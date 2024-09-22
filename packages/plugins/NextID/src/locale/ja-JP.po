@@ -63,7 +63,7 @@ msgstr "このウォレットアドレスは既に接続されています。"
 msgid "Unsupported Network"
 msgstr "対応していないネットワーク"
 
-#: src/components/BindDialog.tsx:84
+#: src/components/BindDialog.tsx:82
 msgid "Verify your wallet"
 msgstr "ウォレットの認証"
 
@@ -75,8 +75,8 @@ msgstr "表示"
 msgid "Wallet"
 msgstr "ウォレット"
 
-#: src/components/BindDialog.tsx:64
-#: src/components/BindDialog.tsx:75
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
 #: src/components/BindPanelUI.tsx:139
 #: src/hooks/useWalletSign.ts:15
 #: src/hooks/useWalletSign.ts:22
@@ -87,10 +87,10 @@ msgstr "ウォレットサイン"
 msgid "Wallet sign cancelled."
 msgstr "ウォレットのサインがキャンセルされました。"
 
-#: src/components/BindDialog.tsx:77
+#: src/components/BindDialog.tsx:75
 msgid "Wallet sign failed."
 msgstr "ウォレットのサインに失敗しました。"
 
-#: src/components/BindDialog.tsx:66
+#: src/components/BindDialog.tsx:64
 msgid "Wallet sign succeeded."
 msgstr "ウォレットのサインは成功しました。"

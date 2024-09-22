@@ -63,7 +63,7 @@ msgstr "此錢包地址已被綁定"
 msgid "Unsupported Network"
 msgstr ""
 
-#: src/components/BindDialog.tsx:84
+#: src/components/BindDialog.tsx:82
 msgid "Verify your wallet"
 msgstr "驗證錢包"
 
@@ -75,8 +75,8 @@ msgstr ""
 msgid "Wallet"
 msgstr "錢包"
 
-#: src/components/BindDialog.tsx:64
-#: src/components/BindDialog.tsx:75
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
 #: src/components/BindPanelUI.tsx:139
 #: src/hooks/useWalletSign.ts:15
 #: src/hooks/useWalletSign.ts:22
@@ -87,10 +87,10 @@ msgstr ""
 msgid "Wallet sign cancelled."
 msgstr "取消錢包簽名"
 
-#: src/components/BindDialog.tsx:77
+#: src/components/BindDialog.tsx:75
 msgid "Wallet sign failed."
 msgstr "簽署失敗"
 
-#: src/components/BindDialog.tsx:66
+#: src/components/BindDialog.tsx:64
 msgid "Wallet sign succeeded."
 msgstr "簽署成功"

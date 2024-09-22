@@ -63,7 +63,7 @@ msgstr "이미 연결된 주소입니다."
 msgid "Unsupported Network"
 msgstr "지원되지 않는 네트워크"
 
-#: src/components/BindDialog.tsx:84
+#: src/components/BindDialog.tsx:82
 msgid "Verify your wallet"
 msgstr "월렛 인증"
 
@@ -75,8 +75,8 @@ msgstr ""
 msgid "Wallet"
 msgstr "월렛"
 
-#: src/components/BindDialog.tsx:64
-#: src/components/BindDialog.tsx:75
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
 #: src/components/BindPanelUI.tsx:139
 #: src/hooks/useWalletSign.ts:15
 #: src/hooks/useWalletSign.ts:22
@@ -87,10 +87,10 @@ msgstr "월렛 사인"
 msgid "Wallet sign cancelled."
 msgstr "월렛 사인 취소"
 
-#: src/components/BindDialog.tsx:77
+#: src/components/BindDialog.tsx:75
 msgid "Wallet sign failed."
 msgstr "월렛 사인 실패"
 
-#: src/components/BindDialog.tsx:66
+#: src/components/BindDialog.tsx:64
 msgid "Wallet sign succeeded."
 msgstr "월렛 사인 성공"

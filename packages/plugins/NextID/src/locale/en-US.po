@@ -58,7 +58,7 @@ msgstr ""
 msgid "Unsupported Network"
 msgstr ""
 
-#: src/components/BindDialog.tsx:84
+#: src/components/BindDialog.tsx:82
 msgid "Verify your wallet"
 msgstr ""
 
@@ -70,8 +70,8 @@ msgstr ""
 msgid "Wallet"
 msgstr ""
 
-#: src/components/BindDialog.tsx:64
-#: src/components/BindDialog.tsx:75
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
 #: src/components/BindPanelUI.tsx:139
 #: src/hooks/useWalletSign.ts:15
 #: src/hooks/useWalletSign.ts:22
@@ -82,10 +82,10 @@ msgstr ""
 msgid "Wallet sign cancelled."
 msgstr ""
 
-#: src/components/BindDialog.tsx:77
+#: src/components/BindDialog.tsx:75
 msgid "Wallet sign failed."
 msgstr ""
 
-#: src/components/BindDialog.tsx:66
+#: src/components/BindDialog.tsx:64
 msgid "Wallet sign succeeded."
 msgstr ""
