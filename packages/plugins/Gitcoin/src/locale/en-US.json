@@ -1,1 +1,17 @@
-{ "messages": {} }
+{
+    "messages": {
+        "uyJsf6": "About",
+        "aEgiLS": "contributions",
+        "iCb44o": ["Created on: ", ["0"]],
+        "199DuV": "Display specific information of Gitcoin projects, donate to a project directly on social media.",
+        "h5Dtc5": "funding received",
+        "PIG043": "Gitcoin",
+        "0bKGbK": "No past rounds found.",
+        "j2a+h4": "Past rounds",
+        "tjbyOy": "Project details",
+        "ghVDTt": "rounds",
+        "kf83Ld": "Something went wrong.",
+        "7cg5cq": "unique contributors",
+        "jpctdh": "View"
+    }
+}

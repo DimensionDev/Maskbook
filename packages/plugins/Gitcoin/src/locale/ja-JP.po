@@ -17,3 +17,55 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 968\n"
+
+#: src/SiteAdaptor/PreviewCard.tsx:310
+msgid "About"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:231
+msgid "contributions"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:285
+msgid "Created on: {0}"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:79
+msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
+msgstr "Gitcoinプロジェクトの具体的な情報を表示し、ソーシャルメディア上で直接プロジェクトに寄付してください。"
+
+#: src/SiteAdaptor/PreviewCard.tsx:227
+msgid "funding received"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:75
+msgid "Gitcoin"
+msgstr "Gitcoin"
+
+#: src/SiteAdaptor/PreviewCard.tsx:326
+msgid "No past rounds found."
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:303
+msgid "Past rounds"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:302
+msgid "Project details"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:239
+msgid "rounds"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:178
+msgid "Something went wrong."
+msgstr "問題が発生しました"
+
+#: src/SiteAdaptor/PreviewCard.tsx:235
+msgid "unique contributors"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewCard.tsx:260
+msgid "View"
+msgstr ""
