@@ -48,6 +48,6 @@
     "delete_file_message$failed": "削除できませんでした、もう一度お試しください",
     "upload_tips": "アップロードするファイルを選択するには、「ファイルを参照」ボタンをクリックしてください。",
     "file_chip_single": "添付ファイル: {{name}} ({{size}})",
-    "file_chip_multiple": "{count} ファイル選択中",
+    "file_chip_multiple": "{{count}} ファイル選択中",
     "size": "サイズ"
 }
