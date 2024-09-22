@@ -67,4 +67,3 @@ msgstr "撤销中"
 #: src/SiteAdaptor/ApprovalDialog.tsx:92
 msgid "Tokens"
 msgstr "代币"
-

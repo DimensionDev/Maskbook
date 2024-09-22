@@ -264,4 +264,3 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:395
 msgid "Update Quote"
 msgstr ""
-

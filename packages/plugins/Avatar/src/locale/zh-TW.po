@@ -98,4 +98,3 @@ msgstr ""
 #: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr ""
-
