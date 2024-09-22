@@ -21,7 +21,7 @@ import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { TabType } from '../../types.js'
 import { FigureCard } from '../Shared/FigureCard.js'
 import { Context } from '../Context/index.js'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({
@@ -80,7 +80,6 @@ interface CardDialogContentProps {
 export function CardDialogContent(props: CardDialogContentProps) {
     const { currentTab } = props
     const { classes } = useStyles()
-    const t = useCollectibleTrans()
     const {
         asset,
         orders,
@@ -115,7 +114,7 @@ export function CardDialogContent(props: CardDialogContentProps) {
     }, [asset.data?.link])
 
     if (asset.isPending) return <LoadingStatus height="100%" />
-    if (!asset.data) return <ReloadStatus height="100%" message={t.load_failed()} onRetry={asset.refetch} />
+    if (!asset.data) return <ReloadStatus height="100%" message={<Trans>Load failed</Trans>} onRetry={asset.refetch} />
 
     // Links of Solana NFTs might be incorrect, we discard them temporarily.
     const externalLink = pluginID !== NetworkPluginID.PLUGIN_SOLANA && asset.data.source ? asset.data.link : null
@@ -160,7 +159,9 @@ export function CardDialogContent(props: CardDialogContentProps) {
                                 onClick={onPFPButtonClick}
                                 fullWidth>
                                 <Icons.Avatar size={20} />
-                                <span className={classes.buttonText}>{t.plugin_collectibles_pfp_button()}</span>
+                                <span className={classes.buttonText}>
+                                    <Trans>Change NFT PFP</Trans>
+                                </span>
                             </Button>
                         </ConnectPersonaBoundary>
                     : externalLink ?
@@ -171,12 +172,12 @@ export function CardDialogContent(props: CardDialogContentProps) {
                             onClick={onMoreButtonClick}
                             fullWidth>
                             <span className={classes.buttonText}>
-                                {t.plugin_collectibles_more_on_button({
-                                    provider:
-                                        asset.data.source === SourceType.NFTScan ?
-                                            resolveSourceTypeName(asset.data.source)
-                                        :   'platform',
-                                })}
+                                <Trans>
+                                    More on{' '}
+                                    {asset.data.source === SourceType.NFTScan ?
+                                        resolveSourceTypeName(asset.data.source)
+                                    :   'platform'}
+                                </Trans>
                             </span>
                             <Icons.LinkOut size={16} />
                         </Button>

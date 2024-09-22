@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { CardDialogContent } from './CardDialogContent.js'
 import { TabType } from '../../types.js'
 import { Context } from '../Context/index.js'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -29,7 +29,6 @@ interface CardDialogProps {
 }
 
 export function CardDialog(props: CardDialogProps) {
-    const t = useCollectibleTrans()
     const { classes } = useStyles()
     const { chainId, pluginID, tokenId, tokenAddress } = Context.useContainer()
 
@@ -48,15 +47,15 @@ export function CardDialog(props: CardDialogProps) {
     return (
         <InjectedDialog
             open={props.open}
-            title={t.plugin_collectible_nft_details()}
+            title={<Trans>NFT Details</Trans>}
             onClose={() => props.setOpen(false)}
             classes={{ paper: classes.dialogRoot }}
             titleTabs={
                 <TabContext value={currentTab}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="NFTCard">
-                        <Tab label={t.plugin_collectible_about()} value={TabType.About} />
-                        <Tab label={t.plugin_collectible_offers()} value={TabType.Offers} />
-                        <Tab label={t.plugin_collectible_activities()} value={TabType.Activities} />
+                        <Tab label={<Trans>About</Trans>} value={TabType.About} />
+                        <Tab label={<Trans>Offers</Trans>} value={TabType.Offers} />
+                        <Tab label={<Trans>Activities</Trans>} value={TabType.Activities} />
                     </MaskTabList>
                 </TabContext>
             }>
