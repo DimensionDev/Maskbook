@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-22 17:51\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,95 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FriendTech/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 966\n"
+
+#: src/SiteAdaptor/Order.tsx:209
+msgid "Action"
+msgstr "crwdns28592:0crwdne28592:0"
+
+#: src/SiteAdaptor/Order.tsx:182
+msgid "Amount"
+msgstr "crwdns28594:0crwdne28594:0"
+
+#: src/SiteAdaptor/Main.tsx:17
+msgid "Connecting to the wallet to see what keys are held."
+msgstr "crwdns28596:0crwdne28596:0"
+
+#: src/SiteAdaptor/index.tsx:22
+msgid "Display the user's friend key related information on the timeline on x.com."
+msgstr "crwdns28598:0crwdne28598:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:28
+#: src/SiteAdaptor/components/RouterDialog.tsx:31
+#: src/SiteAdaptor/index.tsx:16
+msgid "Friend"
+msgstr "crwdns28600:0crwdne28600:0"
+
+#: src/SiteAdaptor/Order.tsx:193
+msgid "From"
+msgstr "crwdns28602:0crwdne28602:0"
+
+#: src/SiteAdaptor/Order.tsx:223
+msgid "Gas fee"
+msgstr "crwdns28604:0crwdne28604:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:45
+msgid "History"
+msgstr "crwdns28606:0crwdne28606:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:198
+msgid "Holders"
+msgstr "crwdns28608:0crwdne28608:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:214
+#: src/SiteAdaptor/UserDetail.tsx:100
+msgid "Holding"
+msgstr "crwdns28610:0crwdne28610:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:161
+msgid "Key Price"
+msgstr "crwdns28612:0crwdne28612:0"
+
+#: src/SiteAdaptor/components/HoldingCard.tsx:138
+#: src/SiteAdaptor/components/HoldingCard.tsx:178
+#: src/SiteAdaptor/components/RouterDialog.tsx:44
+msgid "Keys"
+msgstr "crwdns28614:0crwdne28614:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:30
+msgid "Sell"
+msgstr "crwdns28616:0crwdne28616:0"
+
+#: src/SiteAdaptor/Order.tsx:212
+msgid "Sell Key"
+msgstr "crwdns28618:0crwdne28618:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:165
+#: src/SiteAdaptor/Order.tsx:147
+msgid "The price of next share is equal to the S^2 / 16000*1 ether where S is the current number of keys."
+msgstr "crwdns28620:0crwdne28620:0"
+
+#: src/SiteAdaptor/Order.tsx:201
+msgid "To"
+msgstr "crwdns28622:0crwdne28622:0"
+
+#: src/SiteAdaptor/Order.tsx:217
+msgid "Total Amount"
+msgstr "crwdns28624:0crwdne28624:0"
+
+#: src/SiteAdaptor/UserDetail.tsx:92
+msgid "Trades"
+msgstr "crwdns28626:0crwdne28626:0"
+
+#: src/SiteAdaptor/components/HoldingCard.tsx:144
+#: src/SiteAdaptor/components/HoldingCard.tsx:184
+msgid "Value"
+msgstr "crwdns28628:0crwdne28628:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:182
+msgid "You Own"
+msgstr "crwdns28630:0crwdne28630:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:206
+msgid "Your Rank"
+msgstr "crwdns28632:0crwdne28632:0"
 
