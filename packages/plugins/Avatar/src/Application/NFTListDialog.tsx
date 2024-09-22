@@ -31,11 +31,12 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
-import { useAvatarTrans } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
+import { useAvatarTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -117,7 +118,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
-                showSnackbar(t.download_image_error(), { variant: 'error' })
+                showSnackbar(<Trans>Download image error</Trans>, { variant: 'error' })
                 return
             }
             setSelectedTokenInfo({
@@ -217,7 +218,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
                 :   <Box className={classes.noWallet} height={479}>
                         <Icons.EmptySimple variant="light" size={36} />
                         <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
-                            {t.no_wallet_message()}
+                            <Trans>No valid wallet detected. Please connect wallet or verify wallet firstly.</Trans>
                         </Typography>
                     </Box>
                 }

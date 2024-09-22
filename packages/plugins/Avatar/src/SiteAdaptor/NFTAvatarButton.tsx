@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { useAvatarTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -36,7 +36,6 @@ export interface NFTAvatarButtonProps extends withClasses<'root' | 'text'> {
 
 export function NFTAvatarButton(props: NFTAvatarButtonProps) {
     const { onClick, showSettings } = props
-    const t = useAvatarTrans()
     const { classes } = useStyles(undefined, { props })
 
     return (
@@ -44,7 +43,7 @@ export function NFTAvatarButton(props: NFTAvatarButtonProps) {
             <Icons.Avatar className={classes.icon} size={20} />
             <Stack display="inline-flex" gap={1}>
                 <Typography style={{ marginLeft: 4 }} className={classes.text}>
-                    {t.nft_avatar()}
+                    <Trans>NFT PFP</Trans>
                 </Typography>
                 {showSettings ?
                     <Icons.GearSettings className={classes.setIcon} />
