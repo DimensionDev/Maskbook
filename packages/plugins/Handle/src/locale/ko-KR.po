@@ -17,3 +17,11 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
+
+#: src/SiteAdaptor/PluginHeader.tsx:48
+msgid "Powered by"
+msgstr ""
+
+#: src/SiteAdaptor/SearchResultInspector.tsx:129
+msgid "USD Value"
+msgstr ""
