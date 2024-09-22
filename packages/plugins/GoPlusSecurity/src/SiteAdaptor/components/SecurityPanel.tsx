@@ -13,7 +13,8 @@ import { DefineMapping, SecurityMessageLevel } from '../constants.js'
 import { TokenPanel } from './TokenPanel.js'
 import { RiskCard, RiskCardUI } from './RiskCard.js'
 import { resolveGoLabLink } from '../../utils/helper.js'
-import { useGoPlusLabsTrans } from '../../locales/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
@@ -59,8 +60,8 @@ const LIST_HEIGHT = {
 }
 
 export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, tokenPrice, tokenMarketCap }) => {
+    const { _ } = useLingui()
     const { classes } = useStyles()
-    const t = useGoPlusLabsTrans()
     const theme = useTheme()
 
     const [isCollapse, setCollapse] = useState(false)
@@ -103,7 +104,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     :   <Icons.DefaultToken size={48} />}
                     <Stack>
                         <Typography className={classes.tokenName}>
-                            {tokenSecurity?.token_name || t.unnamed()}
+                            {tokenSecurity?.token_name || <Trans>Unnamed</Trans>}
                         </Typography>
                         <Typography className={classes.tokenPrice}>
                             {tokenPrice ? formatCurrency(tokenPrice) : '--'}
@@ -134,7 +135,9 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                     ].titleColor
                                 }>
                                 {' '}
-                                {riskyFactors !== 0 ? t.high_risk() : t.medium_risk()}
+                                {riskyFactors !== 0 ?
+                                    <Trans>High Risk</Trans>
+                                :   <Trans>Medium Risk</Trans>}
                             </Typography>
                         </div>
                     </Stack>
@@ -144,7 +147,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 <Stack direction="row" justifyContent="space-between">
                     <Stack display="inline-flex" direction="row" alignItems="center" spacing={0.6}>
                         <Typography variant="h6" className={classes.header}>
-                            {t.token_info()}
+                            <Trans>Token info</Trans>
                         </Typography>
                         <KeyboardArrowDownIcon
                             onClick={() => setCollapse(!isCollapse)}
@@ -153,7 +156,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     </Stack>
                     <Stack direction="row" alignItems="center" spacing={1}>
                         <Typography component="span" lineHeight="14px" fontSize={14} fontWeight={400}>
-                            {t.more_details()}
+                            <Trans>More Details</Trans>
                         </Typography>
                         <Link
                             lineHeight="14px"
@@ -171,7 +174,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
             <Stack spacing={1.5} flex={1}>
                 <Stack direction="row" alignItems="center" justifyContent="space-between" spacing={3.5}>
                     <Typography variant="h6" className={classes.header}>
-                        {t.security_detection()}
+                        <Trans>Security Detection</Trans>
                     </Typography>
                     <Stack direction="row" alignItems="center" spacing={1.5}>
                         {riskyFactors !== 0 && (
@@ -179,8 +182,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                 {DefineMapping[SecurityMessageLevel.High].icon(16)}
                                 <Typography component="span" className={classes.itemTitle}>
                                     {riskyFactors > 1 ?
-                                        t.risky_factors({ quantity: riskyFactors.toString() })
-                                    :   t.risky_factor({ quantity: riskyFactors.toString() })}
+                                        <Trans>{riskyFactors.toString()} Risky factors</Trans>
+                                    :   <Trans>{riskyFactors.toString()} Risky factor</Trans>}
                                 </Typography>
                             </Stack>
                         )}
@@ -189,8 +192,8 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                                 {DefineMapping[SecurityMessageLevel.Medium].icon(16)}
                                 <Typography component="span" className={classes.itemTitle}>
                                     {attentionFactors > 1 ?
-                                        t.attention_factors({ quantity: attentionFactors.toString() })
-                                    :   t.attention_factor({ quantity: attentionFactors.toString() })}
+                                        <Trans>{attentionFactors.toString()} Attention factors</Trans>
+                                    :   <Trans>{attentionFactors.toString()} Attention factor</Trans>}
                                 </Typography>
                             </Stack>
                         )}
@@ -203,7 +206,7 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                     {(!makeMessageList.length || securityMessageLevel === SecurityMessageLevel.Safe) && (
                         <RiskCardUI
                             icon={DefineMapping[SecurityMessageLevel.Safe].icon(14)}
-                            title={t.risk_safe_description()}
+                            title={_(msg`This token has no risky or attention factors.`)}
                             titleColor={DefineMapping[SecurityMessageLevel.Safe].titleColor}
                         />
                     )}

@@ -17,3 +17,12 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/CrossChainBridge/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 958\n"
+
+#: src/SiteAdaptor/CrossChainBridgeDialog.tsx:24
+#: src/SiteAdaptor/index.tsx:15
+msgid "Cross-chain"
+msgstr "Cross-chain"
+
+#: src/SiteAdaptor/components/BridgeStack.tsx:83
+msgid "Powered by Celer Network. Support $MASK!"
+msgstr "Powered by Celer Network. Support $MASK!"

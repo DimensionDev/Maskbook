@@ -4,9 +4,9 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
 import { Box, Button, Stack } from '@mui/material'
 import { useMemo } from 'react'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { OfferCard } from './OfferCard.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -43,7 +43,6 @@ function OffersList(props: OffersListProps) {
     const orderedOffers = useMemo(() => offers.sort((a, b) => (a.createdAt! > b.createdAt! ? -1 : 0)), [offers])
 
     const { classes } = useStyles()
-    const t = useCollectibleTrans()
 
     if (loading && !orderedOffers.length)
         return (
@@ -57,7 +56,12 @@ function OffersList(props: OffersListProps) {
                 <ReloadStatus onRetry={onRetry} />
             </div>
         )
-    if (!orderedOffers.length) return <EmptyStatus height={215}>{t.plugin_collectible_nft_offers_empty()}</EmptyStatus>
+    if (!orderedOffers.length)
+        return (
+            <EmptyStatus height={215}>
+                <Trans>This NFT didn't have any offers.</Trans>
+            </EmptyStatus>
+        )
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }} data-hide-scrollbar>
@@ -67,7 +71,7 @@ function OffersList(props: OffersListProps) {
             <Stack pb="1px" width="100%" direction="row" justifyContent="center" data-hide-scrollbar>
                 {!finished && (
                     <Button variant="roundedContained" sx={{ mb: 2 }} onClick={() => onNext?.()}>
-                        {t.load_more()}
+                        <Trans>Load More</Trans>
                     </Button>
                 )}
             </Stack>

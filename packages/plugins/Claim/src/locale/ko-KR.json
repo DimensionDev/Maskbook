@@ -1,1 +1,28 @@
-{ "messages": {} }
+{
+    "messages": {
+        "hom7qf": "수령",
+        "u2Srv1": "에어드랍 수령",
+        "TZDLPg": "수령 가능",
+        "7lnlzl": ["Claimed ", ["amount"], " $", ["0"], " successfully."],
+        "ryWxhG": "축하합니다!",
+        "TYTRNP": "수령 가능",
+        "M1RnFv": "만료됨",
+        "wrJC61": [
+            "I just claimed airdrop with ",
+            ["amount"],
+            " ",
+            ["0"],
+            " on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \nInstall https://mask.io to explore more airdrop activities."
+        ],
+        "w4oOEJ": "Mask Community $ARB Giveaway",
+        "rJZPaP": "사용 활동을 찾을 수 없습니다",
+        "neBDpj": "월렛을 연결하세요",
+        "GDe4XX": "Please connect wallet to check if you are eligible to claim $ARB.",
+        "Z8lGw6": "공유",
+        "hTbvD9": "$ARB 수령하는 자격이 없습니다.",
+        "3cw8FQ": "에어드롭에 참여하기 위해서는 거래 비용을 충당할 수 있는 네이티브 토큰이 지정된 네트워크의 월렛에 충분히 있어야 합니다.",
+        "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
+        "ayf6mz": "WalletConnect 월렛에 연결되어 있습니다. 해당 월렛에서 네트워크를 전환하기나 다른 월렛으로 바꾸세요.",
+        "gWcGl/": "월렛은 이미 해당 거래를 취소했습니다."
+    }
+}

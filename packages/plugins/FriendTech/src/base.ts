@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { EnhanceableSite, PluginID } from '@masknet/shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_NAME } from './constants.js'
-import { languages } from './locales/languages.js'
+import { languages, linguiLanguages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PluginID.FriendTech,
@@ -20,5 +20,5 @@ export const base: Plugin.Shared.Definition = {
     },
     inMinimalModeByDefault: true,
     experimentalMark: true,
-    i18n: languages,
+    i18n: [languages, linguiLanguages],
 }

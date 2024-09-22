@@ -2,12 +2,12 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Alert, AlertTitle, Box } from '@mui/material'
 import { memo } from 'react'
-import { useClaimTrans } from '../../../locales/i18n_generated.js'
 import { AirDropActivityItem } from './AirDropActivityItem.js'
 import { useAirDropActivity } from '../../../hooks/useAirDropActivity.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { EmptyStatus } from '@masknet/shared'
 import { useToggle } from 'react-use'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -47,7 +47,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const AirDropActivities = memo(() => {
-    const t = useClaimTrans()
     const [open, toggle] = useToggle(true)
     const { classes } = useStyles()
     const { account } = useChainContext()
@@ -67,7 +66,12 @@ export const AirDropActivities = memo(() => {
                 <AirDropActivityItem {...activity} onClaimSuccess={refetch} />
                 {open ?
                     <Alert severity="info" onClose={toggle} className={classes.alert}>
-                        <AlertTitle className={classes.alertTitle}>{t.airdrop_alert()}</AlertTitle>
+                        <AlertTitle className={classes.alertTitle}>
+                            <Trans>
+                                To participate in airdrops, it is necessary to have enough native tokens in your wallet
+                                on the specified network to cover the transaction costs.
+                            </Trans>
+                        </AlertTitle>
                     </Alert>
                 :   null}
             </Box>
@@ -75,7 +79,9 @@ export const AirDropActivities = memo(() => {
     }
     return (
         <EmptyStatus className={classes.placeholder}>
-            {!account ? t.connect_wallet_airdrop_tips() : t.no_activities_tips()}
+            {!account ?
+                <Trans>Please connect wallet</Trans>
+            :   <Trans>No activities found.</Trans>}
         </EmptyStatus>
     )
 })

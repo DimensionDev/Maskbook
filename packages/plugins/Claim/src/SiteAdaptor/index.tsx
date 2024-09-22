@@ -9,7 +9,7 @@ import { PluginClaimMessage } from '../message.js'
 import { ClaimDialog } from './components/ClaimDialog/index.js'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
-import { useClaimTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -54,17 +54,12 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: PLUGIN_ID,
             appBoardSortingDefaultPriority: 8,
             icon: <Icons.MarketsClaim size={36} />,
-            name: <Name />,
+            name: <Trans>Claim</Trans>,
             iconFilterColor: 'rgba(240, 51, 51, 0.3)',
             category: 'dapp',
             entryWalletConnectedNotRequired: true,
         },
     ],
-}
-
-function Name() {
-    const t = useClaimTrans()
-    return t.__plugin_name()
 }
 
 export default site

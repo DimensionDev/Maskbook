@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { useCallback, useMemo } from 'react'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -111,7 +111,6 @@ interface NewsListProps {
 
 export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) {
     const { classes, cx } = useStyles()
-    const t = useCalendarTrans()
     const futureNewsList = useMemo(() => {
         const newsList: string[] = []
         for (const key in list) {
@@ -167,7 +166,10 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
                             </div>
                         )
                     })
-                :   <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>}
+                :   <EmptyStatus className={classes.empty}>
+                        <Trans>No content for the last two weeks.</Trans>
+                    </EmptyStatus>
+                }
             </div>
         </div>
     )

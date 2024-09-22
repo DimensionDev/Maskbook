@@ -2,8 +2,8 @@ import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useNextID_Trans } from '../../locales/index.js'
 import { PersonaSelectPanel } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -26,20 +26,19 @@ interface CreatePersonaActionProps {
 }
 
 export const CreatePersonaAction = memo<CreatePersonaActionProps>(({ disabled, onCreate }) => {
-    const t = useNextID_Trans()
     const { classes, theme } = useStyles()
 
     return (
         <>
             <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">
                 <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
-                    {t.create_persona_intro()}
+                    <Trans>Please create your persona to use Web3 Profile.</Trans>
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center" alignItems="center">
                 <Button color="primary" disabled={disabled} className={classes.button} onClick={onCreate}>
                     <Icons.Identity size={18} />
-                    {t.create_persona()}
+                    <Trans>Create Persona</Trans>
                 </Button>
             </Stack>
         </>
@@ -61,19 +60,21 @@ interface AddWalletPersonaActionProps {
 }
 
 export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAddWallet }) => {
-    const t = useNextID_Trans()
     const { classes, theme } = useStyles()
     return (
         <>
             <Stack flex={1} px={1.25} justifyContent="flex-start" width="100%" boxSizing="border-box">
                 <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
-                    {t.add_wallet_intro()}
+                    <Trans>
+                        In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and
+                        other on-chain feeds to friends who have also installed the Mask extension.
+                    </Trans>
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
                 <Button color="primary" variant="contained" onClick={onAddWallet} className={classes.button}>
                     <Icons.Wallet size={16} />
-                    {t.add_wallet_button()}
+                    <Trans>Add wallet</Trans>
                 </Button>
             </Stack>
         </>
@@ -81,12 +82,11 @@ export const AddWalletPersonaAction = memo<AddWalletPersonaActionProps>(({ onAdd
 })
 
 export const OtherLackWalletAction = memo(() => {
-    const t = useNextID_Trans()
     const theme = useTheme()
     return (
         <Stack justifyContent="center" alignItems="center" flex={1}>
             <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
-                {t.others_lack_wallet()}
+                <Trans>The user has not set this.</Trans>
             </Typography>
         </Stack>
     )

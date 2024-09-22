@@ -1,1 +1,25 @@
-{ "messages": {} }
+{
+    "messages": {
+        "bwRvnp": "행동",
+        "hehnjM": "수량",
+        "HpgswQ": "월렛을 연결하여 보유하고 있는 키를 확인합니다.",
+        "U/6KKh": "X.com 의 타임라인에 사용자의 친구 키 관련 정보를 표시합니다.",
+        "NBRdPB": "친구",
+        "ejVYRQ": "From",
+        "9FSKeo": "가스비",
+        "0caMy7": "역사 기록",
+        "CI4Km7": "홀더",
+        "FYzHRF": "보유중",
+        "vS/FMN": "가격 설정",
+        "WQg61I": "키",
+        "xNB0TS": "매출",
+        "E5pRo/": "키 매출",
+        "7xTCzK": "다음 지분의 가격은 S^2 / 16000*1 ETH와 같으며, 여기서 S는 현재 키의 개수입니다.",
+        "/jQctM": "To",
+        "NrYZ3H": "총액",
+        "ZFtwlj": "거래",
+        "wMHvYH": "값",
+        "BbPO8N": "You Own",
+        "uiFNIR": "나의 순위"
+    }
+}

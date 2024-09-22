@@ -1,11 +1,11 @@
 import { InjectedDialog, PluginWalletStatusBar } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
-import { useClaimTrans } from '../../../locales/i18n_generated.js'
 import { DialogActions, DialogContent } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { AirDropActivities } from '../AirDropActivities/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -18,11 +18,10 @@ interface Props {
     onClose(): void
 }
 export const ClaimDialog = memo(({ open, onClose }: Props) => {
-    const t = useClaimTrans()
     const { classes } = useStyles()
 
     return (
-        <InjectedDialog open={open} onClose={onClose} title={t.__plugin_name()}>
+        <InjectedDialog open={open} onClose={onClose} title={<Trans>Claim</Trans>}>
             <DialogContent sx={{ padding: 0 }}>
                 <AirDropActivities />
             </DialogContent>

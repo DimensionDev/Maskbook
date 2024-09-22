@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { IconButton, Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { useMemo, type ReactNode, useCallback } from 'react'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
 import { CountdownTimer } from './CountDownTimer.js'
 import { formatDate } from './EventList.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -127,7 +127,6 @@ const sortPlat = (_: any, b: { type: string }) => {
 
 export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     const { classes, cx } = useStyles()
-    const t = useCalendarTrans()
     const listAfterDate = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -197,19 +196,25 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                                             </div>
                                         </div>
                                         <div className={classes.eventHeader}>
-                                            <Typography className={classes.second}>{t.total()}</Typography>
+                                            <Typography className={classes.second}>
+                                                <Trans>Total</Trans>
+                                            </Typography>
                                             <Typography className={classes.eventTitle}>
                                                 {Number(v.ext_info.nft_info.total).toLocaleString('en-US')}
                                             </Typography>
                                         </div>
                                         <div className={classes.eventHeader}>
-                                            <Typography className={classes.second}>{t.price()}</Typography>
+                                            <Typography className={classes.second}>
+                                                <Trans>Price</Trans>
+                                            </Typography>
                                             <Typography className={classes.eventTitle}>
                                                 {v.ext_info.nft_info.token}
                                             </Typography>
                                         </div>
                                         <div className={classes.eventHeader}>
-                                            <Typography className={classes.second}>{t.date()}</Typography>
+                                            <Typography className={classes.second}>
+                                                <Trans>Date</Trans>
+                                            </Typography>
                                             <Typography className={classes.eventTitle}>
                                                 {formatDate(v.event_date)}
                                             </Typography>
@@ -220,7 +225,10 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
                             </div>
                         )
                     })
-                :   <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>}
+                :   <EmptyStatus className={classes.empty}>
+                        <Trans>No content for the last two weeks.</Trans>
+                    </EmptyStatus>
+                }
             </div>
         </div>
     )

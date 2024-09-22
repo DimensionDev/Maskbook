@@ -17,3 +17,106 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FileService/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 964\n"
+
+#: src/SiteAdaptor/components/FileChip.tsx:57
+msgid "{0} files selected"
+msgstr "已选择 {0} 个文件"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:90
+msgid "Arweave"
+msgstr "Arweave"
+
+#: src/SiteAdaptor/components/FileChip.tsx:33
+msgid "Attached File: {name} ({size})"
+msgstr ""
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:221
+#: src/SiteAdaptor/components/Terms.tsx:127
+msgid "Cancel"
+msgstr "取消"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:279
+#: src/SiteAdaptor/components/Terms.tsx:130
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:104
+msgid "Confirm"
+msgstr "确定"
+
+#: src/SiteAdaptor/index.tsx:98
+msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
+msgstr "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。"
+
+#: src/SiteAdaptor/components/FileList.tsx:114
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:130
+msgid "Delete"
+msgstr "删除"
+
+#: src/SiteAdaptor/components/FileList.tsx:90
+msgid "Delete File"
+msgstr "删除文件"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:111
+msgid "Download"
+msgstr "下载"
+
+#: src/SiteAdaptor/components/FileList.tsx:125
+msgid "File name must between 3 to 20 characters."
+msgstr "文件名必须介于 3 到 20 个字符之间。"
+
+#: src/SiteAdaptor/index.tsx:61
+msgid "File Service"
+msgstr "文件服务"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:94
+msgid "IPFS"
+msgstr "IPFS"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:159
+msgid "Make It Encrypted"
+msgstr "进行加密"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:263
+msgid "No results found"
+msgstr "未找到结果"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:171
+msgid "Please click Browse Files button to select files to upload."
+msgstr "请点击浏览文件按钮选择要上传的文件。"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:121
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:84
+msgid "Rename"
+msgstr "重命名"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:138
+msgid "size"
+msgstr "大小"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:270
+#: src/SiteAdaptor/components/RouterDialog.tsx:12
+msgid "Upload File"
+msgstr "上传文件"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:164
+msgid "Uploaded files"
+msgstr "已上传的文件"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:119
+msgid "Use Meson CDN"
+msgstr "使用Meson CDN"
+
+#: src/SiteAdaptor/components/FileList.tsx:109
+msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
+msgstr "用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:12
+#: src/SiteAdaptor/index.tsx:73
+msgid "Web3 File Service"
+msgstr "文件服务"
+
+#: src/SiteAdaptor/components/Terms.tsx:95
+msgid "What is Web3 File Service?"
+msgstr "什么是 Web3 文件服务？"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:264
+msgid "You haven't uploaded any files yet."
+msgstr "您尚未上传任何文件。"

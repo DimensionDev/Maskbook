@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER } from '@masknet/shared-base'
 import { CYBERCONNECT_PLUGIN_ID } from './constants.js'
-import { languages } from './locales/languages.js'
+import { languages, linguiLanguages } from './locales/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: CYBERCONNECT_PLUGIN_ID,
@@ -15,5 +15,5 @@ export const base: Plugin.Shared.Definition = {
         target: 'insider',
     },
     contribution: { postContent: new Set([/https:\/\/app.cyberconnect.me/]) },
-    i18n: languages,
+    i18n: [languages, linguiLanguages],
 }

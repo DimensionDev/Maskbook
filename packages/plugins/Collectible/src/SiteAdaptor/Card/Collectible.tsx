@@ -14,7 +14,6 @@ import { TabContext } from '@mui/lab'
 import { Box, CardContent, CardHeader, IconButton, Paper, Tab, Typography } from '@mui/material'
 import { format as formatDateTime, isAfter, isValid as isValidDate } from 'date-fns'
 import { useMemo } from 'react'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { LinkingAvatar } from '../Shared/LinkingAvatar.js'
 import { CollectiblePaper } from './CollectiblePaper.js'
@@ -22,6 +21,7 @@ import { AboutTab } from './tabs/AboutTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {
@@ -135,7 +135,6 @@ const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) =
 })
 
 export function Collectible() {
-    const t = useCollectibleTrans()
     const [currentTab, onChange, tabs] = useTabs('about', 'details', 'offers', 'activities')
     const { classes } = useStyles({ currentTab })
     const { asset, orders } = Context.useContainer()
@@ -152,7 +151,11 @@ export function Collectible() {
     if (asset.isPending) return <LoadingStatus height={148} p={1} />
 
     if (!asset.data && !asset.error) {
-        return <EmptyStatus className={classes.empty}>{t.nft_minted()}</EmptyStatus>
+        return (
+            <EmptyStatus className={classes.empty}>
+                <Trans>NFT is not minted yet.</Trans>
+            </EmptyStatus>
+        )
     }
 
     if (!asset.data) {
@@ -185,10 +188,10 @@ export function Collectible() {
         return tabMap[currentTab] || null
     }
     const Tabs = [
-        { value: tabs.about, label: t.plugin_collectible_about() },
-        { value: tabs.details, label: t.plugin_collectible_details() },
-        { value: tabs.offers, label: t.plugin_collectible_offers() },
-        { value: tabs.activities, label: t.plugin_collectible_activities() },
+        { value: tabs.about, label: <Trans>About</Trans> },
+        { value: tabs.details, label: <Trans>Details</Trans> },
+        { value: tabs.offers, label: <Trans>Offers</Trans> },
+        { value: tabs.activities, label: <Trans>Activities</Trans> },
     ]
 
     return (
@@ -266,9 +269,7 @@ export function Collectible() {
             {endDate && isValidDate(endDate) && isAfter(endDate, Date.now()) ?
                 <Box sx={{ marginTop: 1 }}>
                     <Typography className={classes.countdown}>
-                        {t.plugin_collectible_sale_end({
-                            time: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss'),
-                        })}
+                        <Trans>Sale ends in {formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')}</Trans>
                     </Typography>
                 </Box>
             :   null}

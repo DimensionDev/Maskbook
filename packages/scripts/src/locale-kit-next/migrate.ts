@@ -15,13 +15,15 @@ import type {
     MethodDeclaration,
     NamedImports,
     Node,
+    NoSubstitutionTemplateLiteral,
+    NumericLiteral,
     Program,
-    PropertyAssignment,
+    ReferencedSymbol,
     ReferenceEntry,
     server,
-    ShorthandPropertyAssignment,
     SourceFile,
     SpreadAssignment,
+    StringLiteral,
     TypeChecker,
     TypeLiteralNode,
     VariableDeclaration,
@@ -60,7 +62,7 @@ export async function migrate() {
         suppressDiagnosticEvents: true,
     })
 
-    const cwd = new URL('../../../plugins/Avatar/', import.meta.url)
+    const cwd = new URL('../../../plugins/NextID/', import.meta.url)
     const inputURL = new URL('./src/locales/i18n_generated.ts', cwd)
     const json = JSON.parse(await readFile(new URL('./en-US.json', inputURL), 'utf-8'))
     processFile(inputURL, json)
@@ -119,20 +121,25 @@ function processFile(url: URL, targetJSON: any) {
     const hookName = useTrans.name!.text
     // migrate t.trans() call
     for (const translateMethod of useTrans.type.members) {
-        if (!translateMethod.name || ts.isComputedPropertyName(translateMethod.name)) {
+        let name: Identifier | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral
+        if (translateMethod.name) {
+            if (ts.isComputedPropertyName(translateMethod.name)) {
+                if (ts.isStringLiteral(translateMethod.name.expression)) name = translateMethod.name.expression
+            } else if (!ts.isPrivateIdentifier(translateMethod.name)) name = translateMethod.name
+        }
+        if (!name!) {
             console.warn(`${hookName} has invalid member at ${formatPos(i18nFile.file, translateMethod)}`)
             continue
         }
-        const translateKey = translateMethod.name.text
+        const translateKey = name.text
         const enTranslate = String(targetJSON[translateKey] || '')
         const parsedEnTranslate = parseI18String(enTranslate, 'i18next')
-        console.log(parsedEnTranslate)
 
         // complex case, manually handle it
         if (!parsedEnTranslate || !enTranslate) continue
 
         updateReferences(
-            () => i18nFile.service.getReferencesAtPosition(path, translateMethod.name!.getStart(i18nFile.file)),
+            () => i18nFile.service.getReferencesAtPosition(path, name.getEnd()),
             (reference, currentFile) => {
                 // xyz in t.xyz()
                 const referencingField = getNodeAtPosition(currentFile.file, reference.textSpan.start)
@@ -230,23 +237,23 @@ function processFile(url: URL, targetJSON: any) {
             const t = decl.name
             if (!ts.isIdentifier(t)) return
 
-            const refs = file.service.getReferencesAtPosition(file.file.fileName, t.getEnd())?.filter((ref) => {
-                if (
-                    ref.fileName === file.file.fileName &&
-                    ref.contextSpan &&
-                    ref.contextSpan.start === declList.getStart() &&
-                    ref.contextSpan.length === declList.getWidth()
-                )
-                    return false
-                return true
-            })
+            const refs = excludeSelfReference(file.service.findReferences(file.file.fileName, t.getEnd()))?.flatMap(
+                (x) => x.references,
+            )
             if (!refs?.length) {
                 file.scriptInfo.editContent(varStatement.getFullStart(), varStatement.getEnd(), '')
                 file.scriptInfo.saveTo(file.file.fileName)
             }
         })
-        if (importStatement?.importClause) {
+
+        if (importedName && importStatement?.importClause) {
+            const importRefs = excludeSelfReference(
+                file.service
+                    .findReferences(file.file.fileName, importedName.end)
+                    ?.filter((x) => x.definition.fileName === file.file.fileName),
+            )?.flatMap((x) => x.references)
             if (
+                !importRefs?.length &&
                 !importStatement.importClause.name &&
                 importStatement.importClause.namedBindings &&
                 ts.isNamedImports(importStatement.importClause.namedBindings)
@@ -258,6 +265,22 @@ function processFile(url: URL, targetJSON: any) {
                 }
                 file.scriptInfo.saveTo(file.file.fileName)
             }
+        }
+    })
+}
+function excludeSelfReference(symbols: ReferencedSymbol[] | undefined) {
+    return symbols?.map((symbol) => {
+        const { definition, references } = symbol
+        return {
+            definition,
+            references: references.filter(
+                (x) =>
+                    !(
+                        x.fileName === definition.fileName &&
+                        x.textSpan.start === definition.textSpan.start &&
+                        x.textSpan.length === definition.textSpan.length
+                    ),
+            ),
         }
     })
 }
@@ -452,7 +475,7 @@ function getTranslationMode({ checker, file, service }: ReadonlySourceFile, node
     })
 
     if (assignedVariable) {
-        const references = service.getReferencesAtPosition(file.fileName, assignedVariable.pos)
+        const references = service.getReferencesAtPosition(file.fileName, assignedVariable.end)
         const isAllUseSiteAcceptsReactNode =
             references?.every(({ fileName, textSpan }) => {
                 const file = getSourceFile(fileName)
@@ -586,7 +609,10 @@ function mapTranslate(
         const oldParts = parseI18String(enStrings[translateKey], 'i18next')!
         const translatedParts = parseI18String(translatedStrings[translateKey], 'i18next')!
 
-        if (oldParts.length - 1) debugger
+        if (oldParts.length !== translatedParts.length) {
+            console.warn(translateKey, 'has a bad translation.')
+            return undefined
+        }
 
         const oldVariables = oldParts.filter((x): x is Interpolation => typeof x !== 'string')
         const newVariables = newParts.filter((x): x is Interpolation => typeof x !== 'string')

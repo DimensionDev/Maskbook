@@ -12,3 +12,40 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/index.tsx:46
+msgid "CyberConnect"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:45
+msgid "Decentralized social graph protocol for user-centric Web3."
+msgstr ""
+
+#: src/SiteAdaptor/ConnectButton.tsx:106
+msgid "Follow Now"
+msgstr ""
+
+#: src/SiteAdaptor/Profile.tsx:191
+msgid "Followers"
+msgstr ""
+
+#: src/SiteAdaptor/Profile.tsx:186
+msgid "Followings"
+msgstr ""
+
+#: src/SiteAdaptor/FollowersPage.tsx:24
+#: src/SiteAdaptor/Profile.tsx:130
+msgid "Load failed"
+msgstr ""
+
+#: src/SiteAdaptor/Profile.tsx:123
+msgid "No followers."
+msgstr ""
+
+#: src/SiteAdaptor/Profile.tsx:124
+msgid "No following friends."
+msgstr ""
+
+#: src/SiteAdaptor/ConnectButton.tsx:107
+msgid "Unfollow"
+msgstr ""

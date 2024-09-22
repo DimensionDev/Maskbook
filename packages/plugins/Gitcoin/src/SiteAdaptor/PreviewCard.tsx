@@ -1,6 +1,5 @@
 import { LoadingStatus, Markdown, ReloadStatus } from '@masknet/shared'
 import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { useGitcoinTrans } from '../locales/i18n_generated.js'
 
 import { useProject } from './hooks/useProject.js'
 import { Box, Link, Tab, Typography } from '@mui/material'
@@ -11,6 +10,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import type { Round } from '../apis/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { DEFAULT_PROJECT_BANNER } from '../constants.js'
+import { Trans } from '@lingui/macro'
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),
@@ -159,7 +159,6 @@ interface PreviewCardProps {
 }
 
 export function PreviewCard(props: PreviewCardProps) {
-    const t = useGitcoinTrans()
     const { classes } = useStyles()
     const { value: data, loading, error, retry: refetch } = useProject(props.grantId)
 
@@ -174,7 +173,7 @@ export function PreviewCard(props: PreviewCardProps) {
     if (error)
         return (
             <article className={classes.card} data-hide-scrollbar>
-                <ReloadStatus height={120} message={t.go_wrong()} onRetry={refetch} />
+                <ReloadStatus height={120} message={<Trans>Something went wrong.</Trans>} onRetry={refetch} />
             </article>
         )
 
@@ -223,19 +222,19 @@ export function PreviewCard(props: PreviewCardProps) {
 
     const stats = [
         {
-            title: t.funding_received(),
+            title: <Trans>funding received</Trans>,
             value: `$${totalFundingReceived}`,
         },
         {
-            title: t.contributions(),
+            title: <Trans>contributions</Trans>,
             value: totalContributions,
         },
         {
-            title: t.unique_contributors(),
+            title: <Trans>unique contributors</Trans>,
             value: totalUniqueDonors,
         },
         {
-            title: t.rounds(),
+            title: <Trans>rounds</Trans>,
             value: totalRoundsParticipated,
         },
     ]
@@ -256,7 +255,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     size="small"
                     variant="roundedContained"
                     className={classes.button}>
-                    {t.view()}
+                    <Trans>View</Trans>
                 </ActionButton>
             </Box>
 
@@ -281,7 +280,7 @@ export function PreviewCard(props: PreviewCardProps) {
                 <Box className={classes.linkItem} key="created">
                     <Icons.CalendarDark size={16} />
                     <Typography className={classes.link}>
-                        {t.created_on({ created: format(project.metadata.createdAt, 'MMMM do, yyyy') })}
+                        <Trans>Created on: {format(project.metadata.createdAt, 'MMMM do, yyyy')}</Trans>
                     </Typography>
                 </Box>
             </Box>
@@ -298,14 +297,16 @@ export function PreviewCard(props: PreviewCardProps) {
             <Box>
                 <TabContext value={currentTab}>
                     <MaskTabList onChange={onChange}>
-                        <Tab label={t.project_details()} value={tabs.detail} />
-                        <Tab label={t.past_rounds()} value={tabs.pastRounds} />
+                        <Tab label={<Trans>Project details</Trans>} value={tabs.detail} />
+                        <Tab label={<Trans>Past rounds</Trans>} value={tabs.pastRounds} />
                     </MaskTabList>
 
                     <Box className={classes.tabContent}>
                         <TabPanel className={classes.panel} value={tabs.detail}>
                             <Box>
-                                <Typography className={classes.subtitle}>{t.about()}</Typography>
+                                <Typography className={classes.subtitle}>
+                                    <Trans>About</Trans>
+                                </Typography>
                                 <Markdown defaultStyle={false} className={classes.markdown}>
                                     {project.metadata.description}
                                 </Markdown>
@@ -320,7 +321,7 @@ export function PreviewCard(props: PreviewCardProps) {
                                 </Box>
                             :   <Box className={classes.placeholder}>
                                     <Typography className={classes.placeholderTitle} style={{ textAlign: 'center' }}>
-                                        {t.no_past_rounds_found()}
+                                        <Trans>No past rounds found.</Trans>
                                     </Typography>
                                 </Box>
                             }

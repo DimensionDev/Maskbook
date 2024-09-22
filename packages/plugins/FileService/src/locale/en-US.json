@@ -1,1 +1,28 @@
-{ "messages": {} }
+{
+    "messages": {
+        "bnuQy5": [["0"], " files selected"],
+        "e1vdXO": "Arweave",
+        "RLBjfU": ["Attached File: ", ["name"], " (", ["size"], ")"],
+        "dEgA5A": "Cancel",
+        "7VpPHA": "Confirm",
+        "Udf/Es": "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network.",
+        "cnGeoo": "Delete",
+        "/KseE7": "Delete File",
+        "mzI/c+": "Download",
+        "Rm3JCH": "File name must between 3 to 20 characters.",
+        "tG9G+b": "File Service",
+        "XrH+JC": "IPFS",
+        "tuOw4x": "Make It Encrypted",
+        "AxPAXW": "No results found",
+        "VHShJf": "Please click Browse Files button to select files to upload.",
+        "2wxgft": "Rename",
+        "qNiGUh": "size",
+        "IQ3gAw": "Upload File",
+        "re2nOO": "Uploaded files",
+        "6hagY3": "Use Meson CDN",
+        "7PPwVf": "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted.",
+        "Gia1VG": "Web3 File Service",
+        "4JCJIV": "What is Web3 File Service?",
+        "9uYu7e": "You haven't uploaded any files yet."
+    }
+}

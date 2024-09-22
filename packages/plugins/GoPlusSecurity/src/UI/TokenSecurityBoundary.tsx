@@ -2,7 +2,7 @@ import { ActionButton } from '@masknet/theme'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginGoPlusSecurityMessages } from '../messages.js'
-import { useGoPlusLabsTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 interface Token {
     contract: string
@@ -20,8 +20,6 @@ export interface TokenSecurityBoundaryProps {
 
 export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
     const { children = null, showTokenSecurity = false, tokenInfo, onSwap, disabled = true } = props
-
-    const t = useGoPlusLabsTrans()
 
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         PluginGoPlusSecurityMessages.tokenRiskWarningDialogEvent,
@@ -44,7 +42,7 @@ export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
                         swap: false,
                     })
                 }}>
-                {t.confirm_swap_risk()}
+                <Trans>Confirm swap risk</Trans>
             </ActionButton>
         )
 

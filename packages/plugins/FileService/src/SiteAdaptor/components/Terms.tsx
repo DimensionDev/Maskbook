@@ -3,8 +3,9 @@ import { Button, Link, Typography } from '@mui/material'
 import { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
+import { FileServiceTrans } from '../../locales/index.js'
 import { useTermsConfirmed } from '../storage.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     terms: {
@@ -79,7 +80,6 @@ const TERMS_URL = 'https://legal.mask.io/arweave/file-service/plugin-terms.html'
 const POLICY_URL = 'https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html'
 
 export function Terms() {
-    const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [confirmed, setConfirmed] = useTermsConfirmed()
@@ -92,7 +92,7 @@ export function Terms() {
         <div className={classes.terms}>
             <div className={classes.content}>
                 <Typography variant="h1" className={classes.title}>
-                    {t.what_is_web3_file_service()}
+                    <Trans>What is Web3 File Service?</Trans>
                 </Typography>
                 <Typography variant="body2" className={classes.introduction}>
                     {/* eslint-disable-next-line react/naming-convention/component-name */}
@@ -124,10 +124,10 @@ export function Terms() {
             </div>
             <div className={classes.actions}>
                 <Button className={cx(classes.button, classes.cancelButton)} onClick={() => navigate(RoutePaths.Exit)}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <Button className={cx(classes.button, classes.confirmButton)} onClick={() => setConfirmed(true)}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </Button>
             </div>
         </div>

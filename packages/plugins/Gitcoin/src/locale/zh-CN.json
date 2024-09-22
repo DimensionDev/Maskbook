@@ -1,1 +1,17 @@
-{ "messages": {} }
+{
+    "messages": {
+        "uyJsf6": "About",
+        "aEgiLS": "contributions",
+        "iCb44o": ["Created on: ", ["0"]],
+        "199DuV": "在社交媒体上直接展示Gitcoin项目的具体信息。",
+        "h5Dtc5": "funding received",
+        "PIG043": "Gitcoin",
+        "0bKGbK": "No past rounds found.",
+        "j2a+h4": "Past rounds",
+        "tjbyOy": "Project details",
+        "ghVDTt": "rounds",
+        "kf83Ld": "出现了一些问题。",
+        "7cg5cq": "unique contributors",
+        "jpctdh": "View"
+    }
+}

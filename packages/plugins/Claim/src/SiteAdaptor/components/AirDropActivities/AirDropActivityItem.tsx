@@ -1,7 +1,7 @@
 import { memo, useMemo, useState } from 'react'
 import { useInterval } from 'react-use'
 import { isAfter, format, isBefore, intervalToDuration, differenceInDays } from 'date-fns'
-import { ClaimTrans, useClaimTrans } from '../../../locales/i18n_generated.js'
+import { ClaimTrans } from '../../../locales/i18n_generated.js'
 import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Typography, alpha } from '@mui/material'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
@@ -11,6 +11,7 @@ import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useClaimAirdrop } from '../../../hooks/useClaimAirdrop.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {
@@ -104,7 +105,6 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
         eventIndex,
         onClaimSuccess,
     }) => {
-        const t = useClaimTrans()
         const { classes } = useStyles()
         const { account, providerType } = useChainContext()
         const [now, setNow] = useState(new Date())
@@ -176,17 +176,25 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             <Box className={classes.container}>
                 <ImageIcon icon={networkDescriptor?.icon} size={24} className={classes.badge} />
                 <Box className={classes.content}>
-                    <Typography className={classes.title}>{t.airdrop_title({ symbol: 'ARB' })}</Typography>
+                    <Typography className={classes.title}>
+                        <Trans>Mask Community ${'ARB'} Giveaway</Trans>
+                    </Typography>
                     <Typography className={classes.timeTips}>{timeTips}</Typography>
                     {!account ?
-                        <Typography className={classes.tips}>{t.no_account_tips({ symbol: 'ARB' })}</Typography>
+                        <Typography className={classes.tips}>
+                            <Trans>Please connect wallet to check if you are eligible to claim ${'ARB'}.</Trans>
+                        </Typography>
                     :   <>
                             {!isEligible ?
-                                <Typography className={classes.tips}>{t.no_eligible_tips()}</Typography>
+                                <Typography className={classes.tips}>
+                                    <Trans>Sorry, you are not eligible to claim $ARB in this campaign.</Trans>
+                                </Typography>
                             :   null}
                             {isClaimed ?
                                 <Typography className={classes.tips}>
-                                    {t.claimed_tips({ amount: amount ?? '', symbol: 'ARB' })}
+                                    <Trans>
+                                        You have claimed {amount ?? ''} ${'ARB'}.
+                                    </Trans>
                                 </Typography>
                             :   null}
                             {isEligible && !isClaimed ?
@@ -197,8 +205,8 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                                         </Typography>
                                         <Typography className={classes.claimable}>
                                             {activityStatus === ActivityStatus.IN_PROGRESS ?
-                                                t.eligible_to_claim()
-                                            :   t.claimable()}
+                                                <Trans>Eligible to claim</Trans>
+                                            :   <Trans>Claimable</Trans>}
                                         </Typography>
                                     </Box>
                                     <ActionButton
@@ -208,12 +216,21 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                                         disabled={activityStatus !== ActivityStatus.IN_PROGRESS}
                                         endIcon={
                                             providerType === ProviderType.WalletConnect ?
-                                                <ShadowRootTooltip title={t.wallet_connect_tips()} placement="top">
+                                                <ShadowRootTooltip
+                                                    title={
+                                                        <Trans>
+                                                            You’re connected to a WalletConnect wallet. Please switch
+                                                            network in that wallet, or switch to another wallet.
+                                                        </Trans>
+                                                    }
+                                                    placement="top">
                                                     <Icons.Questions size={18} />
                                                 </ShadowRootTooltip>
                                             :   null
                                         }>
-                                        {activityStatus === ActivityStatus.ENDED ? t.expired() : t.claim()}
+                                        {activityStatus === ActivityStatus.ENDED ?
+                                            <Trans>Expired</Trans>
+                                        :   <Trans>Claim</Trans>}
                                     </ActionButton>
                                 </Box>
                             :   null}

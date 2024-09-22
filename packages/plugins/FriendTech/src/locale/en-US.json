@@ -1,1 +1,25 @@
-{ "messages": {} }
+{
+    "messages": {
+        "bwRvnp": "Action",
+        "hehnjM": "Amount",
+        "HpgswQ": "Connecting to the wallet to see what keys are held.",
+        "U/6KKh": "Display the user's friend key related information on the timeline on x.com.",
+        "NBRdPB": "Friend",
+        "ejVYRQ": "From",
+        "9FSKeo": "Gas fee",
+        "0caMy7": "History",
+        "CI4Km7": "Holders",
+        "FYzHRF": "Holding",
+        "vS/FMN": "Key Price",
+        "WQg61I": "Keys",
+        "xNB0TS": "Sell",
+        "E5pRo/": "Sell Key",
+        "7xTCzK": "The price of next share is equal to the S^2 / 16000*1 ether where S is the current number of keys.",
+        "/jQctM": "To",
+        "NrYZ3H": "Total Amount",
+        "ZFtwlj": "Trades",
+        "wMHvYH": "Value",
+        "BbPO8N": "You Own",
+        "uiFNIR": "Your Rank"
+    }
+}

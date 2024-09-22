@@ -19,7 +19,7 @@ import { FileServiceInjection } from './FileServiceInjection.js'
 import { Modals } from './modals/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { useFileServiceTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SiteAdaptor.BadgeDescriptor
 
@@ -58,7 +58,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
         label: (
             <>
                 <Icons.FileService size={16} />
-                <Name />
+                <Trans>File Service</Trans>
             </>
         ),
         onClick: ({ compositionType, metadata }) => {
@@ -70,7 +70,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.FileService size={36} />
-            const name = <Name2 />
+            const name = <Trans>Web3 File Service</Trans>
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -94,7 +94,12 @@ const definition: Plugin.SiteAdaptor.Definition = {
                 marketListSortingPriority: 3,
                 icon,
                 category: 'dapp',
-                description: <Desc />,
+                description: (
+                    <Trans>
+                        Decentralized file storage, permanently. Upload and share files to your Mask friends on top of
+                        Arweave Network.
+                    </Trans>
+                ),
                 name,
                 iconFilterColor,
                 tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
@@ -106,18 +111,6 @@ const definition: Plugin.SiteAdaptor.Definition = {
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(255, 177, 16, 0.2) 100%), #FFFFFF;',
     },
-}
-function Name() {
-    const t = useFileServiceTrans()
-    return t.name()
-}
-function Name2() {
-    const t = useFileServiceTrans()
-    return t.__plugin_name()
-}
-function Desc() {
-    const t = useFileServiceTrans()
-    return t.__plugin_description()
 }
 
 export default definition

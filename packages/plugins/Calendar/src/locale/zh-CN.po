@@ -17,3 +17,50 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Calendar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 952\n"
+
+#: src/SiteAdaptor/components/Footer.tsx:95
+#: src/SiteAdaptor/index.tsx:23
+msgid "Calendar"
+msgstr "日历"
+
+#: src/SiteAdaptor/components/NFTList.tsx:216
+msgid "Date"
+msgstr "日期"
+
+#: src/SiteAdaptor/CalendarContent.tsx:85
+msgid "Events"
+msgstr "活动"
+
+#: src/SiteAdaptor/components/CountDownTimer.tsx:58
+msgid "Expired"
+msgstr "已过期"
+
+#: src/SiteAdaptor/index.tsx:9
+msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
+msgstr "与Twitter 高度关联的 Web3 新闻和事件。提供 Token 、NFT、AMA 和管理活动。"
+
+#: src/SiteAdaptor/CalendarContent.tsx:84
+msgid "News"
+msgstr "新闻"
+
+#: src/SiteAdaptor/CalendarContent.tsx:86
+msgid "NFTs"
+msgstr "NFTs"
+
+#: src/SiteAdaptor/components/EventList.tsx:163
+#: src/SiteAdaptor/components/NewsList.tsx:170
+#: src/SiteAdaptor/components/NFTList.tsx:229
+msgid "No content for the last two weeks."
+msgstr "最近两周没有内容。"
+
+#: src/SiteAdaptor/components/Footer.tsx:100
+msgid "Powered By"
+msgstr ""
+
+#: src/SiteAdaptor/components/NFTList.tsx:208
+msgid "Price"
+msgstr "价格"
+
+#: src/SiteAdaptor/components/NFTList.tsx:200
+msgid "Total"
+msgstr "总额"

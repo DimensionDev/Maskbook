@@ -2,14 +2,14 @@ import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { useLayoutEffect } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { useFileServiceTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 export function RouterDialog(props: InjectedDialogProps) {
-    const t = useFileServiceTrans()
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
-    const title = matchPath(RoutePaths.UploadFile, pathname) ? t.upload_file() : t.__display_name()
+    const title =
+        matchPath(RoutePaths.UploadFile, pathname) ? <Trans>Upload File</Trans> : <Trans>Web3 File Service</Trans>
 
     useLayoutEffect(() => {
         if (pathname === RoutePaths.Exit) {

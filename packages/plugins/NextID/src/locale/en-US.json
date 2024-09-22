@@ -1,1 +1,22 @@
-{ "messages": {} }
+{
+    "messages": {
+        "XyAmgg": "Add wallet",
+        "jh0i4n": "Confirm this transaction in your wallet.",
+        "5o2pdQ": "Create Persona",
+        "DPfwMq": "Done",
+        "LigbuA": "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension.",
+        "gC2WI+": "Persona",
+        "GK6Tzr": "Persona Sign",
+        "PwjgPX": "Please create your persona to use Web3 Profile.",
+        "ggdga4": "The user has not set this.",
+        "ajKdns": "This wallet address has already been connected.",
+        "Z3y+8t": "Unsupported Network",
+        "SlxhDh": "Verify your wallet",
+        "jpctdh": "View",
+        "sb9Y58": "Wallet",
+        "BMCVM3": "Wallet Sign",
+        "0yf3iU": "Wallet sign cancelled.",
+        "KFYFgI": "Wallet sign failed.",
+        "toDFSK": "Wallet sign succeeded."
+    }
+}

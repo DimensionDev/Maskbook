@@ -10,12 +10,13 @@ import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, DialogActions, DialogContent, Stack } from '@mui/material'
-import { useGoPlusLabsTrans } from '../locales/index.js'
 import { DefaultPlaceholder } from './components/DefaultPlaceholder.js'
 import { Footer } from './components/Footer.js'
 import { NotFound } from './components/NotFound.js'
 import { SearchBox } from './components/SearchBox.js'
 import { SecurityPanel } from './components/SecurityPanel.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -41,7 +42,7 @@ interface Props {
     tokenAddress: string
 }
 export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, tokenAddress }: Props) {
-    const t = useGoPlusLabsTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
     useEffect(() => {
@@ -52,7 +53,7 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
         async (chainId: ChainId, content: string): Promise<SecurityAPI.TokenSecurityType | undefined> => {
             if (!content || isSameAddress(content.trim(), ZERO_ADDRESS)) return
             const values = await GoPlusLabs.getTokenSecurity(chainId, [content.trim()])
-            if (!values) throw new Error(t.contract_not_found())
+            if (!values) throw new Error(_(msg`Contract Not Found`))
             return values
         },
         [],
@@ -71,7 +72,7 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
     }, [value?.contract, !value?.token_symbol])
 
     return (
-        <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
+        <InjectedDialog title={<Trans>Check Security</Trans>} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Stack height="100%" spacing={2}>
                     {!searchHidden && (

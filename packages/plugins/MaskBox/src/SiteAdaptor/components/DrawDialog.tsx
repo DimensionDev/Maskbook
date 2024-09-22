@@ -20,7 +20,7 @@ import { formatBalance, formatCurrency, multipliedBy } from '@masknet/web3-share
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { BoxInfo } from '../../type.js'
 import { Context } from '../../hooks/useContext.js'
-import { useMaskBoxTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -96,7 +96,6 @@ export function DrawDialog(props: DrawDialogProps) {
     const { boxInfo, open, drawing, onClose, onSubmit } = props
     const { classes } = useStyles()
     const { MASK_BOX_CONTRACT_ADDRESS } = useMaskBoxConstants()
-    const t = useMaskBoxTrans()
 
     const {
         paymentCount,
@@ -274,10 +273,10 @@ export function DrawDialog(props: DrawDialogProps) {
                                 disabled={isBalanceInsufficient || drawing}
                                 onClick={onSubmit}>
                                 {isBalanceInsufficient ?
-                                    t.insufficient_balance()
+                                    <Trans>Insufficient balance</Trans>
                                 : drawing ?
-                                    t.drawing()
-                                :   t.draw()}
+                                    <Trans>Drawing</Trans>
+                                :   <Trans>Draw</Trans>}
                             </ActionButton>
                         </EthereumERC20TokenApprovedBoundary>
                     </WalletConnectedBoundary>
