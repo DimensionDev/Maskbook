@@ -119,4 +119,3 @@ msgstr "このプロジェクトはもう有効ではありません"
 #: src/SiteAdaptor/DetailsView.tsx:80
 msgid "Website"
 msgstr "ウェブサイト"
-

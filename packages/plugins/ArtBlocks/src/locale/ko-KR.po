@@ -119,4 +119,3 @@ msgstr "활성화되지 않는 프로젝트입니다."
 #: src/SiteAdaptor/DetailsView.tsx:80
 msgid "Website"
 msgstr "웹사이트"
-
