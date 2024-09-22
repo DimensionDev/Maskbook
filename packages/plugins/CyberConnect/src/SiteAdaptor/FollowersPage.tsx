@@ -5,8 +5,8 @@ import { Box } from '@mui/material'
 import type { IFollowIdentity } from '../Worker/apis/index.js'
 import type { ProfileTab } from '../constants.js'
 import { useFollowers } from '../hooks/useFollowers.js'
-import { useCyberConnectTrans } from '../locales/index.js'
 import { FollowRow } from './FollowTab.js'
+import { Trans } from '@lingui/macro'
 
 interface FollowersPageProps {
     address?: string
@@ -15,14 +15,13 @@ interface FollowersPageProps {
 }
 
 export function FollowersPage(props: FollowersPageProps) {
-    const t = useCyberConnectTrans()
     const { data, fetchNextPage, hasNextPage, isPending, refetch, error } = useFollowers(props.tab, props.address)
     const followers = data?.pages.flatMap((x) => x?.data || []) || []
 
     if (error) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
-                <ReloadStatus height={400} p={2} message={t.failed()} onRetry={refetch} />
+                <ReloadStatus height={400} p={2} message={<Trans>Load failed</Trans>} onRetry={refetch} />
             </ThemeProvider>
         )
     }
