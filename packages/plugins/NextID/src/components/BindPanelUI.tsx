@@ -1,13 +1,13 @@
-import { memo } from 'react'
+import { memo, type ReactNode } from 'react'
 import { Box, DialogContent, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { LoadingButton } from '@mui/lab'
 import { Done as DoneIcon } from '@mui/icons-material'
-import { useNextID_Trans } from '../locales/index.js'
 import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/theme'
 import { InjectedDialog, WalletStatusBox } from '@masknet/shared'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatPersonaFingerprint, NetworkPluginID, type PersonaInformation } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface BindPanelUIProps {
-    title: string
+    title: ReactNode
     open: boolean
     currentPersona: PersonaInformation
     signature: {
@@ -88,7 +88,6 @@ const SUPPORTED_PLUGINS = [NetworkPluginID.PLUGIN_EVM]
 
 export const BindPanelUI = memo<BindPanelUIProps>(
     ({ onPersonaSign, onWalletSign, currentPersona, signature, isBound, title, onClose, open, isCurrentAccount }) => {
-        const t = useNextID_Trans()
         const { classes } = useStyles()
         const { pluginID } = useNetworkContext()
         const isSupported = SUPPORTED_PLUGINS.includes(pluginID)
@@ -101,7 +100,9 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                 <DialogContent style={{ padding: '24px' }}>
                     <Box>
                         <Stack alignItems="center" direction="row" justifyContent="space-between" mb={1.25}>
-                            <Typography className={classes.subTitle}>{t.wallet()}</Typography>
+                            <Typography className={classes.subTitle}>
+                                <Trans>Wallet</Trans>
+                            </Typography>
                             <Typography>
                                 <Typography
                                     variant="body2"
@@ -116,7 +117,9 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                         </Stack>
                         <WalletStatusBox />
                         {isBound ?
-                            <Typography className={classes.error}>{t.bind_wallet_bound_error()}</Typography>
+                            <Typography className={classes.error}>
+                                <Trans>This wallet address has already been connected.</Trans>
+                            </Typography>
                         :   null}
                         <Box mt={3}>
                             <LoadingButton
@@ -131,14 +134,22 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 onClick={onWalletSign}
                                 endIcon={isWalletSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                                 loadingIndicator={<LoadingBase />}>
-                                {isWalletSigned ? t.done() : t.wallet_sign()}
+                                {isWalletSigned ?
+                                    <Trans>Done</Trans>
+                                :   <Trans>Wallet Sign</Trans>}
                             </LoadingButton>
                         </Box>
                     </Box>
-                    {!isSupported && <Typography className={classes.error}>{t.unsupported_network()}</Typography>}
+                    {!isSupported && (
+                        <Typography className={classes.error}>
+                            <Trans>Unsupported Network</Trans>
+                        </Typography>
+                    )}
                     <Box mt={3}>
                         <Stack alignItems="center" direction="row" justifyContent="space-between" mb={1.25}>
-                            <Typography className={classes.subTitle}>{t.persona()}</Typography>
+                            <Typography className={classes.subTitle}>
+                                <Trans>Persona</Trans>
+                            </Typography>
                             <Typography>
                                 <Typography
                                     variant="body2"
@@ -175,7 +186,9 @@ export const BindPanelUI = memo<BindPanelUIProps>(
                                 onClick={onPersonaSign}
                                 endIcon={isPersonaSigned ? <DoneIcon sx={{ color: MaskColorVar.white }} /> : null}
                                 loadingIndicator={<LoadingBase />}>
-                                {isPersonaSigned ? t.done() : t.persona_sign()}
+                                {isPersonaSigned ?
+                                    <Trans>Done</Trans>
+                                :   <Trans>Persona Sign</Trans>}
                             </LoadingButton>
                         </Box>
                     </Box>

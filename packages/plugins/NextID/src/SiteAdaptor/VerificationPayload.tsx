@@ -2,7 +2,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useNextID_Trans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -28,7 +28,6 @@ interface Props {
 }
 export const VerificationPayload = memo(function VerificationPayload({ pubkey }: Props) {
     const { classes } = useStyles()
-    const t = useNextID_Trans()
     return (
         <div className={classes.container}>
             <EmojiAvatar value={pubkey} size={40} />
@@ -39,7 +38,7 @@ export const VerificationPayload = memo(function VerificationPayload({ pubkey }:
                 href={`https://web3.bio/?s=${pubkey}`}
                 target="_blank"
                 rel="noopener noreferrer">
-                {t.view()}
+                <Trans>View</Trans>
             </Button>
         </div>
     )
