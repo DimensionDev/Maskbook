@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { differenceInSeconds } from 'date-fns'
 import { useCallback, useEffect, useState } from 'react'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     timer: {
@@ -33,7 +33,6 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
     const [remainingTime, setRemainingTime] = useState(() => calculateRemainingTime(targetDate))
 
     const { classes } = useStyles()
-    const t = useCalendarTrans()
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -55,7 +54,9 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
 
     return (
         <Typography className={classes.timer}>
-            {remainingTime === 0 ? t.expired() : `${days}d :${hours}h :${minutes}m :${seconds}s`}
+            {remainingTime === 0 ?
+                <Trans>Expired</Trans>
+            :   `${days}d :${hours}h :${minutes}m :${seconds}s`}
         </Typography>
     )
 }

@@ -4,8 +4,8 @@ import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { useCallback, useMemo } from 'react'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
 import { ImageLoader } from './ImageLoader.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -103,7 +103,6 @@ export const formatDate = (date: string) => {
 
 export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
     const { classes, cx } = useStyles()
-    const t = useCalendarTrans()
     const futureEvents = useMemo(() => {
         const listAfterDate: string[] = []
         for (const key in list) {
@@ -160,7 +159,10 @@ export function EventList({ list, isLoading, empty, dateString }: EventListProps
                             </div>
                         )
                     })
-                :   <EmptyStatus className={classes.empty}>{t.empty_status()}</EmptyStatus>}
+                :   <EmptyStatus className={classes.empty}>
+                        <Trans>No content for the last two weeks.</Trans>
+                    </EmptyStatus>
+                }
             </div>
         </div>
     )

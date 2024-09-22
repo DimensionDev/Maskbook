@@ -4,7 +4,7 @@ import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
 import { type ReactNode } from 'react'
-import { useCalendarTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -65,7 +65,6 @@ export interface FooterProps {
 
 export function Footer({ provider, disableSetting }: FooterProps) {
     const { classes } = useStyles()
-    const t = useCalendarTrans()
     const providerMap: Record<string, ReactNode> = {
         news: (
             <>
@@ -92,10 +91,14 @@ export function Footer({ provider, disableSetting }: FooterProps) {
             <div className={classes.lineWrap}>
                 <div className={classes.calender}>
                     <Icons.Calendar size={24} />
-                    <Typography className={classes.calendarText}>{t.title()}</Typography>
+                    <Typography className={classes.calendarText}>
+                        <Trans>Calendar</Trans>
+                    </Typography>
                 </div>
                 <div className={classes.poweredByWrap}>
-                    <Typography className={classes.poweredBy}>{t.powered_by()}</Typography>
+                    <Typography className={classes.poweredBy}>
+                        <Trans>Powered By</Trans>
+                    </Typography>
                     {providerMap[provider]}
                     {disableSetting ? null : (
                         <IconButton
