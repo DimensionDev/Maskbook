@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-22 17:51\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,107 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FileService/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 964\n"
+
+#: src/SiteAdaptor/components/FileChip.tsx:57
+msgid "{0} files selected"
+msgstr "crwdns28544:0{0}crwdne28544:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:90
+msgid "Arweave"
+msgstr "crwdns28546:0crwdne28546:0"
+
+#: src/SiteAdaptor/components/FileChip.tsx:33
+msgid "Attached File: {name} ({size})"
+msgstr "crwdns28548:0{name}crwdnd28548:0{size}crwdne28548:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:221
+#: src/SiteAdaptor/components/Terms.tsx:127
+msgid "Cancel"
+msgstr "crwdns28550:0crwdne28550:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:279
+#: src/SiteAdaptor/components/Terms.tsx:130
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:104
+msgid "Confirm"
+msgstr "crwdns28552:0crwdne28552:0"
+
+#: src/SiteAdaptor/index.tsx:98
+msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
+msgstr "crwdns28554:0crwdne28554:0"
+
+#: src/SiteAdaptor/components/FileList.tsx:114
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:130
+msgid "Delete"
+msgstr "crwdns28556:0crwdne28556:0"
+
+#: src/SiteAdaptor/components/FileList.tsx:90
+msgid "Delete File"
+msgstr "crwdns28558:0crwdne28558:0"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:111
+msgid "Download"
+msgstr "crwdns28560:0crwdne28560:0"
+
+#: src/SiteAdaptor/components/FileList.tsx:125
+msgid "File name must between 3 to 20 characters."
+msgstr "crwdns28562:0crwdne28562:0"
+
+#: src/SiteAdaptor/index.tsx:61
+msgid "File Service"
+msgstr "crwdns28564:0crwdne28564:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:94
+msgid "IPFS"
+msgstr "crwdns28566:0crwdne28566:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:159
+msgid "Make It Encrypted"
+msgstr "crwdns28568:0crwdne28568:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:263
+msgid "No results found"
+msgstr "crwdns28570:0crwdne28570:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:171
+msgid "Please click Browse Files button to select files to upload."
+msgstr "crwdns28572:0crwdne28572:0"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:121
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:84
+msgid "Rename"
+msgstr "crwdns28574:0crwdne28574:0"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:138
+msgid "size"
+msgstr "crwdns28576:0crwdne28576:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:270
+#: src/SiteAdaptor/components/RouterDialog.tsx:12
+msgid "Upload File"
+msgstr "crwdns28578:0crwdne28578:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:164
+msgid "Uploaded files"
+msgstr "crwdns28580:0crwdne28580:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx:119
+msgid "Use Meson CDN"
+msgstr "crwdns28582:0crwdne28582:0"
+
+#: src/SiteAdaptor/components/FileList.tsx:109
+msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
+msgstr "crwdns28584:0crwdne28584:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:12
+#: src/SiteAdaptor/index.tsx:73
+msgid "Web3 File Service"
+msgstr "crwdns28586:0crwdne28586:0"
+
+#: src/SiteAdaptor/components/Terms.tsx:95
+msgid "What is Web3 File Service?"
+msgstr "crwdns28588:0crwdne28588:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx:264
+msgid "You haven't uploaded any files yet."
+msgstr "crwdns28590:0crwdne28590:0"
 
