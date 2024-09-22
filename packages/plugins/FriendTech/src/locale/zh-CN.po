@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 12:14\n"
+"PO-Revision-Date: 2024-09-22 17:49\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,95 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FriendTech/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 966\n"
+
+#: src/SiteAdaptor/Order.tsx:209
+msgid "Action"
+msgstr "操作"
+
+#: src/SiteAdaptor/Order.tsx:182
+msgid "Amount"
+msgstr "金额"
+
+#: src/SiteAdaptor/Main.tsx:17
+msgid "Connecting to the wallet to see what keys are held."
+msgstr "正在连接到钱包以查看持有的 Key。"
+
+#: src/SiteAdaptor/index.tsx:22
+msgid "Display the user's friend key related information on the timeline on x.com."
+msgstr "在x.com上显示用户的好友 Key 的相关信息。"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:28
+#: src/SiteAdaptor/components/RouterDialog.tsx:31
+#: src/SiteAdaptor/index.tsx:16
+msgid "Friend"
+msgstr "朋友"
+
+#: src/SiteAdaptor/Order.tsx:193
+msgid "From"
+msgstr "从"
+
+#: src/SiteAdaptor/Order.tsx:223
+msgid "Gas fee"
+msgstr "Gas 费用"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:45
+msgid "History"
+msgstr "历史"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:198
+msgid "Holders"
+msgstr "持有者"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:214
+#: src/SiteAdaptor/UserDetail.tsx:100
+msgid "Holding"
+msgstr "正在持有"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:161
+msgid "Key Price"
+msgstr ""
+
+#: src/SiteAdaptor/components/HoldingCard.tsx:138
+#: src/SiteAdaptor/components/HoldingCard.tsx:178
+#: src/SiteAdaptor/components/RouterDialog.tsx:44
+msgid "Keys"
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:30
+msgid "Sell"
+msgstr "出售"
+
+#: src/SiteAdaptor/Order.tsx:212
+msgid "Sell Key"
+msgstr "出售密钥"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:165
+#: src/SiteAdaptor/Order.tsx:147
+msgid "The price of next share is equal to the S^2 / 16000*1 ether where S is the current number of keys."
+msgstr "下一次分享的价格等于S^2 / 16000*1 ether ，其中S是当前的 keys 的数量。"
+
+#: src/SiteAdaptor/Order.tsx:201
+msgid "To"
+msgstr "至"
+
+#: src/SiteAdaptor/Order.tsx:217
+msgid "Total Amount"
+msgstr "总金额"
+
+#: src/SiteAdaptor/UserDetail.tsx:92
+msgid "Trades"
+msgstr "交易"
+
+#: src/SiteAdaptor/components/HoldingCard.tsx:144
+#: src/SiteAdaptor/components/HoldingCard.tsx:184
+msgid "Value"
+msgstr "价值"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:182
+msgid "You Own"
+msgstr "你拥有"
+
+#: src/SiteAdaptor/components/UserProfile.tsx:206
+msgid "Your Rank"
+msgstr "您的排名"
+
