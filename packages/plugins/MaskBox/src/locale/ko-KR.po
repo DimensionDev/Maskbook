@@ -17,3 +17,65 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/MaskBox/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 974\n"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:376
+msgid "{boxStateMessage} ({0} {1}/Time)"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:330
+msgid "Active"
+msgstr "활성화"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:260
+msgid "Articles"
+msgstr "아티클"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:316
+msgid "by"
+msgstr "by"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:330
+msgid "Closed"
+msgstr "종료됨"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:264
+msgid "Details"
+msgstr "디테일"
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:279
+msgid "Draw"
+msgstr "뽑기"
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:278
+msgid "Drawing"
+msgstr "뽑는 중"
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:276
+msgid "Insufficient balance"
+msgstr "잔액 부족"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:304
+msgid "Limit:"
+msgstr "제한:"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:210
+#: src/SiteAdaptor/components/PreviewCard.tsx:235
+msgid "Load failed"
+msgstr "로딩 실패"
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "MaskBox"
+msgstr "MaskBox"
+
+#: src/SiteAdaptor/index.tsx:55
+msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
+msgstr "NFT 미스터리박스를 출시하는 멀티체인 탈중앙화 플랫폼"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:227
+#: src/SiteAdaptor/components/PreviewCard.tsx:252
+msgid "Reload"
+msgstr "다시 로드"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:294
+msgid "Solid:"
+msgstr "Solid:"

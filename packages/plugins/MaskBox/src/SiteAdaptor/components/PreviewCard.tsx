@@ -16,7 +16,7 @@ import { ArticlesTab } from './ArticlesTab.js'
 import { DetailsTab } from './DetailsTab.js'
 import { DrawDialog } from './DrawDialog.js'
 import { DrawResultDialog } from './DrawResultDialog.js'
-import { useMaskBoxTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useTabsStyles = makeStyles()((theme) => ({
     button: {
@@ -131,7 +131,6 @@ export function PreviewCard() {
     const { chainId } = useChainContext()
     const networkDescriptor = useNetworkDescriptor()
     const theme = useTheme()
-    const t = useMaskBoxTrans()
     const {
         boxState,
         boxStateMessage,
@@ -207,7 +206,9 @@ export function PreviewCard() {
     if (boxState === BoxState.ERROR)
         return (
             <Box className={classes.statusBox}>
-                <Typography color="error">{t.failed()}</Typography>
+                <Typography color="error">
+                    <Trans>Load failed</Trans>
+                </Typography>
                 <Button
                     sx={{
                         width: 254,
@@ -223,14 +224,16 @@ export function PreviewCard() {
                     size="small"
                     variant="roundedContained"
                     onClick={retryBoxInfo}>
-                    {t.retry()}
+                    <Trans>Reload</Trans>
                 </Button>
             </Box>
         )
     if (boxState === BoxState.NOT_FOUND || !boxInfo)
         return (
             <Box className={classes.statusBox}>
-                <Typography color="error">{t.failed()}</Typography>
+                <Typography color="error">
+                    <Trans>Load failed</Trans>
+                </Typography>
                 <Button
                     sx={{
                         width: 254,
@@ -246,7 +249,7 @@ export function PreviewCard() {
                     size="small"
                     variant="roundedContained"
                     onClick={retryMaskBoxInfo}>
-                    {t.retry()}
+                    <Trans>Reload</Trans>
                 </Button>
             </Box>
         )
@@ -254,11 +257,11 @@ export function PreviewCard() {
     const Tabs = [
         {
             value: tabs.Articles,
-            label: t.articles(),
+            label: <Trans>Articles</Trans>,
         },
         {
             value: tabs.Details,
-            label: t.details(),
+            label: <Trans>Details</Trans>,
         },
     ]
 
@@ -288,7 +291,7 @@ export function PreviewCard() {
                                     color={theme.palette.maskColor.publicSecond}
                                     fontSize={14}
                                     fontWeight={400}>
-                                    {t.sold()}
+                                    <Trans>Solid:</Trans>
                                 </Typography>
                                 <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
                                     {boxInfo.sold}/{boxInfo.total}
@@ -298,7 +301,7 @@ export function PreviewCard() {
                                     color={theme.palette.maskColor.publicSecond}
                                     fontSize={14}
                                     fontWeight={400}>
-                                    {t.limit()}
+                                    <Trans>Limit:</Trans>
                                 </Typography>
                                 <Typography color={theme.palette.maskColor.publicMain} fontSize={14} fontWeight="bold">
                                     {boxInfo.personalLimit}
@@ -310,7 +313,7 @@ export function PreviewCard() {
                                     color={theme.palette.maskColor.publicSecond}
                                     fontSize={14}
                                     fontWeight={400}>
-                                    {t.by()}
+                                    <Trans>by</Trans>
                                 </Typography>
                                 <Typography
                                     color={theme.palette.maskColor.publicMain}
@@ -324,7 +327,7 @@ export function PreviewCard() {
                     </Box>
                     <Chip
                         className={boxState === BoxState.READY ? classes.active : classes.close}
-                        label={boxState === BoxState.READY ? t.active() : t.close()}
+                        label={boxState === BoxState.READY ? <Trans>Active</Trans> : <Trans>Closed</Trans>}
                     />
                 </Box>
                 <Box className={classes.body}>
@@ -370,11 +373,10 @@ export function PreviewCard() {
                                 onClick={() => setOpenDrawDialog(true)}>
                                 {(() => {
                                     return boxState === BoxState.READY && paymentTokenAddress ?
-                                            t.action_title({
-                                                title: boxStateMessage,
-                                                price: formatCurrency(paymentTokenPrice, ''),
-                                                symbol: paymentTokenDetailed?.symbol ?? '',
-                                            })
+                                            <Trans>
+                                                {boxStateMessage} ({formatCurrency(paymentTokenPrice, '')}{' '}
+                                                {paymentTokenDetailed?.symbol ?? ''}/Time)
+                                            </Trans>
                                         :   boxStateMessage
                                 })()}
                             </ActionButton>
