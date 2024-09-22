@@ -5,8 +5,9 @@ import { useFungibleToken } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
-import { useClaimTrans } from '../../../locales/i18n_generated.js'
 import { share } from '@masknet/plugin-infra/content-script/context'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -70,7 +71,7 @@ interface Props {
     tokenAddress?: string
 }
 export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Props) {
-    const t = useClaimTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
     const { data: tokenDetail } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
@@ -78,30 +79,37 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
     const onShare = useCallback(() => {
         if (!amount || !tokenDetail) return
 
-        share?.(t.share_text({ amount, symbol: tokenDetail.symbol }))
+        share?.(
+            _(msg`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. 
+ Install https://mask.io to explore more airdrop activities.`),
+        )
     }, [amount, tokenDetail?.symbol])
 
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
             <DialogTitle className={classes.title}>
                 <Icons.Close className={classes.close} onClick={onClose} />
-                {t.claim()}
+                <Trans>Claim</Trans>
             </DialogTitle>
             <DialogContent className={classes.content} style={{ paddingTop: 34 }}>
                 <ImageIcon icon={tokenDetail?.logoURL} size={90} className={classes.icon} />
                 <Typography className={classes.symbol}>
                     {amount} {tokenDetail?.symbol}
                 </Typography>
-                <Typography className={classes.congratulations}>{t.congratulations()}</Typography>
+                <Typography className={classes.congratulations}>
+                    <Trans>Congratulations!</Trans>
+                </Typography>
                 {amount && tokenDetail ?
                     <Typography className={classes.tips}>
-                        {t.claim_successfully_tips({ amount, symbol: tokenDetail.symbol })}
+                        <Trans>
+                            Claimed {amount} ${tokenDetail.symbol} successfully.
+                        </Trans>
                     </Typography>
                 :   null}
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <ActionButton fullWidth onClick={onShare}>
-                    {t.share()}
+                    <Trans>Share</Trans>
                 </ActionButton>
             </DialogActions>
         </Dialog>

@@ -1,1 +1,28 @@
-{ "messages": {} }
+{
+    "messages": {
+        "hom7qf": "受取る",
+        "u2Srv1": "エアドロップを受け取る",
+        "TZDLPg": "受取可能",
+        "7lnlzl": ["Claimed ", ["amount"], " $", ["0"], " successfully."],
+        "ryWxhG": "おめでとうございます！",
+        "TYTRNP": "請求可能",
+        "M1RnFv": "期限切れ",
+        "wrJC61": [
+            "I just claimed airdrop with ",
+            ["amount"],
+            " ",
+            ["0"],
+            " on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \nInstall https://mask.io to explore more airdrop activities."
+        ],
+        "w4oOEJ": "Mask Community $ARB Giveaway",
+        "rJZPaP": "アクティブティーはありません。",
+        "neBDpj": "ウォレットに接続してください",
+        "GDe4XX": "Please connect wallet to check if you are eligible to claim $ARB.",
+        "Z8lGw6": "シェア",
+        "hTbvD9": "申し訳ありませんが、このキャンペーンで $ARB を請求する資格がありません。",
+        "3cw8FQ": "エアドロップに参加するには、トランザクションコストをカバーするために、指定されたネットワーク上のウォレットに十分なネイティブトークンが必要です。",
+        "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
+        "ayf6mz": "WalletConnect ウォレットに接続しています。そのウォレットのネットワークを切り替えるか、別のウォレットに切り替えてください。",
+        "gWcGl/": "あなたのウォレットは取引をキャンセルしました。"
+    }
+}
