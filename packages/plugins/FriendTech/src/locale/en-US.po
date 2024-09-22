@@ -12,3 +12,94 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/Order.tsx:209
+msgid "Action"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:182
+msgid "Amount"
+msgstr ""
+
+#: src/SiteAdaptor/Main.tsx:17
+msgid "Connecting to the wallet to see what keys are held."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:22
+msgid "Display the user's friend key related information on the timeline on x.com."
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:28
+#: src/SiteAdaptor/components/RouterDialog.tsx:31
+#: src/SiteAdaptor/index.tsx:16
+msgid "Friend"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:193
+msgid "From"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:223
+msgid "Gas fee"
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:45
+msgid "History"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:198
+msgid "Holders"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:214
+#: src/SiteAdaptor/UserDetail.tsx:100
+msgid "Holding"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:161
+msgid "Key Price"
+msgstr ""
+
+#: src/SiteAdaptor/components/HoldingCard.tsx:138
+#: src/SiteAdaptor/components/HoldingCard.tsx:178
+#: src/SiteAdaptor/components/RouterDialog.tsx:44
+msgid "Keys"
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:30
+msgid "Sell"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:212
+msgid "Sell Key"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:165
+#: src/SiteAdaptor/Order.tsx:147
+msgid "The price of next share is equal to the S^2 / 16000*1 ether where S is the current number of keys."
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:201
+msgid "To"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:217
+msgid "Total Amount"
+msgstr ""
+
+#: src/SiteAdaptor/UserDetail.tsx:92
+msgid "Trades"
+msgstr ""
+
+#: src/SiteAdaptor/components/HoldingCard.tsx:144
+#: src/SiteAdaptor/components/HoldingCard.tsx:184
+msgid "Value"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:182
+msgid "You Own"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:206
+msgid "Your Rank"
+msgstr ""

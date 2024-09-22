@@ -14,6 +14,7 @@ import { useLayoutEffect, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths, TitleTabs } from '../../constants.js'
 import { useI18N } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 export function RouterDialog(props: InjectedDialogProps) {
     const t = useI18N()
@@ -24,10 +25,10 @@ export function RouterDialog(props: InjectedDialogProps) {
 
     const title = useMemo(() => {
         if (matchPath(RoutePaths.Detail, pathname)) {
-            return paramTitle || t.name()
+            return paramTitle || <Trans>Friend</Trans>
         }
-        if (matchPath(RoutePaths.Order, pathname)) return t.sell()
-        return t.name()
+        if (matchPath(RoutePaths.Order, pathname)) return <Trans>Sell</Trans>
+        return <Trans>Friend</Trans>
     }, [t, pathname, paramTitle])
 
     useLayoutEffect(() => {
@@ -40,8 +41,8 @@ export function RouterDialog(props: InjectedDialogProps) {
     const titleTabs =
         matchPath(RoutePaths.Main, pathname) ?
             <MaskTabList variant="base" onChange={handleTabChange}>
-                <Tab label={t.key()} value={TitleTabs.Keys} />
-                <Tab label={t.history()} value={TitleTabs.History} />
+                <Tab label={<Trans>Keys</Trans>} value={TitleTabs.Keys} />
+                <Tab label={<Trans>History</Trans>} value={TitleTabs.History} />
             </MaskTabList>
         :   undefined
     const openApplicationBoardDialog = useOpenApplicationSettings()

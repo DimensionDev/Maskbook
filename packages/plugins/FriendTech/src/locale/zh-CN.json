@@ -1,1 +1,25 @@
-{ "messages": {} }
+{
+    "messages": {
+        "bwRvnp": "操作",
+        "hehnjM": "金额",
+        "HpgswQ": "正在连接到钱包以查看持有的 Key。",
+        "U/6KKh": "在x.com上显示用户的好友 Key 的相关信息。",
+        "NBRdPB": "朋友",
+        "ejVYRQ": "从",
+        "9FSKeo": "Gas 费用",
+        "0caMy7": "历史",
+        "CI4Km7": "持有者",
+        "FYzHRF": "正在持有",
+        "vS/FMN": "Key Price",
+        "WQg61I": "Keys",
+        "xNB0TS": "出售",
+        "E5pRo/": "出售密钥",
+        "7xTCzK": "下一次分享的价格等于S^2 / 16000*1 ether ，其中S是当前的 keys 的数量。",
+        "/jQctM": "至",
+        "NrYZ3H": "总金额",
+        "ZFtwlj": "交易",
+        "wMHvYH": "价值",
+        "BbPO8N": "你拥有",
+        "uiFNIR": "您的排名"
+    }
+}
