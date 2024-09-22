@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-09-22 09:59\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,54 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 946\n"
+
+#: src/SiteAdaptor/ApprovalDialog.tsx:87
+#: src/SiteAdaptor/index.tsx:29
+#: src/SiteAdaptor/index.tsx:49
+msgid "Approval"
+msgstr "crwdns28284:0crwdne28284:0"
+
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:255
+msgid "Approved Amount"
+msgstr "crwdns28286:0crwdne28286:0"
+
+#: src/SiteAdaptor/ApprovalDialog.tsx:93
+msgid "Collectibles"
+msgstr "crwdns28288:0crwdne28288:0"
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:276
+msgid "Collection Approval"
+msgstr "crwdns28290:0crwdne28290:0"
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:256
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:235
+msgid "Contract"
+msgstr "crwdns28292:0crwdne28292:0"
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:177
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:171
+msgid "No approved contract records."
+msgstr "crwdns28294:0crwdne28294:0"
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:291
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:298
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:299
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:308
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:269
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:276
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:277
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:286
+msgid "Revoke"
+msgstr "crwdns28296:0crwdne28296:0"
+
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:297
+#: src/SiteAdaptor/ApprovalNFTContent.tsx:307
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:275
+#: src/SiteAdaptor/ApprovalTokenContent.tsx:285
+msgid "Revoking"
+msgstr "crwdns28298:0crwdne28298:0"
+
+#: src/SiteAdaptor/ApprovalDialog.tsx:92
+msgid "Tokens"
+msgstr "crwdns28300:0crwdne28300:0"
 
