@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 950\n"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:229
+#: src/SiteAdaptor/NFTAvatar.tsx:227
 msgid "Add Collectibles"
 msgstr "コレクティブルを追加"
 
@@ -26,7 +26,7 @@ msgstr "コレクティブルを追加"
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:179
+#: src/SiteAdaptor/NFTAvatar.tsx:177
 msgid "Change"
 msgstr "変更"
 
@@ -34,7 +34,7 @@ msgstr "変更"
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr "ソーシャルアカウントを接続することでNFTエクスペリエンスをカスタマイズします。全く新しいWeb3の雰囲気でWeb2をお楽しみください。"
 
-#: src/Application/NFTListDialog.tsx:120
+#: src/Application/NFTListDialog.tsx:121
 msgid "Download image error"
 msgstr "画像ダウンロードエラー"
 
@@ -46,7 +46,7 @@ msgstr "プロフィールを編集する"
 msgid "Loading..."
 msgstr "読み込み中..."
 
-#: src/SiteAdaptor/NFTAvatar.tsx:168
+#: src/SiteAdaptor/NFTAvatar.tsx:166
 msgid "NFT Avatar Setting"
 msgstr "NFT のアバター設定"
 
@@ -55,11 +55,11 @@ msgstr "NFT のアバター設定"
 msgid "NFT PFP"
 msgstr "NFT PFP"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:197
+#: src/SiteAdaptor/NFTAvatar.tsx:195
 msgid "No collectible found."
 msgstr "コレクションが見つかりません."
 
-#: src/Application/NFTListDialog.tsx:220
+#: src/Application/NFTListDialog.tsx:221
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr "有効なウォレットが見つかりませんでした。ウォレットに接続するか、ウォレットを確認してください。"
 
@@ -67,7 +67,7 @@ msgstr "有効なウォレットが見つかりませんでした。ウォレッ
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
 msgstr "現在のアカウントではありません。このアカウントに切り替えてNFTsプロファイルを設定してください。"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:198
+#: src/SiteAdaptor/NFTAvatar.tsx:196
 msgid "Retry"
 msgstr "再試行"
 
@@ -75,7 +75,7 @@ msgstr "再試行"
 msgid "Save"
 msgstr "保存"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:233
+#: src/SiteAdaptor/NFTAvatar.tsx:231
 msgid "Set NFT Avatar"
 msgstr "NFT アバターを設定"
 
@@ -95,6 +95,6 @@ msgstr "申し訳ありませんが、NFT アバターを保存できません�
 msgid "Update NFT Avatar Success!"
 msgstr "NFTアバターを更新しました！"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:172
+#: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr "ウォレット"

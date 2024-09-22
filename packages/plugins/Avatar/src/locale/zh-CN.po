@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 950\n"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:229
+#: src/SiteAdaptor/NFTAvatar.tsx:227
 msgid "Add Collectibles"
 msgstr "添加 NFT"
 
@@ -26,7 +26,7 @@ msgstr "添加 NFT"
 msgid "Cancel"
 msgstr "取消"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:179
+#: src/SiteAdaptor/NFTAvatar.tsx:177
 msgid "Change"
 msgstr "切换"
 
@@ -34,7 +34,7 @@ msgstr "切换"
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr "通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的 Web2 。"
 
-#: src/Application/NFTListDialog.tsx:120
+#: src/Application/NFTListDialog.tsx:121
 msgid "Download image error"
 msgstr "下载图片错误"
 
@@ -46,7 +46,7 @@ msgstr "编辑个人资料"
 msgid "Loading..."
 msgstr "加载中..."
 
-#: src/SiteAdaptor/NFTAvatar.tsx:168
+#: src/SiteAdaptor/NFTAvatar.tsx:166
 msgid "NFT Avatar Setting"
 msgstr "头像设置"
 
@@ -55,11 +55,11 @@ msgstr "头像设置"
 msgid "NFT PFP"
 msgstr "NFT 头像"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:197
+#: src/SiteAdaptor/NFTAvatar.tsx:195
 msgid "No collectible found."
 msgstr "未找到任何 NFT。"
 
-#: src/Application/NFTListDialog.tsx:220
+#: src/Application/NFTListDialog.tsx:221
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr "未检测到有效的钱包。请先连接钱包或验证钱包。"
 
@@ -67,7 +67,7 @@ msgstr "未检测到有效的钱包。请先连接钱包或验证钱包。"
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
 msgstr "非当前帐户。请切换到此帐户以设置 NFT 头像。"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:198
+#: src/SiteAdaptor/NFTAvatar.tsx:196
 msgid "Retry"
 msgstr "重试"
 
@@ -75,7 +75,7 @@ msgstr "重试"
 msgid "Save"
 msgstr "保存"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:233
+#: src/SiteAdaptor/NFTAvatar.tsx:231
 msgid "Set NFT Avatar"
 msgstr "设置 NFT 头像"
 
@@ -95,6 +95,6 @@ msgstr "抱歉，保存 NFT 头像失败。请重新设置。"
 msgid "Update NFT Avatar Success!"
 msgstr "更新 NFT 头像成功！"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:172
+#: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr "钱包"

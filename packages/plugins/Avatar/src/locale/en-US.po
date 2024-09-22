@@ -13,7 +13,7 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:229
+#: src/SiteAdaptor/NFTAvatar.tsx:227
 msgid "Add Collectibles"
 msgstr ""
 
@@ -21,7 +21,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatar.tsx:179
+#: src/SiteAdaptor/NFTAvatar.tsx:177
 msgid "Change"
 msgstr ""
 
@@ -29,7 +29,7 @@ msgstr ""
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:120
+#: src/Application/NFTListDialog.tsx:121
 msgid "Download image error"
 msgstr ""
 
@@ -41,7 +41,7 @@ msgstr ""
 msgid "Loading..."
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatar.tsx:168
+#: src/SiteAdaptor/NFTAvatar.tsx:166
 msgid "NFT Avatar Setting"
 msgstr ""
 
@@ -50,11 +50,11 @@ msgstr ""
 msgid "NFT PFP"
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatar.tsx:197
+#: src/SiteAdaptor/NFTAvatar.tsx:195
 msgid "No collectible found."
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:220
+#: src/Application/NFTListDialog.tsx:221
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr ""
 
@@ -62,7 +62,7 @@ msgstr ""
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatar.tsx:198
+#: src/SiteAdaptor/NFTAvatar.tsx:196
 msgid "Retry"
 msgstr ""
 
@@ -70,7 +70,7 @@ msgstr ""
 msgid "Save"
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatar.tsx:233
+#: src/SiteAdaptor/NFTAvatar.tsx:231
 msgid "Set NFT Avatar"
 msgstr ""
 
@@ -90,6 +90,6 @@ msgstr ""
 msgid "Update NFT Avatar Success!"
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatar.tsx:172
+#: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr ""
