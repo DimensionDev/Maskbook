@@ -490,6 +490,7 @@ type Transaction = {
     randomKeyAccount: any[]
 }
 
+// cspell:ignore minmum
 /** Response type for getting a cross-chain swap */
 export type GetBridgeResponse = OKXResponse<
     Array<{

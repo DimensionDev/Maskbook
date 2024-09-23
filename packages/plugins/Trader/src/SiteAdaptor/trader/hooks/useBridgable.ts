@@ -2,8 +2,8 @@ import { t } from '@lingui/macro'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
-import { useSwap } from '../contexts/index.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { useSwap } from '../contexts/index.js'
 
 export function useBridgable(): [result: boolean, message?: string] {
     const { inputAmount, fromToken, toToken, bridgeQuote } = useSwap()
