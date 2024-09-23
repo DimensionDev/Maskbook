@@ -1,4 +1,3 @@
-export * from './useBalanceChecker.js'
 export * from './useContract.js'
 export * from './useERC165.js'
 export * from './useERC20TokenAllowance.js'

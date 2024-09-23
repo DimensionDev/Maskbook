@@ -1,9 +1,10 @@
+import { queryClient } from '@masknet/shared-base-ui'
 import { rightShift, TokenType, type FungibleToken } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
 import { v4 as uuid } from 'uuid'
 import { fetchJSON } from '../helpers/fetchJSON.js'
-import { NATIVE_TOKEN_ADDRESS, OKX_HOST } from './constant.js'
+import { blockedTokenMap, NATIVE_TOKEN_ADDRESS, OKX_HOST } from './constant.js'
 import { fixToken, fromOkxNativeAddress, normalizeCode, toOkxNativeAddress } from './helper.js'
 import type {
     ApproveTransactionResponse,
@@ -20,7 +21,6 @@ import type {
     SwapOptions,
     SwapResponse,
 } from './types.js'
-import { queryClient } from '@masknet/shared-base-ui'
 
 /** request okx official API, and normalize the code */
 function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
@@ -45,20 +45,30 @@ export class OKX {
         const res = await fetchFromOKX<GetTokensResponse>(url)
         if (res.code !== 0) return null
         const tokens = res.data
-        return tokens.map((x) => {
-            return {
-                id: x.tokenContractAddress,
-                chainId,
-                name: x.tokenName,
-                symbol: x.tokenSymbol,
-                // string to number for /api/v5/dex/aggregator/all-tokens
-                decimals: +x.decimals,
-                logoURL: x.tokenLogoUrl,
-                address: toOkxNativeAddress(x.tokenContractAddress),
-                type: TokenType.Fungible,
-                schema: SchemaType.ERC20,
-            } satisfies FungibleToken<ChainId, SchemaType>
-        })
+        return (
+            tokens
+                // There are some invalid tokens mixed in.
+                .filter((x) => {
+                    if (!x.tokenContractAddress.startsWith('0x')) return false
+                    const blockedList = blockedTokenMap[chainId] || []
+                    if (!blockedList.length) return true
+                    return !blockedList.includes(x.tokenContractAddress.toLowerCase())
+                })
+                .map((x) => {
+                    return {
+                        id: x.tokenContractAddress,
+                        chainId,
+                        name: x.tokenName,
+                        symbol: x.tokenSymbol,
+                        // string to number for /api/v5/dex/aggregator/all-tokens
+                        decimals: +x.decimals,
+                        logoURL: x.tokenLogoUrl,
+                        address: toOkxNativeAddress(x.tokenContractAddress),
+                        type: TokenType.Fungible,
+                        schema: SchemaType.ERC20,
+                    } satisfies FungibleToken<ChainId, SchemaType>
+                })
+        )
     }
 
     static async getTokens(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>> | null> {
