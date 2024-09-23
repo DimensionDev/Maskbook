@@ -265,7 +265,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const disabled = !isBridgable || loading
 
     const { showSnackbar } = useCustomSnackbar()
-    const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, toNetwork?.chainId)
+    const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+        chainId: toNetwork?.chainId,
+    })
     const toChainNetworkFee = bridgeQuote?.routerList[0]?.toChainNetworkFee
     const toNetworkFeeValue = leftShift(toChainNetworkFee ?? 0, toNetwork?.nativeCurrency.decimals ?? 0)
         .times(toChainNativeTokenPrice ?? 0)

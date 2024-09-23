@@ -125,7 +125,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
         const firstSubRouterDex = quote.dexRouterList[0].subRouterList[0].dexProtocol[0].dexName
         const compareList: OKXSwapQuote['quoteCompareList'] = [
             {
-                amountOut: formatAmount(quote.toTokenAmount, quote.toToken.decimals),
+                amountOut: formatAmount(quote.toTokenAmount, -quote.toToken.decimals),
                 dexLogo: dexes.find((x) => x.name === firstSubRouterDex)?.logo as string,
                 dexName: firstSubRouterDex,
                 tradeFee: quote.estimateGasFee,

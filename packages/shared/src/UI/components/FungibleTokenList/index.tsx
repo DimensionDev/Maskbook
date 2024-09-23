@@ -112,6 +112,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const trustedFungibleTokens = useTrustedFungibleTokens(pluginID, undefined, chainId)
     const blockedFungibleTokens = useBlockedFungibleTokens(pluginID)
+    console.log({ blockedFungibleTokens })
     const nativeToken = useMemo(() => Utils.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {

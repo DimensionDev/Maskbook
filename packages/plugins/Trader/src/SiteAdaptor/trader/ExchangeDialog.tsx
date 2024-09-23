@@ -56,7 +56,8 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
     const titleMap: Record<RoutePaths, string | null> = {
         [RoutePaths.Trade]: t`Exchange`,
         [RoutePaths.History]: t`History`,
-        [RoutePaths.Confirm]: t`Confirm swap`,
+        [RoutePaths.Confirm]: t`Confirm Swap`,
+        [RoutePaths.BridgeConfirm]: t`Confirm Bridge`,
         [RoutePaths.SelectLiquidity]: t`Select Liquidity`,
         [RoutePaths.Slippage]: t`Slippage`,
         [RoutePaths.QuoteRoute]: t`Quote Route`,
