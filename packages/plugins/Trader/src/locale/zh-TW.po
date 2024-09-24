@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-24 02:28\n"
+"PO-Revision-Date: 2024-09-24 15:27\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -57,6 +57,22 @@ msgstr ""
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:137
+msgid "24H Average Price"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:170
+msgid "24H sale"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:152
+msgid "24H Traded Volume"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
+msgid "Activities"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:310
 msgid "Aggregator"
 msgstr ""
@@ -87,6 +103,10 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:398
 msgid "Bridge network fee"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:386
+msgid "Buy Now"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:368
@@ -146,8 +166,11 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:78
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
+#: src/SiteAdaptor/trending/TickersTable.tsx:82
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
 msgid "Exchange"
 msgstr ""
 
@@ -163,10 +186,16 @@ msgstr ""
 msgid "Fastest"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:412
+msgid "Floor Price"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:289
 #: src/SiteAdaptor/trader/views/Confirm.tsx:262
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:209
 #: src/SiteAdaptor/trader/views/Transaction.tsx:260
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:139
 msgid "From"
 msgstr ""
 
@@ -176,6 +205,14 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:382
 msgid "Gas Price"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:224
+msgid "General"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:107
+msgid "Highest Price"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:58
@@ -194,12 +231,33 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:77
+msgid "Items"
+msgstr ""
+
+#: src/SiteAdaptor/trending/FailedTrendingView.tsx:29
+msgid "Load failed"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:226
+#: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx:47
+msgid "Loading"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:93
+msgid "Market Cap"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:175
 msgid "Max amount"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:347
 msgid "Max base fee"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:137
+msgid "Method"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:419
@@ -215,6 +273,21 @@ msgstr ""
 msgid "Network fee"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:136
+msgid "NFT"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:237
+msgid "NFTs"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
+#: src/SiteAdaptor/trending/PriceChart.tsx:89
+#: src/SiteAdaptor/trending/TickersTable.tsx:173
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
+msgid "No Data"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/History.tsx:132
 msgid "No recent transactions"
 msgstr ""
@@ -223,9 +296,27 @@ msgstr ""
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:396
+msgid "Open"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:85
+msgid "Owners"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:83
+msgid "Pair"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:361
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:145
+#: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx:80
 msgid "Powered by"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:84
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+msgid "Price"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:365
@@ -244,6 +335,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:63
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:64
 msgid "Quote Route"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:339
+msgid "Rank #{0}"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:413
@@ -283,6 +378,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:413
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:360
 #: src/SiteAdaptor/trader/views/Transaction.tsx:320
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:376
 msgid "Swap"
 msgstr ""
 
@@ -315,10 +411,19 @@ msgstr ""
 msgid "This swap isn’t supported"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:141
+msgid "Time"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:311
 #: src/SiteAdaptor/trader/views/Confirm.tsx:284
 #: src/SiteAdaptor/trader/views/Transaction.tsx:286
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:140
 msgid "To"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:122
+msgid "Total Volume"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:307
@@ -358,5 +463,17 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:453
 #: src/SiteAdaptor/trader/views/Confirm.tsx:396
 msgid "Update Quote"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:81
+msgid "Updated"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:138
+msgid "Value"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:80
+msgid "Volume (24h)"
 msgstr ""
 
