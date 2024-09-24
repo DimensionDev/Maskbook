@@ -14,7 +14,7 @@
     "create_a_new_persona_desc": "팝업에서 새로운 페르소나 만들기",
     "create_successfully": "성공적으로 생성되었습니다!",
     "create_smart_pay_wallet": "SmartPay 월렛 만들기",
-    "created_smart_pay_wallet_description": "Ploygon 네트워크에서 SmartPay 월렛 만듭니다.",
+    "created_smart_pay_wallet_description": "Polygon 네트워크에서 SmartPay 월렛 만듭니다.",
     "create_successfully_tips": "축하합니다! SmartPay 월렛 {{address}} 이미 생성되었습니다.",
     "create_successfully_tips_owner": "SmartPay 월렛의 관리자 계정은 {{owner}} 입니다.",
     "can_only_receive_polygon_assets": "Polygon 네트워크에서만 자산을 받기 가능합니다.",
