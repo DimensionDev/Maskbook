@@ -5,11 +5,11 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { Button, Typography } from '@mui/material'
 import { useState } from 'react'
 import { RSS3Trans } from '../../../locales/i18n_generated.js'
-import { useRSS3Trans } from '../../../locales/index.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, formatValue, Label } from '../common.js'
 import { TokenApprovalAction } from './TokenApprovalAction.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -62,7 +62,6 @@ const contextMap: Partial<
  * - TokenBurn
  */
 export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionProps) {
-    const t = useRSS3Trans()
     const { classes, cx } = useStyles()
 
     const owner = useFeedOwner()
@@ -77,7 +76,12 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
         <>
             {actions.map((action, index) => {
                 const metadata = action.metadata
-                const asset = metadata ? t.token_value({ value: formatValue(metadata), symbol: metadata.symbol }) : ''
+                const asset =
+                    metadata ?
+                        <Trans>
+                            {formatValue(metadata)} {metadata.symbol}
+                        </Trans>
+                    :   ''
                 const isFromOwner = isSameAddress(owner.address, action.from)
                 // Always treat as send action
                 const sender = isFromOwner ? action.from! : action.to!

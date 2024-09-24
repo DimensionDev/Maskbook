@@ -1,1 +1,22 @@
-{ "messages": {} }
+{
+    "messages": {
+        "xYxQCZ": [["0"], " ", ["1"]],
+        "2EUnBM": [["0"], " Networks"],
+        "K7tIrx": "Category",
+        "URmyfc": "详情",
+        "fYUNRJ": "Direct",
+        "7Bj3x9": "Failed",
+        "ejVYRQ": "From",
+        "OAfk3i": "Hash",
+        "OR475H": "Network",
+        "8IN0ph": "No more data available.",
+        "F3bW6y": "Platform",
+        "8Ug9jB": "Related",
+        "uAQUqI": "Status",
+        "olEUh2": "Successful",
+        "8TMaZI": "Timestamp",
+        "/jQctM": "To",
+        "5HVoyc": "Transaction Details",
+        "mNUsxu": "Tx Fee"
+    }
+}

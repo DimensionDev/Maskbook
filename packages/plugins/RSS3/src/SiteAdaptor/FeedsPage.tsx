@@ -14,6 +14,7 @@ import { FeedFilters } from './FeedFilters.js'
 import { useFilters } from './filters.js'
 import { useFeeds } from './hooks/useFeeds.js'
 import { Networks } from '../constants.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
@@ -111,7 +112,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
                         :   null}
                     </ElementAnchor>
                 :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
-                        {t.no_more_data()}
+                        <Trans>No more data available.</Trans>
                     </Typography>
                 }
             </Box>
