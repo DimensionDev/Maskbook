@@ -170,7 +170,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:291
 #: src/SiteAdaptor/trader/views/Confirm.tsx:264
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:210
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:212
 #: src/SiteAdaptor/trader/views/Transaction.tsx:268
 msgid "From"
 msgstr ""
@@ -292,12 +292,14 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:104
 #: src/SiteAdaptor/trader/views/Confirm.tsx:413
 #: src/SiteAdaptor/trader/views/Confirm.tsx:419
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:365
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:204
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:205
 #: src/SiteAdaptor/trader/views/Transaction.tsx:328
 msgid "Swap"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:365
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:204
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:205
 msgid "Swap anyway"
 msgstr ""
 
