@@ -25,7 +25,7 @@ import { base } from '../../../base.js'
 import { DEFAULT_SLIPPAGE } from '../../constants.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useQuotes } from '../hooks/useQuotes.js'
-import { useUsdtToken } from '../hooks/useUsdtToken.js'
+import { useDefaultToken } from '../hooks/useDefaultToken.js'
 import { useBridgeQuotes } from '../hooks/useBridgeQuotes.js'
 import { fixBridgeMessage } from '../helpers.js'
 
@@ -102,8 +102,8 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const usdtToken = useUsdtToken(chainId)
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
+    const usdtToken = useDefaultToken(chainId, fromToken?.address)
     const [toToken = fromToken?.address === usdtToken?.address ? undefined : usdtToken, setToToken] =
         useModeState<Web3Helper.FungibleTokenAll>(mode)
 
