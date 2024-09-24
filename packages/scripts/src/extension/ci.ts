@@ -21,7 +21,7 @@ export const ciBuild: TaskFunction = series(
 export const buildChrome: TaskFunction = series(
     codegen,
     buildBaseExtension,
-    zipTo('MaskNetwork.chromium-mv2.zip', ManifestFile.ChromiumMV3),
+    zipTo('MaskNetwork.chromium-mv3.zip', ManifestFile.ChromiumMV3),
 )
 task(ciBuild, 'build-ci', 'Build the extension on CI')
 task(buildChrome, 'build-chrome', 'Build the extension for Chrome only')

@@ -78,8 +78,13 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:105
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:469
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:475
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:205
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx:155
 msgid "Bridge"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:205
+msgid "Bridge anyway"
 msgstr ""
 
 #: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:168
@@ -293,13 +298,11 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:413
 #: src/SiteAdaptor/trader/views/Confirm.tsx:419
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:204
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:205
 #: src/SiteAdaptor/trader/views/Transaction.tsx:328
 msgid "Swap"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:204
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:205
 msgid "Swap anyway"
 msgstr ""
 

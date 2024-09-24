@@ -202,7 +202,7 @@ export function TradeView() {
     const isTradable = isSwap ? !isSwappable : !isBridgable
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
     const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
-    const bridgeButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
+    const bridgeButtonLabel = isOverSlippage ? t`Bridge anyway` : t`Bridge`
     return (
         <div className={classes.view}>
             <Box className={classes.container}>
