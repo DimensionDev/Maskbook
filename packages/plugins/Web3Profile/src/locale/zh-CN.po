@@ -120,7 +120,7 @@ msgstr "成功设置 Web3 个人资料钱包。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:406
 msgid "Switch to Polygon and Follow"
-msgstr "切换到 Ploygon 并关注"
+msgstr "切换到 Polygon 并关注"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:317
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"

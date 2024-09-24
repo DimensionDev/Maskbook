@@ -14,7 +14,7 @@
     "create_a_new_persona_desc": "ポップアップで新しいペルソナを作成します。",
     "create_successfully": "正常に作成されました",
     "create_smart_pay_wallet": "スマートペイウォレットを作成",
-    "created_smart_pay_wallet_description": "Ploygon network に SmartPay ウォレットを作成しました。",
+    "created_smart_pay_wallet_description": "Polygon network に SmartPay ウォレットを作成しました。",
     "create_successfully_tips": "おめでとうございます！SmartPayウォレット {{address}}を展開しました。",
     "create_successfully_tips_owner": "SmartPayウォレットの管理アカウントは {{owner}}です。",
     "can_only_receive_polygon_assets": "Polygonネットワークのみのアセットを受信する",

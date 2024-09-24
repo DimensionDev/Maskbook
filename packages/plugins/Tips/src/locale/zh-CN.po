@@ -48,7 +48,7 @@ msgstr "发送"
 
 #: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
 msgid "Send authors tips by using Mask Network’s Tips function."
-msgstr "使用Mask Newwork发送小费给作者。"
+msgstr "使用Mask Network发送小费给作者。"
 
 #: src/components/TipDialog.tsx:125
 msgid "Sending..."
