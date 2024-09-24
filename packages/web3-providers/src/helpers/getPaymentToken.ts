@@ -5,6 +5,7 @@ import {
     DAI,
     HUSD,
     RARI,
+    // cspell:disable-next-line
     TATR,
     USDC,
     USDT,

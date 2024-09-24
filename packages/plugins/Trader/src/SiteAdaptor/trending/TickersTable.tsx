@@ -20,7 +20,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CurrencyType, formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
 import type { Ticker } from '../../types/index.js'
 import { TrendingViewContext } from './context.js'
-import { useTraderTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ themeMode?: 'dim' | 'dark' | 'light'; isPopper?: boolean }>()(
     (theme, { themeMode, isPopper }) => ({
@@ -71,18 +71,17 @@ interface TickersTableProps {
 type Cells = 'exchange' | 'pair' | 'price' | 'volume' | 'updated'
 
 export function TickersTable({ tickers }: TickersTableProps) {
-    const t = useTraderTrans()
     const theme = useTheme()
     const themeMode = useSiteThemeMode(theme)
     const { isCollectionProjectPopper, isTokenTagPopper } = useContext(TrendingViewContext)
     const { classes } = useStyles({ themeMode, isPopper: isCollectionProjectPopper || isTokenTagPopper })
 
-    const headCellMap: Record<Cells, string> = {
-        volume: t.plugin_trader_table_volume(),
-        updated: t.plugin_trader_table_updated(),
-        exchange: t.plugin_trader_table_exchange(),
-        pair: t.plugin_trader_table_pair(),
-        price: t.plugin_trader_table_price(),
+    const headCellMap: Record<Cells, ReactNode> = {
+        volume: <Trans>Volume (24h)</Trans>,
+        updated: <Trans>Updated</Trans>,
+        exchange: <Trans>Exchange</Trans>,
+        pair: <Trans>Pair</Trans>,
+        price: <Trans>Price</Trans>,
     }
 
     const columns: Cells[] = ['exchange', 'pair', 'price', 'volume', 'updated']
@@ -155,8 +154,8 @@ export function TickersTable({ tickers }: TickersTableProps) {
             <Table size="small" stickyHeader>
                 <TableHead>
                     <TableRow>
-                        {headCells.map((x) => (
-                            <TableCell className={classes.cell} key={x}>
+                        {headCells.map((x, i) => (
+                            <TableCell className={classes.cell} key={i}>
                                 {x}
                             </TableCell>
                         ))}
@@ -171,7 +170,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
                                 colSpan={columns.length}
                                 style={{ borderStyle: 'none' }}>
                                 <Typography className={classes.placeholder} align="center" color="textSecondary">
-                                    {t.plugin_trader_no_data()}
+                                    <Trans>No Data</Trans>
                                 </Typography>
                             </TableCell>
                         </TableRow>

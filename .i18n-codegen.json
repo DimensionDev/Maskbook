@@ -21,8 +21,8 @@
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
             "generator": {
                 "type": "i18next/react-hooks",
-                "hooks": "useDO_NOT_USE",
-                "namespace": "DO_NOT_USE",
+                "hooks": "useDO_NOT_USE_",
+                "namespace": "DO_NOT_USE_",
                 "trans": "DO_NOT_USE_TRANSLATOR",
                 "emitTS": true,
                 "shouldUnescape": true

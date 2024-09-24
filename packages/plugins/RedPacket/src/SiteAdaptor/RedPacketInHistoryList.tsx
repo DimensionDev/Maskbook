@@ -8,8 +8,9 @@ import { ChainId, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
 import { memo } from 'react'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
+import { RedPacketTrans } from '../locales/index.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
+import { Trans } from '@lingui/macro'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
@@ -161,7 +162,6 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
         share_from,
         theme_id,
     } = history
-    const t = useRedPacketTrans()
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chain_id)
@@ -180,12 +180,14 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                             <div className={classes.div}>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.title, classes.message)}>
-                                        {!rp_msg ? t.best_wishes() : rp_msg}
+                                        {!rp_msg ?
+                                            <Trans>Best Wishes!</Trans>
+                                        :   rp_msg}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                        {t.create_time()}
+                                        <Trans>Create time:</Trans>
                                     </Typography>
                                     <Typography
                                         variant="body1"
@@ -194,9 +196,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                             classes.message,
                                             redpacket_id ? '' : classes.invisible,
                                         )}>
-                                        {t.history_duration({
-                                            time: format(fromUnixTime(create_time), 'M/d/yyyy HH:mm'),
-                                        })}
+                                        <Trans>{format(fromUnixTime(create_time), 'M/d/yyyy HH:mm')} (UTC+8)</Trans>
                                     </Typography>
                                 </div>
                             </div>

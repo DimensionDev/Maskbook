@@ -1,8 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, Link, Typography } from '@mui/material'
-import { SmartPayTrans, useSmartPayTrans } from '../../locales/index.js'
+import { SmartPayTrans } from '../../locales/index.js'
 import { memo } from 'react'
 import { SmartPayBanner } from './SmartPayBanner.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -34,11 +35,12 @@ const useStyles = makeStyles()((theme) => ({
 
 export const InEligibilityTips = memo(() => {
     const { classes } = useStyles()
-    const t = useSmartPayTrans()
     return (
         <DialogContent className={classes.dialogContent}>
             <SmartPayBanner>
-                <Typography>{t.ineligibility_tips()}</Typography>
+                <Typography>
+                    <Trans>Sorry, you are not in the free trial whitelist.</Trans>
+                </Typography>
             </SmartPayBanner>
             <Typography className={classes.description}>
                 {/* eslint-disable-next-line react/naming-convention/component-name */}

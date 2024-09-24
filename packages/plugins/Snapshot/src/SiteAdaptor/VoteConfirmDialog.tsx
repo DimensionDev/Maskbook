@@ -6,7 +6,7 @@ import { PluginWalletStatusBar, InjectedDialog, WalletConnectedBoundary } from '
 import { formatCount } from '@masknet/web3-shared-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { InfoField } from './InformationCard.js'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -45,17 +45,12 @@ interface VoteConfirmDialogProps {
 
 export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
     const { open, onClose, onVoteConfirm, choiceText, snapshot, powerSymbol, power = 0, loading, chainId } = props
-    const t = useSnapshotTrans()
 
     const { classes } = useStyles()
     return (
-        <InjectedDialog
-            open={open}
-            onClose={onClose}
-            title={t.plugin_snapshot_vote_confirm_dialog_title()}
-            disableBackdropClick>
+        <InjectedDialog open={open} onClose={onClose} title={<Trans>Vote Overview</Trans>} disableBackdropClick>
             <DialogContent className={classes.content}>
-                <InfoField classes={{ field: classes.field }} title={t.plugin_snapshot_vote_choice()}>
+                <InfoField classes={{ field: classes.field }} title={<Trans>Option(s)</Trans>}>
                     <ShadowRootTooltip
                         PopperProps={{
                             disablePortal: true,
@@ -75,7 +70,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         </Typography>
                     </ShadowRootTooltip>
                 </InfoField>
-                <InfoField classes={{ field: classes.field }} title={t.plugin_snapshot_info_snapshot()}>
+                <InfoField classes={{ field: classes.field }} title={<Trans>Snapshot</Trans>}>
                     <Link
                         className={classes.link}
                         target="_blank"
@@ -85,7 +80,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                         <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
-                <InfoField classes={{ field: classes.field }} title={t.plugin_snapshot_vote_power()}>
+                <InfoField classes={{ field: classes.field }} title={<Trans>Your voting power</Trans>}>
                     <Typography>
                         {formatCount(power, 2, true)} {powerSymbol.toUpperCase()}
                     </Typography>
@@ -100,7 +95,7 @@ export function VoteConfirmDialog(props: VoteConfirmDialogProps) {
                             disabled={loading}
                             onClick={onVoteConfirm}
                             loading={loading}>
-                            {t.plugin_snapshot_vote()}
+                            <Trans>Vote</Trans>
                         </ActionButton>
                     </PluginWalletStatusBar>
                 </WalletConnectedBoundary>

@@ -55,7 +55,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     actualNetworkPluginID?: T
-    switchText?: string
+    switchText?: React.ReactNode
     disableConnectWallet?: boolean
 }
 

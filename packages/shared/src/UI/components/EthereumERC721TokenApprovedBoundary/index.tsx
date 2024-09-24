@@ -13,7 +13,7 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
     owner: string | undefined
     chainId: ChainId
     collection: NonFungibleCollection<ChainId, SchemaType> | undefined
-    validationMessage?: string
+    validationMessage?: React.ReactNode
     operator: string | undefined
     ActionButtonProps?: ActionButtonProps
 }

@@ -9,11 +9,12 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { fill } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
+import { RedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
 import { dateTimeFormat } from './utils/formatDate.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -171,7 +172,6 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 }: NftRedPacketHistoryItemProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [seen, ref] = useEverSeen<HTMLLIElement>()
-    const t = useRedPacketTrans()
 
     const { value: receipt } = useCreateNftRedPacketReceipt(seen ? history.txid : '', history.chainId)
     const rpid = receipt?.rpid || history.rpid || ''
@@ -212,19 +212,19 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
                                         variant="body1"
                                         className={cx(classes.title, classes.message, classes.ellipsis)}>
                                         {patchedHistory.sender.message === '' ?
-                                            t.best_wishes()
+                                            <Trans>Best Wishes!</Trans>
                                         :   patchedHistory.sender.message}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                        {t.create_time()}
+                                        <Trans>Create time:</Trans>
                                     </Typography>
                                     {rpid ?
                                         <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                            {t.history_duration({
-                                                time: dateTimeFormat(new Date(patchedHistory.creation_time)),
-                                            })}
+                                            <Trans>
+                                                {dateTimeFormat(new Date(patchedHistory.creation_time))} (UTC+8)
+                                            </Trans>
                                         </Typography>
                                     :   null}
                                 </div>
@@ -232,14 +232,18 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 
                             <ShadowRootTooltip
                                 placement="top"
-                                title={canSend && !isPasswordValid ? t.nft_data_broken() : ''}>
+                                title={
+                                    canSend && !isPasswordValid ?
+                                        <Trans>The Lucky Drop can’t be sent due to data damage.</Trans>
+                                    :   ''
+                                }>
                                 <span style={{ display: 'inline-block' }}>
                                     <ActionButton
                                         onClick={handleSend}
                                         disabled={!isPasswordValid}
                                         className={classes.actionButton}
                                         size="large">
-                                        {t.share()}
+                                        <Trans>Share</Trans>
                                     </ActionButton>
                                 </span>
                             </ShadowRootTooltip>

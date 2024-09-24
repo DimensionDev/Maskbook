@@ -14,7 +14,7 @@
     "create_a_new_persona_desc": "Create a new Persona in Pop-up.",
     "create_successfully": "Created successfully!",
     "create_smart_pay_wallet": "Create SmartPay Wallet",
-    "created_smart_pay_wallet_description": "Created a SmartPay Wallet on Ploygon network.",
+    "created_smart_pay_wallet_description": "Created a SmartPay Wallet on Polygon network.",
     "create_successfully_tips": "Congratulation! You’ve deployed SmartPay Wallet {{address}}.",
     "create_successfully_tips_owner": "Management account of the SmartPay Wallet is {{owner}}.",
     "can_only_receive_polygon_assets": "Receives assets on Polygon Network ONLY",

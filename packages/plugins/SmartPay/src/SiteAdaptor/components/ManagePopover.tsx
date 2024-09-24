@@ -8,8 +8,8 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Button, Popover, Radio, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useManagers } from '../../hooks/useManagers.js'
-import { useSmartPayTrans } from '../../locales/index.js'
 import { type ManagerAccount, ManagerAccountType } from '../../type.js'
+import { Trans } from '@lingui/macro'
 
 interface ManagePopoverProps {
     open: boolean
@@ -79,7 +79,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose, onSelect, selectedAddress }) => {
-    const t = useSmartPayTrans()
     const { classes } = useStyles()
     const { personaManagers, walletManagers } = useManagers()
 
@@ -93,7 +92,9 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
             PaperProps={{ style: { minWidth: `${anchorEl?.clientWidth ?? 568}px` }, className: classes.paper }}
             anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             disableRestoreFocus>
-            <Typography className={classes.title}>{t.personas()}</Typography>
+            <Typography className={classes.title}>
+                <Trans>Personas</Trans>
+            </Typography>
             {personaManagers.length ?
                 <Box className={classes.list}>
                     {personaManagers.map((persona, index) => (
@@ -124,19 +125,25 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                 </Box>
             :   <Box className={classes.footer} sx={{ py: 2 }}>
                     <Box>
-                        <Typography className={classes.title}>{t.create_a_new_persona_title()}</Typography>
-                        <Typography className={classes.desc}>{t.create_a_new_persona_desc()}</Typography>
+                        <Typography className={classes.title}>
+                            <Trans>Create a New Persona</Trans>
+                        </Typography>
+                        <Typography className={classes.desc}>
+                            <Trans>Create a new Persona in Pop-up.</Trans>
+                        </Typography>
                     </Box>
                     <Button
                         variant="roundedContained"
                         size="small"
                         sx={{ height: 32 }}
                         onClick={() => openDashboard(DashboardRoutes.SignUpPersona)}>
-                        {t.create()}
+                        <Trans>Create</Trans>
                     </Button>
                 </Box>
             }
-            <Typography className={classes.title}>{t.wallets()}</Typography>
+            <Typography className={classes.title}>
+                <Trans>Wallets</Trans>
+            </Typography>
             {walletManagers.length ?
                 <Box className={classes.list}>
                     {walletManagers.map((wallet, index) => (
@@ -166,15 +173,19 @@ export const ManagePopover = memo<ManagePopoverProps>(({ open, anchorEl, onClose
                 </Box>
             :   <Box className={classes.footer}>
                     <Box>
-                        <Typography className={classes.title}>{t.create_a_new_wallet_title()}</Typography>
-                        <Typography className={classes.desc}>{t.create_a_new_wallet_desc()}</Typography>
+                        <Typography className={classes.title}>
+                            <Trans>Create a New Wallet</Trans>
+                        </Typography>
+                        <Typography className={classes.desc}>
+                            <Trans>Create a new Mask wallet in Pop-up.</Trans>
+                        </Typography>
                     </Box>
                     <Button
                         variant="roundedContained"
                         size="small"
                         sx={{ height: 32 }}
                         onClick={() => openPopupWindow(PopupRoutes.WalletStartUp, undefined)}>
-                        {t.create()}
+                        <Trans>Create</Trans>
                     </Button>
                 </Box>
             }

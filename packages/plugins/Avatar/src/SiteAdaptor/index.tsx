@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Trans } from 'react-i18next'
+import { Trans as Trans2 } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { type Plugin, PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
@@ -48,7 +48,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             const icon = <Icons.NFTAvatar size={36} />
 
             const recommendFeature = {
-                description: <Trans i18nKey="plugin_nft_avatar_recommend_feature_description" />,
+                description: <Trans2 i18nKey="plugin_nft_avatar_recommend_feature_description" />,
                 backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
             }
 
@@ -66,7 +66,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                             }}
                             tooltipHint={
                                 EntryComponentProps.tooltipHint ??
-                                (EntryComponentProps.disabled ? undefined : <Trans i18nKey="application_hint" />)
+                                (EntryComponentProps.disabled ? undefined : <Trans2 i18nKey="application_hint" />)
                             }
                         />
                     )

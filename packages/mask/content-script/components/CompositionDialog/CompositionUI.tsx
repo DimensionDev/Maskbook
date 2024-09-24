@@ -108,7 +108,7 @@ export interface CompositionProps extends RefAttributes<CompositionRef> {
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
-    initialMetas?: Record<string, unknown>
+    initialMeta?: Record<string, unknown>
     personaAction?: React.ReactNode
 }
 export interface SubmitComposition {
@@ -169,11 +169,11 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     useImperativeHandle(ref, () => refItem, [refItem])
 
     useEffect(() => {
-        if (!props.initialMetas || !Editor.current) return
-        for (const [meta, data] of Object.entries(props.initialMetas)) {
+        if (!props.initialMeta || !Editor.current) return
+        for (const [meta, data] of Object.entries(props.initialMeta)) {
             Editor.current.attachMetadata(meta, data)
         }
-    }, [props.initialMetas, Editor.current])
+    }, [props.initialMeta, Editor.current])
 
     const context = useMemo(
         (): CompositionContext => ({

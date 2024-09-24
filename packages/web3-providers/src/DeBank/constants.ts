@@ -1,3 +1,4 @@
+// cspell:disable
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { DebankChains } from './types.js'
 

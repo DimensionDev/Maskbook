@@ -127,7 +127,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface FungibleTokenInputUIProps extends InputBaseProps {
-    label: string
+    label: React.ReactNode
     disableMax?: boolean
     isNative?: boolean
     token?: Web3Helper.FungibleTokenAll | null

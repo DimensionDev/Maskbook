@@ -15,10 +15,10 @@ import { Avatar, Box, Chip, Tab, ThemeProvider, Typography } from '@mui/material
 import Color from 'color'
 import { useContext } from 'react'
 import { SnapshotContext } from '../context.js'
-import { useSnapshotTrans } from '../locales/index.js'
 import { ProgressTab } from './ProgressTab.js'
 import { ProposalTab } from './ProposalTab.js'
 import { useProposal } from './hooks/useProposal.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -91,16 +91,15 @@ export function Snapshot() {
     const proposal = useProposal(identifier.id)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [currentTab, onChange, tabs] = useTabs('Proposal', 'Progress')
-    const t = useSnapshotTrans()
 
     const Tabs = [
         {
             value: tabs.Proposal,
-            label: t.plugin_snapshot_proposal(),
+            label: <Trans>Proposal</Trans>,
         },
         {
             value: tabs.Progress,
-            label: t.plugin_snapshot_progress(),
+            label: <Trans>Progress</Trans>,
         },
     ]
 

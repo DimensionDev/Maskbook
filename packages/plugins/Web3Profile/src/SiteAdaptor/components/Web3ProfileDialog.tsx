@@ -12,6 +12,7 @@ import { useWeb3ProfileTrans } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -116,15 +117,15 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {
             await updateConfig(pendingUnlistedConfig)
-            showSnackbar(t.save_successfully(), {
+            showSnackbar(<Trans>Save successfully</Trans>, {
                 variant: 'success',
-                message: t.save_successfully_message(),
+                message: <Trans>Set up Web3 Profile wallets successfully.</Trans>,
                 autoHideDuration: 2000,
             })
         } catch {
-            showSnackbar(t.save_failed(), {
+            showSnackbar(<Trans>Save failed</Trans>, {
                 variant: 'error',
-                message: t.save_failed_message(),
+                message: <Trans>Failed to set up Web3 Profile wallets. Please try again.</Trans>,
             })
         }
 
@@ -144,7 +145,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     return (
         <InjectedDialog
             classes={{ dialogContent: classes.content }}
-            title={t.web3_profile()}
+            title={<Trans>Web3 Profile</Trans>}
             fullWidth={false}
             open={open}
             isOnBack
@@ -152,12 +153,16 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
             onClose={onClose}>
             <DialogContent className={classes.content}>
                 <Alert open={tipsVisible} onClose={dismissTips}>
-                    {t.setup_tips()}
+                    <Trans>
+                        Set up wallet for displaying Web3 footprints and receiving tips on each social media account.
+                    </Trans>
                 </Alert>
                 {loadingBinding && !twitterProofs.length ?
                     range(3).map((v) => <ProfileCardSkeleton className={classes.profileCard} key={v} />)
                 : isFetched && !twitterProofs.length ?
-                    <EmptyStatus height={360}>{t.no_verified_account()}</EmptyStatus>
+                    <EmptyStatus height={360}>
+                        <Trans>No verified account found here.</Trans>
+                    </EmptyStatus>
                 :   twitterProofs.map((proof) => {
                         const avatar = allLinkedProfiles.find((x) => x.identifier.userId === proof.identity)?.avatar
                         const unlistedAddresses = unlistedAddressConfig[proof.identity] ?? EMPTY_LIST
@@ -192,7 +197,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
                             disabled={disabled}
                             loading={submitting}
                             onClick={handleSubmit}>
-                            {t.confirm()}
+                            <Trans>Confirm</Trans>
                         </ActionButton>
                     </PersonaAction>
                 </DialogActions>

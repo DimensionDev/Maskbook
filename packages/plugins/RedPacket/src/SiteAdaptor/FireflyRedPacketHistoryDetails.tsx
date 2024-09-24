@@ -9,7 +9,7 @@ import { createIndicator } from '@masknet/shared-base'
 import { first } from 'lodash-es'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
-import { useRedPacketTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -55,7 +55,6 @@ interface Props {
 
 export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHistoryDetails({ rpid }: Props) {
     const { classes } = useStyles()
-    const t = useRedPacketTrans()
     const { data: claimData, fetchNextPage } = useSuspenseInfiniteQuery({
         queryKey: ['fireflyClaimHistory', rpid],
         initialPageParam: '',
@@ -90,7 +89,10 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
                             </Typography>
                         </div>
                     ))
-                :   <div className={classes.noData}>{t.no_claim_data()}</div>}
+                :   <div className={classes.noData}>
+                        <Trans>No claims yet for this Lucky Drop</Trans>
+                    </div>
+                }
                 <ElementAnchor callback={() => fetchNextPage()} height={10} />
             </Box>
         </div>

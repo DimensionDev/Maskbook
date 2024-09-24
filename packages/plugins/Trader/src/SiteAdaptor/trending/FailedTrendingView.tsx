@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/material'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { EmptyStatus } from '@masknet/shared'
 import { TrendingViewDescriptor, type TrendingViewDescriptorProps } from './TrendingViewDescriptor.js'
-import { useTraderTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -20,13 +20,14 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends TrendingCardProps, TrendingViewDescriptorProps {}
 
 export function FailedTrendingView({ result, resultList, setResult, ...rest }: Props) {
-    const t = useTraderTrans()
     const { classes } = useStyles()
     return (
         <ThemeProvider theme={MaskLightTheme}>
             <TrendingCard {...rest}>
                 <div className={classes.content}>
-                    <EmptyStatus style={{ height: 'auto', flexGrow: 1 }}>{t.load_failed()}</EmptyStatus>
+                    <EmptyStatus style={{ height: 'auto', flexGrow: 1 }}>
+                        <Trans>Load failed</Trans>
+                    </EmptyStatus>
                     <TrendingViewDescriptor result={result} resultList={resultList} setResult={setResult} />
                 </div>
             </TrendingCard>

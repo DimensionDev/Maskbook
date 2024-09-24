@@ -14,11 +14,11 @@ import { Box } from '@mui/system'
 import { matchPath, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { Deploy } from './Deploy.js'
 import { InEligibilityTips } from './InEligibilityTips.js'
 import { SmartPayContent } from './SmartPayContent.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ isDeployPage: boolean }>()((theme, { isDeployPage }) => ({
     dialogContent: {
@@ -39,7 +39,6 @@ const useStyles = makeStyles<{ isDeployPage: boolean }>()((theme, { isDeployPage
 }))
 
 export function RouterDialog() {
-    const t = useSmartPayTrans()
     const { pathname, state } = useLocation()
     const { classes } = useStyles({ isDeployPage: Boolean(matchPath(RoutePaths.Deploy, pathname)) })
     const navigate = useNavigate()
@@ -87,9 +86,9 @@ export function RouterDialog() {
     // #endregion
 
     const title = useMemo(() => {
-        if (matchPath(RoutePaths.Deploy, pathname)) return t.smart_pay_wallet_deployment()
-        else if (matchPath(RoutePaths.InEligibility, pathname)) return t.smart_pay_wallet()
-        return t.__plugin_name()
+        if (matchPath(RoutePaths.Deploy, pathname)) return <Trans>SmartPay Wallet Deployment</Trans>
+        else if (matchPath(RoutePaths.InEligibility, pathname)) return <Trans>SmartPay Wallet</Trans>
+        return <Trans>Smart Pay</Trans>
     }, [matchPath, pathname])
 
     const handleClose = useCallback(() => {
@@ -114,7 +113,9 @@ export function RouterDialog() {
                         rowGap={1.5}
                         minHeight={564}>
                         <LoadingBase size={36} />
-                        <Typography>{t.loading()}</Typography>
+                        <Typography>
+                            <Trans>Loading</Trans>
+                        </Typography>
                     </Box>
                 :   <Routes>
                         <Route path={RoutePaths.Deploy} element={<Deploy open={open} />} />

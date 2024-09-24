@@ -6,16 +6,8 @@ import { base } from '../base.js'
 import { PluginPetMessages } from '../messages.js'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
 import { twitterDomainMigrate } from '@masknet/shared-base'
-import { usePetsTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
-function Name() {
-    const t = usePetsTrans()
-    return t.plugin_pets_name()
-}
-function Desc() {
-    const t = usePetsTrans()
-    return t.plugin_pets_description()
-}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     init() {},
@@ -23,7 +15,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Pets size={36} />
-            const name = <Name />
+            const name = <Trans>Non-F Friends</Trans>
             const iconFilterColor = 'rgba(226, 0, 233, 0.2)'
             return {
                 ApplicationEntryID: base.ID,
@@ -47,7 +39,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 13,
                 marketListSortingPriority: 13,
                 icon,
-                description: <Desc />,
+                description: <Trans>Discover the infinite possibilities of #NFTs.</Trans>,
                 name,
                 tutorialLink: twitterDomainMigrate('https://x.com/NonFFriend'),
                 iconFilterColor,

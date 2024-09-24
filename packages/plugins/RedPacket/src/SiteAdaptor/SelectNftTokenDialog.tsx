@@ -13,6 +13,8 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -237,6 +239,7 @@ interface SelectNftTokenDialogProps {
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
+    const { _ } = useLingui()
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
     const t = useRedPacketTrans()
@@ -360,16 +363,16 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         />
 
                         <Button disabled={!searchTokenListInput} className={classes.searchButton} onClick={onSearch}>
-                            {t.search()}
+                            <Trans>Search</Trans>
                         </Button>
                     </div>
                     {loadingToken || !searchedTokenDetailedList || !contract ?
                         <Box className={classes.noResultBox}>
                             <Typography>
                                 {loadingToken ?
-                                    t.loading_token()
+                                    <Trans>Loading token...</Trans>
                                 : searched ?
-                                    t.search_no_result()
+                                    <Trans>No results</Trans>
                                 :   null}
                             </Typography>
                         </Box>
@@ -421,7 +424,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     disabled={loadingToken || isSelectSharesExceed}
                     className={classes.confirmButton}
                     onClick={onSubmit}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </Button>
             </DialogContent>
         :   <DialogContent className={cx(classes.dialogContent, classes.dialogContentFixedHeight)}>
@@ -429,7 +432,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <InputBase
                         startAdornment={<Icons.Search className={classes.iconButton} />}
                         value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                        placeholder={t.nft_search_placeholder()}
+                        placeholder={_(msg`Token ID separated by comma, e.g. 1224, 7873, 8948`)}
                         className={classes.textField}
                         onChange={(e) => {
                             if (tokenDetailedOwnerList.length === 0) {
@@ -446,13 +449,17 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         disabled={tokenDetailedOwnerList.length === 0 ? !searchTokenListInput : !tokenIdListInput}
                         className={classes.searchButton}
                         onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
-                        {t.search()}
+                        <Trans>Search</Trans>
                     </Button>
                 </div>
                 <Box className={classes.ownerTokenBox}>
                     {loadingToken && searched ?
                         <Box className={classes.noResultBox}>
-                            <Typography>{loadingToken ? t.loading_token() : t.search_no_result()}</Typography>
+                            <Typography>
+                                {loadingToken ?
+                                    <Trans>Loading token...</Trans>
+                                :   <Trans>No results</Trans>}
+                            </Typography>
                         </Box>
                     :   <>
                             {tokenIdFilterList.length === 0 ?
@@ -466,7 +473,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                             :   null}
                                         </div>
                                         <Typography className={cx(classes.selectAllCheckBoxText)}>
-                                            {t.select_all()}
+                                            <Trans>Select All</Trans>
                                         </Typography>
                                     </div>
                                     <Typography>
@@ -533,7 +540,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     disabled={loadingToken || tokenDetailedSelectedList.length === 0 || isSelectSharesExceed}
                     className={classes.confirmButton}
                     onClick={onSubmit}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </Button>
             </DialogContent>
 }

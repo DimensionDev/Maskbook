@@ -185,6 +185,7 @@ export class OKX {
         const chains = (await OKX.getSupportedChains()) || []
         const walletId = uuid()
         const addresses = chains.map((chain) => ({ address, chainId: chain.chainId.toString() }))
+        // cspell:disable-next-line
         const res = await fetchFromOKX(`${OKX_HOST}/api/v5/waas/wallet/create-wallet`, {
             method: 'POST',
             headers: {

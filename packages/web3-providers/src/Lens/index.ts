@@ -1,3 +1,4 @@
+// cspell:ignore finalised datas
 import { NameServiceID } from '@masknet/shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
@@ -490,7 +491,7 @@ export class Lens {
                           }
                         }
                       }
-                    }  
+                    }
                   `,
                 }),
             },
@@ -537,7 +538,7 @@ export class Lens {
                           }
                         }
                       }
-                    }  
+                    }
                 `,
                 }),
             },

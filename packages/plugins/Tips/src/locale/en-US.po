@@ -12,3 +12,72 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/components/NFTSection/index.tsx:160
+msgid "Add Collectibles"
+msgstr ""
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:106
+msgid "Close"
+msgstr ""
+
+#: src/contexts/Tip/useTipValidate.ts:42
+msgid "Insufficient balance"
+msgstr ""
+
+#: src/components/TipDialog.tsx:180
+msgid "NFTs"
+msgstr ""
+
+#: src/components/NFTSection/index.tsx:207
+msgid "No any collectible is available to preview. Please add your collectible here."
+msgstr ""
+
+#: src/contexts/Tip/useTipValidate.ts:38
+msgid "No Enough Gas Fees"
+msgstr ""
+
+#: src/components/TipDialog.tsx:126
+msgid "Send"
+msgstr ""
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
+msgid "Send authors tips by using Mask Network’s Tips function."
+msgstr ""
+
+#: src/components/TipDialog.tsx:125
+msgid "Sending..."
+msgstr ""
+
+#: src/components/TipDialog.tsx:142
+msgid "Sent {1} {0} tips successfully."
+msgstr ""
+
+#: src/components/TipDialog.tsx:143
+msgid "Sent {amount} {0} tips successfully."
+msgstr ""
+
+#: src/contexts/Tip/useRecipientValidate.ts:30
+msgid "The receiving address is a contract address. Please check again."
+msgstr ""
+
+#: src/contexts/Tip/useRecipientValidate.ts:31
+msgid "The receiving address may be a malicious address."
+msgstr ""
+
+#: src/components/TipDialog.tsx:144
+#: src/components/TipDialog.tsx:176
+msgid "Tips"
+msgstr ""
+
+#: src/components/RecipientSection/index.tsx:46
+msgid "To"
+msgstr ""
+
+#: src/components/TipDialog.tsx:179
+msgid "Tokens"
+msgstr ""
+
+#: src/components/RecipientSection/RecipientSelect.tsx:130
+msgid "View on Explorer"
+msgstr ""

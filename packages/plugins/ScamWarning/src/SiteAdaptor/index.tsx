@@ -6,16 +6,8 @@ import { Icons } from '@masknet/icons'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { base } from '../base.js'
-import { useScamWarningTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
-function Name() {
-    const t = useScamWarningTrans()
-    return t.__plugin_name()
-}
-function Desc() {
-    const t = useScamWarningTrans()
-    return t.__plugin_description()
-}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     ApplicationEntries: [
@@ -26,8 +18,13 @@ const site: Plugin.SiteAdaptor.Definition = {
                 ApplicationEntryID: base.ID,
                 icon,
                 category: 'dapp',
-                name: <Name />,
-                description: <Desc />,
+                name: <Trans>Safety Warning</Trans>,
+                description: (
+                    <Trans>
+                        Detecting whether user-published crypto websites are risky or malicious. Help to save your
+                        digital assets.
+                    </Trans>
+                ),
             }
         })(),
     ],

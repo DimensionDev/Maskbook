@@ -28,6 +28,8 @@ import { useAsyncFn } from 'react-use'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     value: {
@@ -64,6 +66,7 @@ interface WithdrawFormDialogProps {
 const MINIMUM_AMOUNT = '0.000000000000000001'
 
 export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormDialogProps) {
+    const { _ } = useLingui()
     const t = useSavingsTrans()
     const { classes } = useStyles()
     const [amount, setAmount] = useState('0')
@@ -113,7 +116,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
             amount,
             symbol: protocol.bareToken.symbol,
             chain: EVMChainResolver.chainName(chainId) ?? '',
-            account: Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account(),
+            account: Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`),
         }
 
         await openShareTxDialog({
@@ -125,19 +128,21 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
     }, [protocol, time, chainId, amount, token.decimals, actualChainId])
 
     return (
-        <InjectedDialog open title={t.plugin_savings_withdraw()} onClose={onClose}>
+        <InjectedDialog open title={<Trans>Withdraw</Trans>} onClose={onClose}>
             <DialogContent style={{ minHeight: 492 }}>
                 <FungibleTokenInput
                     amount={amount}
                     maxAmount={balance || '0'}
                     balance={balance || '0'}
                     onAmountChange={setAmount}
-                    label={t.plugin_savings_withdraw()}
+                    label={<Trans>Withdraw</Trans>}
                     token={token}
                 />
                 {isMinimum ?
                     <Typography className={classes.minimum}>
-                        {t.minimum_tips({ amount: MINIMUM_AMOUNT, symbol: token.symbol })}
+                        <Trans>
+                            Minimum withdraw amount is {MINIMUM_AMOUNT} {token.symbol}
+                        </Trans>
                     </Typography>
                 :   null}
                 <Typography className={classes.value}>
@@ -149,7 +154,9 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
                     />
                 </Typography>
                 <Box className={classes.row}>
-                    <Typography className={classes.title}>{t.lido_exchange_rate()}</Typography>
+                    <Typography className={classes.title}>
+                        <Trans>Lido Exchange Rate</Trans>
+                    </Typography>
                     <Typography className={classes.value}>
                         1 {token?.symbol} = 1 {protocol.bareToken.symbol}
                     </Typography>
@@ -157,17 +164,19 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
                 {time ?
                     <>
                         <Box className={classes.row}>
-                            <Typography className={classes.title}>{t.waiting_time()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>Waiting time</Trans>
+                            </Typography>
                             <Typography className={classes.value}>
-                                {t.waiting_time_value({
-                                    value: add(differenceInDays(new Date(time), new Date()), 1).toString(),
-                                })}
+                                <Trans>{add(differenceInDays(new Date(time), new Date()), 1).toString()} days</Trans>
                             </Typography>
                         </Box>
                         <Typography className={classes.tips}>
-                            {t.lido_withdraw_tips({
-                                days: add(differenceInDays(new Date(time), new Date()), 1).toString(),
-                            })}
+                            <Trans>
+                                To use Lido, you need to wait{' '}
+                                {add(differenceInDays(new Date(time), new Date()), 1).toString()} days. Using other swap
+                                aggregators is faster, but the exchange rate is lower than 1:1.
+                            </Trans>
                         </Typography>
                     </>
                 :   null}
@@ -175,7 +184,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
             <DialogActions style={{ padding: 0, position: 'sticky', bottom: 0 }}>
                 <PluginWalletStatusBar expectedChainId={chainId}>
                     <ActionButton disabled={isMinimum} loading={loading} fullWidth onClick={handleWithdraw}>
-                        {t.lido_withdraw_token({ symbol: protocol.bareToken.symbol ?? '' })}
+                        <Trans>Withdraw {protocol.bareToken.symbol ?? ''}</Trans>
                     </ActionButton>
                 </PluginWalletStatusBar>
             </DialogActions>

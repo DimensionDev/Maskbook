@@ -57,6 +57,22 @@ msgstr ""
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:137
+msgid "24H Average Price"
+msgstr "24H平均价格"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:170
+msgid "24H sale"
+msgstr "24小时销售"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:152
+msgid "24H Traded Volume"
+msgstr "24H 交易量"
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
+msgid "Activities"
+msgstr "活动"
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:310
 msgid "Aggregator"
 msgstr ""
@@ -89,6 +105,10 @@ msgstr ""
 msgid "Bridge network fee"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:386
+msgid "Buy Now"
+msgstr "立即购买"
+
 #: src/SiteAdaptor/trader/views/Transaction.tsx:368
 msgid "Check on Explorer"
 msgstr ""
@@ -118,7 +138,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:59
 #: src/SiteAdaptor/trader/views/Confirm.tsx:457
 msgid "Confirm Swap"
-msgstr ""
+msgstr "确认兑换"
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:320
 msgid "Cross-chain Swap"
@@ -126,7 +146,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:324
 msgid "Custom"
-msgstr ""
+msgstr "自定义"
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:427
 #: src/SiteAdaptor/trader/views/Confirm.tsx:370
@@ -146,29 +166,38 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:78
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
+#: src/SiteAdaptor/trending/TickersTable.tsx:82
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
 msgid "Exchange"
-msgstr ""
+msgstr "兑换"
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:253
 msgid "Failed"
-msgstr ""
+msgstr "失败"
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:284
 msgid "Fast"
-msgstr ""
+msgstr "快速"
 
 #: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:167
 msgid "Fastest"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:412
+msgid "Floor Price"
+msgstr "地板价"
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:289
 #: src/SiteAdaptor/trader/views/Confirm.tsx:262
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:209
 #: src/SiteAdaptor/trader/views/Transaction.tsx:260
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:139
 msgid "From"
-msgstr ""
+msgstr "从"
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:399
 msgid "Gas Limit"
@@ -177,6 +206,14 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:382
 msgid "Gas Price"
 msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:224
+msgid "General"
+msgstr "概况"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:107
+msgid "Highest Price"
+msgstr "最高价格"
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:58
 msgid "History"
@@ -195,6 +232,23 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:77
+msgid "Items"
+msgstr "条目"
+
+#: src/SiteAdaptor/trending/FailedTrendingView.tsx:29
+msgid "Load failed"
+msgstr "加载失败"
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:226
+#: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx:47
+msgid "Loading"
+msgstr "加载中"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:93
+msgid "Market Cap"
+msgstr "市值"
+
 #: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:175
 msgid "Max amount"
 msgstr ""
@@ -202,6 +256,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:347
 msgid "Max base fee"
 msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:137
+msgid "Method"
+msgstr "操作"
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:419
 msgid "Minimum received"
@@ -216,6 +274,21 @@ msgstr ""
 msgid "Network fee"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:136
+msgid "NFT"
+msgstr "NFT"
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:237
+msgid "NFTs"
+msgstr "NFTs"
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
+#: src/SiteAdaptor/trending/PriceChart.tsx:89
+#: src/SiteAdaptor/trending/TickersTable.tsx:173
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
+msgid "No Data"
+msgstr "暂无数据"
+
 #: src/SiteAdaptor/trader/views/History.tsx:132
 msgid "No recent transactions"
 msgstr ""
@@ -224,10 +297,28 @@ msgstr ""
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:396
+msgid "Open"
+msgstr "打开"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:85
+msgid "Owners"
+msgstr "拥有者"
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:83
+msgid "Pair"
+msgstr "交易对"
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:361
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:145
+#: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx:80
 msgid "Powered by"
 msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:84
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+msgid "Price"
+msgstr "价格"
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:365
 msgid "Priority fee"
@@ -245,6 +336,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:63
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:64
 msgid "Quote Route"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:339
+msgid "Rank #{0}"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:413
@@ -284,8 +379,9 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:413
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:360
 #: src/SiteAdaptor/trader/views/Transaction.tsx:320
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:376
 msgid "Swap"
-msgstr ""
+msgstr "兑换"
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:360
 msgid "Swap anyway"
@@ -316,11 +412,20 @@ msgstr ""
 msgid "This swap isn’t supported"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:141
+msgid "Time"
+msgstr "时间"
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:311
 #: src/SiteAdaptor/trader/views/Confirm.tsx:284
 #: src/SiteAdaptor/trader/views/Transaction.tsx:286
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:140
 msgid "To"
-msgstr ""
+msgstr "至"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:122
+msgid "Total Volume"
+msgstr "成交量"
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:307
 msgid "Trading mode"
@@ -360,3 +465,15 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:396
 msgid "Update Quote"
 msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:81
+msgid "Updated"
+msgstr "已更新"
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:138
+msgid "Value"
+msgstr "价值"
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:80
+msgid "Volume (24h)"
+msgstr "交易量 (24h)"

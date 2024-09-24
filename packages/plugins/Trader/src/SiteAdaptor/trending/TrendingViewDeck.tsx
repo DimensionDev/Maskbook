@@ -43,13 +43,13 @@ import {
 } from '@mui/material'
 import { first, last } from 'lodash-es'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { useTraderTrans } from '../../locales/index.js'
 import { ContentTab, type Currency, type Stat } from '../../types/index.js'
 import { CoinIcon } from './CoinIcon.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { TrendingViewContext } from './context.js'
 import { useActivatedPluginSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -192,8 +192,6 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         useContext(TrendingViewContext)
     const { anchorEl, anchorBounding } = useAnchor()
     const timer = useRef<ReturnType<typeof setTimeout>>(undefined)
-
-    const t = useTraderTrans()
     const theme = useTheme()
     const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper }, { props })
     const isNFT = coin.type === TokenType.NonFungible
@@ -338,9 +336,9 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                 </Typography>
                                 {typeof coin.market_cap_rank === 'number' || result.rank ?
                                     <Typography component="span" className={classes.rank} title="Index Cap Rank">
-                                        {t.plugin_trader_rank({
-                                            rank: result.rank?.toString() ?? coin.market_cap_rank?.toString() ?? '',
-                                        })}
+                                        <Trans>
+                                            Rank #{result.rank?.toString() ?? coin.market_cap_rank?.toString() ?? ''}
+                                        </Trans>
                                     </Typography>
                                 :   null}
                                 {(collectionList.length > 1 || (socialAccounts.length && rss3Key)) && !isPreciseSearch ?
@@ -375,7 +373,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 endIcon={<Icons.Swap size={16} />}
                                                 variant="roundedContained"
                                                 onClick={onExchangeButtonClicked}>
-                                                {t.swap()}
+                                                <Trans>Swap</Trans>
                                             </Button>
                                         :   null}
                                         {isBuyable ?
@@ -385,7 +383,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 endIcon={<Icons.Buy size={16} />}
                                                 variant="roundedContained"
                                                 onClick={onBuyButtonClicked}>
-                                                {t.buy_now()}
+                                                <Trans>Buy Now</Trans>
                                             </Button>
                                         :   null}
                                         {isNFT && first(coin.home_urls) ?
@@ -395,7 +393,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                                 endIcon={<Icons.LinkOut size={16} />}
                                                 variant="roundedContained"
                                                 onClick={() => window.open(first(coin.home_urls))}>
-                                                {t.open()}
+                                                <Trans>Open</Trans>
                                             </Button>
                                         :   null}
                                     </ThemeProvider>
@@ -409,13 +407,17 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             fontWeight={500}
                                             lineHeight="24px"
                                             color={theme.palette.maskColor.dark}>
-                                            {isNFT ? `${t.plugin_trader_floor_price()}: ` : null}
+                                            {isNFT ?
+                                                <>
+                                                    <Trans>Floor Price</Trans>:{' '}
+                                                </>
+                                            :   null}
                                             {floorPrice ?
                                                 formatCurrency(floorPrice, isNFT ? market.price_symbol : 'USD')
                                             :   '--'}
                                         </Typography>
                                     :   <Typography fontSize={14} fontWeight={500} lineHeight="24px">
-                                            {t.plugin_trader_no_data()}
+                                            <Trans>No Data</Trans>
                                         </Typography>
                                     }
                                     {isNFT && !isSpam ?

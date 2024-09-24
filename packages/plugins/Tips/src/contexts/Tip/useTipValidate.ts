@@ -6,6 +6,8 @@ import { isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@mask
 import { useTipsTrans } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 type TipValidateOptions = Pick<
     TipContextOptions,
@@ -24,6 +26,7 @@ export function useTipValidate(
         isGasSufficient,
     }: TipValidateOptions,
 ): ValidationTuple {
+    const { _ } = useLingui()
     const { account } = useChainContext()
 
     const { data: balance = '0' } = useFungibleTokenBalance(pluginID, token?.address, { chainId, account })
@@ -32,11 +35,11 @@ export function useTipValidate(
     const result: ValidationTuple = useMemo(() => {
         if (tipType === TokenType.Fungible) {
             if (!isGasSufficient) {
-                return [false, t.no_enough_gas_fees()]
+                return [false, _(msg`No Enough Gas Fees`)]
             }
             if (!amount || isLessThanOrEqualTo(amount, 0)) return [false]
             if (isGreaterThan(rightShift(amount, token?.decimals), balance))
-                return [false, t.token_insufficient_balance()]
+                return [false, _(msg`Insufficient balance`)]
         } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
             if (!tokenId || !tokenAddress) return [false]
         } else if (pluginID === NetworkPluginID.PLUGIN_SOLANA && !tokenAddress) {

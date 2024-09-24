@@ -62,7 +62,7 @@ export async function migrate() {
         suppressDiagnosticEvents: true,
     })
 
-    const cwd = new URL('../../../plugins/NextID/', import.meta.url)
+    const cwd = new URL('../../../plugins/Web3Profile/', import.meta.url)
     const inputURL = new URL('./src/locales/i18n_generated.ts', cwd)
     const json = JSON.parse(await readFile(new URL('./en-US.json', inputURL), 'utf-8'))
     processFile(inputURL, json)
@@ -466,6 +466,30 @@ function getTranslationMode({ checker, file, service }: ReadonlySourceFile, node
         switch (node.kind) {
             case ts.SyntaxKind.ConditionalExpression:
                 return false
+            case ts.SyntaxKind.IfStatement:
+                return node.parent.kind === ts.SyntaxKind.Block
+            case ts.SyntaxKind.Block:
+                return (
+                    node.parent.kind === ts.SyntaxKind.ArrowFunction ||
+                    node.parent.kind === ts.SyntaxKind.FunctionExpression ||
+                    node.parent.kind === ts.SyntaxKind.IfStatement
+                )
+            // if (expr) return t.call()
+            case ts.SyntaxKind.ReturnStatement:
+                return false
+            case ts.SyntaxKind.FunctionExpression:
+            case ts.SyntaxKind.ArrowFunction:
+                // const expr = useMemo(() => { ... })
+                const fnLike = node as FunctionDeclaration | FunctionExpression | ArrowFunction
+                if (!ts.isCallExpression(fnLike.parent)) return 'quit'
+                const call = fnLike.parent as CallExpression
+                if (
+                    call.arguments[0] === node &&
+                    ts.isIdentifier(call.expression) &&
+                    call.expression.text === 'useMemo'
+                )
+                    return false
+                return 'quit'
             case ts.SyntaxKind.VariableDeclaration:
                 const decl = node as VariableDeclaration
                 return ts.isIdentifier(decl.name)
@@ -529,6 +553,12 @@ function findHookAncestor(
         })
     )
         return true
+    if (ts.isCallExpression(node.parent)) {
+        if (ts.isIdentifier(node.parent.expression)) {
+            return node.parent.expression.text === 'memo'
+        }
+        return false
+    }
     const last = node.body.statements.at(-1)
     return !!(last && ts.isReturnStatement(last) && last.expression?.kind === ts.SyntaxKind.JsxElement)
 }

@@ -1,1 +1,21 @@
-{ "messages": {} }
+{
+    "messages": {
+        "9+VwX/": "添加 NFT",
+        "yz7wBu": "关闭",
+        "znqB4T": "余额不足",
+        "8Dh77Z": "NFTs",
+        "4kYy+U": "没有任何可预览的收藏品。请在这里添加您的收藏品。",
+        "CMfM6C": "没有足够的 Gas 费",
+        "JlFcis": "发送",
+        "7ee72/": "使用Mask Network发送小费给作者。",
+        "IoAuJG": "发送中...",
+        "+E4pMq": ["已成功发送 ", ["0"], " ", ["1"], " 小费。"],
+        "FOu1+K": ["Sent ", ["amount"], " ", ["0"], " tips successfully."],
+        "Ko4L/B": "此接收地址为合约地址，请重新检查。",
+        "RW1HJz": "接收地址可能是恶意地址。",
+        "x4f8pZ": "小费",
+        "/jQctM": "发送至",
+        "6RDwJM": "Tokens",
+        "Sjplg3": "在区块链浏览器查看"
+    }
+}

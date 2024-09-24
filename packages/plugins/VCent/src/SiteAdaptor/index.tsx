@@ -5,16 +5,8 @@ import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
-import { useVCentTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
-function Name() {
-    const t = useVCentTrans()
-    return t.name()
-}
-function Desc() {
-    const t = useVCentTrans()
-    return t.description()
-}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     PostInspector: Component,
@@ -22,8 +14,8 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Name />,
-            name: <Desc />,
+            description: <Trans>Valuables</Trans>,
+            name: <Trans>Buy & sell tweets autographed by their original creators.</Trans>,
             marketListSortingPriority: 10,
             tutorialLink: 'https://realmasknetwork.notion.site/27424923ee454a4a9b0ed16fc5cb93d0',
             icon: <Icons.Valuables size={36} />,
@@ -37,7 +29,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 variant="light"
             />
         ),
-        title: <Name />,
+        title: <Trans>Valuables</Trans>,
     },
 }
 

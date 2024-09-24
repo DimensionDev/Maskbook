@@ -17,3 +17,11 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ProfileCard/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 980\n"
+
+#: src/SiteAdaptor/index.tsx:17
+msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
+msgstr "タイムラインのアバターやトークンタグの隅にあるミニMaskアイコンに合わせると、複数のアカウントのWeb3プロフィールが表示されます。"
+
+#: src/SiteAdaptor/index.tsx:24
+msgid "Web3 Profile Card"
+msgstr "Web3 プロフィールカード"

@@ -5,9 +5,9 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { memo, useMemo, type HTMLProps } from 'react'
-import { useRedPacketTrans } from '../locales/index.js'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -43,7 +43,6 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({
     onSelect,
     ...rest
 }: RedPacketHistoryListProps) {
-    const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
@@ -55,7 +54,12 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 
-    if (!histories.length) return <EmptyStatus className={classes.placeholder}>{t.search_no_result()}</EmptyStatus>
+    if (!histories.length)
+        return (
+            <EmptyStatus className={classes.placeholder}>
+                <Trans>No results</Trans>
+            </EmptyStatus>
+        )
 
     return (
         <div {...rest} className={cx(classes.root, rest.className)}>

@@ -24,6 +24,7 @@ enum RestoreStatus {
 const supportedFileType = {
     json: 'application/json',
     octetStream: 'application/octet-stream',
+    // cspell:disable-next-line
     macBinary: 'application/macbinary',
 }
 

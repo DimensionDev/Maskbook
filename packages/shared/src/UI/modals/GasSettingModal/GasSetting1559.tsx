@@ -1,6 +1,6 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { Trans } from 'react-i18next'
+import { Trans as Trans2 } from 'react-i18next'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
@@ -225,7 +225,7 @@ export const GasSetting1559 = memo(
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>
-                                <Trans
+                                <Trans2
                                     i18nKey="popups_wallet_gas_fee_settings_usd"
                                     values={{
                                         usd: formatCurrency(
@@ -257,7 +257,7 @@ export const GasSetting1559 = memo(
                             ({t.wallet_transfer_gwei()})
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            <Trans
+                            <Trans2
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
                                     usd: formatWeiToEther(Number(maxPriorityFeePerGas))
@@ -277,7 +277,7 @@ export const GasSetting1559 = memo(
                             ({t.wallet_transfer_gwei()})
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            <Trans
+                            <Trans2
                                 i18nKey="popups_wallet_gas_fee_settings_usd"
                                 values={{
                                     usd: formatWeiToEther(Number(maxFeePerGas))

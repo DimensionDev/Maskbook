@@ -490,7 +490,6 @@ type Transaction = {
     randomKeyAccount: any[]
 }
 
-// cspell:ignore minmum
 /** Response type for getting a cross-chain swap */
 export type GetBridgeResponse = OKXResponse<
     Array<{
@@ -498,8 +497,6 @@ export type GetBridgeResponse = OKXResponse<
         fromTokenAmount: string
         /** The resulting amount of a token to be bought (Quantity needs to include accuracy. e.g., 1.00 USDT set as 1000000) */
         toTokenAmount: string
-        /** The minimum amount of a token to buy when the price reaches maximum slippage */
-        minmumReceive: string
         /** Bridge information */
         router: BridgeRouter
         /** On chain transaction data */
@@ -507,7 +504,7 @@ export type GetBridgeResponse = OKXResponse<
         /**
          * The randomKeyAccount parameter is not required for every transaction.
          * It is only generated and returned during certain special transactions,
-         * such as when using the CCTP bridge for cross-chain token transfers.
+         * such as when using the bridge for cross-chain token transfers.
          */
         randomKeyAccount?: string[]
     }>

@@ -5,9 +5,10 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { memo, useMemo } from 'react'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
+import { RedPacketTrans } from '../locales/index.js'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -49,7 +50,6 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
     handleOpenDetails,
     historyType,
 }: RedPacketHistoryListProps) {
-    const t = useRedPacketTrans()
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: historiesData, fetchNextPage } = useRedPacketHistory(account, historyType)
@@ -60,7 +60,7 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
             <EmptyStatus className={classes.placeholder}>
                 {
                     historyType === FireflyRedPacketAPI.ActionType.Claim ?
-                        t.no_claim_history_data()
+                        <Trans>No Lucky Drops claimed</Trans>
                         // eslint-disable-next-line react/naming-convention/component-name
                     :   <RedPacketTrans.no_sent_history_data
                             components={{

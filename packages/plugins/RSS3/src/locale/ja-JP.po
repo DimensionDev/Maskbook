@@ -17,3 +17,75 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 982\n"
+
+#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
+#~ msgid "{0} {1}"
+#~ msgstr "{0} {1}"
+
+#: src/SiteAdaptor/FeedFilters.tsx:56
+msgid "{0} Networks"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:148
+msgid "Category"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx:68
+msgid "Details"
+msgstr "詳細"
+
+#: src/SiteAdaptor/FeedFilters.tsx:65
+msgid "Direct"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:118
+msgid "Failed"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:161
+msgid "From"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:100
+msgid "Hash"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:130
+msgid "Network"
+msgstr ""
+
+#: src/SiteAdaptor/FeedsPage.tsx:115
+msgid "No more data available."
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:139
+msgid "Platform"
+msgstr ""
+
+#: src/SiteAdaptor/FeedFilters.tsx:66
+msgid "Related"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:112
+msgid "Status"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:117
+msgid "Successful"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:124
+msgid "Timestamp"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:173
+msgid "To"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:95
+msgid "Transaction Details"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:195
+msgid "Tx Fee"
+msgstr ""

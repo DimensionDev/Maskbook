@@ -164,7 +164,6 @@ function editManifest(
 }
 
 // cspell: disable-next-line
-// ID: jkoeaghipilijlahjplgbfiocjhldnap
 // Note: with this key you cannot upload it to the extension store
 function fixTheExtensionID(manifest: ManifestV2 | ManifestV3) {
     manifest.key =

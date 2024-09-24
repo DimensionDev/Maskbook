@@ -31,7 +31,7 @@ import type {
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
-const fetchRayDiumTokenList = memoizePromise(
+const fetchRaydiumTokenList = memoizePromise(
     memoize,
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
         const tokenList = await fetchJSON<RaydiumTokenList>(url, { cache: 'force-cache' })
@@ -168,9 +168,9 @@ class SolanaFungibleTokenAPI
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const maskTokenList = await fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0])
-        const rayDiumTokenList = await fetchRayDiumTokenList(RAYDIUM_TOKEN_LIST)
+        const raydiumTokenList = await fetchRaydiumTokenList(RAYDIUM_TOKEN_LIST)
 
-        return uniqBy([...maskTokenList, ...rayDiumTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
+        return uniqBy([...maskTokenList, ...raydiumTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
     }
 
     async getNonFungibleTokenList(

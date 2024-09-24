@@ -11,10 +11,10 @@ import { SnapshotCard } from './SnapshotCard.js'
 import { Parser } from '@json2csv/plainjs'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { formatCount } from '@masknet/web3-shared-base'
-import { useSnapshotTrans } from '../locales/index.js'
 import { LoadingCard } from './LoadingCard.js'
 import { isArray } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const choiceMaxWidth = 240
 
@@ -92,7 +92,6 @@ function Content() {
     const votes = useVotes(identifier)
     const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
-    const t = useSnapshotTrans()
 
     const dataForCsv = useMemo(() => {
         if (!isArray(votes)) return EMPTY_LIST
@@ -107,8 +106,7 @@ function Content() {
     }, [votes])
 
     return (
-        <SnapshotCard
-            title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}>
+        <SnapshotCard title={proposal.isEnd ? <Trans>Results</Trans> : <Trans>Current results</Trans>}>
             <List className={classes.list}>
                 {results ?
                     results.map((result, i) => (
@@ -179,7 +177,7 @@ function Content() {
                         link.click()
                         document.body.removeChild(link)
                     }}>
-                    {t.plugin_snapshot_download_report()}
+                    <Trans>Download report</Trans>
                 </Button>
             :   null}
         </SnapshotCard>
@@ -187,26 +185,21 @@ function Content() {
 }
 
 function Loading(props: React.PropsWithChildren) {
-    const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     return (
-        <LoadingCard
-            title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}>
+        <LoadingCard title={proposal.isEnd ? <Trans>Results</Trans> : <Trans>Current results</Trans>}>
             {props.children}
         </LoadingCard>
     )
 }
 
 function Fail(props: React.PropsWithChildren) {
-    const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const retry = unstable_useCacheRefresh()
     const proposal = useProposal(identifier.id)
     return (
-        <LoadingFailCard
-            title={proposal.isEnd ? t.plugin_snapshot_result_title() : t.plugin_snapshot_current_result_title()}
-            retry={retry}>
+        <LoadingFailCard title={proposal.isEnd ? <Trans>Results</Trans> : <Trans>Current results</Trans>} retry={retry}>
             {props.children}
         </LoadingFailCard>
     )

@@ -13,7 +13,7 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Box, Link, Skeleton, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { Trans } from 'react-i18next'
+import { Trans as Trans2 } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { useVerifyContent } from '../../../hooks/index.js'
 import { useSharedTrans } from '../../../locales/i18n_generated.js'
@@ -235,7 +235,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                     </Box>
                     {!platform || verifiedSuccess ?
                         <Typography className={classes.text}>
-                            <Trans
+                            <Trans2
                                 i18nKey={platform ? 'send_post_successfully' : 'connect_successfully'}
                                 components={{ br: <br /> }}
                             />

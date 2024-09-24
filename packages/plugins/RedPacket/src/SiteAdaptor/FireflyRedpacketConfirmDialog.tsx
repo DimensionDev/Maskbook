@@ -1,5 +1,4 @@
 import { Box, Popover, Radio, Skeleton, Typography } from '@mui/material'
-import { useRedPacketTrans } from '../locales/index.js'
 import { compact, flatten, uniqBy } from 'lodash-es'
 import { ActionButton, ShadowRootTooltip, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { type RedPacketSettings } from './hooks/useCreateCallback.js'
@@ -17,6 +16,7 @@ import { FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatEthereumAddress, isValidAddress, isValidDomain, type GasConfig } from '@masknet/web3-shared-evm'
 import { useCreateFTRedpacketCallback } from './hooks/useCreateFTRedpacketCallback.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -127,7 +127,6 @@ export function FireflyRedpacketConfirmDialog({
     onClose,
 }: FireflyRedpacketConfirmDialogProps) {
     const { currentFarcasterProfile, currentLensProfile, currentTwitterProfile } = fireflyContext || {}
-    const t = useRedPacketTrans()
     const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: ensName } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account, true)
     const { data: lensOwnerENS } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, currentLensProfile?.ownedBy, true)
@@ -334,17 +333,25 @@ export function FireflyRedpacketConfirmDialog({
             <Box className={classes.container}>
                 <Box className={classes.info}>
                     <Box className={classes.item}>
-                        <Typography className={classes.title}>{t.drop_type()}</Typography>
                         <Typography className={classes.title}>
-                            {settings.isRandom ? t.random_amount() : t.identical_amount()}
+                            <Trans>Drop Type</Trans>
+                        </Typography>
+                        <Typography className={classes.title}>
+                            {settings.isRandom ?
+                                <Trans>Random Amount</Trans>
+                            :   <Trans>Equal Amount</Trans>}
                         </Typography>
                     </Box>
                     <Box className={classes.item}>
-                        <Typography className={classes.title}>{t.number_of_winners()}</Typography>
+                        <Typography className={classes.title}>
+                            <Trans>Number of Winners</Trans>
+                        </Typography>
                         <Typography className={classes.title}>{settings.shares}</Typography>
                     </Box>
                     <Box className={classes.item}>
-                        <Typography className={classes.title}>{t.amount()}</Typography>
+                        <Typography className={classes.title}>
+                            <Trans>Amount</Trans>
+                        </Typography>
                         <Typography
                             className={classes.title}
                             display="flex"
@@ -377,7 +384,9 @@ export function FireflyRedpacketConfirmDialog({
                         </Typography>
                     </Box>
                     <Box className={classes.item}>
-                        <Typography className={classes.title}>{t.claim_requirements_title()}</Typography>
+                        <Typography className={classes.title}>
+                            <Trans>Claim Requirements</Trans>
+                        </Typography>
                         {fireflySettings?.requirements.length ?
                             <Box className={classes.requirements}>
                                 {fireflySettings?.requirements.map((x) => {
@@ -390,12 +399,21 @@ export function FireflyRedpacketConfirmDialog({
                                     )
                                 })}
                             </Box>
-                        :   <Typography className={classes.title}>{t.no()}</Typography>}
+                        :   <Typography className={classes.title}>
+                                <Trans>No</Trans>
+                            </Typography>
+                        }
                     </Box>
                     <Box className={classes.item}>
                         <Typography className={classes.title} display="flex" columnGap={0.5}>
-                            {t.share_from()}
-                            <ShadowRootTooltip title={t.share_from_tips()}>
+                            <Trans>Share From</Trans>
+                            <ShadowRootTooltip
+                                title={
+                                    <Trans>
+                                        Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use
+                                        the currently connected wallet.
+                                    </Trans>
+                                }>
                                 <Icons.Questions size={18} className={classes.question} />
                             </ShadowRootTooltip>
                         </Typography>
@@ -409,7 +427,7 @@ export function FireflyRedpacketConfirmDialog({
                         </Typography>
                     </Box>
                     <Typography className={classes.title} sx={{ textAlign: 'center', width: '100%' }}>
-                        {t.image_preview()}
+                        <Trans>Image Preview</Trans>
                     </Typography>
 
                     {state ?
@@ -447,16 +465,21 @@ export function FireflyRedpacketConfirmDialog({
                         />
                     </Box>
                     <Alert open className={classes.alert}>
-                        <Typography className={classes.tips}>{t.unclaim_tips()}</Typography>
+                        <Typography className={classes.tips}>
+                            <Trans>You can withdraw any unclaimed amount 24 hours after sending this lucky drop.</Trans>
+                        </Typography>
                         <Typography className={classes.tips} sx={{ color: theme.palette.maskColor.danger, mt: 1.2 }}>
-                            {t.create_redpacket_tips()}
+                            <Trans>
+                                By clicking "Next", you acknowledge the risk associated with decentralized networks and
+                                beta products.
+                            </Trans>
                         </Typography>
                     </Alert>
                 </Box>
             </Box>
             <Box className={classes.footer}>
                 <ActionButton loading={isCreating || loading || fetchUrlsLoading} onClick={createRedpacket} fullWidth>
-                    {t.next_button()}
+                    <Trans>Next</Trans>
                 </ActionButton>
             </Box>
             {popover}

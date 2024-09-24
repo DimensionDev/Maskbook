@@ -24,6 +24,7 @@ import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
 import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
 import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 
+// cspell:disable-next-line
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/gi

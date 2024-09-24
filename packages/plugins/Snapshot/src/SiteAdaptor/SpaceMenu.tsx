@@ -5,7 +5,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Avatar, MenuItem, Stack, Typography, Divider } from '@mui/material'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     menu: {
@@ -93,7 +93,6 @@ export function SpaceMenu({
     disableScrollLock,
 }: SpaceMenuProps) {
     const { classes } = useStyles()
-    const t = useSnapshotTrans()
     return (
         <ShadowRootMenu
             anchorEl={containerRef.current}
@@ -105,7 +104,9 @@ export function SpaceMenu({
             }}
             onClose={() => setSpaceMenuOpen(false)}>
             <div key="rss3" className={classes.group}>
-                <Typography className={classes.groupName}>{t.plugin_snapshot_space()}</Typography>
+                <Typography className={classes.groupName}>
+                    <Trans>Space</Trans>
+                </Typography>
                 <Divider className={classes.divider} />
                 {options.map((x, i) => {
                     const selected = isEqual(x, currentOption)

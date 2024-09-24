@@ -10,7 +10,7 @@ import { memo } from 'react'
 import { ProtocolType, type SavingsProtocol } from '../../types.js'
 import { ProviderIconURLs } from '../IconURL.js'
 import { useApr, useBalance } from '../hooks/index.js'
-import { useSavingsTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme, props) => ({
     tableRow: {
@@ -54,7 +54,6 @@ interface SavingsRowProps {
 }
 
 export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWithdraw, onDeposit }: SavingsRowProps) {
-    const t = useSavingsTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [seen, ref] = useEverSeen()
@@ -103,7 +102,9 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
                         }
                         onDeposit?.(protocol)
                     }}>
-                    {isDeposit ? t.plugin_savings_deposit() : t.plugin_savings_withdraw()}
+                    {isDeposit ?
+                        <Trans>Deposit</Trans>
+                    :   <Trans>Withdraw</Trans>}
                 </Button>
             </Grid>
         </Grid>

@@ -177,7 +177,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
 
     const media = metadata?.media?.[0]
 
-    // Image post on Forcaster
+    // Image post on Farcaster
     const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
     const soloImage = rest.verbose && isImagePost
 

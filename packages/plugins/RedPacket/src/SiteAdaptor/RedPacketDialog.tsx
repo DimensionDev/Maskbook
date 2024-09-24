@@ -23,7 +23,6 @@ import { Icons } from '@masknet/icons'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketTrans } from '../locales/index.js'
 import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 import { RedPacketMetaKey } from '../constants.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
@@ -40,6 +39,7 @@ import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.j
 import { RedPacketPast } from './RedPacketPast.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
 import { base } from '../base.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -89,7 +89,6 @@ interface RedPacketDialogProps {
 }
 
 export default function RedPacketDialog(props: RedPacketDialogProps) {
-    const t = useRedPacketTrans()
     const [showHistory, setShowHistory] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
     const [rpid, setRpid] = useState<string>('')
@@ -235,17 +234,17 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [onCreateOrSelect],
     )
 
-    const title = useMemo(() => {
-        if (showDetails) return t.more_details()
-        if (showHistory) return t.history()
-        if (openSelectNFTDialog) return t.nft_select_collection()
-        if (openNFTConfirmDialog) return t.confirm()
-        if (step === CreateRedPacketPageStep.NewRedPacketPage) return t.display_name()
-        if (step === CreateRedPacketPageStep.ClaimRequirementsPage) return t.claim_requirements_title()
-        return t.details()
-    }, [showHistory, openSelectNFTDialog, openNFTConfirmDialog, step, showDetails])
+    const title = (() => {
+        if (showDetails) return <Trans>More details</Trans>
+        if (showHistory) return <Trans>History</Trans>
+        if (openSelectNFTDialog) return <Trans>Choose your collection</Trans>
+        if (openNFTConfirmDialog) return <Trans>Confirm</Trans>
+        if (step === CreateRedPacketPageStep.NewRedPacketPage) return <Trans>Lucky Drop</Trans>
+        if (step === CreateRedPacketPageStep.ClaimRequirementsPage) return <Trans>Claim Requirements</Trans>
+        return <Trans>Confirm the Lucky Drop</Trans>
+    })()
 
-    const titleTail = useMemo(() => {
+    const titleTail = (() => {
         if (
             step === CreateRedPacketPageStep.NewRedPacketPage &&
             !openNFTConfirmDialog &&
@@ -259,7 +258,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
             return <Icons.Questions onClick={() => setShowClaimRule(true)} />
         }
         return null
-    }, [step, openNFTConfirmDialog, showHistory, showDetails])
+    })()
 
     // #region gas config
     const [defaultGasPrice] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -302,14 +301,14 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ?
                         showHistory && isFirefly ?
                             <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
-                                <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
-                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
+                                <Tab label={<Trans>Claimed</Trans>} value={historyTabs.claimed} />
+                                <Tab label={<Trans>Sent</Trans>} value={historyTabs.sent} />
                             </MaskTabList>
                         :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                                <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
+                                <Tab label={<Trans>Tokens</Trans>} value={tabs.tokens} />
                                 <Tab
                                     className={isFirefly ? classes.disabledTab : undefined}
-                                    label={t.nfts()}
+                                    label={<Trans>NFTs</Trans>}
                                     value={tabs.collectibles}
                                     disabled={isFirefly}
                                 />

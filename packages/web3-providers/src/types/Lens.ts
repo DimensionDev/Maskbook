@@ -87,6 +87,7 @@ export namespace LensBaseAPI {
         follower: string
         profileId: string
         status: {
+            // cspell:disable-next-line
             isFinalisedOnchain: boolean
             value: boolean
         }
@@ -124,6 +125,7 @@ export namespace LensBaseAPI {
                 followTokenIds: string[]
                 followerProfileId: string
                 idsOfProfilesToFollow: string[]
+                // cspell:disable-next-line
                 datas: string[]
             }
         }

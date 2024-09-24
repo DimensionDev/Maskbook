@@ -11,7 +11,7 @@ When reporting an issue, where possible, please provide at least:
 - The project and commit version the issue was identified at
 - A proof of concept (plain-text; no binaries)
 - Steps to reproduce
-- Your recommended remediation(s), if any.
+- Your recommended remediations, if any.
 
 ## `security.txt`
 

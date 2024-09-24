@@ -8,7 +8,7 @@ import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
 import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
@@ -65,7 +65,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
     const { spaceList, currentSpace, setSpaceIndex, theme } = props
-    const t = useSnapshotTrans()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
@@ -110,9 +109,7 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                     </div>
                     {currentSpace.followersCount ?
                         <Typography component="span" className={classes.followersCount}>
-                            {t.plugin_snapshot_space_info_followers_count({
-                                followersCount: formatCount(currentSpace.followersCount, 1),
-                            })}
+                            <Trans>{formatCount(currentSpace.followersCount, 1)} members</Trans>
                         </Typography>
                     :   null}
                 </div>
@@ -124,8 +121,8 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                 variant="roundedContained"
                 onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
                 {followedSpaceList?.includes(currentSpace.spaceId) && account ?
-                    t.plugin_snapshot_space_view()
-                :   t.plugin_snapshot_space_join()}
+                    <Trans>View</Trans>
+                :   <Trans>Join</Trans>}
             </Button>
         </Box>
     )

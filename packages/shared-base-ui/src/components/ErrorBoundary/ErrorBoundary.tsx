@@ -31,7 +31,6 @@ function normalizeError(error: unknown): ErrorBoundaryError {
         stack = stack.replaceAll(/webpack-internal:.+node_modules\//g, 'npm:')
         // remove webpack-internal:///
         stack = stack.replaceAll(/webpack-internal:\/{3}/g, '')
-        // cspell:ignore jkoeaghipilijlahjplgbfiocjhldnap
         stack = stack.replaceAll('chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap', '')
     } catch {}
     try {
