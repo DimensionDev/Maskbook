@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -134,7 +134,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Quote route</Trans>
+                            {isSwap ? t`Quote route` : t`Trading route`}
                         </Typography>
                         <Typography
                             component={Link}
