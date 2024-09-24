@@ -28,8 +28,7 @@ import { useQuotes } from '../hooks/useQuotes.js'
 import { useDefaultToken } from '../hooks/useDefaultToken.js'
 import { useBridgeQuotes } from '../hooks/useBridgeQuotes.js'
 import { fixBridgeMessage } from '../helpers.js'
-
-export type TradeMode = 'swap' | 'bridge'
+import { useMode, type TradeMode } from './useMode.js'
 
 interface Options {
     chainId: ChainId
@@ -97,10 +96,10 @@ function useModeState<T>(mode: TradeMode, defaultValue?: T): [T | undefined, Dis
 const SwapContext = createContext<Options>(null!)
 export function TradeProvider({ children }: PropsWithChildren) {
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [mode, setMode] = useState<TradeMode>('swap')
     const defaultChainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
     const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const [mode, setMode] = useMode()
 
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
     const usdtToken = useDefaultToken(chainId, fromToken?.address)
@@ -243,3 +242,5 @@ export function TradeProvider({ children }: PropsWithChildren) {
 export function useSwap() {
     return useContext(SwapContext)
 }
+
+export { type TradeMode } from './useMode.js'
