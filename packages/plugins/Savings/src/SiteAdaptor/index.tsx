@@ -4,18 +4,14 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { SavingsDialog } from './SavingsDialog.js'
-import { useSavingsTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
-function Name() {
-    const t = useSavingsTrans()
-    return t.plugin_savings()
-}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Savings size={36} />
-            const name = <Name />
+            const name = <Trans>Savings</Trans>
             const iconFilterColor = 'rgba(255, 83, 146, 0.3)'
             return {
                 ApplicationEntryID: base.ID,

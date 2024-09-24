@@ -22,10 +22,10 @@ import { type SavingsProtocol, TabType, type TokenPair } from '../types.js'
 import { SavingsTable } from './SavingsTable/index.js'
 import { LidoProtocol } from '../protocols/LDOProtocol.js'
 import { LDO_PAIRS } from '../constants.js'
-import { useSavingsTrans } from '../locales/index.js'
 import { WithdrawFormDialog } from './WithdrawForm.js'
 import { SavingsFormDialog } from './SavingsForm.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {
@@ -63,7 +63,6 @@ interface SavingsDialogProps {
 const chains = [ChainId.Mainnet]
 
 export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
-    const t = useSavingsTrans()
     const { classes } = useStyles()
 
     const [withdrawDialogOpen, setWithDrawDialogOpen] = useState(false)
@@ -127,15 +126,15 @@ export function SavingsDialog({ open, onClose }: SavingsDialogProps) {
                         <InjectedDialog
                             open={open}
                             classes={{ paper: classes.dialogRoot }}
-                            title={t.plugin_savings()}
+                            title={<Trans>Savings</Trans>}
                             onClose={() => {
                                 onClose?.()
                                 setSelectedProtocol(null)
                             }}
                             titleTabs={
                                 <MaskTabList variant="base" onChange={onChange} aria-label="Savings">
-                                    <Tab label={t.plugin_savings_deposit()} value={tabs.deposit} />
-                                    <Tab label={t.plugin_savings_withdraw()} value={tabs.withdraw} />
+                                    <Tab label={<Trans>Deposit</Trans>} value={tabs.deposit} />
+                                    <Tab label={<Trans>Withdraw</Trans>} value={tabs.withdraw} />
                                 </MaskTabList>
                             }>
                             <DialogContent className={classes.content}>
