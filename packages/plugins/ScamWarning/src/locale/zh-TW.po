@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 17:51\n"
+"PO-Revision-Date: 2024-09-24 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,4 +17,12 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 990\n"
+
+#: src/SiteAdaptor/index.tsx:23
+msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:21
+msgid "Safety Warning"
+msgstr ""
 
