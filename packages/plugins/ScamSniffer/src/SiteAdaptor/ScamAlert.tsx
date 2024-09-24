@@ -7,8 +7,8 @@ import { Twitter as TwitterIcon, Link as LinkIcon, Description as DescriptionIco
 import { openWindow } from '@masknet/shared-base-ui'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
-import { useScamSnifferTrans } from '../locales/i18n_generated.js'
 import { twitterDomainMigrate } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -63,7 +63,6 @@ const useStyles = makeStyles()((theme) => ({
 function ScamAlert({ result }: { result: ScamResult }) {
     const { classes } = useStyles()
     const [autoReport, setAutoReport] = useState(false)
-    const t = useScamSnifferTrans()
 
     useEffect(() => {
         if (autoReport) {
@@ -93,7 +92,7 @@ function ScamAlert({ result }: { result: ScamResult }) {
         <div className={classes.root}>
             <div className={classes.scam}>
                 <Typography variant="body2" className={classes.title}>
-                    {t.similarProject()}
+                    <Trans>Similar Project</Trans>
                 </Typography>
                 <List className={classes.list}>
                     <ListItemButton>
@@ -119,13 +118,15 @@ function ScamAlert({ result }: { result: ScamResult }) {
                         </ListItemButton>
                     :   null}
                 </List>
-                <Typography className={classes.desc}>{t.tip()}</Typography>
+                <Typography className={classes.desc}>
+                    <Trans>Be careful what you visit and sign!</Trans>
+                </Typography>
             </div>
             <div className={classes.reportWrapper}>
                 <FormControlLabel
                     className={classes.report}
                     control={<Checkbox checked={autoReport} onChange={handleClick} />}
-                    label={t.report()}
+                    label={<Trans>Auto report the scam links to MetaMask</Trans>}
                 />
             </div>
         </div>

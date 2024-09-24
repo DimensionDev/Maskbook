@@ -12,3 +12,15 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/ScamAlert.tsx:129
+msgid "Auto report the scam links to MetaMask"
+msgstr ""
+
+#: src/SiteAdaptor/ScamAlert.tsx:122
+msgid "Be careful what you visit and sign!"
+msgstr ""
+
+#: src/SiteAdaptor/ScamAlert.tsx:95
+msgid "Similar Project"
+msgstr ""

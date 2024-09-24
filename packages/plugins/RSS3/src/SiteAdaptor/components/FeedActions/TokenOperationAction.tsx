@@ -9,7 +9,6 @@ import { useFeedOwner } from '../../contexts/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, formatValue, Label } from '../common.js'
 import { TokenApprovalAction } from './TokenApprovalAction.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -76,12 +75,7 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
         <>
             {actions.map((action, index) => {
                 const metadata = action.metadata
-                const asset =
-                    metadata ?
-                        <Trans>
-                            {formatValue(metadata)} {metadata.symbol}
-                        </Trans>
-                    :   ''
+                const asset = metadata ? `${formatValue(metadata)} ${metadata.symbol}` : ''
                 const isFromOwner = isSameAddress(owner.address, action.from)
                 // Always treat as send action
                 const sender = isFromOwner ? action.from! : action.to!
