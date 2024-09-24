@@ -7,8 +7,8 @@ import { Web3Storage } from '@masknet/web3-providers'
 import { usePetConstants } from '@masknet/web3-shared-evm'
 import { PetShareDialog } from './PetShareDialog.js'
 import { PetSetDialog } from './PetSetDialog.js'
-import { usePetsTrans } from '../locales/index.js'
 import type { ConfigRSSNode } from '../types.js'
+import { Trans } from '@lingui/macro'
 
 enum PetFriendNFTStep {
     SetFriendNFT = 'set',
@@ -20,7 +20,6 @@ interface Props {
     onClose(): void
 }
 export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
-    const t = usePetsTrans()
     const [step, setStep] = useState(PetFriendNFTStep.SetFriendNFT)
     const [configNFTs, setConfigNFTs] = useState<Record<string, Constant> | undefined>(undefined)
     const [isReady, cancel] = useTimeout(500)
@@ -42,7 +41,9 @@ export const PetDialog = memo(function PetDialog({ open, onClose }: Props) {
         <InjectedDialog
             open={open}
             onClose={handleClose}
-            title={step === PetFriendNFTStep.SetFriendNFT ? t.pets_dialog_title() : t.pets_dialog_title_share()}
+            title={
+                step === PetFriendNFTStep.SetFriendNFT ? <Trans>Non-Fungible Friends</Trans> : <Trans>Successful</Trans>
+            }
             titleBarIconStyle="back">
             <DialogContent style={{ padding: 0, display: 'flex', flexDirection: 'column' }}>
                 {step === PetFriendNFTStep.SetFriendNFT ?

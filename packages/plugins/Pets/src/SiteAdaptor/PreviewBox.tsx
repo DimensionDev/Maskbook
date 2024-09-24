@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { usePetsTrans } from '../locales/index.js'
 import type { OwnerERC721TokenInfo } from '../types.js'
 import { ImageLoader } from './ImageLoader.js'
 import ModelView from './ModelView.js'
+import { Trans } from '@lingui/macro'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {
@@ -121,7 +121,6 @@ interface Props {
 
 export function PreviewBox(props: Props) {
     const { classes, cx } = useStyles()
-    const t = usePetsTrans()
 
     const renderPreview = (mediaUrl: string, imageUrl: string) => {
         if (/\.(mp4|webm|ogg)/.test(mediaUrl ?? '')) {
@@ -158,7 +157,9 @@ export function PreviewBox(props: Props) {
             :   null}
             {!(props.message || props.mediaUrl) && (
                 <div className={classes.noData}>
-                    <Typography color="textPrimary">{t.pets_dialog_preview()}</Typography>
+                    <Typography color="textPrimary">
+                        <Trans>Preview</Trans>
+                    </Typography>
                 </div>
             )}
         </div>

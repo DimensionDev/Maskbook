@@ -17,3 +17,75 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Pets/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 978\n"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:259
+msgid "(unverified)"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:393
+msgid "Confirm"
+msgstr "確認"
+
+#: src/SiteAdaptor/index.tsx:42
+msgid "Discover the infinite possibilities of #NFTs."
+msgstr "#NFTs の無限の可能性を発見してください。"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:348
+msgid "Greeting message"
+msgstr "挨拶メッセージ"
+
+#: src/SiteAdaptor/PetShareDialog.tsx:45
+msgid ""
+"I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
+"#mask_io #nonfungiblefriends\n"
+"⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:269
+msgid "NFT Contract"
+msgstr "NFT 契約"
+
+#: src/SiteAdaptor/index.tsx:18
+msgid "Non-F Friends"
+msgstr "ノンーF フレンド"
+
+#: src/SiteAdaptor/PetDialog.tsx:45
+msgid "Non-Fungible Friends"
+msgstr "ノンファンジブルな友達（かけがえのない友人）"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:348
+msgid "Optional, 100 characters max."
+msgstr "任意、最大100文字まで。"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:370
+msgid "Powered by"
+msgstr "以下により提供されています"
+
+#: src/SiteAdaptor/PreviewBox.tsx:161
+msgid "Preview"
+msgstr "プレビュー"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:176
+msgid "Setting failed, please try later"
+msgstr "設定に失敗しました。後ほどお試しください。"
+
+#: src/SiteAdaptor/PetShareDialog.tsx:60
+msgid "Share"
+msgstr "シェア"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:365
+msgid "Show NFT friends on the profile page."
+msgstr "プロフィールページに NFT の友達を表示する。"
+
+#: src/SiteAdaptor/PetDialog.tsx:45
+msgid "Successful"
+msgstr "成功しました"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:316
+msgid "Token ID"
+msgstr "トークンID"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:400
+#: src/SiteAdaptor/PetShareDialog.tsx:56
+msgid "Your Non-Fungible Friend has been set up successfully."
+msgstr "ノンファンジブルな友達が正常に設定されました。"

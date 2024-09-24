@@ -17,3 +17,75 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Pets/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 978\n"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:259
+msgid "(unverified)"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:393
+msgid "Confirm"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:42
+msgid "Discover the infinite possibilities of #NFTs."
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:348
+msgid "Greeting message"
+msgstr ""
+
+#: src/SiteAdaptor/PetShareDialog.tsx:45
+msgid ""
+"I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
+"#mask_io #nonfungiblefriends\n"
+"⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:269
+msgid "NFT Contract"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:18
+msgid "Non-F Friends"
+msgstr ""
+
+#: src/SiteAdaptor/PetDialog.tsx:45
+msgid "Non-Fungible Friends"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:348
+msgid "Optional, 100 characters max."
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:370
+msgid "Powered by"
+msgstr ""
+
+#: src/SiteAdaptor/PreviewBox.tsx:161
+msgid "Preview"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:176
+msgid "Setting failed, please try later"
+msgstr ""
+
+#: src/SiteAdaptor/PetShareDialog.tsx:60
+msgid "Share"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:365
+msgid "Show NFT friends on the profile page."
+msgstr ""
+
+#: src/SiteAdaptor/PetDialog.tsx:45
+msgid "Successful"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:316
+msgid "Token ID"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:400
+#: src/SiteAdaptor/PetShareDialog.tsx:56
+msgid "Your Non-Fungible Friend has been set up successfully."
+msgstr ""
