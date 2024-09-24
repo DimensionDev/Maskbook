@@ -231,7 +231,7 @@ export const Confirm = memo(function Confirm() {
     const [{ loading: isSending }, sendSwap] = useAsyncFn(async () => {
         if (!transaction?.data) return
         return Web3.sendTransaction({
-            data: transaction?.data,
+            data: transaction.data,
             to: transaction.to,
             from: account,
             value: transaction.value,

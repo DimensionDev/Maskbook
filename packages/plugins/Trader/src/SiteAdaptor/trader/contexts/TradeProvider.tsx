@@ -65,6 +65,7 @@ interface Options {
     isBridgeQuoteLoading: boolean
     updateBridgeQuote: (options?: RefetchOptions) => Promise<QueryObserverResult<GetBridgeQuoteResponse>>
     bridgeQuoteErrorMessage: string | undefined
+    reset: () => void
 }
 
 function useModeState<T>(mode: TradeMode): [T | undefined, Dispatch<SetStateAction<T | undefined>>]
@@ -169,6 +170,14 @@ export function TradeProvider({ children }: PropsWithChildren) {
     // misc, ui
     const [expand, setExpand] = useModeState(mode, false)
 
+    const reset = useCallback(() => {
+        setFromToken(undefined)
+        setToToken(undefined)
+        setSlippage(undefined)
+        setDisabledDexIds(EMPTY_LIST)
+        setInputAmount('')
+    }, [setFromToken, setToToken, setSlippage])
+
     const value = useMemo(
         () => ({
             chainId,
@@ -201,6 +210,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             isBridgeQuoteLoading,
             updateBridgeQuote,
             bridgeQuoteErrorMessage: fixBridgeMessage(bridgeQuoteErrorMessage, fromToken),
+            reset,
         }),
         [
             chainId,
@@ -229,6 +239,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             isBridgeQuoteLoading,
             updateBridgeQuote,
             bridgeQuoteErrorMessage,
+            reset,
         ],
     )
     return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>

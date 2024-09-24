@@ -21,7 +21,7 @@ export enum TokenPanel {
     Output = 1,
 }
 
-interface Token {
+export interface Token {
     chainId: number
     decimals: number
     contractAddress: string

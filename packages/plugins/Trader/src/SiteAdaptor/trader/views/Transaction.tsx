@@ -12,11 +12,13 @@ import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { memo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { Countdown } from '../../components/Countdown.js'
-import { useTransaction } from '../../storage.js'
 import { GasCost } from '../../components/GasCost.js'
 import { RoutePaths } from '../../constants.js'
-import urlcat from 'urlcat'
+import { useTransaction } from '../../storage.js'
+import { useSwap } from '../contexts/index.js'
+import { okxTokenToFungibleToken } from '../helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -173,6 +175,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Transaction = memo(function Transaction() {
+    const { reset, setFromToken, setMode, setToToken } = useSwap()
     const { classes, cx, theme } = useStyles()
     const [params] = useSearchParams()
     const hash = params.get('hash')
@@ -356,7 +359,7 @@ export const Transaction = memo(function Transaction() {
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {formatEthereumAddress(transaction.dexContractAddress, 4)}
-                            <CopyButton text={transaction.dexContractAddress} size={16} />
+                            <CopyButton text={transaction.dexContractAddress} size={16} display="flex" />
                         </Typography>
                     </div>
                 </div>
@@ -367,7 +370,10 @@ export const Transaction = memo(function Transaction() {
                         className={classes.button}
                         fullWidth
                         onClick={() => {
-                            console.log('kind', transaction.kind)
+                            reset()
+                            setMode(transaction.kind)
+                            setFromToken(okxTokenToFungibleToken(transaction.fromToken))
+                            setToToken(okxTokenToFungibleToken(transaction.toToken))
                             navigate(urlcat(RoutePaths.Trade, { mode: transaction.kind }))
                         }}>
                         <Icons.Cached color={theme.palette.maskColor.bottom} />
