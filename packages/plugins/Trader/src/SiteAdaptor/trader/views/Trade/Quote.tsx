@@ -71,7 +71,8 @@ export function Quote({ quote, ...props }: QuoteProps) {
 
     const rateNode = (
         <>
-            1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber()) : '--'} {targetToken.tokenSymbol}
+            1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
+            {targetToken.tokenSymbol}
             <Icons.Cached size={16} color={theme.palette.maskColor.main} onClick={() => setForwardCompare((v) => !v)} />
         </>
     )
@@ -89,11 +90,17 @@ export function Quote({ quote, ...props }: QuoteProps) {
             {expand ?
                 <>
                     <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>Trading mode</Typography>
-                        <Typography className={classes.rowValue}>Aggregator</Typography>
+                        <Typography className={classes.rowName}>
+                            <Trans>Trading mode</Trans>
+                        </Typography>
+                        <Typography className={classes.rowValue}>
+                            <Trans>Aggregator</Trans>
+                        </Typography>
                     </div>
                     <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>Rate</Typography>
+                        <Typography className={classes.rowName}>
+                            <Trans>Rate</Trans>
+                        </Typography>
                         <Typography className={classes.rowValue}>{rateNode}</Typography>
                     </div>
                     <div className={classes.infoRow}>
