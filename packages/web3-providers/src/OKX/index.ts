@@ -241,13 +241,23 @@ export class OKX {
             OKX.getTokenPrice(options.fromTokenAddress, options.fromChainId),
             OKX.getTokenPrice(options.toTokenAddress, options.toChainId),
         ])
-        // Patch tokenUnitPrice's and toTokenAmount
+        // Patch data
         res.data.forEach((quote) => {
             quote.fromToken.tokenUnitPrice = fromTokenPrice
             quote.toToken.tokenUnitPrice = toTokenPrice
             quote.toTokenAmount = quote.routerList[0]?.toTokenAmount
             quote.fromChainId = +quote.fromChainId
             quote.toChainId = +quote.fromChainId
+            quote.routerList.forEach((router) => {
+                router.router.crossChainFeeTokenAddress = fromOkxNativeAddress(router.router.crossChainFeeTokenAddress)
+                ;[...router.fromDexRouterList, ...router.toDexRouterList].forEach((dexRouter) => {
+                    dexRouter.subRouterList.forEach((subRouter) => {
+                        subRouter.fromToken.tokenContractAddress = fromOkxNativeAddress(
+                            subRouter.fromToken.tokenContractAddress,
+                        )
+                    })
+                })
+            })
         })
         return res
     }

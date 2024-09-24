@@ -211,12 +211,11 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
     const [expand, setExpand] = useState(false)
-    const transaction = bridgeData?.data[0]?.tx
-    const fromToken_ = fromToken
-    const fromTokenAmount = bridgeData?.data[0].fromTokenAmount
-    const toToken_ = toToken
+    const firstData = bridgeData?.data?.[0]
+    const transaction = firstData?.tx
+    const fromTokenAmount = firstData?.fromTokenAmount
 
-    const toTokenAmount = bridgeData?.data[0].toTokenAmount
+    const toTokenAmount = firstData?.toTokenAmount
 
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
@@ -299,10 +298,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText
-                                        loading={!fromToken_}
+                                        loading={!fromToken}
                                         className={cx(classes.fromToken, classes.value)}>
-                                        -{formatBalance(fromTokenAmount, fromToken_?.decimals || 0)}{' '}
-                                        {fromToken_?.symbol}
+                                        -{formatBalance(fromTokenAmount, fromToken?.decimals || 0)} {fromToken?.symbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{fromNetwork?.name}</Typography>
                                 </div>
@@ -320,8 +318,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                     logoURL={toToken?.logoURL}
                                 />
                                 <div className={classes.tokenValue}>
-                                    <ProgressiveText loading={!toToken_} className={cx(classes.toToken, classes.value)}>
-                                        +{formatBalance(toTokenAmount, toToken_?.decimals || 0)} {toToken_?.symbol}
+                                    <ProgressiveText loading={!toToken} className={cx(classes.toToken, classes.value)}>
+                                        +{formatBalance(toTokenAmount, toToken?.decimals || 0)} {toToken?.symbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{toNetwork?.name}</Typography>
                                 </div>
@@ -353,7 +351,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{fromNetwork?.shortName} fee</Trans>
+                            <Trans>{fromNetwork?.name} fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
@@ -382,7 +380,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{toNetwork?.shortName} fee</Trans>
+                            <Trans>{toNetwork?.name} fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
@@ -393,7 +391,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {toChainNetworkFee ?
-                                `${formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)} MATIC $(${toNetworkFeeValue})`
+                                `${formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)} ${toNetwork?.nativeCurrency.symbol ?? 'ETH'} $(${toNetworkFeeValue})`
                             :   '--'}
                         </Typography>
                     </div>
