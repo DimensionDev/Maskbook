@@ -99,7 +99,7 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
                         <MaskTabList
                             variant="base"
                             onChange={(_, tab) => {
-                                setMode(tab as TradeMode)
+                                setMode(tab as TradeMode, { replace: true })
                             }}>
                             <Tab label={t`Swap`} value="swap" />
                             <Tab label={t`Bridge`} value="bridge" />

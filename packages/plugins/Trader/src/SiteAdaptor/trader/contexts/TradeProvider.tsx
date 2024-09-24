@@ -28,13 +28,14 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useQuotes } from '../hooks/useQuotes.js'
 import { useDefaultParams } from './useDefaultParams.js'
 import { useMode, type TradeMode } from './useMode.js'
+import type { NavigateOptions } from 'react-router-dom'
 
 interface Options {
     chainId: ChainId
     setChainId: Dispatch<SetStateAction<ChainId>>
     nativeToken: Web3Helper.FungibleTokenAll | undefined
     mode: TradeMode
-    setMode: Dispatch<SetStateAction<TradeMode>>
+    setMode: (mode: TradeMode, options?: NavigateOptions) => void
     fromToken: Web3Helper.FungibleTokenAll | undefined
     setFromToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | undefined>>
     toToken: Web3Helper.FungibleTokenAll | undefined

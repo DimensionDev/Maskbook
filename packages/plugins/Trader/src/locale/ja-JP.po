@@ -82,7 +82,7 @@ msgstr ""
 msgid "Bridge"
 msgstr ""
 
-#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:167
+#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:168
 msgid "Bridge between this token pair are't supported at the moment."
 msgstr ""
 
@@ -301,7 +301,7 @@ msgstr ""
 msgid "Swap anyway"
 msgstr ""
 
-#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:144
+#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:145
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr ""
 
