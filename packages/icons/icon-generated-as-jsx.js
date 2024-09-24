@@ -445,6 +445,10 @@ export const NFTScan = /*#__PURE__*/ __createIcon('NFTScan', [
 ])
 export const Okx = /*#__PURE__*/ __createIcon('okx', [
     {
+        c: ['dark'],
+        u: () => new URL('./brands/okx.dark.svg', import.meta.url).href,
+    },
+    {
         c: ['light'],
         u: () => new URL('./brands/okx.light.svg', import.meta.url).href,
     },
