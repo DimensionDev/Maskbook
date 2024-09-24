@@ -26,6 +26,8 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -67,6 +69,7 @@ interface TipDialogProps {
 
 const site = getSiteType()
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
+    const { _ } = useLingui()
     const t = useTipsTrans()
     const { classes } = useStyles()
 
@@ -119,8 +122,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [])
 
     const buttonLabel =
-        isSending ? t.sending_tip()
-        : isValid || !validateMessage ? t.send_tip()
+        isSending ? <Trans>Sending...</Trans>
+        : isValid || !validateMessage ? <Trans>Send</Trans>
         : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
@@ -136,15 +139,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             token,
             nonFungibleTokenId,
             nonFungibleTokenAddress,
-            messageTextForNFT: t.send_specific_tip_successfully({
-                amount: '1',
-                name: nonFungibleToken?.contract?.name || 'NFT',
-            }),
-            messageTextForFT: t.send_specific_tip_successfully({
-                amount,
-                name: `$${token?.symbol}`,
-            }),
-            title: t.tips(),
+            messageTextForNFT: _(msg`Sent ${'1'} ${nonFungibleToken?.contract?.name || 'NFT'} tips successfully.`),
+            messageTextForFT: _(msg`Sent ${amount} ${`$${token?.symbol}`} tips successfully.`),
+            title: _(msg`Tips`),
             share,
         })
         onClose?.()
@@ -176,11 +173,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 open={open}
                 onClose={onClose}
                 classes={{ paper: classes.dialog }}
-                title={t.tips()}
+                title={<Trans>Tips</Trans>}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
-                        <Tab label={t.tips_tab_tokens()} value={TokenType.Fungible} />
-                        <Tab label={t.tips_tab_collectibles()} value={TokenType.NonFungible} />
+                        <Tab label={<Trans>Tokens</Trans>} value={TokenType.Fungible} />
+                        <Tab label={<Trans>NFTs</Trans>} value={TokenType.NonFungible} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>
