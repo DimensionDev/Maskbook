@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-24 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,12 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ProfileCard/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 980\n"
+
+#: src/SiteAdaptor/index.tsx:17
+msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
+msgstr "crwdns28890:0crwdne28890:0"
+
+#: src/SiteAdaptor/index.tsx:24
+msgid "Web3 Profile Card"
+msgstr "crwdns28892:0crwdne28892:0"
 
