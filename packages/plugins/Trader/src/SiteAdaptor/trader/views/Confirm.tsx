@@ -245,7 +245,7 @@ export const Confirm = memo(function Confirm() {
 
     const spender = transaction?.to
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
-        useERC20TokenApproveCallback(account, amount, spender)
+        useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
     const loading = isSending || isApproving || loadingApprove
     const disabled = !isSwappable || loading
