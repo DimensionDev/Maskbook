@@ -1,6 +1,6 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { flattenDeep } from 'lodash-es'
-import { canonifyImgUrl, parseId } from './url.js'
+import { normalizeImageURL, parseId } from './url.js'
 import {
     makeTypedMessageText,
     makeTypedMessageAnchor,
@@ -153,7 +153,7 @@ export async function postImagesParser(node: HTMLElement): Promise<string[]> {
     if (!imgNodes.length) return []
     const imgUrls = Array.from(imgNodes)
         .filter((node) => isQuotedTweet || !node.closest('div[role="link"]'))
-        .flatMap((node) => canonifyImgUrl(node.getAttribute('src') ?? ''))
+        .flatMap((node) => normalizeImageURL(node.getAttribute('src') ?? ''))
         .filter(Boolean)
     if (!imgUrls.length) return []
     return imgUrls

@@ -32,7 +32,7 @@ export function SettingsBoard(props: SettingsBoardProps) {
                     ...transactionOptions,
                 }
             :   undefined) as Web3Helper.TransactionAll | undefined,
-            slippageTolerance: slippageTolerance * 100, // convert to bips
+            slippageTolerance: slippageTolerance * 100,
         })
     }, [JSON.stringify(transaction), JSON.stringify(transactionOptions), slippageTolerance, onChange])
 

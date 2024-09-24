@@ -75,8 +75,14 @@ export function useFollow(
 
             const { v, r, s } = splitSignature(signature)
 
-            const { deadline, idsOfProfilesToFollow, followerProfileId, followTokenIds, datas } =
-                typedData.typedData.value
+            const {
+                deadline,
+                idsOfProfilesToFollow,
+                followerProfileId,
+                followTokenIds,
+                // cspell:disable-next-line
+                datas: data,
+            } = typedData.typedData.value
 
             let hash: string | undefined
 
@@ -87,7 +93,7 @@ export function useFollow(
             } catch {
                 onFailed?.()
                 const tx = await new ContractTransaction(lensHub).fillAll(
-                    lensHub?.methods.followWithSig(followerProfileId, idsOfProfilesToFollow, followTokenIds, datas, [
+                    lensHub?.methods.followWithSig(followerProfileId, idsOfProfilesToFollow, followTokenIds, data, [
                         account,
                         v,
                         r,

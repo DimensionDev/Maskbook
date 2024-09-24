@@ -144,6 +144,7 @@ export interface OpenSeaAssetResponse extends Asset {
     name: string
     description: string
     owner: OpenSeaCustomAccount
+    // cspell:disable-next-line
     is_presale: boolean
     image_url: string
     image_preview_url: string

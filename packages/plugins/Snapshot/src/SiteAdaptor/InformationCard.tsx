@@ -12,7 +12,7 @@ import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
-import { Trans } from '@lingui/macro'
+import { plural, Trans } from '@lingui/macro'
 
 interface InfoFieldProps extends withClasses<'field'>, PropsWithChildren {
     title: ReactNode
@@ -74,7 +74,12 @@ export function InformationCard() {
     const { start, end, snapshot, strategies, chainId } = proposal
     return (
         <SnapshotCard title={<Trans>Information</Trans>}>
-            <InfoField title={<Trans>Strategie(s)</Trans>} classes={{ field: classes.info }}>
+            <InfoField
+                title={plural(strategies.length, {
+                    one: 'Strategy',
+                    other: 'Strategies',
+                })}
+                classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
                         .filter((strategy) => !!strategy.params.address)

@@ -1,4 +1,3 @@
-// cspell:ignore evfyavhwq
 import { expect, test } from 'vitest'
 import { parseEIP4361Message } from '../../src/helpers/eip4361-parser.js'
 

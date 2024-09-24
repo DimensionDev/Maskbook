@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+// cspell:disable-next-line
 import { Application } from '@splinetool/runtime'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 

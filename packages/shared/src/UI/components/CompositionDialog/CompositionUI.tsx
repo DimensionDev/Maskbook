@@ -74,7 +74,7 @@ export interface CompositionRef {
 export function CompositionDialogUI(props: CompositionProps) {
     const { classes } = useStyles()
     const t = useSharedTrans()
-    const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
+    const [initialMeta, setInitialMeta] = useState<Record<string, unknown>>(EMPTY_OBJECT)
     const [currentPostSize, __updatePostSize] = useState(0)
 
     const Editor = useRef<TypedMessageEditorRef | null>(null)
@@ -91,21 +91,21 @@ export function CompositionDialogUI(props: CompositionProps) {
             Editor.current?.reset()
             setSending(false)
         })
-        setInitialMetas(EMPTY_OBJECT)
+        setInitialMeta(EMPTY_OBJECT)
     }, [])
 
     useEffect(() => {
         return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
-            setInitialMetas(options?.initialMetas ?? EMPTY_OBJECT)
+            setInitialMeta(options?.initialMeta ?? EMPTY_OBJECT)
         })
     }, [])
 
     useEffect(() => {
-        if (!initialMetas || !Editor.current) return
-        for (const [meta, data] of Object.entries(initialMetas)) {
+        if (!initialMeta || !Editor.current) return
+        for (const [meta, data] of Object.entries(initialMeta)) {
             Editor.current.attachMetadata(meta, data)
         }
-    }, [initialMetas, Editor.current])
+    }, [initialMeta, Editor.current])
 
     const context = useMemo(
         (): CompositionContext => ({

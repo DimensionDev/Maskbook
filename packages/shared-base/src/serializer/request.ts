@@ -22,4 +22,4 @@ export const deserializer = (x: { input: string; init: RequestInit }) => {
     return new Request(x.input, x.init)
 }
 
-export const requestRegedit = [is, serializer, deserializer] as const
+export const requestSerializer = [is, serializer, deserializer] as const

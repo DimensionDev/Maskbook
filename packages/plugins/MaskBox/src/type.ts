@@ -8,8 +8,8 @@ export enum BoxState {
     EXPIRED = 3,
     /** sold all tokens out */
     SOLD_OUT = 4,
-    /** drawed all personal limited tokens */
-    DRAWED_OUT = 5,
+    /** drew all personal limited tokens */
+    DREW_OUT = 5,
     /** canceled */
     CANCELED = 6,
     /** error occur */

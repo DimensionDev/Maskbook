@@ -25,7 +25,7 @@ export function useThemeFacebookVariant(baseTheme: Theme) {
             theme.components.MuiTypography = {
                 styleOverrides: {
                     root: {
-                        // cspell:ignore SFNS
+                        // cspell:disable-next-line
                         fontFamily: "system-ui, -apple-system, BlinkMacSystemFont, '.SFNSText-Regular', sans-serif",
                     },
                 },

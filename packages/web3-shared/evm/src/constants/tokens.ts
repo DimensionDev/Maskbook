@@ -1,3 +1,4 @@
+// cspell:disable
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId, type ChainIdOptionalRecord, type SchemaType } from '../types/index.js'
 import { createERC20Tokens } from '../helpers/token.js'

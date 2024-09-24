@@ -20,13 +20,13 @@ const features = {
     hidden_profile_subscriptions_enabled: false,
     subscriptions_verification_info_is_identity_verified_enabled: false,
     subscriptions_feature_can_gift_premium: false,
+    // cspell:disable-next-line
     rweb_tipjar_consumption_enabled: false,
     responsive_web_twitter_article_notes_tab_enabled: false,
 }
 
 async function createRequest(screenName: string) {
     // cspell:disable-next-line
-    // Yka-W8dz7RaEuQNkroPkYw is queryId for UserByScreenName
     const url = urlcat('https://x.com/i/api/graphql/Yka-W8dz7RaEuQNkroPkYw/UserByScreenName', {
         variables: JSON.stringify({
             screen_name: screenName,

@@ -81,7 +81,7 @@ export namespace RSS3BaseAPI {
         image: string
         name: Network
         decimals: number
-        /** Numberish string */
+        /** Number-ish string */
         value: string
         symbol: string
         /**
@@ -392,6 +392,7 @@ export namespace RSS3BaseAPI {
     export type Platform =
         | '1inch'
         | 'AAVE'
+        // cspell:disable-next-line
         | 'Aavegotchi'
         | 'Crossbell'
         | 'Curve'
@@ -471,7 +472,6 @@ export namespace RSS3BaseAPI {
         spaceid: string
         unstoppable_domains: string
         bit: string
-        avvy: string
         address: string
     }
 

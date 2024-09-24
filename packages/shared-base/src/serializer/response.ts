@@ -22,4 +22,4 @@ export const deserializer = (x: { body: Blob; init: ResponseInit }) => {
     return new Response(x.body, x.init)
 }
 
-export const responseRegedit = [is, serializer, deserializer] as const
+export const responseSerializer = [is, serializer, deserializer] as const

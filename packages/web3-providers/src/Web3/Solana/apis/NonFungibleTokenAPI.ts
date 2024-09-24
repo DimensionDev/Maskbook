@@ -1,3 +1,4 @@
+// cspell:ignore metaplex
 import { Connection } from '@metaplex/js'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
