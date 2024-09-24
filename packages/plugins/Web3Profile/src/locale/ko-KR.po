@@ -56,7 +56,7 @@ msgstr "팔로우"
 msgid "Follow for {0} {1}"
 msgstr ""
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts:162
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts:168
 msgid "Follow Lens handle"
 msgstr "Lens 핸들 팔로우"
 
@@ -77,7 +77,7 @@ msgstr "Lens 팔로우"
 msgid "Lens Unfollow"
 msgstr "Lens 언팔로우"
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts:165
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts:171
 #: src/SiteAdaptor/hooks/Lens/useUnfollow.ts:152
 msgid "Network error, try again"
 msgstr "네트워크 오류입니다. 다시 시도하세요."

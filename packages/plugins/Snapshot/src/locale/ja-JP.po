@@ -18,11 +18,15 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
 
+#: src/SiteAdaptor/InformationCard.tsx:78
+msgid "{0, plural, one {Strategy} other {Strategies}}"
+msgstr ""
+
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:112
 msgid "{0} members"
 msgstr "{0} メンバー"
 
-#: src/SiteAdaptor/InformationCard.tsx:93
+#: src/SiteAdaptor/InformationCard.tsx:98
 msgid "Author"
 msgstr "著者"
 
@@ -48,7 +52,7 @@ msgstr "それぞれのプロジェクトまたはプロトコルのTwitterペ�
 msgid "Download report"
 msgstr "レポートをダウンロードする"
 
-#: src/SiteAdaptor/InformationCard.tsx:124
+#: src/SiteAdaptor/InformationCard.tsx:129
 msgid "End date"
 msgstr "終了日"
 
@@ -64,7 +68,7 @@ msgstr ""
 msgid "Information"
 msgstr "情報"
 
-#: src/SiteAdaptor/InformationCard.tsx:109
+#: src/SiteAdaptor/InformationCard.tsx:114
 msgid "IPFS"
 msgstr "IPFS"
 
@@ -114,7 +118,7 @@ msgstr "提案"
 msgid "Results"
 msgstr "結果"
 
-#: src/SiteAdaptor/InformationCard.tsx:129
+#: src/SiteAdaptor/InformationCard.tsx:134
 #: src/SiteAdaptor/PluginDescriptor.tsx:33
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
@@ -125,7 +129,7 @@ msgstr "Snapshot"
 msgid "Space"
 msgstr "スペース"
 
-#: src/SiteAdaptor/InformationCard.tsx:119
+#: src/SiteAdaptor/InformationCard.tsx:124
 msgid "Start date"
 msgstr "開始日"
 
@@ -134,8 +138,8 @@ msgid "Starts in {0}"
 msgstr "開始時刻 {0}"
 
 #: src/SiteAdaptor/InformationCard.tsx:77
-msgid "Strategie(s)"
-msgstr "ストラテジー"
+#~ msgid "Strategie(s)"
+#~ msgstr "ストラテジー"
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"

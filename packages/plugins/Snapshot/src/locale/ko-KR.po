@@ -18,11 +18,15 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
 
+#: src/SiteAdaptor/InformationCard.tsx:78
+msgid "{0, plural, one {Strategy} other {Strategies}}"
+msgstr ""
+
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:112
 msgid "{0} members"
 msgstr "{0} 맴버"
 
-#: src/SiteAdaptor/InformationCard.tsx:93
+#: src/SiteAdaptor/InformationCard.tsx:98
 msgid "Author"
 msgstr "작성자"
 
@@ -48,7 +52,7 @@ msgstr "각 프로젝트 또는 프로토콜의 트위터 페이지에 스냅샷
 msgid "Download report"
 msgstr "리포트 다운로드"
 
-#: src/SiteAdaptor/InformationCard.tsx:124
+#: src/SiteAdaptor/InformationCard.tsx:129
 msgid "End date"
 msgstr "종료 날짜"
 
@@ -64,7 +68,7 @@ msgstr ""
 msgid "Information"
 msgstr "정보"
 
-#: src/SiteAdaptor/InformationCard.tsx:109
+#: src/SiteAdaptor/InformationCard.tsx:114
 msgid "IPFS"
 msgstr "IPFS"
 
@@ -114,7 +118,7 @@ msgstr "프로포절"
 msgid "Results"
 msgstr "결과"
 
-#: src/SiteAdaptor/InformationCard.tsx:129
+#: src/SiteAdaptor/InformationCard.tsx:134
 #: src/SiteAdaptor/PluginDescriptor.tsx:33
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
@@ -125,7 +129,7 @@ msgstr "스냅숏"
 msgid "Space"
 msgstr "스페이스"
 
-#: src/SiteAdaptor/InformationCard.tsx:119
+#: src/SiteAdaptor/InformationCard.tsx:124
 msgid "Start date"
 msgstr "시작 날짜"
 
@@ -134,8 +138,8 @@ msgid "Starts in {0}"
 msgstr "시작 시간 {0}"
 
 #: src/SiteAdaptor/InformationCard.tsx:77
-msgid "Strategie(s)"
-msgstr "전략"
+#~ msgid "Strategie(s)"
+#~ msgstr "전략"
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"
