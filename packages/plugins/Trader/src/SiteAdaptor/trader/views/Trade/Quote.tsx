@@ -1,7 +1,8 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { OKXSwapQuote } from '@masknet/web3-providers/types'
+import type { OKXBridgeQuote, OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact, leftShift } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
@@ -9,7 +10,6 @@ import { Link } from 'react-router-dom'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
 import { useSwap } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -47,12 +47,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface QuoteProps extends BoxProps {
-    quote: OKXSwapQuote
+    quote: OKXSwapQuote | OKXBridgeQuote
 }
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
-    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage } = useSwap()
+    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode } = useSwap()
+    const isSwap = mode === 'swap'
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
         forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
@@ -60,18 +61,17 @@ export function Quote({ quote, ...props }: QuoteProps) {
     const rate = useMemo(() => {
         if (!quote) return null
         const { fromTokenAmount, toTokenAmount, fromToken, toToken } = quote
-        const fromAmount = leftShift(fromTokenAmount || 0, +fromToken.decimal)
-        const toAmount = leftShift(toTokenAmount || 0, +toToken.decimal)
+        const fromAmount = leftShift(fromTokenAmount || 0, fromToken.decimals)
+        const toAmount = leftShift(toTokenAmount || 0, toToken.decimals)
         if (fromAmount.isZero() || toAmount.isZero()) return null
         return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
     }, [quote])
-    const { data: liquidityRes } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
+    const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const rateNode = (
         <>
-            1 {baseToken.tokenSymbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.tokenSymbol}
+            1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber()) : '--'} {targetToken.tokenSymbol}
             <Icons.Cached size={16} color={theme.palette.maskColor.main} onClick={() => setForwardCompare((v) => !v)} />
         </>
     )
@@ -113,16 +113,18 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>
-                    <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>Select liquidity</Typography>
-                        <Typography
-                            component={Link}
-                            className={cx(classes.rowValue, classes.link)}
-                            to={RoutePaths.SelectLiquidity}>
-                            {dexIdsCount}/{liquidityList.length}
-                            <Icons.ArrowRight size={20} />
-                        </Typography>
-                    </div>
+                    {isSwap ?
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.rowName}>Select liquidity</Typography>
+                            <Typography
+                                component={Link}
+                                className={cx(classes.rowValue, classes.link)}
+                                to={RoutePaths.SelectLiquidity}>
+                                {dexIdsCount}/{liquidityList.length}
+                                <Icons.ArrowRight size={20} />
+                            </Typography>
+                        </div>
+                    :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Quote route</Trans>
@@ -130,7 +132,11 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
-                            to={RoutePaths.QuoteRoute}>
+                            to={
+                                isSwap ?
+                                    { pathname: RoutePaths.QuoteRoute, search: '?mode=swap' }
+                                :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=swap' }
+                            }>
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>

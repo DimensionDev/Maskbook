@@ -2099,6 +2099,9 @@ importers:
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
+      immer:
+        specifier: ^10.1.1
+        version: 10.1.1
       react-router-dom:
         specifier: ^6.24.0
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)

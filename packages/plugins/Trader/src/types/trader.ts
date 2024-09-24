@@ -21,24 +21,45 @@ export enum TokenPanel {
     Output = 1,
 }
 
-interface SwapToken {
+interface Token {
     chainId: number
     decimals: number
     contractAddress: string
     symbol: string
     logo: string | undefined
 }
-export interface OkxSwapTransaction {
+
+export interface OkxBaseTransaction {
     hash: string
+    timestamp: number
+}
+export interface OkxSwapTransaction extends OkxBaseTransaction {
+    kind: 'swap'
     chainId: number
-    fromToken: SwapToken
+    fromToken: Token
     fromTokenAmount: string | undefined
-    toToken: SwapToken
+    toToken: Token
     toTokenAmount: string | undefined
-    datetime: number
     transactionFee: string
     gasLimit: string
     gasPrice: string
     dexContractAddress: string
     estimatedTime: number
 }
+
+export interface OkxBridgeTransaction extends OkxBaseTransaction {
+    kind: 'bridge'
+    fromChainId: number
+    toChainId: number
+    fromToken: Token
+    fromTokenAmount: string | undefined
+    toToken: Token
+    toTokenAmount: string | undefined
+    transactionFee: string
+    gasLimit: string
+    gasPrice: string
+    dexContractAddress: string
+    estimatedTime: number
+}
+
+export type OkxTransaction = OkxSwapTransaction | OkxBridgeTransaction

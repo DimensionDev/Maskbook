@@ -4,7 +4,7 @@ import { multipliedBy } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { type BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
-import { useSwap } from '../contexts/SwapProvider.js'
+import { useSwap } from '../contexts/TradeProvider.js'
 
 export function useGasCost(gasPrice: BigNumber.Value, gas: BigNumber.Value) {
     const { chainId } = useSwap()

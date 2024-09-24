@@ -69,6 +69,7 @@ const useStyles = makeStyles()({
     },
     bar: {
         position: 'absolute',
+        flexShrink: 0,
         bottom: 0,
         left: 0,
         right: 0,
@@ -122,9 +123,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 )
             :   tokens
 
-        const blockedTokenAddresses = new Map(blockedFungibleTokens.map((x) => [x.address, true]))
-        const includeMap = includeTokens ? new Map(includeTokens.map((x) => [x, true])) : null
-        const excludeMap = excludeTokens.length ? new Map(excludeTokens.map((x) => [x, true])) : null
+        const blockedTokenAddresses = new Map(blockedFungibleTokens.map((x) => [x.address.toLowerCase(), true]))
+        const includeMap = includeTokens ? new Map(includeTokens.map((x) => [x.toLowerCase(), true])) : null
+        const excludeMap = excludeTokens.length ? new Map(excludeTokens.map((x) => [x.toLowerCase(), true])) : null
         return allFungibleTokens.filter((token) => {
             const addr = token.address.toLowerCase()
             const isIncluded = !includeMap || includeMap.has(addr)
@@ -390,9 +391,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 FixedSizeListProps={FixedSizeListProps}
                 SearchFieldProps={SearchFieldProps}
             />
-            {mode === TokenListMode.List && enableManage ?
+            {mode === TokenListMode.List && enableManage && !props.loading ?
                 <Box className={classes.bar}>
-                    <ManageTokenListBar onClick={() => setMode?.(TokenListMode.Manage)} />
+                    <ManageTokenListBar onEdit={() => setMode?.(TokenListMode.Manage)} />
                 </Box>
             :   null}
         </Stack>

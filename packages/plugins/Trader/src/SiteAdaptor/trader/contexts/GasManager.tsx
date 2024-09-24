@@ -13,7 +13,7 @@ import {
     type PropsWithChildren,
     type SetStateAction,
 } from 'react'
-import { useSwap } from './SwapProvider.js'
+import { useSwap } from './TradeProvider.js'
 
 interface Options {
     gasLimit: string | undefined

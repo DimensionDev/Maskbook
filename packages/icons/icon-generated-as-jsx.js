@@ -1263,10 +1263,13 @@ export const Checkbox = /*#__PURE__*/ __createIcon('Checkbox', [
                         d: 'M0 4a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H4a4 4 0 0 1-4-4z',
                     }),
                     /*#__PURE__*/ _jsx('path', {
-                        fill: '#fff',
                         fillRule: 'evenodd',
                         d: 'M14.03 5.47a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 0 1-1.06 0l-3-3a.75.75 0 0 1 1.06-1.06l2.47 2.47 5.47-5.47a.75.75 0 0 1 1.06 0',
                         clipRule: 'evenodd',
+                        style: {
+                            '--default-stroke-color': '#fff',
+                            fill: 'var(--stroke-color, var(--default-stroke-color, currentColor))',
+                        },
                     }),
                 ],
             }),
@@ -1982,16 +1985,64 @@ export const Empty = /*#__PURE__*/ __createIcon('Empty', [
         u: () => new URL('./general/Empty.png', import.meta.url).href,
     },
 ])
-export const EmptySimple = /*#__PURE__*/ __createIcon('EmptySimple', [
-    {
-        c: ['dark'],
-        u: () => new URL('./general/EmptySimple.dark.svg', import.meta.url).href,
-    },
-    {
-        c: ['light'],
-        u: () => new URL('./general/EmptySimple.light.svg', import.meta.url).href,
-    },
-])
+export const EmptySimple = /*#__PURE__*/ __createIcon(
+    'EmptySimple',
+    [
+        {
+            c: ['dark'],
+            u: () => new URL('./general/EmptySimple.dark.svg', import.meta.url).href,
+            j: () =>
+                /*#__PURE__*/ _jsx('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    viewBox: '0 0 36 37',
+                    children: /*#__PURE__*/ _jsxs('g', {
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        style: {
+                            '--default-color': '#666c75',
+                            fill: 'var(--icon-color, var(--default-color, currentColor))',
+                        },
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M4.59 5.223C6.611 3.2 9.631 2.434 13.5 2.434h9c3.869 0 6.889.766 8.911 2.789 2.023 2.023 2.79 5.043 2.79 8.911v9c0 3.868-.767 6.889-2.79 8.911-2.022 2.023-5.042 2.79-8.91 2.79h-9c-3.87 0-6.89-.767-8.912-2.79S1.8 27.002 1.8 23.135v-9c0-3.87.767-6.89 2.79-8.912M6.285 6.92C4.934 8.272 4.2 10.502 4.2 14.134v9c0 3.632.734 5.862 2.086 7.214C7.64 31.7 9.87 32.434 13.5 32.434h9c3.632 0 5.862-.734 7.214-2.086s2.086-3.582 2.086-7.214v-9c0-3.632-.733-5.862-2.086-7.214S26.132 4.834 22.5 4.834h-9c-3.631 0-5.861.734-7.214 2.086z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'm25.749 22.321-1.335 2.685a4.2 4.2 0 0 1-3.759 2.328H15.36c-.436 0-2.597-.003-3.77-2.305l-.004-.01-1.334-2.683a1.8 1.8 0 0 0-1.612-1.002H3a1.2 1.2 0 1 1 0-2.4h5.64a4.2 4.2 0 0 1 3.759 2.329v.002l1.333 2.68c.507.99 1.34.99 1.626.99h5.297a1.8 1.8 0 0 0 1.611-1.001l1.336-2.686a4.2 4.2 0 0 1 3.758-2.329h5.61a1.2 1.2 0 0 1 0 2.4h-5.61c-.68 0-1.303.386-1.611 1.002',
+                            }),
+                        ],
+                    }),
+                }),
+            s: true,
+        },
+        {
+            c: ['light'],
+            u: () => new URL('./general/EmptySimple.light.svg', import.meta.url).href,
+            j: () =>
+                /*#__PURE__*/ _jsx('svg', {
+                    xmlns: 'http://www.w3.org/2000/svg',
+                    viewBox: '0 0 36 37',
+                    children: /*#__PURE__*/ _jsxs('g', {
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        style: {
+                            '--default-color': '#acb4c1',
+                            fill: 'var(--icon-color, var(--default-color, currentColor))',
+                        },
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M4.59 5.223C6.611 3.2 9.631 2.434 13.5 2.434h9c3.869 0 6.889.766 8.911 2.789 2.023 2.023 2.79 5.043 2.79 8.911v9c0 3.868-.767 6.889-2.79 8.911-2.022 2.023-5.042 2.79-8.91 2.79h-9c-3.87 0-6.89-.767-8.912-2.79S1.8 27.002 1.8 23.135v-9c0-3.87.767-6.89 2.79-8.912M6.285 6.92C4.934 8.272 4.2 10.502 4.2 14.134v9c0 3.632.734 5.862 2.086 7.214C7.64 31.7 9.87 32.434 13.5 32.434h9c3.632 0 5.862-.734 7.214-2.086s2.086-3.582 2.086-7.214v-9c0-3.632-.733-5.862-2.086-7.214S26.132 4.834 22.5 4.834h-9c-3.631 0-5.861.734-7.214 2.086z',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'm25.749 22.321-1.335 2.685a4.2 4.2 0 0 1-3.759 2.328H15.36c-.436 0-2.597-.003-3.77-2.305l-.004-.01-1.334-2.683a1.8 1.8 0 0 0-1.612-1.002H3a1.2 1.2 0 1 1 0-2.4h5.64a4.2 4.2 0 0 1 3.759 2.329v.002l1.333 2.68c.507.99 1.34.99 1.626.99h5.297a1.8 1.8 0 0 0 1.611-1.001l1.336-2.686a4.2 4.2 0 0 1 3.758-2.329h5.61a1.2 1.2 0 0 1 0 2.4h-5.61c-.68 0-1.303.386-1.611 1.002',
+                            }),
+                        ],
+                    }),
+                }),
+            s: true,
+        },
+    ],
+    [36, 37],
+)
 export const EncryptedFiles = /*#__PURE__*/ __createIcon('EncryptedFiles', [
     {
         u: () => new URL('./general/EncryptedFiles.svg', import.meta.url).href,
@@ -3038,11 +3089,14 @@ export const RadioButtonChecked = /*#__PURE__*/ __createIcon('RadioButtonChecked
                         },
                     }),
                     /*#__PURE__*/ _jsx('path', {
-                        stroke: '#fff',
                         strokeLinecap: 'round',
                         strokeLinejoin: 'round',
                         strokeWidth: '1.5',
                         d: 'm5.166 10.63 3.333 3.5 6.667-7',
+                        style: {
+                            '--default-stroke-color': '#fff',
+                            stroke: 'var(--stroke-color, var(--default-stroke-color, currentColor))',
+                        },
                     }),
                 ],
             }),

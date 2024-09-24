@@ -1,14 +1,14 @@
 import type { PropsWithChildren } from 'react'
-import { SwapProvider } from './SwapProvider.js'
+import { TradeProvider } from './TradeProvider.js'
 import { GasManager } from './GasManager.js'
 
 export function Providers({ children }: PropsWithChildren) {
     return (
-        <SwapProvider>
+        <TradeProvider>
             <GasManager>{children}</GasManager>
-        </SwapProvider>
+        </TradeProvider>
     )
 }
 
-export * from './SwapProvider.js'
+export * from './TradeProvider.js'
 export * from './GasManager.js'

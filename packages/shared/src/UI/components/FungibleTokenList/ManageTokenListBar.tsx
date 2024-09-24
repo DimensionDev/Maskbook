@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, type StackProps } from '@mui/material'
 import { memo } from 'react'
 import { useSharedTrans } from '../../../locales/index.js'
 
@@ -18,16 +18,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface ManageTokenListBarProps {
-    onClick(): void
+interface ManageTokenListBarProps extends StackProps {
+    onEdit(): void
 }
 
-export const ManageTokenListBar = memo<ManageTokenListBarProps>(({ onClick }) => {
+export const ManageTokenListBar = memo<ManageTokenListBarProps>(function ManageTokenListBar({ onEdit, ...rest }) {
     const t = useSharedTrans()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     return (
-        <Stack className={classes.root} direction="row" justifyContent="center">
-            <Stack className={classes.target} display="inline-flex" gap={2} direction="row" onClick={onClick}>
+        <Stack direction="row" justifyContent="center" {...rest} className={cx(classes.root, rest.className)}>
+            <Stack className={classes.target} display="inline-flex" gap={2} direction="row" onClick={onEdit}>
                 <Icons.Edit2 />
                 <Typography>{t.erc20_manage_token_list()}</Typography>
             </Stack>

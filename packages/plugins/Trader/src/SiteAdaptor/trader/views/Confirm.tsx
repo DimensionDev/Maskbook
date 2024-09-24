@@ -3,6 +3,8 @@ import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
+import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     dividedBy,
     formatBalance,
@@ -12,21 +14,20 @@ import {
     leftShift,
     rightShift,
 } from '@masknet/web3-shared-base'
+import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Warning } from '../../components/Warning.js'
-import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
-import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
-import { useSwappable } from '../hooks/useSwappable.js'
-import { useSwapData } from '../hooks/useSwapData.js'
-import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
-import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { Warning } from '../../components/Warning.js'
+import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
+import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
+import { useSwapData } from '../hooks/useSwapData.js'
+import { useSwappable } from '../hooks/useSwappable.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -34,6 +35,7 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         height: '100%',
         boxSizing: 'border-box',
+        scrollbarWidth: 'none',
     },
     content: {
         display: 'flex',
@@ -172,7 +174,7 @@ export const Confirm = memo(function Confirm() {
         isQuoteStale,
         updateQuote,
     } = useSwap()
-    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const decimals = fromToken?.decimals
@@ -185,8 +187,8 @@ export const Confirm = memo(function Confirm() {
         amount,
         fromTokenAddress: fromToken?.address,
         toTokenAddress: toToken?.address,
-        slippage: isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage,
-        userWalletAddress: address,
+        slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toString(),
+        userWalletAddress: account,
     })
     const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
@@ -198,8 +200,7 @@ export const Confirm = memo(function Confirm() {
     const toToken_ = routerResult?.toToken
     const toTokenAmount = routerResult?.toTokenAmount
 
-    const { data: liquidityRes } = useLiquidityResources(chainId)
-    const liquidityList = liquidityRes?.code === 0 ? liquidityRes.data : EMPTY_LIST
+    const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -231,7 +232,7 @@ export const Confirm = memo(function Confirm() {
         return Web3.sendTransaction({
             data: transaction?.data,
             to: transaction.to,
-            from: address,
+            from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
             gas: transaction.gas,
@@ -240,11 +241,11 @@ export const Confirm = memo(function Confirm() {
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
         })
-    }, [transaction, address, gasConfig])
+    }, [transaction, account, gasConfig])
 
     const spender = transaction?.to
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
-        useERC20TokenApproveCallback(address, amount, spender)
+        useERC20TokenApproveCallback(account, amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
     const loading = isSending || isApproving || loadingApprove
     const disabled = !isSwappable || loading
@@ -271,7 +272,7 @@ export const Confirm = memo(function Confirm() {
                                     <ProgressiveText
                                         loading={!fromToken_}
                                         className={cx(classes.fromToken, classes.value)}>
-                                        -{formatBalance(fromTokenAmount, +(fromToken_?.decimal ?? 0))}{' '}
+                                        -{formatBalance(fromTokenAmount, +(fromToken_?.decimals ?? 0))}{' '}
                                         {fromToken_?.tokenSymbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{network?.name}</Typography>
@@ -291,7 +292,7 @@ export const Confirm = memo(function Confirm() {
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText loading={!toToken_} className={cx(classes.toToken, classes.value)}>
-                                        +{formatBalance(toTokenAmount, +(toToken_?.decimal ?? 0))}{' '}
+                                        +{formatBalance(toTokenAmount, +(toToken_?.decimals ?? 0))}{' '}
                                         {toToken_?.tokenSymbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{network?.name}</Typography>
@@ -416,7 +417,8 @@ export const Confirm = memo(function Confirm() {
                                 gasOptions ?
                                     gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
                                 :   networkDescriptor?.averageBlockDelay
-                            await addTransaction({
+                            await addTransaction(account, {
+                                kind: 'swap',
                                 hash,
                                 chainId,
                                 fromToken: {
@@ -435,7 +437,7 @@ export const Confirm = memo(function Confirm() {
                                     logo: toToken.logoURL,
                                 },
                                 toTokenAmount,
-                                datetime: Date.now(),
+                                timestamp: Date.now(),
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: transaction.to,
                                 estimatedTime: (estimatedSeconds ?? 10) * 1000,

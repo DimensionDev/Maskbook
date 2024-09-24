@@ -163,7 +163,7 @@ export const Slippage = memo(function Slippage() {
                     <Typography className={classes.rowName}>Minimum received</Typography>
                     {quote ?
                         <Typography className={classes.rowValue}>
-                            {leftShift(quote.toTokenAmount, +quote.toToken.decimal).toFixed(4)}
+                            {leftShift(quote.toTokenAmount, quote.toToken.decimals).toFixed(4)}
                             {quote.toToken.tokenSymbol}
                         </Typography>
                     :   null}
