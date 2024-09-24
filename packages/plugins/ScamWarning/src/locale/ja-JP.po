@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 17:50\n"
+"PO-Revision-Date: 2024-09-24 15:27\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,4 +17,12 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 990\n"
+
+#: src/SiteAdaptor/index.tsx:23
+msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
+msgstr "ユーザーが公開した暗号化ウェブサイトが危険か悪意のあるものかを検出します。デジタル資産を保存するのに役立ちます。"
+
+#: src/SiteAdaptor/index.tsx:21
+msgid "Safety Warning"
+msgstr "安全警告"
 
