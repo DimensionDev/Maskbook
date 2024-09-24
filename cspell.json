@@ -24,7 +24,7 @@
         "packages/xcode",
         "qya-aa.json"
     ],
-    "susWords": ["bridgable", "clonable", "canonify", "sniffings", "strategie"],
+    "TODO: fix those words": ["bridgable", "clonable", "sniffings"],
     "ignoreWords": [
         "algr",
         "anchorme",

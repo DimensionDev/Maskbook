@@ -1,6 +1,0 @@
-
-> mask-network@2.26.9 spellcheck /Users/jack/workspace/mask
-> cspell lint --no-must-find-files "--config" "cspell.json" "packages"
-
-./packages/mask/content-script/site-adaptors/twitter.com/locales/languages.ts:32:24 - Unknown word (USEI)
- ELIFECYCLE  Command failed with exit code 1.
