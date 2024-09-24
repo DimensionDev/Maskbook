@@ -1,6 +1,7 @@
 import { Box, InputBase, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useRedPacketTrans } from '../locales/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -29,20 +30,22 @@ interface RedpacketMessagePanelProps {
     onChange: (val: string) => void
 }
 export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
+    const { _ } = useLingui()
     const { onChange, message } = props
     const { classes, cx } = useStyles()
-    const t = useRedPacketTrans()
 
     return (
         <Box className={classes.root}>
             <div className={classes.wrapper}>
-                <Typography>{t.message_label()}</Typography>
+                <Typography>
+                    <Trans>Enclose a Message</Trans>
+                </Typography>
             </div>
             <div className={cx(classes.wrapper)}>
                 <InputBase
                     className={classes.input}
                     onChange={(e) => onChange(e.target.value)}
-                    inputProps={{ maxLength: 100, placeholder: t.best_wishes() }}
+                    inputProps={{ maxLength: 100, placeholder: _(msg`Best Wishes!`) }}
                     value={message}
                 />
             </div>

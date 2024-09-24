@@ -20,6 +20,8 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -160,6 +162,7 @@ export interface RedPacketProps {
 }
 
 export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
+    const { _ } = useLingui()
     const t = useRedPacketTrans()
     const token = payload.token
     const { pluginID } = useNetworkContext()
@@ -214,7 +217,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 sender: payload.sender.name,
                 payload: link!,
                 network: network?.name ?? 'Mainnet',
-                account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
+                account: isOnTwitter ? _(msg`realMaskNetwork`) : _(msg`masknetwork`),
                 interpolation: { escapeValue: false },
             }
             if (hasClaimed) {
@@ -254,14 +257,11 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
             token,
             tokenType: TokenType.Fungible,
-            messageTextForNFT: t.claim_nft_successful({
-                name: 'NFT',
-            }),
-            messageTextForFT: t.claim_token_successful({
-                amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
-                name: `$${token?.symbol}`,
-            }),
-            title: t.lucky_drop(),
+            messageTextForNFT: _(msg`Claimed 1 ${'NFT'} successfully.`),
+            messageTextForFT: _(
+                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} ${`$${token?.symbol}`}.`,
+            ),
+            title: _(msg`Lucky Drop`),
             share: (text) => share?.(text, source ? source : undefined),
         })
     }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
@@ -326,14 +326,13 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (!availability || !token) return
 
         if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return t.description_refund({
-                balance: formatBalance(availability.balance, token.decimals, { significant: 2 }),
-                symbol: token.symbol ?? '-',
-            })
-        if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
-        if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
-        if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
-        if (!payload.password) return t.description_broken()
+            return _(
+                msg`You could refund ${formatBalance(availability.balance, token.decimals, { significant: 2 })} ${token.symbol ?? '-'}.`,
+            )
+        if (listOfStatus.includes(RedPacketStatus.refunded)) return _(msg`The Lucky Drop has been refunded.`)
+        if (listOfStatus.includes(RedPacketStatus.expired)) return _(msg`The Lucky Drop is expired.`)
+        if (listOfStatus.includes(RedPacketStatus.empty)) return _(msg`The Lucky Drop is empty.`)
+        if (!payload.password) return _(msg`The Lucky Drop is broken.`)
         const i18nParams = {
             total: formatBalance(payload.total, token.decimals, { significant: 2 }),
             symbol: token.symbol ?? '-',
@@ -422,7 +421,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                                 </Typography>
                             </div>
                             <Typography className={classes.from} variant="body1">
-                                {t.from({ name: payload.sender.name || '-' })}
+                                <Trans>From: @{payload.sender.name || '-'}</Trans>
                             </Typography>
                         </div>
                     </div>

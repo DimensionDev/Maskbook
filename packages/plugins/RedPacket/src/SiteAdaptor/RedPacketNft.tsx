@@ -36,6 +36,8 @@ import { useRedPacketTrans } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -198,6 +200,7 @@ interface RedPacketNftProps {
 }
 
 export function RedPacketNft({ payload }: RedPacketNftProps) {
+    const { _ } = useLingui()
     const t = useRedPacketTrans()
 
     const { pluginID } = useNetworkContext()
@@ -307,14 +310,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             nonFungibleTokenId: availability.claimed_id,
             nonFungibleTokenAddress: payload.contractAddress,
             tokenType: TokenType.NonFungible,
-            messageTextForNFT: t.claim_nft_successful({
-                name: token?.contract?.name || 'NFT',
-            }),
-            messageTextForFT: t.claim_token_successful({
-                amount: '1',
-                name: '',
-            }),
-            title: t.lucky_drop(),
+            messageTextForNFT: _(msg`Claimed 1 ${token?.contract?.name || 'NFT'} successfully.`),
+            messageTextForFT: _(msg`You claimed ${'1'} ${''}.`),
+            title: _(msg`Lucky Drop`),
             share,
         })
     }, [nftRedPacketContract, payload.id, account, Hub])
@@ -332,7 +330,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
     }, [claimCallback, checkResult, retryAvailability, showSnackbar])
 
-    if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
+    if (availabilityError)
+        return <ReloadStatus message={<Trans>Something went wrong.</Trans>} onRetry={retryAvailability} />
 
     if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
 
@@ -393,27 +392,29 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <div className={classes.footer}>
                     {availability.isClaimed ?
                         <Typography className={classes.claimedText}>
-                            {t.got_nft({ name: payload.contractName || 'NFT' })}
+                            <Trans>You got 1 {payload.contractName || 'NFT'}</Trans>
                         </Typography>
                     :   <Typography className={classes.remain}>
-                            {t.claimed({ amount: `${availability.claimedAmount}/${availability.totalAmount}` })}
+                            <Trans>Claimed {`${availability.claimedAmount}/${availability.totalAmount}`}</Trans>
                         </Typography>
                     }
                     <Typography variant="body1" className={classes.from}>
-                        {t.from({ name: payload.senderName || '-' })}
+                        <Trans>From: @{payload.senderName || '-'}</Trans>
                     </Typography>
                 </div>
 
                 {availability.isClaimed ?
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
-                            {t.claimed({ amount: '' })}
+                            <Trans>Claimed {''}</Trans>
                         </Typography>
                     </div>
                 : availability.isEnd ?
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
-                            {availability.expired ? t.expired() : t.completed()}
+                            {availability.expired ?
+                                <Trans>Expired</Trans>
+                            :   <Trans>Completed</Trans>}
                         </Typography>
                     </div>
                 :   null}
@@ -441,7 +442,6 @@ interface OperationFooterProps {
 
 function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: OperationFooterProps) {
     const { classes } = useStyles({ claimed, outdated: false })
-    const t = useRedPacketTrans()
 
     return (
         <Box className={classes.buttonWrapper}>
@@ -452,7 +452,7 @@ function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: Ope
                     className={classes.button}
                     fullWidth
                     onClick={onShare}>
-                    {t.share()}
+                    <Trans>Share</Trans>
                 </Button>
             </Box>
             {claimed ? null : (
@@ -475,7 +475,9 @@ function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: Ope
                                 onClick={onClaim}
                                 className={classes.button}
                                 fullWidth>
-                                {isClaiming ? t.claiming() : t.claim()}
+                                {isClaiming ?
+                                    <Trans>Claiming...</Trans>
+                                :   <Trans>Claim</Trans>}
                             </ActionButton>
                         </WalletConnectedBoundary>
                     </ChainBoundary>

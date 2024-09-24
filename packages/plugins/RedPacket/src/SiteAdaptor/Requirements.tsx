@@ -8,8 +8,9 @@ import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { Fragment, useMemo } from 'react'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
+import { RedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -176,7 +177,6 @@ function FollowProfile({ payload }: FollowProfileProps) {
 }
 
 export function Requirements({ onClose, statusList, showResults = true, ...props }: Props) {
-    const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const postLink = usePostLink()
     const postUrl = usePostInfoDetails.url()
@@ -277,7 +277,7 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
     return (
         <Box {...props} className={cx(classes.box, props.className)}>
             <Typography variant="h2" className={classes.header}>
-                {t.requirements()}
+                <Trans>Requirements</Trans>
                 <IconButton
                     className={classes.closeButton}
                     disableRipple
