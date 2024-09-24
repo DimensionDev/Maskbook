@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 17:51\n"
+"PO-Revision-Date: 2024-09-24 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,4 +17,16 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamSniffer/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 988\n"
+
+#: src/SiteAdaptor/ScamAlert.tsx:129
+msgid "Auto report the scam links to MetaMask"
+msgstr ""
+
+#: src/SiteAdaptor/ScamAlert.tsx:122
+msgid "Be careful what you visit and sign!"
+msgstr ""
+
+#: src/SiteAdaptor/ScamAlert.tsx:95
+msgid "Similar Project"
+msgstr ""
 
