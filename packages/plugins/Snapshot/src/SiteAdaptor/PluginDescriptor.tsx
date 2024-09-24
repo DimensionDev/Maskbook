@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { Stack, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSharedTrans } from '@masknet/shared'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     item1: {
@@ -22,7 +22,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PluginDescriptor() {
-    const t = useSnapshotTrans()
     const tr = useSharedTrans()
     const { classes } = useStyles()
 
@@ -31,7 +30,7 @@ export function PluginDescriptor() {
             <Stack flexDirection="row" justifyContent="space-between" gap={1} alignItems="center">
                 <Icons.Snapshot />
                 <Typography fontWeight="bolder" fontSize={16} color={(theme) => theme.palette.maskColor.dark}>
-                    {t.plugin_snapshot_info_snapshot()}
+                    <Trans>Snapshot</Trans>
                 </Typography>
             </Stack>
             <Stack direction="row" gap={0.5}>

@@ -1,4 +1,4 @@
-import { Suspense } from 'react'
+import { Suspense, type ReactNode } from 'react'
 import { alpha, Skeleton } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { SnapshotCard } from './SnapshotCard.js'
@@ -17,7 +17,7 @@ const useStyles = makeStyles()((theme) => {
 
 export function LoadingCard(
     props: React.PropsWithChildren<{
-        title: string
+        title: ReactNode
     }>,
 ) {
     const { classes, theme } = useStyles()

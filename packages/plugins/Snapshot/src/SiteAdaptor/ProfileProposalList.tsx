@@ -12,7 +12,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { resolveSnapshotProposalUrl } from './helpers.js'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -210,16 +210,15 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
 function ProfileProposalListItemBody(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
-    const t = useSnapshotTrans()
 
     const date = useMemo(() => {
         const now = Date.now()
         if (now < proposal.start * 1000) {
-            return t.plugin_snapshot_proposal_not_start({ date: formatElapsedPure(proposal.start * 1000, false) })
+            return <Trans>Starts in {formatElapsedPure(proposal.start * 1000, false)}</Trans>
         } else if (now > proposal.end * 1000) {
-            return t.plugin_snapshot_proposal_ended({ date: formatElapsed(proposal.end * 1000) })
+            return <Trans>Ended {formatElapsed(proposal.end * 1000)}</Trans>
         } else {
-            return t.plugin_snapshot_proposal_started({ date: formatElapsedPure(proposal.end * 1000, false) })
+            return <Trans>Ends in {formatElapsedPure(proposal.end * 1000, false)} </Trans>
         }
     }, [proposal.start, proposal.end])
 
@@ -236,7 +235,6 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes, cx } = useStyles({ state: proposal.state })
     const theme = useTheme()
-    const t = useSnapshotTrans()
     const { value: currentAccountVote } = useCurrentAccountVote(proposal.id, proposal.votes)
 
     return (
@@ -262,7 +260,9 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         </Typography>
                         {currentAccountVote?.choice === i + 1 ?
                             <div className={classes.myVote}>
-                                <Typography className={classes.myVoteText}>{t.plugin_snapshot_my_vote()}</Typography>
+                                <Typography className={classes.myVoteText}>
+                                    <Trans>My vote</Trans>
+                                </Typography>
                             </div>
                         :   null}
                     </div>
