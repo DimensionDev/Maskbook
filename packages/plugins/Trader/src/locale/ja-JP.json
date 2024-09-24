@@ -33,6 +33,7 @@
         "kPQQEW": "Enter an Amount",
         "Citz6F": "Exchange",
         "7Bj3x9": "Failed",
+        "2J5wRx": "Failed to get quote information",
         "KziH2K": "Fast",
         "pG7O41": "Fastest",
         "ejVYRQ": "From",
@@ -41,6 +42,7 @@
         "0caMy7": "History",
         "lqW7eD": "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\nThe actual cost may be lower\nthan estimated, and any unused funds will remain in the original address.",
         "m3pz1u": ["Insufficient ", ["symbol"], " Balance"],
+        "ELQ256": "Make another Swap",
         "RhCL4z": "Max amount",
         "T3EPqL": "Max base fee",
         "HTX2HV": "Minimum received",
@@ -77,6 +79,7 @@
         "g/i+bG": "Transaction rejected",
         "Re7Oex": "Transaction submitted.",
         "cFDjd3": "Transaction type",
+        "3ublvs": "Try token from different chains",
         "XcWehA": "Update Quote"
     }
 }

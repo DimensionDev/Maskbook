@@ -21,7 +21,7 @@ import {
     multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { type ChainId, formatAmount, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
@@ -177,6 +177,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const {
+        mode,
         inputAmount,
         nativeToken,
         fromToken,
@@ -259,8 +260,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const spender = transaction?.to
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
-        useERC20TokenApproveCallback(account, amount, spender)
+        useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
+
     const loading = isSending || isApproving || loadingApprove
     const disabled = !isBridgable || loading
 
@@ -299,7 +301,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                     <ProgressiveText
                                         loading={!fromToken_}
                                         className={cx(classes.fromToken, classes.value)}>
-                                        -{formatAmount(fromTokenAmount, -(fromToken_?.decimals ?? 0))}{' '}
+                                        -{formatBalance(fromTokenAmount, fromToken_?.decimals || 0)}{' '}
                                         {fromToken_?.symbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{fromNetwork?.name}</Typography>
@@ -319,7 +321,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText loading={!toToken_} className={cx(classes.toToken, classes.value)}>
-                                        +{formatAmount(toTokenAmount, -(toToken_?.decimals ?? 0))} {toToken_?.symbol}
+                                        +{formatBalance(toTokenAmount, toToken_?.decimals || 0)} {toToken_?.symbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{toNetwork?.name}</Typography>
                                 </div>
@@ -358,7 +360,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 <Icons.Questions size={16} />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Link className={cx(classes.rowValue, classes.link)} to={RoutePaths.NetworkFee}>
+                        <Link
+                            className={cx(classes.rowValue, classes.link)}
+                            to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
@@ -419,7 +423,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                             <Trans>Minimum received</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {formatBalance(bridge?.minimumReceived, toToken?.decimals ?? 0)} {toToken?.symbol ?? '--'}
+                            {formatBalance(bridge?.minimumReceived, toToken?.decimals || 0)} {toToken?.symbol ?? '--'}
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
@@ -458,7 +462,10 @@ than estimated, and any unused funds will remain in the original address.`}>
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to) return
+                            if (notEnoughAllowance) await approve()
+
                             const hash = await sendBridge()
+
                             if (!hash) {
                                 showSnackbar(t`Transaction rejected`, {
                                     title: t`Bridge`,
@@ -502,10 +509,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
-                            if (notEnoughAllowance) {
-                                await approve()
-                            }
-                            const url = urlcat(RoutePaths.Transaction, { hash, chainId })
+                            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
                             navigate(url)
                         }}>
                         {errorMessage ??

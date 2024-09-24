@@ -115,7 +115,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
-                            to={RoutePaths.Slippage}>
+                            to={{ pathname: RoutePaths.Slippage, search: `?mode=${mode}` }}>
                             {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
                             <Icons.ArrowRight size={20} />
                         </Typography>
@@ -126,7 +126,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             <Typography
                                 component={Link}
                                 className={cx(classes.rowValue, classes.link)}
-                                to={RoutePaths.SelectLiquidity}>
+                                to={{ pathname: RoutePaths.SelectLiquidity, search: '?mode=swap' }}>
                                 {dexIdsCount}/{liquidityList.length}
                                 <Icons.ArrowRight size={20} />
                             </Typography>
@@ -142,7 +142,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             to={
                                 isSwap ?
                                     { pathname: RoutePaths.QuoteRoute, search: '?mode=swap' }
-                                :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=swap' }
+                                :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
                             }>
                             <Icons.ArrowRight size={20} />
                         </Typography>

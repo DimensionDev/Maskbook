@@ -162,6 +162,7 @@ export const Confirm = memo(function Confirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const {
+        mode,
         inputAmount,
         nativeToken,
         fromToken,
@@ -247,6 +248,7 @@ export const Confirm = memo(function Confirm() {
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
+
     const loading = isSending || isApproving || loadingApprove
     const disabled = !isSwappable || loading
 
@@ -272,7 +274,7 @@ export const Confirm = memo(function Confirm() {
                                     <ProgressiveText
                                         loading={!fromToken_}
                                         className={cx(classes.fromToken, classes.value)}>
-                                        -{formatBalance(fromTokenAmount, +(fromToken_?.decimals ?? 0))}{' '}
+                                        -{formatBalance(fromTokenAmount, fromToken?.decimals ?? 0)}{' '}
                                         {fromToken_?.tokenSymbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{network?.name}</Typography>
@@ -292,8 +294,7 @@ export const Confirm = memo(function Confirm() {
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText loading={!toToken_} className={cx(classes.toToken, classes.value)}>
-                                        +{formatBalance(toTokenAmount, +(toToken_?.decimals ?? 0))}{' '}
-                                        {toToken_?.tokenSymbol}
+                                        +{formatBalance(toTokenAmount, toToken?.decimals ?? 0)} {toToken_?.tokenSymbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{network?.name}</Typography>
                                 </div>
@@ -325,7 +326,9 @@ export const Confirm = memo(function Confirm() {
                                 <Icons.Questions size={16} />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Link className={cx(classes.rowValue, classes.link)} to={RoutePaths.NetworkFee}>
+                        <Link
+                            className={cx(classes.rowValue, classes.link)}
+                            to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
@@ -350,7 +353,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography
                             className={cx(classes.rowValue, classes.link)}
                             onClick={() => {
-                                navigate(RoutePaths.SelectLiquidity)
+                                navigate(urlcat(RoutePaths.SelectLiquidity, { mode }))
                             }}>
                             {dexIdsCount}/{liquidityList.length}
                             <Icons.ArrowRight size={20} />
@@ -401,7 +404,10 @@ export const Confirm = memo(function Confirm() {
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to) return
+                            if (notEnoughAllowance) await approve()
+
                             const hash = await sendSwap()
+
                             if (!hash) {
                                 showSnackbar(t`Transaction rejected`, {
                                     title: t`Swap`,
@@ -444,10 +450,7 @@ export const Confirm = memo(function Confirm() {
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
-                            if (notEnoughAllowance) {
-                                await approve()
-                            }
-                            const url = urlcat(RoutePaths.Transaction, { hash, chainId })
+                            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
                             navigate(url)
                         }}>
                         {errorMessage ??

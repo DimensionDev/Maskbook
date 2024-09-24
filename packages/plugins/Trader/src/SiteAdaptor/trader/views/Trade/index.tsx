@@ -25,6 +25,7 @@ import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
+import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -355,7 +356,11 @@ export function TradeView() {
                     color={isOverSlippage ? 'error' : undefined}
                     disabled={isTradable}
                     onClick={() => {
-                        navigate(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm)
+                        navigate(
+                            urlcat(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
+                                mode,
+                            }),
+                        )
                     }}>
                     {errorMessage ?? (isOverSlippage ? t`Swap anyway` : t`Swap`)}
                 </ActionButton>
