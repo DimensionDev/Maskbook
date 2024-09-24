@@ -166,6 +166,7 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:78
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
 #: src/SiteAdaptor/trending/TickersTable.tsx:82

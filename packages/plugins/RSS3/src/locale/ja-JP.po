@@ -19,8 +19,8 @@ msgstr ""
 "X-Crowdin-File-ID: 982\n"
 
 #: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
-msgid "{0} {1}"
-msgstr "{0} {1}"
+#~ msgid "{0} {1}"
+#~ msgstr "{0} {1}"
 
 #: src/SiteAdaptor/FeedFilters.tsx:56
 msgid "{0} Networks"

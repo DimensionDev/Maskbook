@@ -1,4 +1,4 @@
-import { Trans } from 'react-i18next'
+import { Trans as Trans2 } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginID } from '@masknet/shared-base'
@@ -24,7 +24,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             return {
                 category: 'dapp',
                 description: (
-                    <Trans
+                    <Trans2
                         ns={PluginID.Tips}
                         i18nKey="description"
                         components={{

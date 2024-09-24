@@ -11,8 +11,9 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, type FollowModuleTypedData } from '@masknet/web3-providers/types'
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 import { fetchJSON } from '@masknet/plugin-infra/dom/context'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export function useFollow(
     profileId?: string,
@@ -22,8 +23,8 @@ export function useFollow(
     onSuccess?: (event: MouseEvent<HTMLElement>) => void,
     onFailed?: () => void,
 ) {
+    const { _ } = useLingui()
     const [loading, setLoading] = useState(false)
-    const t = useWeb3ProfileTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
     const { LENS_HUB_PROXY_CONTRACT_ADDRESS } = useLensConstants(chainId)
@@ -158,10 +159,10 @@ export function useFollow(
                     !error.message.includes('RPC Error')
                 ) {
                     onFailed?.()
-                    showSingletonSnackbar(t.follow_lens_handle(), {
+                    showSingletonSnackbar(_(msg`Follow Lens handle`), {
                         processing: false,
                         variant: 'error',
-                        message: t.network_error(),
+                        message: _(msg`Network error, try again`),
                     })
                 }
             } finally {

@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
 import { Typography } from '@mui/material'
-import { Trans } from 'react-i18next'
+import { Trans as Trans2 } from 'react-i18next'
 import { blue } from '@mui/material/colors'
 
 interface QRProps {
@@ -42,7 +42,7 @@ export function QRCode({ text, options, canvasProps }: QRProps) {
     if (error)
         return (
             <Typography color="textPrimary" variant="body1" className={classes.text}>
-                <Trans
+                <Trans2
                     i18nKey="backup_qrcode_error"
                     components={{
                         again: (

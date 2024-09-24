@@ -8,7 +8,7 @@ import { EVMUtils } from '@masknet/web3-providers'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Trans } from 'react-i18next'
+import { Trans as Trans2 } from 'react-i18next'
 import { base } from '../base.js'
 import { enhanceTag } from './cashTag.js'
 import { setupStorage, type StorageOptions } from './storage.js'
@@ -16,6 +16,7 @@ import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { TrendingView } from './trending/TrendingView.js'
+import { Trans } from '@lingui/macro'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -98,7 +99,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 category: 'dapp',
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
-                description: <Trans i18nKey="plugin_trader_swap_description" />,
+                description: <Trans2 i18nKey="plugin_trader_swap_description" />,
                 iconFilterColor,
                 hiddenInList: true,
             }

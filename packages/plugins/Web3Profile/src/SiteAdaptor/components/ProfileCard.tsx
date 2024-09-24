@@ -17,7 +17,7 @@ import {
     alpha,
 } from '@mui/material'
 import { resolveNextIDPlatformWalletName } from '@masknet/web3-shared-base'
-import { useWeb3ProfileTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -124,7 +124,6 @@ export const ProfileCard = memo(function ProfileCard({
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
-    const t = useWeb3ProfileTrans()
     const [expanded, setExpanded] = useState(initialExpanded)
     const identity = profile.identity
     const { data: user } = useQuery({
@@ -162,7 +161,7 @@ export const ProfileCard = memo(function ProfileCard({
                 </div>
             </>
         :   <Button variant="text" disableRipple onClick={onAddWallet} sx={{ px: 1 }}>
-                {t.add_wallet()}
+                <Trans>Add Wallet</Trans>
             </Button>
     const cardRef = useRef<HTMLDivElement>(null)
 
@@ -190,7 +189,7 @@ export const ProfileCard = memo(function ProfileCard({
                         </Typography>
                         {isCurrent ?
                             <span className={classes.current} role="status">
-                                {t.current()}
+                                <Trans>Current</Trans>
                             </span>
                         :   null}
                     </div>
