@@ -2,7 +2,7 @@
 // Run `npx gulp sync-languages` to regenerate.
 export default {
     'mask/shared-ui/locales/%locale%.json': 'mask',
-    'mask/content-script/site-adaptors/twitter.com/locales/%locale%.json': 'DO_NOT_USE',
+    'mask/content-script/site-adaptors/twitter.com/locales/%locale%.json': 'DO_NOT_USE_',
     'shared/src/locales/%locale%.json': 'shared',
     'shared-base-ui/src/locales/%locale%.json': 'shareBase',
     'mask/dashboard/locales/%locale%.json': 'dashboard',
