@@ -17,3 +17,11 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Transak/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1002\n"
+
+#: src/SiteAdaptor/index.tsx:16
+msgid "Fiat On-Ramp"
+msgstr "法币入金"
+
+#: src/SiteAdaptor/index.tsx:42
+msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
+msgstr "法币入金可支持在60多个国家内购买代币。"
