@@ -4,8 +4,8 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -64,7 +64,6 @@ interface Props {
     onClose(): void
 }
 const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose }: Props) {
-    const t = useSmartPayTrans()
     const { classes } = useStyles()
 
     return usePortalShadowRoot((container) => (
@@ -84,8 +83,12 @@ const ReceiveDialog = memo(function ReceiveDialog({ address, name, open, onClose
             </DialogTitle>
             <DialogContent className={classes.content}>
                 <QRCode text={`:${address}`} options={{ width: 250 }} canvasProps={{ width: 250, height: 250 }} />
-                <Typography className={classes.tips}>{t.scan_address_to_payment()}</Typography>
-                <Typography className={classes.warning}>{t.can_only_receive_polygon_assets()}</Typography>
+                <Typography className={classes.tips}>
+                    <Trans>Scan address to receive payment</Trans>
+                </Typography>
+                <Typography className={classes.warning}>
+                    <Trans>Receives assets on Polygon Network ONLY</Trans>
+                </Typography>
             </DialogContent>
         </Dialog>
     ))

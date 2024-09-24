@@ -14,6 +14,7 @@ import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -155,7 +156,9 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 vertical: 'top',
                 horizontal: 'right',
             }}>
-            <Typography className={classes.title}>{t.add_smart_pay_wallet()}</Typography>
+            <Typography className={classes.title}>
+                <Trans>Add SmartPay Wallet</Trans>
+            </Typography>
             <Box className={classes.info}>
                 <Icon logoURL={currentProfile?.avatar} name={currentProfile?.nickname} size={30} />
                 <Box>
@@ -165,7 +168,7 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
             </Box>
             <Typography className={classes.tips}>{t.remain_times_tips({ count: value })}</Typography>
             <Button fullWidth variant="roundedContained" onClick={handleCreate}>
-                {t.create()}
+                <Trans>Create</Trans>
             </Button>
         </Popover>
     ))
