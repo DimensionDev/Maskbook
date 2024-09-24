@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-24 15:28\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,76 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 982\n"
+
+#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
+#~ msgid "{0} {1}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FeedFilters.tsx:56
+msgid "{0} Networks"
+msgstr "crwdns28894:0{0}crwdne28894:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:148
+msgid "Category"
+msgstr "crwdns28896:0crwdne28896:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx:68
+msgid "Details"
+msgstr "crwdns28898:0crwdne28898:0"
+
+#: src/SiteAdaptor/FeedFilters.tsx:65
+msgid "Direct"
+msgstr "crwdns28900:0crwdne28900:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:118
+msgid "Failed"
+msgstr "crwdns28902:0crwdne28902:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:161
+msgid "From"
+msgstr "crwdns28904:0crwdne28904:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:100
+msgid "Hash"
+msgstr "crwdns28906:0crwdne28906:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:130
+msgid "Network"
+msgstr "crwdns28908:0crwdne28908:0"
+
+#: src/SiteAdaptor/FeedsPage.tsx:115
+msgid "No more data available."
+msgstr "crwdns28910:0crwdne28910:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:139
+msgid "Platform"
+msgstr "crwdns28912:0crwdne28912:0"
+
+#: src/SiteAdaptor/FeedFilters.tsx:66
+msgid "Related"
+msgstr "crwdns28914:0crwdne28914:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:112
+msgid "Status"
+msgstr "crwdns28916:0crwdne28916:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:117
+msgid "Successful"
+msgstr "crwdns28918:0crwdne28918:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:124
+msgid "Timestamp"
+msgstr "crwdns28920:0crwdne28920:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:173
+msgid "To"
+msgstr "crwdns28922:0crwdne28922:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:95
+msgid "Transaction Details"
+msgstr "crwdns28924:0crwdne28924:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:195
+msgid "Tx Fee"
+msgstr "crwdns28926:0crwdne28926:0"
 
