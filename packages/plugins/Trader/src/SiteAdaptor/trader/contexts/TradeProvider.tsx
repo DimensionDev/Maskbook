@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type {
     GetBridgeQuoteResponse,
     GetQuotesResponse,
@@ -9,7 +8,7 @@ import type {
     OKXSwapQuote,
 } from '@masknet/web3-providers/types'
 import { dividedBy, rightShift } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import {
     createContext,
@@ -21,13 +20,13 @@ import {
     type PropsWithChildren,
     type SetStateAction,
 } from 'react'
-import { base } from '../../../base.js'
 import { DEFAULT_SLIPPAGE } from '../../constants.js'
+import { fixBridgeMessage } from '../helpers.js'
+import { useBridgeQuotes } from '../hooks/useBridgeQuotes.js'
+import { useDefaultToken } from '../hooks/useDefaultToken.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useQuotes } from '../hooks/useQuotes.js'
-import { useDefaultToken } from '../hooks/useDefaultToken.js'
-import { useBridgeQuotes } from '../hooks/useBridgeQuotes.js'
-import { fixBridgeMessage } from '../helpers.js'
+import { useDefaultParams } from './useDefaultParams.js'
 import { useMode, type TradeMode } from './useMode.js'
 
 interface Options {
@@ -68,8 +67,6 @@ interface Options {
     bridgeQuoteErrorMessage: string | undefined
 }
 
-const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
-
 function useModeState<T>(mode: TradeMode): [T | undefined, Dispatch<SetStateAction<T | undefined>>]
 function useModeState<T>(mode: TradeMode, defaultValue: T): [T, Dispatch<SetStateAction<T>>]
 
@@ -95,16 +92,14 @@ function useModeState<T>(mode: TradeMode, defaultValue?: T): [T | undefined, Dis
 
 const SwapContext = createContext<Options>(null!)
 export function TradeProvider({ children }: PropsWithChildren) {
-    const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const defaultChainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
+    const { chainId: defaultChainId, nativeToken, paramToToken } = useDefaultParams()
     const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+
     const [mode, setMode] = useMode()
 
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
-    const usdtToken = useDefaultToken(chainId, fromToken?.address)
-    const [toToken = fromToken?.address === usdtToken?.address ? undefined : usdtToken, setToToken] =
-        useModeState<Web3Helper.FungibleTokenAll>(mode)
+    const defaultToToken = useDefaultToken(chainId, fromToken?.address)
+    const [toToken = paramToToken || defaultToToken, setToToken] = useModeState<Web3Helper.FungibleTokenAll>(mode)
 
     const [inputAmount, setInputAmount] = useModeState(mode, '')
     const decimals = fromToken?.decimals
