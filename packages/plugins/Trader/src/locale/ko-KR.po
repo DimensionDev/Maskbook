@@ -57,6 +57,22 @@ msgstr ""
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:137
+msgid "24H Average Price"
+msgstr "24H 평균 가격"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:170
+msgid "24H sale"
+msgstr "24H 판매"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:152
+msgid "24H Traded Volume"
+msgstr "24H 거래액"
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
+msgid "Activities"
+msgstr "활동"
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:310
 msgid "Aggregator"
 msgstr ""
@@ -89,6 +105,10 @@ msgstr ""
 msgid "Bridge network fee"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:386
+msgid "Buy Now"
+msgstr "바로 구매"
+
 #: src/SiteAdaptor/trader/views/Transaction.tsx:368
 msgid "Check on Explorer"
 msgstr ""
@@ -118,7 +138,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:59
 #: src/SiteAdaptor/trader/views/Confirm.tsx:457
 msgid "Confirm Swap"
-msgstr ""
+msgstr "스왑 확인"
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:320
 msgid "Cross-chain Swap"
@@ -126,7 +146,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:324
 msgid "Custom"
-msgstr ""
+msgstr "커스텀"
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:427
 #: src/SiteAdaptor/trader/views/Confirm.tsx:370
@@ -148,27 +168,35 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
+#: src/SiteAdaptor/trending/TickersTable.tsx:82
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
 msgid "Exchange"
-msgstr ""
+msgstr "스왑"
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:253
 msgid "Failed"
-msgstr ""
+msgstr "실패"
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:284
 msgid "Fast"
-msgstr ""
+msgstr "빠름"
 
 #: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:167
 msgid "Fastest"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:412
+msgid "Floor Price"
+msgstr "바닥 가격"
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:289
 #: src/SiteAdaptor/trader/views/Confirm.tsx:262
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:209
 #: src/SiteAdaptor/trader/views/Transaction.tsx:260
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:139
 msgid "From"
-msgstr ""
+msgstr "보낸 사람"
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:399
 msgid "Gas Limit"
@@ -177,6 +205,14 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:382
 msgid "Gas Price"
 msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:224
+msgid "General"
+msgstr "일반"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:107
+msgid "Highest Price"
+msgstr "최고 가격"
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:58
 msgid "History"
@@ -195,6 +231,23 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:77
+msgid "Items"
+msgstr "아이템"
+
+#: src/SiteAdaptor/trending/FailedTrendingView.tsx:29
+msgid "Load failed"
+msgstr "로딩 실패"
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:226
+#: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx:47
+msgid "Loading"
+msgstr "로딩 중"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:93
+msgid "Market Cap"
+msgstr "시가 총액"
+
 #: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:175
 msgid "Max amount"
 msgstr ""
@@ -202,6 +255,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:347
 msgid "Max base fee"
 msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:137
+msgid "Method"
+msgstr "방법"
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:419
 msgid "Minimum received"
@@ -216,6 +273,21 @@ msgstr ""
 msgid "Network fee"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:136
+msgid "NFT"
+msgstr "NFT"
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:237
+msgid "NFTs"
+msgstr "NFTs"
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
+#: src/SiteAdaptor/trending/PriceChart.tsx:89
+#: src/SiteAdaptor/trending/TickersTable.tsx:173
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
+msgid "No Data"
+msgstr "데이터 없음"
+
 #: src/SiteAdaptor/trader/views/History.tsx:132
 msgid "No recent transactions"
 msgstr ""
@@ -224,10 +296,28 @@ msgstr ""
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:396
+msgid "Open"
+msgstr "열기"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:85
+msgid "Owners"
+msgstr "소유자"
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:83
+msgid "Pair"
+msgstr "페어"
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:361
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:145
+#: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx:80
 msgid "Powered by"
-msgstr ""
+msgstr "Powered by"
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:84
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+msgid "Price"
+msgstr "가격"
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:365
 msgid "Priority fee"
@@ -245,6 +335,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:63
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:64
 msgid "Quote Route"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:339
+msgid "Rank #{0}"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:413
@@ -284,8 +378,9 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:413
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:360
 #: src/SiteAdaptor/trader/views/Transaction.tsx:320
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:376
 msgid "Swap"
-msgstr ""
+msgstr "스왑"
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:360
 msgid "Swap anyway"
@@ -316,11 +411,20 @@ msgstr ""
 msgid "This swap isn’t supported"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:141
+msgid "Time"
+msgstr "시간"
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:311
 #: src/SiteAdaptor/trader/views/Confirm.tsx:284
 #: src/SiteAdaptor/trader/views/Transaction.tsx:286
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:140
 msgid "To"
-msgstr ""
+msgstr "받는 사람"
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:122
+msgid "Total Volume"
+msgstr "총 거래량"
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:307
 msgid "Trading mode"
@@ -360,3 +464,15 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:396
 msgid "Update Quote"
 msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:81
+msgid "Updated"
+msgstr "업데이트"
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:138
+msgid "Value"
+msgstr "값"
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:80
+msgid "Volume (24h)"
+msgstr "거래량(24h)"

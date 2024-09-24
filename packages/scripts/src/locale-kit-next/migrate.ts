@@ -62,7 +62,7 @@ export async function migrate() {
         suppressDiagnosticEvents: true,
     })
 
-    const cwd = new URL('../../../plugins/Transak/', import.meta.url)
+    const cwd = new URL('../../../plugins/Trader/', import.meta.url)
     const inputURL = new URL('./src/locales/i18n_generated.ts', cwd)
     const json = JSON.parse(await readFile(new URL('./en-US.json', inputURL), 'utf-8'))
     processFile(inputURL, json)

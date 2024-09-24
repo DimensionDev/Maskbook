@@ -7,7 +7,7 @@ import { TokenIcon, WalletIcon, FungibleCoinMarketTable } from '@masknet/shared'
 import { CurrencyType, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useHighestFloorPrice, useNFT_TrendingOverview, useOneDaySaleAmounts } from '../../trending/useTrending.js'
-import { useTraderTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     gridContainer: {
@@ -50,7 +50,6 @@ interface CoinMarketTableProps {
 }
 
 function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
-    const t = useTraderTrans()
     const { trending, result } = props
     const chainId = result.chainId ?? trending.coin.chainId
     const { data: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)
@@ -75,7 +74,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
             <Grid container className={classes.gridContainer}>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_total_assets()}
+                        <Trans>Items</Trans>
                     </Typography>
                     <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
                         {formatSupply(overview?.items_total ?? trending.market?.total_supply, '--')}
@@ -83,7 +82,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_owners_count()}
+                        <Trans>Owners</Trans>
                     </Typography>
                     <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
                         {formatInteger(overview?.owners_total ?? trending.market?.owners_count, '--')}
@@ -91,7 +90,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_market_cap()}
+                        <Trans>Market Cap</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.market_cap ? PaymentIcon : null}
@@ -105,7 +104,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                 </Grid>
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_highest_price()}
+                        <Trans>Highest Price</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {highestPrice ? PaymentIcon : null}
@@ -120,7 +119,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_total_volume()}
+                        <Trans>Total Volume</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.total_volume ? PaymentIcon : null}
@@ -135,7 +134,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_one_day_average_price()}
+                        <Trans>24H Average Price</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.average_price_24h ?? overview?.average_price ? PaymentIcon : null}
@@ -150,7 +149,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_one_day_traded_volume()}
+                        <Trans>24H Traded Volume</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
                         {overview?.volume_24h ?? overview?.volume ? PaymentIcon : null}
@@ -168,7 +167,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
 
                 <Grid item className={classes.gridItem}>
                     <Typography color="textSecondary" variant="body2" className={classes.gridItemTitle}>
-                        {t.plugin_trader_one_day_sale()}
+                        <Trans>24H sale</Trans>
                     </Typography>
                     <Typography color="textPrimary" variant="body2" className={classes.gridItemValue}>
                         {formatSupply(salesOneDay, '--')}
