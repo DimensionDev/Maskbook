@@ -1,8 +1,8 @@
-import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
-import { useSwap } from '../contexts/index.js'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { t } from '@lingui/macro'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
+import { isLessThan, rightShift } from '@masknet/web3-shared-base'
+import { useSwap } from '../contexts/index.js'
 
 export function useSwappable(): [result: boolean, message?: string] {
     const { inputAmount, chainId, fromToken, quote } = useSwap()

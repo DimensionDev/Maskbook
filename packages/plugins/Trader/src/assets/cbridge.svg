@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <rect width="24" height="24" fill="#000" rx="12"/>
+    <path fill="#444" d="M6.179 17.632a3.18 3.18 0 0 0 3.179-3.185 3.18 3.18 0 0 0-3.179-3.185A3.18 3.18 0 0 0 3 14.447a3.18 3.18 0 0 0 3.179 3.185"/>
+    <path fill="#DDD" d="M17.82 17.632A3.18 3.18 0 0 0 21 14.447a3.18 3.18 0 0 0-3.18-3.185 3.18 3.18 0 0 0-3.178 3.185 3.18 3.18 0 0 0 3.179 3.185"/>
+    <mask id="cbridge_svg__mask0_11500_2888" width="16" height="8" x="4" y="7" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+        <path fill="#C4C4C4" d="M19.796 7H4.16v7.791h15.637z"/>
+    </mask>
+    <g mask="url('#cbridge_svg__mask0_11500_2888')">
+        <mask id="cbridge_svg__mask1_11500_2888" width="16" height="22" x="4" y="7" maskUnits="userSpaceOnUse" style="mask-type:alpha">
+            <path fill="#E9BCFF" fill-rule="evenodd" d="M11.98 7.118c-4.291 0-7.77 3.383-7.77 7.557v13.982h3.896V15.036c0-2.08 1.734-3.767 3.874-3.767 2.139 0 3.873 1.686 3.873 3.767v13.62h3.897v-13.98c0-4.174-3.48-7.557-7.77-7.557" clip-rule="evenodd"/>
+        </mask>
+        <g mask="url('#cbridge_svg__mask1_11500_2888')">
+            <path fill="#E9BCFF" d="M4.21 14.888a7.77 7.77 0 0 1 15.54 0v13.769H4.21z"/>
+            <path fill="#2C98F3" d="M5.092 15.01a6.899 6.899 0 1 1 13.797 0v15.025H5.092z"/>
+            <path fill="#58C971" d="M5.997 14.993a5.89 5.89 0 1 1 11.78 0v17.253H5.998z"/>
+            <path fill="#E9BCFF" d="M7.098 15.113a4.882 4.882 0 0 1 9.763 0v19.885H7.098z"/>
+        </g>
+    </g>
+</svg>

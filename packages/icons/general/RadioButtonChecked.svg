@@ -1,4 +1,4 @@
 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
     <circle cx="10" cy="10" r="10" style="--default-color:#1C68F3;fill:var(--icon-color, var(--default-color, currentColor))"/>
-    <path stroke="#fff" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m5.166 10.63 3.333 3.5 6.667-7"/>
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="m5.166 10.63 3.333 3.5 6.667-7" style="--default-stroke-color:#fff;stroke:var(--stroke-color, var(--default-stroke-color, currentColor))"/>
 </svg>

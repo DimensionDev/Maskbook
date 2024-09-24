@@ -1,9 +1,10 @@
-import type { ScopedStorage } from '@masknet/shared-base'
+import { EMPTY_LIST, type ScopedStorage } from '@masknet/shared-base'
 import { useSubscription } from 'use-subscription'
-import type { OkxSwapTransaction } from '../types/trader.js'
+import type { OkxTransaction } from '../types/trader.js'
 
 export interface StorageOptions {
-    transactions: OkxSwapTransaction[]
+    /** isolated by wallet */
+    transactions: Record<string, OkxTransaction[]>
 }
 let storage: ScopedStorage<StorageOptions>
 
@@ -11,34 +12,44 @@ export function setupStorage(initialized: ScopedStorage<StorageOptions>) {
     storage = initialized
 }
 
-export function useSwapHistory() {
+export function useSwapHistory(address: string) {
     const txes = useSubscription(storage?.storage?.transactions?.subscription)
-    return txes
+    return txes[address.toLowerCase()] || EMPTY_LIST
 }
 
-export async function addTransaction(transaction: OkxSwapTransaction) {
+export async function addTransaction<T extends OkxTransaction>(address: string, transaction: T) {
     if (!storage?.storage?.transactions) return
-    const transactions = storage.storage.transactions
-    await transactions.initializedPromise
-    transactions.setValue([...transactions.value, transaction])
+    const txObject = storage.storage.transactions
+    await txObject.initializedPromise
+    const addr = address.toLowerCase()
+    const transactions = txObject.value[addr] || []
+    txObject.setValue({
+        ...txObject.value,
+        [addr]: [...transactions, transaction],
+    })
 }
 
-export async function updateTransaction(
+export async function updateTransaction<T extends OkxTransaction>(
+    address: string,
     txId: string,
-    transaction: Partial<OkxSwapTransaction> | ((tx: OkxSwapTransaction) => OkxSwapTransaction),
+    transaction: Partial<T> | ((tx: T) => T),
 ) {
     if (!storage?.storage?.transactions) return
-    const transactions = storage.storage.transactions
-    await transactions.initializedPromise
-    transactions.setValue(
-        transactions.value.map((tx) => {
+    const txesObject = storage.storage.transactions
+
+    await txesObject.initializedPromise
+    const addr = address.toLowerCase()
+    const transactions = txesObject.value[addr] || []
+    txesObject.setValue({
+        ...txesObject.value,
+        [addr]: transactions.map((tx) => {
             if (tx.hash !== txId) return tx
-            return typeof transaction === 'function' ? transaction(tx) : { ...tx, ...transaction }
+            return typeof transaction === 'function' ? transaction(tx as T) : { ...tx, ...transaction }
         }),
-    )
+    })
 }
 
-export function useTransaction(hash: string | null) {
-    const txes = useSwapHistory()
+export function useTransaction(address: string, hash: string | null) {
+    const txes = useSwapHistory(address)
     return hash ? txes.find((x) => x.hash === hash) : null
 }

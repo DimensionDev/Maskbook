@@ -1,15 +1,16 @@
-import { TokenIcon } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useSwapHistory } from '../../storage.js'
-import { useNetworks } from '@masknet/web3-hooks-base'
+import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useAccount, useNetworks } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { Box, Typography } from '@mui/material'
+import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
-import { format } from 'date-fns'
+import { useSwapHistory } from '../../storage.js'
+import { t } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -95,23 +96,59 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1),
         textDecoration: 'none',
     },
+    statusBox: {
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: theme.spacing(2),
+        padding: theme.spacing(2, 4),
+    },
+    statusIcon: {
+        color: theme.palette.maskColor.main,
+    },
+    statusMessage: {
+        fontSize: 18,
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
+    },
+    statusNote: {
+        fontSize: 14,
+        color: theme.palette.maskColor.second,
+    },
 }))
 
 export function HistoryView() {
     const { classes, theme } = useStyles()
-    const history = useSwapHistory()
+    const address = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const history = useSwapHistory(address)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+
+    if (!history.length) {
+        return (
+            <Box className={classes.statusBox}>
+                <Icons.EmptySimple className={classes.statusIcon} size={24} color={theme.palette.maskColor.main} />
+                <Typography className={classes.statusMessage}>{t`No recent transactions`}</Typography>
+                <Typography className={classes.statusNote}>
+                    {t`Transaction history is only stored locally and will be deleted if you clear your browser data.`}
+                </Typography>
+            </Box>
+        )
+    }
     return (
         <div className={classes.container}>
             {history.map((tx) => {
-                const { fromToken, toToken, chainId, fromTokenAmount, toTokenAmount } = tx
-                const network = networks.find((x) => x.chainId === chainId)
-                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId: tx.chainId })
+                const { fromToken, toToken, fromTokenAmount, toTokenAmount } = tx
+                const chainId = tx.kind === 'swap' || !tx.kind ? tx.chainId : tx.fromChainId
+                const network = networks.find((x) => +x.chainId === chainId)
+                const toNetwork = tx.kind === 'bridge' ? networks.find((x) => x.chainId === tx.toChainId) : null
+                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId })
                 return (
                     <div className={classes.group} key={tx.hash}>
                         <div className={classes.groupHeader}>
-                            <Typography className={classes.date}>{format(tx.datetime, 'MM/dd/yyyy')}</Typography>
-                            <Typography className={classes.time}>{format(tx.datetime, 'hh:mm aa')}</Typography>
+                            <Typography className={classes.date}>{format(tx.timestamp, 'MM/dd/yyyy')}</Typography>
+                            <Typography className={classes.time}>{format(tx.timestamp, 'hh:mm aa')}</Typography>
                         </div>
                         <div className={classes.records}>
                             <Link className={classes.record} key={tx.hash} to={url}>
@@ -140,7 +177,11 @@ export function HistoryView() {
                                         />
                                         <Typography className={classes.symbol}>{toToken.symbol}</Typography>
                                     </div>
-                                    <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
+                                    {toNetwork ?
+                                        <Typography className={classes.network}>
+                                            {`${network?.name ?? '--'} to ${toNetwork.name ?? '--'}`}
+                                        </Typography>
+                                    :   <Typography className={classes.network}>{network?.name ?? '--'}</Typography>}
                                 </div>
                                 <div className={classes.result}>
                                     <Typography className={classes.received}>
