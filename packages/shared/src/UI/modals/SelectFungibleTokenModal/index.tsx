@@ -61,7 +61,7 @@ export function SelectFungibleTokenModal({
             whitelist={whitelist}
             title={title}
             blacklist={blacklist}
-            tokens={tokens}
+            tokens={tokens || undefined}
             extendTokens={okxOnly ? false : undefined}
             loading={okxOnly ? isPending : false}
             disableSearchBar={disableSearchBar}

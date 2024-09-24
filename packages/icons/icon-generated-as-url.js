@@ -80,7 +80,8 @@ export function next_id_mini_dark_url() { return new URL("./brands/NextIDMini.da
 export function next_id_mini_light_url() { return new URL("./brands/NextIDMini.light.svg", import.meta.url).href }
 export function nft_go_url() { return new URL("./brands/NFTGo.svg", import.meta.url).href }
 export function nft_scan_url() { return new URL("./brands/NFTScan.svg", import.meta.url).href }
-export function okx_url() { return new URL("./brands/okx.svg", import.meta.url).href }
+export function okx_dark_url() { return new URL("./brands/okx.dark.svg", import.meta.url).href }
+export function okx_light_url() { return new URL("./brands/okx.light.svg", import.meta.url).href }
 export function one_inch_url() { return new URL("./brands/OneInch.png", import.meta.url).href }
 export function open_sea_url() { return new URL("./brands/OpenSea.svg", import.meta.url).href }
 export function open_sea_colored_url() { return new URL("./brands/OpenSeaColored.svg", import.meta.url).href }

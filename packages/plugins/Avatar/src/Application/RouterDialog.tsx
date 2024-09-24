@@ -1,12 +1,12 @@
+import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { DialogContent } from '@mui/material'
 import { useLayoutEffect, useRef } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { useAvatarTrans } from '../locales/index.js'
-import { AvatarRoutes, RoutePaths } from './Routes.js'
-import { Icons } from '@masknet/icons'
-import { DialogContent } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import type { NFTListDialogRef } from './NFTListDialog.js'
+import { AvatarRoutes, RoutePaths } from './Routes.js'
 
 const useStyles = makeStyles()({
     root: {

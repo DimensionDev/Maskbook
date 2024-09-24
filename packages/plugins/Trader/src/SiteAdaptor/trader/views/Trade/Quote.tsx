@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -71,7 +71,8 @@ export function Quote({ quote, ...props }: QuoteProps) {
 
     const rateNode = (
         <>
-            1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber()) : '--'} {targetToken.tokenSymbol}
+            1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
+            {targetToken.tokenSymbol}
             <Icons.Cached size={16} color={theme.palette.maskColor.main} onClick={() => setForwardCompare((v) => !v)} />
         </>
     )
@@ -89,11 +90,17 @@ export function Quote({ quote, ...props }: QuoteProps) {
             {expand ?
                 <>
                     <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>Trading mode</Typography>
-                        <Typography className={classes.rowValue}>Aggregator</Typography>
+                        <Typography className={classes.rowName}>
+                            <Trans>Trading mode</Trans>
+                        </Typography>
+                        <Typography className={classes.rowValue}>
+                            <Trans>Aggregator</Trans>
+                        </Typography>
                     </div>
                     <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>Rate</Typography>
+                        <Typography className={classes.rowName}>
+                            <Trans>Rate</Trans>
+                        </Typography>
                         <Typography className={classes.rowValue}>{rateNode}</Typography>
                     </div>
                     <div className={classes.infoRow}>
@@ -108,7 +115,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
-                            to={RoutePaths.Slippage}>
+                            to={{ pathname: RoutePaths.Slippage, search: `?mode=${mode}` }}>
                             {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
                             <Icons.ArrowRight size={20} />
                         </Typography>
@@ -119,7 +126,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             <Typography
                                 component={Link}
                                 className={cx(classes.rowValue, classes.link)}
-                                to={RoutePaths.SelectLiquidity}>
+                                to={{ pathname: RoutePaths.SelectLiquidity, search: '?mode=swap' }}>
                                 {dexIdsCount}/{liquidityList.length}
                                 <Icons.ArrowRight size={20} />
                             </Typography>
@@ -127,7 +134,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Quote route</Trans>
+                            {isSwap ? t`Quote route` : t`Trading route`}
                         </Typography>
                         <Typography
                             component={Link}
@@ -135,7 +142,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             to={
                                 isSwap ?
                                     { pathname: RoutePaths.QuoteRoute, search: '?mode=swap' }
-                                :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=swap' }
+                                :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
                             }>
                             <Icons.ArrowRight size={20} />
                         </Typography>

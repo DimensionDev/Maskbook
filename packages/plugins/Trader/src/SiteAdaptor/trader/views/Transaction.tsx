@@ -11,10 +11,14 @@ import { alpha, Box, Button, Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { memo, useState } from 'react'
-import { useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { Countdown } from '../../components/Countdown.js'
-import { useTransaction } from '../../storage.js'
 import { GasCost } from '../../components/GasCost.js'
+import { RoutePaths } from '../../constants.js'
+import { useTransaction } from '../../storage.js'
+import { useSwap } from '../contexts/index.js'
+import { okxTokenToFungibleToken } from '../helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -161,14 +165,17 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'space-between',
         flex: 1,
         maxHeight: 40,
+        color: theme.palette.maskColor.bottom,
     },
     button: {
         display: 'flex',
         alignItems: 'center',
+        gap: theme.spacing(1),
     },
 }))
 
 export const Transaction = memo(function Transaction() {
+    const { reset, setFromToken, setMode, setToToken } = useSwap()
     const { classes, cx, theme } = useStyles()
     const [params] = useSearchParams()
     const hash = params.get('hash')
@@ -189,6 +196,7 @@ export const Transaction = memo(function Transaction() {
         queryFn: hash ? () => Web3.getTransactionStatus(hash) : skipToken,
     })
 
+    const navigate = useNavigate()
     if (!transaction)
         return (
             <Box className={classes.container} alignItems="center" justifyContent="center">
@@ -243,7 +251,7 @@ export const Transaction = memo(function Transaction() {
                 : status === TransactionStatusType.SUCCEED ?
                     <div className={classes.header}>
                         <Icons.FillSuccess size={72} />
-                        <Typography className={classes.title}>
+                        <Typography className={classes.title} color={theme.palette.maskColor.success}>
                             <Trans>Complete</Trans>
                         </Typography>
                     </div>
@@ -292,7 +300,7 @@ export const Transaction = memo(function Transaction() {
                                 address={toToken?.contractAddress || ''}
                                 logoURL={toToken?.logo}
                             />
-                            <div className={classes.tokenValue}>
+                            <Box className={classes.tokenValue} mr="auto">
                                 <Typography className={cx(classes.toToken, classes.value)} alignItems="center">
                                     {status === TransactionStatusType.NOT_DEPEND ?
                                         <LoadingBase size={16} />
@@ -302,7 +310,7 @@ export const Transaction = memo(function Transaction() {
                                     :   '--'}
                                 </Typography>
                                 <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
-                            </div>
+                            </Box>
                             {txUrl ?
                                 <a href={txUrl} target="_blank">
                                     <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
@@ -351,12 +359,28 @@ export const Transaction = memo(function Transaction() {
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {formatEthereumAddress(transaction.dexContractAddress, 4)}
-                            <CopyButton text={transaction.dexContractAddress} size={16} />
+                            <CopyButton text={transaction.dexContractAddress} size={16} display="flex" />
                         </Typography>
                     </div>
                 </div>
             </div>
-            {txUrl ?
+            {status === TransactionStatusType.SUCCEED ?
+                <div className={classes.footer}>
+                    <Button
+                        className={classes.button}
+                        fullWidth
+                        onClick={() => {
+                            reset()
+                            setMode(transaction.kind)
+                            setFromToken(okxTokenToFungibleToken(transaction.fromToken))
+                            setToToken(okxTokenToFungibleToken(transaction.toToken))
+                            navigate(urlcat(RoutePaths.Trade, { mode: transaction.kind }))
+                        }}>
+                        <Icons.Cached color={theme.palette.maskColor.bottom} />
+                        <Trans>Make another Swap</Trans>
+                    </Button>
+                </div>
+            : txUrl ?
                 <div className={classes.footer}>
                     <Button
                         className={classes.button}

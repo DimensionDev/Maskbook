@@ -18,13 +18,14 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
 import { useSwap } from '../../contexts/index.js'
+import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
-import { useBridgable } from '../../hooks/useBridgable.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -200,6 +201,8 @@ export function TradeView() {
 
     const isTradable = isSwap ? !isSwappable : !isBridgable
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
+    const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
+    const bridgeButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
     return (
         <div className={classes.view}>
             <Box className={classes.container}>
@@ -355,9 +358,13 @@ export function TradeView() {
                     color={isOverSlippage ? 'error' : undefined}
                     disabled={isTradable}
                     onClick={() => {
-                        navigate(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm)
+                        navigate(
+                            urlcat(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
+                                mode,
+                            }),
+                        )
                     }}>
-                    {errorMessage ?? (isOverSlippage ? t`Swap anyway` : t`Swap`)}
+                    {errorMessage ?? (isSwap ? swapButtonLabel : bridgeButtonLabel)}
                 </ActionButton>
             </PluginWalletStatusBar>
         </div>

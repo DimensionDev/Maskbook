@@ -21,12 +21,14 @@ export const bridges = [
     {
         id: 275,
         name: 'Stargate',
-        logoUrl: 'https://www.okx.com/cdn/wallet/logo/dex_stargate_bridge.png',
+        logoUrl:
+            'https://static.okx.com/cdn/wallet/logo/dex_stargate_bridge.png?x-oss-process=image/format,webp/ignore-error,1',
     },
     {
         id: 639,
         name: 'Stargate V2',
-        logoUrl: 'https://www.okx.com/cdn/wallet/logo/dex_stargate_bridge.png',
+        logoUrl:
+            'https://static.okx.com/cdn/wallet/logo/dex_stargate_bridge.png?x-oss-process=image/format,webp/ignore-error,1',
     },
     {
         id: 315,
@@ -67,5 +69,11 @@ export const bridges = [
         id: 235,
         name: 'Bridgers',
         logoUrl: 'https://www.okx.com/cdn/web3/dex/logo/4e1e3c31-aaed-4131-a1d4-3440b7ae9cc3.png',
+    },
+    {
+        id: 662,
+        name: 'Circle-Bridge',
+        logoUrl:
+            'https://static.okx.com/cdn/explorer/dex/logo/dex_Circle.png.png?x-oss-process=image/format,webp/ignore-error,1',
     },
 ]

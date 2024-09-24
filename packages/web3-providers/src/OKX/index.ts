@@ -63,7 +63,7 @@ export class OKX {
                         // string to number for /api/v5/dex/aggregator/all-tokens
                         decimals: +x.decimals,
                         logoURL: x.tokenLogoUrl,
-                        address: toOkxNativeAddress(x.tokenContractAddress),
+                        address: fromOkxNativeAddress(x.tokenContractAddress),
                         type: TokenType.Fungible,
                         schema: SchemaType.ERC20,
                     } satisfies FungibleToken<ChainId, SchemaType>

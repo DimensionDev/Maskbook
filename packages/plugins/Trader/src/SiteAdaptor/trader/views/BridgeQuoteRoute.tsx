@@ -106,24 +106,24 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
 
 export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     const { classes, theme, cx } = useStyles()
-    const { bridgeQuote: quote, fromToken, toToken } = useSwap()
-    const [bridgeId = quote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
+    const { bridgeQuote, fromToken, toToken, mode } = useSwap()
+    const [bridgeId = bridgeQuote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
     const chainId = fromToken?.chainId as ChainId
     const { data: price = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    if (!quote?.routerList.length)
+    if (!bridgeQuote?.routerList.length)
         return (
             <div className={classes.container}>
                 <EmptyStatus />
             </div>
         )
-    const fastestItem = sortBy(quote.routerList, (router) => -router.estimateTime)[0]
-    const maxAmountItem = sortBy(quote.routerList, (router) => -router.minimumReceived)[0]
+    const fastestItem = sortBy(bridgeQuote.routerList, (router) => -router.estimateTime)[0]
+    const maxAmountItem = sortBy(bridgeQuote.routerList, (router) => -router.minimumReceived)[0]
 
     return (
         <div className={classes.container}>
-            {quote.routerList.map((router) => {
+            {bridgeQuote.routerList.map((router) => {
                 const currBridgeId = router.router.bridgeId
                 const logoUrl = bridges.find((x) => x.id === currBridgeId)?.logoUrl
 
@@ -146,7 +146,13 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                                 checked={bridgeId === currBridgeId}
                                 icon={<Icons.RadioButtonUnChecked size={18} />}
                                 checkedIcon={
-                                    <Icons.RadioButtonChecked size={18} color={theme.palette.maskColor.main} />
+                                    <Icons.RadioButtonChecked
+                                        size={18}
+                                        color={theme.palette.maskColor.main}
+                                        sx={{
+                                            '--stroke-color': theme.palette.maskColor.bottom,
+                                        }}
+                                    />
                                 }
                             />
                         </Typography>
@@ -186,7 +192,10 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                             <Typography
                                 component={Link}
                                 className={classes.tag}
-                                to={{ pathname: RoutePaths.TradingRoute, search: `?router-bridge-id=${currBridgeId}` }}>
+                                to={{
+                                    pathname: RoutePaths.TradingRoute,
+                                    search: `?router-bridge-id=${currBridgeId}&mode=${mode}`,
+                                }}>
                                 Route info <Icons.ArrowRight size={16} />
                             </Typography>
                         </div>
