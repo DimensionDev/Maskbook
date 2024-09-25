@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -221,8 +221,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:384
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:401
-msgid ""
-"In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
+msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
@@ -276,11 +275,11 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:136
 msgid "NFT"
-msgstr "NFT"
+msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingView.tsx:237
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
 #: src/SiteAdaptor/trending/PriceChart.tsx:89
@@ -477,3 +476,4 @@ msgstr "価値"
 #: src/SiteAdaptor/trending/TickersTable.tsx:80
 msgid "Volume (24h)"
 msgstr "数量(24時間)"
+
