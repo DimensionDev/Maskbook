@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -65,7 +65,7 @@ msgstr "활동"
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx:378
 msgid "Activity Log"
-msgstr "Activity Log"
+msgstr ""
 
 #: popups/modals/SwitchPersonaModal/index.tsx:76
 #: popups/pages/Friends/ContactCard/index.tsx:216
@@ -218,7 +218,7 @@ msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx:23
 msgid "Auto-lock"
-msgstr "Auto-lock"
+msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx:29
 msgid "Auto-lock Time"
@@ -325,7 +325,7 @@ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:311
 msgid "Block Explorer URL"
-msgstr "Block Explorer URL"
+msgstr ""
 
 #: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx:105
 msgid "Browse the Web3 footprints of your Twitter friends, enjoy the freedom of Web3."
@@ -449,7 +449,7 @@ msgstr "수집품"
 
 #: popups/components/NFTAvatarPicker/index.tsx:124
 msgid "Coming soon"
-msgstr "Coming soon"
+msgstr ""
 
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx:178
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx:97
@@ -1009,7 +1009,7 @@ msgstr "보낸 사람"
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx:253
 msgid "Function: {0}"
-msgstr "Function: {0}"
+msgstr ""
 
 #: popups/components/TransactionPreview/index.tsx:233
 #: popups/components/UnlockERC20Token/index.tsx:287
@@ -1102,7 +1102,7 @@ msgstr "허용한 대상:"
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:408
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:447
 msgid "Gwei"
-msgstr "Gwei"
+msgstr ""
 
 #: popups/hooks/useGasOptionsMenu.tsx:116
 #: popups/hooks/useGasOptionsMenu.tsx:130
@@ -1111,7 +1111,7 @@ msgstr "Gwei"
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:401
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:436
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:39
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:93
@@ -1418,11 +1418,11 @@ msgstr "Mask가 아래 권한을 요청합니다."
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx:491
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx:95
 msgid "Mask Network"
-msgstr "Mask Network"
+msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts:92
 msgid "masknetwork"
-msgstr "masknetwork"
+msgstr ""
 
 #: popups/components/UnlockERC20Token/index.tsx:237
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:291
@@ -1532,7 +1532,7 @@ msgstr "나의 월렛"
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:352
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:360
 msgid "N/A"
-msgstr "N/A"
+msgstr ""
 
 #: popups/modals/AddContactModal/index.tsx:103
 #: popups/modals/EditContactModal/index.tsx:140
@@ -1582,14 +1582,14 @@ msgstr "다음"
 
 #: popups/modals/PersonaSettingModal/index.tsx:87
 msgid "Next.ID"
-msgstr "Next.ID"
+msgstr ""
 
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:238
 #: popups/pages/Wallet/AddToken/index.tsx:160
 #: popups/pages/Wallet/components/WalletAssets/index.tsx:128
 #: popups/pages/Wallet/Transfer/index.tsx:80
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: popups/pages/Friends/Detail/UI.tsx:147
 msgid "No associated accounts"
@@ -1637,7 +1637,7 @@ msgstr "검색 결과가 없습니다."
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:248
 #: popups/pages/Wallet/TransactionDetail/index.tsx:298
 msgid "Nonce"
-msgstr "Nonce"
+msgstr ""
 
 #: popups/modals/ConnectProvider/index.tsx:148
 msgid "Not connected"
@@ -1933,7 +1933,7 @@ msgstr "준비 🚀"
 
 #: content-script/components/CompositionDialog/useSubmit.ts:92
 msgid "realMaskNetwork"
-msgstr "realMaskNetwork"
+msgstr ""
 
 #: popups/pages/Wallet/components/ActionGroup/index.tsx:99
 #: popups/pages/Wallet/Receive/index.tsx:128
@@ -2056,7 +2056,7 @@ msgstr "다시 시도"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:264
 msgid "RPC URL"
-msgstr "RPC URL"
+msgstr ""
 
 #: popups/components/AddContactInputPanel/index.tsx:132
 #: popups/pages/Personas/AccountDetail/UI.tsx:110
@@ -2508,7 +2508,7 @@ msgstr "이 월렛은 현재 페르소나 {0} 에 연결됩니다."
 #: popups/components/TransactionPreview/index.tsx:185
 #: popups/pages/Wallet/TransactionDetail/index.tsx:287
 msgid "To"
-msgstr "To"
+msgstr ""
 
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:341
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:342
@@ -2540,7 +2540,7 @@ msgstr "거래 수수료"
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx:252
 msgid "Transaction Hash"
-msgstr "Transaction Hash"
+msgstr ""
 
 #: content-script/components/GuideStep/index.tsx:218
 msgid "Try"
@@ -2701,7 +2701,7 @@ msgstr "월렛 설정"
 
 #: popups/pages/Personas/WalletConnect/index.tsx:111
 msgid "WalletConnect"
-msgstr "WalletConnect"
+msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx:229
 msgid "Wallets ({walletLength})"
@@ -2730,7 +2730,7 @@ msgstr "환영합니다"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:134
 msgid "Welcome to Mask Cloud Services"
-msgstr "Welcome to Mask Cloud Services"
+msgstr ""
 
 #: popups/pages/Personas/Home/UI.tsx:274
 msgid "Welcome to Mask Network"
@@ -2783,3 +2783,4 @@ msgstr "회원님의 결제비밀번호는 월렛 데이터를 암호화한 것�
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
