@@ -1,16 +1,17 @@
 import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskTabList } from '@masknet/theme'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Box } from '@mui/system'
 import { memo, useMemo } from 'react'
 import { matchPath, MemoryRouter, useLocation, useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { RouterDialog } from '../components/RouterDialog.js'
 import { RoutePaths } from '../constants.js'
 import { ExchangeRoutes } from './Routes.js'
 import { Providers, useSwap, type TradeMode } from './contexts/index.js'
-import urlcat from 'urlcat'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -116,7 +117,8 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
 
 export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(props) {
     const initialEntries = useMemo(() => {
-        if (!props.toAddress || !props.toChainId) return [RoutePaths.Exit, RoutePaths.Trade]
+        if (!props.toAddress || !props.toChainId || isNativeTokenAddress(props.toAddress))
+            return [RoutePaths.Exit, RoutePaths.Trade]
         return [
             RoutePaths.Exit,
             urlcat(RoutePaths.Trade, {
