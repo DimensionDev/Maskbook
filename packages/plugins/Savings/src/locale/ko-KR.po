@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:14\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -29,7 +29,7 @@ msgstr "금액"
 #: src/SiteAdaptor/SavingsForm.tsx:316
 #: src/SiteAdaptor/SavingsTable/index.tsx:88
 msgid "APR"
-msgstr "APR"
+msgstr ""
 
 #: src/SiteAdaptor/SavingsTable/index.tsx:81
 msgid "Asset"
@@ -65,7 +65,7 @@ msgstr "입력 금액은 최소 금액 이하입니다."
 
 #: src/SiteAdaptor/SavingsForm.tsx:154
 #~ msgid "Insufficient {0} balance"
-#~ msgstr "{0} 잔액 부족"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:155
 msgid "Insufficient ${0} balance"
@@ -82,7 +82,7 @@ msgstr "로딩 중"
 #: src/SiteAdaptor/SavingsForm.tsx:198
 #: src/SiteAdaptor/WithdrawForm.tsx:119
 msgid "masknetwork"
-msgstr "masknetwork"
+msgstr ""
 
 #: src/SiteAdaptor/WithdrawForm.tsx:143
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
@@ -108,7 +108,7 @@ msgstr "철회 진행"
 #: src/SiteAdaptor/SavingsForm.tsx:198
 #: src/SiteAdaptor/WithdrawForm.tsx:119
 msgid "realMaskNetwork"
-msgstr "realMaskNetwork"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:14
 #: src/SiteAdaptor/SavingsDialog.tsx:129
@@ -143,3 +143,4 @@ msgstr "철회"
 #: src/SiteAdaptor/WithdrawForm.tsx:187
 msgid "Withdraw {0}"
 msgstr "출금 {0}"
+
