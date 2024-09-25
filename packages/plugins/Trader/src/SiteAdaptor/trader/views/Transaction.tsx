@@ -1,6 +1,6 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { CopyButton, EmptyStatus, Spinner } from '@masknet/shared'
+import { CopyButton, EmptyStatus, NetworkIcon, Spinner } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
@@ -176,7 +176,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Transaction = memo(function Transaction() {
-    const { reset, setFromToken, setMode, setToToken } = useSwap()
+    const { reset, setFromToken, mode, setMode, setToToken } = useSwap()
     const { classes, cx, theme } = useStyles()
     const [params] = useSearchParams()
     const hash = params.get('hash')
@@ -336,6 +336,17 @@ export const Transaction = memo(function Transaction() {
                             {tx.kind === 'swap' ? t`Swap` : t`Cross-chain Swap`}
                         </Typography>
                     </div>
+                    {mode === 'swap' ?
+                        <div className={classes.infoRow}>
+                            <Typography className={classes.rowName}>
+                                <Trans>Network</Trans>
+                            </Typography>
+                            <Typography className={classes.rowValue} style={{ gap: 8 }}>
+                                <NetworkIcon size={16} pluginID={NetworkPluginID.PLUGIN_EVM} chainId={fromChainId} />
+                                {fromNetwork?.name}
+                            </Typography>
+                        </div>
+                    :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Date</Trans>
