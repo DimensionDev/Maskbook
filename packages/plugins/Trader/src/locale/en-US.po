@@ -18,8 +18,8 @@ msgstr ""
 msgid "{0} fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx:218
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx:228
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx:221
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx:231
 msgid "{0} Pool"
 msgstr ""
 
@@ -74,7 +74,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:469
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:475
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:205
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx:155
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx:157
 msgid "Bridge"
 msgstr ""
 
@@ -90,7 +90,7 @@ msgstr ""
 msgid "Bridge network fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:392
+#: src/SiteAdaptor/trader/views/Transaction.tsx:390
 msgid "Check on Explorer"
 msgstr ""
 
@@ -200,7 +200,7 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:380
+#: src/SiteAdaptor/trader/views/Transaction.tsx:378
 msgid "Make another Swap"
 msgstr ""
 
@@ -259,7 +259,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:415
 #: src/SiteAdaptor/trader/views/Confirm.tsx:316
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:102
-#: src/SiteAdaptor/trader/views/Transaction.tsx:351
+#: src/SiteAdaptor/trader/views/Transaction.tsx:350
 msgid "Rate"
 msgstr ""
 
@@ -276,7 +276,7 @@ msgstr ""
 msgid "Sending"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:358
+#: src/SiteAdaptor/trader/views/Transaction.tsx:356
 msgid "Sending address"
 msgstr ""
 
