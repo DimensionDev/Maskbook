@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -45,7 +45,7 @@ msgstr "ニュース"
 
 #: src/SiteAdaptor/CalendarContent.tsx:86
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx:163
 #: src/SiteAdaptor/components/NewsList.tsx:170
@@ -64,3 +64,4 @@ msgstr "価格"
 #: src/SiteAdaptor/components/NFTList.tsx:200
 msgid "Total"
 msgstr "合計"
+
