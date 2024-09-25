@@ -331,7 +331,6 @@ export const Transaction = memo(function Transaction() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Date</Trans>
-                            <Icons.Questions size={16} />
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {transaction.timestamp ? format(transaction.timestamp, 'MM/dd/yyyy, hh:mm:ss') : '--'}
@@ -349,7 +348,6 @@ export const Transaction = memo(function Transaction() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Rate</Trans>
-                            <Icons.Questions size={16} />
                         </Typography>
                         <Typography className={classes.rowValue}>{rateNode}</Typography>
                     </div>
