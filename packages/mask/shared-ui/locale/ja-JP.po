@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -233,7 +233,7 @@ msgstr "アバターを設定しました"
 #: popups/pages/Personas/AccountDetail/UI.tsx:106
 #: popups/pages/Personas/ExportPrivateKey/index.tsx:70
 msgid "Back"
-msgstr "Back"
+msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:219
 #: popups/modals/SwitchPersonaModal/index.tsx:68
@@ -372,7 +372,7 @@ msgstr "有効なユーザーアドレスのデータソースが見つかりま
 #: popups/pages/Wallet/TransactionDetail/index.tsx:397
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:330
 msgid "Cancel"
-msgstr "Cancel"
+msgstr ""
 
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:69
 msgid "Cannot switch to a unknown network."
@@ -1111,7 +1111,7 @@ msgstr "Gwei（グワイ）"
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:401
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:436
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:39
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:93
@@ -1418,11 +1418,11 @@ msgstr "マスクには次の権限が必要です"
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx:491
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx:95
 msgid "Mask Network"
-msgstr "Mask Network"
+msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts:92
 msgid "masknetwork"
-msgstr "masknetwork"
+msgstr ""
 
 #: popups/components/UnlockERC20Token/index.tsx:237
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:291
@@ -1578,18 +1578,18 @@ msgstr "新しい決済パスワード"
 #: popups/pages/Wallet/ContactList/index.tsx:247
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:333
 msgid "Next"
-msgstr "Next"
+msgstr ""
 
 #: popups/modals/PersonaSettingModal/index.tsx:87
 msgid "Next.ID"
-msgstr "Next.ID"
+msgstr ""
 
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:238
 #: popups/pages/Wallet/AddToken/index.tsx:160
 #: popups/pages/Wallet/components/WalletAssets/index.tsx:128
 #: popups/pages/Wallet/Transfer/index.tsx:80
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: popups/pages/Friends/Detail/UI.tsx:147
 msgid "No associated accounts"
@@ -1665,7 +1665,7 @@ msgstr "注：前回のインポートで使用したニーモニックフレー
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:339
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:95
 msgid "Old Payment Password"
@@ -1933,7 +1933,7 @@ msgstr "準備完了🚀"
 
 #: content-script/components/CompositionDialog/useSubmit.ts:92
 msgid "realMaskNetwork"
-msgstr "realMaskNetwork"
+msgstr ""
 
 #: popups/pages/Wallet/components/ActionGroup/index.tsx:99
 #: popups/pages/Wallet/Receive/index.tsx:128
@@ -2056,7 +2056,7 @@ msgstr "再試行"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:264
 msgid "RPC URL"
-msgstr "RPC URL"
+msgstr ""
 
 #: popups/components/AddContactInputPanel/index.tsx:132
 #: popups/pages/Personas/AccountDetail/UI.tsx:110
@@ -2077,7 +2077,7 @@ msgstr "ネットワークを保存しました"
 
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:278
 msgid "Scam tx"
-msgstr "Scam tx"
+msgstr ""
 
 #: popups/pages/Wallet/Receive/index.tsx:176
 msgid "Scan QR code to receive payment"
@@ -2783,3 +2783,4 @@ msgstr "支払いパスワードはウォレットデータを暗号化し、取
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
