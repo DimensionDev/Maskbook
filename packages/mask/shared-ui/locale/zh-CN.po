@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -383,7 +383,7 @@ msgstr ""
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:111
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:120
 msgid "Chain ID"
-msgstr "Chain ID"
+msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:263
 #: popups/pages/Wallet/ChangeOwner/index.tsx:469
@@ -969,7 +969,7 @@ msgstr ""
 
 #: popups/pages/Settings/index.tsx:344
 msgid "FAQ&Tutorial"
-msgstr "FAQ&Tutorial"
+msgstr ""
 
 #: popups/pages/Settings/index.tsx:334
 msgid "Feedback"
@@ -1018,7 +1018,7 @@ msgstr "功能：{0}"
 #: popups/pages/Wallet/ChangeOwner/index.tsx:353
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:308
 msgid "Gas Fee"
-msgstr "Gas Fee"
+msgstr ""
 
 #: popups/pages/Wallet/GasSetting/index.tsx:36
 #: popups/pages/Wallet/GasSetting/index.tsx:40
@@ -1102,7 +1102,7 @@ msgstr "已授权"
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:408
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:447
 msgid "Gwei"
-msgstr "Gwei"
+msgstr ""
 
 #: popups/hooks/useGasOptionsMenu.tsx:116
 #: popups/hooks/useGasOptionsMenu.tsx:130
@@ -1111,7 +1111,7 @@ msgstr "Gwei"
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:401
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:436
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:39
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:93
@@ -1418,11 +1418,11 @@ msgstr "Mask Network需要以下权限"
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx:491
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx:95
 msgid "Mask Network"
-msgstr "Mask Network"
+msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts:92
 msgid "masknetwork"
-msgstr "masknetwork"
+msgstr ""
 
 #: popups/components/UnlockERC20Token/index.tsx:237
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:291
@@ -1582,14 +1582,14 @@ msgstr "下一步"
 
 #: popups/modals/PersonaSettingModal/index.tsx:87
 msgid "Next.ID"
-msgstr "Next.ID"
+msgstr ""
 
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:238
 #: popups/pages/Wallet/AddToken/index.tsx:160
 #: popups/pages/Wallet/components/WalletAssets/index.tsx:128
 #: popups/pages/Wallet/Transfer/index.tsx:80
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: popups/pages/Friends/Detail/UI.tsx:147
 msgid "No associated accounts"
@@ -1637,7 +1637,7 @@ msgstr "找不到搜索结果。"
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:248
 #: popups/pages/Wallet/TransactionDetail/index.tsx:298
 msgid "Nonce"
-msgstr "Nonce"
+msgstr ""
 
 #: popups/modals/ConnectProvider/index.tsx:148
 msgid "Not connected"
@@ -1933,7 +1933,7 @@ msgstr "准备🚀"
 
 #: content-script/components/CompositionDialog/useSubmit.ts:92
 msgid "realMaskNetwork"
-msgstr "realMaskNetwork"
+msgstr ""
 
 #: popups/pages/Wallet/components/ActionGroup/index.tsx:99
 #: popups/pages/Wallet/Receive/index.tsx:128
@@ -2056,7 +2056,7 @@ msgstr "重试"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:264
 msgid "RPC URL"
-msgstr "RPC URL"
+msgstr ""
 
 #: popups/components/AddContactInputPanel/index.tsx:132
 #: popups/pages/Personas/AccountDetail/UI.tsx:110
@@ -2077,7 +2077,7 @@ msgstr "保存网络成功"
 
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:278
 msgid "Scam tx"
-msgstr "Scam tx"
+msgstr ""
 
 #: popups/pages/Wallet/Receive/index.tsx:176
 msgid "Scan QR code to receive payment"
@@ -2701,7 +2701,7 @@ msgstr "钱包设置"
 
 #: popups/pages/Personas/WalletConnect/index.tsx:111
 msgid "WalletConnect"
-msgstr "WalletConnect"
+msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx:229
 msgid "Wallets ({walletLength})"
@@ -2783,3 +2783,4 @@ msgstr "您的钱包数据将使用此支付密码加密，这也是交易确认
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
