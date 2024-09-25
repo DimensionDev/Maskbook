@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:14\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -32,7 +32,7 @@ msgstr "余额不足"
 
 #: src/components/TipDialog.tsx:180
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 msgid "No any collectible is available to preview. Please add your collectible here."
@@ -81,8 +81,9 @@ msgstr "发送至"
 
 #: src/components/TipDialog.tsx:179
 msgid "Tokens"
-msgstr "Tokens"
+msgstr ""
 
 #: src/components/RecipientSection/RecipientSelect.tsx:130
 msgid "View on Explorer"
 msgstr "在区块链浏览器查看"
+
