@@ -2225,7 +2225,7 @@ msgid "Signing Message (Raw)"
 msgstr "メッセージ署名（Hex）"
 
 #: popups/components/SignRequestInfo/index.tsx:117
-msgid "Signing Messsage (Text)"
+msgid "Signing Message (Text)"
 msgstr "署名メッセージ"
 
 #: popups/pages/RequestPermission/RequestPermission.tsx:31

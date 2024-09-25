@@ -114,7 +114,7 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
             {typeof TextMessage === 'string' ?
                 <>
                     <Typography className={classes.messageTitle}>
-                        <Trans>Signing Messsage (Text)</Trans>
+                        <Trans>Signing Message (Text)</Trans>
                     </Typography>
                     <Typography className={classes.sourceText} component={isEIP4361 ? 'details' : 'p'}>
                         {TextMessage}

@@ -2225,7 +2225,7 @@ msgid "Signing Message (Raw)"
 msgstr "签名消息 (十六进制)"
 
 #: popups/components/SignRequestInfo/index.tsx:117
-msgid "Signing Messsage (Text)"
+msgid "Signing Message (Text)"
 msgstr "消息签名"
 
 #: popups/pages/RequestPermission/RequestPermission.tsx:31

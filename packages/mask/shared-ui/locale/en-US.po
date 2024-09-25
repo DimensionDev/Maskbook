@@ -2220,7 +2220,7 @@ msgid "Signing Message (Raw)"
 msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx:117
-msgid "Signing Messsage (Text)"
+msgid "Signing Message (Text)"
 msgstr ""
 
 #: popups/pages/RequestPermission/RequestPermission.tsx:31
