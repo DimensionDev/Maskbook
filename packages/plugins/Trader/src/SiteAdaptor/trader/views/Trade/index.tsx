@@ -223,11 +223,11 @@ export function TradeView() {
                                     }
                                 }}>
                                 <Box className={classes.icon}>
+                                    {/* Omit logoURL, let TokenIcon resolve it itself */}
                                     <TokenIcon
                                         className={classes.tokenIcon}
                                         chainId={fromToken?.chainId}
                                         address={fromToken?.address || ''}
-                                        logoURL={fromToken?.logoURL}
                                     />
                                     {fromToken ?
                                         <NetworkIcon
@@ -291,7 +291,6 @@ export function TradeView() {
                                         className={classes.tokenIcon}
                                         chainId={toToken?.chainId}
                                         address={toToken?.address || ''}
-                                        logoURL={toToken?.logoURL}
                                     />
                                     {toToken ?
                                         <NetworkIcon
