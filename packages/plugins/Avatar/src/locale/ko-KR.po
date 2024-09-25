@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -53,7 +53,7 @@ msgstr "NFT 아바타 설정"
 #: src/Application/RouterDialog.tsx:35
 #: src/SiteAdaptor/NFTAvatarButton.tsx:46
 msgid "NFT PFP"
-msgstr "NFT PFP"
+msgstr ""
 
 #: src/SiteAdaptor/NFTAvatar.tsx:195
 msgid "No collectible found."
@@ -98,3 +98,4 @@ msgstr "NFT 아바타 업데이트 성공"
 #: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr "월렛"
+
