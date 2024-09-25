@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:14\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -32,7 +32,7 @@ msgstr "我刚刚使用 Mask Network 插件把T witter X 图标替换成了原�
 
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:173
 msgid "Mask Network"
-msgstr "Mask Network"
+msgstr ""
 
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:133
 msgid "New Logo"
@@ -61,3 +61,4 @@ msgstr "切换 Twitter 标志"
 #: src/SiteAdaptor/index.tsx:20
 msgid "Switch X Logo"
 msgstr "切换 X 标志"
+
