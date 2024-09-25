@@ -3,7 +3,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { sortBy } from 'lodash-es'
 import { useMemo } from 'react'
 
-const PREFER_TOKENS = ['usdt', 'usdc', 'dai']
+const PREFER_TOKENS = ['usdt', 'usdc', 'dai', 'm.usdt', 'm.usdc']
 /**
  * default token to trade
  */

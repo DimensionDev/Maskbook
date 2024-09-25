@@ -243,7 +243,7 @@ export function TradeView() {
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on {fromNetwork?.name ?? '--'}
+                                        {fromNetwork?.name ? t`on ${fromNetwork.name}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -306,7 +306,7 @@ export function TradeView() {
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on {toNetwork?.name ?? '--'}
+                                        {toNetwork?.name ? t`on ${toNetwork.name}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
