@@ -138,7 +138,7 @@ msgstr ""
 msgid "Date"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:159
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:158
 msgid "Dex/Est received ({0})"
 msgstr ""
 
@@ -229,7 +229,7 @@ msgstr ""
 msgid "No recent transactions"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:181
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:180
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
@@ -318,7 +318,7 @@ msgstr ""
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:164
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:163
 msgid "This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee."
 msgstr ""
 
