@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -32,7 +32,7 @@ msgstr "残高が不足しています"
 
 #: src/components/TipDialog.tsx:180
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 msgid "No any collectible is available to preview. Please add your collectible here."
@@ -86,3 +86,4 @@ msgstr "トークン"
 #: src/components/RecipientSection/RecipientSelect.tsx:130
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
+
