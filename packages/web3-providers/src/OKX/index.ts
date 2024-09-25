@@ -12,6 +12,8 @@ import type {
     GetBridgeQuoteOptions,
     GetBridgeQuoteResponse,
     GetBridgeResponse,
+    GetBridgeStatusOptions,
+    GetBridgeStatusResponse,
     GetLiquidityResponse,
     GetQuotesOptions,
     GetQuotesResponse,
@@ -275,5 +277,19 @@ export class OKX {
         })
         const res = await fetchFromOKX<GetBridgeResponse>(url)
         return res
+    }
+
+    static async getBridgeStatus(options: GetBridgeStatusOptions) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/status', options)
+        const res = await fetchFromOKX<GetBridgeStatusResponse>(url)
+        // Patch data
+        if (res.code === 0 && res.data.length) {
+            res.data.forEach((record) => {
+                record.fromChainId = +record.fromChainId
+                record.toChainId = record.toChainId ? +record.toChainId : 0
+            })
+            return res.data[0]
+        }
+        return null
     }
 }

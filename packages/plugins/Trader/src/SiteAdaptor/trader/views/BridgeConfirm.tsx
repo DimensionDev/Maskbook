@@ -207,7 +207,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         amount,
         fromTokenAddress: fromToken?.address,
         toTokenAddress: toToken?.address,
-        slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toString(),
+        slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toFixed(),
         userWalletAddress: account,
     })
     const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
