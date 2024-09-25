@@ -29,7 +29,7 @@ export const linguiLanguages = {
     zh: lingui_zh_TW,
 }
 import { createI18NBundle } from '@masknet/shared-base'
-export const addDO_NOT_USE_I18N = createI18NBundle('DO_NOT_USE_', [languages, linguiLanguages])
+export const addDO_NOT_USE_I18N = createI18NBundle('DO_NOT_USE_', [languages, linguiLanguages as any])
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
