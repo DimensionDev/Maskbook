@@ -253,7 +253,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender } = useQuery({
+    const { data: spender, isLoading: isLoadingSpender } = useQuery({
         queryKey: ['okx-bridge', 'supported-chains'],
         queryFn: async () => OKX.getBridgeSupportedChain(),
         select(res) {
@@ -265,7 +265,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
 
-    const loading = isSending || isApproving || loadingApprove
+    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
     const disabled = !isBridgable || loading
 
     const { showSnackbar } = useCustomSnackbar()

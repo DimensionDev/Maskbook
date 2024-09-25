@@ -246,7 +246,7 @@ export const Confirm = memo(function Confirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender } = useQuery({
+    const { data: spender, isLoading: isLoadingSpender } = useQuery({
         queryKey: ['okx-swap', 'supported-chains'],
         queryFn: async () => OKX.getSupportedChains(),
         select(chains) {
@@ -258,7 +258,7 @@ export const Confirm = memo(function Confirm() {
         useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
 
-    const loading = isSending || isApproving || loadingApprove
+    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
     const disabled = !isSwappable || loading
     const showStale = isQuoteStale && !isSending && !isApproving
 

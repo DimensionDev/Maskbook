@@ -1,6 +1,6 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
+import { PluginWalletStatusBar, SelectFungibleTokenModal } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -26,6 +26,7 @@ import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
+import { CoinIcon } from '../../../components/CoinIcon.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -81,11 +82,6 @@ const useStyles = makeStyles()((theme) => ({
     tokenIcon: {
         height: 30,
         width: 30,
-    },
-    badgeIcon: {
-        position: 'absolute',
-        right: -3,
-        bottom: -2,
     },
     symbol: {
         fontSize: 14,
@@ -224,19 +220,12 @@ export function TradeView() {
                                 }}>
                                 <Box className={classes.icon}>
                                     {/* Omit logoURL, let TokenIcon resolve it itself */}
-                                    <TokenIcon
+                                    <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={fromToken?.chainId}
+                                        chainId={toToken?.chainId as ChainId}
                                         address={fromToken?.address || ''}
+                                        chainIconSize={12}
                                     />
-                                    {fromToken ?
-                                        <NetworkIcon
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            className={classes.badgeIcon}
-                                            chainId={fromToken?.chainId}
-                                            size={12}
-                                        />
-                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
@@ -287,19 +276,12 @@ export function TradeView() {
                                     if (picked) setToToken(picked)
                                 }}>
                                 <Box className={classes.icon}>
-                                    <TokenIcon
+                                    <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={toToken?.chainId}
+                                        chainId={toToken?.chainId as ChainId}
                                         address={toToken?.address || ''}
+                                        chainIconSize={12}
                                     />
-                                    {toToken ?
-                                        <NetworkIcon
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            className={classes.badgeIcon}
-                                            chainId={toToken.chainId}
-                                            size={12}
-                                        />
-                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
