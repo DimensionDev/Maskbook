@@ -154,6 +154,8 @@ export enum ChainId {
     ZkSyncEra = 324,
 
     Linea = 59144,
+
+    ScrollSDK = 221122,
 }
 
 export enum AddressType {
@@ -311,6 +313,7 @@ export enum NetworkType {
     Zora = 'Zora',
     ZkSyncEra = 'ZkSyncEra',
     Linea = 'Linea',
+    ScrollSDK = 'ScrollSDK',
 }
 
 export enum ProviderType {

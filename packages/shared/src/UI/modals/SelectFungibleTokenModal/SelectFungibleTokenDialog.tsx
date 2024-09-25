@@ -27,6 +27,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
         position: 'relative',
     },
     sidebarContainer: {
+        paddingBottom: '36px',
         width: 27,
         height: isList ? 486 : undefined,
     },
