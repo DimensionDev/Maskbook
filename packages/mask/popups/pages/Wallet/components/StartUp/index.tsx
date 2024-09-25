@@ -3,9 +3,9 @@ import { useAsyncFn } from 'react-use'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import Services from '#services'
 import { ImportCreateWallet } from '../ImportCreateWallet/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -43,7 +43,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const WalletStartUp = memo(function WalletStartUp() {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const [, onEnterCreateWallet] = useAsyncFn(async () => {
@@ -58,9 +57,11 @@ export const WalletStartUp = memo(function WalletStartUp() {
         <Box className={classes.container} data-hide-scrollbar>
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
-                    <Typography className={classes.title}>{t.popups_add_wallet()}</Typography>
+                    <Typography className={classes.title}>
+                        <Trans>Add Wallet</Trans>
+                    </Typography>
                     <Typography className={classes.placeholderDescription}>
-                        {t.popups_add_wallet_description()}
+                        <Trans>Keep your transactions and assets safe with Mask Wallet.</Trans>
                     </Typography>
                 </Box>
                 <ImportCreateWallet onChoose={onEnterCreateWallet} />

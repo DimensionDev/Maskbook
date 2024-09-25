@@ -3,15 +3,15 @@ import { EMPTY_LIST, type EnhanceableSite } from '@masknet/shared-base'
 import { PersonaContext } from '@masknet/shared'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType } from '@masknet/web3-telemetry/types'
-import { requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { requestPermissionFromExtensionPage } from '../../../shared-ui/index.js'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/index.js'
 import { useSupportSocialNetworks } from '../../hooks/index.js'
 import Services from '#services'
 import { EventMap } from '../../../shared/definitions/event.js'
+import { Trans } from '@lingui/macro'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal(props) {
-    const t = useMaskSharedTrans()
     const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()
 
     const { currentPersona } = PersonaContext.useContainer()
@@ -31,7 +31,7 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
     if (!definedSocialNetworks.length) return null
 
     return (
-        <ActionModal header={t.popups_connect_social_account()} keepMounted {...props}>
+        <ActionModal header={<Trans>Connect Social Account</Trans>} keepMounted {...props}>
             <ConnectSocialAccounts networks={definedSocialNetworks} onConnect={handleConnect} />
         </ActionModal>
     )

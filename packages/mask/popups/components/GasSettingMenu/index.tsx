@@ -17,9 +17,9 @@ import {
 } from '@masknet/web3-hooks-base'
 import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import { type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useGasOptionsMenu } from '../../hooks/index.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
+import { Trans } from '@lingui/macro'
 
 interface GasSettingMenuProps {
     defaultGasLimit: string | undefined
@@ -45,7 +45,6 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     onChange,
     onPaymentTokenChange,
 }) {
-    const t = useMaskSharedTrans()
     const theme = useTheme()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
@@ -118,13 +117,13 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
     const gasOptionName = (() => {
         switch (gasOptionType) {
             case GasOptionType.FAST:
-                return t.popups_wallet_gas_fee_settings_instant()
+                return <Trans>Instant</Trans>
             case GasOptionType.NORMAL:
-                return t.popups_wallet_gas_fee_settings_high()
+                return <Trans>High</Trans>
             case GasOptionType.SLOW:
-                return t.popups_wallet_gas_fee_settings_medium()
+                return <Trans>Medium</Trans>
             default:
-                return t.popups_wallet_gas_fee_settings_custom()
+                return <Trans>Custom</Trans>
         }
     })()
 

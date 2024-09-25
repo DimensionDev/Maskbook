@@ -23,11 +23,12 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -154,7 +155,6 @@ const useStyles = makeStyles()((theme) => ({
 interface VerifyNextIDProps extends BindingDialogProps {}
 
 export function VerifyNextID({ onClose }: VerifyNextIDProps) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const queryClient = useQueryClient()
 
@@ -294,7 +294,9 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                         </Typography>
                     : creatingPostContent ?
                         <>
-                            <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
+                            <Typography className={classes.postContentTitle}>
+                                <Trans>Post content:</Trans>
+                            </Typography>
                             <Typography className={classes.postContent}>
                                 <Skeleton variant="text" />
                                 <Skeleton variant="text" />
@@ -304,15 +306,23 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 <Skeleton variant="text" width="50%" />
                             </Typography>
                             <Typography className={classes.tip} component="div">
-                                {t.setup_guide_verify_tip()}
+                                <Trans>
+                                    We will need to verify your Twitter account and record it on the NextID. Please post
+                                    it for validation.
+                                </Trans>
                             </Typography>
                         </>
                     : verifyInfo ?
                         <>
-                            <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
+                            <Typography className={classes.postContentTitle}>
+                                <Trans>Post content:</Trans>
+                            </Typography>
                             <Typography className={classes.postContent}>{verifyInfo.post}</Typography>
                             <Typography className={classes.tip} component="div">
-                                {t.setup_guide_verify_tip()}
+                                <Trans>
+                                    We will need to verify your Twitter account and record it on the NextID. Please post
+                                    it for validation.
+                                </Trans>
                             </Typography>
                         </>
                     :   null}
@@ -326,7 +336,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             variant="contained"
                             disabled={disabled}
                             onClick={onConfirm}>
-                            {t.ok()}
+                            <Trans>OK</Trans>
                         </ActionButton>
                     :   <ActionButton
                             className={classes.button}
@@ -336,7 +346,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             loading={verifying}
                             onClick={onVerify}>
                             <Icons.Send size={18} className={classes.send} />
-                            {t.send()}
+                            <Trans>Send</Trans>
                         </ActionButton>
                     }
                 </Box>

@@ -63,17 +63,18 @@ export async function migrate() {
     })
 
     const cwd = new URL('../../../mask/', import.meta.url)
-    const inputURL = new URL('./dashboard/locales/i18n_generated.ts', cwd)
-    const json = JSON.parse(await readFile(new URL('./en-US.json', inputURL), 'utf-8'))
+    const inputURL = new URL('./shared-ui/locales/i18n_generated.ts', cwd)
+    const enUS_URL = new URL('./shared-ui/locales/en-US.json', cwd)
+    const json = JSON.parse(await readFile(enUS_URL, 'utf-8'))
     processFile(inputURL, json)
 
     await awaitChildProcess(shell.cwd(cwd)`npx lingui extract`)
 
     await Promise.all(
         ['ja-JP', 'ko-KR', 'zh-CN', 'zh-TW'].map(async (lang) => {
-            const langFile = JSON.parse(await readFile(new URL('./' + lang + '.json', inputURL), 'utf-8'))
+            const langFile = JSON.parse(await readFile(new URL('./' + lang + '.json', enUS_URL), 'utf-8'))
 
-            const poFilePath = new URL('../../shared-ui/locale/' + lang + '.po', inputURL)
+            const poFilePath = new URL('./shared-ui/locale/' + lang + '.po', cwd)
             const poFile = await readFile(poFilePath, 'utf-8')
 
             const nextPoFile: string[] = []

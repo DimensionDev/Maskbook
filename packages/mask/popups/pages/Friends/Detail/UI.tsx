@@ -7,8 +7,8 @@ import { type ProfileIdentifier, formatPersonaFingerprint } from '@masknet/share
 import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import type { Profile } from '../common.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -96,7 +96,6 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
     const { classes } = useStyles()
     const navigate = useNavigate()
     const handleBack = useCallback(() => navigate(-1), [])
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     return (
         <Box display="flex" flexDirection="column" alignItems="center" width="100%" className={classes.container}>
@@ -145,7 +144,7 @@ export const FriendsDetailUI = memo<FriendsDetailUIProps>(function FriendsDetail
                 <ConnectedAccounts profiles={profiles} localProfile={localProfile} avatar={avatar} />
             :   <div className={classes.emptyContainer}>
                     <EmptyStatus className={classes.empty}>
-                        {t.popups_encrypted_friends_no_associated_accounts()}
+                        <Trans>No associated accounts</Trans>
                     </EmptyStatus>
                 </div>
             }

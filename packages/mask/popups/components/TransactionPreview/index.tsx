@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useMemo } from 'react'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import {
     TransactionDescriptorType,
     formatBalance,
@@ -29,6 +28,7 @@ import { isString } from 'lodash-es'
 import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     info: {
@@ -82,7 +82,6 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     paymentToken,
     onPaymentTokenChange,
 }) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()
@@ -99,14 +98,14 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 )?.parameters?.to
 
                 return {
-                    title: transaction.formattedTransaction?.title ?? t.popups_wallet_contract_interaction(),
+                    title: transaction.formattedTransaction?.title ?? <Trans>Contract Interaction</Trans>,
                     to: to && isString(to) ? to : transaction.computedPayload?.to,
                     tokenAddress: transaction.formattedTransaction?.tokenInAddress,
                     amount: transaction.formattedTransaction?.tokenInAmount ?? transaction.computedPayload.value,
                 }
             case TransactionDescriptorType.TRANSFER:
                 return {
-                    title: t.wallet_transfer_send(),
+                    title: <Trans>Send</Trans>,
                     to: transaction.computedPayload.to,
                     tokenAddress: '',
                     amount: transaction.computedPayload.value,
@@ -115,7 +114,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
             case TransactionDescriptorType.DEPLOYMENT:
                 console.log(transaction)
                 return {
-                    title: t.wallet_transfer_deploy(),
+                    title: <Trans>Deploy Contract</Trans>,
                 }
             case TransactionDescriptorType.RETRY:
             case TransactionDescriptorType.CANCEL:
@@ -182,7 +181,9 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 </Box>
                 {to ?
                     <Box mt={2} display="flex" columnGap={0.5} alignItems="center">
-                        <Typography className={classes.addressTitle}>{t.to()}:</Typography>
+                        <Typography className={classes.addressTitle}>
+                            <Trans>To</Trans>:
+                        </Typography>
                         <Typography fontSize={11} fontWeight={700} lineHeight="16px">
                             {to}
                         </Typography>
@@ -228,7 +229,9 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 :   null}
             </Box>
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
+                <Typography className={classes.gasFeeTitle}>
+                    <Trans>Gas Fee</Trans>
+                </Typography>
                 <GasSettingMenu
                     defaultGasLimit={transaction.computedPayload.gas}
                     defaultGasConfig={initConfig}

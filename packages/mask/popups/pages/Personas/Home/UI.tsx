@@ -6,7 +6,6 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
 import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ConnectedWallet } from '../../../components/ConnectedWallet/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
@@ -14,6 +13,7 @@ import { SelectProvider } from '../../../components/SelectProvider/index.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -191,7 +191,6 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
         bindingWallets,
     }) => {
         const theme = useTheme()
-        const t = useMaskSharedTrans()
         const navigate = useNavigate()
         const modalNavigate = useModalNavigate()
         const { classes, cx } = useStyles()
@@ -241,8 +240,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                 onChange={onChange}
                                 aria-label="persona-tabs"
                                 classes={{ root: classes.tabs, grouped: classes.groupedButton }}>
-                                <Tab label={t.popups_social_account()} value={PopupHomeTabType.SocialAccounts} />
-                                <Tab label={t.popups_connected_wallets()} value={PopupHomeTabType.ConnectedWallets} />
+                                <Tab label={<Trans>Social Account</Trans>} value={PopupHomeTabType.SocialAccounts} />
+                                <Tab
+                                    label={<Trans>Connected Wallet</Trans>}
+                                    value={PopupHomeTabType.ConnectedWallets}
+                                />
                             </MaskTabList>
                         </Box>
                         <TabPanel className={classes.panel} value={PopupHomeTabType.SocialAccounts} data-hide-scrollbar>
@@ -268,9 +270,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                         </Box>
                         <Box className={classes.content}>
                             <Box className={classes.titleWrapper}>
-                                <Typography className={classes.title}>{t.welcome_to_mask()}</Typography>
+                                <Typography className={classes.title}>
+                                    <Trans>Welcome to Mask Network</Trans>
+                                </Typography>
                                 <Typography className={classes.placeholderDescription}>
-                                    {t.popups_add_persona_description()}
+                                    <Trans>Use Persona to encrypt and decrypt social media posts & messages.</Trans>
                                 </Typography>
                             </Box>
                             <Box className={classes.addPersonaWrapper} onClick={onCreatePersona}>
@@ -278,9 +282,11 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     <Icons.AddUser size={20} color={theme.palette.maskColor.white} />
                                 </div>
                                 <div>
-                                    <Typography className={classes.subTitle}>{t.popups_create_persona()}</Typography>
+                                    <Typography className={classes.subTitle}>
+                                        <Trans>Create Persona</Trans>
+                                    </Typography>
                                     <Typography className={classes.description}>
-                                        {t.popups_generate_a_new_persona()}
+                                        <Trans>Generate a new persona</Trans>
                                     </Typography>
                                 </div>
                             </Box>
@@ -290,9 +296,14 @@ export const PersonaHomeUI = memo<PersonaHomeUIProps>(
                                     <Icons.PopupRestore size={20} color={theme.palette.maskColor.white} />
                                 </div>
                                 <div>
-                                    <Typography className={classes.subTitle}>{t.popups_restore_and_login()}</Typography>
+                                    <Typography className={classes.subTitle}>
+                                        <Trans>Restore or Login</Trans>
+                                    </Typography>
                                     <Typography className={classes.description}>
-                                        {t.popups_import_persona_description()}
+                                        <Trans>
+                                            Support Identity code, private key, local backups or cloud backups to access
+                                            your personal data.
+                                        </Trans>
                                     </Typography>
                                 </div>
                             </Box>

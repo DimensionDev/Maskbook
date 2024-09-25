@@ -12,12 +12,13 @@ import { useQueryClient } from '@tanstack/react-query'
 import { memo, useEffect, useRef } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { WalletBalance } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { WalletRenameModal } from '../../../modals/modal-controls.js'
 import { DeriveStateContext } from './context.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -79,7 +80,7 @@ async function pollResult(address: string) {
 }
 
 export const Component = memo(function DeriveWallet() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const mnemonicId = useLocation().state?.mnemonicId as string
 
@@ -116,7 +117,7 @@ export const Component = memo(function DeriveWallet() {
         setIsDeriving(false)
     }, [mnemonicId, queryClient])
 
-    useTitle(t.popups_add_wallet())
+    useTitle(_(msg`Add Wallet`))
 
     const loading = creating || isDeriving
 
@@ -148,7 +149,7 @@ export const Component = memo(function DeriveWallet() {
                             onClick={() => {
                                 WalletRenameModal.open({
                                     wallet,
-                                    title: t.rename(),
+                                    title: <Trans>Rename</Trans>,
                                 })
                             }}
                         />
@@ -156,7 +157,7 @@ export const Component = memo(function DeriveWallet() {
                 ))}
             </List>
             <ActionButton loading={loading} fullWidth disabled={loading} onClick={create}>
-                {t.add()}
+                <Trans>Add</Trans>
             </ActionButton>
         </div>
     )

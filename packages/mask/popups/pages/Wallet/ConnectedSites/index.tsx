@@ -1,10 +1,11 @@
 import { memo } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OriginCard from '../components/OriginCard/index.js'
 import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -30,15 +31,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function ConnectedSites() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
-    useTitle(t.popups_wallet_connected_sites())
-    const _ = useConnectedOrigins()
-    const origins = _.data ? [..._.data].sort((a, b) => a.localeCompare(b, 'en-US')) : undefined
+    useTitle(_(msg`Connected sites`))
+    const _2 = useConnectedOrigins()
+    const origins = _2.data ? [..._2.data].sort((a, b) => a.localeCompare(b, 'en-US')) : undefined
 
     return (
         <Box className={classes.container}>
-            <Typography className={classes.desc}>{t.popups_wallet_connected_sites_description()}</Typography>
+            <Typography className={classes.desc}>
+                <Trans>Wallet name is connected to these sites, they can view your account address.</Trans>
+            </Typography>
             <Box className={classes.cardList}>
                 {origins?.map((origin) => <OriginCard key={origin} origin={origin} />)}
             </Box>

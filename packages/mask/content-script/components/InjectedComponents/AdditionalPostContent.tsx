@@ -4,7 +4,7 @@ import { type TypedMessage, makeTypedMessageText } from '@masknet/typed-message'
 import { TypedMessageRender } from '@masknet/typed-message-react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
-import { memo, useCallback, useMemo, type JSX } from 'react'
+import { memo, useCallback, useMemo, type JSX, type ReactNode } from 'react'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
 import { Icons } from '@masknet/icons'
 
@@ -13,7 +13,7 @@ enum AdditionalIcon {
     error = 'error',
 }
 interface AdditionalContentProps {
-    title: string
+    title: ReactNode
     titleIcon?: keyof typeof AdditionalIcon
     headerActions?: React.ReactNode
     progress?: boolean | CircularProgressProps

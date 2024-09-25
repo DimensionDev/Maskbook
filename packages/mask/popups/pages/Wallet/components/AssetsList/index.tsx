@@ -11,11 +11,11 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { formatTokenBalance } from '../../../../../shared/index.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
 import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
 import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '@masknet/web3-providers'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -95,7 +95,6 @@ interface AssetItemProps extends ListItemProps {
 const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: AssetItemProps) {
     const hasNavigator = useHasNavigator()
     const { classes, cx } = useStyles({ hasNav: hasNavigator })
-    const t = useMaskSharedTrans()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const network = networks.find((x) => x.chainId === asset.chainId)
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
@@ -164,7 +163,9 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                             </ProgressiveText>
                         </TextOverflowTooltip>
                         {asset.isCustomToken ?
-                            <Typography className={classes.customToken}>{t.added_by_user()}</Typography>
+                            <Typography className={classes.customToken}>
+                                <Trans>Added by user</Trans>
+                            </Typography>
                         :   null}
                     </>
                 }>

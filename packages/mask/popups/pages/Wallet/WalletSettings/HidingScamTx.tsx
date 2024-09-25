@@ -1,13 +1,11 @@
 import { Icons } from '@masknet/icons'
-import { Box, ListItem, Typography, useTheme, Switch } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { Box, ListItem, Typography, Switch } from '@mui/material'
 import { useStyles } from './useStyles.js'
 import { hidingScamSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 export function HidingScamTx() {
-    const t = useMaskSharedTrans()
-    const theme = useTheme()
     const { classes } = useStyles()
     const hiding = useValueRef(hidingScamSettings)
 
@@ -16,7 +14,7 @@ export function HidingScamTx() {
             <Box className={classes.itemBox}>
                 <Icons.DangerOutline size={20} />
                 <Typography className={classes.itemText}>
-                    {t.popups_wallet_settings_hiding_scam_transactions()}
+                    <Trans>Hiding Scam Transactions</Trans>
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>

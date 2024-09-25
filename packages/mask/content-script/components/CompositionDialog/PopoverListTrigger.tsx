@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { RadioGroup, Typography, Popover } from '@mui/material'
-import type { PropsWithChildren } from 'react'
+import type { PropsWithChildren, ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     popper: {
@@ -48,7 +48,7 @@ interface PopoverListTriggerProp extends PropsWithChildren {
     setAnchorEl(v: HTMLElement | null): void
     onChange(v: string): void
     selected: string
-    selectedTitle: string | undefined
+    selectedTitle: ReactNode
 }
 
 export function PopoverListTrigger({

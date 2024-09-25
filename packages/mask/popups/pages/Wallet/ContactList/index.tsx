@@ -14,6 +14,8 @@ import { useTitle, ContactsContext, PageTitleContext } from '../../../hooks/inde
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modal-controls.js'
 import { ContactType } from '../type.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; hasError?: boolean }>()(
     (theme, { showDivideLine, isManage, hasError }) => ({
@@ -136,6 +138,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
 )
 
 const ContactListUI = memo(function ContactListUI() {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
     const theme = useTheme()
     const { setExtension } = useContext(PageTitleContext)
@@ -153,7 +156,7 @@ const ContactListUI = memo(function ContactListUI() {
 
     const addContact = useCallback(() => {
         return AddContactModal.openAndWaitForClose({
-            title: t.wallet_add_contact(),
+            title: <Trans>Add Contact</Trans>,
             address: '',
             name: '',
         })
@@ -165,7 +168,7 @@ const ContactListUI = memo(function ContactListUI() {
         return () => setExtension(undefined)
     }, [isManage])
 
-    useTitle(isManage ? t.contacts() : t.popups_send())
+    useTitle(isManage ? _(msg`Contacts`) : _(msg`Send`))
 
     const navigate = useNavigate()
     const location = useLocation()
@@ -192,7 +195,7 @@ const ContactListUI = memo(function ContactListUI() {
                 <Box className={classes.contactsPanel}>
                     {contacts.length ?
                         <Typography className={classes.contactTitle}>
-                            {t.wallet_transfer_my_contacts_title()}
+                            <Trans>Contacts</Trans>
                         </Typography>
                     :   null}
                     <List className={classes.contactsList}>
@@ -208,7 +211,9 @@ const ContactListUI = memo(function ContactListUI() {
                             )
                         })}
                     </List>
-                    <Typography className={classes.contactTitle}>{t.wallet_transfer_my_wallets_title()}</Typography>
+                    <Typography className={classes.contactTitle}>
+                        <Trans>My Wallets</Trans>
+                    </Typography>
                     <List className={classes.contactsList}>
                         {wallets.map((wallet, index) => {
                             return (
@@ -239,7 +244,7 @@ const ContactListUI = memo(function ContactListUI() {
                             width={368}
                             className={classes.confirmButton}
                             disabled={!!inputValidationMessage || !userInput}>
-                            {t.next()}
+                            <Trans>Next</Trans>
                         </ActionButton>
                     </Box>
                 )}
@@ -263,7 +268,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const editContact = useCallback(() => {
         return EditContactModal.openAndWaitForClose({
-            title: t.wallet_edit_contact(),
+            title: <Trans>Edit Contact</Trans>,
             address,
             name,
             type: contactType,
@@ -272,7 +277,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
-            title: t.wallet_delete_contact(),
+            title: <Trans>Delete Contact</Trans>,
             address,
             name,
         })
@@ -280,18 +285,18 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
 
     const menuOptions = [
         {
-            name: t.edit(),
+            name: <Trans>Edit</Trans>,
             icon: <Icons.Edit2 size={20} color={theme.palette.maskColor.second} />,
             handler: editContact,
         },
         {
-            name: t.delete(),
+            name: <Trans>Delete</Trans>,
             icon: <Icons.Decrease size={20} color={theme.palette.maskColor.second} />,
             handler: deleteContact,
         },
     ]
 
-    const [menu, openMenu, _, isOpenMenu] = useMenuConfig(
+    const [menu, openMenu, __, isOpenMenu] = useMenuConfig(
         menuOptions.map((option, index) => (
             <MenuItem key={index} className={classes.menuItem} onClick={option.handler}>
                 {option.icon}

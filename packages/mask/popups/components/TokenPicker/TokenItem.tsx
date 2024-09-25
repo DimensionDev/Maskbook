@@ -19,8 +19,8 @@ import {
     type ListItemProps,
 } from '@mui/material'
 import { memo, useEffect, useMemo, useRef } from 'react'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { formatTokenBalance } from '../../../shared/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -92,7 +92,6 @@ export const TokenItem = memo(function TokenItem({
     ...rest
 }: TokenItemProps) {
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
 
     const Utils = useWeb3Utils()
     const explorerLink = useMemo(() => {
@@ -181,7 +180,9 @@ export const TokenItem = memo(function TokenItem({
                             </Link>
                         </Typography>
                         {asset.isCustomToken ?
-                            <Typography>{t.added_by_user()}</Typography>
+                            <Typography>
+                                <Trans>Added by user</Trans>
+                            </Typography>
                         :   null}
                     </>
                 }>

@@ -2,12 +2,13 @@ import { memo, useCallback } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useNavigate } from 'react-router-dom'
 import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
 
 import { WalletList } from '../../../components/WalletSettingList/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {
@@ -56,7 +57,6 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
         onSubmit,
         submitting,
     }) => {
-        const t = useMaskSharedTrans()
         const { classes } = useStyles()
         const navigate = useNavigate()
         const handleBack = useCallback(() => navigate(-1), [])
@@ -75,9 +75,14 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                     </Box>
                     <Typography className={classes.tips}>
                         {account.is_valid ?
-                            t.popups_display_web3_address_tips()
+                            <Trans>
+                                Display the following address on your Web3 profile page and use it to receive tips.
+                            </Trans>
                         : isSupportNextDotID ?
-                            t.popups_verify_account_tips()
+                            <Trans>
+                                After connecting and verifying your persona, you can set up associated address for
+                                displaying your web3 footprints or receiving tips.
+                            </Trans>
                             // eslint-disable-next-line react/naming-convention/component-name
                         :   <MaskSharedTrans.popups_other_social_accounts_tips
                                 components={{ strong: <strong />, br: <br /> }}
@@ -98,10 +103,12 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                 {isSupportNextDotID ?
                     <BottomController>
                         <Button variant="outlined" fullWidth onClick={handleBack}>
-                            {t.back()}
+                            <Trans>Back</Trans>
                         </Button>
                         <ActionButton loading={submitting} fullWidth onClick={account.is_valid ? onSubmit : onVerify}>
-                            {account.is_valid ? t.save() : t.popups_verify_account()}
+                            {account.is_valid ?
+                                <Trans>Save</Trans>
+                            :   <Trans>Verify Account</Trans>}
                         </ActionButton>
                     </BottomController>
                 :   null}
