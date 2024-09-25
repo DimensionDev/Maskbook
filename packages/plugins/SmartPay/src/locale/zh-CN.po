@@ -239,4 +239,3 @@ msgstr "您可以更改 SmartPay 钱包的管理账户。在 Mask Network 体系
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:56
 msgid "You need to know before using SmartPay:"
 msgstr "在使用 Smart Pay 前需要知道的事："
-

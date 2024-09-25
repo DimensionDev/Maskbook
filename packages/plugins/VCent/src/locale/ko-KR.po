@@ -34,4 +34,3 @@ msgstr "최신 오퍼"
 #: src/SiteAdaptor/index.tsx:32
 msgid "Valuables"
 msgstr "가치"
-

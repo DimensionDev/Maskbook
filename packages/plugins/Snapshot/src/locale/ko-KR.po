@@ -172,4 +172,3 @@ msgstr ""
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "투표 파워"
-

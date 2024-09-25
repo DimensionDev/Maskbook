@@ -54,4 +54,3 @@ msgstr "팔로잉 친구가 없습니다."
 #: src/SiteAdaptor/ConnectButton.tsx:107
 msgid "Unfollow"
 msgstr "팔로우 취소"
-

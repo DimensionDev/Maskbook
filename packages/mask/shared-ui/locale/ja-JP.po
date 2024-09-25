@@ -2783,4 +2783,3 @@ msgstr "支払いパスワードはウォレットデータを暗号化し、取
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
-

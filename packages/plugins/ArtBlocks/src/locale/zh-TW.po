@@ -119,4 +119,3 @@ msgstr ""
 #: src/SiteAdaptor/DetailsView.tsx:80
 msgid "Website"
 msgstr ""
-

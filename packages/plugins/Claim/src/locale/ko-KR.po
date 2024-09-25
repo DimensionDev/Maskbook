@@ -51,7 +51,8 @@ msgid "Expired"
 msgstr "만료됨"
 
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:83
-msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
+msgid ""
+"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
 "Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
@@ -94,4 +95,3 @@ msgstr "WalletConnect 월렛에 연결되어 있습니다. 해당 월렛에서 �
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."
 msgstr "월렛은 이미 해당 거래를 취소했습니다."
-

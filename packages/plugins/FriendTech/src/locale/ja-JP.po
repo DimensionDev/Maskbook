@@ -108,4 +108,3 @@ msgstr "所持"
 #: src/SiteAdaptor/components/UserProfile.tsx:206
 msgid "Your Rank"
 msgstr "あなたのランク"
-

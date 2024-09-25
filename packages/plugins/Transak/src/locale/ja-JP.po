@@ -25,4 +25,3 @@ msgstr "フィアット・オンランプ"
 #: src/SiteAdaptor/index.tsx:42
 msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
 msgstr "Twitterでフィアットオンランプアグリゲーター。Transakサポートで60以上の国で暗号通貨を購入。"
-

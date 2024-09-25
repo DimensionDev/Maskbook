@@ -94,4 +94,3 @@ msgstr "월렛 사인 실패"
 #: src/components/BindDialog.tsx:64
 msgid "Wallet sign succeeded."
 msgstr "월렛 사인 성공"
-

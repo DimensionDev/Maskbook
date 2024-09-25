@@ -54,4 +54,3 @@ msgstr ""
 #: src/SiteAdaptor/ConnectButton.tsx:107
 msgid "Unfollow"
 msgstr ""
-

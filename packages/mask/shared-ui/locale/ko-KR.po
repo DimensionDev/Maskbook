@@ -2783,4 +2783,3 @@ msgstr "회원님의 결제비밀번호는 월렛 데이터를 암호화한 것�
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
-

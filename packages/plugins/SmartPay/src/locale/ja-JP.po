@@ -239,4 +239,3 @@ msgstr "SmartPayウォレットの管理アカウントを変更することが�
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:56
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPayを使用する前に確認してください:"
-

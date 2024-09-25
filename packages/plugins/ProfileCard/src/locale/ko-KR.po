@@ -25,4 +25,3 @@ msgstr "아바타 오른쪽 아래에 있는 미니 Mask 아이콘이나 타임�
 #: src/SiteAdaptor/index.tsx:24
 msgid "Web3 Profile Card"
 msgstr "웹3 프로필 카드"
-
