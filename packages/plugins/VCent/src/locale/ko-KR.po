@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-09-25 13:14\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -24,7 +24,7 @@ msgstr "크리에이터가 서명한 트윗을 구입 및 판매하기"
 
 #: src/SiteAdaptor/TweetDialog.tsx:91
 msgid "Go"
-msgstr "Go"
+msgstr ""
 
 #: src/SiteAdaptor/TweetDialog.tsx:79
 msgid "Latest offer at"
@@ -34,3 +34,4 @@ msgstr "최신 오퍼"
 #: src/SiteAdaptor/index.tsx:32
 msgid "Valuables"
 msgstr "가치"
+
