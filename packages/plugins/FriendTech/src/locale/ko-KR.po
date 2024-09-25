@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -42,7 +42,7 @@ msgstr "친구"
 
 #: src/SiteAdaptor/Order.tsx:193
 msgid "From"
-msgstr "From"
+msgstr ""
 
 #: src/SiteAdaptor/Order.tsx:223
 msgid "Gas fee"
@@ -86,7 +86,7 @@ msgstr "다음 지분의 가격은 S^2 / 16000*1 ETH와 같으며, 여기서 S�
 
 #: src/SiteAdaptor/Order.tsx:201
 msgid "To"
-msgstr "To"
+msgstr ""
 
 #: src/SiteAdaptor/Order.tsx:217
 msgid "Total Amount"
@@ -103,8 +103,9 @@ msgstr "값"
 
 #: src/SiteAdaptor/components/UserProfile.tsx:182
 msgid "You Own"
-msgstr "You Own"
+msgstr ""
 
 #: src/SiteAdaptor/components/UserProfile.tsx:206
 msgid "Your Rank"
 msgstr "나의 순위"
+
