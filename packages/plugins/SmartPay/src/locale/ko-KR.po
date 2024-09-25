@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:14\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -154,7 +154,7 @@ msgstr "SmartPay 월렛의 관리지 계정 설정"
 #: src/SiteAdaptor/components/SmartPayEntry.tsx:86
 #: src/SiteAdaptor/index.tsx:42
 msgid "Smart Pay"
-msgstr "Smart Pay"
+msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:48
 msgid "SmartPay is based on ERC-4337 and is currently deployed on Polygon Network. Multiple chains will be supported in the future. ERC-4337 is a new wallet proposal that would open the door for creativity in wallet design and could provide more important features. And we will design more fascinating features based on the new wallet proposal in Mask Network."
@@ -239,3 +239,4 @@ msgstr "SmartPay 월렛의 관리 계정을 변경할 수 있으며, Mask Networ
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:56
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPay를 사용하기 전에 알아야 할 사항:"
+
