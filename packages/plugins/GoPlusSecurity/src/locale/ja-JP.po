@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -95,7 +95,7 @@ msgstr "ユーザーの皆様"
 
 #: src/SiteAdaptor/components/Footer.tsx:24
 msgid "Go+"
-msgstr "Go+"
+msgstr ""
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:139
 msgid "High Risk"
@@ -184,3 +184,4 @@ msgstr "エクスプローラーで表示"
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:61
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
+
