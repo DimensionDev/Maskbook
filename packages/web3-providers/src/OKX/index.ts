@@ -24,6 +24,11 @@ import type {
 
 /** request okx official API, and normalize the code */
 function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
+    if (process.env.NODE_ENV === 'development') {
+        if (typeof input === 'string' && input.includes('0x00000')) {
+            console.warn('Do you forget to convert to okx native address?', input)
+        }
+    }
     return fetchJSON<T>(input, init).then(normalizeCode)
 }
 
@@ -263,7 +268,11 @@ export class OKX {
     }
 
     static async bridge(options: BridgeOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', options)
+        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', {
+            ...options,
+            fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
+            toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
+        })
         const res = await fetchFromOKX<GetBridgeResponse>(url)
         return res
     }

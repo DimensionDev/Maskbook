@@ -185,8 +185,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         chainId,
         isAutoSlippage,
         slippage,
-        quote,
-        bridgeQuote,
+        bridgeQuote: quote,
         isQuoteStale,
         updateQuote,
     } = useSwap()
@@ -214,7 +213,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const firstData = bridgeData?.data?.[0]
     const transaction = firstData?.tx
     const fromTokenAmount = firstData?.fromTokenAmount
-
     const toTokenAmount = firstData?.toTokenAmount
 
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -269,11 +267,11 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: toNetwork?.chainId,
     })
-    const toChainNetworkFee = bridgeQuote?.routerList[0]?.toChainNetworkFee
+    const toChainNetworkFee = quote?.routerList[0]?.toChainNetworkFee
     const toNetworkFeeValue = leftShift(toChainNetworkFee ?? 0, toNetwork?.nativeCurrency.decimals ?? 0)
         .times(toChainNativeTokenPrice ?? 0)
         .toFixed(2)
-    const bridge = bridgeQuote?.routerList[0]
+    const bridge = quote?.routerList[0]
     const router = bridge?.router
     const bridgeFee = router?.crossChainFee
     const bridgeFeeToken = useToken(fromNetwork?.chainId, router?.crossChainFeeTokenAddress)
