@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:14\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -42,7 +42,7 @@ msgstr "当前结果"
 
 #: src/SiteAdaptor/index.tsx:77
 msgid "DAO"
-msgstr "DAO"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
 msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
@@ -70,7 +70,7 @@ msgstr "信息"
 
 #: src/SiteAdaptor/InformationCard.tsx:114
 msgid "IPFS"
-msgstr "IPFS"
+msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
 msgid "Join"
@@ -123,7 +123,7 @@ msgstr "结果"
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
 msgid "Snapshot"
-msgstr "Snapshot"
+msgstr ""
 
 #: src/SiteAdaptor/SpaceMenu.tsx:108
 msgid "Space"
@@ -139,7 +139,7 @@ msgstr "开始时间 {0}"
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
-#~ msgstr "策略"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"
@@ -172,3 +172,4 @@ msgstr "您"
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "您的投票权"
+
