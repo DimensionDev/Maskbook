@@ -28,7 +28,8 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { useMaskSharedTrans, MaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity?: SocialIdentity
@@ -114,8 +115,6 @@ const useStyles = makeStyles()((theme) => {
 
 export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) => {
     const { classes } = useStyles(undefined, { props: { classes: rest.classes } })
-
-    const t = useMaskSharedTrans()
     const translate = usePluginTransField()
     const fallbackAccounts = useMemo(() => {
         return [
@@ -247,7 +246,9 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                     <div className={classes.content}>{component}</div>
                     <div className={classes.footer}>
                         <Icons.Web3ProfileCard className={classes.cardIcon} size={24} />
-                        <Typography className={classes.cardName}>{t.web3_profile_card_name()}</Typography>
+                        <Typography className={classes.cardName}>
+                            <Trans>Web3 Profile Card</Trans>
+                        </Typography>
                         <Typography variant="body1" className={classes.powered}>
                             {/* eslint-disable-next-line react/naming-convention/component-name */}
                             <MaskSharedTrans.powered_by_whom

@@ -17,7 +17,7 @@ import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB, useCurrentPersona } from '../../../shared-ui/hooks/index.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -47,7 +47,6 @@ interface PostDialogProps {
 }
 
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const allPersonas = usePersonasFromDB()
@@ -129,7 +128,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
             open={open}
             onClose={onClose}
-            title={t.post_dialog__title()}
+            title={<Trans>Encrypted Post</Trans>}
             independent>
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI

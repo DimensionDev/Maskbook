@@ -1,7 +1,6 @@
 import { memo, useCallback } from 'react'
 import { Box, List } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { PersonaItem } from './PersonaItem.js'
@@ -9,6 +8,7 @@ import { DashboardRoutes, PopupRoutes, type PersonaInformation } from '@masknet/
 import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPersonaModal(props) {
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { personas, currentPersona } = PersonaContext.useContainer()
@@ -58,7 +57,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 variant="outlined"
                 startIcon={<Icons.PopupRestore size={18} />}
                 onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
-                {t.popups_recovery()}
+                <Trans>Recovery</Trans>
             </ActionButton>
             <ActionButton
                 fullWidth
@@ -66,7 +65,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 variant="outlined"
                 startIcon={<Icons.History size={18} />}
                 onClick={() => navigate(PopupRoutes.Settings)}>
-                {t.backup()}
+                <Trans>Backup</Trans>
             </ActionButton>
             <ActionButton
                 fullWidth
@@ -74,13 +73,13 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 variant="outlined"
                 startIcon={<Icons.AddUser size={18} />}
                 onClick={() => handleOpenDashboard(DashboardRoutes.SignUpPersona)}>
-                {t.add()}
+                <Trans>Add</Trans>
             </ActionButton>
         </Box>
     )
 
     return (
-        <ActionModal header={t.popups_switch_persona()} action={action} {...props}>
+        <ActionModal header={<Trans>Switch Persona</Trans>} action={action} {...props}>
             <Box className={classes.content}>
                 <List dense className={classes.list}>
                     {personas.map((item, index) => (

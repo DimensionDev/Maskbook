@@ -10,7 +10,7 @@ import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     networkList: {
@@ -130,7 +130,6 @@ const NetworkItem = memo(function NetworkItem({ network, currentNetworkId }: Net
 })
 
 export const ChooseNetworkModal = memo(function ChooseNetworkModal(props: ActionModalBaseProps) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -139,14 +138,14 @@ export const ChooseNetworkModal = memo(function ChooseNetworkModal(props: Action
 
     const action = (
         <ActionButton fullWidth onClick={() => navigate(PopupRoutes.NetworkManagement)}>
-            {t.manage_network()}
+            <Trans>Manage Network</Trans>
         </ActionButton>
     )
 
     const currentNetworkId = network?.ID
 
     return (
-        <ActionModal header={t.network()} action={action} keepMounted {...props}>
+        <ActionModal header={<Trans>Network</Trans>} action={action} keepMounted {...props}>
             <ul className={classes.networkList}>
                 {networks.map((network) => (
                     <NetworkItem key={network.ID} currentNetworkId={currentNetworkId} network={network} />

@@ -24,10 +24,11 @@ import {
     List,
 } from '@mui/material'
 import { useMemo, useCallback, memo } from 'react'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import { LoadingBase } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
+import { Trans } from '@lingui/macro'
 
 interface WalletItemProps {
     proof: BindingProof
@@ -118,7 +119,6 @@ export const WalletList = memo<WalletListProps>(function WalletList({
     isValid,
     identity,
 }) {
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const navigate = useNavigate()
     if (!isValid) return null
@@ -127,7 +127,9 @@ export const WalletList = memo<WalletListProps>(function WalletList({
         return (
             <Box flex={1} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
                 <LoadingBase size={36} />
-                <Typography mt={1.5}>{t.loading()}</Typography>
+                <Typography mt={1.5}>
+                    <Trans>Loading</Trans>
+                </Typography>
             </Box>
         )
 

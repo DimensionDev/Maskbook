@@ -5,7 +5,7 @@ import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@mask
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const GlobalInjection = createInjectHooksRenderer(
     useActivatedPluginsSiteAdaptor.visibility.useAnyMode,
@@ -13,7 +13,6 @@ const GlobalInjection = createInjectHooksRenderer(
 )
 
 export function PageInspector() {
-    const t = useMaskSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const [autoPasteFailed, JSX] = useAutoPasteFailedDialog()
     const xsMatched = useMatchXS()
@@ -28,16 +27,18 @@ export function PageInspector() {
                 const timeout = setTimeout(close, 15 * 1000 /** 15 seconds */)
                 showSnackbar(
                     <>
-                        <Typography color="textPrimary">{t.auto_paste_failed_snackbar()}</Typography>
+                        <Typography color="textPrimary">
+                            <Trans>Do you need to paste encrypted content manually?</Trans>
+                        </Typography>
                         <Box display="flex" justifyContent="flex-end">
                             <Button
                                 color="inherit"
                                 variant="text"
                                 onClick={() => [clearTimeout(timeout), close(), autoPasteFailed(data)]}>
-                                {t.auto_paste_failed_snackbar_action()}
+                                <Trans>Show me how</Trans>
                             </Button>
                             <Button color="inherit" variant="text" aria-label="Close" onClick={close}>
-                                {t.auto_paste_failed_snackbar_action_close()}
+                                <Trans>Close</Trans>
                             </Button>
                         </Box>
                     </>,

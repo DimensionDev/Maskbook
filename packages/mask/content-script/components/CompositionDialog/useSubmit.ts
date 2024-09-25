@@ -10,9 +10,12 @@ import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
+import { msg } from '@lingui/macro'
+import { useLingui, type I18nContext } from '@lingui/react'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
     const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
     return useCallback(
@@ -34,8 +37,8 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             const decoratedText =
                 encode === 'image' ?
-                    decorateEncryptedText('', t, content.meta)
-                :   decorateEncryptedText(encrypted, t, content.meta)
+                    decorateEncryptedText('', t, _, content.meta)
+                :   decorateEncryptedText(encrypted, t, _, content.meta)
 
             const options = { interpolation: { escapeValue: false } }
             const defaultText: string =
@@ -81,12 +84,13 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 function decorateEncryptedText(
     encrypted: string,
     t: ReturnType<typeof useMaskSharedTrans>,
+    _: I18nContext['_'],
     meta?: Meta,
 ): string | null {
     if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
-    const officialAccount = Sniffings.is_twitter_page ? t.twitter_account() : t.facebook_account()
-    const token = meta.has(`${PluginID.RedPacket}:1`) ? t.redpacket_a_token() : t.redpacket_an_nft()
+    const officialAccount = Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`)
+    const token = meta.has(`${PluginID.RedPacket}:1`) ? _(msg`a token`) : _(msg`an NFT`)
     const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier]
     const options = { interpolation: { escapeValue: false }, token, sns }
 

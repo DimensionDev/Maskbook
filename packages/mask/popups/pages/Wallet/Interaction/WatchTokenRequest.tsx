@@ -3,7 +3,6 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useWallet, useWeb3Hub, useWeb3State } from '@masknet/web3-hooks-base'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { TokenIcon } from '@masknet/shared'
 import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { TokenDetailUI } from '../TokenDetail/index.js'
@@ -13,6 +12,7 @@ import { CollectibleDetailUI } from '../CollectibleDetail/index.js'
 import { useAsync } from 'react-use'
 import type { InteractionItemProps } from './interaction.js'
 import { TokenType } from '@masknet/web3-shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     title: { fontSize: 28 },
@@ -25,7 +25,6 @@ const useStyles = makeStyles()({
 // TODO: wallet_watchAsset SHOULD check the name and symbol fields, and the contract address and chainId against a list of well-known tokens. If the name and/or symbol are similar to ones on the list but the chainId/address don’t match, a warning SHOULD be presented to the user.
 export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
     const { currentRequest: request, setConfirmAction } = props
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { Message, Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const wallet = useWallet()
@@ -77,14 +76,14 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
     return (
         <Box>
             <Typography variant="subtitle1" className={classes.title}>
-                {t.popups_wallet_add_suggested_token()}
+                <Trans>Add Suggested Token</Trans>
             </Typography>
             <Typography variant="body1" className={classes.subtitle}>
-                {t.popups_wallet_add_suggested_token_warning()}
+                <Trans>Be aware, check the token before adding it.</Trans>
             </Typography>
 
             <Typography variant="caption" className={classes.caption}>
-                {t.token()}
+                <Trans>Token</Trans>
             </Typography>
             <Typography variant="body1" component="div" className={classes.iconContainer}>
                 <TokenIcon
@@ -97,13 +96,13 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
                 {isTrustedName ?
                     asset?.name
                 :   <>
-                        {symbol} {t.popups_wallet_add_suggested_token_no_wellknown_name()}
+                        {symbol} <Trans>(the name is set by the web site)</Trans>
                     </>
                 }
             </Typography>
 
             <Typography variant="caption" className={classes.caption}>
-                {t.token_address()}
+                <Trans>Token Address</Trans>
             </Typography>
             <ContractSection
                 fullAddress
@@ -118,7 +117,7 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
             {type === 'ERC20' ?
                 <>
                     <Typography variant="caption" className={classes.caption}>
-                        {t.token_value()}
+                        <Trans>Token Value</Trans>
                     </Typography>
                     <TokenDetailUI hideChart valueAlign="left" address={address} chainId={chainId} />
                 </>
@@ -131,7 +130,6 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
 WatchTokenRequest.displayName = 'WatchTokenRequest'
 
 function NonFungibleAsset({ address, chainId, tokenId }: { address: string; chainId: ChainId; tokenId: string }) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const Hub = useWeb3Hub(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -142,7 +140,7 @@ function NonFungibleAsset({ address, chainId, tokenId }: { address: string; chai
     return (
         <>
             <Typography variant="caption" className={classes.caption}>
-                {t.token_value()}
+                <Trans>Token Value</Trans>
             </Typography>
             <CollectibleDetailUI stateAsset={asset} />
         </>

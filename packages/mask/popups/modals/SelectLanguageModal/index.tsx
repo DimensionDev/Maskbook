@@ -6,6 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
 import { useMaskSharedTrans, useLanguage } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -31,7 +32,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
     }, [])
     const LANGUAGE_OPTIONS_MAP = useMemo(
         () => ({
-            [LanguageOptions.__auto__]: t.popups_settings_language_auto(),
+            [LanguageOptions.__auto__]: <Trans>Follow System</Trans>,
             [LanguageOptions.enUS]: 'English',
             [LanguageOptions.zhCN]: '简体中文',
             [LanguageOptions.zhTW]: '繁体中文',
@@ -42,7 +43,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
     )
 
     return (
-        <ActionModal header={t.popups_settings_select_language()} {...props}>
+        <ActionModal header={<Trans>Select language</Trans>} {...props}>
             <List>
                 {getEnumAsArray(LanguageOptions).map((x) => {
                     return (

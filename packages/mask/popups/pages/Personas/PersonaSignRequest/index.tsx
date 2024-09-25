@@ -7,13 +7,13 @@ import { PersonaContext } from '@masknet/shared'
 import { type PersonaInformation, PopupRoutes, SignType, MaskMessages } from '@masknet/shared-base'
 import { MethodAfterPersonaSign } from '../../Wallet/type.js'
 import Services from '#services'
-import { useMaskSharedTrans, usePersonasFromDB } from '../../../../shared-ui/index.js'
+import { usePersonasFromDB } from '../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 export const Component = memo(function PersonaSignRequest() {
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const [requestID, setRequestID] = useState<string>()
@@ -114,10 +114,10 @@ export const Component = memo(function PersonaSignRequest() {
             <SignRequestInfo message={message} rawMessage={message} origin={source} />
             <BottomController>
                 <ActionButton loading={cancelLoading} onClick={handleCancel} fullWidth variant="outlined">
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButton loading={confirmLoading} onClick={handleConfirm} fullWidth>
-                    {t.sign()}
+                    <Trans>Sign</Trans>
                 </ActionButton>
             </BottomController>
         </Box>

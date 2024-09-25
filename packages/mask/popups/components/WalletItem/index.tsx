@@ -14,8 +14,8 @@ import {
     listItemSecondaryActionClasses,
 } from '@mui/material'
 import { FormattedAddress } from '@masknet/shared'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { WalletBalance } from '../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -98,7 +98,6 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
     hiddenTag,
     ...rest
 }) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const { data: domain } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, wallet.address)
 
@@ -123,7 +122,7 @@ export const WalletItem = memo<WalletItemProps>(function WalletItem({
                         <Typography className={classes.name}>{`${wallet.name}${extraName}`}</Typography>
                         {wallet.source === ImportSource.LocalGenerated || hiddenTag ? null : (
                             <Typography component="span" className={classes.badge}>
-                                {t.wallet_imported()}
+                                <Trans>Imported</Trans>
                             </Typography>
                         )}
                     </Typography>

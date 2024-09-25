@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { PopupRoutes, type SingletonModalProps } from '@masknet/shared-base'
@@ -11,16 +10,18 @@ import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { noop } from 'lodash-es'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {
-    error: string
+    error: ReactNode
     password: string
     setPassword(p: string): void
-    setError(p: string): void
+    setError(p: ReactNode): void
 }
 
 function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest }: ShowPrivateKeyDrawerProps) {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const theme = useTheme()
     const wallet = useWallet()
     const navigate = useNavigate()
@@ -29,7 +30,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
         const verified = await Services.Wallet.verifyPassword(password)
 
         if (!verified) {
-            setError(t.create_wallet_incorrect_payment_password())
+            setError(<Trans>Incorrect Payment Password.</Trans>)
             return
         }
         if (!wallet) return
@@ -51,7 +52,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={t.popups_wallet_payment_password()}
+                    placeholder={_(msg`Payment Password`)}
                     error={!!error}
                     value={password}
                     onChange={(e) => {
@@ -70,7 +71,7 @@ function ShowPrivateKeyDrawer({ password, error, setPassword, setError, ...rest 
                 disabled={loading || !!error || !password}
                 onClick={handleClick}
                 sx={{ marginTop: '16px' }}>
-                {t.confirm()}
+                <Trans>Confirm</Trans>
             </ActionButton>
         </BottomDrawer>
     )
@@ -86,7 +87,7 @@ export function ShowPrivateKeyModal({ ref }: SingletonModalProps<ShowPrivateKeyM
         title: '',
     })
 
-    const [error, setError] = useState('')
+    const [error, setError] = useState<ReactNode>('')
     const [password, setPassword] = useState('')
 
     const [open, dispatch] = useSingletonModal(ref, {

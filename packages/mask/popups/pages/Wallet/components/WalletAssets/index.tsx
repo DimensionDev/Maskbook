@@ -7,11 +7,11 @@ import { TabContext, TabList, TabPanel } from '@mui/lab'
 import { Box, Button, Tab, styled, tabClasses, tabsClasses } from '@mui/material'
 import { memo, useCallback, useRef } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
 import { WalletCollections } from './WalletCollections.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -109,7 +109,6 @@ interface WalletAssetsUIProps {
 }
 
 const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAddToken }) {
-    const t = useMaskSharedTrans()
     const [params] = useSearchParams()
 
     const { classes } = useStyles()
@@ -125,19 +124,11 @@ const WalletAssetsUI = memo<WalletAssetsUIProps>(function WalletAssetsUI({ onAdd
             <TabContext value={currentTab}>
                 <Box className={classes.header}>
                     <StyledTabList onChange={handleTabChange}>
+                        <Tab className={classes.tab} label={<Trans>Tokens</Trans>} value={WalletAssetTabs.Tokens} />
+                        <Tab className={classes.tab} label={<Trans>NFTs</Trans>} value={WalletAssetTabs.Collectibles} />
                         <Tab
                             className={classes.tab}
-                            label={t.popups_wallet_tab_assets()}
-                            value={WalletAssetTabs.Tokens}
-                        />
-                        <Tab
-                            className={classes.tab}
-                            label={t.popups_wallet_tab_collectibles()}
-                            value={WalletAssetTabs.Collectibles}
-                        />
-                        <Tab
-                            className={classes.tab}
-                            label={t.popups_wallet_tab_activity()}
+                            label={<Trans>Activities</Trans>}
                             value={WalletAssetTabs.Activity}
                         />
                     </StyledTabList>

@@ -6,10 +6,10 @@ import { LoadingButton } from '@mui/lab'
 import { Box, Typography, useTheme } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import Services from '#services'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { PopupHomeTabType } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -50,7 +50,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Unlock = memo(function Unlock() {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const [password, setPassword] = useState('')
     const theme = useTheme()
@@ -83,7 +82,9 @@ const Unlock = memo(function Unlock() {
         <Box className={classes.container}>
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
-                    <Typography className={classes.title}>{t.welcome_back()}</Typography>
+                    <Typography className={classes.title}>
+                        <Trans>Welcome Back</Trans>
+                    </Typography>
                 </Box>
                 <Box className={classes.inputWrapper}>
                     <PasswordField
@@ -98,7 +99,7 @@ const Unlock = memo(function Unlock() {
                     />
                     {verified === false ?
                         <Typography fontSize={14} color={theme.palette.maskColor.danger} marginTop="12px">
-                            {t.popups_wallet_unlock_error_password()}
+                            <Trans>Incorrect password</Trans>
                         </Typography>
                     :   null}
                 </Box>
@@ -109,7 +110,7 @@ const Unlock = memo(function Unlock() {
                     variant="contained"
                     disabled={!password || loading}
                     onClick={handleUnlock}>
-                    {t.unlock()}
+                    <Trans>Unlock</Trans>
                 </LoadingButton>
 
                 <Typography
@@ -120,7 +121,7 @@ const Unlock = memo(function Unlock() {
                     fontSize={14}
                     textAlign="center"
                     fontWeight={700}>
-                    {t.popups_wallet_reset_tips()}
+                    <Trans>Forgot payment password?</Trans>
                 </Typography>
             </Box>
         </Box>

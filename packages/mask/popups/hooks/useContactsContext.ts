@@ -6,7 +6,8 @@ import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@maskn
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from '@masknet/shared-base-ui'
-import { useMaskSharedTrans } from '../../shared-ui/index.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface ContextOptions {
     defaultName: string
@@ -17,7 +18,7 @@ interface ContextOptions {
 function useContactsContext(
     { defaultName, defaultChainId, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' },
 ) {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()
     const wallets = useWallets()
@@ -56,19 +57,19 @@ function useContactsContext(
     const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 1
 
     const inputValidationMessage = useMemo(() => {
-        if (isMaliciousAddress) return t.wallets_transfer_error_address_scam()
+        if (isMaliciousAddress) return _(msg`This address may be a scam address.`)
         if (!userInput || address) return ''
         if (!(isValidAddress(userInput) || isValidDomain(userInput))) {
-            return t.wallets_transfer_error_invalid_address()
+            return _(msg`Incorrect wallet address.`)
         }
         if (isValidDomain(userInput) && (resolveDomainError || !registeredAddress)) {
-            return t.wallets_transfer_error_invalid_domain()
+            return _(msg`This ENS does not exist or not be resolved.`)
         }
         return ''
     }, [userInput, resolveDomainError, registeredAddress, isMaliciousAddress])
 
     const inputWarningMessage = useMemo(() => {
-        if (addressType === AddressType.Contract) return t.wallets_transfer_warning_contract_address()
+        if (addressType === AddressType.Contract) return _(msg`This address is a contract address.`)
         return ''
     }, [addressType])
 

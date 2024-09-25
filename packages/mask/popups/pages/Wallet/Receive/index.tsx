@@ -6,9 +6,10 @@ import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, Typography, type AvatarProps } from '@mui/material'
 import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -113,8 +114,8 @@ const avatarProps: AvatarProps = {
     sx: { fontSize: 26 },
 }
 export const Component = memo(function Receive() {
+    const { _ } = useLingui()
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { chainId, address, rawAddress } = useTokenParams()
     // No specific token but only for chain
@@ -124,7 +125,7 @@ export const Component = memo(function Receive() {
 
     const asset = useAsset(chainId, address ?? '', account)
 
-    useTitle(t.wallet_receive())
+    useTitle(_(msg`Receive`))
 
     const name = isChain ? currentNetwork?.name : asset?.symbol
     const MainIcon =
@@ -171,7 +172,9 @@ export const Component = memo(function Receive() {
                     </Box>
                 </div>
             </div>
-            <Typography className={classes.tip}>{t.scan_address_to_payment()}</Typography>
+            <Typography className={classes.tip}>
+                <Trans>Scan QR code to receive payment</Trans>
+            </Typography>
         </Box>
     )
 })

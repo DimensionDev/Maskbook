@@ -24,8 +24,8 @@ const useStyles = makeStyles()((theme) => ({
 interface PopoverListItemProps {
     value: string
     itemTail?: ReactNode
-    title: string
-    subTitle?: string
+    title: ReactNode
+    subTitle?: ReactNode
     disabled?: boolean
     onClick?: (v: string) => void
 }

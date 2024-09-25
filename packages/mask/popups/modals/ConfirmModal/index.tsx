@@ -1,10 +1,10 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -21,19 +21,18 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ConfirmModalProps extends BottomDrawerProps {
-    message: string
-    buttonLabel?: string
+    message: ReactNode
+    buttonLabel?: ReactNode
     onConfirm?(): void
 }
 
 function ConfirmDrawer({ message, buttonLabel, onConfirm, ...rest }: ConfirmModalProps) {
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     return (
         <BottomDrawer {...rest}>
             <Typography className={classes.message}>{message}</Typography>
             <ActionButton className={classes.button} onClick={onConfirm}>
-                {buttonLabel || t.confirm()}
+                {buttonLabel || <Trans>Confirm</Trans>}
             </ActionButton>
         </BottomDrawer>
     )

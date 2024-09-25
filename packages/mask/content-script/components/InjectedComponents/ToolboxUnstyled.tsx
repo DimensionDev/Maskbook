@@ -31,6 +31,7 @@ import { makeStyles } from '@masknet/theme'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -71,12 +72,11 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         ListItemText = MuiListItemText,
     } = props
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
 
     const openApplicationBoardDialog = useOpenApplicationBoardDialog()
 
     return (
-        <GuideStep step={1} total={4} tip={t.user_guide_tip_1()}>
+        <GuideStep step={1} total={4} tip={<Trans>Explore multi-chain dApps.</Trans>}>
             <Container>
                 <ListItemButton onClick={openApplicationBoardDialog}>
                     <ListItemIcon>
@@ -91,7 +91,9 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
                                         justifyContent: 'space-between',
                                         alignItems: 'center',
                                     }}>
-                                    <Typography className={classes.title}>{t.mask_network()}</Typography>
+                                    <Typography className={classes.title}>
+                                        <Trans>Mask Network</Trans>
+                                    </Typography>
                                 </Box>
                             }
                         />
@@ -103,7 +105,6 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 }
 
 function ToolboxHintForWallet(props: ToolboxHintProps) {
-    const t = useMaskSharedTrans()
     const {
         ListItemButton = MuiListItemButton,
         ListItemText = MuiListItemText,
@@ -120,7 +121,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
     const theme = useTheme()
 
     return (
-        <GuideStep step={2} total={4} tip={t.user_guide_tip_2()}>
+        <GuideStep step={2} total={4} tip={<Trans>Connect and switch between your wallets.</Trans>}>
             <Container>
                 <ListItemButton onClick={onClickToolbox}>
                     <ListItemIcon>
@@ -173,7 +174,7 @@ function useToolbox() {
     const { data: domain } = useReverseAddress(undefined, account, true)
 
     function getToolboxTitle() {
-        if (!account || !provider) return t.plugin_wallet_connect_wallet()
+        if (!account || !provider) return <Trans>Connect Wallet</Trans>
         if (pendingTransactions.length <= 0)
             return Utils.formatDomainName?.(domain) || Utils.formatAddress(account, 4) || account
         return (

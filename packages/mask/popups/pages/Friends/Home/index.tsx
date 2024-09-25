@@ -11,12 +11,13 @@ import {
     useFriendsFromSearch,
     useFriendFromList,
 } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import Fuse from 'fuse.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const Component = memo(function FriendsHome() {
-    const t = useMaskSharedTrans()
-    useTitle(t.popups_encrypted_friends())
+    const { _ } = useLingui()
+    useTitle(_(msg`Contacts`))
 
     const [{ isPending, refetch, records }, , { data, fetchNextPage }] = useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
