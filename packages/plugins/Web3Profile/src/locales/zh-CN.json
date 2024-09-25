@@ -33,7 +33,7 @@
     "lens_follow_processing_tips": "先前的关注交易正在处理中，请稍候，然后重试。",
     "lens_unfollow_processing_tips": "先前的取消关注交易正在处理中，请稍候，然后重试。",
     "unlock_token_tips": "解锁 {{value}} {{symbol}} 并关注",
-    "switch_network_tips": "切换到 Polygon 并关注",
+    "switch_network_tips": "切换到 Ploygon 并关注",
     "plugin_wallet_disconnect": "断开连接",
     "wallet_status_button_change": "切换",
     "plugin_wallet_on_connect": "连接钱包",
