@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import { LoadingStatus } from '@masknet/shared'
@@ -17,6 +16,8 @@ import { format as formatDateTime } from 'date-fns'
 import { MimeType } from '@masknet/shared-base'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { UserContext } from '../../../../shared-ui/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function LocalBackup() {
-    const t = useDashboardTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const {
@@ -56,7 +57,7 @@ export const Component = memo(function LocalBackup() {
             if (backupWallets && hasPassword) {
                 const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
                 if (!verified) {
-                    setError('paymentPassword', { type: 'custom', message: t.incorrect_password() })
+                    setError('paymentPassword', { type: 'custom', message: _(msg`Incorrect Password`) })
                     return
                 }
             }
@@ -87,9 +88,11 @@ export const Component = memo(function LocalBackup() {
         <>
             <form>
                 <Typography variant="h1" className={classes.title}>
-                    {t.data_backup_title()}
+                    <Trans>Select the contents of the backup</Trans>
                 </Typography>
-                <Typography className={classes.description}>{t.data_backup_description()}</Typography>
+                <Typography className={classes.description}>
+                    <Trans>Please select the appropriate method to restore your personal data.</Trans>
+                </Typography>
                 {!loading && previewInfo ?
                     <Box display="flex" flexDirection="column">
                         <PersonasBackupPreview info={previewInfo} />
@@ -101,7 +104,7 @@ export const Component = memo(function LocalBackup() {
                                     {...field}
                                     onFocus={() => clearErrors()}
                                     sx={{ mb: 2 }}
-                                    placeholder={t.settings_label_backup_password()}
+                                    placeholder={_(msg`Backup Password`)}
                                     error={!!errors.backupPassword?.message}
                                     helperText={errors.backupPassword?.message}
                                 />
@@ -124,7 +127,7 @@ export const Component = memo(function LocalBackup() {
                                         {...field}
                                         onFocus={() => clearErrors()}
                                         sx={{ mb: 2 }}
-                                        placeholder={t.sign_in_account_local_backup_payment_password()}
+                                        placeholder={_(msg`Payment Password`)}
                                         error={!!errors.paymentPassword?.message}
                                         helperText={errors.paymentPassword?.message}
                                     />
@@ -143,7 +146,7 @@ export const Component = memo(function LocalBackup() {
                     loading={downloadLoading}
                     disabled={!isDirty || !isValid}
                     onClick={handleSubmit(handleFormSubmit)}>
-                    {t.download_backup()}
+                    <Trans>Download Backup</Trans>
                 </PrimaryButton>
             </SetupFrameController>
         </>

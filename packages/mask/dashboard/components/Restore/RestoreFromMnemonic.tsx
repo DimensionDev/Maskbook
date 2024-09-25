@@ -1,12 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { some } from 'lodash-es'
-import { useCallback, useLayoutEffect } from 'react'
+import { useCallback, useLayoutEffect, type ReactNode } from 'react'
 import { useList } from 'react-use'
 import { usePersonaRecovery } from '../../contexts/index.js'
-import { useDashboardTrans } from '../../locales/index.js'
 import { DesktopMnemonicConfirm } from '../Mnemonic/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
@@ -17,18 +17,17 @@ const useStyles = makeStyles()((theme) => ({
 
 interface RestoreFromMnemonicProp {
     handleRestoreFromMnemonic?: (values: string[]) => Promise<void>
-    error?: string
-    setError?: (error: string) => void
+    error?: ReactNode
+    setError?: (error: ReactNode) => void
 }
 
 export function RestoreFromMnemonic({ handleRestoreFromMnemonic, error, setError }: RestoreFromMnemonicProp) {
     const { classes } = useStyles()
-    const t = useDashboardTrans()
     const [values, { updateAt, set: setMnemonic }] = useList(Array.from({ length: 12 }, () => ''))
     const { fillSubmitOutlet } = usePersonaRecovery()
     const handleWordChange = useCallback((word: string, index: number) => {
         updateAt(index, word)
-        setError?.('')
+        setError?.(undefined)
     }, [])
 
     const handleImport = useCallback(async () => handleRestoreFromMnemonic?.(values), [values])
@@ -40,7 +39,7 @@ export function RestoreFromMnemonic({ handleRestoreFromMnemonic, error, setError
                 color="primary"
                 onClick={handleImport}
                 disabled={some(values, (value) => !value)}>
-                {t.continue()}
+                <Trans>Continue</Trans>
             </PrimaryButton>,
         )
     }, [handleImport, values])

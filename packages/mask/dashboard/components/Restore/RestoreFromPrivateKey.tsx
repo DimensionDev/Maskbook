@@ -6,9 +6,10 @@ import { Box, TextField } from '@mui/material'
 import { memo, useCallback, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
-import { useDashboardTrans } from '../../locales/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -32,9 +33,9 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
     handleRestoreFromPrivateKey,
     multiline,
 }: RestoreFromPrivateKeyProps) {
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const {
@@ -64,7 +65,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                 color="primary"
                 disabled={isSubmitting || !isDirty}
                 onClick={handleSubmit(onSubmit)}>
-                {t.continue()}
+                <Trans>Continue</Trans>
             </PrimaryButton>,
         )
     }, [isSubmitting, isDirty, handleSubmit, onSubmit])
@@ -87,7 +88,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                         type="password"
                         helperText={errors.privateKey?.message}
                         error={!!errors.privateKey}
-                        placeholder={t.sign_in_account_private_key_placeholder()}
+                        placeholder={_(msg`Input your Private Key`)}
                     />
                 )}
                 name="privateKey"
