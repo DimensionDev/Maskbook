@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-09-25 09:35\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -18,7 +18,704 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/mask/shared-ui/locale/en-US.po\n"
 "X-Crowdin-File-ID: 944\n"
 
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
+msgid "12-word recovery phrase is used to recover your persona data."
+msgstr "crwdns29526:0crwdne29526:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:88
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:130
+msgid "accounts"
+msgstr "crwdns29528:0crwdne29528:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:99
+msgid "Address"
+msgstr "crwdns29530:0crwdne29530:0"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:133
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:107
+msgid "Agree"
+msgstr "crwdns29532:0crwdne29532:0"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:99
+msgid "Allow us to collect your usage information to help us make improvements."
+msgstr "crwdns29534:0crwdne29534:0"
+
+#: dashboard/components/BackupPreview/index.tsx:176
+msgid "Associated Accounts"
+msgstr "crwdns29536:0crwdne29536:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:138
+msgid "At least 6 characters"
+msgstr "crwdns29538:0crwdne29538:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:351
+msgid "Back"
+msgstr "crwdns29540:0crwdne29540:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:219
+msgid "Backup"
+msgstr "crwdns29542:0crwdne29542:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:156
+msgid "Backup downloaded and merged to local failed."
+msgstr "crwdns29544:0crwdne29544:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:152
+msgid "Backup downloaded and merged to local successfully."
+msgstr "crwdns29546:0crwdne29546:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:149
+msgid "Backup Failed"
+msgstr "crwdns29548:0crwdne29548:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:86
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:186
+msgid "Backup password"
+msgstr "crwdns29550:0crwdne29550:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:206
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:238
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:107
+msgid "Backup Password"
+msgstr "crwdns29552:0crwdne29552:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:284
+msgid "Backup to Cloud"
+msgstr "crwdns29554:0crwdne29554:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:196
+msgid "Backup to Mask Cloud Service"
+msgstr "crwdns29556:0crwdne29556:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:33
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:272
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:111
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:130
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:104
+msgid "Cancel"
+msgstr "crwdns29558:0crwdne29558:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:16
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:186
+msgid "Cloud Backup"
+msgstr "crwdns29560:0crwdne29560:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:178
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:97
+msgid "Completed"
+msgstr "crwdns29562:0crwdne29562:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:36
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:110
+msgid "Confirm"
+msgstr "crwdns29564:0crwdne29564:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:152
+msgid "Confirm Payment Password"
+msgstr "crwdns29566:0crwdne29566:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:174
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:179
+msgid "Congratulations"
+msgstr "crwdns29568:0crwdne29568:0"
+
+#: dashboard/components/BackupPreview/index.tsx:184
+msgid "Contacts"
+msgstr "crwdns29570:0crwdne29570:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:79
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:94
+#: dashboard/components/Restore/RestoreFromMnemonic.tsx:42
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx:68
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:155
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:76
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:247
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:175
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:172
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:216
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:130
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:75
+msgid "Continue"
+msgstr "crwdns29572:0crwdne29572:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:204
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:224
+msgid "Create"
+msgstr "crwdns29574:0crwdne29574:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:99
+msgid "Create New Mask Identity"
+msgstr "crwdns29576:0crwdne29576:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:102
+msgid "Create your persona to get started"
+msgstr "crwdns29578:0crwdne29578:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:83
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:125
+msgid "Creating your"
+msgstr "crwdns29580:0crwdne29580:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:92
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:134
+msgid "data"
+msgstr "crwdns29582:0crwdne29582:0"
+
 #: popups/pages/Settings/index.tsx:243
 msgid "Data correlation"
 msgstr "crwdns27972:0crwdne27972:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:187
+msgid "Data merged from Mask Cloud Service to local successfully. Re-enter password to encrypt and upload backup to Mask Cloud Service."
+msgstr "crwdns29584:0crwdne29584:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:43
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:49
+msgid "Decrypt failed, please check password"
+msgstr "crwdns29586:0crwdne29586:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:266
+msgid "Done"
+msgstr "crwdns29588:0crwdne29588:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:150
+msgid "Download backup"
+msgstr "crwdns29590:0crwdne29590:0"
+
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:149
+msgid "Download Backup"
+msgstr "crwdns29592:0crwdne29592:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:97
+msgid "Download link is expired"
+msgstr "crwdns29594:0crwdne29594:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:217
+msgid "Downloading"
+msgstr "crwdns29596:0crwdne29596:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:150
+msgid "E-mail"
+msgstr "crwdns29598:0crwdne29598:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:105
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:69
+msgid "Email"
+msgstr "crwdns29600:0crwdne29600:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:121
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:84
+msgid "Email verification code"
+msgstr "crwdns29602:0crwdne29602:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:91
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:133
+msgid "Encrypting your"
+msgstr "crwdns29604:0crwdne29604:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:214
+msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
+msgstr "crwdns29606:0{HD_PATH_WITHOUT_INDEX_ETHEREUM}crwdne29606:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:113
+msgid "Example: Alice"
+msgstr "crwdns29608:0crwdne29608:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:186
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:153
+msgid "Experience in X"
+msgstr "crwdns29610:0crwdne29610:0"
+
+#: dashboard/components/BackupPreview/index.tsx:192
+msgid "File"
+msgstr "crwdns29612:0crwdne29612:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:87
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:129
+msgid "Generating your"
+msgstr "crwdns29614:0crwdne29614:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:130
+msgid "Got it"
+msgstr "crwdns29616:0crwdne29616:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:194
+msgid "I wrote down the words in the correct order"
+msgstr "crwdns29618:0crwdne29618:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:126
+msgid "identity"
+msgstr "crwdns29620:0crwdne29620:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:113
+msgid "Identity ID"
+msgstr "crwdns29622:0crwdne29622:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:245
+msgid "Import"
+msgstr "crwdns29624:0crwdne29624:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:113
+msgid "Incorrect Backup Password."
+msgstr "crwdns29626:0crwdne29626:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:140
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:245
+msgid "Incorrect cloud backup password, please try again."
+msgstr "crwdns29628:0crwdne29628:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:191
+msgid "Incorrect Keystore Password."
+msgstr "crwdns29630:0crwdne29630:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:127
+msgid "Incorrect Mnemonic Phrase Words."
+msgstr "crwdns29632:0crwdne29632:0"
+
+#: dashboard/hooks/useBackupFormState.ts:40
+#: dashboard/hooks/useBackupFormState.ts:41
+#: dashboard/hooks/useBackupFormState.ts:42
+#: dashboard/hooks/useBackupFormState.ts:43
+#: dashboard/hooks/useBackupFormState.ts:48
+#: dashboard/hooks/useBackupFormState.ts:50
+#: dashboard/hooks/useBackupFormState.ts:51
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:108
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:60
+msgid "Incorrect Password"
+msgstr "crwdns29634:0crwdne29634:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:155
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:131
+msgid "Incorrect Private Key"
+msgstr "crwdns29636:0crwdne29636:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:109
+msgid "Incorrect recovery phrase."
+msgstr "crwdns29638:0crwdne29638:0"
+
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx:91
+msgid "Input your Private Key"
+msgstr "crwdns29640:0crwdne29640:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:87
+#: dashboard/contexts/CloudBackupFormContext.tsx:40
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:47
+msgid "Invalid email address format."
+msgstr "crwdns29642:0crwdne29642:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:109
+msgid "Invalid phone number, please check and try again."
+msgstr "crwdns29644:0crwdne29644:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:71
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:86
+msgid "Invalid verification code."
+msgstr "crwdns29646:0crwdne29646:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:456
+msgid "Kept safely"
+msgstr "crwdns29648:0crwdne29648:0"
+
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:104
+msgid "Keystore password"
+msgstr "crwdns29650:0crwdne29650:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:185
+msgid "Local Backup"
+msgstr "crwdns29652:0crwdne29652:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:137
+msgid "login to your Mask Cloud"
+msgstr "crwdns29654:0crwdne29654:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:174
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:203
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:187
+msgid "Merge data to local database"
+msgstr "crwdns29656:0crwdne29656:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:262
+msgid "Merge to local"
+msgstr "crwdns29658:0crwdne29658:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:116
+msgid "Mnemonic word"
+msgstr "crwdns29660:0crwdne29660:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:151
+msgid "Mobile"
+msgstr "crwdns29662:0crwdne29662:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:67
+msgid "Mobile number"
+msgstr "crwdns29664:0crwdne29664:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:123
+msgid "Mobile verification code"
+msgstr "crwdns29666:0crwdne29666:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:447
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:187
+msgid "Never share 12-word secret recovery phrase with anyone!"
+msgstr "crwdns29668:0crwdne29668:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:233
+msgid "Next"
+msgstr "crwdns29670:0crwdne29670:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:211
+msgid "No backups found"
+msgstr "crwdns29672:0crwdne29672:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:197
+msgid "Open Mask Wallet"
+msgstr "crwdns29674:0crwdne29674:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:283
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:195
+msgid "Overwrite Backup"
+msgstr "crwdns29676:0crwdne29676:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:108
+msgid "Overwrite current backup"
+msgstr "crwdns29678:0crwdne29678:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:229
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:130
+msgid "Payment Password"
+msgstr "crwdns29680:0crwdne29680:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:76
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:77
+msgid "Payment password must be 6 to 20 characters in length."
+msgstr "crwdns29682:0crwdne29682:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:127
+msgid "Payment Password should be between 6 and 20 characters."
+msgstr "crwdns29684:0crwdne29684:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:93
+msgid "Persona"
+msgstr "crwdns29686:0crwdne29686:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:60
+msgid "Persona already exists."
+msgstr "crwdns29688:0crwdne29688:0"
+
+#: dashboard/pages/SignUp/steps/PersonaRecovery.tsx:73
+msgid "Persona created successfully."
+msgstr "crwdns29690:0crwdne29690:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:105
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:52
+msgid "Persona Name"
+msgstr "crwdns29692:0crwdne29692:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:158
+msgid "Persona Recovery Phrase"
+msgstr "crwdns29694:0crwdne29694:0"
+
+#: dashboard/components/BackupPreview/index.tsx:150
+msgid "Personas"
+msgstr "crwdns29696:0crwdne29696:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:81
+msgid "Phone verification code"
+msgstr "crwdns29698:0crwdne29698:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:105
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:153
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:120
+msgid "Pin Mask Network to the toolbar for easier access:"
+msgstr "crwdns29700:0crwdne29700:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:251
+msgid "Please enter cloud backup password to download file."
+msgstr "crwdns29702:0crwdne29702:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:234
+msgid "Please enter the correct mnemonic phrase words, private key, or upload the correct keystore file."
+msgstr "crwdns29704:0crwdne29704:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:137
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:94
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:168
+msgid "Please select the appropriate method to restore your personal data."
+msgstr "crwdns29706:0crwdne29706:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:329
+msgid "Please select the correct words based on the order of the recovery phases."
+msgstr "crwdns29708:0crwdne29708:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:131
+msgid "Please use your frequently used email account or mobile phone for backup."
+msgstr "crwdns29710:0crwdne29710:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:423
+msgid "Please write down or copy these words in the correct way and store them in secure places."
+msgstr "crwdns29712:0crwdne29712:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:225
+msgid "Previous"
+msgstr "crwdns29714:0crwdne29714:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:182
+msgid "Private Key"
+msgstr "crwdns29716:0crwdne29716:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:96
+msgid "Public Key"
+msgstr "crwdns29718:0crwdne29718:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:96
+msgid "ready 🚀"
+msgstr "crwdns29720:0crwdne29720:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:155
+msgid "Recover your data"
+msgstr "crwdns29722:0crwdne29722:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:229
+msgid "Recover your wallet"
+msgstr "crwdns29724:0crwdne29724:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:154
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:95
+msgid "Recovery"
+msgstr "crwdns29726:0crwdne29726:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:177
+msgid "Recovery Phrase"
+msgstr "crwdns29728:0crwdne29728:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:428
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:167
+msgid "Refresh"
+msgstr "crwdns29730:0crwdne29730:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:196
+msgid "Reselect"
+msgstr "crwdns29732:0crwdne29732:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:100
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:97
+msgid "Resend"
+msgstr "crwdns29734:0crwdne29734:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:66
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx:32
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:156
+msgid "Restore"
+msgstr "crwdns29736:0crwdne29736:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:132
+msgid "Restore backup failed, Please try again."
+msgstr "crwdns29738:0crwdne29738:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx:86
+msgid "Restore failed"
+msgstr "crwdns29740:0crwdne29740:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:209
+msgid "Select Address"
+msgstr "crwdns29742:0crwdne29742:0"
+
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:91
+msgid "Select the contents of the backup"
+msgstr "crwdns29744:0crwdne29744:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:101
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:98
+msgid "Send"
+msgstr "crwdns29746:0crwdne29746:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:114
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:198
+msgid "Set Payment Password"
+msgstr "crwdns29748:0crwdne29748:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:116
+msgid "Set payment password successfully."
+msgstr "crwdns29750:0crwdne29750:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:124
+msgid "Set Your Payment Password"
+msgstr "crwdns29752:0crwdne29752:0"
+
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:44
+msgid "Set Your Persona Name"
+msgstr "crwdns29754:0crwdne29754:0"
+
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:48
+msgid "Set your persona name with maximum length of 24 characters"
+msgstr "crwdns29756:0crwdne29756:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:163
+msgid "Sign Up"
+msgstr "crwdns29758:0crwdne29758:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:123
+msgid "Skip"
+msgstr "crwdns29760:0crwdne29760:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:218
+msgid "Step {step}/{step}"
+msgstr "crwdns29762:0{step}crwdnd29762:0{step}crwdne29762:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:238
+msgid "Step {step}/{totalSteps}"
+msgstr "crwdns29764:0{step}crwdnd29764:0{totalSteps}crwdne29764:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:90
+msgid "Step 1/2"
+msgstr "crwdns29766:0crwdne29766:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:118
+msgid "Step 1/3"
+msgstr "crwdns29768:0crwdne29768:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:199
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:149
+msgid "Step 2/2"
+msgstr "crwdns29770:0crwdne29770:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:21
+msgid "Successful"
+msgstr "crwdns29772:0crwdne29772:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:109
+msgid "Sure to overwrite the backups stored on Mask Cloud Service?"
+msgstr "crwdns29774:0crwdne29774:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:147
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:207
+msgid "Switch other account"
+msgstr "crwdns29776:0crwdne29776:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:77
+msgid "Switch other accounts"
+msgstr "crwdns29778:0crwdne29778:0"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx:49
+#: dashboard/contexts/CloudBackupFormContext.tsx:50
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:81
+msgid "The code is incorrect."
+msgstr "crwdns29780:0crwdne29780:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:443
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:180
+msgid "The mnemonic has been copied, please keep it in a safe place."
+msgstr "crwdns29782:0crwdne29782:0"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx:59
+msgid "The phone number is incorrect."
+msgstr "crwdns29784:0crwdne29784:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:85
+msgid "The two entered passwords are inconsistent."
+msgstr "crwdns29786:0crwdne29786:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:239
+msgid "This option will overwrite the existing cloud backup with the local data, and it cannot be recovered anymore."
+msgstr "crwdns29788:0crwdne29788:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:118
+msgid "This QR saves your identity code, please keep it safely."
+msgstr "crwdns29790:0crwdne29790:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:121
+msgid "This QR saves your mnemonic, please keep it safely."
+msgstr "crwdns29792:0crwdne29792:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:177
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:96
+msgid "Unpacking"
+msgstr "crwdns29794:0crwdne29794:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:83
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:95
+msgid "Unsupported data backup"
+msgstr "crwdns29796:0crwdne29796:0"
+
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:58
+msgid "Unsupported key store data"
+msgstr "crwdns29798:0crwdne29798:0"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:99
+msgid "Update X.com Authorization"
+msgstr "crwdns29800:0crwdne29800:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:304
+msgid "Upload backup"
+msgstr "crwdns29802:0crwdne29802:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:191
+msgid "Uploading"
+msgstr "crwdns29804:0crwdne29804:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:326
+msgid "Verification"
+msgstr "crwdns29806:0crwdne29806:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:54
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:51
+msgid "Verification code sent"
+msgstr "crwdns29808:0crwdne29808:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:40
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:56
+msgid "Verification code was sent to your {type}. Please check your {type}."
+msgstr "crwdns29810:0{type}crwdnd29810:0{type}crwdne29810:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:361
+msgid "Verify"
+msgstr "crwdns29812:0crwdne29812:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:84
+msgid "wallet"
+msgstr "crwdns29814:0crwdne29814:0"
+
+#: dashboard/components/BackupPreview/index.tsx:229
+msgid "Wallets ({walletLength})"
+msgstr "crwdns29816:0{walletLength}crwdne29816:0"
+
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:107
+msgid "We are pleased to inform you that the authorization update for X website has been successfully completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
+msgstr "crwdns29818:0crwdne29818:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:134
+msgid "Welcome to Mask Cloud Services"
+msgstr "crwdns29820:0crwdne29820:0"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:84
+msgid "Welcome to use Mask Network"
+msgstr "crwdns29822:0crwdne29822:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:420
+msgid "Write Down Recovery Phrase"
+msgstr "crwdns29824:0crwdne29824:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:345
+msgid "Wrong words selected. Please try again!"
+msgstr "crwdns29826:0crwdne29826:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:137
+msgid "You have successfully backed up your data."
+msgstr "crwdns29828:0crwdne29828:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:25
+msgid "You have successfully verified your cloud password and recovered your backup. To unify backup passwords, do you want to synchronize your cloud password as local backup password?"
+msgstr "crwdns29830:0crwdne29830:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:182
+msgid "You’ve uploaded backup to Mask Cloud Service successfully."
+msgstr "crwdns29832:0crwdne29832:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:161
+msgid "Your payment password encrypts wallet data and is needed for trade confirmations and unlocking. It's securely stored on your device, and we cannot retrieve it. Please remember it."
+msgstr "crwdns29834:0crwdne29834:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
+msgid "Your Wallet is on"
+msgstr "crwdns29836:0crwdne29836:0"
 
