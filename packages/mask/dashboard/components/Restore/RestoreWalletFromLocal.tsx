@@ -3,11 +3,13 @@ import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import { useDashboardTrans } from '../../locales/index.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     uploadedFile: {
@@ -22,8 +24,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface RestoreFromLocalProps {
     onRestore: (keyStoreContent: string, keyStorePassword: string) => Promise<void>
-    setError: (error: string) => void
-    error: string
+    setError: (error: ReactNode) => void
+    error: ReactNode
 }
 
 export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
@@ -31,6 +33,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     setError,
     error,
 }: RestoreFromLocalProps) {
+    const { _ } = useLingui()
     const { classes, theme } = useStyles()
     const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
@@ -52,7 +55,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                 setKeyStoreContent(value)
                 setReadingFile(false)
             } else {
-                showSnackbar(t.create_wallet_key_store_not_support(), { variant: 'error' })
+                showSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
             }
         },
         [t],
@@ -70,7 +73,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                 color="primary"
                 onClick={() => onRestore(keyStoreContent, keyStorePassword)}
                 disabled={disabled}>
-                {t.continue()}
+                <Trans>Continue</Trans>
             </PrimaryButton>,
         )
     }, [t, disabled, keyStoreContent, keyStorePassword])
@@ -89,14 +92,16 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                             </Button>
                         }>
                         <Typography className={classes.desc}>
-                            {readingFile ? t.file_unpacking() : t.file_unpacking_completed()}
+                            {readingFile ?
+                                <Trans>Unpacking</Trans>
+                            :   <Trans>Completed</Trans>}
                         </Typography>
                     </FileFrame>
                     {!readingFile ?
                         <Box mt={4}>
                             <PasswordField
                                 fullWidth
-                                placeholder={t.create_wallet_key_store_password()}
+                                placeholder={_(msg`Keystore password`)}
                                 type="password"
                                 onChange={(e) => {
                                     setKeyStorePassword(e.target.value)

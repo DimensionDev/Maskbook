@@ -1,7 +1,16 @@
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Link, type LinkProps } from '@mui/material'
-import { memo, useCallback, useRef, useState, type MouseEvent, useImperativeHandle, type RefAttributes } from 'react'
+import {
+    memo,
+    useCallback,
+    useRef,
+    useState,
+    type MouseEvent,
+    useImperativeHandle,
+    type RefAttributes,
+    type ReactNode,
+} from 'react'
 import { useCopyToClipboard } from 'react-use'
 import { useSharedTrans } from '../../../index.js'
 
@@ -20,7 +29,7 @@ export interface CopyButtonProps
     title?: string
     text: string
     /** defaults to 'Copied' */
-    successText?: string
+    successText?: ReactNode
     /** stop event propagation and prevent default */
     scoped?: boolean
 }

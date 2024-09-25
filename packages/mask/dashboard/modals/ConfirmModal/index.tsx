@@ -37,10 +37,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmit' | 'onClose'> {
-    title?: string
-    message?: ReactNode | string
-    cancelLabel?: string
-    confirmLabel?: string
+    title?: ReactNode
+    message?: ReactNode
+    cancelLabel?: ReactNode
+    confirmLabel?: ReactNode
     confirmButtonProps?: ActionButtonProps
     cancelButtonProps?: ActionButtonProps
     onConfirm(): void

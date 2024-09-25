@@ -68,7 +68,7 @@ export async function syncLanguages() {
             if (!namespace.includes('.')) {
                 const target = `@masknet/shared-base`
                 code += `import { createI18NBundle } from '${target}'\n`
-                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', ${linguiLanguages.size ? '[languages, linguiLanguages]' : 'languages'})\n`
+                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', ${linguiLanguages.size ? '[languages, linguiLanguages as any]' : 'languages'})\n`
             }
 
             {

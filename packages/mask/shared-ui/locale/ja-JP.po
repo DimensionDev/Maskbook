@@ -18,6 +18,703 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/mask/shared-ui/locale/en-US.po\n"
 "X-Crowdin-File-ID: 944\n"
 
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
+msgid "12-word recovery phrase is used to recover your persona data."
+msgstr "12単語の復元フレーズは、ペルソナデータを回復するために使用されます。"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:88
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:130
+msgid "accounts"
+msgstr "アカウント"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:99
+msgid "Address"
+msgstr "アドレス"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:133
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:107
+msgid "Agree"
+msgstr "同意"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:99
+msgid "Allow us to collect your usage information to help us make improvements."
+msgstr "お客様の利用情報を収集し、改善に役立てます。"
+
+#: dashboard/components/BackupPreview/index.tsx:176
+msgid "Associated Accounts"
+msgstr "関連アカウント"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:138
+msgid "At least 6 characters"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:351
+msgid "Back"
+msgstr "Back"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:219
+msgid "Backup"
+msgstr "バックアップ"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:156
+msgid "Backup downloaded and merged to local failed."
+msgstr "バックアップがダウンロードされ、ローカルに統合されました。"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:152
+msgid "Backup downloaded and merged to local successfully."
+msgstr "バックアップがダウンロードされ、ローカルに正常に統合されました。"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:149
+msgid "Backup Failed"
+msgstr "バックアップ失敗"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:86
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:186
+msgid "Backup password"
+msgstr "バックアップパスワード"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:206
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:238
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:107
+msgid "Backup Password"
+msgstr "バックアップパスワード"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:284
+msgid "Backup to Cloud"
+msgstr "クラウドにバックアップ"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:196
+msgid "Backup to Mask Cloud Service"
+msgstr "マスククラウドサービスにバックアップ"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:33
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:272
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:111
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:130
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:104
+msgid "Cancel"
+msgstr "Cancel"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:16
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:186
+msgid "Cloud Backup"
+msgstr "クラウドバックアップ"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:178
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:97
+msgid "Completed"
+msgstr "完了しました"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:36
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:110
+msgid "Confirm"
+msgstr "確認"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:152
+msgid "Confirm Payment Password"
+msgstr "支払いパスワードを再入力"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:174
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:179
+msgid "Congratulations"
+msgstr "おめでとうございます！"
+
+#: dashboard/components/BackupPreview/index.tsx:184
+msgid "Contacts"
+msgstr "コンタクト"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:79
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:94
+#: dashboard/components/Restore/RestoreFromMnemonic.tsx:42
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx:68
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:155
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:76
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:247
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:175
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:172
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:216
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:130
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:75
+msgid "Continue"
+msgstr "続行"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:204
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:224
+msgid "Create"
+msgstr "作成"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:99
+msgid "Create New Mask Identity"
+msgstr "新規Mask IDを作成"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:102
+msgid "Create your persona to get started"
+msgstr "あなたのペルソナを作成して始めましょう"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:83
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:125
+msgid "Creating your"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:92
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:134
+msgid "data"
+msgstr "データ"
+
 #: popups/pages/Settings/index.tsx:243
 msgid "Data correlation"
 msgstr "データの相関値"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:187
+msgid "Data merged from Mask Cloud Service to local successfully. Re-enter password to encrypt and upload backup to Mask Cloud Service."
+msgstr "マスククラウドサービスからローカルに正常にデータを統合しました。パスワードを再入力すると、バックアップを暗号化してマスククラウドサービスにアップロードできます。"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:43
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:49
+msgid "Decrypt failed, please check password"
+msgstr "復号に失敗しました。パスワードを確認してください。"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:266
+msgid "Done"
+msgstr "完了!"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:150
+msgid "Download backup"
+msgstr "バックアップをダウンロード"
+
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:149
+msgid "Download Backup"
+msgstr "バックアップのダウンロード"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:97
+msgid "Download link is expired"
+msgstr "ダウンロードリンクの期限が切れています"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:217
+msgid "Downloading"
+msgstr "ダウンロード中"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:150
+msgid "E-mail"
+msgstr "メールアドレス"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:105
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:69
+msgid "Email"
+msgstr "メールアドレス"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:121
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:84
+msgid "Email verification code"
+msgstr "電子メール検証コード"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:91
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:133
+msgid "Encrypting your"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:214
+msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:113
+msgid "Example: Alice"
+msgstr "例: アリス(Alice)"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:186
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:153
+msgid "Experience in X"
+msgstr "Twitter での経験"
+
+#: dashboard/components/BackupPreview/index.tsx:192
+msgid "File"
+msgstr "ファイル"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:87
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:129
+msgid "Generating your"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:130
+msgid "Got it"
+msgstr "了解"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:194
+msgid "I wrote down the words in the correct order"
+msgstr "正しい順番で単語を書き留めました"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:126
+msgid "identity"
+msgstr "アイデンティティ"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:113
+msgid "Identity ID"
+msgstr "アイデンティティ ID"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:245
+msgid "Import"
+msgstr "インポート"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:113
+msgid "Incorrect Backup Password."
+msgstr "バックアップパスワードが正しくありません。"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:140
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:245
+msgid "Incorrect cloud backup password, please try again."
+msgstr "クラウドバックアップのパスワードが正しくありません。もう一度やり直してください。"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:191
+msgid "Incorrect Keystore Password."
+msgstr "キーストアのパスワードが正しくありません。"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:127
+msgid "Incorrect Mnemonic Phrase Words."
+msgstr "ニーモニックフレーズが間違っています"
+
+#: dashboard/hooks/useBackupFormState.ts:40
+#: dashboard/hooks/useBackupFormState.ts:41
+#: dashboard/hooks/useBackupFormState.ts:42
+#: dashboard/hooks/useBackupFormState.ts:43
+#: dashboard/hooks/useBackupFormState.ts:48
+#: dashboard/hooks/useBackupFormState.ts:50
+#: dashboard/hooks/useBackupFormState.ts:51
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:108
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:60
+msgid "Incorrect Password"
+msgstr "パスワードが間違っています"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:155
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:131
+msgid "Incorrect Private Key"
+msgstr "IDコードが間違っています"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:109
+msgid "Incorrect recovery phrase."
+msgstr "アイデンティティニーモニックが正しくありません。"
+
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx:91
+msgid "Input your Private Key"
+msgstr "秘密鍵を入力してください"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:87
+#: dashboard/contexts/CloudBackupFormContext.tsx:40
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:47
+msgid "Invalid email address format."
+msgstr "メールアドレスが正しくありません。"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:109
+msgid "Invalid phone number, please check and try again."
+msgstr "電話番号が無効です。確認してもう一度お試しください。"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:71
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:86
+msgid "Invalid verification code."
+msgstr "認証コードが無効です。"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:456
+msgid "Kept safely"
+msgstr "安全に保管されている"
+
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:104
+msgid "Keystore password"
+msgstr "キーストアのパスワード"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:185
+msgid "Local Backup"
+msgstr "ローカルバックアップ"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:137
+msgid "login to your Mask Cloud"
+msgstr "マスククラウドにログインする"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:174
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:203
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:187
+msgid "Merge data to local database"
+msgstr "ローカルデータベースにデータを統合"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:262
+msgid "Merge to local"
+msgstr "ローカルに統合"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:116
+msgid "Mnemonic word"
+msgstr "ニーモニック単語"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:151
+msgid "Mobile"
+msgstr "モバイル"
+
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:67
+msgid "Mobile number"
+msgstr "携帯番号"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:123
+msgid "Mobile verification code"
+msgstr "モバイル認証コード"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:447
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:187
+msgid "Never share 12-word secret recovery phrase with anyone!"
+msgstr "ニーモニックフレーズを保存することを忘れないでください。ウォレットにアクセスする際に必要になります。"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:233
+msgid "Next"
+msgstr "Next"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:211
+msgid "No backups found"
+msgstr "バックアップが見つかりません"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:197
+msgid "Open Mask Wallet"
+msgstr "Maskウォレットを開く"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:283
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:195
+msgid "Overwrite Backup"
+msgstr "バックアップを上書き"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:108
+msgid "Overwrite current backup"
+msgstr "既存のバックアップを上書き"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:229
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:130
+msgid "Payment Password"
+msgstr "支払いパスワードの設定"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:76
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:77
+msgid "Payment password must be 6 to 20 characters in length."
+msgstr "パスワードの長さが正しくありません。"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:127
+msgid "Payment Password should be between 6 and 20 characters."
+msgstr "支払いパスワードは6文字以上20文字以下で設定してください。"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:93
+msgid "Persona"
+msgstr "ペルソナ"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:60
+msgid "Persona already exists."
+msgstr "ペルソナは既に存在します。"
+
+#: dashboard/pages/SignUp/steps/PersonaRecovery.tsx:73
+msgid "Persona created successfully."
+msgstr "正常にペルソナを作成しました"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:105
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:52
+msgid "Persona Name"
+msgstr "ペルソナ名"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:158
+msgid "Persona Recovery Phrase"
+msgstr "ペルソナ回復フレーズ"
+
+#: dashboard/components/BackupPreview/index.tsx:150
+msgid "Personas"
+msgstr "ペルソナ"
+
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:81
+msgid "Phone verification code"
+msgstr "モバイル認証コード"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:105
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:153
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:120
+msgid "Pin Mask Network to the toolbar for easier access:"
+msgstr "Mask Networkをツールバーにピン留めすると、アクセスしやすくなります。"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:251
+msgid "Please enter cloud backup password to download file."
+msgstr "ファイルをダウンロードするには、クラウドバックアップパスワードを入力してください。"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:234
+msgid "Please enter the correct mnemonic phrase words, private key, or upload the correct keystore file."
+msgstr "正しいニーモニックフレーズの単語、秘密キー、または正しいキーストアファイルをアップロードしてください。"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:137
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:94
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:168
+msgid "Please select the appropriate method to restore your personal data."
+msgstr "12単語の復元フレーズは、ペルソナデータを回復するために使用されます。"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:329
+msgid "Please select the correct words based on the order of the recovery phases."
+msgstr "ニーモニックワードを検証します"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:131
+msgid "Please use your frequently used email account or mobile phone for backup."
+msgstr "バックアップには、頻繁に使用する電子メールアカウントまたは携帯電話を使用してください。"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:423
+msgid "Please write down or copy these words in the correct way and store them in secure places."
+msgstr "これらの単語を正しく書き留めるか、コピーして安全な場所に保管してください。"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:225
+msgid "Previous"
+msgstr "前の"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:182
+msgid "Private Key"
+msgstr "秘密鍵"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:96
+msgid "Public Key"
+msgstr "公開キー"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:96
+msgid "ready 🚀"
+msgstr "準備完了🚀"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:155
+msgid "Recover your data"
+msgstr "データを復元する"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:229
+msgid "Recover your wallet"
+msgstr "ウォレットを復元する"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:154
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:95
+msgid "Recovery"
+msgstr "復旧"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:177
+msgid "Recovery Phrase"
+msgstr "復元フレーズ"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:428
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:167
+msgid "Refresh"
+msgstr "更新"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:196
+msgid "Reselect"
+msgstr "選びなおす"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:100
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:97
+msgid "Resend"
+msgstr "再送信"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:66
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx:32
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:156
+msgid "Restore"
+msgstr "復元"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:132
+msgid "Restore backup failed, Please try again."
+msgstr "バックアップの復元に失敗しました。もう一度やり直してください。"
+
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx:86
+msgid "Restore failed"
+msgstr "復元に失敗しました"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:209
+msgid "Select Address"
+msgstr "アドレスを選択する"
+
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx:91
+msgid "Select the contents of the backup"
+msgstr "バックアップの内容を選択します"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:101
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:98
+msgid "Send"
+msgstr "送信"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:114
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:198
+msgid "Set Payment Password"
+msgstr "支払いパスワードの設定"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:116
+msgid "Set payment password successfully."
+msgstr "支払いパスワードを正常に設定しました"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:124
+msgid "Set Your Payment Password"
+msgstr "支払いパスワードを設定"
+
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:44
+msgid "Set Your Persona Name"
+msgstr "ペルソナ名を設定"
+
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:48
+msgid "Set your persona name with maximum length of 24 characters"
+msgstr "あなたのペルソナ名を24文字以内で設定してください"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:163
+msgid "Sign Up"
+msgstr "新規登録"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:123
+msgid "Skip"
+msgstr "スキップ"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:218
+msgid "Step {step}/{step}"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:238
+msgid "Step {step}/{totalSteps}"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:90
+msgid "Step 1/2"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:118
+msgid "Step 1/3"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:199
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:149
+msgid "Step 2/2"
+msgstr ""
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:21
+msgid "Successful"
+msgstr "成功"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:109
+msgid "Sure to overwrite the backups stored on Mask Cloud Service?"
+msgstr "マスククラウドサービスに保存されているバックアップを上書きしますか?"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:147
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:207
+msgid "Switch other account"
+msgstr "他のアカウントを切り替え"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:77
+msgid "Switch other accounts"
+msgstr "他のアカウントを切り替え"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx:49
+#: dashboard/contexts/CloudBackupFormContext.tsx:50
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:81
+msgid "The code is incorrect."
+msgstr "このコードは正しくありません"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:443
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:180
+msgid "The mnemonic has been copied, please keep it in a safe place."
+msgstr "ニーモニックがコピーされました。安全な場所に保管してください。"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx:59
+msgid "The phone number is incorrect."
+msgstr "電話番号が間違っています。"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:85
+msgid "The two entered passwords are inconsistent."
+msgstr "パスワードが一致しません。"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:239
+msgid "This option will overwrite the existing cloud backup with the local data, and it cannot be recovered anymore."
+msgstr "このオプションは、既存のクラウドバックアップをローカルデータで上書きし、復元することはできません。"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:118
+msgid "This QR saves your identity code, please keep it safely."
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:121
+msgid "This QR saves your mnemonic, please keep it safely."
+msgstr "このQRはニーモニックを保存します。安全に保管してください。"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:177
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:96
+msgid "Unpacking"
+msgstr ""
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:83
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:95
+msgid "Unsupported data backup"
+msgstr "サポートされていないバックアップ"
+
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx:58
+msgid "Unsupported key store data"
+msgstr "非対応のキーストアデータ"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:99
+msgid "Update X.com Authorization"
+msgstr "X.com 認証の更新"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:304
+msgid "Upload backup"
+msgstr "バックアップをアップロード"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:191
+msgid "Uploading"
+msgstr "アップロード中"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:326
+msgid "Verification"
+msgstr "認証"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:54
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:51
+msgid "Verification code sent"
+msgstr "認証コードを送信しました"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:40
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:56
+msgid "Verification code was sent to your {type}. Please check your {type}."
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:361
+msgid "Verify"
+msgstr "認証"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:84
+msgid "wallet"
+msgstr "ウォレット"
+
+#: dashboard/components/BackupPreview/index.tsx:229
+msgid "Wallets ({walletLength})"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:107
+msgid "We are pleased to inform you that the authorization update for X website has been successfully completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
+msgstr "Xウェブサイトの認証アップデートが完了しました。これでマスクネットワークの全ての機能を通常通りお楽しみいただけます。今後ともよろしくお願いいたします！"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:134
+msgid "Welcome to Mask Cloud Services"
+msgstr "マスククラウドサービスへようこそ"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:84
+msgid "Welcome to use Mask Network"
+msgstr "Mask Networkへようこそ"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:420
+msgid "Write Down Recovery Phrase"
+msgstr "復元フレーズを書きます"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:345
+msgid "Wrong words selected. Please try again!"
+msgstr "間違った単語が選択されました。もう一度やり直してください！"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:137
+msgid "You have successfully backed up your data."
+msgstr "データのバックアップに成功しました。"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:25
+msgid "You have successfully verified your cloud password and recovered your backup. To unify backup passwords, do you want to synchronize your cloud password as local backup password?"
+msgstr "クラウドパスワードの認証が完了し、バックアップがアップロードされています。バックアップパスワードを統一するために、クラウドのパスワードをローカルのバックアップのパスワードとして同期するかどうかを確認してください。"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:182
+msgid "You’ve uploaded backup to Mask Cloud Service successfully."
+msgstr "マスククラウドサービスにバックアップをアップロードしました。"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:161
+msgid "Your payment password encrypts wallet data and is needed for trade confirmations and unlocking. It's securely stored on your device, and we cannot retrieve it. Please remember it."
+msgstr "支払いパスワードはウォレットデータを暗号化し、取引の確認とロック解除に必要です。 お使いのデバイスに安全に保存されているため、取り戻すことはできません。覚えておいてください。"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
+msgid "Your Wallet is on"
+msgstr ""

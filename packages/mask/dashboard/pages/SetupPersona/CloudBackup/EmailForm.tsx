@@ -1,5 +1,4 @@
 import { memo, useCallback } from 'react'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Controller } from 'react-hook-form'
 import { Box, TextField } from '@mui/material'
@@ -8,6 +7,8 @@ import { BackupAccountType } from '@masknet/shared-base'
 import { Locale, Scenario } from '../../../utils/type.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -17,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const EmailForm = memo(function EmailForm() {
-    const t = useDashboardTrans()
+    const { _ } = useLingui()
     const language = useLanguage()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
@@ -42,13 +43,15 @@ export const EmailForm = memo(function EmailForm() {
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         }).catch((error) => {
             showSnackbar(
-                error.message.includes('SendTemplatedEmail') ? t.cloud_backup_incorrect_email_address() : error.message,
+                error.message.includes('SendTemplatedEmail') ?
+                    <Trans>Invalid email address format.</Trans>
+                :   error.message,
                 { variant: 'error' },
             )
         })
 
         if (response) {
-            showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+            showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
         }
     }, [email, user, language])
 
@@ -63,7 +66,7 @@ export const EmailForm = memo(function EmailForm() {
                         onFocus={() => clearErrors('email')}
                         onBlur={() => trigger('email')}
                         fullWidth
-                        placeholder={t.email()}
+                        placeholder={_(msg`Email`)}
                         type="email"
                         error={!!errors.email?.message}
                         helperText={errors.email?.message}
@@ -78,7 +81,7 @@ export const EmailForm = memo(function EmailForm() {
                         {...field}
                         onFocus={() => clearErrors('code')}
                         fullWidth
-                        placeholder={t.cloud_backup_email_verification_code()}
+                        placeholder={_(msg`Email verification code`)}
                         error={!!errors.code?.message}
                         helperText={errors.code?.message}
                         InputProps={{
@@ -94,8 +97,8 @@ export const EmailForm = memo(function EmailForm() {
                                     variant="text"
                                     sx={{ px: 0 }}
                                     onClick={handleSendVerificationCode}
-                                    repeatContent={t.resend()}>
-                                    {t.send()}
+                                    repeatContent={<Trans>Resend</Trans>}>
+                                    <Trans>Send</Trans>
                                 </CountdownButton>
                             ),
                         }}

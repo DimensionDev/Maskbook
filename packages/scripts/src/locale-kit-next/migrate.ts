@@ -62,8 +62,8 @@ export async function migrate() {
         suppressDiagnosticEvents: true,
     })
 
-    const cwd = new URL('../../../plugins/Web3Profile/', import.meta.url)
-    const inputURL = new URL('./src/locales/i18n_generated.ts', cwd)
+    const cwd = new URL('../../../mask/', import.meta.url)
+    const inputURL = new URL('./dashboard/locales/i18n_generated.ts', cwd)
     const json = JSON.parse(await readFile(new URL('./en-US.json', inputURL), 'utf-8'))
     processFile(inputURL, json)
 
@@ -73,7 +73,7 @@ export async function migrate() {
         ['ja-JP', 'ko-KR', 'zh-CN', 'zh-TW'].map(async (lang) => {
             const langFile = JSON.parse(await readFile(new URL('./' + lang + '.json', inputURL), 'utf-8'))
 
-            const poFilePath = new URL('../locale/' + lang + '.po', inputURL)
+            const poFilePath = new URL('../../shared-ui/locale/' + lang + '.po', inputURL)
             const poFile = await readFile(poFilePath, 'utf-8')
 
             const nextPoFile: string[] = []

@@ -10,6 +10,8 @@ import { PopupRoutes } from '@masknet/shared-base'
 
 import Services from '#services'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -68,6 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function Onboarding() {
     const t = useDashboardTrans()
     const { classes } = useStyles()
+    const { _ } = useLingui()
 
     const onOpenPopupWallet = useCallback(async () => {
         await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {})
@@ -77,20 +80,20 @@ export const Component = memo(function Onboarding() {
     const words = useMemo(() => {
         return [
             <Typography key="identity">
-                {t.create_wallet_onboarding_creating_identity()}
-                {t.onboarding_wallet()}
+                {_(msg`Creating your `)}
+                {_(msg`wallet`)}
             </Typography>,
             <Typography key="account">
-                {t.create_wallet_onboarding_generating_accounts()}
-                {t.accounts()}
+                {_(msg`Generating your `)}
+                {_(msg`accounts`)}
             </Typography>,
             <Typography key="data">
-                {t.create_wallet_onboarding_encrypting_data()}
-                {t.data()}
+                {_(msg`Encrypting your `)}
+                {_(msg`data`)}
             </Typography>,
             <Typography key="ready">
-                {t.create_wallet_onboarding_ready()}
-                {t.ready()}
+                {_(msg`Your Wallet is on `)}
+                {_(msg`ready 🚀`)}
             </Typography>,
         ]
     }, [t])
@@ -98,7 +101,9 @@ export const Component = memo(function Onboarding() {
     return (
         <>
             <Box className={classes.card}>
-                <Typography className={classes.pin}>{t.persona_onboarding_pin_tips()}</Typography>
+                <Typography className={classes.pin}>
+                    <Trans>Pin Mask Network to the toolbar for easier access:</Trans>
+                </Typography>
                 <Box mt={2.25} display="flex" alignItems="center">
                     <Box className={classes.skeleton} />
                     <Box className={classes.plugins}>
@@ -121,7 +126,9 @@ export const Component = memo(function Onboarding() {
             </Box>
             <SetupFrameController>
                 <PrimaryButton onClick={onOpenPopupWallet} size="large" width={'228px'}>
-                    <Typography fontWeight={700}>{t.create_wallet_onboarding_got_it()}</Typography>
+                    <Typography fontWeight={700}>
+                        <Trans>Got it</Trans>
+                    </Typography>
                 </PrimaryButton>
             </SetupFrameController>
         </>

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { DashboardTrans, useDashboardTrans } from '../../../locales/i18n_generated.js'
+import { DashboardTrans } from '../../../locales/i18n_generated.js'
 import Services from '#services'
 import { useAsync } from 'react-use'
 import { sortBy } from 'lodash-es'
@@ -14,6 +14,7 @@ import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -77,7 +78,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Permission() {
-    const t = useDashboardTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
 
@@ -96,7 +96,7 @@ export const Component = memo(function Permission() {
     return (
         <>
             <Typography variant="h1" className={classes.title}>
-                {t.update_authorization_title()}
+                <Trans>Update X.com Authorization</Trans>
             </Typography>
 
             <article>
@@ -127,10 +127,10 @@ export const Component = memo(function Permission() {
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <SecondaryButton width="125px" size="large" onClick={() => window.close()}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </SecondaryButton>
                     <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
-                        {t.agree()}
+                        <Trans>Agree</Trans>
                     </PrimaryButton>
                 </div>
                 <Typography className={classes.policy}>

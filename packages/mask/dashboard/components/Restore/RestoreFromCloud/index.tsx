@@ -5,7 +5,6 @@ import { Box } from '@mui/material'
 import { DashboardRoutes, BackupAccountType } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
-import { useDashboardTrans } from '../../../locales/index.js'
 
 import { ConfirmSynchronizePasswordDialog } from '../ConfirmSynchronizePasswordDialog.js'
 import { usePersonaRecovery } from '../../../contexts/index.js'
@@ -17,20 +16,20 @@ import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { BackupPreview } from '../../BackupPreview/index.js'
 import { PersonaContext } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 interface RestoreProps {
     onRestore: () => Promise<void>
 }
 
 const Restore = memo(function Restore({ onRestore }: RestoreProps) {
-    const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
     const { state } = RestoreContext.useContainer()
 
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton size="large" color="primary" onClick={onRestore} loading={state.loading}>
-                {t.restore()}
+                <Trans>Restore</Trans>
             </PrimaryButton>,
         )
     }, [onRestore, state.loading])
@@ -41,7 +40,6 @@ const Restore = memo(function Restore({ onRestore }: RestoreProps) {
 })
 
 const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
-    const t = useDashboardTrans()
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = UserContext.useContainer()
@@ -85,7 +83,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
                 replace: true,
             })
         } catch {
-            showSnackbar(t.sign_in_account_cloud_restore_failed(), { variant: 'error' })
+            showSnackbar(<Trans>Restore failed</Trans>, { variant: 'error' })
         }
     }, [user, backupSummary])
 
