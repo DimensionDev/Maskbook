@@ -11,14 +11,15 @@ type OKXResponse<T> = {
     data: T
 }
 
-export type SupportedChainResponse = OKXResponse<
-    Array<{
-        chainId: number
-        chainName: string
-        /** would be empty string for non-ethereum chains */
-        dexTokenApproveAddress: string
-    }>
->
+interface ChainDex {
+    /** API response string, we convert to number */
+    chainId: number
+    chainName: string
+    /** would be empty string for non-ethereum chains */
+    dexTokenApproveAddress: string
+}
+
+export type SupportedChainResponse = OKXResponse<ChainDex[]>
 
 export type GetTokensResponse = OKXResponse<
     Array<{

@@ -269,6 +269,19 @@ export class OKX {
         return res
     }
 
+    static async getBridgeSupportedChain(chainId?: number) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
+            chainId,
+        })
+        const res = await fetchFromOKX<SupportedChainResponse>(url)
+        if (res.code === 0) {
+            res.data.forEach((item) => {
+                item.chainId = +item.chainId
+            })
+        }
+        return res
+    }
+
     static async bridge(options: BridgeOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', {
             ...options,

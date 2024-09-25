@@ -3,13 +3,7 @@ import { Icons } from '@masknet/icons'
 import { LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
-import {
-    useAccount,
-    useNativeTokenPrice,
-    useNetwork,
-    useNetworkDescriptor,
-    useWeb3Connection,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     dividedBy,
@@ -37,6 +31,8 @@ import { useBridgable } from '../hooks/useBridgable.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
+import { useQuery } from '@tanstack/react-query'
+import { OKX } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -137,7 +133,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         marginLeft: -8,
         marginRight: theme.spacing(1),
-        boxShadow: '0 0 0 1px #fff',
+        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
     },
     link: {
         cursor: 'pointer',
@@ -183,7 +179,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         nativeToken,
         fromToken,
         toToken,
-        chainId,
         isAutoSlippage,
         slippage,
         bridgeQuote: quote,
@@ -195,7 +190,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const toChainId = toToken?.chainId as ChainId
     const fromNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, fromChainId)
     const toNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, toChainId)
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
     const decimals = fromToken?.decimals
     const amount = useMemo(
         () => (inputAmount && decimals ? rightShift(inputAmount, decimals).toFixed(0) : ''),
@@ -210,7 +204,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toFixed(),
         userWalletAddress: account,
     })
-    const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
+    const { gasFee, gasCost, gasLimit, gasConfig } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
     const [expand, setExpand] = useState(false)
     const firstData = bridgeData?.data?.[0]
@@ -259,7 +253,14 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const spender = transaction?.to
+    const { data: spender } = useQuery({
+        queryKey: ['okx-bridge', 'supported-chains'],
+        queryFn: async () => OKX.getBridgeSupportedChain(),
+        select(res) {
+            if (res.code !== 0) return undefined
+            return res.data.find((x) => x.chainId === fromChainId)?.dexTokenApproveAddress
+        },
+    })
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
@@ -297,6 +298,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                     className={classes.tokenIcon}
                                     chainId={fromChainId}
                                     address={fromToken?.address || ''}
+                                    disableBadge
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText
@@ -317,6 +319,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                     className={classes.tokenIcon}
                                     chainId={toChainId}
                                     address={toToken?.address || ''}
+                                    disableBadge
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText loading={!toToken} className={cx(classes.toToken, classes.value)}>
@@ -472,10 +475,6 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 title: t`Bridge`,
                                 variant: 'error',
                             })
-                            const estimatedSeconds =
-                                gasOptions ?
-                                    gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
-                                :   networkDescriptor?.averageBlockDelay
                             await addTransaction(account, {
                                 kind: 'bridge',
                                 hash,
@@ -500,7 +499,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 timestamp: Date.now(),
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: transaction.to,
-                                estimatedTime: (estimatedSeconds ?? 10) * 1000,
+                                estimatedTime: router?.estimatedTime ? +router.estimatedTime : 0,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })

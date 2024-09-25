@@ -5,6 +5,7 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
+import { OKX } from '@masknet/web3-providers'
 import {
     dividedBy,
     formatBalance,
@@ -16,6 +17,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -244,7 +246,14 @@ export const Confirm = memo(function Confirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const spender = transaction?.to
+    const { data: spender } = useQuery({
+        queryKey: ['okx-swap', 'supported-chains'],
+        queryFn: async () => OKX.getSupportedChains(),
+        select(chains) {
+            return chains?.find((x) => x.chainId === chainId)?.dexTokenApproveAddress
+        },
+    })
+
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
