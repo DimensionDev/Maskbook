@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:12\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -53,7 +53,7 @@ msgstr "NFT のアバター設定"
 #: src/Application/RouterDialog.tsx:35
 #: src/SiteAdaptor/NFTAvatarButton.tsx:46
 msgid "NFT PFP"
-msgstr "NFT PFP"
+msgstr ""
 
 #: src/SiteAdaptor/NFTAvatar.tsx:195
 msgid "No collectible found."
@@ -98,3 +98,4 @@ msgstr "NFTアバターを更新しました！"
 #: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr "ウォレット"
+
