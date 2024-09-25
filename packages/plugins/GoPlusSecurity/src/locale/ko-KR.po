@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -95,7 +95,7 @@ msgstr "안녕하세요 유저님,"
 
 #: src/SiteAdaptor/components/Footer.tsx:24
 msgid "Go+"
-msgstr "Go+"
+msgstr ""
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:139
 msgid "High Risk"
@@ -127,7 +127,7 @@ msgstr "토큰 컨트랙트 주소를 입력하세요."
 
 #: src/SiteAdaptor/components/Footer.tsx:17
 msgid "Powered by"
-msgstr "Powered by"
+msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:9
 msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
@@ -184,3 +184,4 @@ msgstr "Explorer에서 보기"
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:61
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
+
