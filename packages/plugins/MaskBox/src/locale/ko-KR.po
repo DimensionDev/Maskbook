@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -32,7 +32,7 @@ msgstr "아티클"
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:316
 msgid "by"
-msgstr "by"
+msgstr ""
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:330
 msgid "Closed"
@@ -65,7 +65,7 @@ msgstr "로딩 실패"
 
 #: src/SiteAdaptor/index.tsx:35
 msgid "MaskBox"
-msgstr "MaskBox"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:55
 msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
@@ -78,4 +78,5 @@ msgstr "다시 로드"
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:294
 msgid "Solid:"
-msgstr "Solid:"
+msgstr ""
+
