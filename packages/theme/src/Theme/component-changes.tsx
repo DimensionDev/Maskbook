@@ -20,7 +20,6 @@ import {
     inputAdornmentClasses,
 } from '@mui/material'
 import type { MaskColor } from './colors.js'
-import { isDomainOrSubdomainOf } from '@masknet/shared-base'
 
 type ThemeOverride = (mode: PaletteMode, colors: MaskColor) => ThemeOptions
 // this override extends the mui theme and cannot fit ThemeOptions
@@ -1133,19 +1132,3 @@ export const LinearProgress: ThemeOverride = (mode, colors) => ({
         },
     },
 })
-
-export const Modal: ThemeOverride = (mode, colors) => {
-    let needHTMLBeTheScrollContainer = false
-    try {
-        needHTMLBeTheScrollContainer =
-            document.documentElement &&
-            (isDomainOrSubdomainOf(location.href, 'twitter.com') || isDomainOrSubdomainOf(location.href, 'x.com'))
-    } catch {}
-    return {
-        components: {
-            MuiModal: {
-                defaultProps: { scrollContainer: needHTMLBeTheScrollContainer ? document.documentElement : undefined },
-            },
-        },
-    }
-}
