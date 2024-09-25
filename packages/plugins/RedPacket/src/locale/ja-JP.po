@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -23,7 +23,7 @@ msgstr ""
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:225
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx:199
 msgid "{0} (UTC+8)"
-msgstr "{0} (UTC+8)"
+msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx:426
 msgid "ALL ({0} NFT)"
@@ -281,7 +281,7 @@ msgstr "ラッキードロップ"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:220
 msgid "masknetwork"
-msgstr "masknetwork"
+msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:364
 msgid "Message"
@@ -304,7 +304,7 @@ msgstr "NFT ホルダー"
 
 #: src/SiteAdaptor/RedPacketDialog.tsx:311
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:403
 msgid "No"
@@ -347,7 +347,7 @@ msgstr "ランダム金額"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:220
 msgid "realMaskNetwork"
-msgstr "realMaskNetwork"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:405
 msgid "Received"
@@ -538,3 +538,4 @@ msgstr ""
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
 msgid "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends."
 msgstr "まだNFTラッキードロップを作成していません。友達とラッキーを共有してみてください。"
+
