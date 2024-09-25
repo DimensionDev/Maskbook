@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -42,7 +42,7 @@ msgstr "現在の結果"
 
 #: src/SiteAdaptor/index.tsx:77
 msgid "DAO"
-msgstr "DAO"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
 msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
@@ -70,7 +70,7 @@ msgstr "情報"
 
 #: src/SiteAdaptor/InformationCard.tsx:114
 msgid "IPFS"
-msgstr "IPFS"
+msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
 msgid "Join"
@@ -123,7 +123,7 @@ msgstr "結果"
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
 msgid "Snapshot"
-msgstr "Snapshot"
+msgstr ""
 
 #: src/SiteAdaptor/SpaceMenu.tsx:108
 msgid "Space"
@@ -139,7 +139,7 @@ msgstr "開始時刻 {0}"
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
-#~ msgstr "ストラテジー"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"
@@ -172,3 +172,4 @@ msgstr "あなた"
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "あなたの投票力"
+
