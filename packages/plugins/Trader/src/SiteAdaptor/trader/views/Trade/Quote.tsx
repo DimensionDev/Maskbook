@@ -7,7 +7,7 @@ import { dividedBy, formatCompact, leftShift } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
+import { bridges, DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
 import { useSwap } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 
@@ -44,6 +44,21 @@ const useStyles = makeStyles()((theme) => ({
     rotate: {
         transform: 'rotate(180deg)',
     },
+    bestRoute: {
+        display: 'inline-flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.5),
+    },
+    bridgeName: {
+        fontSize: 14,
+    },
+    bestTag: {
+        backgroundColor: theme.palette.maskColor.success,
+        borderRadius: 4,
+        lineHeight: '18px',
+        fontSize: 14,
+        padding: '2px 6px',
+    },
 }))
 
 interface QuoteProps extends BoxProps {
@@ -52,7 +67,7 @@ interface QuoteProps extends BoxProps {
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
-    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode } = useSwap()
+    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode, bridgeQuote } = useSwap()
     const isSwap = mode === 'swap'
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
@@ -76,6 +91,8 @@ export function Quote({ quote, ...props }: QuoteProps) {
             <Icons.Cached size={16} color={theme.palette.maskColor.main} onClick={() => setForwardCompare((v) => !v)} />
         </>
     )
+
+    const bestRouter = isSwap ? undefined : bridgeQuote?.routerList[0]
 
     return (
         <Box {...props} className={cx(classes.quote, props.className)}>
@@ -144,6 +161,21 @@ export function Quote({ quote, ...props }: QuoteProps) {
                                     { pathname: RoutePaths.QuoteRoute, search: '?mode=swap' }
                                 :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
                             }>
+                            {!isSwap && bestRouter ?
+                                <span className={classes.bestRoute}>
+                                    <img
+                                        src={bridges.find((x) => x.id === bestRouter.router.bridgeId)?.logoUrl}
+                                        width={16}
+                                        height={16}
+                                    />
+                                    <Typography component="span" className={classes.bridgeName}>
+                                        {bestRouter.router.bridgeName}
+                                    </Typography>
+                                    <Typography component="span" className={classes.bestTag}>
+                                        <Trans>Overall Best</Trans>
+                                    </Typography>
+                                </span>
+                            :   null}
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>
