@@ -32,10 +32,6 @@ export interface Token {
 export interface OkxBaseTransaction {
     hash: string
     timestamp: number
-}
-export interface OkxSwapTransaction extends OkxBaseTransaction {
-    kind: 'swap'
-    chainId: number
     fromToken: Token
     fromTokenAmount: string | undefined
     toToken: Token
@@ -43,6 +39,10 @@ export interface OkxSwapTransaction extends OkxBaseTransaction {
     transactionFee: string
     gasLimit: string
     gasPrice: string
+}
+export interface OkxSwapTransaction extends OkxBaseTransaction {
+    kind: 'swap'
+    chainId: number
     dexContractAddress: string
     estimatedTime: number
 }
@@ -51,13 +51,6 @@ export interface OkxBridgeTransaction extends OkxBaseTransaction {
     kind: 'bridge'
     fromChainId: number
     toChainId: number
-    fromToken: Token
-    fromTokenAmount: string | undefined
-    toToken: Token
-    toTokenAmount: string | undefined
-    transactionFee: string
-    gasLimit: string
-    gasPrice: string
     dexContractAddress: string
     estimatedTime: number
 }

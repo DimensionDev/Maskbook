@@ -12,6 +12,8 @@ import type {
     GetBridgeQuoteOptions,
     GetBridgeQuoteResponse,
     GetBridgeResponse,
+    GetBridgeStatusOptions,
+    GetBridgeStatusResponse,
     GetLiquidityResponse,
     GetQuotesOptions,
     GetQuotesResponse,
@@ -24,6 +26,11 @@ import type {
 
 /** request okx official API, and normalize the code */
 function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
+    if (process.env.NODE_ENV === 'development') {
+        if (typeof input === 'string' && input.includes('0x00000')) {
+            console.warn('Do you forget to convert to okx native address?', input)
+        }
+    }
     return fetchJSON<T>(input, init).then(normalizeCode)
 }
 
@@ -241,20 +248,61 @@ export class OKX {
             OKX.getTokenPrice(options.fromTokenAddress, options.fromChainId),
             OKX.getTokenPrice(options.toTokenAddress, options.toChainId),
         ])
-        // Patch tokenUnitPrice's and toTokenAmount
+        // Patch data
         res.data.forEach((quote) => {
             quote.fromToken.tokenUnitPrice = fromTokenPrice
             quote.toToken.tokenUnitPrice = toTokenPrice
             quote.toTokenAmount = quote.routerList[0]?.toTokenAmount
             quote.fromChainId = +quote.fromChainId
             quote.toChainId = +quote.fromChainId
+            quote.routerList.forEach((router) => {
+                router.router.crossChainFeeTokenAddress = fromOkxNativeAddress(router.router.crossChainFeeTokenAddress)
+                ;[...router.fromDexRouterList, ...router.toDexRouterList].forEach((dexRouter) => {
+                    dexRouter.subRouterList.forEach((subRouter) => {
+                        subRouter.fromToken.tokenContractAddress = fromOkxNativeAddress(
+                            subRouter.fromToken.tokenContractAddress,
+                        )
+                    })
+                })
+            })
         })
         return res
     }
 
+    static async getBridgeSupportedChain(chainId?: number) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
+            chainId,
+        })
+        const res = await fetchFromOKX<SupportedChainResponse>(url)
+        if (res.code === 0) {
+            res.data.forEach((item) => {
+                item.chainId = +item.chainId
+            })
+        }
+        return res
+    }
+
     static async bridge(options: BridgeOptions) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', options)
+        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/build-tx', {
+            ...options,
+            fromTokenAddress: toOkxNativeAddress(options.fromTokenAddress),
+            toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
+        })
         const res = await fetchFromOKX<GetBridgeResponse>(url)
         return res
+    }
+
+    static async getBridgeStatus(options: GetBridgeStatusOptions) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/status', options)
+        const res = await fetchFromOKX<GetBridgeStatusResponse>(url)
+        // Patch data
+        if (res.code === 0 && res.data.length) {
+            res.data.forEach((record) => {
+                record.fromChainId = +record.fromChainId
+                record.toChainId = record.toChainId ? +record.toChainId : 0
+            })
+            return res.data[0]
+        }
+        return null
     }
 }

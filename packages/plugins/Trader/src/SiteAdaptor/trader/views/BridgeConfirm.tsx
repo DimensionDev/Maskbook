@@ -1,15 +1,9 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
+import { LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
-import {
-    useAccount,
-    useNativeTokenPrice,
-    useNetwork,
-    useNetworkDescriptor,
-    useWeb3Connection,
-} from '@masknet/web3-hooks-base'
+import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     dividedBy,
@@ -36,6 +30,9 @@ import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useBridgable } from '../hooks/useBridgable.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
+import { CoinIcon } from '../../components/CoinIcon.js'
+import { useQuery } from '@tanstack/react-query'
+import { OKX } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -136,7 +133,7 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: '50%',
         marginLeft: -8,
         marginRight: theme.spacing(1),
-        boxShadow: '0 0 0 1px #fff',
+        boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
     },
     link: {
         cursor: 'pointer',
@@ -182,41 +179,38 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         nativeToken,
         fromToken,
         toToken,
-        chainId,
         isAutoSlippage,
         slippage,
-        quote,
-        bridgeQuote,
+        bridgeQuote: quote,
         isQuoteStale,
         updateQuote,
     } = useSwap()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const fromNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, fromToken?.chainId as ChainId)
-    const toNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, toToken?.chainId as ChainId)
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const fromChainId = fromToken?.chainId as ChainId
+    const toChainId = toToken?.chainId as ChainId
+    const fromNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, fromChainId)
+    const toNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, toChainId)
     const decimals = fromToken?.decimals
     const amount = useMemo(
         () => (inputAmount && decimals ? rightShift(inputAmount, decimals).toFixed(0) : ''),
         [inputAmount, decimals],
     )
     const { data: bridgeData, isLoading } = useBridgeData({
-        fromChainId: fromToken?.chainId as ChainId,
-        toChainId: toToken?.chainId as ChainId,
+        fromChainId,
+        toChainId,
         amount,
         fromTokenAddress: fromToken?.address,
         toTokenAddress: toToken?.address,
-        slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toString(),
+        slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toFixed(),
         userWalletAddress: account,
     })
-    const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
+    const { gasFee, gasCost, gasLimit, gasConfig } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
     const [expand, setExpand] = useState(false)
-    const transaction = bridgeData?.data[0]?.tx
-    const fromToken_ = fromToken
-    const fromTokenAmount = bridgeData?.data[0].fromTokenAmount
-    const toToken_ = toToken
-
-    const toTokenAmount = bridgeData?.data[0].toTokenAmount
+    const firstData = bridgeData?.data?.[0]
+    const transaction = firstData?.tx
+    const fromTokenAmount = firstData?.fromTokenAmount
+    const toTokenAmount = firstData?.toTokenAmount
 
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
@@ -241,7 +235,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         :   null
 
     const [isBridgable, errorMessage] = useBridgable()
-    const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+
+    const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
         if (!transaction?.data) return
         return Web3.sendTransaction({
@@ -256,9 +251,16 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
         })
-    }, [transaction, account, gasConfig])
+    }, [transaction, account, gasConfig, Web3])
 
-    const spender = transaction?.to
+    const { data: spender } = useQuery({
+        queryKey: ['okx-bridge', 'supported-chains'],
+        queryFn: async () => OKX.getBridgeSupportedChain(),
+        select(res) {
+            if (res.code !== 0) return undefined
+            return res.data.find((x) => x.chainId === fromChainId)?.dexTokenApproveAddress
+        },
+    })
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
@@ -268,19 +270,20 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const { showSnackbar } = useCustomSnackbar()
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-        chainId: toNetwork?.chainId,
+        chainId: toChainId,
     })
-    const toChainNetworkFee = bridgeQuote?.routerList[0]?.toChainNetworkFee
+    const toChainNetworkFee = quote?.routerList[0]?.toChainNetworkFee
     const toNetworkFeeValue = leftShift(toChainNetworkFee ?? 0, toNetwork?.nativeCurrency.decimals ?? 0)
         .times(toChainNativeTokenPrice ?? 0)
         .toFixed(2)
-    const bridge = bridgeQuote?.routerList[0]
+    const bridge = quote?.routerList[0]
     const router = bridge?.router
     const bridgeFee = router?.crossChainFee
-    const bridgeFeeToken = useToken(fromNetwork?.chainId, router?.crossChainFeeTokenAddress)
-    const { data: bridgeFeeTokenPrice } = useTokenPrice(fromNetwork?.chainId, router?.crossChainFeeTokenAddress)
+    const bridgeFeeToken = useToken(fromChainId, router?.crossChainFeeTokenAddress)
+    const { data: bridgeFeeTokenPrice } = useTokenPrice(fromChainId, router?.crossChainFeeTokenAddress)
     const bridgeFeeValue = multipliedBy(bridgeFee ?? 0, bridgeFeeTokenPrice ?? 0).toFixed(2)
 
+    const showStale = isQuoteStale && !isSending && !isApproving
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -291,18 +294,17 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 <Trans>From</Trans>
                             </Typography>
                             <div className={classes.tokenInfo}>
-                                <TokenIcon
+                                <CoinIcon
                                     className={classes.tokenIcon}
-                                    chainId={fromToken?.chainId}
+                                    chainId={fromChainId}
                                     address={fromToken?.address || ''}
-                                    logoURL={fromToken?.logoURL}
+                                    disableBadge
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText
-                                        loading={!fromToken_}
+                                        loading={!fromToken}
                                         className={cx(classes.fromToken, classes.value)}>
-                                        -{formatBalance(fromTokenAmount, fromToken_?.decimals || 0)}{' '}
-                                        {fromToken_?.symbol}
+                                        -{formatBalance(fromTokenAmount, fromToken?.decimals || 0)} {fromToken?.symbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{fromNetwork?.name}</Typography>
                                 </div>
@@ -313,15 +315,15 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 <Trans>To</Trans>
                             </Typography>
                             <div className={classes.tokenInfo}>
-                                <TokenIcon
+                                <CoinIcon
                                     className={classes.tokenIcon}
-                                    chainId={toToken?.chainId}
+                                    chainId={toChainId}
                                     address={toToken?.address || ''}
-                                    logoURL={toToken?.logoURL}
+                                    disableBadge
                                 />
                                 <div className={classes.tokenValue}>
-                                    <ProgressiveText loading={!toToken_} className={cx(classes.toToken, classes.value)}>
-                                        +{formatBalance(toTokenAmount, toToken_?.decimals || 0)} {toToken_?.symbol}
+                                    <ProgressiveText loading={!toToken} className={cx(classes.toToken, classes.value)}>
+                                        +{formatBalance(toTokenAmount, toToken?.decimals || 0)} {toToken?.symbol}
                                     </ProgressiveText>
                                     <Typography className={classes.network}>{toNetwork?.name}</Typography>
                                 </div>
@@ -335,15 +337,11 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                             <Trans>Network</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            <NetworkIcon
-                                pluginID={NetworkPluginID.PLUGIN_EVM}
-                                chainId={fromToken?.chainId as ChainId}
-                                size={16}
-                            />
+                            <NetworkIcon pluginID={NetworkPluginID.PLUGIN_EVM} chainId={fromChainId} size={16} />
                             <NetworkIcon
                                 className={classes.toChainIcon}
                                 pluginID={NetworkPluginID.PLUGIN_EVM}
-                                chainId={toToken?.chainId as ChainId}
+                                chainId={toChainId}
                                 size={16}
                             />
                             <Trans>
@@ -353,7 +351,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{fromNetwork?.shortName} fee</Trans>
+                            <Trans>{fromNetwork?.name} fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
@@ -382,7 +380,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{toNetwork?.shortName} fee</Trans>
+                            <Trans>{toNetwork?.name} fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
@@ -393,7 +391,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {toChainNetworkFee ?
-                                `${formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)} MATIC $(${toNetworkFeeValue})`
+                                `${formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)} ${toNetwork?.nativeCurrency.symbol ?? 'ETH'} $(${toNetworkFeeValue})`
                             :   '--'}
                         </Typography>
                     </div>
@@ -442,13 +440,13 @@ than estimated, and any unused funds will remain in the original address.`}>
                     {expand ?
                         <Typography className={classes.data}>{transaction?.data}</Typography>
                     :   null}
-                    {isQuoteStale && !isSending ?
+                    {showStale ?
                         <Warning description={t`Quote expired. Update to receive a new quote.`} />
                     :   null}
                 </div>
             </div>
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
-                {isQuoteStale && !isSending ?
+                {showStale ?
                     <ActionButton
                         fullWidth
                         onClick={async () => {
@@ -477,17 +475,13 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 title: t`Bridge`,
                                 variant: 'error',
                             })
-                            const estimatedSeconds =
-                                gasOptions ?
-                                    gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
-                                :   networkDescriptor?.averageBlockDelay
                             await addTransaction(account, {
                                 kind: 'bridge',
                                 hash,
-                                fromChainId: fromNetwork?.chainId as ChainId,
-                                toChainId: fromNetwork?.chainId as ChainId,
+                                fromChainId,
+                                toChainId,
                                 fromToken: {
-                                    chainId,
+                                    chainId: fromChainId,
                                     decimals: +fromToken.decimals,
                                     contractAddress: fromToken.address,
                                     symbol: fromToken.symbol,
@@ -495,7 +489,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 },
                                 fromTokenAmount,
                                 toToken: {
-                                    chainId,
+                                    chainId: toChainId,
                                     decimals: +toToken.decimals,
                                     contractAddress: toToken.address,
                                     symbol: toToken.symbol,
@@ -505,11 +499,11 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 timestamp: Date.now(),
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: transaction.to,
-                                estimatedTime: (estimatedSeconds ?? 10) * 1000,
+                                estimatedTime: router?.estimatedTime ? +router.estimatedTime : 0,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
-                            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
+                            const url = urlcat(RoutePaths.Transaction, { hash, chainId: fromChainId, mode })
                             navigate(url)
                         }}>
                         {errorMessage ??

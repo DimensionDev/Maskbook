@@ -11,14 +11,15 @@ type OKXResponse<T> = {
     data: T
 }
 
-export type SupportedChainResponse = OKXResponse<
-    Array<{
-        chainId: number
-        chainName: string
-        /** would be empty string for non-ethereum chains */
-        dexTokenApproveAddress: string
-    }>
->
+interface ChainDex {
+    /** API response string, we convert to number */
+    chainId: number
+    chainName: string
+    /** would be empty string for non-ethereum chains */
+    dexTokenApproveAddress: string
+}
+
+export type SupportedChainResponse = OKXResponse<ChainDex[]>
 
 export type GetTokensResponse = OKXResponse<
     Array<{
@@ -512,3 +513,52 @@ export type GetBridgeResponse = OKXResponse<
         randomKeyAccount?: string[]
     }>
 >
+
+export interface GetBridgeStatusOptions {
+    chainId?: number
+    hash: string
+}
+
+export interface BridgeStatus {
+    bridgeHash: string
+    crossChainFee: {
+        symbol: string
+        address: string
+        amount: string
+    } | null
+    crossChainInfo: {
+        memo?: string
+    } | null
+    destinationChainGasfee: string
+    /**
+     * WAITING (Order processing)
+     * FROM_SUCCESS (Source swap success)
+     * FROM_FAILURE (Source swap failure)
+     * BRIDGE_PENDING (Bridge pending)
+     * BRIDGE_SUCCESS (Bridge success)
+     * SUCCESS (Order success)
+     * REFUND (Order failure, refund)
+     */
+    detailStatus: 'WAITING' | 'FROM_SUCCESS' | 'FROM_FAILURE' | 'BRIDGE_PENDING' | 'SUCCESS' | 'REFUND'
+    errorMsg: string
+    fromAmount: string
+    /** API response string, we convert to number */
+    fromChainId: number
+    fromTokenAddress: string
+    fromTxHash: string
+    refundTokenAddress: string
+    sourceChainGasfee: string
+    /**
+     * PENDING (Order pending)
+     * SUCCESS (Order success)
+     * FAILURE (Order failure)
+     */
+    status: 'PENDING' | 'SUCCESS' | 'FAILURE'
+    toAmount: string
+    /** API response string(could be empty string), we convert to number */
+    toChainId: number
+    toTokenAddress: string
+    toTxHash: string
+}
+
+export type GetBridgeStatusResponse = OKXResponse<BridgeStatus[]>

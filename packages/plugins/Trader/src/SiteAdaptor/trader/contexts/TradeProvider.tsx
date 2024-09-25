@@ -8,7 +8,7 @@ import type {
     OKXSwapQuote,
 } from '@masknet/web3-providers/types'
 import { dividedBy, rightShift } from '@masknet/web3-shared-base'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import { ChainId } from '@masknet/web3-shared-evm'
 import type { QueryObserverResult, RefetchOptions } from '@tanstack/react-query'
 import {
     createContext,
@@ -93,6 +93,10 @@ function useModeState<T>(mode: TradeMode, defaultValue?: T): [T | undefined, Dis
 }
 
 const SwapContext = createContext<Options>(null!)
+const otherChainIdMap: Record<number, ChainId> = {
+    [ChainId.BSC]: ChainId.Mainnet,
+    [ChainId.Mainnet]: ChainId.BSC,
+}
 export function TradeProvider({ children }: PropsWithChildren) {
     const { chainId: defaultChainId, nativeToken, paramToToken } = useDefaultParams()
     const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
@@ -100,7 +104,11 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const [mode, setMode] = useMode()
 
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
-    const defaultToToken = useDefaultToken(chainId, fromToken?.address)
+
+    const defaultToToken = useDefaultToken(
+        mode === 'bridge' ? otherChainIdMap[chainId] || ChainId.Mainnet : chainId,
+        fromToken?.address,
+    )
     const [toToken = paramToToken || defaultToToken, setToToken] = useModeState<Web3Helper.FungibleTokenAll>(mode)
 
     const [inputAmount, setInputAmount] = useModeState(mode, '')

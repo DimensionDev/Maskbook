@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         height: '100%',
         padding: theme.spacing(2),
         boxSizing: 'border-box',
-        gap: theme.spacing(1),
+        gap: theme.spacing(3),
     },
     route: {
         display: 'flex',
@@ -128,6 +128,7 @@ export const TradingRoute = memo(function TradingRoute() {
         if (bridgeRoute.fromDexRouterList.length) {
             nodes.push(
                 <BridgeNode
+                    key="from-side"
                     className={classes.node}
                     label={fromNetwork?.name}
                     chainId={fromChainId}
@@ -149,8 +150,9 @@ export const TradingRoute = memo(function TradingRoute() {
             }
         }
         nodes.push(
-            <Icons.ArrowDrop className={classes.arrow} size={20} />,
+            <Icons.ArrowDrop key="bridge-arrow" className={classes.arrow} size={20} />,
             <BridgeNode
+                key="bridge"
                 className={classes.node}
                 label={t`Bridge`}
                 chainId={leftSideToken?.chainId || fromChainId}
@@ -166,8 +168,9 @@ export const TradingRoute = memo(function TradingRoute() {
         )
         if (bridgeRoute.toDexRouterList.length) {
             nodes.push(
-                <Icons.ArrowDrop className={classes.arrow} size={20} />,
+                <Icons.ArrowDrop key="to-side-arrow" className={classes.arrow} size={20} />,
                 <BridgeNode
+                    key="to-side"
                     className={classes.node}
                     label={toNetwork?.name}
                     chainId={toChainId}

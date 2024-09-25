@@ -1,12 +1,12 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { CopyButton, EmptyStatus, Spinner, TokenIcon } from '@masknet/shared'
+import { CopyButton, EmptyStatus, Spinner } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver } from '@masknet/web3-providers'
+import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -19,6 +19,7 @@ import { RoutePaths } from '../../constants.js'
 import { useTransaction } from '../../storage.js'
 import { useSwap } from '../contexts/index.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
+import { CoinIcon } from '../../components/CoinIcon.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -183,33 +184,39 @@ export const Transaction = memo(function Transaction() {
     const chainId = rawChainId ? +rawChainId : undefined
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
-    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
-
-    const transaction = useTransaction(account, hash)
-    const { fromToken, toToken, fromTokenAmount, toTokenAmount } = transaction || {}
+    const tx = useTransaction(account, hash)
+    const { fromToken, toToken, fromTokenAmount, toTokenAmount } = tx || {}
+    const fromChainId = fromToken?.chainId as ChainId
+    const fromNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, fromChainId)
+    const toNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, toToken?.chainId)
 
     const [forwardCompare, setForwardCompare] = useState(true)
 
-    const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
     const { data: status } = useQuery({
         queryKey: ['transaction-status', chainId, hash],
         queryFn: hash ? () => Web3.getTransactionStatus(hash) : skipToken,
     })
 
+    const { data: bridgeStatus } = useQuery({
+        queryKey: ['okx-bridge', 'transaction-status', chainId, hash],
+        queryFn: hash && tx?.kind === 'bridge' ? () => OKX.getBridgeStatus({ chainId, hash }) : skipToken,
+        refetchInterval: 5_000,
+    })
+
     const navigate = useNavigate()
-    if (!transaction)
+    if (!tx)
         return (
             <Box className={classes.container} alignItems="center" justifyContent="center">
                 <EmptyStatus />
             </Box>
         )
 
-    const [baseToken, targetToken] =
-        forwardCompare ? [transaction.fromToken, transaction.toToken] : [transaction.toToken, transaction.fromToken]
+    const [baseToken, targetToken] = forwardCompare ? [tx.fromToken, tx.toToken] : [tx.toToken, tx.fromToken]
     const rate =
-        forwardCompare && transaction ?
-            dividedBy(transaction.toTokenAmount!, transaction.fromTokenAmount ?? '1')
-        :   dividedBy(transaction.fromTokenAmount!, transaction.toTokenAmount!)
+        forwardCompare && tx ?
+            dividedBy(tx.toTokenAmount!, tx.fromTokenAmount ?? '1')
+        :   dividedBy(tx.fromTokenAmount!, tx.toTokenAmount!)
 
     const rateNode =
         baseToken && targetToken ?
@@ -228,7 +235,7 @@ export const Transaction = memo(function Transaction() {
     return (
         <div className={classes.container}>
             <div className={classes.content}>
-                {status === TransactionStatusType.NOT_DEPEND ?
+                {status === TransactionStatusType.NOT_DEPEND || bridgeStatus?.status === 'PENDING' ?
                     <>
                         <div className={classes.header}>
                             <Spinner className={classes.spinner} variant="loading" />
@@ -238,7 +245,7 @@ export const Transaction = memo(function Transaction() {
                                 <Countdown
                                     className={classes.countdown}
                                     component="span"
-                                    endtime={transaction.timestamp + transaction.estimatedTime}
+                                    endtime={tx.timestamp + tx.estimatedTime}
                                 />
                             </Typography>
                         </div>
@@ -248,7 +255,7 @@ export const Transaction = memo(function Transaction() {
                             </Trans>
                         </Typography>
                     </>
-                : status === TransactionStatusType.SUCCEED ?
+                : status === TransactionStatusType.SUCCEED || bridgeStatus?.status === 'SUCCESS' ?
                     <div className={classes.header}>
                         <Icons.FillSuccess size={72} />
                         <Typography className={classes.title} color={theme.palette.maskColor.success}>
@@ -268,11 +275,10 @@ export const Transaction = memo(function Transaction() {
                             <Trans>From</Trans>
                         </Typography>
                         <div className={classes.tokenInfo}>
-                            <TokenIcon
+                            <CoinIcon
                                 className={classes.tokenIcon}
-                                chainId={fromToken?.chainId}
+                                chainId={fromChainId}
                                 address={fromToken?.contractAddress || ''}
-                                logoURL={fromToken?.logo}
                             />
                             <div className={classes.tokenValue}>
                                 <Typography className={cx(classes.fromToken, classes.value)}>
@@ -280,8 +286,11 @@ export const Transaction = memo(function Transaction() {
                                         `-${formatBalance(fromTokenAmount, fromToken.decimals)} ${fromToken.symbol}`
                                     :   '--'}
                                 </Typography>
-                                <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
-                                {status === TransactionStatusType.NOT_DEPEND ?
+                                <Typography className={classes.network}>{fromNetwork?.name ?? '--'}</Typography>
+                                {(
+                                    status === TransactionStatusType.NOT_DEPEND ||
+                                    bridgeStatus?.detailStatus === 'BRIDGE_PENDING'
+                                ) ?
                                     <Typography className={classes.tip}>
                                         <Trans>Transaction in progress. Thank you for your patience.</Trans>
                                     </Typography>
@@ -294,22 +303,21 @@ export const Transaction = memo(function Transaction() {
                             <Trans>To</Trans>
                         </Typography>
                         <div className={classes.tokenInfo}>
-                            <TokenIcon
+                            <CoinIcon
                                 className={classes.tokenIcon}
                                 chainId={toToken?.chainId}
                                 address={toToken?.contractAddress || ''}
-                                logoURL={toToken?.logo}
                             />
                             <Box className={classes.tokenValue} mr="auto">
                                 <Typography className={cx(classes.toToken, classes.value)} alignItems="center">
-                                    {status === TransactionStatusType.NOT_DEPEND ?
+                                    {bridgeStatus?.detailStatus === 'BRIDGE_PENDING' ?
                                         <LoadingBase size={16} />
                                     :   null}
                                     {toTokenAmount && toToken ?
                                         `-${formatBalance(toTokenAmount, toToken.decimals)} ${toToken.symbol}`
                                     :   '--'}
                                 </Typography>
-                                <Typography className={classes.network}>{network?.name ?? '--'}</Typography>
+                                <Typography className={classes.network}>{toNetwork?.name ?? '--'}</Typography>
                             </Box>
                             {txUrl ?
                                 <a href={txUrl} target="_blank">
@@ -325,31 +333,29 @@ export const Transaction = memo(function Transaction() {
                             <Trans>Transaction type</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {transaction.kind === 'swap' ? t`Swap` : t`Cross-chain Swap`}
+                            {tx.kind === 'swap' ? t`Swap` : t`Cross-chain Swap`}
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Date</Trans>
-                            <Icons.Questions size={16} />
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {transaction.timestamp ? format(transaction.timestamp, 'MM/dd/yyyy, hh:mm:ss') : '--'}
+                            {tx.timestamp ? format(tx.timestamp, 'MM/dd/yyyy, hh:mm:ss') : '--'}
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Network fee</Typography>
                         <GasCost
                             className={classes.rowValue}
-                            chainId={transaction.kind === 'swap' ? transaction.chainId : transaction.fromChainId}
-                            gasLimit={transaction.transactionFee}
-                            gasPrice={transaction.gasPrice}
+                            chainId={fromChainId}
+                            gasLimit={tx.transactionFee}
+                            gasPrice={tx.gasPrice}
                         />
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Rate</Trans>
-                            <Icons.Questions size={16} />
                         </Typography>
                         <Typography className={classes.rowValue}>{rateNode}</Typography>
                     </div>
@@ -358,8 +364,8 @@ export const Transaction = memo(function Transaction() {
                             <Trans>Sending address</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {formatEthereumAddress(transaction.dexContractAddress, 4)}
-                            <CopyButton text={transaction.dexContractAddress} size={16} display="flex" />
+                            {formatEthereumAddress(tx.dexContractAddress, 4)}
+                            <CopyButton text={tx.dexContractAddress} size={16} display="flex" />
                         </Typography>
                     </div>
                 </div>
@@ -371,10 +377,10 @@ export const Transaction = memo(function Transaction() {
                         fullWidth
                         onClick={() => {
                             reset()
-                            setMode(transaction.kind)
-                            setFromToken(okxTokenToFungibleToken(transaction.fromToken))
-                            setToToken(okxTokenToFungibleToken(transaction.toToken))
-                            navigate(urlcat(RoutePaths.Trade, { mode: transaction.kind }))
+                            setMode(tx.kind)
+                            setFromToken(okxTokenToFungibleToken(tx.fromToken))
+                            setToToken(okxTokenToFungibleToken(tx.toToken))
+                            navigate(urlcat(RoutePaths.Trade, { mode: tx.kind }))
                         }}>
                         <Icons.Cached color={theme.palette.maskColor.bottom} />
                         <Trans>Make another Swap</Trans>

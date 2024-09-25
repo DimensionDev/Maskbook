@@ -5,7 +5,7 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useGasPrice, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import type { OKXSwapQuote } from '@masknet/web3-providers/types'
-import { multipliedBy } from '@masknet/web3-shared-base'
+import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 import { type ChainId, formatAmount } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
@@ -106,8 +106,8 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const calcValue = (compare: OKXSwapQuote['quoteCompareList'][number], tokenPrice: string, nativeTokenPrice: number) => {
-    return multipliedBy(compare.amountOut, tokenPrice).minus(multipliedBy(compare.tradeFee, nativeTokenPrice))
+const calcValue = (compare: OKXSwapQuote['quoteCompareList'][number], tokenPrice: string) => {
+    return multipliedBy(compare.amountOut, tokenPrice).minus(compare.tradeFee)
 }
 
 /**
@@ -128,7 +128,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
                 amountOut: formatAmount(quote.toTokenAmount, -quote.toToken.decimals),
                 dexLogo: dexes.find((x) => x.name === firstSubRouterDex)?.logo as string,
                 dexName: firstSubRouterDex,
-                tradeFee: quote.estimateGasFee,
+                tradeFee: '0',
             },
         ]
         return compareList
@@ -139,7 +139,6 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 export const QuoteRoute = memo(function QuoteRoute() {
     const { classes, theme } = useStyles()
     const { quote, chainId, slippage } = useSwap()
-    const { data: price = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const compareList = useCompareList(quote, chainId)
     if (!quote)
@@ -150,7 +149,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
         )
     const { toToken } = quote
 
-    const bestValue = compareList[0] ? calcValue(compareList[0], toToken.tokenUnitPrice, price) : 0
+    const bestValue = compareList[0] ? calcValue(compareList[0], toToken.tokenUnitPrice) : 0
 
     return (
         <div className={classes.container}>
@@ -168,8 +167,8 @@ export const QuoteRoute = memo(function QuoteRoute() {
             </Box>
             {compareList.map((compare, index) => {
                 const isBest = index === 0
-                const currentValue = calcValue(compare, toToken.tokenUnitPrice, price)
-                const percent = currentValue.minus(bestValue).div(bestValue).times(100)
+                const currentValue = calcValue(compare, toToken.tokenUnitPrice)
+                const percent = isZero(bestValue) ? ZERO : currentValue.minus(bestValue).div(bestValue).times(100)
                 const isOverSlippage = percent.abs().isGreaterThan(slippage)
                 return (
                     <div className={classes.box} key={compare.dexName}>
