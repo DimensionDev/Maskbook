@@ -242,7 +242,7 @@ export const Confirm = memo(function Confirm() {
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
         })
-    }, [transaction, account, gasConfig])
+    }, [transaction, account, gasConfig, Web3])
 
     const spender = transaction?.to
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
