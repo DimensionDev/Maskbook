@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-25 13:13\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
 #~ msgid "{0} {1}"
-#~ msgstr "{0} {1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FeedFilters.tsx:56
 msgid "{0} Networks"
@@ -89,3 +89,4 @@ msgstr ""
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:195
 msgid "Tx Fee"
 msgstr ""
+
