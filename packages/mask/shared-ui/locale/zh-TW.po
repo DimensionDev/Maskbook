@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-09-25 13:15\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -1111,7 +1111,7 @@ msgstr ""
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:401
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:436
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:39
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:93
@@ -2783,3 +2783,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
