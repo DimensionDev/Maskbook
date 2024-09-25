@@ -251,6 +251,7 @@ export const Confirm = memo(function Confirm() {
 
     const loading = isSending || isApproving || loadingApprove
     const disabled = !isSwappable || loading
+    const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
 
@@ -384,13 +385,13 @@ export const Confirm = memo(function Confirm() {
                     {expand ?
                         <Typography className={classes.data}>{transaction?.data}</Typography>
                     :   null}
-                    {isQuoteStale && !isSending ?
+                    {showStale ?
                         <Warning description={t`Quote expired. Update to receive a new quote.`} />
                     :   null}
                 </div>
             </div>
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
-                {isQuoteStale && !isSending ?
+                {showStale ?
                     <ActionButton
                         fullWidth
                         onClick={async () => {

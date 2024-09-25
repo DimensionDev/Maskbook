@@ -282,6 +282,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const { data: bridgeFeeTokenPrice } = useTokenPrice(fromChainId, router?.crossChainFeeTokenAddress)
     const bridgeFeeValue = multipliedBy(bridgeFee ?? 0, bridgeFeeTokenPrice ?? 0).toFixed(2)
 
+    const showStale = isQuoteStale && !isSending && !isApproving
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -436,13 +437,13 @@ than estimated, and any unused funds will remain in the original address.`}>
                     {expand ?
                         <Typography className={classes.data}>{transaction?.data}</Typography>
                     :   null}
-                    {isQuoteStale && !isSending ?
+                    {showStale ?
                         <Warning description={t`Quote expired. Update to receive a new quote.`} />
                     :   null}
                 </div>
             </div>
             <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
-                {isQuoteStale && !isSending ?
+                {showStale ?
                     <ActionButton
                         fullWidth
                         onClick={async () => {
