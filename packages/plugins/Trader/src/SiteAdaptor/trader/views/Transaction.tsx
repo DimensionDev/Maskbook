@@ -388,7 +388,8 @@ export const Transaction = memo(function Transaction() {
                                     <Typography className={cx(classes.fromToken, classes.value)}>
                                         {txPending ?
                                             <LoadingBase size={16} />
-                                        :   `-- ${tx.leftSideToken.tokenSymbol}`}
+                                        :   null}
+                                        {tx.leftSideToken.tokenSymbol}
                                     </Typography>
                                     <Typography className={classes.network}>{fromNetwork?.name ?? '--'}</Typography>
                                 </div>
@@ -423,7 +424,7 @@ export const Transaction = memo(function Transaction() {
                                 />
                                 <div className={classes.tokenValue}>
                                     <Typography className={cx(classes.toToken, classes.value)}>
-                                        {`-- ${tx.rightSideToken.tokenSymbol}`}
+                                        {tx.rightSideToken.tokenSymbol}
                                     </Typography>
                                     <Typography className={classes.network}>{toNetwork?.name ?? '--'}</Typography>
                                     {txPending || detailStatus === 'BRIDGE_PENDING' ?
