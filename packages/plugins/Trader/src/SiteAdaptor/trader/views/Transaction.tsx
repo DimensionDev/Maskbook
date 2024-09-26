@@ -320,12 +320,10 @@ export const Transaction = memo(function Transaction() {
                             </Typography>
                         </div>
                         <Typography className={cx(classes.box, classes.note)}>
-                            {isSwap ?
-                                <Trans>
-                                    The swap is in progress. You can check its status in History after exiting this
-                                    page.
-                                </Trans>
-                            :   <Trans>Transaction in progress. Thank you for your patience.</Trans>}
+                            <Trans>
+                                The {isSwap ? 'swap' : 'bridge'} is in progress. You can check its status in History
+                                after exiting this page.
+                            </Trans>
                         </Typography>
                     </>
                 : txSucceed || bridgeStatus?.status === 'SUCCESS' ?
@@ -472,9 +470,7 @@ export const Transaction = memo(function Transaction() {
                         <Typography className={classes.rowName}>
                             <Trans>Transaction type</Trans>
                         </Typography>
-                        <Typography className={classes.rowValue}>
-                            {tx.kind === 'swap' ? t`Swap` : t`Cross-chain Swap`}
-                        </Typography>
+                        <Typography className={classes.rowValue}>{tx.kind === 'swap' ? t`Swap` : t`Bridge`}</Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
