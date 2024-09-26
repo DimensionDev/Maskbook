@@ -154,8 +154,10 @@ export function TradeView() {
     const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`
     const quoteErrorMessage = isSwap ? swapQuoteErrorMessage : bridgeQuoteErrorMessage
 
-    const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
-    const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
+    const fromChainId = fromToken?.chainId as ChainId
+    const toChainId = toToken?.chainId as ChainId
+    const fromNetwork = networks.find((x) => x.chainId === fromChainId)
+    const toNetwork = networks.find((x) => x.chainId === toChainId)
     const chainQuery = useSupportedChains()
 
     const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
@@ -165,11 +167,11 @@ export function TradeView() {
             disableNativeToken: false,
             selectedTokens: currentToken ? [currentToken.address] : [],
             // Only from token can decide the chain
-            chainId: (isSwap ? fromToken?.chainId : currentToken?.chainId) || chainId,
+            chainId: (isSwap ? fromChainId : currentToken?.chainId) || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chains: supportedChains?.map((x) => x.chainId),
             okxOnly: true,
-            lockChainId: isSwap && side === 'to' && !!fromToken?.chainId,
+            lockChainId: isSwap && side === 'to' && !!fromChainId,
         })
     }
 
@@ -215,14 +217,14 @@ export function TradeView() {
                                     if (picked) {
                                         setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
-                                        if (toToken?.chainId !== picked.chainId) setToToken(undefined)
+                                        if (toChainId !== picked.chainId) setToToken(undefined)
                                     }
                                 }}>
                                 <Box className={classes.icon}>
                                     {/* Omit logoURL, let TokenIcon resolve it itself */}
                                     <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={toToken?.chainId as ChainId}
+                                        chainId={fromChainId as ChainId}
                                         address={fromToken?.address || ''}
                                         chainIconSize={12}
                                     />
@@ -278,7 +280,7 @@ export function TradeView() {
                                 <Box className={classes.icon}>
                                     <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={toToken?.chainId as ChainId}
+                                        chainId={toChainId as ChainId}
                                         address={toToken?.address || ''}
                                         chainIconSize={12}
                                     />
