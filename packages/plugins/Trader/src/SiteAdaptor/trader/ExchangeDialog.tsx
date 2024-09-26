@@ -11,7 +11,7 @@ import urlcat from 'urlcat'
 import { RouterDialog } from '../components/RouterDialog.js'
 import { RoutePaths } from '../constants.js'
 import { ExchangeRoutes } from './Routes.js'
-import { Providers, useSwap, type TradeMode } from './contexts/index.js'
+import { Providers, useTrade, type TradeMode } from './contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -53,7 +53,7 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
     const { pathname } = useLocation()
     const match = matchPath(RoutePaths.Trade, pathname)
     const navigate = useNavigate()
-    const { mode, setMode } = useSwap()
+    const { mode, setMode } = useTrade()
 
     const titleMap: Record<RoutePaths, string | null> = {
         [RoutePaths.Trade]: t`Exchange`,

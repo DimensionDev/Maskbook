@@ -19,7 +19,7 @@ import { Countdown } from '../../components/Countdown.js'
 import { GasCost } from '../../components/GasCost.js'
 import { RoutePaths } from '../../constants.js'
 import { useTransaction } from '../../storage.js'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
@@ -225,7 +225,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 }))
 
 export const Transaction = memo(function Transaction() {
-    const { reset, setFromToken, mode, setMode, setToToken } = useSwap()
+    const { reset, setFromToken, mode, setMode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()

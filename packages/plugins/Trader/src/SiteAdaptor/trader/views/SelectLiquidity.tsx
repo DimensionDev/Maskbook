@@ -7,7 +7,7 @@ import Fuse from 'fuse.js'
 import { groupBy, sortBy } from 'lodash-es'
 import { memo, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -99,7 +99,7 @@ const useStyles = makeStyles()((theme) => ({
 export const SelectLiquidity = memo(function SelectLiquidity() {
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    const { chainId, disabledDexIds, setDisabledDexIds } = useSwap()
+    const { chainId, disabledDexIds, setDisabledDexIds } = useTrade()
     const [pendingDisabledDexIds, setPendingDisabledDexIds] = useState<string[]>(disabledDexIds)
     const [keyword, setKeyword] = useState('')
     const { data: liquidityList = EMPTY_LIST, isLoading } = useLiquidityResources(chainId)

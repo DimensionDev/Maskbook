@@ -12,7 +12,7 @@ import { BigNumber } from 'bignumber.js'
 import { memo, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -139,7 +139,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 
 export const QuoteRoute = memo(function QuoteRoute() {
     const { classes, theme } = useStyles()
-    const { quote, chainId } = useSwap()
+    const { quote, chainId } = useTrade()
 
     const compareList = useCompareList(quote, chainId)
     if (!quote)

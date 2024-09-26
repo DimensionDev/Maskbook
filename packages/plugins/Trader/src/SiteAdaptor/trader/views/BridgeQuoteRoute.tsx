@@ -12,7 +12,7 @@ import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { formatTime } from '../../../helpers/formatTime.js'
 import { bridges, RoutePaths } from '../../constants.js'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 
 const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>()((theme, _, refs) => ({
     container: {
@@ -106,7 +106,7 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
 
 export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     const { classes, theme, cx } = useStyles()
-    const { bridgeQuote, fromToken, toToken, mode } = useSwap()
+    const { bridgeQuote, fromToken, toToken, mode } = useTrade()
     const [bridgeId = bridgeQuote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
     const chainId = fromToken?.chainId as ChainId
     const { data: price = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })

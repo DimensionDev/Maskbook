@@ -254,7 +254,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
     return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>
 }
 
-export function useSwap() {
+export function useTrade() {
     return useContext(SwapContext)
 }
 

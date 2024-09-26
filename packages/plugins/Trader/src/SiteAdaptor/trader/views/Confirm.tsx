@@ -24,7 +24,7 @@ import urlcat from 'urlcat'
 import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useGasManagement, useTrade } from '../contexts/index.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
@@ -176,7 +176,7 @@ export const Confirm = memo(function Confirm() {
         quote,
         isQuoteStale,
         updateQuote,
-    } = useSwap()
+    } = useTrade()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)

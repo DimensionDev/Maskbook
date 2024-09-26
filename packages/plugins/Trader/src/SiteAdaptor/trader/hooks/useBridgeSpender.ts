@@ -1,10 +1,10 @@
 import { OKX } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
-import { useSwap } from '../contexts/TradeProvider.js'
+import { useTrade } from '../contexts/TradeProvider.js'
 
 export function useBridgeSpender() {
-    const { mode, fromToken } = useSwap()
+    const { mode, fromToken } = useTrade()
     const chainId = fromToken?.chainId as ChainId
     return useQuery({
         enabled: mode === 'bridge',

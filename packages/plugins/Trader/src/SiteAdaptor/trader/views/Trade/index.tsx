@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
-import { useSwap } from '../../contexts/index.js'
+import { useTrade } from '../../contexts/index.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
@@ -148,7 +148,7 @@ export function TradeView() {
         slippage,
         isQuoteLoading,
         isBridgeQuoteLoading,
-    } = useSwap()
+    } = useTrade()
     const isSwap = mode === 'swap'
     const quote = isSwap ? swapQuote : bridgeQuote
     const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`

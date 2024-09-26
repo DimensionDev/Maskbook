@@ -4,7 +4,7 @@ import { alpha, Button, Typography } from '@mui/material'
 import { isNumber } from 'lodash-es'
 import { memo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {
@@ -102,7 +102,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
 export const Slippage = memo(function Slippage() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const { mode, isAutoSlippage, setIsAutoSlippage, setSlippage, slippage, quote, toToken, bridgeQuote } = useSwap()
+    const { mode, isAutoSlippage, setIsAutoSlippage, setSlippage, slippage, quote, toToken, bridgeQuote } = useTrade()
     const [pendingIsAutoSlippage, setPendingIsAutoSlippage] = useState(isAutoSlippage)
     const [pendingSlippage, setPendingSlippage] = useState(slippage)
 

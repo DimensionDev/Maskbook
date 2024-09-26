@@ -25,7 +25,7 @@ import urlcat from 'urlcat'
 import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useGasManagement, useTrade } from '../contexts/index.js'
 import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useBridgable } from '../hooks/useBridgable.js'
 import { useToken } from '../hooks/useToken.js'
@@ -185,7 +185,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         bridgeQuote: quote,
         isQuoteStale,
         updateQuote,
-    } = useSwap()
+    } = useTrade()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const fromChainId = fromToken?.chainId as ChainId
     const toChainId = toToken?.chainId as ChainId
