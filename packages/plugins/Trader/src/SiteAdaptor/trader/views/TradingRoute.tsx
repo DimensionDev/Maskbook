@@ -265,7 +265,7 @@ export const TradingRoute = memo(function TradingRoute() {
 
     return (
         <div className={classes.container}>
-            {mode === 'bridge' ?
+            {mode === 'bridge' && bridgeNodes.length > 2 ?
                 <div className={classes.nodes}>{bridgeNodes}</div>
             :   null}
             {dexRouterList?.map((route) => {
