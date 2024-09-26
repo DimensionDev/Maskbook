@@ -479,7 +479,7 @@ export const Transaction = memo(function Transaction() {
                             <Trans>Date</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {tx.timestamp ? format(tx.timestamp, 'MM/dd/yyyy, hh:mm:ss') : '--'}
+                            {tx.timestamp ? format(tx.timestamp, 'MM/dd/yyyy, HH:mm:ss') : '--'}
                         </Typography>
                     </div>
                     {isSwap ? null : (
