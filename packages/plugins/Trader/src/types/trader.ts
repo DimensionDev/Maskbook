@@ -1,3 +1,4 @@
+import type { SwapToken } from '@masknet/web3-providers/types'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainIdOptionalRecord, ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -39,20 +40,21 @@ export interface OkxBaseTransaction {
     transactionFee: string
     gasLimit: string
     gasPrice: string
+    estimatedTime: number
+    dexContractAddress: string
+    to: string
 }
 export interface OkxSwapTransaction extends OkxBaseTransaction {
     kind: 'swap'
     chainId: number
-    dexContractAddress: string
-    estimatedTime: number
 }
 
 export interface OkxBridgeTransaction extends OkxBaseTransaction {
     kind: 'bridge'
     fromChainId: number
     toChainId: number
-    dexContractAddress: string
-    estimatedTime: number
+    leftSideToken?: SwapToken
+    rightSideToken?: SwapToken
 }
 
 export type OkxTransaction = OkxSwapTransaction | OkxBridgeTransaction

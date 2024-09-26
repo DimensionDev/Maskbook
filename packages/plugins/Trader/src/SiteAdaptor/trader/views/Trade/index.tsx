@@ -1,6 +1,6 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
+import { PluginWalletStatusBar, SelectFungibleTokenModal } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -26,6 +26,7 @@ import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
+import { CoinIcon } from '../../../components/CoinIcon.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -81,11 +82,6 @@ const useStyles = makeStyles()((theme) => ({
     tokenIcon: {
         height: 30,
         width: 30,
-    },
-    badgeIcon: {
-        position: 'absolute',
-        right: -3,
-        bottom: -2,
     },
     symbol: {
         fontSize: 14,
@@ -158,8 +154,10 @@ export function TradeView() {
     const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`
     const quoteErrorMessage = isSwap ? swapQuoteErrorMessage : bridgeQuoteErrorMessage
 
-    const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
-    const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
+    const fromChainId = fromToken?.chainId as ChainId
+    const toChainId = toToken?.chainId as ChainId
+    const fromNetwork = networks.find((x) => x.chainId === fromChainId)
+    const toNetwork = networks.find((x) => x.chainId === toChainId)
     const chainQuery = useSupportedChains()
 
     const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
@@ -169,11 +167,11 @@ export function TradeView() {
             disableNativeToken: false,
             selectedTokens: currentToken ? [currentToken.address] : [],
             // Only from token can decide the chain
-            chainId: (isSwap ? fromToken?.chainId : currentToken?.chainId) || chainId,
+            chainId: (isSwap ? fromChainId : currentToken?.chainId) || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chains: supportedChains?.map((x) => x.chainId),
             okxOnly: true,
-            lockChainId: isSwap && side === 'to' && !!fromToken?.chainId,
+            lockChainId: isSwap && side === 'to' && !!fromChainId,
         })
     }
 
@@ -219,31 +217,24 @@ export function TradeView() {
                                     if (picked) {
                                         setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
-                                        if (toToken?.chainId !== picked.chainId) setToToken(undefined)
+                                        if (toChainId !== picked.chainId) setToToken(undefined)
                                     }
                                 }}>
                                 <Box className={classes.icon}>
                                     {/* Omit logoURL, let TokenIcon resolve it itself */}
-                                    <TokenIcon
+                                    <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={fromToken?.chainId}
+                                        chainId={fromChainId as ChainId}
                                         address={fromToken?.address || ''}
+                                        chainIconSize={12}
                                     />
-                                    {fromToken ?
-                                        <NetworkIcon
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            className={classes.badgeIcon}
-                                            chainId={fromToken?.chainId}
-                                            size={12}
-                                        />
-                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on {fromNetwork?.name ?? '--'}
+                                        {fromNetwork?.name ? t`on ${fromNetwork.name}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -287,26 +278,19 @@ export function TradeView() {
                                     if (picked) setToToken(picked)
                                 }}>
                                 <Box className={classes.icon}>
-                                    <TokenIcon
+                                    <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={toToken?.chainId}
+                                        chainId={toChainId as ChainId}
                                         address={toToken?.address || ''}
+                                        chainIconSize={12}
                                     />
-                                    {toToken ?
-                                        <NetworkIcon
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            className={classes.badgeIcon}
-                                            chainId={toToken.chainId}
-                                            size={12}
-                                        />
-                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on {toNetwork?.name ?? '--'}
+                                        {toNetwork?.name ? t`on ${toNetwork.name}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />

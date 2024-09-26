@@ -33,7 +33,7 @@ export const bridges = [
     {
         id: 315,
         name: 'Across',
-        logoUrl: '',
+        logoUrl: new URL('../assets/accross.svg', import.meta.url).href,
     },
     {
         id: 211,
@@ -53,7 +53,8 @@ export const bridges = [
     {
         id: 223,
         name: 'Meson',
-        logoUrl: '',
+        logoUrl:
+            'https://www.okx.com/cdn/explorer/dex/logo/2e188232-5793-4c71-a221-ebba4c59b64b.png?x-oss-process=image/format,webp/ignore-error,1',
     },
     {
         id: 129,

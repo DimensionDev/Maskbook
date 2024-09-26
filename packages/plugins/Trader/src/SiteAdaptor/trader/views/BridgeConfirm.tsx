@@ -31,8 +31,9 @@ import { useBridgable } from '../hooks/useBridgable.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
-import { useQuery } from '@tanstack/react-query'
-import { OKX } from '@masknet/web3-providers'
+import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
+import { useBridgeSpender } from '../hooks/useBridgeSpender.js'
+import { useLeave } from '../hooks/useLeave.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -215,17 +216,21 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
         forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
+
     const rate = useMemo(() => {
-        const fromAmount = leftShift(fromTokenAmount || 0, fromToken?.decimals || 1)
-        const toAmount = leftShift(toTokenAmount || 0, toToken?.decimals || 1)
+        if (!quote) return null
+        const { fromTokenAmount, toTokenAmount, fromToken, toToken } = quote
+        const fromAmount = leftShift(fromTokenAmount || 0, fromToken.decimals)
+        const toAmount = leftShift(toTokenAmount || 0, toToken.decimals)
         if (fromAmount.isZero() || toAmount.isZero()) return null
         return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
-    }, [fromTokenAmount, toToken, fromToken, toToken])
+    }, [quote])
 
     const rateNode =
         baseToken && targetToken && rate ?
             <>
-                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate.toNumber())} {targetToken.tokenSymbol}
+                1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
+                {targetToken.tokenSymbol}
                 <Icons.Cached
                     size={16}
                     color={theme.palette.maskColor.main}
@@ -233,8 +238,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 />
             </>
         :   null
-
-    const [isBridgable, errorMessage] = useBridgable()
 
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
@@ -253,19 +256,14 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender } = useQuery({
-        queryKey: ['okx-bridge', 'supported-chains'],
-        queryFn: async () => OKX.getBridgeSupportedChain(),
-        select(res) {
-            if (res.code !== 0) return undefined
-            return res.data.find((x) => x.chainId === fromChainId)?.dexTokenApproveAddress
-        },
-    })
+    const { data: spender, isLoading: isLoadingSpender } = useBridgeSpender()
+
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
 
-    const loading = isSending || isApproving || loadingApprove
+    const [isBridgable, errorMessage] = useBridgable()
+    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
     const disabled = !isBridgable || loading
 
     const { showSnackbar } = useCustomSnackbar()
@@ -277,6 +275,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         .times(toChainNativeTokenPrice ?? 0)
         .toFixed(2)
     const bridge = quote?.routerList[0]
+
     const router = bridge?.router
     const bridgeFee = router?.crossChainFee
     const bridgeFeeToken = useToken(fromChainId, router?.crossChainFeeTokenAddress)
@@ -284,6 +283,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const bridgeFeeValue = multipliedBy(bridgeFee ?? 0, bridgeFeeTokenPrice ?? 0).toFixed(2)
 
     const showStale = isQuoteStale && !isSending && !isApproving
+
+    const leaveRef = useLeave()
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -459,7 +460,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         loading={loading}
                         disabled={disabled}
                         onClick={async () => {
-                            if (!fromToken || !toToken || !transaction?.to) return
+                            if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
                             if (notEnoughAllowance) await approve()
 
                             const hash = await sendBridge()
@@ -471,10 +472,6 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 })
                                 return
                             }
-                            showSnackbar(t`Transaction submitted.`, {
-                                title: t`Bridge`,
-                                variant: 'error',
-                            })
                             await addTransaction(account, {
                                 kind: 'bridge',
                                 hash,
@@ -498,13 +495,17 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 toTokenAmount,
                                 timestamp: Date.now(),
                                 transactionFee: gasFee.toFixed(0),
-                                dexContractAddress: transaction.to,
-                                estimatedTime: router?.estimatedTime ? +router.estimatedTime : 0,
+                                dexContractAddress: spender,
+                                to: transaction.to,
+                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime * 1000 : 0,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
+                                leftSideToken: getBridgeLeftSideToken(bridge),
+                                rightSideToken: getBridgeRightSideToken(bridge),
                             })
+                            if (leaveRef.current) return
                             const url = urlcat(RoutePaths.Transaction, { hash, chainId: fromChainId, mode })
-                            navigate(url)
+                            navigate(url, { replace: true })
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`

@@ -1,7 +1,7 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { OKXBridgeQuote, OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact, leftShift } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
@@ -133,7 +133,19 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
                             to={{ pathname: RoutePaths.Slippage, search: `?mode=${mode}` }}>
-                            {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
+                            <TextOverflowTooltip
+                                as={ShadowRootTooltip}
+                                placement="top"
+                                title={isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}>
+                                <Box
+                                    component="span"
+                                    maxWidth="200px"
+                                    textOverflow="ellipsis"
+                                    overflow="hidden"
+                                    whiteSpace="nowrap">
+                                    {isAutoSlippage ? `${DEFAULT_SLIPPAGE}%` : `${slippage}%`}
+                                </Box>
+                            </TextOverflowTooltip>
                             <Icons.ArrowRight size={20} />
                         </Typography>
                     </div>

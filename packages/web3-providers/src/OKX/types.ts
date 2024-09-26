@@ -11,7 +11,7 @@ type OKXResponse<T> = {
     data: T
 }
 
-interface ChainDex {
+export interface ChainDex {
     /** API response string, we convert to number */
     chainId: number
     chainName: string
@@ -318,10 +318,6 @@ type Router = {
     crossChainFee: string
     /** The cross-chain bridge fee token information */
     crossChainFeeTokenAddress: string
-    /** The recommended gas limit for calling the contract */
-    estimateGasFee: string
-    /** Estimated time to complete the cross-chain swap in seconds */
-    estimatedTime: string
 }
 
 /** Represents DEX Router information */
@@ -344,7 +340,7 @@ type DexRouter = {
 }
 
 /** Represents an item in the router list */
-type RouterListItem = {
+export type RouterListItem = {
     /** The recommended gas limit for calling the contract */
     estimateGasFee: string
     /** time in seconds (It's wrongly wrote as estimatedTime) */

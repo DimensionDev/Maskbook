@@ -2,6 +2,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { leftShift, TokenType } from '@masknet/web3-shared-base'
 import type { Token } from '../../types/trader.js'
 import { SchemaType } from '@masknet/web3-shared-evm'
+import type { RouterListItem } from '@masknet/web3-providers/types'
 
 const MINIMUM_AMOUNT_RE = /(Minimum amount is\s+)(\d+)/
 export function fixBridgeMessage(message: string, token?: Web3Helper.FungibleTokenAll) {
@@ -26,4 +27,12 @@ export function okxTokenToFungibleToken(token: Token): Web3Helper.FungibleTokenA
         logoURL: token.logo,
         decimals: token.decimals,
     }
+}
+
+export function getBridgeLeftSideToken(bridge: RouterListItem) {
+    return bridge.fromDexRouterList.at(-1)?.subRouterList.at(-1)?.toToken
+}
+
+export function getBridgeRightSideToken(bridge: RouterListItem) {
+    return bridge.toDexRouterList[0]?.subRouterList[0]?.toToken
 }

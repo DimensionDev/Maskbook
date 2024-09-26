@@ -19,6 +19,7 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
+        justifyContent: 'center',
         height: '100%',
         padding: theme.spacing(0, 2),
         boxSizing: 'border-box',
@@ -70,7 +71,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.white,
         borderRadius: theme.spacing(0.5),
     },
-    tooHigh: {
+    tooSmall: {
         backgroundColor: 'rgba(255, 53, 69, 0.1)',
         lineHeight: '20px',
         fontSize: 16,
@@ -138,7 +139,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 
 export const QuoteRoute = memo(function QuoteRoute() {
     const { classes, theme } = useStyles()
-    const { quote, chainId, slippage } = useSwap()
+    const { quote, chainId } = useSwap()
 
     const compareList = useCompareList(quote, chainId)
     if (!quote)
@@ -169,7 +170,8 @@ export const QuoteRoute = memo(function QuoteRoute() {
                 const isBest = index === 0
                 const currentValue = calcValue(compare, toToken.tokenUnitPrice)
                 const percent = isZero(bestValue) ? ZERO : currentValue.minus(bestValue).div(bestValue).times(100)
-                const isOverSlippage = percent.abs().isGreaterThan(slippage)
+                const isTooSmall = percent.isLessThan(-1)
+
                 return (
                     <div className={classes.box} key={compare.dexName}>
                         <Typography className={classes.boxTitle}>
@@ -192,7 +194,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
                                     <Typography className={classes.highlight}>Best</Typography>
                                 </div>
                             :   <div className={classes.rowValue}>
-                                    <Typography className={isOverSlippage ? classes.tooHigh : classes.normal}>
+                                    <Typography className={isTooSmall ? classes.tooSmall : classes.normal}>
                                         {percent.toFixed(2)}%
                                     </Typography>
                                 </div>

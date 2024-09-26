@@ -5,7 +5,6 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { OKX } from '@masknet/web3-providers'
 import {
     dividedBy,
     formatBalance,
@@ -17,7 +16,6 @@ import {
 } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Typography } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -27,9 +25,11 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
+import { useSwapSpender } from '../hooks/useSwapSpender.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -246,23 +246,18 @@ export const Confirm = memo(function Confirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender } = useQuery({
-        queryKey: ['okx-swap', 'supported-chains'],
-        queryFn: async () => OKX.getSupportedChains(),
-        select(chains) {
-            return chains?.find((x) => x.chainId === chainId)?.dexTokenApproveAddress
-        },
-    })
+    const { data: spender, isLoading: isLoadingSpender } = useSwapSpender()
 
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
 
-    const loading = isSending || isApproving || loadingApprove
+    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
     const disabled = !isSwappable || loading
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
+    const leaveRef = useLeave()
 
     return (
         <div className={classes.container}>
@@ -413,7 +408,7 @@ export const Confirm = memo(function Confirm() {
                         loading={loading}
                         disabled={disabled}
                         onClick={async () => {
-                            if (!fromToken || !toToken || !transaction?.to) return
+                            if (!fromToken || !toToken || !transaction?.to || !spender) return
                             if (notEnoughAllowance) await approve()
 
                             const hash = await sendSwap()
@@ -425,10 +420,6 @@ export const Confirm = memo(function Confirm() {
                                 })
                                 return
                             }
-                            showSnackbar(t`Transaction submitted.`, {
-                                title: t`Swap`,
-                                variant: 'error',
-                            })
                             const estimatedSeconds =
                                 gasOptions ?
                                     gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
@@ -455,13 +446,15 @@ export const Confirm = memo(function Confirm() {
                                 toTokenAmount,
                                 timestamp: Date.now(),
                                 transactionFee: gasFee.toFixed(0),
-                                dexContractAddress: transaction.to,
+                                dexContractAddress: spender,
+                                to: transaction.to,
                                 estimatedTime: (estimatedSeconds ?? 10) * 1000,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
+                            if (leaveRef.current) return
                             const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
-                            navigate(url)
+                            navigate(url, { replace: true })
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`
