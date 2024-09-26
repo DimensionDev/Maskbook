@@ -73,8 +73,7 @@
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "XLayer": ["https://rpc.xlayer.tech"],
-        "XLayer_Testnet": ["https://testrpc.xlayer.tech"],
-        "ScrollSDK": ["http://l2-rpc.scrollsdk"]
+        "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
@@ -105,8 +104,7 @@
         "Scroll": ["https://rpc.scroll.io"],
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "XLayer": ["https://rpc.xlayer.tech"],
-        "XLayer_Testnet": ["https://testrpc.xlayer.tech"],
-        "ScrollSDK": ["http://l2-rpc.scrollsdk"]
+        "XLayer_Testnet": ["https://testrpc.xlayer.tech"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
@@ -137,7 +135,6 @@
         "Scroll": [0, 0, 0, 0, 0],
         "Metis": [0, 0, 0, 0, 0],
         "XLayer": [0, 0, 0, 0, 0],
-        "XLayer_Testnet": [0, 0, 0, 0, 0],
-        "ScrollSDK": [0, 0, 0, 0, 0]
+        "XLayer_Testnet": [0, 0, 0, 0, 0]
     }
 }
