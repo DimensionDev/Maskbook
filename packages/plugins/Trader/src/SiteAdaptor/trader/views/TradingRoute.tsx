@@ -13,6 +13,7 @@ import { useSearchParams } from 'react-router-dom'
 import { BridgeNode } from '../../components/BridgeNode.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
 import { useSwap } from '../contexts/index.js'
+import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -141,7 +142,7 @@ export const TradingRoute = memo(function TradingRoute() {
                     }}
                 />,
             )
-            const lastFromToken = bridgeRoute.fromDexRouterList.at(-1)?.subRouterList.at(-1)?.toToken
+            const lastFromToken = getBridgeLeftSideToken(bridgeRoute)
             if (lastFromToken) {
                 leftSideToken = {
                     ...lastFromToken,
@@ -183,7 +184,7 @@ export const TradingRoute = memo(function TradingRoute() {
                     }}
                 />,
             )
-            rightSideToken = { ...bridgeRoute.toDexRouterList[0].subRouterList[0].toToken, chainId: toChainId }
+            rightSideToken = { ...getBridgeRightSideToken(bridgeRoute), chainId: toChainId }
         }
         return { bridgeNodes: nodes, leftSideToken, rightSideToken }
     }, [isSwap, fromNetwork, fromToken, toToken, fromChainId, toChainId, bridgeStep])

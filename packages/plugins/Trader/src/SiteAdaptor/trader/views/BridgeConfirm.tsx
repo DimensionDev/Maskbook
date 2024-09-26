@@ -31,8 +31,8 @@ import { useBridgable } from '../hooks/useBridgable.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
-import { useQuery } from '@tanstack/react-query'
-import { OKX } from '@masknet/web3-providers'
+import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
+import { useBridgeSpender } from '../hooks/useBridgeSpender.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -234,8 +234,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             </>
         :   null
 
-    const [isBridgable, errorMessage] = useBridgable()
-
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
         if (!transaction?.data) return
@@ -253,18 +251,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender, isLoading: isLoadingSpender } = useQuery({
-        queryKey: ['okx-bridge', 'supported-chains'],
-        queryFn: async () => OKX.getBridgeSupportedChain(),
-        select(res) {
-            if (res.code !== 0) return undefined
-            return res.data.find((x) => x.chainId === fromChainId)?.dexTokenApproveAddress
-        },
-    })
+    const { data: spender, isLoading: isLoadingSpender } = useBridgeSpender()
+
     const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
     const notEnoughAllowance = isLessThan(allowance, amount)
 
+    const [isBridgable, errorMessage] = useBridgable()
     const loading = isSending || isApproving || loadingApprove || isLoadingSpender
     const disabled = !isBridgable || loading
 
@@ -277,6 +270,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         .times(toChainNativeTokenPrice ?? 0)
         .toFixed(2)
     const bridge = quote?.routerList[0]
+
     const router = bridge?.router
     const bridgeFee = router?.crossChainFee
     const bridgeFeeToken = useToken(fromChainId, router?.crossChainFeeTokenAddress)
@@ -459,7 +453,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         loading={loading}
                         disabled={disabled}
                         onClick={async () => {
-                            if (!fromToken || !toToken || !transaction?.to) return
+                            if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
                             if (notEnoughAllowance) await approve()
 
                             const hash = await sendBridge()
@@ -498,13 +492,16 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 toTokenAmount,
                                 timestamp: Date.now(),
                                 transactionFee: gasFee.toFixed(0),
-                                dexContractAddress: transaction.to,
-                                estimatedTime: router?.estimatedTime ? +router.estimatedTime : 0,
+                                dexContractAddress: spender,
+                                to: transaction.to,
+                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime * 1000 : 0,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
+                                leftSideToken: getBridgeLeftSideToken(bridge),
+                                rightSideToken: getBridgeRightSideToken(bridge),
                             })
                             const url = urlcat(RoutePaths.Transaction, { hash, chainId: fromChainId, mode })
-                            navigate(url)
+                            navigate(url, { replace: true })
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`

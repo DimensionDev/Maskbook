@@ -3,10 +3,16 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'
 import { useSwap } from '../contexts/index.js'
+import { useSwapSpender } from './useSwapSpender.js'
+import type { ChainId } from '@masknet/web3-shared-evm'
 
 export function useSwappable(): [result: boolean, message?: string] {
-    const { inputAmount, chainId, fromToken, quote } = useSwap()
+    const { inputAmount, fromToken, quote } = useSwap()
+    const chainId = fromToken?.chainId as ChainId
+    const { data: spender, isLoading: isLoadingSpender } = useSwapSpender()
     const { data: balance = '0' } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, { chainId })
+
+    if (!spender && !isLoadingSpender) return [false, t`Missing dex contract address`]
     if (!inputAmount || !fromToken) return [false, t`Enter an Amount`]
 
     const amount = rightShift(inputAmount, fromToken.decimals)
