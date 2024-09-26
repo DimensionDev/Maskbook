@@ -1376,5 +1376,33 @@
                 "url": "https://explorer.linea.build"
             }
         ]
+    },
+    {
+        "chainId": 221122,
+        "type": "ScrollSDK",
+        "name": "ScrollSDK",
+        "network": "mainnet",
+        "fullName": "ScrollSDK",
+        "shortName": "ScrollSDK",
+        "rpc": ["http://l2-rpc.scrollsdk"],
+        "faucets": [],
+        "features": [],
+        "nativeCurrency": {
+            "chainId": 221122,
+            "name": "Ether",
+            "symbol": "ETH",
+            "decimals": 18,
+            "logoURL": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/ethereum/info/logo.png/quality=85"
+        },
+        "defaultGasLimit": "90000",
+        "minGasLimit": "21000",
+        "infoURL": "http://blockscout.scrollsdk/",
+        "explorers": [
+            {
+                "name": "blockscout",
+                "url": "http://blockscout.scrollsdk/",
+                "standard": "EIP3091"
+            }
+        ]
     }
 ]
