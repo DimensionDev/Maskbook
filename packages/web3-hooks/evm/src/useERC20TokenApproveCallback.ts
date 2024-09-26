@@ -104,5 +104,6 @@ export function useERC20TokenApproveCallback(
         },
         approveCallback,
         resetCallback,
+        revalidateAllowance,
     ] as const
 }

@@ -160,12 +160,15 @@ export function TradeView() {
     const toNetwork = networks.find((x) => x.chainId === toChainId)
     const chainQuery = useSupportedChains()
 
-    const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
+    const pickToken = async (
+        currentToken: Web3Helper.FungibleTokenAll | null | undefined,
+        side: 'from' | 'to',
+        excludes: string[],
+    ) => {
         const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
-        const isSwap = mode === 'swap'
         return SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
-            selectedTokens: currentToken ? [currentToken.address] : [],
+            selectedTokens: excludes,
             // Only from token can decide the chain
             chainId: (isSwap ? fromChainId : currentToken?.chainId) || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -213,7 +216,11 @@ export function TradeView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(fromToken, 'from')
+                                    const picked = await pickToken(
+                                        fromToken,
+                                        'from',
+                                        isSwap && toToken?.address ? [toToken.address] : [],
+                                    )
                                     if (picked) {
                                         setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
@@ -274,7 +281,11 @@ export function TradeView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(toToken, 'to')
+                                    const picked = await pickToken(
+                                        toToken,
+                                        'to',
+                                        isSwap && fromToken ? [fromToken.address] : [],
+                                    )
                                     if (picked) setToToken(picked)
                                 }}>
                                 <Box className={classes.icon}>

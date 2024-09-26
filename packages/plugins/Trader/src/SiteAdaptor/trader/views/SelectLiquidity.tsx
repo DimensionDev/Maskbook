@@ -9,6 +9,7 @@ import { memo, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -226,7 +227,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                             setDisabledDexIds(pendingDisabledDexIds)
                             navigate(-1)
                         }}>
-                        Confirm
+                        <Trans>Confirm</Trans>
                     </Button>
                 </Box>
             </div>
