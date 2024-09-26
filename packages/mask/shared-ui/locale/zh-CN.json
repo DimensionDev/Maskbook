@@ -4,6 +4,7 @@
         "KMgp2+": [["0"], " 可用"],
         "y6VCOb": [["0"], " 分钟"],
         "ovXZv6": [["shareWithNum", "plural", { "one": "1 friend", "other": [["shareWithNum"], " friends"] }]],
+        "ANYjcp": [["shareWithNum", "plural", { "one": "1 friend", "other": ["#", " friends"] }]],
         "lKldOY": "请选择恢复备份的正确方法。",
         "llLBQ1": "代币",
         "uyJsf6": "关于",

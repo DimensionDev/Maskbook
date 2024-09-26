@@ -29,10 +29,11 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { Box, Stack } from '@mui/material'
-import { useSharedTrans } from '../../../locales/index.js'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export * from './type.js'
 
@@ -77,6 +78,7 @@ const useStyles = makeStyles()({
 })
 
 export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
+    const { _ } = useLingui()
     const {
         tokens = EMPTY_LIST,
         extendTokens = true,
@@ -92,8 +94,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         setMode,
         mode = TokenListMode.List,
     } = props
-
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)
@@ -267,7 +267,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 keyword
             :   ''
     }, [keyword, sortedFungibleTokensForList])
-    const searchError = keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? t.erc20_search_wrong_address() : ''
+    const searchError =
+        keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
     useEffect(() => {
         onSearchError?.(!!searchError)
     }, [searchError, !searchError])
@@ -337,7 +338,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     ])
     const SearchFieldProps = useMemo(
         () => ({
-            placeholder: t.erc20_token_list_placeholder(),
+            placeholder: _(msg`Name or Contract address e.g. USDC or 0x234...`),
             helperText: searchError,
             error: !!searchError,
             ...props.SearchTextFieldProps,

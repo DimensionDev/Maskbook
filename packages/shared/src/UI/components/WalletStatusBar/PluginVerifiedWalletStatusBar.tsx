@@ -20,13 +20,13 @@ import {
     useChainId,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { useSharedTrans } from '../../../locales/index.js'
 import { Action } from './Action.js'
 import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { SelectProviderModal, WalletStatusModal, useMenuConfig } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -72,7 +72,6 @@ interface PluginVerifiedWalletStatusBarProps extends PropsWithChildren {
 
 export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarProps>(
     ({ className, children, verifiedWallets, onChange, expectedAddress, openPopupWindow, onChangeWallet }) => {
-        const t = useSharedTrans()
         const { classes, cx } = useStyles()
 
         const account = useAccount()
@@ -176,7 +175,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                             fullWidth
                             onClick={onChangeWallet ? onChangeWallet : () => SelectProviderModal.open()}
                             sx={{ minWidth: 311 }}>
-                            {t.connect_your_wallet()}
+                            <Trans>Connect your wallet</Trans>
                         </Button>
                     </MenuItem>,
                 wallets.length ? <Divider key="divider" style={{ marginLeft: 8, marginRight: 8 }} /> : null,
@@ -195,7 +194,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
                         <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                             <Icons.WalletSetting size={30} sx={{ marginRight: 1, transform: 'translate(0px, 2px)' }} />
                             <Typography fontSize={14} fontWeight={700}>
-                                {t.connected_wallet_settings()}
+                                <Trans>Connected wallets settings</Trans>
                             </Typography>
                         </Box>
                     </MenuItem>
@@ -214,7 +213,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
             return (
                 <Box className={cx(classes.root, className)}>
                     <Button fullWidth onClick={() => SelectProviderModal.open()}>
-                        <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
+                        <Icons.Wallet className={classes.connection} /> <Trans>Connect Wallet</Trans>
                     </Button>
                 </Box>
             )

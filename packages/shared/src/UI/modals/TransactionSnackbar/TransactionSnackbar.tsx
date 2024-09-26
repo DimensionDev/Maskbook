@@ -15,8 +15,8 @@ import { type NetworkPluginID, createLookupTableResolver, Sniffings } from '@mas
 import { TransactionStatusType, type RecognizableError } from '@masknet/web3-shared-base'
 import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useSharedTrans } from '../../../index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     link: {
@@ -28,7 +28,6 @@ const useStyles = makeStyles()({
 
 export function useTransactionSnackbar(pluginID: NetworkPluginID) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
     const { showSnackbar, closeSnackbar } = useCustomSnackbar()
     const { showSnackbar: showPopupSnackbar, closeSnackbar: closePopupSnackbar } = usePopupCustomSnackbar()
     const snackbarKeyRef = useRef<SnackbarKey>(undefined)
@@ -88,17 +87,17 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
             [TransactionStatusType.NOT_DEPEND]: {
                 processing: true,
                 variant: 'default',
-                message: t.plugin_wallet_snackbar_wait_for_confirming(),
+                message: <Trans>Confirm this transaction in your wallet</Trans>,
             },
             [TransactionStatusType.SUCCEED]: {
                 processing: false,
                 variant: 'success',
-                message: t.plugin_wallet_snackbar_confirmed(),
+                message: <Trans>Transaction Confirmed</Trans>,
             },
             [TransactionStatusType.FAILED]: {
                 processing: false,
                 variant: 'error',
-                message: t.plugin_wallet_snackbar_failed(),
+                message: <Trans>Transaction Failed</Trans>,
             },
         },
         {},

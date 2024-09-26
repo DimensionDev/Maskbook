@@ -9,10 +9,10 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, DialogContent, Typography, dialogClasses } from '@mui/material'
 import { useRef, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useSharedTrans } from '../../../locales/i18n_generated.js'
 import { Spinner } from '../../components/Spinner.js'
 import { WalletIcon } from '../../components/WalletIcon/index.js'
 import { InjectedDialog } from '../../contexts/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -65,8 +65,6 @@ export type ConnectWalletModalCloseProps = boolean
 export function ConnectWalletModal({
     ref,
 }: SingletonModalProps<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>) {
-    const t = useSharedTrans()
-
     const connectionRef = useRef<{
         pluginID: NetworkPluginID
         networkType: Web3Helper.NetworkTypeAll
@@ -142,7 +140,7 @@ export function ConnectWalletModal({
 
     return (
         <InjectedDialog
-            title={t.connect_with_wallet({ wallet: providerName })}
+            title={<Trans>Connect with {providerName}</Trans>}
             open={open}
             onClose={() => dispatch?.close(false)}
             maxWidth="sm"
@@ -173,12 +171,12 @@ export function ConnectWalletModal({
                     fontSize={16}
                     mt={1.5}
                     color={error && !loading ? maskColor.danger : undefined}>
-                    {t.requesting_connection()}
+                    <Trans>Requesting Connection</Trans>
                 </Typography>
                 <Typography fontWeight={400} mt={1.5}>
                     {isCanceled && !loading ?
-                        t.you_canceled_the_request()
-                    :   t.check_to_confirm_connect({ wallet: providerName })}
+                        <Trans>You canceled the request.</Trans>
+                    :   <Trans>Check {providerName} to confirm connect.</Trans>}
                 </Typography>
                 {error ?
                     <ActionButton
@@ -188,7 +186,7 @@ export function ConnectWalletModal({
                         onClick={onConnect}
                         disabled={loading}
                         className={classes.retryButton}>
-                        {t.retry()}
+                        <Trans>Retry</Trans>
                     </ActionButton>
                 :   null}
             </DialogContent>

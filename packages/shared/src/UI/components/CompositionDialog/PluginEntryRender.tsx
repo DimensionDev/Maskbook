@@ -10,16 +10,11 @@ import {
 } from '@masknet/plugin-infra/content-script'
 import { DialogContent, alpha } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import {
-    ClickableChip,
-    GrantPermissions,
-    InjectedDialog,
-    usePluginHostPermissionCheck,
-    useSharedTrans,
-} from '@masknet/shared'
+import { ClickableChip, GrantPermissions, InjectedDialog, usePluginHostPermissionCheck } from '@masknet/shared'
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { requestHostPermission } from '@masknet/plugin-infra/dom/context'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     sup: {
@@ -106,12 +101,11 @@ const cache = new Map<
 function getPluginEntryDisabledDialog(define: Plugin.Shared.Definition) {
     if (!cache.has(define)) {
         cache.set(define, (props: Plugin.SiteAdaptor.CompositionDialogEntry_DialogProps) => {
-            const t = useSharedTrans()
             const { classes } = usePermissionDialogStyles()
             return (
                 <InjectedDialog
                     classes={{ paper: classes.root, dialogTitle: classes.dialogTitle }}
-                    title={t.domain_request()}
+                    title={<Trans>Domain Request</Trans>}
                     open={props.open}
                     onClose={props.onClose}
                     maxWidth="sm"

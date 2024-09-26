@@ -62,9 +62,9 @@ export async function migrate() {
         suppressDiagnosticEvents: true,
     })
 
-    const cwd = new URL('../../../mask/', import.meta.url)
-    const inputURL = new URL('./shared-ui/locales/i18n_generated.ts', cwd)
-    const enUS_URL = new URL('./shared-ui/locales/en-US.json', cwd)
+    const cwd = new URL('../../../shared/', import.meta.url)
+    const inputURL = new URL('./src/locales/i18n_generated.ts', cwd)
+    const enUS_URL = new URL('./src/locales/en-US.json', cwd)
     const json = JSON.parse(await readFile(enUS_URL, 'utf-8'))
     processFile(inputURL, json)
 
@@ -74,7 +74,7 @@ export async function migrate() {
         ['ja-JP', 'ko-KR', 'zh-CN', 'zh-TW'].map(async (lang) => {
             const langFile = JSON.parse(await readFile(new URL('./' + lang + '.json', enUS_URL), 'utf-8'))
 
-            const poFilePath = new URL('./shared-ui/locale/' + lang + '.po', cwd)
+            const poFilePath = new URL('./src/locale/' + lang + '.po', cwd)
             const poFile = await readFile(poFilePath, 'utf-8')
 
             const nextPoFile: string[] = []

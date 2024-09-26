@@ -12,7 +12,7 @@ import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
-import { plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 interface InfoFieldProps extends withClasses<'field'>, PropsWithChildren {
     title: ReactNode
@@ -75,10 +75,7 @@ export function InformationCard() {
     return (
         <SnapshotCard title={<Trans>Information</Trans>}>
             <InfoField
-                title={plural(strategies.length, {
-                    one: 'Strategy',
-                    other: 'Strategies',
-                })}
+                title={<Plural value={strategies.length} one="Strategy" other="Strategies" />}
                 classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies

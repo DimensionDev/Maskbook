@@ -8,7 +8,7 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { isGte, isSameAddress, type FungibleToken, rightShift } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { HelpOutline } from '@mui/icons-material'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
     icon: {},
@@ -57,8 +57,6 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
         callback,
         tooltip,
     } = props
-
-    const t = useSharedTrans()
     const { classes } = useStyles(undefined, { props })
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: token?.chainId })
     const { data: tokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, token?.address, {
@@ -120,7 +118,9 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 onClick={() => refetch()}
                 {...props.ActionButtonProps}>
-                {failedContent ?? t.wallet_load_retry({ symbol: token.symbol ?? token.name ?? 'Token' })}
+                {failedContent ?? (
+                    <Trans>Failed to load {token.symbol ?? token.name ?? 'Token'}. Click to retry.</Trans>
+                )}
             </ActionButton>
         )
     if (loading || !approved)
@@ -143,11 +143,12 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                     showHelperToken ?
                         <ShadowRootTooltip
                             title={
-                                tooltip ??
-                                t.plugin_wallet_token_infinite_unlock_tips({
-                                    provider: contractName ?? '',
-                                    symbol: token.symbol,
-                                })
+                                tooltip ?? (
+                                    <Trans>
+                                        You must give the {contractName ?? ''} smart contract permission to use your{' '}
+                                        {token.symbol}. You only have to do this once per token.
+                                    </Trans>
+                                )
                             }
                             placement="top"
                             arrow
@@ -161,7 +162,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>
-                {infiniteUnlockContent ?? t.plugin_wallet_token_infinite_unlock({ symbol: token.symbol })}
+                {infiniteUnlockContent ?? <Trans>Unlock {token.symbol}</Trans>}
             </ActionButton>
         )
     if (approved) return <>{typeof children === 'function' ? children(allowance) : children}</>

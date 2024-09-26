@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, Image, useSharedTrans } from '@masknet/shared'
+import { CopyButton, Image } from '@masknet/shared'
 import { CrossIsolationMessages, NextIDPlatform, type BindingProof, PersistentStorages } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
@@ -12,6 +12,7 @@ import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import { first } from 'lodash-es'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -150,7 +151,6 @@ export function SocialAccountListItem({
     relatedList,
     profileUrl,
 }: SocialAccountListItemProps) {
-    const t = useSharedTrans()
     const { account } = useChainContext()
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
@@ -230,10 +230,10 @@ export function SocialAccountListItem({
                                 })
                             }}>
                             {isSameAddress(account, value?.ownedBy.address) ?
-                                t.view()
+                                <Trans>View</Trans>
                             : value?.isFollowing ?
-                                t.lens_following()
-                            :   t.lens_follow()}
+                                <Trans>Following</Trans>
+                            :   <Trans>Follow</Trans>}
                         </ActionButton>
                     :   <div className={classes.linkIcon}>
                             <Icons.LinkOut size={16} className={classes.linkOutIcon} />

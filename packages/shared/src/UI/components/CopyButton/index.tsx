@@ -12,7 +12,7 @@ import {
     type ReactNode,
 } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     copy: {
@@ -49,7 +49,6 @@ export const CopyButton = memo(function CopyButton({
     ref,
     ...props
 }: CopyButtonProps) {
-    const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props })
 
     const [, copyToClipboard] = useCopyToClipboard()
@@ -72,7 +71,7 @@ export const CopyButton = memo(function CopyButton({
         [text, scoped],
     )
 
-    const tooltipTitle = copied ? successText ?? t.copied() : title ?? t.copy()
+    const tooltipTitle = copied ? successText ?? <Trans>Copied!</Trans> : title ?? <Trans>Copy</Trans>
     const iconProps = { size, color }
 
     useImperativeHandle(

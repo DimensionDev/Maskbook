@@ -26,7 +26,7 @@ msgstr ""
 msgid "{0} members"
 msgstr "{0} 位成员"
 
-#: src/SiteAdaptor/InformationCard.tsx:98
+#: src/SiteAdaptor/InformationCard.tsx:95
 msgid "Author"
 msgstr "作者"
 
@@ -52,7 +52,7 @@ msgstr "在相应项目或协议的Twitter页面显示 Snapshot 提议。"
 msgid "Download report"
 msgstr "下载报告"
 
-#: src/SiteAdaptor/InformationCard.tsx:129
+#: src/SiteAdaptor/InformationCard.tsx:126
 msgid "End date"
 msgstr "结束日期"
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Information"
 msgstr "信息"
 
-#: src/SiteAdaptor/InformationCard.tsx:114
+#: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
 msgstr "IPFS"
 
@@ -118,7 +118,7 @@ msgstr "提案"
 msgid "Results"
 msgstr "结果"
 
-#: src/SiteAdaptor/InformationCard.tsx:134
+#: src/SiteAdaptor/InformationCard.tsx:131
 #: src/SiteAdaptor/PluginDescriptor.tsx:33
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
@@ -129,7 +129,7 @@ msgstr "Snapshot"
 msgid "Space"
 msgstr "空格"
 
-#: src/SiteAdaptor/InformationCard.tsx:124
+#: src/SiteAdaptor/InformationCard.tsx:121
 msgid "Start date"
 msgstr "开始日期"
 

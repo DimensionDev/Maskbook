@@ -3,9 +3,9 @@ import { Image, NFTSpamBadge, useReportSpam } from '@masknet/shared'
 import { LoadingBase, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
 import { useUserAssets } from './AssetsProvider.js'
 import { CollectionsContext } from './CollectionsProvider.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -44,7 +44,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 }
 
 export const CollectionHeader = memo(function CollectionHeader({ className, onResetCollection, ...rest }: Props) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const { getVerifiedBy } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
@@ -65,7 +64,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                 :   null}
                 <Typography mx={1}>{currentCollection.name}</Typography>
                 {currentVerifiedBy.length ?
-                    <ShadowRootTooltip title={t.verified_by({ marketplace: currentVerifiedBy.join(', ') })}>
+                    <ShadowRootTooltip title={<Trans>Verified by {currentVerifiedBy.join(', ')}</Trans>}>
                         <Icons.Verification size={16} />
                     </ShadowRootTooltip>
                 :   null}

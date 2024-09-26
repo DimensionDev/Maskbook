@@ -2,7 +2,6 @@ import { useState, useMemo, useEffect } from 'react'
 import { Controller, FormProvider, useForm } from 'react-hook-form'
 import { makeStyles, MaskTextField, MaskAlert } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '@masknet/shared'
 import { Box, Paper } from '@mui/material'
 import { isZero } from '@masknet/web3-shared-base'
 import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
@@ -10,6 +9,8 @@ import type { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { RadioChip } from './RadioChip.js'
 import { useSlippageToleranceSchema } from './hooks/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -36,8 +37,8 @@ interface SlippageToleranceFormProps {
 }
 
 export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
+    const { _ } = useLingui()
     const { slippageTolerance, slippageTolerances, onChange } = props
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const schema = useSlippageToleranceSchema()
@@ -87,7 +88,7 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                         render={({ field }) => (
                             <MaskTextField
                                 {...field}
-                                placeholder={t.gas_settings_custom()}
+                                placeholder={_(msg`Custom`)}
                                 InputProps={{
                                     type: 'number',
                                     inputProps: {
@@ -120,13 +121,16 @@ export function SlippageToleranceForm(props: SlippageToleranceFormProps) {
                 </MaskAlert>
             : tolerance < slippageTolerances[0] ?
                 <MaskAlert icon={<Icons.WarningTriangle color="warning" />} severity="warning">
-                    {t.gas_settings_alert_low_slippage_tolerance()}
+                    <Trans>
+                        Transaction with extremely low slippage tolerance might be reverted because of very small market
+                        movement.
+                    </Trans>
                 </MaskAlert>
             : tolerance > slippageTolerances.at(-1)! ?
                 <MaskAlert icon={<Icons.Warning />} severity="error">
-                    {t.gas_settings_alert_high_slippage_tolerance({
-                        percentage: tolerance.toString(),
-                    })}
+                    <Trans>
+                        You may have {tolerance.toString()}% less received with this level of slippage tolerance.
+                    </Trans>
                 </MaskAlert>
             :   null}
         </FormProvider>

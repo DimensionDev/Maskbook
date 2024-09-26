@@ -10,7 +10,7 @@ import {
     type PluginWrapperComponentProps,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 interface PluginWrapperProps extends React.PropsWithChildren {
     open?: boolean
@@ -90,7 +90,6 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         borderRadius: wrapperProps?.borderRadius,
         margin: wrapperProps?.margin,
     })
-    const t = useSharedTrans()
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
@@ -107,7 +106,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         return (
             <Box className={classes.provider}>
                 <Typography variant="body1" className={classes.providerBy}>
-                    {t.powered_by()}
+                    <Trans>Powered by</Trans>
                 </Typography>
                 {main}
                 {publisherLink ?
@@ -139,7 +138,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
                     fontWeight={700}
                     component="div"
                     color={MaskColorVar.textPluginColor}>
-                    {wrapperProps?.title ?? title ?? t.plugin_default_title()}
+                    {wrapperProps?.title ?? title ?? <Trans>Default</Trans>}
                 </Typography>
                 <div className={classes.publish}>{publisherInfo}</div>
             </div>

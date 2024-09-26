@@ -18,9 +18,10 @@ import {
     useMediaQuery,
     useTheme,
 } from '@mui/material'
-import { useSharedTrans } from '../../../locales/index.js'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface StyleProps {
     clean: boolean
@@ -137,6 +138,7 @@ export interface InjectedDialogProps extends Omit<DialogProps, 'onClose' | 'titl
 }
 
 export function InjectedDialog(props: InjectedDialogProps) {
+    const { _ } = useLingui()
     const site = useValueRef(sharedUINetworkIdentifier)
     const overwrite = useValueRef(sharedUIComponentOverwrite)
     const clean = site === EnhanceableSite.Minds || site === EnhanceableSite.Facebook
@@ -169,8 +171,6 @@ export function InjectedDialog(props: InjectedDialogProps) {
         container,
         ...dialogClasses
     } = classes
-
-    const t = useSharedTrans()
     const fullScreen = useMediaQuery(useTheme().breakpoints.down('xs'))
     const {
         children,
@@ -237,7 +237,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
                                 size="large"
                                 disableTouchRipple
                                 classes={{ root: cx(dialogCloseButton, titleTabs ? dialogCloseButtonWithTabs : '') }}
-                                aria-label={t.dialog_dismiss()}
+                                aria-label={_(msg`Dismiss`)}
                                 onClick={!props.isOnBack ? closeBothCompositionDialog : onClose}>
                                 <DialogDismissIcon
                                     style={

@@ -351,7 +351,7 @@ export namespace Plugin.SiteAdaptor {
          */
         RenderEntryComponent?: (props: {
             disabled: boolean
-            tooltipHint?: string
+            tooltipHint?: React.ReactNode
             onClick?: (walletConnectedCallback?: () => void, requiredSupportPluginID?: NetworkPluginID) => void
         }) => JSX.Element | null
         /**

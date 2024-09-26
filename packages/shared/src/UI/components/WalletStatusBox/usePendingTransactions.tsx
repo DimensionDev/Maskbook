@@ -9,6 +9,7 @@ import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { TransactionList } from './TransactionList.js'
 import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
@@ -57,7 +58,7 @@ export function usePendingTransactions() {
                 </div>
                 {pendingTransactions.length ?
                     <Typography className={classes.clearAll} onClick={clearRecentTxes} fontWeight={700}>
-                        {t.wallet_status_pending_clear_all()}
+                        <Trans>Clear All</Trans>
                     </Typography>
                 :   null}
             </section>

@@ -1,8 +1,8 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PersonaSelectPanel, type PositionOption } from '../../components/PersonaSelectPanel/index.js'
-import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
+import { Trans } from '@lingui/macro'
 
 type PositionStyle = {
     top?: number
@@ -59,8 +59,6 @@ export function PersonaSelectPanelDialog({
     finishTarget,
     onClose,
 }: PersonaSelectPanelDialogProps) {
-    const t = useSharedTrans()
-
     const { classes } = useStyles({ positionStyle: positionStyleMap[position] })
 
     return open ?
@@ -73,7 +71,7 @@ export function PersonaSelectPanelDialog({
                 }}
                 maxWidth="sm"
                 onClose={onClose}
-                title={t.applications_persona_title()}
+                title={<Trans>Persona</Trans>}
                 titleBarIconStyle="close">
                 <DialogContent classes={{ root: classes.content }}>
                     <PersonaSelectPanel enableVerify={enableVerify} finishTarget={finishTarget} onClose={onClose} />

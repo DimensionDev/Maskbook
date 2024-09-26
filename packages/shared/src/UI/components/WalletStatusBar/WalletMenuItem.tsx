@@ -15,7 +15,7 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
 import { WalletDescription, type WalletDescriptionProps } from './WalletDescription.js'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -35,7 +35,6 @@ interface WalletMenuItemProps {
 
 export const WalletMenuItem = memo<WalletMenuItemProps>(
     ({ address, selected, onChangeWallet, platform, onSelect, verified, expectedChainId }) => {
-        const t = useSharedTrans()
         const { classes } = useStyles()
 
         const { pluginID } = useNetworkContext(platform ? resolveNextID_NetworkPluginID(platform) : undefined)
@@ -77,7 +76,7 @@ export const WalletMenuItem = memo<WalletMenuItemProps>(
                 <WalletDescription {...descriptionProps} />
                 {onChangeWallet ?
                     <Button size="medium" variant="roundedContained" onClick={onChangeWallet} sx={{ marginLeft: 4 }}>
-                        {t.wallet_status_button_change()}
+                        <Trans>Change</Trans>
                     </Button>
                 :   null}
             </MenuItem>

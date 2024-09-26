@@ -21,7 +21,7 @@ msgstr ""
 msgid "{0} members"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:98
+#: src/SiteAdaptor/InformationCard.tsx:95
 msgid "Author"
 msgstr ""
 
@@ -47,7 +47,7 @@ msgstr ""
 msgid "Download report"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:129
+#: src/SiteAdaptor/InformationCard.tsx:126
 msgid "End date"
 msgstr ""
 
@@ -63,7 +63,7 @@ msgstr ""
 msgid "Information"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:114
+#: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
 msgstr ""
 
@@ -113,7 +113,7 @@ msgstr ""
 msgid "Results"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:134
+#: src/SiteAdaptor/InformationCard.tsx:131
 #: src/SiteAdaptor/PluginDescriptor.tsx:33
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
@@ -124,7 +124,7 @@ msgstr ""
 msgid "Space"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:124
+#: src/SiteAdaptor/InformationCard.tsx:121
 msgid "Start date"
 msgstr ""
 

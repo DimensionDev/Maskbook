@@ -16,10 +16,10 @@ import { useMemo } from 'react'
 import { Trans as Trans2 } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { useVerifyContent } from '../../../hooks/index.js'
-import { useSharedTrans } from '../../../locales/i18n_generated.js'
 import { useBaseUIRuntime } from '../../contexts/index.js'
 import { BindingDialog, type BindingDialogProps } from '../BindingDialog/index.js'
 import { EmojiAvatar } from '../EmojiAvatar/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -157,7 +157,6 @@ export interface VerifyNextIDDialogProps extends BindingDialogProps {
 }
 
 export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyNextIDDialogProps) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const queryClient = useQueryClient()
 
@@ -243,7 +242,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                     : creatingVerifyContent ?
                         <>
                             <Typography className={classes.postContentTitle}>
-                                {t.verify_next_id_post_content()}
+                                <Trans>Post content:</Trans>
                             </Typography>
                             <Typography className={classes.postContent}>
                                 <Skeleton variant="text" />
@@ -254,17 +253,23 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                                 <Skeleton variant="text" width="50%" />
                             </Typography>
                             <Typography className={classes.tip} component="div">
-                                {t.verify_next_id_tips()}
+                                <Trans>
+                                    We will need to verify your Twitter account and record it on the NextID. Please post
+                                    it for validation.
+                                </Trans>
                             </Typography>
                         </>
                     : content?.post ?
                         <>
                             <Typography className={classes.postContentTitle}>
-                                {t.verify_next_id_post_content()}
+                                <Trans>Post content:</Trans>
                             </Typography>
                             <Typography className={classes.postContent}>{content.post}</Typography>
                             <Typography className={classes.tip} component="div">
-                                {t.verify_next_id_tips()}
+                                <Trans>
+                                    We will need to verify your Twitter account and record it on the NextID. Please post
+                                    it for validation.
+                                </Trans>
                             </Typography>
                         </>
                     :   null}
@@ -279,7 +284,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                         loading={verifying}
                         onClick={onVerify}>
                         <Icons.Send size={18} className={classes.send} />
-                        {t.send()}
+                        <Trans>Send</Trans>
                     </ActionButton>
                 </Box>
             </div>

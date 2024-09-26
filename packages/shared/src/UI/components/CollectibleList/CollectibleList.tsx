@@ -5,11 +5,11 @@ import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Box, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo, useRef } from 'react'
-import { useSharedTrans } from '../../../index.js'
 import { ReloadStatus } from '../index.js'
 import { CollectibleItem, type ChangeEventOptions, type SelectableProps } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './type.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -85,7 +85,6 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
         className,
         ...rest
     } = props
-    const t = useSharedTrans()
     const { classes, cx } = useStyles({ columns, gap })
     const Utils = useWeb3Utils()
 
@@ -110,7 +109,7 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
             {loading && collectibles.length === 0 ?
                 <LoadingSkeleton className={classes.root} />
             : error || (collectibles.length === 0 && !loading) ?
-                <ReloadStatus className={classes.text} message={t.no_collectible_found()} onRetry={retry} />
+                <ReloadStatus className={classes.text} message={<Trans>No collectible found.</Trans>} onRetry={retry} />
             :   <Box className={classes.root}>
                     {collectibles.map((token, index) => {
                         const name = token.metadata?.name

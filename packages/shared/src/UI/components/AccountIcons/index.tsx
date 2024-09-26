@@ -7,6 +7,7 @@ import { Typography, type TooltipProps, Link } from '@mui/material'
 import { compact } from 'lodash-es'
 import { Linking } from '../../../index.js'
 import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -74,11 +75,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
                         t.account_icon_tooltips_only({
                             context: platform!,
                         })
-                    :   t.account_icon_tooltips({
-                            source: type?.replace('_', ' ') ?? '',
-                            context: platform,
-                        })
-                    }
+                    :   <Trans>Data source is retrieved from {type?.replace('_', ' ') ?? ''}.</Trans>}
                 </Typography>
             }
             arrow>

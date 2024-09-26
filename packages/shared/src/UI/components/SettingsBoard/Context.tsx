@@ -1,11 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
 import { createContainer } from '@masknet/shared-base-ui'
-import { useSharedTrans } from '@masknet/shared'
 import { useGasOptions, useNetworkContext, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { GasSettingsType } from './types/index.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const DEFAULT_SLIPPAGE_TOLERANCE = 0.5
 const DEFAULT_SLIPPAGE_TOLERANCES = [0.5, 1, 2, 5]
@@ -29,7 +30,7 @@ function useSettingsContext(initial?: {
     disableGasLimit?: boolean
     disableSlippageTolerance?: boolean
 }) {
-    const t = useSharedTrans()
+    const { _ } = useLingui()
     const { pluginID } = useNetworkContext(initial?.pluginID)
     const { chainId } = useChainContext({
         chainId: initial?.chainId,
@@ -91,9 +92,9 @@ function useSettingsContext(initial?: {
         DEFAULT_SLIPPAGE_TOLERANCE,
         DEFAULT_SLIPPAGE_TOLERANCES,
         GAS_OPTION_NAMES: {
-            [GasOptionType.FAST]: t.gas_settings_gas_option_type_fast(),
-            [GasOptionType.NORMAL]: t.gas_settings_gas_option_type_normal(),
-            [GasOptionType.SLOW]: t.gas_settings_gas_option_type_slow(),
+            [GasOptionType.FAST]: _(msg`Instant`),
+            [GasOptionType.NORMAL]: _(msg`High`),
+            [GasOptionType.SLOW]: _(msg`Medium`),
             [GasOptionType.CUSTOM]: '',
         },
 
