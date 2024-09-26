@@ -418,10 +418,6 @@ export const Confirm = memo(function Confirm() {
                                 })
                                 return
                             }
-                            showSnackbar(t`Transaction submitted.`, {
-                                title: t`Swap`,
-                                variant: 'error',
-                            })
                             const estimatedSeconds =
                                 gasOptions ?
                                     gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds

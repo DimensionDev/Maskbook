@@ -465,10 +465,6 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 })
                                 return
                             }
-                            showSnackbar(t`Transaction submitted.`, {
-                                title: t`Bridge`,
-                                variant: 'error',
-                            })
                             await addTransaction(account, {
                                 kind: 'bridge',
                                 hash,
