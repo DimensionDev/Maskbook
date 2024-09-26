@@ -33,6 +33,7 @@ import { useTokenPrice } from '../hooks/useTokenPrice.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
 import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
 import { useBridgeSpender } from '../hooks/useBridgeSpender.js'
+import { useLeave } from '../hooks/useLeave.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -278,6 +279,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const bridgeFeeValue = multipliedBy(bridgeFee ?? 0, bridgeFeeTokenPrice ?? 0).toFixed(2)
 
     const showStale = isQuoteStale && !isSending && !isApproving
+
+    const leaveRef = useLeave()
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -496,6 +499,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 leftSideToken: getBridgeLeftSideToken(bridge),
                                 rightSideToken: getBridgeRightSideToken(bridge),
                             })
+                            if (leaveRef.current) return
                             const url = urlcat(RoutePaths.Transaction, { hash, chainId: fromChainId, mode })
                             navigate(url, { replace: true })
                         }}>

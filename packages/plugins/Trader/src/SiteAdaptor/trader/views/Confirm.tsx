@@ -25,6 +25,7 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
@@ -256,6 +257,7 @@ export const Confirm = memo(function Confirm() {
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
+    const leaveRef = useLeave()
 
     return (
         <div className={classes.container}>
@@ -450,6 +452,7 @@ export const Confirm = memo(function Confirm() {
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
+                            if (leaveRef.current) return
                             const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
                             navigate(url, { replace: true })
                         }}>
