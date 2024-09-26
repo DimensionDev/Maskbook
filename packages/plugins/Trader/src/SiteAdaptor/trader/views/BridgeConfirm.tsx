@@ -216,17 +216,21 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
         forwardCompare ? [quote?.fromToken, quote?.toToken] : [quote?.toToken, quote?.fromToken]
+
     const rate = useMemo(() => {
-        const fromAmount = leftShift(fromTokenAmount || 0, fromToken?.decimals || 1)
-        const toAmount = leftShift(toTokenAmount || 0, toToken?.decimals || 1)
+        if (!quote) return null
+        const { fromTokenAmount, toTokenAmount, fromToken, toToken } = quote
+        const fromAmount = leftShift(fromTokenAmount || 0, fromToken.decimals)
+        const toAmount = leftShift(toTokenAmount || 0, toToken.decimals)
         if (fromAmount.isZero() || toAmount.isZero()) return null
         return forwardCompare ? dividedBy(toAmount, fromAmount) : dividedBy(fromAmount, toAmount)
-    }, [fromTokenAmount, toToken, fromToken, toToken])
+    }, [quote])
 
     const rateNode =
         baseToken && targetToken && rate ?
             <>
-                1 {baseToken.tokenSymbol} ≈ {formatCompact(rate.toNumber())} {targetToken.tokenSymbol}
+                1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
+                {targetToken.tokenSymbol}
                 <Icons.Cached
                     size={16}
                     color={theme.palette.maskColor.main}

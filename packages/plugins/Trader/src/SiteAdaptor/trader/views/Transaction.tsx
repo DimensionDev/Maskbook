@@ -289,7 +289,8 @@ export const Transaction = memo(function Transaction() {
     const rateNode =
         baseToken && targetToken ?
             <>
-                1 {baseToken.symbol} ≈ {formatCompact(rate!.toNumber())} {targetToken.symbol}
+                1 {baseToken.symbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
+                {targetToken.symbol}
                 <Icons.Cached
                     size={16}
                     color={theme.palette.maskColor.main}
