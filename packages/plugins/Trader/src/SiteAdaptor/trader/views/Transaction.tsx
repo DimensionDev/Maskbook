@@ -225,7 +225,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 }))
 
 export const Transaction = memo(function Transaction() {
-    const { reset, setFromToken, mode, setMode, setToToken } = useTrade()
+    const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -551,7 +551,6 @@ export const Transaction = memo(function Transaction() {
                         fullWidth
                         onClick={() => {
                             if (txSucceed) reset()
-                            setMode(tx.kind)
                             setFromToken(okxTokenToFungibleToken(tx.fromToken))
                             setToToken(okxTokenToFungibleToken(tx.toToken))
                             navigate(urlcat(RoutePaths.Trade, { mode: tx.kind }))

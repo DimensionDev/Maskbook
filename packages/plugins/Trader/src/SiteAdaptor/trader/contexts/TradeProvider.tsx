@@ -28,14 +28,12 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useQuotes } from '../hooks/useQuotes.js'
 import { useDefaultParams } from './useDefaultParams.js'
 import { useMode, type TradeMode } from './useMode.js'
-import type { NavigateOptions } from 'react-router-dom'
 
 interface Options {
     chainId: ChainId
     setChainId: Dispatch<SetStateAction<ChainId>>
     nativeToken: Web3Helper.FungibleTokenAll | undefined
     mode: TradeMode
-    setMode: (mode: TradeMode, options?: NavigateOptions) => void
     fromToken: Web3Helper.FungibleTokenAll | undefined
     setFromToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | undefined>>
     toToken: Web3Helper.FungibleTokenAll | undefined
@@ -101,7 +99,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const { chainId: defaultChainId, nativeToken, paramToToken } = useDefaultParams()
     const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
 
-    const [mode, setMode] = useMode()
+    const mode = useMode()
 
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
 
@@ -191,7 +189,6 @@ export function TradeProvider({ children }: PropsWithChildren) {
         () => ({
             chainId,
             mode,
-            setMode,
             setChainId,
             quote,
             isQuoteStale,
