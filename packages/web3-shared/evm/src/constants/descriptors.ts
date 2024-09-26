@@ -365,19 +365,6 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         isMainnet: true,
         averageBlockDelay: 10,
     },
-    {
-        ID: `${PLUGIN_ID}_scroll-sdk`,
-        networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.ScrollSDK,
-        type: NetworkType.ScrollSDK,
-        name: 'ScrollSDK',
-        icon: new URL('../assets/scroll.svg', import.meta.url).href,
-        backgroundGradient:
-            'linear-gradient(180deg, rgba(98, 126, 234, 0.15) 0%, rgba(98, 126, 234, 0.05) 100%), rgba(255, 255, 255, 0.2)',
-        iconColor: 'rgb(255, 248, 243)',
-        averageBlockDelay: 9,
-        isMainnet: true,
-    },
 ]
 
 export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>> = CHAINS.map((x) => {
