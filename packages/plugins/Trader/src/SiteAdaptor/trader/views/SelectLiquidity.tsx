@@ -128,6 +128,11 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
         setKeyword('')
     }
 
+    const remains =
+        pendingDisabledDexIds.length ?
+            liquidityList.filter((x) => !pendingDisabledDexIds.includes(x.id))
+        :   liquidityList
+
     return (
         <div className={classes.container}>
             <Box className={classes.searchInput}>
@@ -223,6 +228,7 @@ export const SelectLiquidity = memo(function SelectLiquidity() {
                 <Box flexGrow={1}>
                     <Button
                         fullWidth
+                        disabled={!remains.length}
                         onClick={() => {
                             setDisabledDexIds(pendingDisabledDexIds)
                             navigate(-1)

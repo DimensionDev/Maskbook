@@ -9,7 +9,8 @@ export function useSwapData(opts: Partial<SwapOptions>) {
         opts.fromTokenAddress &&
         opts.toTokenAddress &&
         opts.slippage !== undefined &&
-        opts.userWalletAddress
+        opts.userWalletAddress &&
+        (!opts.dexIds || opts.dexIds.length > 0)
 
     return useQuery({
         queryKey: ['okx-swap', 'get-swap', opts],

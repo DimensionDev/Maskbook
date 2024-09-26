@@ -185,6 +185,10 @@ export const Confirm = memo(function Confirm() {
         () => (inputAmount && decimals ? rightShift(inputAmount, decimals).toFixed(0) : ''),
         [inputAmount, decimals],
     )
+    const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
+    const remainLiquidityList =
+        disabledDexIds.length ? liquidityList.filter((x) => !disabledDexIds.includes(x.id)) : liquidityList
+    const dexIdsCount = remainLiquidityList.length
     const { data: swap, isLoading } = useSwapData({
         chainId: chainId.toString(),
         amount,
@@ -192,6 +196,7 @@ export const Confirm = memo(function Confirm() {
         toTokenAddress: toToken?.address,
         slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toString(),
         userWalletAddress: account,
+        dexIds: remainLiquidityList === liquidityList ? undefined : remainLiquidityList.map((x) => x.id).join(','),
     })
     const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
@@ -202,9 +207,6 @@ export const Confirm = memo(function Confirm() {
     const fromTokenAmount = routerResult?.fromTokenAmount
     const toToken_ = routerResult?.toToken
     const toTokenAmount = routerResult?.toTokenAmount
-
-    const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
-    const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
@@ -252,7 +254,7 @@ export const Confirm = memo(function Confirm() {
         useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
 
     const loading = isSending || isApproving || loadingApprove || isLoadingSpender
-    const disabled = !isSwappable || loading
+    const disabled = !isSwappable || loading || dexIdsCount === 0
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
