@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -25,3 +25,4 @@ msgstr "ユーザーが公開した暗号化ウェブサイトが危険か悪意
 #: src/SiteAdaptor/index.tsx:21
 msgid "Safety Warning"
 msgstr "安全警告"
+
