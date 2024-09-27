@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-25 13:13\n"
+"PO-Revision-Date: 2024-09-27 04:07\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -129,3 +129,4 @@ msgstr "토큰 ID"
 #: src/SiteAdaptor/Shared/DetailsCard.tsx:92
 msgid "Token Standard"
 msgstr "토큰 표준"
+
