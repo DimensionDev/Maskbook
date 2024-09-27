@@ -47,7 +47,7 @@ msgid "Cancel"
 msgstr ""
 
 #: src/SiteAdaptor/CheckSecurityDialog.tsx:75
-#: src/SiteAdaptor/index.tsx:23
+#: src/SiteAdaptor/index.tsx:22
 msgid "Check Security"
 msgstr ""
 
@@ -122,6 +122,10 @@ msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx:17
 msgid "Powered by"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:46
+msgid "Provide you with fast, reliable and convenient security services."
 msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:9

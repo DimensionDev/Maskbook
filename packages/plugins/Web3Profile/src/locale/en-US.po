@@ -22,6 +22,10 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:61
+msgid "Choose and showcase your Web3 footprints on Twitter."
+msgstr ""
+
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:200
 msgid "Confirm"
 msgstr ""
@@ -151,6 +155,6 @@ msgid "View your profile in firefly"
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:148
-#: src/SiteAdaptor/index.tsx:30
+#: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr ""

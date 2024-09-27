@@ -1,5 +1,6 @@
 {
     "messages": {
+        "m/TPEz": "(beta)",
         "yHppI0": [["0"], " network is not added in the wallet. Please add and try it again."],
         "OAZ+tI": [
             ["attentionFactors", "plural", { "one": ["#", " Attention item"], "other": ["#", " Attention items"] }]
@@ -22,6 +23,7 @@
         "7yTBmm": "Approve MASK?",
         "jquqYv": ["Are you sure to report ", ["0"], "? After approving, this NFT will be marked as spam."],
         "c19z3W": "Available Balance",
+        "ZrZMJ6": "Backup failed, <0>try again</0>",
         "fsBGk0": "Balance",
         "foOw00": ["Balance(", ["symbol"], ")"],
         "0wJVK+": "Basic",
@@ -54,6 +56,7 @@
         "CtByM7": "Connect Wallet",
         "2/N/mr": ["Connect with ", ["providerName"]],
         "iH8itU": "Connect your wallet",
+        "1XtOmj": "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network.",
         "Tg003Y": "Connected wallets settings",
         "ks5OGD": "Contract",
         "PiH3UR": "Copied!",
@@ -193,6 +196,7 @@
         "bLJivk": "Select an NFT Contract Owner",
         "Xftpm5": "Select Collection",
         "JlFcis": "Send",
+        "xNR7Cd": "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again.",
         "Z8lGw6": "Share",
         "ZIsLZh": "Size limit: 10 MB",
         "lqTDfd": "Slippage Tolerance",

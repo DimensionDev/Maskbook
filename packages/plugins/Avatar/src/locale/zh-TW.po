@@ -99,6 +99,14 @@ msgstr ""
 msgid "Set up NFT PFP successfully"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:51
+msgid "Set your NFT as profile picture with exclusive aura."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:70
+msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
+msgstr ""
+
 #: src/Application/UploadAvatarDialog.tsx:91
 msgid "Sorry, failed to save NFT Avatar. Please set again."
 msgstr ""

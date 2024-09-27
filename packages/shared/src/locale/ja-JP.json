@@ -1,5 +1,6 @@
 {
     "messages": {
+        "m/TPEz": "(beta)",
         "yHppI0": [["0"], " network is not added in the wallet. Please add and try it again."],
         "OAZ+tI": [
             ["attentionFactors", "plural", { "one": ["#", " Attention item"], "other": ["#", " Attention items"] }]
@@ -22,6 +23,7 @@
         "7yTBmm": "MASKを承認しますか？",
         "jquqYv": [["0"], "を報告してもよろしいですか？承認すると、このNFTはスパムとしてマークされます。"],
         "c19z3W": "利用可能な残高",
+        "ZrZMJ6": "Backup failed, <0>try again</0>",
         "fsBGk0": "残高",
         "foOw00": ["Balance(", ["symbol"], ")"],
         "0wJVK+": "基本",
@@ -54,6 +56,7 @@
         "CtByM7": "ウォレットを接続",
         "2/N/mr": ["Connect with ", ["providerName"]],
         "iH8itU": "ウォレットを接続します",
+        "1XtOmj": "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network.",
         "Tg003Y": "接続されたウォレットの設定",
         "ks5OGD": "コントラクト",
         "PiH3UR": "コピーしました",
@@ -193,6 +196,7 @@
         "bLJivk": "NFT コントラクト所有者を選択",
         "Xftpm5": "コレクションを選択",
         "JlFcis": "送信",
+        "xNR7Cd": "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again.",
         "Z8lGw6": "シェア",
         "ZIsLZh": "サイズ制限：10 MB",
         "lqTDfd": "スリッページの許容範囲",

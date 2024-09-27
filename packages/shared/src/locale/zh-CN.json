@@ -1,5 +1,6 @@
 {
     "messages": {
+        "m/TPEz": "(beta)",
         "yHppI0": [["0"], " network is not added in the wallet. Please add and try it again."],
         "OAZ+tI": [
             ["attentionFactors", "plural", { "one": ["#", " Attention item"], "other": ["#", " Attention items"] }]
@@ -22,6 +23,7 @@
         "7yTBmm": "授权MASK?",
         "jquqYv": ["您确认举报", ["0"], "? 批准后，这个 NFT 会被标记为垃圾。"],
         "c19z3W": "可用余额",
+        "ZrZMJ6": "Backup failed, <0>try again</0>",
         "fsBGk0": "余额",
         "foOw00": ["Balance(", ["symbol"], ")"],
         "0wJVK+": "基础",
@@ -54,6 +56,7 @@
         "CtByM7": "连接钱包",
         "2/N/mr": ["Connect with ", ["providerName"]],
         "iH8itU": "连接您的钱包",
+        "1XtOmj": "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network.",
         "Tg003Y": "已连接的钱包设置",
         "ks5OGD": "合约",
         "PiH3UR": "已复制",
@@ -193,6 +196,7 @@
         "bLJivk": "选择 NFT 合约持有者",
         "Xftpm5": "Select Collection",
         "JlFcis": "发送",
+        "xNR7Cd": "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again.",
         "Z8lGw6": "分享",
         "ZIsLZh": "大小限制：10 MB",
         "lqTDfd": "滑点容许值",
