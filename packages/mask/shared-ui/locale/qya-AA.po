@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-25 13:15\n"
+"PO-Revision-Date: 2024-09-27 04:09\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -31,8 +31,12 @@ msgid "{0} Mins"
 msgstr "crwdns29844:0{0}crwdne29844:0"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
-msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
-msgstr "crwdns29846:0shareWithNum={shareWithNum}crwdnd29846:0shareWithNum={shareWithNum}crwdne29846:0"
+#~ msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
+msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
+msgstr "crwdns30744:0shareWithNum={shareWithNum}crwdne30744:0"
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
 msgid "12-word recovery phrase is used to recover your persona data."
@@ -145,8 +149,8 @@ msgstr "crwdns29888:0crwdne29888:0"
 msgid "Agree"
 msgstr "crwdns29532:0crwdne29532:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:119
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:139
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:116
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:136
 msgid "All"
 msgstr "crwdns29890:0crwdne29890:0"
 
@@ -922,7 +926,7 @@ msgstr "crwdns30136:0crwdne30136:0"
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr "crwdns29606:0{HD_PATH_WITHOUT_INDEX_ETHEREUM}crwdne29606:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:140
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:137
 msgid "Everyone"
 msgstr "crwdns30138:0crwdne30138:0"
 
@@ -1291,11 +1295,11 @@ msgstr "crwdns29646:0crwdne29646:0"
 msgid "Issued at"
 msgstr "crwdns30254:0crwdne30254:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:147
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:144
 msgid "Just Me"
 msgstr "crwdns30256:0crwdne30256:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:157
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:154
 msgid "Just Selected Contacts"
 msgstr "crwdns30258:0crwdne30258:0"
 
@@ -1896,8 +1900,8 @@ msgstr "crwdns30456:0crwdne30456:0"
 msgid "Privacy Policy"
 msgstr "crwdns30458:0crwdne30458:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:120
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:146
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:117
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:143
 msgid "Private"
 msgstr "crwdns30460:0crwdne30460:0"
 
@@ -2184,7 +2188,7 @@ msgstr "crwdns29756:0crwdne29756:0"
 msgid "Settings"
 msgstr "crwdns30544:0crwdne30544:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:156
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:153
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:120
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:206
 msgid "Share with"
@@ -2651,7 +2655,7 @@ msgstr "crwdns30698:0crwdne30698:0"
 msgid "View on Explorer"
 msgstr "crwdns30700:0crwdne30700:0"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:126
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:123
 msgid "Visible To"
 msgstr "crwdns30702:0crwdne30702:0"
 
