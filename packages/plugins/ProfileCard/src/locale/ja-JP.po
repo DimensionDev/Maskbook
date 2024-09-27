@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -25,3 +25,4 @@ msgstr "タイムラインのアバターやトークンタグの隅にあるミ
 #: src/SiteAdaptor/index.tsx:24
 msgid "Web3 Profile Card"
 msgstr "Web3 プロフィールカード"
+
