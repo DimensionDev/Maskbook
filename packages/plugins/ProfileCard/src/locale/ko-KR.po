@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -25,3 +25,4 @@ msgstr "아바타 오른쪽 아래에 있는 미니 Mask 아이콘이나 타임�
 #: src/SiteAdaptor/index.tsx:24
 msgid "Web3 Profile Card"
 msgstr "웹3 프로필 카드"
+
