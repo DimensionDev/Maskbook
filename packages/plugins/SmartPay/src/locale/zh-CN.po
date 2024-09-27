@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -239,3 +239,4 @@ msgstr "您可以更改 SmartPay 钱包的管理账户。在 Mask Network 体系
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:56
 msgid "You need to know before using SmartPay:"
 msgstr "在使用 Smart Pay 前需要知道的事："
+
