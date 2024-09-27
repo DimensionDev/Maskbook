@@ -86,4 +86,3 @@ msgstr "トークン"
 #: src/components/RecipientSection/RecipientSelect.tsx:130
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
-

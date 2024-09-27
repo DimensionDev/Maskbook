@@ -119,4 +119,3 @@ msgstr "此项目已不再生效"
 #: src/SiteAdaptor/DetailsView.tsx:80
 msgid "Website"
 msgstr "网站"
-

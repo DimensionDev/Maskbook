@@ -4,6 +4,7 @@
         "KMgp2+": [["0"], " 利用可能です"],
         "y6VCOb": [["0"], " 分"],
         "ovXZv6": [["shareWithNum", "plural", { "one": "1 friend", "other": [["shareWithNum"], " friends"] }]],
+        "ANYjcp": [["shareWithNum", "plural", { "one": "1 friend", "other": ["#", " friends"] }]],
         "lKldOY": "12単語の復元フレーズは、ペルソナデータを回復するために使用されます。",
         "llLBQ1": "トークン",
         "uyJsf6": "詳細",

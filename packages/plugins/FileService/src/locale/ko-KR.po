@@ -120,4 +120,3 @@ msgstr "웹2 파일 서비스가 무엇입니까?"
 #: src/SiteAdaptor/components/FileBrowser.tsx:264
 msgid "You haven't uploaded any files yet."
 msgstr "업로드된 파일이 없습니다."
-

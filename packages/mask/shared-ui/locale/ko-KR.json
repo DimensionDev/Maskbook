@@ -4,6 +4,7 @@
         "KMgp2+": [["0"], " 이용가능"],
         "y6VCOb": [["0"], " 분"],
         "ovXZv6": [["shareWithNum", "plural", { "one": "1 friend", "other": [["shareWithNum"], " friends"] }]],
+        "ANYjcp": [["shareWithNum", "plural", { "one": "1 friend", "other": ["#", " friends"] }]],
         "lKldOY": "12개 복구 문구로 페르소나 데어터를 복구할 수 있습니다.",
         "llLBQ1": "a token",
         "uyJsf6": "알아보기",

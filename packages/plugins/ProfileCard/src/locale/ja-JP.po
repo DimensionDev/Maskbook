@@ -25,4 +25,3 @@ msgstr "タイムラインのアバターやトークンタグの隅にあるミ
 #: src/SiteAdaptor/index.tsx:24
 msgid "Web3 Profile Card"
 msgstr "Web3 プロフィールカード"
-

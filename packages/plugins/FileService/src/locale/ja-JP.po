@@ -120,4 +120,3 @@ msgstr "Web3ファイルサービスとは何ですか?"
 #: src/SiteAdaptor/components/FileBrowser.tsx:264
 msgid "You haven't uploaded any files yet."
 msgstr "まだファイルはアップロードされていません。"
-

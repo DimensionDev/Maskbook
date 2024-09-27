@@ -29,4 +29,3 @@ msgstr "あなたが訪問して署名するものに注意してください!"
 #: src/SiteAdaptor/ScamAlert.tsx:95
 msgid "Similar Project"
 msgstr ""
-

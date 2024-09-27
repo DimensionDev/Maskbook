@@ -34,4 +34,3 @@ msgstr "最新报价"
 #: src/SiteAdaptor/index.tsx:32
 msgid "Valuables"
 msgstr "贵重物品"
-

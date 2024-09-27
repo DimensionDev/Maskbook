@@ -31,12 +31,12 @@ msgid "{0} Mins"
 msgstr "{0} 分"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
-#~ msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
-#~ msgstr ""
+msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
-msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
-msgstr ""
+#~ msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
 msgid "12-word recovery phrase is used to recover your persona data."
@@ -149,8 +149,8 @@ msgstr "ログアウト後、関連付けられたソーシャルアカウント
 msgid "Agree"
 msgstr "同意"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:116
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:136
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:119
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:139
 msgid "All"
 msgstr "全て"
 
@@ -926,7 +926,7 @@ msgstr "支払いパスワードを入力する"
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:137
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:140
 msgid "Everyone"
 msgstr "全員"
 
@@ -1295,11 +1295,11 @@ msgstr "認証コードが無効です。"
 msgid "Issued at"
 msgstr "発行元"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:144
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:147
 msgid "Just Me"
 msgstr "自分のみ"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:154
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:157
 msgid "Just Selected Contacts"
 msgstr "選択された連絡先のみ"
 
@@ -1900,8 +1900,8 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr "プライバシー・ポリシー（個人情報に関する方針）"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:117
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:143
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:120
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:146
 msgid "Private"
 msgstr "プライベート"
 
@@ -2188,7 +2188,7 @@ msgstr "あなたのペルソナ名を24文字以内で設定してください"
 msgid "Settings"
 msgstr "設定"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:153
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:156
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:120
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:206
 msgid "Share with"
@@ -2655,7 +2655,7 @@ msgstr "取引の詳細を表示する"
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:123
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:126
 msgid "Visible To"
 msgstr "表示対象:"
 
@@ -2787,4 +2787,3 @@ msgstr "支払いパスワードはウォレットデータを暗号化し、取
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
-

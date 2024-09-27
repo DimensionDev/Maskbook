@@ -79,4 +79,3 @@ msgstr ""
 #: src/SiteAdaptor/components/PreviewCard.tsx:294
 msgid "Solid:"
 msgstr ""
-
