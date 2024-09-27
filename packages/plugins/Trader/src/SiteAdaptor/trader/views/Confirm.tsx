@@ -450,7 +450,7 @@ export const Confirm = memo(function Confirm() {
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: spender,
                                 to: transaction.to,
-                                estimatedTime: (estimatedSeconds ?? 10) * 1000,
+                                estimatedTime: estimatedSeconds ?? 10,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })

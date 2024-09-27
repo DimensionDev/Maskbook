@@ -497,7 +497,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: spender,
                                 to: transaction.to,
-                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime * 1000 : 0,
+                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                                 leftSideToken: getBridgeLeftSideToken(bridge),
