@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -120,3 +120,4 @@ msgstr "什么是 Web3 文件服务？"
 #: src/SiteAdaptor/components/FileBrowser.tsx:264
 msgid "You haven't uploaded any files yet."
 msgstr "您尚未上传任何文件。"
+
