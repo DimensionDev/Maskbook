@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "{0} members"
 msgstr "{0} メンバー"
 
-#: src/SiteAdaptor/InformationCard.tsx:98
+#: src/SiteAdaptor/InformationCard.tsx:95
 msgid "Author"
 msgstr "著者"
 
@@ -52,7 +52,7 @@ msgstr "それぞれのプロジェクトまたはプロトコルのTwitterペ�
 msgid "Download report"
 msgstr "レポートをダウンロードする"
 
-#: src/SiteAdaptor/InformationCard.tsx:129
+#: src/SiteAdaptor/InformationCard.tsx:126
 msgid "End date"
 msgstr "終了日"
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Information"
 msgstr "情報"
 
-#: src/SiteAdaptor/InformationCard.tsx:114
+#: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr "提案"
 msgid "Results"
 msgstr "結果"
 
-#: src/SiteAdaptor/InformationCard.tsx:134
+#: src/SiteAdaptor/InformationCard.tsx:131
 #: src/SiteAdaptor/PluginDescriptor.tsx:33
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
@@ -129,7 +129,7 @@ msgstr ""
 msgid "Space"
 msgstr "スペース"
 
-#: src/SiteAdaptor/InformationCard.tsx:124
+#: src/SiteAdaptor/InformationCard.tsx:121
 msgid "Start date"
 msgstr "開始日"
 
@@ -172,3 +172,4 @@ msgstr "あなた"
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "あなたの投票力"
+
