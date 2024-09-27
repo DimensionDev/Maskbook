@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:09\n"
+"PO-Revision-Date: 2024-09-27 11:21\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,16 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared-base-ui/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1010\n"
+
+#: src/components/ErrorBoundary/CrashUI.tsx:62
+msgid "{subject} has an error"
+msgstr ""
+
+#: src/components/ErrorBoundary/CrashUI.tsx:72
+msgid "Report on GitHub"
+msgstr "在 GitHub 上报告"
+
+#: src/components/ErrorBoundary/CrashUI.tsx:69
+msgid "Try to recover"
+msgstr "尝试恢复"
+
