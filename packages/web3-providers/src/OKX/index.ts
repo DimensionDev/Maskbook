@@ -278,8 +278,9 @@ export class OKX {
             res.data.forEach((item) => {
                 item.chainId = +item.chainId
             })
+            return res.data
         }
-        return res
+        return undefined
     }
 
     static async bridge(options: BridgeOptions) {

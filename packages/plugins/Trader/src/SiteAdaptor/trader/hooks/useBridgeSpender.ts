@@ -10,9 +10,8 @@ export function useBridgeSpender() {
         enabled: mode === 'bridge',
         queryKey: ['okx-bridge', 'supported-chains'],
         queryFn: async () => OKX.getBridgeSupportedChain(),
-        select(res) {
-            if (res.code !== 0) return undefined
-            return res.data.find((x) => x.chainId === chainId)?.dexTokenApproveAddress
+        select(chains) {
+            return chains?.find((x) => x.chainId === chainId)?.dexTokenApproveAddress
         },
     })
 }

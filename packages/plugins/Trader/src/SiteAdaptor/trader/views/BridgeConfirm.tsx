@@ -258,7 +258,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const { data: spender, isLoading: isLoadingSpender } = useBridgeSpender()
 
-    const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
+    const [, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
 
     const [isBridgable, errorMessage] = useBridgable()
