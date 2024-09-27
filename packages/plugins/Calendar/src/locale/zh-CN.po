@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:07\n"
+"PO-Revision-Date: 2024-09-27 11:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -64,3 +64,4 @@ msgstr "价格"
 #: src/SiteAdaptor/components/NFTList.tsx:200
 msgid "Total"
 msgstr "总额"
+
