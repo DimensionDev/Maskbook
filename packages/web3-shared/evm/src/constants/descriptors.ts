@@ -1,13 +1,13 @@
-import { difference } from 'lodash-es'
+import { EnhanceableSite, EnhanceableSiteList, ExtensionSiteList, NetworkPluginID } from '@masknet/shared-base'
 import {
     type ChainDescriptor,
     type NetworkDescriptor,
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSite, EnhanceableSiteList, ExtensionSiteList, NetworkPluginID } from '@masknet/shared-base'
-import CHAINS from './chains.json'
+import { difference } from 'lodash-es'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
+import CHAINS from './chains.json'
 import { ChainIdList, getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
 
@@ -371,9 +371,9 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         chainId: ChainId.ScrollSDK,
         type: NetworkType.ScrollSDK,
         name: 'ScrollSDK',
-        icon: new URL('../assets/scroll.svg', import.meta.url).href,
+        icon: new URL('../assets/maskwallet.png', import.meta.url).href,
         backgroundGradient:
-            'linear-gradient(180deg, rgba(98, 126, 234, 0.15) 0%, rgba(98, 126, 234, 0.05) 100%), rgba(255, 255, 255, 0.2)',
+            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         iconColor: 'rgb(255, 248, 243)',
         averageBlockDelay: 9,
         isMainnet: true,
