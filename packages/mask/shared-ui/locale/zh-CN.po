@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-25 13:13\n"
+"PO-Revision-Date: 2024-09-27 04:07\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -31,7 +31,11 @@ msgid "{0} Mins"
 msgstr "{0} 分钟"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
-msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
+msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
@@ -145,8 +149,8 @@ msgstr "身份登出后，您所关联的社交网络账户将不能解密过去
 msgid "Agree"
 msgstr "同意"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:119
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:139
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:116
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:136
 msgid "All"
 msgstr "所有人"
 
@@ -922,7 +926,7 @@ msgstr "输入支付密码"
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:140
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:137
 msgid "Everyone"
 msgstr "任何用户可见"
 
@@ -1291,11 +1295,11 @@ msgstr "验证码错误。"
 msgid "Issued at"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:147
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:144
 msgid "Just Me"
 msgstr "仅自己可见"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:157
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:154
 msgid "Just Selected Contacts"
 msgstr "仅选定的联系人可见"
 
@@ -1896,8 +1900,8 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr "隐私政策"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:120
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:146
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:117
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:143
 msgid "Private"
 msgstr "私密"
 
@@ -2184,7 +2188,7 @@ msgstr "设置您的身份名称，最大长度为24个字符"
 msgid "Settings"
 msgstr "设置"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:156
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:153
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:120
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:206
 msgid "Share with"
@@ -2651,7 +2655,7 @@ msgstr "查看交易详情"
 msgid "View on Explorer"
 msgstr "在区块链浏览器查看"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:126
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:123
 msgid "Visible To"
 msgstr "可见范围"
 
@@ -2783,3 +2787,4 @@ msgstr "您的钱包数据将使用此支付密码加密，这也是交易确认
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
