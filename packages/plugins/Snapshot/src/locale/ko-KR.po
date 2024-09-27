@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -26,7 +26,7 @@ msgstr ""
 msgid "{0} members"
 msgstr "{0} 맴버"
 
-#: src/SiteAdaptor/InformationCard.tsx:98
+#: src/SiteAdaptor/InformationCard.tsx:95
 msgid "Author"
 msgstr "작성자"
 
@@ -52,7 +52,7 @@ msgstr "각 프로젝트 또는 프로토콜의 트위터 페이지에 스냅샷
 msgid "Download report"
 msgstr "리포트 다운로드"
 
-#: src/SiteAdaptor/InformationCard.tsx:129
+#: src/SiteAdaptor/InformationCard.tsx:126
 msgid "End date"
 msgstr "종료 날짜"
 
@@ -68,7 +68,7 @@ msgstr ""
 msgid "Information"
 msgstr "정보"
 
-#: src/SiteAdaptor/InformationCard.tsx:114
+#: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
 msgstr ""
 
@@ -118,7 +118,7 @@ msgstr "프로포절"
 msgid "Results"
 msgstr "결과"
 
-#: src/SiteAdaptor/InformationCard.tsx:134
+#: src/SiteAdaptor/InformationCard.tsx:131
 #: src/SiteAdaptor/PluginDescriptor.tsx:33
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
@@ -129,7 +129,7 @@ msgstr "스냅숏"
 msgid "Space"
 msgstr "스페이스"
 
-#: src/SiteAdaptor/InformationCard.tsx:124
+#: src/SiteAdaptor/InformationCard.tsx:121
 msgid "Start date"
 msgstr "시작 날짜"
 
@@ -172,3 +172,4 @@ msgstr ""
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "투표 파워"
+
