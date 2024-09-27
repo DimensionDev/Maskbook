@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-25 13:13\n"
+"PO-Revision-Date: 2024-09-27 04:07\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -31,7 +31,11 @@ msgid "{0} Mins"
 msgstr "{0} 분"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
-msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
+msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
@@ -145,8 +149,8 @@ msgstr "로그아웃 후, 연결된 소셜 계정은 더 이상 암호화하거�
 msgid "Agree"
 msgstr "동의"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:119
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:139
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:116
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:136
 msgid "All"
 msgstr "전체"
 
@@ -922,7 +926,7 @@ msgstr "결제 비밀번호 입력"
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:140
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:137
 msgid "Everyone"
 msgstr "공개"
 
@@ -1291,11 +1295,11 @@ msgstr "유효하지 않은 인증 코드입니다."
 msgid "Issued at"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:147
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:144
 msgid "Just Me"
 msgstr "나만 보기"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:157
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:154
 msgid "Just Selected Contacts"
 msgstr "선정된 연락처에게만 공유"
 
@@ -1896,8 +1900,8 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr "개인정보처리방침"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:120
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:146
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:117
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:143
 msgid "Private"
 msgstr "비공개"
 
@@ -2184,7 +2188,7 @@ msgstr "최대 24자로 페로소나 이름 설정합니다"
 msgid "Settings"
 msgstr "설정"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:156
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:153
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:120
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:206
 msgid "Share with"
@@ -2651,7 +2655,7 @@ msgstr "거래 세부 내역 보기"
 msgid "View on Explorer"
 msgstr "Explorer에서 보기"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:126
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:123
 msgid "Visible To"
 msgstr "공개 대상"
 
@@ -2783,3 +2787,4 @@ msgstr "회원님의 결제비밀번호는 월렛 데이터를 암호화한 것�
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
