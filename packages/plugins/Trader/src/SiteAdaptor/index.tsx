@@ -8,7 +8,6 @@ import { EVMUtils } from '@masknet/web3-providers'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Trans as Trans2 } from 'react-i18next'
 import { base } from '../base.js'
 import { enhanceTag } from './cashTag.js'
 import { setupStorage, type StorageOptions } from './storage.js'
@@ -99,7 +98,12 @@ const site: Plugin.SiteAdaptor.Definition = {
                 category: 'dapp',
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
-                description: <Trans2 i18nKey="plugin_trader_swap_description" />,
+                description: (
+                    <Trans>
+                        Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade,
+                        also invest in the best performing managers.
+                    </Trans>
+                ),
                 iconFilterColor,
                 hiddenInList: true,
             }

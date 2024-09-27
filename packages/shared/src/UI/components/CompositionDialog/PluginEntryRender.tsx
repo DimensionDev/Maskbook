@@ -1,5 +1,4 @@
 import { useCallback, useState, useRef, memo, useImperativeHandle, useMemo, type Ref, type RefAttributes } from 'react'
-import { Trans as Trans2 } from 'react-i18next'
 import { Result } from 'ts-results-es'
 import {
     useActivatedPluginsSiteAdaptor,
@@ -175,7 +174,9 @@ const CustomEntry = memo((props: Plugin.SiteAdaptor.CompositionDialogEntryCustom
                 <>
                     <PluginTransFieldRender field={label} pluginID={id} />
                     {unstable ?
-                        <Trans2 i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        <sup className={classes.sup}>
+                            <Trans>(beta)</Trans>
+                        </sup>
                     :   null}
                 </>
             }
@@ -211,7 +212,9 @@ const DialogEntry = memo((props: Plugin.SiteAdaptor.CompositionDialogEntryDialog
                 <>
                     <PluginTransFieldRender field={label} pluginID={id} />
                     {unstable ?
-                        <Trans2 i18nKey="beta_sup" components={{ sup: <sup className={classes.sup} /> }} />
+                        <sup className={classes.sup}>
+                            <Trans>(beta)</Trans>
+                        </sup>
                     :   null}
                 </>
             }

@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { Trans as Trans2 } from 'react-i18next'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
@@ -226,20 +225,17 @@ export const GasSetting1559 = memo(
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>
-                                <Trans2
-                                    i18nKey="popups_wallet_gas_fee_settings_usd"
-                                    values={{
-                                        usd: formatCurrency(
-                                            formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
-                                                .times(nativeTokenPrice)
-                                                .times(gasLimit ?? 21000),
-                                            'USD',
-                                            { onlyRemainTwoOrZeroDecimal: true },
-                                        ),
-                                    }}
-                                    components={{ span: <span /> }}
-                                    shouldUnescape
-                                />
+                                {' '}
+                                ≈{' '}
+                                <span>
+                                    {formatCurrency(
+                                        formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
+                                            .times(nativeTokenPrice)
+                                            .times(gasLimit ?? 21000),
+                                        'USD',
+                                        { onlyRemainTwoOrZeroDecimal: true },
+                                    )}
+                                </span>
                             </Typography>
                         </div>
                     ))}
@@ -258,17 +254,14 @@ export const GasSetting1559 = memo(
                             (<Trans>GWEI</Trans>)
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            <Trans2
-                                i18nKey="popups_wallet_gas_fee_settings_usd"
-                                values={{
-                                    usd: formatWeiToEther(Number(maxPriorityFeePerGas))
-                                        .times(nativeTokenPrice)
-                                        .times(inputGasLimit || 1)
-                                        .toFixed(2),
-                                }}
-                                components={{ span: <span /> }}
-                                shouldUnescape
-                            />
+                            {' '}
+                            ≈{' '}
+                            <span>
+                                {formatWeiToEther(Number(maxPriorityFeePerGas))
+                                    .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
+                                    .toFixed(2)}
+                            </span>
                         </Typography>
                     </Typography>
                     <Controller control={control} render={emptyRender} name="maxPriorityFeePerGas" />
@@ -278,17 +271,14 @@ export const GasSetting1559 = memo(
                             (<Trans>GWEI</Trans>)
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            <Trans2
-                                i18nKey="popups_wallet_gas_fee_settings_usd"
-                                values={{
-                                    usd: formatWeiToEther(Number(maxFeePerGas))
-                                        .times(nativeTokenPrice)
-                                        .times(inputGasLimit || 1)
-                                        .toFixed(2),
-                                }}
-                                components={{ span: <span /> }}
-                                shouldUnescape
-                            />
+                            {' '}
+                            ≈{' '}
+                            <span>
+                                {formatWeiToEther(Number(maxFeePerGas))
+                                    .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
+                                    .toFixed(2)}
+                            </span>
                         </Typography>
                     </Typography>
                     <Controller control={control} render={emptyRender} name="maxFeePerGas" />

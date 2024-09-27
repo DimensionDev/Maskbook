@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import { Trans as Trans2 } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import { type Plugin, PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
@@ -9,6 +8,7 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
+import { Trans } from '@lingui/macro'
 
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({
@@ -48,7 +48,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             const icon = <Icons.NFTAvatar size={36} />
 
             const recommendFeature = {
-                description: <Trans2 i18nKey="plugin_nft_avatar_recommend_feature_description" />,
+                description: <Trans>Set your NFT as profile picture with exclusive aura.</Trans>,
                 backgroundGradient: 'linear-gradient(360deg, #FFECD2 -0.43%, #FCB69F 99.57%)',
             }
 
@@ -66,7 +66,12 @@ const site: Plugin.SiteAdaptor.Definition = {
                             }}
                             tooltipHint={
                                 EntryComponentProps.tooltipHint ??
-                                (EntryComponentProps.disabled ? undefined : <Trans2 i18nKey="application_hint" />)
+                                (EntryComponentProps.disabled ? undefined : (
+                                    <Trans>
+                                        Socialize and show off your NFTs. People can bid, buy and view your valuable
+                                        NFTs without leaving Twitter.
+                                    </Trans>
+                                ))
                             }
                         />
                     )

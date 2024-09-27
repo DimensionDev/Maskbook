@@ -8,7 +8,6 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
-import { Trans as Trans2 } from 'react-i18next'
 import { Trans } from '@lingui/macro'
 import { base } from '../base.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
@@ -59,13 +58,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 nextIdRequired: true,
                 category: 'dapp',
-                description: (
-                    <Trans2
-                        i18nKey="__plugin_description"
-                        defaults="Choose and showcase your Web3 footprints on Twitter."
-                        ns={base.ID}
-                    />
-                ),
+                description: <Trans>Choose and showcase your Web3 footprints on Twitter.</Trans>,
             }
         })(),
     ],

@@ -19,7 +19,6 @@ import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/we
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
-import { SharedTrans } from '../../../index.js'
 import { Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
@@ -186,7 +185,7 @@ export const Prior1559GasSetting = memo(
             <>
                 {options ?
                     <div className={classes.options}>
-                        {options.map(({ title, gasPrice, gasOption }, index) => (
+                        {options.map(({ title, gasPrice, gasOption }) => (
                             <div
                                 key={gasOption}
                                 onClick={() => setGasOptionType(gasOption)}
@@ -194,17 +193,14 @@ export const Prior1559GasSetting = memo(
                                 <Typography className={classes.optionsTitle}>{title}</Typography>
                                 <Typography>{formatWeiToGwei(gasPrice || 0).toString()} Gwei</Typography>
                                 <Typography className={classes.gasUSD}>
-                                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                    <SharedTrans.popups_wallet_gas_fee_settings_usd
-                                        values={{
-                                            usd: formatWeiToEther(gasPrice)
-                                                .times(nativeTokenPrice)
-                                                .times(inputGasLimit || '1')
-                                                .toPrecision(3),
-                                        }}
-                                        components={{ span: <span /> }}
-                                        shouldUnescape
-                                    />
+                                    {' '}
+                                    ≈{' '}
+                                    <span>
+                                        {formatWeiToEther(gasPrice)
+                                            .times(nativeTokenPrice)
+                                            .times(inputGasLimit || '1')
+                                            .toPrecision(3)}
+                                    </span>
                                 </Typography>
                             </div>
                         ))}
@@ -221,17 +217,14 @@ export const Prior1559GasSetting = memo(
                     <Typography className={classes.label}>
                         <Trans>Gas Price</Trans>
                         <Typography component="span" className={classes.price}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <SharedTrans.popups_wallet_gas_fee_settings_usd
-                                values={{
-                                    usd: formatGweiToEther(gasPrice || 0)
-                                        .times(nativeTokenPrice)
-                                        .times(inputGasLimit || 1)
-                                        .toFixed(2),
-                                }}
-                                components={{ span: <span /> }}
-                                shouldUnescape
-                            />
+                            {' '}
+                            ≈{' '}
+                            <span>
+                                {formatGweiToEther(gasPrice || 0)
+                                    .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
+                                    .toFixed(2)}
+                            </span>
                         </Typography>
                     </Typography>
                     <Controller control={control} render={emptyRender} name="gasPrice" />

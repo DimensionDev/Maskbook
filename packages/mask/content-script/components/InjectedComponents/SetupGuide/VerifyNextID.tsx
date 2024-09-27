@@ -23,7 +23,6 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
@@ -284,12 +283,18 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                     </Box>
                     {!nextIdPlatform || verified || verifiedSuccess ?
                         <Typography className={classes.text}>
-                            {
-                                nextIdPlatform ?
-                                    // eslint-disable-next-line react/naming-convention/component-name
-                                    <MaskSharedTrans.send_post_successfully components={{ br: <br /> }} />
-                                    // eslint-disable-next-line react/naming-convention/component-name
-                                :   <MaskSharedTrans.connect_successfully components={{ br: <br /> }} />
+                            {nextIdPlatform ?
+                                <Trans>
+                                    Sent verification post successfully.
+                                    <br /> <br />
+                                    You could check the verification result on Mask Pop-up after few minutes. If failed,
+                                    try sending verification post again.
+                                </Trans>
+                            :   <Trans>
+                                    Connected successfully. <br />
+                                    <br />
+                                    Trying exploring more features powered by Mask Network.
+                                </Trans>
                             }
                         </Typography>
                     : creatingPostContent ?

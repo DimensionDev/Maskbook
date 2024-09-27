@@ -13,7 +13,6 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Box, Link, Skeleton, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { Trans as Trans2 } from 'react-i18next'
 import { useAsyncFn } from 'react-use'
 import { useVerifyContent } from '../../../hooks/index.js'
 import { useBaseUIRuntime } from '../../contexts/index.js'
@@ -234,10 +233,19 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                     </Box>
                     {!platform || verifiedSuccess ?
                         <Typography className={classes.text}>
-                            <Trans2
-                                i18nKey={platform ? 'send_post_successfully' : 'connect_successfully'}
-                                components={{ br: <br /> }}
-                            />
+                            {platform ?
+                                <Trans>
+                                    Sent verification post successfully.
+                                    <br /> <br />
+                                    You could check the verification result on Mask Pop-up after few minutes. If failed,
+                                    try sending verification post again.
+                                </Trans>
+                            :   <Trans>
+                                    Connected successfully. <br />
+                                    <br />
+                                    Trying exploring more features powered by Mask Network.
+                                </Trans>
+                            }
                         </Typography>
                     : creatingVerifyContent ?
                         <>

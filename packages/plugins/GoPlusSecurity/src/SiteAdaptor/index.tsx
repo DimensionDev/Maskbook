@@ -1,4 +1,3 @@
-import { Trans as ReactI18NextTrans } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
@@ -44,7 +43,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 12,
                 category: 'dapp',
                 marketListSortingPriority: 16,
-                description: <ReactI18NextTrans i18nKey="plugin_goPlusSecurity_description" />,
+                description: <Trans>Provide you with fast, reliable and convenient security services.</Trans>,
             }
         })(),
     ],

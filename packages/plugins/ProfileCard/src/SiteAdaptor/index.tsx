@@ -1,4 +1,3 @@
-import { Trans as Trans2 } from 'react-i18next'
 import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
@@ -24,16 +23,23 @@ const site: Plugin.SiteAdaptor.Definition = {
             name: <Trans>Web3 Profile Card</Trans>,
             features: [
                 {
-                    name: <Trans2 i18nKey="plugin_avatar_feature_general_user_name" />,
-                    description: <Trans2 i18nKey="plugin_avatar_feature_general_user_description" />,
+                    name: <Trans>General user</Trans>,
+                    description: (
+                        <Trans>
+                            View user’s Web3 footprints, including NFTs, social media posts and other transaction
+                            activities based on public data source.
+                        </Trans>
+                    ),
                 },
                 {
-                    name: <Trans2 i18nKey="plugin_avatar_feature_token_name" />,
-                    description: <Trans2 i18nKey="plugin_avatar_feature_token_description" />,
+                    name: <Trans>Token</Trans>,
+                    description: <Trans>View real-time crypto prices, market cap, trading volume, etc.</Trans>,
                 },
                 {
-                    name: <Trans2 i18nKey="plugin_avatar_feature_nft_name" />,
-                    description: <Trans2 i18nKey="plugin_avatar_feature_nft_description" />,
+                    name: <Trans>NFT collection</Trans>,
+                    description: (
+                        <Trans>Stay on top of NFT trending information, hot projects, notable transactions, etc.</Trans>
+                    ),
                 },
             ],
         },
