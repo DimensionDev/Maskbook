@@ -17,6 +17,6 @@
         "Scroll": ["https://tokens.r2d2.to/latest/534352/tokens.json"],
         "Metis": ["https://tokens.r2d2.to/latest/1088/tokens.json"],
         "XLayer": ["https://tokens.r2d2.to/latest/196/tokens.json"],
-        "ScrollSDK": ["https://media.firefly.land/test/scroll-sdk-v1.json"]
+        "ScrollSDK": ["https://media.firefly.land/test/scroll-sdk-v2.json"]
     }
 }
