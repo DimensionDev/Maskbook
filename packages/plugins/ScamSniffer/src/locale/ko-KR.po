@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -29,3 +29,4 @@ msgstr "사이트 방운하가나 사인할 때 조심하시길 바랍니다."
 #: src/SiteAdaptor/ScamAlert.tsx:95
 msgid "Similar Project"
 msgstr "유사한 프로젝트"
+
