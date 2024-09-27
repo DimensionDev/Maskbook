@@ -3,8 +3,8 @@ import { useMemo, useState } from 'react'
 import { Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/material'
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useBuildInfoMarkdown, type ErrorBoundaryError } from './context.js'
-import { useSharedBaseTrans } from '../../locales/index.js'
 import { makeStyles } from '@masknet/theme'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     message: { flex: 1 },
@@ -22,7 +22,6 @@ export interface CrashUIProps extends React.PropsWithChildren<ErrorBoundaryError
 }
 export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     const context = useBuildInfoMarkdown()
-    const t = useSharedBaseTrans()
     const { classes } = useStyles()
 
     const [showStack, setShowStack] = useState(false)
@@ -59,16 +58,18 @@ Error stack:
     return (
         <Root>
             <Alert severity="error" variant="outlined" classes={{ message: classes.message }}>
-                <AlertTitle>{t.error_boundary_crash_title({ subject })}</AlertTitle>
+                <AlertTitle>
+                    <Trans>{subject} has an error</Trans>
+                </AlertTitle>
                 <ErrorTitle>
                     {error.type}: {error.message}
                 </ErrorTitle>
                 <ActionArea>
                     <Button variant="contained" color="primary" onClick={onRetry}>
-                        {t.error_boundary_try_to_recover()}
+                        <Trans>Try to recover</Trans>
                     </Button>
                     <Button href={githubLink} color="primary" target="_blank">
-                        {t.error_boundary_report_github()}
+                        <Trans>Report on GitHub</Trans>
                     </Button>
                     <IconButtonContainer>
                         <IconButton color="inherit" size="small" onClick={() => setShowStack((x) => !x)}>

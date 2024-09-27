@@ -17,3 +17,15 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared-base-ui/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1010\n"
+
+#: src/components/ErrorBoundary/CrashUI.tsx:62
+msgid "{subject} has an error"
+msgstr ""
+
+#: src/components/ErrorBoundary/CrashUI.tsx:72
+msgid "Report on GitHub"
+msgstr ""
+
+#: src/components/ErrorBoundary/CrashUI.tsx:69
+msgid "Try to recover"
+msgstr ""

@@ -62,7 +62,7 @@ export async function migrate() {
         suppressDiagnosticEvents: true,
     })
 
-    const cwd = new URL('../../../shared/', import.meta.url)
+    const cwd = new URL('../../../shared-base-ui/', import.meta.url)
     const inputURL = new URL('./src/locales/i18n_generated.ts', cwd)
     const enUS_URL = new URL('./src/locales/en-US.json', cwd)
     const json = JSON.parse(await readFile(enUS_URL, 'utf-8'))
