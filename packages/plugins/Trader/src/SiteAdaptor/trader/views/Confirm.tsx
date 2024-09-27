@@ -250,7 +250,7 @@ export const Confirm = memo(function Confirm() {
 
     const { data: spender, isLoading: isLoadingSpender } = useSwapSpender()
 
-    const [, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
+    const [{ isNativeToken }, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
         useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
 
     const loading = isSending || isApproving || loadingApprove || isLoadingSpender
@@ -411,7 +411,7 @@ export const Confirm = memo(function Confirm() {
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender) return
                             const { data: allowance = '0' } = await refetchAllowance()
-                            if (isLessThan(allowance, amount)) await approve()
+                            if (!isNativeToken && isLessThan(allowance, amount)) await approve()
 
                             const hash = await sendSwap()
 

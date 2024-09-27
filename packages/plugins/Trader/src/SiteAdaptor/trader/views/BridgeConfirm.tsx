@@ -258,7 +258,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const { data: spender, isLoading: isLoadingSpender } = useBridgeSpender()
 
-    const [, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
+    const [{ isNativeToken }, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
         useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
 
     const [isBridgable, errorMessage] = useBridgable()
@@ -461,8 +461,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
                             const { data: allowance = '0' } = await refetchAllowance()
-                            const notEnoughAllowance = isLessThan(allowance, amount)
-                            if (notEnoughAllowance) await approve()
+                            if (!isNativeToken && isLessThan(allowance, amount)) await approve()
 
                             const hash = await sendBridge()
 
