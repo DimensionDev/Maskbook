@@ -1384,7 +1384,7 @@
         "network": "mainnet",
         "fullName": "ScrollSDK",
         "shortName": "ScrollSDK",
-        "rpc": ["http://l2-rpc.scrollsdk"],
+        "rpc": ["https://l2-rpc-xs9qoe4v.nextnext.id"],
         "faucets": [],
         "features": [],
         "nativeCurrency": {
@@ -1396,11 +1396,11 @@
         },
         "defaultGasLimit": "90000",
         "minGasLimit": "21000",
-        "infoURL": "http://blockscout.scrollsdk/",
+        "infoURL": "https://blockscout-xs9qoe4v.nextnext.id",
         "explorers": [
             {
                 "name": "blockscout",
-                "url": "http://blockscout.scrollsdk/",
+                "url": "https://blockscout-xs9qoe4v.nextnext.id",
                 "standard": "EIP3091"
             }
         ]

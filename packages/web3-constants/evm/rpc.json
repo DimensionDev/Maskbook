@@ -74,7 +74,7 @@
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "XLayer": ["https://rpc.xlayer.tech"],
         "XLayer_Testnet": ["https://testrpc.xlayer.tech"],
-        "ScrollSDK": ["http://l2-rpc.scrollsdk"]
+        "ScrollSDK": ["https://l2-rpc-xs9qoe4v.nextnext.id"]
     },
     "RPC_URLS_OFFICIAL": {
         "Mainnet": ["https://mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094"],
@@ -106,7 +106,7 @@
         "Metis": ["https://andromeda.metis.io/?owner=1088"],
         "XLayer": ["https://rpc.xlayer.tech"],
         "XLayer_Testnet": ["https://testrpc.xlayer.tech"],
-        "ScrollSDK": ["http://l2-rpc.scrollsdk"]
+        "ScrollSDK": ["https://l2-rpc-xs9qoe4v.nextnext.id"]
     },
     "RPC_WEIGHTS": {
         "Mainnet": [0, 1, 2, 3, 4],
