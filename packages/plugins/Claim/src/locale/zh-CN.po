@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:07\n"
+"PO-Revision-Date: 2024-09-27 11:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -51,8 +51,7 @@ msgid "Expired"
 msgstr "已过期"
 
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:83
-msgid ""
-"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
+msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
 "Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
@@ -95,3 +94,4 @@ msgstr "您已连接到一个钱包。请在那个钱包中切换网络，或切
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."
 msgstr "你的钱包已取消交易。"
+
