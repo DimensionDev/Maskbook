@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-25 13:12\n"
+"PO-Revision-Date: 2024-09-27 04:08\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -108,3 +108,4 @@ msgstr "所持"
 #: src/SiteAdaptor/components/UserProfile.tsx:206
 msgid "Your Rank"
 msgstr "あなたのランク"
+
