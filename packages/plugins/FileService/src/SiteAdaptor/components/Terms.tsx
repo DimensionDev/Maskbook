@@ -3,7 +3,6 @@ import { Button, Link, Typography } from '@mui/material'
 import { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { FileServiceTrans } from '../../locales/index.js'
 import { useTermsConfirmed } from '../storage.js'
 import { Trans } from '@lingui/macro'
 
@@ -95,31 +94,42 @@ export function Terms() {
                     <Trans>What is Web3 File Service?</Trans>
                 </Typography>
                 <Typography variant="body2" className={classes.introduction}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <FileServiceTrans.introduction multiple components={{ br: <br /> }} />
+                    <Trans>
+                        Web3 File Service is a decentralized storage service provided by Mask Network. It allows users
+                        to store files in different decentralized network. This feature is powered by Mask Network’s
+                        partner file storage protocols such as IPFS, Arweave and Meson Network.It supports files in PDF,
+                        DOC, JPG, PNG, MP3, MP4. and other formats. At present, the maximum file upload size is 10 MB.{' '}
+                        <br />
+                        <br />
+                        You can store files in multiple decentralized networks through the Web3 file service function.
+                        When uploading files, you can choose to encrypt or decrypt them. According to the selected
+                        upload encrypted method, you can obtain two file links with encryption and non encryption. Users
+                        of Mask Network can share files to social platforms through this link. By using encrypted files,
+                        you can ensure the security of your files and prevent privacy leakage. <br />
+                        <br />
+                        It should be noted that any user who has the link can download and share the file. With the
+                        characteristics of decentralized file storage systems, your uploaded files can never be deleted
+                        or tampered. Please upload files containing personal privacy with caution. <br />
+                        <br />
+                        The Web3 File Service provided by Mask Network enables individuals to be free from data
+                        restrictions imposed by traditional social platforms, enabling free encrypted transmission and
+                        sharing of files. At present, the service is provisionally free for all users with Mask Network
+                        absorbing all the costs. Mask Network will provide updates on future costs users may have to
+                        bear.
+                    </Trans>
                 </Typography>
                 <Typography variant="body2" className={classes.footNote}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <FileServiceTrans.foot_note
-                        components={{
-                            terms: (
-                                <Link
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className={classes.link}
-                                    href={TERMS_URL}
-                                />
-                            ),
-                            policy: (
-                                <Link
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className={classes.link}
-                                    href={POLICY_URL}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        By using this plugin, you agree to the{' '}
+                        <Link target="_blank" rel="noreferrer noopener" className={classes.link} href={TERMS_URL}>
+                            terms
+                        </Link>{' '}
+                        and the{' '}
+                        <Link target="_blank" rel="noreferrer noopener" className={classes.link} href={POLICY_URL}>
+                            privacy policy
+                        </Link>
+                        .
+                    </Trans>
                 </Typography>
             </div>
             <div className={classes.actions}>

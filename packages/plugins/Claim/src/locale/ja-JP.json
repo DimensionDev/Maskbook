@@ -4,8 +4,10 @@
         "u2Srv1": "エアドロップを受け取る",
         "TZDLPg": "受取可能",
         "7lnlzl": ["Claimed ", ["amount"], " $", ["0"], " successfully."],
+        "uXT+5y": ["Claiming will be live until: <0>", ["days"], " d ", ["0"], " h ", ["1"], " m</0>"],
         "ryWxhG": "おめでとうございます！",
         "TYTRNP": "請求可能",
+        "fdqDgM": ["Ended on <0>", ["0"], "</0>"],
         "M1RnFv": "期限切れ",
         "wrJC61": [
             "I just claimed airdrop with ",
@@ -20,6 +22,7 @@
         "GDe4XX": "Please connect wallet to check if you are eligible to claim $ARB.",
         "Z8lGw6": "シェア",
         "hTbvD9": "申し訳ありませんが、このキャンペーンで $ARB を請求する資格がありません。",
+        "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "3cw8FQ": "エアドロップに参加するには、トランザクションコストをカバーするために、指定されたネットワーク上のウォレットに十分なネイティブトークンが必要です。",
         "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
         "ayf6mz": "WalletConnect ウォレットに接続しています。そのウォレットのネットワークを切り替えるか、別のウォレットに切り替えてください。",

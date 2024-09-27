@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 954\n"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:233
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:227
 #: src/SiteAdaptor/components/ClaimDialog/index.tsx:24
 #: src/SiteAdaptor/components/ClaimEntry/index.tsx:26
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:92
@@ -30,7 +30,7 @@ msgstr "领取"
 msgid "Claim your Airdrop"
 msgstr "确认领取空投"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:209
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:203
 msgid "Claimable"
 msgstr "可领取"
 
@@ -38,15 +38,23 @@ msgstr "可领取"
 msgid "Claimed {amount} ${0} successfully."
 msgstr ""
 
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:136
+msgid "Claiming will be live until: <0>{days} d {0} h {1} m</0>"
+msgstr ""
+
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:100
 msgid "Congratulations!"
 msgstr "恭喜！"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:208
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:202
 msgid "Eligible to claim"
 msgstr "有资格领取"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:232
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:146
+msgid "Ended on <0>{0}</0>"
+msgstr ""
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:226
 msgid "Expired"
 msgstr "已过期"
 
@@ -56,7 +64,7 @@ msgid ""
 "Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:180
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:174
 msgid "Mask Community $ARB Giveaway"
 msgstr ""
 
@@ -68,7 +76,7 @@ msgstr "未找到活动"
 msgid "Please connect wallet"
 msgstr "请连接钱包"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:185
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:179
 msgid "Please connect wallet to check if you are eligible to claim $ARB."
 msgstr ""
 
@@ -76,19 +84,23 @@ msgstr ""
 msgid "Share"
 msgstr "分享"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:190
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:184
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
 msgstr "对不起，您没有资格在此活动中领取 $ARB。"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:122
+msgid "Start Time: <0>{0}</0>"
+msgstr ""
 
 #: src/SiteAdaptor/components/AirDropActivities/index.tsx:70
 msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
 msgstr "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:195
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:189
 msgid "You have claimed {0} $ARB."
 msgstr ""
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:221
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:215
 msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 msgstr "您已连接到一个钱包。请在那个钱包中切换网络，或切换到另一个钱包。"
 

@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
-import { languages, linguiLanguages } from './locales/languages.js'
+import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -25,5 +25,5 @@ export const base: Plugin.Shared.Definition = {
             /opensea.io\/assets\/ethereum\/(0x[\dA-Fa-f]{40})\/(\d+)/,
         ]),
     },
-    i18n: [languages, linguiLanguages],
+    i18n: languages,
 }

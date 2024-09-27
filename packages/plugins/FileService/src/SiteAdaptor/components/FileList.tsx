@@ -12,7 +12,6 @@ import {
     SelectableFile,
     UploadingFile,
 } from './Files/index.js'
-import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/modals.js'
@@ -59,7 +58,6 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
 
 export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
     const { _ } = useLingui()
-    const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
 
@@ -70,14 +68,14 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             try {
                 await PluginFileServiceRPC.deleteFile(file.id)
                 refetchFiles()
-                showSnackbar(t.delete_file_title({ context: 'success' }), {
+                showSnackbar(<Trans>Delete successfully</Trans>, {
                     variant: 'success',
-                    message: t.delete_file_message({ context: 'success', name: file.name }),
+                    message: <Trans>Delete file {file.name} successfully.</Trans>,
                 })
             } catch (err) {
-                showSnackbar(t.delete_file_title({ context: 'failed' }), {
+                showSnackbar(<Trans>Delete failed</Trans>, {
                     variant: 'error',
-                    message: t.delete_file_message({ context: 'failed', name: file.name }),
+                    message: <Trans>Failed to delete, please try again.</Trans>,
                 })
             }
         },
@@ -89,21 +87,12 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             const confirmed = await ConfirmModal.openAndWaitForClose({
                 title: _(msg`Delete File`),
                 message: (
-                    // eslint-disable-next-line react/naming-convention/component-name
-                    <FileServiceTrans.delete_message
-                        values={{
-                            name: file.name,
-                        }}
-                        components={{
-                            file: (
-                                <Typography
-                                    color={(theme) => theme.palette.maskColor.main}
-                                    fontSize={14}
-                                    fontWeight={700}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        Do you want to delete file{' '}
+                        <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} fontWeight={700}>
+                            {file.name}
+                        </Typography>
+                    </Trans>
                 ),
                 description: (
                     <Trans>
@@ -115,7 +104,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             })
             if (confirmed) await deleteFile(file)
         },
-        [refetchFiles, t],
+        [refetchFiles],
     )
 
     const handleRename = useCallback(
@@ -129,7 +118,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             await PluginFileServiceRPC.renameFile(file.id, name)
             refetchFiles()
         },
-        [refetchFiles, t],
+        [refetchFiles],
     )
 
     return (

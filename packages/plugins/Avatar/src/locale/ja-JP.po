@@ -30,11 +30,15 @@ msgstr "キャンセル"
 msgid "Change"
 msgstr "変更"
 
+#: src/Application/NFTListDialog.tsx:245
+msgid "Comming soon"
+msgstr ""
+
 #: src/Application/PersonaPage.tsx:75
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr "ソーシャルアカウントを接続することでNFTエクスペリエンスをカスタマイズします。全く新しいWeb3の雰囲気でWeb2をお楽しみください。"
 
-#: src/Application/NFTListDialog.tsx:121
+#: src/Application/NFTListDialog.tsx:117
 msgid "Download image error"
 msgstr "画像ダウンロードエラー"
 
@@ -59,7 +63,7 @@ msgstr "NFT PFP"
 msgid "No collectible found."
 msgstr "コレクションが見つかりません."
 
-#: src/Application/NFTListDialog.tsx:221
+#: src/Application/NFTListDialog.tsx:217
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr "有効なウォレットが見つかりませんでした。ウォレットに接続するか、ウォレットを確認してください。"
 
@@ -78,6 +82,14 @@ msgstr "保存"
 #: src/SiteAdaptor/NFTAvatar.tsx:231
 msgid "Set NFT Avatar"
 msgstr "NFT アバターを設定"
+
+#: src/Application/NFTListDialog.tsx:248
+msgid "Set NFT NFT Background"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:247
+msgid "Set NFT PFP"
+msgstr ""
 
 #: src/Application/NFTInfo.tsx:31
 msgid "Set NFT PFPs"

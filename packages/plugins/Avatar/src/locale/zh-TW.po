@@ -30,11 +30,15 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
+#: src/Application/NFTListDialog.tsx:245
+msgid "Comming soon"
+msgstr ""
+
 #: src/Application/PersonaPage.tsx:75
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:121
+#: src/Application/NFTListDialog.tsx:117
 msgid "Download image error"
 msgstr ""
 
@@ -59,7 +63,7 @@ msgstr ""
 msgid "No collectible found."
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:221
+#: src/Application/NFTListDialog.tsx:217
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr ""
 
@@ -77,6 +81,14 @@ msgstr ""
 
 #: src/SiteAdaptor/NFTAvatar.tsx:231
 msgid "Set NFT Avatar"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:248
+msgid "Set NFT NFT Background"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:247
+msgid "Set NFT PFP"
 msgstr ""
 
 #: src/Application/NFTInfo.tsx:31

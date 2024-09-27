@@ -13,11 +13,9 @@ import { IconButton, Tab } from '@mui/material'
 import { useLayoutEffect, useMemo } from 'react'
 import { matchPath, useLocation, useNavigate, useSearchParams } from 'react-router-dom'
 import { RoutePaths, TitleTabs } from '../../constants.js'
-import { useI18N } from '../../locales/i18n_generated.js'
 import { Trans } from '@lingui/macro'
 
 export function RouterDialog(props: InjectedDialogProps) {
-    const t = useI18N()
     const { pathname } = useLocation()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -29,7 +27,7 @@ export function RouterDialog(props: InjectedDialogProps) {
         }
         if (matchPath(RoutePaths.Order, pathname)) return <Trans>Sell</Trans>
         return <Trans>Friend</Trans>
-    }, [t, pathname, paramTitle])
+    }, [pathname, paramTitle])
 
     useLayoutEffect(() => {
         if (pathname === RoutePaths.Exit) {
