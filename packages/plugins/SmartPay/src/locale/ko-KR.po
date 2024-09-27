@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:08\n"
+"PO-Revision-Date: 2024-09-27 11:20\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -239,3 +239,4 @@ msgstr "SmartPay 월렛의 관리 계정을 변경할 수 있으며, Mask Networ
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:56
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPay를 사용하기 전에 알아야 할 사항:"
+
