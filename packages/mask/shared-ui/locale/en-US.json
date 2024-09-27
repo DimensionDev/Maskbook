@@ -4,6 +4,7 @@
         "KMgp2+": [["0"], " available"],
         "y6VCOb": [["0"], " Mins"],
         "ovXZv6": [["shareWithNum", "plural", { "one": "1 friend", "other": [["shareWithNum"], " friends"] }]],
+        "ANYjcp": [["shareWithNum", "plural", { "one": "1 friend", "other": ["#", " friends"] }]],
         "lKldOY": "12-word recovery phrase is used to recover your persona data.",
         "llLBQ1": "a token",
         "uyJsf6": "About",

@@ -8,11 +8,11 @@ import {
     isXnsContractAddress,
 } from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
-import { memo, useCallback, useMemo, type HTMLProps } from 'react'
+import { memo, useCallback, useMemo, type HTMLProps, type ReactNode } from 'react'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '../../../index.js'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
     card: {
@@ -110,7 +110,7 @@ export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, Collect
     disableName?: boolean
     /** @default true */
     disableAction?: boolean
-    actionLabel?: string
+    actionLabel?: ReactNode
     verifiedBy?: string[]
     onActionClick?(asset: CollectibleCardProps['asset']): void
     onItemClick?(asset: CollectibleCardProps['asset']): void
@@ -132,7 +132,6 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
         showUnCheckedIndicator,
         ...rest
     } = props
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const name = asset.collection?.name ?? ''
     const popperProps = useBoundedPopperProps()
@@ -184,7 +183,7 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
                             </Typography>
 
                             {verifiedBy.length ?
-                                <ShadowRootTooltip title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                <ShadowRootTooltip title={<Trans>Verified by {verifiedBy.join(', ')}</Trans>}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>
                             :   null}

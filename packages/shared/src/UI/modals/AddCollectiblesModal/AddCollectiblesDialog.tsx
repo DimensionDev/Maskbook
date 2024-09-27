@@ -2,9 +2,9 @@ import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../contexts/components/index.js'
 import { AddCollectibles, type AddCollectiblesProps } from '../../components/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()(() => ({
     content: {
@@ -26,11 +26,10 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
     account,
     onAdd,
 }: AddCollectiblesDialogProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (
-        <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={() => onAdd()} title={t.add_collectibles()}>
+        <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={() => onAdd()} title={<Trans>Add NFTs</Trans>}>
             <DialogContent classes={{ root: classes.content }}>
                 <AddCollectibles
                     pluginID={pluginID}

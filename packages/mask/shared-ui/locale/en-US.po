@@ -26,7 +26,11 @@ msgid "{0} Mins"
 msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
-msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
+msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
@@ -140,8 +144,8 @@ msgstr ""
 msgid "Agree"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:119
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:139
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:116
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:136
 msgid "All"
 msgstr ""
 
@@ -917,7 +921,7 @@ msgstr ""
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:140
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:137
 msgid "Everyone"
 msgstr ""
 
@@ -1286,11 +1290,11 @@ msgstr ""
 msgid "Issued at"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:147
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:144
 msgid "Just Me"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:157
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:154
 msgid "Just Selected Contacts"
 msgstr ""
 
@@ -1891,8 +1895,8 @@ msgstr ""
 msgid "Privacy Policy"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:120
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:146
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:117
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:143
 msgid "Private"
 msgstr ""
 
@@ -2179,7 +2183,7 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:156
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:153
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:120
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:206
 msgid "Share with"
@@ -2646,7 +2650,7 @@ msgstr ""
 msgid "View on Explorer"
 msgstr ""
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:126
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:123
 msgid "Visible To"
 msgstr ""
 

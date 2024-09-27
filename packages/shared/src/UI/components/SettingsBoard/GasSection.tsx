@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { makeStyles, MaskTabList } from '@masknet/theme'
-import { useSharedTrans } from '@masknet/shared'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -12,6 +11,7 @@ import { SettingsContext } from './Context.js'
 import { Section } from './Section.js'
 import { GasForm } from './GasForm.js'
 import { GasSettingsType } from './types/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,8 +47,6 @@ interface GasSectionProps {
 
 export function GasSection(props: GasSectionProps) {
     const { activeTab, setActiveTab, disableGasLimit } = props
-
-    const t = useSharedTrans()
     const { classes } = useStyles()
     const {
         pluginID,
@@ -91,14 +89,14 @@ export function GasSection(props: GasSectionProps) {
     return (
         <div className={classes.root}>
             <Section
-                title={t.gas_settings_label_gas_price()}
+                title={<Trans>Gas Price</Trans>}
                 additions={
                     gasOptionType ?
                         <Typography className={classes.additions} component="span">
                             <span className={classes.label}>
                                 {activeTab === GasSettingsType.Basic ?
                                     GAS_OPTION_NAMES[gasOptionType]
-                                :   t.gas_settings_custom()}
+                                :   <Trans>Custom</Trans>}
                             </span>
                             <span className={classes.price}>{` ${customPrice} Gwei`}</span>
                         </Typography>
@@ -110,12 +108,8 @@ export function GasSection(props: GasSectionProps) {
                         variant="round"
                         aria-label="Gas Tabs"
                         onChange={(event, tab) => setActiveTab(tab as GasSettingsType)}>
-                        <Tab className={classes.tab} label={t.gas_settings_tab_basic()} value={GasSettingsType.Basic} />
-                        <Tab
-                            className={classes.tab}
-                            label={t.gas_settings_tab_advanced()}
-                            value={GasSettingsType.Advanced}
-                        />
+                        <Tab className={classes.tab} label={<Trans>Basic</Trans>} value={GasSettingsType.Basic} />
+                        <Tab className={classes.tab} label={<Trans>Advanced</Trans>} value={GasSettingsType.Advanced} />
                     </MaskTabList>
                 </TabContext>
                 {activeTab === GasSettingsType.Basic ?

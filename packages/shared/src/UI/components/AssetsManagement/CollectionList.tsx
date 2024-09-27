@@ -6,7 +6,6 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, useForkRef } from '@mui/material'
 import type { BoxProps } from '@mui/system'
-import { useSharedTrans } from '../../../locales/index.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
@@ -18,6 +17,7 @@ import { useChainRuntime } from './ChainRuntimeProvider.js'
 import { CollectionHeader } from './CollectionHeader.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -125,7 +125,6 @@ export const CollectionList = memo(function CollectionList({
     from,
     ...rest
 }: CollectionListProps) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles(gridProps, { props: rest })
 
     const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
@@ -239,7 +238,7 @@ export const CollectionList = memo(function CollectionList({
                 <div className={classes.columns}>
                     {sidebar}
                     <Box className={cx(classes.main, classes.emptyMain)} display="flex">
-                        <EmptyStatus flexGrow={1}>{emptyText ?? t.no_NFTs_found()}</EmptyStatus>
+                        <EmptyStatus flexGrow={1}>{emptyText ?? <Trans>No NFTs found.</Trans>}</EmptyStatus>
                     </Box>
                 </div>
             </Box>
@@ -284,7 +283,7 @@ export const CollectionList = memo(function CollectionList({
                                     asset={asset}
                                     pluginID={pluginID}
                                     disableName
-                                    actionLabel={t.send()}
+                                    actionLabel={<Trans>Send</Trans>}
                                     disableAction={disableAction}
                                     isSelected={isSameNFT(pluginID, asset, selectedAsset)}
                                     onActionClick={onActionClick}
@@ -334,13 +333,13 @@ const ExpandedCollection = memo(function ExpandedCollection({
     emptyText,
     ...collectionProps
 }: ExpandedCollectionProps) {
-    const t = useSharedTrans()
     const { loadAssets, getAssets } = useUserAssets()
     const { classes, theme } = useStyles(gridProps)
     const { collection, assets } = collectionProps
     const { finished, loading } = getAssets(collection)
 
-    if (finished && !assets.length) return <EmptyStatus flexGrow={1}>{emptyText ?? t.no_NFTs_found()}</EmptyStatus>
+    if (finished && !assets.length)
+        return <EmptyStatus flexGrow={1}>{emptyText ?? <Trans>No NFTs found.</Trans>}</EmptyStatus>
 
     return (
         <>

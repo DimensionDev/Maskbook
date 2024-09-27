@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, type ReactNode } from 'react'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -7,7 +7,7 @@ import { Trans } from '@lingui/macro'
 
 interface ClaimEntryProps {
     disabled: boolean
-    tooltipHint?: string
+    tooltipHint?: ReactNode
     onClick?: (walletConnectedCallback?: () => void) => void
 }
 

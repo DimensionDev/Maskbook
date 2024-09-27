@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
-import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     dialog: {
@@ -25,23 +25,22 @@ const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
 
 interface ConfirmProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content'> {
     open: boolean
-    title?: string
-    confirmLabel?: React.ReactNode | string
-    content: React.ReactNode | string
+    title?: React.ReactNode
+    confirmLabel?: React.ReactNode
+    content: React.ReactNode
     maxWidthOfContent?: number
     onSubmit(): void
 }
 
 export function Confirm({ title, confirmLabel, content, onSubmit, maxWidthOfContent, ...rest }: ConfirmProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles(maxWidthOfContent)
 
     return (
-        <InjectedDialog title={title ?? t.dialog_confirm()} className={classes.dialog} {...rest}>
+        <InjectedDialog title={title ?? <Trans>Confirm</Trans>} className={classes.dialog} {...rest}>
             <DialogContent className={classes.content}>{content}</DialogContent>
             <DialogActions>
                 <Button fullWidth className={classes.button} onClick={() => onSubmit()}>
-                    {confirmLabel ?? t.dialog_confirm()}
+                    {confirmLabel ?? <Trans>Confirm</Trans>}
                 </Button>
             </DialogActions>
         </InjectedDialog>

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography, type StackProps } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -23,13 +23,14 @@ interface ManageTokenListBarProps extends StackProps {
 }
 
 export const ManageTokenListBar = memo<ManageTokenListBarProps>(function ManageTokenListBar({ onEdit, ...rest }) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     return (
         <Stack direction="row" justifyContent="center" {...rest} className={cx(classes.root, rest.className)}>
             <Stack className={classes.target} display="inline-flex" gap={2} direction="row" onClick={onEdit}>
                 <Icons.Edit2 />
-                <Typography>{t.erc20_manage_token_list()}</Typography>
+                <Typography>
+                    <Trans>Manage Token Lists</Trans>
+                </Typography>
             </Stack>
         </Stack>
     )

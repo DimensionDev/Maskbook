@@ -12,7 +12,7 @@ import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import Services from '#services'
-import { plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -112,10 +112,7 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
         if (selected === EncryptionTargetType.E2E)
-            return plural(shareWithNum, {
-                one: '1 friend',
-                other: `${shareWithNum} friends`,
-            })
+            return <Plural one="1 friend" other="# friends" value={shareWithNum} />
         else if (selected === EncryptionTargetType.Public) return <Trans>All</Trans>
         else if (selected === EncryptionTargetType.Self) return <Trans>Private</Trans>
         unreachable(selected)

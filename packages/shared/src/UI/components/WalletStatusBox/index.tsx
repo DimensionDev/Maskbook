@@ -13,19 +13,14 @@ import {
     useChainIdValid,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import {
-    FormattedAddress,
-    WalletIcon,
-    SelectProviderModal,
-    useSharedTrans,
-    WalletStatusModal,
-    CopyButton,
-} from '@masknet/shared'
+import { FormattedAddress, WalletIcon, SelectProviderModal, WalletStatusModal, CopyButton } from '@masknet/shared'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import { usePendingTransactions } from './usePendingTransactions.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -112,7 +107,7 @@ export interface WalletStatusBox {
 }
 
 export function WalletStatusBox(props: WalletStatusBox) {
-    const t = useSharedTrans()
+    const { _ } = useLingui()
     const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
@@ -146,7 +141,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     variant="contained"
                     size="small"
                     onClick={() => SelectProviderModal.open()}>
-                    {t.plugin_wallet_on_connect()}
+                    <Trans>Connect Wallet</Trans>
                 </Button>
             </section>
         )
@@ -189,7 +184,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 className={classes.link}
                                 href={Utils.explorerResolver.addressLink(chainId, account) ?? ''}
                                 target="_blank"
-                                title={t.plugin_wallet_view_on_explorer()}
+                                title={_(msg`View on Explorer`)}
                                 rel="noopener noreferrer">
                                 <Icons.LinkOut className={cx(classes.icon, classes.linkIcon)} />
                             </Link>
@@ -223,7 +218,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 WalletStatusModal.close()
                                 await Web3.disconnect()
                             }}>
-                            {t.plugin_wallet_disconnect()}
+                            <Trans>Disconnect</Trans>
                         </Button>
                         <Button
                             className={cx(classes.actionButton)}
@@ -233,7 +228,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 SelectProviderModal.open()
                                 props.closeDialog?.()
                             }}>
-                            {t.wallet_status_button_change()}
+                            <Trans>Change</Trans>
                         </Button>
                     </section>
                 )}

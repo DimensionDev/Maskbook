@@ -2,7 +2,7 @@ import { useActivatedPluginsSiteAdaptor, type Plugin, usePluginTransField } from
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
@@ -21,7 +21,6 @@ interface BadgeRendererProps {
 export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererProps) {
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const i18n = usePluginTransField()
-    const t = useSharedTrans()
     if (!meta) return null
 
     const result = [...meta.entries()].flatMap(([metaKey, metaValue]) => {
@@ -47,7 +46,7 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
                 if (typeof desc === 'string')
                     desc = {
                         text: desc,
-                        tooltip: `${t.badge_renderer_provided_by_plugin()} "${i18n(plugin.ID, plugin.name)}"`,
+                        tooltip: <Trans>Provided by plugin "{i18n(plugin.ID, plugin.name)}"</Trans>,
                     }
                 return (
                     <MetaBadge

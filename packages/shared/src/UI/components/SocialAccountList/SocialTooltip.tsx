@@ -1,9 +1,9 @@
-import { useSharedTrans } from '@masknet/shared'
 import { type NextIDPlatform } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useRef, cloneElement, useEffect, useState, type ReactElement, type RefObject } from 'react'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     title: {
@@ -20,13 +20,11 @@ interface SocialTooltipProps<T> {
 export function SocialTooltip<T extends object>({ children, platform }: SocialTooltipProps<T>) {
     const { classes } = useStyles()
     const [inView, setInView] = useState(false)
-
-    const t = useSharedTrans()
     const ref = useRef<HTMLElement>(null)
     const title =
         platform ?
             <Typography className={classes.title} fontSize={14}>
-                {t.account_icon_tooltips({ source: resolveNextIDPlatformName(platform) || platform })}
+                <Trans>Data source is retrieved from {resolveNextIDPlatformName(platform) || platform}.</Trans>
             </Typography>
         :   null
 

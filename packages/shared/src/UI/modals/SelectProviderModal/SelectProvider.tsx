@@ -1,6 +1,6 @@
 import { delay, getEnumAsArray } from '@masknet/kit'
 import { getRegisteredWeb3Providers, MaskWalletProvider } from '@masknet/web3-providers'
-import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
+import { ConnectWalletModal, InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -9,6 +9,7 @@ import { DialogContent } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { GuideDialog } from './GuideDialog.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -35,7 +36,6 @@ interface SelectProviderProps {
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
     const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
-    const t = useSharedTrans()
     const { classes } = useStyles()
     // Guiding provider
     const [provider, setProvider] = useState<Web3Helper.ProviderDescriptorAll>()
@@ -93,7 +93,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     return (
         <InjectedDialog
             classes={{ paper: classes.dialog }}
-            title={t.plugin_wallet_select_provider_dialog_title()}
+            title={<Trans>Connect Wallet</Trans>}
             open={open}
             onClose={onClose}>
             <DialogContent className={classes.content}>

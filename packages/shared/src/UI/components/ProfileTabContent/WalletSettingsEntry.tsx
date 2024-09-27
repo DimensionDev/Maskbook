@@ -3,7 +3,7 @@ import { CrossIsolationMessages } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -21,20 +21,19 @@ function openWeb3ProfileSettingDialog() {
     })
 }
 export const WalletSettingsEntry = memo(function WalletSettingsEntry() {
-    const t = useSharedTrans()
     const { classes, theme } = useStyles()
 
     return (
         <>
             <Stack flex={1}>
                 <Typography fontWeight={400} fontSize={14} color={theme.palette.maskColor.second}>
-                    {t.show_wallet_setting_intro()}
+                    <Trans>Please select the wallet to activate the function after saving the settings.</Trans>
                 </Typography>
             </Stack>
             <Stack direction="row" justifyContent="center">
                 <Button className={classes.button} onClick={openWeb3ProfileSettingDialog}>
                     <Icons.Settings size={18} />
-                    {t.show_wallet_setting_button()}
+                    <Trans>Go to Settings</Trans>
                 </Button>
             </Stack>
         </>

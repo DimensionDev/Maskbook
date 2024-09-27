@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -84,13 +84,12 @@ interface TransactionProps extends GridProps {
 }
 
 function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) {
-    const t = useSharedTrans()
     const { classes, theme } = useStyles()
 
-    const statusTextMap: Record<TransactionStatusType, string> = {
-        [TransactionStatusType.NOT_DEPEND]: t.recent_transaction_pending(),
-        [TransactionStatusType.SUCCEED]: t.recent_transaction_success(),
-        [TransactionStatusType.FAILED]: t.recent_transaction_failed(),
+    const statusTextMap = {
+        [TransactionStatusType.NOT_DEPEND]: <Trans>Pending</Trans>,
+        [TransactionStatusType.SUCCEED]: <Trans>Success</Trans>,
+        [TransactionStatusType.FAILED]: <Trans>Failed</Trans>,
     }
 
     const Utils = useWeb3Utils()
@@ -159,7 +158,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
             <Grid item className={classes.cell} md={2} justifyContent="right">
                 {txStatus === TransactionStatusType.NOT_DEPEND ?
                     <Typography fontWeight={300} className={classes.clear} onClick={handleClear}>
-                        {t.wallet_status_pending_clear()}
+                        <Trans>Clear</Trans>
                     </Typography>
                 :   null}
             </Grid>

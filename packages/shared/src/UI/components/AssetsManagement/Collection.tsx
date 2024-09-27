@@ -6,11 +6,11 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Skeleton, Typography, useForkRef } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useLayoutEffect, type HTMLProps, useMemo } from 'react'
-import { useSharedTrans } from '../../../index.js'
 import { isSameNFT } from '../../../utils/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -113,7 +113,6 @@ export const Collection = memo(
         selectedAsset,
         ...rest
     }: CollectionProps) => {
-        const t = useSharedTrans()
         const { compact, containerRef } = useCompactDetection()
         const popperProps = useBoundedPopperProps()
         const { classes, cx } = useStyles({ compact })
@@ -145,7 +144,7 @@ export const Collection = memo(
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
-                    actionLabel={t.send()}
+                    actionLabel={<Trans>Send</Trans>}
                     disableAction={disableAction}
                     onActionClick={onActionClick}
                     onItemClick={onItemClick}
@@ -195,7 +194,7 @@ export const Collection = memo(
                             {verifiedBy?.length ?
                                 <ShadowRootTooltip
                                     disableInteractive
-                                    title={t.verified_by({ marketplace: verifiedBy.join(', ') })}>
+                                    title={<Trans>Verified by {verifiedBy.join(', ')}</Trans>}>
                                     <Icons.Verification size={16} />
                                 </ShadowRootTooltip>
                             :   null}

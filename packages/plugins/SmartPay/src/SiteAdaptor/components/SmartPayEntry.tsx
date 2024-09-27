@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, type ReactNode } from 'react'
 import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -12,7 +12,7 @@ import { Trans } from '@lingui/macro'
 
 interface SmartPayEntryProps {
     disabled: boolean
-    tooltipHint?: string
+    tooltipHint?: ReactNode
     onClick?: (walletConnectedCallback?: () => void) => void
 }
 

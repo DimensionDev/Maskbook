@@ -7,7 +7,7 @@ import { DialogContent } from '@mui/material'
 import { SettingsBoard } from '../../components/SettingsBoard/index.js'
 import { SettingsContext } from '../../components/SettingsBoard/Context.js'
 import { InjectedDialog } from '../../contexts/index.js'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 interface StyleProps {
     compact: boolean
@@ -54,7 +54,6 @@ export function SelectGasSettingsDialog({
     onClose,
     title,
 }: SelectGasSettingsDialogProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles({ compact: disableSlippageTolerance ?? true })
     const { pluginID: pluginID_ } = useNetworkContext(pluginID)
     const { chainId: chainId_ } = useChainContext({ chainId })
@@ -80,7 +79,7 @@ export function SelectGasSettingsDialog({
             open={open}
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             onClose={() => onClose(settings)}
-            title={title ?? t.gas_settings_title()}>
+            title={title ?? <Trans>Advanced Settings</Trans>}>
             <DialogContent classes={{ root: classes.content }}>
                 <SettingsContext initialState={initialState}>
                     <SettingsBoard

@@ -17,9 +17,9 @@ import {
     Typography,
 } from '@mui/material'
 import { memo, useEffect } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
 import { ContractItem } from './ContractItem.js'
 import { ContractSection } from './ContractSection.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -98,10 +98,10 @@ const brands: Record<TrendingAPI.CommunityType, React.ReactNode> = {
 }
 
 export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: CoinMetadataTableProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
-    const metadataLinks = [[t.website(), trending?.coin.home_urls]] as Array<[string, string[] | undefined]>
+    // eslint-disable-next-line react/no-missing-key
+    const metadataLinks = [[<Trans>Website</Trans>, trending?.coin.home_urls]] as const
 
     const contracts = trending?.contracts?.filter((x) => x.chainId) ?? [
         {
@@ -145,7 +145,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
-                    {t.info()}
+                    <Trans>Info</Trans>
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -155,7 +155,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
-                                        {t.contract()}
+                                        <Trans>Contract</Trans>
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cellValue} align="right">
@@ -210,7 +210,7 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
                             <TableRow>
                                 <TableCell className={classes.cell}>
                                     <Typography className={classes.label} variant="body2">
-                                        {t.community()}
+                                        <Trans>Community</Trans>
                                     </Typography>
                                 </TableCell>
                                 <TableCell className={classes.cellValue} align="right">
@@ -246,14 +246,13 @@ export const CoinMetadataTable = memo(function CoinMetadataTable({ trending }: C
 })
 
 export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton() {
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700}>
-                    {t.info()}
+                    <Trans>Info</Trans>
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -262,7 +261,7 @@ export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton
                         <TableRow>
                             <TableCell className={classes.cell}>
                                 <Typography className={classes.label} variant="body2">
-                                    {t.contract()}
+                                    <Trans>Contract</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cellValue} align="right">
@@ -272,7 +271,7 @@ export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton
                         <TableRow>
                             <TableCell className={classes.cell}>
                                 <Typography className={classes.label} variant="body2">
-                                    {t.website()}
+                                    <Trans>Website</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cellValue} align="right">
@@ -282,7 +281,7 @@ export const CoinMetadataTableSkeleton = memo(function CoinMetadataTableSkeleton
                         <TableRow>
                             <TableCell className={classes.cell}>
                                 <Typography className={classes.label} variant="body2">
-                                    {t.community()}
+                                    <Trans>Community</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.cellValue} align="right">

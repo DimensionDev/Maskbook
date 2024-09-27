@@ -1,8 +1,9 @@
 import { useCallback } from 'react'
 import { DialogContent, dialogClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { InjectedDialog, WalletStatusBox, useSharedTrans } from '@masknet/shared'
+import { InjectedDialog, WalletStatusBox } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -27,7 +28,6 @@ interface WalletStatusDialogProps {
 }
 
 export function WalletStatusDialog({ open, onClose, isHidden = false, setHidden }: WalletStatusDialogProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     // #region remote controlled dialog logic
@@ -42,7 +42,7 @@ export function WalletStatusDialog({ open, onClose, isHidden = false, setHidden 
 
     return (
         <InjectedDialog
-            title={t.plugin_wallet_dialog_title()}
+            title={<Trans>Wallet Account</Trans>}
             open={open}
             onClose={closeDialog}
             maxWidth="sm"
