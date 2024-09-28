@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,36 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ProfileCard/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 980\n"
+
+#: src/SiteAdaptor/index.tsx:26
+msgid "General user"
+msgstr "crwdns31390:0crwdne31390:0"
+
+#: src/SiteAdaptor/index.tsx:39
+msgid "NFT collection"
+msgstr "crwdns31392:0crwdne31392:0"
+
+#: src/SiteAdaptor/index.tsx:41
+msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
+msgstr "crwdns31394:0crwdne31394:0"
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "Token"
+msgstr "crwdns31396:0crwdne31396:0"
+
+#: src/SiteAdaptor/index.tsx:16
+msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
+msgstr "crwdns28890:0crwdne28890:0"
+
+#: src/SiteAdaptor/index.tsx:36
+msgid "View real-time crypto prices, market cap, trading volume, etc."
+msgstr "crwdns31398:0crwdne31398:0"
+
+#: src/SiteAdaptor/index.tsx:28
+msgid "View user’s Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+msgstr "crwdns31400:0crwdne31400:0"
+
+#: src/SiteAdaptor/index.tsx:23
+msgid "Web3 Profile Card"
+msgstr "crwdns28892:0crwdne28892:0"
 
