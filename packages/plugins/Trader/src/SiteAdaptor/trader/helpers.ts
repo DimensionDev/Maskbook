@@ -4,14 +4,15 @@ import type { Token } from '../../types/trader.js'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import type { RouterListItem } from '@masknet/web3-providers/types'
 
-const MINIMUM_AMOUNT_RE = /(Minimum amount is\s+)(\d+)/
+const MINIMUM_AMOUNT_RE = /((?:Minimum|Maximum) amount is\s+)(\d+)/
 export function fixBridgeMessage(message: string, token?: Web3Helper.FungibleTokenAll) {
     // "Minimum amount is  1136775000000000000"
+    // "Maximum amount is  1136775000000000000"
     if (!message.match(MINIMUM_AMOUNT_RE)) {
         return message
     }
     return message.replace(MINIMUM_AMOUNT_RE, (_, pre, amount: string) => {
-        return `${pre} ${leftShift(amount, token?.decimals ?? 0).toFixed()} ${token?.symbol ?? ''}`
+        return `${pre.trim()} ${leftShift(amount, token?.decimals ?? 0).toFixed()} ${token?.symbol ?? ''}`
     })
 }
 
