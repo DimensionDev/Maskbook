@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:19\n"
+"PO-Revision-Date: 2024-09-28 05:01\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -29,6 +29,10 @@ msgstr "Artblocks는 마음에 드는 스타일을 골라 작업비를 지불하
 #: src/SiteAdaptor/DetailsView.tsx:129
 msgid "Blockchain:"
 msgstr "불록체인:"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:151
+msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
+msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx:124
 msgid "Chain"
@@ -54,11 +58,11 @@ msgstr "제작자"
 msgid "Details"
 msgstr "디테일"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:78
+#: src/SiteAdaptor/PurchaseDialog.tsx:77
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
 msgstr "'{0}' 컬렉션에서 {1} {2} 가격로 아름다운 예술품을 구매했습니다. @realMaskNetwork 설치하여 NFT를 구매해 보세요."
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:81
+#: src/SiteAdaptor/PurchaseDialog.tsx:80
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr "'{0}' 컬렉션에서 {1} {2} 가격로 아름다운 예술품을 구매했습니다."
 
@@ -66,7 +70,7 @@ msgstr "'{0}' 컬렉션에서 {1} {2} 가격로 아름다운 예술품을 구매
 msgid "Infos"
 msgstr "정보"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:112
+#: src/SiteAdaptor/PurchaseDialog.tsx:111
 msgid "Insufficient balance"
 msgstr "잔액 부족"
 
@@ -86,11 +90,11 @@ msgstr "민팅 완료"
 msgid "Paused"
 msgstr "일시 정지"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:113
+#: src/SiteAdaptor/PurchaseDialog.tsx:112
 msgid "Please check ToS document"
 msgstr "ToS 파일을 확인하세요"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:136
+#: src/SiteAdaptor/PurchaseDialog.tsx:135
 msgid "Price per mint"
 msgstr "민팅 가격(1 NFT)"
 
@@ -99,12 +103,12 @@ msgid "Price:"
 msgstr "가격:"
 
 #: src/SiteAdaptor/ActionBar.tsx:32
-#: src/SiteAdaptor/PurchaseDialog.tsx:126
-#: src/SiteAdaptor/PurchaseDialog.tsx:131
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+#: src/SiteAdaptor/PurchaseDialog.tsx:130
 msgid "Purchase"
 msgstr "구매"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:126
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
 msgid "Purchasing...."
 msgstr "구매 진행 중"
 
