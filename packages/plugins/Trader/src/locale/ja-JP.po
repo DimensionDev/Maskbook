@@ -166,7 +166,7 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:78
+#: src/SiteAdaptor/index.tsx:77
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
 #: src/SiteAdaptor/trending/TickersTable.tsx:82
@@ -308,6 +308,10 @@ msgstr "所有者"
 #: src/SiteAdaptor/trending/TickersTable.tsx:83
 msgid "Pair"
 msgstr "ペア "
+
+#: src/SiteAdaptor/index.tsx:102
+msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:361
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:145

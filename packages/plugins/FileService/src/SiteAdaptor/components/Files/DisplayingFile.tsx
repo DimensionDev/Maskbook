@@ -4,8 +4,8 @@ import { FileFrame } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { memo } from 'react'
-import { FileServiceTrans } from '../../../locales/index.js'
 import type { FileBaseProps, FileInfo } from '../../../types.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {
@@ -65,13 +65,12 @@ export const DisplayingFile = memo(({ file, onSave, onDownload, ...rest }: Displ
             <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
             {file.key ?
                 <Typography className={classes.meta}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <FileServiceTrans.file_key
-                        components={{
-                            key: <Typography className={classes.metaValue} component="span" />,
-                        }}
-                        values={{ key: file.key }}
-                    />
+                    <Trans>
+                        File Key:{' '}
+                        <Typography className={classes.metaValue} component="span">
+                            {file.key}
+                        </Typography>
+                    </Trans>
                 </Typography>
             :   null}
         </FileFrame>

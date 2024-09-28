@@ -1,13 +1,12 @@
-import { Trans as Trans2 } from 'react-i18next'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { PluginID } from '@masknet/shared-base'
 import { MaskColorVar } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { base } from '../base.js'
 import { TipTaskManager } from '../contexts/index.js'
 import { guideStorageDefaultValue, setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
+import { Trans } from '@lingui/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -24,20 +23,17 @@ const site: Plugin.SiteAdaptor.Definition = {
             return {
                 category: 'dapp',
                 description: (
-                    <Trans2
-                        ns={PluginID.Tips}
-                        i18nKey="description"
-                        components={{
-                            Link: (
-                                <Link
-                                    href="https://next.id/"
-                                    rel="noopener noreferrer"
-                                    target="_blank"
-                                    style={{ color: MaskColorVar.primary }}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        Gift crypto or NFTs tips to any{' '}
+                        <Link
+                            href="https://next.id/"
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            style={{ color: MaskColorVar.primary }}>
+                            Next.ID
+                        </Link>{' '}
+                        verified users on social media.
+                    </Trans>
                 ),
                 ApplicationEntryID: base.ID,
                 icon,

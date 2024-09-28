@@ -25,11 +25,15 @@ msgstr ""
 msgid "Change"
 msgstr ""
 
+#: src/Application/NFTListDialog.tsx:245
+msgid "Coming soon"
+msgstr ""
+
 #: src/Application/PersonaPage.tsx:75
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:121
+#: src/Application/NFTListDialog.tsx:117
 msgid "Download image error"
 msgstr ""
 
@@ -54,7 +58,7 @@ msgstr ""
 msgid "No collectible found."
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:221
+#: src/Application/NFTListDialog.tsx:217
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr ""
 
@@ -74,12 +78,28 @@ msgstr ""
 msgid "Set NFT Avatar"
 msgstr ""
 
+#: src/Application/NFTListDialog.tsx:248
+msgid "Set NFT NFT Background"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:247
+msgid "Set NFT PFP"
+msgstr ""
+
 #: src/Application/NFTInfo.tsx:31
 msgid "Set NFT PFPs"
 msgstr ""
 
 #: src/Application/NFTInfo.tsx:28
 msgid "Set up NFT PFP successfully"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:51
+msgid "Set your NFT as profile picture with exclusive aura."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:70
+msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
 msgstr ""
 
 #: src/Application/UploadAvatarDialog.tsx:91

@@ -1,7 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { useInterval } from 'react-use'
 import { isAfter, format, isBefore, intervalToDuration, differenceInDays } from 'date-fns'
-import { ClaimTrans } from '../../../locales/i18n_generated.js'
 import { ActionButton, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Box, Typography, alpha } from '@mui/material'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
@@ -120,11 +119,10 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
             switch (activityStatus) {
                 case ActivityStatus.NOT_START:
                     return (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <ClaimTrans.start_time_tips
-                            values={{ time: format(startTime, 'MM-dd-yyyy HH:mm') }}
-                            components={{ strong: <strong className={classes.strong} /> }}
-                        />
+                        <Trans>
+                            Start Time:{' '}
+                            <strong className={classes.strong}>{format(startTime, 'MM-dd-yyyy HH:mm')}</strong>
+                        </Trans>
                     )
                 case ActivityStatus.IN_PROGRESS:
                     const duration = intervalToDuration({
@@ -135,23 +133,19 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                     const days = differenceInDays(endTime, now)
 
                     return (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <ClaimTrans.airdrop_in_progress_time_tips
-                            values={{
-                                days: String(days ?? ''),
-                                hours: String(duration.hours ?? ''),
-                                minutes: String(duration.minutes ?? ''),
-                            }}
-                            components={{ strong: <strong className={classes.strong} /> }}
-                        />
+                        <Trans>
+                            Claiming will be live until:{' '}
+                            <strong className={classes.strong}>
+                                {' '}
+                                {days} d {duration.hours ?? ''} h {duration.minutes ?? ''} m
+                            </strong>
+                        </Trans>
                     )
                 case ActivityStatus.ENDED:
                     return (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <ClaimTrans.end_time_tips
-                            values={{ time: format(endTime, 'MM-dd-yyyy HH:mm') }}
-                            components={{ strong: <strong className={classes.strong} /> }}
-                        />
+                        <Trans>
+                            Ended on <strong className={classes.strong}>{format(endTime, 'MM-dd-yyyy HH:mm')}</strong>
+                        </Trans>
                     )
             }
         }, [activityStatus, classes, now])

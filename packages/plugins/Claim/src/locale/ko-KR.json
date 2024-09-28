@@ -4,8 +4,10 @@
         "u2Srv1": "에어드랍 수령",
         "TZDLPg": "수령 가능",
         "7lnlzl": ["Claimed ", ["amount"], " $", ["0"], " successfully."],
+        "uXT+5y": ["Claiming will be live until: <0>", ["days"], " d ", ["0"], " h ", ["1"], " m</0>"],
         "ryWxhG": "축하합니다!",
         "TYTRNP": "수령 가능",
+        "fdqDgM": ["Ended on <0>", ["0"], "</0>"],
         "M1RnFv": "만료됨",
         "wrJC61": [
             "I just claimed airdrop with ",
@@ -20,6 +22,7 @@
         "GDe4XX": "Please connect wallet to check if you are eligible to claim $ARB.",
         "Z8lGw6": "공유",
         "hTbvD9": "$ARB 수령하는 자격이 없습니다.",
+        "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "3cw8FQ": "에어드롭에 참여하기 위해서는 거래 비용을 충당할 수 있는 네이티브 토큰이 지정된 네트워크의 월렛에 충분히 있어야 합니다.",
         "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
         "ayf6mz": "WalletConnect 월렛에 연결되어 있습니다. 해당 월렛에서 네트워크를 전환하기나 다른 월렛으로 바꾸세요.",

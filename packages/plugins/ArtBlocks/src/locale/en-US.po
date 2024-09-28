@@ -25,6 +25,10 @@ msgstr ""
 msgid "Blockchain:"
 msgstr ""
 
+#: src/SiteAdaptor/PurchaseDialog.tsx:151
+msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
+msgstr ""
+
 #: src/SiteAdaptor/DetailsView.tsx:124
 msgid "Chain"
 msgstr ""
@@ -49,11 +53,11 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:78
+#: src/SiteAdaptor/PurchaseDialog.tsx:77
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:81
+#: src/SiteAdaptor/PurchaseDialog.tsx:80
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr ""
 
@@ -61,7 +65,7 @@ msgstr ""
 msgid "Infos"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:112
+#: src/SiteAdaptor/PurchaseDialog.tsx:111
 msgid "Insufficient balance"
 msgstr ""
 
@@ -81,11 +85,11 @@ msgstr ""
 msgid "Paused"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:113
+#: src/SiteAdaptor/PurchaseDialog.tsx:112
 msgid "Please check ToS document"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:136
+#: src/SiteAdaptor/PurchaseDialog.tsx:135
 msgid "Price per mint"
 msgstr ""
 
@@ -94,12 +98,12 @@ msgid "Price:"
 msgstr ""
 
 #: src/SiteAdaptor/ActionBar.tsx:32
-#: src/SiteAdaptor/PurchaseDialog.tsx:126
-#: src/SiteAdaptor/PurchaseDialog.tsx:131
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+#: src/SiteAdaptor/PurchaseDialog.tsx:130
 msgid "Purchase"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:126
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
 msgid "Purchasing...."
 msgstr ""
 

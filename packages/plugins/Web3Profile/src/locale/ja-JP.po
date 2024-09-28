@@ -27,6 +27,10 @@ msgstr "ウォレットを追加"
 msgid "Change"
 msgstr "変更"
 
+#: src/SiteAdaptor/index.tsx:61
+msgid "Choose and showcase your Web3 footprints on Twitter."
+msgstr ""
+
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:200
 msgid "Confirm"
 msgstr "確認"
@@ -156,6 +160,6 @@ msgid "View your profile in firefly"
 msgstr "あなたのプロフィールをFireflyで見る"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:148
-#: src/SiteAdaptor/index.tsx:30
+#: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"

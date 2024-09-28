@@ -26,6 +26,10 @@ msgstr "수장품 추가"
 msgid "Close"
 msgstr "닫기"
 
+#: src/SiteAdaptor/index.tsx:26
+msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
+msgstr ""
+
 #: src/contexts/Tip/useTipValidate.ts:42
 msgid "Insufficient balance"
 msgstr "잔액 부족"

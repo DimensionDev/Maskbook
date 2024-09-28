@@ -1,5 +1,6 @@
 {
     "messages": {
+        "m/TPEz": "(beta)",
         "yHppI0": [["0"], " 네트워크 월렛에 추가되지 않습니다. 추가하고 다시 시도하세요."],
         "OAZ+tI": [
             ["attentionFactors", "plural", { "one": ["#", " Attention item"], "other": ["#", " Attention items"] }]
@@ -22,6 +23,7 @@
         "7yTBmm": "MASK 승인",
         "jquqYv": [["0"], " 신고하시겠습니까? 승인 후 이 NFT는 스팸으로 표시됩니다."],
         "c19z3W": "사용 가능한 잔액",
+        "ZrZMJ6": "Backup failed, <0>try again</0>",
         "fsBGk0": "잔액",
         "foOw00": ["Balance(", ["symbol"], ")"],
         "0wJVK+": "기본",
@@ -54,6 +56,7 @@
         "CtByM7": "월렛 연결",
         "2/N/mr": ["Connect with ", ["providerName"]],
         "iH8itU": "월렛 연결",
+        "1XtOmj": "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network.",
         "Tg003Y": "웰렛 연결 설정",
         "ks5OGD": "컨트랙트",
         "PiH3UR": "복사됨",
@@ -193,6 +196,7 @@
         "bLJivk": "NFT 컨트렉트 소유자를 선택하세요.",
         "Xftpm5": "Select Collection",
         "JlFcis": "발송",
+        "xNR7Cd": "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again.",
         "Z8lGw6": "공유",
         "ZIsLZh": "사이즈 한계: 10 MB",
         "lqTDfd": "슬리피지 톨러런스",

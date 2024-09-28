@@ -11,7 +11,6 @@ import {
     PluginVerifiedWalletStatusBar,
     PopupHomeTabType,
     UserAssetsProvider,
-    useSharedTrans,
 } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -36,7 +35,6 @@ import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { Trans } from '@lingui/macro'
-import { useAvatarTrans } from '../locales/i18n_generated.js'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -81,8 +79,6 @@ export interface NFTListDialogRef {
 }
 
 export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefined>) {
-    const t = useAvatarTrans()
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =
         useAvatarManagement()
@@ -246,8 +242,10 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
                             disabled={disabled || !selectedToken || !!targetWallet?.owner}
                             fullWidth>
                             {targetWallet?.owner ?
-                                sharedI18N.coming_soon()
-                            :   t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
+                                <Trans>Coming soon</Trans>
+                            : pfpType === PFP_TYPE.PFP ?
+                                <Trans>Set NFT PFP</Trans>
+                            :   <Trans>Set NFT NFT Background</Trans>}
                         </Button>
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>

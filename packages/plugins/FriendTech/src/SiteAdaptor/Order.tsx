@@ -5,7 +5,6 @@ import { Box, Button, InputBase, Typography, inputBaseClasses } from '@mui/mater
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { FRIEND_TECH_CONTRACT_ADDRESS } from '../constants.js'
-import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useEstimateSellGas } from './hooks/useEstimateSellGas.js'
 import { useAccount, useGasPrice } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -14,7 +13,7 @@ import { BigNumber } from 'bignumber.js'
 import { useOwnKeys } from './hooks/useOwnKeys.js'
 import { useUser } from './hooks/useUser.js'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -88,7 +87,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Order = memo(function Order() {
-    const t = useI18N()
     const { classes, theme } = useStyles()
     const account = useAccount()
     const [params, setParams] = useSearchParams()
@@ -131,15 +129,20 @@ export const Order = memo(function Order() {
                         component="div"
                         skeletonWidth={150}
                         loading={loadingPrice}>
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <Translate.sell_summary
-                            values={{
-                                count,
-                                cost,
-                            }}
-                            components={{
-                                bold: <b className={classes.bold} />,
-                            }}
+                        <Plural
+                            value={count}
+                            one={
+                                <Trans>
+                                    Sell <b className={classes.bold}>{count}</b> key for{' '}
+                                    <b className={classes.bold}>{cost}</b> ETH
+                                </Trans>
+                            }
+                            other={
+                                <Trans>
+                                    Sell <b className={classes.bold}>{count}</b> keys for{' '}
+                                    <b className={classes.bold}>{cost}</b> ETH
+                                </Trans>
+                            }
                         />
                     </ProgressiveText>
                     <ShadowRootTooltip
@@ -155,7 +158,7 @@ export const Order = memo(function Order() {
                     </ShadowRootTooltip>
                 </Box>
                 <ProgressiveText loading={loadingOwnCount} fontWeight={700} skeletonWidth={150}>
-                    {t.you_currently_hold({ count: own! })}
+                    <Plural value={own || 0} one="You currently hold: # key" other="You currently hold: # keys" />
                 </ProgressiveText>
             </Box>
             <Box display="flex" gap={2} mt={1.5}>

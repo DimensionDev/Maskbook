@@ -9,9 +9,8 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Link, Skeleton, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
 import { useOwnKeys } from '../hooks/useOwnKeys.js'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     userInfo: {
@@ -108,7 +107,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export const UserProfile = memo(function UserProfile({ user, address, loading, variant, className, ...rest }: Props) {
     const { classes, theme, cx } = useStyles()
-    const t = useI18N()
     const identity = useLastRecognizedIdentity()
     const myAccount = useAccount()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
@@ -186,7 +184,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, v
                             ml="auto"
                             skeletonWidth={50}
                             loading={loadingOwnCount}>
-                            {ownCount === undefined ? '--' : t.keys({ count: ownCount })}
+                            {ownCount === undefined ? '--' : <Plural value={ownCount} one="# Key" other="# Keys" />}
                         </ProgressiveText>
                     </div>
                 :   null}
@@ -214,9 +212,7 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, v
                             <Trans>Holding</Trans>
                         </Typography>
                         <ProgressiveText className={classes.metaValue} loading={loading} skeletonWidth={50}>
-                            {t.keys({
-                                count: user?.holdingCount || 0,
-                            })}
+                            <Plural value={user?.holdingCount || 0} one="# Key" other="# Keys" />
                         </ProgressiveText>
                     </div>
                 </>

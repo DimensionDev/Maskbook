@@ -4,8 +4,10 @@
         "u2Srv1": "Claim your Airdrop",
         "TZDLPg": "Claimable",
         "7lnlzl": ["Claimed ", ["amount"], " $", ["0"], " successfully."],
+        "uXT+5y": ["Claiming will be live until: <0>", ["days"], " d ", ["0"], " h ", ["1"], " m</0>"],
         "ryWxhG": "Congratulations!",
         "TYTRNP": "Eligible to claim",
+        "fdqDgM": ["Ended on <0>", ["0"], "</0>"],
         "M1RnFv": "Expired",
         "wrJC61": [
             "I just claimed airdrop with ",
@@ -20,6 +22,7 @@
         "GDe4XX": "Please connect wallet to check if you are eligible to claim $ARB.",
         "Z8lGw6": "Share",
         "hTbvD9": "Sorry, you are not eligible to claim $ARB in this campaign.",
+        "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "3cw8FQ": "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs.",
         "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
         "ayf6mz": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",

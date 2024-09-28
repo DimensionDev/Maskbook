@@ -18,6 +18,14 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
 
+#: src/SiteAdaptor/index.tsx:34
+msgid "ENS"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:33
+msgid "Optimize the display of search results about ENS in social media."
+msgstr ""
+
 #: src/SiteAdaptor/PluginHeader.tsx:48
 msgid "Powered by"
 msgstr ""

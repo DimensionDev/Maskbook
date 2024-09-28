@@ -52,7 +52,7 @@ msgid "Cancel"
 msgstr "취소"
 
 #: src/SiteAdaptor/CheckSecurityDialog.tsx:75
-#: src/SiteAdaptor/index.tsx:23
+#: src/SiteAdaptor/index.tsx:22
 msgid "Check Security"
 msgstr "보안 확인"
 
@@ -128,6 +128,10 @@ msgstr "토큰 컨트랙트 주소를 입력하세요."
 #: src/SiteAdaptor/components/Footer.tsx:17
 msgid "Powered by"
 msgstr "Powered by"
+
+#: src/SiteAdaptor/index.tsx:46
+msgid "Provide you with fast, reliable and convenient security services."
+msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:9
 msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"

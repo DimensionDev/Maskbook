@@ -26,7 +26,6 @@ import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { ArtBlocksTrans } from '../locales/index.js'
 import { Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
@@ -149,19 +148,17 @@ export function PurchaseDialog(props: ActionBarProps) {
                             }
                             label={
                                 <Typography variant="body2">
-                                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                    <ArtBlocksTrans.plugin_artblocks_legal_text
-                                        components={{
-                                            terms: (
-                                                <Link
-                                                    color="primary"
-                                                    target="_blank"
-                                                    rel="noopener noreferrer"
-                                                    href="https://www.artblocks.io/terms-of-service"
-                                                />
-                                            ),
-                                        }}
-                                    />
+                                    <Trans>
+                                        By checking this box, I agree to ArtBlocks's{' '}
+                                        <Link
+                                            color="primary"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            href="https://www.artblocks.io/terms-of-service">
+                                            Terms of Service
+                                        </Link>
+                                        .
+                                    </Trans>
                                 </Typography>
                             }
                         />
