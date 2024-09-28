@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-09-28 05:02\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -29,6 +29,10 @@ msgstr "crwdns28312:0crwdne28312:0"
 #: src/SiteAdaptor/DetailsView.tsx:129
 msgid "Blockchain:"
 msgstr "crwdns28314:0crwdne28314:0"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:151
+msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
+msgstr "crwdns31326:0crwdne31326:0"
 
 #: src/SiteAdaptor/DetailsView.tsx:124
 msgid "Chain"
@@ -54,11 +58,11 @@ msgstr "crwdns28324:0crwdne28324:0"
 msgid "Details"
 msgstr "crwdns28326:0crwdne28326:0"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:78
+#: src/SiteAdaptor/PurchaseDialog.tsx:77
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
 msgstr "crwdns28328:0{0}crwdnd28328:0{1}crwdnd28328:0{2}crwdne28328:0"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:81
+#: src/SiteAdaptor/PurchaseDialog.tsx:80
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr "crwdns28330:0{0}crwdnd28330:0{1}crwdnd28330:0{2}crwdne28330:0"
 
@@ -66,7 +70,7 @@ msgstr "crwdns28330:0{0}crwdnd28330:0{1}crwdnd28330:0{2}crwdne28330:0"
 msgid "Infos"
 msgstr "crwdns28332:0crwdne28332:0"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:112
+#: src/SiteAdaptor/PurchaseDialog.tsx:111
 msgid "Insufficient balance"
 msgstr "crwdns28334:0crwdne28334:0"
 
@@ -86,11 +90,11 @@ msgstr "crwdns28340:0crwdne28340:0"
 msgid "Paused"
 msgstr "crwdns28342:0crwdne28342:0"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:113
+#: src/SiteAdaptor/PurchaseDialog.tsx:112
 msgid "Please check ToS document"
 msgstr "crwdns28344:0crwdne28344:0"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:136
+#: src/SiteAdaptor/PurchaseDialog.tsx:135
 msgid "Price per mint"
 msgstr "crwdns28346:0crwdne28346:0"
 
@@ -99,12 +103,12 @@ msgid "Price:"
 msgstr "crwdns28348:0crwdne28348:0"
 
 #: src/SiteAdaptor/ActionBar.tsx:32
-#: src/SiteAdaptor/PurchaseDialog.tsx:126
-#: src/SiteAdaptor/PurchaseDialog.tsx:131
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+#: src/SiteAdaptor/PurchaseDialog.tsx:130
 msgid "Purchase"
 msgstr "crwdns28350:0crwdne28350:0"
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:126
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
 msgid "Purchasing...."
 msgstr "crwdns28352:0crwdne28352:0"
 
