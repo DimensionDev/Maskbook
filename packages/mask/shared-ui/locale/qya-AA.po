@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:09\n"
+"PO-Revision-Date: 2024-09-28 05:02\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -558,6 +558,10 @@ msgstr "crwdns30010:0crwdne30010:0"
 #: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx:20
 msgid "Connected sites"
 msgstr "crwdns30012:0crwdne30012:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:293
+msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+msgstr "crwdns31322:0crwdne31322:0"
 
 #: popups/pages/Personas/Home/UI.tsx:245
 msgid "Connected Wallet"
@@ -1667,7 +1671,7 @@ msgstr "crwdns30392:0crwdne30392:0"
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
 msgstr "crwdns30394:0crwdne30394:0"
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:339
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:344
 msgid "OK"
 msgstr "crwdns30396:0crwdne30396:0"
 
@@ -1875,8 +1879,8 @@ msgstr "crwdns30446:0crwdne30446:0"
 msgid "Plugins"
 msgstr "crwdns30448:0crwdne30448:0"
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:298
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:318
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:303
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:323
 msgid "Post content:"
 msgstr "crwdns30450:0crwdne30450:0"
 
@@ -2136,7 +2140,7 @@ msgstr "crwdns30534:0crwdne30534:0"
 msgid "Select Wallet"
 msgstr "crwdns30536:0crwdne30536:0"
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:349
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:354
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:101
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:98
 #: popups/components/TransactionPreview/index.tsx:108
@@ -2147,6 +2151,10 @@ msgstr "crwdns30536:0crwdne30536:0"
 #: popups/pages/Wallet/Transfer/index.tsx:52
 msgid "Send"
 msgstr "crwdns29746:0crwdne29746:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:287
+msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr "crwdns31324:0crwdne31324:0"
 
 #: popups/pages/Settings/index.tsx:394
 msgid "Service Agreement"
@@ -2715,8 +2723,8 @@ msgstr "crwdns29816:0{walletLength}crwdne29816:0"
 msgid "We are pleased to inform you that the authorization update for X website has been successfully completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
 msgstr "crwdns29818:0crwdne29818:0"
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:309
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:322
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:314
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:327
 msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
 msgstr "crwdns30724:0crwdne30724:0"
 
