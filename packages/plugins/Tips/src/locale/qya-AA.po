@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,77 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Tips/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 998\n"
+
+#: src/components/NFTSection/index.tsx:160
+msgid "Add Collectibles"
+msgstr "crwdns29426:0crwdne29426:0"
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:106
+msgid "Close"
+msgstr "crwdns29428:0crwdne29428:0"
+
+#: src/SiteAdaptor/index.tsx:26
+msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
+msgstr "crwdns31402:0crwdne31402:0"
+
+#: src/contexts/Tip/useTipValidate.ts:42
+msgid "Insufficient balance"
+msgstr "crwdns29430:0crwdne29430:0"
+
+#: src/components/TipDialog.tsx:180
+msgid "NFTs"
+msgstr "crwdns29432:0crwdne29432:0"
+
+#: src/components/NFTSection/index.tsx:207
+msgid "No any collectible is available to preview. Please add your collectible here."
+msgstr "crwdns29434:0crwdne29434:0"
+
+#: src/contexts/Tip/useTipValidate.ts:38
+msgid "No Enough Gas Fees"
+msgstr "crwdns29436:0crwdne29436:0"
+
+#: src/components/TipDialog.tsx:126
+msgid "Send"
+msgstr "crwdns29438:0crwdne29438:0"
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
+msgid "Send authors tips by using Mask Network’s Tips function."
+msgstr "crwdns29440:0crwdne29440:0"
+
+#: src/components/TipDialog.tsx:125
+msgid "Sending..."
+msgstr "crwdns29442:0crwdne29442:0"
+
+#: src/components/TipDialog.tsx:142
+msgid "Sent {1} {0} tips successfully."
+msgstr "crwdns29444:0{1}crwdnd29444:0{0}crwdne29444:0"
+
+#: src/components/TipDialog.tsx:143
+msgid "Sent {amount} {0} tips successfully."
+msgstr "crwdns29446:0{amount}crwdnd29446:0{0}crwdne29446:0"
+
+#: src/contexts/Tip/useRecipientValidate.ts:30
+msgid "The receiving address is a contract address. Please check again."
+msgstr "crwdns29448:0crwdne29448:0"
+
+#: src/contexts/Tip/useRecipientValidate.ts:31
+msgid "The receiving address may be a malicious address."
+msgstr "crwdns29450:0crwdne29450:0"
+
+#: src/components/TipDialog.tsx:144
+#: src/components/TipDialog.tsx:176
+msgid "Tips"
+msgstr "crwdns29452:0crwdne29452:0"
+
+#: src/components/RecipientSection/index.tsx:46
+msgid "To"
+msgstr "crwdns29454:0crwdne29454:0"
+
+#: src/components/TipDialog.tsx:179
+msgid "Tokens"
+msgstr "crwdns29456:0crwdne29456:0"
+
+#: src/components/RecipientSection/RecipientSelect.tsx:130
+msgid "View on Explorer"
+msgstr "crwdns29458:0crwdne29458:0"
 
