@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-09-28 05:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -25,6 +25,10 @@ msgstr "添加 NFT"
 #: src/SiteAdaptor/components/TipsRealmContent/index.tsx:106
 msgid "Close"
 msgstr "关闭"
+
+#: src/SiteAdaptor/index.tsx:26
+msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
+msgstr ""
 
 #: src/contexts/Tip/useTipValidate.ts:42
 msgid "Insufficient balance"
