@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,20 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
+
+#: src/SiteAdaptor/index.tsx:34
+msgid "ENS"
+msgstr "crwdns31386:0crwdne31386:0"
+
+#: src/SiteAdaptor/index.tsx:33
+msgid "Optimize the display of search results about ENS in social media."
+msgstr "crwdns31388:0crwdne31388:0"
+
+#: src/SiteAdaptor/PluginHeader.tsx:48
+msgid "Powered by"
+msgstr "crwdns28742:0crwdne28742:0"
+
+#: src/SiteAdaptor/SearchResultInspector.tsx:129
+msgid "USD Value"
+msgstr "crwdns28744:0crwdne28744:0"
 
