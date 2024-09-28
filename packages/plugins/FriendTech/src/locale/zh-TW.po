@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:09\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -18,11 +18,35 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FriendTech/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 966\n"
 
-#: src/SiteAdaptor/Order.tsx:209
+#: src/SiteAdaptor/components/UserProfile.tsx:215
+msgid "{0, plural, one {# Key} other {# Keys}}"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:161
+msgid "{0, plural, one {You currently hold: # key} other {You currently hold: # keys}}"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:132
+msgid "{count, plural, one {Sell <0>{count}</0> key for <1>{cost}</1> ETH} other {Sell <2>{count}</2> keys for <3>{cost}</3> ETH}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:187
+msgid "{ownCount, plural, one {# Key} other {# Keys}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/HistoryList.tsx:110
+msgid "{shareAmount, plural, one {{0} bought {shareAmount} <0>{1}</0> key} other {{2} bought {shareAmount} <1>{3}</1> keys}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/HistoryList.tsx:125
+msgid "{shareAmount, plural, one {{0} sold {shareAmount} <0>{1}</0> key} other {{2} sold {shareAmount} <1>{3}</1> keys}}"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:212
 msgid "Action"
 msgstr ""
 
-#: src/SiteAdaptor/Order.tsx:182
+#: src/SiteAdaptor/Order.tsx:185
 msgid "Amount"
 msgstr ""
 
@@ -34,61 +58,65 @@ msgstr ""
 msgid "Display the user's friend key related information on the timeline on x.com."
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx:28
-#: src/SiteAdaptor/components/RouterDialog.tsx:31
+#: src/SiteAdaptor/components/RouterDialog.tsx:26
+#: src/SiteAdaptor/components/RouterDialog.tsx:29
 #: src/SiteAdaptor/index.tsx:16
 msgid "Friend"
 msgstr ""
 
-#: src/SiteAdaptor/Order.tsx:193
+#: src/SiteAdaptor/Order.tsx:196
 msgid "From"
 msgstr ""
 
-#: src/SiteAdaptor/Order.tsx:223
+#: src/SiteAdaptor/Order.tsx:226
 msgid "Gas fee"
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx:45
+#: src/SiteAdaptor/components/RouterDialog.tsx:43
 msgid "History"
 msgstr ""
 
-#: src/SiteAdaptor/components/UserProfile.tsx:198
+#: src/SiteAdaptor/components/UserProfile.tsx:196
 msgid "Holders"
 msgstr ""
 
-#: src/SiteAdaptor/components/UserProfile.tsx:214
+#: src/SiteAdaptor/components/UserProfile.tsx:212
 #: src/SiteAdaptor/UserDetail.tsx:100
 msgid "Holding"
 msgstr ""
 
-#: src/SiteAdaptor/components/UserProfile.tsx:161
+#: src/SiteAdaptor/components/UserProfile.tsx:159
 msgid "Key Price"
 msgstr ""
 
 #: src/SiteAdaptor/components/HoldingCard.tsx:138
 #: src/SiteAdaptor/components/HoldingCard.tsx:178
-#: src/SiteAdaptor/components/RouterDialog.tsx:44
+#: src/SiteAdaptor/components/RouterDialog.tsx:42
 msgid "Keys"
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx:30
+#: src/SiteAdaptor/components/RouterDialog.tsx:28
 msgid "Sell"
 msgstr ""
 
-#: src/SiteAdaptor/Order.tsx:212
+#: src/SiteAdaptor/Order.tsx:215
 msgid "Sell Key"
 msgstr ""
 
-#: src/SiteAdaptor/components/UserProfile.tsx:165
-#: src/SiteAdaptor/Order.tsx:147
+#: src/SiteAdaptor/components/UserProfile.tsx:163
+#: src/SiteAdaptor/Order.tsx:150
 msgid "The price of next share is equal to the S^2 / 16000*1 ether where S is the current number of keys."
 msgstr ""
 
-#: src/SiteAdaptor/Order.tsx:201
+#: src/SiteAdaptor/components/HoldingList.tsx:78
+msgid "There's no one holding. <0>go explore</0>"
+msgstr ""
+
+#: src/SiteAdaptor/Order.tsx:204
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/Order.tsx:217
+#: src/SiteAdaptor/Order.tsx:220
 msgid "Total Amount"
 msgstr ""
 
@@ -101,10 +129,15 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: src/SiteAdaptor/components/UserProfile.tsx:182
+#: src/SiteAdaptor/components/HoldingList.tsx:68
+msgid "You don't have any keys in your wallet. <0>go explore</0>"
+msgstr ""
+
+#: src/SiteAdaptor/components/UserProfile.tsx:180
 msgid "You Own"
 msgstr ""
 
-#: src/SiteAdaptor/components/UserProfile.tsx:206
+#: src/SiteAdaptor/components/UserProfile.tsx:204
 msgid "Your Rank"
 msgstr ""
+
