@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-09-28 05:01\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -52,7 +52,7 @@ msgid "Cancel"
 msgstr "취소"
 
 #: src/SiteAdaptor/CheckSecurityDialog.tsx:75
-#: src/SiteAdaptor/index.tsx:23
+#: src/SiteAdaptor/index.tsx:22
 msgid "Check Security"
 msgstr "보안 확인"
 
@@ -127,6 +127,10 @@ msgstr "토큰 컨트랙트 주소를 입력하세요."
 
 #: src/SiteAdaptor/components/Footer.tsx:17
 msgid "Powered by"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:46
+msgid "Provide you with fast, reliable and convenient security services."
 msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:9
