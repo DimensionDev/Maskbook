@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:10\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -18,222 +18,231 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1012\n"
 
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:178
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:216
+msgid "(beta)"
+msgstr ""
+
 #: src/UI/components/ChainBoundary/index.tsx:113
-#~ msgid "{0} network is not added in the wallet. Please add and try it again."
-#~ msgstr ""
+msgid "{0} network is not added in the wallet. Please add and try it again."
+msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:57
-#~ msgid "{attentionFactors, plural, one {# Attention item} other {# Attention items}}"
-#~ msgstr ""
+msgid "{attentionFactors, plural, one {# Attention item} other {# Attention items}}"
+msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:40
-#~ msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
-#~ msgstr ""
+msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasOption.tsx:71
-#~ msgid "~ {0}"
-#~ msgstr ""
+msgid "~ {0}"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:372
-#~ msgid "≈ {gasFeeUSD}"
-#~ msgstr ""
+msgid "≈ {gasFeeUSD}"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:60
-#~ msgid "1. If you haven't installed {name} Wallet"
-#~ msgstr ""
+msgid "1. If you haven't installed {name} Wallet"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:78
-#~ msgid "2. If you have installed {name} Wallet"
-#~ msgstr ""
+msgid "2. If you have installed {name} Wallet"
+msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:100
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:168
-#~ msgid "24 Hour Trading Vol"
-#~ msgstr ""
+msgid "24 Hour Trading Vol"
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx:348
 #: src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx:32
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:230
-#~ msgid "Add NFTs"
-#~ msgstr ""
+msgid "Add NFTs"
+msgstr ""
 
 #: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx:263
-#~ msgid "Added by user"
-#~ msgstr ""
+msgid "Added by user"
+msgstr ""
 
 #: src/UI/components/TokenWithSocialGroupMenu/index.tsx:159
 #: src/UI/wallet/DeriveWalletTable.tsx:124
-#~ msgid "Address"
-#~ msgstr ""
+msgid "Address"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasSection.tsx:112
-#~ msgid "Advanced"
-#~ msgstr ""
+msgid "Advanced"
+msgstr ""
 
 #: src/UI/modals/SelectAdvancedSettingsDialog/SelectGasSettingsDialog.tsx:82
-#~ msgid "Advanced Settings"
-#~ msgstr ""
+msgid "Advanced Settings"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:110
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:51
-#~ msgid "APP list"
-#~ msgstr ""
+msgid "APP list"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:55
-#~ msgid "APP Settings"
-#~ msgstr ""
+msgid "APP Settings"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
-#~ msgid "Applications"
-#~ msgstr ""
+msgid "Applications"
+msgstr ""
 
 #: src/UI/components/GrantPermission/index.tsx:35
-#~ msgid "Approve"
-#~ msgstr ""
+msgid "Approve"
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:112
-#~ msgid "Approve MASK?"
-#~ msgstr ""
+msgid "Approve MASK?"
+msgstr ""
 
 #: src/hooks/useReportSpam.tsx:65
-#~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
-#~ msgstr ""
+msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
+msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx:171
-#~ msgid "Available Balance"
-#~ msgstr ""
+msgid "Available Balance"
+msgstr ""
+
+#: src/UI/components/QRCode/index.tsx:45
+msgid "Backup failed, <0>try again</0>"
+msgstr ""
 
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx:105
 #: src/UI/components/FungibleTokenInput/UI.tsx:172
 #: src/UI/components/TokenAmountPanel/index.tsx:143
-#~ msgid "Balance"
-#~ msgstr ""
+msgid "Balance"
+msgstr ""
 
 #: src/UI/wallet/DeriveWalletTable.tsx:129
-#~ msgid "Balance({symbol})"
-#~ msgstr ""
+msgid "Balance({symbol})"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasSection.tsx:111
-#~ msgid "Basic"
-#~ msgstr ""
+msgid "Basic"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:191
-#~ msgid "Blocto only supports the Flow chain."
-#~ msgstr ""
+msgid "Blocto only supports the Flow chain."
+msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx:135
-#~ msgid "Browse File"
-#~ msgstr ""
+msgid "Browse File"
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:140
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:127
-#~ msgid "Cancel"
-#~ msgstr ""
+msgid "Cancel"
+msgstr ""
 
 #: src/UI/components/WalletStatusBar/Action.tsx:17
 #: src/UI/components/WalletStatusBar/WalletMenuItem.tsx:79
 #: src/UI/components/WalletStatusBox/index.tsx:231
-#~ msgid "Change"
-#~ msgstr ""
+msgid "Change"
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:186
-#~ msgid "Change Wallet"
-#~ msgstr ""
+msgid "Change Wallet"
+msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx:179
-#~ msgid "Check {providerName} to confirm connect."
-#~ msgstr ""
+msgid "Check {providerName} to confirm connect."
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:72
-#~ msgid "Check out the official website"
-#~ msgstr ""
+msgid "Check out the official website"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:333
-#~ msgid "Choose Network"
-#~ msgstr ""
+msgid "Choose Network"
+msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:89
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:157
-#~ msgid "Circulating Supply"
-#~ msgstr ""
+msgid "Circulating Supply"
+msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx:161
-#~ msgid "Clear"
-#~ msgstr ""
+msgid "Clear"
+msgstr ""
 
 #: src/UI/components/WalletStatusBox/usePendingTransactions.tsx:61
-#~ msgid "Clear All"
-#~ msgstr ""
+msgid "Clear All"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:152
-#~ msgid "Click the application icon to hide in the APP list."
-#~ msgstr ""
+msgid "Click the application icon to hide in the APP list."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:151
-#~ msgid "Click the application icon to list it on the App board."
-#~ msgstr ""
+msgid "Click the application icon to list it on the App board."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:214
-#~ msgid "Click the setting icon to list it on the App board."
-#~ msgstr ""
+msgid "Click the setting icon to list it on the App board."
+msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:118
-#~ msgid "Click to retry"
-#~ msgstr ""
+msgid "Click to retry"
+msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:116
-#~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
-#~ msgstr ""
+msgid "Clicking the confirm button means that you agree to bear the above possible risks."
+msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx:213
 #: src/UI/components/CoinMetadataTable/index.tsx:284
-#~ msgid "Community"
-#~ msgstr ""
+msgid "Community"
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:97
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:103
 #: src/UI/modals/ConfirmModal/Dialog.tsx:39
 #: src/UI/modals/ConfirmModal/Dialog.tsx:43
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:302
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:245
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:292
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:238
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:133
-#~ msgid "Confirm"
-#~ msgstr ""
+msgid "Confirm"
+msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:135
-#~ msgid "Confirm Failed"
-#~ msgstr ""
+msgid "Confirm Failed"
+msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx:74
-#~ msgid "Confirm Risk Warning"
-#~ msgstr ""
+msgid "Confirm Risk Warning"
+msgstr ""
 
 #: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
-#~ msgid "Confirm this transaction in your wallet"
-#~ msgstr ""
+msgid "Confirm this transaction in your wallet"
+msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:134
-#~ msgid "Confirming"
-#~ msgstr ""
+msgid "Confirming"
+msgstr ""
 
 #: src/UI/components/TokenTransactionConfirmModal/index.tsx:127
 #: src/UI/components/TokenTransactionConfirmModal/index.tsx:152
-#~ msgid "Congratulations!"
-#~ msgstr ""
+msgid "Congratulations!"
+msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:185
 #: src/UI/components/PersonaSelectPanel/index.tsx:196
-#~ msgid "Connect {0}"
-#~ msgstr ""
+msgid "Connect {0}"
+msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:176
-#~ msgid "Connect and Verify {0}"
-#~ msgstr ""
+msgid "Connect and Verify {0}"
+msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx:95
-#~ msgid "Connect Persona"
-#~ msgstr ""
+msgid "Connect Persona"
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:170
 #: src/UI/components/WalletConnectedBoundary/index.tsx:57
@@ -241,799 +250,808 @@ msgstr ""
 #: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx:105
 #: src/UI/components/WalletStatusBox/index.tsx:144
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx:96
-#~ msgid "Connect Wallet"
-#~ msgstr ""
+msgid "Connect Wallet"
+msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx:143
-#~ msgid "Connect with {providerName}"
-#~ msgstr ""
+msgid "Connect with {providerName}"
+msgstr ""
 
 #: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:178
-#~ msgid "Connect your wallet"
-#~ msgstr ""
+msgid "Connect your wallet"
+msgstr ""
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:243
+msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+msgstr ""
 
 #: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:197
-#~ msgid "Connected wallets settings"
-#~ msgstr ""
+msgid "Connected wallets settings"
+msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx:158
 #: src/UI/components/CoinMetadataTable/index.tsx:264
-#~ msgid "Contract"
-#~ msgstr ""
+msgid "Contract"
+msgstr ""
 
 #: src/UI/components/CopyButton/index.tsx:74
-#~ msgid "Copied!"
-#~ msgstr ""
+msgid "Copied!"
+msgstr ""
 
 #: src/UI/components/CopyButton/index.tsx:74
-#~ msgid "Copy"
-#~ msgstr ""
+msgid "Copy"
+msgstr ""
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:46
 #: src/UI/components/PersonaSelectPanel/index.tsx:110
-#~ msgid "Create persona"
-#~ msgstr ""
+msgid "Create persona"
+msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx:87
-#~ msgid "Create Persona"
-#~ msgstr ""
+msgid "Create Persona"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:176
-#~ msgid "Current base fee is {0} Gwei"
-#~ msgstr ""
+msgid "Current base fee is {0} Gwei"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:256
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:377
 #: src/UI/components/SettingsBoard/GasSection.tsx:99
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:91
-#~ msgid "Custom"
-#~ msgstr ""
+msgid "Custom"
+msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx:78
 #: src/UI/components/SocialAccountList/SocialTooltip.tsx:27
-#~ msgid "Data source is retrieved from {0}."
-#~ msgstr ""
+msgid "Data source is retrieved from {0}."
+msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx:141
-#~ msgid "Default"
-#~ msgstr ""
+msgid "Default"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:92
-#~ msgid "Details"
-#~ msgstr ""
+msgid "Details"
+msgstr ""
 
 #: src/UI/components/WalletStatusBox/index.tsx:221
-#~ msgid "Disconnect"
-#~ msgstr ""
+msgid "Disconnect"
+msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:89
 #: src/UI/contexts/components/InjectedDialog.tsx:240
-#~ msgid "Dismiss"
-#~ msgstr ""
+msgid "Dismiss"
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:123
-#~ msgid "Do you want to set MASK token as gas fee?"
-#~ msgstr ""
+msgid "Do you want to set MASK token as gas fee?"
+msgstr ""
 
-#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:108
-#~ msgid "Domain Request"
-#~ msgstr ""
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
+msgid "Domain Request"
+msgstr ""
 
 #: src/hooks/useSnackbarCallback.tsx:40
 #: src/hooks/useSnackbarCallback.tsx:89
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:140
-#~ msgid "Done"
-#~ msgstr "完成"
+msgid "Done"
+msgstr "完成"
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:63
-#~ msgid "Download {name} Wallet here"
-#~ msgstr ""
+msgid "Download {name} Wallet here"
+msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx:124
-#~ msgid "Drag & Drop your file here"
-#~ msgstr ""
+msgid "Drag & Drop your file here"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:208
-#~ msgid "DSearch"
-#~ msgstr ""
+msgid "DSearch"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:343
-#~ msgid "Edit"
-#~ msgstr ""
+msgid "Edit"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:152
-#~ msgid "Editor"
-#~ msgstr ""
+msgid "Editor"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:81
-#~ msgid "Enable {name} Wallet extension and disable other browser extension wallets"
-#~ msgstr ""
+msgid "Enable {name} Wallet extension and disable other browser extension wallets"
+msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx:51
-#~ msgid "Enable plugin"
-#~ msgstr ""
+msgid "Enable plugin"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/CompositionUI.tsx:163
-#~ msgid "Encrypt"
-#~ msgstr ""
+msgid "Encrypt"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:246
-#~ msgid "ENS or Wallet Address"
-#~ msgstr ""
+msgid "ENS or Wallet Address"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:31
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:135
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:132
-#~ msgid "Enter a gas limit"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:134
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:131
+msgid "Enter a gas limit"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:38
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:137
-#~ msgid "Enter a gas price"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:136
+msgid "Enter a gas price"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:81
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:144
-#~ msgid "Enter a max fee"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:143
+msgid "Enter a max fee"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:58
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:142
-#~ msgid "Enter a max priority fee"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:141
+msgid "Enter a max priority fee"
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:75
-#~ msgid "Enter an amount"
-#~ msgstr ""
+msgid "Enter an amount"
+msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx:92
-#~ msgid "Failed"
-#~ msgstr ""
+msgid "Failed"
+msgstr ""
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:122
-#~ msgid "Failed to load {0}. Click to retry."
-#~ msgstr ""
+msgid "Failed to load {0}. Click to retry."
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:82
-#~ msgid "Failed to load MASK. Click to retry."
-#~ msgstr ""
+msgid "Failed to load MASK. Click to retry."
+msgstr ""
 
 #: src/hooks/useReportSpam.tsx:76
-#~ msgid "Failed to report spam."
-#~ msgstr ""
+msgid "Failed to report spam."
+msgstr ""
 
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:236
-#~ msgid "Follow"
-#~ msgstr ""
+msgid "Follow"
+msgstr ""
 
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:235
-#~ msgid "Following"
-#~ msgstr ""
+msgid "Following"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:193
-#~ msgid "Fortmatic only supports the ETH and BNB chain."
-#~ msgstr ""
+msgid "Fortmatic only supports the ETH and BNB chain."
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:361
-#~ msgid "Gas Fee"
-#~ msgstr ""
+msgid "Gas Fee"
+msgstr ""
 
 #: src/UI/modals/GasSettingModal/GasSettingModal.tsx:41
-#~ msgid "Gas fee settings"
-#~ msgstr ""
+msgid "Gas fee settings"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:231
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:249
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:215
-#~ msgid "Gas Limit"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:245
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:211
+msgid "Gas Limit"
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:138
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:135
-#~ msgid "Gas limit must be at least {0}"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:137
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:134
+msgid "Gas limit must be at least {0}"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:34
-#~ msgid "Gas limit too low will cause the transaction to fail."
-#~ msgstr ""
+msgid "Gas limit too low will cause the transaction to fail."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:200
 #: src/UI/components/SettingsBoard/GasSection.tsx:92
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:222
-#~ msgid "Gas Price"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:218
+msgid "Gas Price"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:54
-#~ msgid "Gas price is higher than necessary. You may pay more than needed."
-#~ msgstr ""
+msgid "Gas price is higher than necessary. You may pay more than needed."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:46
-#~ msgid "Gas price is too low for network conditions."
-#~ msgstr ""
+msgid "Gas price is too low for network conditions."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:39
-#~ msgid "Gas price must be greater than 0 Gwei."
-#~ msgstr ""
+msgid "Gas price must be greater than 0 Gwei."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:231
-#~ msgid "Get optimized search results when you look for a token."
-#~ msgstr ""
+msgid "Get optimized search results when you look for a token."
+msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:36
-#~ msgid "Go to Settings"
-#~ msgstr ""
+msgid "Go to Settings"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:193
 #: src/UI/components/SettingsBoard/GasForm.tsx:261
 #: src/UI/components/SettingsBoard/GasForm.tsx:299
-#~ msgid "Gwei"
-#~ msgstr ""
+msgid "Gwei"
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:258
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:278
-#~ msgid "GWEI"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:254
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:271
+msgid "GWEI"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/Context.tsx:96
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:119
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:118
-#~ msgid "High"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:118
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:117
+msgid "High"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:56
-#~ msgid "How to use {0} Wallet?"
-#~ msgstr ""
+msgid "How to use {0} Wallet?"
+msgstr ""
 
 #: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx:162
-#~ msgid "Import"
-#~ msgstr "導入"
+msgid "Import"
+msgstr "導入"
 
 #: src/UI/components/AddCollectibles/index.tsx:164
 #: src/UI/components/FungibleTokenList/index.tsx:271
-#~ msgid "Incorrect contract address."
-#~ msgstr ""
+msgid "Incorrect contract address."
+msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx:148
 #: src/UI/components/CoinMetadataTable/index.tsx:255
-#~ msgid "Info"
-#~ msgstr ""
+msgid "Info"
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx:246
-#~ msgid "Input contract address"
-#~ msgstr ""
+msgid "Input contract address"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/Context.tsx:95
-#~ msgid "Instant"
-#~ msgstr ""
+msgid "Instant"
+msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx:96
-#~ msgid "Invalid Network"
-#~ msgstr ""
+msgid "Invalid Network"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useSlippageToleranceSchema.ts:18
-#~ msgid "Invalid slippage tolerance."
-#~ msgstr ""
+msgid "Invalid slippage tolerance."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:116
-#~ msgid "Listed"
-#~ msgstr ""
+msgid "Listed"
+msgstr ""
 
 #: src/UI/components/LoadRetry/index.tsx:20
 #: src/UI/components/ReloadStatus/index.tsx:46
-#~ msgid "Load failed"
-#~ msgstr ""
+msgid "Load failed"
+msgstr ""
 
 #: src/UI/components/LoadingStatus/index.tsx:40
-#~ msgid "Loading"
-#~ msgstr ""
+msgid "Loading"
+msgstr ""
 
 #: src/UI/components/PluginCardFrame/index.tsx:86
-#~ msgid "Loading...."
-#~ msgstr ""
+msgid "Loading...."
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:109
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:108
-#~ msgid "Low"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:108
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:107
+msgid "Low"
+msgstr ""
 
 #: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:127
-#~ msgid "Manage Token List"
-#~ msgstr ""
+msgid "Manage Token List"
+msgstr ""
 
 #: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx:32
-#~ msgid "Manage Token Lists"
-#~ msgstr ""
+msgid "Manage Token Lists"
+msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:70
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:146
-#~ msgid "Market Cap"
-#~ msgstr ""
+msgid "Market Cap"
+msgstr ""
 
 #: src/UI/components/PluginCardFrame/index.tsx:69
-#~ msgid "Mask Network"
-#~ msgstr ""
+msgid "Mask Network"
+msgstr ""
 
 #: src/UI/components/GrantPermission/index.tsx:27
-#~ msgid "Mask Network requires you to authorize the following websites before using it."
-#~ msgstr ""
+msgid "Mask Network requires you to authorize the following websites before using it."
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:276
-#~ msgid "Max fee"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:269
+msgid "Max fee"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:306
-#~ msgid "Max Fee"
-#~ msgstr ""
+msgid "Max Fee"
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:147
-#~ msgid "Max fee cannot be lower than max priority fee"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:146
+msgid "Max fee cannot be lower than max priority fee"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:100
-#~ msgid "Max fee cannot be lower than max priority fee."
-#~ msgstr ""
+msgid "Max fee cannot be lower than max priority fee."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:96
-#~ msgid "Max fee is higher than necessary."
-#~ msgstr ""
+msgid "Max fee is higher than necessary."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:88
-#~ msgid "Max fee is too low for network conditions."
-#~ msgstr ""
+msgid "Max fee is too low for network conditions."
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:256
-#~ msgid "Max priority fee"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:252
+msgid "Max priority fee"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:272
-#~ msgid "Max Priority Fee"
-#~ msgstr ""
+msgid "Max Priority Fee"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:77
-#~ msgid "Max priority fee is higher than necessary. You may pay more than needed."
-#~ msgstr ""
+msgid "Max priority fee is higher than necessary. You may pay more than needed."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:66
-#~ msgid "Max priority fee is too low for network conditions."
-#~ msgstr ""
+msgid "Max priority fee is too low for network conditions."
+msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:143
-#~ msgid "Max priority fee must be greater than 0 GWEI"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:142
+msgid "Max priority fee must be greater than 0 GWEI"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:59
-#~ msgid "Max priority fee must be greater than 0 Gwei."
-#~ msgstr ""
+msgid "Max priority fee must be greater than 0 Gwei."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/Context.tsx:97
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:114
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:113
-#~ msgid "Medium"
-#~ msgstr ""
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:113
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:112
+msgid "Medium"
+msgstr ""
 
 #: src/UI/components/PhoneNumberField/index.tsx:29
-#~ msgid "Mobile Number"
-#~ msgstr ""
+msgid "Mobile Number"
+msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:72
-#~ msgid "More"
-#~ msgstr ""
+msgid "More"
+msgstr ""
 
 #: src/UI/components/FungibleTokenList/index.tsx:341
-#~ msgid "Name or Contract address e.g. USDC or 0x234..."
-#~ msgstr "代幣名稱或合約地址"
+msgid "Name or Contract address e.g. USDC or 0x234..."
+msgstr "代幣名稱或合約地址"
 
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:191
-#~ msgid "Name or Contract address eg.PUNK or 0x234..."
-#~ msgstr ""
+msgid "Name or Contract address eg.PUNK or 0x234..."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:124
-#~ msgid "Network error or user cancels the process."
-#~ msgstr ""
+msgid "Network error or user cancels the process."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:236
-#~ msgid "NFTs"
-#~ msgstr ""
+msgid "NFTs"
+msgstr ""
 
 #: src/UI/components/CollectibleList/CollectibleList.tsx:112
-#~ msgid "No collectible found."
-#~ msgstr ""
+msgid "No collectible found."
+msgstr ""
 
 #: src/UI/components/EmptyStatus/index.tsx:32
-#~ msgid "No Data"
-#~ msgstr ""
+msgid "No Data"
+msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx:89
-#~ msgid "No Enough Gas Fee"
-#~ msgstr ""
+msgid "No Enough Gas Fee"
+msgstr ""
 
 #: src/UI/components/AssetsManagement/CollectionList.tsx:241
 #: src/UI/components/AssetsManagement/CollectionList.tsx:342
-#~ msgid "No NFTs found."
-#~ msgstr ""
+msgid "No NFTs found."
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx:319
 #: src/UI/components/CountryCodePicker/index.tsx:145
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:208
-#~ msgid "No results"
-#~ msgstr ""
+msgid "No results"
+msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:78
-#~ msgid "Not select wallet yet."
-#~ msgstr ""
+msgid "Not select wallet yet."
+msgstr ""
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
-#~ msgid "OK"
-#~ msgstr ""
+msgid "OK"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:196
-#~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-#~ msgstr ""
+msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
+msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:155
-#~ msgid "Only TypedMessageText is supported currently."
-#~ msgstr ""
+msgid "Only TypedMessageText is supported currently."
+msgstr ""
 
 #: src/UI/wallet/DeriveWalletTable.tsx:134
-#~ msgid "Operation"
-#~ msgstr ""
+msgid "Operation"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:212
-#~ msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
-#~ msgstr ""
+msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
+msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx:132
-#~ msgid "or"
-#~ msgstr ""
+msgid "or"
+msgstr ""
 
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx:125
 #: src/UI/components/WalletStatusBox/TransactionList.tsx:90
-#~ msgid "Pending"
-#~ msgstr ""
+msgid "Pending"
+msgstr ""
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:45
 #: src/UI/components/PersonaSelectPanel/index.tsx:109
 #: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx:74
-#~ msgid "Persona"
-#~ msgstr ""
+msgid "Persona"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:189
-#~ msgid "Phantom only supports the Solana chain."
-#~ msgstr ""
+msgid "Phantom only supports the Solana chain."
+msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:178
-#~ msgid "Please connect {0} and send proof post before using dApps."
-#~ msgstr ""
+msgid "Please connect {0} and send proof post before using dApps."
+msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:186
-#~ msgid "Please connect {0} before using dApps."
-#~ msgstr ""
+msgid "Please connect {0} before using dApps."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:266
-#~ msgid "Please connect your persona"
-#~ msgstr ""
+msgid "Please connect your persona"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:261
-#~ msgid "Please connect your wallet"
-#~ msgstr ""
+msgid "Please connect your wallet"
+msgstr ""
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:44
 #: src/UI/components/PersonaSelectPanel/index.tsx:108
-#~ msgid "Please create a Persona and verify your account to use this function."
-#~ msgstr ""
+msgid "Please create a Persona and verify your account to use this function."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:264
-#~ msgid "Please create a persona for accessing Dapps."
-#~ msgstr ""
+msgid "Please create a persona for accessing Dapps."
+msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:30
-#~ msgid "Please select the wallet to activate the function after saving the settings."
-#~ msgstr ""
+msgid "Please select the wallet to activate the function after saving the settings."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:189
 #: src/UI/components/ChainBoundary/index.tsx:206
-#~ msgid "Please switch to this network in the mobile application wallet you are connected to."
-#~ msgstr ""
+msgid "Please switch to this network in the mobile application wallet you are connected to."
+msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:192
-#~ msgid "Please verify current persona with social media account before using dApps."
-#~ msgstr ""
+msgid "Please verify current persona with social media account before using dApps."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:268
-#~ msgid "Please verify your social account"
-#~ msgstr ""
+msgid "Please verify your social account"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:111
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:52
-#~ msgid "Plug-in switch"
-#~ msgstr ""
+msgid "Plug-in switch"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/CompositionUI.tsx:145
-#~ msgid "Plugins"
-#~ msgstr ""
+msgid "Plugins"
+msgstr ""
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:245
-#: src/UI/components/VerifyNextIDDialog/index.tsx:265
-#~ msgid "Post content:"
-#~ msgstr ""
+#: src/UI/components/VerifyNextIDDialog/index.tsx:253
+#: src/UI/components/VerifyNextIDDialog/index.tsx:273
+msgid "Post content:"
+msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx:109
 #: src/UI/components/PluginCardFrame/index.tsx:67
-#~ msgid "Powered by"
-#~ msgstr ""
+msgid "Powered by"
+msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:61
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:137
-#~ msgid "Price Statistic"
-#~ msgstr ""
+msgid "Price Statistic"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/BadgeRenderer.tsx:49
-#~ msgid "Provided by plugin \"{0}\""
-#~ msgstr ""
+msgid "Provided by plugin \"{0}\""
+msgstr ""
 
 #: src/UI/components/LoadRetry/index.tsx:24
 #: src/UI/components/ReloadStatus/index.tsx:48
-#~ msgid "Reload"
-#~ msgstr ""
+msgid "Reload"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:95
-#~ msgid "Remove"
-#~ msgstr ""
+msgid "Remove"
+msgstr ""
 
 #: src/hooks/useReportSpam.tsx:63
-#~ msgid "Report NFT Scam Contract?"
-#~ msgstr ""
+msgid "Report NFT Scam Contract?"
+msgstr ""
 
 #: src/hooks/useReportSpam.tsx:74
-#~ msgid "Report Spam"
-#~ msgstr ""
+msgid "Report Spam"
+msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx:174
-#~ msgid "Requesting Connection"
-#~ msgstr ""
+msgid "Requesting Connection"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:152
-#~ msgid "Reset"
-#~ msgstr ""
+msgid "Reset"
+msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx:189
-#~ msgid "Retry"
-#~ msgstr ""
+msgid "Retry"
+msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:92
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:101
-#~ msgid "Risk Warning"
-#~ msgstr ""
+msgid "Risk Warning"
+msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:85
-#~ msgid "Scan QR code with a WalletConnect-compatible wallet"
-#~ msgstr ""
+msgid "Scan QR code with a WalletConnect-compatible wallet"
+msgstr ""
 
 #: src/UI/components/CountryCodePicker/index.tsx:112
-#~ msgid "Search Area"
-#~ msgstr ""
+msgid "Search Area"
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:249
-#~ msgid "Search with an ENS domain or wallet address to get optimized results."
-#~ msgstr ""
+msgid "Search with an ENS domain or wallet address to get optimized results."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:239
-#~ msgid "Search with the name of an NFT collection or its symbol to get optimized results."
-#~ msgstr ""
+msgid "Search with the name of an NFT collection or its symbol to get optimized results."
+msgstr ""
 
 #: src/UI/components/SelectTokenChip/index.tsx:60
 #: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:128
-#~ msgid "Select"
-#~ msgstr "選擇一種代幣"
+msgid "Select"
+msgstr "選擇一種代幣"
 
 #: src/UI/components/FungibleTokenInput/UI.tsx:221
-#~ msgid "Select a token"
-#~ msgstr ""
+msgid "Select a token"
+msgstr ""
 
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx:96
-#~ msgid "Select an NFT"
-#~ msgstr ""
+msgid "Select an NFT"
+msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:43
-#~ msgid "Select an NFT Contract"
-#~ msgstr ""
+msgid "Select an NFT Contract"
+msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:45
-#~ msgid "Select an NFT Contract Operator"
-#~ msgstr ""
+msgid "Select an NFT Contract Operator"
+msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:44
-#~ msgid "Select an NFT Contract Owner"
-#~ msgstr ""
+msgid "Select an NFT Contract Owner"
+msgstr ""
 
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:185
-#~ msgid "Select Collection"
-#~ msgstr ""
+msgid "Select Collection"
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx:335
 #: src/UI/components/AssetsManagement/Collection.tsx:147
 #: src/UI/components/AssetsManagement/CollectionList.tsx:286
-#: src/UI/components/VerifyNextIDDialog/index.tsx:287
-#~ msgid "Send"
-#~ msgstr ""
+#: src/UI/components/VerifyNextIDDialog/index.tsx:295
+msgid "Send"
+msgstr ""
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:237
+msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:89
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
-#~ msgid "Share"
-#~ msgstr ""
+msgid "Share"
+msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx:128
-#~ msgid "Size limit: 10 MB"
-#~ msgstr ""
+msgid "Size limit: 10 MB"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx:26
-#~ msgid "Slippage Tolerance"
-#~ msgstr ""
+msgid "Slippage Tolerance"
+msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:93
-#~ msgid "Spam"
-#~ msgstr ""
+msgid "Spam"
+msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx:91
-#~ msgid "Success"
-#~ msgstr ""
+msgid "Success"
+msgstr ""
 
 #: src/hooks/useReportSpam.tsx:76
-#~ msgid "Successfully reported."
-#~ msgstr ""
+msgid "Successfully reported."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:109
 #: src/UI/components/ChainBoundary/index.tsx:121
-#~ msgid "Switch Network"
-#~ msgstr ""
+msgid "Switch Network"
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:204
-#~ msgid "Switch to {0}"
-#~ msgstr ""
+msgid "Switch to {0}"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:179
-#~ msgid "Tell selective friends what's happening..."
-#~ msgstr ""
+msgid "Tell selective friends what's happening..."
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx:307
-#~ msgid "The contract address is incorrect or the collection does not belong to you."
-#~ msgstr ""
+msgid "The contract address is incorrect or the collection does not belong to you."
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:276
-#~ msgid "The following wallets are not installed or in conflict with others"
-#~ msgstr ""
+msgid "The following wallets are not installed or in conflict with others"
+msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx:39
-#~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
-#~ msgstr ""
+msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:190
-#~ msgid "This network is not supported yet."
-#~ msgstr ""
+msgid "This network is not supported yet."
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:117
-#~ msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
-#~ msgstr ""
+msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:228
-#~ msgid "Token"
-#~ msgstr ""
+msgid "Token"
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx:280
-#~ msgid "Token ID separated by comma, e.g. 1223,1224,"
-#~ msgstr ""
+msgid "Token ID separated by comma, e.g. 1223,1224,"
+msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:118
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:178
-#~ msgid "Total Supply"
-#~ msgstr ""
+msgid "Total Supply"
+msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:81
-#~ msgid "Transaction"
-#~ msgstr ""
+msgid "Transaction"
+msgstr ""
 
 #: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
-#~ msgid "Transaction Confirmed"
-#~ msgstr ""
+msgid "Transaction Confirmed"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:337
-#~ msgid "Transaction cost"
-#~ msgstr ""
+msgid "Transaction cost"
+msgstr ""
 
 #: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
-#~ msgid "Transaction Failed"
-#~ msgstr ""
+msgid "Transaction Failed"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:124
-#~ msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
-#~ msgstr ""
+msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:120
-#~ msgid "Unlisted"
-#~ msgstr ""
+msgid "Unlisted"
+msgstr ""
 
 #: src/hooks/useGasCurrencyMenu.tsx:96
-#~ msgid "Unlock"
-#~ msgstr ""
+msgid "Unlock"
+msgstr ""
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:165
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
-#~ msgid "Unlock {0}"
-#~ msgstr ""
+msgid "Unlock {0}"
+msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
-#~ msgid "Unlocking {0}..."
-#~ msgstr ""
+msgid "Unlocking {0}..."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/GasOption.tsx:80
-#~ msgid "up to {0} Gwei"
-#~ msgstr ""
+msgid "up to {0} Gwei"
+msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx:88
-#~ msgid "Updating Gas Fee…"
-#~ msgstr ""
+msgid "Updating Gas Fee…"
+msgstr ""
 
 #: src/UI/components/AssetsManagement/CollectibleItem.tsx:186
 #: src/UI/components/AssetsManagement/Collection.tsx:197
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx:67
-#~ msgid "Verified by {0}"
-#~ msgstr ""
+msgid "Verified by {0}"
+msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:190
-#~ msgid "Verify {0}"
-#~ msgstr ""
+msgid "Verify {0}"
+msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx:102
-#~ msgid "Verify your Twitter ID"
-#~ msgstr ""
+msgid "Verify your Twitter ID"
+msgstr ""
 
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:233
-#~ msgid "View"
-#~ msgstr ""
+msgid "View"
+msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:67
 #: src/UI/components/WalletStatusBox/index.tsx:187
-#~ msgid "View on Explorer"
-#~ msgstr ""
+msgid "View on Explorer"
+msgstr ""
 
 #: src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx:45
-#~ msgid "Wallet Account"
-#~ msgstr ""
+msgid "Wallet Account"
+msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:77
-#~ msgid "WalletConnect"
-#~ msgstr ""
+msgid "WalletConnect"
+msgstr ""
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:256
-#: src/UI/components/VerifyNextIDDialog/index.tsx:269
-#~ msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
-#~ msgstr ""
+#: src/UI/components/VerifyNextIDDialog/index.tsx:264
+#: src/UI/components/VerifyNextIDDialog/index.tsx:277
+msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
+msgstr ""
 
 #: src/UI/components/PluginCardFrame/index.tsx:56
-#~ msgid "Web3 Profile"
-#~ msgstr ""
+msgid "Web3 Profile"
+msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx:104
 #: src/UI/components/CoinMetadataTable/index.tsx:274
-#~ msgid "Website"
-#~ msgstr ""
+msgid "Website"
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:155
-#~ msgid "Wrong Network"
-#~ msgstr ""
+msgid "Wrong Network"
+msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx:178
-#~ msgid "You canceled the request."
-#~ msgstr ""
+msgid "You canceled the request."
+msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:131
-#~ msgid "You may have {0}% less received with this level of slippage tolerance."
-#~ msgstr ""
+msgid "You may have {0}% less received with this level of slippage tolerance."
+msgstr ""
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:147
-#~ msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
-#~ msgstr ""
+msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
+msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:84
-#~ msgid "Your transaction was confirmed!"
-#~ msgstr ""
+msgid "Your transaction was confirmed!"
+msgstr ""
+
