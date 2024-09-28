@@ -242,7 +242,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
                             disabled={disabled || !selectedToken || !!targetWallet?.owner}
                             fullWidth>
                             {targetWallet?.owner ?
-                                <Trans>Comming soon</Trans>
+                                <Trans>Coming soon</Trans>
                             : pfpType === PFP_TYPE.PFP ?
                                 <Trans>Set NFT PFP</Trans>
                             :   <Trans>Set NFT NFT Background</Trans>}

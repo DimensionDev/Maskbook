@@ -26,7 +26,7 @@ msgid "Change"
 msgstr ""
 
 #: src/Application/NFTListDialog.tsx:245
-msgid "Comming soon"
+msgid "Coming soon"
 msgstr ""
 
 #: src/Application/PersonaPage.tsx:75

@@ -68,19 +68,6 @@
             }
         },
         {
-            "input": "./packages/plugins/Debugger/src/locales/en-US.json",
-            "output": "./packages/plugins/Debugger/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useDebuggerTrans",
-                "namespace": "io.mask.debugger",
-                "trans": "DebuggerTrans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
             "input": "./packages/plugins/ScamSniffer/src/locales/en-US.json",
             "output": "./packages/plugins/ScamSniffer/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -302,19 +289,6 @@
             }
         },
         {
-            "input": "./packages/plugins/Collectible/src/locales/en-US.json",
-            "output": "./packages/plugins/Collectible/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useCollectibleTrans",
-                "namespace": "com.maskbook.collectibles",
-                "trans": "Collectible",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
-        },
-        {
             "input": "./packages/plugins/Savings/src/locales/en-US.json",
             "output": "./packages/plugins/Savings/src/locales/i18n_generated",
             "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
@@ -359,18 +333,6 @@
                 "hooks": "useSwitchLogoTrans",
                 "namespace": "io.mask.switch-logo",
                 "trans": "SwitchLogoTrans",
-                "emitTS": true
-            }
-        },
-        {
-            "input": "./packages/plugins/FriendTech/src/locales/en-US.json",
-            "output": "./packages/plugins/FriendTech/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useI18N",
-                "namespace": "io.mask.friend-tech",
-                "trans": "Translate",
                 "emitTS": true
             }
         }
