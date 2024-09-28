@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:10\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,6 +17,11 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1012\n"
+
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:178
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:216
+msgid "(beta)"
+msgstr "crwdns31476:0crwdne31476:0"
 
 #: src/UI/components/ChainBoundary/index.tsx:113
 msgid "{0} network is not added in the wallet. Please add and try it again."
@@ -103,6 +108,10 @@ msgstr "crwdns30782:0{0}crwdne30782:0"
 #: src/UI/components/FungibleTokenInput/UI.tsx:171
 msgid "Available Balance"
 msgstr "crwdns30784:0crwdne30784:0"
+
+#: src/UI/components/QRCode/index.tsx:45
+msgid "Backup failed, <0>try again</0>"
+msgstr "crwdns31478:0crwdne31478:0"
 
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx:105
 #: src/UI/components/FungibleTokenInput/UI.tsx:172
@@ -195,8 +204,8 @@ msgstr "crwdns30824:0crwdne30824:0"
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:103
 #: src/UI/modals/ConfirmModal/Dialog.tsx:39
 #: src/UI/modals/ConfirmModal/Dialog.tsx:43
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:302
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:245
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:292
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:238
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:133
 msgid "Confirm"
 msgstr "crwdns30826:0crwdne30826:0"
@@ -251,6 +260,10 @@ msgstr "crwdns30846:0{providerName}crwdne30846:0"
 #: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:178
 msgid "Connect your wallet"
 msgstr "crwdns30848:0crwdne30848:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:243
+msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+msgstr "crwdns31480:0crwdne31480:0"
 
 #: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:197
 msgid "Connected wallets settings"
@@ -315,7 +328,7 @@ msgstr "crwdns30874:0crwdne30874:0"
 msgid "Do you want to set MASK token as gas fee?"
 msgstr "crwdns30876:0crwdne30876:0"
 
-#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:108
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
 msgid "Domain Request"
 msgstr "crwdns30878:0crwdne30878:0"
 
@@ -362,23 +375,23 @@ msgid "ENS or Wallet Address"
 msgstr "crwdns30898:0crwdne30898:0"
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:31
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:135
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:132
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:134
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:131
 msgid "Enter a gas limit"
 msgstr "crwdns30900:0crwdne30900:0"
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:38
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:137
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:136
 msgid "Enter a gas price"
 msgstr "crwdns30902:0crwdne30902:0"
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:81
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:144
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:143
 msgid "Enter a max fee"
 msgstr "crwdns30904:0crwdne30904:0"
 
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:58
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:142
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:141
 msgid "Enter a max priority fee"
 msgstr "crwdns30906:0crwdne30906:0"
 
@@ -423,13 +436,13 @@ msgid "Gas fee settings"
 msgstr "crwdns30926:0crwdne30926:0"
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:231
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:249
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:215
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:245
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:211
 msgid "Gas Limit"
 msgstr "crwdns30928:0crwdne30928:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:138
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:135
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:137
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:134
 msgid "Gas limit must be at least {0}"
 msgstr "crwdns30930:0{0}crwdne30930:0"
 
@@ -439,7 +452,7 @@ msgstr "crwdns30932:0crwdne30932:0"
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:200
 #: src/UI/components/SettingsBoard/GasSection.tsx:92
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:222
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:218
 msgid "Gas Price"
 msgstr "crwdns30934:0crwdne30934:0"
 
@@ -469,14 +482,14 @@ msgstr "crwdns30944:0crwdne30944:0"
 msgid "Gwei"
 msgstr "crwdns30946:0crwdne30946:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:258
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:278
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:254
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:271
 msgid "GWEI"
 msgstr "crwdns30948:0crwdne30948:0"
 
 #: src/UI/components/SettingsBoard/Context.tsx:96
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:119
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:118
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:118
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:117
 msgid "High"
 msgstr "crwdns30950:0crwdne30950:0"
 
@@ -531,8 +544,8 @@ msgstr "crwdns30972:0crwdne30972:0"
 msgid "Loading...."
 msgstr "crwdns30974:0crwdne30974:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:109
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:108
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:108
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:107
 msgid "Low"
 msgstr "crwdns30976:0crwdne30976:0"
 
@@ -557,7 +570,7 @@ msgstr "crwdns30984:0crwdne30984:0"
 msgid "Mask Network requires you to authorize the following websites before using it."
 msgstr "crwdns30986:0crwdne30986:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:276
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:269
 msgid "Max fee"
 msgstr "crwdns30988:0crwdne30988:0"
 
@@ -565,7 +578,7 @@ msgstr "crwdns30988:0crwdne30988:0"
 msgid "Max Fee"
 msgstr "crwdns30990:0crwdne30990:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:147
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:146
 msgid "Max fee cannot be lower than max priority fee"
 msgstr "crwdns30992:0crwdne30992:0"
 
@@ -581,7 +594,7 @@ msgstr "crwdns30996:0crwdne30996:0"
 msgid "Max fee is too low for network conditions."
 msgstr "crwdns30998:0crwdne30998:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:256
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:252
 msgid "Max priority fee"
 msgstr "crwdns31000:0crwdne31000:0"
 
@@ -597,7 +610,7 @@ msgstr "crwdns31004:0crwdne31004:0"
 msgid "Max priority fee is too low for network conditions."
 msgstr "crwdns31006:0crwdne31006:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:143
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:142
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr "crwdns31008:0crwdne31008:0"
 
@@ -606,8 +619,8 @@ msgid "Max priority fee must be greater than 0 Gwei."
 msgstr "crwdns31010:0crwdne31010:0"
 
 #: src/UI/components/SettingsBoard/Context.tsx:97
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:114
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:113
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:113
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:112
 msgid "Medium"
 msgstr "crwdns31012:0crwdne31012:0"
 
@@ -752,8 +765,8 @@ msgstr "crwdns31076:0crwdne31076:0"
 msgid "Plugins"
 msgstr "crwdns31078:0crwdne31078:0"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:245
-#: src/UI/components/VerifyNextIDDialog/index.tsx:265
+#: src/UI/components/VerifyNextIDDialog/index.tsx:253
+#: src/UI/components/VerifyNextIDDialog/index.tsx:273
 msgid "Post content:"
 msgstr "crwdns31080:0crwdne31080:0"
 
@@ -853,9 +866,13 @@ msgstr "crwdns31124:0crwdne31124:0"
 #: src/UI/components/AddCollectibles/index.tsx:335
 #: src/UI/components/AssetsManagement/Collection.tsx:147
 #: src/UI/components/AssetsManagement/CollectionList.tsx:286
-#: src/UI/components/VerifyNextIDDialog/index.tsx:287
+#: src/UI/components/VerifyNextIDDialog/index.tsx:295
 msgid "Send"
 msgstr "crwdns31126:0crwdne31126:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:237
+msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr "crwdns31482:0crwdne31482:0"
 
 #: src/hooks/useOpenShareTxDialog.tsx:89
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
@@ -1004,8 +1021,8 @@ msgstr "crwdns31194:0crwdne31194:0"
 msgid "WalletConnect"
 msgstr "crwdns31196:0crwdne31196:0"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:256
-#: src/UI/components/VerifyNextIDDialog/index.tsx:269
+#: src/UI/components/VerifyNextIDDialog/index.tsx:264
+#: src/UI/components/VerifyNextIDDialog/index.tsx:277
 msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
 msgstr "crwdns31198:0crwdne31198:0"
 
