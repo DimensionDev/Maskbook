@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:19\n"
+"PO-Revision-Date: 2024-09-28 05:01\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -30,13 +30,17 @@ msgstr ""
 msgid "Attached File: {name} ({size})"
 msgstr ""
 
+#: src/SiteAdaptor/components/Terms.tsx:122
+msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
+msgstr ""
+
 #: src/SiteAdaptor/components/FileBrowser.tsx:221
-#: src/SiteAdaptor/components/Terms.tsx:127
+#: src/SiteAdaptor/components/Terms.tsx:137
 msgid "Cancel"
 msgstr "取消"
 
 #: src/SiteAdaptor/components/FileBrowser.tsx:279
-#: src/SiteAdaptor/components/Terms.tsx:130
+#: src/SiteAdaptor/components/Terms.tsx:140
 #: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:104
 msgid "Confirm"
 msgstr "确定"
@@ -45,22 +49,60 @@ msgstr "确定"
 msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
 msgstr "永久去中心化的文件存储。上传和分享Arweave上的文件给Mask Network 上的朋友。"
 
-#: src/SiteAdaptor/components/FileList.tsx:114
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx:130
+#: src/SiteAdaptor/components/FileList.tsx:103
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:129
 msgid "Delete"
 msgstr "删除"
 
-#: src/SiteAdaptor/components/FileList.tsx:90
+#: src/SiteAdaptor/components/FileList.tsx:76
+msgid "Delete failed"
+msgstr ""
+
+#: src/SiteAdaptor/components/FileList.tsx:88
 msgid "Delete File"
 msgstr "删除文件"
 
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx:111
+#: src/SiteAdaptor/components/FileList.tsx:73
+msgid "Delete file {0} successfully."
+msgstr ""
+
+#: src/SiteAdaptor/components/FileList.tsx:71
+msgid "Delete successfully"
+msgstr ""
+
+#: src/SiteAdaptor/components/FileList.tsx:90
+msgid "Do you want to delete file <0>{0}</0>"
+msgstr ""
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:110
 msgid "Download"
 msgstr "下载"
 
-#: src/SiteAdaptor/components/FileList.tsx:125
+#: src/SiteAdaptor/components/FileList.tsx:78
+msgid "Failed to delete, please try again."
+msgstr ""
+
+#: src/SiteAdaptor/FileViewer.tsx:39
+msgid "Failed to save file"
+msgstr ""
+
+#: src/SiteAdaptor/FileViewer.tsx:41
+msgid "Failed to save the file. Please try again."
+msgstr ""
+
+#: src/SiteAdaptor/components/Files/DisplayingFile.tsx:68
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:144
+#: src/SiteAdaptor/components/Files/SelectableFile.tsx:54
+msgid "File Key: <0>{0}</0>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FileList.tsx:114
 msgid "File name must between 3 to 20 characters."
 msgstr "文件名必须介于 3 到 20 个字符之间。"
+
+#: src/SiteAdaptor/FileViewer.tsx:34
+msgid "File saved successfully"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:61
 msgid "File Service"
@@ -82,12 +124,12 @@ msgstr "未找到结果"
 msgid "Please click Browse Files button to select files to upload."
 msgstr "请点击浏览文件按钮选择要上传的文件。"
 
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx:121
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:120
 #: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx:84
 msgid "Rename"
 msgstr "重命名"
 
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx:138
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx:137
 msgid "size"
 msgstr "大小"
 
@@ -104,7 +146,7 @@ msgstr "已上传的文件"
 msgid "Use Meson CDN"
 msgstr "使用Meson CDN"
 
-#: src/SiteAdaptor/components/FileList.tsx:109
+#: src/SiteAdaptor/components/FileList.tsx:98
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
 msgstr "用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。"
 
@@ -113,11 +155,19 @@ msgstr "用户只能删除这些文件的本地链接。去中心化存储协议
 msgid "Web3 File Service"
 msgstr "文件服务"
 
-#: src/SiteAdaptor/components/Terms.tsx:95
+#: src/SiteAdaptor/components/Terms.tsx:97
+msgid "Web3 File Service is a decentralized storage service provided by Mask Network. It allows users to store files in different decentralized network. This feature is powered by Mask Network’s partner file storage protocols such as IPFS, Arweave and Meson Network.It supports files in PDF, DOC, JPG, PNG, MP3, MP4. and other formats. At present, the maximum file upload size is 10 MB. <0/><1/>You can store files in multiple decentralized networks through the Web3 file service function. When uploading files, you can choose to encrypt or decrypt them. According to the selected upload encrypted method, you can obtain two file links with encryption and non encryption. Users of Mask Network can share files to social platforms through this link. By using encrypted files, you can ensure the security of your files and prevent privacy leakage. <2/><3/>It should be noted that any user who has the link can download and share the file. With the characteristics of decentralized file storage systems, your uploaded files can never be deleted or tampered. Please upload files containing personal privacy with caution. <4/><5/>The Web3 File Service provided by Mask Network enables individuals to be free from data restrictions imposed by traditional social platforms, enabling free encrypted transmission and sharing of files. At present, the service is provisionally free for all users with Mask Network absorbing all the costs. Mask Network will provide updates on future costs users may have to bear."
+msgstr ""
+
+#: src/SiteAdaptor/components/Terms.tsx:94
 msgid "What is Web3 File Service?"
 msgstr "什么是 Web3 文件服务？"
 
 #: src/SiteAdaptor/components/FileBrowser.tsx:264
 msgid "You haven't uploaded any files yet."
 msgstr "您尚未上传任何文件。"
+
+#: src/SiteAdaptor/FileViewer.tsx:36
+msgid "You’ve saved {0} to Web3 file service."
+msgstr ""
 
