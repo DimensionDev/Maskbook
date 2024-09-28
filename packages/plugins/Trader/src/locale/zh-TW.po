@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:09\n"
+"PO-Revision-Date: 2024-09-28 05:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:78
+#: src/SiteAdaptor/index.tsx:77
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
 #: src/SiteAdaptor/trending/TickersTable.tsx:82
@@ -221,8 +221,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:384
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:401
-msgid ""
-"In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
+msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
@@ -307,6 +306,10 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/TickersTable.tsx:83
 msgid "Pair"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:102
+msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:361
@@ -477,3 +480,4 @@ msgstr ""
 #: src/SiteAdaptor/trending/TickersTable.tsx:80
 msgid "Volume (24h)"
 msgstr ""
+
