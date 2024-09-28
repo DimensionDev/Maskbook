@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:09\n"
+"PO-Revision-Date: 2024-09-28 05:03\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -52,7 +52,7 @@ msgid "Cancel"
 msgstr ""
 
 #: src/SiteAdaptor/CheckSecurityDialog.tsx:75
-#: src/SiteAdaptor/index.tsx:23
+#: src/SiteAdaptor/index.tsx:22
 msgid "Check Security"
 msgstr ""
 
@@ -129,6 +129,10 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:46
+msgid "Provide you with fast, reliable and convenient security services."
+msgstr ""
+
 #: src/SiteAdaptor/components/NotFound.tsx:9
 msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
 msgstr ""
@@ -184,3 +188,4 @@ msgstr ""
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:61
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
+
