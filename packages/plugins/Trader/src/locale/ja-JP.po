@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-09-28 05:02\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -166,7 +166,7 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:78
+#: src/SiteAdaptor/index.tsx:77
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
 #: src/SiteAdaptor/trending/TickersTable.tsx:82
@@ -307,6 +307,10 @@ msgstr "所有者"
 #: src/SiteAdaptor/trending/TickersTable.tsx:83
 msgid "Pair"
 msgstr "ペア "
+
+#: src/SiteAdaptor/index.tsx:102
+msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:361
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:145
