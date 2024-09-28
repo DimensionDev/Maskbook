@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-09-28 05:02\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,4 +17,150 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
+
+#: src/SiteAdaptor/components/ProfileCard.tsx:164
+msgid "Add Wallet"
+msgstr "ウォレットを追加"
+
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx:94
+#: src/SiteAdaptor/components/ProfilePopup.tsx:213
+msgid "Change"
+msgstr "変更"
+
+#: src/SiteAdaptor/index.tsx:61
+msgid "Choose and showcase your Web3 footprints on Twitter."
+msgstr ""
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:200
+msgid "Confirm"
+msgstr "確認"
+
+#: src/SiteAdaptor/components/ProfileCard.tsx:192
+msgid "Current"
+msgstr "現在"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:301
+msgid "Current wallet does not support to interact with Lens protocol."
+msgstr "現在のウォレットはレンズプロトコルとのやり取りを対応していません。"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:128
+msgid "Failed to set up Web3 Profile wallets. Please try again."
+msgstr "Web3 プロファイルウォレットのセットアップに失敗しました。もう一度やり直してください。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:429
+msgid "Firefly"
+msgstr ""
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:296
+#: src/SiteAdaptor/components/Lens/LensList.tsx:205
+msgid "Follow"
+msgstr "フォロー"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:290
+msgid "Follow for {0} {1}"
+msgstr ""
+
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts:168
+msgid "Follow Lens handle"
+msgstr "レンズの指示に従ってください"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:285
+#: src/SiteAdaptor/components/Lens/LensList.tsx:204
+msgid "Following"
+msgstr "フォロー中"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:333
+msgid "Lens"
+msgstr ""
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:233
+msgid "Lens Follow"
+msgstr "レンズをフォロー"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:233
+msgid "Lens Unfollow"
+msgstr "レンズのフォローを解除"
+
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts:171
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts:152
+msgid "Network error, try again"
+msgstr "ネットワークエラーが発生しました。もう一度やり直してください"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:313
+msgid "No enough balance to complete follow process."
+msgstr "フォロープロセスを完了するための十分な残高がありません。"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:164
+msgid "No verified account found here."
+msgstr "ここには確認済みのアカウントが見つかりません。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:303
+msgid "Only holding lens handle can follow."
+msgstr "レンズのハンドルを握るだけでフォローできます。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:238
+msgid "Previous follow transaction is in processing, please wait and try again."
+msgstr "前のフォロートランザクションが処理中です。しばらくしてからもう一度お試しください。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:237
+msgid "Previous unfollow transaction is in processing, please wait and try again."
+msgstr "以前のフォロー解除トランザクションが処理中です。しばらくしてからもう一度お試しください。"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:126
+msgid "Save failed"
+msgstr "保存できませんでした"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:120
+msgid "Save successfully"
+msgstr "正常に保存されました"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:156
+msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
+msgstr "Web3フットプリントを表示し、各ソーシャルメディアアカウントにチップを受け取るためのウォレットを設定します。"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:122
+msgid "Set up Web3 Profile wallets successfully."
+msgstr "Web3 プロファイルウォレットを正常にセットアップしました。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:406
+msgid "Switch to Polygon and Follow"
+msgstr "Polygonに切り替えてフォロー"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:317
+msgid "The current wallet does not hold a lens and cannot follow/unfollow"
+msgstr "現在のウォレットはレンズを保持しておらず、フォロー/フォロー解除はできません"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:287
+msgid "This profile can not be followed."
+msgstr "このプロフィールはフォローできません。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:315
+msgid "This user has banned follow function."
+msgstr "このユーザーはフォロー機能を禁止しています。"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:285
+msgid "Unfollow"
+msgstr "フォロー解除"
+
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts:149
+msgid "Unfollow lens handle"
+msgstr "レンズハンドルのフォローを解除"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:385
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:391
+msgid "Unlock {0} {1} and follow"
+msgstr "{0} {1} をロック解除してフォロー"
+
+#: src/SiteAdaptor/components/Lens/LensList.tsx:202
+msgid "View"
+msgstr "表示"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:371
+msgid "View your profile in firefly"
+msgstr "あなたのプロフィールをFireflyで見る"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:148
+#: src/SiteAdaptor/index.tsx:29
+msgid "Web3 Profile"
+msgstr "Web3 プロフィール"
 
