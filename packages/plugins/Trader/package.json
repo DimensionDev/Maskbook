@@ -39,7 +39,8 @@
     "react-router-dom": "^6.24.0",
     "react-use": "^17.4.0",
     "urlcat": "^3.1.0",
-    "use-subscription": "^1.8.0"
+    "use-subscription": "^1.8.0",
+    "web3-core": "1.10.4"
   },
   "lingui": {
     "catalogs": [

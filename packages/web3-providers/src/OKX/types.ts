@@ -75,6 +75,12 @@ export type GetLiquidityResponse = OKXResponse<
     }>
 >
 
+export interface ApproveTransactionOptions {
+    chainId: string
+    tokenAddress: string
+    amount: string
+}
+
 export type ApproveTransactionResponse = OKXResponse<{
     /** @example "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240" */
     data: string

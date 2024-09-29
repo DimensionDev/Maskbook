@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
-import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     dividedBy,
@@ -15,7 +15,7 @@ import {
     rightShift,
 } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Link as MuiLink } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -30,6 +30,8 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useSwapSpender } from '../hooks/useSwapSpender.js'
+import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -158,6 +160,11 @@ const useStyles = makeStyles()((theme) => ({
                 '0px 0px 20px rgba(0, 0, 0, 0.05)'
             :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
+    toastLink: {
+        display: 'flex',
+        alignItems: 'center',
+        outline: 'none',
+    },
 }))
 
 export const Confirm = memo(function Confirm() {
@@ -245,6 +252,7 @@ export const Confirm = memo(function Confirm() {
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
+            _disableSuccessSnackbar: true,
         })
     }, [transaction, account, gasConfig, Web3])
 
@@ -259,6 +267,9 @@ export const Confirm = memo(function Confirm() {
 
     const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
+    const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
+    const waitForTransaction = useWaitForTransaction()
+    const getReceived = useGetTransferReceived(chainId)
 
     return (
         <div className={classes.container}>
@@ -410,8 +421,10 @@ export const Confirm = memo(function Confirm() {
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender) return
-                            const { data: allowance = '0' } = await refetchAllowance()
-                            if (!isNativeToken && isLessThan(allowance, amount)) await approve()
+                            if (!isNativeToken) {
+                                const { data: allowance = '0' } = await refetchAllowance()
+                                if (isLessThan(allowance, amount)) await approve()
+                            }
 
                             const hash = await sendSwap()
 
@@ -422,6 +435,32 @@ export const Confirm = memo(function Confirm() {
                                 })
                                 return
                             }
+                            try {
+                                await waitForTransaction({ chainId, hash })
+                                const received = await getReceived(hash, account)
+                                if (received && !leaveRef.current) {
+                                    showSnackbar(t`Swap`, {
+                                        message: (
+                                            <MuiLink
+                                                className={classes.toastLink}
+                                                color="inherit"
+                                                href={Utils.explorerResolver.transactionLink(chainId, hash)}
+                                                tabIndex={-1}
+                                                target="_blank"
+                                                rel="noopener noreferrer">
+                                                {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} swap completed successfully.`}{' '}
+                                                <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                                            </MuiLink>
+                                        ),
+                                        variant: 'success',
+                                    })
+                                }
+                            } catch (error) {
+                                showSnackbar(t`Wait too long for the confirmation.`, {
+                                    variant: 'error',
+                                })
+                            }
+
                             const estimatedSeconds =
                                 gasOptions ?
                                     gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds

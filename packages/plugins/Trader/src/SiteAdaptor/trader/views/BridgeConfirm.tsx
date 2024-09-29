@@ -504,7 +504,12 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 rightSideToken: getBridgeRightSideToken(bridge),
                             })
                             if (leaveRef.current) return
-                            const url = urlcat(RoutePaths.Transaction, { hash, chainId: fromChainId, mode })
+                            const url = urlcat(RoutePaths.Transaction, {
+                                hash,
+                                chainId: fromChainId,
+                                mode,
+                                pending: true,
+                            })
                             navigate(url, { replace: true })
                         }}>
                         {errorMessage ??

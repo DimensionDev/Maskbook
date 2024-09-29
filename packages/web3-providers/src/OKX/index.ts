@@ -7,6 +7,7 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import { blockedTokenMap, NATIVE_TOKEN_ADDRESS, OKX_HOST } from './constant.js'
 import { fixToken, fromOkxNativeAddress, normalizeCode, toOkxNativeAddress } from './helper.js'
 import type {
+    ApproveTransactionOptions,
     ApproveTransactionResponse,
     BridgeOptions,
     GetBridgeQuoteOptions,
@@ -138,12 +139,8 @@ export class OKX {
         }
     }
 
-    static async approveTransaction(chainId: string, tokenAddress: string, amount: string) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', {
-            chainId,
-            tokenAddress,
-            amount,
-        })
+    static async approveSwapTransaction(options: ApproveTransactionOptions) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
         return fetchFromOKX<ApproveTransactionResponse>(url)
     }
 
