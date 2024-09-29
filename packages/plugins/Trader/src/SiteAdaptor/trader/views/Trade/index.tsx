@@ -224,7 +224,7 @@ export function TradeView() {
                                     if (picked) {
                                         setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
-                                        if (toChainId !== picked.chainId) setToToken(undefined)
+                                        if (toChainId !== picked.chainId && isSwap) setToToken(undefined)
                                     }
                                 }}>
                                 <Box className={classes.icon}>
