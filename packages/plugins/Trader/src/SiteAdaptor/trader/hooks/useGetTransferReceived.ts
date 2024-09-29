@@ -1,6 +1,7 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useWeb3 } from '@masknet/web3-hooks-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 
 /**
@@ -14,11 +15,13 @@ export function useGetTransferReceived(chainId: ChainId) {
             const receipt = await web3?.eth.getTransactionReceipt(hash)
             const receiverTopic = `0x000000000000000000000000${receiver.slice(2)}`.toLowerCase()
 
-            const log = receipt?.logs.find((x) => {
-                return x.topics.length === 3 && x.topics[0] === TOPIC && x.topics[2].toLowerCase() === receiverTopic
-            })
+            const datas = receipt?.logs
+                .filter((x) => {
+                    return x.topics.length === 3 && x.topics[0] === TOPIC && x.topics[2].toLowerCase() === receiverTopic
+                })
+                .map((log) => log.data)
 
-            return log?.data
+            return datas?.length ? BigNumber.sum(...datas).toFixed() : undefined
         },
         [web3],
     )

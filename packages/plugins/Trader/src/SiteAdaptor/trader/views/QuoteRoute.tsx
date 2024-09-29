@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'center',
         height: '100%',
         padding: theme.spacing(0, 2),
         boxSizing: 'border-box',
@@ -144,9 +143,9 @@ export const QuoteRoute = memo(function QuoteRoute() {
     const compareList = useCompareList(quote, chainId)
     if (!quote)
         return (
-            <div className={classes.container}>
+            <Box className={classes.container} justifyContent="center">
                 <EmptyStatus />
-            </div>
+            </Box>
         )
     const { toToken } = quote
 

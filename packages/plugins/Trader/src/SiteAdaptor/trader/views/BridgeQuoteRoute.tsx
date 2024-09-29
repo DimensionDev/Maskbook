@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { leftShift } from '@masknet/web3-shared-base'
 import { formatAmount, type ChainId } from '@masknet/web3-shared-evm'
-import { Radio, Typography } from '@mui/material'
+import { Box, Radio, Typography } from '@mui/material'
 import { sortBy } from 'lodash-es'
 import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -114,9 +114,9 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
 
     if (!bridgeQuote?.routerList.length)
         return (
-            <div className={classes.container}>
+            <Box className={classes.container} justifyContent="center">
                 <EmptyStatus />
-            </div>
+            </Box>
         )
     const fastestItem = sortBy(bridgeQuote.routerList, (router) => -router.estimateTime)[0]
     const maxAmountItem = sortBy(bridgeQuote.routerList, (router) => -router.minimumReceived)[0]
