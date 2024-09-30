@@ -6,9 +6,9 @@ import { type BigNumber } from 'bignumber.js'
 import { useMemo } from 'react'
 import { useTrade } from '../contexts/TradeProvider.js'
 
-export function useGasCost(gasPrice: BigNumber.Value, gas: BigNumber.Value) {
+export function useGasCost(gasPrice: BigNumber.Value, gas: BigNumber.Value, txGasFee?: BigNumber.Value) {
     const { chainId } = useTrade()
-    const gasFee = useMemo(() => multipliedBy(gas, gasPrice ?? '1'), [gasPrice, gas])
+    const gasFee = useMemo(() => txGasFee ?? multipliedBy(gas, gasPrice ?? '1'), [gasPrice, gas, txGasFee])
     const { data: price } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const gasCost = useMemo(() => {
         if (!price) return ''

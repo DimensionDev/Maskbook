@@ -237,6 +237,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         :   null
 
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
+    const gas = gasConfig.gas ?? transaction?.gasLimit ?? gasLimit
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
         if (!transaction?.data) return
         return Web3.sendTransaction({
@@ -245,13 +246,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: transaction.gasLimit,
+            gas,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
         })
-    }, [transaction, account, gasConfig, Web3])
+    }, [transaction, account, gasConfig, Web3, gas])
 
     const [isBridgable, errorMessage] = useBridgable()
 
@@ -503,7 +504,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 dexContractAddress: spender,
                                 to: transaction.to,
                                 estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
-                                gasLimit: gasLimit || gasConfig.gas || '1',
+                                gasLimit: gas!,
                                 gasPrice: gasConfig.gasPrice || '0',
                                 leftSideToken: getBridgeLeftSideToken(bridge),
                                 rightSideToken: getBridgeRightSideToken(bridge),

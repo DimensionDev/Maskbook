@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
-import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress, formatEtherToWei } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Typography, Link as MuiLink } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -565,8 +565,13 @@ export const Transaction = memo(function Transaction() {
                         <GasCost
                             className={classes.rowValue}
                             chainId={fromChainId}
-                            gasLimit={tx.transactionFee}
+                            gasLimit={tx.gasLimit}
                             gasPrice={tx.gasPrice}
+                            gasFee={
+                                bridgeStatus?.sourceChainGasfee ?
+                                    formatEtherToWei(bridgeStatus.sourceChainGasfee)
+                                :   undefined
+                            }
                         />
                     </div>
                     <div className={classes.infoRow}>

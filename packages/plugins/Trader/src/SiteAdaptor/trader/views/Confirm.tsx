@@ -237,6 +237,7 @@ export const Confirm = memo(function Confirm() {
 
     const [isSwappable, errorMessage] = useSwappable()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const gas = gasConfig.gas ?? transaction?.gas ?? gasLimit
     const [{ loading: isSending }, sendSwap] = useAsyncFn(async () => {
         if (!transaction?.data) return
         return Web3.sendTransaction({
@@ -245,14 +246,14 @@ export const Confirm = memo(function Confirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: transaction.gas,
+            gas,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
             _disableSuccessSnackbar: true,
         })
-    }, [transaction, account, gasConfig, Web3])
+    }, [transaction, account, gasConfig, Web3, gas])
 
     const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
 
@@ -484,7 +485,7 @@ export const Confirm = memo(function Confirm() {
                                 dexContractAddress: spender,
                                 to: transaction.to,
                                 estimatedTime: estimatedSeconds ?? 10,
-                                gasLimit: gasLimit || gasConfig.gas || '1',
+                                gasLimit: gas!,
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
                             if (leaveRef.current) return
