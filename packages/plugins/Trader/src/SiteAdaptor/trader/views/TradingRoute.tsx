@@ -12,7 +12,7 @@ import { Fragment, memo, useMemo, useState, type ReactNode } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { BridgeNode } from '../../components/BridgeNode.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -80,7 +80,7 @@ enum BridgeStep {
 }
 export const TradingRoute = memo(function TradingRoute() {
     const { classes } = useStyles()
-    const { quote: swapQuote, bridgeQuote, fromToken, toToken, mode } = useSwap()
+    const { quote: swapQuote, bridgeQuote, fromToken, toToken, mode } = useTrade()
     const isSwap = mode === 'swap'
     const [params] = useSearchParams()
     const quote = isSwap ? swapQuote : bridgeQuote

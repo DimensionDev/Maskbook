@@ -18,7 +18,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GasCost } from '../../components/GasCost.js'
 import { Warning } from '../../components/Warning.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useGasManagement, useTrade } from '../contexts/index.js'
 
 const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, _, refs) => ({
     container: {
@@ -128,7 +128,7 @@ const gweiToWei = (gwei: BigNumber.Value | undefined) => formatGweiToWei(gwei ??
 const weiToGwei = (wei: BigNumber.Value | undefined) => formatWeiToGwei(wei ?? '0').toFixed()
 export const NetworkFee = memo(function NetworkFee() {
     const { classes, cx, theme } = useStyles()
-    const { chainId } = useSwap()
+    const { chainId } = useTrade()
     const navigate = useNavigate()
 
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)

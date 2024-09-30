@@ -75,19 +75,27 @@ export type GetLiquidityResponse = OKXResponse<
     }>
 >
 
-export type ApproveTransactionResponse = OKXResponse<{
-    /** @example "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240" */
-    data: string
-    /** @example "0xc67879F4065d3B9fe1C09EE990B891Aa8E3a4c2f" */
-    dexContractAddress: string
-    /** @example "100000" */
-    gasLimit: string
-    /**
-     * Gas price in wei
-     * @example "100000000000000"
-     */
-    gasPrice: string
-}>
+export interface ApproveTransactionOptions {
+    chainId: number
+    tokenContractAddress: string
+    approveAmount: string
+}
+
+export type ApproveTransactionResponse = OKXResponse<
+    Array<{
+        /** @example "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240" */
+        data: string
+        /** @example "0xc67879F4065d3B9fe1C09EE990B891Aa8E3a4c2f" */
+        dexContractAddress: string
+        /** @example "100000" */
+        gasLimit: string
+        /**
+         * Gas price in wei
+         * @example "100000000000000"
+         */
+        gasPrice: string
+    }>
+>
 
 export interface GetQuotesOptions {
     /** Chain ID (e.g., 1 for Ethereum) */

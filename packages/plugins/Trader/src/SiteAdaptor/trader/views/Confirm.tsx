@@ -3,19 +3,17 @@ import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
-import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
+import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
     formatBalance,
     formatCompact,
     GasOptionType,
-    isLessThan,
     leftShift,
     rightShift,
 } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, Link as MuiLink } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -24,12 +22,14 @@ import urlcat from 'urlcat'
 import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useGasManagement, useTrade } from '../contexts/index.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
-import { useSwapSpender } from '../hooks/useSwapSpender.js'
+import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
+import { useApprove } from '../hooks/useApprove.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -158,6 +158,11 @@ const useStyles = makeStyles()((theme) => ({
                 '0px 0px 20px rgba(0, 0, 0, 0.05)'
             :   '0px 0px 20px rgba(255, 255, 255, 0.12)',
     },
+    toastLink: {
+        display: 'flex',
+        alignItems: 'center',
+        outline: 'none',
+    },
 }))
 
 export const Confirm = memo(function Confirm() {
@@ -176,7 +181,7 @@ export const Confirm = memo(function Confirm() {
         quote,
         isQuoteStale,
         updateQuote,
-    } = useSwap()
+    } = useTrade()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
@@ -185,6 +190,10 @@ export const Confirm = memo(function Confirm() {
         () => (inputAmount && decimals ? rightShift(inputAmount, decimals).toFixed(0) : ''),
         [inputAmount, decimals],
     )
+    const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
+    const remainLiquidityList =
+        disabledDexIds.length ? liquidityList.filter((x) => !disabledDexIds.includes(x.id)) : liquidityList
+    const dexIdsCount = remainLiquidityList.length
     const { data: swap, isLoading } = useSwapData({
         chainId: chainId.toString(),
         amount,
@@ -192,6 +201,7 @@ export const Confirm = memo(function Confirm() {
         toTokenAddress: toToken?.address,
         slippage: new BigNumber(isAutoSlippage || !slippage ? DEFAULT_SLIPPAGE : slippage).div(100).toString(),
         userWalletAddress: account,
+        dexIds: remainLiquidityList === liquidityList ? undefined : remainLiquidityList.map((x) => x.id).join(','),
     })
     const { gasFee, gasCost, gasLimit, gasConfig, gasOptions } = useGasManagement()
     const gasOptionType = gasConfig.gasOptionType ?? GasOptionType.NORMAL
@@ -202,9 +212,6 @@ export const Confirm = memo(function Confirm() {
     const fromTokenAmount = routerResult?.fromTokenAmount
     const toToken_ = routerResult?.toToken
     const toTokenAmount = routerResult?.toTokenAmount
-
-    const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
-    const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =
@@ -243,21 +250,23 @@ export const Confirm = memo(function Confirm() {
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
+            _disableSuccessSnackbar: true,
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender, isLoading: isLoadingSpender } = useSwapSpender()
+    const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
 
-    const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
-        useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
-    const notEnoughAllowance = isLessThan(allowance, amount)
-
-    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
-    const disabled = !isSwappable || loading
+    const isApproving = approveMutation.isPending
+    const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
+    const loading = isSending || isCheckingApprove || isApproving
+    const disabled = !isSwappable || loading || dexIdsCount === 0
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
+    const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
+    const waitForTransaction = useWaitForTransaction()
+    const getReceived = useGetTransferReceived(chainId)
 
     return (
         <div className={classes.container}>
@@ -409,7 +418,7 @@ export const Confirm = memo(function Confirm() {
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender) return
-                            if (notEnoughAllowance) await approve()
+                            await approveMutation.mutateAsync()
 
                             const hash = await sendSwap()
 
@@ -420,6 +429,32 @@ export const Confirm = memo(function Confirm() {
                                 })
                                 return
                             }
+                            try {
+                                await waitForTransaction({ chainId, hash })
+                                const received = await getReceived(hash, account)
+                                if (received && !leaveRef.current) {
+                                    showSnackbar(t`Swap`, {
+                                        message: (
+                                            <MuiLink
+                                                className={classes.toastLink}
+                                                color="inherit"
+                                                href={Utils.explorerResolver.transactionLink(chainId, hash)}
+                                                tabIndex={-1}
+                                                target="_blank"
+                                                rel="noopener noreferrer">
+                                                {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} swap completed successfully.`}{' '}
+                                                <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                                            </MuiLink>
+                                        ),
+                                        variant: 'success',
+                                    })
+                                }
+                            } catch (error) {
+                                showSnackbar(t`Wait too long for the confirmation.`, {
+                                    variant: 'error',
+                                })
+                            }
+
                             const estimatedSeconds =
                                 gasOptions ?
                                     gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
@@ -448,7 +483,7 @@ export const Confirm = memo(function Confirm() {
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: spender,
                                 to: transaction.to,
-                                estimatedTime: (estimatedSeconds ?? 10) * 1000,
+                                estimatedTime: estimatedSeconds ?? 10,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                             })
@@ -458,7 +493,7 @@ export const Confirm = memo(function Confirm() {
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`
-                            : loadingAllowance ? t`Checking Approve`
+                            : isCheckingApprove ? t`Checking Approve`
                             : isApproving ? t`Approving`
                             : t`Confirm Swap`)}
                     </ActionButton>

@@ -123,12 +123,16 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
 
     useAsync(async () => {
         if (!progress) return
-        const computed = await TransactionFormatter?.formatTransaction(
-            progress.chainId,
-            progress.transaction,
-            progress.txHash,
-        )
+        const { chainId, transaction, txHash } = progress
+        const computed = await TransactionFormatter?.formatTransaction(chainId, transaction, txHash)
         if (!computed || computed.title === 'followWithSig' || computed.title === 'burnWithSig') return
+
+        if (
+            ('_disableSnackbar' in transaction && transaction._disableSnackbar) ||
+            ('_disableSuccessSnackbar' in transaction && transaction._disableSuccessSnackbar)
+        ) {
+            return
+        }
 
         showSingletonSnackbar(
             progress.status === TransactionStatusType.SUCCEED ?

@@ -2,12 +2,12 @@ import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, Spinner } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useAccount, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
 import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { alpha, Box, Button, Typography } from '@mui/material'
+import { alpha, Box, Button, Typography, Link as MuiLink } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import { memo, useMemo, useState } from 'react'
@@ -19,8 +19,12 @@ import { Countdown } from '../../components/Countdown.js'
 import { GasCost } from '../../components/GasCost.js'
 import { RoutePaths } from '../../constants.js'
 import { useTransaction } from '../../storage.js'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
+import { useAsync } from 'react-use'
+import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
+import { useLeave } from '../hooks/useLeave.js'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
     container: {
@@ -222,16 +226,22 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         marginRight: theme.spacing(1),
         boxShadow: `0 0 0 1px ${theme.palette.maskColor.bottom}`,
     },
+    toastLink: {
+        display: 'flex',
+        alignItems: 'center',
+        outline: 'none',
+    },
 }))
 
 export const Transaction = memo(function Transaction() {
-    const { reset, setFromToken, mode, setMode, setToToken } = useSwap()
+    const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
     const hash = params.get('hash')
     const rawChainId = params.get('chainId')
-    const chainId = rawChainId ? +rawChainId : undefined
+    const isPending = params.has('pending')
+    const chainId: ChainId | undefined = rawChainId ? +rawChainId : undefined
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
 
     const tx = useTransaction(account, hash)
@@ -267,7 +277,36 @@ export const Transaction = memo(function Transaction() {
     }, [isSwap, chainId, hash, toChainId, bridgeStatus?.toTxHash])
 
     const txPending = status === TransactionStatusType.NOT_DEPEND
-    const [expand = txPending, setExpand] = useState<boolean>()
+    const [expand = bridgeStatus?.status === 'PENDING', setExpand] = useState<boolean>()
+
+    const { showSnackbar } = useCustomSnackbar()
+    const leaveRef = useLeave()
+    const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
+    const waitForTransaction = useWaitForTransaction()
+    const getReceived = useGetTransferReceived(chainId as ChainId)
+    useAsync(async () => {
+        if (!isPending || !chainId || !hash || !toToken) return
+        await waitForTransaction({ chainId, hash })
+        const received = await getReceived(hash, account)
+
+        if (received && !leaveRef.current) {
+            showSnackbar(t`Bridge`, {
+                message: (
+                    <MuiLink
+                        className={classes.toastLink}
+                        color="inherit"
+                        href={Utils.explorerResolver.transactionLink(chainId, hash)}
+                        tabIndex={-1}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} bridge completed successfully.`}{' '}
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                    </MuiLink>
+                ),
+                variant: 'success',
+            })
+        }
+    }, [isPending, chainId, hash, toToken])
 
     if (!tx)
         return (
@@ -406,7 +445,10 @@ export const Transaction = memo(function Transaction() {
                     <div
                         className={cx(
                             classes.token,
-                            tx.kind === 'bridge' && ['BRIDGE_PENDING', 'WAITING'].includes(detailStatus!) ?
+                            (
+                                tx.kind === 'bridge' &&
+                                    ['BRIDGE_PENDING', 'WAITING', 'FROM_SUCCESS'].includes(detailStatus!)
+                            ) ?
                                 classes.waiting
                             :   undefined,
                         )}>
@@ -479,7 +521,7 @@ export const Transaction = memo(function Transaction() {
                             <Trans>Date</Trans>
                         </Typography>
                         <Typography className={classes.rowValue}>
-                            {tx.timestamp ? format(tx.timestamp, 'MM/dd/yyyy, hh:mm:ss') : '--'}
+                            {tx.timestamp ? format(tx.timestamp, 'MM/dd/yyyy, HH:mm:ss') : '--'}
                         </Typography>
                     </div>
                     {isSwap ? null : (
@@ -551,7 +593,6 @@ export const Transaction = memo(function Transaction() {
                         fullWidth
                         onClick={() => {
                             if (txSucceed) reset()
-                            setMode(tx.kind)
                             setFromToken(okxTokenToFungibleToken(tx.fromToken))
                             setToToken(okxTokenToFungibleToken(tx.toToken))
                             navigate(urlcat(RoutePaths.Trade, { mode: tx.kind }))

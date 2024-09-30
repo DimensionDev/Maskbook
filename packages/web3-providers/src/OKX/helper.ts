@@ -14,7 +14,7 @@ export function fromOkxNativeAddress(address: string) {
 export function normalizeCode<T extends { code: number }>(res: T): T {
     return {
         ...res,
-        code: Number.parseInt(res.code as unknown as string, 10),
+        code: +res.code,
     }
 }
 

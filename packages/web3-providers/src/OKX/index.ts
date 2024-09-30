@@ -7,6 +7,7 @@ import { fetchJSON } from '../helpers/fetchJSON.js'
 import { blockedTokenMap, NATIVE_TOKEN_ADDRESS, OKX_HOST } from './constant.js'
 import { fixToken, fromOkxNativeAddress, normalizeCode, toOkxNativeAddress } from './helper.js'
 import type {
+    ApproveTransactionOptions,
     ApproveTransactionResponse,
     BridgeOptions,
     GetBridgeQuoteOptions,
@@ -138,13 +139,10 @@ export class OKX {
         }
     }
 
-    static async approveTransaction(chainId: string, tokenAddress: string, amount: string) {
-        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', {
-            chainId,
-            tokenAddress,
-            amount,
-        })
-        return fetchFromOKX<ApproveTransactionResponse>(url)
+    static async getApproveTx(options: ApproveTransactionOptions) {
+        const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
+        const res = await fetchFromOKX<ApproveTransactionResponse>(url)
+        return res.code === 0 ? res.data[0] : null
     }
 
     static async getQuotes(options: GetQuotesOptions) {
@@ -269,7 +267,7 @@ export class OKX {
         return res
     }
 
-    static async getBridgeSupportedChain(chainId?: number) {
+    static async getBridgeSupportedChains(chainId?: number) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
             chainId,
         })
@@ -278,8 +276,9 @@ export class OKX {
             res.data.forEach((item) => {
                 item.chainId = +item.chainId
             })
+            return res.data
         }
-        return res
+        return undefined
     }
 
     static async bridge(options: BridgeOptions) {

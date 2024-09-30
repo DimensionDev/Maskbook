@@ -1,16 +1,14 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
+import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
-import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     dividedBy,
     formatBalance,
     formatCompact,
     GasOptionType,
-    isLessThan,
     leftShift,
     multipliedBy,
     rightShift,
@@ -25,15 +23,15 @@ import urlcat from 'urlcat'
 import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useGasManagement, useTrade } from '../contexts/index.js'
 import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useBridgable } from '../hooks/useBridgable.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
 import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
-import { useBridgeSpender } from '../hooks/useBridgeSpender.js'
 import { useLeave } from '../hooks/useLeave.js'
+import { useApprove } from '../hooks/useApprove.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -177,7 +175,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const {
         mode,
         inputAmount,
-        nativeToken,
         fromToken,
         toToken,
         isAutoSlippage,
@@ -185,7 +182,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         bridgeQuote: quote,
         isQuoteStale,
         updateQuote,
-    } = useSwap()
+    } = useTrade()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const fromChainId = fromToken?.chainId as ChainId
     const toChainId = toToken?.chainId as ChainId
@@ -256,14 +253,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender, isLoading: isLoadingSpender } = useBridgeSpender()
-
-    const [{ allowance }, { loading: isApproving, loadingApprove, loadingAllowance }, approve] =
-        useERC20TokenApproveCallback(fromToken?.address ?? '', amount, spender)
-    const notEnoughAllowance = isLessThan(allowance, amount)
-
     const [isBridgable, errorMessage] = useBridgable()
-    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
+
+    const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
+
+    const isApproving = approveMutation.isPending
+    const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
+    const loading = isSending || isCheckingApprove || isApproving
     const disabled = !isBridgable || loading
 
     const { showSnackbar } = useCustomSnackbar()
@@ -352,7 +348,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{fromNetwork?.name} fee</Trans>
+                            <Trans>{fromNetwork?.name} Network fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
@@ -364,7 +360,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                             to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
-                                    {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
+                                    {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
                                 </Typography>
                                 <Typography className={classes.text}>
                                     <Select
@@ -381,7 +377,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{toNetwork?.name} fee</Trans>
+                            <Trans>{toNetwork?.name} Network fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
@@ -398,7 +394,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Bridge network fee</Trans>
+                            <Trans>{bridge?.router.bridgeName} Bridge Network fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
@@ -409,6 +405,15 @@ than estimated, and any unused funds will remain in the original address.`}>
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'} (${bridgeFeeValue})
+                        </Typography>
+                    </div>
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.rowName}>
+                            <Trans>Wallet</Trans>
+                        </Typography>
+                        <Typography className={classes.rowValue}>
+                            {account}
+                            <CopyButton text={account} size={16} display="flex" />
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
@@ -461,7 +466,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
-                            if (notEnoughAllowance) await approve()
+                            await approveMutation.mutateAsync()
 
                             const hash = await sendBridge()
 
@@ -497,19 +502,24 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 transactionFee: gasFee.toFixed(0),
                                 dexContractAddress: spender,
                                 to: transaction.to,
-                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime * 1000 : 0,
+                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
                                 gasLimit: gasLimit || gasConfig.gas || '1',
                                 gasPrice: gasConfig.gasPrice || '0',
                                 leftSideToken: getBridgeLeftSideToken(bridge),
                                 rightSideToken: getBridgeRightSideToken(bridge),
                             })
                             if (leaveRef.current) return
-                            const url = urlcat(RoutePaths.Transaction, { hash, chainId: fromChainId, mode })
+                            const url = urlcat(RoutePaths.Transaction, {
+                                hash,
+                                chainId: fromChainId,
+                                mode,
+                                pending: true,
+                            })
                             navigate(url, { replace: true })
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`
-                            : loadingAllowance ? t`Checking Approve`
+                            : isCheckingApprove ? t`Checking Approve`
                             : isApproving ? t`Approving`
                             : t`Confirm Bridge`)}
                     </ActionButton>

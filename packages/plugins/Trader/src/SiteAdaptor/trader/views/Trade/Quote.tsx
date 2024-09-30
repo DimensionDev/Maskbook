@@ -8,7 +8,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { bridges, DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
-import { useSwap } from '../../contexts/index.js'
+import { useTrade } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -67,7 +67,7 @@ interface QuoteProps extends BoxProps {
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
-    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode, bridgeQuote } = useSwap()
+    const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode, bridgeQuote } = useTrade()
     const isSwap = mode === 'swap'
     const [forwardCompare, setForwardCompare] = useState(true)
     const [baseToken, targetToken] =

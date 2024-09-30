@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
-import { useSwap } from '../../contexts/index.js'
+import { useTrade } from '../../contexts/index.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
@@ -134,7 +134,6 @@ export function TradeView() {
     const {
         mode,
         chainId,
-        setChainId,
         fromToken,
         setFromToken,
         toToken,
@@ -148,7 +147,7 @@ export function TradeView() {
         slippage,
         isQuoteLoading,
         isBridgeQuoteLoading,
-    } = useSwap()
+    } = useTrade()
     const isSwap = mode === 'swap'
     const quote = isSwap ? swapQuote : bridgeQuote
     const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`
@@ -160,12 +159,15 @@ export function TradeView() {
     const toNetwork = networks.find((x) => x.chainId === toChainId)
     const chainQuery = useSupportedChains()
 
-    const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
+    const pickToken = async (
+        currentToken: Web3Helper.FungibleTokenAll | null | undefined,
+        side: 'from' | 'to',
+        excludes: string[],
+    ) => {
         const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
-        const isSwap = mode === 'swap'
         return SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
-            selectedTokens: currentToken ? [currentToken.address] : [],
+            selectedTokens: excludes,
             // Only from token can decide the chain
             chainId: (isSwap ? fromChainId : currentToken?.chainId) || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
@@ -213,11 +215,14 @@ export function TradeView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(fromToken, 'from')
+                                    const picked = await pickToken(
+                                        fromToken,
+                                        'from',
+                                        isSwap && toToken?.address ? [toToken.address] : [],
+                                    )
                                     if (picked) {
-                                        setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
-                                        if (toChainId !== picked.chainId) setToToken(undefined)
+                                        if (toChainId !== picked.chainId && isSwap) setToToken(undefined)
                                     }
                                 }}>
                                 <Box className={classes.icon}>
@@ -274,7 +279,11 @@ export function TradeView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(toToken, 'to')
+                                    const picked = await pickToken(
+                                        toToken,
+                                        'to',
+                                        isSwap && fromToken ? [fromToken.address] : [],
+                                    )
                                     if (picked) setToToken(picked)
                                 }}>
                                 <Box className={classes.icon}>
