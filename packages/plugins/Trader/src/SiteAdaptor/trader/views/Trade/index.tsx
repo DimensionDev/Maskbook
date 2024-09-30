@@ -199,7 +199,7 @@ export function TradeView() {
     const [isBridgable, bridgeErrorMessage] = useBridgable()
     const errorMessage = isSwap ? swapErrorMessage : bridgeErrorMessage
 
-    const isTradable = isSwap ? !isSwappable : !isBridgable
+    const isTradable = isSwap ? isSwappable : isBridgable
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
     const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
     const bridgeButtonLabel = isOverSlippage ? t`Bridge anyway` : t`Bridge`
@@ -348,7 +348,7 @@ export function TradeView() {
                     loading={isLoading}
                     fullWidth
                     color={isOverSlippage ? 'error' : undefined}
-                    disabled={isTradable}
+                    disabled={!isTradable}
                     onClick={() => {
                         navigate(
                             urlcat(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
