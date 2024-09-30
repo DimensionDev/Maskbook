@@ -139,9 +139,10 @@ export class OKX {
         }
     }
 
-    static async approveSwapTransaction(options: ApproveTransactionOptions) {
+    static async getApproveTx(options: ApproveTransactionOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
-        return fetchFromOKX<ApproveTransactionResponse>(url)
+        const res = await fetchFromOKX<ApproveTransactionResponse>(url)
+        return res.code === 0 ? res.data[0] : null
     }
 
     static async getQuotes(options: GetQuotesOptions) {
@@ -266,7 +267,7 @@ export class OKX {
         return res
     }
 
-    static async getBridgeSupportedChain(chainId?: number) {
+    static async getBridgeSupportedChains(chainId?: number) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/supported/chain', {
             chainId,
         })

@@ -277,7 +277,7 @@ export const Transaction = memo(function Transaction() {
     }, [isSwap, chainId, hash, toChainId, bridgeStatus?.toTxHash])
 
     const txPending = status === TransactionStatusType.NOT_DEPEND
-    const [expand = txPending, setExpand] = useState<boolean>()
+    const [expand = bridgeStatus?.status === 'PENDING', setExpand] = useState<boolean>()
 
     const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
@@ -445,7 +445,10 @@ export const Transaction = memo(function Transaction() {
                     <div
                         className={cx(
                             classes.token,
-                            tx.kind === 'bridge' && ['BRIDGE_PENDING', 'WAITING'].includes(detailStatus!) ?
+                            (
+                                tx.kind === 'bridge' &&
+                                    ['BRIDGE_PENDING', 'WAITING', 'FROM_SUCCESS'].includes(detailStatus!)
+                            ) ?
                                 classes.waiting
                             :   undefined,
                         )}>

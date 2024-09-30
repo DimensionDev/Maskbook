@@ -4,13 +4,11 @@ import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
 import {
     dividedBy,
     formatBalance,
     formatCompact,
     GasOptionType,
-    isLessThan,
     leftShift,
     rightShift,
 } from '@masknet/web3-shared-base'
@@ -29,9 +27,9 @@ import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
-import { useSwapSpender } from '../hooks/useSwapSpender.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
+import { useApprove } from '../hooks/useApprove.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -256,12 +254,11 @@ export const Confirm = memo(function Confirm() {
         })
     }, [transaction, account, gasConfig, Web3])
 
-    const { data: spender, isLoading: isLoadingSpender } = useSwapSpender()
+    const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
 
-    const [{ isNativeToken }, { loading: isApproving, loadingApprove, loadingAllowance }, approve, , refetchAllowance] =
-        useERC20TokenApproveCallback(fromToken?.address || '', amount, spender)
-
-    const loading = isSending || isApproving || loadingApprove || isLoadingSpender
+    const isApproving = approveMutation.isPending
+    const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
+    const loading = isSending || isCheckingApprove || isApproving
     const disabled = !isSwappable || loading || dexIdsCount === 0
     const showStale = isQuoteStale && !isSending && !isApproving
 
@@ -421,10 +418,7 @@ export const Confirm = memo(function Confirm() {
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender) return
-                            if (!isNativeToken) {
-                                const { data: allowance = '0' } = await refetchAllowance()
-                                if (isLessThan(allowance, amount)) await approve()
-                            }
+                            await approveMutation.mutateAsync()
 
                             const hash = await sendSwap()
 
@@ -499,7 +493,7 @@ export const Confirm = memo(function Confirm() {
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`
-                            : loadingAllowance ? t`Checking Approve`
+                            : isCheckingApprove ? t`Checking Approve`
                             : isApproving ? t`Approving`
                             : t`Confirm Swap`)}
                     </ActionButton>

@@ -134,7 +134,6 @@ export function TradeView() {
     const {
         mode,
         chainId,
-        setChainId,
         fromToken,
         setFromToken,
         toToken,
@@ -222,7 +221,6 @@ export function TradeView() {
                                         isSwap && toToken?.address ? [toToken.address] : [],
                                     )
                                     if (picked) {
-                                        setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
                                         if (toChainId !== picked.chainId && isSwap) setToToken(undefined)
                                     }

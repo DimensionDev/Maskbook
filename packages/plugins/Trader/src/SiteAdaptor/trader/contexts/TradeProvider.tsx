@@ -31,7 +31,6 @@ import { useMode, type TradeMode } from './useMode.js'
 
 interface Options {
     chainId: ChainId
-    setChainId: Dispatch<SetStateAction<ChainId>>
     nativeToken: Web3Helper.FungibleTokenAll | undefined
     mode: TradeMode
     fromToken: Web3Helper.FungibleTokenAll | undefined
@@ -45,6 +44,7 @@ interface Options {
     swapQuoteErrorMessage: string | undefined
     inputAmount: string
     setInputAmount: Dispatch<SetStateAction<string>>
+    amount: string
     /**
      * Disabled dexId of the liquidity pool for limited quotes.
      * We record disabled ones only, if no disabled ones, we cna omit the parameter
@@ -97,11 +97,11 @@ const otherChainIdMap: Record<number, ChainId> = {
 }
 export function TradeProvider({ children }: PropsWithChildren) {
     const { chainId: defaultChainId, nativeToken, paramToToken } = useDefaultParams()
-    const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
 
     const mode = useMode()
 
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
+    const chainId = fromToken?.chainId || defaultChainId
 
     const defaultToToken = useDefaultToken(
         mode === 'bridge' ? otherChainIdMap[chainId] || ChainId.Mainnet : chainId,
@@ -189,7 +189,6 @@ export function TradeProvider({ children }: PropsWithChildren) {
         () => ({
             chainId,
             mode,
-            setChainId,
             quote,
             isQuoteStale,
             isQuoteLoading,
@@ -201,6 +200,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             setToToken,
             inputAmount,
             setInputAmount,
+            amount,
             swapQuoteErrorMessage,
             disabledDexIds,
             setDisabledDexIds,
@@ -232,6 +232,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             setToToken,
             inputAmount,
             setInputAmount,
+            amount,
             swapQuoteErrorMessage,
             disabledDexIds,
             setDisabledDexIds,
