@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:03\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -23,9 +23,29 @@ msgstr ""
 msgid "(beta)"
 msgstr "crwdns31476:0crwdne31476:0"
 
+#: src/UI/translate.ts:141
+msgid "{0} {1} approval successfully."
+msgstr "crwdns31506:0{0}crwdnd31506:0{1}crwdne31506:0"
+
+#: src/UI/translate.ts:139
+msgid "{0} {1} NFT contract successfully."
+msgstr "crwdns31508:0{0}crwdnd31508:0{1}crwdne31508:0"
+
+#: src/UI/translate.ts:159
+msgid "{0} {1} NFT contract."
+msgstr "crwdns31510:0{0}crwdnd31510:0{1}crwdne31510:0"
+
 #: src/UI/components/ChainBoundary/index.tsx:113
 msgid "{0} network is not added in the wallet. Please add and try it again."
 msgstr "crwdns30746:0{0}crwdne30746:0"
+
+#: src/UI/translate.ts:163
+msgid "{0} NFT contract"
+msgstr "crwdns31512:0{0}crwdne31512:0"
+
+#: src/UI/translate.ts:103
+msgid "{0} were successfully claimed"
+msgstr "crwdns31514:0{0}crwdne31514:0"
 
 #: src/UI/components/TokenSecurity/index.tsx:57
 msgid "{attentionFactors, plural, one {# Attention item} other {# Attention items}}"
@@ -140,11 +160,19 @@ msgstr "crwdns30794:0crwdne30794:0"
 msgid "Cancel"
 msgstr "crwdns30796:0crwdne30796:0"
 
+#: src/UI/translate.ts:58
+msgid "Cancel Transaction"
+msgstr "crwdns31516:0crwdne31516:0"
+
 #: src/UI/components/WalletStatusBar/Action.tsx:17
 #: src/UI/components/WalletStatusBar/WalletMenuItem.tsx:79
 #: src/UI/components/WalletStatusBox/index.tsx:231
 msgid "Change"
 msgstr "crwdns30798:0crwdne30798:0"
+
+#: src/UI/translate.ts:59
+msgid "Change Owner"
+msgstr "crwdns31518:0crwdne31518:0"
 
 #: src/UI/components/ChainBoundary/index.tsx:186
 msgid "Change Wallet"
@@ -167,7 +195,43 @@ msgstr "crwdns30806:0crwdne30806:0"
 msgid "Circulating Supply"
 msgstr "crwdns30808:0crwdne30808:0"
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:161
+#: src/UI/translate.ts:105
+msgid "Claim 1 {0} NFT Lucky Drop successfully."
+msgstr "crwdns31520:0{0}crwdne31520:0"
+
+#: src/UI/translate.ts:60
+msgid "Claim Lucky Drop"
+msgstr "crwdns31522:0crwdne31522:0"
+
+#: src/UI/translate.ts:26
+msgid "Claim Lucky Drop successfully."
+msgstr "crwdns31524:0crwdne31524:0"
+
+#: src/UI/translate.ts:107
+msgid "Claim Lucky Drop with {0} successfully."
+msgstr "crwdns31526:0{0}crwdne31526:0"
+
+#: src/UI/translate.ts:61
+msgid "Claim NFT Lucky Drop"
+msgstr "crwdns31528:0crwdne31528:0"
+
+#: src/UI/translate.ts:27
+msgid "Claim NFT Lucky Drop successfully."
+msgstr "crwdns31530:0crwdne31530:0"
+
+#: src/UI/translate.ts:62
+msgid "Claim your Airdrop"
+msgstr "crwdns31532:0crwdne31532:0"
+
+#: src/UI/translate.ts:28
+msgid "Claim your Lucky Drop."
+msgstr "crwdns31534:0crwdne31534:0"
+
+#: src/UI/translate.ts:29
+msgid "Claim your NFT Lucky Drop"
+msgstr "crwdns31536:0crwdne31536:0"
+
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:156
 msgid "Clear"
 msgstr "crwdns30810:0crwdne30810:0"
 
@@ -218,7 +282,7 @@ msgstr "crwdns30828:0crwdne30828:0"
 msgid "Confirm Risk Warning"
 msgstr "crwdns30830:0crwdne30830:0"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
 msgid "Confirm this transaction in your wallet"
 msgstr "crwdns30832:0crwdne30832:0"
 
@@ -274,6 +338,18 @@ msgstr "crwdns30850:0crwdne30850:0"
 msgid "Contract"
 msgstr "crwdns30852:0crwdne30852:0"
 
+#: src/UI/translate.ts:63
+msgid "Contract Deployment"
+msgstr "crwdns31538:0crwdne31538:0"
+
+#: src/UI/translate.ts:143
+msgid "Contract Deployment {0}"
+msgstr "crwdns31540:0{0}crwdne31540:0"
+
+#: src/UI/translate.ts:64
+msgid "Contract Interaction"
+msgstr "crwdns31542:0crwdne31542:0"
+
 #: src/UI/components/CopyButton/index.tsx:74
 msgid "Copied!"
 msgstr "crwdns30854:0crwdne30854:0"
@@ -281,6 +357,26 @@ msgstr "crwdns30854:0crwdne30854:0"
 #: src/UI/components/CopyButton/index.tsx:74
 msgid "Copy"
 msgstr "crwdns30856:0crwdne30856:0"
+
+#: src/UI/translate.ts:111
+msgid "Create {0} NFT Lucky Drop successfully."
+msgstr "crwdns31544:0{0}crwdne31544:0"
+
+#: src/UI/translate.ts:65
+msgid "Create Lucky Drop"
+msgstr "crwdns31546:0crwdne31546:0"
+
+#: src/UI/translate.ts:109
+msgid "Create Lucky drop with {0} successfully."
+msgstr "crwdns31548:0{0}crwdne31548:0"
+
+#: src/UI/translate.ts:66
+msgid "Create NFT Lucky Drop"
+msgstr "crwdns31550:0crwdne31550:0"
+
+#: src/UI/translate.ts:30
+msgid "Create NFT Lucky Drop successfully."
+msgstr "crwdns31552:0crwdne31552:0"
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:46
 #: src/UI/components/PersonaSelectPanel/index.tsx:110
@@ -290,6 +386,22 @@ msgstr "crwdns30858:0crwdne30858:0"
 #: src/UI/components/ConnectPersonaBoundary/index.tsx:87
 msgid "Create Persona"
 msgstr "crwdns30860:0crwdne30860:0"
+
+#: src/UI/translate.ts:67
+msgid "Create Smart Pay wallet"
+msgstr "crwdns31554:0crwdne31554:0"
+
+#: src/UI/translate.ts:31
+msgid "Create your Lucky Drop."
+msgstr "crwdns31556:0crwdne31556:0"
+
+#: src/UI/translate.ts:32
+msgid "Create your NFT Lucky Drop."
+msgstr "crwdns31558:0crwdne31558:0"
+
+#: src/UI/translate.ts:33
+msgid "Created a SmartPay wallet on Polygon network."
+msgstr "crwdns31560:0crwdne31560:0"
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:176
 msgid "Current base fee is {0} Gwei"
@@ -311,6 +423,26 @@ msgstr "crwdns30866:0{0}crwdne30866:0"
 msgid "Default"
 msgstr "crwdns30868:0crwdne30868:0"
 
+#: src/UI/translate.ts:34
+msgid "Deploy a SmartPay wallet on Polygon network."
+msgstr "crwdns31562:0crwdne31562:0"
+
+#: src/UI/translate.ts:68
+msgid "Deploy Smarty Pay wallet"
+msgstr "crwdns31564:0crwdne31564:0"
+
+#: src/UI/translate.ts:145
+msgid "Deposit {0} for savings."
+msgstr "crwdns31566:0{0}crwdne31566:0"
+
+#: src/UI/translate.ts:113
+msgid "Deposit {0} successfully."
+msgstr "crwdns31568:0{0}crwdne31568:0"
+
+#: src/UI/translate.ts:69
+msgid "Deposit token"
+msgstr "crwdns31570:0crwdne31570:0"
+
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:92
 msgid "Details"
 msgstr "crwdns30870:0crwdne30870:0"
@@ -331,6 +463,10 @@ msgstr "crwdns30876:0crwdne30876:0"
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
 msgid "Domain Request"
 msgstr "crwdns30878:0crwdne30878:0"
+
+#: src/UI/translate.ts:79
+msgid "Donate"
+msgstr "crwdns31572:0crwdne31572:0"
 
 #: src/hooks/useSnackbarCallback.tsx:40
 #: src/hooks/useSnackbarCallback.tsx:89
@@ -399,9 +535,29 @@ msgstr "crwdns30906:0crwdne30906:0"
 msgid "Enter an amount"
 msgstr "crwdns30908:0crwdne30908:0"
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:92
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:93
 msgid "Failed"
 msgstr "crwdns30910:0crwdne30910:0"
+
+#: src/UI/translate.ts:101
+msgid "Failed to {0} NFT contract."
+msgstr "crwdns31574:0{0}crwdne31574:0"
+
+#: src/UI/translate.ts:35
+msgid "Failed to claim Lucky Drop."
+msgstr "crwdns31576:0crwdne31576:0"
+
+#: src/UI/translate.ts:36
+msgid "Failed to create Lucky Drop."
+msgstr "crwdns31578:0crwdne31578:0"
+
+#: src/UI/translate.ts:97
+msgid "Failed to deposit {0}."
+msgstr "crwdns31580:0{0}crwdne31580:0"
+
+#: src/UI/translate.ts:37
+msgid "Failed to deposit token."
+msgstr "crwdns31582:0crwdne31582:0"
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:122
 msgid "Failed to load {0}. Click to retry."
@@ -411,13 +567,49 @@ msgstr "crwdns30912:0{0}crwdne30912:0"
 msgid "Failed to load MASK. Click to retry."
 msgstr "crwdns30914:0crwdne30914:0"
 
+#: src/UI/translate.ts:38
+msgid "Failed to purchase Maskbox NFT."
+msgstr "crwdns31584:0crwdne31584:0"
+
+#: src/UI/translate.ts:39
+msgid "Failed to refund Lucky Drop."
+msgstr "crwdns31586:0crwdne31586:0"
+
 #: src/hooks/useReportSpam.tsx:76
 msgid "Failed to report spam."
 msgstr "crwdns30916:0crwdne30916:0"
 
+#: src/UI/translate.ts:40
+msgid "Failed to revoke token contract."
+msgstr "crwdns31588:0crwdne31588:0"
+
+#: src/UI/translate.ts:41
+msgid "Failed to send token."
+msgstr "crwdns31590:0crwdne31590:0"
+
+#: src/UI/translate.ts:42
+msgid "Failed to transfer NFT."
+msgstr "crwdns31592:0crwdne31592:0"
+
+#: src/UI/translate.ts:43
+msgid "Failed to unlock NFT contract."
+msgstr "crwdns31594:0crwdne31594:0"
+
+#: src/UI/translate.ts:44
+msgid "Failed to unlock token contract."
+msgstr "crwdns31596:0crwdne31596:0"
+
+#: src/UI/translate.ts:99
+msgid "Failed to withdraw {0}."
+msgstr "crwdns31598:0{0}crwdne31598:0"
+
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:236
 msgid "Follow"
 msgstr "crwdns30918:0crwdne30918:0"
+
+#: src/UI/translate.ts:70
+msgid "Follow User"
+msgstr "crwdns31600:0crwdne31600:0"
 
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:235
 msgid "Following"
@@ -699,8 +891,12 @@ msgstr "crwdns31046:0crwdne31046:0"
 msgid "or"
 msgstr "crwdns31048:0crwdne31048:0"
 
+#: src/UI/translate.ts:45
+msgid "Owner changed successfully."
+msgstr "crwdns31602:0crwdne31602:0"
+
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx:125
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:90
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:91
 msgid "Pending"
 msgstr "crwdns31050:0crwdne31050:0"
 
@@ -784,6 +980,38 @@ msgstr "crwdns31084:0crwdne31084:0"
 msgid "Provided by plugin \"{0}\""
 msgstr "crwdns31086:0{0}crwdne31086:0"
 
+#: src/UI/translate.ts:71
+msgid "Purchase Maskbox NFT"
+msgstr "crwdns31604:0crwdne31604:0"
+
+#: src/UI/translate.ts:47
+msgid "Purchase Maskbox NFT successfully."
+msgstr "crwdns31606:0crwdne31606:0"
+
+#: src/UI/translate.ts:115
+msgid "Purchase Maskbox NFT with {0} successfully."
+msgstr "crwdns31608:0{0}crwdne31608:0"
+
+#: src/UI/translate.ts:46
+msgid "Purchase Maskbox NFT."
+msgstr "crwdns31610:0crwdne31610:0"
+
+#: src/UI/translate.ts:72
+msgid "Refund Lucky drop"
+msgstr "crwdns31612:0crwdne31612:0"
+
+#: src/UI/translate.ts:48
+msgid "Refund Lucky Drop successfully."
+msgstr "crwdns31614:0crwdne31614:0"
+
+#: src/UI/translate.ts:117
+msgid "Refund Lucky Drop with {0} successfully."
+msgstr "crwdns31616:0{0}crwdne31616:0"
+
+#: src/UI/translate.ts:49
+msgid "Refund your expired Lucky Drop."
+msgstr "crwdns31618:0crwdne31618:0"
+
 #: src/UI/components/LoadRetry/index.tsx:24
 #: src/UI/components/ReloadStatus/index.tsx:48
 msgid "Reload"
@@ -812,6 +1040,22 @@ msgstr "crwdns31098:0crwdne31098:0"
 #: src/UI/modals/ConnectWalletModal/index.tsx:189
 msgid "Retry"
 msgstr "crwdns31100:0crwdne31100:0"
+
+#: src/UI/translate.ts:147
+msgid "Revoke the approval for {0}."
+msgstr "crwdns31620:0{0}crwdne31620:0"
+
+#: src/UI/translate.ts:50
+msgid "Revoke the approval for token"
+msgstr "crwdns31622:0crwdne31622:0"
+
+#: src/UI/translate.ts:51
+msgid "Revoke the approval successfully."
+msgstr "crwdns31624:0crwdne31624:0"
+
+#: src/UI/translate.ts:73
+msgid "Revoke Token"
+msgstr "crwdns31626:0crwdne31626:0"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:92
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:101
@@ -870,6 +1114,14 @@ msgstr "crwdns31124:0crwdne31124:0"
 msgid "Send"
 msgstr "crwdns31126:0crwdne31126:0"
 
+#: src/UI/translate.ts:149
+msgid "Send {0}"
+msgstr "crwdns31628:0{0}crwdne31628:0"
+
+#: src/UI/translate.ts:119
+msgid "Send {0} successfully."
+msgstr "crwdns31630:0{0}crwdne31630:0"
+
 #: src/UI/components/VerifyNextIDDialog/index.tsx:237
 msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
 msgstr "crwdns31482:0crwdne31482:0"
@@ -891,7 +1143,7 @@ msgstr "crwdns31132:0crwdne31132:0"
 msgid "Spam"
 msgstr "crwdns31134:0crwdne31134:0"
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:91
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:92
 msgid "Success"
 msgstr "crwdns31136:0crwdne31136:0"
 
@@ -949,7 +1201,7 @@ msgstr "crwdns31160:0crwdne31160:0"
 msgid "Transaction"
 msgstr "crwdns31162:0crwdne31162:0"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
 msgid "Transaction Confirmed"
 msgstr "crwdns31164:0crwdne31164:0"
 
@@ -957,13 +1209,41 @@ msgstr "crwdns31164:0crwdne31164:0"
 msgid "Transaction cost"
 msgstr "crwdns31166:0crwdne31166:0"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
+#: src/UI/translate.ts:52
+msgid "Transaction failed"
+msgstr "crwdns31632:0crwdne31632:0"
+
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
 msgid "Transaction Failed"
 msgstr "crwdns31168:0crwdne31168:0"
+
+#: src/UI/translate.ts:53
+msgid "Transaction submitted."
+msgstr "crwdns31634:0crwdne31634:0"
+
+#: src/UI/translate.ts:54
+msgid "Transaction was Rejected!"
+msgstr "crwdns31636:0crwdne31636:0"
 
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:124
 msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
 msgstr "crwdns31170:0crwdne31170:0"
+
+#: src/UI/translate.ts:121
+msgid "Transfer {0} NFT successfully."
+msgstr "crwdns31638:0{0}crwdne31638:0"
+
+#: src/UI/translate.ts:151
+msgid "Transfer {0} NFT."
+msgstr "crwdns31640:0{0}crwdne31640:0"
+
+#: src/UI/translate.ts:74
+msgid "Transfer NFT"
+msgstr "crwdns31642:0crwdne31642:0"
+
+#: src/UI/translate.ts:75
+msgid "Transfer Token"
+msgstr "crwdns31644:0crwdne31644:0"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:120
 msgid "Unlisted"
@@ -977,6 +1257,38 @@ msgstr "crwdns31174:0crwdne31174:0"
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
 msgid "Unlock {0}"
 msgstr "crwdns31176:0{0}crwdne31176:0"
+
+#: src/UI/translate.ts:123
+msgid "Unlock {0} NFT contract successfully."
+msgstr "crwdns31646:0{0}crwdne31646:0"
+
+#: src/UI/translate.ts:153
+msgid "Unlock {0} NFT contract."
+msgstr "crwdns31648:0{0}crwdne31648:0"
+
+#: src/UI/translate.ts:125
+msgid "Unlock {0} successfully"
+msgstr "crwdns31650:0{0}crwdne31650:0"
+
+#: src/UI/translate.ts:155
+msgid "Unlock {0}."
+msgstr "crwdns31652:0{0}crwdne31652:0"
+
+#: src/UI/translate.ts:76
+msgid "Unlock NFT Contract"
+msgstr "crwdns31654:0crwdne31654:0"
+
+#: src/UI/translate.ts:55
+msgid "Unlock token"
+msgstr "crwdns31656:0crwdne31656:0"
+
+#: src/UI/translate.ts:77
+msgid "Unlock Token"
+msgstr "crwdns31658:0crwdne31658:0"
+
+#: src/UI/translate.ts:56
+msgid "Unlock token successfully"
+msgstr "crwdns31660:0crwdne31660:0"
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
 msgid "Unlocking {0}..."
@@ -1035,6 +1347,18 @@ msgstr "crwdns31200:0crwdne31200:0"
 msgid "Website"
 msgstr "crwdns31202:0crwdne31202:0"
 
+#: src/UI/translate.ts:157
+msgid "Withdraw {0} for savings."
+msgstr "crwdns31662:0{0}crwdne31662:0"
+
+#: src/UI/translate.ts:127
+msgid "Withdraw {0} successfully."
+msgstr "crwdns31664:0{0}crwdne31664:0"
+
+#: src/UI/translate.ts:78
+msgid "Withdraw token"
+msgstr "crwdns31666:0crwdne31666:0"
+
 #: src/UI/components/ChainBoundary/index.tsx:155
 msgid "Wrong Network"
 msgstr "crwdns31204:0crwdne31204:0"
@@ -1043,6 +1367,14 @@ msgstr "crwdns31204:0crwdne31204:0"
 msgid "You canceled the request."
 msgstr "crwdns31206:0crwdne31206:0"
 
+#: src/UI/translate.ts:130
+msgid "You didn't approve {0} successfully. Please do not set spending cap as 0 and try it again."
+msgstr "crwdns31668:0{0}crwdne31668:0"
+
+#: src/UI/translate.ts:133
+msgid "You have donated {0} {1}"
+msgstr "crwdns31670:0{0}crwdnd31670:0{1}crwdne31670:0"
+
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:131
 msgid "You may have {0}% less received with this level of slippage tolerance."
 msgstr "crwdns31208:0{0}crwdne31208:0"
@@ -1050,6 +1382,10 @@ msgstr "crwdns31208:0{0}crwdne31208:0"
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:147
 msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
 msgstr "crwdns31210:0{0}crwdnd31210:0{1}crwdne31210:0"
+
+#: src/UI/translate.ts:136
+msgid "You've approved {0} for {1}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
+msgstr "crwdns31672:0{0}crwdnd31672:0{1}crwdne31672:0"
 
 #: src/hooks/useOpenShareTxDialog.tsx:84
 msgid "Your transaction was confirmed!"
