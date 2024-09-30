@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:03\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -23,8 +23,28 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#: src/UI/translate.ts:141
+msgid "{0} {1} approval successfully."
+msgstr ""
+
+#: src/UI/translate.ts:139
+msgid "{0} {1} NFT contract successfully."
+msgstr ""
+
+#: src/UI/translate.ts:159
+msgid "{0} {1} NFT contract."
+msgstr ""
+
 #: src/UI/components/ChainBoundary/index.tsx:113
 msgid "{0} network is not added in the wallet. Please add and try it again."
+msgstr ""
+
+#: src/UI/translate.ts:163
+msgid "{0} NFT contract"
+msgstr ""
+
+#: src/UI/translate.ts:103
+msgid "{0} were successfully claimed"
 msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:57
@@ -140,10 +160,18 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
+#: src/UI/translate.ts:58
+msgid "Cancel Transaction"
+msgstr ""
+
 #: src/UI/components/WalletStatusBar/Action.tsx:17
 #: src/UI/components/WalletStatusBar/WalletMenuItem.tsx:79
 #: src/UI/components/WalletStatusBox/index.tsx:231
 msgid "Change"
+msgstr ""
+
+#: src/UI/translate.ts:59
+msgid "Change Owner"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:186
@@ -167,7 +195,43 @@ msgstr ""
 msgid "Circulating Supply"
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:161
+#: src/UI/translate.ts:105
+msgid "Claim 1 {0} NFT Lucky Drop successfully."
+msgstr ""
+
+#: src/UI/translate.ts:60
+msgid "Claim Lucky Drop"
+msgstr ""
+
+#: src/UI/translate.ts:26
+msgid "Claim Lucky Drop successfully."
+msgstr ""
+
+#: src/UI/translate.ts:107
+msgid "Claim Lucky Drop with {0} successfully."
+msgstr ""
+
+#: src/UI/translate.ts:61
+msgid "Claim NFT Lucky Drop"
+msgstr ""
+
+#: src/UI/translate.ts:27
+msgid "Claim NFT Lucky Drop successfully."
+msgstr ""
+
+#: src/UI/translate.ts:62
+msgid "Claim your Airdrop"
+msgstr ""
+
+#: src/UI/translate.ts:28
+msgid "Claim your Lucky Drop."
+msgstr ""
+
+#: src/UI/translate.ts:29
+msgid "Claim your NFT Lucky Drop"
+msgstr ""
+
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:156
 msgid "Clear"
 msgstr ""
 
@@ -218,7 +282,7 @@ msgstr ""
 msgid "Confirm Risk Warning"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
@@ -274,12 +338,44 @@ msgstr ""
 msgid "Contract"
 msgstr ""
 
+#: src/UI/translate.ts:63
+msgid "Contract Deployment"
+msgstr ""
+
+#: src/UI/translate.ts:143
+msgid "Contract Deployment {0}"
+msgstr ""
+
+#: src/UI/translate.ts:64
+msgid "Contract Interaction"
+msgstr ""
+
 #: src/UI/components/CopyButton/index.tsx:74
 msgid "Copied!"
 msgstr ""
 
 #: src/UI/components/CopyButton/index.tsx:74
 msgid "Copy"
+msgstr ""
+
+#: src/UI/translate.ts:111
+msgid "Create {0} NFT Lucky Drop successfully."
+msgstr ""
+
+#: src/UI/translate.ts:65
+msgid "Create Lucky Drop"
+msgstr ""
+
+#: src/UI/translate.ts:109
+msgid "Create Lucky drop with {0} successfully."
+msgstr ""
+
+#: src/UI/translate.ts:66
+msgid "Create NFT Lucky Drop"
+msgstr ""
+
+#: src/UI/translate.ts:30
+msgid "Create NFT Lucky Drop successfully."
 msgstr ""
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:46
@@ -289,6 +385,22 @@ msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx:87
 msgid "Create Persona"
+msgstr ""
+
+#: src/UI/translate.ts:67
+msgid "Create Smart Pay wallet"
+msgstr ""
+
+#: src/UI/translate.ts:31
+msgid "Create your Lucky Drop."
+msgstr ""
+
+#: src/UI/translate.ts:32
+msgid "Create your NFT Lucky Drop."
+msgstr ""
+
+#: src/UI/translate.ts:33
+msgid "Created a SmartPay wallet on Polygon network."
 msgstr ""
 
 #: src/UI/components/SettingsBoard/GasForm.tsx:176
@@ -311,6 +423,26 @@ msgstr ""
 msgid "Default"
 msgstr ""
 
+#: src/UI/translate.ts:34
+msgid "Deploy a SmartPay wallet on Polygon network."
+msgstr ""
+
+#: src/UI/translate.ts:68
+msgid "Deploy Smarty Pay wallet"
+msgstr ""
+
+#: src/UI/translate.ts:145
+msgid "Deposit {0} for savings."
+msgstr ""
+
+#: src/UI/translate.ts:113
+msgid "Deposit {0} successfully."
+msgstr ""
+
+#: src/UI/translate.ts:69
+msgid "Deposit token"
+msgstr ""
+
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:92
 msgid "Details"
 msgstr ""
@@ -330,6 +462,10 @@ msgstr ""
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
 msgid "Domain Request"
+msgstr ""
+
+#: src/UI/translate.ts:79
+msgid "Donate"
 msgstr ""
 
 #: src/hooks/useSnackbarCallback.tsx:40
@@ -399,8 +535,28 @@ msgstr ""
 msgid "Enter an amount"
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:92
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:93
 msgid "Failed"
+msgstr ""
+
+#: src/UI/translate.ts:101
+msgid "Failed to {0} NFT contract."
+msgstr ""
+
+#: src/UI/translate.ts:35
+msgid "Failed to claim Lucky Drop."
+msgstr ""
+
+#: src/UI/translate.ts:36
+msgid "Failed to create Lucky Drop."
+msgstr ""
+
+#: src/UI/translate.ts:97
+msgid "Failed to deposit {0}."
+msgstr ""
+
+#: src/UI/translate.ts:37
+msgid "Failed to deposit token."
 msgstr ""
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:122
@@ -411,12 +567,48 @@ msgstr ""
 msgid "Failed to load MASK. Click to retry."
 msgstr ""
 
+#: src/UI/translate.ts:38
+msgid "Failed to purchase Maskbox NFT."
+msgstr ""
+
+#: src/UI/translate.ts:39
+msgid "Failed to refund Lucky Drop."
+msgstr ""
+
 #: src/hooks/useReportSpam.tsx:76
 msgid "Failed to report spam."
 msgstr ""
 
+#: src/UI/translate.ts:40
+msgid "Failed to revoke token contract."
+msgstr ""
+
+#: src/UI/translate.ts:41
+msgid "Failed to send token."
+msgstr ""
+
+#: src/UI/translate.ts:42
+msgid "Failed to transfer NFT."
+msgstr ""
+
+#: src/UI/translate.ts:43
+msgid "Failed to unlock NFT contract."
+msgstr ""
+
+#: src/UI/translate.ts:44
+msgid "Failed to unlock token contract."
+msgstr ""
+
+#: src/UI/translate.ts:99
+msgid "Failed to withdraw {0}."
+msgstr ""
+
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:236
 msgid "Follow"
+msgstr ""
+
+#: src/UI/translate.ts:70
+msgid "Follow User"
 msgstr ""
 
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:235
@@ -699,8 +891,12 @@ msgstr ""
 msgid "or"
 msgstr ""
 
+#: src/UI/translate.ts:45
+msgid "Owner changed successfully."
+msgstr ""
+
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx:125
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:90
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:91
 msgid "Pending"
 msgstr ""
 
@@ -784,6 +980,38 @@ msgstr ""
 msgid "Provided by plugin \"{0}\""
 msgstr ""
 
+#: src/UI/translate.ts:71
+msgid "Purchase Maskbox NFT"
+msgstr ""
+
+#: src/UI/translate.ts:47
+msgid "Purchase Maskbox NFT successfully."
+msgstr ""
+
+#: src/UI/translate.ts:115
+msgid "Purchase Maskbox NFT with {0} successfully."
+msgstr ""
+
+#: src/UI/translate.ts:46
+msgid "Purchase Maskbox NFT."
+msgstr ""
+
+#: src/UI/translate.ts:72
+msgid "Refund Lucky drop"
+msgstr ""
+
+#: src/UI/translate.ts:48
+msgid "Refund Lucky Drop successfully."
+msgstr ""
+
+#: src/UI/translate.ts:117
+msgid "Refund Lucky Drop with {0} successfully."
+msgstr ""
+
+#: src/UI/translate.ts:49
+msgid "Refund your expired Lucky Drop."
+msgstr ""
+
 #: src/UI/components/LoadRetry/index.tsx:24
 #: src/UI/components/ReloadStatus/index.tsx:48
 msgid "Reload"
@@ -811,6 +1039,22 @@ msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx:189
 msgid "Retry"
+msgstr ""
+
+#: src/UI/translate.ts:147
+msgid "Revoke the approval for {0}."
+msgstr ""
+
+#: src/UI/translate.ts:50
+msgid "Revoke the approval for token"
+msgstr ""
+
+#: src/UI/translate.ts:51
+msgid "Revoke the approval successfully."
+msgstr ""
+
+#: src/UI/translate.ts:73
+msgid "Revoke Token"
 msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:92
@@ -870,6 +1114,14 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
+#: src/UI/translate.ts:149
+msgid "Send {0}"
+msgstr ""
+
+#: src/UI/translate.ts:119
+msgid "Send {0} successfully."
+msgstr ""
+
 #: src/UI/components/VerifyNextIDDialog/index.tsx:237
 msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
 msgstr ""
@@ -891,7 +1143,7 @@ msgstr ""
 msgid "Spam"
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:91
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:92
 msgid "Success"
 msgstr ""
 
@@ -949,7 +1201,7 @@ msgstr ""
 msgid "Transaction"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
 msgid "Transaction Confirmed"
 msgstr ""
 
@@ -957,12 +1209,40 @@ msgstr ""
 msgid "Transaction cost"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
+#: src/UI/translate.ts:52
+msgid "Transaction failed"
+msgstr ""
+
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
 msgid "Transaction Failed"
+msgstr ""
+
+#: src/UI/translate.ts:53
+msgid "Transaction submitted."
+msgstr ""
+
+#: src/UI/translate.ts:54
+msgid "Transaction was Rejected!"
 msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:124
 msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
+msgstr ""
+
+#: src/UI/translate.ts:121
+msgid "Transfer {0} NFT successfully."
+msgstr ""
+
+#: src/UI/translate.ts:151
+msgid "Transfer {0} NFT."
+msgstr ""
+
+#: src/UI/translate.ts:74
+msgid "Transfer NFT"
+msgstr ""
+
+#: src/UI/translate.ts:75
+msgid "Transfer Token"
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:120
@@ -976,6 +1256,38 @@ msgstr ""
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:165
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
 msgid "Unlock {0}"
+msgstr ""
+
+#: src/UI/translate.ts:123
+msgid "Unlock {0} NFT contract successfully."
+msgstr ""
+
+#: src/UI/translate.ts:153
+msgid "Unlock {0} NFT contract."
+msgstr ""
+
+#: src/UI/translate.ts:125
+msgid "Unlock {0} successfully"
+msgstr ""
+
+#: src/UI/translate.ts:155
+msgid "Unlock {0}."
+msgstr ""
+
+#: src/UI/translate.ts:76
+msgid "Unlock NFT Contract"
+msgstr ""
+
+#: src/UI/translate.ts:55
+msgid "Unlock token"
+msgstr ""
+
+#: src/UI/translate.ts:77
+msgid "Unlock Token"
+msgstr ""
+
+#: src/UI/translate.ts:56
+msgid "Unlock token successfully"
 msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
@@ -1035,6 +1347,18 @@ msgstr ""
 msgid "Website"
 msgstr ""
 
+#: src/UI/translate.ts:157
+msgid "Withdraw {0} for savings."
+msgstr ""
+
+#: src/UI/translate.ts:127
+msgid "Withdraw {0} successfully."
+msgstr ""
+
+#: src/UI/translate.ts:78
+msgid "Withdraw token"
+msgstr ""
+
 #: src/UI/components/ChainBoundary/index.tsx:155
 msgid "Wrong Network"
 msgstr ""
@@ -1043,12 +1367,24 @@ msgstr ""
 msgid "You canceled the request."
 msgstr ""
 
+#: src/UI/translate.ts:130
+msgid "You didn't approve {0} successfully. Please do not set spending cap as 0 and try it again."
+msgstr ""
+
+#: src/UI/translate.ts:133
+msgid "You have donated {0} {1}"
+msgstr ""
+
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:131
 msgid "You may have {0}% less received with this level of slippage tolerance."
 msgstr ""
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:147
 msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
+msgstr ""
+
+#: src/UI/translate.ts:136
+msgid "You've approved {0} for {1}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
 msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:84
