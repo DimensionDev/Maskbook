@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:03\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -34,11 +34,11 @@ msgstr "crwdns31372:0count={count}crwdnd31372:0count={count}crwdnd31372:0cost={c
 msgid "{ownCount, plural, one {# Key} other {# Keys}}"
 msgstr "crwdns31374:0ownCount={ownCount}crwdne31374:0"
 
-#: src/SiteAdaptor/components/HistoryList.tsx:110
+#: src/SiteAdaptor/components/HistoryList.tsx:113
 msgid "{shareAmount, plural, one {{0} bought {shareAmount} <0>{1}</0> key} other {{2} bought {shareAmount} <1>{3}</1> keys}}"
 msgstr "crwdns31376:0shareAmount={shareAmount}crwdnd31376:00={0}crwdnd31376:0shareAmount={shareAmount}crwdnd31376:01={1}crwdnd31376:02={2}crwdnd31376:0shareAmount={shareAmount}crwdnd31376:03={3}crwdne31376:0"
 
-#: src/SiteAdaptor/components/HistoryList.tsx:125
+#: src/SiteAdaptor/components/HistoryList.tsx:128
 msgid "{shareAmount, plural, one {{0} sold {shareAmount} <0>{1}</0> key} other {{2} sold {shareAmount} <1>{3}</1> keys}}"
 msgstr "crwdns31378:0shareAmount={shareAmount}crwdnd31378:00={0}crwdnd31378:0shareAmount={shareAmount}crwdnd31378:01={1}crwdnd31378:02={2}crwdnd31378:0shareAmount={shareAmount}crwdnd31378:03={3}crwdne31378:0"
 
