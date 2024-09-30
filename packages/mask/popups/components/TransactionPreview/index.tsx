@@ -29,6 +29,7 @@ import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import { Trans } from '@lingui/macro'
+import { useFormatMessage } from '../../../../shared/src/UI/translate.js'
 
 const useStyles = makeStyles()((theme) => ({
     info: {
@@ -86,6 +87,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const contacts = useContacts()
     const Utils = useWeb3Utils()
+    const format = useFormatMessage()
     const { title, to, tokenAddress, amount } = useMemo(() => {
         const type = transaction.formattedTransaction?.type
 
@@ -98,7 +100,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 )?.parameters?.to
 
                 return {
-                    title: transaction.formattedTransaction?.title ?? <Trans>Contract Interaction</Trans>,
+                    title: format(transaction.formattedTransaction?.title) ?? <Trans>Contract Interaction</Trans>,
                     to: to && isString(to) ? to : transaction.computedPayload?.to,
                     tokenAddress: transaction.formattedTransaction?.tokenInAddress,
                     amount: transaction.formattedTransaction?.tokenInAmount ?? transaction.computedPayload.value,
