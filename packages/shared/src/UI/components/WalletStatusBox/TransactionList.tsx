@@ -15,6 +15,7 @@ import {
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
 import { Trans } from '@lingui/macro'
+import { useFormatMessage } from '../../translate.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -96,11 +97,13 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
     const { TransactionFormatter, TransactionWatcher } = useWeb3State()
 
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
+    const formatMessage = useFormatMessage()
 
     const { value: functionName } = useAsync(async () => {
         const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, tx._tx)
         return formattedTransaction?.title ?? 'Contract Interaction'
     }, [TransactionFormatter])
+    const formatted = formatMessage(functionName)
 
     const handleClear = useCallback(() => {
         onClear(tx)
@@ -111,25 +114,17 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
     const [txStatus, setTxStatus] = useState(tx.status)
 
     useEffect(() => {
-        const off = TransactionWatcher?.emitter.on('progress', (chainId, id, status, transaction) => {
-            setTxStatus(status)
-        })
+        const off = TransactionWatcher?.emitter.on('progress', (chainId, id, status) => setTxStatus(status))
 
-        return () => {
-            off?.()
-        }
+        return () => void off?.()
     }, [tx.id, TransactionWatcher])
 
     return (
         <Grid container {...rest}>
             <Grid item className={classes.cell} textAlign="left" md={4}>
                 <Stack overflow="hidden">
-                    <Typography
-                        className={classes.methodName}
-                        title={functionName || ''}
-                        variant="body1"
-                        fontWeight={500}>
-                        {functionName}
+                    <Typography className={classes.methodName} title={formatted || ''} variant="body1" fontWeight={500}>
+                        {formatted}
                     </Typography>
                     <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
                         {format(tx.createdAt, 'yyyy.MM.dd HH:mm')}

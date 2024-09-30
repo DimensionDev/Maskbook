@@ -13,8 +13,8 @@ import { RedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
-import { dateTimeFormat } from './utils/formatDate.js'
 import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -199,6 +199,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
     const { data: redpacketStatus } = useAvailabilityNftRedPacket(rpid, account, patchedHistory.chainId)
     const bitStatusList =
         redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
+    const locale = useLingui().i18n.locale
 
     return (
         <ListItem className={classes.root}>
@@ -223,7 +224,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
                                     {rpid ?
                                         <Typography variant="body1" className={cx(classes.info, classes.message)}>
                                             <Trans>
-                                                {dateTimeFormat(new Date(patchedHistory.creation_time))} (UTC+8)
+                                                {dateTimeFormat(locale, new Date(patchedHistory.creation_time))} (UTC+8)
                                             </Trans>
                                         </Typography>
                                     :   null}
@@ -278,3 +279,10 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
         </ListItem>
     )
 })
+function dateTimeFormat(locale: string, date: Date) {
+    return new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+    }).format(date)
+}

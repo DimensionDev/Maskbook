@@ -1,6 +1,12 @@
 import { BigNumber } from 'bignumber.js'
-import { i18NextInstance } from '@masknet/shared-base'
-import { type TransactionContext, isZero, leftShift, pow10, isSameAddress } from '@masknet/web3-shared-base'
+import {
+    type TransactionContext,
+    isZero,
+    isSameAddress,
+    type FormattedTransactionSnackbarSuccessDescription,
+    type FormattedTransactionDescription,
+    type FormattedTransactionTitle,
+} from '@masknet/web3-shared-base'
 import {
     type ChainId,
     type TransactionParameter,
@@ -10,11 +16,13 @@ import {
 } from '@masknet/web3-shared-evm'
 import { evm } from '../../../../../Manager/registry.js'
 import { BaseDescriptor } from './Base.js'
-import type { TransactionDescriptor } from '../types.js'
+import type { TransactionDescriptorFormatResult } from '../types.js'
 import { getTokenAmountDescription } from '../utils.js'
 
-export class ERC20Descriptor extends BaseDescriptor implements TransactionDescriptor {
-    override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+export class ERC20Descriptor extends BaseDescriptor {
+    override async compute(
+        context_: TransactionContext<ChainId, TransactionParameter>,
+    ): Promise<TransactionDescriptorFormatResult | undefined> {
         const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
@@ -24,23 +32,20 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                     if (parameters?.spender === undefined || parameters?.value === undefined) break
                     const token = await this.Hub.getFungibleToken(context.to ?? '', { chainId: context.chainId })
 
-                    const revokeTitle = i18NextInstance.t('plugin_infra_descriptor_token_revoke_title')
-                    const approveTitle = i18NextInstance.t('plugin_infra_descriptor_token_approve_title')
-                    const revokeDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke', {
-                        symbol: token?.symbol ?? 'token',
-                    })
-                    const approveDescription = i18NextInstance.t('plugin_infra_descriptor_token_approve', {
-                        symbol: token?.symbol ?? 'token',
-                    })
-                    const revokeSuccessDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_success')
-                    const approveSuccessDescription = i18NextInstance.t(
-                        'plugin_infra_descriptor_token_approve_success',
-                        {
-                            symbol: token?.symbol ?? 'token',
-                        },
-                    )
-                    const revokeFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_revoke_fail')
-                    const approveFailedDescription = i18NextInstance.t('plugin_infra_descriptor_token_fail')
+                    const revokeTitle: FormattedTransactionTitle = 'Revoke Token'
+                    const approveTitle: FormattedTransactionTitle = 'Unlock Token'
+                    const revokeDescription: FormattedTransactionDescription =
+                        token?.symbol ?
+                            { key: 'Revoke the approval for {symbol}.', symbol: token.symbol }
+                        :   'Revoke the approval for token'
+                    const approveDescription: FormattedTransactionDescription =
+                        token?.symbol ? { key: 'Unlock {symbol}.', symbol: token.symbol } : 'Unlock token'
+                    const revokeSuccessDescription: FormattedTransactionSnackbarSuccessDescription =
+                        'Revoke the approval successfully.'
+                    const approveSuccessDescription: FormattedTransactionSnackbarSuccessDescription =
+                        token?.symbol ?
+                            { key: 'Unlock {symbol} successfully', symbol: token.symbol }
+                        :   'Unlock token successfully'
 
                     if (evm.state?.Provider?.providerType?.getCurrentValue() === ProviderType.MetaMask) {
                         const spenders = await this.Hub.getFungibleTokenSpenders(context.chainId, context.from, {
@@ -57,18 +62,20 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             spender?.amount ?? spender?.rawAmount ?? parameters.value,
                         ).toString()
 
-                        const successfulDescription =
+                        const successfulDescription: FormattedTransactionSnackbarSuccessDescription =
                             isZero(parameters.value) ?
                                 isZero(spendingCap) ? revokeSuccessDescription
-                                :   i18NextInstance.t('plugin_infra_descriptor_token_revoke_but_set_positive_cap', {
-                                        tokenAmountDescription: getTokenAmountDescription(spendingCap, token),
+                                :   {
+                                        key: "You've approved {token} for {spender}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again.",
                                         spender:
                                             spender?.address ? formatEthereumAddress(spender.address, 4) : 'spender',
-                                    })
+                                        token: getTokenAmountDescription(spendingCap, token),
+                                    }
                             : isZero(spendingCap) ?
-                                i18NextInstance.t('plugin_infra_descriptor_token_approve_but_set_zero_cap', {
-                                    symbol: token?.symbol,
-                                })
+                                {
+                                    key: "You didn't approve {symbol} successfully. Please do not set spending cap as 0 and try it again.",
+                                    symbol: token?.symbol || '',
+                                }
                             :   approveSuccessDescription
 
                         const successfulTitle =
@@ -83,7 +90,9 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                                 successfulDescription,
                                 successfulTitle,
                                 failedDescription:
-                                    isZero(parameters.value) ? revokeFailedDescription : approveFailedDescription,
+                                    isZero(parameters.value) ?
+                                        'Failed to revoke token contract.'
+                                    :   'Failed to unlock token contract.',
                             },
                             popup: {
                                 method: name,
@@ -98,12 +107,11 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                             title: revokeTitle,
                             description: revokeDescription,
                             popup: {
-                                tokenDescription: token?.symbol ?? 'token',
                                 method: name,
                             },
                             snackbar: {
                                 successfulDescription: revokeSuccessDescription,
-                                failedDescription: revokeFailedDescription,
+                                failedDescription: 'Failed to revoke token contract.',
                             },
                         }
                     }
@@ -116,15 +124,11 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                         description: approveDescription,
                         popup: {
                             spender: parameters.spender,
-                            tokenDescription:
-                                leftShift(parameters?.value, token?.decimals).gt(pow10(9)) ?
-                                    i18NextInstance.t('popups_wallet_token_infinite_unlock')
-                                :   undefined,
                             method: name,
                         },
                         snackbar: {
                             successfulDescription: approveSuccessDescription,
-                            failedDescription: approveFailedDescription,
+                            failedDescription: 'Failed to unlock token contract.',
                         },
                     }
             }
@@ -142,15 +146,14 @@ export class ERC20Descriptor extends BaseDescriptor implements TransactionDescri
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
                     tokenInAmount: parameters?.value,
-                    title: i18NextInstance.t('plugin_infra_descriptor_token_transfer_title'),
-                    description: i18NextInstance.t('plugin_infra_descriptor_token_transfer', {
-                        tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
-                    }),
+                    title: 'Transfer Token',
+                    description: { key: 'Send {token}', token: getTokenAmountDescription(parameters?.value, token) },
                     snackbar: {
-                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_success', {
-                            tokenAmountDescription: getTokenAmountDescription(parameters?.value, token),
-                        }),
-                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_token_transfer_fail'),
+                        successfulDescription: {
+                            key: 'Send {token} successfully.',
+                            token: getTokenAmountDescription(parameters?.value, token),
+                        },
+                        failedDescription: 'Failed to send token.',
                     },
                     popup: {
                         method: name,

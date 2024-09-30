@@ -17,10 +17,12 @@ import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { FormattedCurrency } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { CurrencyType, formatCurrency, formatElapsed } from '@masknet/web3-shared-base'
+import { CurrencyType, formatCurrency } from '@masknet/web3-shared-base'
 import type { Ticker } from '../../types/index.js'
 import { TrendingViewContext } from './context.js'
 import { Trans } from '@lingui/macro'
+import { intlFormatDistance } from 'date-fns'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ themeMode?: 'dim' | 'dark' | 'light'; isPopper?: boolean }>()(
     (theme, { themeMode, isPopper }) => ({
@@ -83,6 +85,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
         pair: <Trans>Pair</Trans>,
         price: <Trans>Price</Trans>,
     }
+    const locale = useLingui().i18n.locale
 
     const columns: Cells[] = ['exchange', 'pair', 'price', 'volume', 'updated']
     const tickerRows = tickers.map((ticker, index) => {
@@ -99,7 +102,7 @@ export function TickersTable({ tickers }: TickersTableProps) {
         const cellMap: Record<Cells, ReactNode> = {
             volume:
                 volume ? <FormattedCurrency value={volume} formatter={formatCurrency} sign={CurrencyType.USD} /> : null,
-            updated: ticker.updated ? formatElapsed(ticker.updated.getTime()) : null,
+            updated: ticker.updated ? intlFormatDistance(ticker.updated, new Date(), { locale }) : null,
             exchange: marketplaceOrExchange,
             pair: (() => {
                 if (!ticker.base_name || !ticker.target_name) return null
