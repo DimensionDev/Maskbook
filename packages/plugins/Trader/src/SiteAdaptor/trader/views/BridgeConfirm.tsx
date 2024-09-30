@@ -1,6 +1,6 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
+import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
@@ -177,7 +177,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const {
         mode,
         inputAmount,
-        nativeToken,
         fromToken,
         toToken,
         isAutoSlippage,
@@ -351,7 +350,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{fromNetwork?.name} fee</Trans>
+                            <Trans>{fromNetwork?.name} Network fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
@@ -363,7 +362,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                             to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
-                                    {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
+                                    {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
                                 </Typography>
                                 <Typography className={classes.text}>
                                     <Select
@@ -380,7 +379,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>{toNetwork?.name} fee</Trans>
+                            <Trans>{toNetwork?.name} Network fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
@@ -397,7 +396,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            <Trans>Bridge network fee</Trans>
+                            <Trans>{bridge?.router.bridgeName} Bridge Network fee</Trans>
                             <ShadowRootTooltip
                                 placement="top"
                                 title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
@@ -408,6 +407,15 @@ than estimated, and any unused funds will remain in the original address.`}>
                         </Typography>
                         <Typography className={classes.rowValue}>
                             {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'} (${bridgeFeeValue})
+                        </Typography>
+                    </div>
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.rowName}>
+                            <Trans>Wallet</Trans>
+                        </Typography>
+                        <Typography className={classes.rowValue}>
+                            {account}
+                            <CopyButton text={account} size={16} display="flex" />
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
