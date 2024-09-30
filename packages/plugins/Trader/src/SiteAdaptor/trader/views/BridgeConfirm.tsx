@@ -303,7 +303,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                         className={cx(classes.fromToken, classes.value)}>
                                         -{formatBalance(fromTokenAmount, fromToken?.decimals || 0)} {fromToken?.symbol}
                                     </ProgressiveText>
-                                    <Typography className={classes.network}>{fromNetwork?.name}</Typography>
+                                    <Typography className={classes.network}>{fromNetwork?.fullName}</Typography>
                                 </div>
                             </div>
                         </div>
@@ -322,7 +322,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                     <ProgressiveText loading={!toToken} className={cx(classes.toToken, classes.value)}>
                                         +{formatBalance(toTokenAmount, toToken?.decimals || 0)} {toToken?.symbol}
                                     </ProgressiveText>
-                                    <Typography className={classes.network}>{toNetwork?.name}</Typography>
+                                    <Typography className={classes.network}>{toNetwork?.fullName}</Typography>
                                 </div>
                             </div>
                         </div>
@@ -342,7 +342,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 size={16}
                             />
                             <Trans>
-                                {fromNetwork?.name || '--'} to {toNetwork?.name || '--'}
+                                {fromNetwork?.fullName || '--'} to {toNetwork?.fullName || '--'}
                             </Trans>
                         </Typography>
                     </div>

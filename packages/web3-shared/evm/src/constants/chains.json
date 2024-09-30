@@ -186,7 +186,7 @@
         "name": "BNB",
         "color": "rgb(240, 185, 10)",
         "network": "mainnet",
-        "fullName": "Binance Smart Chain Mainnet",
+        "fullName": "BNB Chain",
         "shortName": "bnb",
         "features": [],
         "nativeCurrency": {
@@ -214,7 +214,7 @@
         "name": "BNB",
         "color": "rgb(240, 185, 10)",
         "network": "chapel",
-        "fullName": "Binance Smart Chain Testnet",
+        "fullName": "BNB Chain Testnet",
         "shortName": "bnbt",
         "features": [],
         "nativeCurrency": {
@@ -238,7 +238,7 @@
         "name": "Polygon",
         "color": "rgb(119, 62, 225)",
         "network": "mainnet",
-        "fullName": "Polygon Mainnet",
+        "fullName": "Polygon",
         "shortName": "matic",
         "features": ["EIP1559"],
         "nativeCurrency": {

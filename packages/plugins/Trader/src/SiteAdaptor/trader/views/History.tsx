@@ -179,9 +179,10 @@ export function HistoryView() {
                                     </div>
                                     {toNetwork ?
                                         <Typography className={classes.network}>
-                                            {`${network?.name ?? '--'} to ${toNetwork.name ?? '--'}`}
+                                            {`${network?.fullName ?? '--'} to ${toNetwork.fullName ?? '--'}`}
                                         </Typography>
-                                    :   <Typography className={classes.network}>{network?.name ?? '--'}</Typography>}
+                                    :   <Typography className={classes.network}>{network?.fullName ?? '--'}</Typography>
+                                    }
                                 </div>
                                 <div className={classes.result}>
                                     <Typography className={classes.received}>
