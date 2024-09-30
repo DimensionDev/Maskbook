@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -57,11 +57,19 @@ msgid "End date"
 msgstr "종료 날짜"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:219
-msgid "Ended {0}"
+#~ msgid "Ended {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:226
+msgid "Ended {relativeEndTime}"
 msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:221
-msgid "Ends in {0}"
+#~ msgid "Ends in {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:228
+msgid "Ends in {relativeEndTime}"
 msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:76
@@ -84,7 +92,7 @@ msgstr "로딩 중"
 msgid "Loading fails due to Snapshot API service breakdown."
 msgstr "Snapshot API 시비스 고장으로 인해 로딩 실패"
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:264
+#: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
 msgstr "나의 투표"
 
@@ -133,9 +141,13 @@ msgstr "스페이스"
 msgid "Start date"
 msgstr "시작 날짜"
 
+#: src/SiteAdaptor/ProfileProposalList.tsx:224
+msgid "Starts {relativeStartTime}"
+msgstr ""
+
 #: src/SiteAdaptor/ProfileProposalList.tsx:217
-msgid "Starts in {0}"
-msgstr "시작 시간 {0}"
+#~ msgid "Starts in {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
