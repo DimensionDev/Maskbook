@@ -1,6 +1,10 @@
 {
     "messages": {
+        "6k8iqO": [["0"], " ", ["1"], " bridge completed successfully."],
+        "dzAth+": [["0"], " ", ["1"], " swap completed successfully."],
+        "MqdtT5": [["0"], " Bridge Network fee"],
         "v2rZrT": [["0"], " fee"],
+        "VvGC/Y": [["0"], " Network fee"],
         "UO7xDp": [["0"], " Pool"],
         "Yp8yB4": [["0"], " to ", ["1"]],
         "ZSWUwq": [["0"], "m"],
@@ -92,6 +96,8 @@
         "qJb6G2": "Try Again",
         "3ublvs": "Try token from different chains",
         "XcWehA": "Update Quote",
+        "lyjM6U": "Wait too long for the confirmation.",
+        "sb9Y58": "Wallet",
         "N931rj": "Your transaction should be done in <0/>"
     }
 }
