@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:02\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -169,7 +169,7 @@ msgstr "crwdns28200:0crwdne28200:0"
 #: src/SiteAdaptor/index.tsx:77
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
-#: src/SiteAdaptor/trending/TickersTable.tsx:82
+#: src/SiteAdaptor/trending/TickersTable.tsx:84
 #: src/SiteAdaptor/trending/TrendingView.tsx:232
 msgid "Exchange"
 msgstr "crwdns28202:0crwdne28202:0"
@@ -283,7 +283,7 @@ msgstr "crwdns29488:0crwdne29488:0"
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
 #: src/SiteAdaptor/trending/PriceChart.tsx:89
-#: src/SiteAdaptor/trending/TickersTable.tsx:173
+#: src/SiteAdaptor/trending/TickersTable.tsx:176
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
 msgid "No Data"
 msgstr "crwdns29490:0crwdne29490:0"
@@ -304,7 +304,7 @@ msgstr "crwdns29492:0crwdne29492:0"
 msgid "Owners"
 msgstr "crwdns29494:0crwdne29494:0"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:83
+#: src/SiteAdaptor/trending/TickersTable.tsx:85
 msgid "Pair"
 msgstr "crwdns29496:0crwdne29496:0"
 
@@ -318,7 +318,7 @@ msgstr "crwdns31404:0crwdne31404:0"
 msgid "Powered by"
 msgstr "crwdns28224:0crwdne28224:0"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:84
+#: src/SiteAdaptor/trending/TickersTable.tsx:86
 #: src/SiteAdaptor/trending/TrendingView.tsx:228
 msgid "Price"
 msgstr "crwdns29498:0crwdne29498:0"
@@ -469,7 +469,7 @@ msgstr "crwdns28278:0crwdne28278:0"
 msgid "Update Quote"
 msgstr "crwdns28280:0crwdne28280:0"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:81
+#: src/SiteAdaptor/trending/TickersTable.tsx:83
 msgid "Updated"
 msgstr "crwdns29506:0crwdne29506:0"
 
@@ -477,7 +477,7 @@ msgstr "crwdns29506:0crwdne29506:0"
 msgid "Value"
 msgstr "crwdns29508:0crwdne29508:0"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:80
+#: src/SiteAdaptor/trending/TickersTable.tsx:82
 msgid "Volume (24h)"
 msgstr "crwdns29510:0crwdne29510:0"
 
