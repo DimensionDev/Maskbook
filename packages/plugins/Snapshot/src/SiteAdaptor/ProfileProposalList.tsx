@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
 import { useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
-import { formatCount, formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
+import { formatCount, formatPercentage } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -13,6 +13,8 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { resolveSnapshotProposalUrl } from './helpers.js'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
 import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { intlFormatDistance } from 'date-fns'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -210,17 +212,22 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
 function ProfileProposalListItemBody(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
+    const { i18n } = useLingui()
 
     const date = useMemo(() => {
         const now = Date.now()
-        if (now < proposal.start * 1000) {
-            return <Trans>Starts in {formatElapsedPure(proposal.start * 1000, false)}</Trans>
-        } else if (now > proposal.end * 1000) {
-            return <Trans>Ended {formatElapsed(proposal.end * 1000)}</Trans>
+        const start = proposal.start * 1000
+        const end = proposal.end * 1000
+        const relativeStartTime = intlFormatDistance(new Date(start), now, { locale: i18n.locale })
+        const relativeEndTime = intlFormatDistance(new Date(end), now, { locale: i18n.locale })
+        if (now < start) {
+            return <Trans>Starts {relativeStartTime}</Trans>
+        } else if (now > end) {
+            return <Trans>Ended {relativeEndTime}</Trans>
         } else {
-            return <Trans>Ends in {formatElapsedPure(proposal.end * 1000, false)} </Trans>
+            return <Trans>Ends in {relativeEndTime}</Trans>
         }
-    }, [proposal.start, proposal.end])
+    }, [i18n.locale, proposal.start, proposal.end])
 
     return (
         <section className={classes.detail}>

@@ -1,5 +1,4 @@
 import type { AbiItem } from 'web3-utils'
-import { i18NextInstance } from '@masknet/shared-base'
 import {
     type ChainId,
     getNftRedPacketConstant,
@@ -9,10 +8,10 @@ import {
 import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
 import NftRedPacketABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
 import { isSameAddress, type TransactionContext } from '@masknet/web3-shared-base'
-import type { TransactionDescriptor } from '../types.js'
+import type { TransactionDescriptorFormatResult } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
-export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt implements TransactionDescriptor {
+export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt {
     async getClaimTokenInfo(chainId: ChainId, contractAddress: string | undefined, hash: string | undefined) {
         const events = await this.getReceipt(chainId, contractAddress, HappyRedPacketV4ABI as AbiItem[], hash)
 
@@ -63,7 +62,9 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
     }
 
     // TODO: 6002: avoid using i18n text in a service. delegate it to ui.
-    override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+    override async compute(
+        context_: TransactionContext<ChainId, TransactionParameter>,
+    ): Promise<TransactionDescriptorFormatResult | undefined> {
         const context = context_ as TransactionContext<ChainId>
 
         const {
@@ -96,13 +97,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     chainId: context.chainId,
                     tokenInAddress: token?.address,
                     tokenInAmount: method?.parameters?._total_tokens,
-                    title: i18NextInstance.t('plugin_red_packet_create_with_token_title'),
-                    description: i18NextInstance.t('plugin_red_packet_create_with_token'),
+                    title: 'Create Lucky Drop',
+                    description: 'Create your Lucky Drop.',
                     snackbar: {
-                        successfulDescription: i18NextInstance.t('plugin_red_packet_create_with_token_success', {
-                            tokenAmountDescription,
-                        }),
-                        failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
+                        successfulDescription: {
+                            key: 'Create Lucky drop with {token} successfully.',
+                            token: tokenAmountDescription,
+                        },
+                        failedDescription: 'Failed to create Lucky Drop.',
                     },
                     popup: {
                         method: method.name,
@@ -113,16 +115,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
 
                 return {
                     chainId: context.chainId,
-                    title: i18NextInstance.t('plugin_red_packet_claim_title'),
-                    description: i18NextInstance.t('plugin_red_packet_claim_notification'),
+                    title: 'Claim Lucky Drop',
+                    description: 'Claim your Lucky Drop.',
                     snackbar: {
                         successfulDescription:
                             tokenAmountDescription ?
-                                i18NextInstance.t('plugin_red_packet_claim_success', {
-                                    tokenAmountDescription,
-                                })
-                            :   i18NextInstance.t('plugin_red_packet_claim_success_without_details'),
-                        failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                                { key: 'Claim Lucky Drop with {token} successfully.', token: tokenAmountDescription }
+                            :   'Claim Lucky Drop successfully.',
+                        failedDescription: 'Failed to claim Lucky Drop.',
                     },
                     popup: {
                         method: method.name,
@@ -132,16 +132,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 const tokenAmountDescription = await this.getRefundTokenInfo(context.chainId, context.to, context.hash)
                 return {
                     chainId: context.chainId,
-                    title: i18NextInstance.t('plugin_red_packet_refund_with_token_title'),
-                    description: i18NextInstance.t('plugin_red_packet_refund_with_token'),
+                    title: 'Refund Lucky drop',
+                    description: 'Refund your expired Lucky Drop.',
                     snackbar: {
                         successfulDescription:
                             tokenAmountDescription ?
-                                i18NextInstance.t('plugin_red_packet_refund_with_token_success', {
-                                    tokenAmountDescription,
-                                })
-                            :   i18NextInstance.t('plugin_red_packet_refund_with_token_success_without_detail'),
-                        failedDescription: i18NextInstance.t('plugin_red_packet_refund_with_token_fail'),
+                                { key: 'Refund Lucky Drop with {token} successfully.', token: tokenAmountDescription }
+                            :   'Refund Lucky Drop successfully.',
+                        failedDescription: 'Failed to refund Lucky Drop.',
                     },
                     popup: {
                         method: method?.name,
@@ -156,16 +154,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 )
                 return {
                     chainId: context.chainId,
-                    title: i18NextInstance.t('plugin_nft_red_packet_create_title'),
-                    description: i18NextInstance.t('plugin_nft_red_packet_create'),
+                    title: 'Create NFT Lucky Drop',
+                    description: 'Create your NFT Lucky Drop.',
                     snackbar: {
                         successfulDescription:
                             symbol ?
-                                i18NextInstance.t('plugin_nft_red_packet_create_success', {
-                                    symbol,
-                                })
-                            :   i18NextInstance.t('plugin_nft_red_packet_create_success_without_detail'),
-                        failedDescription: i18NextInstance.t('plugin_red_packet_create_with_token_fail'),
+                                { key: 'Create {symbol} NFT Lucky Drop successfully.', symbol }
+                            :   'Create NFT Lucky Drop successfully.',
+                        failedDescription: 'Failed to create Lucky Drop.',
                     },
                     popup: {
                         method: method.name,
@@ -175,16 +171,14 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                 const symbol = await this.getClaimedNFTSymbol(context.chainId, RED_PACKET_NFT_ADDRESS, context.hash)
                 return {
                     chainId: context.chainId,
-                    title: i18NextInstance.t('plugin_nft_red_packet_claim_title'),
-                    description: i18NextInstance.t('plugin_nft_red_packet_claim'),
+                    title: 'Claim NFT Lucky Drop',
+                    description: 'Claim your NFT Lucky Drop',
                     snackbar: {
                         successfulDescription:
                             symbol ?
-                                i18NextInstance.t('plugin_nft_red_packet_claim_success', {
-                                    symbol,
-                                })
-                            :   i18NextInstance.t('plugin_nft_red_packet_claim_success_without_detail'),
-                        failedDescription: i18NextInstance.t('plugin_red_packet_claim_fail'),
+                                { key: 'Claim 1 {symbol} NFT Lucky Drop successfully.', symbol }
+                            :   'Claim NFT Lucky Drop successfully.',
+                        failedDescription: 'Failed to claim Lucky Drop.',
                     },
                     popup: {
                         method: method.name,

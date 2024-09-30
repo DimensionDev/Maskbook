@@ -1,8 +1,7 @@
 import { BigNumber } from 'bignumber.js'
-import { i18NextInstance } from '@masknet/shared-base'
 import { type TransactionContext, formatBalance } from '@masknet/web3-shared-base'
 import { type ChainId, getGitcoinConstant, getNativeTokenAddress } from '@masknet/web3-shared-evm'
-import type { TransactionDescriptor } from '../types.js'
+import type { TransactionDescriptorFormatResult } from '../types.js'
 import { BaseDescriptor } from './Base.js'
 
 type ParameterTuple = {
@@ -16,8 +15,10 @@ type ParameterTuple = {
     /** #2 */
     dest: string
 }
-export class GitcoinDescriptor extends BaseDescriptor implements TransactionDescriptor {
-    override async compute(context_: TransactionContext<ChainId, string | boolean | undefined>) {
+export class GitcoinDescriptor extends BaseDescriptor {
+    override async compute(
+        context_: TransactionContext<ChainId, string | boolean | undefined>,
+    ): Promise<TransactionDescriptorFormatResult | undefined> {
         const context = context_ as unknown as TransactionContext<ChainId, ParameterTuple[]>
         if (!context.methods?.length) return
 
@@ -36,17 +37,15 @@ export class GitcoinDescriptor extends BaseDescriptor implements TransactionDesc
                     chainId: context.chainId,
                     tokenInAddress: address,
                     tokenInAmount: amount,
-                    title: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_title'),
-                    description: i18NextInstance.t('plugin_infra_descriptor_gitcoin_submitted', {
-                        amount: formatBalance(amount, token?.decimals, { significant: 6 }),
-                        symbol: token?.symbol,
-                    }),
+                    title: 'Donate',
+                    description: 'Transaction submitted.',
                     snackbar: {
-                        successfulDescription: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_success', {
+                        successfulDescription: {
+                            key: 'You have donated {amount} {symbol}',
                             amount: formatBalance(amount, token?.decimals, { significant: 6 }),
-                            symbol: token?.symbol,
-                        }),
-                        failedDescription: i18NextInstance.t('plugin_infra_descriptor_gitcoin_donate_fail'),
+                            symbol: token?.symbol || '',
+                        },
+                        failedDescription: 'Transaction failed',
                     },
                     popup: {
                         method: name,

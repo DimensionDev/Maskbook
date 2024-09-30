@@ -1,7 +1,7 @@
 import { ElementAnchor, EmptyStatus, FormattedBalance, Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { FriendTech } from '@masknet/web3-providers'
-import { formatBalance, formatElapsed } from '@masknet/web3-shared-base'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, List, ListItem, Skeleton, Typography, type ListProps } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { range } from 'lodash-es'
@@ -10,6 +10,8 @@ import { Link } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { Plural, Trans } from '@lingui/macro'
+import { intlFormatDistance } from 'date-fns'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -70,6 +72,7 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
         getNextPageParam: (x) => x.nextIndicator,
     })
     const activities = useMemo(() => data?.pages.flatMap((x) => x.data) || [], [data?.pages])
+    const locale = useLingui().i18n.locale
 
     if (!isLoading && !activities.length) {
         return (
@@ -156,7 +159,9 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                                     />{' '}
                                     ETH
                                 </Typography>
-                                <Typography fontSize={14}>, {formatElapsed(activity.createdAt)}</Typography>
+                                <Typography fontSize={14}>
+                                    , {intlFormatDistance(new Date(activity.createdAt), new Date(), { locale })}
+                                </Typography>
                             </Box>
                         </Box>
                     </ListItem>

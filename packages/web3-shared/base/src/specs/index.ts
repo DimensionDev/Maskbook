@@ -736,43 +736,170 @@ export type SearchResult<ChainId, SchemaType> =
     | NonFungibleCollectionResult<ChainId, SchemaType>
     | DAOResult<ChainId>
 
-export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined> {
+export interface FormattedTransaction<ChainId, Parameter = string | undefined> {
     chainId: ChainId
-    /** The transaction type */
-    type: TransactionDescriptorType
     /** a transaction title. */
-    title: string
+    title: FormattedTransactionTitle
     context?: TransactionContext<ChainId, Parameter>
-    /** The original transaction object */
-    _tx: Transaction
     /** The address of the token leveraged to swap other tokens */
     tokenInAddress?: string
     /** The amount of the token leveraged to swap other tokens */
     tokenInAmount?: string
     /** a human-readable description. */
-    description?: string
-    snackbar?: {
-        /** a human-readable description for successful transaction. */
-        successfulDescription?: string
-        /** a human-readable title for successful transaction. */
-        successfulTitle?: string
-        /** a human-readable description for failed transaction. */
-        failedDescription?: string
-        /** a human-readable title for failed transaction. */
-        failedTitle?: string
-    }
-    popup?: {
-        /** The spender address of erc20 approve */
-        spender?: string
-        /** The spender address of erc721 approve */
-        erc721Spender?: string
-        /** The method name of contract function */
-        method?: string
-        /** The Non-Fungible token description */
-        tokenId?: string
-        /** The custom token description */
-        tokenDescription?: string
-    }
+    description?: FormattedTransactionDescription
+    snackbar?: FormattedTransactionSnackbar
+    popup?: TransactionDescriptorPopup
+}
+export type FormattedTransactionTitle =
+    // General
+    | 'Cancel Transaction'
+    | 'Contract Deployment'
+    | 'Contract Interaction'
+    | 'Revoke Token'
+    | 'Transfer NFT'
+    | 'Transfer Token'
+    | 'Unlock Token'
+    | 'Unlock NFT Contract'
+    | { key: '{data}'; data: string }
+    | { key: '{action} NFT contract'; action: string }
+    // Airdrop
+    | 'Claim your Airdrop'
+    // Lens
+    | 'Follow User'
+    // Gitcoin
+    | 'Donate'
+    // MaskBox
+    | 'Purchase Maskbox NFT'
+    // RedPacket
+    | 'Claim Lucky Drop'
+    | 'Claim NFT Lucky Drop'
+    | 'Create Lucky Drop'
+    | 'Create NFT Lucky Drop'
+    | 'Refund Lucky drop'
+    // Savings
+    | 'Deposit token'
+    | 'Withdraw token'
+    // SmartPay
+    | 'Create Smart Pay wallet'
+    | 'Deploy Smarty Pay wallet'
+    | 'Change Owner'
+export type FormattedTransactionDescription =
+    // General
+    | 'Revoke the approval for token'
+    | 'Transaction submitted.'
+    | 'Unlock token'
+    | { key: '{data}'; data: string }
+    | { key: '{action} {symbol} NFT contract.'; action: string; symbol: string }
+    | { key: 'Contract Deployment {token}'; token: string }
+    | { key: 'Revoke the approval for {symbol}.'; symbol: string }
+    | { key: 'Send {token}'; token: string }
+    | { key: 'Transfer {symbol} NFT.'; symbol: string }
+    | { key: 'Unlock {symbol}.'; symbol: string }
+    | { key: 'Unlock {symbol} NFT contract.'; symbol: string }
+    // Airdrop
+    | 'Transaction submitted.'
+    // MaskBox
+    | 'Purchase Maskbox NFT.'
+    // RedPacket
+    | 'Claim your Lucky Drop.'
+    | 'Claim your NFT Lucky Drop'
+    | 'Create your Lucky Drop.'
+    | 'Create your NFT Lucky Drop.'
+    | 'Refund your expired Lucky Drop.'
+    // Savings
+    | { key: 'Deposit {token} for savings.'; token: string }
+    | { key: 'Withdraw {token} for savings.'; token: string }
+export interface TransactionDescriptor<ChainId, Transaction, Parameter = string | undefined>
+    extends FormattedTransaction<ChainId, Parameter> {
+    /** The transaction type */
+    type: TransactionDescriptorType
+    /** The original transaction object */
+    _tx: Transaction
+}
+export interface FormattedTransactionSnackbar {
+    /** a human-readable title for successful transaction. */
+    successfulTitle?: FormattedTransactionSnackbarSuccessTitle
+    /** a human-readable description for successful transaction. */
+    successfulDescription?: FormattedTransactionSnackbarSuccessDescription
+    /** a human-readable description for failed transaction. */
+    failedDescription?: FormattedTransactionSnackbarFailedDescription
+}
+export type FormattedTransactionSnackbarSuccessTitle = 'Unlock Token'
+export type FormattedTransactionSnackbarSuccessDescription =
+    // General
+    | 'Revoke the approval successfully.'
+    | 'Unlock token successfully'
+    | { key: 'Transfer {symbol} NFT successfully.'; symbol: string }
+    | { key: '{action} {symbol} approval successfully.'; action: string; symbol: string }
+    | { key: '{action} {symbol} NFT contract successfully.'; action: string; symbol: string }
+    | { key: 'Unlock {symbol} NFT contract successfully.'; symbol: string }
+    | { key: 'Unlock {symbol} successfully'; symbol: string }
+    | { key: 'Send {token} successfully.'; token: string }
+    | {
+          key: "You've approved {token} for {spender}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
+          token: string
+          spender: string
+      }
+    | {
+          key: "You didn't approve {symbol} successfully. Please do not set spending cap as 0 and try it again."
+          symbol: string
+      }
+    | { key: 'Send {token} successfully.'; token: string }
+    // Airdrop
+    | { key: '{token} were successfully claimed'; token: string }
+    // Gitcoin
+    | { key: 'You have donated {amount} {symbol}'; amount: string; symbol: string }
+    // Lucky Drop
+    | 'Claim Lucky Drop successfully.'
+    | 'Claim NFT Lucky Drop successfully.'
+    | 'Create NFT Lucky Drop successfully.'
+    | 'Refund Lucky Drop successfully.'
+    | { key: 'Claim 1 {symbol} NFT Lucky Drop successfully.'; symbol: string }
+    | { key: 'Create {symbol} NFT Lucky Drop successfully.'; symbol: string }
+    | { key: 'Refund Lucky Drop with {token} successfully.'; token: string }
+    | { key: 'Claim Lucky Drop with {token} successfully.'; token: string }
+    | { key: 'Create Lucky drop with {token} successfully.'; token: string }
+    // MaskBox
+    | 'Purchase Maskbox NFT successfully.'
+    | { key: 'Purchase Maskbox NFT with {token} successfully.'; token: string }
+    // Savings
+    | { key: 'Withdraw {token} successfully.'; token: string }
+    | { key: 'Deposit {token} successfully.'; token: string }
+    // SmartPay
+    | 'Created a SmartPay wallet on Polygon network.'
+    | 'Deploy a SmartPay wallet on Polygon network.'
+    | 'Owner changed successfully.'
+export type FormattedTransactionSnackbarFailedDescription =
+    // General
+    | ''
+    | 'Failed to revoke token contract.'
+    | 'Failed to send token.'
+    | 'Failed to transfer NFT.'
+    | 'Failed to unlock NFT contract.'
+    | 'Failed to unlock token contract.'
+    | 'Transaction failed'
+    | 'Transaction was Rejected!'
+    | { key: 'Failed to {action} NFT contract.'; action: string }
+    // Lucky Drop
+    | 'Failed to claim Lucky Drop.'
+    | 'Failed to create Lucky Drop.'
+    | 'Failed to refund Lucky Drop.'
+    // Savings
+    | 'Failed to deposit token.'
+    | { key: 'Failed to deposit {symbol}.'; symbol: string }
+    | { key: 'Failed to withdraw {symbol}.'; symbol: string }
+    // MaskBox
+    | 'Failed to purchase Maskbox NFT.'
+
+export interface TransactionDescriptorPopup {
+    /** The spender address of erc20 approve */
+    spender?: string
+    /** The spender address of erc721 approve */
+    erc721Spender?: string
+    /** The method name of contract function */
+    method?: string
+    /** The Non-Fungible token description */
+    tokenId?: string
 }
 
 export interface TransactionContext<ChainId, Parameter = string | undefined> {

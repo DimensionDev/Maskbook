@@ -20,7 +20,7 @@ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:287
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:290
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:225
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:226
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx:199
 msgid "{0} (UTC+8)"
 msgstr "{0} (UTC+8)"
@@ -54,7 +54,7 @@ msgid "Best Wishes"
 msgstr "祝福語"
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:269
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:215
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:216
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:196
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:224
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx:184
@@ -152,7 +152,7 @@ msgid "Create the Lucky Drop"
 msgstr "ラッキードロップを作成します。"
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:276
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:221
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:222
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx:190
 msgid "Create time:"
 msgstr "作成時間:"
@@ -408,7 +408,7 @@ msgstr "サプライズ暗号のプレゼントを送信します。複数のチ
 msgid "Sent"
 msgstr "送信"
 
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:246
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:247
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx:107
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx:116
 #: src/SiteAdaptor/RedPacketNft.tsx:455
@@ -427,7 +427,7 @@ msgstr "問題が発生しました."
 msgid "Split Mode"
 msgstr "分割モード"
 
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:237
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:238
 msgid "The Lucky Drop can’t be sent due to data damage."
 msgstr "ラッキードロップはデータの損傷のため送信できません。"
 

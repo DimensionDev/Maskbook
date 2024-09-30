@@ -13,7 +13,7 @@ import {
     type TransactionParameter,
 } from '@masknet/web3-shared-evm'
 import { readABIs } from './TransactionFormatter/abi.js'
-import type { TransactionDescriptor } from './TransactionFormatter/types.js'
+import type { TransactionDescriptorFormatter } from './TransactionFormatter/types.js'
 
 // built-in descriptors
 import { TransferTokenDescriptor } from './TransactionFormatter/descriptors/TransferToken.js'
@@ -33,7 +33,7 @@ import { TransactionFormatterState } from '../../Base/state/TransactionFormatter
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
 export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
-    private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
+    private descriptors: Record<TransactionDescriptorType, TransactionDescriptorFormatter[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
         [TransactionDescriptorType.INTERACTION]: [
             new AirdropDescriptor(),

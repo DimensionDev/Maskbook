@@ -169,7 +169,7 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx:77
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
-#: src/SiteAdaptor/trending/TickersTable.tsx:82
+#: src/SiteAdaptor/trending/TickersTable.tsx:84
 #: src/SiteAdaptor/trending/TrendingView.tsx:232
 msgid "Exchange"
 msgstr "兑换"
@@ -284,7 +284,7 @@ msgstr "NFTs"
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
 #: src/SiteAdaptor/trending/PriceChart.tsx:89
-#: src/SiteAdaptor/trending/TickersTable.tsx:173
+#: src/SiteAdaptor/trending/TickersTable.tsx:176
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
 msgid "No Data"
 msgstr "暂无数据"
@@ -305,7 +305,7 @@ msgstr "打开"
 msgid "Owners"
 msgstr "拥有者"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:83
+#: src/SiteAdaptor/trending/TickersTable.tsx:85
 msgid "Pair"
 msgstr "交易对"
 
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Powered by"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:84
+#: src/SiteAdaptor/trending/TickersTable.tsx:86
 #: src/SiteAdaptor/trending/TrendingView.tsx:228
 msgid "Price"
 msgstr "价格"
@@ -470,7 +470,7 @@ msgstr ""
 msgid "Update Quote"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:81
+#: src/SiteAdaptor/trending/TickersTable.tsx:83
 msgid "Updated"
 msgstr "已更新"
 
@@ -478,6 +478,6 @@ msgstr "已更新"
 msgid "Value"
 msgstr "价值"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:80
+#: src/SiteAdaptor/trending/TickersTable.tsx:82
 msgid "Volume (24h)"
 msgstr "交易量 (24h)"
