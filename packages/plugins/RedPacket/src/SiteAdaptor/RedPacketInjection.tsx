@@ -29,7 +29,7 @@ export function RedPacketInjection() {
         setOpen(false)
     }, [])
 
-    if (!open) return null
+    if (!open || !fireflyContext) return null
     return (
         <EVMWeb3ContextProvider>
             <CompositionTypeContext.Provider value={compositionType}>
