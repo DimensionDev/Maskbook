@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 04:10\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -57,12 +57,20 @@ msgid "End date"
 msgstr "crwdns29350:0crwdne29350:0"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:219
-msgid "Ended {0}"
-msgstr "crwdns29352:0{0}crwdne29352:0"
+#~ msgid "Ended {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:226
+msgid "Ended {relativeEndTime}"
+msgstr "crwdns31500:0{relativeEndTime}crwdne31500:0"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:221
-msgid "Ends in {0}"
-msgstr "crwdns29354:0{0}crwdne29354:0"
+#~ msgid "Ends in {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:228
+msgid "Ends in {relativeEndTime}"
+msgstr "crwdns31502:0{relativeEndTime}crwdne31502:0"
 
 #: src/SiteAdaptor/InformationCard.tsx:76
 msgid "Information"
@@ -84,7 +92,7 @@ msgstr "crwdns29362:0crwdne29362:0"
 msgid "Loading fails due to Snapshot API service breakdown."
 msgstr "crwdns29364:0crwdne29364:0"
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:264
+#: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
 msgstr "crwdns29366:0crwdne29366:0"
 
@@ -133,9 +141,13 @@ msgstr "crwdns29384:0crwdne29384:0"
 msgid "Start date"
 msgstr "crwdns29386:0crwdne29386:0"
 
+#: src/SiteAdaptor/ProfileProposalList.tsx:224
+msgid "Starts {relativeStartTime}"
+msgstr "crwdns31504:0{relativeStartTime}crwdne31504:0"
+
 #: src/SiteAdaptor/ProfileProposalList.tsx:217
-msgid "Starts in {0}"
-msgstr "crwdns29388:0{0}crwdne29388:0"
+#~ msgid "Starts in {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
