@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-09-30 19:46\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -57,11 +57,19 @@ msgid "End date"
 msgstr "结束日期"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:219
-msgid "Ended {0}"
-msgstr "结束时间 {0}"
+#~ msgid "Ended {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:226
+msgid "Ended {relativeEndTime}"
+msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:221
-msgid "Ends in {0}"
+#~ msgid "Ends in {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:228
+msgid "Ends in {relativeEndTime}"
 msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:76
@@ -84,7 +92,7 @@ msgstr "加载中"
 msgid "Loading fails due to Snapshot API service breakdown."
 msgstr "Snapshot API 服务故障导致加载失败。"
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:264
+#: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
 msgstr "我的投票"
 
@@ -133,9 +141,13 @@ msgstr "空格"
 msgid "Start date"
 msgstr "开始日期"
 
+#: src/SiteAdaptor/ProfileProposalList.tsx:224
+msgid "Starts {relativeStartTime}"
+msgstr ""
+
 #: src/SiteAdaptor/ProfileProposalList.tsx:217
-msgid "Starts in {0}"
-msgstr "开始时间 {0}"
+#~ msgid "Starts in {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
