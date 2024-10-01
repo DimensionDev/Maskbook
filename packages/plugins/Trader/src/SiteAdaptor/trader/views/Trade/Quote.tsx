@@ -8,7 +8,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { bridges, DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
-import { useTrade } from '../../contexts/index.js'
+import { useGasManagement, useTrade } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -84,6 +84,8 @@ export function Quote({ quote, ...props }: QuoteProps) {
     const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
+    const { gasCost } = useGasManagement()
+
     const rateNode = (
         <>
             1 {baseToken.tokenSymbol} ≈ {rate ? formatCompact(rate.toNumber(), { maximumFractionDigits: 6 }) : '--'}{' '}
@@ -122,7 +124,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Est Network fee</Typography>
-                        <Typography className={classes.rowValue}>$2.46</Typography>
+                        <Typography className={classes.rowValue}>${gasCost}</Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>

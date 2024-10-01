@@ -4,7 +4,7 @@ import { PluginWalletStatusBar, SelectFungibleTokenModal } from '@masknet/shared
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworks } from '@masknet/web3-hooks-base'
+import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
 import {
     formatBalance,
     isGreaterThan,
@@ -13,20 +13,22 @@ import {
     leftShift,
     minus,
     multipliedBy,
+    trimZero,
 } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
+import { CoinIcon } from '../../../components/CoinIcon.js'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
-import { useTrade } from '../../contexts/index.js'
+import { useGasManagement, useTrade } from '../../contexts/index.js'
+import { formatTokenBalance } from '../../helpers.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
-import { CoinIcon } from '../../../components/CoinIcon.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -94,6 +96,20 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         lineHeight: '18px',
     },
+    tokenStatus: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(1),
+    },
+    balance: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
     tokenInput: {
         height: '100%',
         width: '100%',
@@ -114,6 +130,15 @@ const useStyles = makeStyles()((theme) => ({
         position: 'absolute',
         right: 0,
         bottom: 0,
+    },
+    maxButton: {
+        padding: '0 6px',
+        fontSize: 12,
+        lineHeight: '16px',
+        color: theme.palette.maskColor.bottom,
+        backgroundColor: theme.palette.maskColor.main,
+        borderRadius: 4,
+        minWidth: 0,
     },
     diff: {
         marginLeft: theme.spacing(0.5),
@@ -158,6 +183,13 @@ export function TradeView() {
     const fromNetwork = networks.find((x) => x.chainId === fromChainId)
     const toNetwork = networks.find((x) => x.chainId === toChainId)
     const chainQuery = useSupportedChains()
+    const { data: fromTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, {
+        chainId: fromChainId,
+    })
+    const { gasFee } = useGasManagement()
+    const { data: toTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, toToken?.address, {
+        chainId: toChainId,
+    })
 
     const pickToken = async (
         currentToken: Web3Helper.FungibleTokenAll | null | undefined,
@@ -199,7 +231,7 @@ export function TradeView() {
     const [isBridgable, bridgeErrorMessage] = useBridgable()
     const errorMessage = isSwap ? swapErrorMessage : bridgeErrorMessage
 
-    const isTradable = isSwap ? !isSwappable : !isBridgable
+    const isTradable = isSwap ? isSwappable : isBridgable
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
     const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
     const bridgeButtonLabel = isOverSlippage ? t`Bridge anyway` : t`Bridge`
@@ -239,7 +271,7 @@ export function TradeView() {
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {fromNetwork?.name ? t`on ${fromNetwork.name}` : '--'}
+                                        {fromNetwork?.fullName ? t`on ${fromNetwork.fullName}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -248,6 +280,26 @@ export function TradeView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
+                            {fromTokenBalance ?
+                                <Box className={classes.tokenStatus}>
+                                    <Icons.Wallet size={16} />
+                                    <Typography className={classes.balance}>
+                                        {formatTokenBalance(fromTokenBalance, fromToken?.decimals)}
+                                    </Typography>
+                                    <Button
+                                        type="button"
+                                        className={classes.maxButton}
+                                        onClick={() => {
+                                            if (!fromToken?.address) return
+                                            const isNative = isNativeTokenAddress(fromToken.address)
+                                            const balance =
+                                                isNative ? minus(fromTokenBalance, gasFee) : fromTokenBalance
+                                            setInputAmount(trimZero(leftShift(balance, fromToken.decimals).toFixed(12)))
+                                        }}>
+                                        <Trans>MAX</Trans>
+                                    </Button>
+                                </Box>
+                            :   null}
                             <input
                                 className={classes.tokenInput}
                                 autoFocus
@@ -299,7 +351,7 @@ export function TradeView() {
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {toNetwork?.name ? t`on ${toNetwork.name}` : '--'}
+                                        {toNetwork?.fullName ? t`on ${toNetwork.fullName}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -308,6 +360,14 @@ export function TradeView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
+                            {toTokenBalance ?
+                                <Box className={classes.tokenStatus}>
+                                    <Icons.Wallet size={16} />
+                                    <Typography className={classes.balance}>
+                                        {formatTokenBalance(toTokenBalance, toToken?.decimals)}
+                                    </Typography>
+                                </Box>
+                            :   null}
                             <input
                                 className={classes.tokenInput}
                                 disabled
@@ -348,7 +408,7 @@ export function TradeView() {
                     loading={isLoading}
                     fullWidth
                     color={isOverSlippage ? 'error' : undefined}
-                    disabled={isTradable}
+                    disabled={!isTradable}
                     onClick={() => {
                         navigate(
                             urlcat(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {

@@ -6,7 +6,7 @@ import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
-import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { type ChainId, formatEthereumAddress, formatEtherToWei } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Typography, Link as MuiLink } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -399,7 +399,7 @@ export const Transaction = memo(function Transaction() {
                                         `-${formatBalance(fromTokenAmount, fromToken.decimals)} ${fromToken.symbol}`
                                     :   '--'}
                                 </Typography>
-                                <Typography className={classes.network}>{fromNetwork?.name ?? '--'}</Typography>
+                                <Typography className={classes.network}>{fromNetwork?.fullName ?? '--'}</Typography>
                                 {txPending || detailStatus === 'BRIDGE_PENDING' ?
                                     <Typography className={classes.tip}>
                                         <Trans>Transaction in progress. Thank you for your patience.</Trans>
@@ -430,7 +430,7 @@ export const Transaction = memo(function Transaction() {
                                         :   null}
                                         {tx.leftSideToken.tokenSymbol}
                                     </Typography>
-                                    <Typography className={classes.network}>{fromNetwork?.name ?? '--'}</Typography>
+                                    <Typography className={classes.network}>{fromNetwork?.fullName ?? '--'}</Typography>
                                 </div>
                                 {bridgeStatus?.fromTxHash ?
                                     <a
@@ -468,7 +468,7 @@ export const Transaction = memo(function Transaction() {
                                     <Typography className={cx(classes.toToken, classes.value)}>
                                         {tx.rightSideToken.tokenSymbol}
                                     </Typography>
-                                    <Typography className={classes.network}>{toNetwork?.name ?? '--'}</Typography>
+                                    <Typography className={classes.network}>{toNetwork?.fullName ?? '--'}</Typography>
                                     {txPending || detailStatus === 'BRIDGE_PENDING' ?
                                         <Typography className={classes.tip}>
                                             <Trans>Transaction in progress. Thank you for your patience.</Trans>
@@ -499,7 +499,7 @@ export const Transaction = memo(function Transaction() {
                                         `+${formatBalance(toTokenAmount, toToken.decimals)} ${toToken.symbol}`
                                     :   '--'}
                                 </Typography>
-                                <Typography className={classes.network}>{toNetwork?.name ?? '--'}</Typography>
+                                <Typography className={classes.network}>{toNetwork?.fullName ?? '--'}</Typography>
                             </div>
                             {txUrl ?
                                 <a href={txUrl} target="_blank">
@@ -539,7 +539,7 @@ export const Transaction = memo(function Transaction() {
                             </Typography>
                             <Typography className={classes.rowValue} style={{ gap: 8 }}>
                                 <NetworkIcon size={16} pluginID={NetworkPluginID.PLUGIN_EVM} chainId={fromChainId} />
-                                {fromNetwork?.name}
+                                {fromNetwork?.fullName}
                             </Typography>
                         </div>
                     :   <div className={classes.infoRow}>
@@ -555,7 +555,7 @@ export const Transaction = memo(function Transaction() {
                                     size={16}
                                 />
                                 <Trans>
-                                    {fromNetwork?.name || '--'} to {toNetwork?.name || '--'}
+                                    {fromNetwork?.fullName || '--'} to {toNetwork?.fullName || '--'}
                                 </Trans>
                             </Typography>
                         </div>
@@ -565,8 +565,13 @@ export const Transaction = memo(function Transaction() {
                         <GasCost
                             className={classes.rowValue}
                             chainId={fromChainId}
-                            gasLimit={tx.transactionFee}
+                            gasLimit={tx.gasLimit}
                             gasPrice={tx.gasPrice}
+                            gasFee={
+                                bridgeStatus?.sourceChainGasfee ?
+                                    formatEtherToWei(bridgeStatus.sourceChainGasfee)
+                                :   undefined
+                            }
                         />
                     </div>
                     <div className={classes.infoRow}>

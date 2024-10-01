@@ -1,8 +1,9 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { leftShift, TokenType } from '@masknet/web3-shared-base'
+import { formatCompact, leftShift, TokenType } from '@masknet/web3-shared-base'
 import type { Token } from '../../types/trader.js'
 import { SchemaType } from '@masknet/web3-shared-evm'
 import type { RouterListItem } from '@masknet/web3-providers/types'
+import { type BigNumber } from 'bignumber.js'
 
 const MINIMUM_AMOUNT_RE = /((?:Minimum|Maximum) amount is\s+)(\d+)/
 export function fixBridgeMessage(message: string, token?: Web3Helper.FungibleTokenAll) {
@@ -36,4 +37,15 @@ export function getBridgeLeftSideToken(bridge: RouterListItem) {
 
 export function getBridgeRightSideToken(bridge: RouterListItem) {
     return bridge.toDexRouterList[0]?.subRouterList[0]?.toToken
+}
+
+export function formatTokenBalance(raw: BigNumber.Value, decimals = 0) {
+    const balance = leftShift(raw, decimals).toNumber()
+    return formatCompact(balance, {
+        minimumSignificantDigits: 2,
+        maximumSignificantDigits:
+            balance < 100 ? 4
+            : balance < 1000 ? 2
+            : 2,
+    })
 }

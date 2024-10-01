@@ -237,6 +237,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         :   null
 
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
+    const gas = gasConfig.gas ?? transaction?.gasLimit ?? gasLimit
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
         if (!transaction?.data) return
         return Web3.sendTransaction({
@@ -245,13 +246,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: transaction.gasLimit,
+            gas,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
         })
-    }, [transaction, account, gasConfig, Web3])
+    }, [transaction, account, gasConfig, Web3, gas])
 
     const [isBridgable, errorMessage] = useBridgable()
 
@@ -303,7 +304,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                         className={cx(classes.fromToken, classes.value)}>
                                         -{formatBalance(fromTokenAmount, fromToken?.decimals || 0)} {fromToken?.symbol}
                                     </ProgressiveText>
-                                    <Typography className={classes.network}>{fromNetwork?.name}</Typography>
+                                    <Typography className={classes.network}>{fromNetwork?.fullName}</Typography>
                                 </div>
                             </div>
                         </div>
@@ -322,7 +323,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                     <ProgressiveText loading={!toToken} className={cx(classes.toToken, classes.value)}>
                                         +{formatBalance(toTokenAmount, toToken?.decimals || 0)} {toToken?.symbol}
                                     </ProgressiveText>
-                                    <Typography className={classes.network}>{toNetwork?.name}</Typography>
+                                    <Typography className={classes.network}>{toNetwork?.fullName}</Typography>
                                 </div>
                             </div>
                         </div>
@@ -342,7 +343,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                                 size={16}
                             />
                             <Trans>
-                                {fromNetwork?.name || '--'} to {toNetwork?.name || '--'}
+                                {fromNetwork?.fullName || '--'} to {toNetwork?.fullName || '--'}
                             </Trans>
                         </Typography>
                     </div>
@@ -503,7 +504,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                                 dexContractAddress: spender,
                                 to: transaction.to,
                                 estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
-                                gasLimit: gasLimit || gasConfig.gas || '1',
+                                gasLimit: gas!,
                                 gasPrice: gasConfig.gasPrice || '0',
                                 leftSideToken: getBridgeLeftSideToken(bridge),
                                 rightSideToken: getBridgeRightSideToken(bridge),

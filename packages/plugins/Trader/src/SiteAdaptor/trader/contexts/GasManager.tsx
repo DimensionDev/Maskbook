@@ -27,8 +27,8 @@ interface Options {
 
 const GasManagerContext = createContext<Options>(null!)
 export function GasManager({ children }: PropsWithChildren) {
-    const { quote, chainId, fromToken, toToken } = useTrade()
-    const gasLimit = quote?.estimateGasFee ?? '1'
+    const { quote, mode, bridgeQuote, chainId, fromToken, toToken } = useTrade()
+    const gasLimit = mode === 'swap' ? quote?.estimateGasFee : bridgeQuote?.routerList[0]?.estimateGasFee
     const { gasConfig, setGasConfig, gasOptions, isLoadingGasOptions } = useGasConfig(chainId)
     const { data: price } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -41,7 +41,7 @@ export function GasManager({ children }: PropsWithChildren) {
 
     const gasFee = useMemo(() => {
         const price = gasConfig.gasPrice ?? (gasConfig as EIP1559GasConfig).maxFeePerGas ?? '1'
-        return multipliedBy(gasLimit, price)
+        return multipliedBy(gasLimit ?? '1', price)
     }, [gasLimit, gasConfig.gasPrice])
 
     const gasCost = useMemo(() => {
