@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME, PUBLISHER } from './constants.js'
-import { languages } from './locales/languages.js'
+import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,

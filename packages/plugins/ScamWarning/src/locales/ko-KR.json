@@ -1,6 +1,0 @@
-{
-    "__plugin_name": "안전 경고",
-    "__plugin_description": "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적인지 탐지합니다. 디지털 자산을 저장하는 데 도움이 됩니다.",
-    "warning_description_one": "이 도메인은 현재 Mask Network 경고 리스트에 있으며, 이 리스트에는 악의적인 항목, 피싱 또는 스캠이 포함될 수 있습니다.",
-    "warning_description_other": "이 도메인들은 현재 Mask Network 경고 리스트에 있으며, 이 리스트에는 악의적인 항목, 피싱 또는 스캠이 포함될 수 있습니다."
-}

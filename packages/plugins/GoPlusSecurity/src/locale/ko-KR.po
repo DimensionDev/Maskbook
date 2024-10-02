@@ -98,6 +98,7 @@ msgid "Go+"
 msgstr "Go+"
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:139
+#: src/SiteAdaptor/constants.tsx:23
 msgid "High Risk"
 msgstr "높은 리스크"
 
@@ -105,11 +106,16 @@ msgstr "높은 리스크"
 msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
 msgstr "[Check Security] 닫기로 결정한 경우 의심스럽거나 블랙리스트에 있거나 사기 가능성이 있는 컨트랙트 및 주소와 상호 작용할 때 보안 알림이 더 이상 표시되지 않습니다."
 
+#: src/SiteAdaptor/constants.tsx:36
+msgid "Low Risk"
+msgstr ""
+
 #: src/SiteAdaptor/components/TokenPanel.tsx:137
 msgid "Market Cap"
 msgstr "시가 총액"
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:140
+#: src/SiteAdaptor/constants.tsx:29
 msgid "Medium Risk"
 msgstr "중간 리스크"
 

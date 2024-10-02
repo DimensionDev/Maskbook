@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { DialogContent, Link, Typography } from '@mui/material'
-import { SmartPayTrans } from '../../locales/index.js'
 import { memo } from 'react'
 import { SmartPayBanner } from './SmartPayBanner.js'
 import { Trans } from '@lingui/macro'
@@ -43,29 +42,27 @@ export const InEligibilityTips = memo(() => {
                 </Typography>
             </SmartPayBanner>
             <Typography className={classes.description}>
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <SmartPayTrans.eligibility_description
-                    components={{
-                        Link: <Link href="https://x.com/realMaskNetwork" rel="noopener noreferrer" target="_blank" />,
-                        Discord: (
-                            <Link href="https://discord.com/invite/4SVXvj7" rel="noopener noreferrer" target="_blank" />
-                        ),
-                    }}
-                />
+                <Trans>
+                    You can follow Mask Network{' '}
+                    <Link href="https://x.com/realMaskNetwork" rel="noopener noreferrer" target="_blank">
+                        Twitter
+                    </Link>{' '}
+                    or{' '}
+                    <Link href="https://discord.com/invite/4SVXvj7" rel="noopener noreferrer" target="_blank">
+                        Discord
+                    </Link>{' '}
+                    to participate in the event and get free qualification to have gas-free blockchain experiences with
+                    SmartPay. Soon we will publish the second batch of users participating in the test!
+                </Trans>
             </Typography>
             <Typography className={classes.description}>
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <SmartPayTrans.eligibility_query
-                    components={{
-                        Link: (
-                            <Link
-                                href="https://forms.gle/HpzvPVj1MUQmw5Rp9"
-                                rel="noopener noreferrer"
-                                target="_blank"
-                            />
-                        ),
-                    }}
-                />
+                <Trans>
+                    Click{' '}
+                    <Link href="https://forms.gle/HpzvPVj1MUQmw5Rp9" rel="noopener noreferrer" target="_blank">
+                        here
+                    </Link>{' '}
+                    and fill the SmartPay Wallet whitelist application form.
+                </Trans>
             </Typography>
         </DialogContent>
     )

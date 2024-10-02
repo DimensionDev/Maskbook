@@ -1,8 +1,20 @@
 {
     "messages": {
+        "lclZhh": [
+            [
+                "value",
+                "plural",
+                {
+                    "one": ["The Twitter account above remains ", "#", " time to create SmartPay Wallet."],
+                    "other": ["The Twitter account above remains ", "#", " times to create SmartPay Wallet."]
+                }
+            ]
+        ],
+        "y6lE0k": "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future.",
         "m8Ds0H": "スマートペイウォレットを追加",
         "/829fA": "Maskをガスとして許可する",
         "tcHpvG": "所有者変更",
+        "Gi/hb0": "Click <0>here</0> and fill the SmartPay Wallet whitelist application form.",
         "BRhJyf": ["おめでとうございます！SmartPayウォレット ", ["0"], "を展開しました。"],
         "hYgDIe": "作成",
         "I4rME/": "ポップアップに新しいマスクウォレットを作成します。",
@@ -53,6 +65,7 @@
         "Re0DcC": "SmartPayウォレット展開前に知っておくべきこと:",
         "tzlwby": "あなたはトライアルホワイトリストにいます。",
         "hFAVvh": "SmartPayウォレットの管理アカウントを変更することができます。マスクネットワークでは、ペルソナとマスクウォレットの両方を管理アカウントとして認可することができます。",
+        "1sijtW": "You can follow Mask Network <0>Twitter</0> or <1>Discord</1> to participate in the event and get free qualification to have gas-free blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!",
         "O6SJRT": "SmartPayを使用する前に確認してください:"
     }
 }

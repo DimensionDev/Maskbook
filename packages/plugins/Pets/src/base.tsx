@@ -2,7 +2,7 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { PetsPluginID } from './constants.js'
-import { languages, linguiLanguages } from './locales/languages.js'
+import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PetsPluginID,
@@ -25,5 +25,5 @@ export const base: Plugin.Shared.Definition = {
         },
         target: 'stable',
     },
-    i18n: [languages, linguiLanguages],
+    i18n: languages,
 }

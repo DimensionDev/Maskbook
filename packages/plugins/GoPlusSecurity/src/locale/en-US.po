@@ -93,6 +93,7 @@ msgid "Go+"
 msgstr ""
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:139
+#: src/SiteAdaptor/constants.tsx:23
 msgid "High Risk"
 msgstr ""
 
@@ -100,11 +101,16 @@ msgstr ""
 msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
 msgstr ""
 
+#: src/SiteAdaptor/constants.tsx:36
+msgid "Low Risk"
+msgstr ""
+
 #: src/SiteAdaptor/components/TokenPanel.tsx:137
 msgid "Market Cap"
 msgstr ""
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:140
+#: src/SiteAdaptor/constants.tsx:29
 msgid "Medium Risk"
 msgstr ""
 

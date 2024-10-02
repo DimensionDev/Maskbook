@@ -17,7 +17,6 @@ import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Web3ProfileTrans } from '../../../locales/i18n_generated.js'
 import { getFireflyLensProfileLink, getProfileAvatar } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
@@ -347,16 +346,10 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                         </Typography>
                         <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <Web3ProfileTrans.followers
-                                components={{ strong: <strong /> }}
-                                values={{ followers: String(profile?.stats.followers ?? '0') }}
-                            />
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <Web3ProfileTrans.following
-                                components={{ strong: <strong /> }}
-                                values={{ following: String(profile?.stats.following ?? '0') }}
-                            />
+                            <Trans>
+                                <strong>{profile?.stats.followers ?? '0'}</strong> Followers{' '}
+                                <strong>{profile?.stats.following ?? '0'}</strong> Following
+                            </Trans>
                         </Typography>
                         <Box className={classes.actions}>
                             {isSelf ?

@@ -21,7 +21,6 @@ import { useCallback, useMemo } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
-import { useTipsTrans } from '../locales/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
@@ -70,7 +69,6 @@ interface TipDialogProps {
 const site = getSiteType()
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { _ } = useLingui()
-    const t = useTipsTrans()
     const { classes } = useStyles()
 
     const {
@@ -97,24 +95,40 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
         const recipientName = recipient?.label || recipientEns
-        const context = recipientName ? 'name' : 'address'
-        const message =
-            isTokenTip ?
-                t.tip_token_share_post({
-                    amount,
-                    symbol: token?.symbol || 'token',
-                    recipientSnsId: recipientUserId,
-                    recipient: recipientName || recipientAddress,
-                    context,
-                })
-            :   t.tip_nft_share_post({
-                    name: nonFungibleTokenContract?.name || 'NFT',
-                    recipientSnsId: recipientUserId,
-                    recipient: recipientName || recipientAddress,
-                    context,
-                })
-        return message
-    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t, recipientEns])
+        const promote = _(msg`Install https://mask.io/download-links to send your first tip.`)
+        if (isTokenTip) {
+            if (token?.symbol) {
+                const tokenSymbol = token.symbol
+                if (recipientName)
+                    return _(
+                        msg`I just tipped ${amount} ${tokenSymbol} to @${recipientUserId}'s wallet ${recipientName}\n\n${promote}`,
+                    )
+                else
+                    return _(
+                        msg`I just tipped ${amount} ${tokenSymbol} to @${recipientUserId}'s wallet address ${recipientAddress}\n\n${promote}`,
+                    )
+            } else {
+                if (recipientName)
+                    return _(
+                        msg`I just tipped ${amount} token to @${recipientUserId}'s wallet ${recipientName}\n\n${promote}`,
+                    )
+                else
+                    return _(
+                        msg`I just tipped ${amount} token to @${recipientUserId}'s wallet address ${recipientAddress}\n\n${promote}`,
+                    )
+            }
+        } else {
+            const NFT_Name = nonFungibleTokenContract?.name || 'NFT'
+            if (recipientName)
+                return _(
+                    msg`I just tipped a ${NFT_Name} to @${recipientUserId}'s wallet ${recipientName}\n\n${promote}`,
+                )
+            else
+                return _(
+                    msg`I just tipped a {{name}} to @${recipientUserId}'s wallet address ${recipientAddress}\n\n${promote}`,
+                )
+        }
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, _, recipientEns])
 
     const currentTab = isTokenTip ? TokenType.Fungible : TokenType.NonFungible
     const onTabChange = useCallback((_: unknown, value: TokenType) => {

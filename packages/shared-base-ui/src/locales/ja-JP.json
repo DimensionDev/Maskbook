@@ -1,6 +1,0 @@
-{
-    "error_boundary_crash_title": "{{subject}} にエラーが発生しました。",
-    "error_boundary_try_to_recover": "復旧を試みます",
-    "error_boundary_report_github": "GitHubで報告",
-    "error_boundary_report_email": "メールで報告"
-}

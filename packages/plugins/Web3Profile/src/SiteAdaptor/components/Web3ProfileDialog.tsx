@@ -8,7 +8,6 @@ import { EMPTY_LIST, NextIDPlatform, PopupRoutes, PluginID, EMPTY_OBJECT } from 
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useUnlistedAddressConfig } from '@masknet/web3-hooks-base'
 import { openPopupWindow, queryPersonaAvatar, signWithPersona } from '@masknet/plugin-infra/dom/context'
-import { useWeb3ProfileTrans } from '../../locales/index.js'
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
@@ -45,7 +44,6 @@ interface Props {
     onClose(): void
 }
 export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose }: Props) {
-    const t = useWeb3ProfileTrans()
     const { classes } = useStyles()
     const myProfile = useLastRecognizedProfile()
     const allPersona = useAllPersonas()
@@ -130,7 +128,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         }
 
         refetch()
-    }, [pendingUnlistedConfig, t, updateConfig])
+    }, [pendingUnlistedConfig, updateConfig])
 
     const { value: avatar } = useAsyncRetry(async () => queryPersonaAvatar(currentPersona?.identifier), [])
 

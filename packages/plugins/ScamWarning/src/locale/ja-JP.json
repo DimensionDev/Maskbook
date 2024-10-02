@@ -1,5 +1,15 @@
 {
     "messages": {
+        "8m48gD": [
+            [
+                "0",
+                "plural",
+                {
+                    "one": "This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.",
+                    "other": "These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams."
+                }
+            ]
+        ],
         "n+ObkB": "ユーザーが公開した暗号化ウェブサイトが危険か悪意のあるものかを検出します。デジタル資産を保存するのに役立ちます。",
         "jt/cjR": "安全警告"
     }

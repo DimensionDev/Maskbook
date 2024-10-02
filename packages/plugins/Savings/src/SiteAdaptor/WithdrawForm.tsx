@@ -5,7 +5,6 @@ import {
     PluginWalletStatusBar,
     useOpenShareTxDialog,
 } from '@masknet/shared'
-import { useSavingsTrans } from '../locales/index.js'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { useState } from 'react'
 import {
@@ -67,7 +66,6 @@ const MINIMUM_AMOUNT = '0.000000000000000001'
 
 export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormDialogProps) {
     const { _ } = useLingui()
-    const t = useSavingsTrans()
     const { classes } = useStyles()
     const [amount, setAmount] = useState('0')
 
@@ -78,7 +76,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
     const { data: balance } = useFungibleTokenBalance(pluginID, token.address, { chainId })
     const { data: price } = useFungibleTokenPrice(pluginID, token.address, { chainId })
     const account = useAccount()
-    const { data: time, isLoading } = useQuery({
+    const { data: time } = useQuery({
         enabled: !isZero(amount),
         queryKey: ['savings', 'lido', 'time', amount],
         queryFn: async () => {
@@ -122,7 +120,11 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
         await openShareTxDialog({
             hash,
             onShare() {
-                share?.(t.promote_withdraw(promote))
+                share?.(
+                    _(
+                        msg`Hi friends, I just withdrew my deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
+                    ),
+                )
             },
         })
     }, [protocol, time, chainId, amount, token.decimals, actualChainId])

@@ -1,8 +1,20 @@
 {
     "messages": {
+        "lclZhh": [
+            [
+                "value",
+                "plural",
+                {
+                    "one": ["The Twitter account above remains ", "#", " time to create SmartPay Wallet."],
+                    "other": ["The Twitter account above remains ", "#", " times to create SmartPay Wallet."]
+                }
+            ]
+        ],
+        "y6lE0k": "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future.",
         "m8Ds0H": "添加 SmartPay 钱包",
         "/829fA": "设置 Mask 为可支付 gas 的代币",
         "tcHpvG": "更改管理账户",
+        "Gi/hb0": "Click <0>here</0> and fill the SmartPay Wallet whitelist application form.",
         "BRhJyf": ["恭喜您! 您已成功创建了 SmartPay 钱包 ", ["0"], "。"],
         "hYgDIe": "创建",
         "I4rME/": "在弹出窗口中创建新钱包",
@@ -53,6 +65,7 @@
         "Re0DcC": "使用 Smart Pay 前需要知道的事：",
         "tzlwby": "您在试用白名单中。",
         "hFAVvh": "您可以更改 SmartPay 钱包的管理账户。在 Mask Network 体系中，Persona 和 Mask wallet 都可以被授予为 SmartPay 的管理账户。",
+        "1sijtW": "You can follow Mask Network <0>Twitter</0> or <1>Discord</1> to participate in the event and get free qualification to have gas-free blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!",
         "O6SJRT": "在使用 Smart Pay 前需要知道的事："
     }
 }
