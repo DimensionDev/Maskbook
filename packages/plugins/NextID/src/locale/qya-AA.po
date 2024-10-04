@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-04 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,81 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/NextID/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 976\n"
+
+#: src/components/Actions/index.tsx:77
+msgid "Add wallet"
+msgstr "crwdns28776:0crwdne28776:0"
+
+#: src/hooks/useWalletSign.ts:17
+msgid "Confirm this transaction in your wallet."
+msgstr "crwdns28778:0crwdne28778:0"
+
+#: src/components/Actions/index.tsx:41
+msgid "Create Persona"
+msgstr "crwdns28780:0crwdne28780:0"
+
+#: src/components/BindPanelUI.tsx:138
+#: src/components/BindPanelUI.tsx:190
+msgid "Done"
+msgstr "crwdns28782:0crwdne28782:0"
+
+#: src/components/Actions/index.tsx:68
+msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
+msgstr "crwdns28784:0crwdne28784:0"
+
+#: src/components/BindPanelUI.tsx:151
+msgid "Persona"
+msgstr "crwdns28786:0crwdne28786:0"
+
+#: src/components/BindPanelUI.tsx:191
+msgid "Persona Sign"
+msgstr "crwdns28788:0crwdne28788:0"
+
+#: src/components/Actions/index.tsx:35
+msgid "Please create your persona to use Web3 Profile."
+msgstr "crwdns28790:0crwdne28790:0"
+
+#: src/components/Actions/index.tsx:89
+msgid "The user has not set this."
+msgstr "crwdns28792:0crwdne28792:0"
+
+#: src/components/BindPanelUI.tsx:121
+msgid "This wallet address has already been connected."
+msgstr "crwdns28794:0crwdne28794:0"
+
+#: src/components/BindPanelUI.tsx:145
+msgid "Unsupported Network"
+msgstr "crwdns28796:0crwdne28796:0"
+
+#: src/components/BindDialog.tsx:82
+msgid "Verify your wallet"
+msgstr "crwdns28798:0crwdne28798:0"
+
+#: src/SiteAdaptor/VerificationPayload.tsx:41
+msgid "View"
+msgstr "crwdns28800:0crwdne28800:0"
+
+#: src/components/BindPanelUI.tsx:104
+msgid "Wallet"
+msgstr "crwdns28802:0crwdne28802:0"
+
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
+#: src/components/BindPanelUI.tsx:139
+#: src/hooks/useWalletSign.ts:15
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet Sign"
+msgstr "crwdns28804:0crwdne28804:0"
+
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet sign cancelled."
+msgstr "crwdns28806:0crwdne28806:0"
+
+#: src/components/BindDialog.tsx:75
+msgid "Wallet sign failed."
+msgstr "crwdns28808:0crwdne28808:0"
+
+#: src/components/BindDialog.tsx:64
+msgid "Wallet sign succeeded."
+msgstr "crwdns28810:0crwdne28810:0"
 
