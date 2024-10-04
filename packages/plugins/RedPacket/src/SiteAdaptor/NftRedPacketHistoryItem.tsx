@@ -9,7 +9,6 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { fill } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { RedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
@@ -70,7 +69,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
         },
         content: {
-            transform: 'RedPacketTransY(-4px)',
             width: '100%',
             paddingLeft: theme.spacing(1),
         },
@@ -252,17 +250,14 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
-                                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                <RedPacketTrans.history_nft_claimed
-                                    components={{
-                                        span: <span />,
-                                    }}
-                                    values={{
-                                        claimedShares: rpid ? bitStatusList.filter(Boolean).length.toString() : '0',
-                                        shares: patchedHistory.shares.toString(),
-                                        symbol: collection?.name ?? '',
-                                    }}
-                                />
+                                <Trans>
+                                    Claimed:{' '}
+                                    <span>
+                                        {rpid ? bitStatusList.filter(Boolean).length.toString() : '0'}/
+                                        {patchedHistory.shares}
+                                    </span>{' '}
+                                    <span>{collection?.name ?? ''}</span>
+                                </Trans>
                             </Typography>
                             <TokenIcon
                                 className={classes.icon}

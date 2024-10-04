@@ -1,8 +1,20 @@
 {
     "messages": {
+        "lclZhh": [
+            [
+                "value",
+                "plural",
+                {
+                    "one": ["The Twitter account above remains ", "#", " time to create SmartPay Wallet."],
+                    "other": ["The Twitter account above remains ", "#", " times to create SmartPay Wallet."]
+                }
+            ]
+        ],
+        "y6lE0k": "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future.",
         "m8Ds0H": "Add SmartPay Wallet",
         "/829fA": "Allow Mask as gas",
         "tcHpvG": "Change Owner",
+        "Gi/hb0": "Click <0>here</0> and fill the SmartPay Wallet whitelist application form.",
         "BRhJyf": ["Congratulation! You’ve deployed SmartPay Wallet ", ["0"], "."],
         "hYgDIe": "Create",
         "I4rME/": "Create a new Mask wallet in Pop-up.",
@@ -53,6 +65,7 @@
         "Re0DcC": "What to know before SmartPay Wallet deployment:",
         "tzlwby": "You are in the trial whitelist.",
         "hFAVvh": "You can change management account of SmartPay Wallet. In Mask Network, both Persona and Mask Wallet can be authorized as management account.",
+        "1sijtW": "You can follow Mask Network <0>Twitter</0> or <1>Discord</1> to participate in the event and get free qualification to have gas-free blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!",
         "O6SJRT": "You need to know before using SmartPay:"
     }
 }

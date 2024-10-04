@@ -12,9 +12,8 @@ import { RoutePaths } from '../../constants.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { PluginSmartPayMessages } from '../../message.js'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -60,7 +59,6 @@ interface AddSmartPayPopoverProps {
 }
 
 export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorEl, onClose }) => {
-    const t = useSmartPayTrans()
     const sharedI18N = useSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
@@ -166,7 +164,13 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                     <Typography className={classes.identifier}>@{currentProfile?.identifier?.userId}</Typography>
                 </Box>
             </Box>
-            <Typography className={classes.tips}>{t.remain_times_tips({ count: value })}</Typography>
+            <Typography className={classes.tips}>
+                <Plural
+                    value={value}
+                    one="The Twitter account above remains # time to create SmartPay Wallet."
+                    other="The Twitter account above remains # times to create SmartPay Wallet."
+                />
+            </Typography>
             <Button fullWidth variant="roundedContained" onClick={handleCreate}>
                 <Trans>Create</Trans>
             </Button>

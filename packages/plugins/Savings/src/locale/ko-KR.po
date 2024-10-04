@@ -18,15 +18,15 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Savings/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 986\n"
 
-#: src/SiteAdaptor/WithdrawForm.tsx:171
+#: src/SiteAdaptor/WithdrawForm.tsx:173
 msgid "{0} days"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx:287
+#: src/SiteAdaptor/SavingsForm.tsx:289
 msgid "Amount"
 msgstr "금액"
 
-#: src/SiteAdaptor/SavingsForm.tsx:316
+#: src/SiteAdaptor/SavingsForm.tsx:318
 #: src/SiteAdaptor/SavingsTable/index.tsx:88
 msgid "APR"
 msgstr "APR"
@@ -36,30 +36,39 @@ msgid "Asset"
 msgstr "자산"
 
 #: src/SiteAdaptor/SavingsDialog.tsx:136
-#: src/SiteAdaptor/SavingsForm.tsx:235
-#: src/SiteAdaptor/SavingsForm.tsx:247
-#: src/SiteAdaptor/SavingsForm.tsx:277
+#: src/SiteAdaptor/SavingsForm.tsx:237
+#: src/SiteAdaptor/SavingsForm.tsx:249
+#: src/SiteAdaptor/SavingsForm.tsx:279
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:106
 msgid "Deposit"
 msgstr "입금"
 
-#: src/SiteAdaptor/SavingsForm.tsx:239
-#: src/SiteAdaptor/SavingsForm.tsx:251
-#: src/SiteAdaptor/SavingsForm.tsx:267
+#: src/SiteAdaptor/SavingsForm.tsx:241
+#: src/SiteAdaptor/SavingsForm.tsx:253
+#: src/SiteAdaptor/SavingsForm.tsx:269
 msgid "Done"
 msgstr "완료"
 
-#: src/SiteAdaptor/SavingsForm.tsx:151
+#: src/SiteAdaptor/SavingsForm.tsx:146
 msgid "Enter an amount"
 msgstr "수액 입력"
 
-#: src/SiteAdaptor/SavingsForm.tsx:237
-#: src/SiteAdaptor/SavingsForm.tsx:249
-#: src/SiteAdaptor/SavingsForm.tsx:264
+#: src/SiteAdaptor/SavingsForm.tsx:239
+#: src/SiteAdaptor/SavingsForm.tsx:251
+#: src/SiteAdaptor/SavingsForm.tsx:266
 msgid "Failed"
 msgstr "실패"
 
-#: src/SiteAdaptor/SavingsForm.tsx:152
+#: src/SiteAdaptor/SavingsForm.tsx:198
+msgid "Hi friends, I just deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:201
+#: src/SiteAdaptor/WithdrawForm.tsx:125
+msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:147
 msgid "Input amount is below the minimum amount"
 msgstr "입력 금액은 최소 금액 이하입니다."
 
@@ -67,11 +76,11 @@ msgstr "입력 금액은 최소 금액 이하입니다."
 #~ msgid "Insufficient {0} balance"
 #~ msgstr "{0} 잔액 부족"
 
-#: src/SiteAdaptor/SavingsForm.tsx:155
+#: src/SiteAdaptor/SavingsForm.tsx:150
 msgid "Insufficient ${0} balance"
 msgstr ""
 
-#: src/SiteAdaptor/WithdrawForm.tsx:158
+#: src/SiteAdaptor/WithdrawForm.tsx:160
 msgid "Lido Exchange Rate"
 msgstr ""
 
@@ -79,12 +88,12 @@ msgstr ""
 msgid "Loading"
 msgstr "로딩 중"
 
-#: src/SiteAdaptor/SavingsForm.tsx:198
-#: src/SiteAdaptor/WithdrawForm.tsx:119
+#: src/SiteAdaptor/SavingsForm.tsx:193
+#: src/SiteAdaptor/WithdrawForm.tsx:117
 msgid "masknetwork"
 msgstr "masknetwork"
 
-#: src/SiteAdaptor/WithdrawForm.tsx:143
+#: src/SiteAdaptor/WithdrawForm.tsx:145
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr ""
 
@@ -96,17 +105,17 @@ msgstr "입금 프로토컬 찾지 않습니다."
 msgid "Operation"
 msgstr "진행"
 
-#: src/SiteAdaptor/SavingsForm.tsx:236
-#: src/SiteAdaptor/SavingsForm.tsx:248
+#: src/SiteAdaptor/SavingsForm.tsx:238
+#: src/SiteAdaptor/SavingsForm.tsx:250
 msgid "Processing Deposit"
 msgstr "입금 진행"
 
-#: src/SiteAdaptor/SavingsForm.tsx:263
+#: src/SiteAdaptor/SavingsForm.tsx:265
 msgid "Processing Withdrawal"
 msgstr "철회 진행"
 
-#: src/SiteAdaptor/SavingsForm.tsx:198
-#: src/SiteAdaptor/WithdrawForm.tsx:119
+#: src/SiteAdaptor/SavingsForm.tsx:193
+#: src/SiteAdaptor/WithdrawForm.tsx:117
 msgid "realMaskNetwork"
 msgstr "realMaskNetwork"
 
@@ -115,15 +124,15 @@ msgstr "realMaskNetwork"
 msgid "Savings"
 msgstr "저금"
 
-#: src/SiteAdaptor/SavingsForm.tsx:260
+#: src/SiteAdaptor/SavingsForm.tsx:262
 msgid "Swap {0}"
 msgstr "스왑 {0}"
 
-#: src/SiteAdaptor/WithdrawForm.tsx:175
+#: src/SiteAdaptor/WithdrawForm.tsx:177
 msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
 msgstr ""
 
-#: src/SiteAdaptor/WithdrawForm.tsx:168
+#: src/SiteAdaptor/WithdrawForm.tsx:170
 msgid "Waiting time"
 msgstr ""
 
@@ -132,14 +141,14 @@ msgid "Wallet"
 msgstr "월렛"
 
 #: src/SiteAdaptor/SavingsDialog.tsx:137
-#: src/SiteAdaptor/SavingsForm.tsx:277
+#: src/SiteAdaptor/SavingsForm.tsx:279
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:107
-#: src/SiteAdaptor/WithdrawForm.tsx:131
-#: src/SiteAdaptor/WithdrawForm.tsx:138
+#: src/SiteAdaptor/WithdrawForm.tsx:133
+#: src/SiteAdaptor/WithdrawForm.tsx:140
 msgid "Withdraw"
 msgstr "철회"
 
-#: src/SiteAdaptor/SavingsForm.tsx:261
-#: src/SiteAdaptor/WithdrawForm.tsx:187
+#: src/SiteAdaptor/SavingsForm.tsx:263
+#: src/SiteAdaptor/WithdrawForm.tsx:189
 msgid "Withdraw {0}"
 msgstr "출금 {0}"

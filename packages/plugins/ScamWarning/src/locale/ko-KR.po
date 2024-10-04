@@ -18,6 +18,10 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 990\n"
 
+#: src/SiteAdaptor/components/PreviewCard.tsx:52
+msgid "{0, plural, one {This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.} other {These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams.}}"
+msgstr ""
+
 #: src/SiteAdaptor/index.tsx:23
 msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
 msgstr "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적인지 탐지합니다. 디지털 자산을 저장하는 데 도움이 됩니다."

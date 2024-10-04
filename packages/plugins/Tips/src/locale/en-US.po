@@ -25,11 +25,39 @@ msgstr ""
 msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
 msgstr ""
 
-#: src/contexts/Tip/useTipValidate.ts:42
+#: src/components/TipDialog.tsx:104
+msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:108
+msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:113
+msgid "I just tipped {amount} token to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:117
+msgid "I just tipped {amount} token to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:128
+msgid "I just tipped a {{name}} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:124
+msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:98
+msgid "Install https://mask.io/download-links to send your first tip."
+msgstr ""
+
+#: src/contexts/Tip/useTipValidate.ts:40
 msgid "Insufficient balance"
 msgstr ""
 
-#: src/components/TipDialog.tsx:180
+#: src/components/TipDialog.tsx:194
 msgid "NFTs"
 msgstr ""
 
@@ -37,11 +65,11 @@ msgstr ""
 msgid "No any collectible is available to preview. Please add your collectible here."
 msgstr ""
 
-#: src/contexts/Tip/useTipValidate.ts:38
+#: src/contexts/Tip/useTipValidate.ts:36
 msgid "No Enough Gas Fees"
 msgstr ""
 
-#: src/components/TipDialog.tsx:126
+#: src/components/TipDialog.tsx:140
 msgid "Send"
 msgstr ""
 
@@ -49,28 +77,28 @@ msgstr ""
 msgid "Send authors tips by using Mask Network’s Tips function."
 msgstr ""
 
-#: src/components/TipDialog.tsx:125
+#: src/components/TipDialog.tsx:139
 msgid "Sending..."
 msgstr ""
 
-#: src/components/TipDialog.tsx:142
+#: src/components/TipDialog.tsx:156
 msgid "Sent {1} {0} tips successfully."
 msgstr ""
 
-#: src/components/TipDialog.tsx:143
+#: src/components/TipDialog.tsx:157
 msgid "Sent {amount} {0} tips successfully."
 msgstr ""
 
-#: src/contexts/Tip/useRecipientValidate.ts:30
+#: src/contexts/Tip/useRecipientValidate.ts:28
 msgid "The receiving address is a contract address. Please check again."
 msgstr ""
 
-#: src/contexts/Tip/useRecipientValidate.ts:31
+#: src/contexts/Tip/useRecipientValidate.ts:29
 msgid "The receiving address may be a malicious address."
 msgstr ""
 
-#: src/components/TipDialog.tsx:144
-#: src/components/TipDialog.tsx:176
+#: src/components/TipDialog.tsx:158
+#: src/components/TipDialog.tsx:190
 msgid "Tips"
 msgstr ""
 
@@ -78,7 +106,7 @@ msgstr ""
 msgid "To"
 msgstr ""
 
-#: src/components/TipDialog.tsx:179
+#: src/components/TipDialog.tsx:193
 msgid "Tokens"
 msgstr ""
 

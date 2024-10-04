@@ -18,7 +18,15 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/SmartPay/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 992\n"
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:160
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
+msgid "{value, plural, one {The Twitter account above remains # time to create SmartPay Wallet.} other {The Twitter account above remains # times to create SmartPay Wallet.}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:59
+msgid "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future."
+msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:158
 msgid "Add SmartPay Wallet"
 msgstr "SmartPay 월렛 추가"
 
@@ -30,11 +38,15 @@ msgstr "Mask 토큰을 가스비로 허용합니다."
 msgid "Change Owner"
 msgstr "소유자 변경"
 
+#: src/SiteAdaptor/components/InEligibilityTips.tsx:59
+msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form."
+msgstr ""
+
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
 msgid "Congratulation! You’ve deployed SmartPay Wallet {0}."
 msgstr "축하합니다! SmartPay 월렛 {0} 이미 생성되었습니다."
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:171
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:175
 #: src/SiteAdaptor/components/ManagePopover.tsx:140
 #: src/SiteAdaptor/components/ManagePopover.tsx:188
 msgid "Create"
@@ -82,7 +94,7 @@ msgstr "배치"
 msgid "Done"
 msgstr "완료"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:66
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
 msgid "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips."
 msgstr "행운 드랍과 팁와 같은 Mask Network의 dApp에서 무료 기스비 경험을 할 수 있습니다."
 
@@ -106,11 +118,11 @@ msgstr ""
 msgid "MASK token can be used to pay gas fee."
 msgstr "MASK 토큰은 기스비로 지불할 수 있습니다."
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:80
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:82
 msgid "More efficient and simpler signature algorithms (eg. Schnorr, BLS)"
 msgstr "보다 효율적이고 간단한 서명 알고리즘(예: Schnorr, BLS)"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:77
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:79
 msgid "Multisigs and social recovery"
 msgstr "Multisigs 및 소셜 복구"
 
@@ -122,7 +134,7 @@ msgstr "네트워크 오류."
 msgid "Personas"
 msgstr "페르소나"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:83
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:85
 msgid "Post-quantum safe signature algorithms (eg. Lamport, Winternitz)"
 msgstr "Post-quantum 안전 서명 알고리즘(예: Lamport, Winternitz)"
 
@@ -156,7 +168,7 @@ msgstr "SmartPay 월렛의 관리지 계정 설정"
 msgid "Smart Pay"
 msgstr "Smart Pay"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:48
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:47
 msgid "SmartPay is based on ERC-4337 and is currently deployed on Polygon Network. Multiple chains will be supported in the future. ERC-4337 is a new wallet proposal that would open the door for creativity in wallet design and could provide more important features. And we will design more fascinating features based on the new wallet proposal in Mask Network."
 msgstr "SmartPay는 ERC-4337을 기반으로 하며 현재 Polygon 네트워크에 구축되어 있습니다. 향후 여러 체인이 지원될 예정입니다. ERC-4337은 월렛 디자인에 창의성의 문을 열어줄 새로운 월렛 제안이며 더 중요한 기능을 제공할 수 있습니다. 그리고 Mask Network의 새로운 월렛 제안을 기반으로 더 매력적인 기능을 설계할 것입니다."
 
@@ -168,7 +180,7 @@ msgstr "SmartPay 월렛"
 msgid "SmartPay Wallet Deployment"
 msgstr "SmartPay 월렛 배치"
 
-#: src/SiteAdaptor/components/InEligibilityTips.tsx:42
+#: src/SiteAdaptor/components/InEligibilityTips.tsx:41
 msgid "Sorry, you are not in the free trial whitelist."
 msgstr "죄송합니다. 사용자님이 무료 화이트리스트에 없습니다."
 
@@ -176,7 +188,7 @@ msgstr "죄송합니다. 사용자님이 무료 화이트리스트에 없습니�
 msgid "Swap"
 msgstr "스왑"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:70
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:72
 msgid "The ERC-4337 will open the door to more creativity and more important features for wallet design."
 msgstr "ERC-4337은 월렛 디자인을 위해 더 많은 창의력과 중요한 기능을 제공하는 문을 열어줄 것입니다."
 
@@ -192,7 +204,7 @@ msgstr "타임아웃"
 msgid "Transaction rejected."
 msgstr "거래가 거부됨"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:86
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:88
 msgid "Upgradeability"
 msgstr "업그레이드 가능성"
 
@@ -216,11 +228,11 @@ msgstr "사용자 승인 대기 중"
 msgid "Wallets"
 msgstr "월렛"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:42
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:41
 msgid "What is SmartPay"
 msgstr "SmartPay는 무엇입니까?"
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:45
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:44
 msgid "What is SmartPay?"
 msgstr "SmartPay는 무엇입니까?"
 
@@ -236,6 +248,10 @@ msgstr "사용자님이 무료 회이트리스트에 있습니다."
 msgid "You can change management account of SmartPay Wallet. In Mask Network, both Persona and Mask Wallet can be authorized as management account."
 msgstr "SmartPay 월렛의 관리 계정을 변경할 수 있으며, Mask Network에서는 페르소나와 Mask Wallet 모두 관리 계정으로 권한을 부여할 수 있습니다."
 
-#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:56
+#: src/SiteAdaptor/components/InEligibilityTips.tsx:45
+msgid "You can follow Mask Network <0>Twitter</0> or <1>Discord</1> to participate in the event and get free qualification to have gas-free blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:55
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPay를 사용하기 전에 알아야 할 사항:"

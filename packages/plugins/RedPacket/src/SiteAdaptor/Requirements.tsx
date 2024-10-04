@@ -8,7 +8,6 @@ import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { Fragment, useMemo } from 'react'
-import { RedPacketTrans } from '../locales/i18n_generated.js'
 import { usePlatformType } from './hooks/usePlatformType.js'
 import { Trans } from '@lingui/macro'
 
@@ -193,16 +192,9 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.UserPlus className={classes.icon} size={16} />
                         <Typography className={classes.text}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <RedPacketTrans.follow_somebody_on_somewhere
-                                values={{
-                                    handles: handles.join(', '),
-                                    platform,
-                                }}
-                                components={{
-                                    span: <FollowProfile platform={platform} payload={payload} />,
-                                }}
-                            />
+                            <Trans>
+                                Follow <FollowProfile platform={platform} payload={payload} /> on {platform}
+                            </Trans>
                         </Typography>
                         {showResults ?
                             <ResultIcon className={classes.state} size={18} result={status.result} />
@@ -255,15 +247,9 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.FireflyNFT className={classes.icon} size={16} />
                         <Typography className={classes.text}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <RedPacketTrans.nft_holder_of
-                                values={{
-                                    names: collectionNames,
-                                }}
-                                components={{
-                                    nfts: <NFTList nfts={status.payload} />,
-                                }}
-                            />
+                            <Trans>
+                                NFT Holder of <NFTList nfts={status.payload} />
+                            </Trans>
                         </Typography>
                         {showResults ?
                             <ResultIcon className={classes.state} size={18} result={status.result} />

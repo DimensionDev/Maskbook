@@ -2,8 +2,8 @@ import { memo, type ReactNode } from 'react'
 import { Box, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import type { SecurityMessage, SecurityAPI } from '@masknet/web3-providers/types'
-import { useGoPlusLabsTrans } from '../../locales/index.js'
 import { DefineMapping } from '../constants.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     detectionCard: {
@@ -39,13 +39,14 @@ interface RiskCardProps {
 }
 
 export const RiskCard = memo<RiskCardProps>(({ info, tokenSecurity }) => {
-    const t = useGoPlusLabsTrans()
+    const { _ } = useLingui()
+    const title = typeof info.title === 'function' ? info.title(tokenSecurity) : info.title
     return (
         <RiskCardUI
             icon={DefineMapping[info.level].icon(14)}
-            title={t[info.titleKey]({ rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
+            title={_(title)}
             titleColor={DefineMapping[info.level].titleColor}
-            description={t[info.messageKey]({ rate: info.i18nParams?.(tokenSecurity).rate ?? '' })}
+            description={_(info.message)}
         />
     )
 })

@@ -1,7 +1,7 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { languages, linguiLanguages } from './locales/languages.js'
+import { languages } from './locale/languages.js'
 
 export const base: Plugin.Shared.Definition = {
     ID: PLUGIN_ID,
@@ -17,5 +17,5 @@ export const base: Plugin.Shared.Definition = {
         },
         target: 'stable',
     },
-    i18n: [languages, linguiLanguages],
+    i18n: languages,
 }

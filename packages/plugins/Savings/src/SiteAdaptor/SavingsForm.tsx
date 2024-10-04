@@ -40,7 +40,6 @@ import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
-import { useSavingsTrans } from '../locales/index.js'
 import { Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
@@ -95,16 +94,12 @@ interface SavingsFormDialogProps {
 
 export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFormDialogProps) {
     const { _ } = useLingui()
-    const t = useSavingsTrans()
     const { classes } = useStyles()
     const isDeposit = tab === TabType.Deposit
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [inputAmount, setInputAmount] = useState('')
     const [estimatedGas, setEstimatedGas] = useState<BigNumber.Value>(ZERO)
     const { data: nativeToken } = useNativeToken<'all'>(NetworkPluginID.PLUGIN_EVM, {
-        chainId,
-    })
-    const { data: nativeTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, nativeToken?.address, {
         chainId,
     })
 
@@ -197,7 +192,14 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         chain: EVMChainResolver.chainName(chainId) ?? '',
         account: Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`),
     }
-    const shareText = isDeposit ? t.promote_savings(promote) : t.promote_withdraw(promote)
+    const shareText =
+        isDeposit ?
+            _(
+                msg`Hi friends, I just deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
+            )
+        :   _(
+                msg`Hi friends, I just withdrew my deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
+            )
     const queryClient = useQueryClient()
     const [, executor] = useAsyncFn(async () => {
         const methodName = isDeposit ? 'deposit' : 'withdraw'

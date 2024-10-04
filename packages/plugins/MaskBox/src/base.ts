@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
-import { languages, linguiLanguages } from './locales/languages.js'
+import { languages } from './locale/languages.js'
 import { PLUGIN_ID } from './constants.js'
 
 export const base: Plugin.Shared.Definition = {
@@ -18,7 +18,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     experimentalMark: true,
-    i18n: [languages, linguiLanguages],
+    i18n: languages,
     contribution: {
         postContent: new Set(['https://box-beta.mask.io', 'https://box.mask.io']),
     },

@@ -1,6 +1,54 @@
 {
     "messages": {
+        "1wIm8u": [
+            [
+                "0",
+                "plural",
+                {
+                    "one": ["#", " shares / ", ["total"], " ", ["symbol"]],
+                    "other": ["#", " shares / $", ["total"], " $", ["symbol"]]
+                }
+            ]
+        ],
         "DtZDW+": [["0"], " (UTC+8)"],
+        "6gJ1kO": [["null", "plural", { "one": ["<0>", ["0"], "</0> NFT"], "other": ["<1>", ["1"], "</1> NFTs"] }]],
+        "8XJ5FY": [
+            "@",
+            ["sender"],
+            " is sending an NFT lucky drop on ",
+            ["networkName"],
+            " network. ",
+            ["account_promote"],
+            " ",
+            ["promote_short"],
+            " #mask_io #LuckyDrop ",
+            ["postLink"]
+        ],
+        "OdMN1h": [
+            "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
+            ["sender"],
+            " .\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on Farcaster: ",
+            ["link"]
+        ],
+        "Jc7ozq": [
+            "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
+            ["sender"],
+            " .\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on: ",
+            ["link"]
+        ],
+        "VMFE2K": [
+            "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
+            ["sender"],
+            ".\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on Lens: ",
+            ["link"]
+        ],
+        "T4+c4v": [
+            "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @",
+            ["sender"],
+            " ! \\n\\nClaim on Lens: ",
+            ["link"]
+        ],
+        "8wEOMN": "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.",
         "oig90Q": ["全部 (", ["0"], " NFT)"],
         "hehnjM": "Amount",
         "Fgyfqo": "每个金额",
@@ -17,6 +65,33 @@
         "bTp+bt": ["Claimed ", ["0"], "/", ["1"]],
         "wNUf+h": ["成功领取了 1 ", ["0"], "。"],
         "yDDOwl": ["Claimed 1 ", ["NFT"], " successfully."],
+        "WsNUie": ["Claimed: <0>", ["0"], "/", ["1"], "</0> <1>", ["2"], "</1>"],
+        "vcyM3U": [
+            "Claimed: <0>",
+            ["claim_numbers"],
+            "/",
+            ["total_numbers"],
+            "</0> ",
+            ["0"],
+            "/",
+            ["1"],
+            " <1>",
+            ["token_symbol"],
+            "</1>"
+        ],
+        "5NtcoW": [
+            "Claimed: <0>",
+            ["claim_numbers"],
+            "/",
+            ["total_numbers"],
+            "</0> <1>",
+            ["0"],
+            "/",
+            ["1"],
+            "</1> <2>",
+            ["token_symbol"],
+            "</2>"
+        ],
         "N0tcou": "認領中...",
         "s/KkfL": "Clear all requirements",
         "DoJzLz": "NFT 系列",
@@ -41,6 +116,9 @@
         "NfxOUe": "输入总数",
         "YLObqx": "均分金额",
         "M1RnFv": "已過期",
+        "RHSlVw": "Follow @masknetwork (mask.io) to claim NFT lucky drops.",
+        "d5JlO3": "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops.",
+        "1yxOwR": ["Follow <0/> on ", ["platform"]],
         "TvMDGM": "Follow me",
         "O/GjWq": ["From: @", ["0"]],
         "Wy16g8": "给任意用户发送Token或者NFT，先到先得",
@@ -49,7 +127,63 @@
             ["0"],
             " for the Lucky Drop Smart contract. You only have to do this once per token."
         ],
+        "xSMpH/": [
+            "Hi friends, I just found a lucky drop sent by @",
+            ["0"],
+            " on ",
+            ["1"],
+            " network. Follow @",
+            ["2"],
+            " (mask.io) to claim lucky drops.\\n",
+            ["promote_short"],
+            "\\n#mask_io #LuckyDrop\\n",
+            ["3"]
+        ],
+        "xfSZBp": [
+            "Hi friends, I just found a lucky drop sent by @",
+            ["0"],
+            " on ",
+            ["1"],
+            " network.\\n",
+            ["promote_short"],
+            "\\n",
+            ["2"]
+        ],
         "0caMy7": "历史",
+        "APlaHT": [
+            "I just claimed a lucky drop from @",
+            ["0"],
+            " on ",
+            ["1"],
+            " network. Follow @",
+            ["2"],
+            " (mask.io) to claim lucky drops.\\n",
+            ["promote_short"],
+            "\\n#mask_io #LuckyDrop\\n",
+            ["3"]
+        ],
+        "BUGjS8": [
+            "I just claimed a lucky drop from @",
+            ["0"],
+            " on ",
+            ["1"],
+            " network.\\n",
+            ["promote_short"],
+            "\\n",
+            ["2"]
+        ],
+        "duwlhY": [
+            "I just claimed an NFT lucky drop from @",
+            ["sender"],
+            " on ",
+            ["networkName"],
+            " network. ",
+            ["account_promote"],
+            "\\n",
+            ["promote_short"],
+            "\\n#mask_io #LuckyDrop\\n",
+            ["postLink"]
+        ],
         "9r9nwF": "平分",
         "4UmwEM": "Image Preview",
         "H1v3zR": [["0"], " 余额不足"],
@@ -65,10 +199,12 @@
         "LEbOpR": "More details",
         "hXzOVo": "Next",
         "lISnKy": "NFT holder",
+        "XQFSWD": "NFT Holder of <0/>",
         "8Dh77Z": "NFTs",
         "1UzENP": "No",
         "olT7qF": "No claims yet for this Lucky Drop",
         "0oFu/K": "No Lucky Drops claimed",
+        "6rpB4w": "No Lucky Drops created.",
         "Ev2r9A": "没有任何结果。",
         "AuXfDa": "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards.",
         "rl4E61": "Number of Winners",
@@ -83,6 +219,7 @@
         "mkude1": "Repost",
         "QuBpLd": "Requirements",
         "A1taO8": "搜尋",
+        "whvqgX": "Select 🎁 when you compose a post to start your first drop.",
         "/y/pZ3": "选择代币",
         "mCB6Je": "全选",
         "8ZgUhU": "Select NFT collection to gate access",
@@ -99,7 +236,13 @@
         "hdmRb+": "此红包已被损坏。",
         "gPL7RI": "此红包是空的。",
         "XCpVdp": "此红包已过期。",
+        "7lVDIk": [
+            "The maximum number of NFTs to be sold in NFT lucky drop contract is ",
+            ["RED_PACKET_MAX_SHARES"],
+            "."
+        ],
         "51cT/A": ["The minimum amount for each share is ", ["0"], " ", ["1"]],
+        "uQLq0T": ["The NFT lucky drop supports up to ", ["RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "QH3LZ+": "Token ID可用逗号分隔，例如：1224, 7873",
         "6RDwJM": "代幣",
         "V6wYl1": "Total amount",
@@ -114,12 +257,15 @@
         "7tYPrA": "钱包账户",
         "wQrah8": ["当选择过多的 NFT时，总气费可能超过 1 ", ["0"], " 的 Metamask 限制。请减少选中的 NFT数量。"],
         "GRLMKx": "Winners",
+        "No0akY": "You can also use <0>Shift</0> to select multiple NFTs.",
         "p1L+er": "You can set one or multiple rules to be eligible to win a Lucky Drop.",
         "rkVh+N": "You can withdraw any unclaimed amount 24 hours after sending this lucky drop.",
         "LQtEHu": "您可以在发送红包24小时后提取红包余额。",
         "ps4YUr": ["你领取了", ["0"], " ", ["1"], "。"],
         "Z+6iux": ["You claimed ", ["1"], " {}."],
+        "Enb3Qk": "You claimed 1.",
         "nJMj1z": ["您可以退款 ", ["0"], " ", ["1"], "。"],
+        "cBEQ5v": ["You got ", ["0"], " ", ["1"]],
         "0UMPI1": ["You got 1 ", ["0"]],
         "kX8xzI": "您还没有创建任何NFT红包。尝试创建红包并与您的朋友分享。"
     }

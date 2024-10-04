@@ -18,6 +18,10 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
 
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:349
+msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+msgstr ""
+
 #: src/SiteAdaptor/components/ProfileCard.tsx:164
 msgid "Add Wallet"
 msgstr "添加钱包"
@@ -31,7 +35,7 @@ msgstr "切换"
 msgid "Choose and showcase your Web3 footprints on Twitter."
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:200
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
 msgid "Confirm"
 msgstr "确定"
 
@@ -39,24 +43,24 @@ msgstr "确定"
 msgid "Current"
 msgstr "当前"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:301
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:300
 msgid "Current wallet does not support to interact with Lens protocol."
 msgstr "当前钱包不支持与 Lens 协议交互。"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:128
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:126
 msgid "Failed to set up Web3 Profile wallets. Please try again."
 msgstr "无法设置 Web3 个人资料钱包。请重试。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:429
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:422
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:296
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:295
 #: src/SiteAdaptor/components/Lens/LensList.tsx:205
 msgid "Follow"
 msgstr "关注"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:290
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:289
 msgid "Follow for {0} {1}"
 msgstr "关注 {0} {1}"
 
@@ -64,20 +68,20 @@ msgstr "关注 {0} {1}"
 msgid "Follow Lens handle"
 msgstr "关注Lens handle"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:285
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:284
 #: src/SiteAdaptor/components/Lens/LensList.tsx:204
 msgid "Following"
 msgstr "已关注"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:333
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:332
 msgid "Lens"
 msgstr "Lens"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:233
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
 msgid "Lens Follow"
 msgstr "Lens 关注"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:233
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
 msgid "Lens Unfollow"
 msgstr "Lens 取消关注"
 
@@ -86,59 +90,59 @@ msgstr "Lens 取消关注"
 msgid "Network error, try again"
 msgstr "网络错误，请重试"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:313
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:312
 msgid "No enough balance to complete follow process."
 msgstr "没有足够的余额来完成关注流程。"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:164
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:162
 msgid "No verified account found here."
 msgstr "在此找不到已验证的帐户。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:303
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:302
 msgid "Only holding lens handle can follow."
 msgstr "只有拥有lens handle才能进行关注。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:238
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:237
 msgid "Previous follow transaction is in processing, please wait and try again."
 msgstr "先前的关注交易正在处理中，请稍候，然后重试。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:237
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:236
 msgid "Previous unfollow transaction is in processing, please wait and try again."
 msgstr "先前的取消关注交易正在处理中，请稍候，然后重试。"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:126
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:124
 msgid "Save failed"
 msgstr "保存失败"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:120
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
 msgid "Save successfully"
 msgstr "保存成功"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:156
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏地址。"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:122
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:120
 msgid "Set up Web3 Profile wallets successfully."
 msgstr "成功设置 Web3 个人资料钱包。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:406
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:399
 msgid "Switch to Polygon and Follow"
 msgstr "切换到 Polygon 并关注"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:317
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:316
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr "当前钱包没有 Lens ，无法关注/取消关注"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:287
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:286
 msgid "This profile can not be followed."
 msgstr "此个人信息不能被关注。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:315
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:314
 msgid "This user has banned follow function."
 msgstr "此用户已禁止关注功能。"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:285
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:284
 msgid "Unfollow"
 msgstr "取消关注"
 
@@ -146,8 +150,8 @@ msgstr "取消关注"
 msgid "Unfollow lens handle"
 msgstr "取消关注Lens Handle"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:385
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:391
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:378
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:384
 msgid "Unlock {0} {1} and follow"
 msgstr "解锁 {0} {1} 并关注"
 
@@ -155,11 +159,11 @@ msgstr "解锁 {0} {1} 并关注"
 msgid "View"
 msgstr "查看"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:371
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:364
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:148
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:146
 #: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr "Web3 名片"

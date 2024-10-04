@@ -4,7 +4,6 @@ import { useAddressType, useChainContext } from '@masknet/web3-hooks-base'
 import { GoPlusLabs } from '@masknet/web3-providers'
 import { AddressType } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useTipsTrans } from '../../locales/index.js'
 import type { ValidationTuple } from '../../types/index.js'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -14,7 +13,6 @@ export function useRecipientValidate(recipientAddress: string): {
     validation: ValidationTuple
 } {
     const { _ } = useLingui()
-    const t = useTipsTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { value: addressType, loading } = useAddressType(NetworkPluginID.PLUGIN_EVM, recipientAddress, {
         chainId,
@@ -30,7 +28,7 @@ export function useRecipientValidate(recipientAddress: string): {
             return [false, _(msg`The receiving address is a contract address. Please check again.`)]
         if (isMaliciousAddress) return [false, _(msg`The receiving address may be a malicious address.`)]
         return [true]
-    }, [addressType, isMaliciousAddress, t])
+    }, [addressType, isMaliciousAddress, _])
     return {
         loading,
         validation,

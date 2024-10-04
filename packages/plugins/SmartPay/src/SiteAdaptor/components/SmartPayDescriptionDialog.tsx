@@ -3,7 +3,6 @@ import { Box, DialogContent, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { SmartPayTrans } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { Trans } from '@lingui/macro'
 
@@ -57,10 +56,13 @@ const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open
                 </Typography>
                 <Box component="ul">
                     <Typography component="li" className={classes.content}>
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <SmartPayTrans.setup_smart_pay_one
-                            components={{ strong: <strong className={classes.strong} /> }}
-                        />
+                        <Trans>
+                            <strong className={classes.strong}>
+                                Your smart contract wallet is only deployed on Polygon Network for now. Please do not
+                                receive funds on other chains with the same address.
+                            </strong>{' '}
+                            We will support more chains in the future.
+                        </Trans>
                     </Typography>
                     <Typography component="li" className={classes.content}>
                         <Trans>Free gas experience in Mask Network’s dApps like Lucky Drop and Tips.</Trans>
