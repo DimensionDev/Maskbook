@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-10-04 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,116 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 956\n"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:96
+msgid "{0} Platform costs"
+msgstr "crwdns28468:0{0}crwdne28468:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:191
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:56
+msgid "About"
+msgstr "crwdns28470:0crwdne28470:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:194
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:58
+msgid "Activities"
+msgstr "crwdns28472:0crwdne28472:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:91
+msgid "Blockchain"
+msgstr "crwdns28474:0crwdne28474:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:163
+msgid "Change NFT PFP"
+msgstr "crwdns28476:0crwdne28476:0"
+
+#: src/SiteAdaptor/index.tsx:189
+msgid "Collectibles"
+msgstr "crwdns28478:0crwdne28478:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:88
+msgid "Contract"
+msgstr "crwdns28480:0crwdne28480:0"
+
+#: src/SiteAdaptor/Shared/DescriptionCard.tsx:57
+msgid "Description"
+msgstr "crwdns28482:0crwdne28482:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:192
+msgid "Details"
+msgstr "crwdns28484:0crwdne28484:0"
+
+#: src/SiteAdaptor/index.tsx:184
+msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
+msgstr "crwdns28486:0crwdne28486:0"
+
+#: src/SiteAdaptor/Shared/OfferCard.tsx:123
+msgid "Expires in"
+msgstr "crwdns28488:0crwdne28488:0"
+
+#: src/SiteAdaptor/Shared/ActivityCard.tsx:137
+#: src/SiteAdaptor/Shared/OfferCard.tsx:105
+msgid "From"
+msgstr "crwdns28490:0crwdne28490:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:117
+msgid "Load failed"
+msgstr "crwdns28492:0crwdne28492:0"
+
+#: src/SiteAdaptor/Shared/OffersList.tsx:74
+msgid "Load More"
+msgstr "crwdns28494:0crwdne28494:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:82
+msgid "Mint Address"
+msgstr "crwdns28496:0crwdne28496:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:175
+msgid "More on {0}"
+msgstr "crwdns28498:0{0}crwdne28498:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:50
+msgid "NFT Details"
+msgstr "crwdns28500:0crwdne28500:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:156
+msgid "NFT is not minted yet."
+msgstr "crwdns28502:0crwdne28502:0"
+
+#: src/SiteAdaptor/Shared/PriceCard.tsx:70
+msgid "No Listings"
+msgstr "crwdns28504:0crwdne28504:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:193
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:57
+msgid "Offers"
+msgstr "crwdns28506:0crwdne28506:0"
+
+#: src/SiteAdaptor/Shared/PropertiesCard.tsx:86
+msgid "Properties"
+msgstr "crwdns28508:0crwdne28508:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:272
+msgid "Sale ends in {0}"
+msgstr "crwdns28510:0{0}crwdne28510:0"
+
+#: src/SiteAdaptor/Shared/ActivitiesList.tsx:45
+msgid "This NFT didn't have any activities."
+msgstr "crwdns28512:0crwdne28512:0"
+
+#: src/SiteAdaptor/Shared/OffersList.tsx:62
+msgid "This NFT didn't have any offers."
+msgstr "crwdns28514:0crwdne28514:0"
+
+#: src/SiteAdaptor/Shared/ActivityCard.tsx:149
+msgid "To <0>{0}</0>"
+msgstr "crwdns28516:0{0}crwdne28516:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:87
+msgid "Token ID"
+msgstr "crwdns28518:0crwdne28518:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:92
+msgid "Token Standard"
+msgstr "crwdns28520:0crwdne28520:0"
 
