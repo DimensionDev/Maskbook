@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-04 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,128 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 982\n"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:184
+msgid "{0, plural, one {Action} other {Actions}}"
+msgstr "crwdns31680:00={0}crwdne31680:0"
+
+#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
+#~ msgid "{0} {1}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FeedFilters.tsx:56
+msgid "{0} Networks"
+msgstr "crwdns28894:0{0}crwdne28894:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:80
+msgid "<0/> minted <1/>"
+msgstr "crwdns31682:0crwdne31682:0"
+
+#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx:134
+msgid "<0/> publish a post on {0}"
+msgstr "crwdns31684:0{0}crwdne31684:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:171
+msgid "<0>{user}</0> {0, select, send {sent} claim {claimed}} {1, select, verbose {<1>{2}</1>} simple {<2>an NFT</2>}} {3, select, send {to} claim {from}} <3>{formattedAddress}</3>{4, select, cost {for {5} {6}} free {}}"
+msgstr "crwdns31686:0user={user}crwdnd31686:00={0}crwdnd31686:01={1}crwdnd31686:02={2}crwdnd31686:03={3}crwdnd31686:0formattedAddress={formattedAddress}crwdnd31686:04={4}crwdnd31686:05={5}crwdnd31686:06={6}crwdne31686:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:63
+msgid "<0>{user}</0> minted <1>{0}</1> for <2>{value} {symbolName}</2>"
+msgstr "crwdns31688:0{user}crwdnd31688:0{0}crwdnd31688:0{value}crwdnd31688:0{symbolName}crwdne31688:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:71
+msgid "<0>{user}</0> minted <1>an NFT</1> for <2>{value} {symbolName}</2>"
+msgstr "crwdns31690:0{user}crwdnd31690:0{value}crwdnd31690:0{symbolName}crwdne31690:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:143
+msgid "<0>{user}</0> registered <1>{0}</1> for <2>{costValue} {costSymbol}</2>"
+msgstr "crwdns31692:0{user}crwdnd31692:0{0}crwdnd31692:0{costValue}crwdnd31692:0{costSymbol}crwdne31692:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:152
+msgid "<0>{user}</0> registered <1>an ENS</1> for <2>{costValue} {costSymbol}</2>"
+msgstr "crwdns31694:0{user}crwdnd31694:0{costValue}crwdnd31694:0{costSymbol}crwdne31694:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:116
+msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3>"
+msgstr "crwdns31696:0{user}crwdnd31696:0{0}crwdnd31696:0{recipient}crwdnd31696:0{1}crwdnd31696:0{symbolName}crwdne31696:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:93
+msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3> on <4>{2}</4>"
+msgstr "crwdns31698:0{user}crwdnd31698:0{0}crwdnd31698:0{recipient}crwdnd31698:0{1}crwdnd31698:0{symbolName}crwdnd31698:0{2}crwdne31698:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:126
+msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3>"
+msgstr "crwdns31700:0{user}crwdnd31700:0{recipient}crwdnd31700:0{0}crwdnd31700:0{symbolName}crwdne31700:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:104
+msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3> on <4>{1}</4>"
+msgstr "crwdns31702:0{user}crwdnd31702:0{recipient}crwdnd31702:0{0}crwdnd31702:0{symbolName}crwdnd31702:0{1}crwdne31702:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:146
+msgid "Category"
+msgstr "crwdns28896:0crwdne28896:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx:68
+msgid "Details"
+msgstr "crwdns28898:0crwdne28898:0"
+
+#: src/SiteAdaptor/FeedFilters.tsx:65
+msgid "Direct"
+msgstr "crwdns28900:0crwdne28900:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:116
+msgid "Failed"
+msgstr "crwdns28902:0crwdne28902:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:159
+msgid "From"
+msgstr "crwdns28904:0crwdne28904:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:98
+msgid "Hash"
+msgstr "crwdns28906:0crwdne28906:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:128
+msgid "Network"
+msgstr "crwdns28908:0crwdne28908:0"
+
+#: src/SiteAdaptor/FeedsPage.tsx:117
+msgid "No more data available."
+msgstr "crwdns28910:0crwdne28910:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:137
+msgid "Platform"
+msgstr "crwdns28912:0crwdne28912:0"
+
+#: src/SiteAdaptor/FeedFilters.tsx:66
+msgid "Related"
+msgstr "crwdns28914:0crwdne28914:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:110
+msgid "Status"
+msgstr "crwdns28916:0crwdne28916:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:115
+msgid "Successful"
+msgstr "crwdns28918:0crwdne28918:0"
+
+#: src/SiteAdaptor/FeedsPage.tsx:98
+msgid "There's no feed associated with this address."
+msgstr "crwdns31704:0crwdne31704:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:122
+msgid "Timestamp"
+msgstr "crwdns28920:0crwdne28920:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:171
+msgid "To"
+msgstr "crwdns28922:0crwdne28922:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:93
+msgid "Transaction Details"
+msgstr "crwdns28924:0crwdne28924:0"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:195
+msgid "Tx Fee"
+msgstr "crwdns28926:0crwdne28926:0"
 
