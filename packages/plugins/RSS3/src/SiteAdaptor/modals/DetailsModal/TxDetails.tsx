@@ -6,10 +6,9 @@ import { leftShift } from '@masknet/web3-shared-base'
 import { Box, Tooltip, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
-import { useRSS3Trans } from '../../../locales/i18n_generated.js'
 import { FeedActions } from '../../components/FeedActions/index.js'
 import { formatTimestamp, ONE_WEEK } from '../../components/share.js'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     group: {
@@ -75,7 +74,6 @@ interface TxDetailsProps {
 }
 
 export function TxDetails({ feed }: TxDetailsProps) {
-    const t = useRSS3Trans()
     const { classes, theme } = useStyles()
 
     const timestamp = useMemo(() => {
@@ -182,7 +180,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
             </Box>
             <Box className={classes.sep} />
             <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                <Typography className={classes.key}>{t.actions({ count: feed.actions.length })}</Typography>
+                <Typography className={classes.key}>
+                    <Plural one="Action" other="Actions" value={feed.actions.length} />
+                </Typography>
                 <Typography className={classes.value} component="div">
                     <FeedActions feed={feed} />
                 </Typography>

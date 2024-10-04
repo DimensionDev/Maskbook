@@ -11,9 +11,8 @@ import { Icons } from '@masknet/icons'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans, msg } from '@lingui/macro'
+import { Plural, Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 interface StyleProps {
@@ -166,7 +165,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 12,
         border: `1px solid ${theme.palette.mode === 'light' ? '#0F1419' : '#D9D9D9'}`,
         borderRadius: 999,
-        transform: 'RedPacketTransY(-1px)',
         height: 12,
         marginLeft: 5,
         cursor: 'pointer',
@@ -208,10 +206,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     arrow: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#111418',
-        transform: 'RedPacketTransX(260px) !important',
     },
     tooltip: {
-        transform: 'RedPacketTransX(20px) !important',
         padding: '10px 20px',
         width: 256,
         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111418',
@@ -242,7 +238,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const { _ } = useLingui()
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
-    const t = useRedPacketTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
     const [searched, setSearched] = useState(false)
@@ -345,8 +340,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         onClose()
     }, [tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
-    const maxSharesOptions = { amount: RED_PACKET_MAX_SHARES.toString() }
-
     return tokenDetailedOwnerList.length === 0 ?
             <DialogContent className={classes.dialogContent}>
                 <Box className={classes.tokenBox}>
@@ -395,15 +388,26 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 </Box>
                 <div className={classes.selectSharesExceedBox}>
                     <Typography className={classes.selectSharesExceed}>
-                        {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
+                        {isSelectSharesExceed ?
+                            <Trans>
+                                The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time.
+                            </Trans>
+                        :   null}
                     </Typography>
                     <Box className={classes.selectAmountBox}>
                         <ShadowRootTooltip
                             title={
                                 <Typography className={classes.tooltipText}>
                                     {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES ?
-                                        t.nft_max_shares_tip(maxSharesOptions)
-                                    :   t.nft_max_shares(maxSharesOptions)}
+                                        <Trans>
+                                            The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for
+                                            one time.
+                                        </Trans>
+                                    :   <Trans>
+                                            The maximum number of NFTs to be sold in NFT lucky drop contract is{' '}
+                                            {RED_PACKET_MAX_SHARES}.
+                                        </Trans>
+                                    }
                                 </Typography>
                             }
                             placement="top-end"
@@ -412,10 +416,23 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <QuestionMarkIcon className={classes.questionMarkIcon} />
                         </ShadowRootTooltip>
                         <Typography>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <RedPacketTrans.nft_select_amount
-                                components={{ span: <span className={classes.selectedTokenAmount} /> }}
-                                values={{ count: tokenDetailedSelectedList.length }}
+                            <Plural
+                                one={
+                                    <Trans>
+                                        <span className={classes.selectedTokenAmount}>
+                                            {tokenDetailedSelectedList.length}
+                                        </span>{' '}
+                                        NFT
+                                    </Trans>
+                                }
+                                other={
+                                    <Trans>
+                                        <span className={classes.selectedTokenAmount}>
+                                            {tokenDetailedSelectedList.length}
+                                        </span>{' '}
+                                        NFTs
+                                    </Trans>
+                                }
                             />
                         </Typography>
                     </Box>
@@ -477,15 +494,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                         </Typography>
                                     </div>
                                     <Typography>
-                                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                        <RedPacketTrans.nft_shift_select_tip
-                                            components={{
-                                                text: <span style={{ color: theme.palette.maskColor.primary }} />,
-                                            }}
-                                            values={{
-                                                text: 'Shift',
-                                            }}
-                                        />
+                                        <Trans>
+                                            You can also use{' '}
+                                            <span style={{ color: theme.palette.maskColor.primary }}>Shift</span> to
+                                            select multiple NFTs.
+                                        </Trans>
                                     </Typography>
                                 </div>
                             :   null}
@@ -511,7 +524,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 </Box>
                 <div className={classes.selectSharesExceedBox}>
                     <Typography className={classes.selectSharesExceed}>
-                        {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
+                        {isSelectSharesExceed ?
+                            <Trans>
+                                The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time.
+                            </Trans>
+                        :   null}
                     </Typography>
 
                     <Box className={classes.selectAmountBox}>
@@ -519,8 +536,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             title={
                                 <Typography className={classes.tooltipText}>
                                     {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES ?
-                                        t.nft_max_shares_tip(maxSharesOptions)
-                                    :   t.nft_max_shares(maxSharesOptions)}
+                                        <Trans>
+                                            The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for
+                                            one time.
+                                        </Trans>
+                                    :   <Trans>
+                                            The maximum number of NFTs to be sold in NFT lucky drop contract is{' '}
+                                            {RED_PACKET_MAX_SHARES}.
+                                        </Trans>
+                                    }
                                 </Typography>
                             }
                             placement="top-end"

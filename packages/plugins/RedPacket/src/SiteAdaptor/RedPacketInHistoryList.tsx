@@ -8,7 +8,6 @@ import { ChainId, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { format, fromUnixTime } from 'date-fns'
 import { memo } from 'react'
-import { RedPacketTrans } from '../locales/index.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
 import { Trans } from '@lingui/macro'
 
@@ -67,7 +66,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
         },
         content: {
-            transform: 'RedPacketTransY(-4px)',
             width: '100%',
             [smallQuery]: {
                 paddingLeft: theme.spacing(1.5),
@@ -223,25 +221,22 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
 
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
-                                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                <RedPacketTrans.history_claimed
-                                    components={{
-                                        span: <span />,
-                                    }}
-                                    values={{
-                                        claimedShares: String(claim_numbers),
-                                        shares: String(total_numbers),
-                                        amount: formatBalance(total_amounts, token_decimal ?? 18, {
-                                            significant: 2,
-                                            isPrecise: true,
-                                        }),
-                                        claimedAmount: formatBalance(claim_amounts, token_decimal, {
-                                            significant: 2,
-                                            isPrecise: true,
-                                        }),
-                                        symbol: token_symbol,
-                                    }}
-                                />
+                                <Trans>
+                                    Claimed:{' '}
+                                    <span>
+                                        {claim_numbers}/{total_numbers}
+                                    </span>{' '}
+                                    {formatBalance(claim_amounts, token_decimal, {
+                                        significant: 2,
+                                        isPrecise: true,
+                                    })}
+                                    /
+                                    {formatBalance(total_amounts, token_decimal ?? 18, {
+                                        significant: 2,
+                                        isPrecise: true,
+                                    })}{' '}
+                                    <span>{token_symbol}</span>
+                                </Trans>
                             </Typography>
                             {token_logo ?
                                 <TokenIcon

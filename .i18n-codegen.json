@@ -66,19 +66,6 @@
                 "emitTS": true,
                 "shouldUnescape": true
             }
-        },
-        {
-            "input": "./packages/plugins/RedPacket/src/locales/en-US.json",
-            "output": "./packages/plugins/RedPacket/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useRedPacketTrans",
-                "namespace": "com.maskbook.red_packet",
-                "trans": "RedPacketTrans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
         }
     ]
 }

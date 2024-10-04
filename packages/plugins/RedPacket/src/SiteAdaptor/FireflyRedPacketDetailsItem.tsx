@@ -5,7 +5,6 @@ import { useNetworkDescriptor, useChainContext } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { memo } from 'react'
-import { RedPacketTrans } from '../locales/index.js'
 import { format, fromUnixTime } from 'date-fns'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
@@ -70,7 +69,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
         },
         content: {
-            transform: 'RedPacketTransY(-4px)',
             width: '100%',
             [smallQuery]: {
                 paddingLeft: theme.spacing(1.5),
@@ -368,25 +366,24 @@ export const FireflyRedPacketDetailsItem = memo(function FireflyRedPacketDetails
                             {claim_numbers || total_numbers ?
                                 <div style={{ display: 'flex', alignItems: 'center' }}>
                                     <Typography variant="body1" className={classes.claimFooterInfo}>
-                                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                        <RedPacketTrans.history_claimed_firefly
-                                            components={{
-                                                span: <span />,
-                                            }}
-                                            values={{
-                                                claimedShares: String(claim_numbers),
-                                                shares: String(total_numbers),
-                                                amount: formatBalance(total_amounts, token_decimal ?? 18, {
+                                        <Trans>
+                                            Claimed:{' '}
+                                            <span>
+                                                {claim_numbers}/{total_numbers}
+                                            </span>{' '}
+                                            <span>
+                                                {formatBalance(claim_amounts, token_decimal, {
                                                     significant: 2,
                                                     isPrecise: true,
-                                                }),
-                                                claimedAmount: formatBalance(claim_amounts, token_decimal, {
+                                                })}
+                                                /
+                                                {formatBalance(total_amounts, token_decimal ?? 18, {
                                                     significant: 2,
                                                     isPrecise: true,
-                                                }),
-                                                symbol: token_symbol,
-                                            }}
-                                        />
+                                                })}
+                                            </span>{' '}
+                                            <span>{token_symbol}</span>
+                                        </Trans>
                                     </Typography>
                                     {token_logo ?
                                         <TokenIcon

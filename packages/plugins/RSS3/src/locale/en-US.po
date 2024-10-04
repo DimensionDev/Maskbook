@@ -13,6 +13,10 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:184
+msgid "{0, plural, one {Action} other {Actions}}"
+msgstr ""
+
 #: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
 #~ msgid "{0} {1}"
 #~ msgstr ""
@@ -21,7 +25,51 @@ msgstr ""
 msgid "{0} Networks"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:148
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:80
+msgid "<0/> minted <1/>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx:134
+msgid "<0/> publish a post on {0}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:172
+msgid "<0>{user}</0> {0, select, send {sent} claim {claimed}} {1, select, verbose {<1>{2}</1>} simple {<2>an NFT</2>}} {3, select, send {to} claim {from}} <3>{formattedAddress}</3>{4, select, cost {for {5} {6}} free {}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:63
+msgid "<0>{user}</0> minted <1>{0}</1> for <2>{value} {symbolName}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:71
+msgid "<0>{user}</0> minted <1>an NFT</1> for <2>{value} {symbolName}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:143
+msgid "<0>{user}</0> registered <1>{0}</1> for <2>{costValue} {costSymbol}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:152
+msgid "<0>{user}</0> registered <1>an ENS</1> for <2>{costValue} {costSymbol}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:116
+msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:93
+msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3> on <4>{2}</4>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:126
+msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:104
+msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3> on <4>{1}</4>"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:146
 msgid "Category"
 msgstr ""
 
@@ -33,27 +81,27 @@ msgstr ""
 msgid "Direct"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:118
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:116
 msgid "Failed"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:161
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:159
 msgid "From"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:100
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:98
 msgid "Hash"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:130
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:128
 msgid "Network"
 msgstr ""
 
-#: src/SiteAdaptor/FeedsPage.tsx:115
+#: src/SiteAdaptor/FeedsPage.tsx:117
 msgid "No more data available."
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:139
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:137
 msgid "Platform"
 msgstr ""
 
@@ -61,23 +109,27 @@ msgstr ""
 msgid "Related"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:112
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:110
 msgid "Status"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:117
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:115
 msgid "Successful"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:124
+#: src/SiteAdaptor/FeedsPage.tsx:98
+msgid "There's no feed associated with this address."
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:122
 msgid "Timestamp"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:173
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:171
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:95
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:93
 msgid "Transaction Details"
 msgstr ""
 

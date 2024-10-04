@@ -32,7 +32,6 @@ import { Icons } from '@masknet/icons'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketTrans } from '../locales/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
@@ -106,7 +105,6 @@ interface RedPacketFormProps {
 export function RedPacketERC20Form(props: RedPacketFormProps) {
     const { _ } = useLingui()
     const { origin, expectedChainId, isFirefly, gasOption, onChange, onNext, onGasOptionChange, onChainChange } = props
-    const t = useRedPacketTrans()
     const { classes } = useStyles()
     const theme = useTheme()
     // context
@@ -201,7 +199,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 :   undefined,
             total: totalAmount.toFixed(),
         }),
-        [isRandom, senderName, message, t, shares, token, totalAmount],
+        [isRandom, senderName, message, _, shares, token, totalAmount],
     )
 
     const onClick = useCallback(() => {
