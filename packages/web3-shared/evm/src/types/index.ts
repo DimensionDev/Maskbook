@@ -37,8 +37,8 @@ export enum ChainId {
     BSC = 56,
     BSCT = 97,
 
-    // Matic
-    Matic = 137,
+    // Polygon
+    Polygon = 137,
     Mumbai = 80001,
 
     // Arbitrum

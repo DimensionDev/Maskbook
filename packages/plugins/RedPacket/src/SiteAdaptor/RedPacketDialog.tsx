@@ -101,7 +101,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const chainIdList: ChainId[] = useMemo(() => {
         if (currentTab === tabs.tokens)
             return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
-        return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
+        return [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon]
     }, [currentTab === tabs.tokens, definition?.enableRequirement.web3])
     const chainId = chainIdList.includes(contextChainId) ? contextChainId : ChainId.Mainnet
 

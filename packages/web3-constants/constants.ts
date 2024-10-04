@@ -105,7 +105,7 @@ const EVM_KEYS = [
     'BSCT',
     'Base',
     'Base_Goerli',
-    'Matic',
+    'Polygon',
     'Mumbai',
     'Arbitrum',
     'Arbitrum_Rinkeby',

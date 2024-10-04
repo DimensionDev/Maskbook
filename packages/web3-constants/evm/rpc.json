@@ -39,7 +39,7 @@
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545/"],
         "Base": ["https://mainnet.base.org"],
         "Base_Goerli": ["https://goerli.base.org"],
-        "Matic": [
+        "Polygon": [
             "https://polygon-mainnet.infura.io/v3/d74bd8586b9e44449cef131d39ceeefb",
             "https://polygon-mainnet.infura.io/v3/d65858b010d249419cf8687eca12b094",
             "https://polygon-mainnet.infura.io/v3/a9d66980bf334e59a42ca19095f3daeb",
@@ -85,7 +85,7 @@
         "BSCT": ["https://data-seed-prebsc-1-s1.binance.org:8545"],
         "Base": ["https://mainnet.base.org"],
         "Base_Goerli": ["https://goerli.base.org"],
-        "Matic": ["https://polygon-rpc.com/"],
+        "Polygon": ["https://polygon-rpc.com/"],
         "Mumbai": ["https://matic-mumbai.chainstacklabs.com"],
         "Arbitrum": ["https://arb1.arbitrum.io/rpc"],
         "Arbitrum_Rinkeby": ["https://rinkeby.arbitrum.io/rpc"],
@@ -116,7 +116,7 @@
         "BSCT": [0, 0, 0, 0, 0],
         "Base": [0, 0, 0, 0, 0],
         "Base_Goerli": [0, 0, 0, 0, 0],
-        "Matic": [0, 1, 2, 3, 4],
+        "Polygon": [0, 1, 2, 3, 4],
         "Mumbai": [0, 1, 2, 3, 4],
         "Arbitrum": [0, 0, 0, 0, 0],
         "Arbitrum_Rinkeby": [0, 0, 0, 0, 0],

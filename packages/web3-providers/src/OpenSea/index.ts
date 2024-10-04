@@ -40,7 +40,7 @@ import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import type { BaseHubOptions, NonFungibleTokenAPI } from '../entry-types.js'
 
 async function fetchFromOpenSea<T>(url: string, chainId: ChainId, init?: RequestInit) {
-    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Matic].includes(chainId)) return
+    if (![ChainId.Mainnet, ChainId.Rinkeby, ChainId.Polygon].includes(chainId)) return
     return fetchSquashedJSON<T>(urlcat(OPENSEA_API_URL, url), { method: 'GET', ...init })
 }
 
@@ -64,7 +64,7 @@ function createAssetLink(chainId: ChainId, address: string, tokenId: string) {
             address,
             tokenId,
         })
-    if (chainId === ChainId.Matic)
+    if (chainId === ChainId.Polygon)
         return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
             address,
             tokenId,
