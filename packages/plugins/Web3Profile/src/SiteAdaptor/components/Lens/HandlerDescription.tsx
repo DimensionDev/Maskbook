@@ -89,7 +89,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                     onClick={() =>
                         SelectProviderModal.open({
                             requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
-                            requiredSupportChainIds: [ChainId.Matic],
+                            requiredSupportChainIds: [ChainId.Polygon],
                         })
                     }>
                     {t.wallet_status_button_change()}

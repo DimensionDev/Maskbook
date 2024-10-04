@@ -94,7 +94,7 @@ export function isENSNameWrapperContractAddress(contract_address: string) {
 }
 
 export function isLensProfileAddress(address: string) {
-    const { LENS_PROFILE_CONTRACT_ADDRESS } = getLensProfileConstants(ChainId.Matic)
+    const { LENS_PROFILE_CONTRACT_ADDRESS } = getLensProfileConstants(ChainId.Polygon)
     return isSameAddress(address, LENS_PROFILE_CONTRACT_ADDRESS)
 }
 

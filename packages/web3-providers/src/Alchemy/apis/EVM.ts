@@ -17,7 +17,7 @@ import { getAssetFullName } from '../../helpers/getAssetFullName.js'
 import type { BaseHubOptions, NonFungibleTokenAPI } from '../../entry-types.js'
 
 function createNonFungibleTokenLink(chainId: ChainId, address: string, tokenId: string) {
-    if (chainId === ChainId.Matic) {
+    if (chainId === ChainId.Polygon) {
         return urlcat('https://opensea.io/assets/matic/:address/:tokenId', {
             address,
             tokenId,

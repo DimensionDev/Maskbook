@@ -27,7 +27,7 @@ const RULES = [
         hosts: ['opensea.io'],
         pathname: /^\/assets\/matic\/(0x[\dA-Fa-f]{40})\/(\d+)/,
         pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Matic,
+        chainId: ChainIdEVM.Polygon,
         provider: SourceType.OpenSea,
     },
     {
@@ -64,7 +64,7 @@ const RULES = [
         hosts: ['rarible.com', 'app.rarible.com'],
         pathname: /^\/token\/polygon\/(0x[\dA-Fa-f]{40}):(\d+)/,
         pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Matic,
+        chainId: ChainIdEVM.Polygon,
         provider: SourceType.Rarible,
     },
     {
@@ -130,7 +130,7 @@ const RULES = [
         hosts: ['element.market', 'www.element.market'],
         pathname: /^\/assets\/polygon\/(0x[\dA-Fa-f]{40})\/(\d+)/,
         pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Matic,
+        chainId: ChainIdEVM.Polygon,
         provider: SourceType.Element,
     },
 

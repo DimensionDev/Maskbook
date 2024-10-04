@@ -6,7 +6,7 @@ export const TRADER_WEB3_CONFIG = {
         supportedChainIds: [
             ChainId.Mainnet,
             ChainId.BSC,
-            ChainId.Matic,
+            ChainId.Polygon,
             ChainId.Arbitrum,
             ChainId.xDai,
             ChainId.Aurora,

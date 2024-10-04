@@ -6,7 +6,7 @@ export const COINGECKO_CHAIN_ID_LIST = [
     ChainId.Mainnet,
     ChainId.BSC,
     ChainId.Base,
-    ChainId.Matic,
+    ChainId.Polygon,
     ChainId.Arbitrum,
     ChainId.xDai,
     ChainId.Optimism,

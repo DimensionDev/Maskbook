@@ -34,6 +34,7 @@ const DIGITAL_CURRENCY_SYMBOLS = {
     AVAX: 'AVAX',
     GLMR: 'GLMR',
     MATIC: 'MATIC',
+    POL: 'POL',
 }
 
 type UpperCaseKeys = keyof typeof DIGITAL_CURRENCY_SYMBOLS

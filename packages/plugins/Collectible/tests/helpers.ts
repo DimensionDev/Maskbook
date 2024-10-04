@@ -33,7 +33,7 @@ describe('getPayloadFromURL', () => {
             give: 'https://opensea.io/assets/matic/0x2953399124f0cbb46d2cbacd8a89cf0599974963/37184720117030123527613878453157327379579715621769914641223890119352530249488',
             expected: {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainIdEVM.Matic,
+                chainId: ChainIdEVM.Polygon,
                 address: '0x2953399124f0cbb46d2cbacd8a89cf0599974963',
                 tokenId: '37184720117030123527613878453157327379579715621769914641223890119352530249488',
                 provider: SourceType.OpenSea,
@@ -55,7 +55,7 @@ describe('getPayloadFromURL', () => {
             give: 'https://rarible.com/token/polygon/0xa9a6a3626993d487d2dbda3173cf58ca1a9d9e9f:68268762474892781208201789517785975190627759693862686943836537749845164189472',
             expected: {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainIdEVM.Matic,
+                chainId: ChainIdEVM.Polygon,
                 address: '0xa9a6a3626993d487d2dbda3173cf58ca1a9d9e9f',
                 tokenId: '68268762474892781208201789517785975190627759693862686943836537749845164189472',
                 provider: SourceType.Rarible,
@@ -134,7 +134,7 @@ describe('getPayloadFromURL', () => {
             give: 'https://www.element.market/assets/polygon/0xf3892ecb9802c4bd13a123d9d1041654583915e1/4937',
             expected: {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainIdEVM.Matic,
+                chainId: ChainIdEVM.Polygon,
                 address: '0xf3892ecb9802c4bd13a123d9d1041654583915e1',
                 tokenId: '4937',
                 provider: SourceType.Element,

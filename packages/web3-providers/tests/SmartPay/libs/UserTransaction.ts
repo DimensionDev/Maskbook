@@ -4,7 +4,7 @@ import { UserTransaction } from '../../../src/SmartPay/libs/UserTransaction.js'
 
 describe('UserTransaction', async () => {
     const userTransaction = UserTransaction.fromUserOperation(
-        ChainId.Matic,
+        ChainId.Polygon,
         '0x0000000000000000000000000000000000000000',
         {
             sender: '0x0000000000000000000000000000000000000000',

@@ -34,7 +34,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
             :   null}
 
             {lensOpen && handle ?
-                <EVMWeb3ContextProvider chainId={ChainId.Matic}>
+                <EVMWeb3ContextProvider chainId={ChainId.Polygon}>
                     <FollowLensDialog handle={handle} onClose={closeLensDialog} />
                 </EVMWeb3ContextProvider>
             :   null}

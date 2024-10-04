@@ -128,7 +128,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
     {
         ID: `${PLUGIN_ID}_polygon`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Matic,
+        chainId: ChainId.Polygon,
         type: NetworkType.Polygon,
         name: 'Polygon',
         icon: new URL('../assets/polygon.png', import.meta.url).href,
@@ -583,7 +583,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         name: 'Opera',
         icon: new URL('../assets/opera.png', import.meta.url).href,
         enableRequirements: {
-            supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Matic],
+            supportedChainIds: [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon],
             supportedEnhanceableSites: Sniffings.is_opera ? EnhanceableSiteList : [],
             supportedExtensionSites: [],
         },
