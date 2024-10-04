@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-10-04 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -20,6 +20,10 @@ msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:259
 msgid "(unverified)"
+msgstr ""
+
+#: src/hooks/useEssay.ts:40
+msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
 msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:393
@@ -38,6 +42,10 @@ msgstr "挨拶メッセージ"
 msgid "I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
 "#mask_io #nonfungiblefriends\n"
 "⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
+msgstr ""
+
+#: src/hooks/useEssay.ts:38
+msgid "I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!"
 msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:269
