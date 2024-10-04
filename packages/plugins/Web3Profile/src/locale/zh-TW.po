@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:03\n"
+"PO-Revision-Date: 2024-10-04 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,6 +17,10 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:349
+msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+msgstr ""
 
 #: src/SiteAdaptor/components/ProfileCard.tsx:164
 msgid "Add Wallet"
@@ -31,7 +35,7 @@ msgstr ""
 msgid "Choose and showcase your Web3 footprints on Twitter."
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:200
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
 msgid "Confirm"
 msgstr ""
 
@@ -39,24 +43,24 @@ msgstr ""
 msgid "Current"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:301
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:300
 msgid "Current wallet does not support to interact with Lens protocol."
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:128
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:126
 msgid "Failed to set up Web3 Profile wallets. Please try again."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:429
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:422
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:296
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:295
 #: src/SiteAdaptor/components/Lens/LensList.tsx:205
 msgid "Follow"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:290
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:289
 msgid "Follow for {0} {1}"
 msgstr ""
 
@@ -64,20 +68,20 @@ msgstr ""
 msgid "Follow Lens handle"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:285
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:284
 #: src/SiteAdaptor/components/Lens/LensList.tsx:204
 msgid "Following"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:333
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:332
 msgid "Lens"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:233
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
 msgid "Lens Follow"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:233
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
 msgid "Lens Unfollow"
 msgstr ""
 
@@ -86,59 +90,59 @@ msgstr ""
 msgid "Network error, try again"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:313
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:312
 msgid "No enough balance to complete follow process."
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:164
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:162
 msgid "No verified account found here."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:303
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:302
 msgid "Only holding lens handle can follow."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:238
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:237
 msgid "Previous follow transaction is in processing, please wait and try again."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:237
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:236
 msgid "Previous unfollow transaction is in processing, please wait and try again."
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:126
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:124
 msgid "Save failed"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:120
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
 msgid "Save successfully"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:156
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:122
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:120
 msgid "Set up Web3 Profile wallets successfully."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:406
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:399
 msgid "Switch to Polygon and Follow"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:317
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:316
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:287
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:286
 msgid "This profile can not be followed."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:315
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:314
 msgid "This user has banned follow function."
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:285
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:284
 msgid "Unfollow"
 msgstr ""
 
@@ -146,8 +150,8 @@ msgstr ""
 msgid "Unfollow lens handle"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:385
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:391
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:378
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:384
 msgid "Unlock {0} {1} and follow"
 msgstr ""
 
@@ -155,11 +159,11 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:371
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:364
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:148
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:146
 #: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr ""
