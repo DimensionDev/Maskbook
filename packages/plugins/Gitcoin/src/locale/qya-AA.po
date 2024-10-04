@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-04 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,56 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 968\n"
+
+#: src/SiteAdaptor/PreviewCard.tsx:308
+msgid "About"
+msgstr "crwdns28634:0crwdne28634:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:229
+msgid "contributions"
+msgstr "crwdns28636:0crwdne28636:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:283
+msgid "Created on: {0}"
+msgstr "crwdns28638:0{0}crwdne28638:0"
+
+#: src/SiteAdaptor/index.tsx:55
+msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
+msgstr "crwdns28640:0crwdne28640:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:225
+msgid "funding received"
+msgstr "crwdns28642:0crwdne28642:0"
+
+#: src/SiteAdaptor/index.tsx:59
+msgid "Gitcoin"
+msgstr "crwdns28644:0crwdne28644:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:324
+msgid "No past rounds found."
+msgstr "crwdns28646:0crwdne28646:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:301
+msgid "Past rounds"
+msgstr "crwdns28648:0crwdne28648:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:300
+msgid "Project details"
+msgstr "crwdns28650:0crwdne28650:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:237
+msgid "rounds"
+msgstr "crwdns28652:0crwdne28652:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:176
+msgid "Something went wrong."
+msgstr "crwdns28654:0crwdne28654:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:233
+msgid "unique contributors"
+msgstr "crwdns28656:0crwdne28656:0"
+
+#: src/SiteAdaptor/PreviewCard.tsx:258
+msgid "View"
+msgstr "crwdns28658:0crwdne28658:0"
 
