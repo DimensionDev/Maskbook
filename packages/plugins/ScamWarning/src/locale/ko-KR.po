@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-27 11:20\n"
+"PO-Revision-Date: 2024-10-04 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,6 +17,10 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 990\n"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:52
+msgid "{0, plural, one {This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.} other {These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams.}}"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:23
 msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
