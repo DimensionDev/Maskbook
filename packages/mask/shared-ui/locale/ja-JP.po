@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:01\n"
+"PO-Revision-Date: 2024-10-04 12:38\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -607,7 +607,7 @@ msgstr "続行"
 msgid "Contract"
 msgstr "コントラクト"
 
-#: popups/components/TransactionPreview/index.tsx:101
+#: popups/components/TransactionPreview/index.tsx:103
 msgid "Contract Interaction"
 msgstr "コントラクトの相互作用"
 
@@ -749,7 +749,7 @@ msgstr "連絡先を削除しました。"
 msgid "Deleted successfully"
 msgstr "正常に削除されました"
 
-#: popups/components/TransactionPreview/index.tsx:117
+#: popups/components/TransactionPreview/index.tsx:119
 msgid "Deploy Contract"
 msgstr "コントラクトのデプロイ"
 
@@ -1019,7 +1019,7 @@ msgstr "から"
 msgid "Function: {0}"
 msgstr "機能: {0}"
 
-#: popups/components/TransactionPreview/index.tsx:233
+#: popups/components/TransactionPreview/index.tsx:235
 #: popups/components/UnlockERC20Token/index.tsx:287
 #: popups/components/UnlockERC721Token/index.tsx:228
 #: popups/modals/GasSettingModal/index.tsx:41
@@ -2143,7 +2143,7 @@ msgstr "ウォレットを選択"
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:354
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:101
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:98
-#: popups/components/TransactionPreview/index.tsx:108
+#: popups/components/TransactionPreview/index.tsx:110
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:398
 #: popups/pages/Wallet/components/ActionGroup/index.tsx:83
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:398
@@ -2517,7 +2517,7 @@ msgid "This wallet is connected to current persona {0}."
 msgstr "このウォレットは現在のペルソナ {0}に接続されています。"
 
 #: popups/components/AddContactInputPanel/index.tsx:116
-#: popups/components/TransactionPreview/index.tsx:185
+#: popups/components/TransactionPreview/index.tsx:187
 #: popups/pages/Wallet/TransactionDetail/index.tsx:287
 msgid "To"
 msgstr "宛先："
