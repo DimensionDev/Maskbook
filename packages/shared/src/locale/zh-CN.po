@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-30 19:46\n"
+"PO-Revision-Date: 2024-10-04 14:23\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -53,7 +53,7 @@ msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:40
 msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
-msgstr ""
+msgstr "{riskyFactors, plural, one {# 个风险条目} other {# 个风险条目}}"
 
 #: src/UI/components/SettingsBoard/GasOption.tsx:71
 msgid "~ {0}"
