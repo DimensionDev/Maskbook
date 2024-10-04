@@ -166,7 +166,6 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                     :   undefined
                 const isSending = isSameAddress(feed.owner, action.from)
                 const otherAddress = isSending ? action.to : action.from
-                const Tag = verbose ? Label : 'span'
                 const formattedAddress = formatEthereumAddress(otherAddress ?? '', 4)
                 return (
                     <Trans>
