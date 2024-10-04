@@ -217,3 +217,4 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     }
 }
 export const RedPacket = new RedPacketAPI()
+export { CREATE_LUCKY_DROP_TOPIC } from './constants.js'
