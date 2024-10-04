@@ -42,7 +42,7 @@ msgstr ""
 #~ msgid "<0>{user}</0> {0, select, send {sent} claim {claimed}} {1, select, verbose {{2}} simple {an NFT}} {3, select, send {to} claim {from}} <1>{formattedAddress}</1>{4, select, cost {for {5} {6}} free {}}"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:172
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:171
 msgid "<0>{user}</0> {0, select, send {sent} claim {claimed}} {1, select, verbose {<1>{2}</1>} simple {<2>an NFT</2>}} {3, select, send {to} claim {from}} <3>{formattedAddress}</3>{4, select, cost {for {5} {6}} free {}}"
 msgstr ""
 
