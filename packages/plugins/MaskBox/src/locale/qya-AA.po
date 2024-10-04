@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-04 12:40\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,66 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/MaskBox/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 974\n"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:376
+msgid "{boxStateMessage} ({0} {1}/Time)"
+msgstr "crwdns28746:0{boxStateMessage}crwdnd28746:0{0}crwdnd28746:0{1}crwdne28746:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:330
+msgid "Active"
+msgstr "crwdns28748:0crwdne28748:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:260
+msgid "Articles"
+msgstr "crwdns28750:0crwdne28750:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:316
+msgid "by"
+msgstr "crwdns28752:0crwdne28752:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:330
+msgid "Closed"
+msgstr "crwdns28754:0crwdne28754:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:264
+msgid "Details"
+msgstr "crwdns28756:0crwdne28756:0"
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:279
+msgid "Draw"
+msgstr "crwdns28758:0crwdne28758:0"
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:278
+msgid "Drawing"
+msgstr "crwdns28760:0crwdne28760:0"
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:276
+msgid "Insufficient balance"
+msgstr "crwdns28762:0crwdne28762:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:304
+msgid "Limit:"
+msgstr "crwdns28764:0crwdne28764:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:210
+#: src/SiteAdaptor/components/PreviewCard.tsx:235
+msgid "Load failed"
+msgstr "crwdns28766:0crwdne28766:0"
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "MaskBox"
+msgstr "crwdns28768:0crwdne28768:0"
+
+#: src/SiteAdaptor/index.tsx:55
+msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
+msgstr "crwdns28770:0crwdne28770:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:227
+#: src/SiteAdaptor/components/PreviewCard.tsx:252
+msgid "Reload"
+msgstr "crwdns28772:0crwdne28772:0"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:294
+msgid "Solid:"
+msgstr "crwdns28774:0crwdne28774:0"
 
