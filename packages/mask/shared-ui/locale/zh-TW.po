@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-28 05:02\n"
+"PO-Revision-Date: 2024-10-04 12:39\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -607,7 +607,7 @@ msgstr ""
 msgid "Contract"
 msgstr "合約"
 
-#: popups/components/TransactionPreview/index.tsx:101
+#: popups/components/TransactionPreview/index.tsx:103
 msgid "Contract Interaction"
 msgstr ""
 
@@ -749,7 +749,7 @@ msgstr ""
 msgid "Deleted successfully"
 msgstr ""
 
-#: popups/components/TransactionPreview/index.tsx:117
+#: popups/components/TransactionPreview/index.tsx:119
 msgid "Deploy Contract"
 msgstr ""
 
@@ -1019,7 +1019,7 @@ msgstr ""
 msgid "Function: {0}"
 msgstr ""
 
-#: popups/components/TransactionPreview/index.tsx:233
+#: popups/components/TransactionPreview/index.tsx:235
 #: popups/components/UnlockERC20Token/index.tsx:287
 #: popups/components/UnlockERC721Token/index.tsx:228
 #: popups/modals/GasSettingModal/index.tsx:41
@@ -2143,7 +2143,7 @@ msgstr ""
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:354
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:101
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:98
-#: popups/components/TransactionPreview/index.tsx:108
+#: popups/components/TransactionPreview/index.tsx:110
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:398
 #: popups/pages/Wallet/components/ActionGroup/index.tsx:83
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:398
@@ -2517,7 +2517,7 @@ msgid "This wallet is connected to current persona {0}."
 msgstr ""
 
 #: popups/components/AddContactInputPanel/index.tsx:116
-#: popups/components/TransactionPreview/index.tsx:185
+#: popups/components/TransactionPreview/index.tsx:187
 #: popups/pages/Wallet/TransactionDetail/index.tsx:287
 msgid "To"
 msgstr ""
