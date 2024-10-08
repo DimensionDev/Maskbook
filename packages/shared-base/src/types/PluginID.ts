@@ -3,7 +3,6 @@
  */
 export enum NetworkPluginID {
     PLUGIN_EVM = 'com.mask.evm',
-    PLUGIN_FLOW = 'com.mask.flow',
     PLUGIN_SOLANA = 'com.mask.solana',
 }
 
@@ -12,7 +11,6 @@ export enum NetworkPluginID {
  */
 export enum PluginID {
     EVM = 'com.mask.evm',
-    Flow = 'com.mask.flow',
     Solana = 'com.mask.solana',
     Avatar = 'com.maskbook.avatar',
     Collectible = 'com.maskbook.collectibles',

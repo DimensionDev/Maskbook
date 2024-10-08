@@ -15,7 +15,6 @@
     { "path": "../web3-helpers/tsconfig.json" },
     { "path": "../web3-shared/base/tsconfig.json" },
     { "path": "../web3-shared/evm/tsconfig.json" },
-    { "path": "../web3-shared/flow/tsconfig.json" },
     { "path": "../web3-shared/solana/tsconfig.json" }
   ]
 }

@@ -9,7 +9,6 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, WNATIVE, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
-import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { Days, NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createPermalink } from '../NFTScan/helpers/EVM.js'
@@ -34,13 +33,22 @@ export async function fetchFromSimpleHash<T>(path: string, init?: RequestInit) {
     })
 }
 
-export function createNonFungibleAsset(asset: SimpleHash.Asset, skipScoreCheck?: boolean): NonFungibleAsset<ChainId, SchemaType> | undefined {
+export function createNonFungibleAsset(
+    asset: SimpleHash.Asset,
+    skipScoreCheck?: boolean,
+): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveChainId(asset.chain)
     const address = asset.contract_address
 
     const spam_score = asset.collection.spam_score
-    if (!chainId || !isValidChainId(chainId) || !address || (spam_score !== null && spam_score >= SPAM_SCORE && !skipScoreCheck)) return
+    if (
+        !chainId ||
+        !isValidChainId(chainId) ||
+        !address ||
+        (spam_score !== null && spam_score >= SPAM_SCORE && !skipScoreCheck)
+    )
+        return
     const schema = ['ERC721', 'CRYPTOPUNKS'].includes(asset.contract.type) ? SchemaType.ERC721 : SchemaType.ERC1155
     const name = asset.name || getAssetFullName(asset.contract_address, asset.contract.name, asset.name, asset.token_id)
 
@@ -197,9 +205,6 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     },
     [NetworkPluginID.PLUGIN_SOLANA]: {
         [SolanaChainId.Mainnet]: 'solana',
-    },
-    [NetworkPluginID.PLUGIN_FLOW]: {
-        [FlowChainId.Mainnet]: 'flow',
     },
 }
 

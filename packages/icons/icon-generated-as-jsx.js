@@ -191,11 +191,6 @@ export const Firefly = /*#__PURE__*/ __createIcon('Firefly', [
         u: () => new URL('./brands/Firefly.light.svg', import.meta.url).href,
     },
 ])
-export const Flow = /*#__PURE__*/ __createIcon('Flow', [
-    {
-        u: () => new URL('./brands/Flow.svg', import.meta.url).href,
-    },
-])
 export const Gem = /*#__PURE__*/ __createIcon('Gem', [
     {
         u: () => new URL('./brands/Gem.svg', import.meta.url).href,

@@ -88,7 +88,6 @@
       "@masknet/web3-providers/types": ["./packages/web3-providers/src/entry-types.ts"],
       "@masknet/web3-shared-base": ["./packages/web3-shared/base/src/index.ts"],
       "@masknet/web3-shared-evm": ["./packages/web3-shared/evm/src/index.ts"],
-      "@masknet/web3-shared-flow": ["./packages/web3-shared/flow/src/index.ts"],
       "@masknet/web3-shared-solana": ["./packages/web3-shared/solana/src/index.ts"]
     }
   },

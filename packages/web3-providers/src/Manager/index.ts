@@ -1,11 +1,10 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { evm, flow, solana } from './registry.js'
+import { evm, solana } from './registry.js'
 
 export { initWallet } from './io.js'
 const all = {
     [NetworkPluginID.PLUGIN_EVM]: evm,
-    [NetworkPluginID.PLUGIN_FLOW]: flow,
     [NetworkPluginID.PLUGIN_SOLANA]: solana,
 } as const
 /**
@@ -44,7 +43,6 @@ export function getAllPluginsWeb3State(): {
 } {
     return {
         [NetworkPluginID.PLUGIN_EVM]: evm.state!,
-        [NetworkPluginID.PLUGIN_FLOW]: flow.state!,
         [NetworkPluginID.PLUGIN_SOLANA]: solana.state!,
     }
 }

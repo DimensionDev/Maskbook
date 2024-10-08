@@ -6,7 +6,6 @@ import type { BaseHubProvider } from '../../Base/apis/HubBase.js'
 import type { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import type { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
 import type { EVMConnectionOptions, EVMHubOptions } from '../../EVM/types/index.js'
-import type { FlowConnectionOptions, FlowHubOptions } from '../../Flow/types/index.js'
 import type { SolanaConnectionOptions, SolanaHubOptions } from '../../Solana/types/index.js'
 import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
@@ -20,7 +19,6 @@ export interface ConnectionOptions<T extends NetworkPluginID>
 
 export interface ConnectionOptionsMap {
     [NetworkPluginID.PLUGIN_EVM]: EVMConnectionOptions
-    [NetworkPluginID.PLUGIN_FLOW]: FlowConnectionOptions
     [NetworkPluginID.PLUGIN_SOLANA]: SolanaConnectionOptions
 }
 
@@ -28,7 +26,6 @@ export interface HubOptions<T extends NetworkPluginID> extends BaseHubOptions<We
 
 export interface HubOptionsMap {
     [NetworkPluginID.PLUGIN_EVM]: EVMHubOptions
-    [NetworkPluginID.PLUGIN_FLOW]: FlowHubOptions
     [NetworkPluginID.PLUGIN_SOLANA]: SolanaHubOptions
 }
 

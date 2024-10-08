@@ -181,7 +181,6 @@
     "collection_not_belong_to_you": "컨트랙트 조소가 잘못되거나 월렛에 해당 수집품이 없습니다.",
     "collectible_search_placeholder": "이름이나 컨트랙트 주소. 예: PUNK 나 0x234",
     "plugin_wallet_solana_tips": "Phantom은 Solana에만 지원합니다.",
-    "plugin_wallet_blocto_tips": "Blocto는 Flow에만 지원합니다.",
     "plugin_wallet_fortmatic_tips": "Fortmatic는 ETH 및 BNB에만 지원합니다.",
     "plugin_wallet_support_chains_tips": "EVM 체인만 지원합니다. ETH, BNB chain, Polygon, Arb, Op 등.",
     "plugin_wallet_connect_fortmatic": "Fortmatic 연결",

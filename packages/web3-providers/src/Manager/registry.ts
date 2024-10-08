@@ -5,11 +5,6 @@ import {
     PROVIDER_DESCRIPTORS as evm_providers,
 } from '@masknet/web3-shared-evm'
 import {
-    CHAIN_DESCRIPTORS as flow_chain,
-    NETWORK_DESCRIPTORS as flow_network,
-    PROVIDER_DESCRIPTORS as flow_providers,
-} from '@masknet/web3-shared-flow'
-import {
     CHAIN_DESCRIPTORS as solana_chain,
     NETWORK_DESCRIPTORS as solana_network,
     PROVIDER_DESCRIPTORS as solana_providers,
@@ -26,12 +21,6 @@ export const evm: NetworkPlugin<NetworkPluginID.PLUGIN_EVM> = {
     chain: evm_chain,
     network: evm_network,
     provider: evm_providers,
-    state: null,
-}
-export const flow: NetworkPlugin<NetworkPluginID.PLUGIN_FLOW> = {
-    chain: flow_chain,
-    network: flow_network,
-    provider: flow_providers,
     state: null,
 }
 export const solana: NetworkPlugin<NetworkPluginID.PLUGIN_SOLANA> = {

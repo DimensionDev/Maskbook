@@ -43,7 +43,6 @@
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
-    "@masknet/web3-shared-flow": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@servie/events": "^3.0.0",
     "@solana/buffer-layout": "^4.0.1",
