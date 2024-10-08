@@ -11,7 +11,7 @@ export const Alchemy_EVM_NetworkMap = {
             tokenOwnerURL: 'https://alchemy-proxy.r2d2.to/eth-mainnet/nft/v2/APIKEY',
         },
         {
-            chainId: ChainId_EVM.Matic,
+            chainId: ChainId_EVM.Polygon,
             baseURL: 'https://alchemy-proxy.r2d2.to/polygon-mainnet/v2/APIKEY',
             contractMetadataURL: 'https://alchemy-proxy.r2d2.to/polygon-mainnet/nft/v2/APIKEY',
             tokenOwnerURL: 'https://alchemy-proxy.r2d2.to/polygon-mainnet/nft/v2/APIKEY',

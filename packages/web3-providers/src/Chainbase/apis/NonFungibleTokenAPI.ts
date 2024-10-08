@@ -17,7 +17,7 @@ import type { BaseHubOptions, NonFungibleTokenAPI } from '../../entry-types.js'
 
 class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     createNonFungibleTokenPermalink(chainId: ChainId, address: string, tokenId: string) {
-        if (chainId === ChainId.Mainnet || chainId === ChainId.Matic) {
+        if (chainId === ChainId.Mainnet || chainId === ChainId.Polygon) {
             return urlcat('https://opensea.com/:protocol/:contract/:tokenId', {
                 contract: address,
                 tokenId,

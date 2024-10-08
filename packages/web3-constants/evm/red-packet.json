@@ -12,7 +12,7 @@
     "HAPPY_RED_PACKET_ADDRESS_V3": {
         "Mainnet": "",
         "BSC": "0x71834a3FDeA3E70F14a93ED85c6be70925D0CAd9",
-        "Matic": "0x913975af2bb8a6be4100d7dc5e9765b77f6a5d6c",
+        "Polygon": "0x913975af2bb8a6be4100d7dc5e9765b77f6a5d6c",
         "Mumbai": "0x0061E06c9f640a03C4981f43762d2AE5e03873c5",
         "Arbitrum": "0x02Ea0720254F7fa4eca7d09A1b9C783F1020EbEF",
         "Arbitrum_Rinkeby": "0x6B70EC653c4331bdD0D0DCC7C941eb594e69a91d"
@@ -22,7 +22,7 @@
         "BSC": "0x0ca42C178e14c618c81B8438043F27d9D38145f6",
         "Base": "0x8D03d9b43e98Cc2f790Be4E96503fD0CcFd04a2D",
         "Base_Goerli": "0x16f61cb37169523635B6761f3C946892fb3c18fB",
-        "Matic": "0x93e0b87A0aD0C991dc1B5176ddCD850c9a78aabb",
+        "Polygon": "0x93e0b87A0aD0C991dc1B5176ddCD850c9a78aabb",
         "Arbitrum": "0x83D6b366f21e413f214EB077D5378478e71a5eD2",
         "Arbitrum_Rinkeby": "0x4A77E797031257db72F7D2C3Ec08a4FAc5c8CfE9",
         "xDai": "0x54a0A221C25Fc0a347EC929cFC5db0be17fA2a2B",
@@ -51,7 +51,7 @@
         "BSCT": 0,
         "Base": 2604113,
         "Base_Goerli": 0,
-        "Matic": 17494774,
+        "Polygon": 17494774,
         "Mumbai": 0,
         "Arbitrum": 909051,
         "Arbitrum_Rinkeby": 0,

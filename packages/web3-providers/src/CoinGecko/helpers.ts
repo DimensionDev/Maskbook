@@ -7,7 +7,7 @@ export const resolveCoinGeckoChainId = createLookupTableResolver<string, Web3Hel
     {
         ethereum: ChainId.Mainnet,
         'binance-smart-chain': ChainId.BSC,
-        'polygon-pos': ChainId.Matic,
+        'polygon-pos': ChainId.Polygon,
         solana: ChainIdSolana.Mainnet,
         astar: ChainId.Astar,
         aurora: ChainId.Aurora,

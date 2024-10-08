@@ -1,7 +1,7 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetworkDescriptor } from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
@@ -10,6 +10,8 @@ import { format, fromUnixTime } from 'date-fns'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
+import { useRedpacketToken } from './hooks/useRedpacketToken.js'
+import { useEverSeen } from '@masknet/shared-base-ui'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
@@ -154,26 +156,32 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
         claim_amounts,
         token_symbol,
         token_logo,
-        chain_id,
         redpacket_id,
         redpacket_status,
         claim_strategy,
         share_from,
         theme_id,
     } = history
+    const [seen, redpacketRef] = useEverSeen()
+    const chainId = history.chain_id
     const t = useRedPacketTrans()
 
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chain_id)
+    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
     const { classes, cx } = useStyles({
         listItemBackground: networkDescriptor?.backgroundGradient,
         listItemBackgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
+    // Only concern about MATIC token which has been renamed to POL
+    const { data: tokenAddress } = useRedpacketToken(chainId, history.trans_hash, seen && token_symbol === 'MATIC')
+    const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress, undefined, { chainId })
+    const tokenSymbol = token?.symbol ?? token_symbol
+
     return (
         <ListItem className={classes.root}>
-            <section className={classes.contentItem}>
+            <section className={classes.contentItem} ref={redpacketRef}>
                 <Box className={classes.box}>
                     <Box className={classes.content}>
                         <section className={classes.section}>
@@ -210,11 +218,11 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     themeId={theme_id}
                                     redpacketMsg={rp_msg}
                                     tokenInfo={{
-                                        symbol: token_symbol,
+                                        symbol: tokenSymbol,
                                         decimals: token_decimal,
                                         amount: total_amounts,
                                     }}
-                                    chainId={chain_id}
+                                    chainId={chainId}
                                     totalAmount={total_amounts}
                                     createdAt={create_time}
                                 />
@@ -238,7 +246,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                             significant: 2,
                                             isPrecise: true,
                                         }),
-                                        symbol: token_symbol,
+                                        symbol: tokenSymbol,
                                     }}
                                 />
                             </Typography>
@@ -246,7 +254,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                 <TokenIcon
                                     className={classes.icon}
                                     address={''}
-                                    name={token_symbol}
+                                    name={tokenSymbol}
                                     logoURL={token_logo}
                                 />
                             :   null}

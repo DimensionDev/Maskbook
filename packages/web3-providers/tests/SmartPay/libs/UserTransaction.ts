@@ -3,7 +3,7 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { UserTransaction } from '../../../src/SmartPay/libs/UserTransaction.js'
 
 describe('UserTransaction', async () => {
-    const userTransaction = new UserTransaction(ChainId.Matic, '0x0000000000000000000000000000000000000000', {
+    const userTransaction = new UserTransaction(ChainId.Polygon, '0x0000000000000000000000000000000000000000', {
         sender: '0x0000000000000000000000000000000000000000',
         nonce: 0,
         initCode: '0x',

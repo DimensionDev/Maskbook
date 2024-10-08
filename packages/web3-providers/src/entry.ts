@@ -10,7 +10,7 @@ export { evm } from './Manager/registry.js'
 
 export { Multicall } from './Multicall/index.js'
 export { Lens } from './Lens/index.js'
-export { RedPacket } from './RedPacket/index.js'
+export { RedPacket, CREATE_LUCKY_DROP_TOPIC } from './RedPacket/index.js'
 export { TheGraphRedPacket } from './TheGraph/index.js'
 export { SimpleHashEVM, SimpleHashSolana, SPAM_SCORE } from './SimpleHash/index.js'
 

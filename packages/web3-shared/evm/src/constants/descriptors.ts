@@ -121,7 +121,7 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
     {
         ID: `${PLUGIN_ID}_polygon`,
         networkSupporterPluginID: PLUGIN_ID,
-        chainId: ChainId.Matic,
+        chainId: ChainId.Polygon,
         type: NetworkType.Polygon,
         name: 'Polygon',
         icon: new URL('../assets/polygon.png', import.meta.url).href,
