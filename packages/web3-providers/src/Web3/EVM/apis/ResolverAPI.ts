@@ -13,5 +13,9 @@ export const EVMExplorerResolver = new ExplorerResolver(() => {
     if (!registryJs.evm.state?.Network?.networks) return CHAIN_DESCRIPTORS
     return CHAIN_DESCRIPTORS.concat(registryJs.evm.state.Network.networks.getCurrentValue())
 })
+export const BlockScanExplorerResolver = new ExplorerResolver(() => [], {
+    preferentialExplorer: 'https://blockscan.com',
+    fungibleTokenPathname: '/token/:address',
+})
 export const EVMProviderResolver = new ProviderResolver(() => PROVIDER_DESCRIPTORS)
 export const EVMNetworkResolver = new NetworkResolver(() => NETWORK_DESCRIPTORS)

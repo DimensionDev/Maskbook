@@ -22,6 +22,7 @@ export { getUtils } from './Web3/Router/apis/getUtils.js'
 export {
     EVMChainResolver,
     EVMExplorerResolver,
+    BlockScanExplorerResolver,
     EVMProviderResolver,
     EVMNetworkResolver,
 } from './Web3/EVM/apis/ResolverAPI.js'
