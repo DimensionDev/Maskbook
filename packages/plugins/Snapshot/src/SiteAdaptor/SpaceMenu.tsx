@@ -1,8 +1,7 @@
 import type { RefObject } from 'react'
-import { isEqual } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
-import { Avatar, MenuItem, Stack, Typography, Divider } from '@mui/material'
+import { Avatar, MenuItem, Stack, Typography, Divider, type MenuProps } from '@mui/material'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useSnapshotTrans } from '../locales/index.js'
@@ -71,47 +70,31 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface SpaceMenuProps {
+interface SpaceMenuProps extends Omit<MenuProps, 'onSelect'> {
     options: Array<DAOResult<ChainId.Mainnet>>
     currentOption?: DAOResult<ChainId.Mainnet>
-    onSelect(index: number): void
+    onSelect(space: DAOResult<ChainId.Mainnet>): void
     containerRef: RefObject<HTMLElement | null>
-    spaceMenuOpen: boolean
-    setSpaceMenuOpen: (a: boolean) => void
-    disablePortal?: boolean
-    disableScrollLock?: boolean
 }
 
-export function SpaceMenu({
-    options,
-    currentOption,
-    onSelect,
-    containerRef,
-    spaceMenuOpen,
-    setSpaceMenuOpen,
-    disablePortal,
-    disableScrollLock,
-}: SpaceMenuProps) {
+export function SpaceMenu({ options, currentOption, onSelect, containerRef, ...rest }: SpaceMenuProps) {
     const { classes } = useStyles()
     const t = useSnapshotTrans()
     return (
         <ShadowRootMenu
             anchorEl={containerRef.current}
-            open={spaceMenuOpen}
-            disablePortal={disablePortal}
-            disableScrollLock={disableScrollLock}
             PaperProps={{
                 className: classes.menu,
             }}
-            onClose={() => setSpaceMenuOpen(false)}>
+            {...rest}>
             <div key="rss3" className={classes.group}>
                 <Typography className={classes.groupName}>{t.plugin_snapshot_space()}</Typography>
                 <Divider className={classes.divider} />
-                {options.map((x, i) => {
-                    const selected = isEqual(x, currentOption)
+                {options.map((option) => {
+                    const selected = option.spaceId === currentOption?.spaceId
                     return (
-                        <MenuItem className={classes.menuItem} key={i} onClick={() => onSelect(i)}>
-                            <Avatar className={classes.coinIcon} src={x.avatar} alt={x.spaceId} />
+                        <MenuItem className={classes.menuItem} key={option.spaceId} onClick={() => onSelect(option)}>
+                            <Avatar className={classes.coinIcon} src={option.avatar} alt={option.spaceId} />
                             <Stack className={classes.itemText}>
                                 <Typography
                                     fontSize={14}
@@ -119,7 +102,7 @@ export function SpaceMenu({
                                     flexGrow={1}
                                     overflow="hidden"
                                     textOverflow="ellipsis">
-                                    <span className={classes.name}>{x.spaceName}</span>
+                                    <span className={classes.name}>{option.spaceName}</span>
                                 </Typography>
                                 <div className={classes.itemCheckout}>
                                     {selected ?

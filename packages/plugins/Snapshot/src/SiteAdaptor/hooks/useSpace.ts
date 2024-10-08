@@ -1,10 +1,12 @@
-import { useAsyncRetry } from 'react-use'
 import { Snapshot } from '@masknet/web3-providers'
-import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
+import { useQuery } from '@tanstack/react-query'
 
 export function useSpace(spaceId: string) {
-    return useAsyncRetry<SnapshotBaseAPI.SnapshotSpace | undefined>(async () => {
-        if (!spaceId) return
-        return Snapshot.getSpace(spaceId)
-    }, [spaceId])
+    return useQuery({
+        queryKey: ['space', spaceId],
+        async queryFn() {
+            if (!spaceId) return null
+            return Snapshot.getSpace(spaceId)
+        },
+    })
 }
