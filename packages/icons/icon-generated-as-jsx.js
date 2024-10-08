@@ -261,11 +261,6 @@ export const Link3 = /*#__PURE__*/ __createIcon('Link3', [
         u: () => new URL('./brands/Link3.svg', import.meta.url).href,
     },
 ])
-export const LooksRare = /*#__PURE__*/ __createIcon('LooksRare', [
-    {
-        u: () => new URL('./brands/LooksRare.svg', import.meta.url).href,
-    },
-])
 export const Mask = /*#__PURE__*/ __createIcon('Mask', [
     {
         c: ['dark'],

@@ -43,5 +43,4 @@ export const resolveNFTScanRange = createLookupTableResolver<Days, EVM.Collectio
 
 export enum NonFungibleMarketplace {
     OpenSea = 'OpenSea',
-    LooksRare = 'LooksRare',
 }

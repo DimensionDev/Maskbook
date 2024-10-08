@@ -35,7 +35,6 @@ import {
     checkBlurToken,
     isLensFollower,
 } from '../helpers.js'
-import { LooksRare } from '../../LooksRare/index.js'
 import { OpenSea } from '../../OpenSea/index.js'
 import { getContractSymbol } from '../../helpers/getContractSymbol.js'
 import { NonFungibleMarketplace } from '../../NFTScan/helpers/utils.js'
@@ -522,10 +521,9 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             throw new Error(`SimpleHash: Can not find collection by address ${address}, chainId ${chainId}`)
         }
 
-        const [symbol, openseaStats, looksrareStats] = await Promise.all([
+        const [symbol, openseaStats] = await Promise.all([
             getContractSymbol(chainId, address),
             OpenSea.getStats(address).catch(() => null),
-            LooksRare.getStats(address).catch(() => null),
         ])
 
         const paymentToken = collection.floor_prices[0]?.payment_token
@@ -543,17 +541,6 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                     floor_price: openseaStats.floorPrice,
                     price_symbol: paymentToken.symbol,
                     sales_24: openseaStats.count24h,
-                }
-            :   null,
-            looksrareStats ?
-                {
-                    logo_url: MaskIconURLs.looks_rare_url(),
-                    trade_url: `https://looksrare.org/collections/${address}`,
-                    market_name: NonFungibleMarketplace.LooksRare,
-                    volume_24h: looksrareStats.volume24h,
-                    floor_price: looksrareStats.floorPrice,
-                    price_symbol: paymentToken.symbol,
-                    sales_24: looksrareStats.count24h,
                 }
             :   null,
         ])
