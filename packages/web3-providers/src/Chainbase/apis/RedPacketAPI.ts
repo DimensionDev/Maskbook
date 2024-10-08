@@ -20,7 +20,7 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
     static isSupportedChain(chainId: ChainId) {
         const supported = [
             ChainId.Mainnet,
-            ChainId.Matic,
+            ChainId.Polygon,
             ChainId.BSC,
             ChainId.Avalanche,
             ChainId.Arbitrum,

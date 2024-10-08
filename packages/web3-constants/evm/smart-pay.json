@@ -1,32 +1,32 @@
 {
     "LOGIC_WALLET_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Matic": "0xA835E7EbE39107907d7F58D459945979f86a34AD",
+        "Polygon": "0xA835E7EbE39107907d7F58D459945979f86a34AD",
         "Mumbai": "0x0912FD4D5bA43C5583B1796bb17586080cb117D3"
     },
     "EP_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Matic": "0x43B87595F319B17F3386Ac244A00944B3f5A532A",
+        "Polygon": "0x43B87595F319B17F3386Ac244A00944B3f5A532A",
         "Mumbai": "0x8A42F70047a99298822dD1dbA34b454fc49913F2"
     },
     "CREATE2_FACTORY_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Matic": "0xce0042B868300000d44A59004Da54A005ffdcf9f",
+        "Polygon": "0xce0042B868300000d44A59004Da54A005ffdcf9f",
         "Mumbai": "0xce0042B868300000d44A59004Da54A005ffdcf9f"
     },
     "PAYMASTER_NATIVE_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Matic": "0x0B81e2d66F6c52AaAEa836240f63e1b43643B5f9",
+        "Polygon": "0x0B81e2d66F6c52AaAEa836240f63e1b43643B5f9",
         "Mumbai": "0x8C2306B8C31c7eC78078e1C5C53dE6fee1627BF7"
     },
     "PAYMASTER_MASK_CONTRACT_ADDRESS": {
         "Mainnet": "",
-        "Matic": "0x46a47fEf332FBB124D8197afFED5994D89B6BF71",
+        "Polygon": "0x46a47fEf332FBB124D8197afFED5994D89B6BF71",
         "Mumbai": "0x808c7f48a64404e4e97d9b62b21f13F984fF1a96"
     },
     "PAYMASTER_MINIMAL_STAKE_AMOUNT": {
         "Mainnet": "",
-        "Matic": "5000000000000000000",
+        "Polygon": "5000000000000000000",
         "Mumbai": "5000000000000000000"
     },
     "PAYMASTER_UNSTAKE_DELAY": {
@@ -39,7 +39,7 @@
         "BSCT": 0,
         "Base": 0,
         "Base_Goerli": 0,
-        "Matic": 60,
+        "Polygon": 60,
         "Mumbai": 60,
         "Arbitrum": 0,
         "Arbitrum_Rinkeby": 0,
@@ -58,7 +58,7 @@
     },
     "PAYMENT_TOKEN_ADDRESS": {
         "Mainnet": "",
-        "Matic": "0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7",
+        "Polygon": "0x2B9E7ccDF0F4e5B24757c1E1a80e311E34Cb10c7",
         "Mumbai": "0xF8935Df67cAB7BfcA9532D1Ac2088C5c39b995b5"
     }
 }

@@ -188,7 +188,7 @@ export const AssetsList = memo(function AssetsList() {
     const onSwitch = useCallback(() => setAssetsIsExpand((x) => !x), [])
     const isSmartPay = !!useWallet()?.owner
     const filteredAssets = useMemo(() => {
-        if (isSmartPay) return assets.filter((x) => x.chainId === ChainId.Matic)
+        if (isSmartPay) return assets.filter((x) => x.chainId === ChainId.Polygon)
         return assets
     }, [assets, isSmartPay])
 

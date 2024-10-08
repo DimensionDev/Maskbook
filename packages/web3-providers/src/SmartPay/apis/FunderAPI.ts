@@ -9,7 +9,7 @@ import { FunderAPI } from '../../entry-types.js'
 
 class SmartPayFunderAPI implements FunderAPI.Provider<ChainId> {
     private async assetChainId(chainId: ChainId) {
-        if (![ChainId.Matic, ChainId.Mumbai].includes(chainId)) throw new Error(`Not supported ${chainId}.`)
+        if (![ChainId.Polygon, ChainId.Mumbai].includes(chainId)) throw new Error(`Not supported ${chainId}.`)
     }
 
     private async getWhiteList(handler: string) {

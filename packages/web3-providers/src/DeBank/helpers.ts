@@ -76,7 +76,7 @@ function toTxAsset(
     const schema =
         token.decimals ?
             (
-                isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Matic
+                isValidAddress(token.id) // for native token, token.id is symbol. e.g `matic` for Polygon
             ) ?
                 SchemaType.ERC20
             :   SchemaType.Native

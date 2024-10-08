@@ -41,7 +41,7 @@ export const RUNE = createERC20Tokens('RUNE_ADDRESS', 'RUNE.ETH', 'RUNE', 18)
 export const YFI = createERC20Tokens('YFI_ADDRESS', 'Yearn', 'YFI', 18)
 export const BTCB = createERC20Tokens('BTCB_ADDRESS', 'Binance BTC', 'BTCB', 18)
 export const CAKE = createERC20Tokens('CAKE_ADDRESS', 'PancakeSwap Token', 'CAKE', 18)
-export const maUSDC = createERC20Tokens('maUSDC_ADDRESS', 'Matic Aave interest bearing USDC', 'maUSDC', 6)
+export const maUSDC = createERC20Tokens('maUSDC_ADDRESS', 'Polygon Aave interest bearing USDC', 'maUSDC', 6)
 export const NFTX = createERC20Tokens('NFTX_ADDRESS', 'NFTX', 'NFTX', 18)
 export const STETH = createERC20Tokens('stETH_ADDRESS', 'stakedETH', 'stETH', 18)
 export const CUSD = createERC20Tokens('cUSD_ADDRESS', 'Celo Dollar', 'cUSD', 18)
@@ -76,7 +76,7 @@ export const WNATIVE_ONLY: ERC20AgainstToken = {
     [ChainId.Gorli]: [WNATIVE[ChainId.Gorli]],
     [ChainId.BSC]: [WNATIVE[ChainId.BSC]],
     [ChainId.BSCT]: [WNATIVE[ChainId.BSCT]],
-    [ChainId.Matic]: [WNATIVE[ChainId.Matic]],
+    [ChainId.Polygon]: [WNATIVE[ChainId.Polygon]],
     [ChainId.Mumbai]: [WNATIVE[ChainId.Mumbai]],
     [ChainId.Arbitrum]: [WNATIVE[ChainId.Arbitrum]],
     [ChainId.Arbitrum_Rinkeby]: [WNATIVE[ChainId.Arbitrum_Rinkeby]],

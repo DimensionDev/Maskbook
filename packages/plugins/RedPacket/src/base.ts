@@ -26,7 +26,7 @@ export const base = {
                 supportedChainIds: [
                     ChainId.Mainnet,
                     ChainId.BSC,
-                    ChainId.Matic,
+                    ChainId.Polygon,
                     ChainId.Arbitrum,
                     ChainId.Base,
                     ChainId.xDai,

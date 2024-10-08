@@ -45,7 +45,7 @@ export function useFollow(
 
     const broadcastAction = useCallback(
         async (event: MouseEvent<HTMLElement>) => {
-            if (!profileId || chainId !== ChainId.Matic) return
+            if (!profileId || chainId !== ChainId.Polygon) return
             const token = await handleQueryAuthenticate()
             if (!token) return
 
@@ -118,7 +118,7 @@ export function useFollow(
 
             try {
                 setLoading(true)
-                if (!profileId || chainId !== ChainId.Matic) return
+                if (!profileId || chainId !== ChainId.Polygon) return
                 const token = await handleQueryAuthenticate()
                 if (!token) return
 

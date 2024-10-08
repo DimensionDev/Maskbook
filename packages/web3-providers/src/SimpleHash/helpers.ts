@@ -148,7 +148,7 @@ export const resolveChainId: (chain: string) => ChainId | undefined = memoize(fu
         case 'ethereum':
             return ChainId.Mainnet
         case 'polygon':
-            return ChainId.Matic
+            return ChainId.Polygon
         case 'arbitrum':
             return ChainId.Arbitrum
         case 'optimism':
@@ -178,7 +178,7 @@ const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     [NetworkPluginID.PLUGIN_EVM]: {
         [ChainId.Mainnet]: 'ethereum',
         [ChainId.BSC]: 'bsc',
-        [ChainId.Matic]: 'polygon',
+        [ChainId.Polygon]: 'polygon',
         [ChainId.Arbitrum]: 'arbitrum',
         [ChainId.Optimism]: 'optimism',
         [ChainId.Avalanche]: 'avalanche',

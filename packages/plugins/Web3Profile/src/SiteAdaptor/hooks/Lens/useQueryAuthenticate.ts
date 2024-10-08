@@ -9,7 +9,7 @@ export function useQueryAuthenticate(address: string, profileId?: string) {
     const { chainId } = useChainContext()
 
     return useCallback(async () => {
-        if (!address || chainId !== ChainId.Matic || !isValidAddress(address) || !profileId) return
+        if (!address || chainId !== ChainId.Polygon || !isValidAddress(address) || !profileId) return
 
         const accessToken = storage.accessToken?.value?.[profileId]
         const refreshToken = storage.refreshToken?.value?.[profileId]

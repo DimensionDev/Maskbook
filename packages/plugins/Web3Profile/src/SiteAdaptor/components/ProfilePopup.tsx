@@ -209,7 +209,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                     onClick={() =>
                         SelectProviderModal.open({
                             requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
-                            requiredSupportChainIds: [ChainId.Matic],
+                            requiredSupportChainIds: [ChainId.Polygon],
                         })
                     }>
                     {t.wallet_status_button_change()}

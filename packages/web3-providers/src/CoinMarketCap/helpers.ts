@@ -7,7 +7,7 @@ const NETWORK_NAME_MAP: {
 } = {
     Ethereum: ChainId.Mainnet,
     'BNB Smart Chain (BEP20)': ChainId.BSC,
-    Polygon: ChainId.Matic,
+    Polygon: ChainId.Polygon,
     'Avalanche C-Chain': ChainId.Avalanche,
     Moonbeam: ChainId.Moonbeam,
     Optimism: ChainId.Optimism,
