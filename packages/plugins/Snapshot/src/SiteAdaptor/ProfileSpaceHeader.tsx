@@ -13,7 +13,7 @@ import { useSnapshotTrans } from '../locales/index.js'
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
     currentSpace: DAOResult<ChainId.Mainnet>
-    setSpaceIndex: (x: number) => void
+    setSpaceId(id: string): void
     theme: Theme
 }
 
@@ -63,14 +63,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
-    const { spaceList, currentSpace, setSpaceIndex, theme } = props
+export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme }: ProfileSpaceHeaderProps) {
     const t = useSnapshotTrans()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
     const { account } = useChainContext()
-    const { value: followedSpaceList } = useCurrentAccountFollowSpaceList()
+    const { data: followedSpaceList } = useCurrentAccountFollowSpaceList()
 
     return (
         <Box className={classes.root}>
@@ -96,13 +95,13 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                                     <SpaceMenu
                                         options={spaceList}
                                         currentOption={currentSpace}
-                                        onSelect={(i) => {
-                                            setSpaceIndex(i)
+                                        onSelect={(option) => {
+                                            setSpaceId(option.spaceId)
                                             setSpaceMenuOpen(false)
                                         }}
                                         containerRef={spaceRef}
-                                        spaceMenuOpen={spaceMenuOpen}
-                                        setSpaceMenuOpen={setSpaceMenuOpen}
+                                        open={spaceMenuOpen}
+                                        onClose={() => setSpaceMenuOpen(false)}
                                     />
                                 </ThemeProvider>
                             </>
