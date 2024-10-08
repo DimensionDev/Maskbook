@@ -50,14 +50,10 @@ export { DeBankHistory } from './DeBank/index.js'
 export { NFTScanNonFungibleTokenEVM, NFTScanNonFungibleTokenSolana } from './NFTScan/index.js'
 
 // Chainbase
-export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
+export { ChainbaseDomain } from './Chainbase/index.js'
 
 // Firefly
-
 export { FireflyConfig, FireflyRedPacket } from './Firefly/index.js'
 
 // FiatCurrencyRate
 export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'
-
-// NFT Spam
-export { NFTSpam } from './NFTSpam/index.js'

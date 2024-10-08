@@ -19,9 +19,6 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
     "@masknet/theme": "workspace:^",
-    "@masknet/typed-message": "workspace:^",
-    "@masknet/typed-message-react": "workspace:^",
-    "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-helpers": "workspace:^",
     "@masknet/web3-hooks-base": "workspace:^",
     "@masknet/web3-hooks-evm": "workspace:^",
@@ -33,26 +30,15 @@
     "bignumber.js": "9.1.2",
     "date-fns": "^2.30.0",
     "fuse.js": "^7.0.0",
-    "immer": "^10.0.2",
-    "json-stable-stringify": "^1.0.2",
     "lodash-es": "^4.17.21",
-    "qrcode": "^1.5.3",
     "react-hook-form": "^7.45.2",
-    "react-markdown": "^8.0.7",
-    "react-qrcode-logo": "^2.9.0",
-    "react-router-dom": "^6.14.2",
     "react-use": "^17.5.1",
-    "rehype-raw": "^6.1.1",
-    "remark-gfm": "^3.0.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.2",
     "web3-core-helpers": "1.10.2",
-    "web3-utils": "1.10.2",
     "zod": "^3.22.2"
   },
   "devDependencies": {
-    "@types/qrcode": "^1.5.2",
-    "@types/use-subscription": "^1.0.2",
-    "@types/json-stable-stringify": "^1.0.34"
+    "@types/use-subscription": "^1.0.2"
   }
 }

@@ -5,7 +5,7 @@ import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { type NonFungibleToken } from '@masknet/web3-shared-base'
 import { NETWORK_DESCRIPTORS, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Skeleton, type TooltipProps } from '@mui/material'
-import { isSameNFT } from '../../../utils/index.js'
+import { isSameNFT } from '../../../utils/isSameNFT.js'
 
 const useStyles = makeStyles<{ networkPluginID: NetworkPluginID }>()((theme, props) => ({
     itemRoot: {

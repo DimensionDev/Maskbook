@@ -45,7 +45,6 @@ export function kusama_url() { return new URL("./brands/Kusama.svg", import.meta
 export function leaderboard_url() { return new URL("./brands/Leaderboard.png", import.meta.url).href }
 export function lens_url() { return new URL("./brands/Lens.svg", import.meta.url).href }
 export function link_3_url() { return new URL("./brands/Link3.svg", import.meta.url).href }
-export function looks_rare_url() { return new URL("./brands/LooksRare.svg", import.meta.url).href }
 export function mask_dark_url() { return new URL("./brands/Mask.dark.svg", import.meta.url).href }
 export function mask_light_url() { return new URL("./brands/Mask.light.svg", import.meta.url).href }
 export function mask_banner_url() { return new URL("./brands/MaskBanner.svg", import.meta.url).href }

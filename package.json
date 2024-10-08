@@ -120,8 +120,6 @@
       }
     },
     "patchedDependencies": {
-      "micromark@3.1.0": "patches/micromark@3.1.0.patch",
-      "micromark-util-symbol@1.0.1": "patches/micromark-util-symbol@1.0.1.patch",
       "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",

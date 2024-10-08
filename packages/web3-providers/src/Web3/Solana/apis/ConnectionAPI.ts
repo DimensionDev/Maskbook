@@ -29,7 +29,6 @@ import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
 import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import type { BlockResponse } from '@solana/web3.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
-import * as MagicEden from /* webpackDefer: true */ '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
@@ -287,20 +286,7 @@ export class SolanaConnectionAPI
         schema?: SchemaType,
         initial?: SolanaConnectionOptions,
     ): Promise<NonFungibleToken<ChainId, SchemaType>> {
-        const options = this.ConnectionOptions.fill(initial)
-        const asset = await MagicEden.MagicEden.getAsset(address, tokenId, {
-            chainId: options.chainId,
-        })
-        return createNonFungibleToken(
-            options.chainId,
-            address,
-            SchemaType.NonFungible,
-            tokenId,
-            asset?.ownerId,
-            asset?.metadata,
-            asset?.contract,
-            asset?.collection,
-        )
+        throw new Error('Method not implemented.')
     }
 
     getNonFungibleTokenOwner(

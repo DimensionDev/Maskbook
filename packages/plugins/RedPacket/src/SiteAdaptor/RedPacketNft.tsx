@@ -14,7 +14,6 @@ import {
     WalletConnectedBoundary,
     ChainBoundary,
     AssetPreviewer,
-    NFTFallbackImage,
     TransactionConfirmModal,
     LoadingStatus,
     ReloadStatus,
@@ -359,9 +358,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                                                 root: classes.imgWrapper,
                                                 fallbackImage: classes.fallbackImage,
                                             }}
-                                            fallbackImage={
-                                                <div className={classes.fallbackImageWrapper}>{NFTFallbackImage}</div>
-                                            }
                                         />
                                     :   null}
                                 </Box>

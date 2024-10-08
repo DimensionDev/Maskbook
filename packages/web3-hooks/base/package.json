@@ -22,7 +22,6 @@
     "@tanstack/react-query": "^5.29.2",
     "bignumber.js": "9.1.2",
     "react-use": "^17.5.1",
-    "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.2"
   },
   "devDependencies": {
