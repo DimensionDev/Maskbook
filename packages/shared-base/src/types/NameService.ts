@@ -6,7 +6,6 @@ export enum NameServiceID {
     ENS = 'ENS',
     Lens = 'Lens',
     SpaceID = 'SpaceID',
-    Flowns = 'Flowns',
     Bonfida = 'Bonfida',
     SOL = 'SOL',
 }
