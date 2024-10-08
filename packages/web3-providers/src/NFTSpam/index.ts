@@ -41,7 +41,7 @@ export type SpamResponse<T> =
           data: null
       }
 
-const ENDPOINT = 'http://nfttransferlb-152229038.us-east-1.elb.amazonaws.com/v1/nfts/report/spam'
+const ENDPOINT = 'https://nftapi.firefly.land/v1/nfts/report/spam'
 const PAGE_SIZE = 10
 export class NFTSpam {
     static async report(params: ReportParams) {
