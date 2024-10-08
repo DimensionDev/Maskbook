@@ -8,5 +8,4 @@ packages:
   - 'packages/web3-hooks/evm'
   - 'packages/web3-shared/base'
   - 'packages/web3-shared/evm'
-  - 'packages/web3-shared/flow'
   - 'packages/web3-shared/solana'

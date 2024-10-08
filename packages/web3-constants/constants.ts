@@ -125,8 +125,6 @@ const EVM_KEYS = [
 
 const SOLANA_KEYS = ['Mainnet', 'Testnet', 'Devnet']
 
-const FLOW_KEYS = ['Mainnet', 'Testnet']
-
 // Main function to parse command line arguments and perform actions
 async function main() {
     const args = process.argv.slice(2)
@@ -134,13 +132,11 @@ async function main() {
     if (args.includes('--compress')) {
         await processConstants(join(__dirname, 'evm'), EVM_KEYS, compressAction)
         await processConstants(join(__dirname, 'solana'), SOLANA_KEYS, compressAction)
-        await processConstants(join(__dirname, 'flow'), FLOW_KEYS, compressAction)
     }
 
     if (args.includes('--complete')) {
         await processConstants(join(__dirname, 'evm'), EVM_KEYS, completeAction)
         await processConstants(join(__dirname, 'solana'), SOLANA_KEYS, completeAction)
-        await processConstants(join(__dirname, 'flow'), FLOW_KEYS, completeAction)
     }
 }
 

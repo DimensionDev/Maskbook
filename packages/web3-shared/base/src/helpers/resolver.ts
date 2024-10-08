@@ -46,7 +46,6 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.X2Y2]: 'X2Y2',
         [SourceType.MagicEden]: 'MagicEden',
         [SourceType.Element]: 'Element',
-        [SourceType.Flow]: 'Flow',
         [SourceType.Solana]: 'Solana',
         [SourceType.Solsea]: 'Solsea',
         [SourceType.Solanart]: 'Solanart',
@@ -103,7 +102,6 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
     {
         [NetworkPluginID.PLUGIN_EVM]: 'ETH Wallet',
         [NetworkPluginID.PLUGIN_SOLANA]: 'Solana Wallet',
-        [NetworkPluginID.PLUGIN_FLOW]: 'Flow Wallet',
     },
     (network) => {
         throw new Error(`Unknown network plugin-id: ${network}`)

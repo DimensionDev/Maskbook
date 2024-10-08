@@ -17,13 +17,11 @@ import type {
     Web3State as Web3StateShared,
 } from '@masknet/web3-shared-base'
 import type * as EVM from '@masknet/web3-shared-evm'
-import type * as Flow from '@masknet/web3-shared-flow'
 import type * as Solana from '@masknet/web3-shared-solana'
 
 export declare namespace Web3Helper {
     export interface Definition {
         [NetworkPluginID.PLUGIN_EVM]: EVM.Web3Definition
-        [NetworkPluginID.PLUGIN_FLOW]: Flow.Web3Definition
         [NetworkPluginID.PLUGIN_SOLANA]: Solana.Web3Definition
     }
 

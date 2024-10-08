@@ -558,9 +558,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../web3-shared/evm
-      '@masknet/web3-shared-flow':
-        specifier: workspace:^
-        version: link:../web3-shared/flow
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
@@ -856,9 +853,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../web3-shared/evm
-      '@masknet/web3-shared-flow':
-        specifier: workspace:^
-        version: link:../web3-shared/flow
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
@@ -883,9 +877,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
-      '@masknet/web3-shared-flow':
-        specifier: workspace:^
-        version: link:../../web3-shared/flow
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../../web3-shared/solana
@@ -977,9 +968,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../web3-shared/evm
-      '@masknet/web3-shared-flow':
-        specifier: workspace:^
-        version: link:../web3-shared/flow
       '@masknet/web3-shared-solana':
         specifier: workspace:^
         version: link:../web3-shared/solana
@@ -1126,24 +1114,6 @@ importers:
         specifier: 1.10.2
         version: 1.10.2
 
-  packages/web3-shared/flow:
-    dependencies:
-      '@blocto/fcl':
-        specifier: ^1.4.0
-        version: 1.4.0
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/web3-constants':
-        specifier: workspace:^
-        version: link:../../web3-constants
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../base
-      react-use:
-        specifier: ^17.5.1
-        version: 17.5.1(patch_hash=jdgfodh3ixpexpgf3fwrwvcmtq)(react-dom@0.0.0-experimental-8039e6d0b-20231026)(react@0.0.0-experimental-8039e6d0b-20231026)
-
   packages/web3-shared/solana:
     dependencies:
       '@masknet/shared-base':
@@ -1237,46 +1207,6 @@ packages:
       '@babel/helper-string-parser': 7.22.5
       '@babel/helper-validator-identifier': 7.22.20
       to-fast-properties: 2.0.0
-    dev: false
-
-  /@blocto/fcl@1.4.0:
-    resolution: {integrity: sha512-zjCjuUxxAlE5xqGE2zaC8Z5EHPT8Oh135Ld6o7wJ/7m4uPJX9mte8Reasq5tIYi57eF6Bc7wzMjDYQYEXl4ayA==}
-    dependencies:
-      '@babel/runtime': 7.22.6
-      '@blocto/flow-sdk': 1.2.0
-      '@onflow/config': 1.1.0
-      '@onflow/interaction': 0.0.11
-      '@onflow/rlp': 1.1.0
-      '@onflow/types': 1.1.0
-      '@onflow/util-actor': 1.2.0
-      '@onflow/util-address': 1.1.0
-      '@onflow/util-invariant': 1.1.0
-      '@onflow/util-logger': 1.2.0
-      '@onflow/util-template': 1.1.0
-      '@onflow/util-uid': 1.1.0
-      cross-fetch: 3.1.8
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
-  /@blocto/flow-sdk@1.2.0:
-    resolution: {integrity: sha512-SWz3Eae3v4QXHIQL6T0m/XfbkstU0dEzQv8bSTHI57Q6NfHMMDZ1Sj/SX4iJqHJ0sQ+1lmlF/3ORtEmAeUSGRA==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@onflow/config': 1.1.0
-      '@onflow/rlp': 1.1.0
-      '@onflow/transport-http': 1.6.0
-      '@onflow/util-actor': 1.2.0
-      '@onflow/util-address': 1.1.0
-      '@onflow/util-invariant': 1.1.0
-      '@onflow/util-logger': 1.2.0
-      '@onflow/util-template': 1.1.0
-      deepmerge: 4.3.1
-      sha3: 2.1.4
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
     dev: false
 
   /@changesets/apply-release-plan@6.1.4:
@@ -2155,15 +2085,6 @@ packages:
       shell-quote-word: 1.0.1
       to-pascal-case: 1.0.0
       unescape-js: 1.1.4
-    dev: false
-
-  /@es-joy/jsdoccomment@0.37.1:
-    resolution: {integrity: sha512-5vxWJ1gEkEF0yRd0O+uK6dHJf7adrxwQSX8PuRiPfFSAbNLnY0ZJfXaZucoz14Jj2N11xn2DnlEPwWRpYpvRjg==}
-    engines: {node: ^14 || ^16 || ^17 || ^18 || ^19 || ^20}
-    dependencies:
-      comment-parser: 1.3.1
-      esquery: 1.5.0
-      jsdoc-type-pratt-parser: 4.0.0
     dev: false
 
   /@esbuild/android-arm64@0.18.20:
@@ -3401,89 +3322,6 @@ packages:
     dependencies:
       '@nodelib/fs.scandir': 3.0.0
       fastq: 1.17.1
-    dev: false
-
-  /@onflow/config@1.1.0:
-    resolution: {integrity: sha512-Knj+HgDJ7MBKzvWMOCE7ot0HDjVWE73Un+ncbQRZLu3kbnU8mxJYLGG7oRO//Lw6PFPdHxBK0iGG3kz4OtgqKg==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@onflow/util-actor': 1.2.0
-      eslint: 8.57.0
-      eslint-plugin-jsdoc: 40.3.0(eslint@8.57.0)
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /@onflow/interaction@0.0.11:
-    resolution: {integrity: sha512-Xuq1Mmx6Wyba/F/L+QLQs0yJeQDsIDwy5SKk5vrCuVgIj0yD8k506g5L8ODrbM1LWll8i0tQsoOi0F85vNl5sA==}
-    dev: false
-
-  /@onflow/rlp@1.1.0:
-    resolution: {integrity: sha512-JJj4dZpKaWmCOXnado+D3RU5xYAXui9kHOmCVfdLReYHIsYBgxwHCDO/hDiQjrbmfLpiybbJKTaIldu+xkCU3Q==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-      buffer: 6.0.3
-    dev: false
-
-  /@onflow/transport-http@1.6.0:
-    resolution: {integrity: sha512-LgCbPod/JSLjPujs+84FHht2sj3iWszpBwwvN63QVKiVORpJ8Vl72jR1543LPBJQtAeboOd90YUwN3Qu6Kw1zA==}
-    dependencies:
-      '@babel/runtime': 7.24.8
-      '@onflow/util-address': 1.1.0
-      '@onflow/util-invariant': 1.1.0
-      '@onflow/util-logger': 1.2.0
-      '@onflow/util-template': 1.1.0
-      abort-controller: 3.0.0
-      cross-fetch: 3.1.8
-    transitivePeerDependencies:
-      - encoding
-      - supports-color
-    dev: false
-
-  /@onflow/types@1.1.0:
-    resolution: {integrity: sha512-UUd2ZAFqdd8BHW//uTg+YRlh3EIH9Na+UYJ9qXpt6y87qjW0Lf4Zkhn6H5IqvhIJsjK17QYnXLFpoXItD/+ToQ==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-    dev: false
-
-  /@onflow/util-actor@1.2.0:
-    resolution: {integrity: sha512-voyHXE3qYNC+P75vzv55pGDDwpxxWKWH0aToR/3g9Bq8nKGcGoszxaMJkVy+fKX1akfdT0yKr/GxXRkjCS9SBg==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-      queue-microtask: 1.2.3
-    dev: false
-
-  /@onflow/util-address@1.1.0:
-    resolution: {integrity: sha512-HhJOIfNaYAoeYuTNUe85jt4fqnJhFmSbYqyufiJBrplwd3eKmNsan0NYvVYO4U1ecu3KyuY4D9R/NtjGpHjMlA==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-    dev: false
-
-  /@onflow/util-invariant@1.1.0:
-    resolution: {integrity: sha512-5uxweKl5tqeqB1QLzs3dWWLtpNo7H4PgcmgnRIcC2oItAkELcnVCybDdlfYjKB4n/dlg3rIym8cJQE2tBeOpZQ==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-    dev: false
-
-  /@onflow/util-logger@1.2.0:
-    resolution: {integrity: sha512-E/pKOvg6NnXEQ8ibdeA67/TurzwoXP7dKvqWYJxO0DrrhZLBMJbZygkBw3QBKpvlso+hXkVP4HeoltKijfknzA==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-      '@onflow/config': 1.1.0
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
-  /@onflow/util-template@1.1.0:
-    resolution: {integrity: sha512-gGqJJH5OTPPRmHk6YxMw4t5Ecy7iHnj00ZlCE7lnlOnpGUNdHrNNfoeE//hO8TBGNNVpOkEQERWiLDph+/oIxg==}
-    dependencies:
-      '@babel/runtime': 7.24.0
-    dev: false
-
-  /@onflow/util-uid@1.1.0:
-    resolution: {integrity: sha512-HmWfKCOXoz1/TIu7fRx6iR7Nfhq6q5Tmn4YWc868SIfFeWv/inpvVJyrKX0nORf87csSnRSqdDzrJGBowgcXVA==}
-    dependencies:
-      '@babel/runtime': 7.24.0
     dev: false
 
   /@open-draft/until@1.0.3:
@@ -6151,11 +5989,6 @@ packages:
       repeat-string: 1.6.1
     dev: true
 
-  /comment-parser@1.3.1:
-    resolution: {integrity: sha512-B52sN2VNghyq5ofvUsqZjmk6YkihBX5vMSChmSK9v4ShjKf3Vk5Xcmgpw4o+iIgtrnM/u5FiMpz9VKb8lpBveA==}
-    engines: {node: '>= 12.0.0'}
-    dev: false
-
   /common-tags@1.8.2:
     resolution: {integrity: sha512-gk/Z852D2Wtb//0I+kRFNKKE9dIIVirjoqPoA1wJU+XePVXZfGeBpk45+A1rKO4Q43prqWBNY/MiIeRLbPWUaA==}
     engines: {node: '>=4.0.0'}
@@ -6403,14 +6236,6 @@ packages:
   /create-require@1.1.1:
     resolution: {integrity: sha512-dcKFX3jn0MpIaXjisoRvexIJVEKzaq7z2rZKxf+MSr9TkdmHmsU4m2lcLojrj/FHl8mk5VxMmYA+ftRkP/3oKQ==}
     dev: true
-
-  /cross-fetch@3.1.8:
-    resolution: {integrity: sha512-cvA+JwZoU0Xq+h6WkMvAUqPEYy92Obet6UdKLfW60qn99ftItKjB5T+BkyWOFWe2pUyfQ+IJHmpOTznqk1M6Kg==}
-    dependencies:
-      node-fetch: 2.7.0
-    transitivePeerDependencies:
-      - encoding
-    dev: false
 
   /cross-fetch@4.0.0:
     resolution: {integrity: sha512-e4a5N8lVvuLgAWgnCrLr2PP0YyDOTHa9H/Rj54dirp61qXnNq46m82bRhNqIA5VccJtWBvPTFRV3TtvHUKPB1g==}
@@ -7390,24 +7215,6 @@ packages:
       - supports-color
     dev: true
 
-  /eslint-plugin-jsdoc@40.3.0(eslint@8.57.0):
-    resolution: {integrity: sha512-EhCqpzRkxoT2DUB4AnrU0ggBYvTh3bWrLZzQTupq6vSVE6XzNwJVKsOHa41GCoevnsWMBNmoDVjXWGqckjuG1g==}
-    engines: {node: ^14 || ^16 || ^17 || ^18 || ^19}
-    peerDependencies:
-      eslint: ^7.0.0 || ^8.0.0
-    dependencies:
-      '@es-joy/jsdoccomment': 0.37.1
-      comment-parser: 1.3.1
-      debug: 4.3.4
-      escape-string-regexp: 4.0.0
-      eslint: 8.57.0
-      esquery: 1.5.0
-      semver: 7.5.4
-      spdx-expression-parse: 3.0.1
-    transitivePeerDependencies:
-      - supports-color
-    dev: false
-
   /eslint-plugin-no-unsanitized@4.0.2(eslint@8.36.0):
     resolution: {integrity: sha512-Pry0S9YmHoz8NCEMRQh7N0Yexh2MYCNPIlrV52hTmS7qXnTghWsjXouF08bgsrrZqaW9tt1ZiK3j5NEmPE+EjQ==}
     peerDependencies:
@@ -8383,7 +8190,7 @@ packages:
     resolution: {integrity: sha512-oWb1Z6mkHIskLzEJ/XWX0srkpkTQ7vaopMQkyaEIoq0fmtFVxOthb8cCxeT+p3ynTdkk/RZwbgG4brR5BeWECw==}
     engines: {node: '>= 4.0'}
     os: [darwin]
-    deprecated: The v1 package contains DANGEROUS / INSECURE binaries. Upgrade to safe fsevents v2
+    deprecated: Upgrade to fsevents v2 to mitigate potential security issues
     dependencies:
       bindings: 1.5.0
       nan: 2.17.0
@@ -9963,11 +9770,6 @@ packages:
 
   /jsbn@0.1.1:
     resolution: {integrity: sha512-UVU9dibq2JcFWxQPA6KCqj5O42VOmAY3zQUfEKxU0KpTGXwNoCjkX1e13eHNvw/xPynt6pU0rZ1htjWTNTSXsg==}
-
-  /jsdoc-type-pratt-parser@4.0.0:
-    resolution: {integrity: sha512-YtOli5Cmzy3q4dP26GraSOeAhqecewG04hoO8DY56CH4KJ9Fvv5qKWUCCo3HZob7esJQHCv6/+bnTy72xZZaVQ==}
-    engines: {node: '>=12.0.0'}
-    dev: false
 
   /jsesc@0.5.0:
     resolution: {integrity: sha512-uZz5UnB7u4T9LvwmFqXii7pZSouaRPorGs5who1Ip7VO0wxanFvBL7GkM6dTHlgX+jhBApRetaWpnDabOeTcnA==}
@@ -13561,12 +13363,6 @@ packages:
     dependencies:
       inherits: 2.0.4
       safe-buffer: 5.2.1
-
-  /sha3@2.1.4:
-    resolution: {integrity: sha512-S8cNxbyb0UGUM2VhRD4Poe5N58gJnJsLJ5vC7FYWGUmGhcsj4++WaIOBFVDxlG0W3To6xBuiRh+i0Qp2oNCOtg==}
-    dependencies:
-      buffer: 6.0.3
-    dev: false
 
   /shebang-command@1.2.0:
     resolution: {integrity: sha512-EV3L1+UQWGor21OmnvojK36mhg+TyIKDh3iFBKBohr5xeXIhNBcx8oWdgkTEEQ+BEFFYdLRuqMfd5L84N1V5Vg==}

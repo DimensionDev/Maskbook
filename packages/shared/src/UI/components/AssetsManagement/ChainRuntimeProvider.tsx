@@ -1,7 +1,6 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { noop, sortBy } from 'lodash-es'
 import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { useNetworks } from '@masknet/web3-hooks-base'
@@ -22,7 +21,7 @@ interface ChainRuntimeOptions {
     defaultChainId?: Web3Helper.ChainIdAll
     account: string
     chainId?: Web3Helper.ChainIdAll
-    setChainId: Dispatch<SetStateAction<ChainId | FlowChainId | SolanaChainId | undefined>>
+    setChainId: Dispatch<SetStateAction<ChainId | SolanaChainId | undefined>>
     networks: Array<ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>>
 }
 
@@ -47,7 +46,6 @@ const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
         ChainId.Scroll,
     ],
     [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
-    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
 }
 
 export interface ChainRuntimeProviderProps

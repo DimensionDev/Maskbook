@@ -175,21 +175,6 @@
         "logo_url": "https://bscscan.com/token/images/ptokenbtc_32.png"
     },
     {
-        "name": "FUSD",
-        "address": "0x3c5959b568896393",
-        "logo_url": "https://swap.blocto.app/static/media/FUSD.ae4369da.svg"
-    },
-    {
-        "name": "FLOW",
-        "address": "0x1654653399040a61",
-        "logo_url": "https://swap.blocto.app/static/media/flow-logo.7d05ec26.svg"
-    },
-    {
-        "name": "tUSD",
-        "address": "0xcfdd90d4a00f7b5b",
-        "logo_url": "https://swap.blocto.app/static/media/TUSDT.b2ff48b5.svg"
-    },
-    {
         "name": "AVAX",
         "address": "0xb31f66aa3c1e785363f0875a1b74e27b85fd66c7",
         "logo_url": "https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/avalanchex/info/logo.png/quality=85"

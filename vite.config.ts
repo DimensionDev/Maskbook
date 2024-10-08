@@ -15,7 +15,6 @@ export default defineConfig({
             '@masknet/web3-shared-base': import.meta.resolve('./packages/web3-shared/base/src/index.ts'),
             '@masknet/web3-shared-evm': import.meta.resolve('./packages/web3-shared/evm/src/index.ts'),
             '@masknet/web3-shared-solana': import.meta.resolve('./packages/web3-shared/solana/src/index.ts'),
-            '@masknet/web3-shared-flow': import.meta.resolve('./packages/web3-shared/flow/src/index.ts'),
             '@masknet/public-api': import.meta.resolve('./packages/public-api/src/index.ts'),
             '@masknet/typed-message': import.meta.resolve('./packages/typed-message/base/src/index.ts'),
             '@masknet/encryption': import.meta.resolve('./packages/encryption/src/index.ts'),

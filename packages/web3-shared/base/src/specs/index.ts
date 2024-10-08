@@ -48,7 +48,6 @@ export enum SourceType {
     // FT assets
     DeBank = 'DeBank',
     Zerion = 'Zerion',
-    Flow = 'Flow',
     Solana = 'Solana',
     CoinGecko = 'CoinGecko',
     CoinMarketCap = 'CoinMarketCap',

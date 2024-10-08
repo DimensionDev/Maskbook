@@ -176,7 +176,6 @@
     "collection_not_belong_to_you": "合约地址不正确或此 NFT 不属于您。",
     "collectible_search_placeholder": "名称或合同地址 eg.PUNK 或 0x234...",
     "plugin_wallet_solana_tips": "Phantom 只支持Solana 链。",
-    "plugin_wallet_blocto_tips": "Blocto 只支持 Flow 链。",
     "plugin_wallet_fortmatic_tips": "Formatic 仅支持 ETH 和 BNB 链。",
     "plugin_wallet_support_chains_tips": "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。",
     "plugin_wallet_connect_fortmatic": "连接 Fortmatic",

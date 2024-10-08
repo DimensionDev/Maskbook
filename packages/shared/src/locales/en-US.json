@@ -184,7 +184,6 @@
     "collection_not_belong_to_you": "The contract address is incorrect or the collection does not belong to you.",
     "collectible_search_placeholder": "Name or Contract address eg.PUNK or 0x234...",
     "plugin_wallet_solana_tips": "Phantom only supports the Solana chain.",
-    "plugin_wallet_blocto_tips": "Blocto only supports the Flow chain.",
     "plugin_wallet_fortmatic_tips": "Fortmatic only supports the ETH and BNB chain.",
     "plugin_wallet_support_chains_tips": "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc.",
     "plugin_wallet_connect_fortmatic": "Connect Fortmatic",

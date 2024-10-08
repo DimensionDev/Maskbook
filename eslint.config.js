@@ -22,7 +22,6 @@ if (pathToFileURL(process.argv[1]).toString().includes('eslint/bin/eslint.js')) 
 const deferPackages = [
     'wallet.ts',
     'anchorme',
-    '@blocto/fcl',
     '@metamask/eth-sig-util',
     'web3-eth',
     'web3-eth-accounts',

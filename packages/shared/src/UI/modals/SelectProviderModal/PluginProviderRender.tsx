@@ -22,10 +22,6 @@ import {
     NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
     ProviderType as SolProviderType,
 } from '@masknet/web3-shared-solana'
-import {
-    NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
-    ProviderType as FlowProviderType,
-} from '@masknet/web3-shared-flow'
 import { DialogDismissIconUI, ImageIcon, useSharedTrans } from '@masknet/shared'
 import { ProviderItem } from './ProviderItem.js'
 
@@ -34,7 +30,6 @@ const descriptors: Record<
     ReadonlyArray<NetworkDescriptor<Web3Helper.ChainIdAll, Web3Helper.NetworkTypeAll>>
 > = {
     [NetworkPluginID.PLUGIN_EVM]: EVM_NETWORK_DESCRIPTORS,
-    [NetworkPluginID.PLUGIN_FLOW]: FLOW_NETWORK_DESCRIPTORS,
     [NetworkPluginID.PLUGIN_SOLANA]: SOL_NETWORK_DESCRIPTORS,
 }
 
@@ -187,9 +182,8 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
         if (provider === SolProviderType.Phantom) {
             return t.plugin_wallet_solana_tips()
-        } else if (provider === FlowProviderType.Blocto) {
-            return t.plugin_wallet_blocto_tips()
-        } else if (provider === ProviderType.Fortmatic) {
+        }
+        if (provider === ProviderType.Fortmatic) {
             return t.plugin_wallet_fortmatic_tips()
         }
 
