@@ -10,10 +10,11 @@ import {
     formatCompact,
     GasOptionType,
     leftShift,
+    multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Box, Typography, Link as MuiLink } from '@mui/material'
+import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -23,13 +24,13 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useTrade } from '../contexts/index.js'
+import { useApprove } from '../hooks/useApprove.js'
+import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
-import { useApprove } from '../hooks/useApprove.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -246,7 +247,7 @@ export const Confirm = memo(function Confirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas,
+            gas: gas ? multipliedBy(gas, 1.2).toFixed(0) : gas,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas

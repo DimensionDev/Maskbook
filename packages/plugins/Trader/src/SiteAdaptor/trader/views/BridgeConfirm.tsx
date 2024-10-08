@@ -246,7 +246,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas,
+            gas: gas ? multipliedBy(gas, 1.2).toFixed(0) : gas,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
