@@ -294,7 +294,9 @@ export function TradeView() {
                                             const isNative = isNativeTokenAddress(fromToken.address)
                                             const balance =
                                                 isNative ? minus(fromTokenBalance, gasFee) : fromTokenBalance
-                                            setInputAmount(trimZero(leftShift(balance, fromToken.decimals).toFixed(12)))
+                                            setInputAmount(
+                                                trimZero(leftShift(balance, fromToken.decimals).toFixed(12, 1)),
+                                            )
                                         }}>
                                         <Trans>MAX</Trans>
                                     </Button>

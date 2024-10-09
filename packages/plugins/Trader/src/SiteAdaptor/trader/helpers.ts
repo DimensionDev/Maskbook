@@ -42,8 +42,8 @@ export function getBridgeRightSideToken(bridge: RouterListItem) {
 export function formatTokenBalance(raw: BigNumber.Value, decimals = 0) {
     const balance = leftShift(raw, decimals).toNumber()
     return formatCompact(balance, {
-        minimumSignificantDigits: 2,
-        maximumSignificantDigits:
+        minimumFractionDigits: 2,
+        maximumFractionDigits:
             balance < 100 ? 4
             : balance < 1000 ? 2
             : 2,

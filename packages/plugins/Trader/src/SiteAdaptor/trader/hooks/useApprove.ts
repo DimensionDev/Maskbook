@@ -2,8 +2,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { OKX } from '@masknet/web3-providers'
-import { isGreaterThan, isZero, multipliedBy } from '@masknet/web3-shared-base'
-import { type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { addGasMargin, type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTrade } from '../contexts/TradeProvider.js'
 import { useSpender } from './useSpender.js'
@@ -40,8 +40,8 @@ export function useApprove() {
             if (!approveInfo?.data || !tokenAddress || isGreaterThan(allowance, amount)) return
             return Web3.sendTransaction({
                 to: tokenAddress,
-                gas: approveInfo.gasLimit,
-                gasPrice: multipliedBy(approveInfo.gasPrice, 1.5).toFixed(0),
+                gas: addGasMargin(approveInfo.gasLimit).toFixed(0),
+                gasPrice: approveInfo.gasPrice,
                 data: approveInfo.data,
             })
         },

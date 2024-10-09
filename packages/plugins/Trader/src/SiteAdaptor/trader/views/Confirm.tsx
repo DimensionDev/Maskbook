@@ -252,7 +252,7 @@ export const Confirm = memo(function Confirm() {
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
-            _disableSuccessSnackbar: true,
+            _disableSnackbar: true,
         })
     }, [transaction, account, gasConfig, Web3, gas])
 
@@ -261,7 +261,6 @@ export const Confirm = memo(function Confirm() {
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
     const loading = isSending || isCheckingApprove || isApproving
-    const disabled = !isSwappable || loading || dexIdsCount === 0
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
@@ -269,6 +268,114 @@ export const Confirm = memo(function Confirm() {
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const waitForTransaction = useWaitForTransaction()
     const getReceived = useGetTransferReceived(chainId)
+
+    const [{ loading: submitting }, submit] = useAsyncFn(async () => {
+        if (!fromToken || !toToken || !transaction?.to || !spender) return
+
+        try {
+            await approveMutation.mutateAsync()
+            const hash = await sendSwap().catch((err) => {
+                const message = (err as Error).message
+                if (message.includes('Transaction was rejected!')) return null
+                throw err
+            })
+
+            if (!hash) {
+                showSnackbar(t`Swap`, {
+                    message: t`Transaction rejected`,
+                    variant: 'error',
+                })
+                return
+            }
+            try {
+                await waitForTransaction({ chainId, hash })
+                const received = await getReceived(hash, account)
+                if (received && !leaveRef.current) {
+                    showSnackbar(t`Swap`, {
+                        message: (
+                            <MuiLink
+                                className={classes.toastLink}
+                                color="inherit"
+                                href={Utils.explorerResolver.transactionLink(chainId, hash)}
+                                tabIndex={-1}
+                                target="_blank"
+                                rel="noopener noreferrer">
+                                {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} swap completed successfully.`}{' '}
+                                <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                            </MuiLink>
+                        ),
+                        variant: 'success',
+                    })
+                }
+            } catch (error) {
+                showSnackbar(t`Swap`, {
+                    message: t`Wait too long for the confirmation.`,
+                    variant: 'error',
+                })
+            }
+
+            const estimatedSeconds =
+                gasOptions ?
+                    gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
+                :   networkDescriptor?.averageBlockDelay
+            await addTransaction(account, {
+                kind: 'swap',
+                hash,
+                chainId,
+                fromToken: {
+                    chainId,
+                    decimals: +fromToken.decimals,
+                    contractAddress: fromToken.address,
+                    symbol: fromToken.symbol,
+                    logo: fromToken.logoURL,
+                },
+                fromTokenAmount,
+                toToken: {
+                    chainId,
+                    decimals: +toToken.decimals,
+                    contractAddress: toToken.address,
+                    symbol: toToken.symbol,
+                    logo: toToken.logoURL,
+                },
+                toTokenAmount,
+                timestamp: Date.now(),
+                transactionFee: gasFee.toFixed(0),
+                dexContractAddress: spender,
+                to: transaction.to,
+                estimatedTime: estimatedSeconds ?? 10,
+                gasLimit: gas!,
+                gasPrice: gasConfig.gasPrice || '0',
+            })
+            if (leaveRef.current) return
+            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
+            navigate(url, { replace: true })
+        } catch (err) {
+            showSnackbar(t`Swap`, {
+                message: (err as Error).message,
+                variant: 'error',
+            })
+        }
+    }, [
+        fromToken,
+        toToken,
+        transaction,
+        spender,
+        sendSwap,
+        showSnackbar,
+        getReceived,
+        account,
+        gasConfig,
+        networkDescriptor,
+        chainId,
+        fromTokenAmount,
+        toTokenAmount,
+        gasFee,
+        gas,
+        mode,
+        waitForTransaction,
+        gasOptions,
+    ])
+    const disabled = !isSwappable || loading || dexIdsCount === 0 || submitting
 
     return (
         <div className={classes.container}>
@@ -414,85 +521,7 @@ export const Confirm = memo(function Confirm() {
                         }}>
                         {t`Update Quote`}
                     </ActionButton>
-                :   <ActionButton
-                        fullWidth
-                        loading={loading}
-                        disabled={disabled}
-                        onClick={async () => {
-                            if (!fromToken || !toToken || !transaction?.to || !spender) return
-                            await approveMutation.mutateAsync()
-
-                            const hash = await sendSwap()
-
-                            if (!hash) {
-                                showSnackbar(t`Transaction rejected`, {
-                                    title: t`Swap`,
-                                    variant: 'error',
-                                })
-                                return
-                            }
-                            try {
-                                await waitForTransaction({ chainId, hash })
-                                const received = await getReceived(hash, account)
-                                if (received && !leaveRef.current) {
-                                    showSnackbar(t`Swap`, {
-                                        message: (
-                                            <MuiLink
-                                                className={classes.toastLink}
-                                                color="inherit"
-                                                href={Utils.explorerResolver.transactionLink(chainId, hash)}
-                                                tabIndex={-1}
-                                                target="_blank"
-                                                rel="noopener noreferrer">
-                                                {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} swap completed successfully.`}{' '}
-                                                <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                                            </MuiLink>
-                                        ),
-                                        variant: 'success',
-                                    })
-                                }
-                            } catch (error) {
-                                showSnackbar(t`Wait too long for the confirmation.`, {
-                                    variant: 'error',
-                                })
-                            }
-
-                            const estimatedSeconds =
-                                gasOptions ?
-                                    gasOptions[gasConfig.gasOptionType ?? GasOptionType.NORMAL].estimatedSeconds
-                                :   networkDescriptor?.averageBlockDelay
-                            await addTransaction(account, {
-                                kind: 'swap',
-                                hash,
-                                chainId,
-                                fromToken: {
-                                    chainId,
-                                    decimals: +fromToken.decimals,
-                                    contractAddress: fromToken.address,
-                                    symbol: fromToken.symbol,
-                                    logo: fromToken.logoURL,
-                                },
-                                fromTokenAmount,
-                                toToken: {
-                                    chainId,
-                                    decimals: +toToken.decimals,
-                                    contractAddress: toToken.address,
-                                    symbol: toToken.symbol,
-                                    logo: toToken.logoURL,
-                                },
-                                toTokenAmount,
-                                timestamp: Date.now(),
-                                transactionFee: gasFee.toFixed(0),
-                                dexContractAddress: spender,
-                                to: transaction.to,
-                                estimatedTime: estimatedSeconds ?? 10,
-                                gasLimit: gas!,
-                                gasPrice: gasConfig.gasPrice || '0',
-                            })
-                            if (leaveRef.current) return
-                            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
-                            navigate(url, { replace: true })
-                        }}>
+                :   <ActionButton fullWidth loading={loading} disabled={disabled} onClick={submit}>
                         {errorMessage ??
                             (isSending ? t`Sending`
                             : isCheckingApprove ? t`Checking Approve`

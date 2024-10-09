@@ -251,6 +251,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
+            _disableSnackbar: true,
         })
     }, [transaction, account, gasConfig, Web3, gas])
 
@@ -261,7 +262,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
     const loading = isSending || isCheckingApprove || isApproving
-    const disabled = !isBridgable || loading
 
     const { showSnackbar } = useCustomSnackbar()
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
@@ -282,6 +282,91 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const leaveRef = useLeave()
+
+    const [{ loading: submitting }, submit] = useAsyncFn(async () => {
+        if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
+
+        try {
+            await approveMutation.mutateAsync()
+            const hash = await sendBridge().catch((err) => {
+                const message = (err as Error).message
+                if (message.includes('Transaction was rejected!')) return null
+                throw err
+            })
+
+            if (!hash) {
+                showSnackbar(t`Bridge`, {
+                    message: t`Transaction rejected`,
+                    variant: 'error',
+                })
+                return
+            }
+            await addTransaction(account, {
+                kind: 'bridge',
+                hash,
+                fromChainId,
+                toChainId,
+                fromToken: {
+                    chainId: fromChainId,
+                    decimals: +fromToken.decimals,
+                    contractAddress: fromToken.address,
+                    symbol: fromToken.symbol,
+                    logo: fromToken.logoURL,
+                },
+                fromTokenAmount,
+                toToken: {
+                    chainId: toChainId,
+                    decimals: +toToken.decimals,
+                    contractAddress: toToken.address,
+                    symbol: toToken.symbol,
+                    logo: toToken.logoURL,
+                },
+                toTokenAmount,
+                timestamp: Date.now(),
+                transactionFee: gasFee.toFixed(0),
+                dexContractAddress: spender,
+                to: transaction.to,
+                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
+                gasLimit: gas!,
+                gasPrice: gasConfig.gasPrice || '0',
+                leftSideToken: getBridgeLeftSideToken(bridge),
+                rightSideToken: getBridgeRightSideToken(bridge),
+                bridgeId: router?.bridgeId,
+                bridgeName: router?.bridgeName,
+            })
+            if (leaveRef.current) return
+            const url = urlcat(RoutePaths.Transaction, {
+                hash,
+                chainId: fromChainId,
+                mode,
+                pending: true,
+            })
+            navigate(url, { replace: true })
+        } catch (err) {
+            showSnackbar(t`Bridge`, {
+                message: (err as Error).message,
+                variant: 'error',
+            })
+        }
+    }, [
+        fromToken,
+        toToken,
+        fromTokenAmount,
+        toTokenAmount,
+        transaction,
+        spender,
+        bridge,
+        sendBridge,
+        showSnackbar,
+        fromChainId,
+        toChainId,
+        gasFee,
+        gasConfig.gasPrice,
+        router,
+        mode,
+    ])
+
+    const disabled = !isBridgable || loading || submitting
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -461,63 +546,7 @@ than estimated, and any unused funds will remain in the original address.`}>
                         }}>
                         {t`Update Quote`}
                     </ActionButton>
-                :   <ActionButton
-                        fullWidth
-                        loading={loading}
-                        disabled={disabled}
-                        onClick={async () => {
-                            if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
-                            await approveMutation.mutateAsync()
-
-                            const hash = await sendBridge()
-
-                            if (!hash) {
-                                showSnackbar(t`Transaction rejected`, {
-                                    title: t`Bridge`,
-                                    variant: 'error',
-                                })
-                                return
-                            }
-                            await addTransaction(account, {
-                                kind: 'bridge',
-                                hash,
-                                fromChainId,
-                                toChainId,
-                                fromToken: {
-                                    chainId: fromChainId,
-                                    decimals: +fromToken.decimals,
-                                    contractAddress: fromToken.address,
-                                    symbol: fromToken.symbol,
-                                    logo: fromToken.logoURL,
-                                },
-                                fromTokenAmount,
-                                toToken: {
-                                    chainId: toChainId,
-                                    decimals: +toToken.decimals,
-                                    contractAddress: toToken.address,
-                                    symbol: toToken.symbol,
-                                    logo: toToken.logoURL,
-                                },
-                                toTokenAmount,
-                                timestamp: Date.now(),
-                                transactionFee: gasFee.toFixed(0),
-                                dexContractAddress: spender,
-                                to: transaction.to,
-                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
-                                gasLimit: gas!,
-                                gasPrice: gasConfig.gasPrice || '0',
-                                leftSideToken: getBridgeLeftSideToken(bridge),
-                                rightSideToken: getBridgeRightSideToken(bridge),
-                            })
-                            if (leaveRef.current) return
-                            const url = urlcat(RoutePaths.Transaction, {
-                                hash,
-                                chainId: fromChainId,
-                                mode,
-                                pending: true,
-                            })
-                            navigate(url, { replace: true })
-                        }}>
+                :   <ActionButton fullWidth loading={loading} disabled={disabled} onClick={submit}>
                         {errorMessage ??
                             (isSending ? t`Sending`
                             : isCheckingApprove ? t`Checking Approve`

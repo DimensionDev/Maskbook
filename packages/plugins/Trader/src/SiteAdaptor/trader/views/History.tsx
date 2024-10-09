@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
         paddingBottom: theme.spacing(1.5),
+        contentVisibility: 'auto',
     },
     groupHeader: {
         display: 'flex',
