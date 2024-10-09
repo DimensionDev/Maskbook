@@ -514,6 +514,8 @@ than estimated, and any unused funds will remain in the original address.`}>
                                     gasPrice: gasConfig.gasPrice || '0',
                                     leftSideToken: getBridgeLeftSideToken(bridge),
                                     rightSideToken: getBridgeRightSideToken(bridge),
+                                    bridgeId: router?.bridgeId,
+                                    bridgeName: router?.bridgeName,
                                 })
                                 if (leaveRef.current) return
                                 const url = urlcat(RoutePaths.Transaction, {

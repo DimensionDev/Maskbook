@@ -5,8 +5,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
-import { dividedBy, formatBalance, formatCompact, TransactionStatusType } from '@masknet/web3-shared-base'
-import { type ChainId, formatEthereumAddress, formatEtherToWei } from '@masknet/web3-shared-evm'
+import { dividedBy, formatBalance, formatCompact, leftShift, TransactionStatusType } from '@masknet/web3-shared-base'
+import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, Typography, Link as MuiLink } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
@@ -269,12 +269,8 @@ export const Transaction = memo(function Transaction() {
 
     const isSwap = tx?.kind === 'swap'
     const txUrl = useMemo(() => {
-        if (isSwap) {
-            return chainId && hash ? EVMExplorerResolver.transactionLink(chainId, hash) : undefined
-        }
-        if (!toChainId || !bridgeStatus?.toTxHash) return undefined
-        return EVMExplorerResolver.transactionLink(toChainId, bridgeStatus.toTxHash)
-    }, [isSwap, chainId, hash, toChainId, bridgeStatus?.toTxHash])
+        return chainId && hash ? EVMExplorerResolver.transactionLink(chainId, hash) : undefined
+    }, [chainId, hash])
 
     const txPending = status === TransactionStatusType.NOT_DEPEND
     const [expand = bridgeStatus?.status === 'PENDING', setExpand] = useState<boolean>()
@@ -319,11 +315,13 @@ export const Transaction = memo(function Transaction() {
     const txSucceed = status === TransactionStatusType.SUCCEED
     const txFailed = status === TransactionStatusType.FAILED
 
-    const [baseToken, targetToken] = forwardCompare ? [tx.fromToken, tx.toToken] : [tx.toToken, tx.fromToken]
-    const rate =
-        forwardCompare && tx ?
-            dividedBy(tx.toTokenAmount!, tx.fromTokenAmount ?? '1')
-        :   dividedBy(tx.fromTokenAmount!, tx.toTokenAmount!)
+    const fromAmount = leftShift(tx.fromTokenAmount ?? 0, tx.fromToken.decimals)
+    const toAmount = leftShift(tx.toTokenAmount ?? 0, tx.toToken.decimals)
+    const [baseToken, targetToken, baseAmount, targetAmount] =
+        forwardCompare ?
+            [tx.fromToken, tx.toToken, fromAmount, toAmount]
+        :   [tx.toToken, tx.fromToken, toAmount, fromAmount]
+    const rate = dividedBy(targetAmount, baseAmount)
 
     const rateNode =
         baseToken && targetToken ?
@@ -400,7 +398,7 @@ export const Transaction = memo(function Transaction() {
                                     :   '--'}
                                 </Typography>
                                 <Typography className={classes.network}>{fromNetwork?.fullName ?? '--'}</Typography>
-                                {txPending || detailStatus === 'BRIDGE_PENDING' ?
+                                {txPending || detailStatus === 'WAITING' ?
                                     <Typography className={classes.tip}>
                                         <Trans>Transaction in progress. Thank you for your patience.</Trans>
                                     </Typography>
@@ -441,6 +439,15 @@ export const Transaction = memo(function Transaction() {
                                 :   null}
                             </div>
                         :   null}
+                        {tx.kind === 'bridge' && bridgeStatus?.status === 'PENDING' ?
+                            <Typography className={classes.tip} ml="38px">
+                                <Trans>
+                                    Transferring asset across to the {toNetwork?.fullName} network via the{' '}
+                                    {tx.bridgeName}
+                                    cross-chain bridge
+                                </Trans>
+                            </Typography>
+                        :   null}
                     </div>
                     <div
                         className={cx(
@@ -469,19 +476,7 @@ export const Transaction = memo(function Transaction() {
                                         {tx.rightSideToken.tokenSymbol}
                                     </Typography>
                                     <Typography className={classes.network}>{toNetwork?.fullName ?? '--'}</Typography>
-                                    {txPending || detailStatus === 'BRIDGE_PENDING' ?
-                                        <Typography className={classes.tip}>
-                                            <Trans>Transaction in progress. Thank you for your patience.</Trans>
-                                        </Typography>
-                                    :   null}
                                 </div>
-                                {bridgeStatus?.bridgeHash ?
-                                    <a
-                                        href={EVMExplorerResolver.transactionLink(toChainId, bridgeStatus.bridgeHash)}
-                                        target="_blank">
-                                        <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
-                                    </a>
-                                :   null}
                             </div>
                         :   null}
                         <div className={classes.tokenInfo}>
@@ -501,8 +496,10 @@ export const Transaction = memo(function Transaction() {
                                 </Typography>
                                 <Typography className={classes.network}>{toNetwork?.fullName ?? '--'}</Typography>
                             </div>
-                            {txUrl ?
-                                <a href={txUrl} target="_blank">
+                            {bridgeStatus?.toTxHash ?
+                                <a
+                                    href={EVMExplorerResolver.transactionLink(toChainId, bridgeStatus.toTxHash)}
+                                    target="_blank">
                                     <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
                                 </a>
                             :   null}
@@ -567,11 +564,7 @@ export const Transaction = memo(function Transaction() {
                             chainId={fromChainId}
                             gasLimit={tx.gasLimit}
                             gasPrice={tx.gasPrice}
-                            gasFee={
-                                bridgeStatus?.sourceChainGasfee ?
-                                    formatEtherToWei(bridgeStatus.sourceChainGasfee)
-                                :   undefined
-                            }
+                            gasFee={tx.transactionFee}
                         />
                     </div>
                     <div className={classes.infoRow}>
@@ -591,7 +584,19 @@ export const Transaction = memo(function Transaction() {
                     </div>
                 </div>
             </div>
-            {txSucceed || txFailed ?
+            {txUrl && (txPending || bridgeStatus?.status === 'PENDING') ?
+                <div className={classes.footer}>
+                    <Button
+                        className={classes.button}
+                        fullWidth
+                        onClick={() => {
+                            window.open(txUrl)
+                        }}>
+                        <Icons.Connect />
+                        <Trans>Check on Explorer</Trans>
+                    </Button>
+                </div>
+            : txSucceed || txFailed ?
                 <div className={classes.footer}>
                     <Button
                         className={classes.button}
@@ -608,18 +613,6 @@ export const Transaction = memo(function Transaction() {
                                 <Trans>Make another Swap</Trans>
                             :   <Trans>Make another Bridge</Trans>
                         :   <Trans>Try Again</Trans>}
-                    </Button>
-                </div>
-            : txUrl ?
-                <div className={classes.footer}>
-                    <Button
-                        className={classes.button}
-                        fullWidth
-                        onClick={() => {
-                            window.open(txUrl)
-                        }}>
-                        <Icons.Connect />
-                        <Trans>Check on Explorer</Trans>
                     </Button>
                 </div>
             :   null}

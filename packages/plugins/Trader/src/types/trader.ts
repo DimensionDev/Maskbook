@@ -55,6 +55,8 @@ export interface OkxBridgeTransaction extends OkxBaseTransaction {
     toChainId: number
     leftSideToken?: SwapToken
     rightSideToken?: SwapToken
+    bridgeId?: number
+    bridgeName?: string
 }
 
 export type OkxTransaction = OkxSwapTransaction | OkxBridgeTransaction
