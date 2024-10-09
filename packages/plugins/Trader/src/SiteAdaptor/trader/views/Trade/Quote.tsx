@@ -3,13 +3,15 @@ import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { OKXBridgeQuote, OKXSwapQuote } from '@masknet/web3-providers/types'
-import { dividedBy, formatCompact, leftShift } from '@masknet/web3-shared-base'
+import { dividedBy, formatCompact, leftShift, multipliedBy } from '@masknet/web3-shared-base'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { bridges, DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
 import { useGasManagement, useTrade } from '../../contexts/index.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
+import { useTokenPrice } from '../../hooks/useTokenPrice.js'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -84,6 +86,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
     const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
+    const { data: nativeTokenPrice } = useTokenPrice(chainId, ZERO_ADDRESS)
     const { gasCost } = useGasManagement()
 
     const rateNode = (
@@ -95,6 +98,10 @@ export function Quote({ quote, ...props }: QuoteProps) {
     )
 
     const bestRouter = isSwap ? undefined : bridgeQuote?.routerList[0]
+    const totalNetworkFee = useMemo(() => {
+        if (!bestRouter || !nativeTokenPrice) return gasCost
+        return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed()
+    }, [gasCost, bestRouter, nativeTokenPrice])
 
     return (
         <Box {...props} className={cx(classes.quote, props.className)}>
@@ -124,7 +131,9 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>Est Network fee</Typography>
-                        <Typography className={classes.rowValue}>${gasCost}</Typography>
+                        <Typography className={classes.rowValue}>
+                            {totalNetworkFee ? `$${totalNetworkFee}` : '--'}
+                        </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>

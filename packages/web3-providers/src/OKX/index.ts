@@ -224,7 +224,7 @@ export class OKX {
             amount: rightShift(1, fromToken?.decimals ?? 18).toFixed(),
             fromTokenAddress: fromToken?.address ?? NATIVE_TOKEN_ADDRESS,
             chainId,
-            toTokenAddress: address,
+            toTokenAddress: toOkxNativeAddress(address),
         }
         const quoteRes = await queryClient.fetchQuery({
             queryKey: ['okx-swap', 'get-quotes', options],
