@@ -10,7 +10,7 @@ export class FireflyTwitter {
             screenName,
         })
         const res = await fetchJSON<FireflyTwitterAPI.TwitterUserInfoResponse>(url)
-        if (res.code === 0) return res.data.data.user.result
+        if (res.code === 0 && res.data.data.user.result.__typename === 'User') return res.data.data.user.result
         return null
     }
 }
