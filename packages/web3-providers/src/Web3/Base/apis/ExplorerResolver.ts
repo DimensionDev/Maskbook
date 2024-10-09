@@ -31,7 +31,7 @@ export class ExplorerResolver<ChainId, SchemaType, NetworkType> {
         }
     }
 
-    private getExplorerURL(chainId: ChainId) {
+    protected getExplorerURL(chainId: ChainId) {
         const chainDescriptor = this.descriptors().find((x) => x.chainId === chainId)
         return chainDescriptor?.explorerUrl ?? { url: '' }
     }
