@@ -420,9 +420,9 @@ export const Confirm = memo(function Confirm() {
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender) return
-                            await approveMutation.mutateAsync()
 
                             try {
+                                await approveMutation.mutateAsync()
                                 const hash = await sendSwap().catch((err) => {
                                     const message = (err as Error).message
                                     if (message.includes('Transaction was rejected!')) return null

@@ -468,9 +468,9 @@ than estimated, and any unused funds will remain in the original address.`}>
                         disabled={disabled}
                         onClick={async () => {
                             if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
-                            await approveMutation.mutateAsync()
 
                             try {
+                                await approveMutation.mutateAsync()
                                 const hash = await sendBridge().catch((err) => {
                                     const message = (err as Error).message
                                     if (message.includes('Transaction was rejected!')) return null
