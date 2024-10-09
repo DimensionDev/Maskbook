@@ -134,38 +134,42 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
             return
         }
 
-        showSingletonSnackbar(
+        const title =
             progress.status === TransactionStatusType.SUCCEED ?
                 computed.snackbar?.successfulTitle ?? computed.title
-            :   computed.title,
-            {
-                ...resolveSnackbarConfig(progress.status),
-                ...{
-                    message: (
-                        <Link
-                            sx={{ wordBreak: 'break-word' }}
-                            className={classes.link}
-                            color="inherit"
-                            href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
-                            tabIndex={-1}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {progress.status === TransactionStatusType.SUCCEED ?
-                                computed.snackbar?.successfulDescription ?? computed.description
-                            :   computed.description}{' '}
-                            <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                        </Link>
-                    ),
-                },
+            :   computed.title
+        showSingletonSnackbar(title, {
+            ...resolveSnackbarConfig(progress.status),
+            ...{
+                message: (
+                    <Link
+                        sx={{ wordBreak: 'break-word' }}
+                        className={classes.link}
+                        color="inherit"
+                        href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
+                        tabIndex={-1}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {progress.status === TransactionStatusType.SUCCEED ?
+                            computed.snackbar?.successfulDescription ?? computed.description
+                        :   computed.description}{' '}
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                    </Link>
+                ),
             },
-        )
+        })
     }, [progress])
 
     useAsync(async () => {
         if (!errorInfo) return
+
         const transaction = errorInfo.request?.params?.[0] as
             | Web3Helper.Definition[NetworkPluginID]['Transaction']
             | undefined
+
+        if (transaction && '_disableSnackbar' in transaction && transaction._disableSnackbar) {
+            return
+        }
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
         const title = computed?.snackbar?.failedTitle ?? computed?.title
         const message = errorInfo.error.isRecognized ? errorInfo.error.message : computed?.snackbar?.failedDescription

@@ -251,6 +251,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
+            _disableSnackbar: true,
         })
     }, [transaction, account, gasConfig, Web3, gas])
 
@@ -469,54 +470,65 @@ than estimated, and any unused funds will remain in the original address.`}>
                             if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
                             await approveMutation.mutateAsync()
 
-                            const hash = await sendBridge()
+                            try {
+                                const hash = await sendBridge().catch((err) => {
+                                    const message = (err as Error).message
+                                    if (message.includes('Transaction was rejected!')) return null
+                                    throw err
+                                })
 
-                            if (!hash) {
-                                showSnackbar(t`Transaction rejected`, {
-                                    title: t`Bridge`,
+                                if (!hash) {
+                                    showSnackbar(t`Bridge`, {
+                                        message: t`Transaction rejected`,
+                                        variant: 'error',
+                                    })
+                                    return
+                                }
+                                await addTransaction(account, {
+                                    kind: 'bridge',
+                                    hash,
+                                    fromChainId,
+                                    toChainId,
+                                    fromToken: {
+                                        chainId: fromChainId,
+                                        decimals: +fromToken.decimals,
+                                        contractAddress: fromToken.address,
+                                        symbol: fromToken.symbol,
+                                        logo: fromToken.logoURL,
+                                    },
+                                    fromTokenAmount,
+                                    toToken: {
+                                        chainId: toChainId,
+                                        decimals: +toToken.decimals,
+                                        contractAddress: toToken.address,
+                                        symbol: toToken.symbol,
+                                        logo: toToken.logoURL,
+                                    },
+                                    toTokenAmount,
+                                    timestamp: Date.now(),
+                                    transactionFee: gasFee.toFixed(0),
+                                    dexContractAddress: spender,
+                                    to: transaction.to,
+                                    estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
+                                    gasLimit: gas!,
+                                    gasPrice: gasConfig.gasPrice || '0',
+                                    leftSideToken: getBridgeLeftSideToken(bridge),
+                                    rightSideToken: getBridgeRightSideToken(bridge),
+                                })
+                                if (leaveRef.current) return
+                                const url = urlcat(RoutePaths.Transaction, {
+                                    hash,
+                                    chainId: fromChainId,
+                                    mode,
+                                    pending: true,
+                                })
+                                navigate(url, { replace: true })
+                            } catch (err) {
+                                showSnackbar(t`Bridge`, {
+                                    message: (err as Error).message,
                                     variant: 'error',
                                 })
-                                return
                             }
-                            await addTransaction(account, {
-                                kind: 'bridge',
-                                hash,
-                                fromChainId,
-                                toChainId,
-                                fromToken: {
-                                    chainId: fromChainId,
-                                    decimals: +fromToken.decimals,
-                                    contractAddress: fromToken.address,
-                                    symbol: fromToken.symbol,
-                                    logo: fromToken.logoURL,
-                                },
-                                fromTokenAmount,
-                                toToken: {
-                                    chainId: toChainId,
-                                    decimals: +toToken.decimals,
-                                    contractAddress: toToken.address,
-                                    symbol: toToken.symbol,
-                                    logo: toToken.logoURL,
-                                },
-                                toTokenAmount,
-                                timestamp: Date.now(),
-                                transactionFee: gasFee.toFixed(0),
-                                dexContractAddress: spender,
-                                to: transaction.to,
-                                estimatedTime: bridge?.estimateTime ? +bridge.estimateTime : 0,
-                                gasLimit: gas!,
-                                gasPrice: gasConfig.gasPrice || '0',
-                                leftSideToken: getBridgeLeftSideToken(bridge),
-                                rightSideToken: getBridgeRightSideToken(bridge),
-                            })
-                            if (leaveRef.current) return
-                            const url = urlcat(RoutePaths.Transaction, {
-                                hash,
-                                chainId: fromChainId,
-                                mode,
-                                pending: true,
-                            })
-                            navigate(url, { replace: true })
                         }}>
                         {errorMessage ??
                             (isSending ? t`Sending`
