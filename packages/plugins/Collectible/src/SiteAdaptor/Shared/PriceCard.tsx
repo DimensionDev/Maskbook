@@ -81,7 +81,6 @@ export function PriceCard(props: PriceCardProps) {
 
     const renderTokenSymbol = () => {
         const { symbol, logoURL } = topListing?.priceInToken?.token ?? {}
-        // eslint-disable-next-line react/naming-convention/component-name
         if (symbol?.toUpperCase() === 'ETH') return <Icons.ETH size={18} />
         if (logoURL) return <img width={18} height={18} src={logoURL} alt="" />
         // eslint-disable-next-line react/naming-convention/component-name

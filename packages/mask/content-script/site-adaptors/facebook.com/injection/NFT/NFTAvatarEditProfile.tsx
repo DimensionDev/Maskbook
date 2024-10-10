@@ -55,6 +55,7 @@ function OpenNFTAvatarEditProfileButtonInFacebook() {
         const editCss = window.getComputedStyle(editDom)
         const buttonCss = window.getComputedStyle(buttonDom)
 
+        // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
         setStyle({
             fontSize: Number(editCss.fontSize.replace('px', '')),
             marginTop: Number(editCss.paddingTop.replace('px', '')),

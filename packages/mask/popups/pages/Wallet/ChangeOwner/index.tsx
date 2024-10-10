@@ -289,7 +289,6 @@ export function ChangeOwner() {
                 <Box className={cx(classes.item, classes.secondItem)}>
                     <Box className={classes.primaryItemBox}>
                         {walletManager ?
-                            // eslint-disable-next-line react/naming-convention/component-name
                             <Icons.ETH size={24} />
                         : personaManager ?
                             <div className={classes.avatar}>

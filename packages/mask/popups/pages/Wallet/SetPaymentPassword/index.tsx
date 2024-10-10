@@ -144,12 +144,9 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 
     return (
         <Box className={classes.addWalletWrapper}>
-            {
-                owner ?
-                    <Icons.SmartPay size={30} />
-                    // eslint-disable-next-line react/naming-convention/component-name
-                :   <Icons.ETH size={30} />
-            }
+            {owner ?
+                <Icons.SmartPay size={30} />
+            :   <Icons.ETH size={30} />}
             <div>
                 <Typography className={classes.subTitle}>
                     {domain || formatEthereumAddress(address, 4)}{' '}

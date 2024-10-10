@@ -8,6 +8,7 @@ export function useCompactDetection() {
 
     useLayoutEffect(() => {
         if (!containerRef.current) return
+        // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
         setCompact(containerRef.current?.offsetWidth < 100)
     }, [])
 
