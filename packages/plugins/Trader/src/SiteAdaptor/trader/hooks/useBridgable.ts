@@ -7,7 +7,7 @@ import { useTrade } from '../contexts/index.js'
 import { useSpender } from './useSpender.js'
 
 export function useBridgable(): [result: boolean, message?: string] {
-    const { inputAmount, fromToken, toToken, bridgeQuote, bridgeQuoteErrorMessage } = useTrade()
+    const { inputAmount, fromToken, toToken, bridgeQuote, isBridgeQuoteLoading, bridgeQuoteErrorMessage } = useTrade()
     const { data: spender, isLoading: isLoadingSpender } = useSpender('bridge')
 
     const chainId = fromToken?.chainId as ChainId
@@ -24,7 +24,8 @@ export function useBridgable(): [result: boolean, message?: string] {
     const symbol = fromToken.symbol
     if (isLessThan(balance || 0, amount)) return [false, t`Insufficient ${symbol} Balance`]
 
-    if (!bridgeQuote) return [false, bridgeQuoteErrorMessage || t`Failed to get quote information`]
+    if (!bridgeQuote && !isBridgeQuoteLoading)
+        return [false, bridgeQuoteErrorMessage || t`Failed to get quote information`]
 
     return [true]
 }

@@ -254,7 +254,7 @@ export const Transaction = memo(function Transaction() {
     const [forwardCompare, setForwardCompare] = useState(true)
 
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
-    const { data: status } = useQuery({
+    const { data: status, isPending: isStatusPending } = useQuery({
         queryKey: ['transaction-status', chainId, hash],
         queryFn: hash ? () => Web3.getTransactionStatus(hash) : skipToken,
         refetchInterval: 5_000,
@@ -339,7 +339,7 @@ export const Transaction = memo(function Transaction() {
     return (
         <div className={classes.container}>
             <div className={classes.content}>
-                {txPending || bridgeStatus?.status === 'PENDING' ?
+                {txPending || bridgeStatus?.status === 'PENDING' || isStatusPending ?
                     <>
                         <div className={classes.header}>
                             <Spinner className={classes.spinner} variant="loading" />
