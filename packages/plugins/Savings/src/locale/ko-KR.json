@@ -32,7 +32,7 @@
             " to find more staking projects."
         ],
         "bBzHQT": "입력 금액은 최소 금액 이하입니다.",
-        "m6RmA/": [["0"], " 잔액 부족"],
+        "m6RmA/": ["Insufficient ", ["0"], " balance"],
         "oxKup1": ["Insufficient $", ["0"], " balance"],
         "e3hCsY": "Lido Exchange Rate",
         "yQE2r9": "로딩 중",

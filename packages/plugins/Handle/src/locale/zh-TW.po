@@ -41,4 +41,3 @@ msgstr ""
 #: src/SiteAdaptor/SearchResultInspector.tsx:129
 #~ msgid "USD Value"
 #~ msgstr ""
-

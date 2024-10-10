@@ -33,4 +33,3 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx:21
 msgid "Safety Warning"
 msgstr ""
-

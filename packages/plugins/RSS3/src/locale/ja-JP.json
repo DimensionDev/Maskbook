@@ -6,20 +6,6 @@
         "IHfg//": "<0/> minted <1/>",
         "f54thq": ["<0/> minted", ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }]],
         "CTSEx8": ["<0/> publish a post on ", ["0"]],
-        "aFKFVz": [
-            "<0>",
-            ["user"],
-            "</0> ",
-            ["0", "select", { "send": "sent", "claim": "claimed" }],
-            " ",
-            ["1", "select", { "verbose": [["2"]], "simple": "an NFT" }],
-            " ",
-            ["3", "select", { "send": "to", "claim": "from" }],
-            " <1>",
-            ["formattedAddress"],
-            "</1>",
-            ["4", "select", { "cost": ["for ", ["5"], " ", ["6"]], "free": "" }]
-        ],
         "3Nychn": [
             "<0>",
             ["user"],

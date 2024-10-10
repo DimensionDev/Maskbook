@@ -32,7 +32,7 @@
             " to find more staking projects."
         ],
         "bBzHQT": "入力金額が最小金額以下です",
-        "m6RmA/": [["0"], " の残高が足りません"],
+        "m6RmA/": ["Insufficient ", ["0"], " balance"],
         "oxKup1": ["Insufficient $", ["0"], " balance"],
         "e3hCsY": "Lido Exchange Rate",
         "yQE2r9": "読み込み中",

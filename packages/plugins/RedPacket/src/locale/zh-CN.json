@@ -109,7 +109,7 @@
         "s13D96": "Claim Requirements",
         "hRWvpI": "Claimed",
         "bTp+bt": ["Claimed ", ["0"], "/", ["1"]],
-        "wNUf+h": ["成功领取了 1 ", ["0"], "。"],
+        "wNUf+h": ["Claimed 1 ", ["0"], " successfully."],
         "yDDOwl": ["Claimed 1 ", ["NFT"], " successfully."],
         "WsNUie": ["Claimed: <0>", ["0"], "/", ["1"], "</0> <1>", ["2"], "</1>"],
         "vcyM3U": [
@@ -282,7 +282,7 @@
         "kf83Ld": "出现了一些问题。",
         "QF9SdB": "拆分模式",
         "oTLFeN": "The Lucky Drop can't be sent due to data damage.",
-        "2z+RJ9": "由于数据损坏，红包无法发送。",
+        "2z+RJ9": "The Lucky Drop can’t be sent due to data damage.",
         "kNHQXd": "此红包已退款。",
         "hdmRb+": "此红包已被损坏。",
         "gPL7RI": "此红包是空的。",
@@ -311,20 +311,24 @@
             ["0"],
             ". Please reduce the number of NFTs selected."
         ],
-        "wQrah8": ["当选择过多的 NFT时，总气费可能超过 1 ", ["0"], " 的 Metamask 限制。请减少选中的 NFT数量。"],
+        "wQrah8": [
+            "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of 1 ",
+            ["0"],
+            ". Please reduce the number of NFTs selected."
+        ],
         "GRLMKx": "Winners",
         "No0akY": "You can also use <0>Shift</0> to select multiple NFTs.",
         "p1L+er": "You can set one or multiple rules to be eligible to win a Lucky Drop.",
         "rkVh+N": "You can withdraw any unclaimed amount 24 hours after sending this lucky drop.",
         "LQtEHu": "您可以在发送红包24小时后提取红包余额。",
-        "ps4YUr": ["你领取了", ["0"], " ", ["1"], "。"],
+        "ps4YUr": ["You claimed ", ["0"], " ", ["1"], "."],
         "V+ZuGt": ["You claimed ", ["0"], " $", ["1"], "."],
         "Z+6iux": ["You claimed ", ["1"], " {}."],
         "Enb3Qk": "You claimed 1.",
         "nJMj1z": ["您可以退款 ", ["0"], " ", ["1"], "。"],
         "cBEQ5v": ["You got ", ["0"], " ", ["1"]],
         "0UMPI1": ["You got 1 ", ["0"]],
-        "kX8xzI": "您还没有创建任何NFT红包。尝试创建红包并与您的朋友分享。",
+        "kX8xzI": "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends.",
         "zEZe86": "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
     }
 }

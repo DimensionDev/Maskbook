@@ -33,4 +33,3 @@ msgstr "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적
 #: src/SiteAdaptor/index.tsx:21
 msgid "Safety Warning"
 msgstr "안전 경고"
-

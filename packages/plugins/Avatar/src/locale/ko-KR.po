@@ -126,4 +126,3 @@ msgstr "NFT 아바타 업데이트 성공"
 #: src/SiteAdaptor/NFTAvatar.tsx:170
 msgid "Wallet"
 msgstr "월렛"
-
