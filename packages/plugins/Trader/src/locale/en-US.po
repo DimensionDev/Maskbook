@@ -17,7 +17,7 @@ msgstr ""
 msgid "{0} {1} bridge completed successfully."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:303
+#: src/SiteAdaptor/trader/views/Confirm.tsx:302
 msgid "{0} {1} swap completed successfully."
 msgstr ""
 
@@ -89,8 +89,8 @@ msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:112
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:298
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:346
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:297
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:345
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:237
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx:158
 #: src/SiteAdaptor/trader/views/Transaction.tsx:289
@@ -181,7 +181,7 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts:27
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts:28
 msgid "Failed to get quote information"
 msgstr ""
 
@@ -339,10 +339,10 @@ msgid "Slow"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:111
-#: src/SiteAdaptor/trader/views/Confirm.tsx:284
-#: src/SiteAdaptor/trader/views/Confirm.tsx:294
-#: src/SiteAdaptor/trader/views/Confirm.tsx:311
-#: src/SiteAdaptor/trader/views/Confirm.tsx:353
+#: src/SiteAdaptor/trader/views/Confirm.tsx:283
+#: src/SiteAdaptor/trader/views/Confirm.tsx:293
+#: src/SiteAdaptor/trader/views/Confirm.tsx:310
+#: src/SiteAdaptor/trader/views/Confirm.tsx:352
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:236
 #: src/SiteAdaptor/trader/views/Transaction.tsx:514
 msgid "Swap"
@@ -420,8 +420,8 @@ msgstr ""
 msgid "Transaction in progress. Thank you for your patience."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:299
-#: src/SiteAdaptor/trader/views/Confirm.tsx:285
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:298
+#: src/SiteAdaptor/trader/views/Confirm.tsx:284
 msgid "Transaction rejected"
 msgstr ""
 
@@ -451,7 +451,7 @@ msgstr ""
 msgid "Update Quote"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:312
+#: src/SiteAdaptor/trader/views/Confirm.tsx:311
 msgid "Wait too long for the confirmation."
 msgstr ""
 
