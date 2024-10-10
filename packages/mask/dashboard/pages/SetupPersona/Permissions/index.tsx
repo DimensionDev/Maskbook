@@ -96,13 +96,13 @@ export const Component = memo(function Permission() {
     return (
         <>
             <Typography variant="h1" className={classes.title}>
-                <Trans>Update X.com Authorization</Trans>
+                <Trans>Update permission for X.com</Trans>
             </Typography>
 
             <article>
                 <Typography className={classes.p}>
-                    Because Twitter is now using the new domain name x.com, Mask Network requires users to grant new
-                    authorization in order to continue working on x.com.
+                    Because Twitter is now using the new domain name x.com, Mask Network requires new permission in
+                    order to continue working on x.com.
                 </Typography>
 
                 <Typography className={classes.h2} variant="h2" mt="24px">

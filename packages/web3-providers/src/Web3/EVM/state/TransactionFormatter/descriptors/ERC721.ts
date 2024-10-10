@@ -27,7 +27,7 @@ export class ERC721Descriptor extends BaseDescriptor {
                         title: 'Unlock NFT Contract',
                         description: { key: 'Unlock {symbol} NFT contract.', symbol },
                         snackbar: {
-                            successfulDescription: { key: 'Unlock {symbol} NFT contract successfully.', symbol },
+                            successfulDescription: { key: '{symbol} NFT contract unlocked.', symbol },
                             failedDescription: 'Failed to unlock NFT contract.',
                         },
                         popup: {
@@ -73,7 +73,7 @@ export class ERC721Descriptor extends BaseDescriptor {
                         title: 'Transfer NFT',
                         description: { key: 'Transfer {symbol} NFT.', symbol },
                         snackbar: {
-                            successfulDescription: { key: 'Transfer {symbol} NFT successfully.', symbol },
+                            successfulDescription: { key: '{symbol} NFT transferred.', symbol },
                             failedDescription: 'Failed to transfer NFT.',
                         },
                         popup: {

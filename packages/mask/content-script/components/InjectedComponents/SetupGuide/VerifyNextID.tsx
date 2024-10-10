@@ -285,15 +285,17 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                         <Typography className={classes.text}>
                             {nextIdPlatform ?
                                 <Trans>
-                                    Sent verification post successfully.
-                                    <br /> <br />
-                                    You could check the verification result on Mask Pop-up after few minutes. If failed,
-                                    try sending verification post again.
+                                    The verification post sent.
+                                    <br />
+                                    <br />
+                                    You could check the verification result on the Mask Pop-up after few minutes. If it
+                                    failed, try to send another verification post later.
                                 </Trans>
                             :   <Trans>
-                                    Connected successfully. <br />
+                                    Account connected.
                                     <br />
-                                    Trying exploring more features powered by Mask Network.
+                                    <br />
+                                    Try to explore more features powered by Mask Network.
                                 </Trans>
                             }
                         </Typography>
@@ -312,8 +314,8 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             </Typography>
                             <Typography className={classes.tip} component="div">
                                 <Trans>
-                                    We will need to verify your Twitter account and record it on the NextID. Please post
-                                    it for validation.
+                                    To verify your X account and record it on the NextID, you will need to send a post
+                                    for the verification.
                                 </Trans>
                             </Typography>
                         </>
@@ -325,8 +327,8 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             <Typography className={classes.postContent}>{verifyInfo.post}</Typography>
                             <Typography className={classes.tip} component="div">
                                 <Trans>
-                                    We will need to verify your Twitter account and record it on the NextID. Please post
-                                    it for validation.
+                                    To verify your X account and record it on the NextID, please send this post for the
+                                    verification.
                                 </Trans>
                             </Typography>
                         </>

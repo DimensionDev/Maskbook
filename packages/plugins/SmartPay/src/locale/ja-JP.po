@@ -19,8 +19,12 @@ msgstr ""
 "X-Crowdin-File-ID: 992\n"
 
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
-msgid "{value, plural, one {The Twitter account above remains # time to create SmartPay Wallet.} other {The Twitter account above remains # times to create SmartPay Wallet.}}"
-msgstr ""
+#~ msgid "{value, plural, one {The Twitter account above remains # time to create SmartPay Wallet.} other {The Twitter account above remains # times to create SmartPay Wallet.}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
+#~ msgid "{value, plural, one {The X account above remains # time to create SmartPay Wallet.} other {The X account above remains # times to create SmartPay Wallet.}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:59
 msgid "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future."
@@ -31,8 +35,12 @@ msgid "Add SmartPay Wallet"
 msgstr "スマートペイウォレットを追加"
 
 #: src/SiteAdaptor/components/SmartPayContent.tsx:449
-msgid "Allow Mask as gas"
-msgstr "Maskをガスとして許可する"
+#~ msgid "Allow Mask as gas"
+#~ msgstr "Maskをガスとして許可する"
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:449
+msgid "Allow Mask be used as gas"
+msgstr ""
 
 #: src/SiteAdaptor/components/AccountsManagePopover.tsx:136
 msgid "Change Owner"
@@ -43,10 +51,14 @@ msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form
 msgstr ""
 
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
-msgid "Congratulation! You’ve deployed SmartPay Wallet {0}."
-msgstr "おめでとうございます！SmartPayウォレット {0}を展開しました。"
+msgid "Congratulation! You've deployed SmartPay Wallet {0}."
+msgstr ""
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:175
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
+#~ msgid "Congratulation! You’ve deployed SmartPay Wallet {0}."
+#~ msgstr "おめでとうございます！SmartPayウォレット {0}を展開しました。"
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:174
 #: src/SiteAdaptor/components/ManagePopover.tsx:140
 #: src/SiteAdaptor/components/ManagePopover.tsx:188
 msgid "Create"
@@ -69,8 +81,12 @@ msgid "Create a New Wallet"
 msgstr "新しいウォレットを作成する"
 
 #: src/SiteAdaptor/components/Deploy.tsx:217
-msgid "Create a SmartPay Wallet with your Twitter account."
-msgstr "あなたのTwitterアカウントでSmartPayウォレットを作成します。"
+#~ msgid "Create a SmartPay Wallet with your Twitter account."
+#~ msgstr "あなたのTwitterアカウントでSmartPayウォレットを作成します。"
+
+#: src/SiteAdaptor/components/Deploy.tsx:217
+msgid "Create a SmartPay Wallet with your X account."
+msgstr ""
 
 #: src/hooks/useDeploy.tsx:97
 #: src/hooks/useDeploy.tsx:154
@@ -78,8 +94,8 @@ msgid "Create SmartPay Wallet"
 msgstr "スマートペイウォレットを作成"
 
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:58
-msgid "Created successfully!"
-msgstr "正常に作成されました"
+#~ msgid "Created successfully!"
+#~ msgstr "正常に作成されました"
 
 #: src/SiteAdaptor/components/AccountsManagePopover.tsx:128
 msgid "Current Management account"
@@ -95,8 +111,12 @@ msgid "Done"
 msgstr "完了"
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
-msgid "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips."
-msgstr "ラッキードロップやチップなどMask NetworkのdAppsでの無料ガス体験。"
+msgid "Free gas experience in Mask Network's dApps like Lucky Drop and Tips."
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
+#~ msgid "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips."
+#~ msgstr "ラッキードロップやチップなどMask NetworkのdAppsでの無料ガス体験。"
 
 #: src/SiteAdaptor/components/RouterDialog.tsx:117
 msgid "Loading"
@@ -192,6 +212,10 @@ msgstr "スワップ"
 msgid "The ERC-4337 will open the door to more creativity and more important features for wallet design."
 msgstr "ERC-4337は、ウォレットデザインのためのより創造性とより重要な機能への扉を開きます。"
 
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
+msgid "The X account above remains {value} {value, plural, one {time} other {times}} to create SmartPay Wallet."
+msgstr ""
+
 #: src/SiteAdaptor/components/Deploy.tsx:307
 msgid "This SmartPay Wallet can only receive assets on Polygon Network. Please do not use this address to receive assets from other EVM chains."
 msgstr "このSmartPayウォレットはPolygon ネットワーク上でのみアセットを受け取ることができます。他のEVMチェーンからアセットを受け取るためにこのアドレスを使用しないでください。"
@@ -217,12 +241,20 @@ msgid "User need to deploy the SmartPay Wallet on Polygon Network before using i
 msgstr "ユーザーは、SmartPayウォレットをブロックチェーン上で使用する前に、Polygon Network上にデプロイする必要があります。デプロイされていないウォレットは、アセットを受け取ることはできますが、トランザクションを送信することはできません。"
 
 #: src/SiteAdaptor/components/Deploy.tsx:301
-msgid "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment."
-msgstr "現時点ではポリゴンネットワーク上でのみSmartPayウォレット(無料のガス料金と秘密鍵の変更)をご利用いただけます。"
+#~ msgid "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment."
+#~ msgstr "現時点ではポリゴンネットワーク上でのみSmartPayウォレット(無料のガス料金と秘密鍵の変更)をご利用いただけます。"
+
+#: src/SiteAdaptor/components/Deploy.tsx:301
+msgid "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment."
+msgstr ""
 
 #: src/hooks/useDeploy.tsx:98
 msgid "Waiting for user signature"
 msgstr "ユーザー署名を待っています"
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:58
+msgid "Wallet created!"
+msgstr ""
 
 #: src/SiteAdaptor/components/ManagePopover.tsx:145
 msgid "Wallets"

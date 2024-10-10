@@ -20,7 +20,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_open_source === '1',
         title: msg`Contract source code verified`,
-        message: msg`This token contract is open source. You can check the contract code for details. Token contracts with no source code available are likely to have malicious functions to defraud their users of their assets.`,
+        message: msg`This token contract has source code available. You can check the contract code to verify if it has malicious functions. Token contracts with no source code available are likely to be a fraud.`,
         shouldHide: isUnset('is_open_source'),
     },
     {
@@ -28,7 +28,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.High,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_open_source === '0',
         title: msg`Contract source code not verified`,
-        message: msg`This token contract has not been verified. We cannot check the contract code for details. Token contracts with no source code available are likely to have malicious functions to defraud users of their assets.`,
+        message: msg`This token contract has not been verified. We cannot check the contract code for details. Token contracts with no source code available are likely to be a fraud.`,
         shouldHide: isUnset('is_open_source'),
     },
     // proxy
@@ -37,7 +37,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_proxy === '1',
         title: msg`Proxy contract`,
-        message: msg`This contract is an Admin Upgradeability Proxy. The proxy contract means the contract owner can modify the function of the token and could possibly effect the price. There is possibly a way for the team to Rug or Scam. Please confirm the details with the project team before buying.`,
+        message: msg`This contract is an Admin Upgradeable Proxy. A proxy contract means the contract owner can modify the function of the token and could possibly effect the price. It is possible for the team to rug or scam. Please confirm the details with the project team before investing.`,
         shouldHide: isUnset('is_proxy'),
     },
     {
@@ -45,7 +45,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_proxy === '0',
         title: msg`No proxy`,
-        message: msg`There is no proxy in the contract. The proxy contract means contract owner can modify the function of the token and possibly effect the price.`,
+        message: msg`There is no proxy in the contract. A proxy contract means the contract owner can modify the function of the token and possibly effect the price.`,
         shouldHide: isUnset('is_proxy'),
     },
     // mint
@@ -71,7 +71,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.owner_change_balance === '0',
         title: msg`Owner can't change balance`,
-        message: msg`The contract owner is not found to have the authority to modify the balance of tokens at other addresses.`,
+        message: msg`The contract owner is not known to be able to modify the balance of the token of other addresses.`,
         shouldHide: isUnset('owner_change_balance'),
     },
     {
@@ -79,7 +79,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.owner_change_balance === '1',
         title: msg`Owner can change balance`,
-        message: msg`The contract owner has the authority to modify the balance of tokens at other addresses, which may result in a loss of assets.`,
+        message: msg`The contract owner is known to be able to modify the balance of the token of other addresses, which may result in a loss of assets.`,
         shouldHide: isUnset('owner_change_balance'),
     },
     // can take back ownership
@@ -88,7 +88,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.can_take_back_ownership === '0',
         title: msg`No function found that retrieves ownership`,
-        message: msg`If this function exists, it is possible for the project owner to regain ownership even after relinquishing it`,
+        message: msg`If this kind of function exists, it is possible for the project owner to regain ownership even after relinquishing it.`,
         shouldHide: isUnset('can_take_back_ownership'),
     },
     {
@@ -96,7 +96,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.can_take_back_ownership === '1',
         title: msg`Functions with retrievable ownership`,
-        message: msg`If this function exists, it is possible for the project owner to regain ownership even after relinquishing it`,
+        message: msg`If this kind of function exists, it is possible for the project owner to regain ownership even after relinquishing it.`,
         shouldHide: isUnset('can_take_back_ownership'),
     },
     // buy tax
@@ -156,7 +156,7 @@ export const SecurityMessages: SecurityMessage[] = [
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_honeypot === '0',
-        title: msg`This does not appear to be a honeypot.`,
+        title: msg`Unlikely to be a honeypot.`,
         message: msg`We are not aware of any code that prevents the sale of tokens.`,
         shouldHide: isUnset('is_honeypot'),
     },
@@ -164,8 +164,8 @@ export const SecurityMessages: SecurityMessage[] = [
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.High,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_honeypot === '1',
-        title: msg`May the token is a honeypot.`,
-        message: msg`This token contract has a code that states that it cannot be sold. Maybe this is a honeypot.`,
+        title: msg`May be a honeypot.`,
+        message: msg`This token contract has code that pervents selling. This might is a honeypot.`,
         shouldHide: isUnset('is_honeypot'),
     },
     // transfer_pausable
@@ -174,7 +174,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.transfer_pausable === '0',
         title: msg`No codes found to suspend trading.`,
-        message: msg`If a suspendable code is included, the token maybe neither be bought nor sold (honeypot risk).`,
+        message: msg`If this kind of code exists, the token maybe be frozen to buy or sell, which is a honeypot risk.`,
         shouldHide: isUnset('transfer_pausable'),
     },
     {
@@ -182,7 +182,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.transfer_pausable === '1',
         title: msg`Functions that can suspend trading`,
-        message: msg`If a suspendable code is included, the token maybe neither be bought nor sold (honeypot risk).`,
+        message: msg`If this kind of code exists, the token maybe be frozen to buy or sell, which is a honeypot risk.`,
         shouldHide: isUnset('transfer_pausable'),
     },
     // anti whale
@@ -191,15 +191,15 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_anti_whale === '0',
         title: msg`No anti_whale(Unlimited number of transactions)`,
-        message: msg`There is no limit to the number of token transactions. The number of scam token transactions may be limited (honeypot risk).`,
+        message: msg`There is no up bound of token transactions. If this kind of limit exists, the token might not be tradable after hitting the limit, which is a honeypot risk.`,
         shouldHide: isUnset('is_anti_whale'),
     },
     {
         type: SecurityType.Transaction,
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_anti_whale === '1',
-        title: msg` Anti_whale(Limited number of transactions)`,
-        message: msg`The number of token transactions is limited. The number of scam token transactions may be limited (honeypot risk).`,
+        title: msg`Anti_whale(Limited number of transactions)`,
+        message: msg`There is an up bound of token transactions. If this kind of limit exists, the token might not be tradable after hitting the limit, which is a honeypot risk.`,
         shouldHide: isUnset('is_anti_whale'),
     },
     // slippage modifiable
@@ -208,7 +208,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.slippage_modifiable === '0',
         title: msg`Tax cannot be modified`,
-        message: msg`The contract owner may not contain the authority to modify the transaction tax. If the transaction tax is increased to more than 49%, the tokens will not be able to be traded (honeypot risk).`,
+        message: msg`The contract owner is not known to be able to modify the transaction tax. If the tax is increased to more than 49%, the tokens will not be able to be traded, which is a honeypot risk.`,
         shouldHide: isUnset('slippage_modifiable'),
     },
     {
@@ -216,7 +216,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.slippage_modifiable === '1',
         title: msg`Tax can be modified`,
-        message: msg`The contract owner may contain the authority to modify the transaction tax. If the transaction tax is increased to more than 49%, the tokens will not be able to be traded (honeypot risk).`,
+        message: msg`The contract owner is known to be able to modify the transaction tax. If the tax is increased to more than 49%, the tokens will not be able to be traded, which is a honeypot risk.`,
         shouldHide: isUnset('slippage_modifiable'),
     },
     // black list
@@ -225,7 +225,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_blacklisted === '0',
         title: msg`No blacklist`,
-        message: msg`The blacklist function is not included. If there is a blacklist, some addresses may not be able to trade normally (honeypot risk).`,
+        message: msg`No blacklist is found. If there is a blacklist, some addresses may be unable to trade normally, which is a honeypot risk.`,
         shouldHide: isUnset('is_blacklisted'),
     },
     {
@@ -233,7 +233,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_blacklisted === '1',
         title: msg`Blacklist function`,
-        message: msg`The blacklist function is included. Some addresses may not be able to trade normally (honeypot risk).`,
+        message: msg`A blacklist is found. Some addresses may not be able to trade normally, which is a honeypot risk.`,
         shouldHide: isUnset('is_blacklisted'),
     },
     // white list
@@ -242,7 +242,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_whitelisted === '0',
         title: msg`No whitelist`,
-        message: msg`The whitelist function is not included. If there is a whitelist, some addresses may not be able to trade normally (honeypot risk)`,
+        message: msg`No whitelist is included. If there is a whitelist, some addresses may not be able to trade normally, which is a honeypot risk.`,
         shouldHide: isUnset('is_whitelisted'),
     },
     {
@@ -250,7 +250,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Medium,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_whitelisted === '1',
         title: msg`Whitelist function`,
-        message: msg`The whitelist function is included. Some addresses may not be able to trade normally (honeypot risk).`,
+        message: msg`A whitelist is found. Some addresses may not be able to trade normally, which is a honeypot risk.`,
         shouldHide: isUnset('is_whitelisted'),
     },
     // true token
@@ -259,7 +259,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_true_token === '1',
         title: msg`True Token`,
-        message: msg`This token is issued by its declared team. Some scams will create a well-known token with the same name to defraud their users of their assets.`,
+        message: msg`This token is issued by its declared team. Some scams will create a fake token with a well-known token name to cheat users.`,
         shouldHide: isUnset('is_true_token'),
     },
     {
@@ -267,7 +267,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.High,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_true_token === '0',
         title: msg`Fake Token`,
-        message: msg`This token is not issued by its declared team. Some scams will create a well-known token with the same name to defraud their users of their assets.`,
+        message: msg`This token is not issued by its declared team. Some scams will create a fake token with a well-known token name to cheat users.`,
         shouldHide: isUnset('is_true_token'),
     },
     // Airdrop scam
@@ -276,7 +276,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.Safe,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_airdrop_scam === '0',
         title: msg`Airdrop Scam`,
-        message: msg`You may lose your assets if giving approval to the website of this token.`,
+        message: msg`You may lose your assets if you give approval to the website of this token.`,
         shouldHide: isUnset('is_airdrop_scam'),
     },
     {
@@ -284,7 +284,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.High,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_airdrop_scam === '1',
         title: msg`No Airdrop Scam`,
-        message: msg`This is not an airdrop scam. Many scams attract users through airdrops.`,
+        message: msg`This is unlikely to be an airdrop scam. Many scams attract users through airdrops.`,
         shouldHide: isUnset('is_airdrop_scam'),
     },
 ]

@@ -409,7 +409,7 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.publicMain}>
-                                <Trans>Can’t find a valid user address data source.</Trans>
+                                <Trans>Can't find a valid user address data source.</Trans>
                             </Typography>
                         </Stack>
                     </PluginCardFrameMini>
@@ -476,20 +476,22 @@ function Content(props: ProfileTabContentProps) {
                             <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>
-                            <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="5px"
-                                color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                <Trans>Powered by</Trans>
-                            </Typography>
-                            <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="4px"
-                                color={(theme) => theme.palette.maskColor.dark}>
-                                <Trans>Mask Network</Trans>
-                            </Typography>
+                            <Trans>
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="5px"
+                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                    Powered by
+                                </Typography>
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="4px"
+                                    color={(theme) => theme.palette.maskColor.dark}>
+                                    Mask Network
+                                </Typography>
+                            </Trans>
                             {isOwnerIdentity && isOnTwitter ?
                                 <ConnectPersonaBoundary
                                     personas={allPersonas}

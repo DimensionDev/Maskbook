@@ -102,7 +102,7 @@ export function ProfileLinkAtTwitter() {
         <GuideStep
             step={3}
             total={4}
-            tip={<Trans>Browse the Web3 footprints of your Twitter friends, enjoy the freedom of Web3.</Trans>}>
+            tip={<Trans>Browse the Web3 footprints of your X friends, enjoy the freedom of Web3.</Trans>}>
             <Box sx={{ position: 'absolute', left: 0, right: 0, width: '100%', height: '100%' }} />
         </GuideStep>
     )

@@ -17,8 +17,12 @@
         "Sfu/we": "Failed to delete, please try again.",
         "k28Qhe": "Failed to save file",
         "cmKQl+": "Failed to save the file. Please try again.",
+        "RrGhwo": ["File ", ["0"], " deleted."],
+        "3uBJPr": "File delete",
+        "CkLMZ2": "File delete failed",
         "OgohfQ": ["File Key: <0>", ["0"], "</0>"],
         "Rm3JCH": "파일 이름은 3~20 글자 이내로 입력해주세요.",
+        "erRCKP": "File saved",
         "sG8bNc": "File saved successfully",
         "tG9G+b": "파일 서비스",
         "XrH+JC": "IPFS",
@@ -33,8 +37,10 @@
         "7PPwVf": "사용자는 이러한 파일의 로컬 링크만 삭제할 수 있습니다. 탈중앙화 스토리지 프로토콜의 파일은 삭제할 수 없습니다.",
         "Gia1VG": "웹3 파일 서비스",
         "nu3TN3": "Web3 File Service is a decentralized storage service provided by Mask Network. It allows users to store files in different decentralized network. This feature is powered by Mask Network’s partner file storage protocols such as IPFS, Arweave and Meson Network.It supports files in PDF, DOC, JPG, PNG, MP3, MP4. and other formats. At present, the maximum file upload size is 10 MB. <0/><1/>You can store files in multiple decentralized networks through the Web3 file service function. When uploading files, you can choose to encrypt or decrypt them. According to the selected upload encrypted method, you can obtain two file links with encryption and non encryption. Users of Mask Network can share files to social platforms through this link. By using encrypted files, you can ensure the security of your files and prevent privacy leakage. <2/><3/>It should be noted that any user who has the link can download and share the file. With the characteristics of decentralized file storage systems, your uploaded files can never be deleted or tampered. Please upload files containing personal privacy with caution. <4/><5/>The Web3 File Service provided by Mask Network enables individuals to be free from data restrictions imposed by traditional social platforms, enabling free encrypted transmission and sharing of files. At present, the service is provisionally free for all users with Mask Network absorbing all the costs. Mask Network will provide updates on future costs users may have to bear.",
+        "TwdaGt": "Web3 File Service is a decentralized storage service provided by Mask Network. It allows users to store files in different decentralized networks. This feature is powered by Mask Network's partner file storage protocols such as IPFS, Arweave and Meson Network. It supports files in PDF, DOC, JPG, PNG, MP3, MP4 and other formats. At present, the maximum file size is 10 MB.<0/><1/>You can store files in multiple decentralized networks through the Web3 file service. When uploading files, you can choose to encrypt or decrypt them. According to the selected encryption method, you can obtain two file links with and without encryption. Users of Mask Network can share files to social platforms through this link. By using the encryption, you can ensure the security of your files and prevent privacy leakage.<2/><3/>It should be noted that any user who has the link can download and share the file. With the characteristics of decentralized file storage systems, your uploaded files can never be deleted or tampered. Be caution when uploading files with personal privacy.<4/><5/>The Web3 File Service provided by Mask Network enables individuals to be free from data restrictions imposed by traditional social platforms, enabling free encrypted transmission and sharing of files. At present, the service is provisionally free for all users with Mask Network. Mask Network will provide updates on costs users may have to pay in the future.",
         "4JCJIV": "웹2 파일 서비스가 무엇입니까?",
         "9uYu7e": "업로드된 파일이 없습니다.",
+        "jt/0L2": ["You've saved ", ["0"], " to Web3 file service."],
         "L9F3N/": ["You’ve saved ", ["0"], " to Web3 file service."]
     }
 }

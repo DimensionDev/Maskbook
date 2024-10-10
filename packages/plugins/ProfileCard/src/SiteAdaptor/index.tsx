@@ -26,7 +26,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                     name: <Trans>General user</Trans>,
                     description: (
                         <Trans>
-                            View user’s Web3 footprints, including NFTs, social media posts and other transaction
+                            View user's Web3 footprints, including NFTs, social media posts and other transaction
                             activities based on public data source.
                         </Trans>
                     ),

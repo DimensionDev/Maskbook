@@ -236,7 +236,7 @@ export const Transaction = memo(function Transaction() {
                         </div>
                         <Typography className={cx(classes.box, classes.note)}>
                             <Trans>
-                                The swap is in progress. You can check its status in History after exiting this page.
+                                The swap is in progress. You can check its status in History after exit this page.
                             </Trans>
                         </Typography>
                     </>

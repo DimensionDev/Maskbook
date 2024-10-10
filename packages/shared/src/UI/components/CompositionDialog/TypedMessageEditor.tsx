@@ -176,7 +176,7 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
             onChange={setAsText}
             fullWidth
             multiline
-            placeholder={_(msg`Tell selective friends what's happening...`)}
+            placeholder={_(msg`Tell friends what's happening...`)}
             rows={value.meta ? 11 : 13}
         />
     )

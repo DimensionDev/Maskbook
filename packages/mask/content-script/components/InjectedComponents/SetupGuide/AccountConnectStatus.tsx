@@ -102,7 +102,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                     />
                 </Typography>
                 <Typography className={classes.text} mt="1.5em">
-                    <Trans>Switch accounts and try more connections.</Trans>
+                    <Trans>Change another account and try again.</Trans>
                 </Typography>
                 <Box mt="auto" width="100%">
                     <Button fullWidth onClick={rest.onClose}>
@@ -116,7 +116,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
         return (
             <Frame {...rest}>
                 <Typography className={classes.text}>
-                    <Trans>Not your current account.</Trans>
+                    <Trans>Current account is not the verifying account.</Trans>
                 </Typography>
                 <Typography className={classes.text} mt="1.5em">
                     {/* eslint-disable-next-line react/naming-convention/component-name */}

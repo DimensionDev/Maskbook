@@ -70,7 +70,7 @@ export function Component() {
                 }
 
                 await changeCurrentPersona(identifier)
-                showSnackbar(<Trans>Persona created successfully.</Trans>, { variant: 'success' })
+                showSnackbar(<Trans>Persona created.</Trans>, { variant: 'success' })
 
                 await delay(300)
                 navigate(

@@ -29,7 +29,7 @@ export class SavingsDescriptor extends BaseDescriptor {
                     },
                     snackbar: {
                         successfulDescription: {
-                            key: 'Deposit {token} successfully.',
+                            key: '{token} deposited.',
                             token: getTokenAmountDescription(context.value, token),
                         },
                         failedDescription:
@@ -58,7 +58,7 @@ export class SavingsDescriptor extends BaseDescriptor {
                     },
                     snackbar: {
                         successfulDescription: {
-                            key: 'Deposit {token} successfully.',
+                            key: '{token} deposited.',
                             token: getTokenAmountDescription(parameters.amount, token),
                         },
                         failedDescription: { key: 'Failed to deposit {symbol}.', symbol: token?.symbol ?? 'token' },
@@ -83,7 +83,7 @@ export class SavingsDescriptor extends BaseDescriptor {
                     },
                     snackbar: {
                         successfulDescription: {
-                            key: 'Withdraw {token} successfully.',
+                            key: '{token} withdrawn.',
                             token: getTokenAmountDescription(parameters.amount, token),
                         },
                         failedDescription: {

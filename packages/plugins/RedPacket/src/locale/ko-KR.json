@@ -11,6 +11,37 @@
             ]
         ],
         "DtZDW+": [["0"], " (UTC+8)"],
+        "SZ9jVW": [
+            ["0"],
+            " ",
+            ["1", "plural", { "one": "share", "other": "shares" }],
+            " / ",
+            ["total"],
+            " $",
+            ["symbol"]
+        ],
+        "ElFfM9": [
+            ["claimed"],
+            " Follow @",
+            ["0"],
+            " (mask.io) to claim lucky drops.\\n",
+            ["promote_short"],
+            "\\n#mask_io #LuckyDrop\\n",
+            ["1"]
+        ],
+        "SNhOHw": [["claimed"], "\\n", ["promote_short"], "\\n", ["0"]],
+        "0dXDGt": [
+            ["head"],
+            " Follow @",
+            ["0"],
+            " (mask.io) to claim lucky drops.\\n",
+            ["promote_short"],
+            "\\n#mask_io #LuckyDrop\\n",
+            ["1"]
+        ],
+        "rBWSOE": [["notClaimed"], "\\nClaim on Farcaster: ", ["link"]],
+        "WiEWjA": [["notClaimed"], "\\nClaim on Lens: ", ["link"]],
+        "fBmWam": [["notClaimed"], "\\nClaim on: ", ["link"]],
         "6gJ1kO": [["null", "plural", { "one": ["<0>", ["0"], "</0> NFT"], "other": ["<1>", ["1"], "</1> NFTs"] }]],
         "8XJ5FY": [
             "@",
@@ -24,6 +55,7 @@
             " #mask_io #LuckyDrop ",
             ["postLink"]
         ],
+        "0aBHf4": ["<0>", ["0"], "</0> ", ["1", "plural", { "one": "NFT", "other": "NFTs" }], "NFT"],
         "OdMN1h": [
             "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
             ["sender"],
@@ -35,6 +67,11 @@
             ["sender"],
             " .\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on: ",
             ["link"]
+        ],
+        "jIsF03": [
+            "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
+            ["sender"],
+            ".\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
         ],
         "VMFE2K": [
             "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
@@ -48,7 +85,16 @@
             " ! \\n\\nClaim on Lens: ",
             ["link"]
         ],
+        "1y9bVB": [
+            "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @",
+            ["sender"],
+            " !\\n\\nClaim on Lens: ",
+            ["link"]
+        ],
         "8wEOMN": "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.",
+        "tRRE1h": ["1 ", ["0"], " claimed."],
+        "bbS8qf": "1 NFT claimed.",
+        "pfw0Wr": "ALL",
         "oig90Q": ["모든 (", ["0"], " NFT)"],
         "hehnjM": "Amount",
         "Fgyfqo": "하나의 금액",
@@ -101,6 +147,7 @@
         "B1T4nn": "행운 드랍 디테일",
         "P+K/3O": "확인 중",
         "TyF6nf": ["Connect to ", ["0"]],
+        "V9CuQ+": ["Connect to ", ["source"]],
         "CtByM7": "월렛 연결",
         "PLWaf6": "다음",
         "nzBzok": "생성 시간:",
@@ -127,6 +174,7 @@
             ["0"],
             " for the Lucky Drop Smart contract. You only have to do this once per token."
         ],
+        "bPNJ+3": ["Hi friends, I just found a lucky drop sent by @", ["0"], " on ", ["1"], " network."],
         "xSMpH/": [
             "Hi friends, I just found a lucky drop sent by @",
             ["0"],
@@ -150,6 +198,7 @@
             ["2"]
         ],
         "0caMy7": "역사 기록",
+        "5Jczad": ["I just claimed a lucky drop from @", ["0"], " on ", ["1"], " network."],
         "APlaHT": [
             "I just claimed a lucky drop from @",
             ["0"],
@@ -205,6 +254,7 @@
         "olT7qF": "No claims yet for this Lucky Drop",
         "0oFu/K": "No Lucky Drops claimed",
         "6rpB4w": "No Lucky Drops created.",
+        "CT10+i": "No Lucky Drops created. Select 🎁 when you compose a post to start your first drop.",
         "Ev2r9A": "결과 없음",
         "AuXfDa": "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards.",
         "rl4E61": "Number of Winners",
@@ -231,6 +281,7 @@
         "hPIX+D": "Share From",
         "kf83Ld": "오류가 발생합니다.",
         "QF9SdB": "스플릿 모드",
+        "oTLFeN": "The Lucky Drop can't be sent due to data damage.",
         "2z+RJ9": "테이터 훼손때문에 행운 드랍을 보낼 수 없습니다.",
         "kNHQXd": "행운 드랍은 이미 리펀됩니다.",
         "hdmRb+": "훼손된 행운 드랍",
@@ -255,6 +306,11 @@
         "BYZ6zX": "Users must like, repost / quote tweet, or comment on your Lucky Drop post.",
         "jpctdh": "View",
         "7tYPrA": "월렛 계정",
+        "UFzLh1": [
+            "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of ",
+            ["0"],
+            ". Please reduce the number of NFTs selected."
+        ],
         "wQrah8": [
             "NFT를 너무 많이 선택할 경우 총 가스 요금이 MetaMask 한도인 1 ",
             ["0"],
@@ -266,11 +322,13 @@
         "rkVh+N": "You can withdraw any unclaimed amount 24 hours after sending this lucky drop.",
         "LQtEHu": "행운 드롭을 발송한 후 24시간 후에 남은 자금을 인출할 수 있습니다.",
         "ps4YUr": [["0"], " ", ["1"], " 수령되었습니다."],
+        "V+ZuGt": ["You claimed ", ["0"], " $", ["1"], "."],
         "Z+6iux": ["You claimed ", ["1"], " {}."],
         "Enb3Qk": "You claimed 1.",
         "nJMj1z": [["0"], " ", ["1"], " 리펀 가능합니다."],
         "cBEQ5v": ["You got ", ["0"], " ", ["1"]],
         "0UMPI1": ["You got 1 ", ["0"]],
-        "kX8xzI": "생성된 NFT 행운 드랍이 없습니다. 행운 드랍을 만들고 친구들에게 행운을 공유하세요."
+        "kX8xzI": "생성된 NFT 행운 드랍이 없습니다. 행운 드랍을 만들고 친구들에게 행운을 공유하세요.",
+        "zEZe86": "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
     }
 }

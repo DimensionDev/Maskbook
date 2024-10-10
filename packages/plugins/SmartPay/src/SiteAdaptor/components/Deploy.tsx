@@ -214,7 +214,7 @@ export function Deploy({ open }: { open: boolean }) {
                         <Trans>You are in the trial whitelist.</Trans>
                     </Typography>
                     <Typography>
-                        <Trans>Create a SmartPay Wallet with your Twitter account.</Trans>
+                        <Trans>Create a SmartPay Wallet with your X account.</Trans>
                     </Typography>
                 </SmartPayBanner>
                 <Box className={classes.walletDescription}>
@@ -299,7 +299,7 @@ export function Deploy({ open }: { open: boolean }) {
                         </Typography>
                         <Typography component="li">
                             <Trans>
-                                Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon
+                                Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon
                                 Network at the moment.
                             </Trans>
                         </Typography>

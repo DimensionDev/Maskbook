@@ -65,7 +65,7 @@ const SmartPayDescriptionDialog = memo(function SmartPayDescriptionDialog({ open
                         </Trans>
                     </Typography>
                     <Typography component="li" className={classes.content}>
-                        <Trans>Free gas experience in Mask Network’s dApps like Lucky Drop and Tips.</Trans>
+                        <Trans>Free gas experience in Mask Network's dApps like Lucky Drop and Tips.</Trans>
                     </Typography>
                 </Box>
                 <Typography className={classes.title}>

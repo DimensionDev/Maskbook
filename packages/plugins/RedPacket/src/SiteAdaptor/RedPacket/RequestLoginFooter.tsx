@@ -21,7 +21,7 @@ export function RequestLoginFooter({ onRequest }: OperationFooterProps) {
     return (
         <Box className={classes.footer}>
             <ActionButton fullWidth variant="roundedDark" onClick={onRequest}>
-                <Trans>Connect to {source!}</Trans>
+                <Trans>Connect to {source}</Trans>
             </ActionButton>
         </Box>
     )

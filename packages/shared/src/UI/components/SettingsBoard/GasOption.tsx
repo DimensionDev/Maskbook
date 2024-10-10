@@ -68,13 +68,11 @@ export function GasOption(props: GasOptionProps) {
             :   <RadioButtonUnchecked color="inherit" />}
             <Typography className={classes.type}>{GAS_OPTION_NAMES[type]}</Typography>
             <Typography className={classes.estimate}>
-                <Trans>
-                    ~{' '}
-                    {formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
-                        addSuffix: true,
-                        locale: getLocale(lang),
-                    })}
-                </Trans>
+                ~{' '}
+                {formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
+                    addSuffix: true,
+                    locale: getLocale(lang),
+                })}
             </Typography>
             <Typography className={classes.amount}>
                 <Trans>up to {formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), '')} Gwei</Trans>

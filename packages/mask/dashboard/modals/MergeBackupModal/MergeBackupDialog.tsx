@@ -94,7 +94,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })
 
         if (!response.ok || response.status !== 200) {
-            showSnackbar(<Trans>Download link is expired</Trans>, { variant: 'error' })
+            showSnackbar(<Trans>The download link is expired</Trans>, { variant: 'error' })
             handleClose()
             navigate(DashboardRoutes.CloudBackup, { replace: true })
             return
@@ -153,7 +153,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
             })
             setShowCongratulation(true)
         } catch {
-            showSnackbar(<Trans>Backup downloaded and merged to local failed.</Trans>)
+            showSnackbar(<Trans>Failed to download and merge the backup.</Trans>)
         }
     }, [encrypted, backupPassword, account])
 
@@ -185,8 +185,8 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                             color={theme.palette.maskColor.second}
                             textAlign="center">
                             <Trans>
-                                Data merged from Mask Cloud Service to local successfully. Re-enter password to encrypt
-                                and upload backup to Mask Cloud Service.
+                                Data merged from Mask Cloud Service to local successfully. Re-enter your password to
+                                encrypt and upload the new backup to Mask Cloud Service.
                             </Trans>
                         </Typography>
                     </Box>

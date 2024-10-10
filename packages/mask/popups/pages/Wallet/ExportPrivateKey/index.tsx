@@ -140,7 +140,7 @@ export const Component = memo(function ExportPrivateKey() {
                 :   null}
                 <TabPanel className={classes.panel} value={TabType.PrivateKey}>
                     <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
-                        <Trans>Click on the down-arrow icon to see the private key.</Trans>
+                        <Trans>Click on the down-arrow to see the private key.</Trans>
                     </Typography>
                     <Box
                         display="flex"

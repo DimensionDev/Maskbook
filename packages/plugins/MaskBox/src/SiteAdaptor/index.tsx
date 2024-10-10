@@ -52,7 +52,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
                 description: (
-                    <Trans>Professional multi-chain decentralized platform for launching NFT mystery boxes.</Trans>
+                    <Trans>Professional multi-chain decentralized platform for launching NFT blind boxes.</Trans>
                 ),
                 category: 'dapp',
                 iconFilterColor,

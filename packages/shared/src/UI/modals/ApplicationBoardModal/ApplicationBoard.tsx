@@ -211,7 +211,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                         :   '',
                     )}>
                     <Typography className={classes.placeholder}>
-                        <Trans>Click the setting icon to list it on the App board.</Trans>
+                        <Trans>Click the settings icon to list it on the App board.</Trans>
                     </Typography>
                 </div>
             }

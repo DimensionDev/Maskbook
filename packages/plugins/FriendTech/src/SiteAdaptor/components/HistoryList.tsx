@@ -110,36 +110,16 @@ export const HistoryList = memo(function HistoryList({ account, className, ...re
                         <Box flexGrow={1} ml={2}>
                             <Typography fontWeight={700} color={theme.palette.maskColor.main} fontSize={14}>
                                 {activity.isBuy ?
-                                    <Plural
-                                        value={shareAmount}
-                                        one={
-                                            <Trans>
-                                                {activity.trader.name} bought {shareAmount}{' '}
-                                                <Link to={to}>{activity.subject.name}</Link> key
-                                            </Trans>
-                                        }
-                                        other={
-                                            <Trans>
-                                                {activity.trader.name} bought {shareAmount}{' '}
-                                                <Link to={to}>{activity.subject.name}</Link> keys
-                                            </Trans>
-                                        }
-                                    />
-                                :   <Plural
-                                        value={shareAmount}
-                                        one={
-                                            <Trans>
-                                                {activity.trader.name} sold {shareAmount}{' '}
-                                                <Link to={to}>{activity.subject.name}</Link> key
-                                            </Trans>
-                                        }
-                                        other={
-                                            <Trans>
-                                                {activity.trader.name} sold {shareAmount}{' '}
-                                                <Link to={to}>{activity.subject.name}</Link> keys
-                                            </Trans>
-                                        }
-                                    />
+                                    <Trans>
+                                        {activity.trader.name} bought {shareAmount}{' '}
+                                        <Link to={to}>{activity.subject.name}</Link>{' '}
+                                        <Plural value={shareAmount} one="key" other="keys" />
+                                    </Trans>
+                                :   <Trans>
+                                        {activity.trader.name} sold {shareAmount}{' '}
+                                        <Link to={to}>{activity.subject.name}</Link>{' '}
+                                        <Plural value={shareAmount} one="key" other="keys" />
+                                    </Trans>
                                 }
                             </Typography>
 

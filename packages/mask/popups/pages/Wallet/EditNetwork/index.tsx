@@ -110,7 +110,7 @@ export const Component = memo(function EditNetwork() {
                         setChainId(ChainId.Mainnet)
                     }
                     await Network.removeNetwork(id)
-                    showSnackbar(<Trans>Network successfully deleted.</Trans>)
+                    showSnackbar(<Trans>Network removed.</Trans>)
                     // Trigger UI update.
                     queryClient.invalidateQueries({ queryKey: QUERY_KEY })
                     navigate(-1)
@@ -206,10 +206,10 @@ export const Component = memo(function EditNetwork() {
                 }
                 if (isEditing) {
                     await Network.updateNetwork(id, network)
-                    showSnackbar(<Trans>Saved network successfully</Trans>)
+                    showSnackbar(<Trans>Network saved</Trans>)
                 } else {
                     await Network.addNetwork(network)
-                    showSnackbar(<Trans>Adding network successfully</Trans>)
+                    showSnackbar(<Trans>Netword added</Trans>)
                 }
                 navigate(-1)
                 queryClient.invalidateQueries({ queryKey: QUERY_KEY })

@@ -41,11 +41,9 @@ export class ERC20Descriptor extends BaseDescriptor {
                     const approveDescription: FormattedTransactionDescription =
                         token?.symbol ? { key: 'Unlock {symbol}.', symbol: token.symbol } : 'Unlock token'
                     const revokeSuccessDescription: FormattedTransactionSnackbarSuccessDescription =
-                        'Revoke the approval successfully.'
+                        'The token approval revoked.'
                     const approveSuccessDescription: FormattedTransactionSnackbarSuccessDescription =
-                        token?.symbol ?
-                            { key: 'Unlock {symbol} successfully', symbol: token.symbol }
-                        :   'Unlock token successfully'
+                        token?.symbol ? { key: '{symbol} unlocked', symbol: token.symbol } : 'Token unlocked'
 
                     if (evm.state?.Provider?.providerType?.getCurrentValue() === ProviderType.MetaMask) {
                         const spenders = await this.Hub.getFungibleTokenSpenders(context.chainId, context.from, {
@@ -66,14 +64,14 @@ export class ERC20Descriptor extends BaseDescriptor {
                             isZero(parameters.value) ?
                                 isZero(spendingCap) ? revokeSuccessDescription
                                 :   {
-                                        key: "You've approved {token} for {spender}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again.",
+                                        key: "You've approved {token} for {spender}. If you want to revoke this token, please set spending cap amount to 0.",
                                         spender:
                                             spender?.address ? formatEthereumAddress(spender.address, 4) : 'spender',
                                         token: getTokenAmountDescription(spendingCap, token),
                                     }
                             : isZero(spendingCap) ?
                                 {
-                                    key: "You didn't approve {symbol} successfully. Please do not set spending cap as 0 and try it again.",
+                                    key: "You didn't approve {symbol}. Please do not set spending cap to 0 and try it again.",
                                     symbol: token?.symbol || '',
                                 }
                             :   approveSuccessDescription
@@ -150,7 +148,7 @@ export class ERC20Descriptor extends BaseDescriptor {
                     description: { key: 'Send {token}', token: getTokenAmountDescription(parameters?.value, token) },
                     snackbar: {
                         successfulDescription: {
-                            key: 'Send {token} successfully.',
+                            key: '{token} sent.',
                             token: getTokenAmountDescription(parameters?.value, token),
                         },
                         failedDescription: 'Failed to send token.',

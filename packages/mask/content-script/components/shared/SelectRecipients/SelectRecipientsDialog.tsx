@@ -223,7 +223,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={_(msg`eg: Twitter accounts, Persona public keys, wallet addresses or ENS`)}
+                    placeholder={_(msg`eg: X accounts, persona public keys, wallet addresses or ENS`)}
                 />
                 {props.loading ?
                     <div className={cx(classes.empty, classes.mainText)}>
@@ -239,9 +239,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                     {results.length === 0 ?
                                         <EmptyStatus className={classes.empty}>
                                             {props.searchEmptyText ?? (
-                                                <Trans>
-                                                    No Persona-based encryption friends locally, please try searching.
-                                                </Trans>
+                                                <Trans>No friends are stored locally, please try search one.</Trans>
                                             )}
                                         </EmptyStatus>
                                     :   results.map((item, index) => {

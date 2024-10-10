@@ -155,7 +155,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={_(msg`eg: Twitter accounts, Persona public keys, wallet addresses or ENS`)}
+                    placeholder={_(msg`eg: X accounts, persona public keys, wallet addresses or ENS`)}
                     disabled={disabled}
                 />
             </Box>
@@ -169,9 +169,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Box className={classes.list}>
                                 {profiles.length === 0 ?
                                     <EmptyStatus className={classes.empty}>
-                                        <Trans>
-                                            No Persona-based encryption friends locally, please try searching.
-                                        </Trans>
+                                        <Trans>No friends are stored locally, please try search one.</Trans>
                                     </EmptyStatus>
                                 :   profiles.map((item) => {
                                         const pubkey = item.linkedPersona?.publicKeyAsHex as string

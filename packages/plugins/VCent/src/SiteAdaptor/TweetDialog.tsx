@@ -75,12 +75,12 @@ export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAd
                     </Typography>
                 </Box>
                 <Box className={classes.title}>
-                    <Typography className={classes.fieldName}>
-                        <Trans>Latest offer at</Trans>
-                    </Typography>
-                    <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
-                        ${tweet.amount_usd}
-                    </Typography>
+                    <Trans>
+                        <Typography className={classes.fieldName}>Latest offer at </Typography>
+                        <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
+                            ${tweet.amount_usd}
+                        </Typography>
+                    </Trans>
                 </Box>
             </Box>
             <Button

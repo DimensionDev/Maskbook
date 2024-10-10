@@ -38,9 +38,7 @@ export class MaskBoxDescriptor extends DescriptorWithTransactionDecodedReceipt {
                 description: 'Purchase Maskbox NFT.',
                 snackbar: {
                     successfulDescription:
-                        token ?
-                            { key: 'Purchase Maskbox NFT with {token} successfully.', token }
-                        :   'Purchase Maskbox NFT successfully.',
+                        token ? { key: 'Maskbox NFT with {token} purchased.', token } : 'Maskbox NFT purchased.',
                     failedDescription: 'Failed to purchase Maskbox NFT.',
                 },
                 popup: {

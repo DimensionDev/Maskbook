@@ -68,12 +68,12 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             try {
                 await PluginFileServiceRPC.deleteFile(file.id)
                 refetchFiles()
-                showSnackbar(<Trans>Delete successfully</Trans>, {
+                showSnackbar(<Trans>File delete</Trans>, {
                     variant: 'success',
-                    message: <Trans>Delete file {file.name} successfully.</Trans>,
+                    message: <Trans>File {file.name} deleted.</Trans>,
                 })
             } catch (err) {
-                showSnackbar(<Trans>Delete failed</Trans>, {
+                showSnackbar(<Trans>File delete failed</Trans>, {
                     variant: 'error',
                     message: <Trans>Failed to delete, please try again.</Trans>,
                 })

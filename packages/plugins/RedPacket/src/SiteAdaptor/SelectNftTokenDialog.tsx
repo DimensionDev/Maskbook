@@ -416,24 +416,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <QuestionMarkIcon className={classes.questionMarkIcon} />
                         </ShadowRootTooltip>
                         <Typography>
-                            <Plural
-                                one={
-                                    <Trans>
-                                        <span className={classes.selectedTokenAmount}>
-                                            {tokenDetailedSelectedList.length}
-                                        </span>{' '}
-                                        NFT
-                                    </Trans>
-                                }
-                                other={
-                                    <Trans>
-                                        <span className={classes.selectedTokenAmount}>
-                                            {tokenDetailedSelectedList.length}
-                                        </span>{' '}
-                                        NFTs
-                                    </Trans>
-                                }
-                            />
+                            <Trans>
+                                <span className={classes.selectedTokenAmount}>{tokenDetailedSelectedList.length}</span>{' '}
+                                <Plural value={tokenDetailedSelectedList.length} one="NFT" other="NFTs" />
+                                NFT
+                            </Trans>
                         </Typography>
                     </Box>
                 </div>

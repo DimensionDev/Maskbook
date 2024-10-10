@@ -446,7 +446,7 @@ export const SmartPayContent = memo(() => {
                                                             <>
                                                                 (
                                                                 <Icons.Gas size={18} sx={{ marginRight: 0.5 }} />
-                                                                <Trans>Allow Mask as gas</Trans>)
+                                                                <Trans>Allow Mask be used as gas</Trans>)
                                                             </>
                                                         :   <Icons.Gas size={18} />}
                                                     </Typography>

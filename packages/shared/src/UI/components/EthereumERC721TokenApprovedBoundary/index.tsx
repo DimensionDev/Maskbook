@@ -48,6 +48,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     }, [collection, owner, operator, _validationMessage])
 
     if (approveState.loading) {
+        const hasSymbolName = collection?.symbol && collection.symbol.toLowerCase() !== 'unknown'
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -56,15 +57,12 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 loading
                 disabled
                 {...props.ActionButtonProps}>
-                <Trans>
-                    Unlocking{' '}
-                    {collection?.symbol ?
-                        collection.symbol.toLowerCase() === 'unknown' ?
-                            'All'
-                        :   collection.symbol
-                    :   'All'}
-                    ...
-                </Trans>
+                {hasSymbolName ?
+                    <Trans>
+                        Unlocking {hasSymbolName}
+                        ...
+                    </Trans>
+                :   <Trans>Unlocking ALL...</Trans>}
             </ActionButton>
         )
     } else if (validationMessage) {
@@ -90,6 +88,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             />
         )
     } else if (isApproveForAll === false) {
+        const hasSymbolName = collection?.symbol && collection.symbol.toLowerCase() !== 'unknown'
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -97,14 +96,12 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 fullWidth
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
-                <Trans>
-                    Unlock{' '}
-                    {collection?.symbol ?
-                        collection.symbol.toLowerCase() === 'unknown' ?
-                            'All'
-                        :   collection.symbol
-                    :   'All'}
-                </Trans>
+                {hasSymbolName ?
+                    <Trans>
+                        Unlocking {hasSymbolName}
+                        ...
+                    </Trans>
+                :   <Trans>Unlocking ALL...</Trans>}
             </ActionButton>
         )
     } else if (isApproveForAll === undefined) {

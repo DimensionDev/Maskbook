@@ -84,7 +84,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.addContact({ name, address })
-        showSnackbar(<Trans>Add contact successfully.</Trans>)
+        showSnackbar(<Trans>Contact added.</Trans>)
         onConfirm?.()
     }, [name, address, onConfirm, t])
 

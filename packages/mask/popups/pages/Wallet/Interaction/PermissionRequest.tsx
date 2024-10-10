@@ -63,13 +63,13 @@ export function PermissionRequest(props: InteractionItemProps) {
             </Typography>
             <List dense>
                 <ListItem>
-                    <ListItemText primary={<Trans>See your address</Trans>} />
+                    <ListItemText primary={<Trans>View your address</Trans>} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary={<Trans>See your account balance and history</Trans>} />
+                    <ListItemText primary={<Trans>View your account balance and history</Trans>} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary={<Trans>See your Tokens and NFTs</Trans>} />
+                    <ListItemText primary={<Trans>View your Tokens and NFTs</Trans>} />
                 </ListItem>
                 <ListItem>
                     <ListItemText primary={<Trans>Suggest to send transactions and sign messages</Trans>} />

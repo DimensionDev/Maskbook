@@ -74,7 +74,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
         <Box>
             <AccountStatusBar
                 label={account}
-                actionLabel={<Trans>Switch other accounts</Trans>}
+                actionLabel={<Trans>Switch to other accounts</Trans>}
                 onAction={handleSwitchAccount}
             />
             <Box mt={2}>

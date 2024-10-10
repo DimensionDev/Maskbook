@@ -27,8 +27,12 @@ msgid "Change"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:61
-msgid "Choose and showcase your Web3 footprints on Twitter."
+msgid "Choose and show your Web3 footprints on X."
 msgstr ""
+
+#: src/SiteAdaptor/index.tsx:61
+#~ msgid "Choose and showcase your Web3 footprints on Twitter."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
 msgid "Confirm"
@@ -110,7 +114,11 @@ msgid "Save failed"
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-msgid "Save successfully"
+#~ msgid "Save successfully"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
+msgid "Saved"
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154

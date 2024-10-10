@@ -41,8 +41,9 @@ export const Component = memo(function GasSetting() {
             </Typography>
             <Typography className={classes.description}>
                 <Trans>
-                    Gas fees are the fees for paying ethereum miners. The miners prefer to pack transactions with higher
-                    gas fees. Transactions with low gas fees might fail, and the paid gas fees won’t be returned.
+                    Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions
+                    with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be
+                    returned.
                 </Trans>
             </Typography>
             {EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') ?

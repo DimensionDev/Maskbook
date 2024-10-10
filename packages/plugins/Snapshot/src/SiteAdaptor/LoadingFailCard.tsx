@@ -72,7 +72,7 @@ function NotFull(props: { onClick: () => void }) {
     return (
         <Box style={{ textAlign: 'center' }}>
             <Typography color={(t) => t.palette.maskColor.publicMain}>
-                <Trans>Loading fails due to Snapshot API service breakdown.</Trans>
+                <Trans>Loading failed due to Snapshot API service breakdown.</Trans>
             </Typography>
             <Button
                 variant="roundedContained"

@@ -111,7 +111,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                         variant: 'error',
                         message: (
                             <Trans>
-                                {expectedChainName ?? ''} network is not added in the wallet. Please add and try it
+                                {expectedChainName ?? ''} network is not added to the wallet. Please add it and try
                                 again.
                             </Trans>
                         ),

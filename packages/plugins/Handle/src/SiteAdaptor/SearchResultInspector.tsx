@@ -125,16 +125,16 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                     <div className={classes.accounts}>
                         {totalBalance !== undefined ?
                             <div className={classes.walletValue}>
-                                <Typography className={classes.label}>
-                                    <Trans>USD Value</Trans>
-                                </Typography>
-                                <Typography className={classes.value}>
-                                    $
-                                    {totalBalance.toLocaleString('en-US', {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    })}
-                                </Typography>
+                                <Trans>
+                                    <Typography className={classes.label}>USD Value</Typography>
+                                    <Typography className={classes.value}>
+                                        $
+                                        {totalBalance.toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        })}
+                                    </Typography>
+                                </Trans>
                             </div>
                         :   null}
                         <SocialAccountList nextIdBindings={nextIdBindings} />

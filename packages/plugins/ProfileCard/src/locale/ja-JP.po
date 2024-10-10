@@ -43,8 +43,12 @@ msgid "View real-time crypto prices, market cap, trading volume, etc."
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:28
-msgid "View user’s Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
 msgstr ""
+
+#: src/SiteAdaptor/index.tsx:28
+#~ msgid "View user’s Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:23
 msgid "Web3 Profile Card"

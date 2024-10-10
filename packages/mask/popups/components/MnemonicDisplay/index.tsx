@@ -109,7 +109,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                         variant="text"
                         startIcon={<Icons.EyeColor size={20} className={classes.icon} />}
                         className={classes.button}>
-                        <Trans>hide Mnemonic words</Trans>
+                        <Trans>Hide mnemonic words</Trans>
                     </Button>
                 </Box>
             :   null}

@@ -39,12 +39,12 @@ function SetupGuideUI() {
             msg`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post.`,
         )
         if (networkIdentifier === EnhanceableSite.Twitter) {
-            content += _(msg`Follow ${'@realMaskNetwork'} to explore Web3.`)
+            content += _(msg`Follow @realMaskNetwork to explore Web3.`)
         }
 
         activatedSiteAdaptorUI!.automation.maskCompositionDialog?.open?.(
             makeTypedMessageText(content),
-            _(msg`Please click the “Post” button to open the compose dialog.`),
+            _(msg`Please click the "Post" button to open the compose dialog.`),
             { target: EncryptionTargetType.Public },
         )
     }, [t])

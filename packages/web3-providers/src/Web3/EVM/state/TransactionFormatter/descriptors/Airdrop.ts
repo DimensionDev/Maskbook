@@ -25,10 +25,10 @@ export class AirdropDescriptor extends BaseDescriptor {
                     description: 'Transaction submitted.',
                     snackbar: {
                         successfulDescription: {
-                            key: '{token} were successfully claimed',
+                            key: '{token} were claimed',
                             token: getTokenAmountDescription(parameters._amount, token),
                         },
-                        failedDescription: 'Transaction was Rejected!',
+                        failedDescription: 'Transaction has been rejected!',
                     },
                     popup: {
                         method: name,

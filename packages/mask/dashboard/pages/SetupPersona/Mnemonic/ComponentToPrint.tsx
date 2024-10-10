@@ -90,13 +90,15 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
             <Box className={classes.card}>
                 <Box flex={1}>
                     <Typography className={classes.personaName}>
-                        <Trans>Persona</Trans>: {personaName}
+                        <Trans>Persona: {personaName}</Trans>
                     </Typography>
                     <Typography className={classes.publicKeyTitle}>
-                        <Trans>Public Key</Trans>:{' '}
-                        <Typography component="span" className={classes.publicKey}>
-                            {publicKey}
-                        </Typography>
+                        <Trans>
+                            Public Key:{' '}
+                            <Typography component="span" className={classes.publicKey}>
+                                {publicKey}
+                            </Typography>
+                        </Trans>
                     </Typography>
                 </Box>
                 <QRCode
@@ -115,7 +117,7 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
             <Words words={words} classes={{ text: classes.text, wordCard: classes.wordCard }} />
             <Typography className={classes.tips}>
                 <Icons.Info variant="light" size={20} />
-                <Trans>This QR saves your identity code, please keep it safely. </Trans>
+                <Trans>This QR includes your identity, please keep it safely.</Trans>
             </Typography>
         </Box>
     )

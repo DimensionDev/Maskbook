@@ -69,7 +69,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                                 (EntryComponentProps.disabled ? undefined : (
                                     <Trans>
                                         Socialize and show off your NFTs. People can bid, buy and view your valuable
-                                        NFTs without leaving Twitter.
+                                        NFTs without leaving X.
                                     </Trans>
                                 ))
                             }

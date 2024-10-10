@@ -105,7 +105,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
             info: {
                 target: 'dashboard',
                 url: DashboardRoutes.SignUpPersona,
-                text: <Trans>Please create a Persona and verify your account to use this function.</Trans>,
+                text: <Trans>Please create a persona and verify your account to use this.</Trans>,
                 title: <Trans>Persona</Trans>,
                 actionHint: <Trans>Create persona</Trans>,
             },
@@ -176,7 +176,7 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
                         buttonText: <Trans>Connect and Verify {persona.nickname ?? ''}</Trans>,
                         hint: (
                             <Trans>
-                                Please connect {persona.nickname ?? ''} and send proof post before using dApps.
+                                Please connect {persona.nickname ?? ''} and send a proof post before using dApps.
                             </Trans>
                         ),
                     }
@@ -189,7 +189,9 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
                     return {
                         buttonText: <Trans>Verify {persona.nickname ?? ''}</Trans>,
                         hint: (
-                            <Trans>Please verify current persona with social media account before using dApps.</Trans>
+                            <Trans>
+                                Please verify the current persona with a social media account before using dApps.
+                            </Trans>
                         ),
                     }
                 return {

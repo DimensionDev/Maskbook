@@ -102,7 +102,7 @@ export function TipsRealmContent({
                 finished={finished}
                 currentStep={step}
                 onNext={nextStep}
-                title={<Trans>Send authors tips by using Mask Network’s Tips function.</Trans>}
+                title={<Trans>Send authors tips by using Mask Network's Tips function.</Trans>}
                 actionText={<Trans>Close</Trans>}>
                 <Stack
                     display="flex"

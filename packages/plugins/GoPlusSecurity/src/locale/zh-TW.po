@@ -34,20 +34,32 @@ msgstr ""
 msgid "{0} Risky factors"
 msgstr ""
 
-#: src/SiteAdaptor/components/NotFound.tsx:15
-msgid "1. Make sure network is working;"
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:102
+msgid "<0>Dear Users,</0><1>Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.</1>"
 msgstr ""
+
+#: src/SiteAdaptor/components/Footer.tsx:12
+msgid "<0>Powered by</0><1>Go+</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/NotFound.tsx:8
+msgid "<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"
+msgstr ""
+
+#: src/SiteAdaptor/components/NotFound.tsx:15
+#~ msgid "1. Make sure network is working;"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:18
-msgid "2. Make sure the chain network or token address is correct;"
-msgstr ""
+#~ msgid "2. Make sure the chain network or token address is correct;"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:21
-msgid "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later."
-msgstr ""
+#~ msgid "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:74
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:135
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:133
 msgid "Cancel"
 msgstr ""
 
@@ -57,8 +69,8 @@ msgid "Check Security"
 msgstr ""
 
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx:106
-msgid "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction."
-msgstr ""
+#~ msgid "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:47
 msgid "Close [Check Security]?"
@@ -85,17 +97,17 @@ msgstr ""
 msgid "Contract Owner"
 msgstr ""
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:116
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:114
 msgid "Copy Address"
 msgstr ""
 
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx:103
-msgid "Dear Users,"
-msgstr ""
+#~ msgid "Dear Users,"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx:24
-msgid "Go+"
-msgstr ""
+#~ msgid "Go+"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:139
 #: src/SiteAdaptor/constants.tsx:23
@@ -132,16 +144,16 @@ msgid "Please enter token contract address."
 msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx:17
-msgid "Powered by"
-msgstr ""
+#~ msgid "Powered by"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:46
 msgid "Provide you with fast, reliable and convenient security services."
 msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:9
-msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
-msgstr ""
+#~ msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx:98
 msgid "Risk Warning"
@@ -155,7 +167,7 @@ msgstr ""
 msgid "Security Detection"
 msgstr ""
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:138
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:136
 msgid "Swap Anyway"
 msgstr ""
 
@@ -187,7 +199,7 @@ msgstr ""
 msgid "Unnamed"
 msgstr ""
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:126
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:124
 msgid "View on Explorer"
 msgstr ""
 

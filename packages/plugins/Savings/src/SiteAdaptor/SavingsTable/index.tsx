@@ -84,7 +84,6 @@ export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onD
                 {isDeposit ?
                     <Grid item xs={2} className={classes.tableCell}>
                         <Typography variant="body1">
-                            {' '}
                             <Trans>APR</Trans>
                         </Typography>
                     </Grid>

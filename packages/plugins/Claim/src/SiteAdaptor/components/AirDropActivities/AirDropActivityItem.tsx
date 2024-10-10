@@ -171,12 +171,12 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                 <ImageIcon icon={networkDescriptor?.icon} size={24} className={classes.badge} />
                 <Box className={classes.content}>
                     <Typography className={classes.title}>
-                        <Trans>Mask Community ${'ARB'} Giveaway</Trans>
+                        <Trans>Mask Community $ARB Giveaway</Trans>
                     </Typography>
                     <Typography className={classes.timeTips}>{timeTips}</Typography>
                     {!account ?
                         <Typography className={classes.tips}>
-                            <Trans>Please connect wallet to check if you are eligible to claim ${'ARB'}.</Trans>
+                            <Trans>Please connect wallet to check if you are eligible to claim $ARB.</Trans>
                         </Typography>
                     :   <>
                             {!isEligible ?
@@ -186,9 +186,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                             :   null}
                             {isClaimed ?
                                 <Typography className={classes.tips}>
-                                    <Trans>
-                                        You have claimed {amount ?? ''} ${'ARB'}.
-                                    </Trans>
+                                    <Trans>You have claimed {amount ?? ''} $ARB.</Trans>
                                 </Typography>
                             :   null}
                             {isEligible && !isClaimed ?
@@ -213,7 +211,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
                                                 <ShadowRootTooltip
                                                     title={
                                                         <Trans>
-                                                            You’re connected to a WalletConnect wallet. Please switch
+                                                            You're connected to a WalletConnect wallet. Please switch
                                                             network in that wallet, or switch to another wallet.
                                                         </Trans>
                                                     }

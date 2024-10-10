@@ -99,7 +99,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Connect size={18} sx={{ marginRight: '8px', color: '#fff' }} />
-                        <Trans>Verify your Twitter ID</Trans>
+                        <Trans>Verify your X ID</Trans>
                     </Button>
                 )
             return null

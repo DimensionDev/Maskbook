@@ -73,8 +73,8 @@ export const Component = memo(function CreateWalletForm() {
     const schema = useMemo(() => {
         const passwordRule = zod
             .string()
-            .min(6, _(msg`Payment password must be 6 to 20 characters in length.`))
-            .max(20, _(msg`Payment password must be 6 to 20 characters in length.`))
+            .min(6, _(msg`Payment password must be 6 to 20 characters.`))
+            .max(20, _(msg`Payment password must be 6 to 20 characters.`))
 
         return zod
             .object({
@@ -82,7 +82,7 @@ export const Component = memo(function CreateWalletForm() {
                 confirm: zod.string().optional(),
             })
             .refine((data) => data.password === data.confirm, {
-                message: _(msg`The two entered passwords are inconsistent.`),
+                message: _(msg`Entered passwords are inconsistent.`),
                 path: ['confirm'],
             })
     }, [t])
@@ -115,9 +115,7 @@ export const Component = memo(function CreateWalletForm() {
         <div className={classes.container}>
             <Typography className={cx(classes.second, classes.bold)}>
                 {!isReset ?
-                    <Trans>
-                        Step {'1'}/{'3'}
-                    </Trans>
+                    <Trans>Step 1/3</Trans>
                 :   null}
             </Typography>
             <Typography className={cx(classes.title, classes.bold)}>
@@ -159,8 +157,9 @@ export const Component = memo(function CreateWalletForm() {
 
                 <Typography className={classes.tipsBottom}>
                     <Trans>
-                        Your payment password encrypts wallet data and is needed for trade confirmations and unlocking.
-                        It's securely stored on your device, and we cannot retrieve it. Please remember it.
+                        Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction
+                        confirmations and signing. The password is never stored, and there is no way to recover it if
+                        you forget it.
                     </Trans>
                 </Typography>
             </form>

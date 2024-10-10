@@ -106,7 +106,7 @@ export const Component = memo(function CloudBackupPreview() {
     const [{ loading: overwriteLoading }, handleOverwriteClick] = useAsyncFn(async () => {
         await ConfirmDialog.openAndWaitForClose({
             title: <Trans>Overwrite current backup</Trans>,
-            message: <Trans>Sure to overwrite the backups stored on Mask Cloud Service?</Trans>,
+            message: <Trans>Are you sure to overwrite the backups stored on Mask Cloud Service?</Trans>,
             confirmLabel: <Trans>Confirm</Trans>,
             cancelLabel: <Trans>Cancel</Trans>,
             confirmButtonProps: {

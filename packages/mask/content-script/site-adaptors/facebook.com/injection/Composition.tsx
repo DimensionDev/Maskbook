@@ -65,7 +65,7 @@ function CompositionUI() {
                 }
                 taskOpenComposeBoxFacebook(
                     data.content || '',
-                    _(msg`Please click the “Post” button to open the compose dialog.`),
+                    _(msg`Please click the "Post" button to open the compose dialog.`),
                     data.options,
                 )
             }),

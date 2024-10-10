@@ -36,8 +36,12 @@ msgid "Expired"
 msgstr "期限切れ"
 
 #: src/SiteAdaptor/index.tsx:9
-msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
-msgstr "Twitter上で高度に統合されたWeb3ニュースやイベントは、トークン、NFT、AMA、規制イベントに関する情報を提供します。"
+#~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgstr "Twitter上で高度に統合されたWeb3ニュースやイベントは、トークン、NFT、AMA、規制イベントに関する情報を提供します。"
+
+#: src/SiteAdaptor/index.tsx:9
+msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+msgstr ""
 
 #: src/SiteAdaptor/CalendarContent.tsx:84
 msgid "News"
@@ -54,8 +58,12 @@ msgid "No content for the last two weeks."
 msgstr "過去２週間のコンテンツはありません。"
 
 #: src/SiteAdaptor/components/Footer.tsx:100
-msgid "Powered By"
-msgstr "以下により提供されています"
+#~ msgid "Powered By"
+#~ msgstr "以下により提供されています"
+
+#: src/SiteAdaptor/components/Footer.tsx:100
+msgid "Powered By {0}"
+msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx:208
 msgid "Price"

@@ -34,7 +34,7 @@ export enum EncryptionMethodType {
 export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
     const { classes } = useStyles()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
-
+    const encryptMethod = props.method === EncryptionMethodType.Image ? 'image' : 'text'
     return (
         <>
             <Typography className={classes.optionTitle}>
@@ -56,7 +56,7 @@ export function EncryptionMethodSelector(props: EncryptionMethodSelectorProps) {
                 <PopoverListItem
                     value={EncryptionMethodType.Image}
                     title={<Trans>Image</Trans>}
-                    subTitle={<Trans>Encrypt messages in images</Trans>}
+                    subTitle={<Trans>Encrypt the message in an image</Trans>}
                     disabled={props.imageDisabled}
                 />
             </PopoverListTrigger>

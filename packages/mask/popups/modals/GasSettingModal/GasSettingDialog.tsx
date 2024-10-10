@@ -142,7 +142,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         if (isSupport1559) return
         if (isZero(gasPrice)) return <Trans>Gas price should be greater than 0</Trans>
         if (gasOptions && isGreaterThan(gasOptions.slow.suggestedMaxFeePerGas, formatGweiToWei(gasPrice))) {
-            return <Trans>Gas price is too low and will cause the transaction to fail</Trans>
+            return <Trans>Gas price is too low and will cause the transaction fail</Trans>
         }
         return
     })()
@@ -151,7 +151,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
         if (!isSupport1559) return
         const formattedMaxPriorityFee = formatGweiToWei(maxPriorityFeePerGas)
         if (isZero(maxPriorityFeePerGas)) {
-            return <Trans>Priority fee should be greater than 0. </Trans>
+            return <Trans>Priority fee should be greater than 0.</Trans>
         } else if (
             gasOptions &&
             isGreaterThan(
@@ -178,7 +178,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             return (
                 <Trans>
                     Max fee should be greater than base fee of{' '}
-                    {formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP)} Gwei.{' '}
+                    {formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP)} Gwei.
                 </Trans>
             )
         }
@@ -190,7 +190,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     const tips = (() => {
         switch (replaceType) {
             case ReplaceType.CANCEL:
-                return <Trans>Spend more transaction fees to cancel the previous transaction.</Trans>
             case ReplaceType.SPEED_UP:
                 return <Trans>Spend more transaction fees to cancel the previous transaction.</Trans>
             default:

@@ -4,7 +4,7 @@ import { alpha, Button, Typography } from '@mui/material'
 import { type HTMLProps, memo, useCallback, useRef } from 'react'
 import { useDropArea } from 'react-use'
 import { useSharedTrans } from '../../../index.js'
-import { Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dropArea: {
@@ -120,20 +120,18 @@ export const UploadDropArea = memo(
                 <div className={classes.uploadIcon}>
                     <Icons.Upload size={30} />
                 </div>
-                <Typography className={classes.tips}>
-                    <Trans>Drag & Drop your file here</Trans>
-                </Typography>
-                {omitSizeLimit ? null : (
-                    <Typography className={classes.limit}>
-                        <Trans>Size limit: 10 MB</Trans>
-                    </Typography>
-                )}
-                <Typography className={classes.or}>
-                    <Trans>or</Trans>
-                </Typography>
-                <Button className={classes.button} variant="contained" onClick={selectFile}>
-                    <Trans>Browse File</Trans>
-                </Button>
+                <Trans>
+                    <Typography className={classes.tips}>Drag & Drop your file here </Typography>
+                    <Select
+                        value={omitSizeLimit ? 'omit' : null}
+                        default={<Typography className={classes.limit}>Size limit: 10 MB </Typography>}
+                        _omit=""
+                    />
+                    <Typography className={classes.or}>or </Typography>
+                    <Button className={classes.button} variant="contained" onClick={selectFile}>
+                        Browse File
+                    </Button>
+                </Trans>
             </div>
         )
     },

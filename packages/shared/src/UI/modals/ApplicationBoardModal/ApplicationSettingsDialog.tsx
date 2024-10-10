@@ -49,10 +49,10 @@ export const ApplicationBoardSettingsDialog = memo<ApplicationBoardSettingsProps
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
                             <Tab label={<Trans>APP list</Trans>} value={tabs.pluginList} />
-                            <Tab label={<Trans>Plug-in switch</Trans>} value={tabs.pluginSwitch} />
+                            <Tab label={<Trans>Plugin switch</Trans>} value={tabs.pluginSwitch} />
                         </MaskTabList>
                     }
-                    title={<Trans>APP Settings</Trans>}>
+                    title={<Trans>App Settings</Trans>}>
                     <DialogContent className={classes.content}>
                         <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
                             <ApplicationSettingPluginList />

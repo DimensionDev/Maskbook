@@ -18,13 +18,13 @@ export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordD
                     <Stack alignItems="center" py={2}>
                         <Icons.Success size={54} />
                         <Typography variant="caption" sx={{ color: (t) => getMaskColor(t).greenMain }} fontSize={24}>
-                            <Trans>Successful</Trans>
+                            <Trans>Success</Trans>
                         </Typography>
                     </Stack>
                     <Typography variant="caption">
                         <Trans>
-                            You have successfully verified your cloud password and recovered your backup. To unify
-                            backup passwords, do you want to synchronize your cloud password as local backup password?
+                            You have verified your cloud password and recovered your backup. Do you want to let your
+                            cloud password and local backup password be the same?
                         </Trans>
                     </Typography>
                 </DialogContent>

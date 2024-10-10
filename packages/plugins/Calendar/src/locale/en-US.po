@@ -31,7 +31,11 @@ msgid "Expired"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:9
-msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:9
+msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
 msgstr ""
 
 #: src/SiteAdaptor/CalendarContent.tsx:84
@@ -49,7 +53,11 @@ msgid "No content for the last two weeks."
 msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx:100
-msgid "Powered By"
+#~ msgid "Powered By"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Footer.tsx:100
+msgid "Powered By {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx:208

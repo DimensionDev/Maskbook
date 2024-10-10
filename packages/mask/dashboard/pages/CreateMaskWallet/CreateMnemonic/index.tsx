@@ -226,7 +226,7 @@ export const Component = memo(function CreateMnemonic() {
         navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, {}), { replace: true })
     }, [walletName, words, location.state?.isReset, location.state?.password])
 
-    const step = useMemo(() => String((verified ? 3 : 2) - (hasPassword ? 1 : 0)), [verified, hasPassword])
+    const step = useMemo(() => (verified ? 3 : 2) - (hasPassword ? 1 : 0), [verified, hasPassword])
     const totalSteps = hasPassword ? '2' : '3'
 
     return (
@@ -247,7 +247,6 @@ export const Component = memo(function CreateMnemonic() {
             </div>
             {verified ?
                 <VerifyMnemonicUI
-                    isReset={location.state?.isReset}
                     setVerified={setVerified}
                     words={words}
                     loading={loading}
@@ -286,7 +285,6 @@ interface VerifyMnemonicUIProps {
         [key: number]: string
     }
     puzzleWordList: PuzzleWord[]
-    isReset: boolean
     loading: boolean
     isMatched: boolean | undefined
     setVerified: (verified: boolean) => void
@@ -306,7 +304,6 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     setVerified,
     onSubmit,
     loading,
-    isReset,
     puzzleWordList,
     onRefreshWords,
     puzzleAnswer,
@@ -323,10 +320,10 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     return (
         <>
             <Typography className={cx(classes.title, classes.bold)}>
-                <Trans>Verification</Trans>
+                <Trans>Verify</Trans>
             </Typography>
             <Typography className={classes.tips}>
-                <Trans>Please select the correct words based on the order of the recovery phases.</Trans>
+                <Trans>Please select the correct words in the correct order.</Trans>
             </Typography>
             <Box component="ul" className={classes.puzzleWordList}>
                 {puzzleWordList.map((puzzleWord, index) => (
@@ -342,7 +339,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
             </Box>
             {isMatched === false ?
                 <Typography className={classes.verificationFail}>
-                    <Trans>Wrong words selected. Please try again!</Trans>
+                    <Trans>Incorrect words selected. Please try again!</Trans>
                 </Typography>
             :   null}
             <SetupFrameController>
@@ -417,10 +414,10 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
     return (
         <>
             <Typography className={cx(classes.title, classes.bold)}>
-                <Trans>Write Down Recovery Phrase</Trans>
+                <Trans>Write down recovery phrase</Trans>
             </Typography>
             <Typography className={classes.tips}>
-                <Trans>Please write down or copy these words in the correct way and store them in secure places.</Trans>
+                <Trans>Please write down or copy these words and save them in a secure place.</Trans>
             </Typography>
             <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={onRefreshWords}>
@@ -440,11 +437,11 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                     color={theme.palette.maskColor.main}
                     size={18}
                     text={words.join(' ')}
-                    successText={<Trans>The mnemonic has been copied, please keep it in a safe place.</Trans>}
+                    successText={<Trans>The mnemonic word has been copied, please keep it in a safe place.</Trans>}
                 />
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
-                <Trans>Never share 12-word secret recovery phrase with anyone!</Trans>
+                <Trans>Never share 12-word secret mnemonic with anyone!</Trans>
             </Alert>
             <SetupFrameController>
                 <PrimaryButton

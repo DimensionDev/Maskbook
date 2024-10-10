@@ -187,7 +187,6 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
         return orderedStatusList.flatMap((status) => {
             if (status.type === 'profileFollow') {
                 const payload = status.payload.filter((x) => x.platform === platform)
-                const handles = payload.map((x) => `@${x.handle}`)
                 return (
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.UserPlus className={classes.icon} size={16} />
@@ -242,7 +241,6 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
                     })
             }
             if (status.type === 'nftOwned') {
-                const collectionNames = status.payload.map((x) => x.collectionName).join(', ')
                 return (
                     <ListItem className={classes.item} key={status.type}>
                         <Icons.FireflyNFT className={classes.icon} size={16} />

@@ -45,7 +45,7 @@ export class SmartPayDescriptor extends BaseDescriptor {
                         title: 'Change Owner',
                         description: 'Transaction submitted.',
                         snackbar: {
-                            successfulDescription: 'Owner changed successfully.',
+                            successfulDescription: 'Owner changed.',
                             failedDescription: '',
                         },
                         popup: {

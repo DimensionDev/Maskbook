@@ -34,20 +34,32 @@ msgstr "{0} 个有风险的因素"
 msgid "{0} Risky factors"
 msgstr "{0} 个有风险的因素"
 
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:102
+msgid "<0>Dear Users,</0><1>Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/Footer.tsx:12
+msgid "<0>Powered by</0><1>Go+</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/NotFound.tsx:8
+msgid "<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"
+msgstr ""
+
 #: src/SiteAdaptor/components/NotFound.tsx:15
-msgid "1. Make sure network is working;"
-msgstr "1. 确保网络正常运作；"
+#~ msgid "1. Make sure network is working;"
+#~ msgstr "1. 确保网络正常运作；"
 
 #: src/SiteAdaptor/components/NotFound.tsx:18
-msgid "2. Make sure the chain network or token address is correct;"
-msgstr "2. 确认网络 和 Token 地址是否正确；"
+#~ msgid "2. Make sure the chain network or token address is correct;"
+#~ msgstr "2. 确认网络 和 Token 地址是否正确；"
 
 #: src/SiteAdaptor/components/NotFound.tsx:21
-msgid "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later."
-msgstr "3. Token 地址现在没有被覆盖，可能需要超过60秒才能再次获取合约信息。请稍后再试。"
+#~ msgid "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later."
+#~ msgstr "3. Token 地址现在没有被覆盖，可能需要超过60秒才能再次获取合约信息。请稍后再试。"
 
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:74
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:135
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:133
 msgid "Cancel"
 msgstr "取消"
 
@@ -57,8 +69,8 @@ msgid "Check Security"
 msgstr "安全检查"
 
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx:106
-msgid "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction."
-msgstr "点击确认按钮意味着您同意承担潜在的风险并选择继续进行交易。"
+#~ msgid "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction."
+#~ msgstr "点击确认按钮意味着您同意承担潜在的风险并选择继续进行交易。"
 
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:47
 msgid "Close [Check Security]?"
@@ -85,17 +97,17 @@ msgstr "未找到合约"
 msgid "Contract Owner"
 msgstr "合同所有者"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:116
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:114
 msgid "Copy Address"
 msgstr "复制地址"
 
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx:103
-msgid "Dear Users,"
-msgstr "尊敬的用户，"
+#~ msgid "Dear Users,"
+#~ msgstr "尊敬的用户，"
 
 #: src/SiteAdaptor/components/Footer.tsx:24
-msgid "Go+"
-msgstr "Go+"
+#~ msgid "Go+"
+#~ msgstr "Go+"
 
 #: src/SiteAdaptor/components/SecurityPanel.tsx:139
 #: src/SiteAdaptor/constants.tsx:23
@@ -132,16 +144,16 @@ msgid "Please enter token contract address."
 msgstr "请输入合约地址。"
 
 #: src/SiteAdaptor/components/Footer.tsx:17
-msgid "Powered by"
-msgstr "Powered by"
+#~ msgid "Powered by"
+#~ msgstr "Powered by"
 
 #: src/SiteAdaptor/index.tsx:46
 msgid "Provide you with fast, reliable and convenient security services."
 msgstr ""
 
 #: src/SiteAdaptor/components/NotFound.tsx:9
-msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
-msgstr "找不到结果。它可能是由于网络错误、链上数据异常或 Token地址不存在。请检查以下情况："
+#~ msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
+#~ msgstr "找不到结果。它可能是由于网络错误、链上数据异常或 Token地址不存在。请检查以下情况："
 
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx:98
 msgid "Risk Warning"
@@ -155,7 +167,7 @@ msgstr "搜索"
 msgid "Security Detection"
 msgstr "安全检测"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:138
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:136
 msgid "Swap Anyway"
 msgstr "仍要兑换"
 
@@ -187,7 +199,7 @@ msgstr "总供应量"
 msgid "Unnamed"
 msgstr "未命名的"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:126
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx:124
 msgid "View on Explorer"
 msgstr "在区块链浏览器查看"
 

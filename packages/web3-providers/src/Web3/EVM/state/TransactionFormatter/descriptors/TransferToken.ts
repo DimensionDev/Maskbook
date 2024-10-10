@@ -18,7 +18,7 @@ export class TransferTokenDescriptor extends BaseDescriptor {
             description: { key: 'Send {token}', token: getTokenAmountDescription(context.value, token) },
             snackbar: {
                 successfulDescription: {
-                    key: 'Send {token} successfully.',
+                    key: '{token} sent.',
                     token: getTokenAmountDescription(context.value, token),
                 },
                 failedDescription: 'Failed to send token.',

@@ -1,8 +1,24 @@
 {
     "messages": {
+        "R/Pfmp": [["amount"], " ", ["0"], " tips sent."],
+        "ep2Wyh": ["1 ", ["0"], " tips sent."],
         "9+VwX/": "수장품 추가",
         "yz7wBu": "닫기",
         "LBtfmO": "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media.",
+        "7ygsf3": [
+            "I just tipped ",
+            ["amount"],
+            " ",
+            ["0", "select", { "namedToken": [["1"]], "other": "token" }],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["2", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["3"],
+            "\\n\\n",
+            ["promote"]
+        ],
         "D2n62c": [
             "I just tipped ",
             ["amount"],
@@ -57,6 +73,18 @@
             "\\n\\n",
             ["promote"]
         ],
+        "jdJr7z": [
+            "I just tipped a ",
+            ["NFT_Name"],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["0", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["recipientAddress"],
+            "\\n\\n",
+            ["promote"]
+        ],
         "Xf6qGr": [
             "I just tipped a ",
             ["NFT_Name"],
@@ -70,9 +98,11 @@
         "2Wwd56": "Install https://mask.io/download-links to send your first tip.",
         "znqB4T": "잔액 부족",
         "8Dh77Z": "NFTs",
+        "y/+ReV": "No any collectible is available for preview. Please add your collectible here.",
         "4kYy+U": "미리 보기에 사용할 수 있는 수집품이 없습니다. 여기에 수집품을 추가하십시오.",
         "CMfM6C": "가스비 부족",
         "JlFcis": "발송",
+        "t6bQQD": "Send authors tips by using Mask Network's Tips function.",
         "7ee72/": "마스크 네트워크의 팁 기능을 사용하여 작성자에게 팁을 보냅니다.",
         "IoAuJG": "발송 중...",
         "+E4pMq": [["0"], " ", ["1"], " 팁 발송 성공"],

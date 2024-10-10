@@ -128,13 +128,13 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 />
             )
 
-        return <Trans>Please use your frequently used email account or mobile phone for backup.</Trans>
+        return <Trans>Please use your frequently used email or phone number for backup.</Trans>
     }, [user, DashboardTrans, t])
     return (
         <>
             <Box>
                 <Typography variant="h1" className={classes.title}>
-                    <Trans>login to your Mask Cloud</Trans>
+                    <Trans>Login to Mask Cloud</Trans>
                 </Typography>
                 <Typography className={classes.description}>{description}</Typography>
                 <Box className={classes.tabContainer}>

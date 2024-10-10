@@ -66,7 +66,7 @@ export function createSchema(
                     code: z.ZodIssueCode.custom,
                     path: ['chainId'],
                     message: _(
-                        msg`The RPC URL you have entered returned a different chain ID (${String(rpcChainId)}). Please update the Chain ID to match the RPC URL of the network you are trying to add.`,
+                        msg`The RPC URL you have entered returned a different chain ID (${rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add.`,
                     ),
                     params: { chain_id: rpcChainId },
                 })

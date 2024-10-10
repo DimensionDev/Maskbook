@@ -87,7 +87,7 @@ export const Component = memo(() => {
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.removeQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
             queryClient.removeQueries({ queryKey: ['@@my-own-persona-info'] })
-            showSnackbar(<Trans> Disconnect successfully. </Trans>, {
+            showSnackbar(<Trans>Disconnected.</Trans>, {
                 variant: 'success',
             })
             Telemetry.captureEvent(EventType.Access, DisconnectEventMap[selectedAccount.identifier.network])
@@ -103,7 +103,7 @@ export const Component = memo(() => {
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {
             await updateConfig(pendingUnlistedConfig)
-            showSnackbar(<Trans>Save successfully</Trans>, {
+            showSnackbar(<Trans>Saved</Trans>, {
                 variant: 'success',
                 autoHideDuration: 2000,
             })
@@ -159,7 +159,7 @@ export const Component = memo(() => {
             await queryClient.refetchQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
             await queryClient.refetchQueries({ queryKey: ['@@my-own-persona-info'] })
 
-            showSnackbar(<Trans> Disconnect successfully. </Trans>, {
+            showSnackbar(<Trans>Disconnected.</Trans>, {
                 variant: 'success',
             })
             navigate(-1)

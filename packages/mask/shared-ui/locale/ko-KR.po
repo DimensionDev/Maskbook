@@ -30,6 +30,18 @@ msgstr "{0} 이용가능"
 msgid "{0} Mins"
 msgstr "{0} 분"
 
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:20
+msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
+msgstr ""
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx:48
+#~ msgid "{encryptMethod, select, image {Image} text {Text}}"
+#~ msgstr ""
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:116
+#~ msgid "{recipient, select, e2e {{shareWithNum, plural, one {1 friend} other {# friends}}} public {All} self {Private}}"
+#~ msgstr ""
+
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:115
 #~ msgid "{shareWithNum, plural, one {1 friend} other {{shareWithNum} friends}}"
 #~ msgstr ""
@@ -38,7 +50,27 @@ msgstr "{0} 분"
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:161
+#: dashboard/components/BackupPreview/index.tsx:229
+msgid "{walletLength, plural, one {# Wallet} other {# Wallets}}"
+msgstr ""
+
+#: popups/pages/Wallet/Interaction/TransactionRequest.tsx:236
+msgid "<0>Granted to </0><1>{0}</1>"
+msgstr ""
+
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:479
+msgid "<0>Powered by</0><1>Mask Network</1>"
+msgstr ""
+
+#: popups/components/TransactionPreview/index.tsx:186
+msgid "<0>To</0>: <1>{to}</1>"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:159
+#~ msgid "12-word mnemonic words are used to recover your persona data."
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:159
 msgid "12-word recovery phrase is used to recover your persona data."
 msgstr "12개 복구 문구로 페르소나 데어터를 복구할 수 있습니다."
 
@@ -51,7 +83,15 @@ msgid "About"
 msgstr "알아보기"
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:388
-msgid "About {0}"
+#~ msgid "About {0}"
+#~ msgstr ""
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx:388
+msgid "About {collectionName}"
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:294
+msgid "Account connected.<0/><1/>Try to explore more features powered by Mask Network."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts:18
@@ -78,8 +118,12 @@ msgid "Add"
 msgstr "추가"
 
 #: content-script/components/InjectedComponents/CommentBox.tsx:48
-msgid "Add an encrypted comment…"
-msgstr "암호화된 코멘트 추가"
+msgid "Add an encrypted comment..."
+msgstr ""
+
+#: content-script/components/InjectedComponents/CommentBox.tsx:48
+#~ msgid "Add an encrypted comment…"
+#~ msgstr "암호화된 코멘트 추가"
 
 #: popups/pages/Wallet/AddToken/index.tsx:124
 msgid "Add Assets"
@@ -91,8 +135,8 @@ msgid "Add Contact"
 msgstr "연락처 추가"
 
 #: popups/modals/AddContactModal/index.tsx:87
-msgid "Add contact successfully."
-msgstr "연락처 추가 성공"
+#~ msgid "Add contact successfully."
+#~ msgstr "연락처 추가 성공"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:94
 #: popups/pages/Wallet/NetworkManagement/index.tsx:101
@@ -124,25 +168,32 @@ msgid "Added successfully"
 msgstr "추가 완료"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:212
-msgid "Adding network successfully"
-msgstr "네트워크 추가 성공"
+#~ msgid "Adding network successfully"
+#~ msgstr "네트워크 추가 성공"
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:274
 msgid "Adding your wallets will allow you to own, view, and utilize your digital identities via Next.ID service. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
 msgstr "월렛을 추가하면 Next.ID 서비스를 통해 디지털 ID를 소유, 열람 및 활용할 수 있습니다. 월렛 소유권을 증명하기 위해 거래에 서명하고 인증해야 합니다."
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:99
 #: popups/modals/AddContactModal/index.tsx:115
 msgid "Address"
 msgstr "주소"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:99
+msgid "Address: <0>{address}</0>"
+msgstr ""
 
 #: popups/pages/Personas/AccountDetail/UI.tsx:82
 msgid "After connecting and verifying your persona, you can set up associated address for displaying your web3 footprints or receiving tips."
 msgstr "자신의 페르소나를 연결하고 확인한 후, 웹3 풋프린트를 표시하거나 팁을 받기 위한 관련 주소를 설정할 수 있습니다."
 
 #: popups/pages/Personas/Logout/index.tsx:293
-msgid "After logging out, your associated social accounts will no longer decrypt past encrypted messages. If you need to reuse your account, you can recover your account with your identity, private key, local or cloud backup."
-msgstr "로그아웃 후, 연결된 소셜 계정은 더 이상 암호화하거나 복호화할 수 없습나다. 계정을 다시 이용하려면 아이덴티티, 개인 키, 로컬이나 클라우드 백업으로 복원할 수 있습니다."
+msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
+msgstr ""
+
+#: popups/pages/Personas/Logout/index.tsx:293
+#~ msgid "After logging out, your associated social accounts will no longer decrypt past encrypted messages. If you need to reuse your account, you can recover your account with your identity, private key, local or cloud backup."
+#~ msgstr "로그아웃 후, 연결된 소셜 계정은 더 이상 암호화하거나 복호화할 수 없습나다. 계정을 다시 이용하려면 아이덴티티, 개인 키, 로컬이나 클라우드 백업으로 복원할 수 있습니다."
 
 #: dashboard/pages/SetupPersona/Permissions/index.tsx:133
 #: dashboard/pages/SetupPersona/Welcome/index.tsx:107
@@ -155,16 +206,24 @@ msgid "All"
 msgstr "전체"
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx:133
-msgid "All Mask plug-in users"
-msgstr "모두 Mask 플러그인 사용자"
+msgid "All Mask Network users"
+msgstr ""
+
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx:133
+#~ msgid "All Mask plug-in users"
+#~ msgstr "모두 Mask 플러그인 사용자"
 
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:62
 msgid "Allow this site to switch the network?"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Welcome/index.tsx:99
-msgid "Allow us to collect your usage information to help us make improvements."
-msgstr "제품을 개선하기 위해 이용정보 수입을 허용하시길 바랍니다."
+msgid "Allow us to collect your usage information to help us improve Mask."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx:99
+#~ msgid "Allow us to collect your usage information to help us make improvements."
+#~ msgstr "제품을 개선하기 위해 이용정보 수입을 허용하시길 바랍니다."
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx:306
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:283
@@ -190,6 +249,10 @@ msgstr "승인"
 msgid "Approve amount"
 msgstr "금액 승인"
 
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:109
+msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
+msgstr ""
+
 #: popups/modals/WalletRemoveModal/index.tsx:71
 msgid "Are you sure to remove this wallet?"
 msgstr "이 월렛을 삭제하시겠습니까?"
@@ -199,26 +262,34 @@ msgid "Are you sure?"
 msgstr ""
 
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx:138
-msgid "Are your sure you want to disconnect? You may lose site functionality."
-msgstr "연결을 끊으시겠습니까? 사이트 기능을 사용할 수 없을 수 있습니다."
+msgid "Are your sure you want to disconnect? You may lose part of functionalities of this website."
+msgstr ""
+
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx:138
+#~ msgid "Are your sure you want to disconnect? You may lose site functionality."
+#~ msgstr "연결을 끊으시겠습니까? 사이트 기능을 사용할 수 없을 수 있습니다."
+
+#: popups/pages/Wallet/TokenDetail/index.tsx:178
+msgid "Asset is hidden."
+msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx:176
 msgid "Associated Accounts"
 msgstr "관련 계정"
 
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:138
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:136
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:88
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx:248
 msgid "At least 6 characters"
 msgstr "최소 8 글자 이상 이용하세요"
 
 #: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:95
-msgid "at top right of your browser."
-msgstr ""
+#~ msgid "at top right of your browser."
+#~ msgstr ""
 
 #: popups/modals/UpdatePermissionModal/index.tsx:61
-msgid "Authorization List"
-msgstr ""
+#~ msgid "Authorization List"
+#~ msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx:23
 msgid "Auto-lock"
@@ -232,8 +303,8 @@ msgstr "Auto-lock 시간"
 msgid "Avatar set successfully"
 msgstr "아바타 설정 성공"
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:288
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:351
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:286
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:348
 #: popups/pages/Personas/AccountDetail/UI.tsx:106
 #: popups/pages/Personas/ExportPrivateKey/index.tsx:70
 msgid "Back"
@@ -250,8 +321,8 @@ msgid "Backup & Recovery"
 msgstr "백업 맟 복구"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:156
-msgid "Backup downloaded and merged to local failed."
-msgstr "로컬로 백업을 다운로드하여 병합하지 못했습니다."
+#~ msgid "Backup downloaded and merged to local failed."
+#~ msgstr "로컬로 백업을 다운로드하여 병합하지 못했습니다."
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:152
 msgid "Backup downloaded and merged to local successfully."
@@ -260,6 +331,10 @@ msgstr "백업을 다운로드하여 로컬로 병합했습니다."
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:149
 msgid "Backup Failed"
 msgstr "백업 실패"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:182
+msgid "Backup is saved to Mask Cloud Service."
+msgstr ""
 
 #: popups/pages/Settings/index.tsx:154
 #: popups/pages/Settings/index.tsx:160
@@ -295,12 +370,16 @@ msgid "Backup Persona"
 msgstr "페르소나 백업"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:284
-msgid "Backup to Cloud"
-msgstr "클라우드 백업"
+#~ msgid "Backup to Cloud"
+#~ msgstr "클라우드 백업"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:196
 msgid "Backup to Mask Cloud Service"
 msgstr "Mask Cloud Service 백업"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:283
+msgid "Backup to the Cloud"
+msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx:21
 msgid "Backup Wallet"
@@ -324,36 +403,44 @@ msgid "Be aware, check the token before adding it."
 msgstr ""
 
 #: popups/modals/UpdatePermissionModal/index.tsx:69
-msgid "Because Twitter is now using the new domain name x.com, Mask Network requires users to grant new authorization in order to continue working on x.com."
-msgstr ""
+#~ msgid "Because Twitter is now using the new domain name x.com, Mask Network requires users to grant new authorization in order to continue working on x.com."
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:311
 msgid "Block Explorer URL"
 msgstr "Block Explorer URL"
 
 #: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx:105
-msgid "Browse the Web3 footprints of your Twitter friends, enjoy the freedom of Web3."
-msgstr "트위터 친구의 웹3 발자국 브라우저하고 웹3의 자유를 즐깁니다."
+#~ msgid "Browse the Web3 footprints of your Twitter friends, enjoy the freedom of Web3."
+#~ msgstr "트위터 친구의 웹3 발자국 브라우저하고 웹3의 자유를 즐깁니다."
+
+#: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx:105
+msgid "Browse the Web3 footprints of your X friends, enjoy the freedom of Web3."
+msgstr ""
 
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:275
 msgid "Browser File"
 msgstr "브라우저 파일"
 
 #: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:100
-msgid "button."
-msgstr ""
+#~ msgid "button."
+#~ msgstr ""
 
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx:297
 msgid "By proceeding you agree to the"
 msgstr "계속하면 다음을 동의합니다:"
 
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx:412
-msgid "Can’t find a valid user address data source."
-msgstr "인증된 사용자 주소 데이터 소스를 찾을 수 없습니다."
+msgid "Can't find a valid user address data source."
+msgstr ""
 
-#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:141
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:412
+#~ msgid "Can’t find a valid user address data source."
+#~ msgstr "인증된 사용자 주소 데이터 소스를 찾을 수 없습니다."
+
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:142
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:33
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:272
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:271
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:111
 #: dashboard/pages/SetupPersona/Permissions/index.tsx:130
 #: dashboard/pages/SetupPersona/Welcome/index.tsx:104
@@ -368,10 +455,10 @@ msgstr "인증된 사용자 주소 데이터 소스를 찾을 수 없습니다."
 #: popups/pages/RequestPermission/RequestPermission.tsx:59
 #: popups/pages/Wallet/ChangeOwner/index.tsx:460
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:390
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx:148
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx:150
 #: popups/pages/Wallet/EditNetwork/index.tsx:327
 #: popups/pages/Wallet/Interaction/interaction.tsx:119
-#: popups/pages/Wallet/ResetWallet/index.tsx:128
+#: popups/pages/Wallet/ResetWallet/index.tsx:130
 #: popups/pages/Wallet/SelectWallet/index.tsx:180
 #: popups/pages/Wallet/TransactionDetail/index.tsx:397
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:330
@@ -384,15 +471,22 @@ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx:269
 #: popups/pages/Wallet/EditNetwork/index.tsx:279
-#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:111
-#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:120
 msgid "Chain ID"
 msgstr "체인 ID"
+
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:111
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx:120
+msgid "Chain ID: {0}"
+msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:263
 #: popups/pages/Wallet/ChangeOwner/index.tsx:469
 msgid "Change"
 msgstr "바꾸기"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx:105
+msgid "Change another account and try again."
+msgstr ""
 
 #: popups/modals/ChangeBackupPasswordModal/index.tsx:101
 #: popups/pages/Settings/index.tsx:309
@@ -414,8 +508,8 @@ msgid "Change Payment Password"
 msgstr "결제 비밀번호 변경"
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:67
-msgid "Change payment password successfully."
-msgstr "결제 비밀번호 변경 성공"
+#~ msgid "Change payment password successfully."
+#~ msgstr "결제 비밀번호 변경 성공"
 
 #: popups/modals/ConnectProvider/index.tsx:176
 msgid "Choose another wallet"
@@ -430,12 +524,20 @@ msgid "Click here to have a quick start."
 msgstr "퀵 스타트"
 
 #: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:93
-msgid "Click on"
+#~ msgid "Click on"
+#~ msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:93
+msgid "Click on <0/> at the top-right of your browser."
 msgstr ""
 
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx:143
-msgid "Click on the down-arrow icon to see the private key."
-msgstr "월렛을 선택하여 개인 키를 내보내기"
+#~ msgid "Click on the down-arrow icon to see the private key."
+#~ msgstr "월렛을 선택하여 개인 키를 내보내기"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx:143
+msgid "Click on the down-arrow to see the private key."
+msgstr ""
 
 #: content-script/components/InjectedComponents/PageInspector.tsx:41
 msgid "Close"
@@ -468,19 +570,19 @@ msgstr "완료됨"
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:136
 #: popups/modals/ConfirmModal/index.tsx:35
 #: popups/modals/EditContactModal/index.tsx:163
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:462
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:461
 #: popups/modals/PersonaRenameModal/index.tsx:42
 #: popups/modals/SetBackupPasswordModal/index.tsx:76
 #: popups/modals/ShowPrivateKeyModal/index.tsx:74
 #: popups/modals/WalletAutoLockSettingModal/index.tsx:135
 #: popups/modals/WalletRenameModal/index.tsx:96
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:220
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx:145
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx:147
 #: popups/pages/Wallet/EditNetwork/index.tsx:330
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:474
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx:331
 #: popups/pages/Wallet/Interaction/interaction.tsx:60
-#: popups/pages/Wallet/ResetWallet/index.tsx:136
+#: popups/pages/Wallet/ResetWallet/index.tsx:138
 #: popups/pages/Wallet/SelectWallet/index.tsx:190
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx:351
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx:165
@@ -492,16 +594,20 @@ msgstr "확인"
 msgid "Confirm Password"
 msgstr "비밀번호 확인"
 
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:152
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:150
 msgid "Confirm Payment Password"
 msgstr "결재 비밀번호 다시 설정"
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:197
-msgid "Confirm to hide {0}? You can redisplay it by re-adding this NFT at any time."
-msgstr "{0} 숨기시겠습니까? NFT 다시 추가하면 표시할 수 있습니다."
+#~ msgid "Confirm to hide {0}? You can redisplay it by re-adding this NFT at any time."
+#~ msgstr "{0} 숨기시겠습니까? NFT 다시 추가하면 표시할 수 있습니다."
 
 #: popups/pages/Wallet/TokenDetail/index.tsx:163
 msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any time."
+msgstr ""
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx:197
+msgid "Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time."
 msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:174
@@ -554,30 +660,50 @@ msgstr "소셜 미디어 계정을 연결하기"
 msgid "Connect your wallet"
 msgstr "월렛 연결"
 
+#: popups/pages/Personas/ConnectWallet/index.tsx:292
+msgid "Connected {0} with {walletName}."
+msgstr ""
+
 #: popups/pages/Wallet/ConnectedSites/index.tsx:36
 #: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx:20
 msgid "Connected sites"
 msgstr "연결된 사이트"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:293
-msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
-msgstr ""
+#~ msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+#~ msgstr ""
 
 #: popups/pages/Personas/Home/UI.tsx:245
 msgid "Connected Wallet"
 msgstr "연결된 월렛"
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:292
-msgid "Connecting {0} with {walletName} successfully."
-msgstr ""
+#~ msgid "Connecting {0} with {walletName} successfully."
+#~ msgstr ""
 
 #: popups/modals/ConnectProvider/index.tsx:127
 msgid "Connecting operation cancelled in third-party wallet."
 msgstr "연결 작업은 제3자 월렛에서 최소되었습니다."
 
 #: popups/modals/ConnectProvider/index.tsx:156
-msgid "Connecting your {0} wallet"
-msgstr "{0} 월렛 연결 중"
+#~ msgid "Connecting your {0} wallet"
+#~ msgstr "{0} 월렛 연결 중"
+
+#: popups/modals/ConnectProvider/index.tsx:156
+msgid "Connecting your {providerType} wallet"
+msgstr ""
+
+#: popups/modals/AddContactModal/index.tsx:87
+msgid "Contact added."
+msgstr ""
+
+#: popups/modals/DeleteContactModal/index.tsx:76
+msgid "Contact deleted."
+msgstr ""
+
+#: popups/modals/EditContactModal/index.tsx:125
+msgid "Contact edited."
+msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx:184
 #: popups/pages/Friends/Home/index.tsx:20
@@ -587,22 +713,22 @@ msgstr "{0} 월렛 연결 중"
 msgid "Contacts"
 msgstr "연락처"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:79
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:94
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:76
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:89
 #: dashboard/components/Restore/RestoreFromMnemonic.tsx:42
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx:68
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx:155
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx:76
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:247
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:175
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:245
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:174
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx:172
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:216
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:130
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:214
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:128
 #: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:75
 msgid "Continue"
 msgstr "다음"
 
-#: popups/components/UnlockERC20Token/index.tsx:266
+#: popups/components/UnlockERC20Token/index.tsx:262
 #: popups/components/UnlockERC721Token/index.tsx:207
 msgid "Contract"
 msgstr "컨트랙트"
@@ -625,8 +751,8 @@ msgid "Copy image"
 msgstr "이미지 복사"
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:104
-msgid "Copy image successfully!"
-msgstr "이미지 복사 성공"
+#~ msgid "Copy image successfully!"
+#~ msgstr "이미지 복사 성공"
 
 #: popups/components/PrivateKeyDisplay/index.tsx:160
 msgid "Copy private key"
@@ -637,16 +763,16 @@ msgid "Copy text"
 msgstr "문자 복사"
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:77
-msgid "Copy text successfully!"
-msgstr "문자 복사 성공"
+#~ msgid "Copy text successfully!"
+#~ msgstr "문자 복사 성공"
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts:58
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
 msgstr "체인 ID를 가져올 수 없습니다. RPC URL이 맞는지 확인하시길 바랍니다."
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:87
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:204
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:224
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:202
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:222
 msgid "Create"
 msgstr "만들기"
 
@@ -654,7 +780,7 @@ msgstr "만들기"
 msgid "Create a New Wallet"
 msgstr "새로운 월렛 만들기"
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:99
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:97
 msgid "Create New Mask Identity"
 msgstr "새로운 Mask 아이디 만들기"
 
@@ -666,7 +792,7 @@ msgstr "비밀번호 생성"
 msgid "Create Persona"
 msgstr "페르소나 만들기"
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:102
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:100
 msgid "Create your persona to get started"
 msgstr "이용하기 전에 페르소나 한번 만들어 보세요"
 
@@ -684,7 +810,11 @@ msgstr "통화"
 msgid "Currency Symbol (Optional)"
 msgstr "통화 기호(옵션)"
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:324
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx:119
+msgid "Current account is not the verifying account."
+msgstr ""
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:323
 msgid "Current base fee is {0} Gwei"
 msgstr "현재 기초 기스비는 {0} Gwei"
 
@@ -716,8 +846,12 @@ msgid "Data correlation"
 msgstr "데이터 수정"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:187
-msgid "Data merged from Mask Cloud Service to local successfully. Re-enter password to encrypt and upload backup to Mask Cloud Service."
-msgstr "데이터가 Mask Cloud Service에서 Local로 병합되었습니다. 암호를 다시 입력하여 암호화한 후 Mask Cloud Service에 백업을 업로드합니다."
+#~ msgid "Data merged from Mask Cloud Service to local successfully. Re-enter password to encrypt and upload backup to Mask Cloud Service."
+#~ msgstr "데이터가 Mask Cloud Service에서 Local로 병합되었습니다. 암호를 다시 입력하여 암호화한 후 Mask Cloud Service에 백업을 업로드합니다."
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:187
+msgid "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
+msgstr ""
 
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:43
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:49
@@ -729,8 +863,8 @@ msgid "Decrypted by Mask Network"
 msgstr "Mask로 해독되었습니다:"
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx:19
-msgid "Decryption failed."
-msgstr "해독 실패"
+#~ msgid "Decryption failed."
+#~ msgstr "해독 실패"
 
 #: popups/pages/Wallet/ContactList/index.tsx:293
 msgid "Delete"
@@ -742,8 +876,8 @@ msgid "Delete Contact"
 msgstr "연락처 삭제"
 
 #: popups/modals/DeleteContactModal/index.tsx:76
-msgid "Delete contact successfully."
-msgstr "연락처 삭제 성공"
+#~ msgid "Delete contact successfully."
+#~ msgstr "연락처 삭제 성공"
 
 #: popups/pages/Friends/Detail/index.tsx:58
 msgid "Deleted successfully"
@@ -761,7 +895,7 @@ msgstr "설명"
 msgid "Disconnect"
 msgstr "연결 해제"
 
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx:155
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx:157
 msgid "Disconnect all accounts"
 msgstr "모두 계정 연결 해제"
 
@@ -776,12 +910,19 @@ msgstr "소셜 계정 연결 해제"
 
 #: popups/pages/Personas/AccountDetail/index.tsx:90
 #: popups/pages/Personas/AccountDetail/index.tsx:162
-msgid "Disconnect successfully."
-msgstr ""
+#~ msgid "Disconnect successfully."
+#~ msgstr ""
 
 #: popups/components/ConnectedWallet/index.tsx:193
 msgid "Disconnect Wallet?"
 msgstr "월렛 연결을 해제하시겠습니까?"
+
+#: popups/pages/Personas/AccountDetail/index.tsx:90
+#: popups/pages/Personas/AccountDetail/index.tsx:162
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx:110
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx:124
+msgid "Disconnected."
+msgstr ""
 
 #: popups/pages/Personas/AccountDetail/UI.tsx:78
 msgid "Display the following address on your Web3 profile page and use it to receive tips."
@@ -796,19 +937,23 @@ msgid "Domain"
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:89
-msgid "Don't forget to pin Mask Network in your browser toolbar to access Web3 easily."
-msgstr "웹3에 쉽게 접근하려면 브라우저 툴바에 Mask Network를 고정해야 합니다."
+msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:89
+#~ msgid "Don't forget to pin Mask Network in your browser toolbar to access Web3 easily."
+#~ msgstr "웹3에 쉽게 접근하려면 브라우저 툴바에 Mask Network를 고정해야 합니다."
 
 #: popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx:107
 msgid "Don't see your NFT?"
 msgstr "NFT를 보셨나요?"
 
-#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:150
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:151
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx:109
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:297
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:298
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:299
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:300
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:301
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:266
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:265
 #: popups/pages/Personas/ConnectWallet/index.tsx:320
 msgid "Done"
 msgstr "완료"
@@ -826,8 +971,8 @@ msgid "Download Backup"
 msgstr "백업 다운로드"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:97
-msgid "Download link is expired"
-msgstr "다운로드 링크가 만료되었습니다"
+#~ msgid "Download link is expired"
+#~ msgstr "다운로드 링크가 만료되었습니다"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:217
 msgid "Downloading"
@@ -850,20 +995,25 @@ msgid "Edit Contact"
 msgstr "연락처 편집"
 
 #: popups/modals/EditContactModal/index.tsx:125
-msgid "Edit contact successfully."
-msgstr "연락처 편집 성공"
+#~ msgid "Edit contact successfully."
+#~ msgstr "연락처 편집 성공"
 
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx:158
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:226
-msgid "eg: Twitter accounts, Persona public keys, wallet addresses or ENS"
-msgstr "eg:트위터 계정, 페르소나 공개 키, 월렛 주소"
+#~ msgid "eg: Twitter accounts, Persona public keys, wallet addresses or ENS"
+#~ msgstr "eg:트위터 계정, 페르소나 공개 키, 월렛 주소"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:105
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx:158
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:226
+msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
+msgstr ""
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:102
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:69
 msgid "Email"
 msgstr "이메일"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:121
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:118
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:84
 msgid "Email verification code"
 msgstr "메일 인증번호"
@@ -873,16 +1023,24 @@ msgid "Enable auto paste"
 msgstr "자동 붙이기 지원"
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx:104
-msgid "Enable plugin"
-msgstr "플러그인 활성화"
+#~ msgid "Enable plugin"
+#~ msgstr "플러그인 활성화"
+
+#: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx:104
+msgid "Enable the plugin"
+msgstr ""
 
 #: content-script/components/CompositionDialog/CompositionUI.tsx:299
 msgid "Encrypt"
 msgstr "끝내기"
 
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx:59
-msgid "Encrypt messages in images"
-msgstr "이미지로 메시지 암호화"
+#~ msgid "Encrypt messages in images"
+#~ msgstr "이미지로 메시지 암호화"
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx:59
+msgid "Encrypt the message in an image"
+msgstr ""
 
 #: content-script/components/CompositionDialog/Composition.tsx:131
 msgid "Encrypted Post"
@@ -918,7 +1076,7 @@ msgstr "최대 가스비 입력"
 msgid "Enter a max priority fee"
 msgstr "최대 우선 가스비 입력"
 
-#: popups/components/UnlockERC20Token/index.tsx:222
+#: popups/components/UnlockERC20Token/index.tsx:218
 msgid "Enter Max spend limit"
 msgstr "최대 지불 제한 입력"
 
@@ -926,7 +1084,15 @@ msgstr "최대 지불 제한 입력"
 msgid "Enter Payment Password"
 msgstr "결제 비밀번호 입력"
 
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:214
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:85
+msgid "Entered passwords are inconsistent."
+msgstr ""
+
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:137
+msgid "Error: {0}"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:212
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr ""
 
@@ -934,7 +1100,7 @@ msgstr ""
 msgid "Everyone"
 msgstr "공개"
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:113
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:111
 msgid "Example: Alice"
 msgstr "예: Alice"
 
@@ -962,6 +1128,18 @@ msgstr "실패"
 msgid "Failed to add the wallet, please try again."
 msgstr "월렛 추가 실패, 다시 시도하기"
 
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx:19
+msgid "Failed to decrypt."
+msgstr ""
+
+#: popups/components/ConnectedWallet/index.tsx:142
+msgid "Failed to disconnect wallet"
+msgstr ""
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:156
+msgid "Failed to download and merge the backup."
+msgstr ""
+
 #: popups/pages/Wallet/EditNetwork/index.tsx:218
 msgid "Failed to save network"
 msgstr "네트워크 저장 실패"
@@ -987,9 +1165,13 @@ msgstr "피드백"
 msgid "File"
 msgstr "파일"
 
-#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:98
-msgid "Find Mask Network in the list of extensions and click the"
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:99
+msgid "Find Mask Network in the extension list and click the <0/> button."
 msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:98
+#~ msgid "Find Mask Network in the list of extensions and click the"
+#~ msgstr ""
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:345
 msgid "Floor price"
@@ -997,7 +1179,11 @@ msgstr "최저 가격"
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:42
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:94
-msgid "Follow {@realMaskNetwork} to explore Web3."
+#~ msgid "Follow {@realMaskNetwork} to explore Web3."
+#~ msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx:42
+msgid "Follow @realMaskNetwork to explore Web3."
 msgstr ""
 
 #: popups/modals/SelectAppearanceModal/index.tsx:47
@@ -1020,7 +1206,7 @@ msgid "Function: {0}"
 msgstr "Function: {0}"
 
 #: popups/components/TransactionPreview/index.tsx:235
-#: popups/components/UnlockERC20Token/index.tsx:287
+#: popups/components/UnlockERC20Token/index.tsx:283
 #: popups/components/UnlockERC721Token/index.tsx:228
 #: popups/modals/GasSettingModal/index.tsx:41
 #: popups/pages/Wallet/ChangeOwner/index.tsx:353
@@ -1034,10 +1220,14 @@ msgid "Gas fee settings"
 msgstr "기스비 설정"
 
 #: popups/pages/Wallet/GasSetting/index.tsx:43
-msgid "Gas fees are the fees for paying ethereum miners. The miners prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won’t be returned."
-msgstr "기스비는 이더리움의 마이너에게 지불하는 겁니다. 마이너가 더 높은 가스비로 거래를 포장하기를 선호합니다. 낮은 가스비로 거래가 실패될 수 있고 지불된 가스비 반환될 수 없습니다."
+msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
+msgstr ""
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:262
+#: popups/pages/Wallet/GasSetting/index.tsx:43
+#~ msgid "Gas fees are the fees for paying ethereum miners. The miners prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won’t be returned."
+#~ msgstr "기스비는 이더리움의 마이너에게 지불하는 겁니다. 마이너가 더 높은 가스비로 거래를 포장하기를 선호합니다. 낮은 가스비로 거래가 실패될 수 있고 지불된 가스비 반환될 수 없습니다."
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:261
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:374
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx:276
 msgid "Gas Limit"
@@ -1060,7 +1250,7 @@ msgstr ""
 msgid "Gas limit must be smaller than {maxGas}."
 msgstr ""
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:421
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:420
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx:301
 msgid "Gas Price"
 msgstr "가스 가격"
@@ -1070,8 +1260,12 @@ msgid "Gas Price (GWEI)"
 msgstr "가스 가격(GWEI)"
 
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:145
-msgid "Gas price is too low and will cause the transaction to fail"
-msgstr "가스 가격이 너무 낮으면 거래가 실패할 수 있습니다."
+msgid "Gas price is too low and will cause the transaction fail"
+msgstr ""
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:145
+#~ msgid "Gas price is too low and will cause the transaction to fail"
+#~ msgstr "가스 가격이 너무 낮으면 거래가 실패할 수 있습니다."
 
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx:143
 msgid "Gas price should be greater than 0"
@@ -1103,37 +1297,44 @@ msgid "Got it"
 msgstr "알겠습니다"
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx:237
-msgid "Granted to"
-msgstr "허용한 대상:"
+#~ msgid "Granted to"
+#~ msgstr "허용한 대상:"
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:370
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:408
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:447
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:369
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:407
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:446
 msgid "Gwei"
 msgstr "Gwei"
 
 #: popups/hooks/useGasOptionsMenu.tsx:116
 #: popups/hooks/useGasOptionsMenu.tsx:130
 #: popups/hooks/useGasOptionsMenu.tsx:144
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:357
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:401
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:436
 msgid "GWEI"
 msgstr "GWEI"
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:39
-#: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:93
 msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post."
 msgstr ""
 
-#: popups/pages/Wallet/CollectibleDetail/index.tsx:195
+#: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx:93
+msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+msgstr ""
+
 #: popups/pages/Wallet/TokenDetail/index.tsx:161
 msgid "Hide {0}"
 msgstr ""
 
+#: popups/pages/Wallet/CollectibleDetail/index.tsx:195
+msgid "Hide {name}"
+msgstr ""
+
 #: popups/components/MnemonicDisplay/index.tsx:112
-msgid "hide Mnemonic words"
-msgstr "니모닉 단어 숨기기"
+#~ msgid "hide Mnemonic words"
+#~ msgstr "니모닉 단어 숨기기"
+
+#: popups/components/MnemonicDisplay/index.tsx:112
+msgid "Hide mnemonic words"
+msgstr ""
 
 #: popups/pages/Wallet/components/AssetsList/MoreBar.tsx:15
 msgid "Hide tokens with value less than $1"
@@ -1151,14 +1352,18 @@ msgid "High"
 msgstr "높음"
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:194
-msgid "I wrote down the words in the correct order"
-msgstr "단어를 정확한 순서대로 적었습니다"
+#~ msgid "I wrote down the words in the correct order"
+#~ msgstr "단어를 정확한 순서대로 적었습니다"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:192
+msgid "I wrote down those words in the correct order"
+msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx:126
 msgid "identity"
 msgstr "아이덴티티"
 
-#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:113
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:115
 msgid "Identity ID"
 msgstr "아이디"
 
@@ -1167,6 +1372,10 @@ msgstr "아이디"
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:237
 msgid "Image"
 msgstr "이미지"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:104
+msgid "Image copied!"
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:245
 msgid "Import"
@@ -1206,13 +1415,21 @@ msgstr "잘못된 백업 비밀번호."
 msgid "Incorrect cloud backup password, please try again."
 msgstr "잘못된 클라우드 백업 비밀번호입니다. 다시 시도하세요."
 
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:191
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:189
 msgid "Incorrect Keystore Password."
 msgstr "잘못된 키스토어 비밀번호."
 
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:127
-msgid "Incorrect Mnemonic Phrase Words."
-msgstr "잘못된 니모닉 문구 단어."
+#~ msgid "Incorrect Mnemonic Phrase Words."
+#~ msgstr "잘못된 니모닉 문구 단어."
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx:109
+#~ msgid "Incorrect mnemonic words."
+#~ msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:126
+msgid "Incorrect Mnemonic Words."
+msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx:213
 #: popups/pages/Personas/Logout/index.tsx:231
@@ -1241,7 +1458,7 @@ msgstr "잘못된 결제 비밀번호"
 msgid "Incorrect Payment Password."
 msgstr "잘못된 결제 비밀번호"
 
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:155
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:153
 #: dashboard/pages/SetupPersona/Recovery/index.tsx:131
 msgid "Incorrect Private Key"
 msgstr "잘못된 아이디 코드"
@@ -1254,6 +1471,10 @@ msgstr "잘못된 복구 문구"
 #: popups/modals/AddContactModal/index.tsx:92
 msgid "Incorrect wallet address."
 msgstr "잘못된 월렛 주소."
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:342
+msgid "Incorrect words selected. Please try again!"
+msgstr ""
 
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx:91
 msgid "Input your Private Key"
@@ -1272,17 +1493,20 @@ msgstr "자산이나 가스비가 부족합니다."
 msgid "Invalid Block Explorer URL."
 msgstr "무효한 Block Explorer URL."
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:87
 #: dashboard/contexts/CloudBackupFormContext.tsx:40
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:47
 msgid "Invalid email address format."
 msgstr "이메일 주소가 잘못되었습니다."
 
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:84
+msgid "Invalid email address."
+msgstr ""
+
 #: popups/pages/Wallet/EditNetwork/network-schema.ts:31
 msgid "Invalid number"
 msgstr "잘못된 번호"
 
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:109
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:104
 msgid "Invalid phone number, please check and try again."
 msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
 
@@ -1290,8 +1514,8 @@ msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
 msgid "Invalid RPC URL."
 msgstr "무효한 RPC URL"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:71
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:86
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:68
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:81
 msgid "Invalid verification code."
 msgstr "유효하지 않은 인증 코드입니다."
 
@@ -1311,7 +1535,7 @@ msgstr "선정된 연락처에게만 공유"
 msgid "Keep your transactions and assets safe with Mask Wallet."
 msgstr "Mask Wallet으로 거래 및 자산을 안정하게 보관합니다."
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:456
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:453
 msgid "Kept safely"
 msgstr "안전 보관"
 
@@ -1374,8 +1598,12 @@ msgid "Log out"
 msgstr "로그아웃"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx:137
-msgid "login to your Mask Cloud"
-msgstr "Mask 클라우드 로그인"
+msgid "Login to Mask Cloud"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:137
+#~ msgid "login to your Mask Cloud"
+#~ msgstr "Mask 클라우드 로그인"
 
 #: popups/pages/Personas/Logout/index.tsx:92
 msgid "Logout failed"
@@ -1396,34 +1624,37 @@ msgid "Manage Network"
 msgstr "네트워크 관리"
 
 #: popups/modals/SupportedSitesModal/index.tsx:70
-msgid "Manage the permissions of the Mask Network plugin to inject into websites. Once turned off, the use of the plugin on this site will no longer be supported."
-msgstr "Mask Network 플러그인이 웹 사이트에 주입할 수 있는 권한을 관리합니다. 이 플러그인을 끄면 이 사이트에서 더 이상 사용할 수 없습니다."
+#~ msgid "Manage the permissions of the Mask Network plugin to inject into websites. Once turned off, the use of the plugin on this site will no longer be supported."
+#~ msgstr "Mask Network 플러그인이 웹 사이트에 주입할 수 있는 권한을 관리합니다. 이 플러그인을 끄면 이 사이트에서 더 이상 사용할 수 없습니다."
+
+#: popups/modals/SupportedSitesModal/index.tsx:70
+msgid "Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."
+msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:25
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:26
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:27
-msgid "Mask decoding…"
-msgstr "Mask 디코딩 중"
+#~ msgid "Mask decoding…"
+#~ msgstr "Mask 디코딩 중"
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:24
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:29
-msgid "Mask decrypting…"
-msgstr "Mask 해독 중"
+#~ msgid "Mask decrypting…"
+#~ msgstr "Mask 해독 중"
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:18
-msgid "Mask is getting the key to decrypt. If you see this for a long time, this post might not be shared to you."
-msgstr "Mask가 이 게시글의 키를 검색하고 있습니다."
+#~ msgid "Mask is getting the key to decrypt. If you see this for a long time, this post might not be shared to you."
+#~ msgstr "Mask가 이 게시글의 키를 검색하고 있습니다."
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:23
-msgid "Mask is looking for the public key of the author…"
-msgstr "Mask가 상대방의 공개 키를 찾고 있습니다..."
+#~ msgid "Mask is looking for the public key of the author…"
+#~ msgstr "Mask가 상대방의 공개 키를 찾고 있습니다..."
 
 #: popups/pages/RequestPermission/RequestPermission.tsx:23
 msgid "Mask needs the following permissions"
 msgstr "Mask가 아래 권한을 요청합니다."
 
 #: content-script/components/InjectedComponents/PostDialogHint.tsx:46
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:491
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx:95
 msgid "Mask Network"
 msgstr "Mask Network"
@@ -1432,12 +1663,12 @@ msgstr "Mask Network"
 msgid "masknetwork"
 msgstr "masknetwork"
 
-#: popups/components/UnlockERC20Token/index.tsx:237
+#: popups/components/UnlockERC20Token/index.tsx:233
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:291
 msgid "Max"
 msgstr "최대치"
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:380
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:379
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:434
 msgid "Max Fee"
 msgstr "최대 가스비"
@@ -1462,7 +1693,7 @@ msgstr "현재 네트워크 컨디션에서 최대 가스비가 너무 낮습니
 msgid "Max fee should be greater than base fee of {0} Gwei."
 msgstr ""
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:336
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:335
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx:399
 msgid "Max Priority Fee"
 msgstr "최대 우선 가스비"
@@ -1512,7 +1743,7 @@ msgstr "메시지"
 msgid "Mnemonic"
 msgstr "니모닉"
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:116
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:118
 msgid "Mnemonic word"
 msgstr "니모닉 단어"
 
@@ -1524,7 +1755,7 @@ msgstr "모바일"
 msgid "Mobile number"
 msgstr "휴대폰 번호"
 
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:123
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:118
 msgid "Mobile verification code"
 msgstr "모바일 인증번호"
 
@@ -1548,6 +1779,10 @@ msgstr "N/A"
 msgid "Name"
 msgstr ""
 
+#: popups/pages/Wallet/EditNetwork/index.tsx:212
+msgid "Netword added"
+msgstr ""
+
 #: popups/modals/ChooseNetworkModal/index.tsx:148
 msgid "Network"
 msgstr "네트워크"
@@ -1561,13 +1796,28 @@ msgid "Network Name"
 msgstr "네트워크 이름"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:113
-msgid "Network successfully deleted."
-msgstr "네트워크 삭제 성공"
+msgid "Network removed."
+msgstr ""
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:447
+#: popups/pages/Wallet/EditNetwork/index.tsx:209
+msgid "Network saved"
+msgstr ""
+
+#: popups/pages/Wallet/EditNetwork/index.tsx:113
+#~ msgid "Network successfully deleted."
+#~ msgstr "네트워크 삭제 성공"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:444
+msgid "Never share 12-word secret mnemonic with anyone!"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:187
-msgid "Never share 12-word secret recovery phrase with anyone!"
-msgstr "월렛의 자산을 보호하기 위해 니모닉 단어를 잘 저장하고 잊지 마세요."
+#~ msgid "Never share 12-word secret recovery phrase with anyone!"
+#~ msgstr "월렛의 자산을 보호하기 위해 니모닉 단어를 잘 저장하고 잊지 마세요."
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:185
+msgid "Never share the 12-word secret mnemonic words with anyone!"
+msgstr ""
 
 #: popups/modals/ChangeBackupPasswordModal/index.tsx:149
 msgid "New password"
@@ -1582,7 +1832,7 @@ msgid "New Payment Password"
 msgstr "새로운 결제 비밀번호"
 
 #: content-script/components/GuideStep/index.tsx:225
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:233
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:231
 #: popups/pages/Wallet/ContactList/index.tsx:247
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:333
 msgid "Next"
@@ -1599,6 +1849,10 @@ msgstr "Next.ID"
 msgid "NFTs"
 msgstr "NFTs"
 
+#: popups/pages/Wallet/AddToken/index.tsx:146
+msgid "NFTs added"
+msgstr ""
+
 #: popups/pages/Friends/Detail/UI.tsx:147
 msgid "No associated accounts"
 msgstr "관련 계정 없음"
@@ -1612,13 +1866,22 @@ msgstr "백업 없음"
 msgid "No backups found"
 msgstr "백업 없음"
 
+#: popups/pages/Friends/Contacts/index.tsx:46
+msgid "No contacts stored locally, you can try searching."
+msgstr ""
+
 #: popups/pages/Wallet/components/ActivityList/index.tsx:67
 msgid "No Data"
 msgstr "데이터 없음"
 
 #: popups/pages/Friends/Contacts/index.tsx:46
-msgid "No encrypted contacts, you can try searching."
-msgstr "암호화된 연락처가 없습니다. 검색해 보세요."
+#~ msgid "No encrypted contacts, you can try searching."
+#~ msgstr "암호화된 연락처가 없습니다. 검색해 보세요."
+
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx:172
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:242
+msgid "No friends are stored locally, please try search one."
+msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:106
 msgid "No local key"
@@ -1630,8 +1893,8 @@ msgstr "NFT가 없습니다."
 
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx:172
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:242
-msgid "No Persona-based encryption friends locally, please try searching."
-msgstr "암호화 친구가 없습니다. 검색해 보세요."
+#~ msgid "No Persona-based encryption friends locally, please try searching."
+#~ msgstr "암호화 친구가 없습니다. 검색해 보세요."
 
 #: content-script/components/shared/SelectRecipients/SelectRecipients.tsx:53
 msgid "No results"
@@ -1642,7 +1905,7 @@ msgid "No search results"
 msgstr "검색 결과가 없습니다."
 
 #: popups/components/SignRequestInfo/index.tsx:323
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:248
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:247
 #: popups/pages/Wallet/TransactionDetail/index.tsx:298
 msgid "Nonce"
 msgstr "Nonce"
@@ -1656,22 +1919,26 @@ msgid "Not enough data to present."
 msgstr "제시할 데이터가 부족합니다."
 
 #: popups/modals/ConnectProvider/index.tsx:157
-msgid "Not found your {0} wallet"
-msgstr "{0} 월렛 찾지 못합니다."
+#~ msgid "Not found your {0} wallet"
+#~ msgstr "{0} 월렛 찾지 못합니다."
+
+#: popups/modals/ConnectProvider/index.tsx:157
+msgid "Not found your {providerType} wallet"
+msgstr ""
 
 #: popups/pages/Settings/index.tsx:309
 msgid "Not set"
 msgstr "설정되지 않음"
 
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx:119
-msgid "Not your current account."
-msgstr ""
+#~ msgid "Not your current account."
+#~ msgstr ""
 
-#: popups/pages/Wallet/ResetWallet/index.tsx:111
+#: popups/pages/Wallet/ResetWallet/index.tsx:113
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
 msgstr "참고: 마지막 불러오기에서 니모닉 문구를 사용하면 해당 니모닉 문구에서 파생된 월렛을 복구할 수 있습니다."
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:344
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:346
 msgid "OK"
 msgstr "확인"
 
@@ -1703,7 +1970,7 @@ msgstr "혹은 새로운 월렛 그룹을 만듭니다."
 msgid "Originally posted by {0}"
 msgstr ""
 
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:283
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:282
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:195
 msgid "Overwrite Backup"
 msgstr "백업 덮어쓰기"
@@ -1730,21 +1997,41 @@ msgstr "수동으로 붙여넣기"
 msgid "Payment Password"
 msgstr "결재 비밀번호"
 
+#: popups/modals/ChangePaymentPasswordModal/index.tsx:67
+msgid "Payment password changed."
+msgstr ""
+
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:76
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:77
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:62
 #: popups/pages/Wallet/hooks/usePasswordForm.ts:13
 #: popups/pages/Wallet/hooks/usePasswordForm.ts:14
-msgid "Payment password must be 6 to 20 characters in length."
-msgstr "비밀번호 길이가 잘못되었습니다."
+#~ msgid "Payment password must be 6 to 20 characters in length."
+#~ msgstr "비밀번호 길이가 잘못되었습니다."
 
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:127
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:76
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:77
+#: popups/modals/ChangePaymentPasswordModal/index.tsx:62
+#: popups/pages/Wallet/hooks/usePasswordForm.ts:13
+#: popups/pages/Wallet/hooks/usePasswordForm.ts:14
+msgid "Payment password must be 6 to 20 characters."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx:116
+msgid "Payment password set."
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:125
 msgid "Payment Password should be between 6 and 20 characters."
 msgstr "결제 비밀번호는 8~20자 사이어야 합니다."
 
 #: popups/pages/Wallet/ResetWallet/index.tsx:102
-msgid "Payment password stored locally and you could try many times to unlock your wallet."
-msgstr "결제 비밀번호는 로컬에 저장되어 있으며 월렛 잠금을 해제하기 위해 여러 번 시도할 수 있습니다."
+msgid "Payment password stored locally and you could try as many as you want to unlock your wallet."
+msgstr ""
+
+#: popups/pages/Wallet/ResetWallet/index.tsx:102
+#~ msgid "Payment password stored locally and you could try many times to unlock your wallet."
+#~ msgstr "결제 비밀번호는 로컬에 저장되어 있으며 월렛 잠금을 해제하기 위해 여러 번 시도할 수 있습니다."
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx:211
 msgid "Pending"
@@ -1754,7 +2041,10 @@ msgstr "대기중"
 msgid "Permissions"
 msgstr "사용 권한"
 
-#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:93
+#: popups/modals/UpdatePermissionModal/index.tsx:61
+msgid "Permissions List"
+msgstr ""
+
 #: popups/modals/PersonaSettingModal/index.tsx:60
 msgid "Persona"
 msgstr "페르소나"
@@ -1764,10 +2054,18 @@ msgid "Persona already exists."
 msgstr "이미 존재된 페르소나입니다."
 
 #: dashboard/pages/SignUp/steps/PersonaRecovery.tsx:73
-msgid "Persona created successfully."
-msgstr "페르소나 생성 성공"
+#~ msgid "Persona created successfully."
+#~ msgstr "페르소나 생성 성공"
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:105
+#: dashboard/pages/SignUp/steps/PersonaRecovery.tsx:73
+msgid "Persona created."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:156
+#~ msgid "Persona Mnemonic Words"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:103
 #: dashboard/pages/SignUp/steps/PersonaNameUI.tsx:52
 msgid "Persona Name"
 msgstr "페르소나 이름"
@@ -1776,13 +2074,17 @@ msgstr "페르소나 이름"
 msgid "Persona name must between 1 to 24 characters."
 msgstr "페르소나 이름은 1~24자 이내로 입력해주세요."
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:158
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:156
 msgid "Persona Recovery Phrase"
 msgstr "페르소나 복구 문구"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:71
 msgid "Persona required."
 msgstr "페르소나가 필요합니다."
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:93
+msgid "Persona: {personaName}"
+msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx:150
 msgid "Personas"
@@ -1798,18 +2100,27 @@ msgstr ""
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "Mask Network를 툴바에 고정하여 보다 쉽게 액세스할 수 있습니다:"
 
-#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:103
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:104
 msgid "Pinned successfully."
 msgstr "고정됩니다."
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:47
 #: content-script/site-adaptors/facebook.com/injection/Composition.tsx:68
-msgid "Please click the “Post” button to open the compose dialog."
-msgstr "“포스트” 버튼을 눌러 대화 작성을 오픈하세요."
+msgid "Please click the \"Post\" button to open the compose dialog."
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx:47
+#: content-script/site-adaptors/facebook.com/injection/Composition.tsx:68
+#~ msgid "Please click the “Post” button to open the compose dialog."
+#~ msgstr "“포스트” 버튼을 눌러 대화 작성을 오픈하세요."
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:61
-msgid "Please copy the following text and image (if there is any) and publish it."
-msgstr "아래의 문자와 이미지(있으면)를 복사하고 공유하세요"
+#~ msgid "Please copy the following text and image (if there is any) and publish it."
+#~ msgstr "아래의 문자와 이미지(있으면)를 복사하고 공유하세요"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:61
+msgid "Please copy the following text and image (if there is one) and publish it."
+msgstr ""
 
 #: popups/modals/VerifyBackupPasswordModal/index.tsx:48
 msgid "Please enter backup password to export persona private key."
@@ -1820,8 +2131,12 @@ msgid "Please enter cloud backup password to download file."
 msgstr "파일을 다운로드하려면 클라우드 백업 암호를 입력하세요."
 
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:234
-msgid "Please enter the correct mnemonic phrase words, private key, or upload the correct keystore file."
-msgstr "정확한 니모닉 문구 단어와 개인키를 저장하가나 정확한 키스토어 파일을 업로드하세요."
+#~ msgid "Please enter the correct mnemonic phrase words, private key, or upload the correct keystore file."
+#~ msgstr "정확한 니모닉 문구 단어와 개인키를 저장하가나 정확한 키스토어 파일을 업로드하세요."
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:232
+msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
+msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx:206
 #: popups/pages/Personas/Logout/index.tsx:224
@@ -1843,8 +2158,12 @@ msgid "Please select the appropriate method to restore your personal data."
 msgstr "12개 복구 문구로 페르소나 데어터를 복구할 수 있습니다."
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:329
-msgid "Please select the correct words based on the order of the recovery phases."
-msgstr "이모닉 단어 인증"
+#~ msgid "Please select the correct words based on the order of the recovery phases."
+#~ msgstr "이모닉 단어 인증"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:326
+msgid "Please select the correct words in the correct order."
+msgstr ""
 
 #: popups/pages/Settings/index.tsx:152
 #: popups/pages/Settings/index.tsx:158
@@ -1864,12 +2183,24 @@ msgid "Please sign up or login {siteName} to connect Mask Network."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx:131
-msgid "Please use your frequently used email account or mobile phone for backup."
-msgstr "자주 이용하는 이메일이나 전화번호로 백업하시길 바랍니다."
+#~ msgid "Please use your frequently used email account or mobile phone for backup."
+#~ msgstr "자주 이용하는 이메일이나 전화번호로 백업하시길 바랍니다."
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:131
+#~ msgid "Please use your frequently used email or mobile phone for backup."
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx:131
+msgid "Please use your frequently used email or phone number for backup."
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:420
+msgid "Please write down or copy these words and save them in a secure place."
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:423
-msgid "Please write down or copy these words in the correct way and store them in secure places."
-msgstr "단어를 정확한 방식으로 기입하거나 복사하고 안전한 곳에 보관하시길 바랍니다."
+#~ msgid "Please write down or copy these words in the correct way and store them in secure places."
+#~ msgstr "단어를 정확한 방식으로 기입하거나 복사하고 안전한 곳에 보관하시길 바랍니다."
 
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx:133
 msgid "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
@@ -1879,16 +2210,16 @@ msgstr "다음 단어를 정확한 순서로 적어주세요. 안전하게 보�
 msgid "Plugins"
 msgstr "플러그인"
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:303
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:323
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:305
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:325
 msgid "Post content:"
 msgstr ""
 
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx:484
-msgid "Powered by"
-msgstr "기술 지원"
+#~ msgid "Powered by"
+#~ msgstr "기술 지원"
 
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:225
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:223
 msgid "Previous"
 msgstr "이전"
 
@@ -1927,8 +2258,12 @@ msgid "Properties"
 msgstr "속성"
 
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:96
-msgid "Public Key"
-msgstr "공개 키"
+#~ msgid "Public Key"
+#~ msgstr "공개 키"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:96
+msgid "Public Key: <0>{publicKey}</0>"
+msgstr ""
 
 #: popups/modals/ChangeBackupPasswordModal/index.tsx:169
 #: popups/modals/SetBackupPasswordModal/index.tsx:90
@@ -1952,12 +2287,12 @@ msgstr "받기"
 msgid "Recover your data"
 msgstr "데어터 복구"
 
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:229
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:227
 msgid "Recover your wallet"
 msgstr "월렛 복구"
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:154
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:95
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:152
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:93
 #: popups/modals/SwitchPersonaModal/index.tsx:60
 msgid "Recovery"
 msgstr "복구"
@@ -1966,14 +2301,18 @@ msgstr "복구"
 msgid "Recovery Phrase"
 msgstr "복구 문구"
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:428
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:167
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:425
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:165
 msgid "Refresh"
 msgstr "새로고침"
 
 #: popups/pages/Wallet/Interaction/interaction.tsx:226
-msgid "Reject {0} Transactions"
-msgstr "{0} 거래 거부"
+#~ msgid "Reject {0} Transactions"
+#~ msgstr "{0} 거래 거부"
+
+#: popups/pages/Wallet/Interaction/interaction.tsx:226
+msgid "Reject {totalMessages} Transactions"
+msgstr ""
 
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx:391
 msgid "Reload"
@@ -2039,8 +2378,12 @@ msgid "Restore"
 msgstr "복원하기"
 
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx:132
-msgid "Restore backup failed, Please try again."
-msgstr "백업 복구 실패되었습니다. 다시 시도하세요."
+#~ msgid "Restore backup failed, Please try again."
+#~ msgstr "백업 복구 실패되었습니다. 다시 시도하세요."
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx:132
+msgid "Restore backup failed."
+msgstr ""
 
 #: popups/pages/Settings/index.tsx:291
 msgid "Restore Database"
@@ -2076,12 +2419,16 @@ msgid "Save failed"
 msgstr "저장 실패"
 
 #: popups/pages/Personas/AccountDetail/index.tsx:106
-msgid "Save successfully"
-msgstr "저장 성공"
+#~ msgid "Save successfully"
+#~ msgstr "저장 성공"
+
+#: popups/pages/Personas/AccountDetail/index.tsx:106
+msgid "Saved"
+msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:209
-msgid "Saved network successfully"
-msgstr "네트워크 저장 성공"
+#~ msgid "Saved network successfully"
+#~ msgstr "네트워크 저장 성공"
 
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:278
 msgid "Scam tx"
@@ -2096,27 +2443,31 @@ msgid "Scan QR code with WalletConnect-compatible wallet"
 msgstr ""
 
 #: popups/pages/Friends/Search/index.tsx:85
-msgid "Search Next.ID, Twitter, Lens, ENS or Address"
-msgstr "Next.ID 검색, Twitter, Lens, ENS, 주소"
+#~ msgid "Search Next.ID, Twitter, Lens, ENS or Address"
+#~ msgstr "Next.ID 검색, Twitter, Lens, ENS, 주소"
+
+#: popups/pages/Friends/Search/index.tsx:85
+msgid "Search Next.ID, X, Lens, ENS or Address"
+msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx:69
-msgid "See your account balance and history"
-msgstr ""
+#~ msgid "See your account balance and history"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx:66
-msgid "See your address"
-msgstr ""
+#~ msgid "See your address"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx:72
-msgid "See your Tokens and NFTs"
-msgstr ""
+#~ msgid "See your Tokens and NFTs"
+#~ msgstr ""
 
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:209
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx:207
 msgid "Select Address"
 msgstr "주소 선택"
 
-#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx:200
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:272
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx:198
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:270
 msgid "Select All"
 msgstr "전체 선택"
 
@@ -2140,7 +2491,7 @@ msgstr ""
 msgid "Select Wallet"
 msgstr "월렛 선택"
 
-#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:354
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:356
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:101
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:98
 #: popups/components/TransactionPreview/index.tsx:110
@@ -2153,8 +2504,8 @@ msgid "Send"
 msgstr "보내기"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:287
-msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
-msgstr ""
+#~ msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+#~ msgstr ""
 
 #: popups/pages/Settings/index.tsx:394
 msgid "Service Agreement"
@@ -2175,12 +2526,11 @@ msgstr "NFT 사진 설정"
 msgid "Set Payment Password"
 msgstr "결제 비밀번호 설정"
 
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx:116
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx:219
 msgid "Set payment password successfully."
 msgstr "결제 비밀번호 설정 성공"
 
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:124
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:122
 msgid "Set Your Payment Password"
 msgstr "결제 비밀번호 설정"
 
@@ -2197,7 +2547,7 @@ msgid "Settings"
 msgstr "설정"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:153
-#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:120
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx:123
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx:206
 msgid "Share with"
 msgstr "공유 대상:"
@@ -2240,6 +2590,10 @@ msgstr ""
 msgid "Signing Message (Text)"
 msgstr "사인 메시지"
 
+#: popups/modals/UpdatePermissionModal/index.tsx:69
+msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
+msgstr ""
+
 #: popups/pages/RequestPermission/RequestPermission.tsx:31
 msgid "Sites"
 msgstr "사이트"
@@ -2249,7 +2603,7 @@ msgid "Size limit: 10 MB"
 msgstr ""
 
 #: content-script/components/GuideStep/index.tsx:222
-#: dashboard/pages/SetupPersona/SignUp/index.tsx:123
+#: dashboard/pages/SetupPersona/SignUp/index.tsx:121
 msgid "Skip"
 msgstr "넘어가기"
 
@@ -2268,17 +2622,16 @@ msgstr "사인 살패, 다시 시도하기"
 msgid "Speed Up"
 msgstr "가속하기"
 
-#: popups/components/UnlockERC20Token/index.tsx:262
+#: popups/components/UnlockERC20Token/index.tsx:258
 #: popups/components/UnlockERC721Token/index.tsx:203
 msgid "Spend limit requested by"
 msgstr "지불 제한을 요청하는 이용자:"
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:193
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx:195
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx:194
 msgid "Spend more transaction fees to cancel the previous transaction."
 msgstr "더 많은 기스비를 지불하여 지난 거래를 최소합니다."
 
-#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:110
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx:111
 msgid "Start"
 msgstr "시작"
 
@@ -2286,7 +2639,7 @@ msgstr "시작"
 msgid "status"
 msgstr "상태"
 
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:218
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx:216
 msgid "Step {step}/{step}"
 msgstr ""
 
@@ -2307,22 +2660,23 @@ msgstr ""
 msgid "Step 2/2"
 msgstr ""
 
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:21
 #: popups/pages/Wallet/TransactionDetail/index.tsx:210
 msgid "Success"
 msgstr "성공"
 
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:21
-msgid "Successful"
-msgstr "성공"
+#~ msgid "Successful"
+#~ msgstr "성공"
 
 #: popups/pages/Wallet/AddToken/index.tsx:146
-msgid "Successfully added"
-msgstr "추가 성공"
+#~ msgid "Successfully added"
+#~ msgstr "추가 성공"
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx:221
 #: popups/pages/Wallet/TokenDetail/index.tsx:178
-msgid "Successfully hidden."
-msgstr "이미 숨겼습니다."
+#~ msgid "Successfully hidden."
+#~ msgstr "이미 숨겼습니다."
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx:75
 msgid "Suggest to send transactions and sign messages"
@@ -2337,8 +2691,12 @@ msgid "Support Identity code, private key, local backups or cloud backups to acc
 msgstr "아이디 코드, 개인키, 로컬 백업이나 클라우드 백업으로 개인 데이터 접근을 지원합니다."
 
 #: popups/pages/Wallet/components/ImportCreateWallet/index.tsx:101
-msgid "Support mnemonic phrase, private key or keystone file."
-msgstr "니모닉 문구, 개인키 및 키스토어 파일을 지원합니다."
+#~ msgid "Support mnemonic phrase, private key or keystone file."
+#~ msgstr "니모닉 문구, 개인키 및 키스토어 파일을 지원합니다."
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx:101
+msgid "Support mnemonic phrase, private key or keystore file."
+msgstr ""
 
 #: popups/modals/SupportedSitesModal/index.tsx:68
 #: popups/pages/Settings/index.tsx:222
@@ -2346,12 +2704,12 @@ msgid "Supported Sites"
 msgstr "지원되는 사이트"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:109
-msgid "Sure to overwrite the backups stored on Mask Cloud Service?"
-msgstr "Mask Cloud Service에 저장된 백업을 덮어쓰시겠습니까?"
+#~ msgid "Sure to overwrite the backups stored on Mask Cloud Service?"
+#~ msgstr "Mask Cloud Service에 저장된 백업을 덮어쓰시겠습니까?"
 
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx:105
-msgid "Switch accounts and try more connections."
-msgstr ""
+#~ msgid "Switch accounts and try more connections."
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:147
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx:207
@@ -2359,21 +2717,33 @@ msgid "Switch other account"
 msgstr "사용자 계정 전환"
 
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:77
-msgid "Switch other accounts"
-msgstr "사용자 계정 전환"
+#~ msgid "Switch other accounts"
+#~ msgstr "사용자 계정 전환"
 
 #: popups/modals/SwitchPersonaModal/index.tsx:82
 msgid "Switch Persona"
 msgstr "페르소나 전환"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx:77
+msgid "Switch to other accounts"
+msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx:48
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx:51
 msgid "Text"
 msgstr "텍스트"
 
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:77
+msgid "Text copied!"
+msgstr ""
+
+#: popups/components/UnlockERC20Token/index.tsx:158
+msgid "The approval for this contract will be revoked in case of the amount is 0."
+msgstr ""
+
 #: popups/components/UnlockERC20Token/index.tsx:159
-msgid "The approval for this contract will be revoked in the event of using 0 as the default input."
-msgstr "기본 입력은 0으로 사용하는 경우 본 계약에 대한 승인이 취소됩니다."
+#~ msgid "The approval for this contract will be revoked in the event of using 0 as the default input."
+#~ msgstr "기본 입력은 0으로 사용하는 경우 본 계약에 대한 승인이 취소됩니다."
 
 #: popups/components/SignRequestInfo/index.tsx:274
 msgid "The chainID is not equal to the currently connected one."
@@ -2385,14 +2755,29 @@ msgstr ""
 msgid "The code is incorrect."
 msgstr "코드가 잘못되었습니다."
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:443
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx:97
+msgid "The download link is expired"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:180
-msgid "The mnemonic has been copied, please keep it in a safe place."
-msgstr "니모닉이 복사되었습니다. 안전하게 보관하시길 바랍니다."
+#~ msgid "The mnemonic has been copied, please keep it in a safe place."
+#~ msgstr "니모닉이 복사되었습니다. 안전하게 보관하시길 바랍니다."
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:440
+msgid "The mnemonic word has been copied, please keep it in a safe place."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx:178
+msgid "The mnemonic words has been copied, please keep it in a safe place."
+msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/useWarnings.ts:26
-msgid "The network with chain ID {0} may use a different currency symbol ({1}) than the one you have entered. Please check."
-msgstr "체인ID {0} 의 네트워크는 입력하신 네트워크와 다른 통화기호({1}) 를 사용할 수 있습니다. 확인하시길 바랍니다."
+#~ msgid "The network with chain ID {0} may use a different currency symbol ({1}) than the one you have entered. Please check."
+#~ msgstr "체인ID {0} 의 네트워크는 입력하신 네트워크와 다른 통화기호({1}) 를 사용할 수 있습니다. 확인하시길 바랍니다."
+
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts:26
+msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
+msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:58
 msgid "The new passwords don't match"
@@ -2407,8 +2792,12 @@ msgid "The phone number is incorrect."
 msgstr "전화번호가 잘못되었습니다."
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts:69
-msgid "The RPC URL you have entered returned a different chain ID ({0}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
-msgstr "입력한 RPC URL에서 다른 체인 ID ({0}) 를 반환했습니다. 추가하려는 네트워크의 RPC URL과 일치하도록 체인 ID를 업데이트하세요."
+#~ msgid "The RPC URL you have entered returned a different chain ID ({0}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
+#~ msgstr "입력한 RPC URL에서 다른 체인 ID ({0}) 를 반환했습니다. 추가하려는 네트워크의 RPC URL과 일치하도록 체인 ID를 업데이트하세요."
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts:69
+msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
+msgstr ""
 
 #: popups/pages/Wallet/TransactionDetail/useTransactionLogs.ts:42
 msgid "The transaction was complete and has been recorded on blockchain at {0}"
@@ -2422,8 +2811,16 @@ msgstr ""
 #: popups/modals/ChangeBackupPasswordModal/index.tsx:80
 #: popups/modals/SetBackupPasswordModal/index.tsx:95
 #: popups/pages/Wallet/hooks/usePasswordForm.ts:18
-msgid "The two entered passwords are inconsistent."
-msgstr "비밀번호가 일치하지 않습니다"
+#~ msgid "The two entered passwords are inconsistent."
+#~ msgstr "비밀번호가 일치하지 않습니다"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:287
+#~ msgid "The verification post sent.<0/> <1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
+#~ msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:287
+msgid "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
+msgstr ""
 
 #: popups/modals/AddContactModal/index.tsx:94
 msgid "The wallet address already exists."
@@ -2455,11 +2852,11 @@ msgstr "이 주소는 연락처 주소입니다."
 msgid "This address may be a scam address."
 msgstr "이 주소는 사기 주소일 수 있습니다."
 
-#: popups/components/UnlockERC20Token/index.tsx:174
+#: popups/components/UnlockERC20Token/index.tsx:170
 msgid "This allows the third party to spend {value} {0} from your current balance."
 msgstr ""
 
-#: popups/components/UnlockERC20Token/index.tsx:166
+#: popups/components/UnlockERC20Token/index.tsx:162
 msgid "This allows the third party to spend all your token balance until it reaches the cap or you revoke the spending cap. If this is not intended, consider setting a lower spending cap."
 msgstr "이를 통해 제3자가 한도액에 도달하거나 사용자가 지출 한도액을 취소할 때까지 토큰 잔액을 모두 사용할 수 있습니다. 만약 이것이 의도된 것이 아니라면, 지출 한도액을 낮추는 것을 고려하시길 바랍니다."
 
@@ -2484,16 +2881,24 @@ msgid "This network name already exists"
 msgstr "이미 존재된 네트워크입니다"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:239
-msgid "This option will overwrite the existing cloud backup with the local data, and it cannot be recovered anymore."
-msgstr "이 옵션은 기존 클라우드 백업을 로컬 데이터로 덮어쓰므로 더 이상 복구할 수 없습니다."
+#~ msgid "This option will overwrite the existing cloud backup with the local data, and it cannot be recovered anymore."
+#~ msgstr "이 옵션은 기존 클라우드 백업을 로컬 데이터로 덮어쓰므로 더 이상 복구할 수 없습니다."
 
-#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:118
-msgid "This QR saves your identity code, please keep it safely."
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:120
+msgid "This QR includes your identity, please keep it safely."
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:123
+msgid "This QR includes your mnemonic words, please keep it safely."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx:118
+#~ msgid "This QR saves your identity code, please keep it safely."
+#~ msgstr ""
+
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx:121
-msgid "This QR saves your mnemonic, please keep it safely."
-msgstr "이 QR은 니모닉을 저장하는 것이니, 안전하게 보관해주시기 바랍니다."
+#~ msgid "This QR saves your mnemonic, please keep it safely."
+#~ msgstr "이 QR은 니모닉을 저장하는 것이니, 안전하게 보관해주시기 바랍니다."
 
 #: popups/components/SignRequestInfo/index.tsx:312
 msgid "This request has been expired."
@@ -2516,8 +2921,11 @@ msgstr "이 RPC URL는 {0} 네트워크에서 사용되고 있습니다."
 msgid "This wallet is connected to current persona {0}."
 msgstr "이 월렛은 현재 페르소나 {0} 에 연결됩니다."
 
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:239
+msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
+msgstr ""
+
 #: popups/components/AddContactInputPanel/index.tsx:116
-#: popups/components/TransactionPreview/index.tsx:187
 #: popups/pages/Wallet/TransactionDetail/index.tsx:287
 msgid "To"
 msgstr "To"
@@ -2527,12 +2935,24 @@ msgstr "To"
 msgid "to {0}"
 msgstr "받는 주소: {0}"
 
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:329
+msgid "To verify your X account and record it on the NextID, please send this post for the verification."
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:316
+msgid "To verify your X account and record it on the NextID, you will need to send a post for the verification."
+msgstr ""
+
 #: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx:86
 msgid "Token"
 msgstr ""
 
 #: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx:105
 msgid "Token Address"
+msgstr ""
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx:221
+msgid "Token now is hidden."
 msgstr ""
 
 #: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx:120
@@ -2558,10 +2978,19 @@ msgstr "Transaction Hash"
 msgid "Try"
 msgstr "시도"
 
+#: popups/modals/ChangeBackupPasswordModal/index.tsx:80
+msgid "Two entered passwords are different."
+msgstr ""
+
+#: popups/modals/SetBackupPasswordModal/index.tsx:95
+#: popups/pages/Wallet/hooks/usePasswordForm.ts:18
+msgid "Two entered passwords are not the same."
+msgstr ""
+
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx:110
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx:124
-msgid "Unconnected successfully."
-msgstr "연결 해제 성공"
+#~ msgid "Unconnected successfully."
+#~ msgstr "연결 해제 성공"
 
 #: popups/components/SignRequestInfo/index.tsx:241
 msgid "Unknown EIP-4361 message version."
@@ -2590,11 +3019,19 @@ msgid "Unsupported network type"
 msgstr "지원되지 않는 네트워크"
 
 #: dashboard/pages/SetupPersona/Permissions/index.tsx:99
-#: popups/modals/UpdatePermissionModal/index.tsx:56
-msgid "Update X.com Authorization"
+msgid "Update permission for X.com"
 msgstr ""
 
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:304
+#: dashboard/pages/SetupPersona/Permissions/index.tsx:99
+#: popups/modals/UpdatePermissionModal/index.tsx:56
+#~ msgid "Update X.com Authorization"
+#~ msgstr ""
+
+#: popups/modals/UpdatePermissionModal/index.tsx:56
+msgid "Update X.com Permissions"
+msgstr ""
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:303
 msgid "Upload backup"
 msgstr "백업 업로드"
 
@@ -2623,8 +3060,16 @@ msgid "value"
 msgstr "값"
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:326
-msgid "Verification"
-msgstr "인증"
+#~ msgid "Verification"
+#~ msgstr "인증"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:39
+msgid "Verification code has been sent to your email. Please check your mailbox."
+msgstr ""
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:55
+msgid "Verification code has been sent to your phone."
+msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx:54
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx:51
@@ -2633,10 +3078,11 @@ msgstr "인증 코드가 발송되었습니다"
 
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:40
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx:56
-msgid "Verification code was sent to your {type}. Please check your {type}."
-msgstr ""
+#~ msgid "Verification code was sent to your {type}. Please check your {type}."
+#~ msgstr ""
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:361
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:323
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:358
 msgid "Verify"
 msgstr "인증"
 
@@ -2663,13 +3109,29 @@ msgstr "거래 세부 내역 보기"
 msgid "View on Explorer"
 msgstr "Explorer에서 보기"
 
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx:69
+msgid "View your account balance and history"
+msgstr ""
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx:66
+msgid "View your address"
+msgstr ""
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx:72
+msgid "View your Tokens and NFTs"
+msgstr ""
+
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx:123
 msgid "Visible To"
 msgstr "공개 대상"
 
 #: popups/modals/ConnectProvider/index.tsx:148
-msgid "Waiting for ${0}"
+msgid "Waiting for {providerType}"
 msgstr ""
+
+#: popups/modals/ConnectProvider/index.tsx:148
+#~ msgid "Waiting for ${0}"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:84
 msgid "wallet"
@@ -2681,12 +3143,16 @@ msgid "Wallet Account"
 msgstr "월렛 계정"
 
 #: popups/components/ConnectedWallet/index.tsx:142
-msgid "Wallet disconnect failed"
-msgstr "월렛 연결 해제 실패"
+#~ msgid "Wallet disconnect failed"
+#~ msgstr "월렛 연결 해제 실패"
 
 #: popups/components/ConnectedWallet/index.tsx:140
-msgid "Wallet disconnect successfully"
-msgstr "월렛 연결 해제 성공"
+#~ msgid "Wallet disconnect successfully"
+#~ msgstr "월렛 연결 해제 성공"
+
+#: popups/components/ConnectedWallet/index.tsx:140
+msgid "Wallet disconnected"
+msgstr ""
 
 #: popups/modals/WalletGroupModal/index.tsx:76
 #: popups/pages/Wallet/CreateWallet/index.tsx:118
@@ -2716,17 +3182,21 @@ msgid "WalletConnect"
 msgstr "WalletConnect"
 
 #: dashboard/components/BackupPreview/index.tsx:229
-msgid "Wallets ({walletLength})"
-msgstr ""
+#~ msgid "Wallets ({walletLength})"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:107
-msgid "We are pleased to inform you that the authorization update for X website has been successfully completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
+#~ msgid "We are pleased to inform you that the authorization update for X website has been successfully completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx:107
+msgid "We are pleased to inform you that the update for X (formerly named Twitter) website has been completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:314
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:327
-msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
-msgstr ""
+#~ msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/ProfileCard/index.tsx:250
 msgid "Web3 Profile Card"
@@ -2756,41 +3226,65 @@ msgstr "환영합니다"
 msgid "Write down mnemonic words"
 msgstr "니모닉 단어를 적어두세요"
 
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:417
+msgid "Write down recovery phrase"
+msgstr ""
+
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:420
-msgid "Write Down Recovery Phrase"
-msgstr "복원 분구를 기입하세요"
+#~ msgid "Write Down Recovery Phrase"
+#~ msgstr "복원 분구를 기입하세요"
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:345
-msgid "Wrong words selected. Please try again!"
-msgstr "단어를 잘못하게 선택했습니다. 다시 시도하세요!"
+#~ msgid "Wrong words selected. Please try again!"
+#~ msgstr "단어를 잘못하게 선택했습니다. 다시 시도하세요!"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:137
-msgid "You have successfully backed up your data."
-msgstr "데이터가 이미 백업되었습니다."
+msgid "You have backed up your data."
+msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:191
-msgid "You have successfully signed with your wallet."
-msgstr "월렛 사인 성공"
+msgid "You have signed with your wallet."
+msgstr ""
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:137
+#~ msgid "You have successfully backed up your data."
+#~ msgstr "데이터가 이미 백업되었습니다."
+
+#: popups/pages/Personas/ConnectWallet/index.tsx:191
+#~ msgid "You have successfully signed with your wallet."
+#~ msgstr "월렛 사인 성공"
 
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:25
-msgid "You have successfully verified your cloud password and recovered your backup. To unify backup passwords, do you want to synchronize your cloud password as local backup password?"
-msgstr "클라우드 비밀번호는 이미 성공적으로 승인되고 백업은 이미 업로드되었습니다. 백업 비밀번호를 통합하려면 클라우드 비밀번호를 로컬 백업 비밀번호로 동기화할지 여부를 확인하십시오."
+#~ msgid "You have successfully verified your cloud password and recovered your backup. To unify backup passwords, do you want to synchronize your cloud password as local backup password?"
+#~ msgstr "클라우드 비밀번호는 이미 성공적으로 승인되고 백업은 이미 업로드되었습니다. 백업 비밀번호를 통합하려면 클라우드 비밀번호를 로컬 백업 비밀번호로 동기화할지 여부를 확인하십시오."
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:25
+msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"
+msgstr ""
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx:168
-msgid "You need to open the DAPP to view the specific content."
-msgstr "특정 콘텐츠를 보려면 DAPP을 열어야 합니다."
+msgid "You need to open the dApp to view the specific content."
+msgstr ""
+
+#: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx:168
+#~ msgid "You need to open the DAPP to view the specific content."
+#~ msgstr "특정 콘텐츠를 보려면 DAPP을 열어야 합니다."
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:182
-msgid "You’ve uploaded backup to Mask Cloud Service successfully."
-msgstr "Mask Cloud Service에 백업을 업로드했습니다."
+#~ msgid "You’ve uploaded backup to Mask Cloud Service successfully."
+#~ msgstr "Mask Cloud Service에 백업을 업로드했습니다."
 
 #: popups/components/SignRequestInfo/index.tsx:105
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:161
-msgid "Your payment password encrypts wallet data and is needed for trade confirmations and unlocking. It's securely stored on your device, and we cannot retrieve it. Please remember it."
-msgstr "회원님의 결제비밀번호는 월렛 데이터를 암호화한 것으로 거래확인 및 잠금해제를 위해 필요하며, 고객님의 기기에 저장되어 있어 다른 경로로 복구할 수 없습니다. 주의하시길 바랍니다."
+#~ msgid "Your payment password encrypts wallet data and is needed for trade confirmations and unlocking. It's securely stored on your device, and we cannot retrieve it. Please remember it."
+#~ msgstr "회원님의 결제비밀번호는 월렛 데이터를 암호화한 것으로 거래확인 및 잠금해제를 위해 필요하며, 고객님의 기기에 저장되어 있어 다른 경로로 복구할 수 없습니다. 주의하시길 바랍니다."
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:159
+msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"

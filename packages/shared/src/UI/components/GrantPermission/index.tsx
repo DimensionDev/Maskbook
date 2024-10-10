@@ -24,7 +24,7 @@ export const GrantPermissions = memo<GrantPermissionsProps>(({ permissions, onGr
     return (
         <>
             <Typography className={classes.description}>
-                <Trans>Mask Network requires you to authorize the following websites before using it.</Trans>
+                <Trans>Mask Network requires the permission of following websites before using it.</Trans>
                 <Typography component="div">{permissions.join(',')}</Typography>
             </Typography>
             <ActionButton

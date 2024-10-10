@@ -134,7 +134,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         type,
                         code,
                     })
-                    showSnackbar(<Trans>You have successfully backed up your data.</Trans>, { variant: 'success' })
+                    showSnackbar(<Trans>You have backed up your data.</Trans>, { variant: 'success' })
                     updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
                     setParams((params) => {
                         params.set('size', downloadLinkResponse.size.toString())
@@ -179,7 +179,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         lineHeight="18px"
                         color={theme.palette.maskColor.second}
                         textAlign="center">
-                        <Trans>You’ve uploaded backup to Mask Cloud Service successfully.</Trans>
+                        <Trans>Backup is saved to Mask Cloud Service.</Trans>
                     </Typography>
                 </Box>
             )
@@ -237,8 +237,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     {isOverwrite ?
                         <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
                             <Trans>
-                                This option will overwrite the existing cloud backup with the local data, and it cannot
-                                be recovered anymore.
+                                This will overwrite the existing cloud backup with the local data, this cannot be undo.
                             </Trans>
                         </Typography>
                     :   null}
@@ -281,7 +280,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 disabled={!isDirty || !isValid}>
                 {isOverwrite ?
                     <Trans>Overwrite Backup</Trans>
-                :   <Trans>Backup to Cloud</Trans>}
+                :   <Trans>Backup to the Cloud</Trans>}
             </ActionButton>
         )
     }, [

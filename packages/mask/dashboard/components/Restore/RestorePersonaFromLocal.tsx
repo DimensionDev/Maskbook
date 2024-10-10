@@ -129,7 +129,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
 
             await onRestore(summary?.countOfWallets)
         } catch {
-            showSnackbar(<Trans>Restore backup failed, Please try again.</Trans>, { variant: 'error' })
+            showSnackbar(<Trans>Restore backup failed.</Trans>, { variant: 'error' })
         } finally {
             setProcessing(false)
         }

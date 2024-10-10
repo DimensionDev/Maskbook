@@ -146,9 +146,7 @@ export const Component = memo(function SignUpMnemonic() {
         <>
             <Box className={classes.header}>
                 <Typography className={classes.second}>
-                    <Trans>
-                        Step {'2'}/{'2'}
-                    </Trans>
+                    <Trans>Step 2/2</Trans>
                 </Typography>
                 <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
                     <Trans>Recovery</Trans>
@@ -177,21 +175,21 @@ export const Component = memo(function SignUpMnemonic() {
                         classes={{ root: classes.iconBox }}
                         size={18}
                         text={words.join(' ')}
-                        successText={<Trans>The mnemonic has been copied, please keep it in a safe place.</Trans>}
+                        successText={<Trans>The mnemonic words has been copied, please keep it in a safe place.</Trans>}
                     />
                 </IconButton>
             </Box>
             <Box className={classes.warning}>
                 <Icons.WarningTriangle size={20} />
                 <Typography className={classes.warningText}>
-                    <Trans>Never share 12-word secret recovery phrase with anyone!</Trans>
+                    <Trans>Never share the 12-word secret mnemonic words with anyone!</Trans>
                 </Typography>
             </Box>
 
             <FormControlLabel
                 classes={{ label: classes.label }}
                 control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
-                label={<Trans>I wrote down the words in the correct order</Trans>}
+                label={<Trans>I wrote down those words in the correct order</Trans>}
                 sx={{ marginTop: '12px', color: MaskColorVar.textSecondary }}
             />
 

@@ -68,8 +68,12 @@ msgid "MaskBox"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:55
-msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
+msgid "Professional multi-chain decentralized platform for launching NFT blind boxes."
 msgstr ""
+
+#: src/SiteAdaptor/index.tsx:55
+#~ msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:227
 #: src/SiteAdaptor/components/PreviewCard.tsx:252

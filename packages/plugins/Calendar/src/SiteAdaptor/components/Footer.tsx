@@ -97,9 +97,8 @@ export function Footer({ provider, disableSetting }: FooterProps) {
                 </div>
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy}>
-                        <Trans>Powered By</Trans>
+                        <Trans>Powered By {providerMap[provider]}</Trans>
                     </Typography>
-                    {providerMap[provider]}
                     {disableSetting ? null : (
                         <IconButton
                             sx={{ width: '16px', height: '16px' }}

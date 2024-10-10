@@ -190,7 +190,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         amount: inputAmount,
         symbol: protocol.bareToken.symbol,
         chain: EVMChainResolver.chainName(chainId) ?? '',
-        account: Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`),
+        account: Sniffings.is_twitter_page ? 'realMaskNetwork' : 'masknetwork',
     }
     const shareText =
         isDeposit ?
@@ -234,7 +234,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             spender={approvalData?.approveAddress}>
                             <ActionButtonPromise
                                 className={classes.button}
-                                init={validationMessage || _(msg`Deposit`) + ' ' + protocol.bareToken.symbol}
+                                init={validationMessage || _(msg`Deposit ${protocol.bareToken.symbol}`)}
                                 waiting={<Trans>Processing Deposit</Trans>}
                                 failed={<Trans>Failed</Trans>}
                                 failedOnClick="use executor"
@@ -246,7 +246,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                         </EthereumERC20TokenApprovedBoundary>
                     :   <ActionButtonPromise
                             className={classes.button}
-                            init={validationMessage || _(msg`Deposit`) + ' ' + protocol.bareToken.symbol}
+                            init={validationMessage || _(msg`Deposit ${protocol.bareToken.symbol}`)}
                             waiting={<Trans>Processing Deposit</Trans>}
                             failed={<Trans>Failed</Trans>}
                             failedOnClick="use executor"

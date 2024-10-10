@@ -37,7 +37,7 @@ export const PluginEnableBoundary = memo<PluginEnableBoundaryProps>((props) => {
                 <Stack justifyContent="center" alignItems="center" width="100%" boxSizing="border-box">
                     <Typography fontWeight={400} fontSize={14}>
                         <Trans>
-                            This function has been turned off in the App settings. Enable plug-ins to fully access.
+                            This function has been turned off in the App settings. Enable plugins to fully access.
                         </Trans>
                     </Typography>
                 </Stack>

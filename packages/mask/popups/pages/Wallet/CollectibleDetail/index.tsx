@@ -192,10 +192,10 @@ export const Component = memo(function CollectibleDetail() {
                 className={classes.iconButton}
                 onClick={async () => {
                     const result = await ConfirmModal.openAndWaitForClose({
-                        title: <Trans>Hide {String(name)}</Trans>,
+                        title: <Trans>Hide {name}</Trans>,
                         message: (
                             <Trans>
-                                Confirm to hide {String(name)}? You can redisplay it by re-adding this NFT at any time.
+                                Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time.
                             </Trans>
                         ),
                     })
@@ -218,7 +218,7 @@ export const Component = memo(function CollectibleDetail() {
                         },
                         [availableAsset.tokenId],
                     )
-                    showSnackbar(<Trans>Successfully hidden.</Trans>)
+                    showSnackbar(<Trans>Token now is hidden.</Trans>)
                     navigate(-1)
                 }}>
                 <Icons.EyeOff size={24} />
@@ -385,7 +385,7 @@ export const CollectibleDetailUI = memo(function CollectibleDetailUI({
             {isPending || collectionDesc ?
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
-                        <Trans>About {String(collectionName)}</Trans>
+                        <Trans>About {collectionName}</Trans>
                     </Typography>
                     <ProgressiveText variant="body1" loading={isPending} className={classes.text} skeletonWidth={100}>
                         {collectionDesc}

@@ -26,7 +26,7 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
     return (
         <>
             <TextField
-                placeholder={_(msg`Mobile Number`)}
+                placeholder={_(msg`Phone Number`)}
                 type="tel"
                 {...rest}
                 InputProps={{

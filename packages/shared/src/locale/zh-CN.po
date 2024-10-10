@@ -35,16 +35,52 @@ msgstr ""
 msgid "{0} {1} NFT contract."
 msgstr ""
 
+#: src/UI/translate.ts:113
+msgid "{0} deposited."
+msgstr ""
+
 #: src/UI/components/ChainBoundary/index.tsx:113
-msgid "{0} network is not added in the wallet. Please add and try it again."
+#~ msgid "{0} network is not added in the wallet. Please add and try it again."
+#~ msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx:113
+msgid "{0} network is not added to the wallet. Please add it and try again."
 msgstr ""
 
 #: src/UI/translate.ts:163
 msgid "{0} NFT contract"
 msgstr ""
 
+#: src/UI/translate.ts:123
+msgid "{0} NFT contract unlocked."
+msgstr ""
+
+#: src/UI/translate.ts:111
+msgid "{0} NFT Lucky Drop created."
+msgstr ""
+
+#: src/UI/translate.ts:121
+msgid "{0} NFT transferred."
+msgstr ""
+
+#: src/UI/translate.ts:119
+msgid "{0} sent."
+msgstr ""
+
+#: src/UI/translate.ts:125
+msgid "{0} unlocked"
+msgstr ""
+
 #: src/UI/translate.ts:103
-msgid "{0} were successfully claimed"
+msgid "{0} were claimed"
+msgstr ""
+
+#: src/UI/translate.ts:103
+#~ msgid "{0} were successfully claimed"
+#~ msgstr ""
+
+#: src/UI/translate.ts:127
+msgid "{0} withdrawn."
 msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx:57
@@ -55,20 +91,52 @@ msgstr ""
 msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx:123
+msgid "<0>Drag & Drop your file here </0>{0, select, default {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx:123
+#~ msgid "<0>Drag & Drop your file here</0>{0, select, default {<1>Size limit: 10 MB</1>} omit {}}<2>or</2><3>Browse File</3>"
+#~ msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx:123
+#~ msgid "<0>Drag & Drop your file here</0>{0}<1>or</1><2>Browse File</2>"
+#~ msgstr ""
+
+#: src/UI/components/MaskPluginWrapper/index.tsx:108
+msgid "<0>Powered by </0>{publisherNode}"
+msgstr ""
+
+#: src/UI/components/PluginCardFrame/index.tsx:66
+msgid "<0>Powered by </0><1>{0}</1>"
+msgstr ""
+
 #: src/UI/components/SettingsBoard/GasOption.tsx:71
-msgid "~ {0}"
-msgstr "~ {0}"
+#~ msgid "~ {0}"
+#~ msgstr "~ {0}"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:372
-msgid "≈ {gasFeeUSD}"
+#~ msgid "≈ {gasFeeUSD}"
+#~ msgstr ""
+
+#: src/UI/translate.ts:105
+msgid "1 {0} NFT Lucky Drop claimed."
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:60
-msgid "1. If you haven't installed {name} Wallet"
+#~ msgid "1. If you haven't installed {name} Wallet"
+#~ msgstr ""
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:60
+msgid "1. If you haven't installed the {name} Wallet"
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:78
-msgid "2. If you have installed {name} Wallet"
+#~ msgid "2. If you have installed {name} Wallet"
+#~ msgstr ""
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:78
+msgid "2. If you have installed the {name} Wallet"
 msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:100
@@ -100,14 +168,22 @@ msgid "Advanced Settings"
 msgstr "高阶设置"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:110
+msgid "App list"
+msgstr ""
+
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:51
 msgid "APP list"
 msgstr "应用列表"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:55
-msgid "APP Settings"
-msgstr "应用设置"
+msgid "App Settings"
+msgstr ""
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:55
+#~ msgid "APP Settings"
+#~ msgstr "应用设置"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
 msgid "Applications"
@@ -122,8 +198,12 @@ msgid "Approve MASK?"
 msgstr "授权MASK?"
 
 #: src/hooks/useReportSpam.tsx:65
-msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
-msgstr "您确认举报{0}? 批准后，这个 NFT 会被标记为垃圾。"
+msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+msgstr ""
+
+#: src/hooks/useReportSpam.tsx:65
+#~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
+#~ msgstr "您确认举报{0}? 批准后，这个 NFT 会被标记为垃圾。"
 
 #: src/UI/components/FungibleTokenInput/UI.tsx:171
 msgid "Available Balance"
@@ -133,11 +213,17 @@ msgstr "可用余额"
 msgid "Backup failed, <0>try again</0>"
 msgstr ""
 
-#: src/UI/components/ERC721ContractSelectPanel/index.tsx:105
 #: src/UI/components/FungibleTokenInput/UI.tsx:172
-#: src/UI/components/TokenAmountPanel/index.tsx:143
 msgid "Balance"
 msgstr "余额"
+
+#: src/UI/components/ERC721ContractSelectPanel/index.tsx:105
+msgid "Balance: {0}"
+msgstr ""
+
+#: src/UI/components/TokenAmountPanel/index.tsx:143
+msgid "Balance: <0/>"
+msgstr ""
 
 #: src/UI/wallet/DeriveWalletTable.tsx:129
 msgid "Balance({symbol})"
@@ -152,8 +238,12 @@ msgid "Blocto only supports the Flow chain."
 msgstr "Blocto 只支持 Flow 链。"
 
 #: src/UI/components/UploadDropArea/index.tsx:135
-msgid "Browse File"
-msgstr "浏览文件"
+#~ msgid "Browse File"
+#~ msgstr "浏览文件"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:116
+msgid "By confirming means that you agree to bear the possible risks above."
+msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:140
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:127
@@ -196,38 +286,34 @@ msgid "Circulating Supply"
 msgstr "流通总量"
 
 #: src/UI/translate.ts:105
-msgid "Claim 1 {0} NFT Lucky Drop successfully."
-msgstr ""
+#~ msgid "Claim 1 {0} NFT Lucky Drop successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:60
 msgid "Claim Lucky Drop"
 msgstr ""
 
-#: src/UI/translate.ts:26
-msgid "Claim Lucky Drop successfully."
+#: src/UI/translate.ts:107
+msgid "Claim Lucky Drop with {0} claimed."
 msgstr ""
 
 #: src/UI/translate.ts:107
-msgid "Claim Lucky Drop with {0} successfully."
-msgstr ""
+#~ msgid "Claim Lucky Drop with {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:61
 msgid "Claim NFT Lucky Drop"
-msgstr ""
-
-#: src/UI/translate.ts:27
-msgid "Claim NFT Lucky Drop successfully."
 msgstr ""
 
 #: src/UI/translate.ts:62
 msgid "Claim your Airdrop"
 msgstr ""
 
-#: src/UI/translate.ts:28
+#: src/UI/translate.ts:26
 msgid "Claim your Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:29
+#: src/UI/translate.ts:27
 msgid "Claim your NFT Lucky Drop"
 msgstr ""
 
@@ -240,24 +326,32 @@ msgid "Clear All"
 msgstr "全部清除"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:152
-msgid "Click the application icon to hide in the APP list."
-msgstr "点击应用图标将会在应用列表中隐藏。"
+msgid "Click the application icon to hide in the App list."
+msgstr ""
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:152
+#~ msgid "Click the application icon to hide in the APP list."
+#~ msgstr "点击应用图标将会在应用列表中隐藏。"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:151
 msgid "Click the application icon to list it on the App board."
 msgstr "点击应用图标将会在应用列表中显示。"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:214
-msgid "Click the setting icon to list it on the App board."
-msgstr "单击设置图标以在应用板上列出它。"
+#~ msgid "Click the setting icon to list it on the App board."
+#~ msgstr "单击设置图标以在应用板上列出它。"
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:118
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:214
+msgid "Click the settings icon to list it on the App board."
+msgstr ""
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:115
 msgid "Click to retry"
 msgstr "点击重试"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:116
-msgid "Clicking the confirm button means that you agree to bear the above possible risks."
-msgstr "点击确认按钮意味着您同意承担上述风险。"
+#~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
+#~ msgstr "点击确认按钮意味着您同意承担上述风险。"
 
 #: src/UI/components/CoinMetadataTable/index.tsx:213
 #: src/UI/components/CoinMetadataTable/index.tsx:284
@@ -275,8 +369,8 @@ msgid "Confirm"
 msgstr "确定"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:135
-msgid "Confirm Failed"
-msgstr "确认失败"
+#~ msgid "Confirm Failed"
+#~ msgstr "确认失败"
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx:74
 msgid "Confirm Risk Warning"
@@ -296,7 +390,7 @@ msgid "Congratulations!"
 msgstr "恭喜！"
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:185
-#: src/UI/components/PersonaSelectPanel/index.tsx:196
+#: src/UI/components/PersonaSelectPanel/index.tsx:198
 msgid "Connect {0}"
 msgstr "连接到 {0}"
 
@@ -326,7 +420,11 @@ msgid "Connect your wallet"
 msgstr "连接您的钱包"
 
 #: src/UI/components/VerifyNextIDDialog/index.tsx:243
-msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+#~ msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+#~ msgstr ""
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:244
+msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
 msgstr ""
 
 #: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:197
@@ -359,23 +457,19 @@ msgid "Copy"
 msgstr "复制"
 
 #: src/UI/translate.ts:111
-msgid "Create {0} NFT Lucky Drop successfully."
-msgstr ""
+#~ msgid "Create {0} NFT Lucky Drop successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:65
 msgid "Create Lucky Drop"
 msgstr ""
 
 #: src/UI/translate.ts:109
-msgid "Create Lucky drop with {0} successfully."
-msgstr ""
+#~ msgid "Create Lucky drop with {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:66
 msgid "Create NFT Lucky Drop"
-msgstr ""
-
-#: src/UI/translate.ts:30
-msgid "Create NFT Lucky Drop successfully."
 msgstr ""
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:46
@@ -391,15 +485,15 @@ msgstr "创建身份"
 msgid "Create Smart Pay wallet"
 msgstr ""
 
-#: src/UI/translate.ts:31
+#: src/UI/translate.ts:28
 msgid "Create your Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:32
+#: src/UI/translate.ts:29
 msgid "Create your NFT Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:33
+#: src/UI/translate.ts:30
 msgid "Created a SmartPay wallet on Polygon network."
 msgstr ""
 
@@ -408,7 +502,7 @@ msgid "Current base fee is {0} Gwei"
 msgstr "当前基础手续费是 {0} Gwei"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx:256
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:377
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:375
 #: src/UI/components/SettingsBoard/GasSection.tsx:99
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:91
 msgid "Custom"
@@ -419,11 +513,11 @@ msgstr "自定义"
 msgid "Data source is retrieved from {0}."
 msgstr "数据来源于{0} 。"
 
-#: src/UI/components/MaskPluginWrapper/index.tsx:141
+#: src/UI/components/MaskPluginWrapper/index.tsx:143
 msgid "Default"
 msgstr "默认"
 
-#: src/UI/translate.ts:34
+#: src/UI/translate.ts:31
 msgid "Deploy a SmartPay wallet on Polygon network."
 msgstr ""
 
@@ -436,8 +530,8 @@ msgid "Deposit {0} for savings."
 msgstr ""
 
 #: src/UI/translate.ts:113
-msgid "Deposit {0} successfully."
-msgstr ""
+#~ msgid "Deposit {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:69
 msgid "Deposit token"
@@ -457,8 +551,12 @@ msgid "Dismiss"
 msgstr "关闭"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx:123
-msgid "Do you want to set MASK token as gas fee?"
-msgstr "您想设置 MASK 代币用于支付网络费吗?"
+#~ msgid "Do you want to set MASK token as gas fee?"
+#~ msgstr "您想设置 MASK 代币用于支付网络费吗?"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:123
+msgid "Do you want to use MASK tokens to pay gas fee?"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
 msgid "Domain Request"
@@ -475,12 +573,16 @@ msgid "Done"
 msgstr "完成"
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:63
-msgid "Download {name} Wallet here"
+#~ msgid "Download {name} Wallet here"
+#~ msgstr ""
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:63
+msgid "Download the {name} Wallet here"
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx:124
-msgid "Drag & Drop your file here"
-msgstr "将您的文件拖放到此处"
+#~ msgid "Drag & Drop your file here"
+#~ msgstr "将您的文件拖放到此处"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:208
 msgid "DSearch"
@@ -495,12 +597,16 @@ msgid "Editor"
 msgstr "编辑器"
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx:81
-msgid "Enable {name} Wallet extension and disable other browser extension wallets"
-msgstr ""
+#~ msgid "Enable {name} Wallet extension and disable other browser extension wallets"
+#~ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx:51
 msgid "Enable plugin"
 msgstr "开启插件"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:81
+msgid "Enable the {name} Wallet extension and disable other wallet extensions"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/CompositionUI.tsx:163
 msgid "Encrypt"
@@ -543,11 +649,15 @@ msgstr "失败"
 msgid "Failed to {0} NFT contract."
 msgstr ""
 
-#: src/UI/translate.ts:35
+#: src/UI/translate.ts:32
 msgid "Failed to claim Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:36
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:135
+msgid "Failed to confirm"
+msgstr ""
+
+#: src/UI/translate.ts:33
 msgid "Failed to create Lucky Drop."
 msgstr ""
 
@@ -555,7 +665,7 @@ msgstr ""
 msgid "Failed to deposit {0}."
 msgstr ""
 
-#: src/UI/translate.ts:37
+#: src/UI/translate.ts:34
 msgid "Failed to deposit token."
 msgstr ""
 
@@ -567,35 +677,35 @@ msgstr "加载 {0} 失败，请点击重试。"
 msgid "Failed to load MASK. Click to retry."
 msgstr ""
 
-#: src/UI/translate.ts:38
+#: src/UI/translate.ts:35
 msgid "Failed to purchase Maskbox NFT."
 msgstr ""
 
-#: src/UI/translate.ts:39
+#: src/UI/translate.ts:36
 msgid "Failed to refund Lucky Drop."
 msgstr ""
 
-#: src/hooks/useReportSpam.tsx:76
+#: src/hooks/useReportSpam.tsx:81
 msgid "Failed to report spam."
 msgstr "举报失败。"
 
-#: src/UI/translate.ts:40
+#: src/UI/translate.ts:37
 msgid "Failed to revoke token contract."
 msgstr ""
 
-#: src/UI/translate.ts:41
+#: src/UI/translate.ts:38
 msgid "Failed to send token."
 msgstr ""
 
-#: src/UI/translate.ts:42
+#: src/UI/translate.ts:39
 msgid "Failed to transfer NFT."
 msgstr ""
 
-#: src/UI/translate.ts:43
+#: src/UI/translate.ts:40
 msgid "Failed to unlock NFT contract."
 msgstr ""
 
-#: src/UI/translate.ts:44
+#: src/UI/translate.ts:41
 msgid "Failed to unlock token contract."
 msgstr ""
 
@@ -661,8 +771,12 @@ msgid "Gas price must be greater than 0 Gwei."
 msgstr "Gas Price 必须大于 0 Gwei。"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:231
-msgid "Get optimized search results when you look for a token."
-msgstr "当您查询代币时，获取优化后的搜索结果。"
+#~ msgid "Get optimized search results when you look for a token."
+#~ msgstr "当您查询代币时，获取优化后的搜索结果。"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:231
+msgid "Get optimized search results when you're looking for a token."
+msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:36
 msgid "Go to Settings"
@@ -741,6 +855,22 @@ msgstr "加载中...."
 msgid "Low"
 msgstr "低"
 
+#: src/UI/translate.ts:42
+msgid "Lucky Drop claimed."
+msgstr ""
+
+#: src/UI/translate.ts:43
+msgid "Lucky Drop refunded."
+msgstr ""
+
+#: src/UI/translate.ts:109
+msgid "Lucky drop with {0} created."
+msgstr ""
+
+#: src/UI/translate.ts:117
+msgid "Lucky Drop with {0} refunded."
+msgstr ""
+
 #: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:127
 msgid "Manage Token List"
 msgstr "编辑代币列表"
@@ -755,12 +885,24 @@ msgid "Market Cap"
 msgstr "市值"
 
 #: src/UI/components/PluginCardFrame/index.tsx:69
-msgid "Mask Network"
-msgstr "Mask Network"
+#~ msgid "Mask Network"
+#~ msgstr "Mask Network"
 
 #: src/UI/components/GrantPermission/index.tsx:27
-msgid "Mask Network requires you to authorize the following websites before using it."
-msgstr "Mask Network 需要您在使用前授权以下网站。"
+msgid "Mask Network requires the permission of following websites before using it."
+msgstr ""
+
+#: src/UI/components/GrantPermission/index.tsx:27
+#~ msgid "Mask Network requires you to authorize the following websites before using it."
+#~ msgstr "Mask Network 需要您在使用前授权以下网站。"
+
+#: src/UI/translate.ts:44
+msgid "Maskbox NFT purchased."
+msgstr ""
+
+#: src/UI/translate.ts:115
+msgid "Maskbox NFT with {0} purchased."
+msgstr ""
 
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx:269
 msgid "Max fee"
@@ -817,8 +959,8 @@ msgid "Medium"
 msgstr "中等"
 
 #: src/UI/components/PhoneNumberField/index.tsx:29
-msgid "Mobile Number"
-msgstr "手机号码"
+#~ msgid "Mobile Number"
+#~ msgstr "手机号码"
 
 #: src/UI/components/TokenSecurity/index.tsx:72
 msgid "More"
@@ -829,12 +971,24 @@ msgid "Name or Contract address e.g. USDC or 0x234..."
 msgstr "代币代号名称或合约地址"
 
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:191
-msgid "Name or Contract address eg.PUNK or 0x234..."
-msgstr "名称或合同地址 eg.PUNK 或 0x234..."
+msgid "Name or contract address eg. PUNK or 0x234..."
+msgstr ""
+
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:191
+#~ msgid "Name or Contract address eg.PUNK or 0x234..."
+#~ msgstr "名称或合同地址 eg.PUNK 或 0x234..."
 
 #: src/UI/components/ChainBoundary/index.tsx:124
 msgid "Network error or user cancels the process."
 msgstr "网络错误或用户取消进程。"
+
+#: src/UI/translate.ts:45
+msgid "NFT Lucky Drop claimed."
+msgstr ""
+
+#: src/UI/translate.ts:46
+msgid "NFT Lucky Drop created."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:236
 msgid "NFTs"
@@ -864,8 +1018,12 @@ msgid "No results"
 msgstr "没有任何结果。"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:78
-msgid "Not select wallet yet."
-msgstr "尚未选择钱包。"
+msgid "No wallet selected."
+msgstr ""
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:78
+#~ msgid "Not select wallet yet."
+#~ msgstr "尚未选择钱包。"
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
 msgid "OK"
@@ -888,11 +1046,11 @@ msgid "Optimize search results with token names, NFT collections, ENS domains or
 msgstr "使用 Token 名称、 NFT 收藏品、 ENS 域名或钱包地址优化搜索结果。"
 
 #: src/UI/components/UploadDropArea/index.tsx:132
-msgid "or"
-msgstr "或者"
+#~ msgid "or"
+#~ msgstr "或者"
 
-#: src/UI/translate.ts:45
-msgid "Owner changed successfully."
+#: src/UI/translate.ts:47
+msgid "Owner changed."
 msgstr ""
 
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx:125
@@ -910,9 +1068,17 @@ msgstr "身份"
 msgid "Phantom only supports the Solana chain."
 msgstr "Phantom 只支持Solana 链。"
 
+#: src/UI/components/PhoneNumberField/index.tsx:29
+msgid "Phone Number"
+msgstr ""
+
 #: src/UI/components/PersonaSelectPanel/index.tsx:178
-msgid "Please connect {0} and send proof post before using dApps."
-msgstr "请在使用 dApp之前连接到 {0} 并发送验证推文。"
+msgid "Please connect {0} and send a proof post before using dApps."
+msgstr ""
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:178
+#~ msgid "Please connect {0} and send proof post before using dApps."
+#~ msgstr "请在使用 dApp之前连接到 {0} 并发送验证推文。"
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:186
 msgid "Please connect {0} before using dApps."
@@ -928,8 +1094,16 @@ msgstr "请连接您的钱包"
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts:44
 #: src/UI/components/PersonaSelectPanel/index.tsx:108
-msgid "Please create a Persona and verify your account to use this function."
-msgstr "使用此功能需要先创建一个身份并验证您的社交媒体账号。"
+#~ msgid "Please create a Persona and verify your account to use this function."
+#~ msgstr "使用此功能需要先创建一个身份并验证您的社交媒体账号。"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:108
+msgid "Please create a persona and verify your account to use this."
+msgstr ""
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts:44
+msgid "Please create a Persona and verify your account to use this."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:264
 msgid "Please create a persona for accessing Dapps."
@@ -945,8 +1119,12 @@ msgid "Please switch to this network in the mobile application wallet you are co
 msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx:192
-msgid "Please verify current persona with social media account before using dApps."
-msgstr "请在使用 dApp之前验证当前使用社交媒体账号的身份。"
+#~ msgid "Please verify current persona with social media account before using dApps."
+#~ msgstr "请在使用 dApp之前验证当前使用社交媒体账号的身份。"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:192
+msgid "Please verify the current persona with a social media account before using dApps."
+msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:268
 msgid "Please verify your social account"
@@ -954,22 +1132,27 @@ msgstr "请验证您的社交账户"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:111
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:52
-msgid "Plug-in switch"
-msgstr "插件开关"
+#~ msgid "Plug-in switch"
+#~ msgstr "插件开关"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:111
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:52
+msgid "Plugin switch"
+msgstr ""
 
 #: src/UI/components/CompositionDialog/CompositionUI.tsx:145
 msgid "Plugins"
 msgstr "插件"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:253
-#: src/UI/components/VerifyNextIDDialog/index.tsx:273
+#: src/UI/components/VerifyNextIDDialog/index.tsx:255
+#: src/UI/components/VerifyNextIDDialog/index.tsx:275
 msgid "Post content:"
 msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx:109
 #: src/UI/components/PluginCardFrame/index.tsx:67
-msgid "Powered by"
-msgstr ""
+#~ msgid "Powered by"
+#~ msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:61
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:137
@@ -984,15 +1167,11 @@ msgstr ""
 msgid "Purchase Maskbox NFT"
 msgstr ""
 
-#: src/UI/translate.ts:47
-msgid "Purchase Maskbox NFT successfully."
-msgstr ""
-
 #: src/UI/translate.ts:115
-msgid "Purchase Maskbox NFT with {0} successfully."
-msgstr ""
+#~ msgid "Purchase Maskbox NFT with {0} successfully."
+#~ msgstr ""
 
-#: src/UI/translate.ts:46
+#: src/UI/translate.ts:48
 msgid "Purchase Maskbox NFT."
 msgstr ""
 
@@ -1000,13 +1179,9 @@ msgstr ""
 msgid "Refund Lucky drop"
 msgstr ""
 
-#: src/UI/translate.ts:48
-msgid "Refund Lucky Drop successfully."
-msgstr ""
-
 #: src/UI/translate.ts:117
-msgid "Refund Lucky Drop with {0} successfully."
-msgstr ""
+#~ msgid "Refund Lucky Drop with {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:49
 msgid "Refund your expired Lucky Drop."
@@ -1025,7 +1200,7 @@ msgstr ""
 msgid "Report NFT Scam Contract?"
 msgstr "报告 NFT Scam 合约吗？"
 
-#: src/hooks/useReportSpam.tsx:74
+#: src/hooks/useReportSpam.tsx:79
 msgid "Report Spam"
 msgstr "举报垃圾"
 
@@ -1049,10 +1224,6 @@ msgstr ""
 msgid "Revoke the approval for token"
 msgstr ""
 
-#: src/UI/translate.ts:51
-msgid "Revoke the approval successfully."
-msgstr ""
-
 #: src/UI/translate.ts:73
 msgid "Revoke Token"
 msgstr ""
@@ -1063,8 +1234,12 @@ msgid "Risk Warning"
 msgstr "风险提示"
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:85
-msgid "Scan QR code with a WalletConnect-compatible wallet"
-msgstr "使用WalletConnect兼容的钱包扫描二维码"
+#~ msgid "Scan QR code with a WalletConnect-compatible wallet"
+#~ msgstr "使用WalletConnect兼容的钱包扫描二维码"
+
+#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:85
+msgid "Scan the QR code with a WalletConnect-compatible wallet"
+msgstr ""
 
 #: src/UI/components/CountryCodePicker/index.tsx:112
 msgid "Search Area"
@@ -1110,7 +1285,7 @@ msgstr ""
 #: src/UI/components/AddCollectibles/index.tsx:335
 #: src/UI/components/AssetsManagement/Collection.tsx:147
 #: src/UI/components/AssetsManagement/CollectionList.tsx:286
-#: src/UI/components/VerifyNextIDDialog/index.tsx:295
+#: src/UI/components/VerifyNextIDDialog/index.tsx:297
 msgid "Send"
 msgstr "发送"
 
@@ -1119,12 +1294,12 @@ msgid "Send {0}"
 msgstr ""
 
 #: src/UI/translate.ts:119
-msgid "Send {0} successfully."
-msgstr ""
+#~ msgid "Send {0} successfully."
+#~ msgstr ""
 
 #: src/UI/components/VerifyNextIDDialog/index.tsx:237
-msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
-msgstr ""
+#~ msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+#~ msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:89
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
@@ -1132,8 +1307,8 @@ msgid "Share"
 msgstr "分享"
 
 #: src/UI/components/UploadDropArea/index.tsx:128
-msgid "Size limit: 10 MB"
-msgstr "大小限制：10 MB"
+#~ msgid "Size limit: 10 MB"
+#~ msgstr "大小限制：10 MB"
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx:26
 msgid "Slippage Tolerance"
@@ -1143,13 +1318,17 @@ msgstr "滑点容许值"
 msgid "Spam"
 msgstr "垃圾"
 
+#: src/hooks/useReportSpam.tsx:81
+msgid "Spam reported."
+msgstr ""
+
 #: src/UI/components/WalletStatusBox/TransactionList.tsx:92
 msgid "Success"
 msgstr "成功"
 
 #: src/hooks/useReportSpam.tsx:76
-msgid "Successfully reported."
-msgstr "举报成功。"
+#~ msgid "Successfully reported."
+#~ msgstr "举报成功。"
 
 #: src/UI/components/ChainBoundary/index.tsx:109
 #: src/UI/components/ChainBoundary/index.tsx:121
@@ -1161,8 +1340,12 @@ msgid "Switch to {0}"
 msgstr "切换到 {0}"
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:179
-msgid "Tell selective friends what's happening..."
-msgstr "告诉朋友发生了什么..."
+msgid "Tell friends what's happening..."
+msgstr ""
+
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:179
+#~ msgid "Tell selective friends what's happening..."
+#~ msgstr "告诉朋友发生了什么..."
 
 #: src/UI/components/AddCollectibles/index.tsx:307
 msgid "The contract address is incorrect or the collection does not belong to you."
@@ -1172,9 +1355,17 @@ msgstr "合约地址不正确或此 NFT 不属于您。"
 msgid "The following wallets are not installed or in conflict with others"
 msgstr ""
 
+#: src/UI/translate.ts:51
+msgid "The token approval revoked."
+msgstr ""
+
 #: src/UI/components/PluginEnableBoundary/index.tsx:39
-msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
-msgstr "此功能已在应用设置中被关闭。启用插件以完全访问。"
+#~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
+#~ msgstr "此功能已在应用设置中被关闭。启用插件以完全访问。"
+
+#: src/UI/components/PluginEnableBoundary/index.tsx:39
+msgid "This function has been turned off in the App settings. Enable plugins to fully access."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx:190
 msgid "This network is not supported yet."
@@ -1189,7 +1380,15 @@ msgid "Token"
 msgstr "Token"
 
 #: src/UI/components/AddCollectibles/index.tsx:280
-msgid "Token ID separated by comma, e.g. 1223,1224,"
+#~ msgid "Token ID separated by comma, e.g. 1223,1224,"
+#~ msgstr ""
+
+#: src/UI/components/AddCollectibles/index.tsx:280
+msgid "Token ID should be separated by comma, e.g. 1223,1224,"
+msgstr ""
+
+#: src/UI/translate.ts:52
+msgid "Token unlocked"
 msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx:118
@@ -1209,7 +1408,7 @@ msgstr "交易已确认"
 msgid "Transaction cost"
 msgstr "交易费用"
 
-#: src/UI/translate.ts:52
+#: src/UI/translate.ts:53
 msgid "Transaction failed"
 msgstr ""
 
@@ -1217,12 +1416,12 @@ msgstr ""
 msgid "Transaction Failed"
 msgstr "交易失败"
 
-#: src/UI/translate.ts:53
-msgid "Transaction submitted."
+#: src/UI/translate.ts:55
+msgid "Transaction has been rejected!"
 msgstr ""
 
 #: src/UI/translate.ts:54
-msgid "Transaction was Rejected!"
+msgid "Transaction submitted."
 msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:124
@@ -1230,8 +1429,8 @@ msgid "Transaction with extremely low slippage tolerance might be reverted becau
 msgstr "若设置的滑点过低，在流动性极低的情况下交易可能会被退回。"
 
 #: src/UI/translate.ts:121
-msgid "Transfer {0} NFT successfully."
-msgstr ""
+#~ msgid "Transfer {0} NFT successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:151
 msgid "Transfer {0} NFT."
@@ -1254,21 +1453,20 @@ msgid "Unlock"
 msgstr "解锁"
 
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:165
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
 msgid "Unlock {0}"
 msgstr "解锁 {0}"
 
 #: src/UI/translate.ts:123
-msgid "Unlock {0} NFT contract successfully."
-msgstr ""
+#~ msgid "Unlock {0} NFT contract successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:153
 msgid "Unlock {0} NFT contract."
 msgstr ""
 
 #: src/UI/translate.ts:125
-msgid "Unlock {0} successfully"
-msgstr ""
+#~ msgid "Unlock {0} successfully"
+#~ msgstr ""
 
 #: src/UI/translate.ts:155
 msgid "Unlock {0}."
@@ -1278,7 +1476,7 @@ msgstr ""
 msgid "Unlock NFT Contract"
 msgstr ""
 
-#: src/UI/translate.ts:55
+#: src/UI/translate.ts:56
 msgid "Unlock token"
 msgstr ""
 
@@ -1286,21 +1484,31 @@ msgstr ""
 msgid "Unlock Token"
 msgstr ""
 
-#: src/UI/translate.ts:56
-msgid "Unlock token successfully"
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
+#~ msgid "Unlocking {0}..."
+#~ msgstr "正在解锁 {0}..."
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:61
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
+msgid "Unlocking {hasSymbolName}..."
 msgstr ""
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
-msgid "Unlocking {0}..."
-msgstr "正在解锁 {0}..."
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:65
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:104
+msgid "Unlocking ALL..."
+msgstr ""
 
-#: src/UI/components/SettingsBoard/GasOption.tsx:80
+#: src/UI/components/SettingsBoard/GasOption.tsx:78
 msgid "up to {0} Gwei"
 msgstr "最多 {0} Gwei"
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx:88
 msgid "Updating Gas Fee…"
 msgstr "Gas费用更新中…"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:237
+msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
+msgstr ""
 
 #: src/UI/components/AssetsManagement/CollectibleItem.tsx:186
 #: src/UI/components/AssetsManagement/Collection.tsx:197
@@ -1313,8 +1521,12 @@ msgid "Verify {0}"
 msgstr "验证 {0}"
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx:102
-msgid "Verify your Twitter ID"
-msgstr "验证您的Twitter ID"
+#~ msgid "Verify your Twitter ID"
+#~ msgstr "验证您的Twitter ID"
+
+#: src/UI/components/ConnectPersonaBoundary/index.tsx:102
+msgid "Verify your X ID"
+msgstr ""
 
 #: src/UI/components/SocialAccountList/SocialListItem.tsx:233
 msgid "View"
@@ -1333,8 +1545,8 @@ msgstr "钱包账户"
 msgid "WalletConnect"
 msgstr "WalletConnect"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:264
-#: src/UI/components/VerifyNextIDDialog/index.tsx:277
+#: src/UI/components/VerifyNextIDDialog/index.tsx:266
+#: src/UI/components/VerifyNextIDDialog/index.tsx:279
 msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
 msgstr ""
 
@@ -1352,8 +1564,8 @@ msgid "Withdraw {0} for savings."
 msgstr ""
 
 #: src/UI/translate.ts:127
-msgid "Withdraw {0} successfully."
-msgstr ""
+#~ msgid "Withdraw {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts:78
 msgid "Withdraw token"
@@ -1368,7 +1580,11 @@ msgid "You canceled the request."
 msgstr ""
 
 #: src/UI/translate.ts:130
-msgid "You didn't approve {0} successfully. Please do not set spending cap as 0 and try it again."
+#~ msgid "You didn't approve {0} successfully. Please do not set spending cap to 0 and try it again."
+#~ msgstr ""
+
+#: src/UI/translate.ts:130
+msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
 msgstr ""
 
 #: src/UI/translate.ts:133
@@ -1384,9 +1600,13 @@ msgid "You must give the {0} smart contract permission to use your {1}. You only
 msgstr "您必须授予 {0} 智能合约权限才能使用您的 {1} 。每个代币只需要授权一次。"
 
 #: src/UI/translate.ts:136
-msgid "You've approved {0} for {1}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
+msgid "You've approved {0} for {1}. If you want to revoke this token, please set spending cap amount to 0."
 msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx:84
-msgid "Your transaction was confirmed!"
-msgstr "您的交易已确认！"
+msgid "Your transaction has been confirmed!"
+msgstr ""
+
+#: src/hooks/useOpenShareTxDialog.tsx:84
+#~ msgid "Your transaction was confirmed!"
+#~ msgstr "您的交易已确认！"

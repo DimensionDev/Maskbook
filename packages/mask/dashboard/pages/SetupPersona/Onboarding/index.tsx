@@ -113,7 +113,7 @@ export const Component = memo(function Onboarding() {
             retry()
             showSnackbar(<Trans>Set Payment Password</Trans>, {
                 variant: 'success',
-                message: <Trans>Set payment password successfully.</Trans>,
+                message: <Trans>Payment password set.</Trans>,
             })
         })
     }, [retry])

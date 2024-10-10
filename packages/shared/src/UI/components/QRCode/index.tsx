@@ -44,11 +44,7 @@ export function QRCode({ text, options, canvasProps }: QRProps) {
             <Typography color="textPrimary" variant="body1" className={classes.text}>
                 <Trans>
                     Backup failed,{' '}
-                    <span
-                        onClick={() => {
-                            setError(false)
-                        }}
-                        className={classes.info}>
+                    <span onClick={() => setError(false)} className={classes.info}>
                         try again
                     </span>
                 </Trans>

@@ -93,7 +93,7 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
 
     const publisherInfo = useMemo(() => {
         if (!publisher) return
-        const main = (
+        const publisherNode = (
             <Typography
                 variant="body1"
                 fontSize={14}
@@ -105,10 +105,12 @@ export function MaskPostExtraInfoWrapper(props: PluginWrapperProps) {
         )
         return (
             <Box className={classes.provider}>
-                <Typography variant="body1" className={classes.providerBy}>
-                    <Trans>Powered by</Trans>
-                </Typography>
-                {main}
+                <Trans>
+                    <Typography variant="body1" className={classes.providerBy}>
+                        Powered by{' '}
+                    </Typography>
+                    {publisherNode}
+                </Trans>
                 {publisherLink ?
                     <Link href={publisherLink} underline="none" target="_blank" rel="noopener">
                         <Icons.Provider

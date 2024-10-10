@@ -43,7 +43,7 @@ export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fe
     const { classes } = useStyles()
     return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ?
             <EmptyStatus className={classes.empty}>
-                <Trans>No encrypted contacts, you can try searching.</Trans>
+                <Trans>No contacts stored locally, you can try searching.</Trans>
             </EmptyStatus>
         :   <Box className={classes.cardContainer}>
                 {friendsArray.map(({ friends }) => {

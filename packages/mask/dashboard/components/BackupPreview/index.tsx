@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { Box, type BoxProps } from '@mui/system'
 import { memo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -226,7 +226,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                 }
                 title={
                     <Typography className={classes.title}>
-                        <Trans>Wallets ({walletLength})</Trans>
+                        <Plural value={walletLength} one="# Wallet" other="# Wallets" />
                     </Typography>
                 }
                 action={

@@ -188,7 +188,7 @@ export const SelectNonFungibleContractDialog = memo(
                         <MaskTextField
                             value={keyword}
                             onChange={(evt) => setKeyword(evt.target.value)}
-                            placeholder={_(msg`Name or Contract address eg.PUNK or 0x234...`)}
+                            placeholder={_(msg`Name or contract address eg. PUNK or 0x234...`)}
                             autoFocus
                             fullWidth
                             InputProps={{

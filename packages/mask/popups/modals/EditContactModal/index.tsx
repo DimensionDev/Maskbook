@@ -122,7 +122,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             await EVMWeb3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
-        showSnackbar(<Trans>Edit contact successfully.</Trans>)
+        showSnackbar(<Trans>Contact edited.</Trans>)
 
         onConfirm?.()
     }, [name, address, type, onConfirm])

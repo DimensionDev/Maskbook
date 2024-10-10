@@ -87,9 +87,7 @@ export const Component = memo(function SignUp() {
         <>
             <Box className={classes.header}>
                 <Typography className={classes.second}>
-                    <Trans>
-                        Step {'1'}/{'2'}
-                    </Trans>
+                    <Trans>Step 1/2</Trans>
                 </Typography>
                 <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
                     <Trans>Recovery</Trans>

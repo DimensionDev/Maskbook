@@ -25,6 +25,7 @@
         "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "3cw8FQ": "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。",
         "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
+        "wxZZWc": "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
         "ayf6mz": "您已连接到一个钱包。请在那个钱包中切换网络，或切换到另一个钱包。",
         "gWcGl/": "你的钱包已取消交易。"
     }

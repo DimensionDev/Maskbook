@@ -39,7 +39,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 tutorialLink: 'https://transak.com/',
                 icon,
                 description: (
-                    <Trans>Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support.</Trans>
+                    <Trans>Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support.</Trans>
                 ),
                 name,
                 category: 'dapp',

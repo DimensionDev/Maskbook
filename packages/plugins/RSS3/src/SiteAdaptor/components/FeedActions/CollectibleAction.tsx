@@ -58,18 +58,15 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                 if (metadata?.cost) {
                     const value = formatValue(metadata?.cost)
                     const symbolName = metadata?.cost?.symbol ?? ''
-                    if (verbose)
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> minted <Tag>{metadata!.name}</Tag> for{' '}
-                                <Label>
-                                    {value} {symbolName}
-                                </Label>
-                            </Trans>
-                        )
                     return (
                         <Trans>
-                            <Label>{user}</Label> minted <Tag>an NFT</Tag> for{' '}
+                            <Label>{user}</Label> minted{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{metadata!.name} </Tag>}
+                                _nft={<Tag>an NFT </Tag>}
+                            />
+                            for{' '}
                             <Label>
                                 {value} {symbolName}
                             </Label>
@@ -78,7 +75,12 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                 }
                 return (
                     <Trans>
-                        <Label children={user} /> minted <Tag children={verbose ? metadata!.name : 'an NFT'} />
+                        <Label children={user} /> minted
+                        <Select
+                            value={verbose ? 'name' : 'nft'}
+                            _name={<Tag>{metadata!.name} </Tag>}
+                            _nft={<Tag>an NFT </Tag>}
+                        />
                     </Trans>
                 )
             case Type.Trade: {
@@ -88,49 +90,36 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                 const recipient = formatEthereumAddress(action.to ?? '', 4)
                 const symbolName = cost?.symbol ?? ''
                 if (feed.platform) {
-                    if (verbose)
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> sold <Tag>{metadata!.name}</Tag> to{' '}
-                                <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
-                                <Label>
-                                    {formatValue(cost)} {symbolName}
-                                </Label>{' '}
-                                on <Label>{feed.platform}</Label>
-                            </Trans>
-                        )
-                    else
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> sold <Tag>an NFT</Tag> to{' '}
-                                <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
-                                <Label>
-                                    {formatValue(cost)} {symbolName}
-                                </Label>{' '}
-                                on <Label>{feed.platform}</Label>
-                            </Trans>
-                        )
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> sold{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{metadata!.name} </Tag>}
+                                _nft={<Tag>an NFT </Tag>}
+                            />{' '}
+                            to <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
+                            <Label>
+                                {formatValue(cost)} {symbolName}
+                            </Label>{' '}
+                            on <Label>{feed.platform}</Label>
+                        </Trans>
+                    )
                 } else {
-                    if (verbose)
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> sold <Tag>{metadata!.name}</Tag> to{' '}
-                                <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
-                                <Label>
-                                    {formatValue(cost)} {symbolName}
-                                </Label>
-                            </Trans>
-                        )
-                    else
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> sold <Tag>an NFT</Tag> to{' '}
-                                <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
-                                <Label>
-                                    {formatValue(cost)} {symbolName}
-                                </Label>
-                            </Trans>
-                        )
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> sold{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{metadata!.name} </Tag>}
+                                _nft={<Tag>an NFT </Tag>}
+                            />{' '}
+                            to <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
+                            <Label>
+                                {formatValue(cost)} {symbolName}
+                            </Label>
+                        </Trans>
+                    )
                 }
             }
             case Type.Transfer:
@@ -138,24 +127,20 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                     const Tag = verbose ? Label : 'span'
                     const costValue = formatValue((feed.actions[0] as RSS3BaseAPI.CollectibleTransferAction).metadata)
                     const costSymbol = feed.actions[0].metadata?.symbol ?? ''
-                    if (verbose)
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> registered <Tag>{feed.actions[1].metadata!.name}</Tag> for{' '}
-                                <Label>
-                                    {costValue} {costSymbol}
-                                </Label>
-                            </Trans>
-                        )
-                    else
-                        return (
-                            <Trans>
-                                <Label>{user}</Label> registered <Tag>an ENS</Tag> for{' '}
-                                <Label>
-                                    {costValue} {costSymbol}
-                                </Label>
-                            </Trans>
-                        )
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> registered{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{feed.actions[1].metadata!.name} </Tag>}
+                                _nft={<Tag>an ENS </Tag>}
+                            />
+                            for{' '}
+                            <Label>
+                                {costValue} {costSymbol}
+                            </Label>
+                        </Trans>
+                    )
                 }
                 action = getLastAction(feed as RSS3BaseAPI.CollectibleTransferFeed)
                 metadata = action.metadata
@@ -167,24 +152,41 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                 const isSending = isSameAddress(feed.owner, action.from)
                 const otherAddress = isSending ? action.to : action.from
                 const formattedAddress = formatEthereumAddress(otherAddress ?? '', 4)
-                return (
-                    <Trans>
-                        <Label>{user}</Label>{' '}
-                        <Select value={isSending ? 'send' : 'claim'} _send="sent" _claim="claimed" />{' '}
-                        <Select
-                            value={verbose ? 'verbose' : 'simple'}
-                            _verbose={<Tag>{metadata!.name}</Tag>}
-                            _simple={<Tag>an NFT</Tag>}
-                        />{' '}
-                        <Select value={isSending ? 'send' : 'claim'} _send="to" _claim="from" />{' '}
-                        <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
-                        <Select
-                            value={costMetadata ? 'cost' : 'free'}
-                            _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
-                            _free=""
-                        />
-                    </Trans>
-                )
+                if (isSending) {
+                    return (
+                        <Trans>
+                            <Label>{user}</Label>sent
+                            <Select
+                                value={verbose ? 'verbose' : 'simple'}
+                                _verbose={<Tag>{metadata!.name} </Tag>}
+                                _simple={<Tag>an NFT </Tag>}
+                            />
+                            to <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
+                            <Select
+                                value={costMetadata ? 'cost' : 'free'}
+                                _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
+                                _free=""
+                            />
+                        </Trans>
+                    )
+                } else {
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> claimed{' '}
+                            <Select
+                                value={verbose ? 'verbose' : 'simple'}
+                                _verbose={<Tag>{metadata!.name} </Tag>}
+                                _simple={<Tag>an NFT </Tag>}
+                            />
+                            from <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
+                            <Select
+                                value={costMetadata ? 'cost' : 'free'}
+                                _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
+                                _free=""
+                            />
+                        </Trans>
+                    )
+                }
             case Type.Burn:
                 metadata = getLastAction(feed as RSS3BaseAPI.CollectibleBurnFeed).metadata
                 return (

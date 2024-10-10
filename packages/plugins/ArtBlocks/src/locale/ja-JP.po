@@ -26,7 +26,7 @@ msgstr ""
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
 msgstr "Artblocksでは、好きなスタイルを選び、作品に対価を支払うと、アルゴリズムによってランダムに生成されたバージョンのコンテンツが作成され、イーサリアムアカウントに送られる。"
 
-#: src/SiteAdaptor/DetailsView.tsx:129
+#: src/SiteAdaptor/DetailsView.tsx:131
 msgid "Blockchain:"
 msgstr "ブロックチェーン:"
 
@@ -34,7 +34,7 @@ msgstr "ブロックチェーン:"
 msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:124
+#: src/SiteAdaptor/DetailsView.tsx:126
 msgid "Chain"
 msgstr "チェーン"
 
@@ -46,13 +46,17 @@ msgstr "コレクション"
 msgid "Completed"
 msgstr "完了しました"
 
-#: src/SiteAdaptor/DetailsView.tsx:135
+#: src/SiteAdaptor/DetailsView.tsx:137
 msgid "Contract:"
 msgstr "コントラクト:"
 
 #: src/SiteAdaptor/DetailsView.tsx:70
-msgid "Created by"
-msgstr "作成者"
+#~ msgid "Created by"
+#~ msgstr "作成者"
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+msgid "Created by <0>{0}</0>• <1>Website</1>"
+msgstr ""
 
 #: src/SiteAdaptor/Collectible.tsx:71
 msgid "Details"
@@ -66,7 +70,7 @@ msgstr "{0} {1} {2}のコレクションから美しいアート作品を購入�
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr "{0} {1} {2}のコレクションから、美しいアート作品を購入しました。ようこそ。"
 
-#: src/SiteAdaptor/DetailsView.tsx:89
+#: src/SiteAdaptor/DetailsView.tsx:91
 msgid "Infos"
 msgstr "情報"
 
@@ -74,15 +78,15 @@ msgstr "情報"
 msgid "Insufficient balance"
 msgstr "残高不足"
 
-#: src/SiteAdaptor/DetailsView.tsx:116
+#: src/SiteAdaptor/DetailsView.tsx:118
 msgid "Library:"
 msgstr "ライブラリー:"
 
-#: src/SiteAdaptor/DetailsView.tsx:109
+#: src/SiteAdaptor/DetailsView.tsx:111
 msgid "License:"
 msgstr "ライセンス:"
 
-#: src/SiteAdaptor/DetailsView.tsx:102
+#: src/SiteAdaptor/DetailsView.tsx:104
 msgid "Minted:"
 msgstr "ミント済"
 
@@ -98,7 +102,7 @@ msgstr "ToS ドキュメントを確認してください"
 msgid "Price per mint"
 msgstr "1ミントあたりの価格"
 
-#: src/SiteAdaptor/DetailsView.tsx:93
+#: src/SiteAdaptor/DetailsView.tsx:95
 msgid "Price:"
 msgstr "価格:"
 
@@ -117,9 +121,13 @@ msgid "Something went wrong!"
 msgstr "問題が発生しました!"
 
 #: src/SiteAdaptor/ActionBar.tsx:29
-msgid "This project is no more active"
-msgstr "このプロジェクトはもう有効ではありません"
+msgid "This project is no longer active"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:29
+#~ msgid "This project is no more active"
+#~ msgstr "このプロジェクトはもう有効ではありません"
 
 #: src/SiteAdaptor/DetailsView.tsx:80
-msgid "Website"
-msgstr "ウェブサイト"
+#~ msgid "Website"
+#~ msgstr "ウェブサイト"

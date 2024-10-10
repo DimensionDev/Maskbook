@@ -68,7 +68,7 @@ export function NftRedPacketHistoryList({ onSend, ...rest }: Props) {
         return (
             <EmptyStatus className={classes.placeholder} iconSize={36}>
                 <Trans>
-                    You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends.
+                    You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends.
                 </Trans>
             </EmptyStatus>
         )

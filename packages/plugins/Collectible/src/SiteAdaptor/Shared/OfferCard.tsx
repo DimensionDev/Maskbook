@@ -118,14 +118,12 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                             })
                         :   '-'}
                         {isValidTimestamp(offer.expiredAt) && (
-                            <>
-                                <span style={{ margin: '0 4px' }}>
-                                    <Trans>Expires in</Trans>
-                                </span>
+                            <Trans>
+                                <span style={{ margin: '0 4px' }}>Expires in </span>
                                 {formatDistanceToNow(Math.ceil(offer.expiredAt!), {
                                     addSuffix: true,
                                 })}
-                            </>
+                            </Trans>
                         )}
                     </Typography>
                 </div>

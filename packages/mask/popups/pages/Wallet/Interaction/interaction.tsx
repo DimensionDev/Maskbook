@@ -223,7 +223,7 @@ const Pager = memo((props: InteractionProps) => {
             </Box>
 
             <ActionButton variant="text" color="info" onClick={handleCancelAllRequest} loading={cancelAllLoading}>
-                <Trans>Reject {String(totalMessages)} Transactions</Trans>
+                <Trans>Reject {totalMessages} Transactions</Trans>
             </ActionButton>
         </Box>
     )

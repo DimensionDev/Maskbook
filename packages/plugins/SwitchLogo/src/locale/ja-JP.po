@@ -18,6 +18,10 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/SwitchLogo/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 996\n"
 
+#: src/SiteAdaptor/SwitchLogoDialog.tsx:165
+msgid "<0>Powered by </0><1>Mask Network</1>"
+msgstr ""
+
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:122
 msgid "Classics Logo"
 msgstr "クラシックスロゴ"
@@ -31,16 +35,16 @@ msgid "I just replaced Twitter X logo with the original blue bird one with Mask 
 msgstr "Twitter Xのロゴを元の青鳥のロゴに置き換えたところ、Mask Networkの拡張機能が使われています。"
 
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:173
-msgid "Mask Network"
-msgstr "Mask Network"
+#~ msgid "Mask Network"
+#~ msgstr "Mask Network"
 
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:133
 msgid "New Logo"
 msgstr "新しいロゴ"
 
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:170
-msgid "Powered by"
-msgstr ""
+#~ msgid "Powered by"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SwitchLogoDialog.tsx:161
 msgid "Save"

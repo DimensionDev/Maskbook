@@ -10,11 +10,23 @@
                 }
             ]
         ],
+        "dw7gO0": [
+            [
+                "value",
+                "plural",
+                {
+                    "one": ["The X account above remains ", "#", " time to create SmartPay Wallet."],
+                    "other": ["The X account above remains ", "#", " times to create SmartPay Wallet."]
+                }
+            ]
+        ],
         "y6lE0k": "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future.",
         "m8Ds0H": "添加 SmartPay 钱包",
         "/829fA": "设置 Mask 为可支付 gas 的代币",
+        "sKW6CH": "Allow Mask be used as gas",
         "tcHpvG": "更改管理账户",
         "Gi/hb0": "Click <0>here</0> and fill the SmartPay Wallet whitelist application form.",
+        "b+/CRg": ["Congratulation! You've deployed SmartPay Wallet ", ["0"], "."],
         "BRhJyf": ["恭喜您! 您已成功创建了 SmartPay 钱包 ", ["0"], "。"],
         "hYgDIe": "创建",
         "I4rME/": "在弹出窗口中创建新钱包",
@@ -22,11 +34,13 @@
         "74cj7m": "在弹出窗口中创建新身份。",
         "S0CsaV": "创建新钱包",
         "L9UK9K": "你的 Twitter 可以创建一个免费的 SmartPay 钱包。",
+        "hSJPnE": "Create a SmartPay Wallet with your X account.",
         "7/e1up": "创建 SmartPay 钱包",
         "ighSWB": "创建成功！",
         "715qtO": "当前的管理账户",
         "GLUC2q": "部署",
         "DPfwMq": "完成",
+        "QjN6Ob": "Free gas experience in Mask Network's dApps like Lucky Drop and Tips.",
         "D88yeQ": "可以在 Mask Network 生态内体验免 gas 的去中心化应用，如红包，ITO 和 Tips 等。",
         "yQE2r9": "加载中",
         "If2v4h": "红包",
@@ -51,6 +65,13 @@
         "SVo6CO": "很抱歉, 您不在免费体验该功能的白名单中。",
         "vH2C/2": "兑换",
         "WKhaQb": "ERC-4337 将会为钱包的设计打开更多的可行性和重要的功能的大门",
+        "y04pns": [
+            "The X account above remains ",
+            ["value"],
+            " ",
+            ["value", "plural", { "one": "time", "other": "times" }],
+            " to create SmartPay Wallet."
+        ],
         "Gaq/7P": "该 SmartPay 钱包只能接收 Polygon 网络的资产。请勿使用该地址接受其他 EVM 链条的资产。",
         "xY9s5E": "超时",
         "em6LzM": "交易被拒绝。",
@@ -58,7 +79,9 @@
         "5KP2UY": "⽤户取消操作。",
         "zgo0BR": "在使用 SmartPay 钱包前需要先在 Polygon Network 部署该智能合约钱包。未部署前，该钱包只能接收资产而无法发送任何交易。",
         "Mkyh69": "目前 SmartPay 钱包仅支持在 Polygon Network 上体验免 gas fee 及更换管理账户的功能。",
+        "l3e2pF": "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment.",
         "jXHtqK": "等待用户签名",
+        "w2vrYo": "Wallet created!",
         "eyQXE/": "钱包",
         "8yBkTu": "什么是 SmartPay？",
         "bxRTOG": "什么是 SmartPay？",

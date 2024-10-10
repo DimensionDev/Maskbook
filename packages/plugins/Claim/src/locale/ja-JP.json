@@ -25,6 +25,7 @@
         "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "3cw8FQ": "エアドロップに参加するには、トランザクションコストをカバーするために、指定されたネットワーク上のウォレットに十分なネイティブトークンが必要です。",
         "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
+        "wxZZWc": "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
         "ayf6mz": "WalletConnect ウォレットに接続しています。そのウォレットのネットワークを切り替えるか、別のウォレットに切り替えてください。",
         "gWcGl/": "あなたのウォレットは取引をキャンセルしました。"
     }

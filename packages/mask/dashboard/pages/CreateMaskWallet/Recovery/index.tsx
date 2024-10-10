@@ -123,9 +123,7 @@ export const Component = memo(function Recovery() {
             } catch (error) {
                 const errorMsg = (error as Error).message
                 // SDK's error message is not as same as design.
-                setError(
-                    errorMsg === 'Invalid mnemonic words.' ? <Trans>Incorrect Mnemonic Phrase Words.</Trans> : errorMsg,
-                )
+                setError(errorMsg === 'Invalid mnemonic words.' ? <Trans>Incorrect Mnemonic Words.</Trans> : errorMsg)
             }
         },
         [t, navigate, location.state?.isReset, location.state?.password],
@@ -232,7 +230,7 @@ export const Component = memo(function Recovery() {
 
             <Typography className={classes.second} mt={2}>
                 <Trans>
-                    Please enter the correct mnemonic phrase words, private key, or upload the correct keystore file.
+                    Please enter the correct mnemonic words, private key, or upload the correct keystore file.
                 </Trans>
             </Typography>
             <RecoveryProvider>

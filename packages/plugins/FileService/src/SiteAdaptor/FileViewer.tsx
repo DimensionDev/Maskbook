@@ -31,9 +31,9 @@ export function FileViewer({ files }: { files: FileInfo[] }) {
         async (file: FileInfo) => {
             try {
                 await PluginFileServiceRPC.setFileInfo(file)
-                showSnackbar(<Trans>File saved successfully</Trans>, {
+                showSnackbar(<Trans>File saved</Trans>, {
                     variant: 'success',
-                    message: <Trans>You’ve saved {file.name} to Web3 file service.</Trans>,
+                    message: <Trans>You've saved {file.name} to Web3 file service.</Trans>,
                 })
             } catch (err) {
                 showSnackbar(<Trans>Failed to save file</Trans>, {

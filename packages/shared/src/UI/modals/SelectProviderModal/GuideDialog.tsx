@@ -57,10 +57,10 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
             <DialogContent className={classes.content}>
                 <section className={classes.section}>
                     <Typography fontSize={16} fontWeight={700}>
-                        <Trans>1. If you haven't installed {name} Wallet</Trans>
+                        <Trans>1. If you haven't installed the {name} Wallet</Trans>
                     </Typography>
                     <Typography mt={3} fontSize={14}>
-                        <Trans>Download {name} Wallet here</Trans>
+                        <Trans>Download the {name} Wallet here</Trans>
                     </Typography>
                     <Link
                         href={provider.downloadLink}
@@ -75,10 +75,10 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                 </section>
                 <section className={classes.section}>
                     <Typography fontSize={16} fontWeight={700}>
-                        <Trans>2. If you have installed {name} Wallet</Trans>
+                        <Trans>2. If you have installed the {name} Wallet</Trans>
                     </Typography>
                     <Typography mt={1.5} fontSize={14}>
-                        <Trans>Enable {name} Wallet extension and disable other browser extension wallets</Trans>
+                        <Trans>Enable the {name} Wallet extension and disable other wallet extensions</Trans>
                     </Typography>
                     <Stack className={classes.card} style={{ cursor: 'default' }}>
                         <Stack flexDirection="row" alignItems="center">
