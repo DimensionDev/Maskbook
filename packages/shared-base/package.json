@@ -29,7 +29,7 @@
     "json-stable-stringify": "^1.1.1",
     "pvtsutils": "^1.3.5",
     "typeson": "^9.0.3",
-    "typeson-registry": "^10.0.0"
+    "typeson-registry": "^11.1.1"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.2"

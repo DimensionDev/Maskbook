@@ -72,9 +72,6 @@ patchedDependencies:
   rss3-next@0.6.17:
     hash: db27yqpr4wdtpwfyvaxcqd4jpi
     path: patches/rss3-next@0.6.17.patch
-  typeson-registry:
-    hash: 4bzuw53ypfelluyu46makqwiai
-    path: patches/typeson-registry.patch
   urlcat@3.1.0:
     hash: scyjp2cqyqu6oq4kmzjh3isyxa
     path: patches/urlcat@3.1.0.patch
@@ -2591,8 +2588,8 @@ importers:
         specifier: ^9.0.3
         version: 9.0.3
       typeson-registry:
-        specifier: ^10.0.0
-        version: 10.0.0(patch_hash=4bzuw53ypfelluyu46makqwiai)
+        specifier: ^11.1.1
+        version: 11.1.1
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -14298,9 +14295,9 @@ packages:
     engines: {node: '>=14.17'}
     hasBin: true
 
-  typeson-registry@10.0.0:
-    resolution: {integrity: sha512-avguVaKqLvpKAViY3AD+YJFMNSlgAqs66nue3e2DBUY6xBOr2tJgggCyd8E026CM2F6JfNxp8tl9JU/+ZsJtyA==}
-    engines: {node: '>=18.0.0'}
+  typeson-registry@11.1.1:
+    resolution: {integrity: sha512-WF8meNtURfGXXY2RitEMgZrMEclHU8IdxxN4YTcnXTQUHvisPYsKrxxPFhc4DKTCAc6sVvWVtKelOXFDtw/OQQ==}
+    engines: {node: '>=18.14.0'}
 
   typeson@9.0.3:
     resolution: {integrity: sha512-vsOn+VPbIYI3jgj96vwIhAO0BNmlBxEgBKVmuzl1dwXzQe+3XjRi/gK2zYgAansWYlrtvluy4lvWcL8LF01P3Q==}
@@ -29571,7 +29568,7 @@ snapshots:
 
   typescript@5.5.2: {}
 
-  typeson-registry@10.0.0(patch_hash=4bzuw53ypfelluyu46makqwiai):
+  typeson-registry@11.1.1:
     dependencies:
       base64-arraybuffer-es6: 3.1.0
       typeson: 9.0.3
