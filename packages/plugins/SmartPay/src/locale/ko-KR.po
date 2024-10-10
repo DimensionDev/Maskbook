@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -36,7 +36,7 @@ msgstr "SmartPay 월렛 추가"
 
 #: src/SiteAdaptor/components/SmartPayContent.tsx:449
 #~ msgid "Allow Mask as gas"
-#~ msgstr "Mask 토큰을 가스비로 허용합니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayContent.tsx:449
 msgid "Allow Mask be used as gas"
@@ -56,7 +56,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
 #~ msgid "Congratulation! You’ve deployed SmartPay Wallet {0}."
-#~ msgstr "축하합니다! SmartPay 월렛 {0} 이미 생성되었습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx:174
 #: src/SiteAdaptor/components/ManagePopover.tsx:140
@@ -82,7 +82,7 @@ msgstr "새로운 월렛 만들기"
 
 #: src/SiteAdaptor/components/Deploy.tsx:217
 #~ msgid "Create a SmartPay Wallet with your Twitter account."
-#~ msgstr "트위터 계정으로 SmartPay 월렛을 만듭니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Deploy.tsx:217
 msgid "Create a SmartPay Wallet with your X account."
@@ -95,7 +95,7 @@ msgstr "SmartPay 월렛 만들기"
 
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:58
 #~ msgid "Created successfully!"
-#~ msgstr "성공적으로 생성되었습니다!"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/AccountsManagePopover.tsx:128
 msgid "Current Management account"
@@ -116,7 +116,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
 #~ msgid "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips."
-#~ msgstr "행운 드랍과 팁와 같은 Mask Network의 dApp에서 무료 기스비 경험을 할 수 있습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx:117
 msgid "Loading"
@@ -186,7 +186,7 @@ msgstr "SmartPay 월렛의 관리지 계정 설정"
 #: src/SiteAdaptor/components/SmartPayEntry.tsx:86
 #: src/SiteAdaptor/index.tsx:42
 msgid "Smart Pay"
-msgstr "Smart Pay"
+msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:47
 msgid "SmartPay is based on ERC-4337 and is currently deployed on Polygon Network. Multiple chains will be supported in the future. ERC-4337 is a new wallet proposal that would open the door for creativity in wallet design and could provide more important features. And we will design more fascinating features based on the new wallet proposal in Mask Network."
@@ -242,7 +242,7 @@ msgstr "사용자는 SmartPay 월렛을 Polygon 네트워크에 배치한 후 �
 
 #: src/SiteAdaptor/components/Deploy.tsx:301
 #~ msgid "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment."
-#~ msgstr "현재 Polygon 네트워크에서만 SmartPay 월렛(가스비 무료 및 개인키 변경)을 사용할 수 있습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Deploy.tsx:301
 msgid "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment."
@@ -287,3 +287,4 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:55
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPay를 사용하기 전에 알아야 할 사항:"
+
