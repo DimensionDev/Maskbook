@@ -38,7 +38,7 @@ export async function syncLanguages() {
             if (!poFile.includes('plugin')) {
                 const target = `@masknet/shared-base`
                 code += `import { createI18NBundle } from '${target}'\n`
-                code += `export const addI18N = createI18NBundle('_', [undefined, languages as any])\n`
+                code += `export const addI18N = createI18NBundle('_', languages as any)\n`
             }
 
             {

@@ -15,7 +15,7 @@ export const languages = {
     zh: zh_TW,
 }
 import { createI18NBundle } from '@masknet/shared-base'
-export const addI18N = createI18NBundle('_', [undefined, languages as any])
+export const addI18N = createI18NBundle('_', languages as any)
 // @ts-ignore
 import.meta.webpackHot.accept(['./en-US.json', './ja-JP.json', './ko-KR.json', './zh-CN.json', './zh-TW.json'], () =>
     globalThis.dispatchEvent?.(
