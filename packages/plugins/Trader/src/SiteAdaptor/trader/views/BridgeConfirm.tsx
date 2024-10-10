@@ -261,7 +261,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
-    const loading = isSending || isCheckingApprove || isApproving
 
     const { showSnackbar } = useCustomSnackbar()
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
@@ -286,8 +285,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const [{ loading: submitting }, submit] = useAsyncFn(async () => {
         if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
 
+        await approveMutation.mutateAsync()
         try {
-            await approveMutation.mutateAsync()
             const hash = await sendBridge().catch((err) => {
                 const message = (err as Error).message
                 if (message.includes('Transaction was rejected!')) return null
@@ -366,7 +365,8 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         mode,
     ])
 
-    const disabled = !isBridgable || loading || submitting
+    const loading = isSending || isCheckingApprove || isApproving || submitting
+    const disabled = !isBridgable || loading
     return (
         <div className={classes.container}>
             <div className={classes.content}>
