@@ -1,6 +1,5 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3 } from '@masknet/web3-hooks-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import { BigNumber } from 'bignumber.js'
 import { useCallback } from 'react'
 
@@ -8,12 +7,12 @@ import { useCallback } from 'react'
  * Transfer(address,address,uint256)
  */
 const TOPIC = '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef'
-export function useGetTransferReceived(chainId: ChainId) {
-    const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
+export function useGetTransferReceived() {
+    const web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
     return useCallback(
-        async (hash: string, receiver: string) => {
-            const receipt = await web3?.eth.getTransactionReceipt(hash)
-            const receiverTopic = `0x000000000000000000000000${receiver.slice(2)}`.toLowerCase()
+        async ({ hash, account, chainId }: { hash: string; account: string; chainId: number }) => {
+            const receipt = await web3.getTransactionReceipt(hash, { chainId })
+            const receiverTopic = `0x000000000000000000000000${account.slice(2)}`.toLowerCase()
 
             const datas = receipt?.logs
                 .filter((x) => {

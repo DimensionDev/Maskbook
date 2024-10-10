@@ -38,7 +38,7 @@ export function useWaitForTransaction() {
                     }
                     const [receipt, blockNumber] = await Promise.all([
                         web3.getTransactionReceipt(hash, { chainId }),
-                        web3.getBlockNumber(),
+                        web3.getBlockNumber({ chainId }),
                     ])
                     if (receipt?.blockNumber && blockNumber - receipt.blockNumber >= confirmationCount) {
                         resolve(receipt)

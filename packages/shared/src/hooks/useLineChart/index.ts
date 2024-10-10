@@ -67,7 +67,7 @@ export function useLineChart(
             y: (y(max) ?? 0) - 16,
         }
 
-        const minFixedPosition = fixOverPosition(contentWidth, contentHeight, minPosition.x, minPosition.y, 0)
+        const minFixedPosition = fixOverPosition(contentWidth, contentHeight, minPosition.x, minPosition.y, 0, 10)
         const maxFixedPosition = fixOverPosition(contentWidth, contentHeight, maxPosition.x, maxPosition.y, 0)
 
         const minTextSelection = graph
@@ -81,7 +81,7 @@ export function useLineChart(
 
         const boundedMinPosition = bound({
             containerWidth: contentWidth,
-            containerHeight: contentHeight,
+            containerHeight: height,
             targetWidth: minTextRect?.width ?? 0,
             targetHeight: minTextRect?.height ?? 0,
             ...minFixedPosition,
