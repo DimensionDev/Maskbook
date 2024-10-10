@@ -17,7 +17,7 @@ export const languages = {
 import { createI18NBundle } from '@masknet/shared-base'
 export const addI18N = createI18NBundle('_', languages as any)
 // @ts-ignore
-import.meta.webpackHot.accept(['./en-US.json', './ja-JP.json', './ko-KR.json', './zh-CN.json', './zh-TW.json'], () =>
+import.meta.webpackHot?.accept(['./en-US.json', './ja-JP.json', './ko-KR.json', './zh-CN.json', './zh-TW.json'], () =>
     globalThis.dispatchEvent?.(
         new CustomEvent('MASK_I18N_HMR_LINGUI', {
             detail: { en: en_US, ja: ja_JP, ko: ko_KR, 'zh-CN': zh_CN, zh: zh_TW },

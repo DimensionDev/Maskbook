@@ -49,7 +49,7 @@ export async function syncLanguages() {
                     binding.push(`'${familyName}': ${language.replace('-', '_')}`)
                 }
                 code += `// @ts-ignore
-                        import.meta.webpackHot.accept(
+                        import.meta.webpackHot?.accept(
                             ${JSON.stringify(allImportPath)},
                             () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
                                 detail: { ${binding.join(', ')} }
