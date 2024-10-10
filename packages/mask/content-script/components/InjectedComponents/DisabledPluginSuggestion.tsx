@@ -16,7 +16,7 @@ import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
 import Services from '#services'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 function useDisabledPlugins() {
     const activated = new Set<string>(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
@@ -83,7 +83,6 @@ export function PossiblePluginSuggestionUISingle(props: {
     content?: ReactNode
 }) {
     const { define, lackHostPermission, wrapperProps, content } = props
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const onClick = useCallback(() => {
         if (lackHostPermission && define.enableRequirement.host_permissions) {
@@ -102,7 +101,7 @@ export function PossiblePluginSuggestionUISingle(props: {
 
     const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
     const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />
-    const buttonLabel = lackHostPermission ? t.approve() : t.plugin_enable()
+    const buttonLabel = lackHostPermission ? <Trans>Approve</Trans> : <Trans>Enable the plugin</Trans>
 
     return (
         <MaskPostExtraInfoWrapper
@@ -161,12 +160,13 @@ interface FallbackContentProps extends BoxProps {
 }
 
 function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     if (disabled)
         return (
             <Box component="div" {...rest} className={cx(classes.content, rest.className)}>
-                <Typography className={classes.text}>{t.plugin_disabled_tip()}</Typography>
+                <Typography className={classes.text}>
+                    <Trans>You need to open the dApp to view the specific content.</Trans>
+                </Typography>
             </Box>
         )
     return (

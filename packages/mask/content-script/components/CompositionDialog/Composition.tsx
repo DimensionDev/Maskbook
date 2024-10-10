@@ -17,7 +17,7 @@ import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB, useCurrentPersona } from '../../../shared-ui/hooks/index.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {
@@ -47,7 +47,6 @@ interface PostDialogProps {
 }
 
 export function Composition({ type = 'timeline', requireClipboardPermission }: PostDialogProps) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const currentIdentity = useCurrentIdentity()?.identifier
     const allPersonas = usePersonasFromDB()
@@ -66,14 +65,14 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
     )
 
     const [reason, setReason] = useState<'timeline' | 'popup' | 'reply'>('timeline')
-    const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
+    const [initialMeta, setInitialMeta] = useState<Record<string, unknown>>(EMPTY_OBJECT)
 
     const [open, setOpen] = useState(false)
     const [isOpenFromApplicationBoard, setIsOpenFromApplicationBoard] = useState(false)
 
     const onClose = useCallback(() => {
         setOpen(false)
-        setInitialMetas(EMPTY_OBJECT)
+        setInitialMeta(EMPTY_OBJECT)
 
         UI.current?.reset()
     }, [])
@@ -92,7 +91,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             setOpen(open)
             setReason(reason)
             setIsOpenFromApplicationBoard(!!options?.isOpenFromApplicationBoard)
-            setInitialMetas(options?.initialMetas ?? EMPTY_OBJECT)
+            setInitialMeta(options?.initialMeta ?? EMPTY_OBJECT)
             if (content) UI.current?.setMessage(content)
             if (options?.target) UI.current?.setEncryptionKind(options.target)
             if (options?.startupPlugin) UI.current?.startPlugin(options.startupPlugin, options.startupPluginProps)
@@ -129,7 +128,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
             classes={{ paper: cx(classes.dialogRoot, !open ? classes.hideDialogRoot : '') }}
             open={open}
             onClose={onClose}
-            title={t.post_dialog__title()}
+            title={<Trans>Encrypted Post</Trans>}
             independent>
             <DialogContent classes={{ root: classes.dialogContent }}>
                 <CompositionDialogUI
@@ -145,7 +144,7 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
                     supportTextEncoding={networkSupport?.image ?? false}
                     e2eEncryptionDisabled={isE2E_Disabled}
                     isOpenFromApplicationBoard={isOpenFromApplicationBoard}
-                    initialMetas={initialMetas}
+                    initialMeta={initialMeta}
                     personaAction={
                         persona ?
                             <PersonaAction currentPersona={persona} classes={{ bottomFixed: classes.persona }} />

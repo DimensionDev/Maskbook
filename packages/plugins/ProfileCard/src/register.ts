@@ -1,6 +1,5 @@
 import { registerPlugin } from '@masknet/plugin-infra'
 import { base } from './base.js'
-import { languages } from './locales/languages.js'
 
 registerPlugin({
     ...base,
@@ -9,5 +8,4 @@ registerPlugin({
         hotModuleReload: (hot) =>
             import.meta.webpackHot?.accept('./SiteAdaptor', () => hot(import('./SiteAdaptor/index.js'))),
     },
-    i18n: languages,
 })

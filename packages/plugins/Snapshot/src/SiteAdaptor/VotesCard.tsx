@@ -14,8 +14,8 @@ import { useProposal } from './hooks/useProposal.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { useSnapshotTrans } from '../locales/index.js'
 import { isArray } from 'lodash-es'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -91,7 +91,6 @@ function Content() {
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier, account)
     const { classes, cx, theme } = useStyles()
-    const t = useSnapshotTrans()
     return (
         <SnapshotCard
             lazy
@@ -101,7 +100,7 @@ function Content() {
                     classes={{ badge: classes.badge }}
                     badgeContent={proposal.voterAmounts}
                     color="primary">
-                    {t.plugin_snapshot_votes_title()}
+                    <Trans>Votes</Trans>
                 </Badge>
             }>
             <List className={classes.list}>
@@ -130,7 +129,7 @@ function Content() {
                                     </Box>
                                     <Typography color={theme.palette.maskColor.dark}>
                                         {isSameAddress(v.address, account) ?
-                                            t.plugin_snapshot_votes_yourself()
+                                            <Trans>You</Trans>
                                         :   formatEthereumAddress(v.address, 4)}
                                     </Typography>
                                 </Link>
@@ -182,15 +181,13 @@ function Content() {
 }
 
 function Loading(props: React.PropsWithChildren) {
-    const t = useSnapshotTrans()
-    return <LoadingCard title={t.plugin_snapshot_votes_title()}>{props.children}</LoadingCard>
+    return <LoadingCard title={<Trans>Votes</Trans>}>{props.children}</LoadingCard>
 }
 
 function Fail(props: React.PropsWithChildren) {
-    const t = useSnapshotTrans()
     const retry = unstable_useCacheRefresh()
     return (
-        <LoadingFailCard title={t.plugin_snapshot_votes_title()} retry={retry}>
+        <LoadingFailCard title={<Trans>Votes</Trans>} retry={retry}>
             {props.children}
         </LoadingFailCard>
     )

@@ -8,6 +8,8 @@ import { PostDialogHint } from '../../../components/InjectedComponents/PostDialo
 import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
 import { startWatch } from '../../../utils/startWatch.js'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()(() => ({
     tooltip: {
@@ -45,6 +47,7 @@ export function injectCompositionFacebook(signal: AbortSignal) {
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<CompositionUI />)
 }
 function CompositionUI() {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const onHintButtonClicked = useCallback(
@@ -60,7 +63,11 @@ function CompositionUI() {
                     if (data.options?.isOpenFromApplicationBoard) taskCloseNativeComposeBoxFacebook()
                     return
                 }
-                taskOpenComposeBoxFacebook(data.content || '', t.automation_request_click_post_button(), data.options)
+                taskOpenComposeBoxFacebook(
+                    data.content || '',
+                    _(msg`Please click the "Post" button to open the compose dialog.`),
+                    data.options,
+                )
             }),
         [t],
     )

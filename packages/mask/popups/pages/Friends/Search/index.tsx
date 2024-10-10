@@ -1,9 +1,10 @@
 import { memo, useState } from 'react'
 import { InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Icons } from '@masknet/icons'
 import { useCurrentLinkedPersona } from '@masknet/shared'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     inputRoot: {
@@ -35,8 +36,8 @@ interface SearchProps {
 }
 
 export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
+    const { _ } = useLingui()
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const [value, setValue] = useState<string>('')
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
     const currentPersona = useCurrentLinkedPersona()
@@ -81,7 +82,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
                     </button>
                 :   null
             }
-            placeholder={t.popups_encrypted_friends_search_placeholder()}
+            placeholder={_(msg`Search Next.ID, X, Lens, ENS or Address`)}
         />
     )
 })

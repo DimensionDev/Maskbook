@@ -16,6 +16,50 @@ const header = `${basicHeader}
 `
 
 export async function syncLanguages() {
+    const { glob } = await import('glob')
+    const poFiles = await glob('**/en-US.po', { cwd: ROOT_PATH })
+    for (const poFile of poFiles) {
+        const inputDir = new URL(dirname(poFile) + '/', ROOT_PATH)
+        const languages = getLanguageFamilyName(
+            (await readdir(inputDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
+        )
+
+        {
+            let code = header
+            for (const [language] of languages) {
+                code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+            }
+            code += `export const languages = {\n`
+            for (const [language, familyName] of languages) {
+                code += `    '${familyName}': ${language.replace('-', '_')},\n`
+            }
+            code += `}\n`
+            // Non-plugin i18n files
+            if (!poFile.includes('plugin')) {
+                const target = `@masknet/shared-base`
+                code += `import { createI18NBundle } from '${target}'\n`
+                code += `export const addI18N = createI18NBundle('_', languages as any)\n`
+            }
+
+            {
+                const allImportPath: string[] = []
+                const binding: string[] = []
+                for (const [language, familyName] of languages) {
+                    allImportPath.push(`./${language}.json`)
+                    binding.push(`'${familyName}': ${language.replace('-', '_')}`)
+                }
+                code += `// @ts-ignore
+                        import.meta.webpackHot?.accept(
+                            ${JSON.stringify(allImportPath)},
+                            () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
+                                detail: { ${binding.join(', ')} }
+                            }))
+                        )`
+            }
+            code = await prettier(code)
+            await writeFile(new URL('languages.ts', inputDir), code, { encoding: 'utf8' })
+        }
+    }
     const config = JSON.parse(await readFile(new URL('.i18n-codegen.json', ROOT_PATH), 'utf-8')).list
     for (const { input, generator } of config) {
         const { namespace } = generator
@@ -68,7 +112,7 @@ export async function syncLanguages() {
             if (!namespace.includes('.')) {
                 const target = `@masknet/shared-base`
                 code += `import { createI18NBundle } from '${target}'\n`
-                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', ${linguiLanguages.size ? '[languages, linguiLanguages]' : 'languages'})\n`
+                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', ${linguiLanguages.size ? '[languages, linguiLanguages as any]' : 'languages'})\n`
             }
 
             {

@@ -18,6 +18,7 @@ export namespace FriendTech {
         rank: string
         shareSupply: 6
         userBio: string | null
+        // cspell:disable-next-line
         watchlistCount: string
     }
     export interface TradeRecord {

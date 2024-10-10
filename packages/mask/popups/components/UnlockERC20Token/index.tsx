@@ -9,8 +9,10 @@ import { Icons } from '@masknet/icons'
 import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -113,7 +115,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
     onPaymentTokenChange,
     paymentToken,
 }) {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const theme = useTheme()
     const [value, setValue] = useState('')
@@ -153,13 +155,22 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
 
     const tips = useMemo(() => {
         if (isZero(value)) {
-            return t.popups_wallet_unlock_erc20_revoke_tips()
+            return <Trans>The approval for this contract will be revoked in case of the amount is 0.</Trans>
         }
         if (isGreaterThan(value, leftShift(balance, token?.decimals))) {
-            return t.popups_wallet_unlock_erc20_balance_too_high_tips()
+            return (
+                <Trans>
+                    This allows the third party to spend all your token balance until it reaches the cap or you revoke
+                    the spending cap. If this is not intended, consider setting a lower spending cap.
+                </Trans>
+            )
         }
 
-        return t.popups_wallet_unlock_erc20_balance_tips({ amount: value, symbol: String(token?.symbol) })
+        return (
+            <Trans>
+                This allows the third party to spend {value} {String(token?.symbol)} from your current balance.
+            </Trans>
+        )
     }, [value, balance, token])
 
     if (!transaction.formattedTransaction) return null
@@ -204,7 +215,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             <Box className={classes.amountInfo}>
                 <TextField
                     fullWidth
-                    placeholder={t.popups_wallet_unlock_erc20_placeholder()}
+                    placeholder={_(msg`Enter Max spend limit`)}
                     value={value}
                     onChange={(e) => {
                         setValue(e.target.value)
@@ -219,7 +230,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                                     setValue(leftShift(balance, token?.decimals).toString())
                                     handleChange(balance)
                                 }}>
-                                {t.max()}
+                                <Trans>Max</Trans>
                             </Button>
                         ),
                         disableUnderline: true,
@@ -243,10 +254,12 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                         {tips}
                     </Typography>
                 :   null}
-                <Typography className={classes.name}>{t.popups_wallet_unlock_erc20_requested_by()}</Typography>
+                <Typography className={classes.name}>
+                    <Trans>Spend limit requested by</Trans>
+                </Typography>
                 {transaction.formattedTransaction.popup?.spender ?
                     <Typography className={classes.spender} component="div">
-                        {t.contract()}:
+                        <Trans>Contract</Trans>:
                         <Typography className={classes.spenderAddress}>
                             {transaction.formattedTransaction.popup?.spender}{' '}
                             <Link
@@ -266,7 +279,9 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
             </Box>
 
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
+                <Typography className={classes.gasFeeTitle}>
+                    <Trans>Gas Fee</Trans>
+                </Typography>
                 {transaction.computedPayload.gas && initConfig ?
                     <GasSettingMenu
                         defaultGasLimit={transaction.computedPayload.gas}

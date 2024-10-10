@@ -7,7 +7,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans, msg } from '@lingui/macro'
 import {
     UserContext,
     useAppearance,
@@ -18,6 +18,7 @@ import {
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { useTitle } from '../../hooks/useTitle.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -106,6 +107,7 @@ const FAQ_LINK =
 const HOME_LINK = 'Mask.io'
 
 export const Component = memo(function SettingsPage() {
+    const { _ } = useLingui()
     const theme = useTheme()
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
@@ -118,7 +120,7 @@ export const Component = memo(function SettingsPage() {
 
     const LANGUAGE_OPTIONS_MAP = useMemo(
         () => ({
-            [LanguageOptions.__auto__]: t.popups_settings_language_auto(),
+            [LanguageOptions.__auto__]: <Trans>Follow System</Trans>,
             [LanguageOptions.enUS]: 'English',
             [LanguageOptions.zhCN]: '简体中文',
             [LanguageOptions.zhTW]: '繁体中文',
@@ -130,9 +132,9 @@ export const Component = memo(function SettingsPage() {
 
     const APPEARANCE_OPTIONS_MAP = useMemo(
         () => ({
-            [Appearance.default]: t.popups_settings_appearance_default(),
-            [Appearance.light]: t.popups_settings_appearance_light(),
-            [Appearance.dark]: t.popups_settings_appearance_dark(),
+            [Appearance.default]: <Trans>Follow System</Trans>,
+            [Appearance.light]: <Trans>Light</Trans>,
+            [Appearance.dark]: <Trans>Dark</Trans>,
         }),
         [t],
     )
@@ -147,15 +149,15 @@ export const Component = memo(function SettingsPage() {
     )
 
     const localBackupTip = (() => {
-        if (!user.backupPassword) return t.popups_settings_set_backup_password_tips()
-        if (!user.localBackupAt) return t.popups_settings_no_backup()
-        return t.popups_settings_backup_on({ time: user.localBackupAt })
+        if (!user.backupPassword) return <Trans>Please set the backup password to back up</Trans>
+        if (!user.localBackupAt) return <Trans>No back up</Trans>
+        return <Trans>Backup on {user.localBackupAt}</Trans>
     })()
 
     const cloudBackupTip = (() => {
-        if (!user.backupPassword) return t.popups_settings_set_backup_password_tips()
-        if (!user.cloudBackupAt) return t.popups_settings_no_backup()
-        return t.popups_settings_backup_on({ time: user.cloudBackupAt })
+        if (!user.backupPassword) return <Trans>Please set the backup password to back up</Trans>
+        if (!user.cloudBackupAt) return <Trans>No back up</Trans>
+        return <Trans>Backup on {user.cloudBackupAt}</Trans>
     })()
 
     const { data } = useSupportedSites()
@@ -171,7 +173,7 @@ export const Component = memo(function SettingsPage() {
         await Services.Helper.removePopupWindow()
     }, [])
 
-    useTitle(t.settings())
+    useTitle(_(msg`Settings`))
 
     return (
         <>
@@ -183,9 +185,11 @@ export const Component = memo(function SettingsPage() {
                             <Icons.Filter size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t.popups_settings_general()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>General</Trans>
+                            </Typography>
                             <Typography className={classes.titleDescription}>
-                                {t.popups_settings_basic_setting()}
+                                <Trans>Basic setting</Trans>
                             </Typography>
                         </Box>
                     </Box>
@@ -195,7 +199,7 @@ export const Component = memo(function SettingsPage() {
                             onClick={() => modalNavigate(PopupModalRoutes.SelectLanguage)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_language()}
+                                primary={<Trans>Language</Trans>}
                                 secondary={LANGUAGE_OPTIONS_MAP[lang]}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -205,7 +209,7 @@ export const Component = memo(function SettingsPage() {
                             onClick={() => modalNavigate(PopupModalRoutes.SelectAppearance)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_appearance()}
+                                primary={<Trans>Appearance</Trans>}
                                 secondary={APPEARANCE_OPTIONS_MAP[mode]}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -215,7 +219,7 @@ export const Component = memo(function SettingsPage() {
                             onClick={() => modalNavigate(PopupModalRoutes.SupportedSitesModal)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_supported_sites()}
+                                primary={<Trans>Supported Sites</Trans>}
                                 secondary={
                                     // eslint-disable-next-line react/naming-convention/component-name
                                     <MaskSharedTrans.popups_settings_supported_website
@@ -238,7 +242,9 @@ export const Component = memo(function SettingsPage() {
                             <Icons.History size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t.popups_settings_backup_and_recovery()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>Backup & Recovery</Trans>
+                            </Typography>
                             <Typography className={classes.titleDescription}>
                                 <Trans>Data correlation</Trans>
                             </Typography>
@@ -256,7 +262,7 @@ export const Component = memo(function SettingsPage() {
                             }}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_cloud_backup()}
+                                primary={<Trans>Cloud Backup</Trans>}
                                 secondary={cloudBackupTip}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -272,7 +278,7 @@ export const Component = memo(function SettingsPage() {
                             }}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_local_backup()}
+                                primary={<Trans>Local Backup</Trans>}
                                 secondary={localBackupTip}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -282,8 +288,8 @@ export const Component = memo(function SettingsPage() {
                             onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_restore_database()}
-                                secondary={t.popups_settings_restore_database_description()}
+                                primary={<Trans>Restore Database</Trans>}
+                                secondary={<Trans>Restore from a previous database backup</Trans>}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
@@ -298,11 +304,9 @@ export const Component = memo(function SettingsPage() {
                             }>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_backup_password()}
+                                primary={<Trans>Backup Password</Trans>}
                                 secondary={
-                                    user.backupPassword ?
-                                        t.popups_settings_change_backup_password()
-                                    :   t.popups_settings_not_set()
+                                    user.backupPassword ? <Trans>Change Backup Password</Trans> : <Trans>Not set</Trans>
                                 }
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -315,9 +319,11 @@ export const Component = memo(function SettingsPage() {
                             <Icons.Questions size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t.popups_settings_support()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>Support</Trans>
+                            </Typography>
                             <Typography className={classes.titleDescription}>
-                                {t.popups_settings_basic_setting()}
+                                <Trans>Basic setting</Trans>
                             </Typography>
                         </Box>
                     </Box>
@@ -325,7 +331,7 @@ export const Component = memo(function SettingsPage() {
                         <ListItem className={classes.listItem} onClick={() => openWindow(`mailto:${FEEDBACK_MAIL}`)}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_feedback()}
+                                primary={<Trans>Feedback</Trans>}
                                 secondary={FEEDBACK_MAIL}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -335,7 +341,7 @@ export const Component = memo(function SettingsPage() {
                             onClick={() => openWindow(`https://${FAQ_LINK}`, '_blank', { referrer: false })}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_faq()}
+                                primary={<Trans>FAQ&Tutorial</Trans>}
                                 secondary={'realmasknetwork.notion.site'}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -345,7 +351,7 @@ export const Component = memo(function SettingsPage() {
                             onClick={() => openWindow(`https://${HOME_LINK}`, '_blank', { referrer: false })}>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_website()}
+                                primary={<Trans>Website</Trans>}
                                 secondary={HOME_LINK}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -358,7 +364,9 @@ export const Component = memo(function SettingsPage() {
                             <Icons.Appearance size={24} />
                         </Box>
                         <Box className={classes.headerContent}>
-                            <Typography className={classes.title}>{t.popups_settings_about()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>About</Trans>
+                            </Typography>
                         </Box>
                     </Box>
                     <List className={classes.list}>
@@ -369,7 +377,7 @@ export const Component = memo(function SettingsPage() {
                             }>
                             <ListItemText
                                 classes={itemClasses}
-                                primary={t.popups_settings_version()}
+                                primary={<Trans>Version</Trans>}
                                 secondary={env.VERSION}
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
@@ -383,7 +391,7 @@ export const Component = memo(function SettingsPage() {
                                     { referrer: false },
                                 )
                             }>
-                            <ListItemText classes={itemClasses} secondary={t.popups_settings_service_agreement()} />
+                            <ListItemText classes={itemClasses} secondary={<Trans>Service Agreement</Trans>} />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                         <ListItem
@@ -393,7 +401,7 @@ export const Component = memo(function SettingsPage() {
                                     referrer: false,
                                 })
                             }>
-                            <ListItemText classes={itemClasses} secondary={t.popups_settings_primary_policy()} />
+                            <ListItemText classes={itemClasses} secondary={<Trans>Privacy Policy</Trans>} />
                             <Icons.ArrowRight size={24} className={classes.arrow} />
                         </ListItem>
                     </List>

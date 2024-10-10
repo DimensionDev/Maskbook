@@ -1,6 +1,6 @@
 import { type ReasonableMessage } from '@masknet/web3-shared-base'
 import { EthereumMethodType, type MessageRequest } from '@masknet/web3-shared-evm'
-import React, { memo, startTransition, useCallback, useRef, useState } from 'react'
+import React, { memo, startTransition, useCallback, useRef, useState, type ReactNode } from 'react'
 import type { JsonRpcResponse } from 'web3-core-helpers'
 import { WatchTokenRequest } from './WatchTokenRequest.js'
 import { WalletSignRequest } from './WalletSignRequest.js'
@@ -19,6 +19,7 @@ import { PermissionRequest } from './PermissionRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
 import { AddChainRequest } from './AddChainRequest.js'
 import { delay } from '@masknet/kit'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     left: {
@@ -56,7 +57,7 @@ export const Interaction = memo((props: InteractionProps) => {
     const [isDangerRequest, setIsDanger] = useState(false)
     const [confirmDisabled, setConfirmDisabled] = useState(false)
     const [dangerDialogOpen, setDangerDialogOpen] = useState(false)
-    const [confirmVerb, setConfirmVerb] = useState(t.confirm())
+    const [confirmVerb, setConfirmVerb] = useState<ReactNode>(<Trans>Confirm</Trans>)
     const confirmAction = useRef<(lastRequest: boolean) => Promise<void>>(async () => {})
     const hasOrigin = !!currentRequest.origin
 
@@ -95,7 +96,7 @@ export const Interaction = memo((props: InteractionProps) => {
         } catch (error) {
             showSnackbar(
                 <Typography textAlign="center" width="275px">
-                    {t.popups_wallet_rpc_error()}
+                    <Trans>There was a network or RPC provider error, please try again later!</Trans>
                     <br />
                     {String((error as any).message)}
                 </Typography>,
@@ -115,7 +116,7 @@ export const Interaction = memo((props: InteractionProps) => {
             }}
             fullWidth
             variant="outlined">
-            {t.cancel()}
+            <Trans>Cancel</Trans>
         </ActionButton>
     )
     const ConfirmButton = (
@@ -162,7 +163,7 @@ Interaction.displayName = 'Interaction'
 export interface InteractionItemProps {
     currentRequest: ReasonableMessage<MessageRequest, JsonRpcResponse>
     setIsDanger(isDanger: boolean): void
-    setConfirmVerb(verb: string): void
+    setConfirmVerb(verb: ReactNode): void
     setConfirmAction(action: (isLastRequest: boolean) => Promise<void>): void
     setConfirmDisabled(disabled: boolean): void
 
@@ -192,7 +193,6 @@ function getInteractionComponent(type: EthereumMethodType) {
 const Pager = memo((props: InteractionProps) => {
     const { currentMessageIndex, currentRequest, setMessageIndex, totalMessages } = props
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const [{ loading: cancelAllLoading }, handleCancelAllRequest] = useAsyncFn(async () => {
@@ -211,10 +211,9 @@ const Pager = memo((props: InteractionProps) => {
                     <Icons.ArrowDrop size={16} className={classes.left} />
                 </IconButton>
                 <Typography className={classes.text}>
-                    {t.popups_wallet_multiple_requests({
-                        index: String(currentMessageIndex + 1),
-                        total: String(totalMessages),
-                    })}
+                    <Trans>
+                        Multiple transaction requests {String(currentMessageIndex + 1)} / {String(totalMessages)}
+                    </Trans>
                 </Typography>
                 <IconButton
                     onClick={() => startTransition(() => setMessageIndex(currentMessageIndex + 1))}
@@ -224,7 +223,7 @@ const Pager = memo((props: InteractionProps) => {
             </Box>
 
             <ActionButton variant="text" color="info" onClick={handleCancelAllRequest} loading={cancelAllLoading}>
-                {t.popups_wallet_reject_all_requests({ total: String(totalMessages) })}
+                <Trans>Reject {totalMessages} Transactions</Trans>
             </ActionButton>
         </Box>
     )
@@ -232,15 +231,14 @@ const Pager = memo((props: InteractionProps) => {
 Pager.displayName = 'Pager'
 
 function DangerDialog({ cancel, confirm }: Record<'cancel' | 'confirm', React.ReactNode>) {
-    const t = useMaskSharedTrans()
     return (
         <Dialog open>
             <DialogContent>
                 <DialogContentText variant="overline">
-                    {t.popups_wallet_sign_in_danger_confirm_title()}
+                    <Trans>Are you sure?</Trans>
                 </DialogContentText>
                 <DialogContentText color={(theme) => theme.palette.maskColor.danger}>
-                    {t.popups_wallet_sign_in_danger_confirm()}
+                    <Trans>This request may be a phishing attach. I understand this and want to continue.</Trans>
                 </DialogContentText>
             </DialogContent>
             <DialogActions>

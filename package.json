@@ -155,8 +155,6 @@
       "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
-      "@mui/material@5.15.20": "patches/@mui__material@5.15.20.patch",
-      "@mui/base@5.0.0-beta.40": "patches/@mui__base@5.0.0-beta.40.patch",
       "react-use@17.5.0": "patches/react-use@17.5.0.patch",
       "gulp@5.0.0": "patches/gulp@5.0.0.patch",
       "react-devtools-inline@5.3.0": "patches/react-devtools-inline@5.3.0.patch",

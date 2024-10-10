@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Alert, IconButton, Link, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useChainId, useNetwork, useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from 'react-use'
@@ -10,6 +9,8 @@ import { KeyboardArrowRightRounded } from '@mui/icons-material'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useEffect } from 'react'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -27,9 +28,9 @@ const useStyle = makeStyles()({
     arrow: { flex: 1 },
 })
 export function SwitchChainRequest(props: InteractionItemProps) {
+    const { _ } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
-    const t = useMaskSharedTrans()
     const origin = props.currentRequest.origin
     const { Network, Message } = useWeb3State()
     const currentChainId = useChainId()
@@ -37,7 +38,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
     const nextChainId = Number.parseInt(props.currentRequest.request.arguments.params[0].chainId, 16)
     const nextNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, nextChainId)
 
-    useTitle(t.wallet_sdk_connect_title())
+    useTitle(_(msg`Connect with Mask Wallet`))
     useEffect(() => {
         props.setConfirmDisabled(!nextNetwork)
     }, [!nextNetwork])
@@ -58,14 +59,14 @@ export function SwitchChainRequest(props: InteractionItemProps) {
     return (
         <>
             <Typography variant="h1" className={classes.title}>
-                {t.wallet_sdk_switch_chain_title()}
+                <Trans>Allow this site to switch the network?</Trans>
             </Typography>
             <Typography variant="h2" className={classes.origin}>
                 {origin.startsWith('https://') ? origin.slice('https://'.length) : origin}
             </Typography>
             {nextNetwork ? null : (
                 <Alert sx={{ marginBottom: 1 }} severity="error">
-                    {t.wallet_sdk_switch_chain_error()}
+                    <Trans>Cannot switch to a unknown network.</Trans>
                 </Alert>
             )}
             <div className={classes.container}>
@@ -107,7 +108,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
                         {currentNetwork?.fullName ?? 'Unknown Network'}
                     </Link>
                     <Typography>
-                        {t.chain_id()}: {currentNetwork?.chainId ?? currentChainId}
+                        <Trans>Chain ID: {currentNetwork?.chainId ?? currentChainId}</Trans>
                     </Typography>
                 </div>
                 <div className={classes.arrow} />
@@ -116,7 +117,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
                         {nextNetwork?.fullName ?? 'Unknown Network'}
                     </Link>
                     <Typography>
-                        {t.chain_id()}: {nextNetwork?.chainId ?? nextChainId}
+                        <Trans>Chain ID: {nextNetwork?.chainId ?? nextChainId}</Trans>
                     </Typography>
                 </div>
             </div>

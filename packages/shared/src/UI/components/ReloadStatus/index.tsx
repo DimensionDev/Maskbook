@@ -1,7 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps, Button } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../index.js'
+import type { ReactNode } from 'react'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -26,8 +27,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends BoxProps {
-    message?: string
-    actionLabel?: string
+    message?: ReactNode
+    actionLabel?: ReactNode
     onRetry?(): void
 }
 
@@ -40,12 +41,11 @@ export const ReloadStatus = memo(function ReloadStatus({
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
-    const t = useSharedTrans()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
-            <Typography className={classes.text}>{message ?? t.load_failed()}</Typography>
+            <Typography className={classes.text}>{message ?? <Trans>Load failed</Trans>}</Typography>
             <Button className={classes.button} onClick={() => onRetry?.()} variant="roundedContained" size="medium">
-                {actionLabel ?? t.load_retry()}
+                {actionLabel ?? <Trans>Reload</Trans>}
             </Button>
         </Box>
     )

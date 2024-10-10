@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Checkbox, List, ListItem, ListItemButton, ListItemText, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { useId, useState } from 'react'
 import { useWalletName } from '../../../../../shared/src/UI/components/WalletStatusBar/hooks/useWalletName.js'
@@ -9,6 +8,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { EIP2255RequestedPermission } from '@masknet/sdk'
 import Services from '#services'
 import { useTitle } from 'react-use'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -24,15 +25,15 @@ const useStyle = makeStyles()({
     address: { fontFamily: 'monospace', fontSize: 12 },
 })
 export function PermissionRequest(props: InteractionItemProps) {
+    const { _ } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
-    const t = useMaskSharedTrans()
     const id = useId()
     const origin = props.currentRequest.origin
     const allWallets = useWallets()
     const [selectedWallet, setSelectedWallet] = useState<string[]>([allWallets[0].address])
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    useTitle(t.wallet_sdk_connect_title())
+    useTitle(_(msg`Connect with Mask Wallet`))
 
     if (!origin) return null
 
@@ -47,29 +48,31 @@ export function PermissionRequest(props: InteractionItemProps) {
     return (
         <>
             <Typography variant="h1" className={classes.title}>
-                {t.wallet_sdk_connect_title()}
+                <Trans>Connect with Mask Wallet</Trans>
             </Typography>
             <Typography variant="h2" className={classes.subtitle}>
-                {t.wallet_sdk_connect_subtitle()}
+                <Trans>
+                    Select the wallet(s) to use on this site. You should not connect to website you don't trust.
+                </Trans>
             </Typography>
             <Typography variant="h2" className={classes.origin}>
                 {origin.startsWith('https://') ? origin.slice('https://'.length) : origin}
             </Typography>
             <Typography variant="h2" className={classes.subtitle}>
-                {t.wallet_sdk_connect_warning_title()}
+                <Trans>The web site can</Trans>
             </Typography>
             <List dense>
                 <ListItem>
-                    <ListItemText primary={t.wallet_sdk_connect_warning_1()} />
+                    <ListItemText primary={<Trans>View your address</Trans>} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary={t.wallet_sdk_connect_warning_2()} />
+                    <ListItemText primary={<Trans>View your account balance and history</Trans>} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary={t.wallet_sdk_connect_warning_3()} />
+                    <ListItemText primary={<Trans>View your Tokens and NFTs</Trans>} />
                 </ListItem>
                 <ListItem>
-                    <ListItemText primary={t.wallet_sdk_connect_warning_4()} />
+                    <ListItemText primary={<Trans>Suggest to send transactions and sign messages</Trans>} />
                 </ListItem>
             </List>
             <List dense disablePadding>

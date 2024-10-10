@@ -8,8 +8,8 @@ import { DialogActions, Typography, alpha } from '@mui/material'
 import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
-import { useSharedTrans } from '../../../index.js'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -73,8 +73,7 @@ export interface CompositionRef {
 }
 export function CompositionDialogUI(props: CompositionProps) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
-    const [initialMetas, setInitialMetas] = useState<Record<string, unknown>>(EMPTY_OBJECT)
+    const [initialMeta, setInitialMeta] = useState<Record<string, unknown>>(EMPTY_OBJECT)
     const [currentPostSize, __updatePostSize] = useState(0)
 
     const Editor = useRef<TypedMessageEditorRef | null>(null)
@@ -91,21 +90,21 @@ export function CompositionDialogUI(props: CompositionProps) {
             Editor.current?.reset()
             setSending(false)
         })
-        setInitialMetas(EMPTY_OBJECT)
+        setInitialMeta(EMPTY_OBJECT)
     }, [])
 
     useEffect(() => {
         return CrossIsolationMessages.events.compositionDialogEvent.on(({ reason, open, content, options }) => {
-            setInitialMetas(options?.initialMetas ?? EMPTY_OBJECT)
+            setInitialMeta(options?.initialMeta ?? EMPTY_OBJECT)
         })
     }, [])
 
     useEffect(() => {
-        if (!initialMetas || !Editor.current) return
-        for (const [meta, data] of Object.entries(initialMetas)) {
+        if (!initialMeta || !Editor.current) return
+        for (const [meta, data] of Object.entries(initialMeta)) {
             Editor.current.attachMetadata(meta, data)
         }
-    }, [initialMetas, Editor.current])
+    }, [initialMeta, Editor.current])
 
     const context = useMemo(
         (): CompositionContext => ({
@@ -142,7 +141,9 @@ export function CompositionDialogUI(props: CompositionProps) {
                 </div>
 
                 <div className={classes.flex}>
-                    <Typography className={classes.optionTitle}>{t.plugins()}</Typography>
+                    <Typography className={classes.optionTitle}>
+                        <Trans>Plugins</Trans>
+                    </Typography>
                     <PluginEntryRender readonly={sending} ref={PluginEntry} isOpenFromApplicationBoard={false} />
                 </div>
             </div>
@@ -159,7 +160,7 @@ export function CompositionDialogUI(props: CompositionProps) {
                         variant="roundedContained"
                         onClick={onSubmit}
                         startIcon={<Icons.Send className={classes.icon} />}>
-                        {t.post_dialog__button()}
+                        <Trans>Encrypt</Trans>
                     </LoadingButton>
                 </div>
             </DialogActions>

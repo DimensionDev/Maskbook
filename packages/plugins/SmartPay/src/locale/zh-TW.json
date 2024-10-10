@@ -1,1 +1,94 @@
-{ "messages": {} }
+{
+    "messages": {
+        "lclZhh": [
+            [
+                "value",
+                "plural",
+                {
+                    "one": ["The Twitter account above remains ", "#", " time to create SmartPay Wallet."],
+                    "other": ["The Twitter account above remains ", "#", " times to create SmartPay Wallet."]
+                }
+            ]
+        ],
+        "dw7gO0": [
+            [
+                "value",
+                "plural",
+                {
+                    "one": ["The X account above remains ", "#", " time to create SmartPay Wallet."],
+                    "other": ["The X account above remains ", "#", " times to create SmartPay Wallet."]
+                }
+            ]
+        ],
+        "y6lE0k": "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future.",
+        "m8Ds0H": "添加 SmartPay 钱包",
+        "/829fA": "Allow Mask as gas",
+        "sKW6CH": "Allow Mask be used as gas",
+        "tcHpvG": "更改管理账户",
+        "Gi/hb0": "Click <0>here</0> and fill the SmartPay Wallet whitelist application form.",
+        "b+/CRg": ["Congratulation! You've deployed SmartPay Wallet ", ["0"], "."],
+        "BRhJyf": ["Congratulation! You’ve deployed SmartPay Wallet ", ["0"], "."],
+        "hYgDIe": "创建",
+        "I4rME/": "在弹出窗口中创建新钱包",
+        "v5lIes": "创建角色",
+        "74cj7m": "在弹出窗口中创建新身份。",
+        "S0CsaV": "创建新钱包",
+        "L9UK9K": "Create a SmartPay Wallet with your Twitter account.",
+        "hSJPnE": "Create a SmartPay Wallet with your X account.",
+        "7/e1up": "创建 SmartPay 钱包",
+        "ighSWB": "Created successfully!",
+        "715qtO": "当前的管理账户",
+        "GLUC2q": "部署",
+        "DPfwMq": "完成",
+        "QjN6Ob": "Free gas experience in Mask Network's dApps like Lucky Drop and Tips.",
+        "D88yeQ": "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips.",
+        "yQE2r9": "加载中",
+        "If2v4h": "红包",
+        "YwhjRx": "管理账户",
+        "jShqGW": ["Management account of the SmartPay Wallet is ", ["owner"], "."],
+        "8b+5vw": "Mask 代币可用于支付 gas 费用。",
+        "G1WA4m": "更高效和简洁的签名算法(eg. Schnorr, BLS)",
+        "9J1jHE": "支持多签和社交恢复",
+        "ubeqw+": "网络错误。",
+        "1nMGEs": "身份",
+        "vp4MqR": "抗量子安全签名算法(eg. Lamport, Winternitz)",
+        "lDgVWA": "接收",
+        "neDg6Z": "只能接收 Polygon 网络的资产。",
+        "M7fAKv": "扫描地址以接收付款",
+        "JlFcis": "发送",
+        "jdbCoK": "设置 MASK 代币用于支付与 Polygon Network 交互时的网络费。",
+        "JphlsR": "设置 SmartPay 钱包管理账户",
+        "wbkdNi": "SmartPay",
+        "tMHWyK": "Smart Pay 是基于 ERC-4337 提案创建的新型智能合约钱包，目前仅部署在 Polygon 网络上。ERC 4337 是一种新的钱包提案，可以为钱包设计打开多创意的大门和更多重要的功能。未来我们也会基于该提案在 Mask Network 生态内推出更多有趣的功能。",
+        "o2Kkia": "SmartPay 钱包",
+        "nd2mj2": "SmartPay 钱包部署",
+        "SVo6CO": "很抱歉, 您不在免费体验该功能的白名单中。",
+        "vH2C/2": "兑换",
+        "WKhaQb": "ERC-4337 将会为钱包的设计打开更多的可行性和重要的功能的大门",
+        "y04pns": [
+            "The X account above remains ",
+            ["value"],
+            " ",
+            ["value", "plural", { "one": "time", "other": "times" }],
+            " to create SmartPay Wallet."
+        ],
+        "Gaq/7P": "该 SmartPay 钱包只能接收 Polygon 网络的资产。请勿使用该地址接受其他 EVM 链条的资产。",
+        "xY9s5E": "超时",
+        "em6LzM": "交易被拒绝。",
+        "amF6Yq": "具有可升级性",
+        "5KP2UY": "⽤户取消操作。",
+        "zgo0BR": "在使用 SmartPay 钱包前需要先在 Polygon Network 部署该智能合约钱包。未部署前，该钱包只能接收资产而无法发送任何交易。",
+        "Mkyh69": "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment.",
+        "l3e2pF": "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment.",
+        "jXHtqK": "等待用户签名",
+        "w2vrYo": "Wallet created!",
+        "eyQXE/": "钱包",
+        "8yBkTu": "什么是 SmartPay？",
+        "bxRTOG": "什么是 SmartPay？",
+        "Re0DcC": "使用 Smart Pay 前需要知道的事：",
+        "tzlwby": "您在试用白名单中。",
+        "hFAVvh": "您可以更改 SmartPay 钱包的管理账户。在 Mask Network 体系中，Persona 和 Mask wallet 都可以被授予为 SmartPay 的管理账户。",
+        "1sijtW": "You can follow Mask Network <0>Twitter</0> or <1>Discord</1> to participate in the event and get free qualification to have gas-free blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!",
+        "O6SJRT": "在使用 Smart Pay 前需要知道的事："
+    }
+}

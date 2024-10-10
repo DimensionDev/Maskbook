@@ -23,11 +23,11 @@ import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
 import Services from '../../../../shared-ui/service.js'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -154,7 +154,6 @@ const useStyles = makeStyles()((theme) => ({
 interface VerifyNextIDProps extends BindingDialogProps {}
 
 export function VerifyNextID({ onClose }: VerifyNextIDProps) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const queryClient = useQueryClient()
 
@@ -284,17 +283,27 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                     </Box>
                     {!nextIdPlatform || verified || verifiedSuccess ?
                         <Typography className={classes.text}>
-                            {
-                                nextIdPlatform ?
-                                    // eslint-disable-next-line react/naming-convention/component-name
-                                    <MaskSharedTrans.send_post_successfully components={{ br: <br /> }} />
-                                    // eslint-disable-next-line react/naming-convention/component-name
-                                :   <MaskSharedTrans.connect_successfully components={{ br: <br /> }} />
+                            {nextIdPlatform ?
+                                <Trans>
+                                    The verification post sent.
+                                    <br />
+                                    <br />
+                                    You could check the verification result on the Mask Pop-up after few minutes. If it
+                                    failed, try to send another verification post later.
+                                </Trans>
+                            :   <Trans>
+                                    Account connected.
+                                    <br />
+                                    <br />
+                                    Try to explore more features powered by Mask Network.
+                                </Trans>
                             }
                         </Typography>
                     : creatingPostContent ?
                         <>
-                            <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
+                            <Typography className={classes.postContentTitle}>
+                                <Trans>Post content:</Trans>
+                            </Typography>
                             <Typography className={classes.postContent}>
                                 <Skeleton variant="text" />
                                 <Skeleton variant="text" />
@@ -304,15 +313,23 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                                 <Skeleton variant="text" width="50%" />
                             </Typography>
                             <Typography className={classes.tip} component="div">
-                                {t.setup_guide_verify_tip()}
+                                <Trans>
+                                    To verify your X account and record it on the NextID, you will need to send a post
+                                    for the verification.
+                                </Trans>
                             </Typography>
                         </>
                     : verifyInfo ?
                         <>
-                            <Typography className={classes.postContentTitle}>{t.setup_guide_post_content()}</Typography>
+                            <Typography className={classes.postContentTitle}>
+                                <Trans>Post content:</Trans>
+                            </Typography>
                             <Typography className={classes.postContent}>{verifyInfo.post}</Typography>
                             <Typography className={classes.tip} component="div">
-                                {t.setup_guide_verify_tip()}
+                                <Trans>
+                                    To verify your X account and record it on the NextID, please send this post for the
+                                    verification.
+                                </Trans>
                             </Typography>
                         </>
                     :   null}
@@ -326,7 +343,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             variant="contained"
                             disabled={disabled}
                             onClick={onConfirm}>
-                            {t.ok()}
+                            <Trans>OK</Trans>
                         </ActionButton>
                     :   <ActionButton
                             className={classes.button}
@@ -336,7 +353,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             loading={verifying}
                             onClick={onVerify}>
                             <Icons.Send size={18} className={classes.send} />
-                            {t.send()}
+                            <Trans>Send</Trans>
                         </ActionButton>
                     }
                 </Box>

@@ -11,8 +11,9 @@ import { Icons } from '@masknet/icons'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { RED_PACKET_MAX_SHARES } from '../constants.js'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Plural, Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -164,7 +165,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         width: 12,
         border: `1px solid ${theme.palette.mode === 'light' ? '#0F1419' : '#D9D9D9'}`,
         borderRadius: 999,
-        transform: 'RedPacketTransY(-1px)',
         height: 12,
         marginLeft: 5,
         cursor: 'pointer',
@@ -206,10 +206,8 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     },
     arrow: {
         color: theme.palette.mode === 'dark' ? '#fff' : '#111418',
-        transform: 'RedPacketTransX(260px) !important',
     },
     tooltip: {
-        transform: 'RedPacketTransX(20px) !important',
         padding: '10px 20px',
         width: 256,
         backgroundColor: theme.palette.mode === 'dark' ? '#fff' : '#111418',
@@ -237,9 +235,9 @@ interface SelectNftTokenDialogProps {
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
+    const { _ } = useLingui()
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
-    const t = useRedPacketTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [searchedTokenDetailedList, setSearchedTokenDetailedList] = useState<OrderedERC721Token[]>()
     const [searched, setSearched] = useState(false)
@@ -342,8 +340,6 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
         onClose()
     }, [tokenDetailedSelectedList, setExistTokenDetailedList, onClose])
 
-    const maxSharesOptions = { amount: RED_PACKET_MAX_SHARES.toString() }
-
     return tokenDetailedOwnerList.length === 0 ?
             <DialogContent className={classes.dialogContent}>
                 <Box className={classes.tokenBox}>
@@ -360,16 +356,16 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         />
 
                         <Button disabled={!searchTokenListInput} className={classes.searchButton} onClick={onSearch}>
-                            {t.search()}
+                            <Trans>Search</Trans>
                         </Button>
                     </div>
                     {loadingToken || !searchedTokenDetailedList || !contract ?
                         <Box className={classes.noResultBox}>
                             <Typography>
                                 {loadingToken ?
-                                    t.loading_token()
+                                    <Trans>Loading token...</Trans>
                                 : searched ?
-                                    t.search_no_result()
+                                    <Trans>No results</Trans>
                                 :   null}
                             </Typography>
                         </Box>
@@ -392,15 +388,26 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 </Box>
                 <div className={classes.selectSharesExceedBox}>
                     <Typography className={classes.selectSharesExceed}>
-                        {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
+                        {isSelectSharesExceed ?
+                            <Trans>
+                                The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time.
+                            </Trans>
+                        :   null}
                     </Typography>
                     <Box className={classes.selectAmountBox}>
                         <ShadowRootTooltip
                             title={
                                 <Typography className={classes.tooltipText}>
                                     {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES ?
-                                        t.nft_max_shares_tip(maxSharesOptions)
-                                    :   t.nft_max_shares(maxSharesOptions)}
+                                        <Trans>
+                                            The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for
+                                            one time.
+                                        </Trans>
+                                    :   <Trans>
+                                            The maximum number of NFTs to be sold in NFT lucky drop contract is{' '}
+                                            {RED_PACKET_MAX_SHARES}.
+                                        </Trans>
+                                    }
                                 </Typography>
                             }
                             placement="top-end"
@@ -409,11 +416,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             <QuestionMarkIcon className={classes.questionMarkIcon} />
                         </ShadowRootTooltip>
                         <Typography>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <RedPacketTrans.nft_select_amount
-                                components={{ span: <span className={classes.selectedTokenAmount} /> }}
-                                values={{ count: tokenDetailedSelectedList.length }}
-                            />
+                            <Trans>
+                                <span className={classes.selectedTokenAmount}>{tokenDetailedSelectedList.length}</span>{' '}
+                                <Plural value={tokenDetailedSelectedList.length} one="NFT" other="NFTs" />
+                                NFT
+                            </Trans>
                         </Typography>
                     </Box>
                 </div>
@@ -421,7 +428,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     disabled={loadingToken || isSelectSharesExceed}
                     className={classes.confirmButton}
                     onClick={onSubmit}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </Button>
             </DialogContent>
         :   <DialogContent className={cx(classes.dialogContent, classes.dialogContentFixedHeight)}>
@@ -429,7 +436,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <InputBase
                         startAdornment={<Icons.Search className={classes.iconButton} />}
                         value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                        placeholder={t.nft_search_placeholder()}
+                        placeholder={_(msg`Token ID separated by comma, e.g. 1224, 7873, 8948`)}
                         className={classes.textField}
                         onChange={(e) => {
                             if (tokenDetailedOwnerList.length === 0) {
@@ -446,13 +453,17 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         disabled={tokenDetailedOwnerList.length === 0 ? !searchTokenListInput : !tokenIdListInput}
                         className={classes.searchButton}
                         onClick={tokenDetailedOwnerList.length === 0 ? onSearch : onFilter}>
-                        {t.search()}
+                        <Trans>Search</Trans>
                     </Button>
                 </div>
                 <Box className={classes.ownerTokenBox}>
                     {loadingToken && searched ?
                         <Box className={classes.noResultBox}>
-                            <Typography>{loadingToken ? t.loading_token() : t.search_no_result()}</Typography>
+                            <Typography>
+                                {loadingToken ?
+                                    <Trans>Loading token...</Trans>
+                                :   <Trans>No results</Trans>}
+                            </Typography>
                         </Box>
                     :   <>
                             {tokenIdFilterList.length === 0 ?
@@ -466,19 +477,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                                             :   null}
                                         </div>
                                         <Typography className={cx(classes.selectAllCheckBoxText)}>
-                                            {t.select_all()}
+                                            <Trans>Select All</Trans>
                                         </Typography>
                                     </div>
                                     <Typography>
-                                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                        <RedPacketTrans.nft_shift_select_tip
-                                            components={{
-                                                text: <span style={{ color: theme.palette.maskColor.primary }} />,
-                                            }}
-                                            values={{
-                                                text: 'Shift',
-                                            }}
-                                        />
+                                        <Trans>
+                                            You can also use{' '}
+                                            <span style={{ color: theme.palette.maskColor.primary }}>Shift</span> to
+                                            select multiple NFTs.
+                                        </Trans>
                                     </Typography>
                                 </div>
                             :   null}
@@ -504,7 +511,11 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                 </Box>
                 <div className={classes.selectSharesExceedBox}>
                     <Typography className={classes.selectSharesExceed}>
-                        {isSelectSharesExceed ? t.nft_max_shares_tip(maxSharesOptions) : null}
+                        {isSelectSharesExceed ?
+                            <Trans>
+                                The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time.
+                            </Trans>
+                        :   null}
                     </Typography>
 
                     <Box className={classes.selectAmountBox}>
@@ -512,8 +523,15 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                             title={
                                 <Typography className={classes.tooltipText}>
                                     {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES ?
-                                        t.nft_max_shares_tip(maxSharesOptions)
-                                    :   t.nft_max_shares(maxSharesOptions)}
+                                        <Trans>
+                                            The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for
+                                            one time.
+                                        </Trans>
+                                    :   <Trans>
+                                            The maximum number of NFTs to be sold in NFT lucky drop contract is{' '}
+                                            {RED_PACKET_MAX_SHARES}.
+                                        </Trans>
+                                    }
                                 </Typography>
                             }
                             placement="top-end"
@@ -533,7 +551,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     disabled={loadingToken || tokenDetailedSelectedList.length === 0 || isSelectSharesExceed}
                     className={classes.confirmButton}
                     onClick={onSubmit}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </Button>
             </DialogContent>
 }

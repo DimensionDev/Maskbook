@@ -19,8 +19,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
-import { useSharedTrans } from '../../../locales/index.js'
 import { SelectProviderModal } from '../../modals/modals.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -55,7 +55,7 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     actualNetworkPluginID?: T
-    switchText?: string
+    switchText?: React.ReactNode
     disableConnectWallet?: boolean
 }
 
@@ -71,8 +71,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         predicate = (actualPluginID, actualChainId) =>
             actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
-
-    const t = useSharedTrans()
     const { classes } = useStyles(undefined, { props })
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
@@ -108,17 +106,22 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         } catch (error) {
             if (error instanceof Error) {
                 if (error.message === 'Chain currently not supported' || error.message === 'Invalid Request') {
-                    showSnackbar(t.plugin_wallet_switch_network_title(), {
+                    showSnackbar(<Trans>Switch Network</Trans>, {
                         processing: false,
                         variant: 'error',
-                        message: t.plugin_wallet_unsupported_chain({ network: expectedChainName ?? '' }),
+                        message: (
+                            <Trans>
+                                {expectedChainName ?? ''} network is not added to the wallet. Please add it and try
+                                again.
+                            </Trans>
+                        ),
                         autoHideDuration: 5000,
                     })
                 } else {
-                    showSnackbar(t.plugin_wallet_switch_network_title(), {
+                    showSnackbar(<Trans>Switch Network</Trans>, {
                         processing: false,
                         variant: 'error',
-                        message: t.plugin_wallet_switch_chain_failed(),
+                        message: <Trans>Network error or user cancels the process.</Trans>,
                         autoHideDuration: 5000,
                     })
                 }
@@ -127,7 +130,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         }
     }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Web3, expectedChainName])
 
-    const renderBox = (children?: React.ReactNode, tips?: string) => {
+    const renderBox = (children?: React.ReactNode, tips?: React.ReactNode) => {
         return (
             <ShadowRootTooltip
                 title={tips ?? ''}
@@ -149,7 +152,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     startIcon={<Icons.Wallet size={18} />}
                     onClick={() => SelectProviderModal.open()}
                     {...props.ActionButtonPromiseProps}>
-                    {t.plugin_wallet_wrong_network()}
+                    <Trans>Wrong Network</Trans>
                 </ActionButton>
             :   null,
         )
@@ -164,7 +167,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     startIcon={<Icons.Wallet size={18} />}
                     onClick={() => SelectProviderModal.open()}
                     {...props.ActionButtonPromiseProps}>
-                    {t.plugin_wallet_connect_a_wallet()}
+                    <Trans>Connect Wallet</Trans>
                 </ActionButton>
             :   null,
         )
@@ -180,11 +183,11 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 sx={props.ActionButtonPromiseProps?.sx}
                 onClick={() => SelectProviderModal.open()}
                 {...props.ActionButtonPromiseProps}>
-                {t.plugin_wallet_change_wallet()}
+                <Trans>Change Wallet</Trans>
             </ActionButton>,
             actualProviderType === ProviderType.WalletConnect ?
-                t.plugin_wallet_connect_tips()
-            :   t.plugin_wallet_not_support_network(),
+                <Trans>Please switch to this network in the mobile application wallet you are connected to.</Trans>
+            :   <Trans>This network is not supported yet.</Trans>,
         )
     }
 
@@ -198,9 +201,9 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 className={classes.switchButton}
                 sx={props.ActionButtonPromiseProps?.sx}
                 {...props.ActionButtonPromiseProps}>
-                {switchText ?? t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
+                {switchText ?? <Trans>Switch to {expectedChainName ?? ''}</Trans>}
             </ActionButton>,
-            t.plugin_wallet_connect_tips(),
+            <Trans>Please switch to this network in the mobile application wallet you are connected to.</Trans>,
         )
     }
 

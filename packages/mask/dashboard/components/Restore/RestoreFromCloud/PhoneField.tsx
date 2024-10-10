@@ -2,10 +2,9 @@ import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import guessCallingCode from 'guess-calling-code'
 import { pick } from 'lodash-es'
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/index.js'
-import { useDashboardTrans } from '../../../locales/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
 import { phoneRegexp } from '../../../utils/regexp.js'
@@ -14,14 +13,16 @@ import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { PhoneNumberField } from '@masknet/shared'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const PhoneField = memo(function PhoneField() {
+    const { _ } = useLingui()
     const language = useLanguage()
-    const t = useDashboardTrans()
     const [invalidPhone, setInvalidPhone] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const [error, setError] = useState('')
-    const [codeError, setCodeError] = useState('')
+    const [codeError, setCodeError] = useState<ReactNode>()
     const { state, dispatch, downloadBackupInfo } = RestoreContext.useContainer()
     const { loading, phoneForm } = state
     const { account, code, dialingCode } = phoneForm
@@ -51,7 +52,7 @@ export const PhoneField = memo(function PhoneField() {
     }
     const [{ error: sendCodeError }, handleSendCode] = useAsyncFn(async () => {
         const type = BackupAccountType.Phone
-        showSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
+        showSnackbar(<Trans>Verification code has been sent to your phone.</Trans>, { variant: 'success' })
         await sendCode({
             account,
             type,
@@ -77,7 +78,7 @@ export const PhoneField = memo(function PhoneField() {
                     } catch (err) {
                         const message = (err as RestoreQueryError).message
                         if (['code not found', 'code mismatch'].includes(message))
-                            setCodeError(t.incorrect_verification_code())
+                            setCodeError(<Trans>Invalid verification code.</Trans>)
                         else setError(message)
                     } finally {
                         dispatch({ type: 'SET_LOADING', loading: false })
@@ -85,7 +86,7 @@ export const PhoneField = memo(function PhoneField() {
                 }}
                 loading={loading}
                 disabled={disabled}>
-                {t.continue()}
+                <Trans>Continue</Trans>
             </PrimaryButton>,
         )
     }, [account, code, disabled, loading])
@@ -99,7 +100,9 @@ export const PhoneField = memo(function PhoneField() {
                 onBlur={validCheck}
                 onChange={(event) => onPhoneNumberChange(event.target.value)}
                 error={invalidPhone}
-                helperText={invalidPhone ? t.data_recovery_invalid_mobile() : error || ''}
+                helperText={
+                    invalidPhone ? <Trans>Invalid phone number, please check and try again.</Trans> : error || ''
+                }
                 value={phoneForm.phone}
             />
             <Box mt={1.5}>
@@ -112,7 +115,7 @@ export const PhoneField = memo(function PhoneField() {
                     }}
                     errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCode}
-                    placeholder={t.data_recovery_mobile_code()}
+                    placeholder={_(msg`Mobile verification code`)}
                     disabled={phoneNotReady}
                     inputProps={{
                         maxLength: 6,

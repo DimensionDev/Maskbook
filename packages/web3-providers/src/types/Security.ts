@@ -77,6 +77,7 @@ export namespace SecurityAPI {
         malicious_mining_activities: BooleanChar
         /** It describes whether this address is involved in darkweb transactions */
         darkweb_transactions: BooleanChar
+        // cspell:ignore cybercrime
         /** It describes whether this address is involved in cybercrime. */
         cybercrime: BooleanChar
         /** It describes whether this address is involved in money laundering. */

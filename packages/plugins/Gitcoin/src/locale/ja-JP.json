@@ -1,1 +1,17 @@
-{ "messages": {} }
+{
+    "messages": {
+        "uyJsf6": "About",
+        "aEgiLS": "contributions",
+        "iCb44o": ["Created on: ", ["0"]],
+        "199DuV": "Gitcoinプロジェクトの具体的な情報を表示し、ソーシャルメディア上で直接プロジェクトに寄付してください。",
+        "h5Dtc5": "funding received",
+        "PIG043": "Gitcoin",
+        "0bKGbK": "No past rounds found.",
+        "j2a+h4": "Past rounds",
+        "tjbyOy": "Project details",
+        "ghVDTt": "rounds",
+        "kf83Ld": "問題が発生しました",
+        "7cg5cq": "unique contributors",
+        "jpctdh": "View"
+    }
+}

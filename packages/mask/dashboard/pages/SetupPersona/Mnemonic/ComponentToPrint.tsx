@@ -1,11 +1,11 @@
 import { type RefAttributes, useMemo } from 'react'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
 import { MaskWallet, PrintBackground } from '../../../assets/index.js'
 import { Words } from './Words.js'
 import { Icons } from '@masknet/icons'
+import { Trans } from '@lingui/macro'
 
 interface ComponentToPrintProps extends RefAttributes<unknown> {
     personaName: string
@@ -78,7 +78,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ComponentToPrint(props: ComponentToPrintProps) {
     const { words, privateKey, personaName, publicKey, ref } = props
-    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     const qrValue = useMemo(() => {
@@ -91,13 +90,15 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
             <Box className={classes.card}>
                 <Box flex={1}>
                     <Typography className={classes.personaName}>
-                        {t.persona()}: {personaName}
+                        <Trans>Persona: {personaName}</Trans>
                     </Typography>
                     <Typography className={classes.publicKeyTitle}>
-                        {t.public_key()}:{' '}
-                        <Typography component="span" className={classes.publicKey}>
-                            {publicKey}
-                        </Typography>
+                        <Trans>
+                            Public Key:{' '}
+                            <Typography component="span" className={classes.publicKey}>
+                                {publicKey}
+                            </Typography>
+                        </Trans>
                     </Typography>
                 </Box>
                 <QRCode
@@ -110,11 +111,13 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
                     logoHeight={28}
                 />
             </Box>
-            <Typography className={classes.title}>{t.create_account_identity_id()}</Typography>
+            <Typography className={classes.title}>
+                <Trans>Identity ID</Trans>
+            </Typography>
             <Words words={words} classes={{ text: classes.text, wordCard: classes.wordCard }} />
             <Typography className={classes.tips}>
                 <Icons.Info variant="light" size={20} />
-                {t.print_tips()}
+                <Trans>This QR includes your identity, please keep it safely.</Trans>
             </Typography>
         </Box>
     )

@@ -4,8 +4,8 @@ import { FileFrame } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem, Typography } from '@mui/material'
 import { memo, useRef, useState } from 'react'
-import { FileServiceTrans, useFileServiceTrans } from '../../../locales/index.js'
 import type { FileBaseProps, FileInfo } from '../../../types.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     meta: {
@@ -65,7 +65,6 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
     const { classes, cx } = useStyles()
     const menuRef = useRef<HTMLDivElement>(null)
     const [menuOpen, setMenuOpen] = useState(false)
-    const t = useFileServiceTrans()
 
     return (
         <FileFrame
@@ -107,7 +106,9 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                                 setMenuOpen(false)
                             }}
                             className={classes.bottomGap}>
-                            <Typography className={classes.menuLabel}>{t.download()}</Typography>
+                            <Typography className={classes.menuLabel}>
+                                <Trans>Download</Trans>
+                            </Typography>
                         </MenuItem>
                         <MenuItem
                             onClick={() => {
@@ -115,7 +116,9 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                                 setMenuOpen(false)
                             }}
                             className={classes.bottomGap}>
-                            <Typography className={classes.menuLabel}>{t.rename()}</Typography>
+                            <Typography className={classes.menuLabel}>
+                                <Trans>Rename</Trans>
+                            </Typography>
                         </MenuItem>
                         <MenuItem
                             onClick={() => {
@@ -123,26 +126,27 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                                 setMenuOpen(false)
                             }}>
                             <Typography className={classes.menuLabel} color={(theme) => theme.palette.maskColor.danger}>
-                                {t.delete()}
+                                <Trans>Delete</Trans>
                             </Typography>
                         </MenuItem>
                     </ShadowRootMenu>
                 </div>
             }>
             <div className={classes.row}>
-                <Typography className={classes.meta}>{t.size()}:</Typography>
+                <Typography className={classes.meta}>
+                    <Trans>size</Trans>:
+                </Typography>
                 <Typography className={cx(classes.metaValue, classes.rightGap)}>
                     {formatFileSize(file.size, true)}
                 </Typography>
                 {file.key ?
                     <Typography className={classes.meta}>
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <FileServiceTrans.file_key
-                            components={{
-                                key: <Typography className={classes.metaValue} component="span" />,
-                            }}
-                            values={{ key: file.key }}
-                        />
+                        <Trans>
+                            File Key:{' '}
+                            <Typography className={classes.metaValue} component="span">
+                                {file.key}
+                            </Typography>
+                        </Trans>
                     </Typography>
                 :   null}
             </div>

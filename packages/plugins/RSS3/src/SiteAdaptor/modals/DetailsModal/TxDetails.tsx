@@ -6,9 +6,9 @@ import { leftShift } from '@masknet/web3-shared-base'
 import { Box, Tooltip, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
-import { useRSS3Trans } from '../../../locales/i18n_generated.js'
 import { FeedActions } from '../../components/FeedActions/index.js'
 import { formatTimestamp, ONE_WEEK } from '../../components/share.js'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     group: {
@@ -74,7 +74,6 @@ interface TxDetailsProps {
 }
 
 export function TxDetails({ feed }: TxDetailsProps) {
-    const t = useRSS3Trans()
     const { classes, theme } = useStyles()
 
     const timestamp = useMemo(() => {
@@ -91,11 +90,13 @@ export function TxDetails({ feed }: TxDetailsProps) {
         <Box>
             <Typography className={classes.title}>
                 <Icons.Approve size={24} />
-                {t.transaction_details()}
+                <Trans>Transaction Details</Trans>
             </Typography>
             <div className={classes.group}>
                 <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                    <Typography className={classes.key}>{t.hash()}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Hash</Trans>
+                    </Typography>
                     <Typography
                         className={classes.value}
                         component="div"
@@ -105,31 +106,45 @@ export function TxDetails({ feed }: TxDetailsProps) {
                     </Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.status()}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Status</Trans>
+                    </Typography>
                     <Typography className={classes.value}>
-                        <span className={classes.tag}>{feed.success ? t.successful() : t.failed()}</span>
+                        <span className={classes.tag}>
+                            {feed.success ?
+                                <Trans>Successful</Trans>
+                            :   <Trans>Failed</Trans>}
+                        </span>
                     </Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.timestamp()}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Timestamp</Trans>
+                    </Typography>
                     <Typography className={classes.value}>{timestamp}</Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.network()}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Network</Trans>
+                    </Typography>
                     <Typography className={classes.value}>
                         <span className={classes.tag}>{feed.network}</span>
                     </Typography>
                 </Box>
                 {feed.platform ?
                     <Box className={classes.field}>
-                        <Typography className={classes.key}>{t.platform()}</Typography>
+                        <Typography className={classes.key}>
+                            <Trans>Platform</Trans>
+                        </Typography>
                         <Typography className={classes.value}>
                             <span className={classes.tag}>{feed.platform}</span>
                         </Typography>
                     </Box>
                 :   null}
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.category()}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Category</Trans>
+                    </Typography>
                     <Typography className={classes.value} component="div">
                         <div className={classes.tags}>
                             <span className={classes.tag}>{feed.tag}</span>
@@ -140,7 +155,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
             </div>
             <Box className={classes.sep} />
             <Box className={classes.field}>
-                <Typography className={classes.key}>{t.from()}</Typography>
+                <Typography className={classes.key}>
+                    <Trans>From</Trans>
+                </Typography>
                 <Tooltip title={feed.from}>
                     <Typography className={classes.value} gap={10} component="div">
                         <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
@@ -150,7 +167,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
                 </Tooltip>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.key}>{t.to()}</Typography>
+                <Typography className={classes.key}>
+                    <Trans>To</Trans>
+                </Typography>
                 <Tooltip title={feed.to}>
                     <Typography className={classes.value} gap={10} component="div">
                         <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
@@ -161,7 +180,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
             </Box>
             <Box className={classes.sep} />
             <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                <Typography className={classes.key}>{t.actions({ count: feed.actions.length })}</Typography>
+                <Typography className={classes.key}>
+                    <Plural one="Action" other="Actions" value={feed.actions.length} />
+                </Typography>
                 <Typography className={classes.value} component="div">
                     <FeedActions feed={feed} />
                 </Typography>
@@ -170,7 +191,9 @@ export function TxDetails({ feed }: TxDetailsProps) {
                 <>
                     <Box className={classes.sep} />
                     <Box className={classes.field}>
-                        <Typography className={classes.key}>{t.tx_fee()}</Typography>
+                        <Typography className={classes.key}>
+                            <Trans>Tx Fee</Trans>
+                        </Typography>
                         <Typography className={classes.value}>
                             {leftShift(feed.fee.amount, feed.fee.decimal).toFixed(6)}
                             <Icons.Gas size={16} />

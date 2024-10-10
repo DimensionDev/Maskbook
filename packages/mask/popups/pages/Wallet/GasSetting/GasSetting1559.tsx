@@ -27,10 +27,11 @@ import {
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { useGasOptions, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -106,7 +107,7 @@ const useStyles = makeStyles()((theme) => ({
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
@@ -125,15 +126,15 @@ export const GasSetting1559 = memo(() => {
     const options = useMemo(
         () => [
             {
-                title: t.popups_wallet_gas_fee_settings_low(),
+                title: <Trans>Low</Trans>,
                 content: gasOptions?.[GasOptionType.SLOW],
             },
             {
-                title: t.popups_wallet_gas_fee_settings_medium(),
+                title: <Trans>Medium</Trans>,
                 content: gasOptions?.[GasOptionType.NORMAL],
             },
             {
-                title: t.popups_wallet_gas_fee_settings_high(),
+                title: <Trans>High</Trans>,
                 content: gasOptions?.[GasOptionType.FAST],
             },
         ],
@@ -184,19 +185,19 @@ export const GasSetting1559 = memo(() => {
             .object({
                 gasLimit: zod
                     .string()
-                    .min(1, t.wallet_transfer_error_gas_limit_absence())
+                    .min(1, _(msg`Enter a gas limit`))
                     .refine(
                         (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit ?? 0),
-                        t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: String(minGasLimit) }),
+                        _(msg`Gas limit must be at least ${String(minGasLimit)}`),
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
-                    .min(1, t.wallet_transfer_error_max_priority_fee_absence())
-                    .refine(isPositive, t.wallet_transfer_error_max_priority_gas_fee_positive()),
-                maxFeePerGas: zod.string().min(1, t.wallet_transfer_error_max_fee_absence()),
+                    .min(1, _(msg`Enter a max priority fee`))
+                    .refine(isPositive, _(msg`Max priority fee must be greater than 0 GWEI`)),
+                maxFeePerGas: zod.string().min(1, _(msg`Enter a max fee`)),
             })
             .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                message: t.wallet_transfer_error_max_priority_gas_fee_imbalance(),
+                message: _(msg`Max fee cannot be lower than max priority fee`),
                 path: ['maxFeePerGas'],
             })
     }, [minGasLimit, gasOptions])
@@ -299,7 +300,7 @@ export const GasSetting1559 = memo(() => {
                 gasOptions?.[GasOptionType.SLOW]?.suggestedMaxPriorityFeePerGas ?? 0,
             )
         )
-            return t.wallet_transfer_error_max_priority_gas_fee_too_low()
+            return <Trans>Max priority fee is too low for network conditions</Trans>
         if (
             isGreaterThan(
                 formatGweiToWei(maxPriorityFeePerGas),
@@ -309,21 +310,21 @@ export const GasSetting1559 = memo(() => {
                 ),
             )
         )
-            return t.wallet_transfer_error_max_priority_gas_fee_too_high()
+            return <Trans>Max priority fee is higher than necessary. You may pay more than needed.</Trans>
         return undefined
     }, [maxPriorityFeePerGas, gasOptions, getGasOptionsLoading])
 
     const maxFeeGasHelperText = useMemo(() => {
         if (getGasOptionsLoading) return undefined
         if (isLessThan(formatGweiToWei(maxFeePerGas), gasOptions?.[GasOptionType.SLOW]?.estimatedBaseFee ?? 0))
-            return t.wallet_transfer_error_max_fee_too_low()
+            return <Trans>Max fee is too low for network conditions.</Trans>
         if (
             isGreaterThan(
                 formatGweiToWei(maxFeePerGas),
                 multipliedBy(gasOptions?.[GasOptionType.FAST]?.suggestedMaxFeePerGas ?? 0, HIGH_FEE_WARNING_MULTIPLIER),
             )
         )
-            return t.wallet_transfer_error_max_fee_too_high()
+            return <Trans>Max fee is higher than necessary</Trans>
         return undefined
     }, [maxFeePerGas, gasOptions, getGasOptionsLoading])
     // #endregion
@@ -353,7 +354,7 @@ export const GasSetting1559 = memo(() => {
                         <Typography component="div" className={classes.optionsContent}>
                             {formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
                             <Typography variant="inherit" component="span">
-                                {t.wallet_transfer_gwei()}
+                                GWEI
                             </Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>
@@ -369,7 +370,9 @@ export const GasSetting1559 = memo(() => {
                 ))}
             </div>
             <form onSubmit={onSubmit}>
-                <Typography className={classes.label}>{t.popups_wallet_gas_fee_settings_gas_limit()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Gas Limit</Trans>
+                </Typography>
                 <Controller
                     control={control}
                     render={({ field }) => {
@@ -393,9 +396,9 @@ export const GasSetting1559 = memo(() => {
                     name="gasLimit"
                 />
                 <Typography className={classes.label}>
-                    {t.popups_wallet_gas_fee_settings_max_priority_fee()}
+                    <Trans>Max Priority Fee</Trans>
                     <Typography component="span" className={classes.unit}>
-                        ({t.wallet_transfer_gwei()})
+                        (GWEI)
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         ≈{' '}
@@ -428,9 +431,9 @@ export const GasSetting1559 = memo(() => {
                     name="maxPriorityFeePerGas"
                 />
                 <Typography className={classes.label}>
-                    {t.popups_wallet_gas_fee_settings_max_fee()}
+                    <Trans>Max Fee</Trans>
                     <Typography component="span" className={classes.unit}>
-                        ({t.wallet_transfer_gwei()})
+                        (GWEI)
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         ≈{' '}
@@ -468,7 +471,7 @@ export const GasSetting1559 = memo(() => {
                 classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
-                {t.confirm()}
+                <Trans>Confirm</Trans>
             </LoadingButton>
         </>
     )

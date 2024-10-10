@@ -17,13 +17,13 @@ import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useMemo, useState, type MouseEvent } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { Web3ProfileTrans, useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 import { getFireflyLensProfileLink, getProfileAvatar } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
 import { HandlerDescription } from './HandlerDescription.js'
 import { useUpdateFollowingStatus } from '../../hooks/Lens/useUpdateFollowingStatus.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {
@@ -110,8 +110,6 @@ interface Props {
 let task: Promise<void> | undefined
 
 export function FollowLensDialog({ handle, onClose }: Props) {
-    const t = useWeb3ProfileTrans()
-
     const wallet = useWallet()
     const [currentProfile, setCurrentProfile] = useState<LensBaseAPI.Profile>()
     const [isHovering, setIsHovering] = useState(false)
@@ -231,9 +229,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const handleClick = useCallback(
         (event: MouseEvent<HTMLElement>) => {
             if (task) {
-                showSnackbar(isFollowing ? t.lens_unfollow() : t.lens_follow(), {
+                showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
                     processing: true,
-                    message: isFollowing ? t.lens_unfollow_processing_tips() : t.lens_follow_processing_tips(),
+                    message:
+                        isFollowing ?
+                            <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
+                        :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
                     autoHideDuration: 2000,
                 })
                 return
@@ -280,24 +281,25 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const buttonText = useMemo(() => {
         if (isFollowing) {
-            return isHovering ? t.unfollow() : t.following_action()
+            return isHovering ? <Trans>Unfollow</Trans> : <Trans>Following</Trans>
         } else if (profile?.followModule?.type === FollowModuleType.UnknownFollowModule) {
-            return t.can_not_follow()
+            return <Trans>This profile can not be followed.</Trans>
         } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
-            return t.follow_for_fees({
-                value: profile.followModule.amount.value,
-                symbol: profile.followModule.amount.asset.symbol,
-            })
+            return (
+                <Trans>
+                    Follow for {profile.followModule.amount.value} {profile.followModule.amount.asset.symbol}
+                </Trans>
+            )
         }
 
-        return t.follow()
+        return <Trans>Follow</Trans>
     }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
         if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
-            return t.follow_wallet_tips()
+            return <Trans>Current wallet does not support to interact with Lens protocol.</Trans>
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
-            return t.follow_with_profile_tips()
+            return <Trans>Only holding lens handle can follow.</Trans>
         else if (
             profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
             profile.followModule.amount &&
@@ -307,10 +309,11 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                     profile.followModule.amount.value,
                 ))
         )
-            return t.follow_with_charge_tips()
-        else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule) return t.follow_with_revert_tips()
+            return <Trans>No enough balance to complete follow process.</Trans>
+        else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule)
+            return <Trans>This user has banned follow function.</Trans>
         else if (!currentProfile) {
-            return t.follow_with_out_handle_tips()
+            return <Trans>The current wallet does not hold a lens and cannot follow/unfollow</Trans>
         }
         return
     }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf, currentProfile])
@@ -326,7 +329,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         <InjectedDialog
             open
             onClose={onClose}
-            title={t.lens()}
+            title={<Trans>Lens</Trans>}
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
                 {!value && (loading || getBalanceLoading) ?
@@ -343,16 +346,10 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                         </Typography>
                         <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
                         <Typography className={classes.followers}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <Web3ProfileTrans.followers
-                                components={{ strong: <strong /> }}
-                                values={{ followers: String(profile?.stats.followers ?? '0') }}
-                            />
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <Web3ProfileTrans.following
-                                components={{ strong: <strong /> }}
-                                values={{ following: String(profile?.stats.following ?? '0') }}
-                            />
+                            <Trans>
+                                <strong>{profile?.stats.followers ?? '0'}</strong> Followers{' '}
+                                <strong>{profile?.stats.following ?? '0'}</strong> Following
+                            </Trans>
                         </Typography>
                         <Box className={classes.actions}>
                             {isSelf ?
@@ -364,7 +361,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
                                     sx={{ cursor: 'pointer' }}>
-                                    {t.view_profile_in_firefly()}
+                                    <Trans>View your profile in firefly</Trans>
                                 </Button>
                             :   <>
                                     <EthereumERC20TokenApprovedBoundary
@@ -377,14 +374,18 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                             className: classes.followAction,
                                             disabled,
                                         }}
-                                        infiniteUnlockContent={t.unlock_token_tips({
-                                            value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
-                                            symbol: approved.token?.symbol ?? '',
-                                        })}
-                                        failedContent={t.unlock_token_tips({
-                                            value: value?.profile.followModule?.amount?.value ?? ZERO.toFixed(),
-                                            symbol: approved.token?.symbol ?? '',
-                                        })}>
+                                        infiniteUnlockContent={
+                                            <Trans>
+                                                Unlock {value?.profile.followModule?.amount?.value ?? ZERO.toFixed()}{' '}
+                                                {approved.token?.symbol ?? ''} and follow
+                                            </Trans>
+                                        }
+                                        failedContent={
+                                            <Trans>
+                                                Unlock {value?.profile.followModule?.amount?.value ?? ZERO.toFixed()}{' '}
+                                                {approved.token?.symbol ?? ''} and follow
+                                            </Trans>
+                                        }>
                                         <ChainBoundary
                                             disableConnectWallet
                                             expectedPluginID={pluginID}
@@ -395,7 +396,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                                 startIcon: null,
                                                 disabled,
                                             }}
-                                            switchText={t.switch_network_tips()}>
+                                            switchText={<Trans>Switch to Polygon and Follow</Trans>}>
                                             <ActionButton
                                                 variant="roundedContained"
                                                 className={classes.followAction}
@@ -418,7 +419,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                         rel="noopener noreferrer"
                                         endIcon={<Icons.LinkOut size={18} />}
                                         sx={{ cursor: 'pointer' }}>
-                                        {t.firefly()}
+                                        <Trans>Firefly</Trans>
                                     </Button>
                                 </>
                             }

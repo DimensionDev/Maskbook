@@ -8,8 +8,8 @@ import { type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
 import { useNftRedPacketHistory } from './hooks/useNftRedPacketHistory.js'
 import { NftRedPacketHistoryItem } from './NftRedPacketHistoryItem.js'
-import { useRedPacketTrans } from '../locales/index.js'
 import type { HTMLProps } from 'react'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -48,7 +48,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export function NftRedPacketHistoryList({ onSend, ...rest }: Props) {
     const { classes, cx } = useStyles()
-    const t = useRedPacketTrans()
     const sharedI18N = useSharedTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: histories, isPending } = useNftRedPacketHistory(account, chainId)
@@ -68,7 +67,9 @@ export function NftRedPacketHistoryList({ onSend, ...rest }: Props) {
     if (!histories?.length) {
         return (
             <EmptyStatus className={classes.placeholder} iconSize={36}>
-                {t.nft_no_history()}
+                <Trans>
+                    You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends.
+                </Trans>
             </EmptyStatus>
         )
     }

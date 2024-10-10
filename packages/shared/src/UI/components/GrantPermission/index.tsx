@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     description: {
@@ -21,11 +21,10 @@ export interface GrantPermissionsProps extends withClasses<'description' | 'acti
 }
 export const GrantPermissions = memo<GrantPermissionsProps>(({ permissions, onGrant, ...props }) => {
     const { classes } = useStyles(undefined, { props })
-    const t = useSharedTrans()
     return (
         <>
             <Typography className={classes.description}>
-                {t.authorization_descriptions()}
+                <Trans>Mask Network requires the permission of following websites before using it.</Trans>
                 <Typography component="div">{permissions.join(',')}</Typography>
             </Typography>
             <ActionButton
@@ -33,7 +32,7 @@ export const GrantPermissions = memo<GrantPermissionsProps>(({ permissions, onGr
                 variant="roundedDark"
                 onClick={onGrant}
                 className={classes.action}>
-                {t.approve()}
+                <Trans>Approve</Trans>
             </ActionButton>
         </>
     )

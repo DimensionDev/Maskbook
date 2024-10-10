@@ -1,7 +1,8 @@
 import { DialogContent, dialogClasses, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
-import { InjectedDialog, useSharedTrans } from '@masknet/shared'
+import { InjectedDialog } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -71,14 +72,9 @@ interface QRCodeDialogProps {
 }
 
 export function QRCodeDialog({ uri, open, onClose }: QRCodeDialogProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
     return (
-        <InjectedDialog
-            className={classes.dialog}
-            open={open}
-            onClose={onClose}
-            title={t.wallet_connect_qr_code_dialog_title()}>
+        <InjectedDialog className={classes.dialog} open={open} onClose={onClose} title={<Trans>WalletConnect</Trans>}>
             <DialogContent className={classes.container}>
                 <div className={classes.halo}>
                     <Grid className={classes.grid}>
@@ -86,7 +82,7 @@ export function QRCodeDialog({ uri, open, onClose }: QRCodeDialogProps) {
                             <QRCode value={uri} ecLevel="L" size={329} quietZone={16} eyeRadius={100} qrStyle="dots" />
                         </div>
                         <Typography className={classes.tip} color="textSecondary">
-                            {t.wallet_connect_qr_code_dialog_content()}
+                            <Trans>Scan the QR code with a WalletConnect-compatible wallet</Trans>
                         </Typography>
                     </Grid>
                 </div>

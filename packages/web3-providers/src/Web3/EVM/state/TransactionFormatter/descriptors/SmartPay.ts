@@ -1,10 +1,12 @@
 import type { TransactionContext } from '@masknet/web3-shared-base'
 import type { ChainId, TransactionParameter } from '@masknet/web3-shared-evm'
 import { BaseDescriptor } from './Base.js'
-import type { TransactionDescriptor } from '../types.js'
+import type { TransactionDescriptorFormatResult } from '../types.js'
 
-export class SmartPayDescriptor extends BaseDescriptor implements TransactionDescriptor {
-    override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+export class SmartPayDescriptor extends BaseDescriptor {
+    override async compute(
+        context_: TransactionContext<ChainId, TransactionParameter>,
+    ): Promise<TransactionDescriptorFormatResult | undefined> {
         const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
@@ -43,7 +45,7 @@ export class SmartPayDescriptor extends BaseDescriptor implements TransactionDes
                         title: 'Change Owner',
                         description: 'Transaction submitted.',
                         snackbar: {
-                            successfulDescription: 'Change owner Successfully.',
+                            successfulDescription: 'Owner changed.',
                             failedDescription: '',
                         },
                         popup: {

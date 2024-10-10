@@ -25,9 +25,9 @@ import { Box } from '@mui/system'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import Services from '#services'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -75,7 +75,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function AddDeriveWallet() {
-    const t = useDashboardTrans()
     const { cx, classes } = useStyles()
     const navigate = useNavigate()
     const state = useLocation().state as {
@@ -197,20 +196,20 @@ export const Component = memo(function AddDeriveWallet() {
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {t.create_step({ step: '2', totalSteps: '2' })}
+                    <Trans>Step 2/2</Trans>
                 </Typography>
                 <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
-                    {t.create()}
+                    <Trans>Create</Trans>
                 </Typography>
             </div>
             <Box className={classes.header}>
                 <Typography variant="h1" className={classes.title}>
-                    {t.wallet_select_address()}
+                    <Trans>Select Address</Trans>
                 </Typography>
             </Box>
 
             <Typography className={classes.second} mt={2} mb={3}>
-                {t.wallet_derivation_path({ path: HD_PATH_WITHOUT_INDEX_ETHEREUM })}
+                <Trans>Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}</Trans>
             </Typography>
 
             <DeriveWalletTable hiddenHeader loading={isPending} dataSource={tableData} onCheck={onCheck} symbol="ETH" />
@@ -220,13 +219,17 @@ export const Component = memo(function AddDeriveWallet() {
                     className={classes.paginationButton}
                     disabled={page === 0 || confirmLoading}
                     onClick={() => setPage((prev) => prev - 1)}>
-                    <Typography fontWeight={700}>{t.previous_page()}</Typography>
+                    <Typography fontWeight={700}>
+                        <Trans>Previous</Trans>
+                    </Typography>
                 </SecondaryButton>
                 <SecondaryButton
                     className={classes.paginationButton}
                     disabled={confirmLoading}
                     onClick={() => setPage((prev) => prev + 1)}>
-                    <Typography fontWeight={700}>{t.next_page()}</Typography>
+                    <Typography fontWeight={700}>
+                        <Trans>Next</Trans>
+                    </Typography>
                 </SecondaryButton>
             </div>
 
@@ -239,7 +242,7 @@ export const Component = memo(function AddDeriveWallet() {
                     size="large"
                     color="primary"
                     onClick={onConfirm}>
-                    {t.continue()}
+                    <Trans>Continue</Trans>
                 </PrimaryButton>
             </SetupFrameController>
         </>

@@ -2,13 +2,13 @@ import { useMemo } from 'react'
 import { formatDistanceStrict, addSeconds } from 'date-fns'
 import { makeStyles } from '@masknet/theme'
 import { type GasOptionType, getLocale, formatCurrency } from '@masknet/web3-shared-base'
-import { useSharedTrans } from '@masknet/shared'
 import { Typography, useTheme } from '@mui/material'
 import { CheckCircle, RadioButtonUnchecked } from '@mui/icons-material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatWeiToGwei } from '@masknet/web3-shared-evm'
 import type { SupportedLanguages } from '@masknet/public-api'
 import { SettingsContext } from './Context.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -52,7 +52,6 @@ export function GasOption(props: GasOptionProps) {
     const { type, option, lang, checked = false, onClick } = props
     const { classes } = useStyles()
     const theme = useTheme()
-    const t = useSharedTrans()
     const { GAS_OPTION_NAMES } = SettingsContext.useContainer()
 
     const now = useMemo(() => {
@@ -69,17 +68,14 @@ export function GasOption(props: GasOptionProps) {
             :   <RadioButtonUnchecked color="inherit" />}
             <Typography className={classes.type}>{GAS_OPTION_NAMES[type]}</Typography>
             <Typography className={classes.estimate}>
-                {t.gas_settings_gas_option_estimate_distance({
-                    distance: formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
-                        addSuffix: true,
-                        locale: getLocale(lang),
-                    }),
+                ~{' '}
+                {formatDistanceStrict(addSeconds(now, option.estimatedSeconds), now, {
+                    addSuffix: true,
+                    locale: getLocale(lang),
                 })}
             </Typography>
             <Typography className={classes.amount}>
-                {t.gas_settings_gas_option_amount_in_gwei({
-                    amount: formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), ''),
-                })}
+                <Trans>up to {formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), '')} Gwei</Trans>
             </Typography>
         </div>
     )

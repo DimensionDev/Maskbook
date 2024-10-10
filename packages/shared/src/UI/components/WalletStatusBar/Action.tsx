@@ -1,7 +1,7 @@
 import { memo, type PropsWithChildren, useRef } from 'react'
 import { Box, Button } from '@mui/material'
-import { useSharedTrans } from '../../../locales/index.js'
 import { Sniffings } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 interface ActionProps extends PropsWithChildren {
     openSelectWalletDialog: () => void
@@ -9,13 +9,12 @@ interface ActionProps extends PropsWithChildren {
 
 export const Action = memo<ActionProps>(function Action({ children, openSelectWalletDialog }) {
     const ref = useRef<HTMLDivElement>(undefined)
-    const t = useSharedTrans()
 
     return (
         <Box display="flex" columnGap={16} minWidth={!Sniffings.is_popup_page ? 276 : 176} ref={ref}>
             {children ?? (
                 <Button fullWidth onClick={openSelectWalletDialog}>
-                    {t.wallet_status_button_change()}
+                    <Trans>Change</Trans>
                 </Button>
             )}
         </Box>

@@ -23,9 +23,9 @@ import { useLatest } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Button, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -81,7 +81,6 @@ const approveParametersType = [
 
 export function TransactionRequest(props: InteractionItemProps) {
     const { currentRequest: request, setConfirmAction, paymentToken, setPaymentToken } = props
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()
     const [approvedAmount, setApproveAmount] = useState('')
@@ -229,29 +228,29 @@ export function TransactionRequest(props: InteractionItemProps) {
                     <>
                         <Box display="flex" alignItems="center" columnGap={1.25}>
                             <Typography className={classes.itemTitle}>
-                                {t.popups_wallet_unlock_erc20_approve_amount()}
+                                <Trans>Approve amount</Trans>
                             </Typography>
                             <Typography className={classes.itemValue}>{approvedAmount}</Typography>
                         </Box>
                         <Box display="flex" alignItems="center" columnGap={1.25}>
-                            <Typography className={classes.itemTitle}>
-                                {t.popups_wallet_unlock_erc20_granted_to()}
-                            </Typography>
-                            <Typography className={classes.itemValue}>
-                                {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
-                            </Typography>
+                            <Trans>
+                                <Typography className={classes.itemTitle}>Granted to </Typography>
+                                <Typography className={classes.itemValue}>
+                                    {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
+                                </Typography>
+                            </Trans>
                         </Box>
                     </>
                 :   null}
                 <Box display="flex" columnGap={0.5} alignItems="center">
                     <Icons.Documents className={classes.document} size={16} />
-                    <Typography className={classes.text}>{t.data()}</Typography>
+                    <Typography className={classes.text}>
+                        <Trans>Data</Trans>
+                    </Typography>
                 </Box>
                 {transaction.formattedTransaction?.popup?.method ?
                     <Typography className={classes.text}>
-                        {t.popups_wallet_transaction_function_name({
-                            name: transaction.formattedTransaction.popup.method,
-                        })}
+                        <Trans>Function: {transaction.formattedTransaction.popup.method}</Trans>
                     </Typography>
                 :   null}
                 {transaction.formattedTransaction?._tx.data ?
@@ -263,7 +262,9 @@ export function TransactionRequest(props: InteractionItemProps) {
         !FullTransactionDetails ? null : (
             <Box display="flex" justifyContent="center" alignItems="center" mt={2}>
                 <Button variant="text" onClick={() => setExpand(!expand)}>
-                    <Typography className={classes.text}>{t.popups_wallet_view_full_detail_transaction()}</Typography>
+                    <Typography className={classes.text}>
+                        <Trans>View full transaction details</Trans>
+                    </Typography>
                     <Icons.ArrowDrop size={16} className={cx(classes.arrowIcon, expand ? classes.expand : undefined)} />
                 </Button>
             </Box>

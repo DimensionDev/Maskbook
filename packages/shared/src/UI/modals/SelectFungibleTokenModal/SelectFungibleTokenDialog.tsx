@@ -7,10 +7,10 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogContent, inputClasses, useMediaQuery, type Theme } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
+import { Trans } from '@lingui/macro'
 
 interface StyleProps {
     compact: boolean
@@ -94,7 +94,6 @@ export function SelectFungibleTokenDialog({
     onClose,
     onChainChange,
 }: SelectFungibleTokenDialogProps) {
-    const t = useSharedTrans()
     const { networkIdentifier } = useBaseUIRuntime()
     const [mode, setMode] = useState(TokenListMode.List)
     const compact = networkIdentifier === EnhanceableSite.Minds
@@ -125,8 +124,8 @@ export function SelectFungibleTokenDialog({
             title={
                 title ? title
                 : mode === TokenListMode.Manage ?
-                    t.manage_token_list()
-                :   t.select_token()
+                    <Trans>Manage Token List</Trans>
+                :   <Trans>Select</Trans>
             }>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={classes.container}>

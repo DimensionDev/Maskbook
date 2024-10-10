@@ -4,8 +4,8 @@ import { Box } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { ContactCard } from '../ContactCard/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { type Friend } from '../../../hooks/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
@@ -41,9 +41,10 @@ interface ContactsProps {
 
 export const Contacts = memo<ContactsProps>(function Contacts({ friendsArray, fetchNextPage }) {
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     return !first(friendsArray) || first(friendsArray)?.friends.length === 0 ?
-            <EmptyStatus className={classes.empty}>{t.popups_encrypted_friends_no_friends()}</EmptyStatus>
+            <EmptyStatus className={classes.empty}>
+                <Trans>No contacts stored locally, you can try searching.</Trans>
+            </EmptyStatus>
         :   <Box className={classes.cardContainer}>
                 {friendsArray.map(({ friends }) => {
                     return friends.map((friend) => (

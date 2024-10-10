@@ -19,8 +19,9 @@ import { NFTAvatarPicker } from '../../../components/NFTAvatarPicker/index.js'
 import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useQueryClient } from '@tanstack/react-query'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -68,7 +69,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const PersonaAvatarSetting = memo(function PersonaAvatar() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const editor = useRef<AvatarEditor | null>(null)
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
@@ -96,7 +97,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
 
     const handleSetFile = useCallback((file: File) => {
         if (file.size > MAX_FILE_SIZE) {
-            showSnackbar(t.popups_set_avatar_failed(), { variant: 'error' })
+            showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
             return
         }
         setFile(file)
@@ -171,14 +172,14 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
             })
             refreshAvatar()
 
-            showSnackbar(t.popups_set_avatar_successfully())
+            showSnackbar(<Trans>Avatar set successfully</Trans>)
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(t.popups_set_avatar_failed(), { variant: 'error' })
+            showSnackbar(<Trans>Failed to set Avatar.</Trans>, { variant: 'error' })
         }
     }, [file, currentPersona, account, bindingWallets, refreshAvatar, queryClient, JSON.stringify(wallets)])
 
-    useTitle(t.popups_profile_photo())
+    useTitle(_(msg`Profile Photo`))
 
     // reset loaded state after file be changed
 
@@ -213,10 +214,10 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                 </Box>
                 <BottomController>
                     <Button variant="outlined" onClick={() => setFile(null)} fullWidth>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </Button>
                     <ActionButton fullWidth onClick={handleConfirm} loading={uploadLoading} disabled={!avatarLoaded}>
-                        {t.confirm()}
+                        <Trans>Confirm</Trans>
                     </ActionButton>
                 </BottomController>
             </Box>
@@ -233,8 +234,8 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                                 onChange={handleChangeTab}
                                 aria-label="profile-photo-tabs"
                                 classes={{ root: classes.tabs }}>
-                                <Tab label={t.popups_profile_photo_image()} value={ProfilePhotoType.Image} />
-                                <Tab label={t.popups_profile_photo_nfts()} value={ProfilePhotoType.NFT} />
+                                <Tab label={<Trans>Image</Trans>} value={ProfilePhotoType.Image} />
+                                <Tab label={<Trans>NFTs</Trans>} value={ProfilePhotoType.NFT} />
                             </MaskTabList>
                         :   null
                     }
@@ -258,18 +259,20 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
                                         <Icons.Upload size={30} />
                                     </Box>
                                     <Typography className={classes.typo}>
-                                        <strong>{t.popups_profile_photo_drag_file()}</strong>
+                                        <strong>
+                                            <Trans>Drag & Drop your file here</Trans>
+                                        </strong>
                                         <br />
-                                        {t.popups_profile_photo_size_limit()}
+                                        <Trans>Size limit: 10 MB</Trans>
                                     </Typography>
                                     <Typography component="strong" className={classes.strong}>
-                                        {t.or()}
+                                        <Trans>Or</Trans>
                                     </Typography>
                                     <Button
                                         style={{ width: 164 }}
                                         color="info"
                                         onClick={() => inputRef.current?.click()}>
-                                        {t.popups_profile_photo_browser_file()}
+                                        <Trans>Browser File</Trans>
                                     </Button>
                                 </Box>
                             </Box>

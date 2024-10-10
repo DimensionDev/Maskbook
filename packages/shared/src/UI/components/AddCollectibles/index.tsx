@@ -18,11 +18,12 @@ import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, uniq } from 'lodash-es'
 import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useSharedTrans } from '../../../locales/index.js'
 import { CollectibleItem, CollectibleItemSkeleton } from '../AssetsManagement/CollectibleItem.js'
 import { EmptyStatus } from '../EmptyStatus/index.js'
 import { LoadingStatus } from '../LoadingStatus/index.js'
 import { ReloadStatus } from '../ReloadStatus/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -124,9 +125,9 @@ function isValidTokenIds(rawIds: string) {
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
+    const { _ } = useLingui()
     const { pluginID, chainId: defaultChainId, account: defaultAccount, onAdd } = props
     const { chainId } = useChainContext({ chainId: defaultChainId })
-    const t = useSharedTrans()
     const theme = useTheme()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
@@ -160,7 +161,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const validationMsgForAddress = useMemo(() => {
         if (!address) return ''
         if (!Utils.isValidAddress?.(address ?? '') || (addressType !== AddressType.Contract && !loadingAddressType))
-            return t.collectible_contract_invalid()
+            return <Trans>Incorrect contract address.</Trans>
         return ''
     }, [address, addressType, loadingAddressType])
 
@@ -242,7 +243,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                             <MaskTextField
                                 {...field}
                                 autoFocus
-                                placeholder={t.add_collectibles_address_placeholder()}
+                                placeholder={_(msg`Input contract address`)}
                                 error={!!(errors.address || validationMsgForAddress)}
                                 InputProps={{
                                     spellCheck: false,
@@ -276,7 +277,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                         <>
                             <MaskTextField
                                 {...field}
-                                placeholder={t.add_collectibles_token_id_placeholder()}
+                                placeholder={_(msg`Token ID should be separated by comma, e.g. 1223,1224,`)}
                                 error={!!errors.tokenIds}
                                 InputProps={{
                                     spellCheck: false,
@@ -303,7 +304,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             </Box>
             {someNotMine ?
                 <Typography className={classes.error} mt={1}>
-                    {t.collection_not_belong_to_you()}
+                    <Trans>The contract address is incorrect or the collection does not belong to you.</Trans>
                 </Typography>
             :   null}
             <div className={classes.main}>
@@ -314,7 +315,9 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 : isError ?
                     <ReloadStatus flexGrow={1} onRetry={refetch} />
                 : noResults ?
-                    <EmptyStatus height="100%">{t.no_results()}</EmptyStatus>
+                    <EmptyStatus height="100%">
+                        <Trans>No results</Trans>
+                    </EmptyStatus>
                 :   <Box className={classes.grid}>
                         {assetsQueries
                             .filter((x) => x.data)
@@ -329,7 +332,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                         asset={asset}
                                         pluginID={pluginID}
                                         disableName
-                                        actionLabel={t.send()}
+                                        actionLabel={<Trans>Send</Trans>}
                                         disableAction
                                         onItemClick={isMine ? toggleSelect : undefined}
                                         isSelected={selectedTokenIds.includes(asset.tokenId)}
@@ -342,7 +345,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             </div>
             <Stack className={classes.toolbar} direction="row" justifyContent="center">
                 <ActionButton fullWidth startIcon={<Icons.Avatar size={18} />} disabled={disabled} onClick={handleAdd}>
-                    {t.add_collectibles()}
+                    <Trans>Add NFTs</Trans>
                 </ActionButton>
             </Stack>
         </form>

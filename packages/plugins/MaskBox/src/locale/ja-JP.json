@@ -1,1 +1,20 @@
-{ "messages": {} }
+{
+    "messages": {
+        "Xmf1TZ": [["boxStateMessage"], " (", ["0"], " ", ["1"], "/Time)"],
+        "F6pfE9": "アクティブ",
+        "Tt5T6+": "記事",
+        "Vi2Pqx": "によって",
+        "D87pha": "終了",
+        "URmyfc": "詳細",
+        "2vTp2v": "引く",
+        "rFkZD1": "引く中",
+        "znqB4T": "残高不足",
+        "ml4bvW": "制限:",
+        "0Lp4o6": "読み込みに失敗しました",
+        "WNjtSq": "MaskBox",
+        "r0A2o4": "Professional multi-chain decentralized platform for launching NFT blind boxes.",
+        "ZQo3mO": "Professional multi-chain decentralized platform for launching NFT mystery boxes.",
+        "HpK/8d": "再度読み込み",
+        "WbEaq/": "安定した"
+    }
+}

@@ -5,8 +5,9 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { useMaskSharedTrans, MaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -43,14 +44,15 @@ const useStyles = makeStyles()((theme) => {
 
 function Frame({ children, ...rest }: BindingDialogProps) {
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[site] || Icons.Globe
     return (
         <BindingDialog {...rest}>
             <div className={classes.main}>
                 <Icon size={48} className={classes.icon} />
-                <Typography className={classes.title}>{t.connect_persona()}</Typography>
+                <Typography className={classes.title}>
+                    <Trans>Connect Persona</Trans>
+                </Typography>
                 {children}
             </div>
         </BindingDialog>
@@ -71,7 +73,6 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
     ...rest
 }) {
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const siteName = SOCIAL_MEDIA_NAME[site] || ''
 
@@ -101,11 +102,11 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                     />
                 </Typography>
                 <Typography className={classes.text} mt="1.5em">
-                    {t.switch_for_more_connections()}
+                    <Trans>Change another account and try again.</Trans>
                 </Typography>
                 <Box mt="auto" width="100%">
                     <Button fullWidth onClick={rest.onClose}>
-                        {t.done()}
+                        <Trans>Done</Trans>
                     </Button>
                 </Box>
             </Frame>
@@ -114,7 +115,9 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
     if (currentUserId)
         return (
             <Frame {...rest}>
-                <Typography className={classes.text}>{t.not_current_account()}</Typography>
+                <Typography className={classes.text}>
+                    <Trans>Current account is not the verifying account.</Trans>
+                </Typography>
                 <Typography className={classes.text} mt="1.5em">
                     {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <MaskSharedTrans.request_to_switch_account
@@ -131,7 +134,9 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
 
     return (
         <Frame {...rest}>
-            <Typography className={classes.text}>{t.request_to_login({ siteName })}</Typography>
+            <Typography className={classes.text}>
+                <Trans>Please sign up or login {siteName} to connect Mask Network.</Trans>
+            </Typography>
         </Frame>
     )
 })

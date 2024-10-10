@@ -1,3 +1,4 @@
+/* eslint-disable no-irregular-whitespace */
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
@@ -11,7 +12,6 @@ import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useRedPacketTrans } from '../../locales/index.js'
 import { Requirements } from '../Requirements.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
@@ -20,6 +20,8 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { Plural, Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -160,7 +162,7 @@ export interface RedPacketProps {
 }
 
 export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
-    const t = useRedPacketTrans()
+    const { _ } = useLingui()
     const token = payload.token
     const { pluginID } = useNetworkContext()
     const payloadChainId = token?.chainId ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
@@ -200,13 +202,24 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
+            const sender = handle ?? ''
+            const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
+            const farcaster_lens_claimed = _(
+                msg`🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @${sender} !\n\nClaim on Lens: ${link}`,
+            )
+            const notClaimed = _(
+                msg`🤑 Check this Lucky Drop  🧧💰✨ sent by @${sender}.\n\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\n`,
+            )
             if (isOnFirefly) {
-                const context = hasClaimed ? (`${platform}_claimed` as 'lens_claimed' | 'farcaster_claimed') : platform
-                return t.share_on_firefly({
-                    context,
-                    sender: handle ?? '',
-                    link: link!,
-                })
+                if (platform === 'farcaster') {
+                    if (hasClaimed) {
+                        return farcaster_lens_claimed
+                    } else return _(msg`${notClaimed}\nClaim on Farcaster: ${link}`)
+                } else if (platform === 'lens') {
+                    if (hasClaimed) {
+                        return farcaster_lens_claimed
+                    } else return _(msg`${notClaimed}\nClaim on Lens: ${link}`)
+                } else return _(msg`${notClaimed}\nClaim on: ${link}`)
             }
             const isOnTwitter = Sniffings.is_twitter_page
             const isOnFacebook = Sniffings.is_facebook_page
@@ -214,20 +227,30 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 sender: payload.sender.name,
                 payload: link!,
                 network: network?.name ?? 'Mainnet',
-                account: isOnTwitter ? t.twitter_account() : t.facebook_account(),
+                account: isOnTwitter ? 'realMaskNetwork' : 'masknetwork',
                 interpolation: { escapeValue: false },
             }
             if (hasClaimed) {
+                const claimed = _(
+                    msg`I just claimed a lucky drop from @${shareTextOption.sender} on ${shareTextOption.network} network.`,
+                )
                 return isOnTwitter || isOnFacebook ?
-                        t.share_message_official_account(shareTextOption)
-                    :   t.share_message_not_twitter(shareTextOption)
+                        _(
+                            msg`${claimed} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`,
+                        )
+                    :   _(msg`${claimed}\n${promote_short}\n${shareTextOption.payload}`)
             }
+            const head = _(
+                msg`Hi friends, I just found a lucky drop sent by @${shareTextOption.sender} on ${shareTextOption.network} network.`,
+            )
 
             return isOnTwitter || isOnFacebook ?
-                    t.share_unclaimed_message_official_account(shareTextOption)
-                :   t.share_unclaimed_message_not_twitter(shareTextOption)
+                    _(
+                        msg`${head} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`,
+                    )
+                :   `${head}\n${promote_short}\n${shareTextOption.payload}`
         },
-        [payload, link, claimTxHash, t, network?.name, platform, isOnFirefly, handle],
+        [payload, link, claimTxHash, network?.name, platform, isOnFirefly, handle, _],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
     const shareText = useMemo(() => {
@@ -254,14 +277,11 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
             token,
             tokenType: TokenType.Fungible,
-            messageTextForNFT: t.claim_nft_successful({
-                name: 'NFT',
-            }),
-            messageTextForFT: t.claim_token_successful({
-                amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
-                name: `$${token?.symbol}`,
-            }),
-            title: t.lucky_drop(),
+            messageTextForNFT: _(msg`1 NFT claimed.`),
+            messageTextForFT: _(
+                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+            ),
+            title: _(msg`Lucky Drop`),
             share: (text) => share?.(text, source ? source : undefined),
         })
     }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
@@ -311,36 +331,40 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const myStatus = useMemo(() => {
         if (!availability) return ''
         if (token && listOfStatus.includes(RedPacketStatus.claimed))
-            return t.description_claimed(
-                availability.claimed_amount ?
-                    {
-                        amount: formatBalance(availability.claimed_amount, token.decimals, { significant: 2 }),
-                        symbol: token.symbol,
-                    }
-                :   { amount: '-', symbol: '-' },
+            return (
+                <Trans>
+                    You got{' '}
+                    {availability.claimed_amount ?
+                        formatBalance(availability.claimed_amount, token.decimals, { significant: 2 })
+                    :   '-'}{' '}
+                    {availability.claimed_amount ? token.symbol : '-'}
+                </Trans>
             )
         return ''
-    }, [listOfStatus, t, token, availability?.claimed_amount])
+    }, [listOfStatus, token, availability?.claimed_amount])
 
     const subtitle = useMemo(() => {
         if (!availability || !token) return
 
         if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return t.description_refund({
-                balance: formatBalance(availability.balance, token.decimals, { significant: 2 }),
-                symbol: token.symbol ?? '-',
-            })
-        if (listOfStatus.includes(RedPacketStatus.refunded)) return t.description_refunded()
-        if (listOfStatus.includes(RedPacketStatus.expired)) return t.description_expired()
-        if (listOfStatus.includes(RedPacketStatus.empty)) return t.description_empty()
-        if (!payload.password) return t.description_broken()
-        const i18nParams = {
-            total: formatBalance(payload.total, token.decimals, { significant: 2 }),
-            symbol: token.symbol ?? '-',
-            count: payload.shares.toString() ?? '-',
-        }
-        return payload.shares > 1 ? t.description_failover_other(i18nParams) : t.description_failover_one(i18nParams)
-    }, [availability, canRefund, token, t, payload, listOfStatus])
+            return (
+                <Trans>
+                    You could refund {formatBalance(availability.balance, token.decimals, { significant: 2 })}{' '}
+                    {token.symbol ?? '-'}.
+                </Trans>
+            )
+        if (listOfStatus.includes(RedPacketStatus.refunded)) return <Trans>The Lucky Drop has been refunded.</Trans>
+        if (listOfStatus.includes(RedPacketStatus.expired)) return <Trans>The Lucky Drop is expired.</Trans>
+        if (listOfStatus.includes(RedPacketStatus.empty)) return <Trans>The Lucky Drop is empty.</Trans>
+        if (!payload.password) return <Trans>The Lucky Drop is broken.</Trans>
+        const total = formatBalance(payload.total, token.decimals, { significant: 2 })
+        const symbol = token.symbol ?? '-'
+        return (
+            <Trans>
+                {payload.shares} <Plural value={payload.shares} one="share" other="shares" /> / {total} ${symbol}
+            </Trans>
+        )
+    }, [availability, canRefund, token, payload, listOfStatus, _])
 
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
@@ -422,7 +446,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                                 </Typography>
                             </div>
                             <Typography className={classes.from} variant="body1">
-                                {t.from({ name: payload.sender.name || '-' })}
+                                <Trans>From: @{payload.sender.name || '-'}</Trans>
                             </Typography>
                         </div>
                     </div>

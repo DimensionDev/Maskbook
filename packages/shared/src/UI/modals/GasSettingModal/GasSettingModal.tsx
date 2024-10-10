@@ -1,9 +1,10 @@
 import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { GasOptionType } from '@masknet/web3-shared-base'
-import { GasSettingModal, InjectedDialog, useSharedTrans } from '@masknet/shared'
+import { GasSettingModal, InjectedDialog } from '@masknet/shared'
 import { GasSettingSupported } from './GasSettingSupported.js'
 import type { BigNumber } from 'bignumber.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -25,7 +26,6 @@ interface GasSettingProps {
 }
 
 export function GasSetting(props: GasSettingProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
     const {
         open,
@@ -38,7 +38,7 @@ export function GasSetting(props: GasSettingProps) {
     } = props
 
     return (
-        <InjectedDialog title={t.popups_wallet_gas_fee_settings()} open={open} onClose={onClose}>
+        <InjectedDialog title={<Trans>Gas fee settings</Trans>} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
                 <GasSettingSupported
                     gasLimit={gasLimit}

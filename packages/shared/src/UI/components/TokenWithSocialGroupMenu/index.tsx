@@ -7,10 +7,9 @@ import { isSameAddress, type SearchResultType } from '@masknet/web3-shared-base'
 import { Divider, Menu, MenuItem, Typography, type MenuProps } from '@mui/material'
 import { groupBy, toPairs } from 'lodash-es'
 import { memo, useCallback, type PropsWithChildren } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const MENU_ITEM_HEIGHT = 40
-const MENU_LIST_PADDING = 8
 
 const useStyles = makeStyles()((theme) => ({
     groupName: {
@@ -107,7 +106,6 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
     ...rest
 }: TokenWithSocialGroupProps) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
 
     const onSelect = useCallback(
         (value: Web3Helper.TokenResultAll, index: number) => {
@@ -157,7 +155,9 @@ export const TokenWithSocialGroupMenu = memo(function TokenWithSocialGroupMenu({
             <div key="rss3" className={classes.group}>
                 {collectionList.length > 0 && socialAccounts?.length ?
                     <>
-                        <Typography className={classes.groupName}>{t.address_viewer_address_name_address()}</Typography>
+                        <Typography className={classes.groupName}>
+                            <Trans>Address</Trans>
+                        </Typography>
                         <Divider className={classes.divider} />
                     </>
                 :   null}

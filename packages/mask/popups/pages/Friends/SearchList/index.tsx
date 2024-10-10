@@ -2,9 +2,9 @@ import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { EmptyStatus, RestorableScroll, ElementAnchor } from '@masknet/shared'
 import type { NextIDPersonaBindingsWithIdentifier } from '../../../hooks/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {
@@ -41,9 +41,10 @@ interface SearchListProps {
 
 export const SearchList = memo<SearchListProps>(function SearchList({ searchResult, fetchNextPage, refetch }) {
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     return searchResult.length === 0 ?
-            <EmptyStatus className={classes.empty}>{t.popups_encrypted_friends_search_no_result()}</EmptyStatus>
+            <EmptyStatus className={classes.empty}>
+                <Trans>No search results</Trans>
+            </EmptyStatus>
         :   <RestorableScroll scrollKey="search_contacts">
                 <Box className={classes.cardContainer}>
                     {searchResult.map((friend) => {

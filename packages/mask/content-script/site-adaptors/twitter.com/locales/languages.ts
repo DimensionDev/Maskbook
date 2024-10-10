@@ -29,7 +29,7 @@ export const linguiLanguages = {
     zh: lingui_zh_TW,
 }
 import { createI18NBundle } from '@masknet/shared-base'
-export const addDO_NOT_USEI18N = createI18NBundle('DO_NOT_USE', [languages, linguiLanguages])
+export const addDO_NOT_USE_I18N = createI18NBundle('DO_NOT_USE_', [languages, linguiLanguages as any])
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore
@@ -38,7 +38,7 @@ if (import.meta.webpackHot) {
         () =>
             globalThis.dispatchEvent?.(
                 new CustomEvent('MASK_I18N_HMR', {
-                    detail: ['DO_NOT_USE', { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW }],
+                    detail: ['DO_NOT_USE_', { en: en_US, ja: ja_JP, ko: ko_KR, qy: qya_AA, 'zh-CN': zh_CN, zh: zh_TW }],
                 }),
             ),
     )

@@ -12,3 +12,24 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/TweetDialog.tsx:78
+msgid "<0>Latest offer at </0><1>${0}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:18
+msgid "Buy & sell tweets autographed by their original creators."
+msgstr ""
+
+#: src/SiteAdaptor/TweetDialog.tsx:91
+msgid "Go"
+msgstr ""
+
+#: src/SiteAdaptor/TweetDialog.tsx:79
+#~ msgid "Latest offer at"
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:17
+#: src/SiteAdaptor/index.tsx:32
+msgid "Valuables"
+msgstr ""

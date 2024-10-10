@@ -1,1 +1,32 @@
-{ "messages": {} }
+{
+    "messages": {
+        "d6nk2t": [["0"], " Platform costs"],
+        "eEeK5j": ["<0>Expires in </0>", ["0"]],
+        "uyJsf6": "About",
+        "39ohdf": "Activities",
+        "8+xvyR": "Blockchain",
+        "Na6Ytj": "Change NFT PFP",
+        "QowPFh": "Collectibles",
+        "ks5OGD": "Contract",
+        "Nu4oKW": "Description",
+        "URmyfc": "Details",
+        "cM1qH2": "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media.",
+        "i9qiyR": "Expires in",
+        "ejVYRQ": "From",
+        "0Lp4o6": "Load failed",
+        "a4N/Bg": "Load More",
+        "RdfrN2": "Mint Address",
+        "/Dk+nX": ["More on ", ["0"]],
+        "ykiu3o": "NFT Details",
+        "waXvJd": "NFT is not minted yet.",
+        "txEVTf": "No Listings",
+        "qIL7PI": "Offers",
+        "l/UFPv": "Properties",
+        "FzzpXs": ["Sale ends in ", ["0"]],
+        "XsyYEe": "This NFT didn't have any activities.",
+        "0+3dvg": "This NFT didn't have any offers.",
+        "s4Omor": ["To <0>", ["0"], "</0>"],
+        "8glx+u": "Token ID",
+        "6IvSyW": "Token Standard"
+    }
+}

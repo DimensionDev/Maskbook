@@ -14,7 +14,8 @@ import {
 } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
+import { useFormatMessage } from '../../translate.js'
 
 const useStyles = makeStyles()((theme) => ({
     list: {
@@ -84,24 +85,25 @@ interface TransactionProps extends GridProps {
 }
 
 function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: TransactionProps) {
-    const t = useSharedTrans()
     const { classes, theme } = useStyles()
 
-    const statusTextMap: Record<TransactionStatusType, string> = {
-        [TransactionStatusType.NOT_DEPEND]: t.recent_transaction_pending(),
-        [TransactionStatusType.SUCCEED]: t.recent_transaction_success(),
-        [TransactionStatusType.FAILED]: t.recent_transaction_failed(),
+    const statusTextMap = {
+        [TransactionStatusType.NOT_DEPEND]: <Trans>Pending</Trans>,
+        [TransactionStatusType.SUCCEED]: <Trans>Success</Trans>,
+        [TransactionStatusType.FAILED]: <Trans>Failed</Trans>,
     }
 
     const Utils = useWeb3Utils()
     const { TransactionFormatter, TransactionWatcher } = useWeb3State()
 
     const address = ((tx._tx as Transaction<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>).to || '').toLowerCase()
+    const formatMessage = useFormatMessage()
 
     const { value: functionName } = useAsync(async () => {
         const formattedTransaction = await TransactionFormatter?.formatTransaction(chainId, tx._tx)
         return formattedTransaction?.title ?? 'Contract Interaction'
     }, [TransactionFormatter])
+    const formatted = formatMessage(functionName)
 
     const handleClear = useCallback(() => {
         onClear(tx)
@@ -112,25 +114,17 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
     const [txStatus, setTxStatus] = useState(tx.status)
 
     useEffect(() => {
-        const off = TransactionWatcher?.emitter.on('progress', (chainId, id, status, transaction) => {
-            setTxStatus(status)
-        })
+        const off = TransactionWatcher?.emitter.on('progress', (chainId, id, status) => setTxStatus(status))
 
-        return () => {
-            off?.()
-        }
+        return () => void off?.()
     }, [tx.id, TransactionWatcher])
 
     return (
         <Grid container {...rest}>
             <Grid item className={classes.cell} textAlign="left" md={4}>
                 <Stack overflow="hidden">
-                    <Typography
-                        className={classes.methodName}
-                        title={functionName || ''}
-                        variant="body1"
-                        fontWeight={500}>
-                        {functionName}
+                    <Typography className={classes.methodName} title={formatted || ''} variant="body1" fontWeight={500}>
+                        {formatted}
                     </Typography>
                     <Typography className={classes.timestamp} variant="body1" color={theme.palette.text.secondary}>
                         {format(tx.createdAt, 'yyyy.MM.dd HH:mm')}
@@ -159,7 +153,7 @@ function Transaction({ chainId, transaction: tx, onClear = noop, ...rest }: Tran
             <Grid item className={classes.cell} md={2} justifyContent="right">
                 {txStatus === TransactionStatusType.NOT_DEPEND ?
                     <Typography fontWeight={300} className={classes.clear} onClick={handleClear}>
-                        {t.wallet_status_pending_clear()}
+                        <Trans>Clear</Trans>
                     </Typography>
                 :   null}
             </Grid>

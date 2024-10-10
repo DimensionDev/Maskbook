@@ -17,8 +17,8 @@ import Services from '#services'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { attachNextIDToProfile } from '../../../../shared/index.js'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { type Profile } from '../common.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -85,7 +85,6 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
     const profiles = useFriendProfiles(seen, nextId, profile)
     const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const queryClient = useQueryClient()
-    const t = useMaskSharedTrans()
 
     const friendInfo = useMemo(() => {
         if (!rawPublicKey) return
@@ -150,7 +149,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                     }
                 },
             )
-            showSnackbar(t.popups_encrypted_friends_added_successfully(), { variant: 'success' })
+            showSnackbar(<Trans>Added successfully</Trans>, { variant: 'success' })
             setLocal(true)
         },
         onSettled: async () => {
@@ -214,7 +213,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                         onClick={() => onAdd(friendInfo)}
                         loading={isPending}
                         disabled={isPending}>
-                        {t.popups_encrypted_friends_add_friends()}
+                        <Trans>Add</Trans>
                     </ActionButton>
                 }
             </Box>

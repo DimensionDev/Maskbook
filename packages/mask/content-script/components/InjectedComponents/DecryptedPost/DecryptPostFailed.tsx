@@ -1,8 +1,8 @@
 import { memo } from 'react'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
+import { Trans } from '@lingui/macro'
 
 interface DecryptPostFailedProps {
     error: Error
@@ -13,11 +13,10 @@ interface DecryptPostFailedProps {
 }
 export const DecryptPostFailed = memo(function DecryptPostFailed(props: DecryptPostFailedProps) {
     const { author, postedBy, error } = props
-    const t = useMaskSharedTrans()
 
     return (
         <AdditionalContent
-            title={t.service_decryption_failed()}
+            title={<Trans>Failed to decrypt.</Trans>}
             titleIcon="error"
             message={error.message}
             headerActions={useAuthorDifferentMessage(author, postedBy, void 0)}

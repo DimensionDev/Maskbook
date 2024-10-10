@@ -17,6 +17,8 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { createSchema } from './network-schema.js'
 import { useWarnings } from './useWarnings.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -62,6 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 
 const QUERY_KEY = ['system', 'wallet', 'networks']
 export const Component = memo(function EditNetwork() {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -88,7 +91,7 @@ export const Component = memo(function EditNetwork() {
     // #endregion
 
     const { showSnackbar } = usePopupCustomSnackbar()
-    useTitle(network ? network.name : t.network_management_add_network())
+    useTitle(network ? network.name : _(msg`Add Network`))
     const { setExtension } = useContext(PageTitleContext)
 
     const queryClient = useQueryClient()
@@ -107,7 +110,7 @@ export const Component = memo(function EditNetwork() {
                         setChainId(ChainId.Mainnet)
                     }
                     await Network.removeNetwork(id)
-                    showSnackbar(t.deleted_network_successfully())
+                    showSnackbar(<Trans>Network removed.</Trans>)
                     // Trigger UI update.
                     queryClient.invalidateQueries({ queryKey: QUERY_KEY })
                     navigate(-1)
@@ -120,7 +123,7 @@ export const Component = memo(function EditNetwork() {
 
     const schema = useMemo(() => {
         return createSchema(
-            t,
+            _,
             async (name) => {
                 return !networks.find((network) => network.name === name && network.ID !== id)
             },
@@ -203,16 +206,16 @@ export const Component = memo(function EditNetwork() {
                 }
                 if (isEditing) {
                     await Network.updateNetwork(id, network)
-                    showSnackbar(t.saved_network_successfully())
+                    showSnackbar(<Trans>Network saved</Trans>)
                 } else {
                     await Network.addNetwork(network)
-                    showSnackbar(t.adding_network_successfully())
+                    showSnackbar(<Trans>Network added</Trans>)
                 }
                 navigate(-1)
                 queryClient.invalidateQueries({ queryKey: QUERY_KEY })
             } catch (err) {
                 checkZodError((err as Error).message)
-                showSnackbar(t.failed_to_save_network())
+                showSnackbar(<Trans>Failed to save network</Trans>)
             }
             setIsSubmitting(false)
         },
@@ -238,7 +241,9 @@ export const Component = memo(function EditNetwork() {
     return (
         <main className={classes.main}>
             <form className={classes.form} data-hide-scrollbar>
-                <Typography className={classes.label}>{t.network_name()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Network Name</Trans>
+                </Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -255,7 +260,9 @@ export const Component = memo(function EditNetwork() {
                     <Typography className={classes.error}>{errors.name.message}</Typography>
                 :   null}
 
-                <Typography className={classes.label}>{t.rpc_url()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>RPC URL</Trans>
+                </Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -268,7 +275,9 @@ export const Component = memo(function EditNetwork() {
                     <Typography className={classes.error}>{errors.rpc.message}</Typography>
                 :   null}
 
-                <Typography className={classes.label}>{t.chain_id()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Chain ID</Trans>
+                </Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -283,7 +292,9 @@ export const Component = memo(function EditNetwork() {
                     <Typography className={classes.warn}>{chainIdWarning}</Typography>
                 :   null}
 
-                <Typography className={classes.label}>{t.optional_currency_symbol()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Currency Symbol (Optional)</Trans>
+                </Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -296,7 +307,9 @@ export const Component = memo(function EditNetwork() {
                     <Typography className={classes.warn}>{symbolWarning}</Typography>
                 :   null}
 
-                <Typography className={classes.label}>{t.optional_block_explorer_url()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Block Explorer URL</Trans>
+                </Typography>
                 <Input
                     fullWidth
                     disableUnderline
@@ -311,10 +324,10 @@ export const Component = memo(function EditNetwork() {
             {!isBuiltIn ?
                 <div className={classes.footer}>
                     <ActionButton fullWidth variant="outlined" onClick={() => navigate(-1)}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </ActionButton>
                     <ActionButton fullWidth onClick={handleSubmit} disabled={disabled}>
-                        {t.confirm()}
+                        <Trans>Confirm</Trans>
                     </ActionButton>
                 </div>
             :   null}

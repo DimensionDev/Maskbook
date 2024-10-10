@@ -4,13 +4,14 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab } from '@mui/material'
 import { memo, useEffect, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { ContactsContext, useNonFungibleTokenParams, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { TransferTabType } from '../type.js'
 import { FungibleTokenSection } from './FungibleTokenSection.js'
 import { NonFungibleTokenSection } from './NonFungibleTokenSection.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -45,10 +46,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const Transfer = memo(function Transfer() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
-    useTitle(t.popups_send())
+    useTitle(_(msg`Send`))
     const [params, setParams] = useSearchParams()
     const undecided = params.get('undecided') === 'true'
 
@@ -75,8 +76,8 @@ const Transfer = memo(function Transfer() {
                                 onChange={handleTabChange}
                                 aria-label="persona-tabs"
                                 classes={{ root: classes.tabs }}>
-                                <Tab label={t.popups_wallet_token()} value={TransferTabType.Token} />
-                                <Tab label={t.popups_wallet_collectible()} value={TransferTabType.NFT} />
+                                <Tab label={<Trans>Tokens</Trans>} value={TransferTabType.Token} />
+                                <Tab label={<Trans>NFTs</Trans>} value={TransferTabType.NFT} />
                             </MaskTabList>
                         :   null
                     }

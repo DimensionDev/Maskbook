@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect } from 'react'
+import { memo, useCallback, useEffect, type ReactNode } from 'react'
 import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
@@ -8,11 +8,11 @@ import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 interface SmartPayEntryProps {
     disabled: boolean
-    tooltipHint?: string
+    tooltipHint?: ReactNode
     onClick?: (walletConnectedCallback?: () => void) => void
 }
 
@@ -83,12 +83,8 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
         <ApplicationEntry
             {...props}
             icon={<Icons.SmartPay size={36} />}
-            title={<Name />}
+            title={<Trans>Smart Pay</Trans>}
             onClick={() => (props.onClick ? props.onClick() : handleClick())}
         />
     )
 })
-function Name() {
-    const t = useSmartPayTrans()
-    return t.__plugin_name()
-}

@@ -1,11 +1,11 @@
 import { memo, useEffect } from 'react'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
 import { CrossIsolationMessages, PopupRoutes } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -83,7 +83,6 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export const Component = memo(function WalletConnect() {
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const location = useLocation()
@@ -108,7 +107,9 @@ export const Component = memo(function WalletConnect() {
                     <Icons.MaskWallet size={64} />
                 </Box>
             </Box>
-            <Typography className={classes.title}>{t.wallet_connect()}</Typography>
+            <Typography className={classes.title}>
+                <Trans>WalletConnect</Trans>
+            </Typography>
 
             <div className={classes.halo}>
                 <div className={classes.qrcodeContainer}>
@@ -117,7 +118,9 @@ export const Component = memo(function WalletConnect() {
                     </Box>
                 </div>
             </div>
-            <Typography className={classes.tip}>{t.wallet_connect_tips()}</Typography>
+            <Typography className={classes.tip}>
+                <Trans>Scan QR code with WalletConnect-compatible wallet</Trans>
+            </Typography>
         </Box>
     )
 })

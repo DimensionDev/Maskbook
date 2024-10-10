@@ -8,7 +8,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletRemoveModal } from '../../../modals/modal-controls.js'
@@ -23,6 +23,8 @@ import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
 import { HidingScamTx } from './HidingScamTx.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
@@ -30,7 +32,7 @@ function getPathIndex(path?: string) {
     return Number.parseInt(rawIndex, 10)
 }
 export const Component = memo(function WalletSettings() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
     const wallet = useWallet()
@@ -40,7 +42,7 @@ export const Component = memo(function WalletSettings() {
         modalNavigate(PopupModalRoutes.WalletAccount)
     }, [modalNavigate])
 
-    useTitle(t.popups_wallet_setting())
+    useTitle(_(msg`Wallet Settings`))
     const siblingWallets = useMemo(() => {
         if (!wallet?.mnemonicId) return EMPTY_LIST
         return allWallets
@@ -109,7 +111,7 @@ export const Component = memo(function WalletSettings() {
                                     .map((x) => formatEthereumAddress(x.address, 4))
                                     .join(',')
                                 const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: t.remove_wallet_title(),
+                                    title: <Trans>Remove Wallet?</Trans>,
                                     message: (
                                         <Typography className={classes.confirmMessage}>
                                             {/* eslint-disable-next-line react/naming-convention/component-name */}
@@ -129,14 +131,14 @@ export const Component = memo(function WalletSettings() {
                                 if (!confirmed) return
                             }
                             await WalletRemoveModal.openAndWaitForClose({
-                                title: t.remove(),
+                                title: <Trans>Remove</Trans>,
                                 wallet,
                             })
                         }}
                         width={368}
                         color="error"
                         className={classes.removeWalletButton}>
-                        {t.popups_wallet_settings_remove_wallet()}
+                        <Trans>Remove Wallet</Trans>
                     </ActionButton>
                 </Box>
             )}

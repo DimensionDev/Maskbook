@@ -42,7 +42,6 @@ import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme
 import { NextIDProof } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -53,6 +52,7 @@ import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import Services from '#services'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -144,8 +144,6 @@ function openWeb3ProfileSettingDialog() {
 
 function Content(props: ProfileTabContentProps) {
     const { classes } = useStyles(undefined, { props })
-
-    const t = useMaskSharedTrans()
     const translate = usePluginTransField()
 
     const [hidden, setHidden] = useState(true)
@@ -387,10 +385,10 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.danger}>
-                                {t.load_failed()}
+                                <Trans>Load failed</Trans>
                             </Typography>
                             <Button color="primary" className={classes.reload} onClick={handleClick}>
-                                {t.reload()}
+                                <Trans>Reload</Trans>
                             </Button>
                         </Stack>
                     </PluginCardFrameMini>
@@ -411,7 +409,7 @@ function Content(props: ProfileTabContentProps) {
                                 fontWeight={400}
                                 lineHeight="18px"
                                 color={(t) => t.palette.maskColor.publicMain}>
-                                {t.web3_profile_no_social_address_list()}
+                                <Trans>Can't find a valid user address data source.</Trans>
                             </Typography>
                         </Stack>
                     </PluginCardFrameMini>
@@ -478,20 +476,22 @@ function Content(props: ProfileTabContentProps) {
                             <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>
-                            <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="5px"
-                                color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                {t.powered_by()}
-                            </Typography>
-                            <Typography
-                                fontSize="14px"
-                                fontWeight={700}
-                                marginRight="4px"
-                                color={(theme) => theme.palette.maskColor.dark}>
-                                {t.mask_network()}
-                            </Typography>
+                            <Trans>
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="5px"
+                                    color={(theme) => theme.palette.maskColor.secondaryDark}>
+                                    Powered by
+                                </Typography>
+                                <Typography
+                                    fontSize="14px"
+                                    fontWeight={700}
+                                    marginRight="4px"
+                                    color={(theme) => theme.palette.maskColor.dark}>
+                                    Mask Network
+                                </Typography>
+                            </Trans>
                             {isOwnerIdentity && isOnTwitter ?
                                 <ConnectPersonaBoundary
                                     personas={allPersonas}

@@ -4,9 +4,9 @@ import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { useLayoutEffect, useRef } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
-import { useAvatarTrans } from '../locales/index.js'
-import type { NFTListDialogRef } from './NFTListDialog.js'
 import { AvatarRoutes, RoutePaths } from './Routes.js'
+import type { NFTListDialogRef } from './NFTListDialog.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     root: {
@@ -25,7 +25,6 @@ const useStyles = makeStyles()({
 export function RouterDialog(props: InjectedDialogProps) {
     const { classes } = useStyles()
     const nftListRef = useRef<NFTListDialogRef>(undefined)
-    const t = useAvatarTrans()
     const { pathname } = useLocation()
     const navigate = useNavigate()
 
@@ -33,10 +32,7 @@ export function RouterDialog(props: InjectedDialogProps) {
         if (pathname === RoutePaths.Exit) props.onClose?.()
     }, [pathname, props.onClose])
 
-    const title =
-        matchPath(RoutePaths.Upload, pathname) ?
-            t.application_edit_profile_dialog_title()
-        :   t.application_dialog_title()
+    const title = matchPath(RoutePaths.Upload, pathname) ? <Trans>Edit Profile</Trans> : <Trans>NFT PFP</Trans>
     const titleTail =
         matchPath(RoutePaths.NFTPicker, pathname) ?
             <Icons.Plus

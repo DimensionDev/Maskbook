@@ -7,10 +7,11 @@ import Fuse from 'fuse.js'
 import { Box, Checkbox, InputAdornment, InputBase, Stack, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ProfileInList } from '../SelectRecipients/ProfileInList.js'
 import { useContacts } from '../SelectRecipients/useContacts.js'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface SelectProfileUIProps extends withClasses<'root'> {
     items: Profile[]
@@ -69,7 +70,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileUI(props: SelectProfileUIProps) {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes, cx } = useStyles(undefined, { props })
     const { frozenSelected, onSetSelected, disabled, items, selected } = props
     const [search, setSearch] = useState('')
@@ -154,7 +155,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={t.post_dialog_share_with_input_placeholder()}
+                    placeholder={_(msg`eg: X accounts, persona public keys, wallet addresses or ENS`)}
                     disabled={disabled}
                 />
             </Box>
@@ -168,7 +169,7 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                             <Box className={classes.list}>
                                 {profiles.length === 0 ?
                                     <EmptyStatus className={classes.empty}>
-                                        {t.compose_encrypt_share_dialog_empty()}
+                                        <Trans>No friends are stored locally, please try search one.</Trans>
                                     </EmptyStatus>
                                 :   profiles.map((item) => {
                                         const pubkey = item.linkedPersona?.publicKeyAsHex as string
@@ -193,7 +194,9 @@ export function SelectProfileUI(props: SelectProfileUIProps) {
                                     sx={{ width: 20, height: 20 }}
                                     onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
                                 />
-                                <Typography sx={{ paddingLeft: 1 }}>{t.select_all()}</Typography>
+                                <Typography sx={{ paddingLeft: 1 }}>
+                                    <Trans>Select All</Trans>
+                                </Typography>
                             </Stack>
                         :   null}
                     </div>

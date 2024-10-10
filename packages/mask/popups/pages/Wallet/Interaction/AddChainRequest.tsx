@@ -2,8 +2,9 @@ import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Typography } from '@mui/material'
 import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import { useTitle } from 'react-use'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -17,13 +18,13 @@ const useStyle = makeStyles()({
     },
 })
 export function AddChainRequest(props: InteractionItemProps) {
+    const { _ } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
     const t = useMaskSharedTrans()
     const origin = props.currentRequest.origin
-    const { Message } = useWeb3State()
 
-    useTitle(t.wallet_sdk_connect_title())
+    useTitle(_(msg`Connect with Mask Wallet`))
 
     t.wallet_status_pending({ count: 1 })
 

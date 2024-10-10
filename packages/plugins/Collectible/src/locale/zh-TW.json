@@ -1,1 +1,32 @@
-{ "messages": {} }
+{
+    "messages": {
+        "d6nk2t": [["0"], " 平台成本"],
+        "eEeK5j": ["<0>Expires in </0>", ["0"]],
+        "uyJsf6": "关于",
+        "39ohdf": "活动",
+        "8+xvyR": "区块链",
+        "Na6Ytj": "更改 NFT 头像",
+        "QowPFh": "NFT",
+        "ks5OGD": "合约",
+        "Nu4oKW": "介绍",
+        "URmyfc": "详情",
+        "cM1qH2": "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。",
+        "i9qiyR": "Expires in",
+        "ejVYRQ": "从",
+        "0Lp4o6": "加载失败",
+        "a4N/Bg": "加载更多",
+        "RdfrN2": "铸造地址",
+        "/Dk+nX": ["更多关于 ", ["0"]],
+        "ykiu3o": "NFT 详细信息",
+        "waXvJd": "NFT还没有被铸造。",
+        "txEVTf": "没有任何上架信息",
+        "qIL7PI": "报价",
+        "l/UFPv": "属性",
+        "FzzpXs": ["出售结束于 ", ["0"]],
+        "XsyYEe": "此 NFT 没有任何交易动态。",
+        "0+3dvg": "此 NFT 没有任何报价。",
+        "s4Omor": ["To <0>", ["0"], "</0>"],
+        "8glx+u": "Token ID",
+        "6IvSyW": "代币标准"
+    }
+}

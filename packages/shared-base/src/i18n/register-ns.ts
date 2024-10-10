@@ -1,10 +1,10 @@
 import type { i18n } from 'i18next'
-import type { I18n } from '@lingui/core'
+import type { I18n, Messages } from '@lingui/core'
 
 type I18NResource = I18NLanguageResourcePair | LinguiI18NResource
 type I18NKeyValuePair = Record<string, string>
 type I18NLanguageResourcePair = Record<string, I18NKeyValuePair>
-type LinguiI18NResource = Record<string, { messages: I18NKeyValuePair }>
+type LinguiI18NResource = Record<string, { messages: Messages }>
 function addI18NBundle(i18Next: i18n, lingui: I18n, namespace: string, langs: I18NResource[] | I18NResource) {
     if (!i18Next.addResourceBundle) throw new TypeError('Please call instance.init() first')
 

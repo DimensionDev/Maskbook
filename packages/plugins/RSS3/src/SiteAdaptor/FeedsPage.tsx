@@ -6,7 +6,6 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Box, ClickAwayListener, Skeleton, Typography, type BoxProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useMemo } from 'react'
-import { useRSS3Trans } from '../locales/index.js'
 import { FeedCard } from './components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from './contexts/index.js'
 import { useIsFiltersOpen } from './emitter.js'
@@ -14,6 +13,7 @@ import { FeedFilters } from './FeedFilters.js'
 import { useFilters } from './filters.js'
 import { useFeeds } from './hooks/useFeeds.js'
 import { Networks } from '../constants.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     feedCard: {
@@ -34,7 +34,6 @@ export interface FeedListProps {
 }
 
 export const FeedList = memo(function FeedList({ address, tags, listProps }: FeedListProps) {
-    const t = useRSS3Trans()
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
@@ -94,7 +93,11 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
         )
     }
     if (!feeds?.length && !loading) {
-        return <EmptyStatus height={260}>{t.no_data({ context: 'activities' })}</EmptyStatus>
+        return (
+            <EmptyStatus height={260}>
+                <Trans>There's no feed associated with this address.</Trans>
+            </EmptyStatus>
+        )
     }
 
     return (
@@ -111,7 +114,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
                         :   null}
                     </ElementAnchor>
                 :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
-                        {t.no_more_data()}
+                        <Trans>No more data available.</Trans>
                     </Typography>
                 }
             </Box>

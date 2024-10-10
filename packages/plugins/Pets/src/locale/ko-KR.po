@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,91 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Pets/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 978\n"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:259
+msgid "(unverified)"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:369
+msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
+msgstr ""
+
+#: src/hooks/useEssay.ts:40
+#~ msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+#~ msgstr ""
+
+#: src/hooks/useEssay.ts:40
+msgid "Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:395
+msgid "Confirm"
+msgstr "확인"
+
+#: src/SiteAdaptor/index.tsx:42
+msgid "Discover the infinite possibilities of #NFTs."
+msgstr "#NFT 무한한 가능성을 탐색합니다."
+
+#: src/SiteAdaptor/PetSetDialog.tsx:348
+msgid "Greeting message"
+msgstr "인사 메시지"
+
+#: src/SiteAdaptor/PetShareDialog.tsx:45
+msgid ""
+"I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
+"#mask_io #nonfungiblefriends\n"
+"⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
+msgstr ""
+
+#: src/hooks/useEssay.ts:38
+msgid "I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:269
+msgid "NFT Contract"
+msgstr "NFT 컨트렉트"
+
+#: src/SiteAdaptor/index.tsx:18
+msgid "Non-F Friends"
+msgstr "Non-F 친구"
+
+#: src/SiteAdaptor/PetDialog.tsx:45
+msgid "Non-Fungible Friends"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:348
+msgid "Optional, 100 characters max."
+msgstr "최대 100 캐릭터를 선택할 수 있습니다."
+
+#: src/SiteAdaptor/PetSetDialog.tsx:370
+#~ msgid "Powered by"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PreviewBox.tsx:161
+msgid "Preview"
+msgstr "미리보기"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:176
+msgid "Setting failed, please try later"
+msgstr "설치 실패, 잠시 후 다시 시도하세요."
+
+#: src/SiteAdaptor/PetShareDialog.tsx:60
+msgid "Share"
+msgstr "공유"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:365
+msgid "Show NFT friends on the profile page."
+msgstr "프로필 페이지에서 전시하기"
+
+#: src/SiteAdaptor/PetDialog.tsx:45
+msgid "Successful"
+msgstr "성공"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:316
+msgid "Token ID"
+msgstr "토큰 ID"
+
+#: src/SiteAdaptor/PetSetDialog.tsx:402
+#: src/SiteAdaptor/PetShareDialog.tsx:56
+msgid "Your Non-Fungible Friend has been set up successfully."
+msgstr "설치 성공"

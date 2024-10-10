@@ -47,6 +47,7 @@ function fetchingTwitterResource(target: URL) {
 }
 
 function fetchingInsResource(target: URL) {
+    // cspell:disable-next-line
     return location.origin.endsWith('instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/)
 }
 

@@ -3,8 +3,8 @@ import { Button, Link, Typography } from '@mui/material'
 import { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useTermsConfirmed } from '../storage.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     terms: {
@@ -79,7 +79,6 @@ const TERMS_URL = 'https://legal.mask.io/arweave/file-service/plugin-terms.html'
 const POLICY_URL = 'https://legal.mask.io/arweave/file-service/privacy-policy-uploader.html'
 
 export function Terms() {
-    const t = useFileServiceTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [confirmed, setConfirmed] = useTermsConfirmed()
@@ -92,42 +91,54 @@ export function Terms() {
         <div className={classes.terms}>
             <div className={classes.content}>
                 <Typography variant="h1" className={classes.title}>
-                    {t.what_is_web3_file_service()}
+                    <Trans>What is Web3 File Service?</Trans>
                 </Typography>
                 <Typography variant="body2" className={classes.introduction}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <FileServiceTrans.introduction multiple components={{ br: <br /> }} />
+                    <Trans>
+                        Web3 File Service is a decentralized storage service provided by Mask Network. It allows users
+                        to store files in different decentralized networks. This feature is powered by Mask Network's
+                        partner file storage protocols such as IPFS, Arweave and Meson Network. It supports files in
+                        PDF, DOC, JPG, PNG, MP3, MP4 and other formats. At present, the maximum file size is 10 MB.
+                        <br />
+                        <br />
+                        You can store files in multiple decentralized networks through the Web3 file service. When
+                        uploading files, you can choose to encrypt or decrypt them. According to the selected encryption
+                        method, you can obtain two file links with and without encryption. Users of Mask Network can
+                        share files to social platforms through this link. By using the encryption, you can ensure the
+                        security of your files and prevent privacy leakage.
+                        <br />
+                        <br />
+                        It should be noted that any user who has the link can download and share the file. With the
+                        characteristics of decentralized file storage systems, your uploaded files can never be deleted
+                        or tampered. Be caution when uploading files with personal privacy.
+                        <br />
+                        <br />
+                        The Web3 File Service provided by Mask Network enables individuals to be free from data
+                        restrictions imposed by traditional social platforms, enabling free encrypted transmission and
+                        sharing of files. At present, the service is provisionally free for all users with Mask Network.
+                        Mask Network will provide updates on costs users may have to pay in the future.
+                    </Trans>
                 </Typography>
                 <Typography variant="body2" className={classes.footNote}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <FileServiceTrans.foot_note
-                        components={{
-                            terms: (
-                                <Link
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className={classes.link}
-                                    href={TERMS_URL}
-                                />
-                            ),
-                            policy: (
-                                <Link
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    className={classes.link}
-                                    href={POLICY_URL}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        By using this plugin, you agree to the{' '}
+                        <Link target="_blank" rel="noreferrer noopener" className={classes.link} href={TERMS_URL}>
+                            terms
+                        </Link>{' '}
+                        and the{' '}
+                        <Link target="_blank" rel="noreferrer noopener" className={classes.link} href={POLICY_URL}>
+                            privacy policy
+                        </Link>
+                        .
+                    </Trans>
                 </Typography>
             </div>
             <div className={classes.actions}>
                 <Button className={cx(classes.button, classes.cancelButton)} onClick={() => navigate(RoutePaths.Exit)}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <Button className={cx(classes.button, classes.confirmButton)} onClick={() => setConfirmed(true)}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </Button>
             </div>
         </div>

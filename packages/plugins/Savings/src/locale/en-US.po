@@ -12,3 +12,141 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/WithdrawForm.tsx:173
+msgid "{0} days"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:289
+msgid "Amount"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:318
+#: src/SiteAdaptor/SavingsTable/index.tsx:87
+msgid "APR"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsTable/index.tsx:81
+msgid "Asset"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsDialog.tsx:136
+#: src/SiteAdaptor/SavingsForm.tsx:279
+#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:106
+msgid "Deposit"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:237
+#: src/SiteAdaptor/SavingsForm.tsx:249
+msgid "Deposit {0}"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:241
+#: src/SiteAdaptor/SavingsForm.tsx:253
+#: src/SiteAdaptor/SavingsForm.tsx:269
+msgid "Done"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:146
+msgid "Enter an amount"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:239
+#: src/SiteAdaptor/SavingsForm.tsx:251
+#: src/SiteAdaptor/SavingsForm.tsx:266
+msgid "Failed"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:198
+msgid "Hi friends, I just deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:201
+#: src/SiteAdaptor/WithdrawForm.tsx:125
+msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:147
+msgid "Input amount is below the minimum amount"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:154
+#~ msgid "Insufficient {0} balance"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:150
+msgid "Insufficient ${0} balance"
+msgstr ""
+
+#: src/SiteAdaptor/WithdrawForm.tsx:160
+msgid "Lido Exchange Rate"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsTable/index.tsx:107
+msgid "Loading"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:193
+#: src/SiteAdaptor/WithdrawForm.tsx:117
+#~ msgid "masknetwork"
+#~ msgstr ""
+
+#: src/SiteAdaptor/WithdrawForm.tsx:145
+msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsTable/index.tsx:125
+msgid "No deposit protocols found."
+msgstr ""
+
+#: src/SiteAdaptor/SavingsTable/index.tsx:98
+msgid "Operation"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:238
+#: src/SiteAdaptor/SavingsForm.tsx:250
+msgid "Processing Deposit"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:265
+msgid "Processing Withdrawal"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:193
+#: src/SiteAdaptor/WithdrawForm.tsx:117
+#~ msgid "realMaskNetwork"
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:14
+#: src/SiteAdaptor/SavingsDialog.tsx:129
+msgid "Savings"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:262
+msgid "Swap {0}"
+msgstr ""
+
+#: src/SiteAdaptor/WithdrawForm.tsx:177
+msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
+msgstr ""
+
+#: src/SiteAdaptor/WithdrawForm.tsx:170
+msgid "Waiting time"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsTable/index.tsx:93
+msgid "Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsDialog.tsx:137
+#: src/SiteAdaptor/SavingsForm.tsx:279
+#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:107
+#: src/SiteAdaptor/WithdrawForm.tsx:133
+#: src/SiteAdaptor/WithdrawForm.tsx:140
+msgid "Withdraw"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:263
+#: src/SiteAdaptor/WithdrawForm.tsx:189
+msgid "Withdraw {0}"
+msgstr ""

@@ -1,8 +1,15 @@
 import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { getCrossChainBridge } from '../../constants.js'
-import { useCrossChainBridgeTrans } from '../../locales/index.js'
+import { PLUGIN_ID } from '../../constants.js'
+import {
+    CBridgeIcon,
+    ArbitrumOneBridgeIcon,
+    OrbiterFinanceIcon,
+    PolygonBridgeIcon,
+    RainbowBridgeIcon,
+} from '../MaskIcon.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     bridgeItem: {
@@ -42,12 +49,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function BridgeStack() {
-    const t = useCrossChainBridgeTrans()
     const { classes } = useStyles()
 
     return (
         <Stack height="100%" spacing={2}>
-            {getCrossChainBridge(t).map((bridge) => (
+            {useGetCrossChainBridge().map((bridge) => (
                 <div className={classes.bridgeItem} key={bridge.ID} onClick={() => openWindow(bridge.link)}>
                     {bridge.icon}
                     <div className={classes.bridgeInfo}>
@@ -67,4 +73,45 @@ export function BridgeStack() {
             ))}
         </Stack>
     )
+}
+
+export function useGetCrossChainBridge() {
+    return [
+        {
+            name: 'CBridge',
+            ID: `${PLUGIN_ID}_cBridge`,
+            intro: <Trans>Powered by Celer Network. Support $MASK!</Trans>,
+            icon: <CBridgeIcon />,
+            isOfficial: false,
+            link: 'https://cbridge.celer.network/#/transfer',
+        },
+        {
+            name: 'Arbitrum One Bridge',
+            ID: `${PLUGIN_ID}_arbitrum_one_bridge`,
+            isOfficial: true,
+            icon: <ArbitrumOneBridgeIcon />,
+            link: 'https://bridge.arbitrum.io/',
+        },
+        {
+            name: 'Orbiter Finance',
+            ID: `${PLUGIN_ID}_orbiter_finance`,
+            isOfficial: true,
+            icon: <OrbiterFinanceIcon />,
+            link: 'https://www.orbiter.finance/',
+        },
+        {
+            name: 'Polygon Bridge',
+            ID: `${PLUGIN_ID}_polygon_bridge`,
+            isOfficial: true,
+            icon: <PolygonBridgeIcon />,
+            link: 'https://wallet.polygon.technology/polygon/bridge/',
+        },
+        {
+            name: 'Rainbow Bridge',
+            ID: `${PLUGIN_ID}_rainbow_bridge`,
+            isOfficial: true,
+            icon: <RainbowBridgeIcon />,
+            link: 'https://rainbowbridge.app/transfer',
+        },
+    ]
 }

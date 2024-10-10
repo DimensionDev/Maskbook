@@ -21,7 +21,7 @@ export function useValueRefReactQuery<T>(key: `@@${string}`, ref: ValueRefWithRe
         queryKey: [key],
         queryFn: async () => {
             await ref.readyPromise
-            return ref.value
+            return ref.value ?? null
         },
         placeholderData: () => ref.value as any,
         networkMode: 'always',

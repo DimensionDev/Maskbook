@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => ({
 export interface BottomDrawerProps extends withClasses<'title' | 'root' | 'header'> {
     open: boolean
     children?: ReactNode
-    title: string
+    title: ReactNode
     onClose?: () => void
 }
 

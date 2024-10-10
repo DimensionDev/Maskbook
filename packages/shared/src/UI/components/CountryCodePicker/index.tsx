@@ -4,9 +4,11 @@ import { memo, useDeferredValue, useMemo, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
-import { EmptyStatus, useSharedTrans } from '../../../index.js'
+import { EmptyStatus } from '../../../index.js'
 import { COUNTRIES, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -63,7 +65,7 @@ export interface CountryCodePickerProps {
 }
 
 export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl, onClose, code }) => {
-    const t = useSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const [query, setQuery] = useState<string>()
     const deferredQuery = useDeferredValue(query)
@@ -107,7 +109,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 value={query}
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder={t.search_area()}
+                placeholder={_(msg`Search Area`)}
                 InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
                 sx={{ marginBottom: 0.5 }}
             />
@@ -139,7 +141,10 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                         )
                     })}
                 </List>
-            :   <EmptyStatus style={{ height: 246 }}>{t.no_results()}</EmptyStatus>}
+            :   <EmptyStatus style={{ height: 246 }}>
+                    <Trans>No results</Trans>
+                </EmptyStatus>
+            }
         </Popover>
     )
 })

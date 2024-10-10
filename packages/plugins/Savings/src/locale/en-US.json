@@ -1,1 +1,58 @@
-{ "messages": {} }
+{
+    "messages": {
+        "QpgBEp": [["0"], " days"],
+        "hehnjM": "Amount",
+        "70wH1Q": "APR",
+        "bUUVED": "Asset",
+        "kj3M8S": "Deposit",
+        "AOPSKq": ["Deposit ", ["0"]],
+        "DPfwMq": "Done",
+        "iPMIoT": "Enter an amount",
+        "7Bj3x9": "Failed",
+        "sGkv/+": [
+            "Hi friends, I just deposit ",
+            ["0"],
+            " ",
+            ["1"],
+            " on ",
+            ["2"],
+            ". Follow @",
+            ["3"],
+            " to find more staking projects."
+        ],
+        "55/jcy": [
+            "Hi friends, I just withdrew my deposit ",
+            ["0"],
+            " ",
+            ["1"],
+            " on ",
+            ["2"],
+            ". Follow @",
+            ["3"],
+            " to find more staking projects."
+        ],
+        "bBzHQT": "Input amount is below the minimum amount",
+        "m6RmA/": ["Insufficient ", ["0"], " balance"],
+        "oxKup1": ["Insufficient $", ["0"], " balance"],
+        "e3hCsY": "Lido Exchange Rate",
+        "yQE2r9": "Loading",
+        "HsoakN": "masknetwork",
+        "ojlMCx": ["Minimum withdraw amount is ", ["MINIMUM_AMOUNT"], " ", ["0"]],
+        "LLf+t1": "No deposit protocols found.",
+        "FZg3wM": "Operation",
+        "7hZyUn": "Processing Deposit",
+        "i2x+p1": "Processing Withdrawal",
+        "nVT2pJ": "realMaskNetwork",
+        "Baj2MJ": "Savings",
+        "Z/tioj": ["Swap ", ["0"]],
+        "GWKfFr": [
+            "To use Lido, you need to wait ",
+            ["0"],
+            " days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
+        ],
+        "e34ZOD": "Waiting time",
+        "sb9Y58": "Wallet",
+        "OsyKSt": "Withdraw",
+        "qhKyO3": ["Withdraw ", ["0"]]
+    }
+}

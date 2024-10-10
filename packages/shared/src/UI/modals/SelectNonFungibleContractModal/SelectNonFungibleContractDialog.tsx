@@ -12,11 +12,12 @@ import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/we
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { ContractItem } from './ContractItem.js'
-import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
 import { AddCollectiblesModal } from '../modals.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -83,7 +84,7 @@ export const SelectNonFungibleContractDialog = memo(
         schemaType,
         initialCollections,
     }: SelectNonFungibleContractDialogProps) => {
-        const t = useSharedTrans()
+        const { _ } = useLingui()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
 
@@ -181,13 +182,13 @@ export const SelectNonFungibleContractDialog = memo(
                 titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
                 open={open}
                 onClose={onClose}
-                title={t.select_collection()}>
+                title={<Trans>Select Collection</Trans>}>
                 <DialogContent classes={{ root: classes.content }}>
                     <Box px={2}>
                         <MaskTextField
                             value={keyword}
                             onChange={(evt) => setKeyword(evt.target.value)}
-                            placeholder={t.collectible_search_placeholder()}
+                            placeholder={_(msg`Name or contract address eg. PUNK or 0x234...`)}
                             autoFocus
                             fullWidth
                             InputProps={{
@@ -203,7 +204,9 @@ export const SelectNonFungibleContractDialog = memo(
                     : isPending && !collections.length ?
                         <LoadingStatus height={500} />
                     : !searchResults.length ?
-                        <EmptyStatus height={500}>{t.no_results()}</EmptyStatus>
+                        <EmptyStatus height={500}>
+                            <Trans>No results</Trans>
+                        </EmptyStatus>
                     :   <List className={classes.contractList}>
                             {searchResults.map((collection) => (
                                 <ContractItem
@@ -224,7 +227,7 @@ export const SelectNonFungibleContractDialog = memo(
                         onClick={handleAddCollectibles}>
                         <Icons.Avatar size={24} />
                         <Typography ml={2} fontWeight={700}>
-                            {t.add_collectibles()}
+                            <Trans>Add NFTs</Trans>
                         </Typography>
                     </Stack>
                 </DialogContent>

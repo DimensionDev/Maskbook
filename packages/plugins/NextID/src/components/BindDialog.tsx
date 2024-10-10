@@ -17,7 +17,7 @@ import { BindPanelUI } from './BindPanelUI.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
-import { useNextID_Trans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 interface BindDialogProps {
     open: boolean
@@ -29,7 +29,6 @@ interface BindDialogProps {
 
 export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBound, bounds }) => {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const t = useNextID_Trans()
     const { showSnackbar } = useCustomSnackbar()
     const currentIdentifier = persona.identifier
     const isBound = !!bounds.find((x) => isSameAddress(x.identity, account))
@@ -60,9 +59,9 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
                     signature: personaSignState.value,
                 },
             )
-            showSnackbar(t.notify_wallet_sign_request_title(), {
+            showSnackbar(<Trans>Wallet Sign</Trans>, {
                 variant: 'success',
-                message: t.notify_wallet_sign_request_success(),
+                message: <Trans>Wallet sign succeeded.</Trans>,
             })
 
             MaskMessages.events.ownProofChanged.sendToAll()
@@ -71,16 +70,16 @@ export const BindDialog = memo<BindDialogProps>(({ open, onClose, persona, onBou
             onBound()
             onClose()
         } catch {
-            showSnackbar(t.notify_wallet_sign_request_title(), {
+            showSnackbar(<Trans>Wallet Sign</Trans>, {
                 variant: 'error',
-                message: t.notify_wallet_sign_request_failed(),
+                message: <Trans>Wallet sign failed.</Trans>,
             })
         }
     }, [walletSignState.value, personaSignState.value, isBound])
 
     return (
         <BindPanelUI
-            title={t.verify_wallet_dialog_title()}
+            title={<Trans>Verify your wallet</Trans>}
             onClose={onClose}
             open={open}
             currentPersona={persona}

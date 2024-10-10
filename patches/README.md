@@ -25,12 +25,12 @@
 
 ## Other problems
 
-- @mui/base: <https://github.com/mui/material-ui/issues/25077>
 - react-spline: <https://github.com/splinetool/react-spline/issues/133>
 - eslint-plugin-i: <https://github.com/import-js/eslint-plugin-import/pull/1900/>
 - react-devtools-inline: <https://github.com/facebook/react/pull/27733> and <https://github.com/facebook/react/pull/29199>
 - @lifi/widget@2.10.1: Customized requirements, details can be viewed at the fork repository <https://github.com/DimensionDev/lifi-widget>
 - react-use: <https://github.com/streamich/react-use/issues/1923>
+- typeson-registry: <https://github.com/dfahlander/typeson-registry/issues/37>
 
 ## CSP
 

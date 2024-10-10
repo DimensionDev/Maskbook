@@ -1,1 +1,32 @@
-{ "messages": {} }
+{
+    "messages": {
+        "hom7qf": "领取",
+        "u2Srv1": "确认领取空投",
+        "TZDLPg": "可领取",
+        "7lnlzl": ["Claimed ", ["amount"], " $", ["0"], " successfully."],
+        "uXT+5y": ["Claiming will be live until: <0>", ["days"], " d ", ["0"], " h ", ["1"], " m</0>"],
+        "ryWxhG": "恭喜！",
+        "TYTRNP": "有资格领取",
+        "fdqDgM": ["Ended on <0>", ["0"], "</0>"],
+        "M1RnFv": "已过期",
+        "wrJC61": [
+            "I just claimed airdrop with ",
+            ["amount"],
+            " ",
+            ["0"],
+            " on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \nInstall https://mask.io to explore more airdrop activities."
+        ],
+        "w4oOEJ": "Mask Community $ARB Giveaway",
+        "rJZPaP": "未找到活动",
+        "neBDpj": "请连接钱包",
+        "GDe4XX": "Please connect wallet to check if you are eligible to claim $ARB.",
+        "Z8lGw6": "分享",
+        "hTbvD9": "对不起，您没有资格在此活动中领取 $ARB。",
+        "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
+        "3cw8FQ": "要参与空投，您的钱包必须有足够的原生代币来支付交易成本。",
+        "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
+        "wxZZWc": "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
+        "ayf6mz": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
+        "gWcGl/": "你的钱包已取消交易。"
+    }
+}

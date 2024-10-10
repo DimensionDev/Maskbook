@@ -1,16 +1,16 @@
 import { ECKeyIdentifier } from '@masknet/shared-base'
 import { memo, useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans, useCurrentPersona } from '../../../../shared-ui/index.js'
+import { useCurrentPersona } from '../../../../shared-ui/index.js'
 import Services from '#services'
 import { FriendsDetailUI } from './UI.js'
 import { useQueryClient, useMutation, type InfiniteData } from '@tanstack/react-query'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { type Friend } from '../../../hooks/index.js'
+import { Trans } from '@lingui/macro'
 
 export const Component = memo(function FriendsDetail() {
     const location = useLocation()
-    const t = useMaskSharedTrans()
     const { showSnackbar } = usePopupCustomSnackbar()
     const { avatar, profiles, nextId, publicKey, isLocal, localProfile } = location.state
     const navigate = useNavigate()
@@ -55,7 +55,7 @@ export const Component = memo(function FriendsDetail() {
                     }
                 },
             )
-            showSnackbar(t.popups_encrypted_friends_deleted_successfully(), { variant: 'success' })
+            showSnackbar(<Trans>Deleted successfully</Trans>, { variant: 'success' })
             setDeleted(true)
             navigate('/friends')
         },

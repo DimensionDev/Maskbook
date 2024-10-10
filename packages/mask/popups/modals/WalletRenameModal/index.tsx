@@ -1,6 +1,5 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, TextField, Typography, useTheme } from '@mui/material'
 import { useAsyncFn } from 'react-use'
 import { Icons } from '@masknet/icons'
@@ -10,30 +9,30 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useContacts } from '@masknet/web3-hooks-base'
+import { Trans } from '@lingui/macro'
 
 interface WalletRenameDrawerProps extends BottomDrawerProps {
     wallet?: Wallet
 }
 
 function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const [name, setName] = useState('')
-    const [error, setError] = useState('')
+    const [error, setError] = useState<ReactNode>()
     const contacts = useContacts()
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (!name || !wallet) return
         const _name = name.trim()
         if (_name.length > 18 || _name.length < 3) {
-            setError(t.popups_wallet_settings_rename_tips())
+            setError(<Trans>Wallet name must between 3 to 18 characters.</Trans>)
             return
         }
 
         const nameExists = contacts.some((x) => x.name === _name)
 
         if (nameExists) {
-            setError(t.popups_wallet_settings_name_exists())
+            setError(<Trans>The wallet name already exists.</Trans>)
             return
         }
 
@@ -54,7 +53,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t.popups_wallet_settings_rename_tips()}
+                <Trans>Wallet name must between 3 to 18 characters.</Trans>
             </Typography>
             <Box display="flex" justifyContent="center" mx={0.5}>
                 <TextField
@@ -94,7 +93,7 @@ function WalletRenameDrawer({ wallet, ...rest }: WalletRenameDrawerProps) {
                 disabled={loading || !name.length || !!error}
                 onClick={handleClick}
                 sx={{ marginTop: '16px' }}>
-                {t.confirm()}
+                <Trans>Confirm</Trans>
             </ActionButton>
         </BottomDrawer>
     )

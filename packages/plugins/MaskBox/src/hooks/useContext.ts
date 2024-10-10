@@ -16,7 +16,7 @@ import {
 import type { NonPayableTx } from '@masknet/web3-contracts/types/types.js'
 import { type BoxInfo, BoxState } from '../type.js'
 import { useMaskBoxInfo } from './useMaskBoxInfo.js'
-import { useMerkelProof } from './useMerkleProof.js'
+import { useMerkleProof } from './useMerkleProof.js'
 import { useMaskBoxStatus } from './useMaskBoxStatus.js'
 import { useMaskBoxCreationSuccessEvent } from './useMaskBoxCreationSuccessEvent.js'
 import { useMaskBoxTokensForSale } from './useMaskBoxTokensForSale.js'
@@ -129,7 +129,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
     // #endregion
 
     // #region qualification
-    const { value, error: errorProof, loading: loadingProof } = useMerkelProof(rootHash)
+    const { value, error: errorProof, loading: loadingProof } = useMerkleProof(rootHash)
     const proofBytes =
         value?.proof ? abiCoder.encodeParameters(['bytes32[]'], [value.proof.map((p) => `0x${p}`) ?? []]) : undefined
     const qualification = useQualification(
@@ -163,7 +163,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
         if (maskBoxInfo && !boxInfo) return BoxState.UNKNOWN
         if (!maskBoxInfo || !maskBoxStatus || !boxInfo) return BoxState.NOT_FOUND
         if (maskBoxStatus.canceled) return BoxState.CANCELED
-        if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DRAWED_OUT
+        if (isGreaterThanOrEqualTo(boxInfo.tokenIdsPurchased.length, boxInfo.personalLimit)) return BoxState.DREW_OUT
         if (isLessThanOrEqualTo(boxInfo.remaining, 0)) return BoxState.SOLD_OUT
         if (boxInfo.startAt > now || !boxInfo.started) return BoxState.NOT_READY
         if (boxInfo.endAt < now || maskBoxStatus?.expired) return BoxState.EXPIRED
@@ -209,7 +209,7 @@ function useContext(initialState?: { boxId: string; hashRoot: string }) {
                 return `You must hold at least ${tokenPrice}.`
             case BoxState.NOT_QUALIFIED:
                 return qualification?.error_msg ?? 'Not qualified.'
-            case BoxState.DRAWED_OUT:
+            case BoxState.DREW_OUT:
                 return 'Purchase limit exceeded.'
             case BoxState.ERROR:
                 return 'Something went wrong.'

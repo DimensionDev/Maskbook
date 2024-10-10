@@ -18,7 +18,7 @@ import { toFixed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { PluginClaimMessage } from '../message.js'
-import { useClaimTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 export function useClaimAirdrop(
     chainId: ChainId,
@@ -29,7 +29,6 @@ export function useClaimAirdrop(
     tokenAddress?: string,
 ) {
     const theme = useTheme()
-    const t = useClaimTrans()
     const { account, providerType, chainId: globalChainId } = useChainContext()
     const { CONTRACT_ADDRESS } = useAirdropClaimersConstants(chainId)
     const airdropContract = useContract<AirdropV2>(chainId, CONTRACT_ADDRESS, AirDropV2ABI as AbiItem[])
@@ -95,10 +94,14 @@ export function useClaimAirdrop(
                     error.message.includes('User rejected the request') ||
                     error.message.includes('User rejected transaction'))
             )
-                showSingletonSnackbar(t.claim_tips(), {
+                showSingletonSnackbar(<Trans>Claim your Airdrop</Trans>, {
                     processing: false,
                     variant: 'default',
-                    message: <span style={{ color: theme.palette.maskColor.danger }}>{t.cancel_claim_tips()}</span>,
+                    message: (
+                        <span style={{ color: theme.palette.maskColor.danger }}>
+                            <Trans>Your wallet cancelled the transaction.</Trans>
+                        </span>
+                    ),
                 })
         }
     }, [airdropContract, account, amount, merkleProof, eventIndex, providerType, globalChainId])

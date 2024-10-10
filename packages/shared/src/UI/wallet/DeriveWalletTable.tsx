@@ -22,7 +22,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useBalance } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { useSharedTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -114,20 +114,25 @@ export const DeriveWalletTable = memo<DeriveWalletTableProps>(function DeriveWal
     hiddenHeader,
 }) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
     return (
         <Table size="small" padding="none" stickyHeader>
             {hiddenHeader ? null : (
                 <TableHead>
                     <TableRow>
                         <TableCell key="address" align="center" variant="head" className={classes.header}>
-                            <Typography className={classes.title}>{t.address_viewer_address_name_address()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>Address</Trans>
+                            </Typography>
                         </TableCell>
                         <TableCell key="balance" align="center" variant="head" className={classes.header}>
-                            <Typography className={classes.title}>{t.wallet_balance_eth({ symbol })}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>Balance({symbol})</Trans>
+                            </Typography>
                         </TableCell>
                         <TableCell key="Operation" align="center" variant="head" className={classes.header}>
-                            <Typography className={classes.title}>{t.operation()}</Typography>
+                            <Typography className={classes.title}>
+                                <Trans>Operation</Trans>
+                            </Typography>
                         </TableCell>
                     </TableRow>
                 </TableHead>

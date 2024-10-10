@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { Box, type BoxProps } from '@mui/system'
 import { memo } from 'react'
-import { useDashboardTrans } from '../../locales/i18n_generated.js'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -131,7 +131,6 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
     selected,
     onChange,
 }) {
-    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
 
     const personas = info.personas.join(', ')
@@ -146,7 +145,11 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
                     </div>
                 }
                 classes={{ action: classes.action }}
-                title={<Typography className={classes.title}>{t.personas()}</Typography>}
+                title={
+                    <Typography className={classes.title}>
+                        <Trans>Personas</Trans>
+                    </Typography>
+                }
                 action={
                     info.personas.length ?
                         <Box display="flex" columnGap={1}>
@@ -170,20 +173,24 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
                             <Icons.BaseUser size={20} />
                         </ListItemIcon>
                         <ListItemText className={classes.listText}>
-                            {t.settings_backup_preview_associated_accounts()}
+                            <Trans>Associated Accounts</Trans>
                         </ListItemText>
                     </ListItem>
                     <ListItem secondaryAction={<Typography>{info.contacts}</Typography>}>
                         <ListItemIcon className={classes.listItemIcon}>
                             <Icons.BaseContacts size={20} />
                         </ListItemIcon>
-                        <ListItemText className={classes.listText}>{t.settings_backup_preview_contacts()}</ListItemText>
+                        <ListItemText className={classes.listText}>
+                            <Trans>Contacts</Trans>
+                        </ListItemText>
                     </ListItem>
                     <ListItem secondaryAction={<Typography>{info.files}</Typography>}>
                         <ListItemIcon className={classes.listItemIcon}>
                             <Icons.Folder size={20} />
                         </ListItemIcon>
-                        <ListItemText className={classes.listText}>{t.settings_backup_preview_file()}</ListItemText>
+                        <ListItemText className={classes.listText}>
+                            <Trans>File</Trans>
+                        </ListItemText>
                     </ListItem>
                 </List>
             </CardContent>
@@ -204,10 +211,10 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
     selected,
     onChange,
 }) {
-    const t = useDashboardTrans()
     const { classes, theme, cx } = useStyles()
 
     if (!wallets.length) return null
+    const walletLength = wallets.length
     return (
         <Card className={classes.card}>
             <CardHeader
@@ -217,7 +224,11 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                         <Icons.Wallet size={20} color="#fff" />
                     </div>
                 }
-                title={<Typography className={classes.title}>{`${t.wallets()} (${wallets.length})`}</Typography>}
+                title={
+                    <Typography className={classes.title}>
+                        <Plural value={walletLength} one="# Wallet" other="# Wallets" />
+                    </Typography>
+                }
                 action={
                     selectable ?
                         <Checkbox checked={selected} onChange={(event) => onChange?.(event.target.checked)} />

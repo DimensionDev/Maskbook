@@ -6,24 +6,25 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Typography, useTheme } from '@mui/material'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import Services from '#services'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 interface WalletRemoveDrawerProps extends BottomDrawerProps {
-    error: string
+    error: ReactNode
     password: string
     setPassword: (p: string) => void
-    setError: (e: string) => void
+    setError: (e: ReactNode) => void
     wallet?: Wallet
 }
 
 function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ...rest }: WalletRemoveDrawerProps) {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const theme = useTheme()
     const navigate = useNavigate()
     const wallets = useWallets()
@@ -35,7 +36,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
             const verified = await Services.Wallet.verifyPassword(password)
 
             if (!verified) {
-                setError(t.create_wallet_incorrect_payment_password())
+                setError(<Trans>Incorrect Payment Password.</Trans>)
                 return
             }
             const index = wallets.findIndex((x) => isSameAddress(x.address, wallet.address))
@@ -67,7 +68,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t.popups_wallet_settings_are_you_sure_remove_wallet()}
+                <Trans>Are you sure to remove this wallet?</Trans>
             </Typography>
             <Typography
                 fontWeight={700}
@@ -81,7 +82,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={t.popups_wallet_payment_password()}
+                    placeholder={_(msg`Payment Password`)}
                     error={!!error}
                     value={password}
                     onChange={(e) => {
@@ -101,7 +102,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                 onClick={handleClick}
                 color="error"
                 sx={{ marginTop: '16px' }}>
-                {t.remove()}
+                <Trans>Remove</Trans>
             </ActionButton>
         </BottomDrawer>
     )
@@ -119,7 +120,7 @@ export function WalletRemoveModal({ ref }: SingletonModalProps<WalletRemoveModal
     })
 
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const [error, setError] = useState<ReactNode>('')
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(p) {

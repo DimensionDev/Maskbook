@@ -1,3 +1,4 @@
+// cspell:disable
 import type { ComponentType } from 'react'
 import { format as formatDateTime } from 'date-fns'
 import { Icons } from '@masknet/icons'

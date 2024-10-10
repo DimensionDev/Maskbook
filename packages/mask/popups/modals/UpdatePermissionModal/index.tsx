@@ -1,11 +1,11 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useAsync } from 'react-use'
 import Services from '#services'
 import { Box, Typography } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -31,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdatePermissionModal(props) {
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const { value: origins = EMPTY_LIST } = useAsync(async () => {
         const result = await Services.SiteAdaptor.getOriginsWithoutPermission()
         return result.flatMap((x) => x.origins)
@@ -47,24 +46,31 @@ export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdateP
     const action = (
         <Box>
             <ActionButton onClick={handleAgree} fullWidth>
-                {t.approve()}
+                <Trans>Approve</Trans>
             </ActionButton>
         </Box>
     )
 
     return (
         <ActionModal
-            header={t.popups_update_authorization_title()}
+            header={<Trans>Update X.com Permissions</Trans>}
             headerClassName={classes.header}
             action={action}
             {...props}>
-            <Typography className={classes.text}>{t.popups_authorization_list()}</Typography>
+            <Typography className={classes.text}>
+                <Trans>Permissions List</Trans>
+            </Typography>
             <Box className={classes.permissions}>
                 {origins.map((x) => (
                     <span key={x}>{x}</span>
                 ))}
             </Box>
-            <Typography className={classes.text}>{t.popups_authorization_tips()}</Typography>
+            <Typography className={classes.text}>
+                <Trans>
+                    Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions
+                    in order to continue working on x.com.
+                </Trans>
+            </Typography>
         </ActionModal>
     )
 })

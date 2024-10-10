@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
-import { useSharedTrans } from '@masknet/shared'
 import { Typography } from '@mui/material'
 import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
 import { Section } from './Section.js'
 import { SlippageToleranceForm } from './SlippageToleranceForm.js'
 import { SettingsContext } from './Context.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -17,14 +17,13 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function SlippageToleranceSection() {
-    const t = useSharedTrans()
     const { classes } = useStyles()
     const { DEFAULT_SLIPPAGE_TOLERANCES, slippageTolerance, setSlippageTolerance } = SettingsContext.useContainer()
 
     return (
         <div className={classes.root}>
             <Section
-                title={t.gas_settings_section_title_slippage_tolerance()}
+                title={<Trans>Slippage Tolerance</Trans>}
                 additions={
                     <Typography className={classes.additions} component="span">
                         <span className={classes.percentage}>

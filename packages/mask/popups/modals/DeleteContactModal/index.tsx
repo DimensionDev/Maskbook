@@ -10,7 +10,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { evm } from '@masknet/web3-providers'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -68,13 +68,12 @@ interface DeleteContactModalProps extends BottomDrawerProps {
 
 function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContactModalProps) {
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
 
     const { showSnackbar } = usePopupCustomSnackbar()
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.removeContact(address)
-        showSnackbar(t.wallet_delete_contact_successfully())
+        showSnackbar(<Trans>Contact deleted.</Trans>)
         onConfirm?.()
     }, [address, onConfirm])
 
@@ -86,10 +85,10 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
 
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButton onClick={deleteContact} loading={loading} className={classes.button} color="error">
-                    {t.wallet_delete_contact()}
+                    <Trans>Delete Contact</Trans>
                 </ActionButton>
             </div>
         </BottomDrawer>

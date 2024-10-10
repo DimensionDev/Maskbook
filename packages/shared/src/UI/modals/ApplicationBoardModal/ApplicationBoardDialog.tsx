@@ -2,12 +2,7 @@ import { useState, useCallback, useEffect } from 'react'
 import { DialogContent, IconButton, Tab } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import {
-    InjectedDialog,
-    LeavePageConfirmModal,
-    useSharedTrans,
-    type PersonaPerSiteConnectStatus,
-} from '@masknet/shared'
+import { InjectedDialog, LeavePageConfirmModal, type PersonaPerSiteConnectStatus } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import {
@@ -20,6 +15,7 @@ import {
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{
     openSettings: boolean
@@ -76,7 +72,6 @@ export function ApplicationBoard({
 }: ApplicationBoardProps) {
     const [openSettings, setOpenSettings] = useState(false)
     const { classes } = useStyles({ openSettings })
-    const t = useSharedTrans()
     const [currentTab, onChange, tabs, setTab] = useTabs(
         ApplicationSettingTabs.pluginList,
         ApplicationSettingTabs.pluginSwitch,
@@ -112,14 +107,14 @@ export function ApplicationBoard({
                     titleTabs={
                         openSettings ?
                             <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                                <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
-                                <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
+                                <Tab label={<Trans>App list</Trans>} value={tabs.pluginList} />
+                                <Tab label={<Trans>Plugin switch</Trans>} value={tabs.pluginSwitch} />
                             </MaskTabList>
                         :   null
                     }
                     titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
                     independent={LeavePageConfirmModal.peek()}
-                    title={openSettings ? t.application_settings() : t.applications()}
+                    title={openSettings ? <Trans>App Settings</Trans> : <Trans>Applications</Trans>}
                     titleTail={
                         openSettings ? null : (
                             <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>

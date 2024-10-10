@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { useTipsUserGuide } from '../../../storage/index.js'
 import { TipButton } from '../../../components/index.js'
-import { useTipsTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     postButtonWrapper: {
@@ -69,7 +69,6 @@ export function TipsRealmContent({
     buttonSize = 34,
     onStatusUpdate,
 }: Plugin.SiteAdaptor.TipsRealmOptions) {
-    const t = useTipsTrans()
     const { classes, cx } = useStyles({ buttonSize })
     const myIdentity = useLastRecognizedIdentity()
     const userGuide = useTipsUserGuide(myIdentity?.identifier?.network as EnhanceableSite)
@@ -103,8 +102,8 @@ export function TipsRealmContent({
                 finished={finished}
                 currentStep={step}
                 onNext={nextStep}
-                title={t.tips_guide_description()}
-                actionText={t.tips_guide_action()}>
+                title={<Trans>Send authors tips by using Mask Network's Tips function.</Trans>}
+                actionText={<Trans>Close</Trans>}>
                 <Stack
                     display="flex"
                     width="38px"

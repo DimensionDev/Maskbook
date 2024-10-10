@@ -125,8 +125,8 @@ function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
     }
 }
 
-function base64(nums: number[]) {
-    return toBase64URL(new Uint8Array(nums).buffer)
+function base64(numbers: number[]) {
+    return toBase64URL(new Uint8Array(numbers).buffer)
 }
 function keyToAddr(key: string, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')

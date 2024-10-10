@@ -11,7 +11,7 @@ import { ActionBar } from './ActionBar.js'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import { ArtBlocksLogoUrl } from '../constants.js'
 import { ChainBoundary } from '@masknet/shared'
-import { useArtBlocksTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -45,7 +45,6 @@ interface CollectibleProps {
 }
 
 export function Collectible({ projectId, chainId: projectChainId }: CollectibleProps) {
-    const t = useArtBlocksTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: projectChainId })
     const [tabIndex, setTabIndex] = useState(0)
@@ -63,13 +62,13 @@ export function Collectible({ projectId, chainId: projectChainId }: CollectibleP
     if (error || !project)
         return (
             <Typography align="center" color="textPrimary">
-                {t.plugin_artblocks_smt_wrong()}
+                <Trans>Something went wrong!</Trans>
             </Typography>
         )
 
     const tabs = [
-        <Tab className={classes.tab} key="collection" label={t.plugin_artblocks_collection()} />,
-        <Tab className={classes.tab} key="details" label={t.plugin_artblocks_details()} />,
+        <Tab className={classes.tab} key="collection" label={<Trans>Collection</Trans>} />,
+        <Tab className={classes.tab} key="details" label={<Trans>Details</Trans>} />,
     ]
     const pages = [<CollectionView key="project" project={project} />, <DetailsView key="details" project={project} />]
 

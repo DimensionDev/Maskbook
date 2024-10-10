@@ -1,6 +1,5 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { useWalletGroup } from '../../hooks/useWalletGroup.js'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -11,6 +10,7 @@ import { PopupContext } from '../../hooks/usePopupContext.js'
 import { ECKeyIdentifier, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -32,7 +32,6 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupModal(props) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const walletGroup = useWalletGroup()
     const currentWallet = useWallet()
@@ -68,13 +67,13 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
 
     if (!walletGroup) return
     return (
-        <ActionModal header={t.wallet_account()} {...props}>
+        <ActionModal header={<Trans>Wallet Account</Trans>} {...props}>
             <Box className={classes.root}>
                 {Object.entries(walletGroup.groups).map(([key, value], index) => {
                     return (
                         <Box key={key}>
                             <Typography className={classes.title}>
-                                {t.popups_wallet_group_title({ index: String(index + 1) })}
+                                <Trans>Wallet Group #{String(index + 1)}</Trans>
                             </Typography>
                             <Box className={classes.list}>
                                 {value.map((wallet) => {
@@ -94,7 +93,9 @@ export const WalletGroupModal = memo<ActionModalBaseProps>(function WalletGroupM
                 })}
                 {walletGroup.imported.length ?
                     <Box>
-                        <Typography className={classes.title}>{t.popups_wallet_imported_group_title()}</Typography>
+                        <Typography className={classes.title}>
+                            <Trans>Imported Wallets</Trans>
+                        </Typography>
                         <Box className={classes.title}>
                             {walletGroup.imported.map((wallet) => (
                                 <WalletItem

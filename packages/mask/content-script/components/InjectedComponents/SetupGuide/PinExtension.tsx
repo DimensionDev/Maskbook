@@ -3,8 +3,8 @@ import { SetupGuideStep } from '@masknet/shared-base'
 import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { WizardDialog } from './WizardDialog.js'
+import { Trans } from '@lingui/macro'
 
 interface PinExtensionProps {
     onDone?: () => void
@@ -61,7 +61,6 @@ const useStyles = makeStyles()((theme) => ({
 export function PinExtension({ onDone, onClose }: PinExtensionProps) {
     const pinImg = new URL('../../../resources/extensionPinned.png', import.meta.url).toString()
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
 
     return (
         <WizardDialog
@@ -86,25 +85,30 @@ export function PinExtension({ onDone, onClose }: PinExtensionProps) {
             }
             tip={
                 <Typography className={classes.tip} component="div">
-                    <div>{t.setup_guide_pin_tip()}</div>
+                    <div>
+                        <Trans>Don't forget to pin Mask Network in the browser toolbar to access Web3 easily.</Trans>
+                    </div>
                     <ol style={{ paddingLeft: '24px' }}>
                         <li>
-                            {t.setup_guide_pin_tip_step_click_left()}
-                            <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} />
-                            {t.setup_guide_pin_tip_step_click_right()}
+                            <Trans>
+                                Click on <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} /> at the top-right of
+                                your browser.
+                            </Trans>
                         </li>
                         <li>
-                            {t.setup_guide_pin_tip_step_find_left()}
-                            <Icons.Pin size={16} />
-                            {t.setup_guide_pin_tip_step_find_right()}
+                            <Trans>
+                                Find Mask Network in the extension list and click the <Icons.Pin size={16} /> button.
+                            </Trans>
                         </li>
-                        <li>{t.setup_guide_pin_tip_successfully()}</li>
+                        <li>
+                            <Trans>Pinned successfully.</Trans>
+                        </li>
                     </ol>
                 </Typography>
             }
             footer={
                 <Button className={classes.button} variant="contained" onClick={onDone}>
-                    {t.start()}
+                    <Trans>Start</Trans>
                 </Button>
             }
             onClose={onClose}

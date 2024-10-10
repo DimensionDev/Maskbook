@@ -12,3 +12,12 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/CrossChainBridgeDialog.tsx:24
+#: src/SiteAdaptor/index.tsx:15
+msgid "Cross-chain"
+msgstr ""
+
+#: src/SiteAdaptor/components/BridgeStack.tsx:83
+msgid "Powered by Celer Network. Support $MASK!"
+msgstr ""

@@ -32,10 +32,11 @@ import { share } from '@masknet/plugin-infra/content-script/context'
 import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { Stack } from '@mui/system'
-import { useRedPacketTrans } from '../locales/index.js'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -99,7 +100,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         height: 126,
         width: 126,
         borderRadius: 8,
-        transform: 'RedPacketTransY(6px)',
         '& > div': {
             display: 'flex',
             justifyContent: 'center',
@@ -142,7 +142,6 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         textOverflow: 'ellipsis',
         overflow: 'hidden',
         width: 126,
-        transform: 'RedPacketTransY(3px)',
         fontSize: 13,
         color: theme.palette.common.white,
         lineHeight: '36px',
@@ -198,8 +197,7 @@ interface RedPacketNftProps {
 }
 
 export function RedPacketNft({ payload }: RedPacketNftProps) {
-    const t = useRedPacketTrans()
-
+    const { _ } = useLingui()
     const { pluginID } = useNetworkContext()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
@@ -227,26 +225,28 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
     const { classes } = useStyles({ claimed: !!availability?.isClaimed, outdated })
     // #region on share
     const postLink = usePostLink()
-    const shareText = useMemo(() => {
+    const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
+    const account_promote = useMemo(() => {
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
-        const options = {
-            sender: payload.senderName,
-            payload: postLink.toString(),
-            network: network?.name || '',
-            account_promote: t.account_promote({
-                context:
-                    isOnTwitter ? 'twitter'
-                    : isOnFacebook ? 'facebook'
-                    : 'default',
-            }),
-            interpolation: { escapeValue: false },
-        } as const
+        return (
+            isOnTwitter ? _(msg`Follow @realMaskNetwork (mask.io) to claim NFT lucky drops.`)
+            : isOnFacebook ? _(msg`Follow @masknetwork (mask.io) to claim NFT lucky drops.`)
+            : ''
+        )
+    }, [_])
+    const shareText = useMemo(() => {
+        const sender = payload.senderName
+        const networkName = network?.name || ''
         if (availability?.isClaimed) {
-            return t.nft_share_claimed_message(options)
+            return _(
+                msg`I just claimed an NFT lucky drop from @${sender} on ${networkName} network. ${account_promote}\n${promote_short}\n#mask_io #LuckyDrop\n${postLink}`,
+            )
         }
-        return t.nft_share_foreshow_message(options)
-    }, [availability?.isClaimed, t, network?.name])
+        return _(
+            msg`@${sender} is sending an NFT lucky drop on ${networkName} network. ${account_promote} ${promote_short} #mask_io #LuckyDrop ${postLink}`,
+        )
+    }, [payload.senderName, network?.name, availability?.isClaimed, account_promote, promote_short, postLink, _])
 
     const onShare = useCallback(() => {
         if (shareText) share?.(shareText)
@@ -284,21 +284,11 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         })
         if (availability.claimed_id === '0') return
 
-        const isOnTwitter = Sniffings.is_twitter_page
-        const isOnFacebook = Sniffings.is_facebook_page
-        const options = {
-            sender: payload.senderName,
-            payload: postLink.toString(),
-            network: network?.name || '',
-            account_promote: t.account_promote({
-                context:
-                    isOnTwitter ? 'twitter'
-                    : isOnFacebook ? 'facebook'
-                    : 'default',
-            }),
-            interpolation: { escapeValue: false },
-        } as const
-        const shareText = t.nft_share_foreshow_message(options)
+        const sender = payload.senderName
+        const networkName = network?.name || ''
+        const shareText = _(
+            msg`@${sender} is sending an NFT lucky drop on ${networkName} network. ${account_promote} ${promote_short} #mask_io #LuckyDrop ${postLink}`,
+        )
         const token = await Hub.getNonFungibleAsset(payload.contractAddress, availability.claimed_id)
 
         TransactionConfirmModal.open({
@@ -307,17 +297,24 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             nonFungibleTokenId: availability.claimed_id,
             nonFungibleTokenAddress: payload.contractAddress,
             tokenType: TokenType.NonFungible,
-            messageTextForNFT: t.claim_nft_successful({
-                name: token?.contract?.name || 'NFT',
-            }),
-            messageTextForFT: t.claim_token_successful({
-                amount: '1',
-                name: '',
-            }),
-            title: t.lucky_drop(),
+            messageTextForNFT: _(msg`1 ${token?.contract?.name || 'NFT'} claimed.`),
+            messageTextForFT: _(msg`You claimed 1.`),
+            title: _(msg`Lucky Drop`),
             share,
         })
-    }, [nftRedPacketContract, payload.id, account, Hub])
+    }, [
+        nftRedPacketContract,
+        payload.id,
+        account,
+        Hub,
+        payload.senderName,
+        payload.contractAddress,
+        network?.name,
+        account_promote,
+        promote_short,
+        postLink,
+        _,
+    ])
 
     const { showSnackbar } = useCustomSnackbar()
     const claim = useCallback(async () => {
@@ -332,7 +329,8 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         }
     }, [claimCallback, checkResult, retryAvailability, showSnackbar])
 
-    if (availabilityError) return <ReloadStatus message={t.go_wrong()} onRetry={retryAvailability} />
+    if (availabilityError)
+        return <ReloadStatus message={<Trans>Something went wrong.</Trans>} onRetry={retryAvailability} />
 
     if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
 
@@ -393,27 +391,29 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 <div className={classes.footer}>
                     {availability.isClaimed ?
                         <Typography className={classes.claimedText}>
-                            {t.got_nft({ name: payload.contractName || 'NFT' })}
+                            <Trans>You got 1 {payload.contractName || 'NFT'}</Trans>
                         </Typography>
                     :   <Typography className={classes.remain}>
-                            {t.claimed({ amount: `${availability.claimedAmount}/${availability.totalAmount}` })}
+                            <Trans>Claimed {`${availability.claimedAmount}/${availability.totalAmount}`}</Trans>
                         </Typography>
                     }
                     <Typography variant="body1" className={classes.from}>
-                        {t.from({ name: payload.senderName || '-' })}
+                        <Trans>From: @{payload.senderName || '-'}</Trans>
                     </Typography>
                 </div>
 
                 {availability.isClaimed ?
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
-                            {t.claimed({ amount: '' })}
+                            <Trans>Claimed {''}</Trans>
                         </Typography>
                     </div>
                 : availability.isEnd ?
                     <div className={classes.badge}>
                         <Typography variant="body2" className={classes.badgeText}>
-                            {availability.expired ? t.expired() : t.completed()}
+                            {availability.expired ?
+                                <Trans>Expired</Trans>
+                            :   <Trans>Completed</Trans>}
                         </Typography>
                     </div>
                 :   null}
@@ -441,7 +441,6 @@ interface OperationFooterProps {
 
 function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: OperationFooterProps) {
     const { classes } = useStyles({ claimed, outdated: false })
-    const t = useRedPacketTrans()
 
     return (
         <Box className={classes.buttonWrapper}>
@@ -452,7 +451,7 @@ function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: Ope
                     className={classes.button}
                     fullWidth
                     onClick={onShare}>
-                    {t.share()}
+                    <Trans>Share</Trans>
                 </Button>
             </Box>
             {claimed ? null : (
@@ -475,7 +474,9 @@ function OperationFooter({ claimed, chainId, isClaiming, onClaim, onShare }: Ope
                                 onClick={onClaim}
                                 className={classes.button}
                                 fullWidth>
-                                {isClaiming ? t.claiming() : t.claim()}
+                                {isClaiming ?
+                                    <Trans>Claiming...</Trans>
+                                :   <Trans>Claim</Trans>}
                             </ActionButton>
                         </WalletConnectedBoundary>
                     </ChainBoundary>

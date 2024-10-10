@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Stack, Typography } from '@mui/material'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
-import { useTraderTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -56,7 +56,6 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
         isCollectionProjectPopper = false,
         isTokenTagPopper = true,
     } = useContext(TrendingViewContext)
-    const t = useTraderTrans()
 
     const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper })
 
@@ -77,7 +76,9 @@ export function TrendingViewDescriptor(props: TrendingViewDescriptorProps) {
                     flexDirection="row"
                     alignItems="center"
                     gap={0.5}>
-                    <Typography className={classes.sourceNote}>{t.powered_by()}</Typography>
+                    <Typography className={classes.sourceNote}>
+                        <Trans>Powered by</Trans>
+                    </Typography>
                 </Stack>
                 <SourceSwitcher
                     resultList={displayList}

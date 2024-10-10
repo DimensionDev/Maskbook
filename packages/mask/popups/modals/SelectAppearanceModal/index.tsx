@@ -7,6 +7,7 @@ import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/ma
 import { getEnumAsArray } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
 import Services from '#services'
+import { Trans } from '@lingui/macro'
 const useStyles = makeStyles()((theme) => ({
     item: {
         padding: theme.spacing(1.5),
@@ -43,9 +44,9 @@ export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectA
     const mode = useAppearance()
     const APPEARANCE_OPTIONS_MAP = useMemo(
         () => ({
-            [Appearance.default]: t.popups_settings_appearance_default(),
-            [Appearance.light]: t.popups_settings_appearance_light(),
-            [Appearance.dark]: t.popups_settings_appearance_dark(),
+            [Appearance.default]: <Trans>Follow System</Trans>,
+            [Appearance.light]: <Trans>Light</Trans>,
+            [Appearance.dark]: <Trans>Dark</Trans>,
         }),
         [t],
     )
@@ -55,7 +56,7 @@ export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectA
     }, [])
 
     return (
-        <ActionModal header={t.popups_settings_appearance()}>
+        <ActionModal header={<Trans>Appearance</Trans>}>
             <List>
                 {getEnumAsArray(Appearance).map((x) => {
                     const icon = APPEARANCE_ICON_MAP[x.value]

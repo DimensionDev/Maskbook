@@ -3,9 +3,10 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -72,7 +73,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function ResetWallet() {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [answer, setAnswer] = useState('')
@@ -94,16 +94,27 @@ export const Component = memo(function ResetWallet() {
         <Box className={classes.container}>
             <Box className={classes.content}>
                 <Box className={classes.titleWrapper}>
-                    <Typography className={classes.title}>{t.popups_wallet_reset_wallet()}</Typography>
+                    <Typography className={classes.title}>
+                        <Trans>Reset Wallet</Trans>
+                    </Typography>
                 </Box>
-                <Typography className={classes.description}>{t.popups_wallet_reset_wallet_description_1()}</Typography>
+                <Typography className={classes.description}>
+                    <Trans>
+                        Payment password stored locally and you could try as many as you want to unlock your wallet.
+                    </Trans>
+                </Typography>
                 <Typography className={classes.description}>
                     {/* eslint-disable-next-line react/naming-convention/component-name */}
                     <MaskSharedTrans.popups_wallet_reset_wallet_description_2
                         components={{ strong: <strong className={classes.strong} /> }}
                     />
                 </Typography>
-                <Typography className={classes.description}>{t.popups_wallet_reset_wallet_description_3()}</Typography>
+                <Typography className={classes.description}>
+                    <Trans>
+                        Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived
+                        from that mnemonic phrase.
+                    </Trans>
+                </Typography>
                 <StyledInput
                     type="text"
                     autoFocus
@@ -116,7 +127,7 @@ export const Component = memo(function ResetWallet() {
             </Box>
             <Box className={classes.bottomAction}>
                 <Button onClick={onBack} variant="outlined" className={classes.button}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <ActionButton
                     variant="contained"
@@ -124,7 +135,7 @@ export const Component = memo(function ResetWallet() {
                     onClick={onConfirm}
                     className={classes.button}
                     disabled={disabled}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             </Box>
         </Box>

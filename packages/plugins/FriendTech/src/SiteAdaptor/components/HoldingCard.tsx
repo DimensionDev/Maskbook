@@ -12,8 +12,8 @@ import { memo, type HTMLProps } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
-import { useI18N } from '../../locales/i18n_generated.js'
 import { useUser } from '../hooks/useUser.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {
@@ -88,7 +88,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export const HoldingCard = memo(function HoldingCard({ holding, holder, className, ...rest }: Props) {
     const { classes, cx } = useStyles()
-    const t = useI18N()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const [seen, ref] = useEverSeen()
     const [params] = useSearchParams()
@@ -135,11 +134,15 @@ export const HoldingCard = memo(function HoldingCard({ holding, holder, classNam
             </div>
             <div className={classes.holderMeta}>
                 <div className={classes.holderMetaItem}>
-                    <Typography className={classes.holderMetaLabel}>{t.key()}</Typography>
+                    <Typography className={classes.holderMetaLabel}>
+                        <Trans>Keys</Trans>
+                    </Typography>
                     <Typography className={classes.holderMetaValue}>{holding.balance}</Typography>
                 </div>
                 <div className={classes.holderMetaItem}>
-                    <Typography className={classes.holderMetaLabel}>{t.value()}</Typography>
+                    <Typography className={classes.holderMetaLabel}>
+                        <Trans>Value</Trans>
+                    </Typography>
                     <ProgressiveText
                         className={cx(classes.keyPrice, classes.holderMetaValue)}
                         loading={loading}
@@ -158,7 +161,6 @@ export const HoldingCardSkeleton = memo(function HoldingCardSkeleton({
     ...rest
 }: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()
-    const t = useI18N()
 
     return (
         <div className={cx(classes.holdingCard, className)} {...rest}>
@@ -172,11 +174,15 @@ export const HoldingCardSkeleton = memo(function HoldingCardSkeleton({
             </div>
             <div className={classes.holderMeta}>
                 <div className={classes.holderMetaItem}>
-                    <Typography className={classes.holderMetaLabel}>{t.key()}</Typography>
+                    <Typography className={classes.holderMetaLabel}>
+                        <Trans>Keys</Trans>
+                    </Typography>
                     <Skeleton className={classes.holderMetaValue} width={30} />
                 </div>
                 <div className={classes.holderMetaItem}>
-                    <Typography className={classes.holderMetaLabel}>{t.value()}</Typography>
+                    <Typography className={classes.holderMetaLabel}>
+                        <Trans>Value</Trans>
+                    </Typography>
                     <Typography component="div" className={cx(classes.keyPrice, classes.holderMetaValue)}>
                         <Skeleton width={60} />
                     </Typography>

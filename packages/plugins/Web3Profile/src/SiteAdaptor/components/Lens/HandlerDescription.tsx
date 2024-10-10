@@ -15,8 +15,8 @@ import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ProfilePopup } from '../ProfilePopup.js'
-import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 import { getProfileAvatar } from '../../../utils.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -56,7 +56,6 @@ interface HandlerDescriptionProps extends withClasses<'container'> {
 }
 
 export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, currentProfile, onChange, ...props }) => {
-    const t = useWeb3ProfileTrans()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
     const wallet = useWallet()
@@ -92,7 +91,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                             requiredSupportChainIds: [ChainId.Polygon],
                         })
                     }>
-                    {t.wallet_status_button_change()}
+                    <Trans>Change</Trans>
                 </Button>
             </Box>
         )

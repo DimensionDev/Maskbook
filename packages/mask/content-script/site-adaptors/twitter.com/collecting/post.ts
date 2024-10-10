@@ -187,7 +187,7 @@ function collectPostInfo(
     info.nickname.value = name
     info.avatarURL.value = avatar || null
 
-    // decode steganographic image
+    // decode stenographic image
     // don't add await on this
     const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
         .then(() => postImagesParser(tweetNode))

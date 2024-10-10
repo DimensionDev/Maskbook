@@ -53,7 +53,7 @@ function openCompositionWithFiles(type: CompositionType, files: FileInfo[]) {
         reason: type,
         open: true,
         options: {
-            initialMetas: {
+            initialMeta: {
                 [META_KEY_3]: files,
             },
         },

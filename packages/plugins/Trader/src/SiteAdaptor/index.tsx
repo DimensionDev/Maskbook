@@ -8,15 +8,14 @@ import { EVMUtils } from '@masknet/web3-providers'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Trans } from 'react-i18next'
 import { base } from '../base.js'
-import { useTraderTrans } from '../locales/i18n_generated.js'
 import { enhanceTag } from './cashTag.js'
 import { setupStorage, type StorageOptions } from './storage.js'
 import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { TrendingView } from './trending/TrendingView.js'
+import { Trans } from '@lingui/macro'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -75,7 +74,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.SwapColorful size={36} />
-            const name = <Name />
+            const name = <Trans>Exchange</Trans>
             const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -99,7 +98,12 @@ const site: Plugin.SiteAdaptor.Definition = {
                 category: 'dapp',
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
-                description: <Trans i18nKey="plugin_trader_swap_description" />,
+                description: (
+                    <Trans>
+                        Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade,
+                        also invest in the best performing managers.
+                    </Trans>
+                ),
                 iconFilterColor,
                 hiddenInList: true,
             }
@@ -110,11 +114,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(254, 156, 0, 0.2) 100%), #FFFFFF;',
     },
-}
-
-function Name() {
-    const t = useTraderTrans()
-    return t.plugin_trader_swap()
 }
 
 export default site

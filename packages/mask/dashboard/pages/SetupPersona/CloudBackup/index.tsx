@@ -14,6 +14,8 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { fetchDownloadLink } from '../../../utils/api.js'
 import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
 import { PhoneForm } from './PhoneForm.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -57,6 +59,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const CloudBackupInner = memo(function CloudBackupInner() {
+    const { _ } = useLingui()
     const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
@@ -75,7 +78,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 if (error.status === 400) {
                     formState.setError('code', {
                         type: 'custom',
-                        message: t.cloud_backup_incorrect_verified_code(),
+                        message: _(msg`The code is incorrect.`),
                     })
                 } else if (error.status === 404) {
                     // No cloud backup file
@@ -125,13 +128,13 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 />
             )
 
-        return t.cloud_backup_no_exist_tips()
+        return <Trans>Please use your frequently used email or phone number for backup.</Trans>
     }, [user, DashboardTrans, t])
     return (
         <>
             <Box>
                 <Typography variant="h1" className={classes.title}>
-                    {t.cloud_backup_title()}
+                    <Trans>Login to Mask Cloud</Trans>
                 </Typography>
                 <Typography className={classes.description}>{description}</Typography>
                 <Box className={classes.tabContainer}>
@@ -144,8 +147,8 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                                     formState.reset()
                                 }}
                                 aria-label="Cloud Backup Methods">
-                                <Tab className={classes.tab} label={t.cloud_backup_email_title()} value={tabs.email} />
-                                <Tab className={classes.tab} label={t.cloud_backup_phone_title()} value={tabs.mobile} />
+                                <Tab className={classes.tab} label={<Trans>E-mail</Trans>} value={tabs.email} />
+                                <Tab className={classes.tab} label={<Trans>Mobile</Trans>} value={tabs.mobile} />
                             </MaskTabList>
                         </div>
                         <div className={classes.panelContainer}>
@@ -166,7 +169,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                     loading={loading}
                     disabled={!formState.formState.isDirty || !formState.formState.isValid}
                     onClick={formState.handleSubmit(handleSubmit)}>
-                    {t.continue()}
+                    <Trans>Continue</Trans>
                 </PrimaryButton>
             </SetupFrameController>
         </>

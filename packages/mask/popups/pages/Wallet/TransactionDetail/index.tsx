@@ -25,12 +25,12 @@ import { BigNumber } from 'bignumber.js'
 import { capitalize } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { ReplaceType, WalletAssetTabs } from '../type.js'
 import { modifyTransaction, parseReceiverFromERC20TransferInput } from '../utils.js'
 import type { TransactionState } from './types.js'
 import { useTransactionLogs } from './useTransactionLogs.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     statusTitle: {
@@ -143,7 +143,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function TransactionDetail() {
-    const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const location = useLocation()
     const transactionState = location.state.transaction as TransactionState | undefined
@@ -207,9 +206,9 @@ export const Component = memo(function TransactionDetail() {
         [NOT_DEPEND]: classes.statusPending,
     }
     const StatusLabelMap = {
-        [FAILED]: t.transaction_failed(),
-        [SUCCEED]: t.transaction_success(),
-        [NOT_DEPEND]: t.transaction_pending(),
+        [FAILED]: <Trans>Failed</Trans>,
+        [SUCCEED]: <Trans>Success</Trans>,
+        [NOT_DEPEND]: <Trans>Pending</Trans>,
     }
     const status = tx ? chainbase.normalizeTxStatus(tx.status) : transactionState?.status
     const statusPending = status === undefined && loadingTx
@@ -236,7 +235,7 @@ export const Component = memo(function TransactionDetail() {
             <Box p={2} overflow="auto" data-hide-scrollbar>
                 <Box display="flex" alignItems="center">
                     <Typography variant="h2" className={classes.statusTitle}>
-                        {t.transaction_status()}
+                        <Trans>status</Trans>
                     </Typography>
                     <ProgressiveText
                         component="div"
@@ -249,7 +248,9 @@ export const Component = memo(function TransactionDetail() {
                 </Box>
                 {transactionId ?
                     <Box className={classes.field}>
-                        <Typography className={classes.fieldName}>{t.transaction_hash()}</Typography>
+                        <Typography className={classes.fieldName}>
+                            <Trans>Transaction Hash</Trans>
+                        </Typography>
                         <Typography className={classes.fieldValue}>
                             {formatHash(transactionId, 4)}
                             <CopyButton size={16} text={transactionId} sx={{ ml: 0.5 }} />
@@ -257,19 +258,23 @@ export const Component = memo(function TransactionDetail() {
                     </Box>
                 :   null}
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_link()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Link</Trans>
+                    </Typography>
                     <Typography className={classes.fieldValue}>
-                        {t.view_on_explorer()}
+                        <Trans>View on Explorer</Trans>
                         <Link href={link} target="_blank" ml={0.5} fontSize={0}>
                             <Icons.LinkOut size={16} color={theme.palette.maskColor.second} />
                         </Link>
                     </Typography>
                 </Box>
                 <Typography variant="h2" className={classes.sectionName}>
-                    {t.transaction_base()}
+                    <Trans>Base</Trans>
                 </Typography>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_from()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>From</Trans>
+                    </Typography>
                     <ProgressiveText
                         className={classes.fieldValue}
                         component="div"
@@ -278,7 +283,9 @@ export const Component = memo(function TransactionDetail() {
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_to()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>To</Trans>
+                    </Typography>
                     <ProgressiveText className={classes.fieldValue} component="div" loading={loadingToAddress}>
                         <ReversedAddress address={toAddress as string} />
                     </ProgressiveText>
@@ -287,13 +294,17 @@ export const Component = memo(function TransactionDetail() {
                     Transaction
                 </Typography>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.nonce()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Nonce</Trans>
+                    </Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx?.nonce}
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.amount()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Amount</Trans>
+                    </Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx && nativeToken ?
                             `${isOut ? '-' : '+'}${formatBalance(tx.value || '0', nativeToken.decimals, {
@@ -303,27 +314,35 @@ export const Component = memo(function TransactionDetail() {
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_gas_limit()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Gas Limit (Units)</Trans>
+                    </Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx?.gas}
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_gas_used()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Gas Used (Units)</Trans>
+                    </Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx?.gas_used}
                         {gasUsedPercent ? ` (${trimZero(gasUsedPercent.toFixed(1))}%)` : ''}
                     </ProgressiveText>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_gas_price()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Gas Price (GWEI)</Trans>
+                    </Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {tx ? formatWeiToGwei(tx.effective_gas_price).toFixed(6) : ''}
                     </ProgressiveText>
                 </Box>
                 {tx?.max_priority_fee_per_gas ?
                     <Box className={classes.field}>
-                        <Typography className={classes.fieldName}>{t.transaction_priority_fee()}</Typography>
+                        <Typography className={classes.fieldName}>
+                            <Trans>Priority Fee (GWEI)</Trans>
+                        </Typography>
                         <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                             {tx ? formatWeiToGwei(tx.max_priority_fee_per_gas).toFixed(6) : ''}
                         </ProgressiveText>
@@ -331,14 +350,18 @@ export const Component = memo(function TransactionDetail() {
                 :   null}
                 {tx?.max_fee_per_gas ?
                     <Box className={classes.field}>
-                        <Typography className={classes.fieldName}>{t.transaction_max_fee()}</Typography>
+                        <Typography className={classes.fieldName}>
+                            <Trans>Max Fee (GWEI)</Trans>
+                        </Typography>
                         <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                             {tx ? formatWeiToGwei(tx.max_fee_per_gas).toFixed(6) : ''}
                         </ProgressiveText>
                     </Box>
                 :   null}
                 <Box className={classes.field}>
-                    <Typography className={classes.fieldName}>{t.transaction_fee()}</Typography>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Transaction Fee</Trans>
+                    </Typography>
                     <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
                         {gasFee ? `${gasFee.toFixed(6)} ${nativeToken?.symbol}` : ''}
                         {gasCost ?
@@ -352,7 +375,7 @@ export const Component = memo(function TransactionDetail() {
                 {logs.length ?
                     <>
                         <Typography variant="h2" className={classes.sectionName}>
-                            {t.activity_log()}
+                            <Trans>Activity Log</Trans>
                         </Typography>
                         <ol className={classes.logs}>
                             {logs.map((log, index) => (
@@ -368,10 +391,10 @@ export const Component = memo(function TransactionDetail() {
             {isRecentTx && status === NOT_DEPEND ?
                 <Box className={classes.actionGroup}>
                     <ActionButton className={classes.speedupButton} fullWidth onClick={handleSpeedup}>
-                        {t.speed_up()}
+                        <Trans>Speed Up</Trans>
                     </ActionButton>
                     <ActionButton color="error" fullWidth onClick={handleCancel}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </ActionButton>
                 </Box>
             :   null}

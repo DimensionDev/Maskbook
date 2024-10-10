@@ -11,10 +11,11 @@ import { TokenType, type NonFungibleTokenContract } from '@masknet/web3-shared-b
 import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }) => ({
     content: {
@@ -97,7 +98,7 @@ enum TabType {
 }
 
 export const Component = memo(function AddToken() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
 
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
@@ -120,7 +121,7 @@ export const Component = memo(function AddToken() {
         :   ChainId.Mainnet,
     )
 
-    useTitle(t.add_assets())
+    useTitle(_(msg`Add Assets`))
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 
@@ -142,7 +143,7 @@ export const Component = memo(function AddToken() {
                 })
             }
 
-            showSnackbar(t.popups_wallet_collectible_added_successfully(), {
+            showSnackbar(<Trans>NFTs added</Trans>, {
                 variant: 'success',
             })
             navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })
@@ -155,8 +156,8 @@ export const Component = memo(function AddToken() {
             <NormalHeader
                 tabList={
                     <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                        <Tab label={t.popups_wallet_token()} value={TabType.Tokens} />
-                        <Tab label={t.popups_wallet_collectible()} value={TabType.Collectibles} />
+                        <Tab label={<Trans>Tokens</Trans>} value={TabType.Tokens} />
+                        <Tab label={<Trans>NFTs</Trans>} value={TabType.Collectibles} />
                     </MaskTabList>
                 }
             />

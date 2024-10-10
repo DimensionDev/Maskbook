@@ -1,6 +1,5 @@
 import { makeStyles } from '@masknet/theme'
 import { Fragment, memo } from 'react'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Link, Typography } from '@mui/material'
 import type { EIP4361Message, ParsedEIP4361Message } from '@masknet/web3-shared-base'
 import { useInteractionWalletContext } from '../../pages/Wallet/Interaction/InteractionContext.js'
@@ -8,6 +7,7 @@ import { TypedMessageTextRender } from '../../../../typed-message/react/src/Rend
 import { Alert } from '@masknet/shared'
 import { RenderFragmentsContext, type RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { RenderEIP712 } from './eip712.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -54,7 +54,6 @@ interface SignRequestInfoProps {
 
 // TODO: render typed sign
 export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage, origin }) => {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
     const isEIP4361 = typeof message === 'object' && message.type === 'eip4361'
@@ -72,7 +71,9 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
         } else {
             EIP4361Message = (
                 <Alert className={classes.dangerField} open>
-                    {t.popups_wallet_sign_in_message_invalid_eip4361()}
+                    <Trans>
+                        This message contains a invalid EIP-4361 message. It is better to reject this request.
+                    </Trans>
                 </Alert>
             )
         }
@@ -83,12 +84,14 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
     return (
         <main className={classes.container}>
             <Typography className={classes.title}>
-                {isEIP4361 ? t.popups_wallet_sign_in_message() : t.popups_wallet_signature_request_title()}
+                {isEIP4361 ?
+                    <Trans>Sign-in Request</Trans>
+                :   <Trans>Signature Request</Trans>}
             </Typography>
             {origin ?
                 <Box className={classes.source}>
                     <Typography fontSize={16} fontWeight={700}>
-                        {t.popups_wallet_request_source()}
+                        <Trans>Request Source</Trans>
                     </Typography>
                     <Typography
                         className={cx(
@@ -99,7 +102,10 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
                     </Typography>
                     {!origin.startsWith('https://') ?
                         <Alert className={classes.dangerField} open>
-                            {t.popups_wallet_request_source_insecure()}
+                            <Trans>
+                                Your connection to this site is not encrypted which can be modified by a hostile third
+                                party, we strongly suggest you reject this request.
+                            </Trans>
                         </Alert>
                     :   null}
                 </Box>
@@ -107,7 +113,9 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
             {EIP4361Message}
             {typeof TextMessage === 'string' ?
                 <>
-                    <Typography className={classes.messageTitle}>{t.popups_wallet_sign_message()}</Typography>
+                    <Typography className={classes.messageTitle}>
+                        <Trans>Signing Message (Text)</Trans>
+                    </Typography>
                     <Typography className={classes.sourceText} component={isEIP4361 ? 'details' : 'p'}>
                         {TextMessage}
                     </Typography>
@@ -122,7 +130,9 @@ export const SignRequestInfo = memo<SignRequestInfoProps>(({ message, rawMessage
             :   undefined}
             {rawMessage && message !== rawMessage ?
                 <>
-                    <Typography className={classes.messageTitle}>{t.popups_wallet_sign_raw_message()}</Typography>
+                    <Typography className={classes.messageTitle}>
+                        <Trans>Signing Message (Raw)</Trans>
+                    </Typography>
                     <Typography className={classes.sourceText} component={isEIP4361 || isEIP712 ? 'details' : 'p'}>
                         {typeof rawMessage === 'string' ? rawMessage : JSON.stringify(rawMessage, null, 2)}
                     </Typography>
@@ -164,7 +174,6 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
         uri,
         version,
     } = message
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
 
     const { useInteractionWallet } = useInteractionWalletContext()
@@ -183,7 +192,9 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
 
     const normalFields = [
         <Fragment key="statement">
-            <Typography className={classes.messageTitle}>{t.popups_wallet_signature_request_message()}</Typography>
+            <Typography className={classes.messageTitle}>
+                <Trans>Message</Trans>
+            </Typography>
             <Typography className={classes.sourceText}>
                 {statement ?
                     <RenderFragmentsContext value={TextFragmentRender}>
@@ -202,7 +213,9 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
         </Fragment>,
         resources?.length ?
             <Fragment key="resources">
-                <Typography className={classes.messageTitle}>{t.popups_wallet_sign_in_message_resource()}</Typography>
+                <Typography className={classes.messageTitle}>
+                    <Trans>Resource</Trans>
+                </Typography>
                 <Typography className={classes.sourceText}>
                     <RenderFragmentsContext value={TextFragmentRender}>
                         <TypedMessageTextRender content={resources.join('\n')} serializable type="text" version={1} />
@@ -211,17 +224,21 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
             </Fragment>
         :   null,
         <Fragment key="issuedAt">
-            <Typography className={classes.messageTitle}>{t.popups_wallet_sign_in_message_issued_at()}</Typography>
+            <Typography className={classes.messageTitle}>
+                <Trans>Issued at</Trans>
+            </Typography>
             <Typography className={classes.sourceText}>{issued_at.toLocaleString()}</Typography>
         </Fragment>,
     ]
     const dangerFields = [
         invalidVersion ?
             <Fragment key="version">
-                <Typography className={classesDangerTitle}>{t.popups_wallet_sign_in_message_version()}</Typography>
+                <Typography className={classesDangerTitle}>
+                    <Trans>Version</Trans>
+                </Typography>
                 <Typography className={classesDangerField}>{version}</Typography>
                 <Alert className={classes.dangerField} open>
-                    {t.popups_wallet_sign_in_message_version_invalid()}
+                    <Trans>Unknown EIP-4361 message version.</Trans>
                 </Alert>
             </Fragment>
         :   null,
@@ -230,12 +247,15 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
     const domainJSX = (
         <Fragment key="domainJSX">
             <Typography className={invalidDomain ? classesDangerTitle : classes.messageTitle}>
-                {t.popups_wallet_sign_in_message_domain()}
+                <Trans>Domain</Trans>
             </Typography>
             <Typography className={invalidDomain ? classesDangerField : classes.sourceText}>{domain}</Typography>
             {invalidDomain ?
                 <Alert className={classes.dangerField} open>
-                    {t.popups_wallet_sign_in_message_domain_invalid({ messageOrigin, domain: message.domain })}
+                    <Trans>
+                        The website ({messageOrigin}) is asking you to sign in to another domain ({message.domain}).
+                        This may be a phishing attack.
+                    </Trans>
                 </Alert>
             :   null}
         </Fragment>
@@ -246,12 +266,12 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
     const chainID_JSX = (
         <Fragment key="chainID">
             <Typography className={invalidChainId ? classesDangerTitle : classes.messageTitle}>
-                {t.chain_id()}
+                <Trans>Chain ID</Trans>
             </Typography>
             <Typography className={invalidChainId ? classesDangerField : classes.sourceText}>{chainId}</Typography>
             {invalidChainId ?
                 <Alert className={classes.dangerField} open>
-                    {t.popups_wallet_sign_in_message_chainID_invalid()}
+                    <Trans>The chainID is not equal to the currently connected one.</Trans>
                 </Alert>
             :   null}
         </Fragment>
@@ -263,14 +283,14 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
         not_before ?
             <Fragment key="notBefore">
                 <Typography className={invalidNotBefore ? classesDangerTitle : classes.messageTitle}>
-                    {t.popups_wallet_sign_in_message_not_before()}
+                    <Trans>Request is valid not before</Trans>
                 </Typography>
                 <Typography className={invalidNotBefore ? classesDangerField : classes.sourceText}>
                     {not_before.toLocaleString()}
                 </Typography>
                 {invalidNotBefore ?
                     <Alert className={classes.dangerField} open>
-                        {t.popups_wallet_sign_in_message_not_before_invalid()}
+                        <Trans>This request should only be sign in the future.</Trans>
                     </Alert>
                 :   null}
             </Fragment>
@@ -282,14 +302,14 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
         expiration_time ?
             <Fragment key="expirationTime">
                 <Typography className={invalidExpirationTime ? classesDangerTitle : classes.messageTitle}>
-                    {t.popups_wallet_sign_in_message_not_after()}
+                    <Trans>Request is valid not after</Trans>
                 </Typography>
                 <Typography className={invalidExpirationTime ? classesDangerField : classes.sourceText}>
                     {expiration_time.toLocaleString()}
                 </Typography>
                 {invalidExpirationTime ?
                     <Alert className={classes.dangerField} open>
-                        {t.popups_wallet_sign_in_message_expiration_time_invalid()}
+                        <Trans>This request has been expired.</Trans>
                     </Alert>
                 :   null}
             </Fragment>
@@ -299,7 +319,9 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
 
     const nonceJSX = (
         <Fragment key="nonce">
-            <Typography className={classes.messageTitle}>{t.nonce()}</Typography>
+            <Typography className={classes.messageTitle}>
+                <Trans>Nonce</Trans>
+            </Typography>
             <Typography className={classes.sourceText}>{nonce}</Typography>
         </Fragment>
     )
@@ -308,7 +330,9 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
     const request_id_JSX =
         request_id ?
             <Fragment key="request_id">
-                <Typography className={classes.messageTitle}>{t.popups_wallet_sign_in_message_request_id()}</Typography>
+                <Typography className={classes.messageTitle}>
+                    <Trans>Request ID</Trans>
+                </Typography>
                 <Typography className={classes.sourceText}>{request_id}</Typography>
             </Fragment>
         :   null

@@ -17,6 +17,7 @@ export function createAssociatedTokenAccountInstruction(
         { pubkey: mint, isSigner: false, isWritable: false },
         { pubkey: SolanaWeb3.SystemProgram.programId, isSigner: false, isWritable: false },
         { pubkey: programId, isSigner: false, isWritable: false },
+        // cspell:disable-next-line
         { pubkey: SolanaWeb3.SYSVAR_RENT_PUBKEY, isSigner: false, isWritable: false },
     ]
 

@@ -1,7 +1,7 @@
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -34,11 +34,10 @@ export const LoadingStatus = memo(function LoadingStatus({
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
-    const t = useSharedTrans()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
             <LoadingBase size={iconSize} className={classes.icon} />
-            {omitText ? null : <Typography className={classes.text}>{children ?? t.loading()}</Typography>}
+            {omitText ? null : <Typography className={classes.text}>{children ?? <Trans>Loading</Trans>}</Typography>}
         </Box>
     )
 })

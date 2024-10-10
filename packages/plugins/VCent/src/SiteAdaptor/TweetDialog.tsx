@@ -10,8 +10,8 @@ import { memo } from 'react'
 import { useAsync } from 'react-use'
 import urlcat from 'urlcat'
 import { VALUABLES_VCENT_URL } from '../constants.js'
-import { useVCentTrans } from '../locales/i18n_generated.js'
 import { PluginVCentRPC } from '../messages.js'
+import { Trans } from '@lingui/macro'
 
 const useStyle = makeStyles()((theme) => ({
     root: {
@@ -57,7 +57,6 @@ const useStyle = makeStyles()((theme) => ({
 
 export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAddress: string }) {
     const { classes } = useStyle()
-    const t = useVCentTrans()
     const { value: tweets } = useAsync(() => PluginVCentRPC.getTweetData(tweetAddress), [tweetAddress])
     const tweet = first(tweets)
     usePluginWrapper(tweet?.type === 'Offer')
@@ -76,10 +75,12 @@ export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAd
                     </Typography>
                 </Box>
                 <Box className={classes.title}>
-                    <Typography className={classes.fieldName}>{t.plugin_vcent_last_offer_at()}</Typography>
-                    <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
-                        ${tweet.amount_usd}
-                    </Typography>
+                    <Trans>
+                        <Typography className={classes.fieldName}>Latest offer at </Typography>
+                        <Typography fontWeight="bold" fontSize={14} color={(t) => t.palette.maskColor.publicMain}>
+                            ${tweet.amount_usd}
+                        </Typography>
+                    </Trans>
                 </Box>
             </Box>
             <Button
@@ -87,7 +88,7 @@ export const VCentDialog = memo(function VCentDialog({ tweetAddress }: { tweetAd
                 className={classes.button}
                 target="_blank"
                 href={urlcat(VALUABLES_VCENT_URL, tweet.tweet_id)}>
-                {t.plugin_vcent_go()}
+                <Trans>Go</Trans>
             </Button>
         </Box>
     )

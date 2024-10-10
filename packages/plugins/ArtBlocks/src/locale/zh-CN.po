@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-10-10 05:24\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,117 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ArtBlocks/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 948\n"
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "Artblocks"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:30
+msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
+msgstr "Artblocks 依托算法生成内容技术，给用户提供随心铸造 NFT 的体验。"
+
+#: src/SiteAdaptor/DetailsView.tsx:131
+msgid "Blockchain:"
+msgstr "区块链："
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:151
+msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:126
+msgid "Chain"
+msgstr "链"
+
+#: src/SiteAdaptor/Collectible.tsx:70
+msgid "Collection"
+msgstr "Nft 系列"
+
+#: src/SiteAdaptor/ActionBar.tsx:30
+msgid "Completed"
+msgstr "已完成"
+
+#: src/SiteAdaptor/DetailsView.tsx:137
+msgid "Contract:"
+msgstr "合约："
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+#~ msgid "Created by"
+#~ msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+msgid "Created by <0>{0}</0>• <1>Website</1>"
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:71
+msgid "Details"
+msgstr "详情"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:77
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
+msgstr "我刚刚从{0} 使用{1} {2} 购买了一件美丽的艺术品。安装@realMaskNetwork来获取您的作品。"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:80
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
+msgstr "我刚刚在{0} 使用{1} {2} 购买了一件美丽的艺术品。欢迎加入！"
+
+#: src/SiteAdaptor/DetailsView.tsx:91
+msgid "Infos"
+msgstr "信息资料"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:111
+msgid "Insufficient balance"
+msgstr "余额不足"
+
+#: src/SiteAdaptor/DetailsView.tsx:118
+msgid "Library:"
+msgstr "照片库："
+
+#: src/SiteAdaptor/DetailsView.tsx:111
+msgid "License:"
+msgstr "许可证："
+
+#: src/SiteAdaptor/DetailsView.tsx:104
+msgid "Minted:"
+msgstr "已铸造："
+
+#: src/SiteAdaptor/ActionBar.tsx:31
+msgid "Paused"
+msgstr "已暂停"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:112
+msgid "Please check ToS document"
+msgstr "请检查 ToS 文档"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:135
+msgid "Price per mint"
+msgstr "每份铸造的价格"
+
+#: src/SiteAdaptor/DetailsView.tsx:95
+msgid "Price:"
+msgstr "价格："
+
+#: src/SiteAdaptor/ActionBar.tsx:32
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+#: src/SiteAdaptor/PurchaseDialog.tsx:130
+msgid "Purchase"
+msgstr "购买"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+msgid "Purchasing...."
+msgstr "购买中..."
+
+#: src/SiteAdaptor/Collectible.tsx:65
+msgid "Something went wrong!"
+msgstr "发生未知错误。"
+
+#: src/SiteAdaptor/ActionBar.tsx:29
+msgid "This project is no longer active"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:29
+#~ msgid "This project is no more active"
+#~ msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:80
+#~ msgid "Website"
+#~ msgstr ""

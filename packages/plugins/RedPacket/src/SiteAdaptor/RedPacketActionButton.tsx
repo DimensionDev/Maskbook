@@ -1,7 +1,6 @@
 import { memo, useCallback, useState, useContext } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
-import { useRedPacketTrans } from '../locales/index.js'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
 import { openComposition } from './openComposition.js'
@@ -10,6 +9,7 @@ import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
 import { CompositionTypeContext } from './RedPacketInjection.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -75,17 +75,16 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
     const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
     const { classes, cx } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
-    const t = useRedPacketTrans()
     const compositionType = useContext(CompositionTypeContext)
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
     const statusToTransMap = {
-        [FireflyRedPacketAPI.RedPacketStatus.Send]: t.send(),
-        [FireflyRedPacketAPI.RedPacketStatus.Expired]: t.expired(),
-        [FireflyRedPacketAPI.RedPacketStatus.Empty]: t.empty(),
-        [FireflyRedPacketAPI.RedPacketStatus.Refund]: t.expired(),
-        [FireflyRedPacketAPI.RedPacketStatus.View]: t.view(),
-        [FireflyRedPacketAPI.RedPacketStatus.Refunding]: t.refund(),
+        [FireflyRedPacketAPI.RedPacketStatus.Send]: <Trans>Send</Trans>,
+        [FireflyRedPacketAPI.RedPacketStatus.Expired]: <Trans>Expired</Trans>,
+        [FireflyRedPacketAPI.RedPacketStatus.Empty]: <Trans>Empty</Trans>,
+        [FireflyRedPacketAPI.RedPacketStatus.Refund]: <Trans>Expired</Trans>,
+        [FireflyRedPacketAPI.RedPacketStatus.View]: <Trans>View</Trans>,
+        [FireflyRedPacketAPI.RedPacketStatus.Refunding]: <Trans>Refund</Trans>,
     }
 
     const [{ loading: isSharing }, shareCallback] = useAsyncFn(async () => {

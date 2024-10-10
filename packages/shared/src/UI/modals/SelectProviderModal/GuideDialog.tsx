@@ -1,9 +1,9 @@
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/i18n_generated.js'
 import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DialogContent, Link, Stack, Switch, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -49,19 +49,18 @@ interface Props extends InjectedDialogProps {
 }
 
 export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Props) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const name = provider.name
 
     return (
-        <InjectedDialog {...rest} title={t.how_to_use_wallet({ name: provider.name })}>
+        <InjectedDialog {...rest} title={<Trans>How to use {provider.name} Wallet?</Trans>}>
             <DialogContent className={classes.content}>
                 <section className={classes.section}>
                     <Typography fontSize={16} fontWeight={700}>
-                        {t.if_not_installed({ name })}
+                        <Trans>1. If you haven't installed the {name} Wallet</Trans>
                     </Typography>
                     <Typography mt={3} fontSize={14}>
-                        {t.download_here({ name })}
+                        <Trans>Download the {name} Wallet here</Trans>
                     </Typography>
                     <Link
                         href={provider.downloadLink}
@@ -70,16 +69,16 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                         className={cx(classes.card, classes.downloadButton)}>
                         <img width={30} height={30} src={provider.icon} />
                         <Typography fontSize={16} fontWeight={700} ml={1.5}>
-                            {t.check_out_website()}
+                            <Trans>Check out the official website</Trans>
                         </Typography>
                     </Link>
                 </section>
                 <section className={classes.section}>
                     <Typography fontSize={16} fontWeight={700}>
-                        {t.if_installed({ name })}
+                        <Trans>2. If you have installed the {name} Wallet</Trans>
                     </Typography>
                     <Typography mt={1.5} fontSize={14}>
-                        {t.enable_wallet_and_disable_others({ name })}
+                        <Trans>Enable the {name} Wallet extension and disable other wallet extensions</Trans>
                     </Typography>
                     <Stack className={classes.card} style={{ cursor: 'default' }}>
                         <Stack flexDirection="row" alignItems="center">
@@ -89,8 +88,12 @@ export const GuideDialog = memo(function GuideDialog({ provider, ...rest }: Prop
                             </Typography>
                         </Stack>
                         <Stack flexDirection="row" mt={3}>
-                            <div className={classes.button}>{t.details()}</div>
-                            <div className={classes.button}>{t.remove()}</div>
+                            <div className={classes.button}>
+                                <Trans>Details</Trans>
+                            </div>
+                            <div className={classes.button}>
+                                <Trans>Remove</Trans>
+                            </div>
                             <Switch checked style={{ cursor: 'default' }} />
                         </Stack>
                     </Stack>

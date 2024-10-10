@@ -10,7 +10,7 @@ import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ProfileView } from './ProfileView.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useSnapshotTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -70,9 +70,9 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Desc />,
+            description: <Trans>Display Snapshot proposals on the X of the respective project or protocol.</Trans>,
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
-            name: <Name />,
+            name: <Trans>DAO</Trans>,
             marketListSortingPriority: 8,
             icon: <Icons.Snapshot size={36} />,
         },
@@ -95,14 +95,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             },
         },
     },
-}
-function Desc() {
-    const t = useSnapshotTrans()
-    return t.plugin_snapshot_description()
-}
-function Name() {
-    const t = useSnapshotTrans()
-    return t.plugin_snapshot_info_dao()
 }
 
 export default site

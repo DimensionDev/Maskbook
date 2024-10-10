@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,723 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RedPacket/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 984\n"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:363
+#~ msgid "{0, plural, one {# shares / {total} {symbol}} other {# shares / ${total} ${symbol}}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:285
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:288
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:224
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:197
+msgid "{0} (UTC+8)"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:363
+msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:239
+msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:241
+msgid "{claimed}\\n{promote_short}\\n{0}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:249
+msgid "{head} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:217
+msgid "{notClaimed}\\nClaim on Farcaster: {link}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:221
+msgid "{notClaimed}\\nClaim on Lens: {link}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:222
+msgid "{notClaimed}\\nClaim on: {link}"
+msgstr ""
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:419
+#~ msgid "{null, plural, one {<0>{0}</0> NFT} other {<1>{1}</1> NFTs}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:247
+#: src/SiteAdaptor/RedPacketNft.tsx:290
+msgid "@{sender} is sending an NFT lucky drop on {networkName} network. {account_promote} {promote_short} #mask_io #LuckyDrop {postLink}"
+msgstr ""
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:419
+msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:215
+#~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender} .\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on Farcaster: {link}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:228
+#~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender} .\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on: {link}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:211
+msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}.\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:224
+#~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}.\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n\\nClaim on Lens: {link}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:211
+#: src/SiteAdaptor/RedPacket/index.tsx:220
+#~ msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} ! \\n\\nClaim on Lens: {link}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:208
+msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !\\n\\nClaim on Lens: {link}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:206
+#: src/SiteAdaptor/RedPacketNft.tsx:228
+msgid "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:300
+msgid "1 {0} claimed."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:280
+msgid "1 NFT claimed."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:425
+msgid "ALL"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:426
+msgid "ALL ({0} NFT)"
+msgstr "すべて（{0} NFT）"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:353
+msgid "Amount"
+msgstr "量"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:340
+msgid "Amount Each"
+msgstr "各金額"
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:129
+msgid "Amount per Share"
+msgstr "1株当たりの金額"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:253
+msgid "At most 255 recipients"
+msgstr "受信者は最大255人です"
+
+#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx:252
+msgid "Attached Message"
+msgstr "添付メッセージ"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:369
+msgid "Best Wishes"
+msgstr "祝福語"
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:267
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:214
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:194
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:222
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:182
+#: src/SiteAdaptor/RedpacketMessagePanel.tsx:48
+msgid "Best Wishes!"
+msgstr "幸運を祈ります！"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:472
+msgid "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:240
+msgid "Choose your collection"
+msgstr "コレクションを選択してください"
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:90
+#: src/SiteAdaptor/RedPacketNft.tsx:479
+msgid "Claim"
+msgstr "受取る"
+
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:52
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:388
+#: src/SiteAdaptor/RedPacketDialog.tsx:243
+msgid "Claim Requirements"
+msgstr "要件を要求する"
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:304
+#: src/SiteAdaptor/RedPacketNft.tsx:408
+msgid "Claimed"
+msgstr "受け取り済"
+
+#: src/SiteAdaptor/RedPacketNft.tsx:397
+msgid "Claimed {0}/{1}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:300
+#~ msgid "Claimed 1 {0} successfully."
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:285
+#~ msgid "Claimed 1 {NFT} successfully."
+#~ msgstr ""
+
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:253
+msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:224
+msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{token_symbol}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:369
+msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:89
+#: src/SiteAdaptor/RedPacketNft.tsx:478
+msgid "Claiming..."
+msgstr "受け取り中.."
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:223
+msgid "Clear all requirements"
+msgstr "すべての要件をクリアする"
+
+#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx:266
+msgid "Collections"
+msgstr "コレクション"
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:122
+msgid "Comment"
+msgstr "コメント"
+
+#: src/SiteAdaptor/RedPacketNft.tsx:416
+msgid "Completed"
+msgstr "完了しました"
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:221
+#: src/SiteAdaptor/RedPacketDialog.tsx:241
+#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx:317
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:431
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:554
+msgid "Confirm"
+msgstr "確認"
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:244
+msgid "Confirm the Lucky Drop"
+msgstr "ラッキードロップを確認する"
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:220
+#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx:316
+msgid "Confirming"
+msgstr "確認中"
+
+#: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx:24
+#~ msgid "Connect to {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx:24
+msgid "Connect to {source}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:58
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:251
+msgid "Connect Wallet"
+msgstr "ウォレットに接続"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:430
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:354
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:536
+msgid "Create the Lucky Drop"
+msgstr "ラッキードロップを作成します。"
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:274
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:220
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:188
+msgid "Create time:"
+msgstr "作成時間:"
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:301
+msgid "Creator:"
+msgstr "作成者"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:412
+msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
+msgstr "Lucky Drop送信者をカスタマイズします。レンズまたはForecasterユーザー名を選択するか、現在接続されているウォレットを使用してください。"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:337
+msgid "Drop Type"
+msgstr "ドロップ種別"
+
+#: src/SiteAdaptor/RedPacketActionButton.tsx:84
+msgid "Empty"
+msgstr "空です"
+
+#: src/SiteAdaptor/RedpacketMessagePanel.tsx:41
+msgid "Enclose a Message"
+msgstr "メッセージを閉じる"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:257
+msgid "Enter Amount Each"
+msgstr "各金額を入力"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:331
+msgid "Enter number of winners"
+msgstr "入賞者数を入力してください"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:252
+msgid "Enter Number of Winners"
+msgstr "共有を入力"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:345
+msgid "Enter the amount that each winner can claim"
+msgstr "各勝者が受け取れる金額を入力してください"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:257
+msgid "Enter Total Amount"
+msgstr "合計入力"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:342
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:304
+msgid "Equal Amount"
+msgstr "等しい金額"
+
+#: src/SiteAdaptor/RedPacketActionButton.tsx:83
+#: src/SiteAdaptor/RedPacketActionButton.tsx:85
+#: src/SiteAdaptor/RedPacketNft.tsx:415
+msgid "Expired"
+msgstr "期限切れ"
+
+#: src/SiteAdaptor/RedPacketNft.tsx:234
+msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:233
+msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
+msgstr ""
+
+#: src/SiteAdaptor/Requirements.tsx:194
+msgid "Follow <0/> on {platform}"
+msgstr ""
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:119
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:66
+msgid "Follow me"
+msgstr "今すぐフォロー"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:449
+#: src/SiteAdaptor/RedPacketNft.tsx:401
+msgid "From: @{0}"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:135
+msgid "Gift crypto or NFTs to any users, first come, first served."
+msgstr "暗号資産またはNFTをすべてのユーザーに贈り、先着順に提供します。"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:413
+msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have to do this once per token."
+msgstr "{0} にラッキードロップスマートコントラクトへのアクセスを許可します。トークンごとに1回だけ行う必要があります"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:244
+msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:252
+#~ msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network. Follow @{2} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{3}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:255
+#~ msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network.\\n{promote_short}\\n{2}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:239
+msgid "History"
+msgstr "履歴"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:235
+msgid "I just claimed a lucky drop from @{0} on {1} network."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:243
+#~ msgid "I just claimed a lucky drop from @{0} on {1} network. Follow @{2} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{3}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:246
+#~ msgid "I just claimed a lucky drop from @{0} on {1} network.\\n{promote_short}\\n{2}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:243
+msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network. {account_promote}\\n{promote_short}\\n#mask_io #LuckyDrop\\n{postLink}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:110
+msgid "Identical"
+msgstr "同じ"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:430
+msgid "Image Preview"
+msgstr "画像プレビュー"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:255
+msgid "Insufficient {0} Balance"
+msgstr "{0} 残高不足"
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:117
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:275
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:347
+msgid "Insufficient Balance"
+msgstr "残高不足"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:272
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:421
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:353
+msgid "Insufficient Balance for Gas Fee"
+msgstr "ガス料金が足りません"
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:66
+msgid "Invalid Network"
+msgstr "無効なネットワーク"
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:120
+msgid "Like"
+msgstr "いいね"
+
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:77
+msgid "Like / Repost / Comment"
+msgstr "いいね/リポスト/コメント"
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:366
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:464
+msgid "Loading token..."
+msgstr "トークンを読み込み中..."
+
+#: src/SiteAdaptor/index.tsx:96
+#: src/SiteAdaptor/index.tsx:106
+#: src/SiteAdaptor/RedPacket/index.tsx:284
+#: src/SiteAdaptor/RedPacketDialog.tsx:242
+#: src/SiteAdaptor/RedPacketNft.tsx:302
+msgid "Lucky Drop"
+msgstr "ラッキードロップ"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:237
+#~ msgid "masknetwork"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:362
+msgid "Message"
+msgstr "メッセージ"
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:427
+#: src/SiteAdaptor/RedPacketDialog.tsx:238
+msgid "More details"
+msgstr "詳細"
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:237
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:482
+msgid "Next"
+msgstr "次へ"
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:123
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:85
+msgid "NFT holder"
+msgstr "NFT ホルダー"
+
+#: src/SiteAdaptor/Requirements.tsx:248
+msgid "NFT Holder of <0/>"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:311
+msgid "NFTs"
+msgstr ""
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:403
+msgid "No"
+msgstr "いいえ"
+
+#: src/SiteAdaptor/FireflyRedPacketHistoryDetails.tsx:93
+msgid "No claims yet for this Lucky Drop"
+msgstr "このラッキードロップの請求はまだありません。"
+
+#: src/SiteAdaptor/FireflyRedPacketHistoryList.tsx:61
+msgid "No Lucky Drops claimed"
+msgstr "獲得したラッキードロップはありません。"
+
+#: src/SiteAdaptor/FireflyRedPacketHistoryList.tsx:63
+#~ msgid "No Lucky Drops created."
+#~ msgstr ""
+
+#: src/SiteAdaptor/FireflyRedPacketHistoryList.tsx:63
+msgid "No Lucky Drops created. Select 🎁 when you compose a post to start your first drop."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketHistoryList.tsx:60
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:368
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:465
+msgid "No results"
+msgstr "該当なし"
+
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:474
+msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
+msgstr ""
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:347
+msgid "Number of Winners"
+msgstr "当選者数"
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:317
+msgid "Post on"
+msgstr "投稿先:"
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:109
+msgid "Random"
+msgstr "ランダム"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:341
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:293
+msgid "Random Amount"
+msgstr "ランダム金額"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:237
+#~ msgid "realMaskNetwork"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:402
+msgid "Received"
+msgstr "獲得済み"
+
+#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:275
+msgid "Received time:"
+msgstr "受け取り時刻"
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:93
+#: src/SiteAdaptor/RedPacketActionButton.tsx:87
+msgid "Refund"
+msgstr "返金"
+
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:92
+msgid "Refunding"
+msgstr "返金処理中"
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:121
+msgid "Repost"
+msgstr "リポスト"
+
+#: src/SiteAdaptor/Requirements.tsx:264
+msgid "Requirements"
+msgstr "必要条件"
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:359
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:456
+msgid "Search"
+msgstr "検索"
+
+#: src/SiteAdaptor/FireflyRedPacketHistoryList.tsx:64
+#~ msgid "Select 🎁 when you compose a post to start your first drop."
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:250
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:348
+msgid "Select a Token"
+msgstr "トークンを選択してください"
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:480
+msgid "Select All"
+msgstr "全て選ぶ"
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:211
+msgid "Select NFT collection to gate access"
+msgstr "ゲートにアクセスするNFTコレクションを選択します"
+
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:440
+msgid "Select partially"
+msgstr "一部を選択"
+
+#: src/SiteAdaptor/RedPacketActionButton.tsx:82
+msgid "Send"
+msgstr "送る"
+
+#: src/SiteAdaptor/index.tsx:109
+msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+msgstr "サプライズ暗号のプレゼントを送信します。複数のチェーンのトークンとNFTが対応されています。"
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:305
+msgid "Sent"
+msgstr "送信"
+
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:245
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx:107
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:116
+#: src/SiteAdaptor/RedPacketNft.tsx:454
+msgid "Share"
+msgstr "共有"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:409
+msgid "Share From"
+msgstr "共有先"
+
+#: src/SiteAdaptor/RedPacketNft.tsx:333
+msgid "Something went wrong."
+msgstr "問題が発生しました."
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:103
+msgid "Split Mode"
+msgstr "分割モード"
+
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:236
+msgid "The Lucky Drop can't be sent due to data damage."
+msgstr ""
+
+#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:236
+#~ msgid "The Lucky Drop can’t be sent due to data damage."
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:356
+msgid "The Lucky Drop has been refunded."
+msgstr "ラッキードロップは返金されました。"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:359
+msgid "The Lucky Drop is broken."
+msgstr "ラッキードロップが壊れています。"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:358
+msgid "The Lucky Drop is empty."
+msgstr "ラッキードロップは空です。"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:357
+msgid "The Lucky Drop is expired."
+msgstr "ラッキードロップの有効期限が切れています。"
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:406
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:530
+msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:262
+msgid "The minimum amount for each share is {0} {1}"
+msgstr ""
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:392
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:402
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:515
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:526
+msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
+msgstr ""
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:439
+msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
+msgstr "トークンIDはカンマで区切られています。例: 1224, 7873, 8948"
+
+#: src/SiteAdaptor/RedPacketDialog.tsx:308
+msgid "Tokens"
+msgstr "トークン"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:340
+msgid "Total amount"
+msgstr "合計金額"
+
+#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx:291
+msgid "Total Amount"
+msgstr "合計金額"
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:344
+msgid "Total amount shared among all winners"
+msgstr "受賞者の合計金額"
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:160
+msgid "Total cost"
+msgstr "合計額"
+
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:58
+msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
+msgstr "ラッキードロップクエストを使用してフォロワーとエンゲージメントを成長させましょう。各要件をクリアすると、要求を受けることができます。"
+
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:69
+msgid "User must follow your account. Note: When you cross-post a Lucky Drop to multiple social networks, following you on any social allows users to claim."
+msgstr "ユーザーはアカウントをフォローする必要があります。注意: 複数のソーシャルネットワークにラッキードロップを投稿する場合、ソーシャルネットワークをフォローすると、ユーザーが請求することができます。"
+
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:88
+msgid "Users must hold one NFT from the collection you select."
+msgstr "ユーザーは選択したコレクションから1つのNFTを保持する必要があります。"
+
+#: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx:80
+msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
+msgstr "ユーザーは、あなたのラッキードロップの投稿に「いいね！」、リポスト/引用ツイート、コメントをしなければなりません。"
+
+#: src/SiteAdaptor/RedPacketActionButton.tsx:86
+msgid "View"
+msgstr "表示"
+
+#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx:227
+msgid "Wallet account"
+msgstr "ウォレットアカウント"
+
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:515
+msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC721Form.tsx:518
+#~ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of 1 {0}. Please reduce the number of NFTs selected."
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketERC20Form.tsx:322
+msgid "Winners"
+msgstr "当選者"
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx:484
+msgid "You can also use <0>Shift</0> to select multiple NFTs."
+msgstr ""
+
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx:165
+msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
+msgstr "1つまたは複数のルールを設定して、Lucky Dropを獲得することができます。"
+
+#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx:469
+msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
+msgstr "このラッキードロップを送信すると、請求されていない金額を24時間後に引き出すことができます。"
+
+#: src/SiteAdaptor/RedPacketConfirmDialog.tsx:205
+msgid "You can withdraw the rest of your balances back 24h later after sending them out."
+msgstr "残りの残高は、送金後24時間後に引き出すことができます。"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:287
+#~ msgid "You claimed {0} {1}."
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:282
+msgid "You claimed {0} ${1}."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:314
+#~ msgid "You claimed {1} {}."
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:301
+msgid "You claimed 1."
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx:351
+msgid "You could refund {0} {1}."
+msgstr "{0} {1} を返金することができます。"
+
+#: src/SiteAdaptor/RedPacket/index.tsx:335
+msgid "You got {0} {1}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx:394
+msgid "You got 1 {0}"
+msgstr ""
+
+#: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
+#~ msgid "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends."
+#~ msgstr ""
+
+#: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
+msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
+msgstr ""

@@ -1,4 +1,4 @@
-import type { TransactionContext, TransactionDescriptor as TransactionDescriptorBase } from '@masknet/web3-shared-base'
+import type { TransactionContext, FormattedTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction, TransactionParameter } from '@masknet/web3-shared-evm'
 
 export interface TransactionMethodABI {
@@ -9,8 +9,9 @@ export interface TransactionMethodABI {
     }>
 }
 
-export interface TransactionDescriptor {
-    compute: (
+export type TransactionDescriptorFormatResult = FormattedTransaction<ChainId, Transaction>
+export interface TransactionDescriptorFormatter {
+    compute(
         context: TransactionContext<ChainId, TransactionParameter>,
-    ) => Promise<Omit<TransactionDescriptorBase<ChainId, Transaction>, 'type' | '_tx'> | undefined>
+    ): Promise<TransactionDescriptorFormatResult | undefined>
 }

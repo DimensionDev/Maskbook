@@ -9,6 +9,7 @@ import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { getCost, getLastAction } from '../share.js'
 import { AccountLabel, formatValue, Label, isRegisteringENS } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -49,69 +50,96 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
     const summary = useMemo(() => {
         let action
         let metadata
+        const Tag = verbose ? Label : 'span'
         switch (feed.type) {
             case Type.Mint:
                 // If only one action, it should be free minting
                 metadata = getLastAction(feed as RSS3BaseAPI.CollectibleMintFeed).metadata
+                if (metadata?.cost) {
+                    const value = formatValue(metadata?.cost)
+                    const symbolName = metadata?.cost?.symbol ?? ''
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> minted{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{metadata!.name} </Tag>}
+                                _nft={<Tag>an NFT </Tag>}
+                            />
+                            for{' '}
+                            <Label>
+                                {value} {symbolName}
+                            </Label>
+                        </Trans>
+                    )
+                }
                 return (
-                    // eslint-disable-next-line react/naming-convention/component-name
-                    <RSS3Trans.collectible_mint
-                        values={{
-                            user,
-                            collectible: verbose ? metadata!.name : 'an NFT',
-                            cost_value: formatValue(metadata?.cost),
-                            cost_symbol: metadata?.cost?.symbol ?? '',
-                            context: metadata?.cost ? 'cost' : 'no_cost',
-                        }}
-                        components={{
-                            user: <Label />,
-                            cost: <Label />,
-                            collectible: verbose ? <Label /> : <span />,
-                        }}
-                    />
+                    <Trans>
+                        <Label children={user} /> minted
+                        <Select
+                            value={verbose ? 'name' : 'nft'}
+                            _name={<Tag>{metadata!.name} </Tag>}
+                            _nft={<Tag>an NFT </Tag>}
+                        />
+                    </Trans>
                 )
-            case Type.Trade:
+            case Type.Trade: {
                 action = getLastAction(feed as RSS3BaseAPI.CollectibleTradeFeed)
                 metadata = action.metadata
                 const cost = getCost(feed as RSS3BaseAPI.CollectibleTradeFeed)
-                return (
-                    // eslint-disable-next-line react/naming-convention/component-name
-                    <RSS3Trans.collectible_trade
-                        values={{
-                            user,
-                            collectible: verbose ? metadata!.name : 'an NFT',
-                            recipient: formatEthereumAddress(action.to ?? '', 4),
-                            cost_value: formatValue(cost),
-                            cost_symbol: cost?.symbol ?? '',
-                            platform: feed.platform!,
-                            context: feed.platform ? 'platform' : 'no_platform',
-                        }}
-                        components={{
-                            recipient: <AccountLabel address={action.to} />,
-                            bold: <Label />,
-                            collectible: verbose ? <Label /> : <span />,
-                        }}
-                    />
-                )
+                const recipient = formatEthereumAddress(action.to ?? '', 4)
+                const symbolName = cost?.symbol ?? ''
+                if (feed.platform) {
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> sold{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{metadata!.name} </Tag>}
+                                _nft={<Tag>an NFT </Tag>}
+                            />{' '}
+                            to <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
+                            <Label>
+                                {formatValue(cost)} {symbolName}
+                            </Label>{' '}
+                            on <Label>{feed.platform}</Label>
+                        </Trans>
+                    )
+                } else {
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> sold{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{metadata!.name} </Tag>}
+                                _nft={<Tag>an NFT </Tag>}
+                            />{' '}
+                            to <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
+                            <Label>
+                                {formatValue(cost)} {symbolName}
+                            </Label>
+                        </Trans>
+                    )
+                }
+            }
             case Type.Transfer:
                 if (isRegisteringENS(feed)) {
+                    const Tag = verbose ? Label : 'span'
+                    const costValue = formatValue((feed.actions[0] as RSS3BaseAPI.CollectibleTransferAction).metadata)
+                    const costSymbol = feed.actions[0].metadata?.symbol ?? ''
                     return (
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <RSS3Trans.collectible_register_ens
-                            values={{
-                                user,
-                                ens: verbose ? feed.actions[1].metadata!.name : 'an ENS',
-                                cost_value: formatValue(
-                                    (feed.actions[0] as RSS3BaseAPI.CollectibleTransferAction).metadata,
-                                ),
-                                cost_symbol: feed.actions[0].metadata?.symbol ?? '',
-                            }}
-                            components={{
-                                user: <Label />,
-                                cost: <Label />,
-                                ens: verbose ? <Label /> : <span />,
-                            }}
-                        />
+                        <Trans>
+                            <Label>{user}</Label> registered{' '}
+                            <Select
+                                value={verbose ? 'name' : 'nft'}
+                                _name={<Tag>{feed.actions[1].metadata!.name} </Tag>}
+                                _nft={<Tag>an ENS </Tag>}
+                            />
+                            for{' '}
+                            <Label>
+                                {costValue} {costSymbol}
+                            </Label>
+                        </Trans>
                     )
                 }
                 action = getLastAction(feed as RSS3BaseAPI.CollectibleTransferFeed)
@@ -123,28 +151,42 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                     :   undefined
                 const isSending = isSameAddress(feed.owner, action.from)
                 const otherAddress = isSending ? action.to : action.from
-                return (
-                    // eslint-disable-next-line react/naming-convention/component-name
-                    <RSS3Trans.collectible_operation
-                        values={{
-                            user,
-                            collectible: verbose ? metadata!.name : 'an NFT',
-                            other: formatEthereumAddress(otherAddress ?? '', 4),
-                            context:
-                                isSending ? 'send'
-                                : costMetadata ? 'claim_cost'
-                                : 'claim',
-                            cost_value: formatValue(costMetadata),
-                            cost_symbol: costMetadata?.symbol ?? 'Unknown',
-                        }}
-                        components={{
-                            user: <Label />,
-                            other: <AccountLabel address={otherAddress} />,
-                            collectible: verbose ? <Label /> : <span />,
-                            cost: <Label />,
-                        }}
-                    />
-                )
+                const formattedAddress = formatEthereumAddress(otherAddress ?? '', 4)
+                if (isSending) {
+                    return (
+                        <Trans>
+                            <Label>{user}</Label>sent
+                            <Select
+                                value={verbose ? 'verbose' : 'simple'}
+                                _verbose={<Tag>{metadata!.name} </Tag>}
+                                _simple={<Tag>an NFT </Tag>}
+                            />
+                            to <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
+                            <Select
+                                value={costMetadata ? 'cost' : 'free'}
+                                _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
+                                _free=""
+                            />
+                        </Trans>
+                    )
+                } else {
+                    return (
+                        <Trans>
+                            <Label>{user}</Label> claimed{' '}
+                            <Select
+                                value={verbose ? 'verbose' : 'simple'}
+                                _verbose={<Tag>{metadata!.name} </Tag>}
+                                _simple={<Tag>an NFT </Tag>}
+                            />
+                            from <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
+                            <Select
+                                value={costMetadata ? 'cost' : 'free'}
+                                _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
+                                _free=""
+                            />
+                        </Trans>
+                    )
+                }
             case Type.Burn:
                 metadata = getLastAction(feed as RSS3BaseAPI.CollectibleBurnFeed).metadata
                 return (

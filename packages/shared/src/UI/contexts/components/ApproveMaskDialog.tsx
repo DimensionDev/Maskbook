@@ -10,6 +10,7 @@ import { toFixed } from '@masknet/web3-shared-base'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
 import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -71,14 +72,14 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
         if (approveStateType === ApproveStateType.UNKNOWN) {
             return (
                 <ActionButton fullWidth variant="roundedContained" disabled>
-                    {sharedI18N.wallet_transfer_error_amount_absence()}
+                    <Trans>Enter an amount</Trans>
                 </ActionButton>
             )
         }
         if (approveStateType === ApproveStateType.FAILED) {
             return (
                 <ActionButton fullWidth variant="roundedContained" color="error">
-                    {sharedI18N.wallet_load_retry({ symbol: 'MASK' })}
+                    <Trans>Failed to load MASK. Click to retry.</Trans>
                 </ActionButton>
             )
         }
@@ -93,13 +94,13 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
                     fullWidth
                     variant="roundedContained"
                     onClick={onApprove}>
-                    {sharedI18N.dialog_confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             )
         }
         return (
             <ActionButton fullWidth variant="roundedContained" disabled>
-                {sharedI18N.dialog_confirm()}
+                <Trans>Confirm</Trans>
             </ActionButton>
         )
     }, [approveStateType, approveCallback, sharedI18N, transactionState, onApprove])
@@ -107,12 +108,19 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={handleClose} classes={{ paper: classes.paper }}>
             <DialogTitle sx={{ py: 3 }}>
-                <Typography className={classes.title}>{sharedI18N.approve_mask()}</Typography>
+                <Typography className={classes.title}>
+                    <Trans>Approve MASK?</Trans>
+                </Typography>
             </DialogTitle>
             <DialogContent>
-                <Typography className={classes.description}>{sharedI18N.approve_mask_description()}</Typography>
+                <Typography className={classes.description}>
+                    <Trans>
+                        To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow
+                        users to pay gas fee on Polygon network with MASK token.
+                    </Trans>
+                </Typography>
                 <Typography className={classes.description} marginTop={2}>
-                    {sharedI18N.approve_mask_question()}
+                    <Trans>Do you want to use MASK tokens to pay gas fee?</Trans>
                 </Typography>
                 <InputBase
                     sx={{ mt: 3 }}
@@ -129,7 +137,7 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
             <DialogActions className={classes.actions}>
                 {action}
                 <Button fullWidth variant="roundedOutlined" onClick={handleClose}>
-                    {sharedI18N.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
             </DialogActions>
         </Dialog>

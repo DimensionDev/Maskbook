@@ -9,11 +9,11 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { fill } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useCreateNftRedPacketReceipt } from './hooks/useCreateNftRedPacketReceipt.js'
 import { useNftAvailabilityComputed } from './hooks/useNftAvailabilityComputed.js'
-import { dateTimeFormat } from './utils/formatDate.js'
+import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
     theme,
@@ -69,7 +69,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
             width: '100%',
         },
         content: {
-            transform: 'RedPacketTransY(-4px)',
             width: '100%',
             paddingLeft: theme.spacing(1),
         },
@@ -171,7 +170,6 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 }: NftRedPacketHistoryItemProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [seen, ref] = useEverSeen<HTMLLIElement>()
-    const t = useRedPacketTrans()
 
     const { value: receipt } = useCreateNftRedPacketReceipt(seen ? history.txid : '', history.chainId)
     const rpid = receipt?.rpid || history.rpid || ''
@@ -199,6 +197,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
     const { data: redpacketStatus } = useAvailabilityNftRedPacket(rpid, account, patchedHistory.chainId)
     const bitStatusList =
         redpacketStatus ? redpacketStatus.bitStatusList : fill(Array(patchedHistory.token_ids.length), false)
+    const locale = useLingui().i18n.locale
 
     return (
         <ListItem className={classes.root}>
@@ -212,19 +211,19 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
                                         variant="body1"
                                         className={cx(classes.title, classes.message, classes.ellipsis)}>
                                         {patchedHistory.sender.message === '' ?
-                                            t.best_wishes()
+                                            <Trans>Best Wishes!</Trans>
                                         :   patchedHistory.sender.message}
                                     </Typography>
                                 </div>
                                 <div className={classes.fullWidthBox}>
                                     <Typography variant="body1" className={cx(classes.infoTitle, classes.message)}>
-                                        {t.create_time()}
+                                        <Trans>Create time:</Trans>
                                     </Typography>
                                     {rpid ?
                                         <Typography variant="body1" className={cx(classes.info, classes.message)}>
-                                            {t.history_duration({
-                                                time: dateTimeFormat(new Date(patchedHistory.creation_time)),
-                                            })}
+                                            <Trans>
+                                                {dateTimeFormat(locale, new Date(patchedHistory.creation_time))} (UTC+8)
+                                            </Trans>
                                         </Typography>
                                     :   null}
                                 </div>
@@ -232,14 +231,18 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 
                             <ShadowRootTooltip
                                 placement="top"
-                                title={canSend && !isPasswordValid ? t.nft_data_broken() : ''}>
+                                title={
+                                    canSend && !isPasswordValid ?
+                                        <Trans>The Lucky Drop can't be sent due to data damage.</Trans>
+                                    :   ''
+                                }>
                                 <span style={{ display: 'inline-block' }}>
                                     <ActionButton
                                         onClick={handleSend}
                                         disabled={!isPasswordValid}
                                         className={classes.actionButton}
                                         size="large">
-                                        {t.share()}
+                                        <Trans>Share</Trans>
                                     </ActionButton>
                                 </span>
                             </ShadowRootTooltip>
@@ -247,17 +250,14 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
 
                         <section className={classes.footer}>
                             <Typography variant="body1" className={classes.footerInfo}>
-                                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                <RedPacketTrans.history_nft_claimed
-                                    components={{
-                                        span: <span />,
-                                    }}
-                                    values={{
-                                        claimedShares: rpid ? bitStatusList.filter(Boolean).length.toString() : '0',
-                                        shares: patchedHistory.shares.toString(),
-                                        symbol: collection?.name ?? '',
-                                    }}
-                                />
+                                <Trans>
+                                    Claimed:{' '}
+                                    <span>
+                                        {rpid ? bitStatusList.filter(Boolean).length.toString() : '0'}/
+                                        {patchedHistory.shares}
+                                    </span>{' '}
+                                    <span>{collection?.name ?? ''}</span>
+                                </Trans>
                             </Typography>
                             <TokenIcon
                                 className={classes.icon}
@@ -274,3 +274,10 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
         </ListItem>
     )
 })
+function dateTimeFormat(locale: string, date: Date) {
+    return new Intl.DateTimeFormat(locale, {
+        year: 'numeric',
+        month: 'numeric',
+        day: 'numeric',
+    }).format(date)
+}

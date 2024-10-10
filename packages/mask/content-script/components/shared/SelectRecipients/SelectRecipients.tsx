@@ -7,7 +7,7 @@ import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
 import { useContacts } from './useContacts.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 interface SelectRecipientsUIProps {
     items: LazyRecipients
@@ -22,7 +22,6 @@ interface SelectRecipientsUIProps {
 
 export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     const { items, selected, onSetSelected, open, onClose } = props
-    const t = useMaskSharedTrans()
     const [valueToSearch, setValueToSearch] = useState('')
     const currentIdentity = useCurrentIdentity()
     const type = resolveNextIDPlatform(valueToSearch)
@@ -51,7 +50,7 @@ export function SelectRecipientsUI(props: SelectRecipientsUIProps) {
     }, [open, items.request])
     return (
         <SelectRecipientsDialogUI
-            searchEmptyText={valueToSearch ? t.wallet_search_no_result() : undefined}
+            searchEmptyText={valueToSearch ? <Trans>No results</Trans> : undefined}
             loading={searchLoading}
             onSearch={setValueToSearch}
             open={open}

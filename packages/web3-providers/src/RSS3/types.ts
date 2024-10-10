@@ -85,7 +85,6 @@ export type RSS3NameServiceResponse = Response<{
     spaceid: string
     unstoppable_domains: string
     bit: string
-    avvy: string
     /** hex address */
     address: string
 }>

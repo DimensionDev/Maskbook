@@ -1,6 +1,14 @@
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Button, Portal, Typography } from '@mui/material'
-import { cloneElement, createContext, useLayoutEffect, useState, type ReactElement, type Ref } from 'react'
+import {
+    cloneElement,
+    createContext,
+    useLayoutEffect,
+    useState,
+    type ReactElement,
+    type ReactNode,
+    type Ref,
+} from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -80,8 +88,8 @@ interface GuideStepProps {
     arrow?: boolean
     finished?: boolean
     currentStep: number
-    title: string
-    actionText: string
+    title: ReactNode
+    actionText: ReactNode
     onNext?: () => void
 }
 

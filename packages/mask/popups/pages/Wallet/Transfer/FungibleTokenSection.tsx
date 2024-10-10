@@ -26,12 +26,13 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { formatTokenBalance } from '../../../../shared/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams, PopupContext } from '../../../hooks/index.js'
 import { ChooseTokenModal } from '../../../modals/modal-controls.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -90,7 +91,7 @@ const ERC20_GAS_LIMIT = '50000'
 // Change chain in SelectNetworkSidebar is pending status, but it should affect ContactsContext
 const PENDING_CHAIN_ID = 'pendingChainId'
 export const FungibleTokenSection = memo(function FungibleTokenSection() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
     const { smartPayChainId } = PopupContext.useContainer()
@@ -196,7 +197,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
         } catch (err) {
             let message = (err as Error).message
             message = message.includes('"blockNumber":') ? '' : message
-            showSnackbar(t.failed_to_transfer_token({ message }), { variant: 'error' })
+            showSnackbar(<Trans>Failed to transfer token: {message}</Trans>, { variant: 'error' })
         }
     }, [
         address,
@@ -269,9 +270,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     </ProgressiveText>
                     <ProgressiveText loading={isLoadingBalance} skeletonWidth={60}>
                         {isAvailableBalance ?
-                            t.available_amount({
-                                amount: formatTokenBalance(tokenBalance, token?.decimals),
-                            })
+                            <Trans>{formatTokenBalance(tokenBalance, token?.decimals)} available</Trans>
                         :   formatTokenBalance(tokenBalance, token?.decimals)}
                     </ProgressiveText>
                 </Box>
@@ -281,7 +280,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 <Input
                     fullWidth
                     disableUnderline
-                    placeholder={t.amount()}
+                    placeholder={_(msg`Amount`)}
                     endAdornment={
                         <Typography
                             className={classes.maxButton}
@@ -289,7 +288,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                                 if (!balance || !token?.decimals) return
                                 setAmount(uiTokenBalance)
                             }}>
-                            {t.max()}
+                            <Trans>Max</Trans>
                         </Typography>
                     }
                     value={amount}
@@ -305,7 +304,9 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 />
             </Box>
             <Box display="flex" justifyContent="space-between" alignItems="center" mt={2} mx={2}>
-                <Typography className={classes.label}>{t.gas_fee()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Gas Fee</Trans>
+                </Typography>
                 <ChainContextProvider chainId={chainId}>
                     <GasSettingMenu
                         defaultGasConfig={gasConfig}
@@ -320,14 +321,16 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 </ChainContextProvider>
             </Box>
             {isGasSufficient ? null : (
-                <Typography className={classes.error}>{t.insufficient_funds_for_gas()}</Typography>
+                <Typography className={classes.error}>
+                    <Trans>Insufficient funds for gas.</Trans>
+                </Typography>
             )}
             <Box className={classes.actionGroup}>
                 <ActionButton variant="outlined" fullWidth onClick={() => navigate(-2)}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButton fullWidth onClick={transfer} disabled={transferDisabled} loading={state.loading}>
-                    {t.next()}
+                    <Trans>Next</Trans>
                 </ActionButton>
             </Box>
         </>

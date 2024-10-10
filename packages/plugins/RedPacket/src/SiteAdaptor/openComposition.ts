@@ -12,7 +12,7 @@ export function openComposition(
         reason,
         open: true,
         options: {
-            initialMetas: {
+            initialMeta: {
                 [metadataKey]: payload,
             },
             pluginMeta: extraMeta,

@@ -12,6 +12,7 @@ export interface Transaction {
     gasPrice: string
     isError: string
     errorCode: string
+    // cspell:disable-next-line
     txreceipt_status: '0' | '1'
     input: string
     contractAddress: string

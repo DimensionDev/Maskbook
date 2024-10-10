@@ -18,9 +18,9 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage, useCustomSnackbar } from '@masknet/theme'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import type { ManagerAccount } from '../type.js'
-import { useSmartPayTrans } from '../locales/index.js'
 import { PluginSmartPayMessages } from '../message.js'
 import { openPopupWindow, signWithPersona, hasPaymentPassword } from '@masknet/plugin-infra/dom/context'
+import { Trans } from '@lingui/macro'
 
 export function useDeploy(
     signPersona?: PersonaInformation,
@@ -31,7 +31,6 @@ export function useDeploy(
     onSuccess?: () => void,
 ) {
     const snackbarKeyRef = useRef<SnackbarKey>(undefined)
-    const t = useSmartPayTrans()
 
     const { TransactionWatcher, Transaction } = useWeb3State()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
@@ -95,8 +94,8 @@ export function useDeploy(
 
             let signature: string | undefined
 
-            showSingletonSnackbar(t.create_smart_pay_wallet(), {
-                message: t.waiting_for_user_signature(),
+            showSingletonSnackbar(<Trans>Create SmartPay Wallet</Trans>, {
+                message: <Trans>Waiting for user signature</Trans>,
                 processing: true,
                 variant: 'default',
             })
@@ -137,22 +136,22 @@ export function useDeploy(
             return deployResult.transactionHash
         } catch (error) {
             if (error instanceof Error) {
-                let message = ''
+                let message
                 switch (error.message) {
                     case 'Failed To Fund':
-                        message = t.transaction_rejected()
+                        message = <Trans>Transaction rejected.</Trans>
                         break
                     case 'Persona Rejected':
-                        message = t.user_cancelled_the_transaction()
+                        message = <Trans>User cancelled the process.</Trans>
                         break
                     case 'Timeout':
-                        message = t.timeout()
+                        message = <Trans>Timeout</Trans>
                         break
                     default:
-                        message = t.network_error()
+                        message = <Trans>Network error.</Trans>
                 }
 
-                showSingletonSnackbar(t.create_smart_pay_wallet(), {
+                showSingletonSnackbar(<Trans>Create SmartPay Wallet</Trans>, {
                     processing: false,
                     variant: 'error',
                     message: <Typography>{message}</Typography>,

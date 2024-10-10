@@ -19,7 +19,7 @@ import {
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers.js'
-import { useRedPacketTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -93,7 +93,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         label: (
             <>
                 <Icons.RedPacket size={16} />
-                <Name />
+                <Trans>Lucky Drop</Trans>
             </>
         ),
         onClick: ({ compositionType }) => {
@@ -103,9 +103,11 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <PluginIcon size={36} />
-            const name = <Name />
+            const name = <Trans>Lucky Drop</Trans>
             const recommendFeature = {
-                description: <Desc2 />,
+                description: (
+                    <Trans>Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported.</Trans>
+                ),
                 backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
                 isFirst: true,
             }
@@ -130,7 +132,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 appBoardSortingDefaultPriority: 1,
                 marketListSortingPriority: 1,
                 icon,
-                description: <Desc />,
+                description: <Trans>Gift crypto or NFTs to any users, first come, first served.</Trans>,
                 name,
                 tutorialLink: 'https://realmasknetwork.notion.site/0a71fd421aae4563bd07caa3e2129e5b',
                 category: 'dapp',
@@ -143,18 +145,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(249, 55, 55, 0.2) 100%), #FFFFFF',
     },
-}
-function Name() {
-    const t = useRedPacketTrans()
-    return t.name()
-}
-function Desc() {
-    const t = useRedPacketTrans()
-    return t.description()
-}
-function Desc2() {
-    const t = useRedPacketTrans()
-    return t.recommend_feature_description()
 }
 interface RedpacketBadgeProps {
     message: string

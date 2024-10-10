@@ -9,6 +9,7 @@ import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { AccountLabel, LinkifyOptions, htmlToPlain } from '../common.js'
 import { useMarkdownStyles } from './useMarkdownStyles.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {
@@ -130,17 +131,10 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
             {target ?
                 <div className={classes.quoted}>
                     <Typography className={classes.summary} component="div">
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <RSS3Trans.note
-                            values={{
-                                user: target.handle,
-                                platform: action.platform!,
-                                context: 'post',
-                            }}
-                            components={{
-                                user: <AccountLabel address={target.handle} handle={target.handle} />,
-                            }}
-                        />
+                        <Trans>
+                            <AccountLabel address={target.handle} handle={target.handle} children={target.handle} />{' '}
+                            publish a post on {action.platform}
+                        </Trans>
                     </Typography>
                     <div className={classes.quotedPost}>
                         <div className={classes.line} />

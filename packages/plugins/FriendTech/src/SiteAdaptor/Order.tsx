@@ -5,7 +5,6 @@ import { Box, Button, InputBase, Typography, inputBaseClasses } from '@mui/mater
 import { memo, useEffect, useMemo, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { FRIEND_TECH_CONTRACT_ADDRESS } from '../constants.js'
-import { Translate, useI18N } from '../locales/i18n_generated.js'
 import { useEstimateSellGas } from './hooks/useEstimateSellGas.js'
 import { useAccount, useGasPrice } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -14,6 +13,7 @@ import { BigNumber } from 'bignumber.js'
 import { useOwnKeys } from './hooks/useOwnKeys.js'
 import { useUser } from './hooks/useUser.js'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -87,7 +87,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Order = memo(function Order() {
-    const t = useI18N()
     const { classes, theme } = useStyles()
     const account = useAccount()
     const [params, setParams] = useSearchParams()
@@ -130,26 +129,27 @@ export const Order = memo(function Order() {
                         component="div"
                         skeletonWidth={150}
                         loading={loadingPrice}>
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <Translate.sell_summary
-                            values={{
-                                count,
-                                cost,
-                            }}
-                            components={{
-                                bold: <b className={classes.bold} />,
-                            }}
-                        />
+                        <Trans>
+                            Sell <b className={classes.bold}>{count}</b> <Plural value={count} one="key" other="keys" />{' '}
+                            for <b className={classes.bold}>{cost}</b> ETH
+                        </Trans>
                     </ProgressiveText>
                     <ShadowRootTooltip
-                        title={t.price_tooltip()}
+                        title={
+                            <Trans>
+                                The price of next share is equal to the S^2 / 16000*1 ether where S is the current
+                                number of keys.
+                            </Trans>
+                        }
                         placement="top"
                         PopperProps={{ style: { width: 268 } }}>
                         <Icons.Questions color={theme.palette.maskColor.second} size={18} />
                     </ShadowRootTooltip>
                 </Box>
                 <ProgressiveText loading={loadingOwnCount} fontWeight={700} skeletonWidth={150}>
-                    {t.you_currently_hold({ count: own! })}
+                    <Trans>
+                        You currently hold: {own} <Plural value={count} one="key" other="keys" />
+                    </Trans>
                 </ProgressiveText>
             </Box>
             <Box display="flex" gap={2} mt={1.5}>
@@ -171,7 +171,11 @@ export const Order = memo(function Order() {
                         value = Number.isNaN(value) ? 1 : value
                         setCount(Math.max(1, value))
                     }}
-                    startAdornment={<Typography className={classes.amountLabel}>{t.amount()}*</Typography>}
+                    startAdornment={
+                        <Typography className={classes.amountLabel}>
+                            <Trans>Amount</Trans>*
+                        </Typography>
+                    }
                 />
                 <Button variant="outlined" onClick={() => setCount((v) => v + 1)} disabled={own ? count >= own : true}>
                     <Icons.Plus size={20} color={theme.palette.maskColor.main} />
@@ -179,27 +183,39 @@ export const Order = memo(function Order() {
             </Box>
             <div className={classes.infos}>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.infoLabel}>{t.from()}</Typography>
+                    <Typography className={classes.infoLabel}>
+                        <Trans>From</Trans>
+                    </Typography>
                     <Typography className={classes.infoValue} component="div">
                         <ReversedAddress address={account} />
                     </Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.infoLabel}>{t.to()}</Typography>
+                    <Typography className={classes.infoLabel}>
+                        <Trans>To</Trans>
+                    </Typography>
                     <Typography className={classes.infoValue} component="div">
                         <ReversedAddress address={FRIEND_TECH_CONTRACT_ADDRESS} />
                     </Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.infoLabel}>{t.action()}</Typography>
-                    <Typography className={classes.infoValue}>{t.sell_key()}</Typography>
+                    <Typography className={classes.infoLabel}>
+                        <Trans>Action</Trans>
+                    </Typography>
+                    <Typography className={classes.infoValue}>
+                        <Trans>Sell Key</Trans>
+                    </Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.infoLabel}>{t.total_amount()}</Typography>
+                    <Typography className={classes.infoLabel}>
+                        <Trans>Total Amount</Trans>
+                    </Typography>
                     <Typography className={classes.infoValue}>{cost} ETH</Typography>
                 </div>
                 <div className={classes.infoRow}>
-                    <Typography className={classes.infoLabel}>{t.gas_fee()}</Typography>
+                    <Typography className={classes.infoLabel}>
+                        <Trans>Gas fee</Trans>
+                    </Typography>
                     <ProgressiveText
                         className={classes.infoValue}
                         loading={isEstimating || isLoadingPrice}

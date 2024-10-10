@@ -14,10 +14,11 @@ import { CopyButton, TokenIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { TokenType, isSameAddress } from '@masknet/web3-shared-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -113,7 +114,6 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
     paymentToken,
 }) {
     const { pluginID } = useNetworkContext()
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const theme = useTheme()
 
@@ -199,10 +199,12 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                 :   null}
             </Box>
             <Box className={classes.amountInfo}>
-                <Typography className={classes.name}>{t.popups_wallet_unlock_erc20_requested_by()}</Typography>
+                <Typography className={classes.name}>
+                    <Trans>Spend limit requested by</Trans>
+                </Typography>
                 {transaction.formattedTransaction.popup?.erc721Spender ?
                     <Typography className={classes.spender}>
-                        {t.contract()}:
+                        <Trans>Contract</Trans>:
                         <Typography className={classes.spenderAddress}>
                             {transaction.formattedTransaction.popup?.erc721Spender}{' '}
                             <Link
@@ -222,7 +224,9 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
             </Box>
 
             <Box mt={3.75} display="flex" justifyContent="space-between" alignItems="center">
-                <Typography className={classes.gasFeeTitle}>{t.popups_wallet_gas_fee()}</Typography>
+                <Typography className={classes.gasFeeTitle}>
+                    <Trans>Gas Fee</Trans>
+                </Typography>
                 {transaction.computedPayload.gas && initConfig ?
                     <GasSettingMenu
                         defaultGasLimit={transaction.computedPayload.gas}

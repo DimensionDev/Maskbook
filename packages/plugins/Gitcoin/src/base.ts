@@ -1,6 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, PluginID } from '@masknet/shared-base'
-import { languages } from './locales/languages.js'
+import { languages } from './locale/languages.js'
 
 export const PLUGIN_NAME = 'Gitcoin'
 export const base: Plugin.Shared.Definition = {

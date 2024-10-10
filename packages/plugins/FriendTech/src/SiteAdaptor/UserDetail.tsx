@@ -2,11 +2,11 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo, useEffect, useState } from 'react'
 import { useSearchParams } from 'react-router-dom'
-import { useI18N } from '../locales/i18n_generated.js'
 import { HistoryList } from './components/HistoryList.js'
 import { HoldingList } from './components/HoldingList.js'
 import { UserProfile } from './components/UserProfile.js'
 import { useUser } from './hooks/useUser.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<void, 'name' | 'value'>()((theme, _, refs) => ({
     container: {
@@ -64,7 +64,6 @@ const useStyles = makeStyles<void, 'name' | 'value'>()((theme, _, refs) => ({
 
 export const UserDetail = memo(function UserDetail() {
     type TabKey = 'trades' | 'holding'
-    const t = useI18N()
     const { classes, cx } = useStyles()
     const [params, setParams] = useSearchParams()
     const address = params.get('address')!
@@ -89,13 +88,17 @@ export const UserDetail = memo(function UserDetail() {
                     className={cx(classes.tab, tab === 'trades' ? classes.selectedTab : undefined)}
                     role="tab"
                     onClick={() => setTab('trades')}>
-                    <Typography className={classes.name}>{t.trades()}</Typography>
+                    <Typography className={classes.name}>
+                        <Trans>Trades</Trans>
+                    </Typography>
                 </div>
                 <div
                     className={cx(classes.tab, tab === 'holding' ? classes.selectedTab : undefined)}
                     role="tab"
                     onClick={() => setTab('holding')}>
-                    <Typography className={classes.name}>{t.holding()}</Typography>
+                    <Typography className={classes.name}>
+                        <Trans>Holding</Trans>
+                    </Typography>
                     <Typography className={classes.value}>{user?.holdingCount}</Typography>
                 </div>
             </div>

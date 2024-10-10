@@ -7,13 +7,13 @@ import { Icons } from '@masknet/icons'
 import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
-import { useSharedTrans } from '../../../locales/index.js'
 import { TokenListMode } from './type.js'
 import { SettingSwitch } from '../SettingSwitch/index.js'
 import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
 import { DotLoading, NetworkIcon } from '../index.js'
 import { useAsyncFn } from 'react-use'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -109,7 +109,6 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
     isCustomToken?: boolean,
 ) => {
     return memo(({ data, index, style }: any) => {
-        const t = useSharedTrans()
         const { classes } = useStyles()
         const Utils = useWeb3Utils()
 
@@ -160,7 +159,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                 loading={onAddOrRemoveTokenToLocalLoading}
                                 className={classes.importButton}
                                 onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}>
-                                {t.import()}
+                                <Trans>Import</Trans>
                             </ActionButton>
                         :   <SettingSwitch
                                 disabled={
@@ -260,7 +259,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                                             <Icons.PopupLink size={18} className={classes.link} />
                                         </Link>
                                         {token.isCustomToken ?
-                                            <span>{t.added_by_user()}</span>
+                                            <span>
+                                                <Trans>Added by user</Trans>
+                                            </span>
                                         :   null}
                                     </>
                                 }

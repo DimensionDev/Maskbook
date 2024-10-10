@@ -39,7 +39,6 @@ const avoidMistakeRules = {
     // Libraries
     '@tanstack/query/stable-query-client': 'error',
     '@tanstack/query/no-rest-destructuring': 'error',
-    '@lingui/no-expression-in-message': 'error',
     '@lingui/no-single-tag-to-translate': 'error',
     // '@lingui/no-single-variables-to-translate': 'error', // we're mixing two i18n frameworks, a lot of false positive reports
     // https://github.com/lingui/eslint-plugin/issues/46
@@ -540,7 +539,6 @@ const moduleSystemRules = {
             deferPackages,
         },
     ],
-    '@lingui/no-expression-in-message': 'off',
 }
 
 /** @type {any} */
@@ -622,12 +620,12 @@ export default tseslint.config(
         ignores: [
             'packages/shared/**/*',
             'packages/shared-base-ui/**/*',
-            'packages/mask/content-script/*',
-            'packages/mask/dashboard/*',
-            'packages/mask/popups/*',
-            'packages/mask/shared/*',
-            'packages/mask/shared-ui/*',
-            'packages/mask/swap/*',
+            'packages/mask/content-script/**/*',
+            'packages/mask/dashboard/**/*',
+            'packages/mask/popups/**/*',
+            'packages/mask/shared/**/*',
+            'packages/mask/shared-ui/**/*',
+            'packages/mask/swap/**/*',
             'packages/theme/**/*',
             'packages/plugins/**/*',
         ],

@@ -1,1 +1,58 @@
-{ "messages": {} }
+{
+    "messages": {
+        "QpgBEp": [["0"], " days"],
+        "hehnjM": "量",
+        "70wH1Q": "4月",
+        "bUUVED": "資産",
+        "kj3M8S": "入金",
+        "AOPSKq": ["Deposit ", ["0"]],
+        "DPfwMq": "完了",
+        "iPMIoT": "金額を入力",
+        "7Bj3x9": "失敗しました",
+        "sGkv/+": [
+            "Hi friends, I just deposit ",
+            ["0"],
+            " ",
+            ["1"],
+            " on ",
+            ["2"],
+            ". Follow @",
+            ["3"],
+            " to find more staking projects."
+        ],
+        "55/jcy": [
+            "Hi friends, I just withdrew my deposit ",
+            ["0"],
+            " ",
+            ["1"],
+            " on ",
+            ["2"],
+            ". Follow @",
+            ["3"],
+            " to find more staking projects."
+        ],
+        "bBzHQT": "入力金額が最小金額以下です",
+        "m6RmA/": ["Insufficient ", ["0"], " balance"],
+        "oxKup1": ["Insufficient $", ["0"], " balance"],
+        "e3hCsY": "Lido Exchange Rate",
+        "yQE2r9": "読み込み中",
+        "HsoakN": "masknetwork",
+        "ojlMCx": ["Minimum withdraw amount is ", ["MINIMUM_AMOUNT"], " ", ["0"]],
+        "LLf+t1": "入金プロトコルが見つかりません。",
+        "FZg3wM": "オペレーション",
+        "7hZyUn": "入金処理中",
+        "i2x+p1": "引き出し処理中",
+        "nVT2pJ": "realMaskNetwork",
+        "Baj2MJ": "普通預金",
+        "Z/tioj": ["Swap ", ["0"]],
+        "GWKfFr": [
+            "To use Lido, you need to wait ",
+            ["0"],
+            " days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
+        ],
+        "e34ZOD": "Waiting time",
+        "sb9Y58": "ウォレット",
+        "OsyKSt": "出金",
+        "qhKyO3": ["Withdraw ", ["0"]]
+    }
+}

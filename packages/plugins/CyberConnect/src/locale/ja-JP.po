@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-09-22 09:59\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,40 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/CyberConnect/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 960\n"
+
+#: src/SiteAdaptor/index.tsx:46
+msgid "CyberConnect"
+msgstr "CyberConnect"
+
+#: src/SiteAdaptor/index.tsx:45
+msgid "Decentralized social graph protocol for user-centric Web3."
+msgstr "ユーザー中心のWeb3の分散型ソーシャルグラフプロトコル."
+
+#: src/SiteAdaptor/ConnectButton.tsx:106
+msgid "Follow Now"
+msgstr "今すぐフォロー"
+
+#: src/SiteAdaptor/Profile.tsx:191
+msgid "Followers"
+msgstr "フォロワー"
+
+#: src/SiteAdaptor/Profile.tsx:186
+msgid "Followings"
+msgstr "フォロー"
+
+#: src/SiteAdaptor/FollowersPage.tsx:24
+#: src/SiteAdaptor/Profile.tsx:130
+msgid "Load failed"
+msgstr "読み込みに失敗しました"
+
+#: src/SiteAdaptor/Profile.tsx:123
+msgid "No followers."
+msgstr "フォロワーがいません。"
+
+#: src/SiteAdaptor/Profile.tsx:124
+msgid "No following friends."
+msgstr "フォロー中の友達はいません。"
+
+#: src/SiteAdaptor/ConnectButton.tsx:107
+msgid "Unfollow"
+msgstr "フォロー解除"

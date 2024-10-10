@@ -30,6 +30,7 @@ import { DIMENSION, TrendingChart } from './TrendingChart.js'
 import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valueAlign }) => {
     return {
@@ -157,8 +158,13 @@ export const Component = memo(function TokenDetailPage() {
                 className={classes.deleteButton}
                 onClick={async () => {
                     const result = await ConfirmModal.openAndWaitForClose({
-                        title: t.hide_token_symbol({ symbol: asset.symbol }),
-                        message: t.hide_token_description({ symbol: asset.symbol }),
+                        title: <Trans>Hide {asset.symbol}</Trans>,
+                        message: (
+                            <Trans>
+                                Confirm to hide {asset.symbol}? You can redisplay it by re-adding this token at any
+                                time.
+                            </Trans>
+                        ),
                     })
                     if (!result) return
                     // Actually, blocking.
@@ -169,7 +175,7 @@ export const Component = memo(function TokenDetailPage() {
                         schema: SchemaType.ERC20,
                         address: asset.address,
                     })
-                    showSnackbar(t.hided_token_successfully())
+                    showSnackbar(<Trans>Asset is hidden.</Trans>)
                     navigate(-1)
                 }}>
                 <Icons.EyeOff size={24} />
@@ -201,7 +207,6 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
     const { chainId, address, hideChart, valueAlign = 'center' } = props
 
     const { classes } = useStyles({ valueAlign })
-    const t = useMaskSharedTrans()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const asset = useAsset(chainId, address, account)
     const { data: balance = asset?.balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
@@ -243,7 +248,7 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                             />
                         : !isLoadingStats && !stats.length ?
                             <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
-                                {t.not_enough_data_to_present()}
+                                <Trans>Not enough data to present.</Trans>
                             </EmptyStatus>
                         :   <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />}
                     </>
@@ -251,7 +256,9 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
 
                 <Box display="flex" flexDirection="row" justifyContent="space-between">
                     <Box>
-                        <Typography className={classes.label}>{t.balance()}</Typography>
+                        <Typography className={classes.label}>
+                            <Trans>Balance</Trans>
+                        </Typography>
                         {asset ?
                             <Typography component="div" className={classes.value} justifyContent="flex-start">
                                 <TokenIcon
@@ -276,7 +283,9 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                         }
                     </Box>
                     <Box textAlign="right">
-                        <Typography className={classes.label}>{t.value()}</Typography>
+                        <Typography className={classes.label}>
+                            <Trans>value</Trans>
+                        </Typography>
                         <Typography component="div" className={classes.value} justifyContent="flex-end">
                             <FormattedCurrency value={tokenValue} formatter={formatCurrency} />
                         </Typography>

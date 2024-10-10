@@ -6,6 +6,7 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { WalletAutoLockSettingModal } from '../../../modals/modal-controls.js'
 import { useWalletAutoLockTime } from '../hooks/useWalletAutoLockTime.js'
+import { Trans } from '@lingui/macro'
 
 export function AutoLock() {
     const t = useMaskSharedTrans()
@@ -19,22 +20,21 @@ export function AutoLock() {
             className={classes.item}
             onClick={() =>
                 WalletAutoLockSettingModal.open({
-                    title: t.popups_wallet_settings_auto_unlock_time_title(),
+                    title: <Trans>Auto-lock</Trans>,
                 })
             }>
             <Box className={classes.itemBox}>
                 <Icons.Time size={20} color={theme.palette.maskColor.second} />
-                <Typography className={classes.itemText}>{t.popups_wallet_settings_auto_unlock_time()}</Typography>
+                <Typography className={classes.itemText}>
+                    <Trans>Auto-lock Time</Trans>
+                </Typography>
             </Box>
             <Box className={classes.itemBox}>
                 {value ?
                     <Typography className={classes.itemText}>
                         {minutes && minutes >= 60 ?
                             t['popups_wallet_settings_auto-unlock_time_hour']({ count: millisecondsToHours(value) })
-                        :   t.popups_wallet_settings_auto_unlock_time_mins({
-                                time: String(millisecondsToMinutes(value)),
-                            })
-                        }
+                        :   <Trans>{millisecondsToMinutes(value)} Mins</Trans>}
                     </Typography>
                 :   null}
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />

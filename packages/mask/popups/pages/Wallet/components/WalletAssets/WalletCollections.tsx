@@ -8,9 +8,9 @@ import { memo, useCallback, useMemo, type RefAttributes } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { WalletAssetTabs } from '../../type.js'
 import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
+import { Trans } from '@lingui/macro'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
@@ -69,7 +69,6 @@ interface Props extends RefAttributes<unknown> {
 }
 
 export const WalletCollections = memo(function WalletCollections({ onAddToken, scrollTargetRef, ref }: Props) {
-    const t = useMaskSharedTrans()
     const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const [currentTab] = useParamTab<WalletAssetTabs>(WalletAssetTabs.Tokens)
@@ -104,9 +103,11 @@ export const WalletCollections = memo(function WalletCollections({ onAddToken, s
 
     const collectiblesEmptyText = (
         <>
-            <Typography component="div">{t.do_not_see_your_nft()}</Typography>
+            <Typography component="div">
+                <Trans>Don't see your NFT?</Trans>
+            </Typography>
             <Typography className={classes.importNft} role="button" onClick={() => onAddToken(currentTab)}>
-                {t.import_nft()}
+                <Trans>Import NFT</Trans>
             </Typography>
         </>
     )

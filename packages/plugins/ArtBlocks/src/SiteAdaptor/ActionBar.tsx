@@ -4,7 +4,7 @@ import { useControlledDialog } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PurchaseDialog } from './PurchaseDialog.js'
 import type { Project } from '../types.js'
-import { useArtBlocksTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -20,17 +20,16 @@ interface ActionBarProps {
 }
 
 export function ActionBar(props: ActionBarProps) {
-    const t = useArtBlocksTrans()
     const { classes } = useStyles()
     const { project, chainId } = props
 
     const { open: openMintDialog, onClose: onCloseMintDialog, onOpen: onOpenMintDialog } = useControlledDialog()
 
     const status =
-        !project.active ? t.plugin_artblocks_not_active()
-        : project.complete ? t.plugin_artblocks_completed()
-        : project.paused ? t.plugin_artblocks_paused()
-        : t.plugin_artblocks_purchase()
+        !project.active ? <Trans>This project is no longer active</Trans>
+        : project.complete ? <Trans>Completed</Trans>
+        : project.paused ? <Trans>Paused</Trans>
+        : <Trans>Purchase</Trans>
 
     return (
         <Box className={classes.root} display="flex" justifyContent="center">

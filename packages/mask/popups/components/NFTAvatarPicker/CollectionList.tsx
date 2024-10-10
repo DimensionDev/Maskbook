@@ -5,7 +5,7 @@ import { useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, Skeleton, type BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 interface CollectionListProps extends BoxProps {
     loading: boolean
@@ -40,7 +40,6 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     onItemClick,
     ...rest
 }) {
-    const t = useMaskSharedTrans()
     const { pluginID } = useNetworkContext()
     const { classes, cx } = useStyles()
     const wallet = useWallet()
@@ -49,7 +48,7 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
         return (
             <Box style={{ height: 358 }}>
                 <EmptyStatus sx={{ height: '100%' }} flex={1}>
-                    {t.no_NFTs_found()}
+                    <Trans>No NFTs found.</Trans>
                 </EmptyStatus>
             </Box>
         )

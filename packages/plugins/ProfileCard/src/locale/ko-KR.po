@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,39 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ProfileCard/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 980\n"
+
+#: src/SiteAdaptor/index.tsx:26
+msgid "General user"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:39
+msgid "NFT collection"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:41
+msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "Token"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:16
+msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
+msgstr "아바타 오른쪽 아래에 있는 미니 Mask 아이콘이나 타임라인의 토큰 태그 위에 마우스를 올려놓아 여러 계정의 웹3 프로필을 볼 수 있습니다."
+
+#: src/SiteAdaptor/index.tsx:36
+msgid "View real-time crypto prices, market cap, trading volume, etc."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:28
+msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:28
+#~ msgid "View user’s Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:23
+msgid "Web3 Profile Card"
+msgstr "웹3 프로필 카드"

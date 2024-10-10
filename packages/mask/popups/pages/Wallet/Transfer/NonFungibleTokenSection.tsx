@@ -8,8 +8,8 @@ import { isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/we
 import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useNonFungibleTokenParams } from '../../../hooks/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -55,7 +55,6 @@ function getCollectibleKey(token: Web3Helper.NonFungibleAssetAll) {
     return `${token.chainId}.${token.address}.${token.tokenId}`
 }
 export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { chainId, address, tokenId, params, setParams } = useNonFungibleTokenParams()
 
@@ -129,7 +128,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
             await Web3.transferNonFungibleToken(address!, tokenId, recipient, '1')
             return
         } catch (error) {
-            showSnackbar(t.failed_to_transfer_nft(), { variant: 'error' })
+            showSnackbar(<Trans>Network error or execute smart contract failed.</Trans>, { variant: 'error' })
             return
         }
     }, [address, tokenId || recipient])
@@ -163,7 +162,7 @@ export const NonFungibleTokenSection = memo(function NonFungibleTokenSection() {
             </div>
             <div className={classes.actionGroup}>
                 <ActionButton fullWidth onClick={transfer} disabled={disabled} loading={state.loading}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             </div>
         </div>

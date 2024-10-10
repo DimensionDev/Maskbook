@@ -1,6 +1,6 @@
 import { memo, useCallback } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { requestPermissionFromExtensionPage } from '../../../shared-ui/index.js'
 import { List, ListItem, ListItemButton, ListItemIcon, ListItemText, Skeleton, Switch, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
@@ -9,6 +9,7 @@ import { SOCIAL_MEDIA_ICON_FILTER_COLOR } from '../../constants.js'
 import { type EnhanceableSite, InjectSwitchSettings, SOCIAL_MEDIA_NAME, EMPTY_LIST } from '@masknet/shared-base'
 import Services from '#services'
 import { range } from 'lodash-es'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     description: {
@@ -39,7 +40,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SupportedSitesModal = memo<ActionModalBaseProps>(function SupportedSitesModal(props) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { data = EMPTY_LIST, isPending, refetch } = useSupportedSites()
 
@@ -65,8 +65,13 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
     )
 
     return (
-        <ActionModal header={t.popups_settings_supported_sites()} {...props}>
-            <Typography className={classes.description}>{t.popups_settings_supported_sites_description()}</Typography>
+        <ActionModal header={<Trans>Supported Sites</Trans>} {...props}>
+            <Typography className={classes.description}>
+                <Trans>
+                    Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on
+                    those websites.
+                </Trans>
+            </Typography>
             <List className={classes.list}>
                 {!isPending && data ?
                     data.map((x) => {

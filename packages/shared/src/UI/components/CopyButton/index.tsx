@@ -1,9 +1,18 @@
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { Link, type LinkProps } from '@mui/material'
-import { memo, useCallback, useRef, useState, type MouseEvent, useImperativeHandle, type RefAttributes } from 'react'
+import {
+    memo,
+    useCallback,
+    useRef,
+    useState,
+    type MouseEvent,
+    useImperativeHandle,
+    type RefAttributes,
+    type ReactNode,
+} from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     copy: {
@@ -20,7 +29,7 @@ export interface CopyButtonProps
     title?: string
     text: string
     /** defaults to 'Copied' */
-    successText?: string
+    successText?: ReactNode
     /** stop event propagation and prevent default */
     scoped?: boolean
 }
@@ -40,7 +49,6 @@ export const CopyButton = memo(function CopyButton({
     ref,
     ...props
 }: CopyButtonProps) {
-    const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props })
 
     const [, copyToClipboard] = useCopyToClipboard()
@@ -63,7 +71,7 @@ export const CopyButton = memo(function CopyButton({
         [text, scoped],
     )
 
-    const tooltipTitle = copied ? successText ?? t.copied() : title ?? t.copy()
+    const tooltipTitle = copied ? successText ?? <Trans>Copied!</Trans> : title ?? <Trans>Copy</Trans>
     const iconProps = { size, color }
 
     useImperativeHandle(

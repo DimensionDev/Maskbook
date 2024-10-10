@@ -29,7 +29,7 @@ export const linguiLanguages = {
     zh: lingui_zh_TW,
 }
 import { createI18NBundle } from '@masknet/shared-base'
-export const addSharedI18N = createI18NBundle('shared', [languages, linguiLanguages])
+export const addSharedI18N = createI18NBundle('shared', [languages, linguiLanguages as any])
 // @ts-ignore
 if (import.meta.webpackHot) {
     // @ts-ignore

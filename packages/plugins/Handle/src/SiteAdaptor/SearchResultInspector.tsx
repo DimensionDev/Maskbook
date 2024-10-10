@@ -9,7 +9,7 @@ import { EVMUtils } from '@masknet/web3-providers'
 import { PluginHeader } from './PluginHeader.js'
 import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
-import { useHandleTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -77,7 +77,6 @@ const useStyles = makeStyles()((theme) => {
 
 export const SearchResultInspectorContent = memo(function SearchResultInspectorContent() {
     const { classes } = useStyles()
-    const t = useHandleTrans()
     const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const suffix = domain ? domain.split('.').pop()! : undefined
     const ChainIcon = suffix ? SuffixToChainIconMap[suffix] ?? Icons.ETH : null
@@ -126,14 +125,16 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                     <div className={classes.accounts}>
                         {totalBalance !== undefined ?
                             <div className={classes.walletValue}>
-                                <Typography className={classes.label}>{t.usd_value()}</Typography>
-                                <Typography className={classes.value}>
-                                    $
-                                    {totalBalance.toLocaleString('en-US', {
-                                        minimumFractionDigits: 2,
-                                        maximumFractionDigits: 2,
-                                    })}
-                                </Typography>
+                                <Trans>
+                                    <Typography className={classes.label}>USD Value</Typography>
+                                    <Typography className={classes.value}>
+                                        $
+                                        {totalBalance.toLocaleString('en-US', {
+                                            minimumFractionDigits: 2,
+                                            maximumFractionDigits: 2,
+                                        })}
+                                    </Typography>
+                                </Trans>
                             </div>
                         :   null}
                         <SocialAccountList nextIdBindings={nextIdBindings} />

@@ -7,7 +7,7 @@ import { NetworkType } from '@masknet/web3-shared-evm'
 import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { PrintBackground } from '../../../assets/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 interface ComponentToPrintProps extends RefAttributes<unknown> {
     words: string[]
@@ -85,7 +85,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export function ComponentToPrint(props: ComponentToPrintProps) {
     const { words, address } = props
-    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     const qrValue = useMemo(() => {
@@ -97,10 +96,12 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
             <Box className={classes.card}>
                 <Box flex={1}>
                     <Typography className={classes.publicKeyTitle}>
-                        {t.address()}:{' '}
-                        <Typography component="span" className={classes.publicKey}>
-                            {address}
-                        </Typography>
+                        <Trans>
+                            Address:{' '}
+                            <Typography component="span" className={classes.publicKey}>
+                                {address}
+                            </Typography>
+                        </Trans>
                     </Typography>
                 </Box>
                 <div className={classes.qrWrapper}>
@@ -113,11 +114,13 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
                     />
                 </div>
             </Box>
-            <Typography className={classes.title}>{t.wallets_mnemonic_word()}</Typography>
+            <Typography className={classes.title}>
+                <Trans>Mnemonic word</Trans>
+            </Typography>
             <MnemonicReveal words={words} indexed classes={{ wordCard: classes.wordCard, text: classes.text }} />
             <Typography className={classes.tips}>
                 <Icons.Info variant="light" size={24} />
-                {t.wallets_print_tips()}
+                <Trans>This QR includes your mnemonic words, please keep it safely.</Trans>
             </Typography>
         </Box>
     )

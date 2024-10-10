@@ -5,9 +5,9 @@ import { makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon } from '@mui/icons-material'
 import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-base'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
-import { useSharedTrans } from '../../../locales/index.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectNonFungibleContractModal } from '../../modals/index.js'
+import { Trans } from '@lingui/macro'
 
 interface StyleProps {
     hasIcon: boolean
@@ -69,7 +69,6 @@ export interface ERC721TokenSelectPanelProps {
 
 export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
     const { onContractChange, collection, label, chainId = ChainId.Mainnet, balance } = props
-    const t = useSharedTrans()
     const { classes, cx } = useStyles({ hasIcon: !!collection?.iconURL })
     const Utils = useWeb3Utils()
 
@@ -94,7 +93,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
         <Box className={classes.root}>
             <div className={classes.wrapper}>
                 <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                    {label ?? t.select_an_nft()}
+                    {label ?? <Trans>Select an NFT</Trans>}
                 </Typography>
                 {(
                     !collection?.address ||
@@ -103,7 +102,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 ) ?
                     null
                 :   <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                        {t.wallet_balance()}: {balance ? balance : '0'}
+                        <Trans>Balance: {balance ? balance : '0'}</Trans>
                     </Typography>}
             </div>
             <div className={cx(classes.wrapper, classes.pointer)} onClick={openDialog}>

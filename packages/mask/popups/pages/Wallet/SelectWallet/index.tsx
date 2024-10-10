@@ -10,13 +10,14 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { PersonaContext } from '@masknet/shared'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, PopupContext, useVerifiedWallets } from '../../../hooks/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
 import { ProfilePhotoType } from '../type.js'
 import urlcat from 'urlcat'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -35,7 +36,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function SelectWallet() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -137,12 +138,14 @@ export const Component = memo(function SelectWallet() {
         Network,
     ])
 
-    useTitle(t.popups_select_wallet())
+    useTitle(_(msg`Select Wallet`))
 
     if (!chainIdValid)
         return (
             <Box className={classes.placeholder}>
-                <Typography>{t.popups_wallet_unsupported_network()}</Typography>
+                <Typography>
+                    <Trans>Unsupported network type</Trans>
+                </Typography>
             </Box>
         )
 
@@ -174,7 +177,7 @@ export const Component = memo(function SelectWallet() {
             </Box>
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <ActionButton
                     fullWidth
@@ -184,7 +187,7 @@ export const Component = memo(function SelectWallet() {
                             !!wallets?.some((x) => isSameAddress(x.address, selected) && !!x.owner)
                         :   false
                     }>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             </BottomController>
         </Box>

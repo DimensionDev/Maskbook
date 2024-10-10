@@ -6,8 +6,9 @@ import { CopyButton, InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
-import { useGoPlusLabsTrans } from '../../locales/index.js'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -71,7 +72,7 @@ interface Props {
     onSetDialog(event: TokenRiskWarningDialogEvent): void
 }
 export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
-    const t = useGoPlusLabsTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
     const onClose = useCallback(async () => {
@@ -89,27 +90,28 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
             classes={{ paper: classes.paper }}
             maxWidth="xs"
             fullWidth
-            title={t.swap_risk()}>
+            title={<Trans>Confirm swap risk</Trans>}>
             <DialogContent className={classes.content}>
                 <Stack alignItems="center">
                     <Icons.SecurityRisk size={68} />
-                    <Typography className={classes.warningTitle}>{t.risk_warning_short()}</Typography>
+                    <Typography className={classes.warningTitle}>
+                        <Trans>Risk Warning</Trans>
+                    </Typography>
                 </Stack>
                 <Stack marginTop="51px">
-                    <Typography color={(theme) => theme.palette.maskColor.danger}>{t.dear_user()}</Typography>
-                    <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
-                        {t.user_warning()}
-                    </Typography>
+                    <Trans>
+                        <Typography color={(theme) => theme.palette.maskColor.danger}>Dear Users,</Typography>
+                        <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
+                            Clicking the confirm button means that you agree to take the potential risks and proceed
+                            with the transaction.
+                        </Typography>
+                    </Trans>
                 </Stack>
                 <Stack className={classes.tokenInfo}>
                     <Typography>{token?.name ?? '--'}</Typography>
                     <Stack direction="row">
                         <Typography>{token?.contract ? formatEthereumAddress(token?.contract, 4) : '--'}</Typography>
-                        <CopyButton
-                            size={14}
-                            title={t.wallet_status_button_copy_address()}
-                            text={token?.contract ?? ''}
-                        />
+                        <CopyButton size={14} title={_(msg`Copy Address`)} text={token?.contract ?? ''} />
                         <Link
                             className={classes.link}
                             href={
@@ -119,7 +121,7 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                                 ) ?? ''
                             }
                             target="_blank"
-                            title={t.view_on_explorer()}
+                            title={_(msg`View on Explorer`)}
                             rel="noopener noreferrer">
                             <ExternalLink size={14} />
                         </Link>
@@ -128,10 +130,10 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
             </DialogContent>
             <DialogActions className={classes.actions}>
                 <Button sx={{ width: '48%' }} onClick={onClose}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <Button className={classes.warningButton} onClick={onConfirm}>
-                    {t.make_risk_trade()}
+                    <Trans>Swap Anyway</Trans>
                 </Button>
             </DialogActions>
         </InjectedDialog>

@@ -12,3 +12,69 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:376
+msgid "{boxStateMessage} ({0} {1}/Time)"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:330
+msgid "Active"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:260
+msgid "Articles"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:316
+msgid "by"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:330
+msgid "Closed"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:264
+msgid "Details"
+msgstr ""
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:279
+msgid "Draw"
+msgstr ""
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:278
+msgid "Drawing"
+msgstr ""
+
+#: src/SiteAdaptor/components/DrawDialog.tsx:276
+msgid "Insufficient balance"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:304
+msgid "Limit:"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:210
+#: src/SiteAdaptor/components/PreviewCard.tsx:235
+msgid "Load failed"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "MaskBox"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:55
+msgid "Professional multi-chain decentralized platform for launching NFT blind boxes."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:55
+#~ msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:227
+#: src/SiteAdaptor/components/PreviewCard.tsx:252
+msgid "Reload"
+msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:294
+msgid "Solid:"
+msgstr ""

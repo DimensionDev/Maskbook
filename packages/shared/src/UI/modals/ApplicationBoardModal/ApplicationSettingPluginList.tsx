@@ -8,7 +8,7 @@ import {
 import { PersistentStorages, type PluginID } from '@masknet/shared-base'
 import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItemButton, Typography } from '@mui/material'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 export interface Application {
     entry: Plugin.SiteAdaptor.ApplicationEntry
@@ -87,7 +87,6 @@ const useStyles = makeStyles<{
 
 export function ApplicationSettingPluginList() {
     const { classes } = useStyles({ iconFilterColor: undefined })
-    const t = useSharedTrans()
 
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const applicationList = useMemo(() => {
@@ -113,9 +112,13 @@ export function ApplicationSettingPluginList() {
 
     return (
         <div>
-            <Typography className={classes.unlisted}>{t.application_settings_tab_plug_app_list_listed()}</Typography>
+            <Typography className={classes.unlisted}>
+                <Trans>Listed</Trans>
+            </Typography>
             <AppList appList={listedEntries} isListing />
-            <Typography className={classes.unlisted}>{t.application_settings_tab_plug_app_list_unlisted()}</Typography>
+            <Typography className={classes.unlisted}>
+                <Trans>Unlisted</Trans>
+            </Typography>
             <AppList appList={unlistedEntries} isListing={false} />
         </div>
     )
@@ -128,7 +131,6 @@ interface AppListProps {
 
 function AppList({ appList, isListing }: AppListProps) {
     const { classes } = useStyles({ iconFilterColor: undefined })
-    const t = useSharedTrans()
 
     return appList.length > 0 ?
             <Boundary>
@@ -146,8 +148,8 @@ function AppList({ appList, isListing }: AppListProps) {
         :   <div className={classes.placeholderWrapper}>
                 <Typography className={classes.placeholder}>
                     {isListing ?
-                        t.application_settings_tab_plug_app_unlisted_placeholder()
-                    :   t.application_settings_tab_plug_app_listed_placeholder()}
+                        <Trans>Click the application icon to list it on the App board.</Trans>
+                    :   <Trans>Click the application icon to hide in the App list.</Trans>}
                 </Typography>
             </div>
 }

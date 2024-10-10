@@ -3,7 +3,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { getMerkleProof } from '../apis/index.js'
 
-export function useMerkelProof(root?: string) {
+export function useMerkleProof(root?: string) {
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useAsyncRetry(async () => {
         if (!root) return

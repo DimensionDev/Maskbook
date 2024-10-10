@@ -23,12 +23,13 @@ import { useMemo, useState, type ReactNode } from 'react'
 import { useTimeout } from 'react-use'
 import { GLB3DIcon, PetsPluginID, initMeta } from '../constants.js'
 import { useNFTs, useUser } from '../hooks/index.js'
-import { usePetsTrans } from '../locales/index.js'
 import { PluginPetMessages } from '../messages.js'
 import { petShowSettings } from '../settings.js'
 import { ImageType, type FilterContract, type OwnerERC721TokenInfo, type PetMetaDB } from '../types.js'
 import { ImageLoader } from './ImageLoader.js'
 import { PreviewBox } from './PreviewBox.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -115,7 +116,7 @@ interface PetSetDialogProps {
 }
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
-    const t = usePetsTrans()
+    const { _ } = useLingui()
     const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const theme = useTheme()
@@ -172,7 +173,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
             await storage.set('pet', { address: user.address, essay: meta })
             closeDialogHandle()
         } catch {
-            showSnackbar(t.pets_dialog_fail(), { variant: 'error' })
+            showSnackbar(<Trans>Setting failed, please try later</Trans>, { variant: 'error' })
         } finally {
             setLoading(false)
         }
@@ -253,7 +254,11 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     <Box component="span" className={classes.itemFix} key={option.contract}>
                         {renderImg(option)}
                         <Typography className={classes.itemTxt}>{option.name}</Typography>
-                        <Typography>{blacklist.includes(option.contract) ? t.pets_dialog_unverified() : ''}</Typography>
+                        <Typography>
+                            {blacklist.includes(option.contract) ?
+                                <Trans> (unverified)</Trans>
+                            :   ''}
+                        </Typography>
                     </Box>
                 </MenuItem>
             )}
@@ -261,7 +266,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <InputBase
                     {...params.InputProps}
                     fullWidth
-                    placeholder={t.pets_dialog_contract()}
+                    placeholder={_(msg`NFT Contract`)}
                     error={isCollectionsError}
                     className={classes.input}
                     inputProps={{ ...params.inputProps }}
@@ -308,7 +313,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <InputBase
                     {...params.InputProps}
                     fullWidth
-                    placeholder={t.pets_dialog_token()}
+                    placeholder={_(msg`Token ID`)}
                     error={isImageError}
                     className={classes.input}
                     inputProps={{ ...params.inputProps }}
@@ -339,7 +344,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {tokensRender}
                         <InputBase
                             className={classes.inputOption}
-                            placeholder={holderChange ? t.pets_dialog_msg_optional() : t.pets_dialog_msg()}
+                            placeholder={
+                                holderChange ? _(msg`Optional, 100 characters max.`) : _(msg`Greeting message`)
+                            }
                             fullWidth
                             multiline
                             rows={3}
@@ -355,24 +362,26 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     control={
                         <Checkbox checked={checked} onChange={(e) => (petShowSettings.value = e.target.checked)} />
                     }
-                    label={t.pets_dialog_check_title()}
+                    label={<Trans>Show NFT friends on the profile page.</Trans>}
                     sx={{ marginTop: '4px' }}
                 />
                 <Box className={classes.desBox}>
-                    <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
-                        {t.pets_powered_by()}
-                    </Typography>
-                    <Typography color="textPrimary" fontSize={14} fontWeight={700}>
-                        NFF
-                    </Typography>
-                    <Icons.Pets className={classes.icon} />
-                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
-                        &
-                    </Typography>
-                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
-                        RSS3
-                    </Typography>
-                    <Icons.RSS3 color={theme.palette.mode === 'light' ? '#000' : '#fff'} />
+                    <Trans>
+                        <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
+                            Powered by
+                        </Typography>
+                        <Typography color="textPrimary" fontSize={14} fontWeight={700}>
+                            NFF
+                        </Typography>
+                        <Icons.Pets className={classes.icon} />
+                        <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
+                            &
+                        </Typography>
+                        <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
+                            RSS3
+                        </Typography>
+                        <Icons.RSS3 color={theme.palette.mode === 'light' ? '#000' : '#fff'} />
+                    </Trans>
                 </Box>
             </Box>
 
@@ -383,14 +392,14 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     className={classes.btn}
                     onClick={saveHandle}
                     disabled={!collection?.name || !metaData.image || !!wallet?.owner}>
-                    {wallet?.owner ? sharedI18N.coming_soon() : t.pets_dialog_btn()}
+                    {wallet?.owner ? sharedI18N.coming_soon() : <Trans>Confirm</Trans>}
                 </ActionButton>
             </PluginWalletStatusBar>
 
             <Snackbar
                 anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
                 open={isTipVisible}
-                message={t.pets_dialog_success()}
+                message={<Trans>Your Non-Fungible Friend has been set up successfully.</Trans>}
             />
         </>
     )

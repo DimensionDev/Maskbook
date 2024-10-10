@@ -11,7 +11,7 @@ import { List, ListItem, Typography, type ListProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
 import { useSubscription } from 'use-subscription'
-import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -107,7 +107,7 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
             const currentProfileId = (await Lens.queryDefaultProfileByAddress(wallet))?.id
             if (!currentProfileId) {
                 const profiles = await Lens.queryProfilesByAddress(wallet)
-                return first(profiles)?.id
+                return first(profiles)?.id || null
             }
             return currentProfileId
         },
@@ -170,7 +170,6 @@ interface LensListItemProps {
 const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
     const { classes } = useStyles()
     const { account: wallet } = useChainContext()
-    const t = useWeb3ProfileTrans()
     const profileUri = account.profileUri.filter(Boolean)
     const lensIcon = <Icons.Lens size={30} />
 
@@ -200,10 +199,10 @@ const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
                     })
                 }}>
                 {isSameAddress(wallet, account.ownedBy) ?
-                    t.view()
+                    <Trans>View</Trans>
                 : account.isFollowing ?
-                    t.following_action()
-                :   t.follow()}
+                    <Trans>Following</Trans>
+                :   <Trans>Follow</Trans>}
             </ActionButton>
         </ListItem>
     )

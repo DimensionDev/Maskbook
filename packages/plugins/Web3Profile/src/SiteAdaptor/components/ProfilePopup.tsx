@@ -18,9 +18,9 @@ import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { useWeb3ProfileTrans } from '../../locales/i18n_generated.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { getProfileAvatar } from '../../utils.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -125,8 +125,6 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
     onChange,
     walletName,
 }) {
-    const t = useWeb3ProfileTrans()
-
     const Utils = useWeb3Utils()
 
     const { classes } = useStyles()
@@ -212,7 +210,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                             requiredSupportChainIds: [ChainId.Polygon],
                         })
                     }>
-                    {t.wallet_status_button_change()}
+                    <Trans>Change</Trans>
                 </Button>
             </Box>
         </Popover>

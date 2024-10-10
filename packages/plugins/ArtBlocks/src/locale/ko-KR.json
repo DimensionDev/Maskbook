@@ -1,1 +1,38 @@
-{ "messages": {} }
+{
+    "messages": {
+        "gERRYE": "Artblocks",
+        "SDrb6I": "Artblocks는 마음에 드는 스타일을 골라 작업비를 지불하고 무작위로 생성된 콘텐츠 버전이 알고리즘에 의해 생성돼 이더리움 계정으로 전송를 지원하는 겁니다.",
+        "uqF4Nm": "불록체인:",
+        "iobEyh": "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>.",
+        "xjhtsV": "체인",
+        "q+hNag": "수집품",
+        "qqWcBV": "완료됨",
+        "p7l2aC": "컨트랙트:",
+        "NCIYDF": "Created by",
+        "V5lpjo": ["Created by <0>", ["0"], "</0>• <1>Website</1>"],
+        "URmyfc": "디테일",
+        "SG6jy+": [
+            "{0} 컬렉션에서 ",
+            ["1"],
+            " ",
+            ["2"],
+            " 가격로 아름다운 예술품을 구매했습니다. @realMaskNetwork 설치하여 NFT를 구매해 보세요."
+        ],
+        "ie2c+s": ["{0} 컬렉션에서 ", ["1"], " ", ["2"], " 가격로 아름다운 예술품을 구매했습니다."],
+        "623chP": "정보",
+        "znqB4T": "잔액 부족",
+        "bLvQvN": "라이브러리:",
+        "z/3+av": "라이센스:",
+        "ldI18s": "민팅 완료",
+        "URAE3q": "일시 정지",
+        "D9iWaX": "ToS 파일을 확인하세요",
+        "q/ao7A": "민팅 가격(1 NFT)",
+        "rcNnsQ": "가격:",
+        "zZk9Yz": "구매",
+        "zgqgNP": "구매 진행 중",
+        "ywDBfs": "오류가 발생합니다.",
+        "mW8F64": "This project is no longer active",
+        "V9xq/9": "This project is no more active",
+        "On0aF2": "Website"
+    }
+}

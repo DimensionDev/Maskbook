@@ -7,8 +7,9 @@ import { Icons } from '@masknet/icons'
 import { PopupModalRoutes, PopupRoutes } from '@masknet/shared-base'
 import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
 import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
+import { UserContext } from '../../../shared-ui/index.js'
 import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     avatarItem: {
@@ -48,7 +49,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSettingModal(props) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
     const { currentPersona, avatar } = PersonaContext.useContainer()
@@ -57,15 +57,17 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
 
     return (
         <ActionModal
-            header={t.persona()}
+            header={<Trans>Persona</Trans>}
             action={
                 <ActionButton variant="contained" color="error" onClick={() => navigate(PopupRoutes.Logout)}>
-                    {t.popups_log_out()}
+                    <Trans>Log out</Trans>
                 </ActionButton>
             }
             {...props}>
             <Box className={classes.avatarItem}>
-                <Typography className={classes.text}>{t.popups_profile_photo()}</Typography>
+                <Typography className={classes.text}>
+                    <Trans>Profile Photo</Trans>
+                </Typography>
                 <Box className={classes.right}>
                     <PersonaAvatar
                         avatar={avatar}
@@ -81,7 +83,9 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                 </Box>
             </Box>
             <Box className={classes.item}>
-                <Typography className={classes.text}>{t.popups_next_id()}</Typography>
+                <Typography className={classes.text}>
+                    <Trans>Next.ID</Trans>
+                </Typography>
                 {currentPersona ?
                     <PersonaPublicKey
                         rawPublicKey={currentPersona.identifier.rawPublicKey}
@@ -92,7 +96,9 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                 :   null}
             </Box>
             <Box className={classes.item}>
-                <Typography className={classes.text}>{t.popups_name()}</Typography>
+                <Typography className={classes.text}>
+                    <Trans>Name</Trans>
+                </Typography>
                 <Box className={classes.right}>
                     <Typography className={classes.text}>{currentPersona?.nickname}</Typography>
                     <Icons.ArrowRight
@@ -103,7 +109,9 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                 </Box>
             </Box>
             <Box className={classes.item}>
-                <Typography className={classes.text}>{t.popups_backup_persona()}</Typography>
+                <Typography className={classes.text}>
+                    <Trans>Backup Persona</Trans>
+                </Typography>
                 <Icons.ArrowRight
                     size={24}
                     className={classes.arrow}

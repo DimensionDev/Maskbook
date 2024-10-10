@@ -18,6 +18,8 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { format as formatDateTime } from 'date-fns'
 import { UserContext } from '../../../shared-ui/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -73,6 +75,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     account,
     abstract,
 }) {
+    const { _ } = useLingui()
     const controllerRef = useRef<AbortController | null>(null)
     const { classes, theme } = useStyles()
     const [params, setParams] = useSearchParams()
@@ -102,7 +105,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 if (backupWallets && hasPassword) {
                     const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
                     if (!verified) {
-                        setError('paymentPassword', { type: 'custom', message: t.incorrect_password() })
+                        setError('paymentPassword', { type: 'custom', message: _(msg`Incorrect Password`) })
                         return
                     }
                 }
@@ -131,7 +134,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         type,
                         code,
                     })
-                    showSnackbar(t.settings_alert_backup_success(), { variant: 'success' })
+                    showSnackbar(<Trans>You have backed up your data.</Trans>, { variant: 'success' })
                     updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
                     setParams((params) => {
                         params.set('size', downloadLinkResponse.size.toString())
@@ -143,7 +146,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 }
                 return true
             } catch (error) {
-                showSnackbar(t.settings_alert_backup_fail(), { variant: 'error' })
+                showSnackbar(<Trans>Backup Failed</Trans>, { variant: 'error' })
                 onClose()
                 if ((error as any).status === 400) navigate(DashboardRoutes.CloudBackup, { replace: true })
                 return false
@@ -168,7 +171,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 <Box className={classes.container}>
                     <Typography fontSize={36}>🎉</Typography>
                     <Typography fontSize={24} fontWeight={700} lineHeight="120%" sx={{ my: 1.5 }}>
-                        {t.congratulations()}
+                        <Trans>Congratulations</Trans>
                     </Typography>
                     <Typography
                         fontSize={14}
@@ -176,7 +179,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                         lineHeight="18px"
                         color={theme.palette.maskColor.second}
                         textAlign="center">
-                        {t.cloud_backup_successfully_tips()}
+                        <Trans>Backup is saved to Mask Cloud Service.</Trans>
                     </Typography>
                 </Box>
             )
@@ -185,7 +188,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 <Box className={classes.container}>
                     <Icons.FileService className={classes.icon} />
                     <Typography sx={{ mt: 2, fontWeight: 700, fontSize: 16, lineHeight: '20px' }}>
-                        {t.uploading()}
+                        <Trans>Uploading</Trans>
                     </Typography>
                 </Box>
             )
@@ -200,7 +203,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                                 {...field}
                                 onFocus={() => clearErrors('backupPassword')}
                                 sx={{ mb: 2 }}
-                                placeholder={t.settings_label_backup_password()}
+                                placeholder={_(msg`Backup Password`)}
                                 error={!!errors.backupPassword?.message}
                                 helperText={errors.backupPassword?.message}
                             />
@@ -223,7 +226,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                                     {...field}
                                     onFocus={() => clearErrors('paymentPassword')}
                                     sx={{ mb: 2 }}
-                                    placeholder={t.sign_in_account_local_backup_payment_password()}
+                                    placeholder={_(msg`Payment Password`)}
                                     error={!!errors.paymentPassword?.message}
                                     helperText={errors.paymentPassword?.message}
                                 />
@@ -233,7 +236,9 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     :   null}
                     {isOverwrite ?
                         <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
-                            {t.cloud_backup_overwrite_tips()}
+                            <Trans>
+                                This will overwrite the existing cloud backup with the local data, this cannot be undo.
+                            </Trans>
                         </Typography>
                     :   null}
                 </Box>
@@ -257,13 +262,13 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         if (value)
             return (
                 <ActionButton fullWidth color="success" onClick={onClose}>
-                    {t.done()}
+                    <Trans>Done</Trans>
                 </ActionButton>
             )
         if (uploadLoading)
             return (
                 <ActionButton fullWidth color="error" onClick={handleClose}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
             )
         return (
@@ -273,7 +278,9 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 startIcon={isOverwrite ? <Icons.CloudBackup2 size={18} /> : <Icons.Cloud />}
                 color={isOverwrite ? 'error' : 'primary'}
                 disabled={!isDirty || !isValid}>
-                {isOverwrite ? t.cloud_backup_overwrite_backup() : t.cloud_backup_upload_to_cloud()}
+                {isOverwrite ?
+                    <Trans>Overwrite Backup</Trans>
+                :   <Trans>Backup to the Cloud</Trans>}
             </ActionButton>
         )
     }, [
@@ -293,7 +300,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     ])
 
     return (
-        <InjectedDialog title={t.cloud_backup_upload_backup()} open={open} onClose={handleClose}>
+        <InjectedDialog title={<Trans>Upload backup</Trans>} open={open} onClose={handleClose}>
             <DialogContent data-hide-scrollbar>{content}</DialogContent>
             <DialogActions>{action}</DialogActions>
         </InjectedDialog>

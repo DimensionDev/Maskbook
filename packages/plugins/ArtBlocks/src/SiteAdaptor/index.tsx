@@ -6,7 +6,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { useArtBlocksTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -26,19 +26,16 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: base.ID,
             category: 'dapp',
             marketListSortingPriority: 15,
-            description: <Desc />,
-            name: <Name />,
+            description: (
+                <Trans>
+                    Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated
+                    version of the content is created by an algorithm and sent to your Ethereum account.
+                </Trans>
+            ),
+            name: <Trans>Artblocks</Trans>,
             icon: <Icons.ArtBlocks size={36} />,
         },
     ],
-}
-function Name() {
-    const t = useArtBlocksTrans()
-    return t.plugin_artblocks_name()
-}
-function Desc() {
-    const t = useArtBlocksTrans()
-    return t.plugin_artblocks_description()
 }
 
 function Renderer(

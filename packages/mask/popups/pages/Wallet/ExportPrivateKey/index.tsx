@@ -10,7 +10,6 @@ import { ActionButton, makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { encodeText } from '@masknet/kit'
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
 import { NormalHeader } from '../../../components/index.js'
@@ -18,6 +17,7 @@ import { saveFileFromBuffer } from '../../../../shared/index.js'
 import { MnemonicDisplay } from '../../../components/MnemonicDisplay/index.js'
 import { PrivateKeyDisplay } from '../../../components/PrivateKeyDisplay/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
+import { Trans } from '@lingui/macro'
 
 enum TabType {
     Mnemonic = 'Mnemonic',
@@ -55,7 +55,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function ExportPrivateKey() {
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const wallet = useWallet()
@@ -113,13 +112,13 @@ export const Component = memo(function ExportPrivateKey() {
                 tabList={
                     !getMnemonicLoading && mnemonic ?
                         <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                            <Tab label={t.popups_wallet_name_mnemonic()} value={TabType.Mnemonic} />
-                            <Tab label={t.popups_wallet_name_private_key()} value={TabType.PrivateKey} />
-                            <Tab label={t.popups_wallet_name_keystore()} value={TabType.JsonFile} />
+                            <Tab label={<Trans>Mnemonic</Trans>} value={TabType.Mnemonic} />
+                            <Tab label={<Trans>Private Key</Trans>} value={TabType.PrivateKey} />
+                            <Tab label={<Trans>Keystore</Trans>} value={TabType.JsonFile} />
                         </MaskTabList>
                     :   <MaskTabList onChange={onChange} aria-label="persona-tabs" classes={{ root: classes.tabs }}>
-                            <Tab label={t.popups_wallet_name_private_key()} value={TabType.PrivateKey} />
-                            <Tab label={t.popups_wallet_name_keystore()} value={TabType.JsonFile} />
+                            <Tab label={<Trans>Private Key</Trans>} value={TabType.PrivateKey} />
+                            <Tab label={<Trans>Keystore</Trans>} value={TabType.JsonFile} />
                         </MaskTabList>
                 }
             />
@@ -127,18 +126,21 @@ export const Component = memo(function ExportPrivateKey() {
                 {!getMnemonicLoading && mnemonic ?
                     <TabPanel className={classes.panel} value={TabType.Mnemonic}>
                         <Typography sx={{ fontSize: 14, lineHeight: '18px', fontWeight: 700 }}>
-                            {t.popups_wallet_backup_mnemonic_title()}
+                            <Trans>Write down mnemonic words</Trans>
                         </Typography>
                         <Typography
                             sx={{ py: 2, color: theme.palette.maskColor.second, fontSize: 14, lineHeight: '18px' }}>
-                            {t.popups_wallet_backup_mnemonic_tips()}
+                            <Trans>
+                                Please write down the following words in correct order. Keep it safe and do not share
+                                with anyone!
+                            </Trans>
                         </Typography>
                         <MnemonicDisplay mnemonic={mnemonic} />
                     </TabPanel>
                 :   null}
                 <TabPanel className={classes.panel} value={TabType.PrivateKey}>
                     <Typography sx={{ fontSize: 14, fontWeight: 700, lineHeight: '18px' }}>
-                        {t.popups_wallet_settings_export_private_key_title()}
+                        <Trans>Click on the down-arrow to see the private key.</Trans>
                     </Typography>
                     <Box
                         display="flex"
@@ -165,14 +167,19 @@ export const Component = memo(function ExportPrivateKey() {
                     <Box className={classes.iconWrapper}>
                         <Icons.EncryptedFiles size={36} />
                     </Box>
-                    <Typography color={theme.palette.maskColor.danger}>{t.popups_export_keystore_tips()}</Typography>
+                    <Typography color={theme.palette.maskColor.danger}>
+                        <Trans>
+                            This JSON file is encrypted with your current payment password. The same password is
+                            required for decryption when importing this wallet.
+                        </Trans>
+                    </Typography>
                 </TabPanel>
             </Box>
 
             {currentTab === TabType.JsonFile ?
                 <BottomController>
                     <ActionButton onClick={onExport} fullWidth loading={loading} disabled={loading}>
-                        {t.export()}
+                        <Trans>Export</Trans>
                     </ActionButton>
                 </BottomController>
             :   null}

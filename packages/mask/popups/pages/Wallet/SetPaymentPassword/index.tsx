@@ -19,11 +19,13 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useHasNavigator } from '../../../hooks/useHasNavigator.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -176,7 +178,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 })
 
 export const Component = memo(function SetPaymentPassword() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
@@ -214,7 +216,7 @@ export const Component = memo(function SetPaymentPassword() {
 
                 if (hasPassword) {
                     const from = params.get('from')
-                    showSnackbar(t.popups_wallet_set_payment_password_successfully(), { variant: 'success' })
+                    showSnackbar(<Trans>Set payment password successfully.</Trans>, { variant: 'success' })
                     CrossIsolationMessages.events.passwordStatusUpdated.sendToAll(true)
                     params.delete('from')
                     navigate({ pathname: from || PopupRoutes.Wallet, search: params.toString() }, { replace: true })
@@ -238,12 +240,12 @@ export const Component = memo(function SetPaymentPassword() {
                 <Box className={classes.titleWrapper}>
                     <Typography className={classes.title}>
                         {isCreating ?
-                            t.popups_wallet_create_payment_password()
-                        :   t.popups_set_the_payment_password_title()}
+                            <Trans>Create Password</Trans>
+                        :   <Trans>Set Payment Password</Trans>}
                     </Typography>
                     {isCreating ?
                         <Typography className={classes.description} fontSize={14} fontWeight={700}>
-                            {t.popups_wallet_create_payment_password_tip()}
+                            <Trans>At least 6 characters</Trans>
                         </Typography>
                     :   null}
                 </Box>
@@ -259,7 +261,7 @@ export const Component = memo(function SetPaymentPassword() {
                                             autoFocus
                                             type="password"
                                             variant="filled"
-                                            placeholder={t.popups_wallet_payment_password()}
+                                            placeholder={_(msg`Payment Password`)}
                                             error={!isValid && !!errors.password?.message}
                                         />
                                     )}
@@ -274,7 +276,7 @@ export const Component = memo(function SetPaymentPassword() {
                                             error={!isValid && !!errors.confirm?.message}
                                             type="password"
                                             variant="filled"
-                                            placeholder={t.popups_wallet_confirm_password()}
+                                            placeholder={_(msg`Confirm Password`)}
                                         />
                                     )}
                                     name="confirm"
@@ -292,7 +294,7 @@ export const Component = memo(function SetPaymentPassword() {
                             fontSize={14}
                             textAlign="center"
                             fontWeight={700}>
-                            {t.popups_wallet_term_of_service_agree_part_1()}
+                            <Trans>By proceeding you agree to the</Trans>
                         </Typography>
 
                         <Typography
@@ -331,7 +333,7 @@ export const Component = memo(function SetPaymentPassword() {
                         </Box>
                         <div className={classes.setPasswordButtonWrapper}>
                             <ActionButton fullWidth onClick={() => setIsCreating(true)}>
-                                {t.popups_set_the_payment_password_title()}
+                                <Trans>Set Payment Password</Trans>
                             </ActionButton>
                         </div>
                     </>
@@ -346,7 +348,7 @@ export const Component = memo(function SetPaymentPassword() {
                         loading={loading}
                         width={368}
                         className={classes.confirmButton}>
-                        {t.confirm()}
+                        <Trans>Confirm</Trans>
                     </ActionButton>
                 </div>
             :   null}

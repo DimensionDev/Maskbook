@@ -11,8 +11,8 @@ import { ReplaceType } from '../../type.js'
 import { ActivityItem, ActivityItemSkeleton, RecentActivityItem } from './ActivityItem.js'
 import { useTransactions } from './useTransactions.js'
 import { modifyTransaction } from '../../utils.js'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -34,7 +34,6 @@ const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
 }))
 
 export const ActivityList = memo(function ActivityList() {
-    const t = useMaskSharedTrans()
     const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
@@ -63,7 +62,11 @@ export const ActivityList = memo(function ActivityList() {
     )
 
     if (!isPending && !localeTxes.length && !transactions?.length)
-        return <EmptyStatus height="100%">{t.no_data()}</EmptyStatus>
+        return (
+            <EmptyStatus height="100%">
+                <Trans>No Data</Trans>
+            </EmptyStatus>
+        )
 
     return (
         <div className={classes.container} data-hide-scrollbar>

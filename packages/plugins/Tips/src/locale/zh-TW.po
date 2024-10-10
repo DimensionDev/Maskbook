@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"PO-Revision-Date: 2024-09-22 10:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,128 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Tips/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 998\n"
+
+#: src/components/TipDialog.tsx:146
+msgid "{amount} {0} tips sent."
+msgstr ""
+
+#: src/components/TipDialog.tsx:145
+msgid "1 {0} tips sent."
+msgstr ""
+
+#: src/components/NFTSection/index.tsx:160
+msgid "Add Collectibles"
+msgstr ""
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:106
+msgid "Close"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:26
+msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
+msgstr ""
+
+#: src/components/TipDialog.tsx:101
+msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:104
+#~ msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:108
+#~ msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:113
+#~ msgid "I just tipped {amount} token to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:117
+#~ msgid "I just tipped {amount} token to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:128
+#~ msgid "I just tipped a {{name}} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:113
+msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\n{promote}"
+msgstr ""
+
+#: src/components/TipDialog.tsx:124
+#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:98
+msgid "Install https://mask.io/download-links to send your first tip."
+msgstr ""
+
+#: src/contexts/Tip/useTipValidate.ts:40
+msgid "Insufficient balance"
+msgstr ""
+
+#: src/components/TipDialog.tsx:183
+msgid "NFTs"
+msgstr ""
+
+#: src/components/NFTSection/index.tsx:207
+msgid "No any collectible is available for preview. Please add your collectible here."
+msgstr ""
+
+#: src/components/NFTSection/index.tsx:207
+#~ msgid "No any collectible is available to preview. Please add your collectible here."
+#~ msgstr ""
+
+#: src/contexts/Tip/useTipValidate.ts:36
+msgid "No Enough Gas Fees"
+msgstr ""
+
+#: src/components/TipDialog.tsx:129
+msgid "Send"
+msgstr ""
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
+msgid "Send authors tips by using Mask Network's Tips function."
+msgstr ""
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
+#~ msgid "Send authors tips by using Mask Network’s Tips function."
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:128
+msgid "Sending..."
+msgstr ""
+
+#: src/components/TipDialog.tsx:156
+#~ msgid "Sent {1} {0} tips successfully."
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:157
+#~ msgid "Sent {amount} {0} tips successfully."
+#~ msgstr ""
+
+#: src/contexts/Tip/useRecipientValidate.ts:28
+msgid "The receiving address is a contract address. Please check again."
+msgstr ""
+
+#: src/contexts/Tip/useRecipientValidate.ts:29
+msgid "The receiving address may be a malicious address."
+msgstr ""
+
+#: src/components/TipDialog.tsx:147
+#: src/components/TipDialog.tsx:179
+msgid "Tips"
+msgstr ""
+
+#: src/components/RecipientSection/index.tsx:46
+msgid "To"
+msgstr ""
+
+#: src/components/TipDialog.tsx:182
+msgid "Tokens"
+msgstr ""
+
+#: src/components/RecipientSection/RecipientSelect.tsx:130
+msgid "View on Explorer"
+msgstr ""

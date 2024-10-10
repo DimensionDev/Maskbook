@@ -5,14 +5,16 @@ import { makeStyles } from '@masknet/theme'
 import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
 import { useReverseAddress, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EthereumBlockie } from '@masknet/shared'
-import { formatCount, formatElapsed, formatElapsedPure, formatPercentage } from '@masknet/web3-shared-base'
+import { formatCount, formatPercentage } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { useIntersectionObserver } from '@react-hookz/web'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { resolveSnapshotProposalUrl } from './helpers.js'
 import { useCurrentAccountVote } from './hooks/useCurrentAccountVote.js'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { intlFormatDistance } from 'date-fns'
 
 const useStyles = makeStyles<{ state?: string }>()((theme, { state }) => {
     return {
@@ -210,18 +212,22 @@ function ProfileProposalListItemHeader(props: ProfileProposalProps) {
 function ProfileProposalListItemBody(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({ state: proposal.state })
-    const t = useSnapshotTrans()
+    const { i18n } = useLingui()
 
     const date = useMemo(() => {
         const now = Date.now()
-        if (now < proposal.start * 1000) {
-            return t.plugin_snapshot_proposal_not_start({ date: formatElapsedPure(proposal.start * 1000, false) })
-        } else if (now > proposal.end * 1000) {
-            return t.plugin_snapshot_proposal_ended({ date: formatElapsed(proposal.end * 1000) })
+        const start = proposal.start * 1000
+        const end = proposal.end * 1000
+        const relativeStartTime = intlFormatDistance(new Date(start), now, { locale: i18n.locale })
+        const relativeEndTime = intlFormatDistance(new Date(end), now, { locale: i18n.locale })
+        if (now < start) {
+            return <Trans>Starts {relativeStartTime}</Trans>
+        } else if (now > end) {
+            return <Trans>Ended {relativeEndTime}</Trans>
         } else {
-            return t.plugin_snapshot_proposal_started({ date: formatElapsedPure(proposal.end * 1000, false) })
+            return <Trans>Ends in {relativeEndTime}</Trans>
         }
-    }, [proposal.start, proposal.end])
+    }, [i18n.locale, proposal.start, proposal.end])
 
     return (
         <section className={classes.detail}>
@@ -236,7 +242,6 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes, cx } = useStyles({ state: proposal.state })
     const theme = useTheme()
-    const t = useSnapshotTrans()
     const { value: currentAccountVote } = useCurrentAccountVote(proposal.id, proposal.votes)
 
     return (
@@ -262,7 +267,9 @@ function ProfileProposalListItemVote(props: ProfileProposalProps) {
                         </Typography>
                         {currentAccountVote?.choice === i + 1 ?
                             <div className={classes.myVote}>
-                                <Typography className={classes.myVoteText}>{t.plugin_snapshot_my_vote()}</Typography>
+                                <Typography className={classes.myVoteText}>
+                                    <Trans>My vote</Trans>
+                                </Typography>
                             </div>
                         :   null}
                     </div>

@@ -9,7 +9,7 @@ import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/sh
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 interface StyleProps {
     loading: boolean
@@ -65,7 +65,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { loading, timeout }) => ({
 }))
 
 export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectProviderModal(props) {
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
     const location = useLocation()
@@ -125,7 +124,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             if (error instanceof Error) {
                 if (error.message === 'timeout') throw error
                 if (error.message.includes('reject') || error.message.includes('cancel')) {
-                    showSnackbar(t.popups_cancel_connect_provider(), {
+                    showSnackbar(<Trans>Connecting operation cancelled in third-party wallet.</Trans>, {
                         variant: 'warning',
                     })
                     handleClose()
@@ -146,20 +145,16 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
 
     return (
         <ActionModal
-            header={
-                providerExist ?
-                    t.popups_wait_for_provider_connect_title({ providerType: String(providerType) })
-                :   t.popups_not_connected_third_party_wallet_title()
-            }
+            header={providerExist ? <Trans>Waiting for {providerType}</Trans> : <Trans>Not connected</Trans>}
             keepMounted
             {...props}
             onClose={handleClose}>
             <Typography className={classes.tips}>
                 {isTimeout ?
-                    t.popups_wait_for_provider_connect_timeout()
+                    <Trans>Wallet request timed out</Trans>
                 : providerExist ?
-                    t.popups_wait_for_provider_connect_tips({ providerType: String(providerType) })
-                :   t.popups_not_connected_third_party_wallet_tips({ providerType: String(providerType) })}
+                    <Trans>Connecting your {providerType} wallet</Trans>
+                :   <Trans>Not found your {providerType} wallet</Trans>}
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 {provider?.icon ?
@@ -169,16 +164,16 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 :   null}
                 {isTimeout ?
                     <Button variant="roundedContained" size="small" sx={{ width: 84, mt: 1.5 }} onClick={handleConnect}>
-                        {t.retry()}
+                        <Trans>Retry</Trans>
                     </Button>
                 :   null}
                 {!providerExist ?
                     <>
                         <Typography fontSize={14} lineHeight="18px" my={1.25}>
-                            {t.popups_not_connected_third_party_wallet_description()}
+                            <Trans>Please install your metamask wallet and set up your first wallet.</Trans>
                         </Typography>
                         <Button variant="roundedContained" size="small" onClick={handleChooseAnotherWallet}>
-                            {t.popups_choose_another_wallet()}
+                            <Trans>Choose another wallet</Trans>
                         </Button>
                     </>
                 :   null}

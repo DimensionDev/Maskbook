@@ -9,7 +9,8 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -68,20 +69,22 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CreateWallet() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
 
     const walletGroup = useWalletGroup()
     const groups = walletGroup?.groups ? Object.entries(walletGroup.groups) : []
 
-    useTitle(t.popups_add_wallet())
+    useTitle(_(msg`Add Wallet`))
 
     return (
         <div className={classes.content}>
             {groups.length ?
                 <>
-                    <Typography className={classes.sectionTitle}>{t.add_new_address_to_an_existing_group()}</Typography>
+                    <Typography className={classes.sectionTitle}>
+                        <Trans>Add new address to an existing group</Trans>
+                    </Typography>
                     <List className={classes.groups}>
                         {groups.map(([key, wallets], index) => {
                             const theFirstWallet = first(sortBy(wallets, (w) => w.createdAt.getTime()))
@@ -112,7 +115,7 @@ export const Component = memo(function CreateWallet() {
                                             :   null
                                         }>
                                         <Typography className={classes.groupName}>
-                                            {t.popups_wallet_group_title({ index: String(index + 1) })}
+                                            <Trans>Wallet Group #{String(index + 1)}</Trans>
                                         </Typography>
                                     </ListItemText>
                                     <Typography className={classes.walletCount}>{wallets.length}</Typography>
@@ -124,7 +127,9 @@ export const Component = memo(function CreateWallet() {
                 </>
             :   null}
 
-            <Typography className={classes.sectionTitle}>{t.or_create_a_new_wallet_group()}</Typography>
+            <Typography className={classes.sectionTitle}>
+                <Trans>Or create a new wallet group</Trans>
+            </Typography>
             <ImportCreateWallet />
         </div>
     )

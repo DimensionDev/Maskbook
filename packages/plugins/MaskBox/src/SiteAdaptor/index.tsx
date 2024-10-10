@@ -8,7 +8,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
 import { PreviewCard } from './components/PreviewCard.js'
 import { Context } from '../hooks/useContext.js'
-import { useMaskBoxTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const isMaskBox = (x: string) => x.startsWith('https://box-beta.mask.io') || x.startsWith('https://box.mask.io')
 
@@ -32,7 +32,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.MaskBox />
-            const name = <Name />
+            const name = <Trans>MaskBox</Trans>
             const iconFilterColor = 'rgba(0, 87, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -51,21 +51,15 @@ const site: Plugin.SiteAdaptor.Definition = {
                 marketListSortingPriority: 14,
                 icon,
                 tutorialLink: 'https://realmasknetwork.notion.site/d0941687649a4ef7a38d71f23ecbe4da',
-                description: <Desc />,
+                description: (
+                    <Trans>Professional multi-chain decentralized platform for launching NFT blind boxes.</Trans>
+                ),
                 category: 'dapp',
                 iconFilterColor,
                 name,
             }
         })(),
     ],
-}
-function Name() {
-    const t = useMaskBoxTrans()
-    return t.plugin_mask_box_name()
-}
-function Desc() {
-    const t = useMaskBoxTrans()
-    return t.plugin_mask_box_description()
 }
 
 export default site

@@ -4,11 +4,12 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useState } from 'react'
 import Services from '#services'
 import { Icons } from '@masknet/icons'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Typography, alpha } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletBalance } from '../index.js'
 import { useToggle } from '@react-hookz/web'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -101,7 +102,6 @@ interface PrimaryKeyDisplayProps {
 }
 
 export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKeyDisplay({ wallet, hiddenArrow }) {
-    const t = useMaskSharedTrans()
     const [display, toggle] = useToggle(false)
     const [expand, setExpand] = useState(!!hiddenArrow)
     const { classes, cx } = useStyles()
@@ -116,7 +116,7 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
     const handleCopy = useCallback(() => {
         if (!privateKey) return
         copyToClipboard(privateKey)
-        showSnackbar(t.copied())
+        showSnackbar(<Trans>Copied</Trans>)
     }, [privateKey])
 
     return (
@@ -157,7 +157,7 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
                     </Box>
                     <Typography className={classes.copy} onClick={handleCopy}>
                         <Icons.Copy size={20} />
-                        {t.popups_wallet_backup_copy_private_key()}
+                        <Trans>Copy private key</Trans>
                     </Typography>
                 </>
             :   null}

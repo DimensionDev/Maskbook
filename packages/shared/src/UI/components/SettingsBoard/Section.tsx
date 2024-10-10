@@ -13,7 +13,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface SectionProps extends PropsWithChildren {
-    title: string
+    title: React.ReactNode
     additions?: React.ReactNode
 }
 

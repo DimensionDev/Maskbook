@@ -2,14 +2,16 @@ import { memo, useCallback, useState } from 'react'
 import { ActionButton } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
+import { UserContext } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function VerifyBackupPasswordModal() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const navigate = useNavigate()
     const [password, setPassword] = useState('')
     const [passwordMatched, setPasswordMatched] = useState(true)
@@ -26,15 +28,15 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
 
     return (
         <ActionModal
-            header={t.popups_backup_persona()}
+            header={<Trans>Backup Persona</Trans>}
             action={
                 <ActionButton onClick={handleExport} disabled={!passwordValid || !passwordMatched || !password.length}>
-                    {t.export()}
+                    <Trans>Export</Trans>
                 </ActionButton>
             }>
             <Box display="flex" flexDirection="column" m={0.5}>
                 <PasswordField
-                    placeholder={t.password()}
+                    placeholder={_(msg`Password`)}
                     onFocus={() => setPasswordMatched(true)}
                     onChange={(e) => {
                         setPassword(e.target.value)
@@ -43,9 +45,9 @@ export const VerifyBackupPasswordModal = memo<ActionModalBaseProps>(function Ver
                     value={password}
                     error={!passwordMatched}
                     helperText={
-                        !passwordValid ? t.popups_backup_password_invalid()
+                        !passwordValid ? <Trans>Please enter backup password to export persona private key.</Trans>
                         : !passwordMatched ?
-                            t.popups_backup_password_incorrect()
+                            <Trans>Incorrect backup password.</Trans>
                         :   null
                     }
                 />

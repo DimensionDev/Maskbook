@@ -2,11 +2,13 @@ import { type TransactionContext } from '@masknet/web3-shared-base'
 import { type ChainId, type TransactionParameter } from '@masknet/web3-shared-evm'
 import { BaseDescriptor } from './Base.js'
 import { getTokenAmountDescription } from '../utils.js'
-import type { TransactionDescriptor } from '../types.js'
+import type { TransactionDescriptorFormatResult } from '../types.js'
 import * as Airdrop from /* webpackDefer: true */ '../../../../../Airdrop/index.js'
 
-export class AirdropDescriptor extends BaseDescriptor implements TransactionDescriptor {
-    override async compute(context_: TransactionContext<ChainId, TransactionParameter>) {
+export class AirdropDescriptor extends BaseDescriptor {
+    override async compute(
+        context_: TransactionContext<ChainId, TransactionParameter>,
+    ): Promise<TransactionDescriptorFormatResult | undefined> {
         const context = context_ as TransactionContext<ChainId>
         if (!context.methods?.length) return
 
@@ -22,11 +24,11 @@ export class AirdropDescriptor extends BaseDescriptor implements TransactionDesc
                     title: 'Claim your Airdrop',
                     description: 'Transaction submitted.',
                     snackbar: {
-                        successfulDescription: `${getTokenAmountDescription(
-                            parameters._amount,
-                            token,
-                        )} were successfully claimed`,
-                        failedDescription: 'Transaction was Rejected!',
+                        successfulDescription: {
+                            key: '{token} were claimed',
+                            token: getTokenAmountDescription(parameters._amount, token),
+                        },
+                        failedDescription: 'Transaction has been rejected!',
                     },
                     popup: {
                         method: name,

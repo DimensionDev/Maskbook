@@ -16,7 +16,7 @@ import { makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Button, Stack, Typography } from '@mui/material'
-import { memo, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
@@ -25,9 +25,9 @@ import { ReloadStatus } from '../ReloadStatus/index.js'
 import { LoadingStatus } from '../LoadingStatus/index.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
-import { useSharedTrans } from '../../../locales/index.js'
 import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,8 +64,6 @@ interface PersonaSelectPanelProps extends withClasses<'checked' | 'unchecked' | 
 
 export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function PersonaSelectPanel(props) {
     const { finishTarget, enableVerify = true, onClose } = props
-
-    const t = useSharedTrans()
 
     const currentPersonaIdentifier = useCurrentPersona()
 
@@ -107,9 +105,9 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
             info: {
                 target: 'dashboard',
                 url: DashboardRoutes.SignUpPersona,
-                text: t.applications_create_persona_hint(),
-                title: t.applications_create_persona_title(),
-                actionHint: t.applications_create_persona_action(),
+                text: <Trans>Please create a persona and verify your account to use this.</Trans>,
+                title: <Trans>Persona</Trans>,
+                actionHint: <Trans>Create persona</Trans>,
             },
         })
     }, [!personas.length, isPending, !error])
@@ -175,33 +173,29 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
                 const { persona } = selectedPersona
                 if (!isConnected && !isVerified && enableVerify)
                     return {
-                        buttonText: t.applications_persona_verify_connect({
-                            nickname: persona.nickname ?? '',
-                        }),
-                        hint: t.applications_persona_verify_connect_hint({
-                            nickname: persona.nickname ?? '',
-                        }),
+                        buttonText: <Trans>Connect and Verify {persona.nickname ?? ''}</Trans>,
+                        hint: (
+                            <Trans>
+                                Please connect {persona.nickname ?? ''} and send a proof post before using dApps.
+                            </Trans>
+                        ),
                     }
                 if (!isConnected)
                     return {
-                        buttonText: t.applications_persona_connect({
-                            nickname: persona.nickname ?? '',
-                        }),
-                        hint: t.applications_persona_connect_hint({
-                            nickname: persona.nickname ?? '',
-                        }),
+                        buttonText: <Trans>Connect {persona.nickname ?? ''}</Trans>,
+                        hint: <Trans>Please connect {persona.nickname ?? ''} before using dApps.</Trans>,
                     }
                 if (!isVerified)
                     return {
-                        buttonText: t.applications_persona_verify({
-                            nickname: persona.nickname ?? '',
-                        }),
-                        hint: t.applications_persona_verify_hint(),
+                        buttonText: <Trans>Verify {persona.nickname ?? ''}</Trans>,
+                        hint: (
+                            <Trans>
+                                Please verify the current persona with a social media account before using dApps.
+                            </Trans>
+                        ),
                     }
                 return {
-                    buttonText: t.applications_persona_connect({
-                        nickname: persona.nickname ?? '',
-                    }),
+                    buttonText: <Trans>Connect {persona.nickname ?? ''}</Trans>,
                 }
             })(),
             onClick: handleClick,
@@ -258,8 +252,8 @@ export const PersonaSelectPanel = memo<PersonaSelectPanelProps>(function Persona
 })
 
 interface ActionContentProps extends withClasses<'button'> {
-    buttonText?: string
-    hint?: string
+    buttonText?: ReactNode
+    hint?: ReactNode
     onClick(): Promise<void>
 }
 

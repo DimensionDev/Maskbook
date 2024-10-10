@@ -1,5 +1,6 @@
 import { last } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+// cspell:disable-next-line
 import { MerkleTree } from 'merkletreejs'
 import { secondsToMilliseconds } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'

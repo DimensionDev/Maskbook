@@ -1,12 +1,12 @@
-import { Component, type PropsWithChildren } from 'react'
+import { Component, type PropsWithChildren, type ReactNode } from 'react'
 import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
-import { useSnapshotTrans } from '../locales/i18n_generated.js'
 import { useSharedTrans } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 export class LoadingFailCard extends Component<
     PropsWithChildren<{
-        title: string
+        title: ReactNode
         retry: () => void
         isFullPluginDown?: boolean
     }>
@@ -39,7 +39,6 @@ export class LoadingFailCard extends Component<
     }
 }
 function Full(props: { onClick: () => void }) {
-    const t = useSnapshotTrans()
     const t2 = useSharedTrans()
     return (
         <Box style={{ textAlign: 'center', padding: 16 }}>
@@ -69,11 +68,12 @@ function Full(props: { onClick: () => void }) {
 }
 
 function NotFull(props: { onClick: () => void }) {
-    const t = useSnapshotTrans()
     const t2 = useSharedTrans()
     return (
         <Box style={{ textAlign: 'center' }}>
-            <Typography color={(t) => t.palette.maskColor.publicMain}>{t.plugin_snapshot_load_failed()}</Typography>
+            <Typography color={(t) => t.palette.maskColor.publicMain}>
+                <Trans>Loading failed due to Snapshot API service breakdown.</Trans>
+            </Typography>
             <Button
                 variant="roundedContained"
                 sx={{

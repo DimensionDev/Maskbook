@@ -5,7 +5,8 @@ import { ImageType } from '../types.js'
 import type { User, ShowMeta, EssayRSSNode } from '../types.js'
 import { MASK_TWITTER, PunkIcon, Punk3D } from '../constants.js'
 import { useUser } from './useUser.js'
-import { usePetsTrans } from '../locales/i18n_generated.js'
+import { useLingui } from '@lingui/react'
+import { msg } from '@lingui/macro'
 
 export function useEssay(user: User) {
     return useAsyncRetry(async () => {
@@ -20,9 +21,9 @@ export function useEssay(user: User) {
     }, [user.userId, user.address])
 }
 
-export function useDefaultEssay(user: User) {
+export function useDefaultEssay(user: User): ShowMeta | undefined {
     const profileUser = useUser()
-    const t = usePetsTrans()
+    const { _ } = useLingui()
     const essayMeta = useMemo<ShowMeta | undefined>(() => {
         if (user?.userId || user?.userId !== '$unknown') {
             const isProfile = user.userId === profileUser?.userId
@@ -32,7 +33,12 @@ export function useDefaultEssay(user: User) {
                     isMASK ? Punk3D.url
                     : isProfile ? PunkIcon
                     : '',
-                word: t.pet_setting_tooltip({ context: isMASK ? 'punk' : 'default' }),
+                word:
+                    isMASK ?
+                        _(msg`I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!`)
+                    :   _(
+                            msg`Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet.`,
+                        ),
                 type: ImageType.NORMAL,
                 contract: '',
                 tokenId: '',
@@ -41,6 +47,6 @@ export function useDefaultEssay(user: User) {
         } else {
             return
         }
-    }, [user, profileUser, t])
+    }, [user, profileUser, _])
     return essayMeta
 }

@@ -9,11 +9,12 @@ import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import Services from '#services'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { useVerifiedWallets } from '../../hooks/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     walletList: {
@@ -73,7 +74,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const ConnectedWallet = memo(function ConnectedWallet() {
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 
@@ -137,9 +137,9 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
 
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
-                showSnackbar(t.popups_wallet_disconnect_success())
+                showSnackbar(<Trans>Wallet disconnected</Trans>)
             } catch {
-                showSnackbar(t.popups_wallet_disconnect_failed(), {
+                showSnackbar(<Trans>Failed to disconnect wallet</Trans>, {
                     variant: 'error',
                 })
             }
@@ -190,7 +190,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                             onClick={async () => {
                                 if (!currentPersona) return
                                 const confirmed = await ConfirmDialog.openAndWaitForClose({
-                                    title: t.popups_release_bind_wallet_title(),
+                                    title: <Trans>Disconnect Wallet?</Trans>,
                                     confirmVariant: 'warning',
                                     message: (
                                         // eslint-disable-next-line react/naming-convention/component-name
@@ -213,7 +213,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
             <Box className={classes.connect} onClick={() => modalNavigate(PopupModalRoutes.SelectProvider)}>
                 <Icons.Connect size={16} />
                 <Typography fontSize={12} fontWeight={700} lineHeight="16px">
-                    {t.connect()}
+                    <Trans>Connect</Trans>
                 </Typography>
             </Box>
         </Box>

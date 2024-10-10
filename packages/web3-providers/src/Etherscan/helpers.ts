@@ -14,6 +14,7 @@ export function toTransaction(transaction: Transaction): ExplorerAPI.Transaction
         input: transaction.input,
         transactionIndex: Number.parseInt(transaction.transactionIndex, 10),
         value: transaction.value,
+        // cspell:disable-next-line
         status: transaction.txreceipt_status,
         confirmations: Number.parseInt(transaction.confirmations, 10),
     }

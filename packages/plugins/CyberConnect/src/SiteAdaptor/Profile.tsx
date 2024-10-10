@@ -9,9 +9,9 @@ import { Icons } from '@masknet/icons'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import ConnectButton from './ConnectButton.js'
 import { FollowersPage } from './FollowersPage.js'
-import { useCyberConnectTrans } from '../locales/index.js'
 import { ProfileTab } from '../constants.js'
 import { PluginCyberConnectRPC } from '../messages.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -99,7 +99,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 function Profile({ url }: { url: string }) {
-    const t = useCyberConnectTrans()
     const { classes } = useStyles()
     const [, , , , queryAddress] = url.split('/')
     const {
@@ -120,13 +119,15 @@ function Profile({ url }: { url: string }) {
     function getNodata() {
         return (
             <EmptyStatus height={400} p={2}>
-                {currentTab === tabs.Followers ? t.no_followers() : t.no_followings()}
+                {currentTab === tabs.Followers ?
+                    <Trans>No followers.</Trans>
+                :   <Trans>No following friends.</Trans>}
             </EmptyStatus>
         )
     }
 
     if (isPending) return <LoadingStatus height={196} omitText />
-    if (error) return <ReloadStatus height={196} message={t.failed()} onRetry={refetch} />
+    if (error) return <ReloadStatus height={196} message={<Trans>Load failed</Trans>} onRetry={refetch} />
 
     return (
         <TabContext value={currentTab}>
@@ -182,12 +183,12 @@ function Profile({ url }: { url: string }) {
                 <Stack className={classes.follow}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="CyberConnection">
                         <Tab
-                            label={t.followings()}
+                            label={<Trans>Followings</Trans>}
                             value={tabs.Followings}
                             className={tabs.Followings === currentTab ? classes.tabActive : classes.tab}
                         />
                         <Tab
-                            label={t.followers()}
+                            label={<Trans>Followers</Trans>}
                             value={tabs.Followers}
                             className={tabs.Followers === currentTab ? classes.tabActive : classes.tab}
                         />

@@ -14,6 +14,8 @@ import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ContactType } from '../../pages/Wallet/type.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -93,6 +95,7 @@ interface EditContactModalProps extends BottomDrawerProps {
 }
 
 function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }: EditContactModalProps) {
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
 
@@ -107,7 +110,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     )
 
     const validationMessage = useMemo(() => {
-        if (nameAlreadyExist) return t.wallets_transfer_contact_wallet_name_already_exist()
+        if (nameAlreadyExist) return <Trans>The wallet name already exists.</Trans>
         return ''
     }, [t, nameAlreadyExist])
 
@@ -119,7 +122,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             await EVMWeb3.renameWallet?.(address, _name, { providerType: ProviderType.MaskWallet })
         }
 
-        showSnackbar(t.wallet_edit_contact_successfully())
+        showSnackbar(<Trans>Contact edited.</Trans>)
 
         onConfirm?.()
     }, [name, address, type, onConfirm])
@@ -134,7 +137,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     inputProps={{ style: { textAlign: 'center' } }}
                     classes={{ root: classes.inputRoot }}
                     spellCheck={false}
-                    placeholder={t.name()}
+                    placeholder={_(msg`Name`)}
                     className={classes.input}
                     value={name}
                     onChange={(ev) => {
@@ -150,14 +153,14 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
             :   null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButton
                     onClick={edit}
                     loading={loading}
                     className={classes.button}
                     disabled={nameAlreadyExist || !name.trim()}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             </div>
         </BottomDrawer>

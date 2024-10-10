@@ -1,15 +1,17 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { Box, Typography, useTheme } from '@mui/material'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, UserContext } from '../../../shared-ui/index.js'
+import { UserContext } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const theme = useTheme()
     const [params] = useSearchParams()
 
@@ -18,7 +20,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
     const { updateUser } = UserContext.useContainer()
     const [newPassword, setNewPassword] = useState('')
     const [repeatPassword, setRepeatPassword] = useState('')
-    const [passwordValidError, setPasswordValidError] = useState('')
+    const [passwordValidError, setPasswordValidError] = useState<ReactNode>('')
     const [passwordMatched, setPasswordMatched] = useState(true)
 
     const navigate = useNavigate()
@@ -29,7 +31,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
         if (newPassword.length < 8 || newPassword.length > 20) {
             return
         } else if (!MATCH_PASSWORD_RE.test(newPassword)) {
-            setPasswordValidError(t.popups_settings_backup_password_invalid())
+            setPasswordValidError(<Trans>Lack of number, letter or special character.</Trans>)
             return
         }
         setPasswordValidError('')
@@ -46,7 +48,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
             backupPassword: newPassword,
         })
 
-        showSnackbar(t.popups_backup_password_set_successfully())
+        showSnackbar(<Trans>Backup password set successfully</Trans>)
 
         if (to) {
             navigate(to, { replace: true })
@@ -68,15 +70,15 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
 
     return (
         <ActionModal
-            header={t.popups_backup_password()}
+            header={<Trans>Backup Password</Trans>}
             action={
                 <ActionButton onClick={handleClick} loading={loading} disabled={disabled}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             }>
             <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" rowGap={2} m={0.5}>
                 <PasswordField
-                    placeholder={t.password()}
+                    placeholder={_(msg`Password`)}
                     onChange={(e) => setNewPassword(e.target.value)}
                     autoFocus
                     onBlur={validPassword}
@@ -85,20 +87,23 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     helperText={passwordValidError}
                 />
                 <PasswordField
-                    placeholder={t.reenter()}
+                    placeholder={_(msg`Re-enter`)}
                     onChange={(e) => setRepeatPassword(e.target.value)}
                     value={repeatPassword}
                     onBlur={validRepeatPassword}
                     error={!passwordMatched}
-                    helperText={!passwordMatched ? t.popups_backup_password_inconsistency() : ''}
+                    helperText={!passwordMatched ? <Trans>Two entered passwords are not the same.</Trans> : ''}
                 />
                 <Box>
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>
-                        {t.popups_backup_password_rules_tips()}
+                        <Trans>
+                            Backup password must be 8-20 characters, including uppercase, lowercase, special characters
+                            and numbers.
+                        </Trans>
                     </Typography>
                     {to ?
                         <Typography mt={2} fontSize={12} color={theme.palette.maskColor.second}>
-                            {t.popups_backup_password_tips()}
+                            <Trans>Please set up backup password to export private key.</Trans>
                         </Typography>
                     :   null}
                 </Box>

@@ -13,9 +13,9 @@ import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
 import { ContentTabs } from '../types.js'
 import { useProposalList } from './hooks/useProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
-import { useSnapshotTrans } from '../locales/index.js'
 import { ProfileCard, type ProfileCardProps } from './ProfileCard.js'
 import { ProfileProposalList } from './ProfileProposalList.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -48,7 +48,6 @@ interface ProfileViewProps extends withClasses<'content' | 'footer'> {
 export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
     const { classes } = useStyles()
-    const t = useSnapshotTrans()
     const theme = useTheme()
     const [currentTab, , , setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
@@ -81,7 +80,7 @@ export function ProfileView(props: ProfileViewProps) {
     if (isMinimalMode) {
         return (
             <PluginCardFrameMini
-                title={t.plugin_snapshot_info_snapshot()}
+                title={<Trans>Snapshot</Trans>}
                 icon={<Icons.Snapshot className={classes.iconSnapshot} />}>
                 <ThemeProvider theme={MaskLightTheme}>
                     <PluginEnableBoundary pluginID={PluginID.Snapshot}>
@@ -126,7 +125,7 @@ export function ProfileView(props: ProfileViewProps) {
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />
                         <Typography fontSize="14px" mt={1.5}>
-                            {t.loading()}
+                            <Trans>Loading</Trans>
                         </Typography>
                     </Stack>
                 </CardContent>
@@ -136,7 +135,7 @@ export function ProfileView(props: ProfileViewProps) {
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <Icons.EmptySimple size={36} />
                         <Typography fontSize="14px" mt={1.5}>
-                            {t.plugin_snapshot_proposal_no_results()}
+                            <Trans>Oops, we can't find any results.</Trans>
                         </Typography>
                     </Stack>
                 </CardContent>

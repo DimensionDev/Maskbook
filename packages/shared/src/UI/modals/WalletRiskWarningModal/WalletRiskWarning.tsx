@@ -2,10 +2,11 @@ import { useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { InjectedDialog, ActionButtonPromise, WalletStatusBox, useSharedTrans, SharedTrans } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, WalletStatusBox, SharedTrans } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -65,7 +66,6 @@ interface WalletRiskWarningProps {
 }
 
 export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRiskWarningProps) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()
@@ -75,7 +75,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
     const onConfirm = useCallback(async () => {
         try {
             if (!account) {
-                showSnackbar(t.wallet_risk_warning_no_select_wallet(), {
+                showSnackbar(<Trans>No wallet selected.</Trans>, {
                     variant: 'error',
                     preventDuplicate: true,
                 })
@@ -89,10 +89,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
     }, [showSnackbar, account, onClose])
 
     return (
-        <InjectedDialog
-            title={isMobile ? undefined : t.wallet_risk_warning_dialog_title()}
-            open={open}
-            onClose={onClose}>
+        <InjectedDialog title={isMobile ? undefined : <Trans>Risk Warning</Trans>} open={open} onClose={onClose}>
             <DialogContent className={classes.paper}>
                 <div className={classes.icon}>
                     <Icons.Warning size={90} sx={{ filter: 'drop-shadow(0px 6px 12px rgba(255, 53, 69, 0.2))' }} />
@@ -101,7 +98,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     className={classes.title}
                     align="center"
                     variant="h4"
-                    children={t.wallet_risk_warning_dialog_title()}
+                    children={<Trans>Risk Warning</Trans>}
                 />
                 <Typography
                     className={classes.article}
@@ -115,7 +112,9 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                         />
                     }
                 />
-                <Typography className={classes.article}>{t.wallet_risk_warning_confirm_tips()}</Typography>
+                <Typography className={classes.article}>
+                    <Trans>By confirming means that you agree to bear the possible risks above.</Trans>
+                </Typography>
                 <WalletStatusBox disableChange withinRiskWarningDialog />
             </DialogContent>
             <DialogActions className={classes.buttons}>
@@ -125,20 +124,20 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     variant="outlined"
                     color="secondary"
                     onClick={onClose}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButtonPromise
                     className={classes.button}
                     fullWidth
                     disabled={!account}
-                    init={t.confirm()}
-                    waiting={t.wallet_risk_confirm_confirming()}
-                    failed={t.wallet_risk_confirm_failed()}
+                    init={<Trans>Confirm</Trans>}
+                    waiting={<Trans>Confirming</Trans>}
+                    failed={<Trans>Failed to confirm</Trans>}
                     executor={onConfirm}
                     completeIcon={null}
                     failIcon={null}
                     failedOnClick="use executor"
-                    complete={t.done()}
+                    complete={<Trans>Done</Trans>}
                 />
             </DialogActions>
         </InjectedDialog>

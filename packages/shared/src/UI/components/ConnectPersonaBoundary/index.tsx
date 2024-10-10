@@ -5,6 +5,7 @@ import { Icons } from '@masknet/icons'
 import { DashboardRoutes, type PersonaIdentifier, type PersonaInformation, type PluginID } from '@masknet/shared-base'
 import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedTrans } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -83,7 +84,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Identity size={18} sx={{ marginRight: '8px' }} />
-                        {t.persona_boundary_create_persona()}
+                        <Trans>Create Persona</Trans>
                     </Button>
                 )
 
@@ -91,14 +92,14 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Connect size={18} sx={{ marginRight: '8px', color: '#fff' }} />
-                        {t.persona_boundary_connect_persona()}
+                        <Trans>Connect Persona</Trans>
                     </Button>
                 )
             if (!status.verified)
                 return (
                     <Button disabled={statusLoading} className={classes.button}>
                         <Icons.Connect size={18} sx={{ marginRight: '8px', color: '#fff' }} />
-                        {t.persona_boundary_verify_persona()}
+                        <Trans>Verify your X ID</Trans>
                     </Button>
                 )
             return null

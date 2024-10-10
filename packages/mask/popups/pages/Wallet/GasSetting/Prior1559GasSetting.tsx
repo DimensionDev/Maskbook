@@ -21,11 +21,12 @@ import {
 import { makeStyles } from '@masknet/theme'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { formatCurrency, GasOptionType, isLessThan, pow10, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -91,7 +92,7 @@ const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
 }
 
 export const Prior1559GasSetting = memo(() => {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: gasOptions_ } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -118,15 +119,15 @@ export const Prior1559GasSetting = memo(() => {
             gasOptions ?
                 [
                     {
-                        title: t.popups_wallet_gas_fee_settings_low(),
+                        title: <Trans>Low</Trans>,
                         gasPrice: gasOptions.slow,
                     },
                     {
-                        title: t.popups_wallet_gas_fee_settings_medium(),
+                        title: <Trans>Medium</Trans>,
                         gasPrice: gasOptions.standard,
                     },
                     {
-                        title: t.popups_wallet_gas_fee_settings_high(),
+                        title: <Trans>High</Trans>,
                         gasPrice: gasOptions.fast,
                     },
                 ]
@@ -165,12 +166,12 @@ export const Prior1559GasSetting = memo(() => {
         return zod.object({
             gasLimit: zod
                 .string()
-                .min(1, t.wallet_transfer_error_gas_limit_absence())
+                .min(1, _(msg`Enter a gas limit`))
                 .refine(
                     (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit ?? 0),
-                    t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: String(minGasLimit) }),
+                    _(msg`Gas limit must be at least ${String(minGasLimit)}`),
                 ),
-            gasPrice: zod.string().min(1, t.wallet_transfer_error_gas_price_absence()),
+            gasPrice: zod.string().min(1, _(msg`Enter a gas price`)),
         })
     }, [minGasLimit])
 
@@ -271,7 +272,9 @@ export const Prior1559GasSetting = memo(() => {
                 </div>
             :   null}
             <form onSubmit={onSubmit}>
-                <Typography className={classes.label}>{t.popups_wallet_gas_fee_settings_gas_limit()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Gas Limit</Trans>
+                </Typography>
                 <Controller
                     control={control}
                     render={({ field }) => {
@@ -294,7 +297,9 @@ export const Prior1559GasSetting = memo(() => {
                     }}
                     name="gasLimit"
                 />
-                <Typography className={classes.label}>{t.popups_wallet_gas_price()}</Typography>
+                <Typography className={classes.label}>
+                    <Trans>Gas Price</Trans>
+                </Typography>
                 <Controller
                     control={control}
                     render={({ field }) => (
@@ -323,7 +328,7 @@ export const Prior1559GasSetting = memo(() => {
                 classes={{ root: classes.button, disabled: classes.disabled }}
                 disabled={!isEmpty(errors)}
                 onClick={onSubmit}>
-                {t.confirm()}
+                <Trans>Confirm</Trans>
             </LoadingButton>
         </>
     )

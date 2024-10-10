@@ -1,6 +1,5 @@
 import { InjectedDialog } from '@masknet/shared'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { useDashboardTrans } from '../../locales/i18n_generated.js'
+import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAsync, useAsyncFn } from 'react-use'
@@ -17,6 +16,8 @@ import { decode, encode } from '@msgpack/msgpack'
 import Services from '#services'
 import { BackupPreviewModal } from '../modals.js'
 import type { BackupAccountType } from '@masknet/shared-base'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     account: {
@@ -71,11 +72,11 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
     code,
     abstract,
 }) {
-    const t = useDashboardTrans()
+    const { _ } = useLingui()
     const { classes, theme } = useStyles()
     const [process, setProcess] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')
-    const [backupPasswordError, setBackupPasswordError] = useState('')
+    const [backupPasswordError, setBackupPasswordError] = useState<ReactNode>()
     const [showCongratulation, setShowCongratulation] = useState(false)
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
@@ -93,7 +94,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })
 
         if (!response.ok || response.status !== 200) {
-            showSnackbar(t.cloud_backup_download_link_expired(), { variant: 'error' })
+            showSnackbar(<Trans>The download link is expired</Trans>, { variant: 'error' })
             handleClose()
             navigate(DashboardRoutes.CloudBackup, { replace: true })
             return
@@ -136,7 +137,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
             const backupText = JSON.stringify(decode(decrypted))
             const summary = await Services.Backup.generateBackupSummary(backupText)
             if (summary.isErr()) {
-                setBackupPasswordError(t.cloud_backup_incorrect_backup_password())
+                setBackupPasswordError(<Trans>Incorrect cloud backup password, please try again.</Trans>)
                 return
             }
             const backupSummary = summary.unwrapOr(undefined)
@@ -146,13 +147,13 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                 if (!hasPassword) await Services.Wallet.setDefaultPassword()
             }
             await Services.Backup.restoreBackup(backupText)
-            showSnackbar(t.cloud_backup_download_backup(), {
+            showSnackbar(<Trans>Download backup</Trans>, {
                 variant: 'success',
-                message: t.cloud_backup_merge_to_local_successfully(),
+                message: <Trans>Backup downloaded and merged to local successfully.</Trans>,
             })
             setShowCongratulation(true)
         } catch {
-            showSnackbar(t.cloud_backup_merge_to_local_failed())
+            showSnackbar(<Trans>Failed to download and merge the backup.</Trans>)
         }
     }, [encrypted, backupPassword, account])
 
@@ -170,12 +171,12 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
 
     if (showCongratulation)
         return (
-            <InjectedDialog title={t.cloud_backup_merge_to_local_database()} open={open} onClose={handleClose}>
+            <InjectedDialog title={<Trans>Merge data to local database</Trans>} open={open} onClose={handleClose}>
                 <DialogContent>
                     <Box className={classes.container}>
                         <Typography fontSize={36}>🎉</Typography>
                         <Typography fontSize={24} fontWeight={700} lineHeight="120%" sx={{ my: 1.5 }}>
-                            {t.congratulations()}
+                            <Trans>Congratulations</Trans>
                         </Typography>
                         <Typography
                             fontSize={14}
@@ -183,20 +184,23 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                             lineHeight="18px"
                             color={theme.palette.maskColor.second}
                             textAlign="center">
-                            {t.cloud_backup_merge_to_local_congratulation_tips()}
+                            <Trans>
+                                Data merged from Mask Cloud Service to local successfully. Re-enter your password to
+                                encrypt and upload the new backup to Mask Cloud Service.
+                            </Trans>
                         </Typography>
                     </Box>
                 </DialogContent>
                 <DialogActions>
                     <ActionButton fullWidth onClick={handleClickBackup}>
-                        {t.cloud_backup_backup_to_mask_cloud_service()}
+                        <Trans>Backup to Mask Cloud Service</Trans>
                     </ActionButton>
                 </DialogActions>
             </InjectedDialog>
         )
 
     return (
-        <InjectedDialog title={t.cloud_backup_merge_to_local_database()} open={open} onClose={onClose}>
+        <InjectedDialog title={<Trans>Merge data to local database</Trans>} open={open} onClose={onClose}>
             <DialogContent>
                 <Typography className={classes.account}>{account}</Typography>
                 <Box className={classes.box}>
@@ -210,7 +214,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                             fontWeight={700}
                             lineHeight="16px">
                             {process !== 100 ?
-                                t.data_downloading()
+                                <Trans>Downloading</Trans>
                             :   <>
                                     <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
                                         {formatFileSize(Number(size), false)}
@@ -231,20 +235,20 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                 <PasswordField
                     fullWidth
                     value={backupPassword}
-                    placeholder={t.settings_label_backup_password()}
+                    placeholder={_(msg`Backup Password`)}
                     onChange={(e) => {
                         setBackupPassword(e.target.value)
                         setBackupPasswordError('')
                     }}
                     onBlur={(e) => {
                         if (!passwordRegexp.test(e.target.value)) {
-                            setBackupPasswordError(t.cloud_backup_incorrect_backup_password())
+                            setBackupPasswordError(<Trans>Incorrect cloud backup password, please try again.</Trans>)
                         }
                     }}
                     error={!!backupPasswordError}
                     helperText={
                         backupPasswordError ? backupPasswordError : (
-                            t.cloud_backup_enter_backup_password_to_decrypt_file()
+                            <Trans>Please enter cloud backup password to download file.</Trans>
                         )
                     }
                 />
@@ -255,7 +259,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                     onClick={handleClickMerge}
                     loading={loading}
                     disabled={!!backupPasswordError || !backupPassword || !encrypted}>
-                    {t.cloud_backup_merge_to_local()}
+                    <Trans>Merge to local</Trans>
                 </ActionButton>
             </DialogActions>
         </InjectedDialog>

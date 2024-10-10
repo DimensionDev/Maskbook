@@ -12,10 +12,11 @@ import {
     SelectableFile,
     UploadingFile,
 } from './Files/index.js'
-import { FileServiceTrans, useFileServiceTrans } from '../../locales/index.js'
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/modals.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -56,7 +57,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
 }
 
 export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
-    const t = useFileServiceTrans()
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
 
@@ -67,14 +68,14 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
             try {
                 await PluginFileServiceRPC.deleteFile(file.id)
                 refetchFiles()
-                showSnackbar(t.delete_file_title({ context: 'success' }), {
+                showSnackbar(<Trans>File delete</Trans>, {
                     variant: 'success',
-                    message: t.delete_file_message({ context: 'success', name: file.name }),
+                    message: <Trans>File {file.name} deleted.</Trans>,
                 })
             } catch (err) {
-                showSnackbar(t.delete_file_title({ context: 'failed' }), {
+                showSnackbar(<Trans>File delete failed</Trans>, {
                     variant: 'error',
-                    message: t.delete_file_message({ context: 'failed', name: file.name }),
+                    message: <Trans>Failed to delete, please try again.</Trans>,
                 })
             }
         },
@@ -84,44 +85,40 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
     const handleDelete = useCallback(
         async (file: FileInfo) => {
             const confirmed = await ConfirmModal.openAndWaitForClose({
-                title: t.delete_file(),
+                title: _(msg`Delete File`),
                 message: (
-                    // eslint-disable-next-line react/naming-convention/component-name
-                    <FileServiceTrans.delete_message
-                        values={{
-                            name: file.name,
-                        }}
-                        components={{
-                            file: (
-                                <Typography
-                                    color={(theme) => theme.palette.maskColor.main}
-                                    fontSize={14}
-                                    fontWeight={700}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        Do you want to delete file{' '}
+                        <Typography color={(theme) => theme.palette.maskColor.main} fontSize={14} fontWeight={700}>
+                            {file.name}
+                        </Typography>
+                    </Trans>
                 ),
-                description: t.delete_description(),
-                confirmLabel: t.delete(),
+                description: (
+                    <Trans>
+                        Users can only delete local links of these files. Files on the decentralized storage protocols
+                        cannot be deleted.
+                    </Trans>
+                ),
+                confirmLabel: _(msg`Delete`),
             })
             if (confirmed) await deleteFile(file)
         },
-        [refetchFiles, t],
+        [refetchFiles],
     )
 
     const handleRename = useCallback(
         async (file: FileInfo) => {
             const name = await RenameModal.openAndWaitForClose({
                 currentName: file.name,
-                message: t.rename_validation(),
+                message: <Trans>File name must between 3 to 20 characters.</Trans>,
             })
             if (!name) return
 
             await PluginFileServiceRPC.renameFile(file.id, name)
             refetchFiles()
         },
-        [refetchFiles, t],
+        [refetchFiles],
     )
 
     return (

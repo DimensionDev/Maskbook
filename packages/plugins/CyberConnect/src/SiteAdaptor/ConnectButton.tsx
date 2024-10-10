@@ -6,8 +6,8 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { useCyberConnectTrans } from '../locales/i18n_generated.js'
 import { useSharedTrans, WalletConnectedBoundary } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -45,7 +45,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default function ConnectButton({ address }: { address: string }) {
-    const t = useCyberConnectTrans()
     const sharedI18N = useSharedTrans()
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext()
@@ -87,11 +86,6 @@ export default function ConnectButton({ address }: { address: string }) {
         }
     }, [ccInstance, address, isFollowing])
 
-    const buttonText = useMemo(() => {
-        if (wallet?.owner) sharedI18N.coming_soon()
-        return !isFollowing ? t.follow_now() : t.unfollow()
-    }, [wallet?.owner, isFollowing])
-
     if (!isSameAddress(account, address)) {
         return (
             <WalletConnectedBoundary
@@ -106,7 +100,11 @@ export default function ConnectButton({ address }: { address: string }) {
                     onClick={handleClick}
                     variant="roundedContained"
                     disabled={!!wallet?.owner}>
-                    {buttonText}
+                    {wallet?.owner ?
+                        sharedI18N.coming_soon()
+                    : !isFollowing ?
+                        <Trans>Follow Now</Trans>
+                    :   <Trans>Unfollow</Trans>}
                 </ActionButton>
             </WalletConnectedBoundary>
         )

@@ -10,7 +10,6 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material'
-import { useRedPacketTrans } from '../locales/index.js'
 import { makeStyles } from '@masknet/theme'
 import { useCallback, useMemo, useState } from 'react'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
@@ -20,6 +19,7 @@ import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { getEnumAsArray } from '@masknet/kit'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) => ({
     container: {
@@ -116,35 +116,14 @@ export const REQUIREMENT_ICON_MAP: Record<RequirementType, GeneratedIcon> = {
 }
 
 export const REQUIREMENT_TITLE_MAP: Record<RequirementType, React.ReactNode> = {
-    [RequirementType.Follow]: <Follow />,
-    [RequirementType.Like]: <Like />,
-    [RequirementType.Repost]: <Repost />,
-    [RequirementType.Comment]: <Comment />,
-    [RequirementType.NFTHolder]: <NFTHolder />,
-}
-function Follow() {
-    const t = useRedPacketTrans()
-    return t.follow_me()
-}
-function Like() {
-    const t = useRedPacketTrans()
-    return t.like()
-}
-function Repost() {
-    const t = useRedPacketTrans()
-    return t.repost()
-}
-function Comment() {
-    const t = useRedPacketTrans()
-    return t.comment()
-}
-function NFTHolder() {
-    const t = useRedPacketTrans()
-    return t.nft_holder()
+    [RequirementType.Follow]: <Trans>Follow me</Trans>,
+    [RequirementType.Like]: <Trans>Like</Trans>,
+    [RequirementType.Repost]: <Trans>Repost</Trans>,
+    [RequirementType.Comment]: <Trans>Comment</Trans>,
+    [RequirementType.NFTHolder]: <Trans>NFT holder</Trans>,
 }
 
 export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
-    const t = useRedPacketTrans()
     const [selectedRules, setSelectedRules] = useState(props.origin ?? [RequirementType.Follow])
     const [selectedCollection, setSelectedCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
     const { classes } = useStyles({ isFirefly: props.isFirefly })
@@ -182,7 +161,9 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
     return (
         <>
             <Box className={classes.container}>
-                <Alert open>{t.claim_requirements_tips()}</Alert>
+                <Alert open>
+                    <Trans>You can set one or multiple rules to be eligible to win a Lucky Drop.</Trans>
+                </Alert>
                 <List dense className={classes.list}>
                     {getEnumAsArray(RequirementType).map(({ value }) => {
                         const checked = selectedRules.includes(value)
@@ -227,7 +208,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                                 :   null}
                             </Box>
                         :   <Typography className={classes.selectText}>
-                                {t.select_nft_collection_to_gate_access()}
+                                <Trans>Select NFT collection to gate access</Trans>
                             </Typography>
                         }
                         <Icons.ArrowDrop size={18} />
@@ -239,7 +220,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                     onClick={() => setSelectedRules(EMPTY_LIST)}
                     disableRipple
                     disableElevation>
-                    {t.clear_all_requirements()}
+                    <Trans>Clear all requirements</Trans>
                 </Button>
             </Box>
             <Box className={classes.footer}>
@@ -253,7 +234,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                             nftCollectionName: selectedCollection?.name,
                         })
                     }>
-                    {t.next_button()}
+                    <Trans>Next</Trans>
                 </Button>
             </Box>
         </>

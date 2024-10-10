@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ConfirmDialog } from '../UI/modals/modals.js'
-import { useSharedTrans } from '../locales/i18n_generated.js'
+import { Select, Trans } from '@lingui/macro'
 
 interface Options {
     address?: string
@@ -18,7 +18,6 @@ interface Options {
  * collectionId is more accurate
  */
 export function useReportSpam({ pluginID, chainId, address, collectionId }: Options) {
-    const t = useSharedTrans()
     const isSolana = pluginID === NetworkPluginID.PLUGIN_SOLANA
     const { data: collectionByAddress } = useQuery({
         enabled: !collectionId && !isSolana,
@@ -61,15 +60,25 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
     const { showSnackbar } = useCustomSnackbar()
     const promptReport = useCallback(async () => {
         const confirmed = await ConfirmDialog.openAndWaitForClose({
-            title: t.report_nft(),
-            message: t.confirm_to_report_nft({ name: collection?.name || 'this NFT' }),
+            title: <Trans>Report NFT Scam Contract?</Trans>,
+            message: (
+                <Trans>
+                    Are you sure to report{' '}
+                    <Select
+                        value={collection?.name ? 'hasName' : 'noName'}
+                        _hasName={collection?.name}
+                        _noName="this NFT"
+                    />
+                    ? After confirmed, this NFT will be marked as spam.
+                </Trans>
+            ),
             confirmVariant: 'warning',
         })
         if (!confirmed || !colId) return
         const result = await reportSpam()
-        showSnackbar(t.report_spam(), {
+        showSnackbar(<Trans>Report Spam</Trans>, {
             variant: result ? 'success' : 'error',
-            message: result ? t.report_spam_success() : t.report_spam_fail(),
+            message: result ? <Trans>Spam reported.</Trans> : <Trans>Failed to report spam.</Trans>,
         })
     }, [colId, reportSpam, collection?.name])
     const isSpam = !!collection && collection.spam_score !== null && collection.spam_score > SPAM_SCORE

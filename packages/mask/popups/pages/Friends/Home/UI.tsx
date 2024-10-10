@@ -2,10 +2,10 @@ import { makeStyles, LoadingBase } from '@masknet/theme'
 import { memo } from 'react'
 import { Box, Typography } from '@mui/material'
 import { Search } from '../Search/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import type { NextIDPersonaBindingsWithIdentifier, Friend } from '../../../hooks/index.js'
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -55,7 +55,6 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
     refetch,
 }) {
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
     return (
         <div className={classes.container}>
             <Box padding="16px">
@@ -64,7 +63,9 @@ export const FriendsHomeUI = memo<FriendsHomeUIProps>(function FriendsHomeUI({
             {loading ?
                 <div className={cx(classes.empty, classes.mainText)}>
                     <LoadingBase />
-                    <Typography>{t.loading()}</Typography>
+                    <Typography>
+                        <Trans>Loading</Trans>
+                    </Typography>
                 </div>
             : searchValue ?
                 <SearchList searchResult={searchResult} fetchNextPage={fetchNextSearchPage} refetch={refetch} />

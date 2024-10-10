@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { useDashboardTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 interface ConfirmSynchronizePasswordDialogProps {
     open: boolean
@@ -12,26 +12,29 @@ interface ConfirmSynchronizePasswordDialogProps {
 
 export const ConfirmSynchronizePasswordDialog = memo<ConfirmSynchronizePasswordDialogProps>(
     function ConfirmSynchronizePasswordDialog({ open, onClose, onConform }) {
-        const t = useDashboardTrans()
-
         return (
-            <MaskDialog open={open} title={t.cloud_backup()} onClose={onClose} maxWidth="xs">
+            <MaskDialog open={open} title={<Trans>Cloud Backup</Trans>} onClose={onClose} maxWidth="xs">
                 <DialogContent>
                     <Stack alignItems="center" py={2}>
                         <Icons.Success size={54} />
                         <Typography variant="caption" sx={{ color: (t) => getMaskColor(t).greenMain }} fontSize={24}>
-                            {t.successful()}
+                            <Trans>Success</Trans>
                         </Typography>
                     </Stack>
                     <Typography variant="caption">
-                        {t.sign_in_account_cloud_backup_synchronize_password_tip()}
+                        <Trans>
+                            You have verified your cloud password and recovered your backup. Do you want to let your
+                            cloud password and local backup password be the same?
+                        </Trans>
                     </Typography>
                 </DialogContent>
                 <DialogActions>
                     <Button color="secondary" onClick={onClose}>
-                        {t.personas_cancel()}
+                        <Trans>Cancel</Trans>
                     </Button>
-                    <Button onClick={onConform}>{t.personas_confirm()}</Button>
+                    <Button onClick={onConform}>
+                        <Trans>Confirm</Trans>
+                    </Button>
                 </DialogActions>
             </MaskDialog>
         )

@@ -12,3 +12,15 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/components/ErrorBoundary/CrashUI.tsx:62
+msgid "{subject} has an error"
+msgstr ""
+
+#: src/components/ErrorBoundary/CrashUI.tsx:72
+msgid "Report on GitHub"
+msgstr ""
+
+#: src/components/ErrorBoundary/CrashUI.tsx:69
+msgid "Try to recover"
+msgstr ""

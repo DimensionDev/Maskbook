@@ -1,20 +1,21 @@
 import { useMemo } from 'react'
 import { z as zod } from 'zod'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { msg } from '@lingui/macro'
+import { useLingui, type I18nContext } from '@lingui/react'
 
-function defineSchema(refine: boolean, t: ReturnType<typeof useMaskSharedTrans>) {
+function defineSchema(refine: boolean, _: I18nContext['_']) {
     return zod
         .object({
             password: zod
                 .string()
-                .min(6, t.popups_wallet_password_length_error())
-                .max(20, t.popups_wallet_password_length_error()),
+                .min(6, _(msg`Payment password must be 6 to 20 characters.`))
+                .max(20, _(msg`Payment password must be 6 to 20 characters.`)),
             confirm: zod.string().optional(),
         })
         .refine((data) => !refine || data.password === data.confirm, {
-            message: t.popups_wallet_password_not_match(),
+            message: _(msg`Two entered passwords are not the same.`),
             path: ['confirm'],
         })
 }
@@ -27,11 +28,11 @@ export function usePasswordForm(refine = true): UseFormReturn<
 > & {
     schema: ReturnType<typeof defineSchema>
 } {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
 
     const schema = useMemo(() => {
-        return defineSchema(refine, t)
-    }, [refine, t])
+        return defineSchema(refine, _)
+    }, [refine, _])
 
     const formValue = useForm<zod.infer<typeof schema>>({
         mode: 'onBlur',

@@ -2,8 +2,8 @@ import { ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/the
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatTrait } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Rank } from './Rank.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {
@@ -76,7 +76,6 @@ interface PropertiesCardProps {
 export function PropertiesCard(props: PropertiesCardProps) {
     const { asset, rank, timeline } = props
     const { classes, cx } = useStyles()
-    const t = useCollectibleTrans()
 
     if (!asset.traits?.length) return null
 
@@ -84,7 +83,7 @@ export function PropertiesCard(props: PropertiesCardProps) {
         <div className={classes.wrapper}>
             <div className={classes.titleBox}>
                 <Typography className={timeline ? cx(classes.title, classes.unset) : classes.title}>
-                    {t.plugin_collectible_properties()}
+                    <Trans>Properties</Trans>
                 </Typography>
                 {rank ?
                     <div className={classes.rankBox}>

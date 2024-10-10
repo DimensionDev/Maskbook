@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,119 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 956\n"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:96
+msgid "{0} Platform costs"
+msgstr "{0} 平台成本"
+
+#: src/SiteAdaptor/Shared/OfferCard.tsx:121
+msgid "<0>Expires in </0>{0}"
+msgstr ""
+
+#: src/SiteAdaptor/Card/Collectible.tsx:191
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:56
+msgid "About"
+msgstr "关于"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:194
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:58
+msgid "Activities"
+msgstr "活动"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:91
+msgid "Blockchain"
+msgstr "区块链"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:163
+msgid "Change NFT PFP"
+msgstr "更改 NFT 头像"
+
+#: src/SiteAdaptor/index.tsx:189
+msgid "Collectibles"
+msgstr "NFT"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:88
+msgid "Contract"
+msgstr "合约"
+
+#: src/SiteAdaptor/Shared/DescriptionCard.tsx:57
+msgid "Description"
+msgstr "介绍"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:192
+msgid "Details"
+msgstr "详情"
+
+#: src/SiteAdaptor/index.tsx:184
+msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
+msgstr "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。"
+
+#: src/SiteAdaptor/Shared/OfferCard.tsx:123
+#~ msgid "Expires in"
+#~ msgstr ""
+
+#: src/SiteAdaptor/Shared/ActivityCard.tsx:137
+#: src/SiteAdaptor/Shared/OfferCard.tsx:105
+msgid "From"
+msgstr "从"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:117
+msgid "Load failed"
+msgstr "加载失败"
+
+#: src/SiteAdaptor/Shared/OffersList.tsx:74
+msgid "Load More"
+msgstr "加载更多"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:82
+msgid "Mint Address"
+msgstr "铸造地址"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:175
+msgid "More on {0}"
+msgstr "更多关于 {0}"
+
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:50
+msgid "NFT Details"
+msgstr "NFT 详细信息"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:156
+msgid "NFT is not minted yet."
+msgstr "NFT还没有被铸造。"
+
+#: src/SiteAdaptor/Shared/PriceCard.tsx:70
+msgid "No Listings"
+msgstr "没有任何上架信息"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:193
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx:57
+msgid "Offers"
+msgstr "报价"
+
+#: src/SiteAdaptor/Shared/PropertiesCard.tsx:86
+msgid "Properties"
+msgstr "属性"
+
+#: src/SiteAdaptor/Card/Collectible.tsx:272
+msgid "Sale ends in {0}"
+msgstr "出售结束于 {0}"
+
+#: src/SiteAdaptor/Shared/ActivitiesList.tsx:45
+msgid "This NFT didn't have any activities."
+msgstr "此 NFT 没有任何交易动态。"
+
+#: src/SiteAdaptor/Shared/OffersList.tsx:62
+msgid "This NFT didn't have any offers."
+msgstr "此 NFT 没有任何报价。"
+
+#: src/SiteAdaptor/Shared/ActivityCard.tsx:149
+msgid "To <0>{0}</0>"
+msgstr ""
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:87
+msgid "Token ID"
+msgstr ""
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx:92
+msgid "Token Standard"
+msgstr "代币标准"

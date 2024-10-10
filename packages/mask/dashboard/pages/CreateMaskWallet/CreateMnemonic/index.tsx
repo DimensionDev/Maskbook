@@ -21,9 +21,9 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { useDashboardTrans } from '../../../locales/index.js'
 import { ResetWalletContext } from '../context.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -181,7 +181,6 @@ export const Component = memo(function CreateMnemonic() {
     const navigate = useNavigate()
     const wallets = useWallets()
     const walletName = generateNewWalletName(wallets)
-    const t = useDashboardTrans()
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
     const [verified, setVerified] = useState(false)
     const { classes, cx } = useStyles()
@@ -227,23 +226,27 @@ export const Component = memo(function CreateMnemonic() {
         navigate(urlcat(DashboardRoutes.SignUpMaskWalletOnboarding, {}), { replace: true })
     }, [walletName, words, location.state?.isReset, location.state?.password])
 
-    const step = useMemo(() => String((verified ? 3 : 2) - (hasPassword ? 1 : 0)), [verified, hasPassword])
+    const step = useMemo(() => (verified ? 3 : 2) - (hasPassword ? 1 : 0), [verified, hasPassword])
     const totalSteps = hasPassword ? '2' : '3'
 
     return (
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {loadingHasPassword ? '' : t.create_step({ step, totalSteps })}
+                    {loadingHasPassword ?
+                        ''
+                    :   <Trans>
+                            Step {step}/{totalSteps}
+                        </Trans>
+                    }
                 </Typography>
 
                 <Typography className={cx(classes.import, classes.bold)} onClick={handleRecovery}>
-                    {t.wallets_import_wallet_import()}
+                    <Trans>Import</Trans>
                 </Typography>
             </div>
             {verified ?
                 <VerifyMnemonicUI
-                    isReset={location.state?.isReset}
                     setVerified={setVerified}
                     words={words}
                     loading={loading}
@@ -282,7 +285,6 @@ interface VerifyMnemonicUIProps {
         [key: number]: string
     }
     puzzleWordList: PuzzleWord[]
-    isReset: boolean
     loading: boolean
     isMatched: boolean | undefined
     setVerified: (verified: boolean) => void
@@ -302,14 +304,12 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     setVerified,
     onSubmit,
     loading,
-    isReset,
     puzzleWordList,
     onRefreshWords,
     puzzleAnswer,
     verifyAnswerCallback,
     isMatched,
 }) {
-    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
 
     const handleOnBack = useCallback(() => {
@@ -320,9 +320,11 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
     return (
         <>
             <Typography className={cx(classes.title, classes.bold)}>
-                {t.wallets_create_wallet_verification()}
+                <Trans>Verify</Trans>
             </Typography>
-            <Typography className={classes.tips}>{t.create_wallet_verify_words()}</Typography>
+            <Typography className={classes.tips}>
+                <Trans>Please select the correct words in the correct order.</Trans>
+            </Typography>
             <Box component="ul" className={classes.puzzleWordList}>
                 {puzzleWordList.map((puzzleWord, index) => (
                     <section key={index} className={classes.puzzleWord}>
@@ -337,13 +339,13 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
             </Box>
             {isMatched === false ?
                 <Typography className={classes.verificationFail}>
-                    {t.create_wallet_mnemonic_verification_fail()}
+                    <Trans>Incorrect words selected. Please try again!</Trans>
                 </Typography>
             :   null}
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <SecondaryButton className={classes.bold} width="125px" size="large" onClick={handleOnBack}>
-                        {t.back()}
+                        <Trans>Back</Trans>
                     </SecondaryButton>
                     <PrimaryButton
                         className={classes.bold}
@@ -353,7 +355,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                         size="large"
                         color="primary"
                         onClick={() => verifyAnswerCallback(onSubmit)}>
-                        {t.verify()}
+                        <Trans>Verify</Trans>
                     </PrimaryButton>
                 </div>
             </SetupFrameController>
@@ -394,7 +396,6 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
     onVerifyClick,
     address,
 }) {
-    const t = useDashboardTrans()
     const ref = useRef(null)
     const { classes, cx } = useStyles()
     const theme = useTheme()
@@ -412,12 +413,16 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
 
     return (
         <>
-            <Typography className={cx(classes.title, classes.bold)}>{t.write_down_recovery_phrase()}</Typography>
-            <Typography className={classes.tips}>{t.store_recovery_phrase_tip()}</Typography>
+            <Typography className={cx(classes.title, classes.bold)}>
+                <Trans>Write down recovery phrase</Trans>
+            </Typography>
+            <Typography className={classes.tips}>
+                <Trans>Please write down or copy these words and save them in a secure place.</Trans>
+            </Typography>
             <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={onRefreshWords}>
                     <Icons.Refresh size={16} />
-                    {t.refresh()}
+                    <Trans>Refresh</Trans>
                 </Button>
             </Stack>
             <div className={classes.words}>
@@ -432,11 +437,11 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                     color={theme.palette.maskColor.main}
                     size={18}
                     text={words.join(' ')}
-                    successText={t.persona_phrase_copy_description()}
+                    successText={<Trans>The mnemonic word has been copied, please keep it in a safe place.</Trans>}
                 />
             </div>
             <Alert icon={<Icons.WarningTriangle />} severity="warning" className={classes.alert}>
-                {t.create_wallet_mnemonic_tip()}
+                <Trans>Never share 12-word secret mnemonic with anyone!</Trans>
             </Alert>
             <SetupFrameController>
                 <PrimaryButton
@@ -445,7 +450,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
                     size="large"
                     color="primary"
                     onClick={onVerifyClick}>
-                    {t.create_wallet_mnemonic_keep_safe()}
+                    <Trans>Kept safely</Trans>
                 </PrimaryButton>
             </SetupFrameController>
 

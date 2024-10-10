@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"PO-Revision-Date: 2024-09-22 10:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,182 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
+
+#: src/SiteAdaptor/InformationCard.tsx:78
+msgid "{0, plural, one {Strategy} other {Strategies}}"
+msgstr ""
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:112
+msgid "{0} members"
+msgstr "{0} 位成员"
+
+#: src/SiteAdaptor/InformationCard.tsx:95
+msgid "Author"
+msgstr "作者"
+
+#: src/SiteAdaptor/VotingCard.tsx:145
+msgid "Cast your vote"
+msgstr "投出您的票"
+
+#: src/SiteAdaptor/ResultCard.tsx:109
+#: src/SiteAdaptor/ResultCard.tsx:191
+#: src/SiteAdaptor/ResultCard.tsx:202
+msgid "Current results"
+msgstr "当前结果"
+
+#: src/SiteAdaptor/index.tsx:75
+msgid "DAO"
+msgstr "DAO"
+
+#: src/SiteAdaptor/index.tsx:74
+#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+#~ msgstr "在相应项目或协议的Twitter页面显示 Snapshot 提议。"
+
+#: src/SiteAdaptor/index.tsx:73
+msgid "Display Snapshot proposals on the X of the respective project or protocol."
+msgstr ""
+
+#: src/SiteAdaptor/ResultCard.tsx:180
+msgid "Download report"
+msgstr "下载报告"
+
+#: src/SiteAdaptor/InformationCard.tsx:126
+msgid "End date"
+msgstr "结束日期"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:219
+#~ msgid "Ended {0}"
+#~ msgstr "结束时间 {0}"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:226
+msgid "Ended {relativeEndTime}"
+msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:221
+#~ msgid "Ends in {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:228
+msgid "Ends in {relativeEndTime}"
+msgstr ""
+
+#: src/SiteAdaptor/InformationCard.tsx:76
+msgid "Information"
+msgstr "信息"
+
+#: src/SiteAdaptor/InformationCard.tsx:111
+msgid "IPFS"
+msgstr "IPFS"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
+msgid "Join"
+msgstr "加入"
+
+#: src/SiteAdaptor/ProfileView.tsx:128
+msgid "Loading"
+msgstr "加载中"
+
+#: src/SiteAdaptor/LoadingFailCard.tsx:75
+msgid "Loading failed due to Snapshot API service breakdown."
+msgstr ""
+
+#: src/SiteAdaptor/LoadingFailCard.tsx:75
+#~ msgid "Loading fails due to Snapshot API service breakdown."
+#~ msgstr "Snapshot API 服务故障导致加载失败。"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:271
+msgid "My vote"
+msgstr "我的投票"
+
+#: src/SiteAdaptor/VotingCard.tsx:176
+msgid "No power"
+msgstr "没有投票权"
+
+#: src/SiteAdaptor/ProfileView.tsx:138
+msgid "Oops, we can't find any results."
+msgstr "对不起，我们没有找到任何结果。"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:53
+msgid "Option(s)"
+msgstr "选项"
+
+#: src/SiteAdaptor/VotingCard.tsx:121
+msgid "Please try again if you failed to vote."
+msgstr "如果您未投票，请再试一次。"
+
+#: src/SiteAdaptor/Snapshot.tsx:102
+msgid "Progress"
+msgstr "进度"
+
+#: src/SiteAdaptor/Snapshot.tsx:98
+msgid "Proposal"
+msgstr "提案"
+
+#: src/SiteAdaptor/ResultCard.tsx:109
+#: src/SiteAdaptor/ResultCard.tsx:191
+#: src/SiteAdaptor/ResultCard.tsx:202
+msgid "Results"
+msgstr "结果"
+
+#: src/SiteAdaptor/InformationCard.tsx:131
+#: src/SiteAdaptor/PluginDescriptor.tsx:33
+#: src/SiteAdaptor/ProfileView.tsx:83
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:73
+msgid "Snapshot"
+msgstr "Snapshot"
+
+#: src/SiteAdaptor/SpaceMenu.tsx:108
+msgid "Space"
+msgstr "空格"
+
+#: src/SiteAdaptor/InformationCard.tsx:121
+msgid "Start date"
+msgstr "开始日期"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:224
+msgid "Starts {relativeStartTime}"
+msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:217
+#~ msgid "Starts in {0}"
+#~ msgstr "开始时间 {0}"
+
+#: src/SiteAdaptor/InformationCard.tsx:77
+#~ msgid "Strategie(s)"
+#~ msgstr "策略"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
+msgid "View"
+msgstr "查看"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:98
+#: src/SiteAdaptor/VotingCard.tsx:66
+#: src/SiteAdaptor/VotingCard.tsx:175
+msgid "Vote"
+msgstr "投票"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:51
+msgid "Vote Overview"
+msgstr "投票概览"
+
+#: src/SiteAdaptor/VotingCard.tsx:120
+#~ msgid "Voted successfully."
+#~ msgstr "投票成功！"
+
+#: src/SiteAdaptor/VotingCard.tsx:120
+msgid "Voted."
+msgstr ""
+
+#: src/SiteAdaptor/VotesCard.tsx:103
+#: src/SiteAdaptor/VotesCard.tsx:184
+#: src/SiteAdaptor/VotesCard.tsx:190
+msgid "Votes"
+msgstr "投票"
+
+#: src/SiteAdaptor/VotesCard.tsx:132
+msgid "You"
+msgstr "您"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:83
+msgid "Your voting power"
+msgstr "您的投票权"

@@ -7,6 +7,8 @@ import { useQuery } from '@tanstack/react-query'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 /**
  * Prefer to list online transaction.
@@ -14,6 +16,7 @@ import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-share
  * Would try to get activity from local record transaction for online transaction
  */
 export function useTransactionLogs(transactionState: TransactionState) {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -34,12 +37,10 @@ export function useTransactionLogs(transactionState: TransactionState) {
             isRecentTx ? transactionState : txes?.find((x) => x.id === transactionState.id)
         if (localTransaction) {
             return [
-                t.transaction_confirmed_at({
-                    datetime: format(localTransaction.createdAt, "HH:mm 'on' M/dd/yyyy"),
-                }),
-                t.transaction_completed_at({
-                    datetime: format(localTransaction.updatedAt, "HH:mm 'on' M/dd/yyyy"),
-                }),
+                _(msg`The transaction was confirmed at ${format(localTransaction.createdAt, "HH:mm 'on' M/dd/yyyy")}`),
+                _(
+                    msg`The transaction was complete and has been recorded on blockchain at ${format(localTransaction.updatedAt, "HH:mm 'on' M/dd/yyyy")}`,
+                ),
             ].filter(Boolean)
         }
         return EMPTY_LIST

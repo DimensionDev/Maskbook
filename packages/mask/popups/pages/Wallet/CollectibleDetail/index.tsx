@@ -21,6 +21,8 @@ import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { TransferTabType } from '../type.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -158,6 +160,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CollectibleDetail() {
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
@@ -173,7 +176,7 @@ export const Component = memo(function CollectibleDetail() {
     useEffect(() => {
         if (!asset && !isPending) navigate(-1)
     }, [!asset && !isPending, navigate])
-    useTitle(asset?.metadata?.name || t.collectible_title())
+    useTitle(asset?.metadata?.name || _(msg`Collectible`))
 
     const availableAsset = asset || stateAsset
 
@@ -189,8 +192,12 @@ export const Component = memo(function CollectibleDetail() {
                 className={classes.iconButton}
                 onClick={async () => {
                     const result = await ConfirmModal.openAndWaitForClose({
-                        title: t.hide_collectible({ name: String(name) }),
-                        message: t.hide_collectible_description({ name: String(name) }),
+                        title: <Trans>Hide {name}</Trans>,
+                        message: (
+                            <Trans>
+                                Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time.
+                            </Trans>
+                        ),
                     })
                     if (!result || !Token?.blockToken || !availableAsset) return
                     await Token.blockToken(account, {
@@ -211,7 +218,7 @@ export const Component = memo(function CollectibleDetail() {
                         },
                         [availableAsset.tokenId],
                     )
-                    showSnackbar(t.hided_token_successfully())
+                    showSnackbar(<Trans>Token now is hidden.</Trans>)
                     navigate(-1)
                 }}>
                 <Icons.EyeOff size={24} />
@@ -246,7 +253,6 @@ export const CollectibleDetailUI = memo(function CollectibleDetailUI({
     onTransfer?(): void
 }) {
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
     const { chainId, address, params } = useTokenParams()
     const id = params.get('id') || ''
     const { data: asset, isPending } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, id, { chainId })
@@ -326,37 +332,37 @@ export const CollectibleDetailUI = memo(function CollectibleDetailUI({
             <div className={classes.prices}>
                 <div className={classes.price}>
                     <Typography variant="h2" className={classes.priceLabel}>
-                        {t.collectible_last_sale_price()}
+                        <Trans>Properties</Trans>
                     </Typography>
                     <Typography className={cx(classes.priceValue, lastSale ? '' : classes.noneValue)}>
                         {lastSale ?
                             `${formatBalance(lastSale.amount, lastSale.token.decimals)} ${lastSale.token.symbol}`
-                        :   t.none()}
+                        :   <Trans>N/A</Trans>}
                     </Typography>
                 </div>
                 <div className={classes.price}>
                     <Typography variant="h2" className={classes.priceLabel}>
-                        {t.floor_price()}
+                        <Trans>Floor price</Trans>
                     </Typography>
                     <Typography className={cx(classes.priceValue, floorPrice ? '' : classes.noneValue)}>
                         {floorPrice ?
                             `${formatBalance(floorPrice.value, floorPrice.payment_token.decimals)} ${
                                 floorPrice.payment_token.symbol
                             }`
-                        :   t.none()}
+                        :   <Trans>N/A</Trans>}
                     </Typography>
                 </div>
             </div>
             <Typography variant="h2" className={classes.sectionTitle}>
-                {t.collectible_description()}
+                <Trans>Description</Trans>
             </Typography>
             <Typography variant="body1" className={classes.text}>
-                {assetDesc || t.none()}
+                {assetDesc || <Trans>N/A</Trans>}
             </Typography>
             {isPending || asset?.traits?.length ?
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
-                        {t.collectible_properties()}
+                        <Trans>Properties</Trans>
                     </Typography>
                     <div className={classes.traits}>
                         {asset?.traits?.map((trait, index) => {
@@ -379,7 +385,7 @@ export const CollectibleDetailUI = memo(function CollectibleDetailUI({
             {isPending || collectionDesc ?
                 <>
                     <Typography variant="h2" className={classes.sectionTitle}>
-                        {t.about_collection({ name: String(collectionName) })}
+                        <Trans>About {collectionName}</Trans>
                     </Typography>
                     <ProgressiveText variant="body1" loading={isPending} className={classes.text} skeletonWidth={100}>
                         {collectionDesc}
@@ -389,7 +395,7 @@ export const CollectibleDetailUI = memo(function CollectibleDetailUI({
             {transferable ?
                 <Button className={classes.sendButton} onClick={onTransfer}>
                     <Icons.Send size={16} style={{ marginRight: 4 }} />
-                    {t.send()}
+                    <Trans>Send</Trans>
                 </Button>
             :   null}
         </>

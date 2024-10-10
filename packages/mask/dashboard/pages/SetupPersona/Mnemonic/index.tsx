@@ -12,10 +12,10 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
 import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js'
-import { useDashboardTrans } from '../../../locales/index.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { Words } from './Words.js'
 import urlcat from 'urlcat'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -89,7 +89,6 @@ export const Component = memo(function SignUpMnemonic() {
     const ref = useRef(null)
 
     const navigate = useNavigate()
-    const t = useDashboardTrans()
     const createPersona = useCreatePersonaV2()
 
     const { classes } = useStyles()
@@ -146,22 +145,24 @@ export const Component = memo(function SignUpMnemonic() {
     return (
         <>
             <Box className={classes.header}>
-                <Typography className={classes.second}>{t.create_step({ step: '2', totalSteps: '2' })}</Typography>
+                <Typography className={classes.second}>
+                    <Trans>Step 2/2</Trans>
+                </Typography>
                 <Button variant="text" className={classes.recovery} onClick={handleRecovery}>
-                    {t.recovery()}
+                    <Trans>Recovery</Trans>
                 </Button>
             </Box>
             <Typography variant="h1" className={classes.title}>
-                {t.persona_phrase_title()}
+                <Trans>Persona Recovery Phrase</Trans>
             </Typography>
             <Typography className={classes.second} mt={2}>
-                {t.persona_phrase_tips()}
+                <Trans>12-word recovery phrase is used to recover your persona data.</Trans>
             </Typography>
 
             <Stack direction="row" justifyContent="flex-end" sx={{ marginBottom: (theme) => theme.spacing(2) }}>
                 <Button className={classes.refresh} variant="text" onClick={refreshCallback}>
                     <Icons.Refresh size={16} />
-                    {t.refresh()}
+                    <Trans>Refresh</Trans>
                 </Button>
             </Stack>
             <Words words={words} />
@@ -174,19 +175,21 @@ export const Component = memo(function SignUpMnemonic() {
                         classes={{ root: classes.iconBox }}
                         size={18}
                         text={words.join(' ')}
-                        successText={t.persona_phrase_copy_description()}
+                        successText={<Trans>The mnemonic words has been copied, please keep it in a safe place.</Trans>}
                     />
                 </IconButton>
             </Box>
             <Box className={classes.warning}>
                 <Icons.WarningTriangle size={20} />
-                <Typography className={classes.warningText}>{t.persona_phrase_create_tips()}</Typography>
+                <Typography className={classes.warningText}>
+                    <Trans>Never share the 12-word secret mnemonic words with anyone!</Trans>
+                </Typography>
             </Box>
 
             <FormControlLabel
                 classes={{ label: classes.label }}
                 control={<Checkbox checked={checked} onChange={(e) => setChecked(e.target.checked)} />}
-                label={t.persona_phrase_create_check_tips()}
+                label={<Trans>I wrote down those words in the correct order</Trans>}
                 sx={{ marginTop: '12px', color: MaskColorVar.textSecondary }}
             />
 
@@ -208,7 +211,7 @@ export const Component = memo(function SignUpMnemonic() {
                     loading={loading}
                     onClick={handleCreate}
                     disabled={!checked}>
-                    {t.continue()}
+                    <Trans>Continue</Trans>
                 </PrimaryButton>
             </SetupFrameController>
         </>

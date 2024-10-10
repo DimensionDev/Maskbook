@@ -90,7 +90,7 @@ function collectPostsMindsInner(
                     if (currentProfile?.linkedPersona)
                         Services.Identity.createNewRelation(postBy, currentProfile.linkedPersona)
                 }
-                // decode steganographic image
+                // decode stenographic image
                 // don't add await on this
                 const images = untilElementAvailable(
                     new LiveSelector([activityNode]).querySelectorAll<HTMLImageElement>(

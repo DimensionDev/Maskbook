@@ -12,8 +12,9 @@ import {
 } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
-import { useSharedTrans } from '../locales/index.js'
 import type { PersonaConnectStatus } from '../types.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
     action: undefined,
@@ -30,9 +31,8 @@ export function useCurrentPersonaConnectStatus(
     openDashboard?: (route: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,
 ) {
-    const t = useSharedTrans()
-
-    const create = useCallback((target?: string, position?: 'center' | 'top-right', _?: boolean, direct = false) => {
+    const { _ } = useLingui()
+    const create = useCallback((target?: string, position?: 'center' | 'top-right', _2?: boolean, direct = false) => {
         if (direct) {
             openDashboard?.(DashboardRoutes.SignUpPersona)
         } else {
@@ -41,9 +41,9 @@ export function useCurrentPersonaConnectStatus(
                 info: {
                     target: 'dashboard',
                     url: target ?? DashboardRoutes.SignUpPersona,
-                    text: t.applications_create_persona_hint(),
-                    title: t.applications_create_persona_title(),
-                    actionHint: t.applications_create_persona_action(),
+                    text: _(msg`Please create a Persona and verify your account to use this.`),
+                    title: _(msg`Persona`),
+                    actionHint: _(msg`Create persona`),
                     position,
                 },
             })

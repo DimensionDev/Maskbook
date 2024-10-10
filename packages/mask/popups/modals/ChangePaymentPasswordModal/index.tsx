@@ -2,12 +2,14 @@ import { type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { Box, Typography, useTheme, type InputProps } from '@mui/material'
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import Services from '#services'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -18,15 +20,15 @@ interface ChangePaymentPasswordDrawer extends BottomDrawerProps {
     oldPassword: string
     newPassword: string
     confirmNewPassword: string
-    passwordNotMatch: string
-    passwordTooShort: string
-    originalPasswordWrong: string
+    passwordNotMatch: ReactNode
+    passwordTooShort: ReactNode
+    originalPasswordWrong: ReactNode
     setOldPassword(p: string): void
     setNewPassword(p: string): void
     setConfirmNewPassword(p: string): void
-    setPasswordNotMatch(p: string): void
-    setPasswordTooShort(p: string): void
-    setOriginalPasswordWrong(p: string): void
+    setPasswordNotMatch(p: ReactNode): void
+    setPasswordTooShort(p: ReactNode): void
+    setOriginalPasswordWrong(p: ReactNode): void
 }
 
 function ChangePaymentPasswordDrawer({
@@ -44,6 +46,7 @@ function ChangePaymentPasswordDrawer({
     setOriginalPasswordWrong,
     ...rest
 }: ChangePaymentPasswordDrawer) {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
@@ -52,16 +55,16 @@ function ChangePaymentPasswordDrawer({
 
     const [{ loading }, handleClick] = useAsyncFn(async () => {
         if (newPassword !== confirmNewPassword) {
-            setPasswordNotMatch(t.popups_wallet_new_password_not_match())
+            setPasswordNotMatch(<Trans>The new passwords don't match</Trans>)
             return
         }
         if ([oldPassword, newPassword, confirmNewPassword].some((x) => x.length < 6)) {
-            setPasswordTooShort(t.popups_wallet_password_length_error())
+            setPasswordTooShort(<Trans>Payment password must be 6 to 20 characters.</Trans>)
             return
         }
         try {
             await Services.Wallet.changePassword(oldPassword, newPassword)
-            showSnackbar(t.popups_wallet_password_change_successful())
+            showSnackbar(<Trans>Payment password changed.</Trans>)
             rest.onClose?.()
         } catch (error) {
             setOriginalPasswordWrong((error as Error).message)
@@ -82,14 +85,14 @@ function ChangePaymentPasswordDrawer({
                 textAlign="center"
                 color={theme.palette.maskColor.third}
                 sx={{ marginTop: '12px' }}>
-                {t.popups_wallet_create_payment_password_tip()}
+                <Trans>At least 6 characters</Trans>
             </Typography>
             <Box display="flex" justifyContent="center" flexDirection="column">
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={t.popups_wallet_old_payment_password()}
+                    placeholder={_(msg`Old Payment Password`)}
                     error={!!originalPasswordWrong}
                     value={oldPassword}
                     onChange={(e) => {
@@ -102,7 +105,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    placeholder={t.popups_wallet_new_payment_password()}
+                    placeholder={_(msg`New Payment Password`)}
                     error={false}
                     value={newPassword}
                     onChange={(e) => {
@@ -115,7 +118,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    placeholder={t.popups_wallet_confirm_password()}
+                    placeholder={_(msg`Confirm Password`)}
                     error={false}
                     value={confirmNewPassword}
                     onChange={(e) => {
@@ -130,7 +133,7 @@ function ChangePaymentPasswordDrawer({
                 {passwordTooShort || passwordNotMatch || originalPasswordWrong}
             </Typography>
             <ActionButton loading={loading} disabled={loading} onClick={handleClick} sx={{ marginTop: '16px' }}>
-                {t.confirm()}
+                <Trans>Confirm</Trans>
             </ActionButton>
         </BottomDrawer>
     )
@@ -162,9 +165,9 @@ export function ChangePaymentPasswordModal({ ref }: SingletonModalProps<ChangePa
     const [newPassword, setNewPassword] = useState('')
     const [confirmNewPassword, setConfirmNewPassword] = useState('')
 
-    const [passwordNotMatch, setPasswordNotMatch] = useState('')
-    const [passwordTooShort, setPasswordTooShort] = useState('')
-    const [originalPasswordWrong, setOriginalPasswordWrong] = useState('')
+    const [passwordNotMatch, setPasswordNotMatch] = useState<ReactNode>('')
+    const [passwordTooShort, setPasswordTooShort] = useState<ReactNode>('')
+    const [originalPasswordWrong, setOriginalPasswordWrong] = useState<ReactNode>('')
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(p) {

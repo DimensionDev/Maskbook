@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { first } from 'lodash-es'
@@ -19,6 +19,8 @@ import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     infoBox: {
@@ -45,7 +47,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Logout() {
-    const t = useMaskSharedTrans()
     const { currentPersona } = PersonaContext.useContainer()
     const navigate = useNavigate()
     const wallet = useWallet()
@@ -85,10 +86,10 @@ export const Component = memo(function Logout() {
                 await Services.Settings.setCurrentPersonaIdentifier(lastCreatedPersona)
             }
 
-            showSnackbar(t.popups_log_out_successfully())
+            showSnackbar(<Trans>Logout successfully</Trans>)
             navigate(PopupRoutes.Personas, { replace: true })
         } catch {
-            showSnackbar(t.popups_log_out_failed(), { variant: 'error' })
+            showSnackbar(<Trans>Logout failed</Trans>, { variant: 'error' })
         }
     }, [currentPersona, Provider, wallet, wallets, smartPayChainId, manageWallets.length])
 
@@ -131,6 +132,7 @@ const LogoutUI = memo<LogoutUIProps>(
         verifyPaymentPassword,
         chainId,
     }) => {
+        const { _ } = useLingui()
         const t = useMaskSharedTrans()
         const theme = useTheme()
         const modalNavigate = useModalNavigate()
@@ -138,16 +140,16 @@ const LogoutUI = memo<LogoutUIProps>(
         const [password, setPassword] = useState('')
         const [paymentPassword, setPaymentPassword] = useState('')
         const [error, setError] = useState(false)
-        const [paymentPasswordError, setPaymentPasswordError] = useState('')
+        const [paymentPasswordError, setPaymentPasswordError] = useState<ReactNode>('')
 
-        useTitle(t.popups_log_out())
+        useTitle(_(msg`Log out`))
 
         const onConfirm = useCallback(async () => {
             if (manageWallets.length) {
                 if (hasPassword) {
                     const verified = await verifyPaymentPassword(paymentPassword)
                     if (!verified) {
-                        setPaymentPasswordError(t.popups_wallet_persona_log_out_error_payment_password())
+                        setPaymentPasswordError(<Trans>Incorrect payment password.</Trans>)
                         return
                     }
                 } else if (!backupPassword) {
@@ -188,7 +190,7 @@ const LogoutUI = memo<LogoutUIProps>(
                 if (hasPassword) {
                     return (
                         <PasswordField
-                            placeholder={t.popups_wallet_logout_input_payment_password()}
+                            placeholder={_(msg`Please enter your payment password.`)}
                             value={paymentPassword}
                             error={!!paymentPasswordError}
                             helperText={paymentPasswordError}
@@ -201,14 +203,14 @@ const LogoutUI = memo<LogoutUIProps>(
                 } else if (backupPassword) {
                     return (
                         <PasswordField
-                            placeholder={t.popups_wallet_backup_input_password()}
+                            placeholder={_(msg`Please enter your backup password.`)}
                             value={password}
                             onChange={(e) => {
                                 if (error) setError(false)
                                 setPassword(e.target.value)
                             }}
                             error={error}
-                            helperText={error ? t.popups_password_do_not_match() : ''}
+                            helperText={error ? <Trans>Incorrect password</Trans> : ''}
                         />
                     )
                 }
@@ -219,14 +221,14 @@ const LogoutUI = memo<LogoutUIProps>(
             if (backupPassword) {
                 return (
                     <PasswordField
-                        placeholder={t.popups_wallet_backup_input_password()}
+                        placeholder={_(msg`Please enter your backup password.`)}
                         value={password}
                         onChange={(e) => {
                             if (error) setError(false)
                             setPassword(e.target.value)
                         }}
                         error={error}
-                        helperText={error ? t.popups_password_do_not_match() : ''}
+                        helperText={error ? <Trans>Incorrect password</Trans> : ''}
                     />
                 )
             }
@@ -288,7 +290,11 @@ const LogoutUI = memo<LogoutUIProps>(
                         </Box>
                     :   null}
                     <Typography className={classes.tips}>
-                        {t.popups_log_out_tips()}
+                        <Trans>
+                            After logging out, your associated social accounts will no longer decrypt old encrypted
+                            messages. If you need to use your account again, you can recover your account with your
+                            identity, private key, local or cloud backup.
+                        </Trans>
                         {currentPersona && manageWallets.length ?
                             <Typography mt={2}>
                                 {t.popups_log_out_with_smart_pay_tips({
@@ -302,7 +308,7 @@ const LogoutUI = memo<LogoutUIProps>(
                 </Box>
                 <BottomController>
                     <Button variant="outlined" fullWidth onClick={onCancel}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </Button>
                     <ActionButton
                         variant="contained"
@@ -310,7 +316,9 @@ const LogoutUI = memo<LogoutUIProps>(
                         fullWidth
                         onClick={onConfirm}
                         disabled={disabled}>
-                        {!backupPassword && manageWallets.length && !hasPassword ? t.backup() : t.popups_log_out()}
+                        {!backupPassword && manageWallets.length && !hasPassword ?
+                            <Trans>Backup</Trans>
+                        :   <Trans>Log out</Trans>}
                     </ActionButton>
                 </BottomController>
             </Box>

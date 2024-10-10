@@ -1,6 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, type BoxProps } from '@mui/material'
-import { memo } from 'react'
+import { memo, type ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     label: {
@@ -15,7 +15,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 interface Props extends BoxProps {
     label?: string
-    actionLabel: string
+    actionLabel: ReactNode
     onAction: () => void
 }
 export const AccountStatusBar = memo(function AccountStatusBar({ label, actionLabel, onAction, ...rest }: Props) {

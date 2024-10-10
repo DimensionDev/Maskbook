@@ -25,11 +25,11 @@ import { makeStyles } from '@masknet/theme'
 import type { SerializableTypedMessages, TypedMessage } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.js'
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
 import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -108,7 +108,7 @@ export interface CompositionProps extends RefAttributes<CompositionRef> {
     hasClipboardPermission?: boolean
     onRequestClipboardPermission?(): void
     onQueryClipboardPermission?(): void
-    initialMetas?: Record<string, unknown>
+    initialMeta?: Record<string, unknown>
     personaAction?: React.ReactNode
 }
 export interface SubmitComposition {
@@ -125,7 +125,6 @@ export interface CompositionRef {
 }
 export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
 
     const [currentPostSize, __updatePostSize] = useState(0)
 
@@ -169,11 +168,11 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     useImperativeHandle(ref, () => refItem, [refItem])
 
     useEffect(() => {
-        if (!props.initialMetas || !Editor.current) return
-        for (const [meta, data] of Object.entries(props.initialMetas)) {
+        if (!props.initialMeta || !Editor.current) return
+        for (const [meta, data] of Object.entries(props.initialMeta)) {
             Editor.current.attachMetadata(meta, data)
         }
-    }, [props.initialMetas, Editor.current])
+    }, [props.initialMeta, Editor.current])
 
     const context = useMemo(
         (): CompositionContext => ({
@@ -226,7 +225,9 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                 </div>
 
                 <div className={classes.flex}>
-                    <Typography className={classes.optionTitle}>{t.plugins()}</Typography>
+                    <Typography className={classes.optionTitle}>
+                        <Trans>Plugins</Trans>
+                    </Typography>
                     <PluginEntryRender
                         readonly={sending}
                         ref={PluginEntry}
@@ -284,7 +285,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                             variant="roundedContained"
                             onClick={props.onRequestClipboardPermission}
                             sx={{ marginRight: 1 }}>
-                            {t.post_dialog_enable_paste_auto()}
+                            <Trans>Enable auto paste</Trans>
                         </Button>
                     :   null}
                     <LoadingButton
@@ -295,7 +296,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                         variant="roundedContained"
                         onClick={onSubmit}
                         startIcon={<Icons.Send className={classes.icon} />}>
-                        {t.post_dialog__button()}
+                        <Trans>Encrypt</Trans>
                     </LoadingButton>
                 </div>
             </DialogActions>

@@ -2,7 +2,6 @@ import { useState, useCallback, useEffect } from 'react'
 import { Box, Typography, List, ListItem, Skeleton } from '@mui/material'
 import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
 import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
-import { useRedPacketTrans } from '../locales/index.js'
 import {
     WalletConnectedBoundary,
     AssetPreviewer,
@@ -42,6 +41,7 @@ import { useAsync } from 'react-use'
 import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -233,7 +233,6 @@ interface RedPacketERC721FormProps {
     onGasOptionChange?: (config: GasConfig) => void
 }
 export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
-    const t = useRedPacketTrans()
     const {
         onClose,
         setIsNFTRedPacketLoaded,
@@ -345,15 +344,15 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
     const { RED_PACKET_NFT_ADDRESS } = useNftRedPacketConstants(chainId)
 
     const validationMessage = (() => {
-        if (!balance) return t.erc721_insufficient_balance()
-        if (tokenDetailedList.length === 0) return t.select_a_token()
-        return ''
+        if (!balance) return <Trans>Insufficient Balance</Trans>
+        if (tokenDetailedList.length === 0) return <Trans>Select a Token</Trans>
+        return undefined
     })()
 
     const gasValidationMessage = (() => {
-        if (!isGasSufficient) return t.no_enough_gas_fees()
-        if (isGasFeeGreaterThanOneETH) return t.erc721_create_lucky_drop()
-        return ''
+        if (!isGasSufficient) return <Trans>Insufficient Balance for Gas Fee</Trans>
+        if (isGasFeeGreaterThanOneETH) return <Trans>Create the Lucky Drop</Trans>
+        return undefined
     })()
 
     useRenderPhraseCallbackOnDepsChange(() => {
@@ -423,11 +422,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                     </div>
                                     <Typography color="textPrimary">
                                         {balance === 0 ?
-                                            'All'
-                                        :   t.nft_select_all_option({
-                                                total: Math.min(RED_PACKET_MAX_SHARES, balance).toString(),
-                                            })
-                                        }
+                                            <Trans>ALL</Trans>
+                                        :   <Trans>ALL ({Math.min(RED_PACKET_MAX_SHARES, balance)} NFT)</Trans>}
                                     </Typography>
                                 </div>
                                 <div
@@ -440,7 +436,9 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                         )}>
                                         <CheckIcon className={classes.checkIcon} />
                                     </div>
-                                    <Typography color="textPrimary">{t.nft_select_partially_option()}</Typography>
+                                    <Typography color="textPrimary">
+                                        <Trans>Select partially</Trans>
+                                    </Typography>
                                 </div>
                             </Box>
                             <div className={classes.tokenSelectorParent}>
@@ -472,7 +470,12 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     <RedpacketMessagePanel onChange={(val: string) => setMessage(val)} message={message} />
                 </div>
                 {collection && balance ?
-                    <Typography className={classes.approveAllTip}>{t.nft_approve_all_tip()}</Typography>
+                    <Typography className={classes.approveAllTip}>
+                        <Trans>
+                            Note: When you "Unlock All", all of the NFTs in the collection will be by default authorized
+                            for sale. This includes the NFTs transferred afterwards.
+                        </Trans>
+                    </Typography>
                 :   null}
                 {nativeTokenDetailed && nativeTokenPrice ?
                     <Box mx={2}>
@@ -509,7 +512,11 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                 <ShadowRootTooltip
                                     title={
                                         isGasFeeGreaterThanOneETH ?
-                                            t.erc721_gas_cap({ symbol: nativeTokenDetailed?.symbol || 'ETH' })
+                                            <Trans>
+                                                When selecting too many NFTs, the total gas fee may exceed the MetaMask
+                                                limit of {nativeTokenDetailed?.symbol || 'ETH'}. Please reduce the
+                                                number of NFTs selected.
+                                            </Trans>
                                         :   ''
                                     }
                                     arrow
@@ -526,7 +533,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                             disabled={!!validationMessage || !!gasValidationMessage}
                                             fullWidth
                                             onClick={() => setOpenNFTConfirmDialog(true)}>
-                                            {gasValidationMessage || t.next()}
+                                            {gasValidationMessage || <Trans>Create the Lucky Drop</Trans>}
                                         </ActionButton>
                                     </div>
                                 </ShadowRootTooltip>

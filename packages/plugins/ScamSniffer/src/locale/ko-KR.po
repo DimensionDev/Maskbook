@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"PO-Revision-Date: 2024-09-22 10:00\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,15 @@ msgstr ""
 "X-Crowdin-Language: ko\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamSniffer/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 988\n"
+
+#: src/SiteAdaptor/ScamAlert.tsx:129
+msgid "Auto report the scam links to MetaMask"
+msgstr "MetaMask에 스캠 링크 자동 보고"
+
+#: src/SiteAdaptor/ScamAlert.tsx:122
+msgid "Be careful what you visit and sign!"
+msgstr "사이트 방운하가나 사인할 때 조심하시길 바랍니다."
+
+#: src/SiteAdaptor/ScamAlert.tsx:95
+msgid "Similar Project"
+msgstr "유사한 프로젝트"

@@ -1,5 +1,6 @@
 import { useCallback } from 'react'
-import { TokenTransactionConfirmModal, useSharedTrans, type TokenTransactionConfirmModalProps } from '../../../index.js'
+import { TokenTransactionConfirmModal, type TokenTransactionConfirmModalProps } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 export interface TransactionConfirmProps extends TokenTransactionConfirmModalProps {
     shareText: string
@@ -12,7 +13,6 @@ export interface TransactionConfirmProps extends TokenTransactionConfirmModalPro
     onClose: () => void
 }
 export function TransactionConfirm({ onSubmit, shareText, share, ...rest }: TransactionConfirmProps) {
-    const t = useSharedTrans()
     const handleConfirm = useCallback(() => {
         share?.(shareText)
         onSubmit?.()
@@ -23,7 +23,7 @@ export function TransactionConfirm({ onSubmit, shareText, share, ...rest }: Tran
             messageTextForNFT={rest.messageTextForNFT}
             messageTextForFT={rest.messageTextForFT}
             title={rest.title}
-            confirmText={share ? t.share() : t.ok()}
+            confirmText={share ? <Trans>Share</Trans> : <Trans>OK</Trans>}
             onConfirm={handleConfirm}
         />
     )

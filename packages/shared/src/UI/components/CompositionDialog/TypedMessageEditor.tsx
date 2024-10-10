@@ -10,7 +10,8 @@ import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, memo, useMemo, useEffect, type RefAttributes } from 'react'
 import { BadgeRenderer } from './BadgeRenderer.js'
-import { useSharedTrans } from '../../../index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -81,9 +82,9 @@ export interface TypedMessageEditorRef {
 const emptyMessage = makeTypedMessageText('')
 // This is an **uncontrolled** component. (performance consideration, because it will be re-rendered very frequently).
 export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedMessageEditorProps) {
+    const { _ } = useLingui()
     const { onChange, readonly, ref } = props
     const { classes, cx } = useStyles()
-    const t = useSharedTrans()
 
     const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
     const currentValue = useRef(value)
@@ -148,10 +149,10 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
                 severity="error"
                 action={
                     <Button onClick={reset}>
-                        {t.reset()} {t.editor()}
+                        <Trans>Reset</Trans> <Trans>Editor</Trans>
                     </Button>
                 }>
-                {t.typed_message_text_alert()}
+                <Trans>Only TypedMessageText is supported currently.</Trans>
             </Alert>
         )
     }
@@ -175,7 +176,7 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
             onChange={setAsText}
             fullWidth
             multiline
-            placeholder={t.post_dialog__placeholder()}
+            placeholder={_(msg`Tell friends what's happening...`)}
             rows={value.meta ? 11 : 13}
         />
     )

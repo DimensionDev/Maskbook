@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, type ReactNode } from 'react'
 import { Done as DoneIcon } from '@mui/icons-material'
 import { Link, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -7,6 +7,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { useSharedTrans } from '../locales/index.js'
 import { ConfirmModal } from '../UI/modals/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -33,7 +34,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ShareTransactionOptions {
     title?: string
-    message?: string
+    message?: ReactNode
     content?: string
     hash: string
     buttonLabel?: string
@@ -45,7 +46,6 @@ type ShareTransactionProps = Omit<ShareTransactionOptions, 'title' | 'onShare'>
 
 const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps) => {
     const { classes } = useStyles()
-    const t = useSharedTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const link = EVMExplorerResolver.transactionLink(chainId, hash)
     return (
@@ -64,7 +64,7 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
             {link ?
                 <Typography>
                     <Link className={classes.link} href={link} target="_blank" rel="noopener noreferrer">
-                        {t.share_dialog_view_on_explorer()}
+                        <Trans>View on Explorer</Trans>
                     </Link>
                 </Typography>
             :   null}
@@ -78,15 +78,15 @@ export function useOpenShareTxDialog() {
     return useCallback(
         async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
             const confirmed = await ConfirmModal.openAndWaitForClose({
-                title: title ?? t.share_dialog_transaction(),
+                title: title ?? <Trans>Transaction</Trans>,
                 content: (
                     <ShareTransaction
-                        message={message ?? t.share_dialog_transaction_confirmed()}
+                        message={message ?? <Trans>Your transaction has been confirmed!</Trans>}
                         content={content}
                         hash={hash}
                     />
                 ),
-                confirmLabel: onShare ? buttonLabel ?? t.dialog_share() : t.dialog_dismiss(),
+                confirmLabel: onShare ? buttonLabel ?? <Trans>Share</Trans> : <Trans>Dismiss</Trans>,
             })
             if (confirmed) onShare?.()
         },

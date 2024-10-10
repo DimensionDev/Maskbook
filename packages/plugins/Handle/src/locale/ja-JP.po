@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,27 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
+
+#: src/SiteAdaptor/SearchResultInspector.tsx:128
+msgid "<0>USD Value</0><1>${0}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:34
+msgid "ENS"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:33
+msgid "Optimize the display of search results about ENS in social media."
+msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx:48
+#~ msgid "Powered by"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx:48
+msgid "Powered by {0}"
+msgstr ""
+
+#: src/SiteAdaptor/SearchResultInspector.tsx:129
+#~ msgid "USD Value"
+#~ msgstr ""

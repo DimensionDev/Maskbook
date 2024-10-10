@@ -21,12 +21,12 @@ import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shar
 import { Grid, Link, Typography, List, DialogContent, ListItem, Box } from '@mui/material'
 import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { useRedPacketTrans } from '../locales/index.js'
 import { useCreateNftRedpacketCallback } from './hooks/useCreateNftRedpacketCallback.js'
 import { RedPacketNftMetaKey } from '../constants.js'
 import { RedPacketRPC } from '../messages.js'
 import { openComposition } from './openComposition.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -157,7 +157,6 @@ interface RedpacketNftConfirmDialogProps {
     gasOption?: GasConfig
 }
 export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps) {
-    const t = useRedPacketTrans()
     const { classes, cx } = useStyles()
     const { onClose, message, contract, tokenList, senderName, gasOption } = props
     const wallet = useWallet()
@@ -225,7 +224,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
             <Grid container spacing={2} pb={9}>
                 <Grid item xs={6}>
                     <Typography color="textPrimary" variant="body1" className={classes.text}>
-                        {t.nft_account_name()}
+                        <Trans>Wallet account</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -250,7 +249,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textPrimary" className={cx(classes.text)}>
-                        {t.nft_attached_message()}
+                        <Trans>Attached Message</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -264,7 +263,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                 </Grid>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textPrimary" className={cx(classes.text)}>
-                        {t.collections()}
+                        <Trans>Collections</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -289,7 +288,7 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
 
                 <Grid item xs={6}>
                     <Typography color="textPrimary" variant="body1" className={cx(classes.text)}>
-                        {t.nft_total_amount()}
+                        <Trans>Total Amount</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -313,7 +312,9 @@ export function RedpacketNftConfirmDialog(props: RedpacketNftConfirmDialogProps)
                                 onClick={onSendTx}
                                 className={cx(classes.button, classes.sendButton)}
                                 fullWidth>
-                                {isSending ? t.confirming() : t.confirm()}
+                                {isSending ?
+                                    <Trans>Confirming</Trans>
+                                :   <Trans>Confirm</Trans>}
                             </ActionButton>
                         </WalletConnectedBoundary>
                     </ChainBoundary>

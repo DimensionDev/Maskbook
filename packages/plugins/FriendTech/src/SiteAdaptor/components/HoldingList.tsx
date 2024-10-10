@@ -8,8 +8,8 @@ import { Box, Link, Typography } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { range, uniqBy } from 'lodash-es'
 import { memo, useMemo, type HTMLProps } from 'react'
-import { Translate } from '../../locales/i18n_generated.js'
 import { HoldingCard, HoldingCardSkeleton } from './HoldingCard.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -60,26 +60,32 @@ export const HoldingList = memo(function HoldingList({ address, ...rest }: Props
     }, [data?.pages])
 
     if (!isFetching && !holdings.length) {
-        const noKeysContext = isSameAddress(address, account) ? 'mine' : 'other'
         return (
             <div {...rest} className={cx(classes.container, rest.className)}>
                 <Box flexGrow={1} display="flex" alignItems="center" justifyContent="center">
                     <Typography color={theme.palette.maskColor.second} fontSize={14}>
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <Translate.no_keys
-                            values={{ context: noKeysContext }}
-                            context={noKeysContext}
-                            components={{
-                                a: (
-                                    <Link
-                                        color={theme.palette.maskColor.main}
-                                        href="https://www.friend.tech/explore"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                    />
-                                ),
-                            }}
-                        />
+                        {isSameAddress(address, account) ?
+                            <Trans>
+                                You don't have any keys in your wallet.{' '}
+                                <Link
+                                    color={theme.palette.maskColor.main}
+                                    href="https://www.friend.tech/explore"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    go explore
+                                </Link>
+                            </Trans>
+                        :   <Trans>
+                                There's no one holding.{' '}
+                                <Link
+                                    color={theme.palette.maskColor.main}
+                                    href="https://www.friend.tech/explore"
+                                    target="_blank"
+                                    rel="noopener noreferrer">
+                                    go explore
+                                </Link>
+                            </Trans>
+                        }
                     </Typography>
                 </Box>
             </div>

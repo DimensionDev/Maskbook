@@ -5,7 +5,7 @@ import { CrossIsolationMessages, PluginID } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Avatar, Box, List, ListItem, ListItemAvatar, Stack, Switch, Typography } from '@mui/material'
-import { useSharedTrans } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -190,7 +190,6 @@ interface DSearchSettingsProps {
 }
 
 function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     return (
@@ -205,9 +204,16 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                         </ListItemAvatar>
                         <Stack className={classes.info} flex={1}>
                             <div className={classes.headerWrapper}>
-                                <Typography className={classes.name}>{t.decentralized_search_name()}</Typography>
+                                <Typography className={classes.name}>
+                                    <Trans>DSearch</Trans>
+                                </Typography>
                             </div>
-                            <Typography className={classes.desc}>{t.decentralized_search_description()}</Typography>
+                            <Typography className={classes.desc}>
+                                <Trans>
+                                    Optimize search results with token names, NFT collections, ENS domains or wallet
+                                    addresses.
+                                </Trans>
+                            </Typography>
                         </Stack>
                     </section>
                     <Stack justifyContent="center">
@@ -219,26 +225,28 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                     <Stack spacing={1.25}>
                         <Stack>
                             <Typography className={classes.name} fontSize={14}>
-                                {t.decentralized_search_feature_token_name()}
+                                <Trans>Token</Trans>
                             </Typography>
                             <Typography className={classes.desc}>
-                                {t.decentralized_search_feature_token_description()}
+                                <Trans>Get optimized search results when you're looking for a token.</Trans>
                             </Typography>
                         </Stack>
                         <Stack>
                             <Typography className={classes.name} fontSize={14}>
-                                {t.decentralized_search_feature_nft_name()}
+                                <Trans>NFTs</Trans>
                             </Typography>
                             <Typography className={classes.desc}>
-                                {t.decentralized_search_feature_nft_description()}
+                                <Trans>
+                                    Search with the name of an NFT collection or its symbol to get optimized results.
+                                </Trans>
                             </Typography>
                         </Stack>
                         <Stack>
                             <Typography className={classes.name} fontSize={14}>
-                                {t.decentralized_search_feature_wallet_name()}
+                                <Trans>ENS or Wallet Address</Trans>
                             </Typography>
                             <Typography className={classes.desc}>
-                                {t.decentralized_search_feature_wallet_description()}
+                                <Trans>Search with an ENS domain or wallet address to get optimized results.</Trans>
                             </Typography>
                         </Stack>
                     </Stack>

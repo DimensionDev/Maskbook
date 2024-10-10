@@ -45,11 +45,12 @@ import {
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import { EVMUtils, SmartPayFunder, EVMWeb3 } from '@masknet/web3-providers'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
+import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {
@@ -178,7 +179,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SmartPayContent = memo(() => {
-    const t = useSmartPayTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
     const [approveDialogOpen, setApproveDialogOpen] = useState(false)
@@ -423,8 +424,11 @@ export const SmartPayContent = memo(() => {
                                                 <ShadowRootTooltip
                                                     title={
                                                         availableBalanceTooLow ?
-                                                            t.allow_mask_as_gas_token_description()
-                                                        :   t.remain_mask_tips()
+                                                            <Trans>
+                                                                Set MASK tokens to pay gas fee when interacting with
+                                                                Polygon Network.
+                                                            </Trans>
+                                                        :   <Trans>MASK token can be used to pay gas fee.</Trans>
                                                     }
                                                     placement="top">
                                                     <Typography
@@ -442,7 +446,7 @@ export const SmartPayContent = memo(() => {
                                                             <>
                                                                 (
                                                                 <Icons.Gas size={18} sx={{ marginRight: 0.5 }} />
-                                                                {t.allow_mask_as_gas_token()})
+                                                                <Trans>Allow Mask be used as gas</Trans>)
                                                             </>
                                                         :   <Icons.Gas size={18} />}
                                                     </Typography>
@@ -487,7 +491,7 @@ export const SmartPayContent = memo(() => {
                     fullWidth
                     size="small"
                     onClick={handleLuckDropClick}>
-                    {t.lucky_drop()}
+                    <Trans>Lucky Drop</Trans>
                 </ActionButton>
                 <ActionButton
                     loading={openSwapLoading}
@@ -496,7 +500,7 @@ export const SmartPayContent = memo(() => {
                     fullWidth
                     size="small"
                     onClick={handleSwapClick}>
-                    {t.swap()}
+                    <Trans>Swap</Trans>
                 </ActionButton>
                 <ActionButton
                     loading={openSendLoading}
@@ -505,7 +509,7 @@ export const SmartPayContent = memo(() => {
                     fullWidth
                     size="small"
                     onClick={handleSendClick}>
-                    {t.send()}
+                    <Trans>Send</Trans>
                 </ActionButton>
                 <Button
                     variant="roundedContained"
@@ -513,7 +517,7 @@ export const SmartPayContent = memo(() => {
                     fullWidth
                     size="small"
                     onClick={handleReceiveClick}>
-                    {t.receive()}
+                    <Trans>Receive</Trans>
                 </Button>
             </DialogActions>
         </>

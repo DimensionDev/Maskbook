@@ -1,4 +1,4 @@
-import { startTransition, useCallback, useDeferredValue, useMemo, useState } from 'react'
+import { startTransition, useCallback, useDeferredValue, useMemo, useState, type ReactNode } from 'react'
 import { compact } from 'lodash-es'
 import { Icons } from '@masknet/icons'
 import { ActionButtonPromise, EmptyStatus, InjectedDialog } from '@masknet/shared'
@@ -18,8 +18,9 @@ import {
     alpha,
 } from '@mui/material'
 import { attachNextIDToProfile } from '../../../../shared/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { ProfileInList } from './ProfileInList.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -128,14 +129,14 @@ interface SelectRecipientsDialogUIProps {
     disabled: boolean
     submitDisabled: boolean
     loading?: boolean
-    searchEmptyText?: string
+    searchEmptyText?: ReactNode
     onSubmit: () => void
     onClose: () => void
     onSearch(v: string): void
     onSetSelected(selected: Profile[]): void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const { items, onSearch } = props
     const [searchInput, setSearchInput] = useState('')
@@ -202,7 +203,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
         <InjectedDialog
             className={classes.root}
             open={props.open}
-            title={t.select_specific_friends_dialog__title()}
+            title={<Trans>Share with</Trans>}
             onClose={handleClose}>
             <DialogContent className={classes.paper}>
                 <InputBase
@@ -222,12 +223,14 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={t.post_dialog_share_with_input_placeholder()}
+                    placeholder={_(msg`eg: X accounts, persona public keys, wallet addresses or ENS`)}
                 />
                 {props.loading ?
                     <div className={cx(classes.empty, classes.mainText)}>
                         <LoadingBase />
-                        <Typography>{t.loading()}</Typography>
+                        <Typography>
+                            <Trans>Loading</Trans>
+                        </Typography>
                     </div>
                 :   <Boundary>
                         <div className={classes.listParent}>
@@ -235,7 +238,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                 <div className={classes.list}>
                                     {results.length === 0 ?
                                         <EmptyStatus className={classes.empty}>
-                                            {props.searchEmptyText ?? t.compose_encrypt_share_dialog_empty()}
+                                            {props.searchEmptyText ?? (
+                                                <Trans>No friends are stored locally, please try search one.</Trans>
+                                            )}
                                         </EmptyStatus>
                                     :   results.map((item, index) => {
                                             const pubkey = item.linkedPersona?.publicKeyAsHex as string
@@ -261,7 +266,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                                         sx={{ width: 20, height: 20 }}
                                         onChange={(e) => onSelectedAllChange(e.currentTarget.checked)}
                                     />
-                                    <Typography sx={{ paddingLeft: 1 }}>{t.select_all()}</Typography>
+                                    <Typography sx={{ paddingLeft: 1 }}>
+                                        <Trans>Select All</Trans>
+                                    </Typography>
                                 </Stack>
                             :   null}
                         </div>
@@ -276,7 +283,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         variant="roundedContained"
                         disabled={props.submitDisabled}
                         onClick={handleClose}>
-                        {t.back()}
+                        <Trans>Back</Trans>
                     </Button>
                     <ActionButtonPromise
                         className={classes.done}
@@ -287,9 +294,9 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                         completeIcon={null}
                         failIcon={null}
                         failedOnClick="use executor"
-                        complete={t.done()}
-                        init={t.done()}
-                        waiting={t.done()}
+                        complete={<Trans>Done</Trans>}
+                        init={<Trans>Done</Trans>}
+                        waiting={<Trans>Done</Trans>}
                     />
                 </div>
             </DialogActions>

@@ -5,7 +5,6 @@ import { useActivatedPluginsSiteAdaptor, type IdentityResolved } from '@masknet/
 import {
     useCurrentPersonaConnectStatus,
     SelectProviderModal,
-    useSharedTrans,
     PersonaContext,
     type PersonaPerSiteConnectStatus,
 } from '@masknet/shared'
@@ -22,6 +21,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -126,7 +126,6 @@ interface ApplicationBoardPluginsListProps
 
 function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     const { currentSite = EnhanceableSite.Twitter } = props
-    const t = useSharedTrans()
     const plugins = useActivatedPluginsSiteAdaptor('any')
     const { pluginID: currentWeb3Network } = useNetworkContext()
     const { account, chainId } = useChainContext()
@@ -212,7 +211,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
                         :   '',
                     )}>
                     <Typography className={classes.placeholder}>
-                        {t.application_display_tab_plug_app_unlisted_placeholder()}
+                        <Trans>Click the settings icon to list it on the App board.</Trans>
                     </Typography>
                 </div>
             }
@@ -222,7 +221,6 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
 
 function RenderEntryComponent({ application }: { application: Application }) {
     const Entry = application.entry.RenderEntryComponent!
-    const t = useSharedTrans()
 
     const ApplicationEntryStatus = useContext(ApplicationEntryStatusContext)
 
@@ -260,13 +258,14 @@ function RenderEntryComponent({ application }: { application: Application }) {
     // #region tooltip hint
     const tooltipHint = (() => {
         if (ApplicationEntryStatus.isLoading) return
-        if (application.isWalletConnectedRequired) return t.application_tooltip_hint_connect_wallet()
+        if (application.isWalletConnectedRequired) return <Trans>Please connect your wallet</Trans>
         if (!application.entry.nextIdRequired) return
         if (ApplicationEntryStatus.isPersonaCreated === false && !disabled)
-            return t.application_tooltip_hint_persona_accessing_dapp()
+            return <Trans>Please create a persona for accessing Dapps.</Trans>
         if (ApplicationEntryStatus.isPersonaConnected === false && !disabled)
-            return t.application_tooltip_hint_connect_persona()
-        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled) return t.application_tooltip_hint_verify()
+            return <Trans>Please connect your persona</Trans>
+        if (ApplicationEntryStatus.shouldVerifyNextId && !disabled)
+            return <Trans>Please verify your social account</Trans>
         return
     })()
     // #endregion

@@ -12,3 +12,112 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/NFTAvatar.tsx:227
+msgid "Add Collectibles"
+msgstr ""
+
+#: src/Application/UploadAvatarDialog.tsx:148
+msgid "Cancel"
+msgstr ""
+
+#: src/SiteAdaptor/NFTAvatar.tsx:177
+msgid "Change"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:245
+msgid "Coming soon"
+msgstr ""
+
+#: src/Application/PersonaPage.tsx:75
+msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:117
+#~ msgid "Download image error"
+#~ msgstr ""
+
+#: src/Application/RouterDialog.tsx:35
+msgid "Edit Profile"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:117
+msgid "Failed to download image"
+msgstr ""
+
+#: src/SiteAdaptor/NFTBadge.tsx:42
+msgid "Loading..."
+msgstr ""
+
+#: src/SiteAdaptor/NFTAvatar.tsx:166
+msgid "NFT Avatar Setting"
+msgstr ""
+
+#: src/Application/RouterDialog.tsx:35
+#: src/SiteAdaptor/NFTAvatarButton.tsx:46
+msgid "NFT PFP"
+msgstr ""
+
+#: src/SiteAdaptor/NFTAvatar.tsx:195
+msgid "No collectible found."
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:217
+msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
+msgstr ""
+
+#: src/Application/PersonaItem.tsx:99
+msgid "Not current account. Please switch to this account to set up NFTs Profile."
+msgstr ""
+
+#: src/SiteAdaptor/NFTAvatar.tsx:196
+msgid "Retry"
+msgstr ""
+
+#: src/Application/UploadAvatarDialog.tsx:151
+msgid "Save"
+msgstr ""
+
+#: src/SiteAdaptor/NFTAvatar.tsx:231
+msgid "Set NFT Avatar"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:248
+msgid "Set NFT NFT Background"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:247
+msgid "Set NFT PFP"
+msgstr ""
+
+#: src/Application/NFTInfo.tsx:31
+msgid "Set NFT PFPs"
+msgstr ""
+
+#: src/Application/NFTInfo.tsx:28
+msgid "Set up NFT PFP successfully"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:51
+msgid "Set your NFT as profile picture with exclusive aura."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:70
+#~ msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:70
+msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
+msgstr ""
+
+#: src/Application/UploadAvatarDialog.tsx:91
+msgid "Sorry, failed to save NFT Avatar. Please set again."
+msgstr ""
+
+#: src/Application/UploadAvatarDialog.tsx:96
+msgid "Update NFT Avatar Success!"
+msgstr ""
+
+#: src/SiteAdaptor/NFTAvatar.tsx:170
+msgid "Wallet"
+msgstr ""

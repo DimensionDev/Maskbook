@@ -7,7 +7,6 @@ import { Grid, Typography } from '@mui/material'
 import { makeStyles, MaskAlert, MaskTextField } from '@masknet/theme'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '@masknet/shared'
 import { NUMERIC_INPUT_REGEXP_PATTERN } from '@masknet/shared-base'
 import {
     type ChainId,
@@ -19,6 +18,7 @@ import {
 import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
 import { EVMUtils } from '@masknet/web3-providers'
 import { useGasSchema } from './hooks/index.js'
+import { Trans } from '@lingui/macro'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {
@@ -82,7 +82,6 @@ export function GasForm(props: GasFormProps) {
         maxPriorityFeePerGasByUser,
         setMaxPriorityFeePerGasByUser,
     } = props
-    const t = useSharedTrans()
     const { classes } = useStyles()
 
     const isEIP1559 = EVMUtils.chainResolver.isFeatureSupported(chainId, 'EIP1559')
@@ -174,9 +173,7 @@ export function GasForm(props: GasFormProps) {
                         standardSuccess: classes.alertStandardSuccess,
                     }}
                     icon={<Icons.Info />}>
-                    {t.gas_settings_info_gas_fee({
-                        fee: formatCurrency(formatWeiToGwei(baseFeePerGas), ''),
-                    })}
+                    <Trans>Current base fee is {formatCurrency(formatWeiToGwei(baseFeePerGas), '')} Gwei</Trans>
                 </MaskAlert>
             :   null}
             <Grid container direction="row" spacing={2}>
@@ -191,12 +188,16 @@ export function GasForm(props: GasFormProps) {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
                                         type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
+                                        endAdornment: (
+                                            <Typography className={classes.unit}>
+                                                <Trans>Gwei</Trans>
+                                            </Typography>
+                                        ),
                                     }}
                                     value={isZero(gasPriceByUser ?? 0) ? gasPrice : gasPriceByUser}
                                     label={
                                         <Typography className={classes.caption}>
-                                            {t.gas_settings_label_gas_price()}
+                                            <Trans>Gas Price</Trans>
                                         </Typography>
                                     }
                                     error={!!errors.gasPrice?.message}
@@ -227,7 +228,7 @@ export function GasForm(props: GasFormProps) {
                                 value={isZero(gasLimit) ? defaultGasLimit : new BigNumber(gasLimit).toString()}
                                 label={
                                     <Typography className={classes.caption}>
-                                        {t.gas_settings_label_gas_limit()}
+                                        <Trans>Gas Limit</Trans>
                                     </Typography>
                                 }
                                 fullWidth
@@ -255,7 +256,11 @@ export function GasForm(props: GasFormProps) {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
                                         type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
+                                        endAdornment: (
+                                            <Typography className={classes.unit}>
+                                                <Trans>Gwei</Trans>
+                                            </Typography>
+                                        ),
                                     }}
                                     value={
                                         isZero(maxPriorityFeePerGasByUser ?? 0) ? maxPriorityFeePerGas : (
@@ -264,7 +269,7 @@ export function GasForm(props: GasFormProps) {
                                     }
                                     label={
                                         <Typography className={classes.caption}>
-                                            {t.gas_settings_label_max_priority_fee()}
+                                            <Trans>Max Priority Fee</Trans>
                                         </Typography>
                                     }
                                     error={!!errors.maxPriorityFeePerGas?.message}
@@ -289,12 +294,16 @@ export function GasForm(props: GasFormProps) {
                                             pattern: NUMERIC_INPUT_REGEXP_PATTERN,
                                         },
                                         type: 'number',
-                                        endAdornment: <Typography className={classes.unit}>{t.gwei()}</Typography>,
+                                        endAdornment: (
+                                            <Typography className={classes.unit}>
+                                                <Trans>Gwei</Trans>
+                                            </Typography>
+                                        ),
                                     }}
                                     value={isZero(maxFeePerGasByUser ?? 0) ? maxFeePerGas : maxFeePerGasByUser}
                                     label={
                                         <Typography className={classes.caption}>
-                                            {t.gas_settings_label_max_fee()}
+                                            <Trans>Max Fee</Trans>
                                         </Typography>
                                     }
                                     error={!!errors.maxFeePerGas?.message}

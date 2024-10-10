@@ -28,11 +28,12 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 
 import { useTitle } from '../../../hooks/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '#services'
 import { useModalNavigate } from '../../../components/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     provider: {
@@ -93,7 +94,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function ConnectWalletPage() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
 
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -149,7 +150,7 @@ export const Component = memo(function ConnectWalletPage() {
 
                 return true
             } catch {
-                showSnackbar(t.popups_verify_wallet_bind_fail_tips(), {
+                showSnackbar(<Trans>Failed to add the wallet, please try again.</Trans>, {
                     variant: 'error',
                 })
                 return false
@@ -187,13 +188,13 @@ export const Component = memo(function ConnectWalletPage() {
 
             const result = await bindProof(payload, walletSignature, personaSignature)
 
-            if (result) showSnackbar(t.popups_verify_wallet_sign_success_tips())
+            if (result) showSnackbar(<Trans>You have signed with your wallet.</Trans>)
 
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
             return true
         } catch (error) {
-            showSnackbar(t.popups_verify_wallet_sign_fail_tips(), {
+            showSnackbar(<Trans>Sorry, signature failed! Please try signing again.</Trans>, {
                 variant: 'error',
             })
             return false
@@ -232,7 +233,7 @@ export const Component = memo(function ConnectWalletPage() {
         })
     }, [])
 
-    useTitle(t.plugin_wallet_connect_a_wallet(), handleBack)
+    useTitle(_(msg`Connect Wallet`), handleBack)
 
     return (
         <Box>
@@ -251,7 +252,7 @@ export const Component = memo(function ConnectWalletPage() {
                                         className={classes.link}
                                         href={account ? EVMExplorerResolver.addressLink(chainId, account) : '#'}
                                         target="_blank"
-                                        title={t.plugin_wallet_view_on_explorer()}
+                                        title={_(msg`View on Explorer`)}
                                         rel="noopener noreferrer">
                                         <Icons.LinkOut size={12} />
                                     </Link>
@@ -259,17 +260,25 @@ export const Component = memo(function ConnectWalletPage() {
                             </Box>
                         </Box>
                         <Button size="small" onClick={handleChooseAnotherWallet}>
-                            {t.wallet_status_button_change()}
+                            <Trans>Change</Trans>
                         </Button>
                     </Box>
                     {isBound ?
                         <Typography className={classes.bounded}>
-                            {t.popups_verify_wallet_bounded_tips({ persona: String(currentPersona?.nickname) })}
+                            <Trans>
+                                This wallet is connected to current persona {String(currentPersona?.nickname)}.
+                            </Trans>
                         </Typography>
                     :   null}
-                    <Typography className={classes.description}>{t.popups_verify_wallet_description()}</Typography>
+                    <Typography className={classes.description}>
+                        <Trans>
+                            Adding your wallets will allow you to own, view, and utilize your digital identities via
+                            Next.ID service. Note that you will be required to sign and authenticate the transaction to
+                            prove ownership of your wallet.
+                        </Trans>
+                    </Typography>
                     {loading ?
-                        <LoadingMask text={t.signing()} />
+                        <LoadingMask text={<Trans>Signing ...</Trans>} />
                     :   null}
                 </Box>
             :   <Box p={2} display="flex" flexDirection="column" alignItems="center">
@@ -277,13 +286,12 @@ export const Component = memo(function ConnectWalletPage() {
                         &#x1F389;
                     </Typography>
                     <Typography fontSize={24} lineHeight="120%" fontWeight={700} my={1.5}>
-                        {t.congratulations()}
+                        <Trans>Congratulations</Trans>
                     </Typography>
                     <Typography className={classes.congratulation}>
-                        {t.popups_verify_wallet_congratulation_tips({
-                            persona: String(currentPersona?.nickname),
-                            wallet: walletName,
-                        })}
+                        <Trans>
+                            Connected {currentPersona?.nickname} with {walletName}.
+                        </Trans>
                     </Typography>
                     <Box display="flex" py={3} px={1.5} alignItems="center">
                         <Box className={classes.info}>
@@ -302,14 +310,14 @@ export const Component = memo(function ConnectWalletPage() {
             }
             <BottomController>
                 <Button variant="outlined" fullWidth onClick={handleCancel}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 {!signResult ?
                     <ActionButton fullWidth onClick={handleSign} disabled={loading || isBound}>
-                        {t.sign()}
+                        <Trans>Sign</Trans>
                     </ActionButton>
                 :   <ActionButton fullWidth onClick={handleDone}>
-                        {t.done()}
+                        <Trans>Done</Trans>
                     </ActionButton>
                 }
             </BottomController>

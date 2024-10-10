@@ -12,3 +12,39 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/index.tsx:26
+msgid "General user"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:39
+msgid "NFT collection"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:41
+msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "Token"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:16
+msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:36
+msgid "View real-time crypto prices, market cap, trading volume, etc."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:28
+msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:28
+#~ msgid "View user’s Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:23
+msgid "Web3 Profile Card"
+msgstr ""

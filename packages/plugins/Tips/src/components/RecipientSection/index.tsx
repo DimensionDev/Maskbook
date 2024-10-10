@@ -1,8 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { FormControl, type FormControlProps, Typography } from '@mui/material'
 import { useTip } from '../../contexts/index.js'
-import { useTipsTrans } from '../../locales/index.js'
 import { RecipientSelect } from './RecipientSelect.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -36,14 +36,15 @@ interface Props extends FormControlProps {}
 
 export function RecipientSection({ className, ...rest }: Props) {
     const { classes, cx } = useStyles()
-    const t = useTipsTrans()
     const {
         recipientValidation: [isValid, validateMessage],
     } = useTip()
     return (
         <FormControl fullWidth className={cx(classes.container, className)} {...rest}>
             <div className={classes.receiverRow}>
-                <Typography className={classes.to}>{t.tip_to()}</Typography>
+                <Typography className={classes.to}>
+                    <Trans>To</Trans>
+                </Typography>
                 <RecipientSelect className={classes.select} />
             </div>
             {isValid ? null : <div className={classes.validation}>{validateMessage}</div>}

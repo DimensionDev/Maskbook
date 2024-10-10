@@ -6,7 +6,8 @@ import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
+import type React from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
@@ -75,13 +76,13 @@ export interface TokenTransactionConfirmModalProps extends PropsWithChildren<Inj
     tokenType: TokenType
     messageTextForNFT?: string
     messageTextForFT?: string
-    confirmText?: string
+    confirmText?: React.ReactNode
     onConfirm?(): void
 }
 
 export function TokenTransactionConfirmModal({
     className,
-    confirmText,
+    confirmText = 'Confirm',
     onConfirm,
     children,
     messageTextForNFT,
@@ -95,8 +96,6 @@ export function TokenTransactionConfirmModal({
     ...rest
 }: TokenTransactionConfirmModalProps) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
-    confirmText = confirmText || 'Confirm'
     const isToken = tokenType === TokenType.Fungible
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
     return (
@@ -125,7 +124,7 @@ export function TokenTransactionConfirmModal({
                             size={90}
                         />
                         <Typography className={classes.congratulation} mt="19.5px">
-                            {t.congratulations()}
+                            <Trans>Congratulations!</Trans>
                         </Typography>
                         <Typography className={classes.messageText} mt="41px">
                             {messageTextForFT}
@@ -150,7 +149,7 @@ export function TokenTransactionConfirmModal({
                             </>
                         :   null}
                         <Typography className={classes.congratulation} mt="24px">
-                            {t.congratulations()}
+                            <Trans>Congratulations!</Trans>
                         </Typography>
                         <Typography className={classes.nftMessageText} mt="14px">
                             {messageTextForNFT}

@@ -7,7 +7,7 @@ import { useDialogStackActor } from './DialogStack.js'
 export interface MaskDialogProps
     extends React.PropsWithChildren<Omit<MaskDialogTitleProps, 'children'>>,
         Pick<DialogProps, 'fullWidth' | 'maxWidth'> {
-    title: string
+    title: ReactNode
     open: boolean
     DialogProps?: Omit<DialogProps, 'open'>
     isOpenFromApplicationBoard?: boolean

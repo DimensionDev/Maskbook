@@ -8,7 +8,8 @@ import { useChainContext, useFungibleToken, useMaskTokenAddress, useNativeToken 
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { useMenuConfig } from './useMenu.js'
-import { TokenIcon, useSharedTrans } from '../index.js'
+import { TokenIcon } from '../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -45,7 +46,6 @@ export function useGasCurrencyMenu(
     selectedAddress?: string,
     handleUnlock?: () => void,
 ) {
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const { chainId } = useChainContext()
     const [current, setCurrent] = useState('')
@@ -93,7 +93,7 @@ export function useGasCurrencyMenu(
                     </Typography>
                     {availableBalanceTooLow ?
                         <Button variant="roundedContained" onClick={handleUnlock} size="small">
-                            {sharedI18N.unlock()}
+                            <Trans>Unlock</Trans>
                         </Button>
                     :   <RadioIndicator
                             size={20}

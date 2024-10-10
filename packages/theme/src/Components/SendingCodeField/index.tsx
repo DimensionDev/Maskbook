@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react'
+import { useRef, useEffect, useState, type ReactNode } from 'react'
 import { type MaskTextFieldProps } from '../TextField/index.js'
 import { CountdownButton } from '../CountdownButton/index.js'
 import { makeStyles } from '../../UIHelper/index.js'
@@ -15,8 +15,8 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface SendingCodeFieldProps extends Omit<MaskTextFieldProps, 'onChange' | 'onBlur'> {
-    sendButtonText?: string
-    errorMessage?: string
+    sendButtonText?: ReactNode
+    errorMessage?: ReactNode
     autoSend?: boolean
     resendDisabled?: boolean
     onBlur?(code: string): void

@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-22 10:00\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,80 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/NextID/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 976\n"
+
+#: src/components/Actions/index.tsx:77
+msgid "Add wallet"
+msgstr "ウォレットを追加"
+
+#: src/hooks/useWalletSign.ts:17
+msgid "Confirm this transaction in your wallet."
+msgstr "ウォレットでこの取引を確認する"
+
+#: src/components/Actions/index.tsx:41
+msgid "Create Persona"
+msgstr "ペルソナを作成"
+
+#: src/components/BindPanelUI.tsx:138
+#: src/components/BindPanelUI.tsx:190
+msgid "Done"
+msgstr "完了"
+
+#: src/components/Actions/index.tsx:68
+msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
+msgstr "Web3タブでは、NFTコレクションのウォレットアドレス、寄付レコードを表示できます。 その他のオンチェーンフィードは、マスク拡張機能をインストールした友達にも提供されます。"
+
+#: src/components/BindPanelUI.tsx:151
+msgid "Persona"
+msgstr "ペルソナ"
+
+#: src/components/BindPanelUI.tsx:191
+msgid "Persona Sign"
+msgstr "ペルソナサイン"
+
+#: src/components/Actions/index.tsx:35
+msgid "Please create your persona to use Web3 Profile."
+msgstr "Web3 プロフィールを使用するには、ペルソナを作成してください。"
+
+#: src/components/Actions/index.tsx:89
+msgid "The user has not set this."
+msgstr "ユーザーはこれを設定していません。"
+
+#: src/components/BindPanelUI.tsx:121
+msgid "This wallet address has already been connected."
+msgstr "このウォレットアドレスは既に接続されています。"
+
+#: src/components/BindPanelUI.tsx:145
+msgid "Unsupported Network"
+msgstr "対応していないネットワーク"
+
+#: src/components/BindDialog.tsx:82
+msgid "Verify your wallet"
+msgstr "ウォレットの認証"
+
+#: src/SiteAdaptor/VerificationPayload.tsx:41
+msgid "View"
+msgstr "表示"
+
+#: src/components/BindPanelUI.tsx:104
+msgid "Wallet"
+msgstr "ウォレット"
+
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
+#: src/components/BindPanelUI.tsx:139
+#: src/hooks/useWalletSign.ts:15
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet Sign"
+msgstr "ウォレットサイン"
+
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet sign cancelled."
+msgstr "ウォレットのサインがキャンセルされました。"
+
+#: src/components/BindDialog.tsx:75
+msgid "Wallet sign failed."
+msgstr "ウォレットのサインに失敗しました。"
+
+#: src/components/BindDialog.tsx:64
+msgid "Wallet sign succeeded."
+msgstr "ウォレットのサインは成功しました。"

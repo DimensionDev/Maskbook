@@ -4,9 +4,9 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useNonFungibleEvents } from '@masknet/web3-hooks-base'
 import { Stack } from '@mui/material'
 import { useMemo } from 'react'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { Context } from '../Context/index.js'
 import { ActivityCard } from './ActivityCard.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     wrapper: {
@@ -23,8 +23,6 @@ const useStyles = makeStyles()({
 
 export function ActivitiesList() {
     const { pluginID, tokenAddress, tokenId, chainId, ownerAddress } = Context.useContainer()
-
-    const t = useCollectibleTrans()
     const { classes } = useStyles()
 
     const { data, isPending, error, hasNextPage, fetchNextPage, refetch } = useNonFungibleEvents(
@@ -41,7 +39,12 @@ export function ActivitiesList() {
 
     if (error) return <ReloadStatus className={classes.wrapper} onRetry={refetch} />
 
-    if (!events.length) return <EmptyStatus height={215}>{t.plugin_collectible_nft_activity_empty()}</EmptyStatus>
+    if (!events.length)
+        return (
+            <EmptyStatus height={215}>
+                <Trans>This NFT didn't have any activities.</Trans>
+            </EmptyStatus>
+        )
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }}>

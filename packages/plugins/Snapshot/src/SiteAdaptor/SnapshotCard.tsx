@@ -1,6 +1,6 @@
 import { Card, CardContent, CardHeader, Skeleton, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { memo, useEffect, useRef, useState, useTransition, type JSX } from 'react'
+import { memo, useEffect, useRef, useState, useTransition } from 'react'
 import { range } from 'lodash-es'
 import { useIntersection } from 'react-use'
 
@@ -45,7 +45,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 interface SnapshotCardProps {
-    title: (JSX.Element & React.ReactNode) | string
+    title: React.ReactNode
     children?: React.ReactNode
     lazy?: boolean
 }

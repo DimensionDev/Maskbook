@@ -6,7 +6,8 @@ import { z } from 'zod'
 import { UserContext } from '../../shared-ui/index.js'
 import Services from '#services'
 import { passwordRegexp } from '../utils/regexp.js'
-import { useDashboardTrans } from '../locales/i18n_generated.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export type BackupFormInputs = {
     backupPassword: string
@@ -14,7 +15,7 @@ export type BackupFormInputs = {
 }
 
 export function useBackupFormState() {
-    const t = useDashboardTrans()
+    const { _ } = useLingui()
     const { value: hasPassword } = useAsync(Services.Wallet.hasPassword, [])
     const { value: previewInfo, loading } = useAsync(Services.Backup.generateBackupPreviewInfo, [])
     const { user } = UserContext.useContainer()
@@ -36,18 +37,18 @@ export function useBackupFormState() {
             z.object({
                 backupPassword: z
                     .string()
-                    .min(8, t.incorrect_password())
-                    .max(20, t.incorrect_password())
-                    .refine((password) => password === user.backupPassword, t.incorrect_password())
-                    .refine((password) => passwordRegexp.test(password), t.incorrect_password()),
+                    .min(8, _(msg`Incorrect Password`))
+                    .max(20, _(msg`Incorrect Password`))
+                    .refine((password) => password === user.backupPassword, _(msg`Incorrect Password`))
+                    .refine((password) => passwordRegexp.test(password), _(msg`Incorrect Password`)),
                 paymentPassword:
                     backupWallets && hasPassword ?
                         z
                             .string({
-                                required_error: t.incorrect_password(),
+                                required_error: _(msg`Incorrect Password`),
                             })
-                            .min(6, t.incorrect_password())
-                            .max(20, t.incorrect_password())
+                            .min(6, _(msg`Incorrect Password`))
+                            .max(20, _(msg`Incorrect Password`))
                     :   z.string().optional(),
             }),
         ),

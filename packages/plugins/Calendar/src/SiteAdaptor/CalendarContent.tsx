@@ -7,11 +7,11 @@ import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { useNFTList, useNewsList } from '../hooks/useEventList.js'
-import { useCalendarTrans } from '../locales/i18n_generated.js'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { Footer } from './components/Footer.js'
 import { NFTList } from './components/NFTList.js'
 import { NewsList } from './components/NewsList.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -43,7 +43,6 @@ interface Props {
 }
 
 export function CalendarContent({ target, disableSetting }: Props) {
-    const t = useCalendarTrans()
     const { classes } = useStyles()
     const [pathname, setPathname] = useState(location.pathname)
     const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
@@ -75,8 +74,8 @@ export function CalendarContent({ target, disableSetting }: Props) {
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
-                        <Tab className={classes.tab} label={t.news()} value={tabs.news} />
-                        <Tab className={classes.tab} label={t.nfts()} value={tabs.nfts} />
+                        <Tab className={classes.tab} label={<Trans>News</Trans>} value={tabs.news} />
+                        <Tab className={classes.tab} label={<Trans>NFTs</Trans>} value={tabs.nfts} />
                     </MaskTabList>
                 </div>
                 <DatePickerTab

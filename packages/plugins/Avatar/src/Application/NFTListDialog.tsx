@@ -11,7 +11,6 @@ import {
     PluginVerifiedWalletStatusBar,
     PopupHomeTabType,
     UserAssetsProvider,
-    useSharedTrans,
 } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -31,11 +30,11 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
-import { useAvatarTrans } from '../locales/index.js'
 import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -80,8 +79,6 @@ export interface NFTListDialogRef {
 }
 
 export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefined>) {
-    const t = useAvatarTrans()
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =
         useAvatarManagement()
@@ -117,7 +114,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
-                showSnackbar(t.download_image_error(), { variant: 'error' })
+                showSnackbar(<Trans>Failed to download image</Trans>, { variant: 'error' })
                 return
             }
             setSelectedTokenInfo({
@@ -217,7 +214,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
                 :   <Box className={classes.noWallet} height={479}>
                         <Icons.EmptySimple variant="light" size={36} />
                         <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
-                            {t.no_wallet_message()}
+                            <Trans>No valid wallet detected. Please connect wallet or verify wallet firstly.</Trans>
                         </Typography>
                     </Box>
                 }
@@ -245,8 +242,10 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
                             disabled={disabled || !selectedToken || !!targetWallet?.owner}
                             fullWidth>
                             {targetWallet?.owner ?
-                                sharedI18N.coming_soon()
-                            :   t.set_up_title({ context: pfpType === PFP_TYPE.PFP ? 'pfp' : 'background' })}
+                                <Trans>Coming soon</Trans>
+                            : pfpType === PFP_TYPE.PFP ?
+                                <Trans>Set NFT PFP</Trans>
+                            :   <Trans>Set NFT NFT Background</Trans>}
                         </Button>
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>

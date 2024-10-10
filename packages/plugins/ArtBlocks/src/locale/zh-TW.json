@@ -1,1 +1,40 @@
-{ "messages": {} }
+{
+    "messages": {
+        "gERRYE": "Artblocks",
+        "SDrb6I": "Artblocks 依托算法生成内容技术，给用户提供随心铸造 NFT 的体验。",
+        "uqF4Nm": "区块链：",
+        "iobEyh": "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>.",
+        "xjhtsV": "链",
+        "q+hNag": "Nft 系列",
+        "qqWcBV": "已完成",
+        "p7l2aC": "合约：",
+        "NCIYDF": "Created by",
+        "V5lpjo": ["Created by <0>", ["0"], "</0>• <1>Website</1>"],
+        "URmyfc": "详情",
+        "SG6jy+": [
+            "我刚刚从",
+            ["0"],
+            " 使用",
+            ["1"],
+            " ",
+            ["2"],
+            " 购买了一件美丽的艺术品。安装@realMaskNetwork来获取您的作品。"
+        ],
+        "ie2c+s": ["我刚刚在", ["0"], " 使用", ["1"], " ", ["2"], " 购买了一件美丽的艺术品。欢迎加入！"],
+        "623chP": "信息资料",
+        "znqB4T": "余额不足",
+        "bLvQvN": "照片库：",
+        "z/3+av": "许可证：",
+        "ldI18s": "已铸造：",
+        "URAE3q": "已暂停",
+        "D9iWaX": "请检查 ToS 文档",
+        "q/ao7A": "每份铸造的价格",
+        "rcNnsQ": "价格：",
+        "zZk9Yz": "购买",
+        "zgqgNP": "购买中...",
+        "ywDBfs": "发生未知错误。",
+        "mW8F64": "This project is no longer active",
+        "V9xq/9": "This project is no more active",
+        "On0aF2": "Website"
+    }
+}

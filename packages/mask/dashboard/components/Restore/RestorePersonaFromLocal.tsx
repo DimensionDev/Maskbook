@@ -1,4 +1,4 @@
-import { memo, useCallback, useLayoutEffect, useMemo, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
 import { useAsync } from 'react-use'
 import { Box, Button, Typography } from '@mui/material'
 import { type BackupSummary, decryptBackup } from '@masknet/backup-format'
@@ -14,6 +14,8 @@ import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { AccountStatusBar } from './AccountStatusBar.js'
 import { BackupPreview } from '../BackupPreview/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -24,6 +26,7 @@ enum RestoreStatus {
 const supportedFileType = {
     json: 'application/json',
     octetStream: 'application/octet-stream',
+    // cspell:disable-next-line
     macBinary: 'application/macbinary',
 }
 
@@ -43,6 +46,7 @@ interface RestoreFromLocalProps {
 }
 
 export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ onRestore }: RestoreFromLocalProps) {
+    const { _ } = useLingui()
     const { classes, theme } = useStyles()
     const t = useDashboardTrans()
     const { showSnackbar } = useCustomSnackbar()
@@ -52,7 +56,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
     const [summary, setSummary] = useState<BackupSummary | null>(null)
     const [backupValue, setBackupValue] = useState('')
     const [password, setPassword] = useState('')
-    const [error, setError] = useState('')
+    const [error, setError] = useState<ReactNode>()
     const [restoreStatus, setRestoreStatus] = useState(RestoreStatus.WaitingInput)
     const [readingFile, setReadingFile] = useState(false)
     const [processing, setProcessing] = useState(false)
@@ -76,7 +80,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             setRestoreStatus(RestoreStatus.Decrypting)
         } else {
             reset()
-            showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
+            showSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
         }
     }, [])
 
@@ -88,7 +92,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             setSummary(summary.value)
             setRestoreStatus(RestoreStatus.Verified)
         } else {
-            showSnackbar(t.sign_in_account_cloud_backup_not_support(), { variant: 'error' })
+            showSnackbar(<Trans>Unsupported data backup</Trans>, { variant: 'error' })
             setRestoreStatus(RestoreStatus.WaitingInput)
             setBackupValue('')
         }
@@ -106,7 +110,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             const decoded = decode(decrypted)
             setBackupValue(JSON.stringify(decoded))
         } catch (error_) {
-            setError(t.incorrect_backup_password())
+            setError(<Trans>Incorrect Backup Password.</Trans>)
         } finally {
             setReadingFile(false)
             setProcessing(false)
@@ -125,7 +129,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
 
             await onRestore(summary?.countOfWallets)
         } catch {
-            showSnackbar(t.sign_in_account_cloud_backup_failed(), { variant: 'error' })
+            showSnackbar(<Trans>Restore backup failed.</Trans>, { variant: 'error' })
         } finally {
             setProcessing(false)
         }
@@ -147,7 +151,9 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                 onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                 loading={loading}
                 disabled={disabled}>
-                {restoreStatus !== RestoreStatus.Verified ? t.continue() : t.restore()}
+                {restoreStatus !== RestoreStatus.Verified ?
+                    <Trans>Continue</Trans>
+                :   <Trans>Restore</Trans>}
             </PrimaryButton>,
         )
     }, [restoreStatus, decryptBackupFile, restoreDB, disabled, loading])
@@ -167,7 +173,9 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                         </Button>
                     }>
                     <Typography className={classes.desc}>
-                        {readingFile ? t.file_unpacking() : t.file_unpacking_completed()}
+                        {readingFile ?
+                            <Trans>Unpacking</Trans>
+                        :   <Trans>Completed</Trans>}
                     </Typography>
                 </FileFrame>
             :   null}
@@ -175,7 +183,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                 <Box mt={4}>
                     <PasswordField
                         fullWidth
-                        placeholder={t.sign_in_account_cloud_backup_password()}
+                        placeholder={_(msg`Backup password`)}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                         error={!!error}
@@ -185,7 +193,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                 </Box>
             : restoreStatus === RestoreStatus.Verified && summary ?
                 <>
-                    <AccountStatusBar label={file?.name} actionLabel={t.file_reselect()} onAction={reset} />
+                    <AccountStatusBar label={file?.name} actionLabel={<Trans>Reselect</Trans>} onAction={reset} />
                     <BackupPreview mt={2} info={summary} />
                 </>
             :   null}

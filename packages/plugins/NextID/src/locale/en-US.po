@@ -12,3 +12,80 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/components/Actions/index.tsx:77
+msgid "Add wallet"
+msgstr ""
+
+#: src/hooks/useWalletSign.ts:17
+msgid "Confirm this transaction in your wallet."
+msgstr ""
+
+#: src/components/Actions/index.tsx:41
+msgid "Create Persona"
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:138
+#: src/components/BindPanelUI.tsx:190
+msgid "Done"
+msgstr ""
+
+#: src/components/Actions/index.tsx:68
+msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:151
+msgid "Persona"
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:191
+msgid "Persona Sign"
+msgstr ""
+
+#: src/components/Actions/index.tsx:35
+msgid "Please create your persona to use Web3 Profile."
+msgstr ""
+
+#: src/components/Actions/index.tsx:89
+msgid "The user has not set this."
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:121
+msgid "This wallet address has already been connected."
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:145
+msgid "Unsupported Network"
+msgstr ""
+
+#: src/components/BindDialog.tsx:82
+msgid "Verify your wallet"
+msgstr ""
+
+#: src/SiteAdaptor/VerificationPayload.tsx:41
+msgid "View"
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:104
+msgid "Wallet"
+msgstr ""
+
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
+#: src/components/BindPanelUI.tsx:139
+#: src/hooks/useWalletSign.ts:15
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet Sign"
+msgstr ""
+
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet sign cancelled."
+msgstr ""
+
+#: src/components/BindDialog.tsx:75
+msgid "Wallet sign failed."
+msgstr ""
+
+#: src/components/BindDialog.tsx:64
+msgid "Wallet sign succeeded."
+msgstr ""

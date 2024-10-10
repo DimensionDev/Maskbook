@@ -5,7 +5,7 @@ import { Stack, Typography, useTheme } from '@mui/material'
 import { useSharedTrans } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { PluginTransFieldRender, useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { useHandleTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme, props) => {
     return {
@@ -29,7 +29,6 @@ const useStyles = makeStyles()((theme, props) => {
 
 export function PluginHeader() {
     const t = useSharedTrans()
-    const handleTrans = useHandleTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 
@@ -46,21 +45,23 @@ export function PluginHeader() {
             </Stack>
             <Box className={classes.provider}>
                 <Typography variant="body1" fontSize={14} fontWeight="700" className={classes.providerBy}>
-                    {handleTrans.powered_by()}
+                    <Trans>
+                        Powered by{' '}
+                        {publisher ?
+                            <>
+                                <Typography
+                                    variant="body1"
+                                    fontSize={14}
+                                    fontWeight="700"
+                                    component="div"
+                                    color={MaskColorVar.textPluginColor}>
+                                    <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
+                                </Typography>
+                                <Icons.RSS3 size={24} />
+                            </>
+                        :   null}
+                    </Trans>
                 </Typography>
-                {publisher ?
-                    <>
-                        <Typography
-                            variant="body1"
-                            fontSize={14}
-                            fontWeight="700"
-                            component="div"
-                            color={MaskColorVar.textPluginColor}>
-                            <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
-                        </Typography>
-                        <Icons.RSS3 size={24} />
-                    </>
-                :   null}
             </Box>
         </Stack>
     )

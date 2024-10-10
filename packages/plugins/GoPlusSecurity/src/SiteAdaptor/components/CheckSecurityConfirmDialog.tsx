@@ -1,7 +1,7 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { useGoPlusLabsTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -34,7 +34,6 @@ interface Props {
     onClose(): void
 }
 function CheckSecurityConfirmDialog({ open, onClose }: Props) {
-    const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
 
     return (
@@ -44,10 +43,23 @@ function CheckSecurityConfirmDialog({ open, onClose }: Props) {
             classes={{ paper: classes.paper, dialogContent: classes.content }}>
             <DialogContent className={classes.content}>
                 <Stack alignItems="center">
-                    <Typography style={{ fontSize: '14px', fontWeight: 500 }}>{t.close_check_security()}</Typography>
-                    <Typography className={classes.intro}>{t.check_security_intro()}</Typography>
-                    <Typography className={classes.intro}>{t.check_security_close_warning()}</Typography>
-                    <Typography className={classes.intro}>{t.check_security_close_advice()}</Typography>
+                    <Typography style={{ fontSize: '14px', fontWeight: 500 }}>
+                        <Trans>Close [Check Security]?</Trans>
+                    </Typography>
+                    <Typography className={classes.intro}>
+                        <Trans>
+                            The [Check Security] dApp provides quick, reliable, and convenient Web3 security services.
+                        </Trans>
+                    </Typography>
+                    <Typography className={classes.intro}>
+                        <Trans>
+                            If you decide to close [Check Security], you will no longer see security notifications when
+                            interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses.
+                        </Trans>
+                    </Typography>
+                    <Typography className={classes.intro}>
+                        <Trans>We recommend new Web3 users to keep [Check Security] open.</Trans>
+                    </Typography>
                 </Stack>
                 <Stack marginTop="36px">
                     <Button
@@ -56,10 +68,10 @@ function CheckSecurityConfirmDialog({ open, onClose }: Props) {
                             onConfirm.f()
                             onClose()
                         }}>
-                        {t.confirm()}
+                        <Trans>Confirm</Trans>
                     </Button>
                     <Button style={{ marginTop: '16px', borderRadius: '99px' }} onClick={onClose}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </Button>
                 </Stack>
             </DialogContent>

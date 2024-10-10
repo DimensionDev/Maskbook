@@ -11,6 +11,8 @@ import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import urlcat from 'urlcat'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -59,6 +61,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CreateWalletForm() {
+    const { _ } = useLingui()
     const t = useDashboardTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
@@ -70,8 +73,8 @@ export const Component = memo(function CreateWalletForm() {
     const schema = useMemo(() => {
         const passwordRule = zod
             .string()
-            .min(6, t.create_wallet_password_length_error())
-            .max(20, t.create_wallet_password_length_error())
+            .min(6, _(msg`Payment password must be 6 to 20 characters.`))
+            .max(20, _(msg`Payment password must be 6 to 20 characters.`))
 
         return zod
             .object({
@@ -79,7 +82,7 @@ export const Component = memo(function CreateWalletForm() {
                 confirm: zod.string().optional(),
             })
             .refine((data) => data.password === data.confirm, {
-                message: t.create_wallet_password_match_tip(),
+                message: _(msg`Entered passwords are inconsistent.`),
                 path: ['confirm'],
             })
     }, [t])
@@ -111,10 +114,16 @@ export const Component = memo(function CreateWalletForm() {
     return (
         <div className={classes.container}>
             <Typography className={cx(classes.second, classes.bold)}>
-                {!isReset ? t.create_step({ step: '1', totalSteps: '3' }) : null}
+                {!isReset ?
+                    <Trans>Step 1/3</Trans>
+                :   null}
             </Typography>
-            <Typography className={cx(classes.title, classes.bold)}>{t.set_payment_password()}</Typography>
-            <Typography className={classes.tips}>{t.create_wallet_payment_password_tip_1()}</Typography>
+            <Typography className={cx(classes.title, classes.bold)}>
+                <Trans>Set Your Payment Password</Trans>
+            </Typography>
+            <Typography className={classes.tips}>
+                <Trans>Payment Password should be between 6 and 20 characters.</Trans>
+            </Typography>
             <form className={classes.form} onSubmit={onSubmit}>
                 <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
                     <Controller
@@ -124,7 +133,7 @@ export const Component = memo(function CreateWalletForm() {
                                 {...field}
                                 autoFocus
                                 className={classes.input}
-                                placeholder={t.create_wallet_payment_password_place_holder()}
+                                placeholder={_(msg`At least 6 characters`)}
                                 error={!isValid && !!errors.password?.message}
                                 helperText={!isValid ? errors.password?.message : ''}
                             />
@@ -138,7 +147,7 @@ export const Component = memo(function CreateWalletForm() {
                                 className={classes.input}
                                 error={!isValid && !!errors.confirm?.message}
                                 helperText={!isValid ? errors.confirm?.message : ''}
-                                placeholder={t.create_wallet_re_enter_payment_password()}
+                                placeholder={_(msg`Confirm Payment Password`)}
                             />
                         )}
                         name="confirm"
@@ -146,7 +155,13 @@ export const Component = memo(function CreateWalletForm() {
                     />
                 </Box>
 
-                <Typography className={classes.tipsBottom}>{t.create_wallet_payment_password_tip_2()}</Typography>
+                <Typography className={classes.tipsBottom}>
+                    <Trans>
+                        Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction
+                        confirmations and signing. The password is never stored, and there is no way to recover it if
+                        you forget it.
+                    </Trans>
+                </Typography>
             </form>
             <SetupFrameController>
                 <PrimaryButton
@@ -156,7 +171,7 @@ export const Component = memo(function CreateWalletForm() {
                     className={classes.bold}
                     onClick={onSubmit}
                     disabled={!isValid}>
-                    {t.continue()}
+                    <Trans>Continue</Trans>
                 </PrimaryButton>
             </SetupFrameController>
         </div>

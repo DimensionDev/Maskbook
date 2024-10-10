@@ -15,8 +15,8 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
-import { useTipsTrans } from '../../locales/index.js'
 import { useTip } from '../../contexts/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -88,7 +88,6 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
         setNonFungibleTokenAddress,
     } = useTip()
     const { classes, cx } = useStyles()
-    const t = useTipsTrans()
     const selectedKey = tokenAddress || tokenId ? `${tokenAddress}_${tokenId}` : undefined
     const { pluginID } = useNetworkContext()
     const { account, chainId } = useChainContext()
@@ -158,7 +157,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
             <FormControl className={classes.header}>
                 {isEvm && account ?
                     <Typography className={classes.addButton} onClick={handleAddToken}>
-                        {t.tip_add_collectibles()}
+                        <Trans>Add Collectibles</Trans>
                     </Typography>
                 :   null}
             </FormControl>
@@ -205,7 +204,9 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                     }
                     return (
                         <EmptyStatus className={classes.statusBox} iconSize={36}>
-                            {t.tip_empty_nft()}
+                            <Trans>
+                                No any collectible is available for preview. Please add your collectible here.
+                            </Trans>
                         </EmptyStatus>
                     )
                 })()}

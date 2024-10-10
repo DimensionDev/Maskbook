@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-10-10 05:26\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,59 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Calendar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 952\n"
+
+#: src/SiteAdaptor/components/Footer.tsx:95
+#: src/SiteAdaptor/index.tsx:23
+msgid "Calendar"
+msgstr "crwdns28410:0crwdne28410:0"
+
+#: src/SiteAdaptor/components/NFTList.tsx:216
+msgid "Date"
+msgstr "crwdns28412:0crwdne28412:0"
+
+#: src/SiteAdaptor/CalendarContent.tsx:85
+msgid "Events"
+msgstr "crwdns28414:0crwdne28414:0"
+
+#: src/SiteAdaptor/components/CountDownTimer.tsx:58
+msgid "Expired"
+msgstr "crwdns28416:0crwdne28416:0"
+
+#: src/SiteAdaptor/index.tsx:9
+#~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:9
+msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+msgstr "crwdns32216:0crwdne32216:0"
+
+#: src/SiteAdaptor/CalendarContent.tsx:84
+msgid "News"
+msgstr "crwdns28420:0crwdne28420:0"
+
+#: src/SiteAdaptor/CalendarContent.tsx:86
+msgid "NFTs"
+msgstr "crwdns28422:0crwdne28422:0"
+
+#: src/SiteAdaptor/components/EventList.tsx:163
+#: src/SiteAdaptor/components/NewsList.tsx:170
+#: src/SiteAdaptor/components/NFTList.tsx:229
+msgid "No content for the last two weeks."
+msgstr "crwdns28424:0crwdne28424:0"
+
+#: src/SiteAdaptor/components/Footer.tsx:100
+#~ msgid "Powered By"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Footer.tsx:100
+msgid "Powered By {0}"
+msgstr "crwdns32218:0{0}crwdne32218:0"
+
+#: src/SiteAdaptor/components/NFTList.tsx:208
+msgid "Price"
+msgstr "crwdns28428:0crwdne28428:0"
+
+#: src/SiteAdaptor/components/NFTList.tsx:200
+msgid "Total"
+msgstr "crwdns28430:0crwdne28430:0"
 

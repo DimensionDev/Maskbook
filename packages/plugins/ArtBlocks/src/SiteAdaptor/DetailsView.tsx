@@ -9,7 +9,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { EVMChainResolver, EVMExplorerResolver } from '@masknet/web3-providers'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import type { Project } from '../types.js'
-import { useArtBlocksTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,7 +47,6 @@ interface DetailsViewProps {
 
 export function DetailsView({ project }: DetailsViewProps) {
     const { classes } = useStyles()
-    const t = useArtBlocksTrans()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const invocations = `${project.invocations} of ${project.maxInvocations}`
@@ -68,18 +67,20 @@ export function DetailsView({ project }: DetailsViewProps) {
                     </Link>
                 </Typography>
                 <Typography variant="body2">
-                    {t.plugin_artblocks_created_by()}
-                    <Link
-                        href={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        title={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}>
-                        {` ${project.artistName}`}
-                    </Link>
-                    &nbsp;&bull;&nbsp;
-                    <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
-                        {t.plugin_artblocks_website()}
-                    </Link>
+                    <Trans>
+                        Created by{' '}
+                        <Link
+                            href={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            title={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}>
+                            {project.artistName}
+                        </Link>
+                        &nbsp;&bull;&nbsp;
+                        <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
+                            Website
+                        </Link>
+                    </Trans>
                 </Typography>
                 <Typography variant="body1" className={classes.description}>
                     {project.description}
@@ -87,42 +88,54 @@ export function DetailsView({ project }: DetailsViewProps) {
             </Box>
             <Box className={classes.container}>
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                    {t.plugin_artblocks_infos()}
+                    <Trans>Infos</Trans>
                 </Typography>
                 <Box className={classes.meta_row}>
-                    <Typography variant="body2">{t.plugin_artblocks_price_row()} </Typography>
+                    <Typography variant="body2">
+                        <Trans>Price:</Trans>{' '}
+                    </Typography>
                     <Typography variant="body2">
                         {price}
                         {project.currencySymbol === null ? 'ETH' : project.currencySymbol}
                     </Typography>
                 </Box>
                 <Box className={classes.meta_row}>
-                    <Typography variant="body2">{t.plugin_artblocks_minted_row()} </Typography>
+                    <Typography variant="body2">
+                        <Trans>Minted:</Trans>{' '}
+                    </Typography>
                     <Typography variant="body2">{invocations}</Typography>
                 </Box>
 
                 <Box className={classes.meta_row}>
-                    <Typography variant="body2">{t.plugin_artblocks_license_row()} </Typography>
+                    <Typography variant="body2">
+                        <Trans>License:</Trans>{' '}
+                    </Typography>
                     <Typography variant="body2">{project.license}</Typography>
                 </Box>
                 {project.scriptJSON ?
                     <Box className={classes.meta_row}>
-                        <Typography variant="body2">{t.plugin_artblocks_library_row()}</Typography>
+                        <Typography variant="body2">
+                            <Trans>Library:</Trans>
+                        </Typography>
                         <Typography variant="body2">{JSON.parse(project.scriptJSON).type}</Typography>
                     </Box>
                 :   null}
             </Box>
             <Box className={classes.container}>
                 <Typography variant="body1" sx={{ marginBottom: 1 }}>
-                    {t.plugin_artblocks_chain()}
+                    <Trans>Chain</Trans>
                 </Typography>
 
                 <Box className={classes.meta_row}>
-                    <Typography variant="body2">{t.plugin_artblocks_blockchain_row()}</Typography>
+                    <Typography variant="body2">
+                        <Trans>Blockchain:</Trans>
+                    </Typography>
                     <Typography variant="body2">{EVMChainResolver.chainName(chainId)}</Typography>
                 </Box>
                 <Box className={classes.meta_row}>
-                    <Typography variant="body2">{t.plugin_artblocks_contract_row()}</Typography>
+                    <Typography variant="body2">
+                        <Trans>Contract:</Trans>
+                    </Typography>
                     <Link
                         href={EVMExplorerResolver.transactionLink(chainId, project.contract.id)}
                         target="_blank"

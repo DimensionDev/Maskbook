@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-09-22 10:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,80 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/NextID/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 976\n"
+
+#: src/components/Actions/index.tsx:77
+msgid "Add wallet"
+msgstr "新增錢包"
+
+#: src/hooks/useWalletSign.ts:17
+msgid "Confirm this transaction in your wallet."
+msgstr ""
+
+#: src/components/Actions/index.tsx:41
+msgid "Create Persona"
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:138
+#: src/components/BindPanelUI.tsx:190
+msgid "Done"
+msgstr "完成"
+
+#: src/components/Actions/index.tsx:68
+msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:151
+msgid "Persona"
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:191
+msgid "Persona Sign"
+msgstr ""
+
+#: src/components/Actions/index.tsx:35
+msgid "Please create your persona to use Web3 Profile."
+msgstr ""
+
+#: src/components/Actions/index.tsx:89
+msgid "The user has not set this."
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:121
+msgid "This wallet address has already been connected."
+msgstr "此錢包地址已被綁定"
+
+#: src/components/BindPanelUI.tsx:145
+msgid "Unsupported Network"
+msgstr ""
+
+#: src/components/BindDialog.tsx:82
+msgid "Verify your wallet"
+msgstr "驗證錢包"
+
+#: src/SiteAdaptor/VerificationPayload.tsx:41
+msgid "View"
+msgstr ""
+
+#: src/components/BindPanelUI.tsx:104
+msgid "Wallet"
+msgstr "錢包"
+
+#: src/components/BindDialog.tsx:62
+#: src/components/BindDialog.tsx:73
+#: src/components/BindPanelUI.tsx:139
+#: src/hooks/useWalletSign.ts:15
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet Sign"
+msgstr ""
+
+#: src/hooks/useWalletSign.ts:22
+msgid "Wallet sign cancelled."
+msgstr "取消錢包簽名"
+
+#: src/components/BindDialog.tsx:75
+msgid "Wallet sign failed."
+msgstr "簽署失敗"
+
+#: src/components/BindDialog.tsx:64
+msgid "Wallet sign succeeded."
+msgstr "簽署成功"

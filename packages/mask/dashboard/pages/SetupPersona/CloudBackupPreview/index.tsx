@@ -12,6 +12,7 @@ import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
 import type { BackupAccountType } from '@masknet/shared-base'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -104,10 +105,10 @@ export const Component = memo(function CloudBackupPreview() {
 
     const [{ loading: overwriteLoading }, handleOverwriteClick] = useAsyncFn(async () => {
         await ConfirmDialog.openAndWaitForClose({
-            title: t.cloud_backup_overwrite_current_backup(),
-            message: t.cloud_backup_overwrite_current_backup_tips(),
-            confirmLabel: t.confirm(),
-            cancelLabel: t.cancel(),
+            title: <Trans>Overwrite current backup</Trans>,
+            message: <Trans>Are you sure to overwrite the backups stored on Mask Cloud Service?</Trans>,
+            confirmLabel: <Trans>Confirm</Trans>,
+            cancelLabel: <Trans>Cancel</Trans>,
             confirmButtonProps: {
                 color: 'error',
             },
@@ -129,8 +130,12 @@ export const Component = memo(function CloudBackupPreview() {
     return (
         <>
             <Box>
-                <Typography className={classes.title}>{t.cloud_backup_preview_title()}</Typography>
-                <Typography className={classes.description}>{t.cloud_backup_preview_description()}</Typography>
+                <Typography className={classes.title}>
+                    <Trans>Welcome to Mask Cloud Services</Trans>
+                </Typography>
+                <Typography className={classes.description}>
+                    <Trans>Please select the appropriate method to restore your personal data.</Trans>
+                </Typography>
                 {previewInfo.downloadLink ?
                     <>
                         <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
@@ -139,7 +144,7 @@ export const Component = memo(function CloudBackupPreview() {
                                 sx={{ cursor: 'pointer' }}
                                 className={classes.text}
                                 onClick={() => navigate(DashboardRoutes.CloudBackup, { replace: true })}>
-                                {t.cloud_backup_preview_switch_other_account()}
+                                <Trans>Switch other account</Trans>
                             </Typography>
                         </Box>
                         <Box className={classes.content}>
@@ -179,7 +184,7 @@ export const Component = memo(function CloudBackupPreview() {
                                     className={classes.button}
                                     loading={mergeLoading}
                                     onClick={handleMergeClick}>
-                                    {t.cloud_backup_merge_local_data()}
+                                    <Trans>Merge data to local database</Trans>
                                 </ActionButton>
                                 <ActionButton
                                     loading={overwriteLoading}
@@ -187,7 +192,7 @@ export const Component = memo(function CloudBackupPreview() {
                                     startIcon={<Icons.CloudBackup2 size={18} />}
                                     color="error"
                                     className={cx(classes.button)}>
-                                    {t.cloud_backup_overwrite_backup()}
+                                    <Trans>Overwrite Backup</Trans>
                                 </ActionButton>
                             </Box>
                         </Box>
@@ -199,17 +204,19 @@ export const Component = memo(function CloudBackupPreview() {
                                 sx={{ cursor: 'pointer' }}
                                 className={classes.text}
                                 onClick={() => navigate(DashboardRoutes.CloudBackup, { replace: true })}>
-                                {t.cloud_backup_preview_switch_other_account()}
+                                <Trans>Switch other account</Trans>
                             </Typography>
                         </Box>
-                        <EmptyStatus sx={{ minHeight: 182 }}>{t.data_backup_no_backups_found()}</EmptyStatus>
+                        <EmptyStatus sx={{ minHeight: 182 }}>
+                            <Trans>No backups found</Trans>
+                        </EmptyStatus>
                     </Box>
                 }
             </Box>
             {!previewInfo.downloadLink ?
                 <SetupFrameController>
                     <ActionButton onClick={handleBackupClick} startIcon={<Icons.CloudBackup2 size={20} />}>
-                        {t.backup()}
+                        <Trans>Backup</Trans>
                     </ActionButton>
                 </SetupFrameController>
             :   null}

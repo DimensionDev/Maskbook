@@ -5,13 +5,12 @@ import { Box, ListItem, Typography } from '@mui/material'
 import { PopupRoutes } from '@masknet/shared-base'
 import { useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
+import { Trans } from '@lingui/macro'
 
 export function ChangeOwner() {
-    const t = useMaskSharedTrans()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const wallet = useWallet()
@@ -38,7 +37,9 @@ export function ChangeOwner() {
         <ListItem className={classes.item} onClick={() => navigate(PopupRoutes.ChangeOwner)}>
             <Box className={classes.itemBox}>
                 <Icons.PersonasOutline size={20} color={theme.palette.maskColor.second} />
-                <Typography className={classes.itemText}>{t.popups_change_owner()}</Typography>
+                <Typography className={classes.itemText}>
+                    <Trans>Change Owner</Trans>
+                </Typography>
             </Box>
             <Box className={classes.itemBox}>
                 <Typography className={cx(classes.itemText, classes.ellipsis)}>

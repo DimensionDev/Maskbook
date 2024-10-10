@@ -13,6 +13,7 @@ import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { compact } from 'lodash-es'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -103,8 +104,11 @@ export const Component = memo(function Onboarding() {
     const words = useMemo(() => {
         return compact([
             <Typography key="identity">
-                {''}
-                {t.permission_onboarding()}
+                <Trans>
+                    We are pleased to inform you that the update for X (formerly named Twitter) website has been
+                    completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for
+                    your continuous support!
+                </Trans>
             </Typography>,
         ])
     }, [t])
@@ -112,7 +116,9 @@ export const Component = memo(function Onboarding() {
     return (
         <>
             <Box className={classes.card}>
-                <Typography className={classes.pin}>{t.persona_onboarding_pin_tips()}</Typography>
+                <Typography className={classes.pin}>
+                    <Trans>Pin Mask Network to the toolbar for easier access:</Trans>
+                </Typography>
                 <Box mt={2.25} display="flex" alignItems="center">
                     <Box className={classes.skeleton} />
                     <Box className={classes.plugins}>
@@ -144,7 +150,7 @@ export const Component = memo(function Onboarding() {
                             size={20}
                         />
                     }>
-                    {t.persona_onboarding_to_twitter()}
+                    <Trans>Experience in X</Trans>
                 </PrimaryButton>
             </SetupFrameController>
         </>

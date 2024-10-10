@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:17\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,117 @@ msgstr ""
 "X-Crowdin-Language: zh-TW\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ArtBlocks/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 948\n"
+
+#: src/SiteAdaptor/index.tsx:35
+msgid "Artblocks"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:30
+msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:131
+msgid "Blockchain:"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:151
+msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:126
+msgid "Chain"
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:70
+msgid "Collection"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:30
+msgid "Completed"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:137
+msgid "Contract:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+#~ msgid "Created by"
+#~ msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+msgid "Created by <0>{0}</0>• <1>Website</1>"
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:71
+msgid "Details"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:77
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:80
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:91
+msgid "Infos"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:111
+msgid "Insufficient balance"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:118
+msgid "Library:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:111
+msgid "License:"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:104
+msgid "Minted:"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:31
+msgid "Paused"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:112
+msgid "Please check ToS document"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:135
+msgid "Price per mint"
+msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:95
+msgid "Price:"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:32
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+#: src/SiteAdaptor/PurchaseDialog.tsx:130
+msgid "Purchase"
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx:125
+msgid "Purchasing...."
+msgstr ""
+
+#: src/SiteAdaptor/Collectible.tsx:65
+msgid "Something went wrong!"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:29
+msgid "This project is no longer active"
+msgstr ""
+
+#: src/SiteAdaptor/ActionBar.tsx:29
+#~ msgid "This project is no more active"
+#~ msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:80
+#~ msgid "Website"
+#~ msgstr ""

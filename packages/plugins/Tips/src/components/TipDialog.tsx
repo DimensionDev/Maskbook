@@ -21,11 +21,12 @@ import { useCallback, useMemo } from 'react'
 import { useAsync, useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
-import { useTipsTrans } from '../locales/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
+import { msg, select, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -67,7 +68,7 @@ interface TipDialogProps {
 
 const site = getSiteType()
 export function TipDialog({ open = false, onClose }: TipDialogProps) {
-    const t = useTipsTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
     const {
@@ -94,24 +95,29 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const isTokenTip = tipType === TokenType.Fungible
     const shareText = useMemo(() => {
         const recipientName = recipient?.label || recipientEns
-        const context = recipientName ? 'name' : 'address'
-        const message =
-            isTokenTip ?
-                t.tip_token_share_post({
-                    amount,
-                    symbol: token?.symbol || 'token',
-                    recipientSnsId: recipientUserId,
-                    recipient: recipientName || recipientAddress,
-                    context,
-                })
-            :   t.tip_nft_share_post({
-                    name: nonFungibleTokenContract?.name || 'NFT',
-                    recipientSnsId: recipientUserId,
-                    recipient: recipientName || recipientAddress,
-                    context,
-                })
-        return message
-    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, t, recipientEns])
+        const promote = _(msg`Install https://mask.io/download-links to send your first tip.`)
+        if (isTokenTip) {
+            return _(
+                msg`I just tipped ${amount} ${select(token?.symbol ? 'namedToken' : 'token', {
+                    namedToken: token?.symbol || '',
+                    other: 'token',
+                })} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
+                    name: 'wallet',
+                    address: 'wallet address',
+                    other: 'wallet',
+                })} ${recipientName || recipientAddress}\n\n${promote}`,
+            )
+        } else {
+            const NFT_Name = nonFungibleTokenContract?.name || 'NFT'
+            return _(
+                msg`I just tipped a ${NFT_Name} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
+                    name: 'wallet',
+                    address: 'wallet address',
+                    other: 'wallet',
+                })} ${recipientAddress}\n\n${promote}`,
+            )
+        }
+    }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, _, recipientEns])
 
     const currentTab = isTokenTip ? TokenType.Fungible : TokenType.NonFungible
     const onTabChange = useCallback((_: unknown, value: TokenType) => {
@@ -119,8 +125,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     }, [])
 
     const buttonLabel =
-        isSending ? t.sending_tip()
-        : isValid || !validateMessage ? t.send_tip()
+        isSending ? <Trans>Sending...</Trans>
+        : isValid || !validateMessage ? <Trans>Send</Trans>
         : validateMessage
 
     const { data: nonFungibleToken } = useNonFungibleAsset(undefined, nonFungibleTokenAddress, nonFungibleTokenId ?? '')
@@ -136,15 +142,9 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             token,
             nonFungibleTokenId,
             nonFungibleTokenAddress,
-            messageTextForNFT: t.send_specific_tip_successfully({
-                amount: '1',
-                name: nonFungibleToken?.contract?.name || 'NFT',
-            }),
-            messageTextForFT: t.send_specific_tip_successfully({
-                amount,
-                name: `$${token?.symbol}`,
-            }),
-            title: t.tips(),
+            messageTextForNFT: _(msg`1 ${nonFungibleToken?.contract?.name || 'NFT'} tips sent.`),
+            messageTextForFT: _(msg`${amount} ${`$${token?.symbol}`} tips sent.`),
+            title: _(msg`Tips`),
             share,
         })
         onClose?.()
@@ -176,11 +176,11 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
                 open={open}
                 onClose={onClose}
                 classes={{ paper: classes.dialog }}
-                title={t.tips()}
+                title={<Trans>Tips</Trans>}
                 titleTabs={
                     <MaskTabList variant="base" onChange={onTabChange} aria-label="Tips">
-                        <Tab label={t.tips_tab_tokens()} value={TokenType.Fungible} />
-                        <Tab label={t.tips_tab_collectibles()} value={TokenType.NonFungible} />
+                        <Tab label={<Trans>Tokens</Trans>} value={TokenType.Fungible} />
+                        <Tab label={<Trans>NFTs</Trans>} value={TokenType.NonFungible} />
                     </MaskTabList>
                 }>
                 <DialogContent className={classes.content}>

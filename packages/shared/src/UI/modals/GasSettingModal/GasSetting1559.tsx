@@ -1,6 +1,5 @@
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { Trans } from 'react-i18next'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty, noop } from 'lodash-es'
@@ -19,7 +18,8 @@ import {
     isPositive,
 } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
-import { useSharedTrans } from '../../../index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -87,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
 const emptyRender = () => <></>
 export const GasSetting1559 = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
-        const t = useSharedTrans()
+        const { _ } = useLingui()
         const { classes } = useStyles()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
@@ -105,17 +105,17 @@ export const GasSetting1559 = memo(
         const options = useMemo(
             () => [
                 {
-                    title: t.popups_wallet_gas_fee_settings_low(),
+                    title: _(msg`Low`),
                     gasOption: GasOptionType.SLOW,
                     content: gasOptions?.[GasOptionType.SLOW],
                 },
                 {
-                    title: t.popups_wallet_gas_fee_settings_medium(),
+                    title: _(msg`Medium`),
                     gasOption: GasOptionType.NORMAL,
                     content: gasOptions?.[GasOptionType.NORMAL],
                 },
                 {
-                    title: t.popups_wallet_gas_fee_settings_high(),
+                    title: _(msg`High`),
                     gasOption: GasOptionType.FAST,
                     content: gasOptions?.[GasOptionType.FAST],
                 },
@@ -131,19 +131,19 @@ export const GasSetting1559 = memo(
                 .object({
                     gasLimit: zod
                         .string()
-                        .min(1, t.wallet_transfer_error_gas_limit_absence())
+                        .min(1, _(msg`Enter a gas limit`))
                         .refine(
                             (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit),
-                            t.popups_wallet_gas_fee_settings_min_gas_limit_tips({ limit: minGasLimit.toFixed() }),
+                            _(msg`Gas limit must be at least ${minGasLimit.toFixed()}`),
                         ),
                     maxPriorityFeePerGas: zod
                         .string()
-                        .min(1, t.wallet_transfer_error_max_priority_fee_absence())
-                        .refine(isPositive, t.wallet_transfer_error_max_priority_gas_fee_positive()),
-                    maxFeePerGas: zod.string().min(1, t.wallet_transfer_error_max_fee_absence()),
+                        .min(1, _(msg`Enter a max priority fee`))
+                        .refine(isPositive, _(msg`Max priority fee must be greater than 0 GWEI`)),
+                    maxFeePerGas: zod.string().min(1, _(msg`Enter a max fee`)),
                 })
                 .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                    message: t.wallet_transfer_error_max_priority_gas_fee_imbalance(),
+                    message: _(msg`Max fee cannot be lower than max priority fee`),
                     path: ['maxFeePerGas'],
                 })
         }, [minGasLimit, gasOptions])
@@ -225,69 +225,60 @@ export const GasSetting1559 = memo(
                                 <Typography variant="inherit">Gwei</Typography>
                             </Typography>
                             <Typography className={classes.gasUSD}>
-                                <Trans
-                                    i18nKey="popups_wallet_gas_fee_settings_usd"
-                                    values={{
-                                        usd: formatCurrency(
-                                            formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
-                                                .times(nativeTokenPrice)
-                                                .times(gasLimit ?? 21000),
-                                            'USD',
-                                            { onlyRemainTwoOrZeroDecimal: true },
-                                        ),
-                                    }}
-                                    components={{ span: <span /> }}
-                                    shouldUnescape
-                                />
+                                {' '}
+                                ≈{' '}
+                                <span>
+                                    {formatCurrency(
+                                        formatWeiToEther(content?.suggestedMaxFeePerGas ?? 0)
+                                            .times(nativeTokenPrice)
+                                            .times(gasLimit ?? 21000),
+                                        'USD',
+                                        { onlyRemainTwoOrZeroDecimal: true },
+                                    )}
+                                </span>
                             </Typography>
                         </div>
                     ))}
                 </div>
                 <form onSubmit={onSubmit}>
                     <Typography className={classes.label}>
-                        {t.popups_wallet_gas_fee_settings_gas_limit()}
+                        <Trans>Gas Limit</Trans>
                         <Typography component="span" className={classes.price}>
                             {gasLimit?.toString()}
                         </Typography>
                     </Typography>
                     <Controller control={control} render={emptyRender} name="gasLimit" />
                     <Typography className={classes.label}>
-                        {t.popups_wallet_gas_fee_settings_max_priority_fee()}
+                        <Trans>Max priority fee</Trans>
                         <Typography component="span" className={classes.unit}>
-                            ({t.wallet_transfer_gwei()})
+                            (<Trans>GWEI</Trans>)
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            <Trans
-                                i18nKey="popups_wallet_gas_fee_settings_usd"
-                                values={{
-                                    usd: formatWeiToEther(Number(maxPriorityFeePerGas))
-                                        .times(nativeTokenPrice)
-                                        .times(inputGasLimit || 1)
-                                        .toFixed(2),
-                                }}
-                                components={{ span: <span /> }}
-                                shouldUnescape
-                            />
+                            {' '}
+                            ≈{' '}
+                            <span>
+                                {formatWeiToEther(Number(maxPriorityFeePerGas))
+                                    .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
+                                    .toFixed(2)}
+                            </span>
                         </Typography>
                     </Typography>
                     <Controller control={control} render={emptyRender} name="maxPriorityFeePerGas" />
                     <Typography className={classes.label}>
-                        {t.popups_wallet_gas_fee_settings_max_fee()}
+                        <Trans>Max fee</Trans>
                         <Typography component="span" className={classes.unit}>
-                            ({t.wallet_transfer_gwei()})
+                            (<Trans>GWEI</Trans>)
                         </Typography>
                         <Typography component="span" className={classes.price}>
-                            <Trans
-                                i18nKey="popups_wallet_gas_fee_settings_usd"
-                                values={{
-                                    usd: formatWeiToEther(Number(maxFeePerGas))
-                                        .times(nativeTokenPrice)
-                                        .times(inputGasLimit || 1)
-                                        .toFixed(2),
-                                }}
-                                components={{ span: <span /> }}
-                                shouldUnescape
-                            />
+                            {' '}
+                            ≈{' '}
+                            <span>
+                                {formatWeiToEther(Number(maxFeePerGas))
+                                    .times(nativeTokenPrice)
+                                    .times(inputGasLimit || 1)
+                                    .toFixed(2)}
+                            </span>
                         </Typography>
                     </Typography>
                     <Controller control={control} render={emptyRender} name="maxFeePerGas" />
@@ -298,7 +289,7 @@ export const GasSetting1559 = memo(
                     className={classes.button}
                     disabled={!isEmpty(errors)}
                     onClick={onSubmit}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             </>
         )

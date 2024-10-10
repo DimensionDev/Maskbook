@@ -15,7 +15,6 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { ChainContextProvider, useChainContext, useWallet, useWallets } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, ProviderType, type GasConfig } from '@masknet/web3-shared-evm'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { StyledRadio } from '../../../components/StyledRadio/index.js'
 import { PopupContext, useTitle } from '../../../hooks/index.js'
@@ -24,6 +23,8 @@ import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
 import { BottomController } from '../../../components/BottomController/index.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -172,7 +173,7 @@ const FALLBACK_GAS = 50000
 
 export { ChangeOwner as Component }
 export function ChangeOwner() {
-    const t = useMaskSharedTrans()
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -248,7 +249,7 @@ export function ChangeOwner() {
     }, [manageAccount, smartPayChainId, wallet, gasConfig])
     const disabled = !manageAccount?.address || !wallet || loadingHandleConfirm
 
-    useTitle(t.popups_wallet_change_owner())
+    useTitle(_(msg`Change Owner`))
 
     return (
         <>
@@ -268,7 +269,7 @@ export function ChangeOwner() {
                                         <Link
                                             href={EVMExplorerResolver.addressLink(chainId, wallet.address)}
                                             target="_blank"
-                                            title={t.view_on_explorer()}
+                                            title={_(msg`View on Explorer`)}
                                             rel="noopener noreferrer"
                                             onClick={(event) => {
                                                 event.stopPropagation()
@@ -283,7 +284,7 @@ export function ChangeOwner() {
                     </Box>
                 </Box>
                 <Typography className={classes.title} sx={{ mb: 2, mt: 2 }}>
-                    {t.popups_wallet_settings_current_management_account()}
+                    <Trans>Current Management Account</Trans>
                 </Typography>
                 <Box className={cx(classes.item, classes.secondItem)}>
                     <Box className={classes.primaryItemBox}>
@@ -317,7 +318,7 @@ export function ChangeOwner() {
                                                 :   urlcat('https://web3.bio/', { s: managerAddress })
                                             }
                                             target="_blank"
-                                            title={t.view_on_explorer()}
+                                            title={_(msg`View on Explorer`)}
                                             rel="noopener noreferrer"
                                             onClick={(event) => {
                                                 event.stopPropagation()
@@ -332,10 +333,10 @@ export function ChangeOwner() {
                     </Box>
                 </Box>
                 <Typography className={classes.title} sx={{ mb: 2, mt: 2 }}>
-                    {t.popups_wallet_set_a_new_manage_account()}
+                    <Trans>Set a New Management Account</Trans>
                 </Typography>
                 <StyledInput
-                    placeholder={t.popups_wallet_settings_local_persona_or_wallet_only()}
+                    placeholder={_(msg`Local persona or wallet only`)}
                     InputProps={{
                         endAdornment: <Icons.ArrowDownRound size={18} sx={{ cursor: 'pointer' }} />,
                         classes: { input: classes.input },
@@ -348,7 +349,9 @@ export function ChangeOwner() {
                 />
                 {manageAccount ?
                     <Box display="flex" justifyContent="space-between" mt={2}>
-                        <Typography className={classes.label}>{t.gas_fee()}</Typography>
+                        <Typography className={classes.label}>
+                            <Trans>Gas Fee</Trans>
+                        </Typography>
                         <ChainContextProvider chainId={smartPayChainId}>
                             <GasSettingMenu
                                 defaultGasLimit={gas}
@@ -454,7 +457,7 @@ export function ChangeOwner() {
                         navigate(-1)
                         await Services.Helper.removePopupWindow()
                     }}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButton
                     fullWidth
@@ -463,7 +466,7 @@ export function ChangeOwner() {
                     onClick={handleConfirm}
                     loading={loadingHandleConfirm}
                     disabled={disabled}>
-                    {t.wallet_status_button_change()}
+                    <Trans>Change</Trans>
                 </ActionButton>
             </BottomController>
         </>

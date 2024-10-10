@@ -3,8 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { formatPrice, formatText } from '../utils/index.js'
 import { NFTAvatarRing } from './NFTAvatarRing.js'
-import { useAvatarTrans } from '../locales/i18n_generated.js'
 import type { AvatarToken } from '@masknet/web3-providers/types'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -23,9 +24,9 @@ interface NFTBadgeProps extends withClasses<'root' | 'text' | 'icon'> {
 }
 
 export function NFTBadge(props: NFTBadgeProps) {
+    const { _ } = useLingui()
     const { token, size = 140, hasRainbow, borderSize } = props
     const { classes } = useStyles(undefined, { props })
-    const t = useAvatarTrans()
 
     if (!token)
         return (
@@ -38,7 +39,7 @@ export function NFTBadge(props: NFTBadgeProps) {
                     hasRainbow={hasRainbow}
                     borderSize={borderSize}
                     fontSize={9}
-                    text={t.loading()}
+                    text={_(msg`Loading...`)}
                     price=""
                 />
             </div>

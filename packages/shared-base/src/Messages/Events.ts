@@ -60,7 +60,7 @@ export interface CompositionDialogEvent {
     readonly open: boolean
     readonly content?: SerializableTypedMessages
     readonly options?: {
-        initialMetas?: Record<string, unknown>
+        initialMeta?: Record<string, unknown>
         target?: EncryptionTargetType
         startupPlugin?: string
         startupPluginProps?: any

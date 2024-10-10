@@ -27,7 +27,7 @@ import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
 import { ContentTab } from '../../types/index.js'
 import { FailedTrendingView } from './FailedTrendingView.js'
-import { useTraderTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -127,7 +127,6 @@ export function TrendingView(props: TrendingViewProps) {
     const { resultList, identity, setActive, currentResult } = props
     const [result, setResult] = useState(currentResult ?? resultList[0])
     const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
-    const t = useTraderTrans()
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
     const isWeb3ProfileMinimalMode = useIsMinimalMode(PluginID.Web3Profile)
@@ -222,25 +221,25 @@ export function TrendingView(props: TrendingViewProps) {
         const configs = [
             {
                 key: ContentTab.Market,
-                label: t.plugin_trader_tab_market(),
+                label: <Trans>General</Trans>,
             },
             {
                 key: ContentTab.Price,
-                label: isNFT ? t.plugin_trader_floor_price() : t.plugin_trader_tab_price(),
+                label: isNFT ? <Trans>Floor Price</Trans> : <Trans>Price</Trans>,
             },
             {
                 key: ContentTab.Exchange,
-                label: isNFT ? t.plugin_trader_tab_activities() : t.plugin_trader_tab_exchange(),
+                label: isNFT ? <Trans>Activities</Trans> : <Trans>Exchange</Trans>,
             },
             isNFT ?
                 {
                     key: ContentTab.NFTItems,
-                    label: t.plugin_trader_nft_items(),
+                    label: <Trans>NFTs</Trans>,
                 }
             :   undefined,
         ]
         return compact(configs).map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
-    }, [t, isSwappable, isNFT])
+    }, [isSwappable, isNFT])
     // #endregion
 
     const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper, currentTab })

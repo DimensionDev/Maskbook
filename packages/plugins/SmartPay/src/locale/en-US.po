@@ -12,3 +12,273 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
+#~ msgid "{value, plural, one {The Twitter account above remains # time to create SmartPay Wallet.} other {The Twitter account above remains # times to create SmartPay Wallet.}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
+#~ msgid "{value, plural, one {The X account above remains # time to create SmartPay Wallet.} other {The X account above remains # times to create SmartPay Wallet.}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:59
+msgid "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future."
+msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:158
+msgid "Add SmartPay Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:449
+#~ msgid "Allow Mask as gas"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:449
+msgid "Allow Mask be used as gas"
+msgstr ""
+
+#: src/SiteAdaptor/components/AccountsManagePopover.tsx:136
+msgid "Change Owner"
+msgstr ""
+
+#: src/SiteAdaptor/components/InEligibilityTips.tsx:59
+msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form."
+msgstr ""
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
+msgid "Congratulation! You've deployed SmartPay Wallet {0}."
+msgstr ""
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
+#~ msgid "Congratulation! You’ve deployed SmartPay Wallet {0}."
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:174
+#: src/SiteAdaptor/components/ManagePopover.tsx:140
+#: src/SiteAdaptor/components/ManagePopover.tsx:188
+msgid "Create"
+msgstr ""
+
+#: src/SiteAdaptor/components/ManagePopover.tsx:180
+msgid "Create a new Mask wallet in Pop-up."
+msgstr ""
+
+#: src/SiteAdaptor/components/ManagePopover.tsx:129
+msgid "Create a New Persona"
+msgstr ""
+
+#: src/SiteAdaptor/components/ManagePopover.tsx:132
+msgid "Create a new Persona in Pop-up."
+msgstr ""
+
+#: src/SiteAdaptor/components/ManagePopover.tsx:177
+msgid "Create a New Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:217
+#~ msgid "Create a SmartPay Wallet with your Twitter account."
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:217
+msgid "Create a SmartPay Wallet with your X account."
+msgstr ""
+
+#: src/hooks/useDeploy.tsx:97
+#: src/hooks/useDeploy.tsx:154
+msgid "Create SmartPay Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:58
+#~ msgid "Created successfully!"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/AccountsManagePopover.tsx:128
+msgid "Current Management account"
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:327
+#: src/SiteAdaptor/components/Deploy.tsx:351
+msgid "Deploy"
+msgstr ""
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:69
+msgid "Done"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
+msgid "Free gas experience in Mask Network's dApps like Lucky Drop and Tips."
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
+#~ msgid "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips."
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:117
+msgid "Loading"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:494
+msgid "Lucky Drop"
+msgstr ""
+
+#: src/SiteAdaptor/components/AccountsManagePopover.tsx:121
+msgid "Manage Account"
+msgstr ""
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:64
+msgid "Management account of the SmartPay Wallet is {owner}."
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:431
+msgid "MASK token can be used to pay gas fee."
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:82
+msgid "More efficient and simpler signature algorithms (eg. Schnorr, BLS)"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:79
+msgid "Multisigs and social recovery"
+msgstr ""
+
+#: src/hooks/useDeploy.tsx:151
+msgid "Network error."
+msgstr ""
+
+#: src/SiteAdaptor/components/ManagePopover.tsx:96
+msgid "Personas"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:85
+msgid "Post-quantum safe signature algorithms (eg. Lamport, Winternitz)"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:520
+msgid "Receive"
+msgstr ""
+
+#: src/SiteAdaptor/components/ReceiveDialog.tsx:90
+msgid "Receives assets on Polygon Network ONLY"
+msgstr ""
+
+#: src/SiteAdaptor/components/ReceiveDialog.tsx:87
+msgid "Scan address to receive payment"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:512
+msgid "Send"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:427
+msgid "Set MASK tokens to pay gas fee when interacting with Polygon Network."
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:259
+msgid "Set up the Management Account for SmartPay Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:91
+#: src/SiteAdaptor/components/SmartPayEntry.tsx:86
+#: src/SiteAdaptor/index.tsx:42
+msgid "Smart Pay"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:47
+msgid "SmartPay is based on ERC-4337 and is currently deployed on Polygon Network. Multiple chains will be supported in the future. ERC-4337 is a new wallet proposal that would open the door for creativity in wallet design and could provide more important features. And we will design more fascinating features based on the new wallet proposal in Mask Network."
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:90
+msgid "SmartPay Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx:89
+msgid "SmartPay Wallet Deployment"
+msgstr ""
+
+#: src/SiteAdaptor/components/InEligibilityTips.tsx:41
+msgid "Sorry, you are not in the free trial whitelist."
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayContent.tsx:503
+msgid "Swap"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:72
+msgid "The ERC-4337 will open the door to more creativity and more important features for wallet design."
+msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx:168
+msgid "The X account above remains {value} {value, plural, one {time} other {times}} to create SmartPay Wallet."
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:307
+msgid "This SmartPay Wallet can only receive assets on Polygon Network. Please do not use this address to receive assets from other EVM chains."
+msgstr ""
+
+#: src/hooks/useDeploy.tsx:148
+msgid "Timeout"
+msgstr ""
+
+#: src/hooks/useDeploy.tsx:142
+msgid "Transaction rejected."
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:88
+msgid "Upgradeability"
+msgstr ""
+
+#: src/hooks/useDeploy.tsx:145
+msgid "User cancelled the process."
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:288
+msgid "User need to deploy the SmartPay Wallet on Polygon Network before using it for blockchain interaction. Wallet that has not been deployed can receive assets, but cannot send any transactions."
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:301
+#~ msgid "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment."
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:301
+msgid "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment."
+msgstr ""
+
+#: src/hooks/useDeploy.tsx:98
+msgid "Waiting for user signature"
+msgstr ""
+
+#: src/SiteAdaptor/components/CreateSuccessDialog.tsx:58
+msgid "Wallet created!"
+msgstr ""
+
+#: src/SiteAdaptor/components/ManagePopover.tsx:145
+msgid "Wallets"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:41
+msgid "What is SmartPay"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:44
+msgid "What is SmartPay?"
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:284
+msgid "What to know before SmartPay Wallet deployment:"
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:214
+msgid "You are in the trial whitelist."
+msgstr ""
+
+#: src/SiteAdaptor/components/Deploy.tsx:295
+msgid "You can change management account of SmartPay Wallet. In Mask Network, both Persona and Mask Wallet can be authorized as management account."
+msgstr ""
+
+#: src/SiteAdaptor/components/InEligibilityTips.tsx:45
+msgid "You can follow Mask Network <0>Twitter</0> or <1>Discord</1> to participate in the event and get free qualification to have gas-free blockchain experiences with SmartPay. Soon we will publish the second batch of users participating in the test!"
+msgstr ""
+
+#: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:55
+msgid "You need to know before using SmartPay:"
+msgstr ""

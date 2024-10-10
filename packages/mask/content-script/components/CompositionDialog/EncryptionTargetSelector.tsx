@@ -11,8 +11,8 @@ import { PopoverListItem } from './PopoverListItem.js'
 import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import Services from '#services'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {
@@ -57,7 +57,6 @@ interface EncryptionTargetSelectorProps {
     selectedRecipientLength: number
 }
 export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
 
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -68,7 +67,9 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
     const e2eDisabledMessage =
         props.e2eDisabled && props.e2eDisabled !== E2EUnavailableReason.NoLocalKey ?
             <div className={classes.flex}>
-                <Typography className={classes.mainTitle}>{t.persona_required()}</Typography>
+                <Typography className={classes.mainTitle}>
+                    <Trans>Persona required.</Trans>
+                </Typography>
                 <Box flex={1} />
                 <ConnectPersonaBoundary
                     personas={allPersonas}
@@ -80,10 +81,19 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     enableVerify={false}
                     createConfirm={false}>
                     {(s) => {
-                        if (!s.hasPersona) return <Typography className={classes.create}>{t.create()}</Typography>
+                        if (!s.hasPersona)
+                            return (
+                                <Typography className={classes.create}>
+                                    <Trans>Create</Trans>
+                                </Typography>
+                            )
                         // TODO: how to handle verified
                         if (!s.connected || !s.verified)
-                            return <Typography className={classes.create}>{t.connect()}</Typography>
+                            return (
+                                <Typography className={classes.create}>
+                                    <Trans>Connect</Trans>
+                                </Typography>
+                            )
 
                         return null
                     }}
@@ -92,7 +102,9 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         :   null
     const noLocalKeyMessage = props.e2eDisabled === E2EUnavailableReason.NoLocalKey && (
         <div className={classes.flex}>
-            <Typography className={classes.mainTitle}>{t.compose_no_local_key()}</Typography>
+            <Typography className={classes.mainTitle}>
+                <Trans>No local key</Trans>
+            </Typography>
         </div>
     )
 
@@ -100,16 +112,16 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
         const selected = props.target
         const shareWithNum = props.selectedRecipientLength
         if (selected === EncryptionTargetType.E2E)
-            return shareWithNum > 1 ?
-                    t.compose_shared_friends_other({ count: shareWithNum })
-                :   t.compose_shared_friends_one()
-        else if (selected === EncryptionTargetType.Public) return t.compose_encrypt_visible_to_all()
-        else if (selected === EncryptionTargetType.Self) return t.compose_encrypt_visible_to_private()
+            return <Plural one="1 friend" other="# friends" value={shareWithNum} />
+        else if (selected === EncryptionTargetType.Public) return <Trans>All</Trans>
+        else if (selected === EncryptionTargetType.Self) return <Trans>Private</Trans>
         unreachable(selected)
     }
     return (
         <>
-            <Typography className={classes.optionTitle}>{t.post_dialog_visible_to()}</Typography>
+            <Typography className={classes.optionTitle}>
+                <Trans>Visible To</Trans>
+            </Typography>
             <PopoverListTrigger
                 selected={props.target}
                 selectedTitle={selectedTitle()}
@@ -121,15 +133,15 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                 }}>
                 <PopoverListItem
                     value={EncryptionTargetType.Public}
-                    title={t.compose_encrypt_visible_to_all()}
-                    subTitle={t.compose_encrypt_visible_to_all_sub()}
+                    title={<Trans>All</Trans>}
+                    subTitle={<Trans>Everyone</Trans>}
                 />
                 <div className={classes.divider} />
                 <PopoverListItem
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.Self}
-                    title={t.compose_encrypt_visible_to_private()}
-                    subTitle={t.compose_encrypt_visible_to_private_sub()}
+                    title={<Trans>Private</Trans>}
+                    subTitle={<Trans>Just Me</Trans>}
                 />
                 {e2eDisabledMessage}
                 {noLocalKeyMessage}
@@ -138,8 +150,8 @@ export function EncryptionTargetSelector(props: EncryptionTargetSelectorProps) {
                     itemTail={<Icons.RightArrow className={classes.rightIcon} />}
                     disabled={!!props.e2eDisabled}
                     value={EncryptionTargetType.E2E}
-                    title={t.compose_encrypt_visible_to_share()}
-                    subTitle={t.compose_encrypt_visible_to_share_sub()}
+                    title={<Trans>Share with</Trans>}
+                    subTitle={<Trans>Just Selected Contacts</Trans>}
                     onClick={(v: string) => {
                         if (props.e2eDisabled) return
                         props.onClick(v as EncryptionTargetType)

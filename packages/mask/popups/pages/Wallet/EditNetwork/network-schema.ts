@@ -2,7 +2,8 @@ import { fetchChainId } from '@masknet/web3-providers/helpers'
 import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { z } from 'zod'
-import type { useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { msg } from '@lingui/macro'
+import { type I18nContext } from '@lingui/react'
 
 type NameValidator = (name: string) => boolean | Promise<boolean>
 
@@ -11,35 +12,39 @@ type NameValidator = (name: string) => boolean | Promise<boolean>
  * duplicated name validator is injected as dependency, both frontend and
  * background can provide their own validator
  */
-function createBaseSchema(t: ReturnType<typeof useMaskSharedTrans>, duplicateNameValidator: NameValidator) {
+function createBaseSchema(_: I18nContext['_'], duplicateNameValidator: NameValidator) {
     const schema = z.object({
-        name: z.string().trim().nonempty().refine(duplicateNameValidator, t.network_already_exists()),
+        name: z
+            .string()
+            .trim()
+            .nonempty()
+            .refine(duplicateNameValidator, _(msg`This network name already exists`)),
         rpc: z
             .string()
             .trim()
-            .url(t.incorrect_rpc_url())
-            .refine((rpc) => rpc.startsWith('https'), t.rpc_requires_https()),
+            .url(_(msg`Invalid RPC URL.`))
+            .refine((rpc) => rpc.startsWith('https'), _(msg`URLs require the appropriate HTTPS prefix.`)),
         chainId: z.union([
             z
                 .string()
                 .trim()
-                .regex(/^\d+|0x[\da-f]$/i, t.invalid_number())
+                .regex(/^\d+|0x[\da-f]$/i, _(msg`Invalid number`))
                 .transform((v) => Number.parseInt(v, v.startsWith('0x') ? 16 : 10)),
             z.number(),
         ]),
         currencySymbol: z.string().optional(),
-        explorer: z.string().url(t.incorrect_explorer_url()),
+        explorer: z.string().url(_(msg`Invalid Block Explorer URL.`)),
     })
     return schema
 }
 
 export function createSchema(
-    t: ReturnType<typeof useMaskSharedTrans>,
+    _: I18nContext['_'],
     duplicateNameValidator: NameValidator,
     networks: Array<ReasonableNetwork<ChainId, SchemaType, NetworkType>>,
     editingId: string | undefined,
 ) {
-    const baseSchema = createBaseSchema(t, duplicateNameValidator)
+    const baseSchema = createBaseSchema(_, duplicateNameValidator)
     const schema = baseSchema
         .superRefine(async (schema, context) => {
             if (!schema.rpc) return true
@@ -50,7 +55,7 @@ export function createSchema(
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['rpc'],
-                    message: t.failed_to_fetch_chain_id(),
+                    message: _(msg`Could not fetch chain ID. Is your RPC URL correct?`),
                 })
                 return false
             }
@@ -60,7 +65,9 @@ export function createSchema(
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['chainId'],
-                    message: t.rpc_return_different_chain_id({ chain_id: String(rpcChainId) }),
+                    message: _(
+                        msg`The RPC URL you have entered returned a different chain ID (${rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add.`,
+                    ),
                     params: { chain_id: rpcChainId },
                 })
                 return
@@ -74,7 +81,7 @@ export function createSchema(
                 context.addIssue({
                     code: z.ZodIssueCode.custom,
                     path: ['rpc'],
-                    message: t.rpc_url_is_used_by({ name: network.name }),
+                    message: _(msg`This RPC URL is currently used by the ${network.name} network`),
                 })
                 return false
             } else {
@@ -83,7 +90,7 @@ export function createSchema(
                         context.addIssue({
                             code: z.ZodIssueCode.custom,
                             path: ['rpc'],
-                            message: t.rpc_url_is_used_by({ name: network.name }),
+                            message: _(msg`This RPC URL is currently used by the ${network.name} network`),
                         })
                         return true
                     }

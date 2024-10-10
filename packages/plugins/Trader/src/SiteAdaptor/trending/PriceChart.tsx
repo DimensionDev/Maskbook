@@ -3,8 +3,8 @@ import { Stack, Typography } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useDimension, usePriceLineChart, type Dimension } from '@masknet/shared'
-import { useTraderTrans } from '../../locales/index.js'
 import type { Coin, Currency, Stat } from '../../types/index.js'
+import { Trans } from '@lingui/macro'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,
@@ -49,7 +49,6 @@ interface PriceChartProps extends withClasses<'root'> {
 }
 
 export function PriceChart(props: PriceChartProps) {
-    const t = useTraderTrans()
     const { classes } = useStyles(props, { props })
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
@@ -87,7 +86,7 @@ export function PriceChart(props: PriceChartProps) {
                         }}
                     />
                 :   <Typography className={classes.placeholder} align="center" color="textSecondary">
-                        {t.plugin_trader_no_data()}
+                        <Trans>No Data</Trans>
                     </Typography>
                 }
                 {props.children}

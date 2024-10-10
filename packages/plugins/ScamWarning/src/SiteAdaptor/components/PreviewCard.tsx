@@ -3,8 +3,8 @@ import { uniq } from 'lodash-es'
 import { Stack, ThemeProvider, Typography } from '@mui/material'
 import { CryptoScamDB } from '@masknet/web3-providers'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
-import { useScamWarningTrans } from '../../locales/index.js'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
+import { Plural, Trans } from '@lingui/macro'
 
 interface PreviewCardProps {
     links: readonly string[]
@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PreviewCard({ links }: PreviewCardProps) {
-    const t = useScamWarningTrans()
     const { classes } = useStyles()
 
     const { value, loading } = useAsync(() => {
@@ -50,7 +49,10 @@ export function PreviewCard({ links }: PreviewCardProps) {
                         </Typography>
                     ))}
                     <Typography variant="body1" color="textPrimary">
-                        {t.warning_description({ count: value.length })}
+                        <Trans>
+                            <Plural value={value.length} one="This domain is" other="These domains are" /> currently on
+                            the Mask Network warning list which may include malicious entries, phishing or scams.
+                        </Trans>
                     </Typography>
                 </Stack>
             </Stack>

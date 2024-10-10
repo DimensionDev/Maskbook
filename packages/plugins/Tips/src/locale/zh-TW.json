@@ -1,1 +1,117 @@
-{ "messages": {} }
+{
+    "messages": {
+        "R/Pfmp": [["amount"], " ", ["0"], " tips sent."],
+        "ep2Wyh": ["1 ", ["0"], " tips sent."],
+        "9+VwX/": "添加 NFT",
+        "yz7wBu": "关闭",
+        "LBtfmO": "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media.",
+        "7ygsf3": [
+            "I just tipped ",
+            ["amount"],
+            " ",
+            ["0", "select", { "namedToken": [["1"]], "other": "token" }],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["2", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["3"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "D2n62c": [
+            "I just tipped ",
+            ["amount"],
+            " ",
+            ["tokenSymbol"],
+            " to @",
+            ["recipientUserId"],
+            "'s wallet ",
+            ["recipientName"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "1ArpDq": [
+            "I just tipped ",
+            ["amount"],
+            " ",
+            ["tokenSymbol"],
+            " to @",
+            ["recipientUserId"],
+            "'s wallet address ",
+            ["recipientAddress"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "chV8ym": [
+            "I just tipped ",
+            ["amount"],
+            " token to @",
+            ["recipientUserId"],
+            "'s wallet ",
+            ["recipientName"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "gwK1xn": [
+            "I just tipped ",
+            ["amount"],
+            " token to @",
+            ["recipientUserId"],
+            "'s wallet address ",
+            ["recipientAddress"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "SA+/yt": [
+            "I just tipped a {",
+            ["name"],
+            "} to @",
+            ["recipientUserId"],
+            "'s wallet address ",
+            ["recipientAddress"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "jdJr7z": [
+            "I just tipped a ",
+            ["NFT_Name"],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["0", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["recipientAddress"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "Xf6qGr": [
+            "I just tipped a ",
+            ["NFT_Name"],
+            " to @",
+            ["recipientUserId"],
+            "'s wallet ",
+            ["recipientName"],
+            "\\n\\n",
+            ["promote"]
+        ],
+        "2Wwd56": "Install https://mask.io/download-links to send your first tip.",
+        "znqB4T": "余额不足",
+        "8Dh77Z": "NFTs",
+        "y/+ReV": "No any collectible is available for preview. Please add your collectible here.",
+        "4kYy+U": "没有任何可预览的收藏品。请在这里添加您的收藏品。",
+        "CMfM6C": "没有足够的 Gas 费",
+        "JlFcis": "发送",
+        "t6bQQD": "Send authors tips by using Mask Network's Tips function.",
+        "7ee72/": "使用Mask Network发送小费给作者。",
+        "IoAuJG": "发送中...",
+        "+E4pMq": ["已成功发送 ", ["0"], " ", ["1"], " 小费。"],
+        "FOu1+K": ["Sent ", ["amount"], " ", ["0"], " tips successfully."],
+        "Ko4L/B": "此接收地址为合约地址，请重新检查。",
+        "RW1HJz": "接收地址可能是恶意地址。",
+        "x4f8pZ": "小费",
+        "/jQctM": "发送至",
+        "6RDwJM": "Tokens",
+        "Sjplg3": "在区块链浏览器查看"
+    }
+}

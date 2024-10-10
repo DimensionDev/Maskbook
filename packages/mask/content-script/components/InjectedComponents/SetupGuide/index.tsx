@@ -17,10 +17,13 @@ import { PinExtension } from './PinExtension.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { VerifyNextID } from './VerifyNextID.js'
 import { CheckConnection } from './CheckConnection.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 // #region setup guide ui
 
 function SetupGuideUI() {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
 
     const { step } = SetupGuideContext.useContainer()
@@ -32,14 +35,16 @@ function SetupGuideUI() {
     }, [])
 
     const onCreate = useCallback(() => {
-        let content = t.setup_guide_say_hello_content()
+        let content = _(
+            msg`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post.`,
+        )
         if (networkIdentifier === EnhanceableSite.Twitter) {
-            content += t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' })
+            content += _(msg`Follow @realMaskNetwork to explore Web3.`)
         }
 
         activatedSiteAdaptorUI!.automation.maskCompositionDialog?.open?.(
             makeTypedMessageText(content),
-            t.automation_request_click_post_button(),
+            _(msg`Please click the "Post" button to open the compose dialog.`),
             { target: EncryptionTargetType.Public },
         )
     }, [t])

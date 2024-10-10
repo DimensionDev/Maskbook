@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Dialog, DialogActions, DialogContent, Typography } from '@mui/material'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -40,7 +40,6 @@ interface CreateSuccessDialogProps {
 }
 
 export function CreateSuccessDialog({ open, onClose, address, owner }: CreateSuccessDialogProps) {
-    const t = useSmartPayTrans()
     const { classes } = useStyles()
 
     return usePortalShadowRoot((container) => (
@@ -55,17 +54,19 @@ export function CreateSuccessDialog({ open, onClose, address, owner }: CreateSuc
             <DialogContent className={classes.content}>
                 <Icons.FillSuccess size={50} />
 
-                <Typography className={classes.title}>{t.create_successfully()}</Typography>
+                <Typography className={classes.title}>
+                    <Trans>Wallet created!</Trans>
+                </Typography>
                 <Typography className={classes.description}>
-                    {t.create_successfully_tips({ address: formatEthereumAddress(address, 4) })}
+                    <Trans>Congratulation! You've deployed SmartPay Wallet {formatEthereumAddress(address, 4)}.</Trans>
                 </Typography>
                 <Typography className={classes.description} sx={{ marginTop: 2 }}>
-                    {t.create_successfully_tips_owner({ owner })}
+                    <Trans>Management account of the SmartPay Wallet is {owner}.</Trans>
                 </Typography>
             </DialogContent>
             <DialogActions sx={{ p: 3 }}>
                 <ActionButton fullWidth variant="roundedContained" onClick={onClose}>
-                    {t.done()}
+                    <Trans>Done</Trans>
                 </ActionButton>
             </DialogActions>
         </Dialog>

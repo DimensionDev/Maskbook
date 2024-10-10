@@ -12,7 +12,7 @@ import {
     isValidTimestamp,
     ActivityType,
 } from '@masknet/web3-shared-base'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -95,7 +95,6 @@ interface ActivityCardProps {
 export function ActivityCard(props: ActivityCardProps) {
     const { activity } = props
     const { type } = activity
-    const t = useCollectibleTrans()
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
 
@@ -135,7 +134,7 @@ export function ActivityCard(props: ActivityCardProps) {
             <div className={classes.flex}>
                 {activity.send ?
                     <Typography className={classes.textBase}>
-                        {t.plugin_collectible_from()}
+                        <Trans>From</Trans>
                         <strong title={activity.send.address}>
                             {type === ActivityType.Mint ?
                                 Utils.formatAddress(ZERO_ADDRESS, 4)
@@ -147,16 +146,20 @@ export function ActivityCard(props: ActivityCardProps) {
                 :   null}
                 <Typography className={classes.textBase}>
                     {activity.receive && activity.from?.address ?
-                        <>
-                            {t.plugin_collectible_to()}
-                            <strong title={activity.receive.address}>
-                                {type === ActivityType.Mint ?
-                                    Utils.formatAddress(activity.from?.address, 4)
-                                :   activity.receive.nickname ||
-                                    (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
-                                }
-                            </strong>
-                        </>
+                        <Trans>
+                            To{' '}
+                            {
+                                <strong title={activity.receive.address}>
+                                    {type === ActivityType.Mint ?
+                                        Utils.formatAddress(activity.from?.address, 4)
+                                    :   activity.receive.nickname ||
+                                        (activity.receive.address ?
+                                            Utils.formatAddress(activity.receive.address, 4)
+                                        :   '-')
+                                    }
+                                </strong>
+                            }
+                        </Trans>
                     :   null}
                     {isValidTimestamp(activity.timestamp) &&
                         formatDistanceToNowStrict(new Date(activity.timestamp), {

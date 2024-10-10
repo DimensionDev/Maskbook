@@ -1,1 +1,17 @@
-{ "messages": {} }
+{
+    "messages": {
+        "uyJsf6": "About",
+        "aEgiLS": "contributions",
+        "iCb44o": ["Created on: ", ["0"]],
+        "199DuV": "Gitcoin의 지정 정보를 표시하고 소셜미디어에서 프로젝트에게 적접 기부합니다.",
+        "h5Dtc5": "funding received",
+        "PIG043": "Gitcoin",
+        "0bKGbK": "No past rounds found.",
+        "j2a+h4": "Past rounds",
+        "tjbyOy": "Project details",
+        "ghVDTt": "rounds",
+        "kf83Ld": "오류가 발생합니다.",
+        "7cg5cq": "unique contributors",
+        "jpctdh": "View"
+    }
+}

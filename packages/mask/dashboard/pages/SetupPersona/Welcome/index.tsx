@@ -5,7 +5,7 @@ import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Services from '#services'
 import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
-import { DashboardTrans, useDashboardTrans } from '../../../locales/index.js'
+import { DashboardTrans } from '../../../locales/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 
@@ -13,6 +13,7 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { Article } from './Article.js'
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -75,14 +76,12 @@ export const Component = memo(function Welcome() {
         if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
         navigate(DashboardRoutes.SignUpPersona, { replace: true })
     }, [params, allowedToCollect])
-
-    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     return (
         <>
             <Typography variant="h1" className={classes.title}>
-                {t.welcome_to_use_mask_network()}
+                <Trans>Welcome to use Mask Network</Trans>
             </Typography>
             <Article />
 
@@ -97,15 +96,15 @@ export const Component = memo(function Welcome() {
                         }}
                     />
                 }
-                label={t.welcome_request_to_collect()}
+                label={<Trans>Allow us to collect your usage information to help us improve Mask.</Trans>}
             />
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <SecondaryButton width="125px" size="large" onClick={() => window.close()}>
-                        {t.cancel()}
+                        <Trans>Cancel</Trans>
                     </SecondaryButton>
                     <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
-                        {t.agree()}
+                        <Trans>Agree</Trans>
                     </PrimaryButton>
                 </div>
                 <Typography className={classes.policy}>

@@ -3,7 +3,7 @@ import { memo } from 'react'
 import { alpha, Box, Link, Typography } from '@mui/material'
 import { CopyButton, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -79,7 +79,6 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         verified,
     }) => {
         const { classes } = useStyles()
-        const t = useSharedTrans()
 
         return (
             <Box onClick={onClick} className={classes.root}>
@@ -123,7 +122,7 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                                     e.stopPropagation()
                                     onPendingClick?.()
                                 }}>
-                                {t.recent_transaction_pending()}
+                                <Trans>Pending</Trans>
                                 <LoadingBase size={12} className={classes.progress} />
                             </span>
                         :   null}

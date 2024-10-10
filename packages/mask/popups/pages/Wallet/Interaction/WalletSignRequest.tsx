@@ -4,9 +4,9 @@ import { useEffect, useMemo } from 'react'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { useInteractionWalletContext } from './InteractionContext.js'
 import type { InteractionItemProps } from './interaction.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useWeb3State } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { Trans } from '@lingui/macro'
 
 /**
  * string: personal_sign
@@ -25,9 +25,7 @@ export function WalletSignRequest(props: InteractionItemProps) {
     const request = currentRequest.request.arguments
 
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-
-    const t = useMaskSharedTrans()
-    useEffect(() => setConfirmVerb(t.sign()), [])
+    useEffect(() => setConfirmVerb(<Trans>Sign</Trans>), [])
 
     setConfirmAction(async () => {
         const params = structuredClone(request.params)

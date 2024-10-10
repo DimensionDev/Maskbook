@@ -1,9 +1,8 @@
 import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Box, TextField } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { usePersonaRecovery } from '../../../contexts/RecoveryContext.js'
-import { useDashboardTrans } from '../../../locales/index.js'
 import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
 import { emailRegexp } from '../../../utils/regexp.js'
 import { BackupAccountType } from '@masknet/shared-base'
@@ -11,14 +10,16 @@ import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { RestoreContext } from './RestoreProvider.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const EmailField = memo(function EmailField() {
+    const { _ } = useLingui()
     const language = useLanguage()
-    const t = useDashboardTrans()
     const [invalidEmail, setInvalidEmail] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
     const [error, setError] = useState('')
-    const [codeError, setCodeError] = useState('')
+    const [codeError, setCodeError] = useState<ReactNode>(undefined)
 
     const { state, dispatch, downloadBackupInfo } = RestoreContext.useContainer()
     const { emailForm, loading } = state
@@ -35,7 +36,9 @@ export const EmailField = memo(function EmailField() {
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
-        showSnackbar(t.sign_in_account_cloud_backup_send_email_success({ type }), { variant: 'success' })
+        showSnackbar(<Trans>Verification code has been sent to your email. Please check your mailbox.</Trans>, {
+            variant: 'success',
+        })
     }, [account, language])
 
     const validCheck = () => {
@@ -62,7 +65,7 @@ export const EmailField = memo(function EmailField() {
                     } catch (err) {
                         const message = (err as RestoreQueryError).message
                         if (['code not found', 'code mismatch'].includes(message))
-                            setCodeError(t.incorrect_verification_code())
+                            setCodeError(<Trans>Invalid verification code.</Trans>)
                         else setError(message)
                     } finally {
                         dispatch({ type: 'SET_LOADING', loading: false })
@@ -70,7 +73,7 @@ export const EmailField = memo(function EmailField() {
                 }}
                 loading={loading}
                 disabled={disabled}>
-                {t.continue()}
+                <Trans>Continue</Trans>
             </PrimaryButton>,
         )
     }, [account, code, loading, disabled])
@@ -78,7 +81,7 @@ export const EmailField = memo(function EmailField() {
     const hasError = sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail || !!error
     const errorMessage =
         sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail ?
-            t.sign_in_account_cloud_backup_email_format_error()
+            <Trans>Invalid email address.</Trans>
         :   error || ''
 
     return (
@@ -96,7 +99,7 @@ export const EmailField = memo(function EmailField() {
                     })
                 }}
                 error={hasError}
-                placeholder={t.data_recovery_email()}
+                placeholder={_(msg`Email`)}
                 helperText={errorMessage}
                 type="email"
                 size="small"
@@ -112,7 +115,7 @@ export const EmailField = memo(function EmailField() {
                         :   ''
                     }
                     onSend={handleSendCodeFn}
-                    placeholder={t.data_recovery_email_code()}
+                    placeholder={_(msg`Email verification code`)}
                     disabled={emailNotReady}
                     inputProps={{
                         maxLength: 6,

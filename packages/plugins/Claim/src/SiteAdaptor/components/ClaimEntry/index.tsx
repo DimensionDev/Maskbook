@@ -1,13 +1,13 @@
-import { memo, useCallback } from 'react'
+import { memo, useCallback, type ReactNode } from 'react'
 import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginClaimMessage } from '../../../message.js'
-import { useClaimTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 interface ClaimEntryProps {
     disabled: boolean
-    tooltipHint?: string
+    tooltipHint?: ReactNode
     onClick?: (walletConnectedCallback?: () => void) => void
 }
 
@@ -23,12 +23,8 @@ export const ClaimEntry = memo<ClaimEntryProps>((props) => {
         <ApplicationEntry
             {...props}
             icon={<Icons.MarketsClaim size={36} />}
-            title={<Name />}
+            title={<Trans>Claim</Trans>}
             onClick={() => (props.onClick ? props.onClick(handleClick) : handleClick())}
         />
     )
 })
-function Name() {
-    const t = useClaimTrans()
-    return t.__plugin_name()
-}

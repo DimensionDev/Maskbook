@@ -1,5 +1,5 @@
 import urlcat from 'urlcat'
-import { useContext, type PropsWithChildren } from 'react'
+import { useContext, type PropsWithChildren, type ReactNode } from 'react'
 import { format as formatDateTime } from 'date-fns'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { OpenInNew } from '@mui/icons-material'
@@ -12,10 +12,10 @@ import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
-import { useSnapshotTrans } from '../locales/index.js'
+import { Plural, Trans } from '@lingui/macro'
 
 interface InfoFieldProps extends withClasses<'field'>, PropsWithChildren {
-    title: string
+    title: ReactNode
 }
 
 const useStyles = makeStyles()((theme) => {
@@ -69,13 +69,14 @@ export function InfoField(props: InfoFieldProps) {
 
 export function InformationCard() {
     const { classes } = useStyles()
-    const t = useSnapshotTrans()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const { start, end, snapshot, strategies, chainId } = proposal
     return (
-        <SnapshotCard title={t.plugin_snapshot_info_title()}>
-            <InfoField title={t.plugin_snapshot_info_strategy()} classes={{ field: classes.info }}>
+        <SnapshotCard title={<Trans>Information</Trans>}>
+            <InfoField
+                title={<Plural value={strategies.length} one="Strategy" other="Strategies" />}
+                classes={{ field: classes.info }}>
                 <Box sx={{ display: 'flex' }}>
                     {strategies
                         .filter((strategy) => !!strategy.params.address)
@@ -91,7 +92,7 @@ export function InformationCard() {
                         ))}
                 </Box>
             </InfoField>
-            <InfoField title={t.plugin_snapshot_info_author()} classes={{ field: classes.infoColor }}>
+            <InfoField title={<Trans>Author</Trans>} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
@@ -107,7 +108,7 @@ export function InformationCard() {
                     </Typography>
                 </Link>
             </InfoField>
-            <InfoField title={t.plugin_snapshot_info_ipfs()} classes={{ field: classes.infoColor }}>
+            <InfoField title={<Trans>IPFS</Trans>} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"
@@ -117,17 +118,17 @@ export function InformationCard() {
                     <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                 </Link>
             </InfoField>
-            <InfoField title={t.plugin_snapshot_info_start()} classes={{ field: classes.infoColor }}>
+            <InfoField title={<Trans>Start date</Trans>} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(start * 1000, 'MMM dd, yyyy, hh:mm a')}
                 </Typography>
             </InfoField>
-            <InfoField title={t.plugin_snapshot_info_end()} classes={{ field: classes.infoColor }}>
+            <InfoField title={<Trans>End date</Trans>} classes={{ field: classes.infoColor }}>
                 <Typography fontSize={14} fontWeight={400}>
                     {formatDateTime(end * 1000, 'MMM dd, yyyy, hh:mm a')}
                 </Typography>
             </InfoField>
-            <InfoField title={t.plugin_snapshot_info_snapshot()} classes={{ field: classes.infoColor }}>
+            <InfoField title={<Trans>Snapshot</Trans>} classes={{ field: classes.infoColor }}>
                 <Link
                     className={classes.link}
                     target="_blank"

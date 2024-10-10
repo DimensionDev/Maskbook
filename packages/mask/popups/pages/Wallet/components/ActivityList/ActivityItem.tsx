@@ -36,6 +36,7 @@ import { memo, useMemo, type JSX } from 'react'
 import { formatTokenBalance } from '../../../../../shared/index.js'
 import { MaskSharedTrans, useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: Record<string, string> = {
@@ -189,7 +190,6 @@ interface ActivityItemProps extends ListItemProps {
 }
 
 export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ transaction, className, onView, ...rest }) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles({})
     const descriptors = useNetworkDescriptors(NetworkPluginID.PLUGIN_EVM)
     const networkDescriptor = descriptors.find((x) => x.chainId === transaction.chainId)
@@ -256,7 +256,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                         component="div">
                         {status === TransactionStatusType.FAILED ?
                             <Typography className={classes.failedLabel} component="span">
-                                {t.failed()}
+                                <Trans>Failed</Trans>
                             </Typography>
                         :   null}
                         {/* eslint-disable-next-line react/naming-convention/component-name */}
@@ -274,7 +274,9 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                 <Typography className={classes.txName}>
                     {transaction.cateName}
                     {transaction.isScam ?
-                        <span className={classes.scamLabel}>{t.scam_tx()}</span>
+                        <span className={classes.scamLabel}>
+                            <Trans>Scam tx</Trans>
+                        </span>
                     :   null}
                 </Typography>
             </ListItemText>
@@ -336,8 +338,8 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, transaction.chainId)
 
     const recipient = useMemo(() => {
-        if (domain) return t.to_address({ address: formatDomainName(domain) })
-        if (toAddress) return t.to_address({ address: formatEthereumAddress(toAddress, 4) })
+        if (domain) return <Trans>to {formatDomainName(domain)}</Trans>
+        if (toAddress) return <Trans>to {formatEthereumAddress(toAddress, 4)}</Trans>
         return undefined
     }, [domain, t])
 
@@ -362,7 +364,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                         <Typography>
                             {transaction.status === TransactionStatusType.FAILED ?
                                 <Typography className={classes.failedLabel} component="span">
-                                    {t.failed()}
+                                    <Trans>Failed</Trans>
                                 </Typography>
                             :   null}
                             {recipient}
@@ -376,7 +378,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                                         e.stopPropagation()
                                         onSpeedup?.(transaction)
                                     }}>
-                                    {t.speed_up()}
+                                    <Trans>Speed Up</Trans>
                                 </button>
                                 <button
                                     type="button"
@@ -385,14 +387,16 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
                                         e.stopPropagation()
                                         onCancel?.(transaction)
                                     }}>
-                                    {t.cancel()}
+                                    <Trans>Cancel</Trans>
                                 </button>
                             </Box>
                         :   null}
                     </Box>
                 }>
                 {/* TODO specify cateType */}
-                <Typography className={classes.txName}>{t.send()}</Typography>
+                <Typography className={classes.txName}>
+                    <Trans>Send</Trans>
+                </Typography>
             </ListItemText>
             <Box ml="auto">
                 {candidate.value && nativeToken ?

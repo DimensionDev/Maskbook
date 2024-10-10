@@ -3,12 +3,13 @@ import { Controller } from 'react-hook-form'
 import { Box, TextField } from '@mui/material'
 import { PhoneNumberField } from '@masknet/shared'
 import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
 import { BackupAccountType } from '@masknet/shared-base'
 import { Scenario, Locale } from '../../../utils/type.js'
 import { sendCode } from '../../../utils/api.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -18,7 +19,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const PhoneForm = memo(function PhoneForm() {
-    const t = useDashboardTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
     const lang = useLanguage()
@@ -47,7 +48,7 @@ export const PhoneForm = memo(function PhoneForm() {
         })
 
         if (response) {
-            showSnackbar(t.settings_alert_validation_code_sent(), { variant: 'success' })
+            showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
         }
     }, [phone, user, lang, countryCode])
 
@@ -63,7 +64,7 @@ export const PhoneForm = memo(function PhoneForm() {
                         onCodeChange={(code) => setValue('countryCode', code)}
                         onFocus={() => clearErrors('phone')}
                         fullWidth
-                        placeholder={t.mobile_number()}
+                        placeholder={_(msg`Mobile number`)}
                         error={!!errors.phone?.message}
                         helperText={errors.phone?.message}
                     />
@@ -77,7 +78,7 @@ export const PhoneForm = memo(function PhoneForm() {
                         {...field}
                         onFocus={() => clearErrors('code')}
                         fullWidth
-                        placeholder={t.cloud_backup_phone_verification_code()}
+                        placeholder={_(msg`Phone verification code`)}
                         error={!!errors.code?.message}
                         helperText={errors.code?.message}
                         InputProps={{
@@ -93,8 +94,8 @@ export const PhoneForm = memo(function PhoneForm() {
                                     variant="text"
                                     sx={{ px: 0 }}
                                     onClick={handleSendVerificationCode}
-                                    repeatContent={t.resend()}>
-                                    {t.send()}
+                                    repeatContent={<Trans>Resend</Trans>}>
+                                    <Trans>Send</Trans>
                                 </CountdownButton>
                             ),
                         }}

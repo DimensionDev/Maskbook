@@ -1,13 +1,7 @@
 import { useEffect, useState, useMemo, useCallback, memo } from 'react'
 import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
-import {
-    useMenuConfig,
-    FormattedBalance,
-    useSharedTrans,
-    ApproveMaskDialog,
-    SelectGasSettingsModal,
-} from '@masknet/shared'
+import { useMenuConfig, FormattedBalance, ApproveMaskDialog, SelectGasSettingsModal } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import {
     GasOptionType,
@@ -40,6 +34,7 @@ import { Icons } from '@masknet/icons'
 import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
 import { SettingsContext } from '../SettingsBoard/Context.js'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
+import { Trans } from '@lingui/macro'
 
 export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
     extends withClasses<'label'> {
@@ -160,7 +155,6 @@ export function SelectGasSettingsToolbarUI({
     onOpenCustomSetting,
     MenuProps,
 }: SelectGasSettingsToolbarProps) {
-    const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
 
@@ -258,7 +252,9 @@ export function SelectGasSettingsToolbarUI({
             })
             .concat(
                 <MenuItem key="setting" className={cx(classes.menuItem)} onClick={openCustomGasSettingsDialog}>
-                    <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>
+                    <Typography className={classes.title}>
+                        <Trans>Custom</Trans>
+                    </Typography>
                 </MenuItem>,
             ),
         {
@@ -338,13 +334,13 @@ export function SelectGasSettingsToolbarUI({
             <>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
-                        {t.gas_settings_label_transaction_cost()}
+                        <Trans>Transaction cost</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textPrimary" align="right">
                         <Typography component="span" className={classes.edit} onClick={openCustomGasSettingsDialog}>
-                            {t.edit()}
+                            <Trans>Edit</Trans>
                         </Typography>
                         <FormattedBalance
                             value={gasFee ?? estimateGasFee}
@@ -361,7 +357,9 @@ export function SelectGasSettingsToolbarUI({
 
     return (
         <Box className={cx(classes.section, className)}>
-            <Typography className={cx(classes.label, classes.label)}>{t.gas_settings_label_gas_fee()}</Typography>
+            <Typography className={cx(classes.label, classes.label)}>
+                <Trans>Gas Fee</Trans>
+            </Typography>
             <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
@@ -370,10 +368,12 @@ export function SelectGasSettingsToolbarUI({
                     symbol={currencyToken?.symbol}
                     formatter={formatBalance}
                 />
-                <Typography className={classes.gasUSDPrice}>{t.gas_usd_price({ usd: gasFeeUSD })}</Typography>
+                <Typography className={classes.gasUSDPrice}>≈ {gasFeeUSD}</Typography>
                 <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
                     <Typography className={classes.text}>
-                        {isCustomGas ? t.gas_settings_custom() : GAS_OPTION_NAMES[currentGasOptionType]}
+                        {isCustomGas ?
+                            <Trans>Custom</Trans>
+                        :   GAS_OPTION_NAMES[currentGasOptionType]}
                     </Typography>
                     <Icons.Candle width={12} height={12} />
                 </div>

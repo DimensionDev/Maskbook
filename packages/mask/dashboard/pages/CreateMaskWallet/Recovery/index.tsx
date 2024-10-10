@@ -7,7 +7,7 @@ import { ProviderType } from '@masknet/web3-shared-evm'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, use, useCallback, useMemo, useState } from 'react'
+import { memo, use, useCallback, useMemo, useState, type ReactNode } from 'react'
 import type { UseFormSetError } from 'react-hook-form'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
@@ -22,6 +22,8 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import Services from '#services'
 import urlcat from 'urlcat'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -84,12 +86,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Recovery() {
+    const { _ } = useLingui()
     const t = useDashboardTrans()
     const location = useLocation()
     const { cx, classes } = useStyles()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
-    const [error, setError] = useState('')
+    const [error, setError] = useState<ReactNode>()
     const { handlePasswordAndWallets } = ResetWalletContext.useContainer()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local')
@@ -120,9 +123,7 @@ export const Component = memo(function Recovery() {
             } catch (error) {
                 const errorMsg = (error as Error).message
                 // SDK's error message is not as same as design.
-                setError(
-                    errorMsg === 'Invalid mnemonic words.' ? t.wallet_recovery_mnemonic_confirm_failed() : errorMsg,
-                )
+                setError(errorMsg === 'Invalid mnemonic words.' ? <Trans>Incorrect Mnemonic Words.</Trans> : errorMsg)
             }
         },
         [t, navigate, location.state?.isReset, location.state?.password],
@@ -149,7 +150,7 @@ export const Component = memo(function Recovery() {
                 const errorMsg = (error as Error).message
                 onError('privateKey', {
                     type: 'value',
-                    message: errorMsg === 'Invalid private key.' ? t.sign_in_account_private_key_error() : errorMsg,
+                    message: errorMsg === 'Invalid private key.' ? _(msg`Incorrect Private Key`) : errorMsg,
                 })
             }
         },
@@ -185,9 +186,7 @@ export const Component = memo(function Recovery() {
                 const errorMsg = (error as Error).message
                 // Todo: SDK should return 'Incorrect Keystore Password.' when keystore pwd is wrong.
                 setError(
-                    errorMsg === 'Incorrect payment password.' ?
-                        t.create_wallet_key_store_incorrect_password()
-                    :   errorMsg,
+                    errorMsg === 'Incorrect payment password.' ? <Trans>Incorrect Keystore Password.</Trans> : errorMsg,
                 )
             }
         },
@@ -212,20 +211,27 @@ export const Component = memo(function Recovery() {
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    {loadingHasPassword ? '' : t.create_step({ step, totalSteps: step })}
+                    {loadingHasPassword ?
+                        ''
+                    :   <Trans>
+                            Step {step}/{step}
+                        </Trans>
+                    }
                 </Typography>
                 <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
-                    {t.create()}
+                    <Trans>Create</Trans>
                 </Typography>
             </div>
             <Box className={classes.header}>
                 <Typography variant="h1" className={classes.title}>
-                    {t.wallet_recovery_title()}
+                    <Trans>Recover your wallet</Trans>
                 </Typography>
             </Box>
 
             <Typography className={classes.second} mt={2}>
-                {t.wallet_recovery_description()}
+                <Trans>
+                    Please enter the correct mnemonic words, private key, or upload the correct keystore file.
+                </Trans>
             </Typography>
             <RecoveryProvider>
                 <div className={classes.tabContainer}>

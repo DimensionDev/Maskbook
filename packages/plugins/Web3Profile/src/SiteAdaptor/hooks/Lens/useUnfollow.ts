@@ -11,8 +11,9 @@ import { ChainId, ContractTransaction, useLensConstants } from '@masknet/web3-sh
 import { cloneDeep } from 'lodash-es'
 import { useCallback, useRef, useState, type MouseEvent } from 'react'
 import type { AbiItem } from 'web3-utils'
-import { useWeb3ProfileTrans } from '../../../locales/i18n_generated.js'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export function useUnfollow(
     profileId?: string,
@@ -21,8 +22,8 @@ export function useUnfollow(
     onSuccess?: (event: MouseEvent<HTMLElement>) => void,
     onFailed?: () => void,
 ) {
+    const { _ } = useLingui()
     const [loading, setLoading] = useState(false)
-    const t = useWeb3ProfileTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
 
@@ -145,10 +146,10 @@ export function useUnfollow(
                     !error.message.includes('RPC Error')
                 ) {
                     onFailed?.()
-                    showSingletonSnackbar(t.unfollow_lens_handle(), {
+                    showSingletonSnackbar(_(msg`Unfollow lens handle`), {
                         processing: false,
                         variant: 'error',
-                        message: t.network_error(),
+                        message: _(msg`Network error, try again`),
                     })
                 }
             } finally {

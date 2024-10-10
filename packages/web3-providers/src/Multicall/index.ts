@@ -153,10 +153,10 @@ export class Multicall {
     static createSingleContractMultipleData<T extends BaseContract, K extends keyof T['methods']>(
         contract: T,
         names: K[],
-        callDatas: Array<Parameters<T['methods'][K]>>,
+        callData: Array<Parameters<T['methods'][K]>>,
         gasLimit = DEFAULT_GAS_LIMIT,
     ) {
-        return callDatas.map<MulticallBaseAPI.Call>((data, i) => [
+        return callData.map<MulticallBaseAPI.Call>((data, i) => [
             contract.options.address,
             gasLimit,
             contract.methods[names[i]](...data).encodeABI() as string,

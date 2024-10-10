@@ -7,8 +7,8 @@ import { MaskEthereumProviderRpcError } from '@masknet/sdk'
 
 import { blob, builtin, file, filelist, imagebitmap, specialNumbers } from 'typeson-registry'
 import { Identifier } from '@masknet/base'
-import { responseRegedit } from './response.js'
-import { requestRegedit } from './request.js'
+import { responseSerializer } from './response.js'
+import { requestSerializer } from './request.js'
 
 const pendingRegister = new Set<() => void>()
 let typeson: Typeson | undefined
@@ -49,8 +49,8 @@ function setup() {
             (x: Identifier) => x.toText(),
             (x) => Identifier.from(x).expect(`${x} should be a Identifier`),
         ],
-        Response: [...responseRegedit],
-        Request: [...requestRegedit],
+        Response: [...responseSerializer],
+        Request: [...requestSerializer],
     })
 
     for (const a of pendingRegister) a()

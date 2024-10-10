@@ -32,10 +32,11 @@ import { Icons } from '@masknet/icons'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useChainContext, useWallet, useNativeTokenPrice, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketTrans } from '../locales/index.js'
 import { RED_PACKET_DEFAULT_SHARES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES } from '../constants.js'
 import { type RedPacketSettings, useCreateParams } from './hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from './hooks/useDefaultCreateGas.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 // seconds of 1 day
 const duration = 60 * 60 * 24
@@ -102,8 +103,8 @@ interface RedPacketFormProps {
 }
 
 export function RedPacketERC20Form(props: RedPacketFormProps) {
+    const { _ } = useLingui()
     const { origin, expectedChainId, isFirefly, gasOption, onChange, onNext, onGasOptionChange, onChainChange } = props
-    const t = useRedPacketTrans()
     const { classes } = useStyles()
     const theme = useTheme()
     // context
@@ -190,7 +191,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message: message || t.best_wishes(),
+            message: message || _(msg`Best Wishes!`),
             shares: shares || 0,
             token:
                 token ?
@@ -198,7 +199,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 :   undefined,
             total: totalAmount.toFixed(),
         }),
-        [isRandom, senderName, message, t, shares, token, totalAmount],
+        [isRandom, senderName, message, _, shares, token, totalAmount],
     )
 
     const onClick = useCallback(() => {
@@ -218,7 +219,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             duration,
             isRandom: !!isRandom,
             name: senderName,
-            message: message || t.best_wishes(),
+            message: message || _(msg`Best Wishes!`),
             shares: shares || 0,
             token:
                 token ?
@@ -245,35 +246,36 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
     )
     // #endregion
 
-    const validationMessage = useMemo(() => {
-        if (!token) return t.select_a_token()
-        if (!account) return t.plugin_wallet_connect_a_wallet()
-        if (isZero(shares || '0')) return t.enter_shares()
-        if (isGreaterThan(shares || '0', 255)) return t.max_shares()
+    const validationMessage = (() => {
+        if (!token) return <Trans>Select a Token</Trans>
+        if (!account) return <Trans>Connect Wallet</Trans>
+        if (isZero(shares || '0')) return <Trans>Enter Number of Winners</Trans>
+        if (isGreaterThan(shares || '0', 255)) return <Trans>At most 255 recipients</Trans>
         if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
-            return t.insufficient_token_balance({ symbol: token?.symbol })
+            return <Trans>Insufficient {token?.symbol} Balance</Trans>
         if (isZero(amount)) {
-            return isRandom ? t.enter_total_amount() : t.enter_each_amount()
+            return isRandom ? <Trans>Enter Total Amount</Trans> : <Trans>Enter Amount Each</Trans>
         }
 
         if (!isDivisible)
-            return t.indivisible({
-                symbol: token.symbol,
-                amount: formatBalance(1, token.decimals),
-            })
-        return ''
-    }, [isRandom, account, amount, totalAmount, shares, token, balance, t, minTotalAmount])
+            return (
+                <Trans>
+                    The minimum amount for each share is {formatBalance(1, token.decimals)} {token.symbol}
+                </Trans>
+            )
+        return undefined
+    })()
 
-    const gasValidationMessage = useMemo(() => {
+    const gasValidationMessage = (() => {
         if (!token) return ''
         if (!isGasSufficient) {
-            return t.no_enough_gas_fees()
+            return <Trans>Insufficient Balance for Gas Fee</Trans>
         }
         if (!loadingTransactionValue && new BigNumber(transactionValue).isLessThanOrEqualTo(0))
-            return t.insufficient_balance()
+            return <Trans>Insufficient Balance</Trans>
 
-        return ''
-    }, [isAvailableBalance, balance, token?.symbol, transactionValue, loadingTransactionValue, isGasSufficient])
+        return undefined
+    })()
 
     if (!token) return null
 
@@ -288,7 +290,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
                         fontSize={16}
                         fontWeight={isRandom ? 700 : 400}>
-                        {t.random_amount()}
+                        <Trans>Random Amount</Trans>
                     </Typography>
                 </label>
                 <label className={classes.option} onClick={() => setRandom(0)}>
@@ -299,7 +301,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                         color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
                         fontSize={16}
                         fontWeight={!isRandom ? 700 : 400}>
-                        {t.identical_amount()}
+                        <Trans>Equal Amount</Trans>
                     </Typography>
                 </label>
             </div>
@@ -317,7 +319,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     fontSize={14}
                                     marginRight={0.5}
                                     whiteSpace="nowrap">
-                                    {t.winners()}
+                                    <Trans>Winners</Trans>
                                 </Typography>
                                 <Icons.RedPacket size={18} />
                             </>
@@ -326,7 +328,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                             autoComplete: 'off',
                             autoCorrect: 'off',
                             inputMode: 'decimal',
-                            placeholder: t.enter_number_of_winners(),
+                            placeholder: _(msg`Enter number of winners`),
                             spellCheck: false,
                             pattern: '^[0-9]+$',
                         },
@@ -335,9 +337,13 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
             </div>
             <div className={classes.field}>
                 <FungibleTokenInput
-                    label={isRandom ? t.total_amount() : t.amount_each()}
+                    label={isRandom ? _(msg`Total amount`) : _(msg`Amount Each`)}
                     token={token}
-                    placeholder={isRandom ? t.random_amount_share_tips() : t.equal_amount_share_tips()}
+                    placeholder={
+                        isRandom ?
+                            _(msg`Total amount shared among all winners`)
+                        :   _(msg`Enter the amount that each winner can claim`)
+                    }
                     onSelectToken={onSelectTokenChipClick}
                     onAmountChange={setRawAmount}
                     amount={rawAmount}
@@ -352,13 +358,15 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                 />
             </div>
             <Box margin={2}>
-                <Typography className={classes.title}>{t.message()}</Typography>
+                <Typography className={classes.title}>
+                    <Trans>Message</Trans>
+                </Typography>
             </Box>
             <Box margin={2}>
                 <InputBase
                     fullWidth
                     onChange={(e) => setMessage(e.target.value)}
-                    placeholder={t.blessing_words()}
+                    placeholder={_(msg`Best Wishes`)}
                     value={message}
                     inputProps={{
                         maxLength: isFirefly ? 40 : 100,
@@ -401,14 +409,16 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                 token
                             :   undefined
                         }
-                        tooltip={t.infinite_unlock_tips({ token: token.symbol })}
+                        tooltip={_(
+                            msg`Grant access to your ${token.symbol} for the Lucky Drop Smart contract. You only have to do this once per token.`,
+                        )}
                         spender={HAPPY_RED_PACKET_ADDRESS_V4}>
                         <ChainBoundary
                             expectedPluginID={NetworkPluginID.PLUGIN_EVM}
                             expectedChainId={chainId}
                             forceShowingWrongNetworkButton>
                             <WalletConnectedBoundary
-                                noGasText={t.no_enough_gas_fees()}
+                                noGasText={_(msg`Insufficient Balance for Gas Fee`)}
                                 expectedChainId={chainId}
                                 hideRiskWarningConfirmed={isFirefly}>
                                 <ActionButton
@@ -417,7 +427,7 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
                                     fullWidth
                                     disabled={!!validationMessage || !!gasValidationMessage}
                                     onClick={onClick}>
-                                    {validationMessage || gasValidationMessage || t.next()}
+                                    {validationMessage || gasValidationMessage || <Trans>Create the Lucky Drop</Trans>}
                                 </ActionButton>
                             </WalletConnectedBoundary>
                         </ChainBoundary>

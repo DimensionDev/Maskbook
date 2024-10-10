@@ -8,9 +8,9 @@ import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { useRecipientsList } from '../CompositionDialog/useRecipientsList.js'
 import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitterIdByWalletSearch.js'
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { Trans } from '@lingui/macro'
 
 interface SelectProfileDialogProps {
     open: boolean
@@ -67,7 +67,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose, onSelect }: SelectProfileDialogProps) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const [people, select] = useState<Profile[]>([])
     const [committed, setCommitted] = useState(false)
@@ -81,7 +80,10 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, onReject)
+        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, (err) => {
+            console.warn(err)
+            onReject(err)
+        })
     }, [handleClose, people, selectedProfiles, onSelect])
 
     const [valueToSearch, setValueToSearch] = useState('')
@@ -118,7 +120,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const canCommit = committed || people.length === 0
 
     return (
-        <InjectedDialog onClose={handleClose} open={open} title={t.select_specific_friends_dialog__title()}>
+        <InjectedDialog onClose={handleClose} open={open} title={<Trans>Share with</Trans>}>
             <DialogContent className={classes.body}>
                 <SelectProfileUI
                     frozenSelected={selectedProfiles}
@@ -132,14 +134,12 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
             </DialogContent>
             {rejection ?
                 <DialogContent className={classes.content}>
-                    <>
-                        Error: {rejection.message} {console.error(rejection)}
-                    </>
+                    <Trans>Error: {rejection.message}</Trans>
                 </DialogContent>
             :   null}
             <DialogActions className={classes.action}>
                 <Button className={classes.cancel} fullWidth onClick={handleClose} variant="roundedContained">
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <ActionButton
                     fullWidth
@@ -148,7 +148,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
                     className={classes.share}
                     disabled={canCommit}
                     onClick={share}>
-                    {t.done()}
+                    <Trans>Done</Trans>
                 </ActionButton>
             </DialogActions>
         </InjectedDialog>

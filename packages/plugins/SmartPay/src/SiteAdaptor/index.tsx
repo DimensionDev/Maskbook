@@ -10,7 +10,7 @@ import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { SmartPayDialog } from './components/SmartPayDialog.js'
 import { InjectReceiveDialog } from './components/ReceiveDialog.js'
 import { InjectSmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
-import { useSmartPayTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -39,15 +39,11 @@ const site: Plugin.SiteAdaptor.Definition = {
             ApplicationEntryID: PLUGIN_ID,
             appBoardSortingDefaultPriority: 2,
             marketListSortingPriority: 2,
-            name: <Name />,
+            name: <Trans>Smart Pay</Trans>,
             icon: <Icons.SmartPay size={36} />,
             category: 'other',
         },
     ],
-}
-function Name() {
-    const t = useSmartPayTrans()
-    return t.__plugin_name()
 }
 
 export default site

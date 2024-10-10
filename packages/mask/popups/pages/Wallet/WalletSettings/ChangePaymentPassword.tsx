@@ -1,11 +1,10 @@
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { ChangePaymentPasswordModal } from '../../../modals/modal-controls.js'
+import { Trans } from '@lingui/macro'
 
 export function ChangePaymentPassword() {
-    const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
 
     return (
@@ -13,13 +12,13 @@ export function ChangePaymentPassword() {
             className={classes.item}
             onClick={() =>
                 ChangePaymentPasswordModal.open({
-                    title: t.popups_wallet_settings_change_payment_password(),
+                    title: <Trans>Change Payment Password</Trans>,
                 })
             }>
             <Box className={classes.itemBox}>
                 <Icons.Lock size={20} color={theme.palette.maskColor.second} />
                 <Typography className={classes.itemText}>
-                    {t.popups_wallet_settings_change_payment_password()}
+                    <Trans>Change Payment Password</Trans>
                 </Typography>
             </Box>
             <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />

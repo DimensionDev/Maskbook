@@ -6,8 +6,8 @@ import type { PluginID } from '@masknet/shared-base'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
-import { useSharedTrans } from '../../../locales/index.js'
 import { InjectedDialog } from '../../../index.js'
+import { Trans } from '@lingui/macro'
 
 interface ApplicationBoardSettingsProps {
     open: boolean
@@ -33,7 +33,6 @@ const useStyles = makeStyles()((theme) => {
 
 export const ApplicationBoardSettingsDialog = memo<ApplicationBoardSettingsProps>(
     ({ focusPluginID, setPluginMinimalModeEnabled, open, onClose, tab = ApplicationSettingTabs.pluginSwitch }) => {
-        const t = useSharedTrans()
         const { classes } = useStyles()
         const [currentTab, onChange, tabs, setTab] = useTabs(
             ApplicationSettingTabs.pluginList,
@@ -49,11 +48,11 @@ export const ApplicationBoardSettingsDialog = memo<ApplicationBoardSettingsProps
                     onClose={onClose}
                     titleTabs={
                         <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                            <Tab label={t.application_settings_tab_app_list()} value={tabs.pluginList} />
-                            <Tab label={t.application_settings_tab_plug_in_switch()} value={tabs.pluginSwitch} />
+                            <Tab label={<Trans>APP list</Trans>} value={tabs.pluginList} />
+                            <Tab label={<Trans>Plugin switch</Trans>} value={tabs.pluginSwitch} />
                         </MaskTabList>
                     }
-                    title={t.application_settings()}>
+                    title={<Trans>App Settings</Trans>}>
                     <DialogContent className={classes.content}>
                         <TabPanel value={tabs.pluginList} style={{ padding: 0 }}>
                             <ApplicationSettingPluginList />

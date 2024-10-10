@@ -2,9 +2,9 @@ import { noop } from 'lodash-es'
 import { Chip, type ChipProps } from '@mui/material'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon, Error as ErrorIcon } from '@mui/icons-material'
-import { useSharedTrans } from '../../../locales/index.js'
 import { TokenIcon } from '../TokenIcon/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -41,7 +41,6 @@ export interface SelectTokenChipProps extends withClasses<'chip' | 'tokenIcon' |
 
 // todo: merge into one with SelectTokenChip
 export function SelectTokenChip(props: SelectTokenChipProps) {
-    const t = useSharedTrans()
     const { token, error, loading = false, readonly = false, ChipProps, chainId } = props
     const { classes, cx } = useStyles(undefined, { props })
     if (loading)
@@ -58,7 +57,7 @@ export function SelectTokenChip(props: SelectTokenChipProps) {
         return (
             <Chip
                 className={cx(classes.chip, classes.noToken)}
-                label={t.select_token()}
+                label={<Trans>Select</Trans>}
                 size="small"
                 clickable={!readonly}
                 {...ChipProps}

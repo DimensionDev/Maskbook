@@ -1,7 +1,7 @@
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useState } from 'react'
+import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import Services from '#services'
 import { usePersonaRecovery } from '../../../contexts/index.js'
 import { useDashboardTrans } from '../../../locales/index.js'
@@ -12,11 +12,14 @@ import { AccountStatusBar } from '../AccountStatusBar.js'
 import { BackupInfoCard } from '../BackupInfoCard.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
+    const { _ } = useLingui()
     const t = useDashboardTrans()
     const [password, setPassword] = useState('')
-    const [errorMessage, setErrorMessage] = useState('')
+    const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined)
     const { state, dispatch } = RestoreContext.useContainer()
     const { account, backupFileInfo, loading } = state
 
@@ -37,13 +40,13 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
 
         if (!backupDecrypted) {
             dispatch({ type: 'SET_LOADING', loading: false })
-            return setErrorMessage(t.sign_in_account_cloud_backup_decrypt_failed())
+            return setErrorMessage(<Trans>Decrypt failed, please check password</Trans>)
         }
 
         const summary = await Services.Backup.generateBackupSummary(backupDecrypted)
         if (summary.isErr()) {
             dispatch({ type: 'SET_LOADING', loading: false })
-            return setErrorMessage(t.sign_in_account_cloud_backup_decrypt_failed())
+            return setErrorMessage(<Trans>Decrypt failed, please check password</Trans>)
         }
         dispatch({ type: 'SET_LOADING', loading: false })
 
@@ -60,7 +63,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
     useLayoutEffect(() => {
         return fillSubmitOutlet(
             <PrimaryButton color="primary" size="large" onClick={handleNext} loading={loading}>
-                {t.restore()}
+                <Trans>Restore</Trans>
             </PrimaryButton>,
         )
     }, [handleNext, t, loading])
@@ -69,14 +72,18 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
 
     return (
         <Box>
-            <AccountStatusBar label={account} actionLabel={t.switch_other_accounts()} onAction={handleSwitchAccount} />
+            <AccountStatusBar
+                label={account}
+                actionLabel={<Trans>Switch to other accounts</Trans>}
+                onAction={handleSwitchAccount}
+            />
             <Box mt={2}>
                 <BackupInfoCard info={backupFileInfo} />
             </Box>
             <Box mt={4}>
                 <PasswordField
                     fullWidth
-                    placeholder={t.sign_in_account_cloud_backup_password()}
+                    placeholder={_(msg`Backup password`)}
                     onChange={(e) => {
                         setErrorMessage('')
                         setPassword(e.currentTarget.value)

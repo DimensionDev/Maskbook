@@ -12,3 +12,27 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/SearchResultInspector.tsx:128
+msgid "<0>USD Value</0><1>${0}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:34
+msgid "ENS"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:33
+msgid "Optimize the display of search results about ENS in social media."
+msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx:48
+#~ msgid "Powered by"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx:48
+msgid "Powered by {0}"
+msgstr ""
+
+#: src/SiteAdaptor/SearchResultInspector.tsx:129
+#~ msgid "USD Value"
+#~ msgstr ""

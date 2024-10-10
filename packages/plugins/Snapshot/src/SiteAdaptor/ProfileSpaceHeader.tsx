@@ -1,14 +1,14 @@
+import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { useState, useRef } from 'react'
-import { Icons } from '@masknet/icons'
-import { Box, Typography, Avatar, IconButton, Button, ThemeProvider, type Theme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Avatar, Box, Button, IconButton, ThemeProvider, Typography, type Theme } from '@mui/material'
+import { useRef, useState } from 'react'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
 import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { useSnapshotTrans } from '../locales/index.js'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
@@ -64,7 +64,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme }: ProfileSpaceHeaderProps) {
-    const t = useSnapshotTrans()
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
@@ -109,9 +108,7 @@ export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme 
                     </div>
                     {currentSpace.followersCount ?
                         <Typography component="span" className={classes.followersCount}>
-                            {t.plugin_snapshot_space_info_followers_count({
-                                followersCount: formatCount(currentSpace.followersCount, 1),
-                            })}
+                            <Trans>{formatCount(currentSpace.followersCount, 1)} members</Trans>
                         </Typography>
                     :   null}
                 </div>
@@ -123,8 +120,8 @@ export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme 
                 variant="roundedContained"
                 onClick={() => window.open(resolveSnapshotSpacePageUrl(currentSpace.spaceId))}>
                 {followedSpaceList?.includes(currentSpace.spaceId) && account ?
-                    t.plugin_snapshot_space_view()
-                :   t.plugin_snapshot_space_join()}
+                    <Trans>View</Trans>
+                :   <Trans>Join</Trans>}
             </Button>
         </Box>
     )

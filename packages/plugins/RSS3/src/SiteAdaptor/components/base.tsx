@@ -16,7 +16,7 @@ interface FeedCardBaseProps {
     actionIndex?: number
     /**
      * verbose variant is
-     * - not inspectable (not clickable)
+     * - not clickable
      * - showing more details, including fee, and more other content, in different layout
      */
     verbose?: boolean
@@ -25,7 +25,7 @@ interface FeedCardBaseProps {
 export interface FeedCardProps extends Omit<HTMLProps<HTMLDivElement>, 'type' | 'action'>, FeedCardBaseProps {}
 
 const useStyles = makeStyles()((theme) => ({
-    inspectable: {
+    clickable: {
         cursor: 'pointer',
         '&:hover': {
             backgroundColor: theme.palette.maskColor.bg,
@@ -70,7 +70,7 @@ export function CardFrame({
 
     return (
         <article
-            className={cx(className, verbose ? null : classes.inspectable)}
+            className={cx(className, verbose ? null : classes.clickable)}
             onClick={(event: React.MouseEvent<HTMLDivElement>) => {
                 onClick?.(event)
                 if (!verbose) {

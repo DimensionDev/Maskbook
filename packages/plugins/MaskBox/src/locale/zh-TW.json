@@ -1,1 +1,20 @@
-{ "messages": {} }
+{
+    "messages": {
+        "Xmf1TZ": [["boxStateMessage"], " (", ["0"], " ", ["1"], "/Time)"],
+        "F6pfE9": "启用",
+        "Tt5T6+": "文章",
+        "Vi2Pqx": "由",
+        "D87pha": "已关闭",
+        "URmyfc": "详情",
+        "2vTp2v": "抽取",
+        "rFkZD1": "抽取中",
+        "znqB4T": "余额不足",
+        "ml4bvW": "上限:",
+        "0Lp4o6": "加载失败",
+        "WNjtSq": "Mask盲盒",
+        "r0A2o4": "Professional multi-chain decentralized platform for launching NFT blind boxes.",
+        "ZQo3mO": "Professional multi-chain decentralized platform for launching NFT mystery boxes.",
+        "HpK/8d": "重新加载",
+        "WbEaq/": "卖出"
+    }
+}

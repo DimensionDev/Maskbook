@@ -6,8 +6,8 @@ import { FormattedCurrency, TokenIcon } from '@masknet/shared'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Icons } from '@masknet/icons'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
 import { memo, type HTMLProps } from 'react'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -55,7 +55,6 @@ interface OfferCardProps extends HTMLProps<HTMLDivElement> {
 export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardProps) {
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
-    const t = useCollectibleTrans()
 
     const renderTokenIcon = () => {
         if (offer.priceInToken?.token.logoURL)
@@ -102,7 +101,9 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                     </div>
                 </div>
                 <div className={classes.flex}>
-                    <Typography className={classes.textBase}>{t.plugin_collectible_from()}</Typography>
+                    <Typography className={classes.textBase}>
+                        <Trans>From</Trans>
+                    </Typography>
 
                     <Typography className={classes.textBase} style={{ marginRight: 6, fontSize: '12px' }}>
                         {offer.maker?.address ?
@@ -117,12 +118,12 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                             })
                         :   '-'}
                         {isValidTimestamp(offer.expiredAt) && (
-                            <>
-                                <span style={{ margin: '0 4px' }}>{t.plugin_collectible_expires_in()}</span>
+                            <Trans>
+                                <span style={{ margin: '0 4px' }}>Expires in </span>
                                 {formatDistanceToNow(Math.ceil(offer.expiredAt!), {
                                     addSuffix: true,
                                 })}
-                            </>
+                            </Trans>
                         )}
                     </Typography>
                 </div>

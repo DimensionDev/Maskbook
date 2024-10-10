@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, type ReactNode } from 'react'
 import { first } from 'lodash-es'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
@@ -53,9 +53,9 @@ const positionStyleMap: Record<PositionOption, PositionStyle> = {
 export interface OpenPageConfirm {
     target: 'dashboard' | 'other'
     url: string
-    title: string
-    text: string
-    actionHint: string
+    title: ReactNode
+    text: ReactNode
+    actionHint: ReactNode
     position?: 'center' | 'top-right'
 }
 

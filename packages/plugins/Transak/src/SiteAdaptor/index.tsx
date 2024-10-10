@@ -5,23 +5,15 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
 import { PluginTransakMessages } from '../messages.js'
 import { BuyTokenGlobalInjection } from './BuyTokenGlobalInjection.js'
-import { useTransakTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
-function Name() {
-    const t = useTransakTrans()
-    return t.plugin_transak_name()
-}
-function Desc() {
-    const t = useTransakTrans()
-    return t.plugin_transak_description()
-}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     GlobalInjection: BuyTokenGlobalInjection,
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Transak size={36} />
-            const name = <Name />
+            const name = <Trans>Fiat On-Ramp</Trans>
             const iconFilterColor = 'rgba(69, 110, 255, 0.3)'
             return {
                 ApplicationEntryID: base.ID,
@@ -46,7 +38,9 @@ const site: Plugin.SiteAdaptor.Definition = {
                 marketListSortingPriority: 6,
                 tutorialLink: 'https://transak.com/',
                 icon,
-                description: <Desc />,
+                description: (
+                    <Trans>Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support.</Trans>
+                ),
                 name,
                 category: 'dapp',
                 iconFilterColor,

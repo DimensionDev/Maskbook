@@ -4,8 +4,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { Confirm } from './Dialog.js'
 import type { InjectedDialogProps } from '../../contexts/index.js'
 
-export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'title' | 'onSubmit' | 'content' | 'open'> {
-    title?: string
+export interface ConfirmModalOpenProps extends Omit<InjectedDialogProps, 'onSubmit' | 'content' | 'open'> {
     confirmLabel?: React.ReactNode | string
     content: React.ReactNode | string
     maxWidthOfContent?: number

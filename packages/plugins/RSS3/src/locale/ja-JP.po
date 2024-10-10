@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,3 +17,155 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 982\n"
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:184
+msgid "{0, plural, one {Action} other {Actions}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
+#~ msgid "{0} {1}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FeedFilters.tsx:56
+msgid "{0} Networks"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:80
+#~ msgid "<0/> minted <1/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:77
+msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx:134
+msgid "<0/> publish a post on {0}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:171
+#~ msgid "<0>{user}</0> {0, select, send {sent} claim {claimed}} {1, select, verbose {<1>{2}</1>} simple {<2>an NFT</2>}} {3, select, send {to} claim {from}} <3>{formattedAddress}</3>{4, select, cost {for {5} {6}} free {}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:174
+msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}from <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:62
+msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}for <3>{value} {symbolName}</3>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:63
+#~ msgid "<0>{user}</0> minted <1>{0}</1> for <2>{value} {symbolName}</2>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:71
+#~ msgid "<0>{user}</0> minted <1>an NFT</1> for <2>{value} {symbolName}</2>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:131
+msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>}}for <3>{costValue} {costSymbol}</3>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:143
+#~ msgid "<0>{user}</0> registered <1>{0}</1> for <2>{costValue} {costSymbol}</2>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:152
+#~ msgid "<0>{user}</0> registered <1>an ENS</1> for <2>{costValue} {costSymbol}</2>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:110
+msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:94
+msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:116
+#~ msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:93
+#~ msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3> on <4>{2}</4>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:126
+#~ msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:104
+#~ msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3> on <4>{1}</4>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:157
+msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:146
+msgid "Category"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx:68
+msgid "Details"
+msgstr "詳細"
+
+#: src/SiteAdaptor/FeedFilters.tsx:65
+msgid "Direct"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:116
+msgid "Failed"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:159
+msgid "From"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:98
+msgid "Hash"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:128
+msgid "Network"
+msgstr ""
+
+#: src/SiteAdaptor/FeedsPage.tsx:117
+msgid "No more data available."
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:137
+msgid "Platform"
+msgstr ""
+
+#: src/SiteAdaptor/FeedFilters.tsx:66
+msgid "Related"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:110
+msgid "Status"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:115
+msgid "Successful"
+msgstr ""
+
+#: src/SiteAdaptor/FeedsPage.tsx:98
+msgid "There's no feed associated with this address."
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:122
+msgid "Timestamp"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:171
+msgid "To"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:93
+msgid "Transaction Details"
+msgstr ""
+
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:195
+msgid "Tx Fee"
+msgstr ""

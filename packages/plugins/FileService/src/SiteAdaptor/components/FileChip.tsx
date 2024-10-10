@@ -2,8 +2,8 @@ import type { HTMLProps } from 'react'
 import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useFileServiceTrans } from '../../locales/i18n_generated.js'
 import { type CompositionType, useCompositionContext } from '@masknet/plugin-infra/content-script'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {
@@ -21,7 +21,6 @@ interface SingleFileChipProps extends Omit<HTMLProps<HTMLDivElement>, 'ref' | 's
 
 export function SingleFileChip({ name, size, onClick, ...rest }: SingleFileChipProps) {
     const { classes } = useStyles()
-    const t = useFileServiceTrans()
     const { type } = useCompositionContext()
     return (
         <Typography
@@ -31,7 +30,9 @@ export function SingleFileChip({ name, size, onClick, ...rest }: SingleFileChipP
                 onClick({ compositionType: type })
             }}>
             <Icons.FileService size={16} />
-            {t.file_chip_single({ name, size })}
+            <Trans>
+                Attached File: {name} ({size})
+            </Trans>
         </Typography>
     )
 }
@@ -43,7 +44,6 @@ interface MultipleFileChipProps
 }
 export function MultipleFileChip({ count, onClick, ...rest }: MultipleFileChipProps) {
     const { classes, cx } = useStyles()
-    const t = useFileServiceTrans()
     const { type } = useCompositionContext()
     return (
         <Typography
@@ -54,7 +54,7 @@ export function MultipleFileChip({ count, onClick, ...rest }: MultipleFileChipPr
                 onClick({ compositionType: type })
             }}>
             <Icons.FileService size={16} />
-            {t.file_chip_multiple({ count: count.toString() })}
+            <Trans>{count.toString()} files selected</Trans>
         </Typography>
     )
 }

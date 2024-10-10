@@ -4,7 +4,8 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { MaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -78,7 +79,6 @@ interface MnemonicDisplayProps {
 }
 
 export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDisplay({ mnemonic = EMPTY_LIST }) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const [display, toggle] = useToggle(false)
 
@@ -109,7 +109,7 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                         variant="text"
                         startIcon={<Icons.EyeColor size={20} className={classes.icon} />}
                         className={classes.button}>
-                        {t.popups_wallet_backup_mnemonic_hidden()}
+                        <Trans>Hide mnemonic words</Trans>
                     </Button>
                 </Box>
             :   null}

@@ -1,1 +1,39 @@
-{ "messages": {} }
+{
+    "messages": {
+        "gERRYE": "Artblocks",
+        "SDrb6I": "Artblocksでは、好きなスタイルを選び、作品に対価を支払うと、アルゴリズムによってランダムに生成されたバージョンのコンテンツが作成され、イーサリアムアカウントに送られる。",
+        "uqF4Nm": "ブロックチェーン:",
+        "iobEyh": "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>.",
+        "xjhtsV": "チェーン",
+        "q+hNag": "コレクション",
+        "qqWcBV": "完了しました",
+        "p7l2aC": "コントラクト:",
+        "NCIYDF": "Created by",
+        "V5lpjo": ["Created by <0>", ["0"], "</0>• <1>Website</1>"],
+        "URmyfc": "詳細",
+        "SG6jy+": [
+            ["0"],
+            " ",
+            ["1"],
+            " ",
+            ["2"],
+            "のコレクションから美しいアート作品を購入しました。@realMaskNetworkをインストールすると、あなたも手に入ります。"
+        ],
+        "ie2c+s": [["0"], " ", ["1"], " ", ["2"], "のコレクションから、美しいアート作品を購入しました。ようこそ。"],
+        "623chP": "情報",
+        "znqB4T": "残高不足",
+        "bLvQvN": "ライブラリー:",
+        "z/3+av": "ライセンス:",
+        "ldI18s": "ミント済",
+        "URAE3q": "一時停止",
+        "D9iWaX": "ToS ドキュメントを確認してください",
+        "q/ao7A": "1ミントあたりの価格",
+        "rcNnsQ": "価格:",
+        "zZk9Yz": "購入",
+        "zgqgNP": "購入中...",
+        "ywDBfs": "問題が発生しました!",
+        "mW8F64": "This project is no longer active",
+        "V9xq/9": "This project is no more active",
+        "On0aF2": "Website"
+    }
+}

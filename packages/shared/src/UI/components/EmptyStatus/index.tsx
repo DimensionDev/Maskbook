@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {
@@ -24,13 +24,12 @@ interface Props extends BoxProps {
 }
 
 export const EmptyStatus = memo(function EmptyStatus({ className, children, iconSize = 32, ...rest }: Props) {
-    const t = useSharedTrans()
     const { classes, cx } = useStyles()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
             <Icons.EmptySimple size={iconSize} />
             <Typography className={classes.text} component="div">
-                {children ?? t.no_data()}
+                {children ?? <Trans>No Data</Trans>}
             </Typography>
         </Box>
     )

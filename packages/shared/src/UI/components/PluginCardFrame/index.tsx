@@ -1,8 +1,8 @@
 import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '../../../locales/index.js'
 import { LoadingStatus } from '../index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -47,14 +47,13 @@ export interface PluginCardFrameMiniProps {
 }
 
 export function PluginCardFrameMini({ icon, title, provider, providerLink, children }: PluginCardFrameMiniProps) {
-    const t = useSharedTrans()
     const { classes, theme } = useStyles()
 
     const PluginName = (
         <Stack className={classes.title} direction="row">
             {icon ?? <Icons.Web3Profile className={classes.web3Icon} />}
             <Typography fontSize={16} fontWeight={700} color={theme.palette.maskColor.main}>
-                {title ?? t.plugin_card_frame_default_title()}
+                {title ?? <Trans>Web3 Profile</Trans>}
             </Typography>
         </Stack>
     )
@@ -64,10 +63,10 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
             <Stack direction="row" justifyContent="space-between" p={1.5}>
                 {PluginName}
                 <Stack direction="row" gap={0.5}>
-                    <Typography className={classes.item1}>{t.plugin_card_frame_default_provided_by()}</Typography>
-                    <Typography className={classes.item2}>
-                        {provider ?? t.plugin_card_frame_default_provided_by_value()}
-                    </Typography>
+                    <Trans>
+                        <Typography className={classes.item1}>Powered by </Typography>
+                        <Typography className={classes.item2}>{provider ?? 'Mask Network'}</Typography>
+                    </Trans>
                     <Link
                         underline="none"
                         target="_blank"
@@ -84,7 +83,7 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
             <Stack flex={1} justifyContent="center" alignItems="center" p={1.5}>
                 {children ?? (
                     <LoadingStatus iconSize={24} color={theme.palette.maskColor.main}>
-                        {t.plugin_card_frame_loading()}
+                        <Trans>Loading....</Trans>
                     </LoadingStatus>
                 )}
             </Stack>

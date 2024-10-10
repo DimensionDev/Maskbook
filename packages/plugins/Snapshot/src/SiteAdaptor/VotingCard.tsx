@@ -1,4 +1,4 @@
-import { useContext, useState, useMemo, unstable_useCacheRefresh } from 'react'
+import React, { useContext, useState, useMemo, unstable_useCacheRefresh } from 'react'
 import { Box, Button, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { checksumAddress } from '@masknet/web3-shared-evm'
@@ -14,8 +14,8 @@ import { SnapshotContext } from '../context.js'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { getSnapshotVoteType } from '../utils.js'
 import { PluginSnapshotRPC } from '../messages.js'
-import { useSnapshotTrans } from '../locales/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -50,7 +50,6 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export function VotingCard() {
-    const t = useSnapshotTrans()
     const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
@@ -61,10 +60,10 @@ export function VotingCard() {
     const [open, setOpen] = useState(false)
     const [loading, setLoading] = useState(false)
 
-    const messageText = (text: string) => (
+    const messageText = (text: React.ReactNode) => (
         <Box>
             <Typography fontSize={14} fontWeight={700}>
-                {t.plugin_snapshot_vote()}
+                <Trans>Vote</Trans>
             </Typography>
             <Typography fontSize={14} fontWeight={400}>
                 {text}
@@ -118,8 +117,8 @@ export function VotingCard() {
         },
         (_err: Error) => setLoading(false),
         void 0,
-        messageText(t.plugin_snapshot_vote_success()),
-        messageText(t.plugin_snapshot_vote_failed()),
+        messageText(<Trans>Voted.</Trans>),
+        messageText(<Trans>Please try again if you failed to vote.</Trans>),
     )
 
     useRenderPhraseCallbackOnDepsChange(() => setOpen(false), [account, power])
@@ -143,7 +142,7 @@ export function VotingCard() {
         return text
     }, [choices_])
     return account && pluginID === NetworkPluginID.PLUGIN_EVM ?
-            <SnapshotCard title={t.plugin_snapshot_vote_title()}>
+            <SnapshotCard title={<Trans>Cast your vote</Trans>}>
                 <Box className={classes.buttons}>
                     {choices.map((choiceText, i) => (
                         <Button
@@ -172,7 +171,9 @@ export function VotingCard() {
                         disabled={disabled}
                         onClick={() => setOpen(true)}>
                         <Typography fontWeight={700} fontSize={16}>
-                            {power && account ? t.plugin_snapshot_vote() : t.plugin_snapshot_no_power()}
+                            {power && account ?
+                                <Trans>Vote</Trans>
+                            :   <Trans>No power</Trans>}
                         </Typography>
                     </Button>
                 </Box>

@@ -6,12 +6,13 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { alpha } from '@mui/material'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { twitterBase } from '../base.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -80,15 +81,17 @@ function renderPostDialogHintTo<T extends HTMLElement>(
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
+    const { _ } = useLingui()
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
 
     const onHintButtonClicked = useCallback(() => {
         const content =
             sayHelloShowed[twitterBase.networkIdentifier].value ?
                 undefined
             :   makeTypedMessageText(
-                    t.setup_guide_say_hello_content() + t.setup_guide_say_hello_follow({ account: '@realMaskNetwork' }),
+                    _(
+                        msg`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3.`,
+                    ),
                 )
 
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

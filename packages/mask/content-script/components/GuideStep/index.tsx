@@ -1,10 +1,18 @@
-import { cloneElement, useRef, useState, type ReactElement, useLayoutEffect, type RefObject } from 'react'
+import {
+    cloneElement,
+    useRef,
+    useState,
+    type ReactElement,
+    useLayoutEffect,
+    type RefObject,
+    type ReactNode,
+} from 'react'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Box, Modal, styled, Typography } from '@mui/material'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -97,13 +105,12 @@ interface GuideStepProps {
     children: ReactElement<{ ref: RefObject<HTMLElement | undefined> }>
     total: number
     step: number
-    tip: string
+    tip: ReactNode
     arrow?: boolean
     onComplete?: () => void
 }
 
 export default function GuideStep({ total, step, tip, children, arrow = true, onComplete }: GuideStepProps) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles()
     const childrenRef = useRef<HTMLElement>(undefined)
     const [clientRect, setClientRect] = useState<Pick<DOMRect, 'width' | 'height' | 'top' | 'left'>>()
@@ -208,14 +215,14 @@ export default function GuideStep({ total, step, tip, children, arrow = true, on
                                         <div className={classes.buttonContainer}>
                                             {step === total ?
                                                 <NextButton type="button" style={{ width: '100%' }} onClick={onTry}>
-                                                    {t.try()}
+                                                    <Trans>Try</Trans>
                                                 </NextButton>
                                             :   <>
                                                     <ActionButton type="button" onClick={onSkip}>
-                                                        {t.skip()}
+                                                        <Trans>Skip</Trans>
                                                     </ActionButton>
                                                     <NextButton type="button" onClick={onNext}>
-                                                        {t.next()}
+                                                        <Trans>Next</Trans>
                                                     </NextButton>
                                                 </>
                                             }

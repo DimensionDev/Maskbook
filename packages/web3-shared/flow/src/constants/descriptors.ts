@@ -102,6 +102,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         backgroundGradient:
             'linear-gradient(90deg, rgba(52, 133, 196, 0.2) 0%, rgba(0, 239, 139, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
         homeLink: 'https://portto.com/',
+        // cspell: disable-next-line
         shortenLink: 'portto.com',
         enableRequirements: {
             supportedChainIds: ChainIdList,

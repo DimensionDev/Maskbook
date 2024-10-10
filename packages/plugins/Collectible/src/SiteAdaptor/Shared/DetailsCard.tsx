@@ -5,7 +5,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import { useCollectibleTrans } from '../../locales/i18n_generated.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const PLATFORM_COSTS: {
     [k in SourceType]?: number
@@ -69,8 +70,8 @@ interface DetailsCardProps {
 }
 
 export function DetailsCard(props: DetailsCardProps) {
+    const { _ } = useLingui()
     const { asset, sourceType } = props
-    const t = useCollectibleTrans()
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
     const { pluginID } = useNetworkContext()
@@ -78,22 +79,21 @@ export function DetailsCard(props: DetailsCardProps) {
     const infos: Array<{ title: string; value: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
-            title: t.plugin_collectible_mint_address(),
+            title: _(msg`Mint Address`),
             value: Utils.formatAddress(asset.address, 4),
             link: true,
         })
     } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
-        if (asset.tokenId)
-            infos.push({ title: t.plugin_collectible_token_id(), value: Utils.formatTokenId(asset.tokenId, 4) })
-        infos.push({ title: t.contract(), value: Utils.formatAddress(asset.address, 4) ?? '-', link: true })
+        if (asset.tokenId) infos.push({ title: _(msg`Token ID`), value: Utils.formatTokenId(asset.tokenId, 4) })
+        infos.push({ title: _(msg`Contract`), value: Utils.formatAddress(asset.address, 4) ?? '-', link: true })
     }
     infos.push(
-        { title: t.plugin_collectible_block_chain(), value: Utils.chainResolver.chainFullName(asset.chainId) },
-        { title: t.token_standard(), value: Utils.formatSchemaType(asset.schema || asset.contract?.schema) },
+        { title: _(msg`Blockchain`), value: Utils.chainResolver.chainFullName(asset.chainId) },
+        { title: _(msg`Token Standard`), value: Utils.formatSchemaType(asset.schema || asset.contract?.schema) },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {
         infos.push({
-            title: t.plugin_collectible_platform_costs({ platform: sourceType ?? SourceType.NFTScan }),
+            title: _(msg`${sourceType ?? SourceType.NFTScan} Platform costs`),
             value: `${PLATFORM_COSTS[sourceType]}%`,
         })
     }

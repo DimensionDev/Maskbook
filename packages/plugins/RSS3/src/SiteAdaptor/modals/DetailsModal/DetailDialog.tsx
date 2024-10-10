@@ -4,11 +4,11 @@ import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-b
 import { EVMUtils } from '@masknet/web3-providers'
 import { DialogContent } from '@mui/material'
 import { useMemo, type PropsWithChildren } from 'react'
-import { useRSS3Trans } from '../../../locales/index.js'
 import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
 import { TxDetails } from './TxDetails.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {
@@ -43,7 +43,6 @@ interface FeedDetailsDialogProps
         Pick<FeedCardProps, 'feed' | 'actionIndex'> {}
 
 export function FeedDetailsDialog({ feed, onClose, actionIndex, ...rest }: FeedDetailsDialogProps) {
-    const t = useRSS3Trans()
     const { classes } = useStyles()
 
     const address = feed.owner || feed.from || feed.actions[0].from || ''
@@ -66,7 +65,7 @@ export function FeedDetailsDialog({ feed, onClose, actionIndex, ...rest }: FeedD
                     paper: classes.detailsDialog,
                 }}
                 {...rest}
-                title={t.details()}
+                title={<Trans>Details</Trans>}
                 onClose={() => {
                     onClose?.()
                 }}>

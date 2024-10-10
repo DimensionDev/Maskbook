@@ -8,19 +8,14 @@ import { NextIDProof } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
-import { Trans } from 'react-i18next'
+import { Trans } from '@lingui/macro'
 import { base } from '../base.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
 import { FarcasterBadge } from './components/Farcaster/FarcasterBadge.js'
 import { LensBadge } from './components/Lens/LensBadge.js'
 import { NextIdLensToFireflyLens } from './components/Lens/LensPopup.js'
 import { setupStorage } from './context.js'
-import { useWeb3ProfileTrans } from '../locales/i18n_generated.js'
 
-function Name() {
-    const t = useWeb3ProfileTrans()
-    return t.web3_profile()
-}
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     async init(signal, context) {
@@ -31,7 +26,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ApplicationEntries: [
         (() => {
             const icon = <Icons.Web3Profile size={36} />
-            const name = <Name />
+            const name = <Trans>Web3 Profile</Trans>
             return {
                 RenderEntryComponent(EntryComponentProps) {
                     useEffect(() => {
@@ -63,13 +58,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 nextIdRequired: true,
                 category: 'dapp',
-                description: (
-                    <Trans
-                        i18nKey="__plugin_description"
-                        defaults="Choose and showcase your Web3 footprints on Twitter."
-                        ns={base.ID}
-                    />
-                ),
+                description: <Trans>Choose and show your Web3 footprints on X.</Trans>,
             }
         })(),
     ],

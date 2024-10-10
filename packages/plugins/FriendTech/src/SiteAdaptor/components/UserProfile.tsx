@@ -9,8 +9,8 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Link, Skeleton, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
-import { useI18N } from '../../locales/i18n_generated.js'
 import { useOwnKeys } from '../hooks/useOwnKeys.js'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     userInfo: {
@@ -107,7 +107,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export const UserProfile = memo(function UserProfile({ user, address, loading, variant, className, ...rest }: Props) {
     const { classes, theme, cx } = useStyles()
-    const t = useI18N()
     const identity = useLastRecognizedIdentity()
     const myAccount = useAccount()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
@@ -157,10 +156,15 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, v
             <div className={classes.key}>
                 <div className={classes.row}>
                     <Typography color={theme.palette.maskColor.second} mr={1} fontSize={14}>
-                        {t.key_price()}
+                        <Trans>Key Price</Trans>
                     </Typography>
                     <ShadowRootTooltip
-                        title={t.price_tooltip()}
+                        title={
+                            <Trans>
+                                The price of next share is equal to the S^2 / 16000*1 ether where S is the current
+                                number of keys.
+                            </Trans>
+                        }
                         placement="top"
                         PopperProps={{ style: { width: 268 } }}>
                         <Icons.Questions color={theme.palette.maskColor.second} size={18} />
@@ -173,14 +177,14 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, v
                 {isOther ?
                     <div className={classes.row}>
                         <Typography color={theme.palette.maskColor.second} mr={1} fontSize={14}>
-                            {t.you_own()}
+                            <Trans>You Own</Trans>
                         </Typography>
                         <ProgressiveText
                             className={classes.keyPrice}
                             ml="auto"
                             skeletonWidth={50}
                             loading={loadingOwnCount}>
-                            {ownCount === undefined ? '--' : t.keys({ count: ownCount })}
+                            {ownCount === undefined ? '--' : <Plural value={ownCount} one="# Key" other="# Keys" />}
                         </ProgressiveText>
                     </div>
                 :   null}
@@ -188,23 +192,27 @@ export const UserProfile = memo(function UserProfile({ user, address, loading, v
             {isOther ? null : (
                 <>
                     <div className={classes.meta}>
-                        <Typography className={classes.metaLabel}>{t.holders()}</Typography>
+                        <Typography className={classes.metaLabel}>
+                            <Trans>Holders</Trans>
+                        </Typography>
                         <ProgressiveText className={classes.metaValue} loading={loading} skeletonWidth={50}>
                             {user?.holderCount}
                         </ProgressiveText>
                     </div>
                     <div className={classes.meta}>
-                        <Typography className={classes.metaLabel}>{t.your_rank()}</Typography>
+                        <Typography className={classes.metaLabel}>
+                            <Trans>Your Rank</Trans>
+                        </Typography>
                         <ProgressiveText className={classes.metaValue} loading={loading} skeletonWidth={50}>
                             {user?.rank !== undefined ? `#${user.rank}` : '--'}
                         </ProgressiveText>
                     </div>
                     <div className={classes.meta}>
-                        <Typography className={classes.metaLabel}>{t.holding()}</Typography>
+                        <Typography className={classes.metaLabel}>
+                            <Trans>Holding</Trans>
+                        </Typography>
                         <ProgressiveText className={classes.metaValue} loading={loading} skeletonWidth={50}>
-                            {t.keys({
-                                count: user?.holdingCount || 0,
-                            })}
+                            <Plural value={user?.holdingCount || 0} one="# Key" other="# Keys" />
                         </ProgressiveText>
                     </div>
                 </>

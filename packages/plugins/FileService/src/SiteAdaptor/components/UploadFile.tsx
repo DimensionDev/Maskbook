@@ -2,15 +2,18 @@ import { Icons } from '@masknet/icons'
 import { UploadDropArea } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Radio, Typography } from '@mui/material'
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type ReactNode } from 'react'
 import { MAX_FILE_SIZE } from '../../constants.js'
 import { downloadFile } from '../../helpers.js'
-import { useFileServiceTrans } from '../../locales/i18n_generated.js'
-import type { ProviderConfig } from '../../types.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList } from './FileList.js'
+import { Trans } from '@lingui/macro'
 
+interface ProviderConfig {
+    name: ReactNode
+    provider: Provider
+}
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
@@ -71,7 +74,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function UploadFile() {
-    const t = useFileServiceTrans()
     const { classes, theme } = useStyles()
     const [encrypted, setEncrypted] = useState(true)
     const [useCDN, setUseCDN] = useState(false)
@@ -85,11 +87,11 @@ export function UploadFile() {
     const providers: ProviderConfig[] = [
         {
             provider: Provider.Arweave,
-            name: t.provider_arweave(),
+            name: <Trans>Arweave</Trans>,
         },
         {
             provider: Provider.IPFS,
-            name: t.provider_ipfs(),
+            name: <Trans>IPFS</Trans>,
         },
     ]
 
@@ -114,7 +116,7 @@ export function UploadFile() {
                     />
                 }
                 className={classes.label}
-                label={t.use_cdn()}
+                label={<Trans>Use Meson CDN</Trans>}
             />
         :   null
 
@@ -154,16 +156,20 @@ export function UploadFile() {
                         />
                     }
                     className={classes.label}
-                    label={t.on_encrypt_it()}
+                    label={<Trans>Make It Encrypted</Trans>}
                 />
                 {cdnButton}
             </section>
-            <Typography className={classes.heading}>{t.uploaded_files()}</Typography>
+            <Typography className={classes.heading}>
+                <Trans>Uploaded files</Trans>
+            </Typography>
             {files.length ?
                 <FileList files={files} className={classes.fileList} onSend={attachToPost} onDownload={downloadFile} />
             :   <div className={classes.emptyBox}>
                     <Icons.EmptySimple size={36} />
-                    <Typography className={classes.emptyMessage}>{t.upload_tips()}</Typography>
+                    <Typography className={classes.emptyMessage}>
+                        <Trans>Please click Browse Files button to select files to upload.</Trans>
+                    </Typography>
                 </div>
             }
         </section>

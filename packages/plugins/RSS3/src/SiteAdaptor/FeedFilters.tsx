@@ -3,8 +3,8 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { forwardRef, memo } from 'react'
 import { NetworkOptions, Networks } from '../constants.js'
-import { useRSS3Trans } from '../locales/i18n_generated.js'
 import { useFilters } from './filters.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -44,7 +44,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const FeedFilters = memo(
     forwardRef<HTMLDivElement, BoxProps>(function FeedFilters(props: BoxProps, ref) {
-        const t = useRSS3Trans()
         const { classes, cx } = useStyles()
 
         const [filters, setFilters] = useFilters()
@@ -54,7 +53,7 @@ export const FeedFilters = memo(
             <Box {...props} ref={ref} className={cx(classes.container, props.className)}>
                 <Box className={classes.header}>
                     <Typography fontWeight="bold">
-                        {t.networks({ count: networks.length as unknown as string })}
+                        <Trans>{networks.length} Networks</Trans>
                     </Typography>
                     <Box
                         className={classes.button}
@@ -62,7 +61,9 @@ export const FeedFilters = memo(
                             setFilters((origin) => ({ ...origin, isDirect: !origin.isDirect }))
                         }}>
                         <Icons.Blocks size={16} />
-                        {isDirect ? t.direct() : t.related()}
+                        {isDirect ?
+                            <Trans>Direct</Trans>
+                        :   <Trans>Related</Trans>}
                     </Box>
                 </Box>
                 <Box className={classes.networks}>

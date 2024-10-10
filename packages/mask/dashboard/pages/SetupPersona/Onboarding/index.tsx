@@ -17,6 +17,8 @@ import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -77,6 +79,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function Onboarding() {
     const t = useDashboardTrans()
+    const { _ } = useLingui()
     const { classes } = useStyles()
 
     const [params] = useSearchParams()
@@ -108,9 +111,9 @@ export const Component = memo(function Onboarding() {
         return CrossIsolationMessages.events.passwordStatusUpdated.on((hasPassword) => {
             if (!hasPassword) return
             retry()
-            showSnackbar(t.persona_onboarding_set_payment_password(), {
+            showSnackbar(<Trans>Set Payment Password</Trans>, {
                 variant: 'success',
-                message: t.wallet_set_payment_password_successfully(),
+                message: <Trans>Payment password set.</Trans>,
             })
         })
     }, [retry])
@@ -119,24 +122,24 @@ export const Component = memo(function Onboarding() {
         const count = params.get('count')
         return compact([
             <Typography key="identity">
-                {t.persona_onboarding_creating_identity()}
-                {t.identity()}
+                {_(msg`Creating your `)}
+                {_(msg`identity`)}
             </Typography>,
             <Typography key="account">
-                {t.persona_onboarding_generating_accounts()}
-                {t.accounts()}
+                {_(msg`Generating your `)}
+                {_(msg`accounts`)}
             </Typography>,
             <Typography key="data">
-                {t.persona_onboarding_encrypting_data()}
-                {t.data()}
+                {_(msg`Encrypting your `)}
+                {_(msg`data`)}
             </Typography>,
             <Typography key="ready">
-                {t.persona_onboarding_ready()}
-                {t.ready()}
+                {_('Your Persona is on ')}
+                {_('ready 🚀')}
             </Typography>,
             count && !isZero(count) ?
                 <Typography key="wallets">
-                    {t.persona_onboarding_recovery_wallets()}
+                    {_('You have recovered ')}
                     {t.persona_onboarding_wallets({ count: Number(count) })}
                 </Typography>
             :   undefined,
@@ -146,7 +149,9 @@ export const Component = memo(function Onboarding() {
     return (
         <>
             <Box className={classes.card}>
-                <Typography className={classes.pin}>{t.persona_onboarding_pin_tips()}</Typography>
+                <Typography className={classes.pin}>
+                    <Trans>Pin Mask Network to the toolbar for easier access:</Trans>
+                </Typography>
                 <Box mt={2.25} display="flex" alignItems="center">
                     <Box className={classes.skeleton} />
                     <Box className={classes.plugins}>
@@ -178,7 +183,7 @@ export const Component = memo(function Onboarding() {
                             size={20}
                         />
                     }>
-                    {t.persona_onboarding_to_twitter()}
+                    <Trans>Experience in X</Trans>
                 </PrimaryButton>
                 {!isCreate && count && !isZero(count) ?
                     <PrimaryButton
@@ -188,7 +193,9 @@ export const Component = memo(function Onboarding() {
                         size="large"
                         sx={{ ml: 1.5 }}
                         startIcon={<Icons.Wallet className={classes.twitter} size={20} />}>
-                        {hasPaymentPassword ? t.wallet_open_mask_wallet() : t.persona_onboarding_set_payment_password()}
+                        {hasPaymentPassword ?
+                            <Trans>Open Mask Wallet</Trans>
+                        :   <Trans>Set Payment Password</Trans>}
                     </PrimaryButton>
                 :   null}
             </SetupFrameController>

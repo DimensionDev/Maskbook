@@ -16,7 +16,7 @@ import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
 import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
-import { useCollectibleTrans } from '../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 function useInspectCollectible(pluginID?: NetworkPluginID) {
     return useCallback(
@@ -180,8 +180,13 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Desc />,
-            name: <Name />,
+            description: (
+                <Trans>
+                    Display specific information of collectibles in OpenSea and Rarible, make an offer directly on
+                    social media.
+                </Trans>
+            ),
+            name: <Trans>Collectibles</Trans>,
             icon: <Icons.Collectibles size={36} />,
             marketListSortingPriority: 7,
             tutorialLink: 'https://realmasknetwork.notion.site/c388746f11774ecfa17914c900d3ed97',
@@ -191,14 +196,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         title: PLUGIN_NAME,
         icon: <Icons.ApplicationNFT size={24} />,
     },
-}
-function Desc() {
-    const t = useCollectibleTrans()
-    return t.plugin_collectibles_description()
-}
-function Name() {
-    const t = useCollectibleTrans()
-    return t.plugin_collectibles_name()
 }
 
 export default site

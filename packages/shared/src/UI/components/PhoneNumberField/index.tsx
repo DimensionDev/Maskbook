@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react'
 import { Button, TextField, type FilledTextFieldProps, Typography } from '@mui/material'
 import { COUNTRIES } from '@masknet/shared-base-ui'
-import { getCountryFlag, useSharedTrans } from '../../../index.js'
+import { getCountryFlag } from '../../../index.js'
 import { Icons } from '@masknet/icons'
 import { CountryCodePicker } from '../CountryCodePicker/index.js'
+import { msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'variant'> {
     code: string
@@ -11,7 +13,7 @@ export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'varia
 }
 
 export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFieldProps) {
-    const t = useSharedTrans()
+    const { _ } = useLingui()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     const countryIcon = useMemo(() => {
@@ -24,7 +26,7 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
     return (
         <>
             <TextField
-                placeholder={t.mobile_number()}
+                placeholder={_(msg`Phone Number`)}
                 type="tel"
                 {...rest}
                 InputProps={{

@@ -203,13 +203,13 @@ export function Quote({ quote, ...props }: QuoteProps) {
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
-                        <Typography className={classes.rowName}>
-                            <Trans>Powered by</Trans>
-                        </Typography>
-                        <Typography className={classes.rowValue}>
-                            OKX
-                            <Icons.Okx size={18} />
-                        </Typography>
+                        <Trans>
+                            <Typography className={classes.rowName}>Powered by</Typography>
+                            <Typography className={classes.rowValue}>
+                                OKX
+                                <Icons.Okx size={18} />
+                            </Typography>
+                        </Trans>
                     </div>
                 </>
             :   null}

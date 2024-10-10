@@ -14,9 +14,9 @@ import {
     Typography,
 } from '@mui/material'
 import { memo } from 'react'
-import { useSharedTrans } from '../../../locales/index.js'
 import { FormattedCurrency } from '../../wallet/FormattedCurrency.js'
 import { ProgressiveText } from '../ProgressiveText/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     container: {
@@ -49,7 +49,6 @@ interface CoinMarketTableProps {
     sign?: CurrencyType
 }
 export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ trending, sign }: CoinMarketTableProps) {
-    const t = useSharedTrans()
     const { classes } = useStyles()
     const { isPending } = useFiatCurrencyRate()
 
@@ -59,7 +58,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700} component="h3">
-                    {t.usdc_price_statistic()}
+                    <Trans>Price Statistic</Trans>
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -68,7 +67,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.market_cap()}
+                                    <Trans>Market Cap</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
@@ -87,7 +86,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.circulating_supply()}
+                                    <Trans>Circulating Supply</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
@@ -98,7 +97,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.volume_24()}
+                                    <Trans>24 Hour Trading Vol</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
@@ -116,7 +115,7 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.total_supply()}
+                                    <Trans>Total Supply</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>{formatSupply(market?.total_supply, '--')}</TableCell>
@@ -130,13 +129,12 @@ export const FungibleCoinMarketTable = memo(function FungibleCoinMarketTable({ t
 
 export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketTableSkeleton() {
     const { classes } = useStyles()
-    const t = useSharedTrans()
 
     return (
         <Stack>
             <Stack>
                 <Typography fontSize={14} fontWeight={700} component="h3">
-                    {t.usdc_price_statistic()}
+                    <Trans>Price Statistic</Trans>
                 </Typography>
             </Stack>
             <TableContainer className={classes.container} component={Paper} elevation={0}>
@@ -145,7 +143,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.market_cap()}
+                                    <Trans>Market Cap</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
@@ -156,7 +154,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.circulating_supply()}
+                                    <Trans>Circulating Supply</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
@@ -167,7 +165,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.volume_24()}
+                                    <Trans>24 Hour Trading Vol</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>
@@ -177,7 +175,7 @@ export const FungibleCoinMarketTableSkeleton = memo(function FungibleCoinMarketT
                         <TableRow>
                             <TableCell className={classes.head} component="th">
                                 <Typography color="textSecondary" variant="body2" className={classes.label}>
-                                    {t.total_supply()}
+                                    <Trans>Total Supply</Trans>
                                 </Typography>
                             </TableCell>
                             <TableCell className={classes.value}>

@@ -18,12 +18,12 @@ import { RoutePaths } from '../../constants.js'
 import { useDeploy } from '../../hooks/useDeploy.js'
 import { useManagers } from '../../hooks/useManagers.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
-import { useSmartPayTrans } from '../../locales/index.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { ManagerAccountType, type ManagerAccount } from '../../type.js'
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {
@@ -120,7 +120,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function Deploy({ open }: { open: boolean }) {
-    const t = useSmartPayTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const wallets = useWallets()
@@ -211,8 +210,12 @@ export function Deploy({ open }: { open: boolean }) {
         <>
             <Box className={classes.content}>
                 <SmartPayBanner>
-                    <Typography>{t.white_list_tips()}</Typography>
-                    <Typography>{t.personas_description()}</Typography>
+                    <Typography>
+                        <Trans>You are in the trial whitelist.</Trans>
+                    </Typography>
+                    <Typography>
+                        <Trans>Create a SmartPay Wallet with your X account.</Trans>
+                    </Typography>
                 </SmartPayBanner>
                 <Box className={classes.walletDescription}>
                     <Box display="flex" alignItems="center" columnGap={1.5}>
@@ -252,7 +255,9 @@ export function Deploy({ open }: { open: boolean }) {
                         event.preventDefault()
                         setAnchorEl(event.currentTarget)
                     }}>
-                    <Typography className={classes.selectTitle}>{t.setup_smart_pay_managed_account()}</Typography>
+                    <Typography className={classes.selectTitle}>
+                        <Trans>Set up the Management Account for SmartPay Wallet</Trans>
+                    </Typography>
                     <Box display="flex" justifyContent="space-between" alignItems="center" mt={0.5}>
                         <Box display="flex" alignItems="center" columnGap={1}>
                             <Icons.MaskBlue size={24} className={classes.maskIcon} />
@@ -275,12 +280,35 @@ export function Deploy({ open }: { open: boolean }) {
                     />
                 </Box>
                 <Box className={classes.tips}>
-                    <Typography>{t.deploy_tips_title()}</Typography>
+                    <Typography>
+                        <Trans>What to know before SmartPay Wallet deployment:</Trans>
+                    </Typography>
                     <Box component="ol" pl={1.5}>
-                        <Typography component="li">{t.deploy_tips_description_one()}</Typography>
-                        <Typography component="li">{t.deploy_tips_description_two()}</Typography>
-                        <Typography component="li">{t.deploy_tips_description_three()}</Typography>
-                        <Typography component="li">{t.deploy_tips_description_four()}</Typography>
+                        <Typography component="li">
+                            <Trans>
+                                User need to deploy the SmartPay Wallet on Polygon Network before using it for
+                                blockchain interaction. Wallet that has not been deployed can receive assets, but cannot
+                                send any transactions.
+                            </Trans>
+                        </Typography>
+                        <Typography component="li">
+                            <Trans>
+                                You can change management account of SmartPay Wallet. In Mask Network, both Persona and
+                                Mask Wallet can be authorized as management account.
+                            </Trans>
+                        </Typography>
+                        <Typography component="li">
+                            <Trans>
+                                Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon
+                                Network at the moment.
+                            </Trans>
+                        </Typography>
+                        <Typography component="li">
+                            <Trans>
+                                This SmartPay Wallet can only receive assets on Polygon Network. Please do not use this
+                                address to receive assets from other EVM chains.
+                            </Trans>
+                        </Typography>
                     </Box>
                 </Box>
             </Box>
@@ -296,7 +324,7 @@ export function Deploy({ open }: { open: boolean }) {
                             loading={deployLoading}
                             disabled={deployLoading || queryContractLoading || !signPersona}
                             variant="roundedContained">
-                            {t.deploy()}
+                            <Trans>Deploy</Trans>
                         </ActionButton>
                     </PersonaAction>
                 :   <Box className={classes.walletStatus}>
@@ -320,7 +348,7 @@ export function Deploy({ open }: { open: boolean }) {
                             loading={deployLoading}
                             disabled={deployLoading || queryContractLoading || !signWallet}
                             variant="roundedContained">
-                            {t.deploy()}
+                            <Trans>Deploy</Trans>
                         </ActionButton>
                     </Box>
                 }

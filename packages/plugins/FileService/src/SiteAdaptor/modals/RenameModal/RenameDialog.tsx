@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogContent, InputBase, Typography } from '@mui/material'
-import { useFileServiceTrans } from '../../../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -73,7 +73,6 @@ interface RenameDialogProps extends Omit<InjectedDialogProps, 'title' | 'onSubmi
 export const RenameDialog = memo(
     ({ title, message, description, currentName, onSubmit, onClose, ...rest }: RenameDialogProps) => {
         const { classes } = useStyles()
-        const t = useFileServiceTrans()
         const [name, setName] = useState(currentName)
         const isDirty = name !== currentName
         const isValid = isDirty && name.length >= 3 && name.length <= 20
@@ -82,7 +81,7 @@ export const RenameDialog = memo(
             <InjectedDialog classes={{ paper: classes.paper, ...rest.classes }} {...rest}>
                 <DialogContent className={classes.content}>
                     <Typography variant="h1" className={classes.title}>
-                        {t.rename()}
+                        <Trans>Rename</Trans>
                     </Typography>
                     <Typography component="div" className={classes.message}>
                         {message}
@@ -102,7 +101,7 @@ export const RenameDialog = memo(
                         color="primary"
                         disabled={!isValid}
                         onClick={() => onSubmit(name)}>
-                        {t.confirm()}
+                        <Trans>Confirm</Trans>
                     </Button>
                     <Icons.Close className={classes.closeButton} size={24} onClick={() => onClose()} />
                 </DialogContent>

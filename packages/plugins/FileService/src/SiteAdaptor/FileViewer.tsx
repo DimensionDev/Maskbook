@@ -6,7 +6,7 @@ import { DisplayingFileList } from './components/FileList.js'
 import { useCallback } from 'react'
 import { PluginFileServiceRPC } from './rpc.js'
 import { downloadFile } from '../helpers.js'
-import { useFileServiceTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()({
     file: {
@@ -25,25 +25,24 @@ const useStyles = makeStyles()({
 export function FileViewer({ files }: { files: FileInfo[] }) {
     usePluginWrapper(true)
     const { classes } = useStyles()
-    const t = useFileServiceTrans()
 
     const { showSnackbar } = useCustomSnackbar()
     const handleSave = useCallback(
         async (file: FileInfo) => {
             try {
                 await PluginFileServiceRPC.setFileInfo(file)
-                showSnackbar(t.save_file_title({ context: 'success' }), {
+                showSnackbar(<Trans>File saved</Trans>, {
                     variant: 'success',
-                    message: t.save_file_message({ context: 'success', name: file.name }),
+                    message: <Trans>You've saved {file.name} to Web3 file service.</Trans>,
                 })
             } catch (err) {
-                showSnackbar(t.save_file_title({ context: 'failed' }), {
+                showSnackbar(<Trans>Failed to save file</Trans>, {
                     variant: 'error',
-                    message: t.save_file_message({ context: 'failed', name: file.name }),
+                    message: <Trans>Failed to save the file. Please try again.</Trans>,
                 })
             }
         },
-        [showSnackbar, showSnackbar, t],
+        [showSnackbar, showSnackbar],
     )
 
     return (

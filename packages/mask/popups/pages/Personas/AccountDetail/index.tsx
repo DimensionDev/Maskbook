@@ -29,8 +29,11 @@ import { MaskSharedTrans, requestPermissionFromExtensionPage, useMaskSharedTrans
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 export const Component = memo(() => {
+    const { _ } = useLingui()
     const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const theme = useTheme()
@@ -84,14 +87,14 @@ export const Component = memo(() => {
             MaskMessages.events.ownPersonaChanged.sendToAll()
             queryClient.removeQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
             queryClient.removeQueries({ queryKey: ['@@my-own-persona-info'] })
-            showSnackbar(t.popups_disconnect_success(), {
+            showSnackbar(<Trans>Disconnected.</Trans>, {
                 variant: 'success',
             })
             Telemetry.captureEvent(EventType.Access, DisconnectEventMap[selectedAccount.identifier.network])
             await delay(300)
             navigate(-1)
         } catch {
-            showSnackbar(t.popups_disconnect_failed(), {
+            showSnackbar(<Trans>Disconnect failed.</Trans>, {
                 variant: 'error',
             })
         }
@@ -100,12 +103,12 @@ export const Component = memo(() => {
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {
             await updateConfig(pendingUnlistedConfig)
-            showSnackbar(t.popups_save_successfully(), {
+            showSnackbar(<Trans>Saved</Trans>, {
                 variant: 'success',
                 autoHideDuration: 2000,
             })
         } catch {
-            showSnackbar(t.popups_save_failed(), {
+            showSnackbar(<Trans>Save failed</Trans>, {
                 variant: 'error',
             })
         }
@@ -156,12 +159,12 @@ export const Component = memo(() => {
             await queryClient.refetchQueries({ queryKey: ['@@next-id', 'bindings-by-persona', pubkey] })
             await queryClient.refetchQueries({ queryKey: ['@@my-own-persona-info'] })
 
-            showSnackbar(t.popups_disconnect_success(), {
+            showSnackbar(<Trans>Disconnected.</Trans>, {
                 variant: 'success',
             })
             navigate(-1)
         } catch {
-            showSnackbar(t.popups_disconnect_failed(), {
+            showSnackbar(<Trans>Disconnect failed.</Trans>, {
                 variant: 'error',
             })
         }
@@ -179,7 +182,7 @@ export const Component = memo(() => {
         window.close()
     }, [selectedAccount, currentPersona])
 
-    useTitle(t.popups_social_account())
+    useTitle(_(msg`Social Account`))
 
     useEffect(() => {
         if (!selectedAccount) navigate(PopupRoutes.Personas, { replace: true })
@@ -191,7 +194,7 @@ export const Component = memo(() => {
                     onClick={async () => {
                         if (!currentPersona) return
                         const confirmed = await ConfirmDialog.openAndWaitForClose({
-                            title: t.popups_disconnect_persona(),
+                            title: <Trans>Disconnect Social Account?</Trans>,
                             confirmVariant: 'warning',
                             message: (
                                 // eslint-disable-next-line react/naming-convention/component-name

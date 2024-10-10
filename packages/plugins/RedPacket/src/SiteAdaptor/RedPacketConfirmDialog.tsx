@@ -12,8 +12,8 @@ import { Launch as LaunchIcon } from '@mui/icons-material'
 import { EVMChainResolver, EVMExplorerResolver, SmartPayBundler, EVMWeb3 } from '@masknet/web3-providers'
 import { isZero } from '@masknet/web3-shared-base'
 import { type RedPacketSettings } from './hooks/useCreateCallback.js'
-import { useRedPacketTrans } from '../locales/index.js'
 import { useCreateFTRedpacketCallback } from './hooks/useCreateFTRedpacketCallback.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -66,7 +66,6 @@ interface ConfirmRedPacketFormProps {
 }
 
 export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
-    const t = useRedPacketTrans()
     const { settings, onCreated, onClose, gasOption, onGasOptionChange, expectedChainId } = props
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: expectedChainId })
@@ -101,18 +100,20 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                 </Grid>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
-                        {t.split_mode()}
+                        <Trans>Split Mode</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textPrimary" align="right">
-                        {settings?.isRandom ? t.random() : t.average()}
+                        {settings?.isRandom ?
+                            <Trans>Random</Trans>
+                        :   <Trans>Identical</Trans>}
                     </Typography>
                 </Grid>
 
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
-                        {t.share()}
+                        <Trans>Share</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -125,7 +126,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                     <>
                         <Grid item xs={6}>
                             <Typography variant="body1" color="textSecondary">
-                                {t.amount_per_share()}
+                                <Trans>Amount per Share</Trans>
                             </Typography>
                         </Grid>
                         <Grid item xs={6}>
@@ -156,7 +157,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
 
                 <Grid item xs={6}>
                     <Typography variant="body1" color="textSecondary">
-                        {t.total_cost()}
+                        <Trans>Total cost</Trans>
                     </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -201,7 +202,9 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                             marginLeft="8.5px"
                             style={{ lineHeight: '18px' }}
                             fontSize="14px">
-                            {t.hint()}
+                            <Trans>
+                                You can withdraw the rest of your balances back 24h later after sending them out.
+                            </Trans>
                         </Typography>
                     </Paper>
                 </Grid>
@@ -213,7 +216,9 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
                         fullWidth
                         onClick={createRedpacket}
                         disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
-                        {isCreating ? t.confirming() : t.confirm()}
+                        {isCreating ?
+                            <Trans>Confirming</Trans>
+                        :   <Trans>Confirm</Trans>}
                     </ActionButton>
                 </ChainBoundary>
             </PluginWalletStatusBar>

@@ -14,8 +14,9 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, NetworkIcon, TokenIcon, useSharedTrans } from '../../../index.js'
+import { FormattedBalance, NetworkIcon, TokenIcon } from '../../../index.js'
 import { useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -127,7 +128,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface FungibleTokenInputUIProps extends InputBaseProps {
-    label: string
+    label: React.ReactNode
     disableMax?: boolean
     isNative?: boolean
     token?: Web3Helper.FungibleTokenAll | null
@@ -154,7 +155,6 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
         ...props
     }) => {
         const { classes, cx } = useStyles()
-        const t = useSharedTrans()
         const { pluginID } = useNetworkContext()
         const networks = useNetworks(pluginID)
         const network = networks.find((x) => x.chainId === token?.chainId)
@@ -167,7 +167,10 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                         <Typography className={classes.label} display="flex" alignItems="center" component="div">
                             {!disableBalance ?
                                 <>
-                                    {isNative ? t.available_balance() : t.balance()}:
+                                    {isNative ?
+                                        <Trans>Available Balance</Trans>
+                                    :   <Trans>Balance</Trans>}
+                                    :
                                     <Typography className={classes.balance} component="span">
                                         {token && !loadingBalance ?
                                             <FormattedBalance
@@ -215,7 +218,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                         label={token.symbol}
                                     />
                                 :   <Box className={classes.selectToken} onClick={onSelectToken}>
-                                        {t.select_a_token()}
+                                        <Trans>Select a token</Trans>
                                         <Icons.ArrowDrop size={16} />
                                     </Box>
                                 }

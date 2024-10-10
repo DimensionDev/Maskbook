@@ -4,7 +4,7 @@ import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
-import { useSharedTrans } from '../../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()(() => ({}))
 
@@ -13,14 +13,13 @@ export interface EthereumERC712TokenApprovedBoundaryProps extends withClasses<'a
     owner: string | undefined
     chainId: ChainId
     collection: NonFungibleCollection<ChainId, SchemaType> | undefined
-    validationMessage?: string
+    validationMessage?: React.ReactNode
     operator: string | undefined
     ActionButtonProps?: ActionButtonProps
 }
 
 export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenApprovedBoundaryProps) {
     const { owner, collection, operator, children, validationMessage: _validationMessage, chainId } = props
-    const t = useSharedTrans()
     const Utils = useWeb3Utils()
     const { classes } = useStyles(undefined, { props })
     const {
@@ -41,14 +40,15 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
     }, [approveState.loading])
     const validationMessage = useMemo(() => {
         if (!collection?.address || !Utils.isValidAddress(collection.address))
-            return t.plugin_wallet_select_a_nft_contract()
-        if (!owner || !Utils.isValidAddress(owner)) return t.plugin_wallet_select_a_nft_owner()
-        if (!operator || !Utils.isValidAddress(operator)) return t.plugin_wallet_select_a_nft_operator()
+            return <Trans>Select an NFT Contract</Trans>
+        if (!owner || !Utils.isValidAddress(owner)) return <Trans>Select an NFT Contract Owner</Trans>
+        if (!operator || !Utils.isValidAddress(operator)) return <Trans>Select an NFT Contract Operator</Trans>
         if (_validationMessage) return _validationMessage
         return ''
     }, [collection, owner, operator, _validationMessage])
 
     if (approveState.loading) {
+        const hasSymbolName = collection?.symbol && collection.symbol.toLowerCase() !== 'unknown'
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -57,14 +57,12 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 loading
                 disabled
                 {...props.ActionButtonProps}>
-                {t.plugin_wallet_nft_approving_all({
-                    symbol:
-                        collection?.symbol ?
-                            collection.symbol.toLowerCase() === 'unknown' ?
-                                'All'
-                            :   collection.symbol
-                        :   'All',
-                })}
+                {hasSymbolName ?
+                    <Trans>
+                        Unlocking {hasSymbolName}
+                        ...
+                    </Trans>
+                :   <Trans>Unlocking ALL...</Trans>}
             </ActionButton>
         )
     } else if (validationMessage) {
@@ -90,6 +88,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
             />
         )
     } else if (isApproveForAll === false) {
+        const hasSymbolName = collection?.symbol && collection.symbol.toLowerCase() !== 'unknown'
         return (
             <ActionButton
                 className={classes.approveButton}
@@ -97,14 +96,12 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 fullWidth
                 onClick={approveCallback}
                 {...props.ActionButtonProps}>
-                {t.plugin_wallet_approve_all_nft({
-                    symbol:
-                        collection?.symbol ?
-                            collection.symbol.toLowerCase() === 'unknown' ?
-                                'All'
-                            :   collection.symbol
-                        :   'All',
-                })}
+                {hasSymbolName ?
+                    <Trans>
+                        Unlocking {hasSymbolName}
+                        ...
+                    </Trans>
+                :   <Trans>Unlocking ALL...</Trans>}
             </ActionButton>
         )
     } else if (isApproveForAll === undefined) {
@@ -115,7 +112,7 @@ export function EthereumERC721TokenApprovedBoundary(props: EthereumERC712TokenAp
                 fullWidth
                 onClick={retry}
                 {...props.ActionButtonProps}>
-                {t.plugin_wallet_fail_to_load_nft_contract()}
+                <Trans>Click to retry</Trans>
             </ActionButton>
         )
     }

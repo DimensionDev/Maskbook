@@ -1,4 +1,4 @@
-import { useRef, useContext, type JSX } from 'react'
+import { useRef, useContext, type JSX, type ReactNode } from 'react'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import {
     Table,
@@ -23,7 +23,7 @@ import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { TrendingViewContext } from './context.js'
-import { useTraderTrans } from '../../locales/index.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ isPopper: boolean; themeMode?: 'dim' | 'dark' | 'light' }>()(
     (theme, { isPopper, themeMode }) => ({
@@ -121,7 +121,6 @@ interface NonFungibleTickersTableProps {
 type Cells = 'nft' | 'method' | 'value' | 'from' | 'to' | 'time'
 
 export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTickersTableProps) {
-    const t = useTraderTrans()
     const theme = useTheme()
     const containerRef = useRef(null)
     const themeMode = useSiteThemeMode(theme)
@@ -133,13 +132,13 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
         id,
         chainId,
     )
-    const headCellMap: Record<Cells, string> = {
-        nft: t.plugin_trader_table_nft(),
-        method: t.plugin_trader_table_method(),
-        value: t.plugin_trader_table_value(),
-        from: t.plugin_trader_table_from(),
-        to: t.plugin_trader_table_to(),
-        time: t.plugin_trader_table_time(),
+    const headCellMap: Record<Cells, ReactNode> = {
+        nft: <Trans>NFT</Trans>,
+        method: <Trans>Method</Trans>,
+        value: <Trans>Value</Trans>,
+        from: <Trans>From</Trans>,
+        to: <Trans>To</Trans>,
+        time: <Trans>Time</Trans>,
     }
 
     const tickerRows: JSX.Element[] =
@@ -224,15 +223,15 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                 <Stack height={298} width={566} alignItems="center" justifyContent="center">
                     <LoadingBase />
                     <Typography fontSize="14px" mt={1.5}>
-                        {t.loading()}
+                        <Trans>Loading</Trans>
                     </Typography>
                 </Stack>
             :   <>
                     <Table size="small" stickyHeader>
                         <TableHead>
                             <TableRow>
-                                {headCells.map((x) => (
-                                    <TableCell className={classes.cell} key={x}>
+                                {headCells.map((x, i) => (
+                                    <TableCell className={classes.cell} key={i}>
                                         {x}
                                     </TableCell>
                                 ))}
@@ -250,7 +249,7 @@ export function NonFungibleTickersTable({ id, chainId, result }: NonFungibleTick
                                             className={classes.placeholder}
                                             align="center"
                                             color="textSecondary">
-                                            {t.plugin_trader_no_data()}
+                                            <Trans>No Data</Trans>
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

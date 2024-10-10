@@ -26,8 +26,9 @@ import {
     NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
-import { DialogDismissIconUI, ImageIcon, useSharedTrans } from '@masknet/shared'
+import { DialogDismissIconUI, ImageIcon } from '@masknet/shared'
 import { ProviderItem } from './ProviderItem.js'
+import { Trans } from '@lingui/macro'
 
 const descriptors: Record<
     NetworkPluginID,
@@ -149,7 +150,6 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     requiredSupportPluginID,
 }: PluginProviderRenderProps) {
     const { classes, theme, cx } = useStyles()
-    const t = useSharedTrans()
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
     const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
@@ -186,14 +186,14 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
         if (provider === SolProviderType.Phantom) {
-            return t.plugin_wallet_solana_tips()
+            return <Trans>Phantom only supports the Solana chain.</Trans>
         } else if (provider === FlowProviderType.Blocto) {
-            return t.plugin_wallet_blocto_tips()
+            return <Trans>Blocto only supports the Flow chain.</Trans>
         } else if (provider === ProviderType.Fortmatic) {
-            return t.plugin_wallet_fortmatic_tips()
+            return <Trans>Fortmatic only supports the ETH and BNB chain.</Trans>
         }
 
-        return t.plugin_wallet_support_chains_tips()
+        return <Trans>Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc.</Trans>
     }, [])
 
     const getDisabled = useCallback(
@@ -273,7 +273,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                 {unavailableProviders.length ?
                     <>
                         <Typography mt={2} color={theme.palette.maskColor.second} fontSize={14}>
-                            {t.not_installed_or_conflict()}
+                            <Trans>The following wallets are not installed or in conflict with others</Trans>
                         </Typography>
                         <section className={classes.section}>
                             <List className={classes.wallets}>
@@ -329,7 +329,9 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                             onClick={() => setSelectChainDialogOpen(false)}>
                             <DialogDismissIconUI />
                         </IconButton>
-                        <Typography className={classes.dialogTitle}>{t.plugin_wallet_choose_network()}</Typography>
+                        <Typography className={classes.dialogTitle}>
+                            <Trans>Choose Network</Trans>
+                        </Typography>
                     </DialogTitle>
                     <DialogContent sx={{ minWidth: 352 }}>
                         <List className={classes.list}>

@@ -14,6 +14,8 @@ import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -61,6 +63,7 @@ interface AddContactModalProps extends BottomDrawerProps {
 }
 
 function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
     const theme = useTheme()
@@ -81,14 +84,14 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
 
     const [{ loading }, addContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.addContact({ name, address })
-        showSnackbar(t.wallet_add_contact_successfully())
+        showSnackbar(<Trans>Contact added.</Trans>)
         onConfirm?.()
     }, [name, address, onConfirm, t])
 
     const validationMessage = useMemo(() => {
-        if (addressError) return t.wallets_transfer_error_invalid_address()
-        if (nameExistError) return t.wallets_transfer_contact_wallet_name_already_exist()
-        if (addressExistError) return t.popups_wallet_settings_address_exists()
+        if (addressError) return <Trans>Incorrect wallet address.</Trans>
+        if (nameExistError) return <Trans>The wallet name already exists.</Trans>
+        if (addressExistError) return <Trans>The wallet address already exists.</Trans>
         return ''
     }, [t, addressError, nameExistError, addressExistError])
 
@@ -97,7 +100,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             <EmojiAvatar value={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
             <MaskTextField
                 spellCheck={false}
-                placeholder={t.name()}
+                placeholder={_(msg`Name`)}
                 className={classes.input}
                 value={name}
                 onChange={(ev) => {
@@ -109,7 +112,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             />
             <MaskTextField
                 spellCheck={false}
-                placeholder={t.address()}
+                placeholder={_(msg`Address`)}
                 wrapperProps={{ className: classes.input }}
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}
@@ -130,14 +133,14 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             :   null}
             <div className={classes.buttonGroup}>
                 <ActionButton className={cx(classes.button, classes.secondaryButton)} onClick={rest.onClose}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </ActionButton>
                 <ActionButton
                     loading={loading}
                     onClick={addContact}
                     className={classes.button}
                     disabled={addressError || nameExistError || addressExistError || !name.trim() || !address}>
-                    {t.confirm()}
+                    <Trans>Confirm</Trans>
                 </ActionButton>
             </div>
         </BottomDrawer>

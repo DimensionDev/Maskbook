@@ -2,8 +2,8 @@ import { makeStyles } from '@masknet/theme'
 import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
 import { Typography } from '@mui/material'
-import { Trans } from 'react-i18next'
 import { blue } from '@mui/material/colors'
+import { Trans } from '@lingui/macro'
 
 interface QRProps {
     text: string
@@ -42,19 +42,12 @@ export function QRCode({ text, options, canvasProps }: QRProps) {
     if (error)
         return (
             <Typography color="textPrimary" variant="body1" className={classes.text}>
-                <Trans
-                    i18nKey="backup_qrcode_error"
-                    components={{
-                        again: (
-                            <span
-                                onClick={() => {
-                                    setError(false)
-                                }}
-                                className={classes.info}
-                            />
-                        ),
-                    }}
-                />
+                <Trans>
+                    Backup failed,{' '}
+                    <span onClick={() => setError(false)} className={classes.info}>
+                        try again
+                    </span>
+                </Trans>
             </Typography>
         )
     return <canvas {...canvasProps} ref={ref} />

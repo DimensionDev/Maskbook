@@ -2,8 +2,8 @@ import { Icons } from '@masknet/icons'
 import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { IconButton } from '@mui/material'
 import { memo, type JSX } from 'react'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import GuideStep from '../GuideStep/index.js'
+import { Trans } from '@lingui/macro'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'
@@ -38,13 +38,12 @@ const ICON_MAP: Record<string, JSX.Element> = {
 }
 
 const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIProps) {
-    const t = useMaskSharedTrans()
     const { tooltip, disableGuideTip } = props
     const { classes, cx } = useStyles(undefined, { props })
 
     const Entry = (
         <ShadowRootTooltip
-            title={t.mask_network()}
+            title={<Trans>Mask Network</Trans>}
             placement={tooltip?.placement}
             disableHoverListener={tooltip?.disabled}
             PopperProps={{
@@ -61,7 +60,11 @@ const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIPro
     )
 
     return disableGuideTip ? Entry : (
-            <GuideStep step={4} total={4} tip={t.user_guide_tip_4()} onComplete={props.onHintButtonClicked}>
+            <GuideStep
+                step={4}
+                total={4}
+                tip={<Trans>Click here to have a quick start.</Trans>}
+                onComplete={props.onHintButtonClicked}>
                 {Entry}
             </GuideStep>
         )
@@ -70,7 +73,6 @@ const EntryIconButton = memo(function EntryIconButton(props: PostDialogHintUIPro
 export const PostDialogHint = memo(function PostDialogHintUI(props: PostDialogHintUIProps) {
     const { onHintButtonClicked, size, ...others } = props
     const { classes } = useStyles(undefined, { props })
-    const t = useMaskSharedTrans()
     return (
         <div className={classes.buttonTransform}>
             <EntryIconButton size={size} onHintButtonClicked={onHintButtonClicked} {...others} />

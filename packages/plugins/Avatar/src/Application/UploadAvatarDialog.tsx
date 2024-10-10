@@ -11,10 +11,10 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentVisitingProfile } from '@masknet/plugin-infra/content-script/context'
-import { useAvatarTrans } from '../locales/i18n_generated.js'
 import { type AvatarInfo, useSave } from '../hooks/useSave.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
 import { RoutePaths } from './Routes.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -54,7 +54,6 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 }
 
 export function UploadAvatarDialog() {
-    const t = useAvatarTrans()
     const { classes } = useStyles()
     const { proof, proofs, selectedTokenInfo } = useAvatarManagement()
     const { image, account, token, pluginID } = selectedTokenInfo ?? {}
@@ -89,12 +88,12 @@ export function UploadAvatarDialog() {
                 proof,
             )
             if (!response) {
-                showSnackbar(t.upload_avatar_failed_message(), { variant: 'error' })
+                showSnackbar(<Trans>Sorry, failed to save NFT Avatar. Please set again.</Trans>, { variant: 'error' })
                 setDisabled(false)
                 return
             }
 
-            showSnackbar(t.upload_avatar_success_message(), { variant: 'success' })
+            showSnackbar(<Trans>Update NFT Avatar Success!</Trans>, { variant: 'success' })
 
             navigate(RoutePaths.Exit)
             setDisabled(false)
@@ -146,10 +145,10 @@ export function UploadAvatarDialog() {
                     fullWidth
                     variant="outlined"
                     onClick={() => navigate(-1)}>
-                    {t.cancel()}
+                    <Trans>Cancel</Trans>
                 </Button>
                 <Button fullWidth onClick={onSave} disabled={disabled}>
-                    {t.save()}
+                    <Trans>Save</Trans>
                 </Button>
             </DialogActions>
         </>

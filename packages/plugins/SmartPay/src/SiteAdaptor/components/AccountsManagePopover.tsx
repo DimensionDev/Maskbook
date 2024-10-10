@@ -6,8 +6,8 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatPersonaFingerprint, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import { useManagers } from '../../hooks/useManagers.js'
-import { useSmartPayTrans } from '../../locales/i18n_generated.js'
 import { useAccount, useChainContext, useNetwork, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -60,7 +60,6 @@ interface AccountsManagePopoverProps {
 
 export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
     ({ open, anchorEl, onClose, address, owner, name }) => {
-        const t = useSmartPayTrans()
         const { classes } = useStyles()
         const { personaManagers, walletManagers } = useManagers()
 
@@ -118,13 +117,15 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                     vertical: 'top',
                     horizontal: 'right',
                 }}>
-                <Typography className={classes.title}>{t.managed_accounts()}</Typography>
+                <Typography className={classes.title}>
+                    <Trans>Manage Account</Trans>
+                </Typography>
                 <Box mt={1.5}>
                     <Typography className={classes.name}>{name}</Typography>
                     <Typography className={classes.second}>{formatEthereumAddress(address ?? '', 4)}</Typography>
                 </Box>
                 <Typography className={classes.second} my={1.5}>
-                    {t.current_manage_account()}
+                    <Trans>Current Management account</Trans>
                 </Typography>
                 <Box component="div" display="flex" justifyContent="space-between" alignItems="center">
                     <Box>
@@ -132,7 +133,7 @@ export const AccountsManagerPopover = memo<AccountsManagePopoverProps>(
                         <Typography className={classes.second}>{ownerInfo?.publicKey}</Typography>
                     </Box>
                     <Button className={classes.changeOwner} variant="roundedContained" onClick={handleChangeOwner}>
-                        {t.change_owner()}
+                        <Trans>Change Owner</Trans>
                     </Button>
                 </Box>
             </Popover>

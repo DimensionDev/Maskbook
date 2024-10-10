@@ -9,8 +9,9 @@ import { CrossIsolationMessages, SwitchLogoType, switchLogoSettings } from '@mas
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { useSwitchLogoTrans } from '../locales/i18n_generated.js'
 import { delay } from '@masknet/kit'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -57,7 +58,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SwitchLogoDialog = memo(() => {
-    const t = useSwitchLogoTrans()
+    const { _ } = useLingui()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
@@ -80,9 +81,11 @@ export const SwitchLogoDialog = memo(() => {
         setOpen(false)
         if (needShare && logoType === SwitchLogoType.Classics) {
             share?.(
-                [t.switch_logo_share_text(), '#TwitterLogo #TwitterX #SaveTheBird\n', t.switch_logo_share_mask()].join(
-                    '\n',
-                ),
+                [
+                    _(msg`I just replaced Twitter X logo with the original blue bird one with Mask Network extension.`),
+                    '#TwitterLogo #TwitterX #SaveTheBird\n',
+                    _(msg`Download https://mask.io to try more powerful tools on Twitter.`),
+                ].join('\n'),
             )
         }
     }, [logoType, identity?.identifier?.userId, defaultLogoType, needShare])
@@ -104,7 +107,7 @@ export const SwitchLogoDialog = memo(() => {
         <InjectedDialog
             open={open}
             onClose={() => setOpen(false)}
-            title={t.switch_logo_title()}
+            title={<Trans>Switch Twitter Logo</Trans>}
             classes={{ paper: classes.dialog }}>
             <DialogContent className={classes.content}>
                 <Stack className={classes.icons}>
@@ -116,7 +119,7 @@ export const SwitchLogoDialog = memo(() => {
                         onClick={() => onChange(SwitchLogoType.Classics)}>
                         <Icons.TwitterColored />
                         <Typography fontSize={14} fontWeight={700}>
-                            {t.switch_logo_classics_logo()}
+                            <Trans>Classics Logo</Trans>
                         </Typography>
                     </Stack>
                     <Stack
@@ -127,7 +130,7 @@ export const SwitchLogoDialog = memo(() => {
                         onClick={() => onChange(SwitchLogoType.New)}>
                         <Icons.TwitterX />
                         <Typography fontSize={14} fontWeight={700}>
-                            {t.switch_logo_new_logo()}
+                            <Trans>New Logo</Trans>
                         </Typography>
                     </Stack>
                 </Stack>
@@ -147,7 +150,7 @@ export const SwitchLogoDialog = memo(() => {
                                     fontWeight={400}
                                     lineHeight="18px"
                                     color={(theme) => theme.palette.maskColor.secondaryDark}>
-                                    {t.switch_logo_save_tip()}
+                                    <Trans>Share and recommend this feature after saving.</Trans>
                                 </Typography>
                             }
                         />
@@ -155,20 +158,22 @@ export const SwitchLogoDialog = memo(() => {
                 </Stack>
                 <Stack className={classes.buttons}>
                     <Button variant="roundedContained" fullWidth onClick={onSave} disabled={disabled}>
-                        {t.save()}
+                        <Trans>Save</Trans>
                     </Button>
                 </Stack>
                 <Stack className={classes.powered_by}>
-                    <Typography
-                        fontSize="14px"
-                        fontWeight={700}
-                        marginRight="5px"
-                        color={(theme) => theme.palette.maskColor.secondaryDark}>
-                        {t.powered_by()}
-                    </Typography>
-                    <Typography fontSize="14px" fontWeight={700} marginRight="4px">
-                        {t.mask_network()}
-                    </Typography>
+                    <Trans>
+                        <Typography
+                            fontSize="14px"
+                            fontWeight={700}
+                            marginRight="5px"
+                            color={(theme) => theme.palette.maskColor.secondaryDark}>
+                            Powered by{' '}
+                        </Typography>
+                        <Typography fontSize="14px" fontWeight={700} marginRight="4px">
+                            Mask Network
+                        </Typography>
+                    </Trans>
                     <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => openApplicationBoardDialog()}>
                         <Icons.Gear size={24} />
                     </IconButton>

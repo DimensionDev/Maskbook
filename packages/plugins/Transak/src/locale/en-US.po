@@ -12,3 +12,15 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/index.tsx:16
+msgid "Fiat On-Ramp"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:42
+#~ msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:42
+msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
+msgstr ""

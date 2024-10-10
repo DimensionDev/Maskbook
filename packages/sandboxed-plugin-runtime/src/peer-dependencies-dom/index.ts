@@ -1,7 +1,7 @@
 import * as react from 'react'
 import * as react_jsx_runtime from 'react/jsx-runtime'
 import * as react_dom from 'react-dom'
-import { Trans, useTranslation } from 'react-i18next'
+import { Trans as Trans2, useTranslation } from 'react-i18next'
 import * as mui_material from '@mui/material'
 import { makeStyles, MaskDialog } from '@masknet/theme'
 import * as masknet_icons from '@masknet/icons/jsx'
@@ -54,7 +54,7 @@ export function createI18nHooksAndTranslate(id: string) {
             return react.useMemo(() => createProxy((key) => t.bind(null, key)), [t])
         },
         Translate: createProxy(
-            (key: string) => (props: any) => react.createElement(Trans, { i18nKey: key, ns: id, ...props }),
+            (key: string) => (props: any) => react.createElement(Trans2, { i18nKey: key, ns: id, ...props }),
         ),
     }
 }

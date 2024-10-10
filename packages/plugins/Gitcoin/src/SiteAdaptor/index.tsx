@@ -8,7 +8,7 @@ import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { PreviewCard } from './PreviewCard.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
-import { useGitcoinTrans } from '../locales/i18n_generated.js'
+import { Trans } from '@lingui/macro'
 
 const isGitcoin = (x: string): boolean => {
     return /^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/.test(x)
@@ -51,8 +51,12 @@ const site: Plugin.SiteAdaptor.Definition = {
             hiddenInList: false,
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: <Desc />,
-            name: <Name />,
+            description: (
+                <Trans>
+                    Display specific information of Gitcoin projects, donate to a project directly on social media.
+                </Trans>
+            ),
+            name: <Trans>Gitcoin</Trans>,
             icon: <Icons.Gitcoin size={36} />,
             marketListSortingPriority: 9,
         },
@@ -68,14 +72,6 @@ const site: Plugin.SiteAdaptor.Definition = {
         backgroundGradient:
             'linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.8) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.2) 0%, rgba(41, 228, 253, 0.2) 100%), #FFFFFF',
     },
-}
-function Name() {
-    const t = useGitcoinTrans()
-    return t.name()
-}
-function Desc() {
-    const t = useGitcoinTrans()
-    return t.description()
 }
 
 export default site

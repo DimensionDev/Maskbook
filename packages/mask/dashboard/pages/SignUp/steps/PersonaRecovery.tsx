@@ -2,7 +2,6 @@ import { useCallback, useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
-import { useDashboardTrans } from '../../../locales/index.js'
 import Services from '#services'
 import { PersonaNameUI } from './PersonaNameUI.js'
 import { useCreatePersonaByPrivateKey, useCreatePersonaV2 } from '../../../hooks/useCreatePersonaV2.js'
@@ -10,9 +9,9 @@ import { delay } from '@masknet/kit'
 import { useAsync, useAsyncFn } from 'react-use'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
+import { Trans } from '@lingui/macro'
 
 export function Component() {
-    const t = useDashboardTrans()
     const navigate = useNavigate()
 
     const createPersona = useCreatePersonaV2()
@@ -71,7 +70,7 @@ export function Component() {
                 }
 
                 await changeCurrentPersona(identifier)
-                showSnackbar(t.create_account_persona_successfully(), { variant: 'success' })
+                showSnackbar(<Trans>Persona created.</Trans>, { variant: 'success' })
 
                 await delay(300)
                 navigate(

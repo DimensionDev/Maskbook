@@ -7,10 +7,10 @@ import { first, uniqBy } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CollectionList } from './CollectionList.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes, type BindingProof } from '@masknet/shared-base'
 import { useModalNavigate } from '../index.js'
 import { Flags } from '@masknet/flags'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     picker: {
@@ -47,7 +47,6 @@ interface NFTAvatarPickerProps {
 }
 
 export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPicker({ onChange, bindingWallets }) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const { pluginID } = useNetworkContext()
     const modalNavigate = useModalNavigate()
@@ -121,7 +120,9 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                             if (!selected?.metadata?.imageURL) return
                             onChange(selected.metadata.imageURL)
                         }}>
-                        {wallet?.owner ? t.coming_soon() : t.confirm()}
+                        {wallet?.owner ?
+                            <Trans>Coming soon</Trans>
+                        :   <Trans>Confirm</Trans>}
                     </Button>
                 </PluginVerifiedWalletStatusBar>
             </Box>

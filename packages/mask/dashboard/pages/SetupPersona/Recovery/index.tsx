@@ -4,7 +4,7 @@ import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Button, Tab, Typography } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo, use, useCallback, useMemo, useState } from 'react'
+import { memo, use, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useDashboardTrans } from '../../../locales/i18n_generated.js'
@@ -19,6 +19,8 @@ import { delay } from '@masknet/kit'
 import urlcat from 'urlcat'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
 import { PersonaContext } from '@masknet/shared'
+import { Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -76,12 +78,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Recovery() {
+    const { _ } = useLingui()
     const t = useDashboardTrans()
     const { classes } = useStyles()
     const { currentPersona } = PersonaContext.useContainer()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
     const navigate = useNavigate()
-    const [error, setError] = useState('')
+    const [error, setError] = useState<ReactNode>()
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
 
@@ -103,7 +106,7 @@ export const Component = memo(function Recovery() {
                     })
                 }
             } catch {
-                setError(t.incorrect_identity_mnemonic())
+                setError(<Trans>Incorrect recovery phrase.</Trans>)
             }
         },
         [t, navigate, changeCurrentPersona],
@@ -125,7 +128,7 @@ export const Component = memo(function Recovery() {
                     })
                 }
             } catch {
-                onError('privateKey', { type: 'value', message: t.sign_in_account_private_key_error() })
+                onError('privateKey', { type: 'value', message: _(msg`Incorrect Private Key`) })
             }
         },
         [t, navigate],
@@ -149,7 +152,7 @@ export const Component = memo(function Recovery() {
         <>
             <Box className={classes.header}>
                 <Typography variant="h1" className={classes.title}>
-                    {t.data_recovery_title()}
+                    <Trans>Recover your data</Trans>
                 </Typography>
                 <Button
                     variant="text"
@@ -157,22 +160,30 @@ export const Component = memo(function Recovery() {
                     onClick={() => {
                         navigate(DashboardRoutes.SignUpPersona)
                     }}>
-                    {t.sign_up()}
+                    <Trans>Sign Up</Trans>
                 </Button>
             </Box>
 
             <Typography className={classes.second} mt={2}>
-                {t.data_recovery_description()}
+                <Trans>Please select the appropriate method to restore your personal data.</Trans>
             </Typography>
             <RecoveryProvider>
                 <div className={classes.tabContainer}>
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
                             <MaskTabList variant="base" onChange={onChange} aria-label="Recovery Methods">
-                                <Tab className={classes.tab} label={t.identity_words()} value={tabs.mnemonic} />
-                                <Tab className={classes.tab} label={t.private_key()} value={tabs.privateKey} />
-                                <Tab className={classes.tab} label={t.local_backup()} value={tabs.local} />
-                                <Tab className={classes.tab} label={t.cloud_backup()} value={tabs.cloud} />
+                                <Tab
+                                    className={classes.tab}
+                                    label={<Trans>Recovery Phrase</Trans>}
+                                    value={tabs.mnemonic}
+                                />
+                                <Tab
+                                    className={classes.tab}
+                                    label={<Trans>Private Key</Trans>}
+                                    value={tabs.privateKey}
+                                />
+                                <Tab className={classes.tab} label={<Trans>Local Backup</Trans>} value={tabs.local} />
+                                <Tab className={classes.tab} label={<Trans>Cloud Backup</Trans>} value={tabs.cloud} />
                             </MaskTabList>
                         </div>
                         <div className={classes.panelContainer}>
