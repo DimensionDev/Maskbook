@@ -3,10 +3,11 @@ import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { OKX } from '@masknet/web3-providers'
 import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
-import { addGasMargin, type ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { addGasMargin, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTrade } from '../contexts/TradeProvider.js'
 import { useSpender } from './useSpender.js'
+import { useWaitForTransaction } from './useWaitForTransaction.js'
 
 export function useApprove() {
     const { fromToken, amount } = useTrade()
@@ -33,17 +34,33 @@ export function useApprove() {
         chainId,
     })
 
+    const waitForTransaction = useWaitForTransaction()
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId })
     const mutation = useMutation({
-        mutationKey: ['okx', 'approve-transaction', account, chainId, tokenAddress, amount, allowance],
+        mutationKey: [
+            'okx',
+            'approve-transaction',
+            account,
+            chainId,
+            tokenAddress,
+            amount,
+            allowance,
+            approveInfo?.data,
+            approveInfo?.gasLimit,
+            approveInfo?.gasPrice,
+        ],
         mutationFn: async () => {
             if (!approveInfo?.data || !tokenAddress || isGreaterThan(allowance, amount)) return
-            return Web3.sendTransaction({
+            const hash = await Web3.sendTransaction({
                 to: tokenAddress,
-                gas: addGasMargin(approveInfo.gasLimit).toFixed(0),
+                // gas provided by API for Arbitrum is too low, let wallet estimate itself
+                gas: chainId === ChainId.Arbitrum ? undefined : addGasMargin(approveInfo.gasLimit).toFixed(0),
                 gasPrice: approveInfo.gasPrice,
                 data: approveInfo.data,
             })
+            const receipt = await waitForTransaction({ chainId, hash, confirmationCount: 1 })
+            if (!receipt?.status) throw new Error('Failed to approve')
+            return hash
         },
     })
     return [

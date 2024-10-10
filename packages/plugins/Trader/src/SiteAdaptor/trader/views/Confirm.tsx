@@ -260,7 +260,6 @@ export const Confirm = memo(function Confirm() {
 
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
-    const loading = isSending || isCheckingApprove || isApproving
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const { showSnackbar } = useCustomSnackbar()
@@ -272,8 +271,8 @@ export const Confirm = memo(function Confirm() {
     const [{ loading: submitting }, submit] = useAsyncFn(async () => {
         if (!fromToken || !toToken || !transaction?.to || !spender) return
 
+        await approveMutation.mutateAsync()
         try {
-            await approveMutation.mutateAsync()
             const hash = await sendSwap().catch((err) => {
                 const message = (err as Error).message
                 if (message.includes('Transaction was rejected!')) return null
@@ -375,7 +374,8 @@ export const Confirm = memo(function Confirm() {
         waitForTransaction,
         gasOptions,
     ])
-    const disabled = !isSwappable || loading || dexIdsCount === 0 || submitting
+    const loading = isSending || isCheckingApprove || isApproving || submitting
+    const disabled = !isSwappable || loading || dexIdsCount === 0
 
     return (
         <div className={classes.container}>

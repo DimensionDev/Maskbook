@@ -100,7 +100,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
     const bestRouter = isSwap ? undefined : bridgeQuote?.routerList[0]
     const totalNetworkFee = useMemo(() => {
         if (!bestRouter || !nativeTokenPrice) return gasCost
-        return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed()
+        return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed(2)
     }, [gasCost, bestRouter, nativeTokenPrice])
 
     return (
