@@ -1780,12 +1780,16 @@ msgid "Name"
 msgstr "名前"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx:212
-msgid "Netword added"
-msgstr ""
+#~ msgid "Netword added"
+#~ msgstr ""
 
 #: popups/modals/ChooseNetworkModal/index.tsx:148
 msgid "Network"
 msgstr "ネットワーク"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx:212
+msgid "Network added"
+msgstr ""
 
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx:131
 msgid "Network error or execute smart contract failed."

@@ -209,7 +209,7 @@ export const Component = memo(function EditNetwork() {
                     showSnackbar(<Trans>Network saved</Trans>)
                 } else {
                     await Network.addNetwork(network)
-                    showSnackbar(<Trans>Netword added</Trans>)
+                    showSnackbar(<Trans>Network added</Trans>)
                 }
                 navigate(-1)
                 queryClient.invalidateQueries({ queryKey: QUERY_KEY })

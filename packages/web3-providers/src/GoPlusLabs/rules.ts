@@ -165,7 +165,7 @@ export const SecurityMessages: SecurityMessage[] = [
         level: SecurityMessageLevel.High,
         condition: (info: SecurityAPI.TokenSecurityType) => info.is_honeypot === '1',
         title: msg`May be a honeypot.`,
-        message: msg`This token contract has code that pervents selling. This might is a honeypot.`,
+        message: msg`This token contract has code that prevent selling. This might is a honeypot.`,
         shouldHide: isUnset('is_honeypot'),
     },
     // transfer_pausable
