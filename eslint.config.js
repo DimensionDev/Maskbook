@@ -211,6 +211,7 @@ const avoidMistakeRules = {
     'react/dom/no-children-in-void-dom-elements': 'warn', // <img>children</img>
     'react/web-api/no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
     'react/web-api/no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
+    'react/web-api/no-leaked-resize-observer': 'warn', // new ResizeObserver in hooks without disconnect
     'react/web-api/no-leaked-timeout': 'warn', // setTimeout in hooks without clearTimeout
     'react/no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     // 'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} /> this rule has bug?
@@ -226,9 +227,9 @@ const avoidMistakeRules = {
     'react/no-missing-key': 'warn',
     'react/no-unstable-context-value': 'warn',
     'react/no-unstable-default-props': 'warn',
-    // 'react/hooks-extra/ensure-use-callback-has-non-empty-deps': 'warn',
-    // 'react/hooks-extra/ensure-use-memo-has-non-empty-deps': 'warn',
     'react/hooks-extra/no-direct-set-state-in-use-effect': 'error',
+    // 'react/hooks-extra/no-unnecessary-use-callback': 'warn',
+    // 'react/hooks-extra/no-unnecessary-use-memo': 'warn',
     'react/hooks-extra/prefer-use-state-lazy-initialization': 'warn',
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
 }
@@ -312,6 +313,7 @@ const codeStyleRules = {
     // 'unicorn/prefer-dom-node-remove': 'warn',
     // 'unicorn/prefer-dom-node-text-content': 'warn',
     'unicorn/prefer-event-target': 'warn', // prevent use of Node's EventEmitter
+    'unicorn/prefer-math-min-max': 'warn', // Math.min/max than x < y ? x : y
     'unicorn/prefer-math-trunc': 'warn',
     'unicorn/prefer-modern-dom-apis': 'warn',
     'unicorn/prefer-modern-math-apis': 'warn',
@@ -383,6 +385,7 @@ const codeStyleRules = {
     'no-irregular-whitespace': 'warn', // unusual but safe
     yoda: 'warn',
     'unicorn/better-regex': 'error', // RegEx
+    'unicorn/consistent-existence-index-check': 'warn', // index === -1
     'unicorn/escape-case': 'warn', // correct casing of escape '\xA9'
     'unicorn/no-hex-escape': 'warn', // correct casing of escape '\u001B'
     // 'unicorn/numeric-separators-style': 'warn', // correct using of 1_234_567

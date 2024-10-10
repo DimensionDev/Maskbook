@@ -50,6 +50,7 @@ export function Slider({ children, className, onUpdate, count, ...rest }: Props)
     useLayoutEffect(() => {
         if (!containerRef.current) return
         const offsetWidth = containerRef.current.offsetWidth
+        // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
         setStyle({
             width: offsetWidth * count,
             transform: `translate(${-offsetWidth * index}px, 0)`,

@@ -383,26 +383,25 @@ function InjectProfileTab() {
     const tabList = searchProfileTabListSelector().evaluate()
     const nextArrow = nextTabListSelector().evaluate()
     useEffect(() => {
-        web3TabRef.current?.addEventListener('mouseenter', onMouseEnter)
-        web3TabRef.current?.addEventListener('mouseleave', onMouseLeave)
-        nextArrow?.addEventListener('click', onNextClick)
-        nextArrow?.addEventListener('mouseenter', onEnterNextArrow)
-        nextArrow?.addEventListener('mouseleave', onLeaveNextArrow)
+        const ac = new AbortController()
+        const signal = ac.signal
+        // eslint-disable-next-line react/web-api/no-leaked-event-listener
+        web3TabRef.current?.addEventListener('mouseenter', onMouseEnter, { signal })
+        // eslint-disable-next-line react/web-api/no-leaked-event-listener
+        web3TabRef.current?.addEventListener('mouseleave', onMouseLeave, { signal })
+        // eslint-disable-next-line react/web-api/no-leaked-event-listener
+        nextArrow?.addEventListener('click', onNextClick, { signal })
+        // eslint-disable-next-line react/web-api/no-leaked-event-listener
+        nextArrow?.addEventListener('mouseenter', onEnterNextArrow, { signal })
+        // eslint-disable-next-line react/web-api/no-leaked-event-listener
+        nextArrow?.addEventListener('mouseleave', onLeaveNextArrow, { signal })
         tabList.map((v) => {
-            v.closest('div')?.addEventListener('mouseenter', onMouseEnter)
-            v.closest('div')?.addEventListener('mouseleave', onMouseLeave)
+            // eslint-disable-next-line react/web-api/no-leaked-event-listener
+            v.closest('div')?.addEventListener('mouseenter', onMouseEnter, { signal })
+            // eslint-disable-next-line react/web-api/no-leaked-event-listener
+            v.closest('div')?.addEventListener('mouseleave', onMouseLeave, { signal })
         })
-        return () => {
-            web3TabRef.current?.removeEventListener('mouseenter', onMouseEnter)
-            web3TabRef.current?.removeEventListener('mouseleave', onMouseLeave)
-            nextArrow?.removeEventListener('click', onNextClick)
-            nextArrow?.removeEventListener('mouseenter', onEnterNextArrow)
-            nextArrow?.removeEventListener('mouseleave', onLeaveNextArrow)
-            tabList.map((v) => {
-                v.closest('div')?.removeEventListener('mouseenter', onMouseEnter)
-                v.closest('div')?.removeEventListener('mouseleave', onMouseLeave)
-            })
-        }
+        return () => ac.abort()
     }, [windowSize, tabList, web3TabRef.current, nextArrow])
 
     return (

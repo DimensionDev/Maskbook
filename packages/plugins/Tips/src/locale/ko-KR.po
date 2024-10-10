@@ -139,6 +139,6 @@ msgstr "받는 사람"
 msgid "Tokens"
 msgstr "토큰"
 
-#: src/components/RecipientSection/RecipientSelect.tsx:130
+#: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr "Explorer에서 보기"

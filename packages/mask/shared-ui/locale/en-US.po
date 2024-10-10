@@ -274,7 +274,7 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:136
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:88
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:248
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:245
 msgid "At least 6 characters"
 msgstr ""
 
@@ -421,7 +421,7 @@ msgstr ""
 #~ msgid "button."
 #~ msgstr ""
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:297
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:294
 msgid "By proceeding you agree to the"
 msgstr ""
 
@@ -448,7 +448,7 @@ msgstr ""
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:217
 #: popups/pages/Personas/PersonaSignRequest/index.tsx:117
 #: popups/pages/RequestPermission/RequestPermission.tsx:59
-#: popups/pages/Wallet/ChangeOwner/index.tsx:460
+#: popups/pages/Wallet/ChangeOwner/index.tsx:459
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:390
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx:150
 #: popups/pages/Wallet/EditNetwork/index.tsx:327
@@ -475,7 +475,7 @@ msgid "Chain ID: {0}"
 msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:263
-#: popups/pages/Wallet/ChangeOwner/index.tsx:469
+#: popups/pages/Wallet/ChangeOwner/index.tsx:468
 msgid "Change"
 msgstr ""
 
@@ -579,13 +579,13 @@ msgstr ""
 #: popups/pages/Wallet/Interaction/interaction.tsx:60
 #: popups/pages/Wallet/ResetWallet/index.tsx:138
 #: popups/pages/Wallet/SelectWallet/index.tsx:190
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:351
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:348
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx:165
 msgid "Confirm"
 msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:121
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:279
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:276
 msgid "Confirm Password"
 msgstr ""
 
@@ -779,7 +779,7 @@ msgstr ""
 msgid "Create New Mask Identity"
 msgstr ""
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:243
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:240
 msgid "Create Password"
 msgstr ""
 
@@ -1204,7 +1204,7 @@ msgstr ""
 #: popups/components/UnlockERC20Token/index.tsx:283
 #: popups/components/UnlockERC721Token/index.tsx:228
 #: popups/modals/GasSettingModal/index.tsx:41
-#: popups/pages/Wallet/ChangeOwner/index.tsx:353
+#: popups/pages/Wallet/ChangeOwner/index.tsx:352
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:308
 msgid "Gas Fee"
 msgstr ""
@@ -1578,7 +1578,7 @@ msgstr ""
 msgid "Local Backup"
 msgstr ""
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx:339
+#: popups/pages/Wallet/ChangeOwner/index.tsx:338
 msgid "Local persona or wallet only"
 msgstr ""
 
@@ -1992,7 +1992,7 @@ msgstr ""
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx:130
 #: popups/modals/ShowPrivateKeyModal/index.tsx:55
 #: popups/modals/WalletRemoveModal/index.tsx:85
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:264
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:261
 msgid "Payment Password"
 msgstr ""
 
@@ -2510,7 +2510,7 @@ msgstr ""
 msgid "Service Agreement"
 msgstr ""
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx:336
+#: popups/pages/Wallet/ChangeOwner/index.tsx:335
 msgid "Set a New Management Account"
 msgstr ""
 
@@ -2520,12 +2520,12 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx:114
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx:198
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:244
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:336
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:241
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:333
 msgid "Set Payment Password"
 msgstr ""
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:219
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:216
 msgid "Set payment password successfully."
 msgstr ""
 
@@ -3042,7 +3042,7 @@ msgstr ""
 msgid "URLs require the appropriate HTTPS prefix."
 msgstr ""
 
-#: content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx:76
+#: content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx:77
 msgid "Use NFT"
 msgstr ""
 
@@ -3103,7 +3103,7 @@ msgstr ""
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx:269
 #: popups/pages/Personas/ConnectWallet/index.tsx:255
 #: popups/pages/Wallet/ChangeOwner/index.tsx:272
-#: popups/pages/Wallet/ChangeOwner/index.tsx:321
+#: popups/pages/Wallet/ChangeOwner/index.tsx:320
 #: popups/pages/Wallet/TransactionDetail/index.tsx:265
 msgid "View on Explorer"
 msgstr ""

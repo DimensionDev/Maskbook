@@ -83,10 +83,8 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             type === SearchResultType.NonFungibleCollection ||
             type === SearchResultType.NonFungibleToken
         )
-            // eslint-disable-next-line react/web-api/no-leaked-timeout
             timer1 = setTimeout(() => Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchNft), 500)
         if (type === SearchResultType.FungibleToken)
-            // eslint-disable-next-line react/web-api/no-leaked-timeout
             timer2 = setTimeout(() => Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchToken), 500)
         return () => {
             timer1 && clearTimeout(timer1)
