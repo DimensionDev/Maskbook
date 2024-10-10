@@ -132,7 +132,7 @@ export const Component = memo(function AddToken() {
             const [contract, tokenIds] = result
             await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
 
-            for await (const tokenId of tokenIds) {
+            for (const tokenId of tokenIds) {
                 await Token?.addToken?.(account, {
                     id: `${contract.chainId}.${contract.address}.${tokenId}`,
                     chainId: contract.chainId,
