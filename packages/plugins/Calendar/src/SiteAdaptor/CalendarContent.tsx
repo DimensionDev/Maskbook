@@ -6,10 +6,9 @@ import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useMemo, useState } from 'react'
-import { useEventList, useNFTList, useNewsList } from '../hooks/useEventList.js'
+import { useNFTList, useNewsList } from '../hooks/useEventList.js'
 import { useCalendarTrans } from '../locales/i18n_generated.js'
 import { DatePickerTab } from './components/DatePickerTab.js'
-import { EventList } from './components/EventList.js'
 import { Footer } from './components/Footer.js'
 import { NFTList } from './components/NFTList.js'
 import { NewsList } from './components/NewsList.js'
@@ -48,28 +47,22 @@ export function CalendarContent({ target, disableSetting }: Props) {
     const { classes } = useStyles()
     const [pathname, setPathname] = useState(location.pathname)
     const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
-    const [currentTab, onChange, tabs] = useTabs('news', 'event', 'nfts')
+    const [currentTab, onChange, tabs] = useTabs('news', 'nfts')
     const [selectedDate, setSelectedDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const { data: eventList = EMPTY_OBJECT, isPending: eventLoading } = useEventList(
-        selectedDate,
-        currentTab === 'event',
-    )
     const { data: newsList = EMPTY_OBJECT, isPending: newsLoading } = useNewsList(selectedDate, currentTab === 'news')
     const { data: nftList = EMPTY_OBJECT, isPending: nftLoading } = useNFTList(selectedDate, currentTab === 'nfts')
     const list = useMemo(() => {
         switch (currentTab) {
             case 'news':
                 return newsList
-            case 'event':
-                return eventList
             case 'nfts':
                 return nftList
             default:
                 safeUnreachable(currentTab)
                 return null
         }
-    }, [currentTab, newsList, eventList, nftList])
+    }, [currentTab, newsList, nftList])
     const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
 
     useLocationChange(() => {
@@ -83,7 +76,6 @@ export function CalendarContent({ target, disableSetting }: Props) {
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
                         <Tab className={classes.tab} label={t.news()} value={tabs.news} />
-                        <Tab className={classes.tab} label={t.event()} value={tabs.event} />
                         <Tab className={classes.tab} label={t.nfts()} value={tabs.nfts} />
                     </MaskTabList>
                 </div>
@@ -100,14 +92,6 @@ export function CalendarContent({ target, disableSetting }: Props) {
                         list={newsList}
                         isLoading={newsLoading}
                         empty={!Object.keys(newsList).length}
-                        dateString={dateString}
-                    />
-                </TabPanel>
-                <TabPanel value={tabs.event} className={classes.tabPanel}>
-                    <EventList
-                        list={eventList}
-                        isLoading={eventLoading}
-                        empty={!Object.keys(eventList).length}
                         dateString={dateString}
                     />
                 </TabPanel>
