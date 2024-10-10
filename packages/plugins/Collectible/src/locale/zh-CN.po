@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -66,7 +66,7 @@ msgstr "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体
 
 #: src/SiteAdaptor/Shared/OfferCard.tsx:123
 #~ msgid "Expires in"
-#~ msgstr "失效于"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Shared/ActivityCard.tsx:137
 #: src/SiteAdaptor/Shared/OfferCard.tsx:105
@@ -128,8 +128,9 @@ msgstr ""
 
 #: src/SiteAdaptor/Shared/DetailsCard.tsx:87
 msgid "Token ID"
-msgstr "Token ID"
+msgstr ""
 
 #: src/SiteAdaptor/Shared/DetailsCard.tsx:92
 msgid "Token Standard"
 msgstr "代币标准"
+
