@@ -139,6 +139,6 @@ msgstr "发送至"
 msgid "Tokens"
 msgstr "Tokens"
 
-#: src/components/RecipientSection/RecipientSelect.tsx:130
+#: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr "在区块链浏览器查看"

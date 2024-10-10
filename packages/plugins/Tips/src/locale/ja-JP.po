@@ -139,6 +139,6 @@ msgstr "宛先"
 msgid "Tokens"
 msgstr "トークン"
 
-#: src/components/RecipientSection/RecipientSelect.tsx:130
+#: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
