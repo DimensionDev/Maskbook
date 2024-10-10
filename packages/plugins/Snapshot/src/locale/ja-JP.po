@@ -22,7 +22,7 @@ msgstr ""
 msgid "{0, plural, one {Strategy} other {Strategies}}"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileSpaceHeader.tsx:112
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:111
 msgid "{0} members"
 msgstr "{0} メンバー"
 
@@ -84,7 +84,7 @@ msgstr "情報"
 msgid "IPFS"
 msgstr "IPFS"
 
-#: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "Join"
 msgstr "参加"
 
@@ -141,7 +141,7 @@ msgstr "結果"
 msgid "Snapshot"
 msgstr "Snapshot"
 
-#: src/SiteAdaptor/SpaceMenu.tsx:108
+#: src/SiteAdaptor/SpaceMenu.tsx:91
 msgid "Space"
 msgstr "スペース"
 
@@ -161,7 +161,7 @@ msgstr ""
 #~ msgid "Strategie(s)"
 #~ msgstr "ストラテジー"
 
-#: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:123
 msgid "View"
 msgstr "表示"
 

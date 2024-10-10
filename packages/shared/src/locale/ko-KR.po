@@ -376,7 +376,7 @@ msgstr "확인"
 msgid "Confirm Risk Warning"
 msgstr "리스크 경고 확인"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
 msgid "Confirm this transaction in your wallet"
 msgstr "이 거래를 월렛에서 확인하세요"
 
@@ -1400,7 +1400,7 @@ msgstr "총 공급량"
 msgid "Transaction"
 msgstr "거래"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
 msgid "Transaction Confirmed"
 msgstr "거래 확인 완료"
 
@@ -1412,7 +1412,7 @@ msgstr "거래 수수료"
 msgid "Transaction failed"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
 msgid "Transaction Failed"
 msgstr "거래 실패"
 

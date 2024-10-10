@@ -66,9 +66,30 @@ msgstr ""
 msgid "{seconds}sec"
 msgstr ""
 
+#: src/SiteAdaptor/trader/views/Confirm.tsx:489
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:206
+msgid "<0>Powered by</0><1>OKX<2/></1>"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:236
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:137
+msgid "24H Average Price"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:170
+msgid "24H sale"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:152
+msgid "24H Traded Volume"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
+msgid "Activities"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:437
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:123
@@ -114,6 +135,10 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:368
 msgid "Bridging"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:386
+msgid "Buy Now"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:622
@@ -174,8 +199,11 @@ msgstr ""
 msgid "Enter an Amount"
 msgstr ""
 
+#: src/SiteAdaptor/index.tsx:77
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:59
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:72
+#: src/SiteAdaptor/trending/TickersTable.tsx:84
+#: src/SiteAdaptor/trending/TrendingView.tsx:232
 msgid "Exchange"
 msgstr ""
 
@@ -199,10 +227,16 @@ msgstr ""
 msgid "Fastest"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:412
+msgid "Floor Price"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:398
 #: src/SiteAdaptor/trader/views/Confirm.tsx:390
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:244
 #: src/SiteAdaptor/trader/views/Transaction.tsx:410
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:139
 msgid "From"
 msgstr ""
 
@@ -212,6 +246,14 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:382
 msgid "Gas Price"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:224
+msgid "General"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:107
+msgid "Highest Price"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:60
@@ -231,12 +273,29 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:77
+msgid "Items"
+msgstr ""
+
+#: src/SiteAdaptor/trending/FailedTrendingView.tsx:29
+msgid "Load failed"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:226
+#: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx:47
+msgid "Loading"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Transaction.tsx:640
 msgid "Make another Bridge"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:639
 msgid "Make another Swap"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:93
+msgid "Market Cap"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:301
@@ -249,6 +308,10 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:347
 msgid "Max base fee"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:137
+msgid "Method"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:534
@@ -271,6 +334,21 @@ msgstr ""
 msgid "Network fee"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:136
+msgid "NFT"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingView.tsx:237
+msgid "NFTs"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
+#: src/SiteAdaptor/trending/PriceChart.tsx:89
+#: src/SiteAdaptor/trending/TickersTable.tsx:176
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
+msgid "No Data"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/History.tsx:133
 msgid "No recent transactions"
 msgstr ""
@@ -284,13 +362,33 @@ msgstr ""
 msgid "on {0}"
 msgstr ""
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:396
+msgid "Open"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:198
 msgid "Overall Best"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:490
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:207
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:85
+msgid "Owners"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:85
+msgid "Pair"
+msgstr ""
+
+#: src/SiteAdaptor/index.tsx:102
+msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx:80
 msgid "Powered by"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:86
+#: src/SiteAdaptor/trending/TrendingView.tsx:228
+msgid "Price"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee.tsx:365
@@ -309,6 +407,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:65
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:66
 msgid "Quote Route"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:339
+msgid "Rank #{0}"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:528
@@ -351,6 +453,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:355
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:236
 #: src/SiteAdaptor/trader/views/Transaction.tsx:540
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:376
 msgid "Swap"
 msgstr ""
 
@@ -395,10 +498,19 @@ msgstr ""
 msgid "This swap isn’t supported"
 msgstr ""
 
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:141
+msgid "Time"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:419
 #: src/SiteAdaptor/trader/views/Confirm.tsx:412
 #: src/SiteAdaptor/trader/views/Transaction.tsx:489
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:140
 msgid "To"
+msgstr ""
+
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx:122
+msgid "Total Volume"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:434
@@ -454,6 +566,18 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:568
 #: src/SiteAdaptor/trader/views/Confirm.tsx:525
 msgid "Update Quote"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:83
+msgid "Updated"
+msgstr ""
+
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:138
+msgid "Value"
+msgstr ""
+
+#: src/SiteAdaptor/trending/TickersTable.tsx:82
+msgid "Volume (24h)"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx:314
