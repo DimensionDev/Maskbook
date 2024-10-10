@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"PO-Revision-Date: 2024-10-10 15:16\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -279,7 +279,7 @@ msgstr "crwdns29536:0crwdne29536:0"
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:136
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:88
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:248
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:245
 msgid "At least 6 characters"
 msgstr "crwdns29538:0crwdne29538:0"
 
@@ -426,7 +426,7 @@ msgstr "crwdns29948:0crwdne29948:0"
 #~ msgid "button."
 #~ msgstr ""
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:297
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:294
 msgid "By proceeding you agree to the"
 msgstr "crwdns29952:0crwdne29952:0"
 
@@ -453,7 +453,7 @@ msgstr "crwdns32010:0crwdne32010:0"
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx:217
 #: popups/pages/Personas/PersonaSignRequest/index.tsx:117
 #: popups/pages/RequestPermission/RequestPermission.tsx:59
-#: popups/pages/Wallet/ChangeOwner/index.tsx:460
+#: popups/pages/Wallet/ChangeOwner/index.tsx:459
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx:390
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx:150
 #: popups/pages/Wallet/EditNetwork/index.tsx:327
@@ -480,7 +480,7 @@ msgid "Chain ID: {0}"
 msgstr "crwdns32012:0{0}crwdne32012:0"
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:263
-#: popups/pages/Wallet/ChangeOwner/index.tsx:469
+#: popups/pages/Wallet/ChangeOwner/index.tsx:468
 msgid "Change"
 msgstr "crwdns29960:0crwdne29960:0"
 
@@ -584,13 +584,13 @@ msgstr "crwdns29562:0crwdne29562:0"
 #: popups/pages/Wallet/Interaction/interaction.tsx:60
 #: popups/pages/Wallet/ResetWallet/index.tsx:138
 #: popups/pages/Wallet/SelectWallet/index.tsx:190
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:351
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:348
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx:165
 msgid "Confirm"
 msgstr "crwdns29564:0crwdne29564:0"
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx:121
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:279
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:276
 msgid "Confirm Password"
 msgstr "crwdns29988:0crwdne29988:0"
 
@@ -784,7 +784,7 @@ msgstr "crwdns30042:0crwdne30042:0"
 msgid "Create New Mask Identity"
 msgstr "crwdns29576:0crwdne29576:0"
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:243
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:240
 msgid "Create Password"
 msgstr "crwdns30044:0crwdne30044:0"
 
@@ -1209,7 +1209,7 @@ msgstr "crwdns30170:0{0}crwdne30170:0"
 #: popups/components/UnlockERC20Token/index.tsx:283
 #: popups/components/UnlockERC721Token/index.tsx:228
 #: popups/modals/GasSettingModal/index.tsx:41
-#: popups/pages/Wallet/ChangeOwner/index.tsx:353
+#: popups/pages/Wallet/ChangeOwner/index.tsx:352
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx:308
 msgid "Gas Fee"
 msgstr "crwdns30172:0crwdne30172:0"
@@ -1583,7 +1583,7 @@ msgstr "crwdns30274:0crwdne30274:0"
 msgid "Local Backup"
 msgstr "crwdns29652:0crwdne29652:0"
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx:339
+#: popups/pages/Wallet/ChangeOwner/index.tsx:338
 msgid "Local persona or wallet only"
 msgstr "crwdns30276:0crwdne30276:0"
 
@@ -1997,7 +1997,7 @@ msgstr "crwdns30412:0crwdne30412:0"
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx:130
 #: popups/modals/ShowPrivateKeyModal/index.tsx:55
 #: popups/modals/WalletRemoveModal/index.tsx:85
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:264
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:261
 msgid "Payment Password"
 msgstr "crwdns29680:0crwdne29680:0"
 
@@ -2515,7 +2515,7 @@ msgstr "crwdns29746:0crwdne29746:0"
 msgid "Service Agreement"
 msgstr "crwdns30538:0crwdne30538:0"
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx:336
+#: popups/pages/Wallet/ChangeOwner/index.tsx:335
 msgid "Set a New Management Account"
 msgstr "crwdns30540:0crwdne30540:0"
 
@@ -2525,12 +2525,12 @@ msgstr "crwdns30542:0crwdne30542:0"
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx:114
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx:198
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:244
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:336
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:241
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:333
 msgid "Set Payment Password"
 msgstr "crwdns29748:0crwdne29748:0"
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx:219
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx:216
 msgid "Set payment password successfully."
 msgstr "crwdns29750:0crwdne29750:0"
 
@@ -3047,7 +3047,7 @@ msgstr "crwdns29804:0crwdne29804:0"
 msgid "URLs require the appropriate HTTPS prefix."
 msgstr "crwdns30684:0crwdne30684:0"
 
-#: content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx:76
+#: content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx:77
 msgid "Use NFT"
 msgstr "crwdns30686:0crwdne30686:0"
 
@@ -3108,7 +3108,7 @@ msgstr "crwdns30698:0crwdne30698:0"
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx:269
 #: popups/pages/Personas/ConnectWallet/index.tsx:255
 #: popups/pages/Wallet/ChangeOwner/index.tsx:272
-#: popups/pages/Wallet/ChangeOwner/index.tsx:321
+#: popups/pages/Wallet/ChangeOwner/index.tsx:320
 #: popups/pages/Wallet/TransactionDetail/index.tsx:265
 msgid "View on Explorer"
 msgstr "crwdns30700:0crwdne30700:0"
