@@ -75,7 +75,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
     const onConfirm = useCallback(async () => {
         try {
             if (!account) {
-                showSnackbar(<Trans>Not select wallet yet.</Trans>, {
+                showSnackbar(<Trans>No wallet selected.</Trans>, {
                     variant: 'error',
                     preventDuplicate: true,
                 })
@@ -113,7 +113,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     }
                 />
                 <Typography className={classes.article}>
-                    <Trans>Clicking the confirm button means that you agree to bear the above possible risks.</Trans>
+                    <Trans>By confirming means that you agree to bear the possible risks above.</Trans>
                 </Typography>
                 <WalletStatusBox disableChange withinRiskWarningDialog />
             </DialogContent>
@@ -132,7 +132,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     disabled={!account}
                     init={<Trans>Confirm</Trans>}
                     waiting={<Trans>Confirming</Trans>}
-                    failed={<Trans>Confirm Failed</Trans>}
+                    failed={<Trans>Failed to confirm</Trans>}
                     executor={onConfirm}
                     completeIcon={null}
                     failIcon={null}

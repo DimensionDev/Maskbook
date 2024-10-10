@@ -107,7 +107,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
         }, []),
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
-            showSnackbar(<Trans>Unconnected successfully.</Trans>, { variant: 'success' })
+            showSnackbar(<Trans>Disconnected.</Trans>, { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
@@ -121,7 +121,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
         }, [wallet?.address]),
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
-            showSnackbar(<Trans>Unconnected successfully.</Trans>, { variant: 'success' })
+            showSnackbar(<Trans>Disconnected.</Trans>, { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
@@ -135,7 +135,9 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
                     <Trans>Disconnect</Trans>
                 </Typography>
                 <Typography className={classes.desc}>
-                    <Trans>Are your sure you want to disconnect? You may lose site functionality.</Trans>
+                    <Trans>
+                        Are your sure you want to disconnect? You may lose part of functionalities of this website.
+                    </Trans>
                 </Typography>
                 <button
                     type="button"

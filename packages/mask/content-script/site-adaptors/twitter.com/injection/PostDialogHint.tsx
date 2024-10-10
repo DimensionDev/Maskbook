@@ -90,8 +90,8 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
                 undefined
             :   makeTypedMessageText(
                     _(
-                        msg`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. `,
-                    ) + _(msg`Follow ${'@realMaskNetwork'} to explore Web3.`),
+                        msg`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3.`,
+                    ),
                 )
 
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

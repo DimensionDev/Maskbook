@@ -17,6 +17,10 @@ msgstr ""
 msgid "{0} Platform costs"
 msgstr ""
 
+#: src/SiteAdaptor/Shared/OfferCard.tsx:121
+msgid "<0>Expires in </0>{0}"
+msgstr ""
+
 #: src/SiteAdaptor/Card/Collectible.tsx:191
 #: src/SiteAdaptor/CardDialog/CardDialog.tsx:56
 msgid "About"
@@ -56,8 +60,8 @@ msgid "Display specific information of collectibles in OpenSea and Rarible, make
 msgstr ""
 
 #: src/SiteAdaptor/Shared/OfferCard.tsx:123
-msgid "Expires in"
-msgstr ""
+#~ msgid "Expires in"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Shared/ActivityCard.tsx:137
 #: src/SiteAdaptor/Shared/OfferCard.tsx:105

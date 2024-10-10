@@ -114,7 +114,7 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
         try {
             const image = await toPNG(selectedToken.metadata.imageURL)
             if (!image) {
-                showSnackbar(<Trans>Download image error</Trans>, { variant: 'error' })
+                showSnackbar(<Trans>Failed to download image</Trans>, { variant: 'error' })
                 return
             }
             setSelectedTokenInfo({

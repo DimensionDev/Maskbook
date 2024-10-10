@@ -114,7 +114,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
             amount,
             symbol: protocol.bareToken.symbol,
             chain: EVMChainResolver.chainName(chainId) ?? '',
-            account: Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`),
+            account: Sniffings.is_twitter_page ? 'realMaskNetwork' : 'masknetwork',
         }
 
         await openShareTxDialog({

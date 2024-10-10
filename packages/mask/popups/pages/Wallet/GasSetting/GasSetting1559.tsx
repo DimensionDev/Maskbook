@@ -354,7 +354,7 @@ export const GasSetting1559 = memo(() => {
                         <Typography component="div" className={classes.optionsContent}>
                             {formatWeiToGwei(content?.suggestedMaxFeePerGas ?? 0).toFixed(2)}
                             <Typography variant="inherit" component="span">
-                                <Trans>GWEI</Trans>
+                                GWEI
                             </Typography>
                         </Typography>
                         <Typography className={classes.gasUSD}>
@@ -398,7 +398,7 @@ export const GasSetting1559 = memo(() => {
                 <Typography className={classes.label}>
                     <Trans>Max Priority Fee</Trans>
                     <Typography component="span" className={classes.unit}>
-                        (<Trans>GWEI</Trans>)
+                        (GWEI)
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         ≈{' '}
@@ -433,7 +433,7 @@ export const GasSetting1559 = memo(() => {
                 <Typography className={classes.label}>
                     <Trans>Max Fee</Trans>
                     <Typography component="span" className={classes.unit}>
-                        (<Trans>GWEI</Trans>)
+                        (GWEI)
                     </Typography>
                     <Typography component="span" className={classes.price}>
                         ≈{' '}

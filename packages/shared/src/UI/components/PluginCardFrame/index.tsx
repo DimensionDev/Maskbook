@@ -63,10 +63,10 @@ export function PluginCardFrameMini({ icon, title, provider, providerLink, child
             <Stack direction="row" justifyContent="space-between" p={1.5}>
                 {PluginName}
                 <Stack direction="row" gap={0.5}>
-                    <Typography className={classes.item1}>
-                        <Trans>Powered by</Trans>
-                    </Typography>
-                    <Typography className={classes.item2}>{provider ?? <Trans>Mask Network</Trans>}</Typography>
+                    <Trans>
+                        <Typography className={classes.item1}>Powered by </Typography>
+                        <Typography className={classes.item2}>{provider ?? 'Mask Network'}</Typography>
+                    </Trans>
                     <Link
                         underline="none"
                         target="_blank"

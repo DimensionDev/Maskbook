@@ -36,8 +36,12 @@ msgid "Expired"
 msgstr "已过期"
 
 #: src/SiteAdaptor/index.tsx:9
-msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
-msgstr "与Twitter 高度关联的 Web3 新闻和事件。提供 Token 、NFT、AMA 和管理活动。"
+#~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
+#~ msgstr "与Twitter 高度关联的 Web3 新闻和事件。提供 Token 、NFT、AMA 和管理活动。"
+
+#: src/SiteAdaptor/index.tsx:9
+msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
+msgstr ""
 
 #: src/SiteAdaptor/CalendarContent.tsx:84
 msgid "News"
@@ -54,7 +58,11 @@ msgid "No content for the last two weeks."
 msgstr "最近两周没有内容。"
 
 #: src/SiteAdaptor/components/Footer.tsx:100
-msgid "Powered By"
+#~ msgid "Powered By"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Footer.tsx:100
+msgid "Powered By {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx:208

@@ -45,21 +45,23 @@ export function PluginHeader() {
             </Stack>
             <Box className={classes.provider}>
                 <Typography variant="body1" fontSize={14} fontWeight="700" className={classes.providerBy}>
-                    <Trans>Powered by</Trans>
+                    <Trans>
+                        Powered by{' '}
+                        {publisher ?
+                            <>
+                                <Typography
+                                    variant="body1"
+                                    fontSize={14}
+                                    fontWeight="700"
+                                    component="div"
+                                    color={MaskColorVar.textPluginColor}>
+                                    <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
+                                </Typography>
+                                <Icons.RSS3 size={24} />
+                            </>
+                        :   null}
+                    </Trans>
                 </Typography>
-                {publisher ?
-                    <>
-                        <Typography
-                            variant="body1"
-                            fontSize={14}
-                            fontWeight="700"
-                            component="div"
-                            color={MaskColorVar.textPluginColor}>
-                            <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
-                        </Typography>
-                        <Icons.RSS3 size={24} />
-                    </>
-                :   null}
             </Box>
         </Stack>
     )

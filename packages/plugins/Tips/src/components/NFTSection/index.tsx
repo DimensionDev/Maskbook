@@ -204,7 +204,9 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                     }
                     return (
                         <EmptyStatus className={classes.statusBox} iconSize={36}>
-                            <Trans>No any collectible is available to preview. Please add your collectible here.</Trans>
+                            <Trans>
+                                No any collectible is available for preview. Please add your collectible here.
+                            </Trans>
                         </EmptyStatus>
                     )
                 })()}

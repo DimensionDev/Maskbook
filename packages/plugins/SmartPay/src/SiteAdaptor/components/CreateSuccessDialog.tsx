@@ -55,10 +55,10 @@ export function CreateSuccessDialog({ open, onClose, address, owner }: CreateSuc
                 <Icons.FillSuccess size={50} />
 
                 <Typography className={classes.title}>
-                    <Trans>Created successfully!</Trans>
+                    <Trans>Wallet created!</Trans>
                 </Typography>
                 <Typography className={classes.description}>
-                    <Trans>Congratulation! You’ve deployed SmartPay Wallet {formatEthereumAddress(address, 4)}.</Trans>
+                    <Trans>Congratulation! You've deployed SmartPay Wallet {formatEthereumAddress(address, 4)}.</Trans>
                 </Typography>
                 <Typography className={classes.description} sx={{ marginTop: 2 }}>
                     <Trans>Management account of the SmartPay Wallet is {owner}.</Trans>

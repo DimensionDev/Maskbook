@@ -58,7 +58,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                 <DialogContent sx={{ paddingTop: 0 }}>
                     <DialogContentText component="div">
                         <Typography color="textPrimary" sx={{ marginBottom: 1 }}>
-                            <Trans>Please copy the following text and image (if there is any) and publish it.</Trans>
+                            <Trans>Please copy the following text and image (if there is one) and publish it.</Trans>
                         </Typography>
                     </DialogContentText>
                     {props.data.text ?
@@ -74,7 +74,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                                 variant="contained"
                                 onClick={() => {
                                     copy(data.text)
-                                    showSnackbar(<Trans>Copy text successfully!</Trans>, {
+                                    showSnackbar(<Trans>Text copied!</Trans>, {
                                         variant: 'success',
                                         preventDuplicate: true,
                                         anchorOrigin: {
@@ -101,7 +101,7 @@ function AutoPasteFailedDialog(props: AutoPasteFailedDialogProps) {
                             onClick={async () => {
                                 if (!data.image) return
                                 await navigator.clipboard.write([new ClipboardItem({ [data.image.type]: data.image })])
-                                showSnackbar(<Trans>Copy image successfully!</Trans>, {
+                                showSnackbar(<Trans>Image copied!</Trans>, {
                                     variant: 'success',
                                     preventDuplicate: true,
                                     anchorOrigin: {

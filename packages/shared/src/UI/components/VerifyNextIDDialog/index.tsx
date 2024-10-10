@@ -235,13 +235,15 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                         <Typography className={classes.text}>
                             {platform ?
                                 <Trans>
-                                    Sent verification post successfully.
-                                    <br /> <br />
-                                    You could check the verification result on Mask Pop-up after few minutes. If failed,
-                                    try sending verification post again.
+                                    Verification post sent.
+                                    <br />
+                                    <br />
+                                    You could check the verification result on Mask Pop-up after few minutes. If it
+                                    failed, please try again later.
                                 </Trans>
                             :   <Trans>
-                                    Connected successfully. <br />
+                                    Connected successfully.
+                                    <br />
                                     <br />
                                     Trying exploring more features powered by Mask Network.
                                 </Trans>

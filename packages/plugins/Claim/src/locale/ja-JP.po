@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 954\n"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:227
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:225
 #: src/SiteAdaptor/components/ClaimDialog/index.tsx:24
 #: src/SiteAdaptor/components/ClaimEntry/index.tsx:26
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:92
@@ -30,7 +30,7 @@ msgstr "受取る"
 msgid "Claim your Airdrop"
 msgstr "エアドロップを受け取る"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:203
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:201
 msgid "Claimable"
 msgstr "受取可能"
 
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Congratulations!"
 msgstr "おめでとうございます！"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:202
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:200
 msgid "Eligible to claim"
 msgstr "請求可能"
 
@@ -54,7 +54,7 @@ msgstr "請求可能"
 msgid "Ended on <0>{0}</0>"
 msgstr ""
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:226
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:224
 msgid "Expired"
 msgstr "期限切れ"
 
@@ -100,9 +100,13 @@ msgstr "エアドロップに参加するには、トランザクションコス
 msgid "You have claimed {0} $ARB."
 msgstr ""
 
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:213
+msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+msgstr ""
+
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:215
-msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
-msgstr "WalletConnect ウォレットに接続しています。そのウォレットのネットワークを切り替えるか、別のウォレットに切り替えてください。"
+#~ msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+#~ msgstr "WalletConnect ウォレットに接続しています。そのウォレットのネットワークを切り替えるか、別のウォレットに切り替えてください。"
 
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."

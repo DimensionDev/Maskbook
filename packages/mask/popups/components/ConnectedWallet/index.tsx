@@ -137,9 +137,9 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
 
                 // Broadcast updates.
                 MaskMessages.events.ownProofChanged.sendToAll()
-                showSnackbar(<Trans>Wallet disconnect successfully</Trans>)
+                showSnackbar(<Trans>Wallet disconnected</Trans>)
             } catch {
-                showSnackbar(<Trans>Wallet disconnect failed</Trans>, {
+                showSnackbar(<Trans>Failed to disconnect wallet</Trans>, {
                     variant: 'error',
                 })
             }

@@ -26,7 +26,7 @@ export function ActionBar(props: ActionBarProps) {
     const { open: openMintDialog, onClose: onCloseMintDialog, onOpen: onOpenMintDialog } = useControlledDialog()
 
     const status =
-        !project.active ? <Trans>This project is no more active</Trans>
+        !project.active ? <Trans>This project is no longer active</Trans>
         : project.complete ? <Trans>Completed</Trans>
         : project.paused ? <Trans>Paused</Trans>
         : <Trans>Purchase</Trans>

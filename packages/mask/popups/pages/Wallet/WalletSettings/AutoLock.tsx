@@ -34,7 +34,7 @@ export function AutoLock() {
                     <Typography className={classes.itemText}>
                         {minutes && minutes >= 60 ?
                             t['popups_wallet_settings_auto-unlock_time_hour']({ count: millisecondsToHours(value) })
-                        :   <Trans>{String(millisecondsToMinutes(value))} Mins</Trans>}
+                        :   <Trans>{millisecondsToMinutes(value)} Mins</Trans>}
                     </Typography>
                 :   null}
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />

@@ -27,7 +27,7 @@ msgid "Amount"
 msgstr "量"
 
 #: src/SiteAdaptor/SavingsForm.tsx:318
-#: src/SiteAdaptor/SavingsTable/index.tsx:88
+#: src/SiteAdaptor/SavingsTable/index.tsx:87
 msgid "APR"
 msgstr "4月"
 
@@ -36,12 +36,15 @@ msgid "Asset"
 msgstr "資産"
 
 #: src/SiteAdaptor/SavingsDialog.tsx:136
-#: src/SiteAdaptor/SavingsForm.tsx:237
-#: src/SiteAdaptor/SavingsForm.tsx:249
 #: src/SiteAdaptor/SavingsForm.tsx:279
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:106
 msgid "Deposit"
 msgstr "入金"
+
+#: src/SiteAdaptor/SavingsForm.tsx:237
+#: src/SiteAdaptor/SavingsForm.tsx:249
+msgid "Deposit {0}"
+msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:241
 #: src/SiteAdaptor/SavingsForm.tsx:253
@@ -84,24 +87,24 @@ msgstr ""
 msgid "Lido Exchange Rate"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:108
+#: src/SiteAdaptor/SavingsTable/index.tsx:107
 msgid "Loading"
 msgstr "読み込み中"
 
 #: src/SiteAdaptor/SavingsForm.tsx:193
 #: src/SiteAdaptor/WithdrawForm.tsx:117
-msgid "masknetwork"
-msgstr "masknetwork"
+#~ msgid "masknetwork"
+#~ msgstr "masknetwork"
 
 #: src/SiteAdaptor/WithdrawForm.tsx:145
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:126
+#: src/SiteAdaptor/SavingsTable/index.tsx:125
 msgid "No deposit protocols found."
 msgstr "入金プロトコルが見つかりません。"
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:99
+#: src/SiteAdaptor/SavingsTable/index.tsx:98
 msgid "Operation"
 msgstr "オペレーション"
 
@@ -116,8 +119,8 @@ msgstr "引き出し処理中"
 
 #: src/SiteAdaptor/SavingsForm.tsx:193
 #: src/SiteAdaptor/WithdrawForm.tsx:117
-msgid "realMaskNetwork"
-msgstr "realMaskNetwork"
+#~ msgid "realMaskNetwork"
+#~ msgstr "realMaskNetwork"
 
 #: src/SiteAdaptor/index.tsx:14
 #: src/SiteAdaptor/SavingsDialog.tsx:129
@@ -136,7 +139,7 @@ msgstr ""
 msgid "Waiting time"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:94
+#: src/SiteAdaptor/SavingsTable/index.tsx:93
 msgid "Wallet"
 msgstr "ウォレット"
 

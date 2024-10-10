@@ -162,16 +162,18 @@ export const SwitchLogoDialog = memo(() => {
                     </Button>
                 </Stack>
                 <Stack className={classes.powered_by}>
-                    <Typography
-                        fontSize="14px"
-                        fontWeight={700}
-                        marginRight="5px"
-                        color={(theme) => theme.palette.maskColor.secondaryDark}>
-                        <Trans>Powered by </Trans>
-                    </Typography>
-                    <Typography fontSize="14px" fontWeight={700} marginRight="4px">
-                        <Trans>Mask Network</Trans>
-                    </Typography>
+                    <Trans>
+                        <Typography
+                            fontSize="14px"
+                            fontWeight={700}
+                            marginRight="5px"
+                            color={(theme) => theme.palette.maskColor.secondaryDark}>
+                            Powered by{' '}
+                        </Typography>
+                        <Typography fontSize="14px" fontWeight={700} marginRight="4px">
+                            Mask Network
+                        </Typography>
+                    </Trans>
                     <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => openApplicationBoardDialog()}>
                         <Icons.Gear size={24} />
                     </IconButton>

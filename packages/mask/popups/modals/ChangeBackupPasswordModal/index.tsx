@@ -77,7 +77,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     path: ['newPassword'],
                 })
                 .refine((data) => data.newPassword === data.repeatPassword, {
-                    message: _(msg`The two entered passwords are inconsistent.`),
+                    message: _(msg`Two entered passwords are different.`),
                     path: ['repeatPassword'],
                 }),
         ),

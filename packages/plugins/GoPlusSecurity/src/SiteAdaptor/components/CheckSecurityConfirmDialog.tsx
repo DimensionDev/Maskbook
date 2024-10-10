@@ -58,7 +58,7 @@ function CheckSecurityConfirmDialog({ open, onClose }: Props) {
                         </Trans>
                     </Typography>
                     <Typography className={classes.intro}>
-                        <Trans>We recommend new Web3 users to keep [Check Security] open. </Trans>
+                        <Trans>We recommend new Web3 users to keep [Check Security] open.</Trans>
                     </Typography>
                 </Stack>
                 <Stack marginTop="36px">

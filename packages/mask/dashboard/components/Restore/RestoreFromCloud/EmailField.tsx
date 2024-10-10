@@ -36,12 +36,9 @@ export const EmailField = memo(function EmailField() {
             scenario: Scenario.backup,
             locale: language.includes('zh') ? Locale.zh : Locale.en,
         })
-        showSnackbar(
-            <Trans>
-                Verification code was sent to your {type}. Please check your {type}.
-            </Trans>,
-            { variant: 'success' },
-        )
+        showSnackbar(<Trans>Verification code has been sent to your email. Please check your mailbox.</Trans>, {
+            variant: 'success',
+        })
     }, [account, language])
 
     const validCheck = () => {
@@ -84,7 +81,7 @@ export const EmailField = memo(function EmailField() {
     const hasError = sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail || !!error
     const errorMessage =
         sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail ?
-            <Trans> Invalid email address format.</Trans>
+            <Trans>Invalid email address.</Trans>
         :   error || ''
 
     return (

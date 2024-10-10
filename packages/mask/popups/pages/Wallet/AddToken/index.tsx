@@ -143,7 +143,7 @@ export const Component = memo(function AddToken() {
                 })
             }
 
-            showSnackbar(<Trans>Successfully added</Trans>, {
+            showSnackbar(<Trans>NFTs added</Trans>, {
                 variant: 'success',
             })
             navigate(`${PopupRoutes.Wallet}?tab=${WalletAssetTabs.Collectibles}`, { replace: true })

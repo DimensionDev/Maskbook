@@ -99,7 +99,9 @@ export const Component = memo(function ResetWallet() {
                     </Typography>
                 </Box>
                 <Typography className={classes.description}>
-                    <Trans>Payment password stored locally and you could try many times to unlock your wallet.</Trans>
+                    <Trans>
+                        Payment password stored locally and you could try as many as you want to unlock your wallet.
+                    </Trans>
                 </Typography>
                 <Typography className={classes.description}>
                     {/* eslint-disable-next-line react/naming-convention/component-name */}

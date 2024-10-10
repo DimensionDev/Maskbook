@@ -99,15 +99,13 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                     </Typography>
                 </Stack>
                 <Stack marginTop="51px">
-                    <Typography color={(theme) => theme.palette.maskColor.danger}>
-                        <Trans>Dear Users,</Trans>
-                    </Typography>
-                    <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
-                        <Trans>
+                    <Trans>
+                        <Typography color={(theme) => theme.palette.maskColor.danger}>Dear Users,</Typography>
+                        <Typography color={(theme) => theme.palette.maskColor.danger} marginTop="16px">
                             Clicking the confirm button means that you agree to take the potential risks and proceed
                             with the transaction.
-                        </Trans>
-                    </Typography>
+                        </Typography>
+                    </Trans>
                 </Stack>
                 <Stack className={classes.tokenInfo}>
                     <Typography>{token?.name ?? '--'}</Typography>

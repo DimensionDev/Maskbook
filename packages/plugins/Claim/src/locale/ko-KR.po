@@ -18,7 +18,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 954\n"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:227
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:225
 #: src/SiteAdaptor/components/ClaimDialog/index.tsx:24
 #: src/SiteAdaptor/components/ClaimEntry/index.tsx:26
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:92
@@ -30,7 +30,7 @@ msgstr "수령"
 msgid "Claim your Airdrop"
 msgstr "에어드랍 수령"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:203
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:201
 msgid "Claimable"
 msgstr "수령 가능"
 
@@ -46,7 +46,7 @@ msgstr ""
 msgid "Congratulations!"
 msgstr "축하합니다!"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:202
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:200
 msgid "Eligible to claim"
 msgstr "수령 가능"
 
@@ -54,7 +54,7 @@ msgstr "수령 가능"
 msgid "Ended on <0>{0}</0>"
 msgstr ""
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:226
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:224
 msgid "Expired"
 msgstr "만료됨"
 
@@ -100,9 +100,13 @@ msgstr "에어드롭에 참여하기 위해서는 거래 비용을 충당할 수
 msgid "You have claimed {0} $ARB."
 msgstr ""
 
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:213
+msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+msgstr ""
+
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:215
-msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
-msgstr "WalletConnect 월렛에 연결되어 있습니다. 해당 월렛에서 네트워크를 전환하기나 다른 월렛으로 바꾸세요."
+#~ msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
+#~ msgstr "WalletConnect 월렛에 연결되어 있습니다. 해당 월렛에서 네트워크를 전환하기나 다른 월렛으로 바꾸세요."
 
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."

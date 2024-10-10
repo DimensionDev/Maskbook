@@ -37,7 +37,7 @@ export function useDefaultEssay(user: User): ShowMeta | undefined {
                     isMASK ?
                         _(msg`I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!`)
                     :   _(
-                            msg`Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet.`,
+                            msg`Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet.`,
                         ),
                 type: ImageType.NORMAL,
                 contract: '',

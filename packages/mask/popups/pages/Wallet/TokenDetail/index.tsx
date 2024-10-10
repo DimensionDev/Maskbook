@@ -175,7 +175,7 @@ export const Component = memo(function TokenDetailPage() {
                         schema: SchemaType.ERC20,
                         address: asset.address,
                     })
-                    showSnackbar(<Trans>Successfully hidden.</Trans>)
+                    showSnackbar(<Trans>Asset is hidden.</Trans>)
                     navigate(-1)
                 }}>
                 <Icons.EyeOff size={24} />

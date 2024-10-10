@@ -70,9 +70,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         {
             ApplicationEntryID: base.ID,
             category: 'dapp',
-            description: (
-                <Trans>Display Snapshot proposals on the Twitter page of the respective project or protocol.</Trans>
-            ),
+            description: <Trans>Display Snapshot proposals on the X of the respective project or protocol.</Trans>,
             tutorialLink: 'https://realmasknetwork.notion.site/10c08ed9629942dd852d9afbfab61208',
             name: <Trans>DAO</Trans>,
             marketListSortingPriority: 8,

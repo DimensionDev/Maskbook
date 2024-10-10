@@ -165,11 +165,10 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 </Box>
             </Box>
             <Typography className={classes.tips}>
-                <Plural
-                    value={value}
-                    one="The Twitter account above remains # time to create SmartPay Wallet."
-                    other="The Twitter account above remains # times to create SmartPay Wallet."
-                />
+                <Trans>
+                    The X account above remains {value} <Plural value={value} one="time" other="times" /> to create
+                    SmartPay Wallet.
+                </Trans>
             </Typography>
             <Button fullWidth variant="roundedContained" onClick={handleCreate}>
                 <Trans>Create</Trans>

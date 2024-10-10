@@ -233,7 +233,7 @@ export const NftRedPacketHistoryItem = memo(function NftRedPacketHistoryItem({
                                 placement="top"
                                 title={
                                     canSend && !isPasswordValid ?
-                                        <Trans>The Lucky Drop can’t be sent due to data damage.</Trans>
+                                        <Trans>The Lucky Drop can't be sent due to data damage.</Trans>
                                     :   ''
                                 }>
                                 <span style={{ display: 'inline-block' }}>

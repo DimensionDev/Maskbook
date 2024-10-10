@@ -297,7 +297,7 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
             nonFungibleTokenId: availability.claimed_id,
             nonFungibleTokenAddress: payload.contractAddress,
             tokenType: TokenType.NonFungible,
-            messageTextForNFT: _(msg`Claimed 1 ${token?.contract?.name || 'NFT'} successfully.`),
+            messageTextForNFT: _(msg`1 ${token?.contract?.name || 'NFT'} claimed.`),
             messageTextForFT: _(msg`You claimed 1.`),
             title: _(msg`Lucky Drop`),
             share,

@@ -422,11 +422,8 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                     </div>
                                     <Typography color="textPrimary">
                                         {balance === 0 ?
-                                            'All'
-                                        :   <Trans>
-                                                ALL ({Math.min(RED_PACKET_MAX_SHARES, balance).toString()} NFT)
-                                            </Trans>
-                                        }
+                                            <Trans>ALL</Trans>
+                                        :   <Trans>ALL ({Math.min(RED_PACKET_MAX_SHARES, balance)} NFT)</Trans>}
                                     </Typography>
                                 </div>
                                 <div
@@ -517,7 +514,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                                         isGasFeeGreaterThanOneETH ?
                                             <Trans>
                                                 When selecting too many NFTs, the total gas fee may exceed the MetaMask
-                                                limit of 1 {nativeTokenDetailed?.symbol || 'ETH'}. Please reduce the
+                                                limit of {nativeTokenDetailed?.symbol || 'ETH'}. Please reduce the
                                                 number of NFTs selected.
                                             </Trans>
                                         :   ''

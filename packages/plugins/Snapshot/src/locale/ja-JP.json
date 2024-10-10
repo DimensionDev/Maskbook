@@ -7,6 +7,7 @@
         "6sbLuF": "現在の結果",
         "MQ9hQ4": "DAO",
         "XQYg/I": "それぞれのプロジェクトまたはプロトコルのTwitterページにスナップショットの提案を表示します。",
+        "UxJ2jd": "Display Snapshot proposals on the X of the respective project or protocol.",
         "Midntl": "レポートをダウンロードする",
         "IrI9pg": "終了日",
         "TbaYrr": ["Ended ", ["0"]],
@@ -17,6 +18,7 @@
         "XrH+JC": "IPFS",
         "0wdd7X": "参加",
         "yQE2r9": "読み込み中",
+        "hj39w+": "Loading failed due to Snapshot API service breakdown.",
         "eYLq1w": "Snapshot APIサービスの故障のため、読み込みに失敗します。",
         "9oP21f": "自分の投票",
         "+ubcPw": "パワーなし",
@@ -36,6 +38,7 @@
         "lQXQKs": "投票",
         "przoUP": "投票一覧",
         "eFmWrs": "投票しました",
+        "u7TofG": "Voted.",
         "PByO0X": "投票",
         "kWJmRL": "あなた",
         "9q+I38": "あなたの投票力"

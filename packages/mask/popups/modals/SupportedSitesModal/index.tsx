@@ -68,8 +68,8 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
         <ActionModal header={<Trans>Supported Sites</Trans>} {...props}>
             <Typography className={classes.description}>
                 <Trans>
-                    Manage the permissions of the Mask Network plugin to inject into websites. Once turned off, the use
-                    of the plugin on this site will no longer be supported.
+                    Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on
+                    those websites.
                 </Trans>
             </Typography>
             <List className={classes.list}>

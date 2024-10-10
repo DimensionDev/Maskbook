@@ -366,20 +366,22 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     sx={{ marginTop: '4px' }}
                 />
                 <Box className={classes.desBox}>
-                    <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
-                        <Trans>Powered by</Trans>
-                    </Typography>
-                    <Typography color="textPrimary" fontSize={14} fontWeight={700}>
-                        NFF
-                    </Typography>
-                    <Icons.Pets className={classes.icon} />
-                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
-                        &
-                    </Typography>
-                    <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
-                        RSS3
-                    </Typography>
-                    <Icons.RSS3 color={theme.palette.mode === 'light' ? '#000' : '#fff'} />
+                    <Trans>
+                        <Typography fontSize={14} fontWeight={700} className={classes.poweredBy}>
+                            Powered by
+                        </Typography>
+                        <Typography color="textPrimary" fontSize={14} fontWeight={700}>
+                            NFF
+                        </Typography>
+                        <Icons.Pets className={classes.icon} />
+                        <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
+                            &
+                        </Typography>
+                        <Typography fontSize={14} color="textSecondary" fontWeight={700} className={classes.des}>
+                            RSS3
+                        </Typography>
+                        <Icons.RSS3 color={theme.palette.mode === 'light' ? '#000' : '#fff'} />
+                    </Trans>
                 </Box>
             </Box>
 

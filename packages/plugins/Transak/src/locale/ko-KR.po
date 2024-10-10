@@ -23,5 +23,9 @@ msgid "Fiat On-Ramp"
 msgstr "Fiat On-Ramp"
 
 #: src/SiteAdaptor/index.tsx:42
-msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
-msgstr "Fit On-Ramp 애그리게이터. Transak 지원을 통해 60개 이상의 국가에서 암호화폐를 구매할 수 있습니다."
+#~ msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
+#~ msgstr "Fit On-Ramp 애그리게이터. Transak 지원을 통해 60개 이상의 국가에서 암호화폐를 구매할 수 있습니다."
+
+#: src/SiteAdaptor/index.tsx:42
+msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
+msgstr ""

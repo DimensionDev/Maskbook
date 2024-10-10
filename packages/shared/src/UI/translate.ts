@@ -23,11 +23,8 @@ const map: Record<
     MessageDescriptor
 > = {
     '': null!,
-    'Claim Lucky Drop successfully.': msg`Claim Lucky Drop successfully.`,
-    'Claim NFT Lucky Drop successfully.': msg`Claim NFT Lucky Drop successfully.`,
     'Claim your Lucky Drop.': msg`Claim your Lucky Drop.`,
     'Claim your NFT Lucky Drop': msg`Claim your NFT Lucky Drop`,
-    'Create NFT Lucky Drop successfully.': msg`Create NFT Lucky Drop successfully.`,
     'Create your Lucky Drop.': msg`Create your Lucky Drop.`,
     'Create your NFT Lucky Drop.': msg`Create your NFT Lucky Drop.`,
     'Created a SmartPay wallet on Polygon network.': msg`Created a SmartPay wallet on Polygon network.`,
@@ -42,18 +39,21 @@ const map: Record<
     'Failed to transfer NFT.': msg`Failed to transfer NFT.`,
     'Failed to unlock NFT contract.': msg`Failed to unlock NFT contract.`,
     'Failed to unlock token contract.': msg`Failed to unlock token contract.`,
-    'Owner changed successfully.': msg`Owner changed successfully.`,
+    'Lucky Drop claimed.': msg`Lucky Drop claimed.`,
+    'Lucky Drop refunded.': msg`Lucky Drop refunded.`,
+    'Maskbox NFT purchased.': msg`Maskbox NFT purchased.`,
+    'NFT Lucky Drop claimed.': msg`NFT Lucky Drop claimed.`,
+    'NFT Lucky Drop created.': msg`NFT Lucky Drop created.`,
+    'Owner changed.': msg`Owner changed.`,
     'Purchase Maskbox NFT.': msg`Purchase Maskbox NFT.`,
-    'Purchase Maskbox NFT successfully.': msg`Purchase Maskbox NFT successfully.`,
-    'Refund Lucky Drop successfully.': msg`Refund Lucky Drop successfully.`,
     'Refund your expired Lucky Drop.': msg`Refund your expired Lucky Drop.`,
     'Revoke the approval for token': msg`Revoke the approval for token`,
-    'Revoke the approval successfully.': msg`Revoke the approval successfully.`,
+    'The token approval revoked.': msg`The token approval revoked.`,
+    'Token unlocked': msg`Token unlocked`,
     'Transaction failed': msg`Transaction failed`,
     'Transaction submitted.': msg`Transaction submitted.`,
-    'Transaction was Rejected!': msg`Transaction was Rejected!`,
+    'Transaction has been rejected!': msg`Transaction has been rejected!`,
     'Unlock token': msg`Unlock token`,
-    'Unlock token successfully': msg`Unlock token successfully`,
 
     'Cancel Transaction': msg`Cancel Transaction`,
     'Change Owner': msg`Change Owner`,
@@ -99,41 +99,41 @@ export function useFormatMessage() {
                     return _(msg`Failed to withdraw ${message.symbol}.`)
                 case 'Failed to {action} NFT contract.':
                     return _(msg`Failed to ${message.action} NFT contract.`)
-                case '{token} were successfully claimed':
-                    return _(msg`${message.token} were successfully claimed`)
-                case 'Claim 1 {symbol} NFT Lucky Drop successfully.':
-                    return _(msg`Claim 1 ${message.symbol} NFT Lucky Drop successfully.`)
-                case 'Claim Lucky Drop with {token} successfully.':
-                    return _(msg`Claim Lucky Drop with ${message.token} successfully.`)
-                case 'Create Lucky drop with {token} successfully.':
-                    return _(msg`Create Lucky drop with ${message.token} successfully.`)
-                case 'Create {symbol} NFT Lucky Drop successfully.':
-                    return _(msg`Create ${message.symbol} NFT Lucky Drop successfully.`)
-                case 'Deposit {token} successfully.':
-                    return _(msg`Deposit ${message.token} successfully.`)
-                case 'Purchase Maskbox NFT with {token} successfully.':
-                    return _(msg`Purchase Maskbox NFT with ${message.token} successfully.`)
-                case 'Refund Lucky Drop with {token} successfully.':
-                    return _(msg`Refund Lucky Drop with ${message.token} successfully.`)
-                case 'Send {token} successfully.':
-                    return _(msg`Send ${message.token} successfully.`)
-                case 'Transfer {symbol} NFT successfully.':
-                    return _(msg`Transfer ${message.symbol} NFT successfully.`)
-                case 'Unlock {symbol} NFT contract successfully.':
-                    return _(msg`Unlock ${message.symbol} NFT contract successfully.`)
-                case 'Unlock {symbol} successfully':
-                    return _(msg`Unlock ${message.symbol} successfully`)
-                case 'Withdraw {token} successfully.':
-                    return _(msg`Withdraw ${message.token} successfully.`)
-                case "You didn't approve {symbol} successfully. Please do not set spending cap as 0 and try it again.":
+                case '{token} were claimed':
+                    return _(msg`${message.token} were claimed`)
+                case '1 {symbol} NFT Lucky Drop claimed.':
+                    return _(msg`1 ${message.symbol} NFT Lucky Drop claimed.`)
+                case 'Lucky Drop with {token} claimed.':
+                    return _(msg`Claim Lucky Drop with ${message.token} claimed.`)
+                case 'Lucky drop with {token} created.':
+                    return _(msg`Lucky drop with ${message.token} created.`)
+                case '{symbol} NFT Lucky Drop created.':
+                    return _(msg`${message.symbol} NFT Lucky Drop created.`)
+                case '{token} deposited.':
+                    return _(msg`${message.token} deposited.`)
+                case 'Maskbox NFT with {token} purchased.':
+                    return _(msg`Maskbox NFT with ${message.token} purchased.`)
+                case 'Lucky Drop with {token} refunded.':
+                    return _(msg`Lucky Drop with ${message.token} refunded.`)
+                case '{token} sent.':
+                    return _(msg`${message.token} sent.`)
+                case '{symbol} NFT transferred.':
+                    return _(msg`${message.symbol} NFT transferred.`)
+                case '{symbol} NFT contract unlocked.':
+                    return _(msg`${message.symbol} NFT contract unlocked.`)
+                case '{symbol} unlocked':
+                    return _(msg`${message.symbol} unlocked`)
+                case '{token} withdrawn.':
+                    return _(msg`${message.token} withdrawn.`)
+                case "You didn't approve {symbol}. Please do not set spending cap to 0 and try it again.":
                     return _(
-                        msg`You didn't approve ${message.symbol} successfully. Please do not set spending cap as 0 and try it again.`,
+                        msg`You didn't approve ${message.symbol}. Please do not set spending cap to 0 and try it again.`,
                     )
                 case 'You have donated {amount} {symbol}':
                     return _(msg`You have donated ${message.amount} ${message.symbol}`)
-                case "You've approved {token} for {spender}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again.":
+                case "You've approved {token} for {spender}. If you want to revoke this token, please set spending cap amount to 0.":
                     return _(
-                        msg`You've approved ${message.token} for ${message.spender}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again.`,
+                        msg`You've approved ${message.token} for ${message.spender}. If you want to revoke this token, please set spending cap amount to 0.`,
                     )
                 case '{action} {symbol} NFT contract successfully.':
                     return _(msg`${message.action} ${message.symbol} NFT contract successfully.`)

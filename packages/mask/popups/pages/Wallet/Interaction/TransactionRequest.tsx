@@ -233,12 +233,12 @@ export function TransactionRequest(props: InteractionItemProps) {
                             <Typography className={classes.itemValue}>{approvedAmount}</Typography>
                         </Box>
                         <Box display="flex" alignItems="center" columnGap={1.25}>
-                            <Typography className={classes.itemTitle}>
-                                <Trans>Granted to</Trans>
-                            </Typography>
-                            <Typography className={classes.itemValue}>
-                                {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
-                            </Typography>
+                            <Trans>
+                                <Typography className={classes.itemTitle}>Granted to </Typography>
+                                <Typography className={classes.itemValue}>
+                                    {formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)}
+                                </Typography>
+                            </Trans>
                         </Box>
                     </>
                 :   null}

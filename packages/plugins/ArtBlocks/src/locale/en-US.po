@@ -21,7 +21,7 @@ msgstr ""
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:129
+#: src/SiteAdaptor/DetailsView.tsx:131
 msgid "Blockchain:"
 msgstr ""
 
@@ -29,7 +29,7 @@ msgstr ""
 msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:124
+#: src/SiteAdaptor/DetailsView.tsx:126
 msgid "Chain"
 msgstr ""
 
@@ -41,12 +41,16 @@ msgstr ""
 msgid "Completed"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:135
+#: src/SiteAdaptor/DetailsView.tsx:137
 msgid "Contract:"
 msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx:70
-msgid "Created by"
+#~ msgid "Created by"
+#~ msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx:70
+msgid "Created by <0>{0}</0>• <1>Website</1>"
 msgstr ""
 
 #: src/SiteAdaptor/Collectible.tsx:71
@@ -61,7 +65,7 @@ msgstr ""
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:89
+#: src/SiteAdaptor/DetailsView.tsx:91
 msgid "Infos"
 msgstr ""
 
@@ -69,15 +73,15 @@ msgstr ""
 msgid "Insufficient balance"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:116
+#: src/SiteAdaptor/DetailsView.tsx:118
 msgid "Library:"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:109
+#: src/SiteAdaptor/DetailsView.tsx:111
 msgid "License:"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:102
+#: src/SiteAdaptor/DetailsView.tsx:104
 msgid "Minted:"
 msgstr ""
 
@@ -93,7 +97,7 @@ msgstr ""
 msgid "Price per mint"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:93
+#: src/SiteAdaptor/DetailsView.tsx:95
 msgid "Price:"
 msgstr ""
 
@@ -112,9 +116,13 @@ msgid "Something went wrong!"
 msgstr ""
 
 #: src/SiteAdaptor/ActionBar.tsx:29
-msgid "This project is no more active"
+msgid "This project is no longer active"
 msgstr ""
 
+#: src/SiteAdaptor/ActionBar.tsx:29
+#~ msgid "This project is no more active"
+#~ msgstr ""
+
 #: src/SiteAdaptor/DetailsView.tsx:80
-msgid "Website"
-msgstr ""
+#~ msgid "Website"
+#~ msgstr ""

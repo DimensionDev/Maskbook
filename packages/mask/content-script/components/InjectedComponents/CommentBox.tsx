@@ -45,7 +45,7 @@ export function CommentBox(props: CommentBoxProps) {
             <InputBase
                 className={classes.root}
                 inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
-                placeholder={_(msg`Add an encrypted comment…`)}
+                placeholder={_(msg`Add an encrypted comment...`)}
                 onKeyDown={(event) => {
                     const node = event.target as HTMLInputElement
                     if (!node.value) return

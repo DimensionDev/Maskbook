@@ -1,8 +1,24 @@
 {
     "messages": {
+        "R/Pfmp": [["amount"], " ", ["0"], " tips sent."],
+        "ep2Wyh": ["1 ", ["0"], " tips sent."],
         "9+VwX/": "Add Collectibles",
         "yz7wBu": "Close",
         "LBtfmO": "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media.",
+        "7ygsf3": [
+            "I just tipped ",
+            ["amount"],
+            " ",
+            ["0", "select", { "namedToken": [["1"]], "other": "token" }],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["2", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["3"],
+            "\\n\\n",
+            ["promote"]
+        ],
         "D2n62c": [
             "I just tipped ",
             ["amount"],
@@ -57,6 +73,18 @@
             "\\n\\n",
             ["promote"]
         ],
+        "jdJr7z": [
+            "I just tipped a ",
+            ["NFT_Name"],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["0", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["recipientAddress"],
+            "\\n\\n",
+            ["promote"]
+        ],
         "Xf6qGr": [
             "I just tipped a ",
             ["NFT_Name"],
@@ -70,9 +98,11 @@
         "2Wwd56": "Install https://mask.io/download-links to send your first tip.",
         "znqB4T": "Insufficient balance",
         "8Dh77Z": "NFTs",
+        "y/+ReV": "No any collectible is available for preview. Please add your collectible here.",
         "4kYy+U": "No any collectible is available to preview. Please add your collectible here.",
         "CMfM6C": "No Enough Gas Fees",
         "JlFcis": "Send",
+        "t6bQQD": "Send authors tips by using Mask Network's Tips function.",
         "7ee72/": "Send authors tips by using Mask Network’s Tips function.",
         "IoAuJG": "Sending...",
         "+E4pMq": ["Sent ", ["1"], " ", ["0"], " tips successfully."],

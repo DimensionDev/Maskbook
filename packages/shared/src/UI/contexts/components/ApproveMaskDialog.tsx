@@ -79,7 +79,7 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
         if (approveStateType === ApproveStateType.FAILED) {
             return (
                 <ActionButton fullWidth variant="roundedContained" color="error">
-                    <Trans>Failed to load {'MASK'}. Click to retry.</Trans>
+                    <Trans>Failed to load MASK. Click to retry.</Trans>
                 </ActionButton>
             )
         }
@@ -120,7 +120,7 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
                     </Trans>
                 </Typography>
                 <Typography className={classes.description} marginTop={2}>
-                    <Trans>Do you want to set MASK token as gas fee?</Trans>
+                    <Trans>Do you want to use MASK tokens to pay gas fee?</Trans>
                 </Typography>
                 <InputBase
                     sx={{ mt: 3 }}

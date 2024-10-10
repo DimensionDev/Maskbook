@@ -188,7 +188,7 @@ export const Component = memo(function ConnectWalletPage() {
 
             const result = await bindProof(payload, walletSignature, personaSignature)
 
-            if (result) showSnackbar(<Trans>You have successfully signed with your wallet.</Trans>)
+            if (result) showSnackbar(<Trans>You have signed with your wallet.</Trans>)
 
             // Broadcast updates
             MaskMessages.events.ownProofChanged.sendToAll()
@@ -290,7 +290,7 @@ export const Component = memo(function ConnectWalletPage() {
                     </Typography>
                     <Typography className={classes.congratulation}>
                         <Trans>
-                            Connecting {String(currentPersona?.nickname)} with {walletName} successfully.
+                            Connected {currentPersona?.nickname} with {walletName}.
                         </Trans>
                     </Typography>
                     <Box display="flex" py={3} px={1.5} alignItems="center">

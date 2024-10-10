@@ -105,7 +105,7 @@ export const Component = memo(function Onboarding() {
         return compact([
             <Typography key="identity">
                 <Trans>
-                    We are pleased to inform you that the authorization update for X website has been successfully
+                    We are pleased to inform you that the update for X (formerly named Twitter) website has been
                     completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for
                     your continuous support!
                 </Trans>

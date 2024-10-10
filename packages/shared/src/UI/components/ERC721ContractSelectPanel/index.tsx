@@ -102,7 +102,7 @@ export function ERC721ContractSelectPanel(props: ERC721TokenSelectPanelProps) {
                 ) ?
                     null
                 :   <Typography className={classes.title} color="textSecondary" variant="body2" component="span">
-                        <Trans>Balance</Trans>: {balance ? balance : '0'}
+                        <Trans>Balance: {balance ? balance : '0'}</Trans>
                     </Typography>}
             </div>
             <div className={cx(classes.wrapper, classes.pointer)} onClick={openDialog}>

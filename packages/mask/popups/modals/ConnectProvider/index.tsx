@@ -145,7 +145,7 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
 
     return (
         <ActionModal
-            header={providerExist ? <Trans>Waiting for ${String(providerType)}</Trans> : <Trans>Not connected</Trans>}
+            header={providerExist ? <Trans>Waiting for {providerType}</Trans> : <Trans>Not connected</Trans>}
             keepMounted
             {...props}
             onClose={handleClose}>
@@ -153,8 +153,8 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
                 {isTimeout ?
                     <Trans>Wallet request timed out</Trans>
                 : providerExist ?
-                    <Trans>Connecting your {String(providerType)} wallet</Trans>
-                :   <Trans>Not found your {String(providerType)} wallet</Trans>}
+                    <Trans>Connecting your {providerType} wallet</Trans>
+                :   <Trans>Not found your {providerType} wallet</Trans>}
             </Typography>
             <Box mt={4} p={1.5} display="flex" justifyContent="center" flexDirection="column" alignItems="center">
                 {provider?.icon ?

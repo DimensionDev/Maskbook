@@ -149,7 +149,7 @@ function AppList({ appList, isListing }: AppListProps) {
                 <Typography className={classes.placeholder}>
                     {isListing ?
                         <Trans>Click the application icon to list it on the App board.</Trans>
-                    :   <Trans>Click the application icon to hide in the APP list.</Trans>}
+                    :   <Trans>Click the application icon to hide in the App list.</Trans>}
                 </Typography>
             </div>
 }

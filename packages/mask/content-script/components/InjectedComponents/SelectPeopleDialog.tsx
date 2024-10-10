@@ -80,7 +80,10 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
     const [rejection, onReject] = useState<Error>()
     const share = useCallback(() => {
         setCommitted(true)
-        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, onReject)
+        onSelect(uniqBy([...people, ...selectedProfiles], (x) => x.identifier)).then(handleClose, (err) => {
+            console.warn(err)
+            onReject(err)
+        })
     }, [handleClose, people, selectedProfiles, onSelect])
 
     const [valueToSearch, setValueToSearch] = useState('')
@@ -131,9 +134,7 @@ export function SelectProfileDialog({ open, profiles, selectedProfiles, onClose,
             </DialogContent>
             {rejection ?
                 <DialogContent className={classes.content}>
-                    <>
-                        Error: {rejection.message} {console.error(rejection)}
-                    </>
+                    <Trans>Error: {rejection.message}</Trans>
                 </DialogContent>
             :   null}
             <DialogActions className={classes.action}>

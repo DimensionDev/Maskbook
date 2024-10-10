@@ -8,6 +8,24 @@
                 { "one": ["You currently hold: ", "#", " key"], "other": ["You currently hold: ", "#", " keys"] }
             ]
         ],
+        "U+1sE3": [
+            ["0"],
+            " bought ",
+            ["shareAmount"],
+            " <0>",
+            ["1"],
+            "</0> ",
+            ["shareAmount", "plural", { "one": "key", "other": "keys" }]
+        ],
+        "ts8ISi": [
+            ["0"],
+            " sold ",
+            ["shareAmount"],
+            " <0>",
+            ["1"],
+            "</0> ",
+            ["shareAmount", "plural", { "one": "key", "other": "keys" }]
+        ],
         "H/renE": [
             [
                 "count",
@@ -52,6 +70,15 @@
         "vS/FMN": "가격 설정",
         "WQg61I": "키",
         "xNB0TS": "매출",
+        "PXbAu5": [
+            "Sell <0>",
+            ["count"],
+            "</0> ",
+            ["count", "plural", { "one": "key", "other": "keys" }],
+            " for <1>",
+            ["cost"],
+            "</1> ETH"
+        ],
         "E5pRo/": "키 매출",
         "7xTCzK": "다음 지분의 가격은 S^2 / 16000*1 ETH와 같으며, 여기서 S는 현재 키의 개수입니다.",
         "5kLACU": "There's no one holding. <0>go explore</0>",
@@ -59,6 +86,7 @@
         "NrYZ3H": "총액",
         "ZFtwlj": "거래",
         "wMHvYH": "값",
+        "+mxads": ["You currently hold: ", ["own"], " ", ["count", "plural", { "one": "key", "other": "keys" }]],
         "i1GlQb": "You don't have any keys in your wallet. <0>go explore</0>",
         "BbPO8N": "You Own",
         "uiFNIR": "나의 순위"

@@ -96,7 +96,7 @@ export const Component = memo(function Welcome() {
                         }}
                     />
                 }
-                label={<Trans>Allow us to collect your usage information to help us make improvements.</Trans>}
+                label={<Trans>Allow us to collect your usage information to help us improve Mask.</Trans>}
             />
             <SetupFrameController>
                 <div className={classes.buttonGroup}>

@@ -228,7 +228,7 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                                 <Trans>Token</Trans>
                             </Typography>
                             <Typography className={classes.desc}>
-                                <Trans>Get optimized search results when you look for a token.</Trans>
+                                <Trans>Get optimized search results when you're looking for a token.</Trans>
                             </Typography>
                         </Stack>
                         <Stack>

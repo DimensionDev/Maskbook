@@ -107,14 +107,14 @@ export function ApplicationBoard({
                     titleTabs={
                         openSettings ?
                             <MaskTabList variant="base" onChange={onChange} aria-label="ApplicationBoard">
-                                <Tab label={<Trans>APP list</Trans>} value={tabs.pluginList} />
-                                <Tab label={<Trans>Plug-in switch</Trans>} value={tabs.pluginSwitch} />
+                                <Tab label={<Trans>App list</Trans>} value={tabs.pluginList} />
+                                <Tab label={<Trans>Plugin switch</Trans>} value={tabs.pluginSwitch} />
                             </MaskTabList>
                         :   null
                     }
                     titleBarIconStyle={openSettings && !quickMode ? 'back' : 'close'}
                     independent={LeavePageConfirmModal.peek()}
-                    title={openSettings ? <Trans>APP Settings</Trans> : <Trans>Applications</Trans>}
+                    title={openSettings ? <Trans>App Settings</Trans> : <Trans>Applications</Trans>}
                     titleTail={
                         openSettings ? null : (
                             <IconButton size="small" sx={{ margin: '-5px' }} onClick={() => setOpenSettings(true)}>

@@ -34,11 +34,15 @@ msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a
 msgstr ""
 
 #: src/Application/NFTListDialog.tsx:117
-msgid "Download image error"
-msgstr ""
+#~ msgid "Download image error"
+#~ msgstr ""
 
 #: src/Application/RouterDialog.tsx:35
 msgid "Edit Profile"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx:117
+msgid "Failed to download image"
 msgstr ""
 
 #: src/SiteAdaptor/NFTBadge.tsx:42
@@ -99,7 +103,11 @@ msgid "Set your NFT as profile picture with exclusive aura."
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:70
-msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
+#~ msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:70
+msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
 msgstr ""
 
 #: src/Application/UploadAvatarDialog.tsx:91

@@ -41,7 +41,7 @@ export function useCurrentPersonaConnectStatus(
                 info: {
                     target: 'dashboard',
                     url: target ?? DashboardRoutes.SignUpPersona,
-                    text: _(msg`Please create a Persona and verify your account to use this function.`),
+                    text: _(msg`Please create a Persona and verify your account to use this.`),
                     title: _(msg`Persona`),
                     actionHint: _(msg`Create persona`),
                     position,

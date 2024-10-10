@@ -140,13 +140,15 @@ export function TokenAmountPanel(props: TokenAmountPanelProps) {
                                     color="textSecondary"
                                     variant="body2"
                                     component="span">
-                                    <Trans>Balance</Trans>:
-                                    <FormattedBalance
-                                        value={balance}
-                                        decimals={token.decimals}
-                                        significant={6}
-                                        formatter={formatBalance}
-                                    />
+                                    <Trans>
+                                        Balance:{' '}
+                                        <FormattedBalance
+                                            value={balance}
+                                            decimals={token.decimals}
+                                            significant={6}
+                                            formatter={formatBalance}
+                                        />
+                                    </Trans>
                                 </Typography>
                             :   null}
                             <Box

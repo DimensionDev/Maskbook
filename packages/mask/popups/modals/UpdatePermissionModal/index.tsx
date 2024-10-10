@@ -53,12 +53,12 @@ export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdateP
 
     return (
         <ActionModal
-            header={<Trans>Update X.com Authorization</Trans>}
+            header={<Trans>Update X.com Permissions</Trans>}
             headerClassName={classes.header}
             action={action}
             {...props}>
             <Typography className={classes.text}>
-                <Trans>Authorization List</Trans>
+                <Trans>Permissions List</Trans>
             </Typography>
             <Box className={classes.permissions}>
                 {origins.map((x) => (
@@ -67,8 +67,8 @@ export const UpdatePermissionModal = memo<ActionModalBaseProps>(function UpdateP
             </Box>
             <Typography className={classes.text}>
                 <Trans>
-                    Because Twitter is now using the new domain name x.com, Mask Network requires users to grant new
-                    authorization in order to continue working on x.com.
+                    Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions
+                    in order to continue working on x.com.
                 </Trans>
             </Typography>
         </ActionModal>

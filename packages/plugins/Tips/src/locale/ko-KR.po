@@ -18,6 +18,14 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Tips/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 998\n"
 
+#: src/components/TipDialog.tsx:146
+msgid "{amount} {0} tips sent."
+msgstr ""
+
+#: src/components/TipDialog.tsx:145
+msgid "1 {0} tips sent."
+msgstr ""
+
 #: src/components/NFTSection/index.tsx:160
 msgid "Add Collectibles"
 msgstr "수장품 추가"
@@ -30,29 +38,37 @@ msgstr "닫기"
 msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
 msgstr ""
 
-#: src/components/TipDialog.tsx:104
-msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#: src/components/TipDialog.tsx:101
+msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\n{promote}"
 msgstr ""
+
+#: src/components/TipDialog.tsx:104
+#~ msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:108
-msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
-msgstr ""
+#~ msgid "I just tipped {amount} {tokenSymbol} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:113
-msgid "I just tipped {amount} token to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
-msgstr ""
+#~ msgid "I just tipped {amount} token to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:117
-msgid "I just tipped {amount} token to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
-msgstr ""
+#~ msgid "I just tipped {amount} token to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:128
-msgid "I just tipped a {{name}} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgid "I just tipped a {{name}} to @{recipientUserId}'s wallet address {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx:113
+msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\n{promote}"
 msgstr ""
 
 #: src/components/TipDialog.tsx:124
-msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
-msgstr ""
+#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s wallet {recipientName}\\n\\n{promote}"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:98
 msgid "Install https://mask.io/download-links to send your first tip."
@@ -62,37 +78,45 @@ msgstr ""
 msgid "Insufficient balance"
 msgstr "잔액 부족"
 
-#: src/components/TipDialog.tsx:194
+#: src/components/TipDialog.tsx:183
 msgid "NFTs"
 msgstr "NFTs"
 
 #: src/components/NFTSection/index.tsx:207
-msgid "No any collectible is available to preview. Please add your collectible here."
-msgstr "미리 보기에 사용할 수 있는 수집품이 없습니다. 여기에 수집품을 추가하십시오."
+msgid "No any collectible is available for preview. Please add your collectible here."
+msgstr ""
+
+#: src/components/NFTSection/index.tsx:207
+#~ msgid "No any collectible is available to preview. Please add your collectible here."
+#~ msgstr "미리 보기에 사용할 수 있는 수집품이 없습니다. 여기에 수집품을 추가하십시오."
 
 #: src/contexts/Tip/useTipValidate.ts:36
 msgid "No Enough Gas Fees"
 msgstr "가스비 부족"
 
-#: src/components/TipDialog.tsx:140
+#: src/components/TipDialog.tsx:129
 msgid "Send"
 msgstr "발송"
 
 #: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
-msgid "Send authors tips by using Mask Network’s Tips function."
-msgstr "마스크 네트워크의 팁 기능을 사용하여 작성자에게 팁을 보냅니다."
+msgid "Send authors tips by using Mask Network's Tips function."
+msgstr ""
 
-#: src/components/TipDialog.tsx:139
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
+#~ msgid "Send authors tips by using Mask Network’s Tips function."
+#~ msgstr "마스크 네트워크의 팁 기능을 사용하여 작성자에게 팁을 보냅니다."
+
+#: src/components/TipDialog.tsx:128
 msgid "Sending..."
 msgstr "발송 중..."
 
 #: src/components/TipDialog.tsx:156
-msgid "Sent {1} {0} tips successfully."
-msgstr "{0} {1} 팁 발송 성공"
+#~ msgid "Sent {1} {0} tips successfully."
+#~ msgstr "{0} {1} 팁 발송 성공"
 
 #: src/components/TipDialog.tsx:157
-msgid "Sent {amount} {0} tips successfully."
-msgstr ""
+#~ msgid "Sent {amount} {0} tips successfully."
+#~ msgstr ""
 
 #: src/contexts/Tip/useRecipientValidate.ts:28
 msgid "The receiving address is a contract address. Please check again."
@@ -102,8 +126,8 @@ msgstr "받는 주소는 컨트랙트 주소입니다. 다시 확인해 주세�
 msgid "The receiving address may be a malicious address."
 msgstr "받는 주소는 악의적인 주소일 수 있습니다."
 
-#: src/components/TipDialog.tsx:158
-#: src/components/TipDialog.tsx:190
+#: src/components/TipDialog.tsx:147
+#: src/components/TipDialog.tsx:179
 msgid "Tips"
 msgstr "팁"
 
@@ -111,7 +135,7 @@ msgstr "팁"
 msgid "To"
 msgstr "받는 사람"
 
-#: src/components/TipDialog.tsx:193
+#: src/components/TipDialog.tsx:182
 msgid "Tokens"
 msgstr "토큰"
 

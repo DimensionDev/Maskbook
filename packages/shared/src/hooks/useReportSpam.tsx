@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ConfirmDialog } from '../UI/modals/modals.js'
-import { Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/macro'
 
 interface Options {
     address?: string
@@ -63,8 +63,13 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
             title: <Trans>Report NFT Scam Contract?</Trans>,
             message: (
                 <Trans>
-                    Are you sure to report {collection?.name || 'this NFT'}? After approving, this NFT will be marked as
-                    spam.
+                    Are you sure to report{' '}
+                    <Select
+                        value={collection?.name ? 'hasName' : 'noName'}
+                        _hasName={collection?.name}
+                        _noName="this NFT"
+                    />
+                    ? After confirmed, this NFT will be marked as spam.
                 </Trans>
             ),
             confirmVariant: 'warning',
@@ -73,7 +78,7 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
         const result = await reportSpam()
         showSnackbar(<Trans>Report Spam</Trans>, {
             variant: result ? 'success' : 'error',
-            message: result ? <Trans>Successfully reported.</Trans> : <Trans>Failed to report spam.</Trans>,
+            message: result ? <Trans>Spam reported.</Trans> : <Trans>Failed to report spam.</Trans>,
         })
     }, [colId, reportSpam, collection?.name])
     const isSpam = !!collection && collection.spam_score !== null && collection.spam_score > SPAM_SCORE

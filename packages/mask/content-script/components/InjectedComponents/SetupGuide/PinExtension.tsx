@@ -86,18 +86,19 @@ export function PinExtension({ onDone, onClose }: PinExtensionProps) {
             tip={
                 <Typography className={classes.tip} component="div">
                     <div>
-                        <Trans>Don't forget to pin Mask Network in your browser toolbar to access Web3 easily.</Trans>
+                        <Trans>Don't forget to pin Mask Network in the browser toolbar to access Web3 easily.</Trans>
                     </div>
                     <ol style={{ paddingLeft: '24px' }}>
                         <li>
-                            <Trans>Click on </Trans>
-                            <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} />
-                            <Trans> at top right of your browser.</Trans>
+                            <Trans>
+                                Click on <ExtensionIcon sx={{ fontSize: 16, color: '#ababab' }} /> at the top-right of
+                                your browser.
+                            </Trans>
                         </li>
                         <li>
-                            <Trans>Find Mask Network in the list of extensions and click the </Trans>
-                            <Icons.Pin size={16} />
-                            <Trans> button.</Trans>
+                            <Trans>
+                                Find Mask Network in the extension list and click the <Icons.Pin size={16} /> button.
+                            </Trans>
                         </li>
                         <li>
                             <Trans>Pinned successfully.</Trans>

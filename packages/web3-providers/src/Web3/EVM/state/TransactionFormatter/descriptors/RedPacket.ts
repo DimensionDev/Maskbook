@@ -101,7 +101,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     description: 'Create your Lucky Drop.',
                     snackbar: {
                         successfulDescription: {
-                            key: 'Create Lucky drop with {token} successfully.',
+                            key: 'Lucky drop with {token} created.',
                             token: tokenAmountDescription,
                         },
                         failedDescription: 'Failed to create Lucky Drop.',
@@ -120,8 +120,8 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     snackbar: {
                         successfulDescription:
                             tokenAmountDescription ?
-                                { key: 'Claim Lucky Drop with {token} successfully.', token: tokenAmountDescription }
-                            :   'Claim Lucky Drop successfully.',
+                                { key: 'Lucky Drop with {token} claimed.', token: tokenAmountDescription }
+                            :   'Lucky Drop claimed.',
                         failedDescription: 'Failed to claim Lucky Drop.',
                     },
                     popup: {
@@ -137,8 +137,8 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     snackbar: {
                         successfulDescription:
                             tokenAmountDescription ?
-                                { key: 'Refund Lucky Drop with {token} successfully.', token: tokenAmountDescription }
-                            :   'Refund Lucky Drop successfully.',
+                                { key: 'Lucky Drop with {token} refunded.', token: tokenAmountDescription }
+                            :   'Lucky Drop refunded.',
                         failedDescription: 'Failed to refund Lucky Drop.',
                     },
                     popup: {
@@ -158,9 +158,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     description: 'Create your NFT Lucky Drop.',
                     snackbar: {
                         successfulDescription:
-                            symbol ?
-                                { key: 'Create {symbol} NFT Lucky Drop successfully.', symbol }
-                            :   'Create NFT Lucky Drop successfully.',
+                            symbol ? { key: '{symbol} NFT Lucky Drop created.', symbol } : 'NFT Lucky Drop created.',
                         failedDescription: 'Failed to create Lucky Drop.',
                     },
                     popup: {
@@ -175,9 +173,7 @@ export class RedPacketDescriptor extends DescriptorWithTransactionDecodedReceipt
                     description: 'Claim your NFT Lucky Drop',
                     snackbar: {
                         successfulDescription:
-                            symbol ?
-                                { key: 'Claim 1 {symbol} NFT Lucky Drop successfully.', symbol }
-                            :   'Claim NFT Lucky Drop successfully.',
+                            symbol ? { key: '1 {symbol} NFT Lucky Drop claimed.', symbol } : 'NFT Lucky Drop claimed.',
                         failedDescription: 'Failed to claim Lucky Drop.',
                     },
                     popup: {

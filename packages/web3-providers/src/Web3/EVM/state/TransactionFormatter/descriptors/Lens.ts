@@ -18,7 +18,7 @@ export class LensDescriptor extends BaseDescriptor {
                         title: 'Follow User',
                         description: 'Transaction submitted.',
                         snackbar: {
-                            failedDescription: 'Transaction was Rejected!',
+                            failedDescription: 'Transaction has been rejected!',
                         },
                         popup: {
                             method: name,

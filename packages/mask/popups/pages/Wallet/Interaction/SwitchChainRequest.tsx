@@ -108,7 +108,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
                         {currentNetwork?.fullName ?? 'Unknown Network'}
                     </Link>
                     <Typography>
-                        <Trans>Chain ID</Trans>: {currentNetwork?.chainId ?? currentChainId}
+                        <Trans>Chain ID: {currentNetwork?.chainId ?? currentChainId}</Trans>
                     </Typography>
                 </div>
                 <div className={classes.arrow} />
@@ -117,7 +117,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
                         {nextNetwork?.fullName ?? 'Unknown Network'}
                     </Link>
                     <Typography>
-                        <Trans>Chain ID</Trans>: {nextNetwork?.chainId ?? nextChainId}
+                        <Trans>Chain ID: {nextNetwork?.chainId ?? nextChainId}</Trans>
                     </Typography>
                 </div>
             </div>

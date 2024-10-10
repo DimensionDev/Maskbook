@@ -10,12 +10,12 @@ function defineSchema(refine: boolean, _: I18nContext['_']) {
         .object({
             password: zod
                 .string()
-                .min(6, _(msg`Payment password must be 6 to 20 characters in length.`))
-                .max(20, _(msg`Payment password must be 6 to 20 characters in length.`)),
+                .min(6, _(msg`Payment password must be 6 to 20 characters.`))
+                .max(20, _(msg`Payment password must be 6 to 20 characters.`)),
             confirm: zod.string().optional(),
         })
         .refine((data) => !refine || data.password === data.confirm, {
-            message: _(msg`The two entered passwords are inconsistent.`),
+            message: _(msg`Two entered passwords are not the same.`),
             path: ['confirm'],
         })
 }

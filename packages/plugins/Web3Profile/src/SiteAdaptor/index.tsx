@@ -58,7 +58,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 nextIdRequired: true,
                 category: 'dapp',
-                description: <Trans>Choose and showcase your Web3 footprints on Twitter.</Trans>,
+                description: <Trans>Choose and show your Web3 footprints on X.</Trans>,
             }
         })(),
     ],

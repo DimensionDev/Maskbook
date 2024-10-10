@@ -7,6 +7,7 @@
         "6sbLuF": "현재 결과",
         "MQ9hQ4": "DAO",
         "XQYg/I": "각 프로젝트 또는 프로토콜의 트위터 페이지에 스냅샷 제안을 표시합니다.",
+        "UxJ2jd": "Display Snapshot proposals on the X of the respective project or protocol.",
         "Midntl": "리포트 다운로드",
         "IrI9pg": "종료 날짜",
         "TbaYrr": ["Ended ", ["0"]],
@@ -17,6 +18,7 @@
         "XrH+JC": "IPFS",
         "0wdd7X": "참가",
         "yQE2r9": "로딩 중",
+        "hj39w+": "Loading failed due to Snapshot API service breakdown.",
         "eYLq1w": "Snapshot API 시비스 고장으로 인해 로딩 실패",
         "9oP21f": "나의 투표",
         "+ubcPw": "파워없음",
@@ -36,6 +38,7 @@
         "lQXQKs": "투표",
         "przoUP": "투표 개요",
         "eFmWrs": "투표 성공",
+        "u7TofG": "Voted.",
         "PByO0X": "투표",
         "kWJmRL": "You",
         "9q+I38": "투표 파워"

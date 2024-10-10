@@ -196,9 +196,7 @@ export const Component = memo(function AddDeriveWallet() {
         <>
             <div className={classes.between}>
                 <Typography className={cx(classes.second, classes.bold)}>
-                    <Trans>
-                        Step {'2'}/{'2'}
-                    </Trans>
+                    <Trans>Step 2/2</Trans>
                 </Typography>
                 <Typography className={cx(classes.create, classes.bold)} onClick={handleRecovery}>
                     <Trans>Create</Trans>

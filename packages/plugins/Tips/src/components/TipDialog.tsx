@@ -25,7 +25,7 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg, select, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -97,36 +97,25 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         const recipientName = recipient?.label || recipientEns
         const promote = _(msg`Install https://mask.io/download-links to send your first tip.`)
         if (isTokenTip) {
-            if (token?.symbol) {
-                const tokenSymbol = token.symbol
-                if (recipientName)
-                    return _(
-                        msg`I just tipped ${amount} ${tokenSymbol} to @${recipientUserId}'s wallet ${recipientName}\n\n${promote}`,
-                    )
-                else
-                    return _(
-                        msg`I just tipped ${amount} ${tokenSymbol} to @${recipientUserId}'s wallet address ${recipientAddress}\n\n${promote}`,
-                    )
-            } else {
-                if (recipientName)
-                    return _(
-                        msg`I just tipped ${amount} token to @${recipientUserId}'s wallet ${recipientName}\n\n${promote}`,
-                    )
-                else
-                    return _(
-                        msg`I just tipped ${amount} token to @${recipientUserId}'s wallet address ${recipientAddress}\n\n${promote}`,
-                    )
-            }
+            return _(
+                msg`I just tipped ${amount} ${select(token?.symbol ? 'namedToken' : 'token', {
+                    namedToken: token?.symbol || '',
+                    other: 'token',
+                })} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
+                    name: 'wallet',
+                    address: 'wallet address',
+                    other: 'wallet',
+                })} ${recipientName || recipientAddress}\n\n${promote}`,
+            )
         } else {
             const NFT_Name = nonFungibleTokenContract?.name || 'NFT'
-            if (recipientName)
-                return _(
-                    msg`I just tipped a ${NFT_Name} to @${recipientUserId}'s wallet ${recipientName}\n\n${promote}`,
-                )
-            else
-                return _(
-                    msg`I just tipped a {{name}} to @${recipientUserId}'s wallet address ${recipientAddress}\n\n${promote}`,
-                )
+            return _(
+                msg`I just tipped a ${NFT_Name} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
+                    name: 'wallet',
+                    address: 'wallet address',
+                    other: 'wallet',
+                })} ${recipientAddress}\n\n${promote}`,
+            )
         }
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, _, recipientEns])
 
@@ -153,8 +142,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
             token,
             nonFungibleTokenId,
             nonFungibleTokenAddress,
-            messageTextForNFT: _(msg`Sent ${'1'} ${nonFungibleToken?.contract?.name || 'NFT'} tips successfully.`),
-            messageTextForFT: _(msg`Sent ${amount} ${`$${token?.symbol}`} tips successfully.`),
+            messageTextForNFT: _(msg`1 ${nonFungibleToken?.contract?.name || 'NFT'} tips sent.`),
+            messageTextForFT: _(msg`${amount} ${`$${token?.symbol}`} tips sent.`),
             title: _(msg`Tips`),
             share,
         })

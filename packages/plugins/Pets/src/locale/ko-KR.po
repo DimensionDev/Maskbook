@@ -22,11 +22,19 @@ msgstr ""
 msgid "(unverified)"
 msgstr ""
 
-#: src/hooks/useEssay.ts:40
-msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+#: src/SiteAdaptor/PetSetDialog.tsx:369
+msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:393
+#: src/hooks/useEssay.ts:40
+#~ msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+#~ msgstr ""
+
+#: src/hooks/useEssay.ts:40
+msgid "Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:395
 msgid "Confirm"
 msgstr "확인"
 
@@ -66,8 +74,8 @@ msgid "Optional, 100 characters max."
 msgstr "최대 100 캐릭터를 선택할 수 있습니다."
 
 #: src/SiteAdaptor/PetSetDialog.tsx:370
-msgid "Powered by"
-msgstr "기술 지원"
+#~ msgid "Powered by"
+#~ msgstr "기술 지원"
 
 #: src/SiteAdaptor/PreviewBox.tsx:161
 msgid "Preview"
@@ -93,7 +101,7 @@ msgstr "성공"
 msgid "Token ID"
 msgstr "토큰 ID"
 
-#: src/SiteAdaptor/PetSetDialog.tsx:400
+#: src/SiteAdaptor/PetSetDialog.tsx:402
 #: src/SiteAdaptor/PetShareDialog.tsx:56
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr "설치 성공"

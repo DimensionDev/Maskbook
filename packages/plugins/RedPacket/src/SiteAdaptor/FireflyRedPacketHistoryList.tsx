@@ -60,8 +60,9 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
                 {historyType === FireflyRedPacketAPI.ActionType.Claim ?
                     <Trans>No Lucky Drops claimed</Trans>
                 :   <div>
-                        <Trans>No Lucky Drops created.</Trans>{' '}
-                        <Trans>Select 🎁 when you compose a post to start your first drop.</Trans>
+                        <Trans>
+                            No Lucky Drops created. Select 🎁 when you compose a post to start your first drop.
+                        </Trans>
                     </div>
                 }
             </EmptyStatus>

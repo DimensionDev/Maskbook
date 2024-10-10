@@ -19,7 +19,11 @@ msgstr ""
 "X-Crowdin-File-ID: 990\n"
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:52
-msgid "{0, plural, one {This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.} other {These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams.}}"
+#~ msgid "{0, plural, one {This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.} other {These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams.}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/PreviewCard.tsx:52
+msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:23

@@ -39,12 +39,16 @@ msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a
 msgstr "ソーシャルアカウントを接続することでNFTエクスペリエンスをカスタマイズします。全く新しいWeb3の雰囲気でWeb2をお楽しみください。"
 
 #: src/Application/NFTListDialog.tsx:117
-msgid "Download image error"
-msgstr "画像ダウンロードエラー"
+#~ msgid "Download image error"
+#~ msgstr "画像ダウンロードエラー"
 
 #: src/Application/RouterDialog.tsx:35
 msgid "Edit Profile"
 msgstr "プロフィールを編集する"
+
+#: src/Application/NFTListDialog.tsx:117
+msgid "Failed to download image"
+msgstr ""
 
 #: src/SiteAdaptor/NFTBadge.tsx:42
 msgid "Loading..."
@@ -104,7 +108,11 @@ msgid "Set your NFT as profile picture with exclusive aura."
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:70
-msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
+#~ msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:70
+msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
 msgstr ""
 
 #: src/Application/UploadAvatarDialog.tsx:91

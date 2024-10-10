@@ -96,10 +96,12 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
             <Box className={classes.card}>
                 <Box flex={1}>
                     <Typography className={classes.publicKeyTitle}>
-                        <Trans>Address</Trans>:{' '}
-                        <Typography component="span" className={classes.publicKey}>
-                            {address}
-                        </Typography>
+                        <Trans>
+                            Address:{' '}
+                            <Typography component="span" className={classes.publicKey}>
+                                {address}
+                            </Typography>
+                        </Trans>
                     </Typography>
                 </Box>
                 <div className={classes.qrWrapper}>
@@ -118,7 +120,7 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
             <MnemonicReveal words={words} indexed classes={{ wordCard: classes.wordCard, text: classes.text }} />
             <Typography className={classes.tips}>
                 <Icons.Info variant="light" size={24} />
-                <Trans>This QR saves your mnemonic, please keep it safely.</Trans>
+                <Trans>This QR includes your mnemonic words, please keep it safely.</Trans>
             </Typography>
         </Box>
     )

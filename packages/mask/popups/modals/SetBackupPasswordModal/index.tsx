@@ -92,7 +92,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     value={repeatPassword}
                     onBlur={validRepeatPassword}
                     error={!passwordMatched}
-                    helperText={!passwordMatched ? <Trans>The two entered passwords are inconsistent.</Trans> : ''}
+                    helperText={!passwordMatched ? <Trans>Two entered passwords are not the same.</Trans> : ''}
                 />
                 <Box>
                     <Typography fontSize={12} color={theme.palette.maskColor.second}>

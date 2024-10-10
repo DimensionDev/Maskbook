@@ -52,12 +52,7 @@ export const PhoneField = memo(function PhoneField() {
     }
     const [{ error: sendCodeError }, handleSendCode] = useAsyncFn(async () => {
         const type = BackupAccountType.Phone
-        showSnackbar(
-            <Trans>
-                Verification code was sent to your {type}. Please check your {type}.
-            </Trans>,
-            { variant: 'success' },
-        )
+        showSnackbar(<Trans>Verification code has been sent to your phone.</Trans>, { variant: 'success' })
         await sendCode({
             account,
             type,

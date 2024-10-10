@@ -115,7 +115,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
     const [{ loading: submitting }, handleSubmit] = useAsyncFn(async () => {
         try {
             await updateConfig(pendingUnlistedConfig)
-            showSnackbar(<Trans>Save successfully</Trans>, {
+            showSnackbar(<Trans>Saved</Trans>, {
                 variant: 'success',
                 message: <Trans>Set up Web3 Profile wallets successfully.</Trans>,
                 autoHideDuration: 2000,

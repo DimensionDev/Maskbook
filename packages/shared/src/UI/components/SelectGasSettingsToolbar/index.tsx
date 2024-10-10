@@ -368,9 +368,7 @@ export function SelectGasSettingsToolbarUI({
                     symbol={currencyToken?.symbol}
                     formatter={formatBalance}
                 />
-                <Typography className={classes.gasUSDPrice}>
-                    <Trans> ≈ {gasFeeUSD}</Trans>
-                </Typography>
+                <Typography className={classes.gasUSDPrice}>≈ {gasFeeUSD}</Typography>
                 <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
                     <Typography className={classes.text}>
                         {isCustomGas ?

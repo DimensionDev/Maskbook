@@ -827,48 +827,48 @@ export interface FormattedTransactionSnackbar {
 export type FormattedTransactionSnackbarSuccessTitle = 'Unlock Token'
 export type FormattedTransactionSnackbarSuccessDescription =
     // General
-    | 'Revoke the approval successfully.'
-    | 'Unlock token successfully'
-    | { key: 'Transfer {symbol} NFT successfully.'; symbol: string }
+    | 'The token approval revoked.'
+    | 'Token unlocked'
+    | { key: '{symbol} NFT transferred.'; symbol: string }
     | { key: '{action} {symbol} approval successfully.'; action: string; symbol: string }
     | { key: '{action} {symbol} NFT contract successfully.'; action: string; symbol: string }
-    | { key: 'Unlock {symbol} NFT contract successfully.'; symbol: string }
-    | { key: 'Unlock {symbol} successfully'; symbol: string }
-    | { key: 'Send {token} successfully.'; token: string }
+    | { key: '{symbol} NFT contract unlocked.'; symbol: string }
+    | { key: '{symbol} unlocked'; symbol: string }
+    | { key: '{token} sent.'; token: string }
     | {
-          key: "You've approved {token} for {spender}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
+          key: "You've approved {token} for {spender}. If you want to revoke this token, please set spending cap amount to 0."
           token: string
           spender: string
       }
     | {
-          key: "You didn't approve {symbol} successfully. Please do not set spending cap as 0 and try it again."
+          key: "You didn't approve {symbol}. Please do not set spending cap to 0 and try it again."
           symbol: string
       }
-    | { key: 'Send {token} successfully.'; token: string }
+    | { key: '{token} sent.'; token: string }
     // Airdrop
-    | { key: '{token} were successfully claimed'; token: string }
+    | { key: '{token} were claimed'; token: string }
     // Gitcoin
     | { key: 'You have donated {amount} {symbol}'; amount: string; symbol: string }
     // Lucky Drop
-    | 'Claim Lucky Drop successfully.'
-    | 'Claim NFT Lucky Drop successfully.'
-    | 'Create NFT Lucky Drop successfully.'
-    | 'Refund Lucky Drop successfully.'
-    | { key: 'Claim 1 {symbol} NFT Lucky Drop successfully.'; symbol: string }
-    | { key: 'Create {symbol} NFT Lucky Drop successfully.'; symbol: string }
-    | { key: 'Refund Lucky Drop with {token} successfully.'; token: string }
-    | { key: 'Claim Lucky Drop with {token} successfully.'; token: string }
-    | { key: 'Create Lucky drop with {token} successfully.'; token: string }
+    | 'Lucky Drop claimed.'
+    | 'NFT Lucky Drop claimed.'
+    | 'NFT Lucky Drop created.'
+    | 'Lucky Drop refunded.'
+    | { key: '1 {symbol} NFT Lucky Drop claimed.'; symbol: string }
+    | { key: '{symbol} NFT Lucky Drop created.'; symbol: string }
+    | { key: 'Lucky Drop with {token} refunded.'; token: string }
+    | { key: 'Lucky Drop with {token} claimed.'; token: string }
+    | { key: 'Lucky drop with {token} created.'; token: string }
     // MaskBox
-    | 'Purchase Maskbox NFT successfully.'
-    | { key: 'Purchase Maskbox NFT with {token} successfully.'; token: string }
+    | 'Maskbox NFT purchased.'
+    | { key: 'Maskbox NFT with {token} purchased.'; token: string }
     // Savings
-    | { key: 'Withdraw {token} successfully.'; token: string }
-    | { key: 'Deposit {token} successfully.'; token: string }
+    | { key: '{token} withdrawn.'; token: string }
+    | { key: '{token} deposited.'; token: string }
     // SmartPay
     | 'Created a SmartPay wallet on Polygon network.'
     | 'Deploy a SmartPay wallet on Polygon network.'
-    | 'Owner changed successfully.'
+    | 'Owner changed.'
 export type FormattedTransactionSnackbarFailedDescription =
     // General
     | ''
@@ -878,7 +878,7 @@ export type FormattedTransactionSnackbarFailedDescription =
     | 'Failed to unlock NFT contract.'
     | 'Failed to unlock token contract.'
     | 'Transaction failed'
-    | 'Transaction was Rejected!'
+    | 'Transaction has been rejected!'
     | { key: 'Failed to {action} NFT contract.'; action: string }
     // Lucky Drop
     | 'Failed to claim Lucky Drop.'

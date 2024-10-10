@@ -17,11 +17,19 @@ msgstr ""
 msgid "(unverified)"
 msgstr ""
 
-#: src/hooks/useEssay.ts:40
-msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+#: src/SiteAdaptor/PetSetDialog.tsx:369
+msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:393
+#: src/hooks/useEssay.ts:40
+#~ msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+#~ msgstr ""
+
+#: src/hooks/useEssay.ts:40
+msgid "Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx:395
 msgid "Confirm"
 msgstr ""
 
@@ -61,8 +69,8 @@ msgid "Optional, 100 characters max."
 msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:370
-msgid "Powered by"
-msgstr ""
+#~ msgid "Powered by"
+#~ msgstr ""
 
 #: src/SiteAdaptor/PreviewBox.tsx:161
 msgid "Preview"
@@ -88,7 +96,7 @@ msgstr ""
 msgid "Token ID"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:400
+#: src/SiteAdaptor/PetSetDialog.tsx:402
 #: src/SiteAdaptor/PetShareDialog.tsx:56
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr ""

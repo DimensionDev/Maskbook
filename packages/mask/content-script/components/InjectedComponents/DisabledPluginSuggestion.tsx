@@ -101,7 +101,7 @@ export function PossiblePluginSuggestionUISingle(props: {
 
     const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
     const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />
-    const buttonLabel = lackHostPermission ? <Trans>Approve</Trans> : <Trans>Enable plugin</Trans>
+    const buttonLabel = lackHostPermission ? <Trans>Approve</Trans> : <Trans>Enable the plugin</Trans>
 
     return (
         <MaskPostExtraInfoWrapper
@@ -165,7 +165,7 @@ function FallbackContent({ disabled, ...rest }: FallbackContentProps) {
         return (
             <Box component="div" {...rest} className={cx(classes.content, rest.className)}>
                 <Typography className={classes.text}>
-                    <Trans>You need to open the DAPP to view the specific content.</Trans>
+                    <Trans>You need to open the dApp to view the specific content.</Trans>
                 </Typography>
             </Box>
         )

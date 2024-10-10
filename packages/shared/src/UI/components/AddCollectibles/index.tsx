@@ -277,7 +277,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                         <>
                             <MaskTextField
                                 {...field}
-                                placeholder={_(msg`Token ID separated by comma, e.g. 1223,1224,`)}
+                                placeholder={_(msg`Token ID should be separated by comma, e.g. 1223,1224,`)}
                                 error={!!errors.tokenIds}
                                 InputProps={{
                                     spellCheck: false,

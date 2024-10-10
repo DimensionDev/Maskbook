@@ -130,7 +130,7 @@ export const DecryptPostSuccess = memo(function DecryptPostSuccess(props: Decryp
                 </>
             :   <section className={classes.visibilityBox}>
                     <Typography color="textPrimary" fontSize={12} fontWeight={500}>
-                        <Trans>All Mask plug-in users</Trans>
+                        <Trans>All Mask Network users</Trans>
                     </Typography>
                 </section>
         :   null

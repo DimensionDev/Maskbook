@@ -155,11 +155,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
 
     const tips = useMemo(() => {
         if (isZero(value)) {
-            return (
-                <Trans>
-                    The approval for this contract will be revoked in the event of using 0 as the default input.
-                </Trans>
-            )
+            return <Trans>The approval for this contract will be revoked in case of the amount is 0.</Trans>
         }
         if (isGreaterThan(value, leftShift(balance, token?.decimals))) {
             return (

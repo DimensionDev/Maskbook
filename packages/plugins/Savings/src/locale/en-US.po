@@ -22,7 +22,7 @@ msgid "Amount"
 msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:318
-#: src/SiteAdaptor/SavingsTable/index.tsx:88
+#: src/SiteAdaptor/SavingsTable/index.tsx:87
 msgid "APR"
 msgstr ""
 
@@ -31,11 +31,14 @@ msgid "Asset"
 msgstr ""
 
 #: src/SiteAdaptor/SavingsDialog.tsx:136
-#: src/SiteAdaptor/SavingsForm.tsx:237
-#: src/SiteAdaptor/SavingsForm.tsx:249
 #: src/SiteAdaptor/SavingsForm.tsx:279
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:106
 msgid "Deposit"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx:237
+#: src/SiteAdaptor/SavingsForm.tsx:249
+msgid "Deposit {0}"
 msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:241
@@ -79,24 +82,24 @@ msgstr ""
 msgid "Lido Exchange Rate"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:108
+#: src/SiteAdaptor/SavingsTable/index.tsx:107
 msgid "Loading"
 msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:193
 #: src/SiteAdaptor/WithdrawForm.tsx:117
-msgid "masknetwork"
-msgstr ""
+#~ msgid "masknetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/WithdrawForm.tsx:145
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:126
+#: src/SiteAdaptor/SavingsTable/index.tsx:125
 msgid "No deposit protocols found."
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:99
+#: src/SiteAdaptor/SavingsTable/index.tsx:98
 msgid "Operation"
 msgstr ""
 
@@ -111,8 +114,8 @@ msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:193
 #: src/SiteAdaptor/WithdrawForm.tsx:117
-msgid "realMaskNetwork"
-msgstr ""
+#~ msgid "realMaskNetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:14
 #: src/SiteAdaptor/SavingsDialog.tsx:129
@@ -131,7 +134,7 @@ msgstr ""
 msgid "Waiting time"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:94
+#: src/SiteAdaptor/SavingsTable/index.tsx:93
 msgid "Wallet"
 msgstr ""
 

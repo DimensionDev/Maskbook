@@ -59,12 +59,12 @@ function ChangePaymentPasswordDrawer({
             return
         }
         if ([oldPassword, newPassword, confirmNewPassword].some((x) => x.length < 6)) {
-            setPasswordTooShort(<Trans>Payment password must be 6 to 20 characters in length.</Trans>)
+            setPasswordTooShort(<Trans>Payment password must be 6 to 20 characters.</Trans>)
             return
         }
         try {
             await Services.Wallet.changePassword(oldPassword, newPassword)
-            showSnackbar(<Trans>Change payment password successfully.</Trans>)
+            showSnackbar(<Trans>Payment password changed.</Trans>)
             rest.onClose?.()
         } catch (error) {
             setOriginalPasswordWrong((error as Error).message)

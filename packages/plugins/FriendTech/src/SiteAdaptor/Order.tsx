@@ -129,21 +129,10 @@ export const Order = memo(function Order() {
                         component="div"
                         skeletonWidth={150}
                         loading={loadingPrice}>
-                        <Plural
-                            value={count}
-                            one={
-                                <Trans>
-                                    Sell <b className={classes.bold}>{count}</b> key for{' '}
-                                    <b className={classes.bold}>{cost}</b> ETH
-                                </Trans>
-                            }
-                            other={
-                                <Trans>
-                                    Sell <b className={classes.bold}>{count}</b> keys for{' '}
-                                    <b className={classes.bold}>{cost}</b> ETH
-                                </Trans>
-                            }
-                        />
+                        <Trans>
+                            Sell <b className={classes.bold}>{count}</b> <Plural value={count} one="key" other="keys" />{' '}
+                            for <b className={classes.bold}>{cost}</b> ETH
+                        </Trans>
                     </ProgressiveText>
                     <ShadowRootTooltip
                         title={
@@ -158,7 +147,9 @@ export const Order = memo(function Order() {
                     </ShadowRootTooltip>
                 </Box>
                 <ProgressiveText loading={loadingOwnCount} fontWeight={700} skeletonWidth={150}>
-                    <Plural value={own || 0} one="You currently hold: # key" other="You currently hold: # keys" />
+                    <Trans>
+                        You currently hold: {own} <Plural value={count} one="key" other="keys" />
+                    </Trans>
                 </ProgressiveText>
             </Box>
             <Box display="flex" gap={2} mt={1.5}>

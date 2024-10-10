@@ -73,7 +73,7 @@ function DeleteContactDrawer({ onConfirm, address, name, ...rest }: DeleteContac
 
     const [{ loading }, deleteContact] = useAsyncFn(async () => {
         await evm.state!.AddressBook?.removeContact(address)
-        showSnackbar(<Trans>Delete contact successfully.</Trans>)
+        showSnackbar(<Trans>Contact deleted.</Trans>)
         onConfirm?.()
     }, [address, onConfirm])
 

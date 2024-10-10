@@ -291,8 +291,8 @@ const LogoutUI = memo<LogoutUIProps>(
                     :   null}
                     <Typography className={classes.tips}>
                         <Trans>
-                            After logging out, your associated social accounts will no longer decrypt past encrypted
-                            messages. If you need to reuse your account, you can recover your account with your
+                            After logging out, your associated social accounts will no longer decrypt old encrypted
+                            messages. If you need to use your account again, you can recover your account with your
                             identity, private key, local or cloud backup.
                         </Trans>
                         {currentPersona && manageWallets.length ?

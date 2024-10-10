@@ -98,7 +98,7 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
                         <Trans>Import Wallets</Trans>
                     </Typography>
                     <Typography className={classes.description}>
-                        <Trans>Support mnemonic phrase, private key or keystone file.</Trans>
+                        <Trans>Support mnemonic phrase, private key or keystore file.</Trans>
                     </Typography>
                 </div>
             </Box>

@@ -53,7 +53,7 @@ export const FeedFilters = memo(
             <Box {...props} ref={ref} className={cx(classes.container, props.className)}>
                 <Box className={classes.header}>
                     <Typography fontWeight="bold">
-                        <Trans>{networks.length as unknown as string} Networks</Trans>
+                        <Trans>{networks.length} Networks</Trans>
                     </Typography>
                     <Box
                         className={classes.button}

@@ -67,18 +67,20 @@ export function DetailsView({ project }: DetailsViewProps) {
                     </Link>
                 </Typography>
                 <Typography variant="body2">
-                    <Trans>Created by</Trans>
-                    <Link
-                        href={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}
-                        rel="noopener noreferrer"
-                        target="_blank"
-                        title={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}>
-                        {` ${project.artistName}`}
-                    </Link>
-                    &nbsp;&bull;&nbsp;
-                    <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
-                        <Trans>Website</Trans>
-                    </Link>
+                    <Trans>
+                        Created by{' '}
+                        <Link
+                            href={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            title={resolveUserLinkOnArtBlocks(chainId, project.artistAddress)}>
+                            {project.artistName}
+                        </Link>
+                        &nbsp;&bull;&nbsp;
+                        <Link href={project.website} rel="noopener noreferrer" target="_blank" title={project.website}>
+                            Website
+                        </Link>
+                    </Trans>
                 </Typography>
                 <Typography variant="body1" className={classes.description}>
                     {project.description}

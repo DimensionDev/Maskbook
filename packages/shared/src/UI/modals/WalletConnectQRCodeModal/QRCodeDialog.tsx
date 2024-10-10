@@ -82,7 +82,7 @@ export function QRCodeDialog({ uri, open, onClose }: QRCodeDialogProps) {
                             <QRCode value={uri} ecLevel="L" size={329} quietZone={16} eyeRadius={100} qrStyle="dots" />
                         </div>
                         <Typography className={classes.tip} color="textSecondary">
-                            <Trans>Scan QR code with a WalletConnect-compatible wallet</Trans>
+                            <Trans>Scan the QR code with a WalletConnect-compatible wallet</Trans>
                         </Typography>
                     </Grid>
                 </div>

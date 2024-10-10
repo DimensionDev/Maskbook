@@ -81,7 +81,7 @@ export function useOpenShareTxDialog() {
                 title: title ?? <Trans>Transaction</Trans>,
                 content: (
                     <ShareTransaction
-                        message={message ?? <Trans>Your transaction was confirmed!</Trans>}
+                        message={message ?? <Trans>Your transaction has been confirmed!</Trans>}
                         content={content}
                         hash={hash}
                     />

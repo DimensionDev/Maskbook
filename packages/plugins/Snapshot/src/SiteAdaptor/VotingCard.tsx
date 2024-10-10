@@ -117,7 +117,7 @@ export function VotingCard() {
         },
         (_err: Error) => setLoading(false),
         void 0,
-        messageText(<Trans>Voted successfully.</Trans>),
+        messageText(<Trans>Voted.</Trans>),
         messageText(<Trans>Please try again if you failed to vote.</Trans>),
     )
 
