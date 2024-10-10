@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -77,7 +77,7 @@ msgstr "入力金額が最小金額以下です"
 
 #: src/SiteAdaptor/SavingsForm.tsx:154
 #~ msgid "Insufficient {0} balance"
-#~ msgstr "{0} の残高が足りません"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx:150
 msgid "Insufficient ${0} balance"
@@ -94,7 +94,7 @@ msgstr "読み込み中"
 #: src/SiteAdaptor/SavingsForm.tsx:193
 #: src/SiteAdaptor/WithdrawForm.tsx:117
 #~ msgid "masknetwork"
-#~ msgstr "masknetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/WithdrawForm.tsx:145
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
@@ -120,7 +120,7 @@ msgstr "引き出し処理中"
 #: src/SiteAdaptor/SavingsForm.tsx:193
 #: src/SiteAdaptor/WithdrawForm.tsx:117
 #~ msgid "realMaskNetwork"
-#~ msgstr "realMaskNetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:14
 #: src/SiteAdaptor/SavingsDialog.tsx:129
@@ -155,3 +155,4 @@ msgstr "出金"
 #: src/SiteAdaptor/WithdrawForm.tsx:189
 msgid "Withdraw {0}"
 msgstr ""
+
