@@ -212,7 +212,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 // Widely used Node.js global variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
                 // same as https://github.com/MetaMask/extension-provider/issues/48
-                'process.nextTick': require.resolve('next-tick'),
+                'process.nextTick': [require.resolve('./package-overrides/process.nextTick.mjs'), 'default'],
             }),
             new EnvironmentPlugin({
                 NODE_ENV: productionLike ? 'production' : flags.mode,
