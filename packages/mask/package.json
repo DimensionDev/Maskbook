@@ -125,7 +125,6 @@
     "idb": "^8.0.0",
     "immer": "^10.1.1",
     "json-stable-stringify": "^1.1.1",
-    "next-tick": "^1.1.0",
     "react-avatar-editor": "^13.0.2",
     "react-draggable": "^4.4.6",
     "react-highlight-words": "^0.20.0",
