@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:24\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -37,7 +37,7 @@ msgstr "期限切れ"
 
 #: src/SiteAdaptor/index.tsx:9
 #~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
-#~ msgstr "Twitter上で高度に統合されたWeb3ニュースやイベントは、トークン、NFT、AMA、規制イベントに関する情報を提供します。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:9
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -49,7 +49,7 @@ msgstr "ニュース"
 
 #: src/SiteAdaptor/CalendarContent.tsx:86
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx:163
 #: src/SiteAdaptor/components/NewsList.tsx:170
@@ -59,7 +59,7 @@ msgstr "過去２週間のコンテンツはありません。"
 
 #: src/SiteAdaptor/components/Footer.tsx:100
 #~ msgid "Powered By"
-#~ msgstr "以下により提供されています"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx:100
 msgid "Powered By {0}"

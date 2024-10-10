@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -67,7 +67,7 @@ msgstr "Non-F 친구"
 
 #: src/SiteAdaptor/PetDialog.tsx:45
 msgid "Non-Fungible Friends"
-msgstr "Non-Fungible Friends"
+msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:348
 msgid "Optional, 100 characters max."
@@ -75,7 +75,7 @@ msgstr "최대 100 캐릭터를 선택할 수 있습니다."
 
 #: src/SiteAdaptor/PetSetDialog.tsx:370
 #~ msgid "Powered by"
-#~ msgstr "기술 지원"
+#~ msgstr ""
 
 #: src/SiteAdaptor/PreviewBox.tsx:161
 msgid "Preview"

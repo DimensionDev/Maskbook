@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -27,7 +27,7 @@ msgstr ""
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:224
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx:197
 msgid "{0} (UTC+8)"
-msgstr "{0} (UTC+8)"
+msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:363
 msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
@@ -179,7 +179,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx:300
 #~ msgid "Claimed 1 {0} successfully."
-#~ msgstr "成功领取了 1 {0}。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:285
 #~ msgid "Claimed 1 {NFT} successfully."
@@ -424,7 +424,7 @@ msgstr "红包"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:237
 #~ msgid "masknetwork"
-#~ msgstr "masknetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:362
 msgid "Message"
@@ -502,7 +502,7 @@ msgstr "随机金额"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:237
 #~ msgid "realMaskNetwork"
-#~ msgstr "realMaskNetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:402
 msgid "Received"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:236
 #~ msgid "The Lucky Drop can’t be sent due to data damage."
-#~ msgstr "由于数据损坏，红包无法发送。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:356
 msgid "The Lucky Drop has been refunded."
@@ -680,7 +680,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx:518
 #~ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of 1 {0}. Please reduce the number of NFTs selected."
-#~ msgstr "当选择过多的 NFT时，总气费可能超过 1 {0} 的 Metamask 限制。请减少选中的 NFT数量。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:322
 msgid "Winners"
@@ -704,7 +704,7 @@ msgstr "您可以在发送红包24小时后提取红包余额。"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:287
 #~ msgid "You claimed {0} {1}."
-#~ msgstr "你领取了{0} {1}。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:282
 msgid "You claimed {0} ${1}."
@@ -732,7 +732,7 @@ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
 #~ msgid "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends."
-#~ msgstr "您还没有创建任何NFT红包。尝试创建红包并与您的朋友分享。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."

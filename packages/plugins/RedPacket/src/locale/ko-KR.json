@@ -109,7 +109,7 @@
         "s13D96": "Claim Requirements",
         "hRWvpI": "Claimed",
         "bTp+bt": ["Claimed ", ["0"], "/", ["1"]],
-        "wNUf+h": [["0"], " 1 개가 수령되었습니다."],
+        "wNUf+h": ["Claimed 1 ", ["0"], " successfully."],
         "yDDOwl": ["Claimed 1 ", ["NFT"], " successfully."],
         "WsNUie": ["Claimed: <0>", ["0"], "/", ["1"], "</0> <1>", ["2"], "</1>"],
         "vcyM3U": [
@@ -282,7 +282,7 @@
         "kf83Ld": "오류가 발생합니다.",
         "QF9SdB": "스플릿 모드",
         "oTLFeN": "The Lucky Drop can't be sent due to data damage.",
-        "2z+RJ9": "테이터 훼손때문에 행운 드랍을 보낼 수 없습니다.",
+        "2z+RJ9": "The Lucky Drop can’t be sent due to data damage.",
         "kNHQXd": "행운 드랍은 이미 리펀됩니다.",
         "hdmRb+": "훼손된 행운 드랍",
         "gPL7RI": "비어 있는 행운 드랍",
@@ -312,23 +312,23 @@
             ". Please reduce the number of NFTs selected."
         ],
         "wQrah8": [
-            "NFT를 너무 많이 선택할 경우 총 가스 요금이 MetaMask 한도인 1 ",
+            "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of 1 ",
             ["0"],
-            " 을(를) 초과할 수 있습니다. 선택한 NFT 수를 줄이세요."
+            ". Please reduce the number of NFTs selected."
         ],
         "GRLMKx": "Winners",
         "No0akY": "You can also use <0>Shift</0> to select multiple NFTs.",
         "p1L+er": "You can set one or multiple rules to be eligible to win a Lucky Drop.",
         "rkVh+N": "You can withdraw any unclaimed amount 24 hours after sending this lucky drop.",
         "LQtEHu": "행운 드롭을 발송한 후 24시간 후에 남은 자금을 인출할 수 있습니다.",
-        "ps4YUr": [["0"], " ", ["1"], " 수령되었습니다."],
+        "ps4YUr": ["You claimed ", ["0"], " ", ["1"], "."],
         "V+ZuGt": ["You claimed ", ["0"], " $", ["1"], "."],
         "Z+6iux": ["You claimed ", ["1"], " {}."],
         "Enb3Qk": "You claimed 1.",
         "nJMj1z": [["0"], " ", ["1"], " 리펀 가능합니다."],
         "cBEQ5v": ["You got ", ["0"], " ", ["1"]],
         "0UMPI1": ["You got 1 ", ["0"]],
-        "kX8xzI": "생성된 NFT 행운 드랍이 없습니다. 행운 드랍을 만들고 친구들에게 행운을 공유하세요.",
+        "kX8xzI": "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends.",
         "zEZe86": "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
     }
 }

@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:24\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -52,7 +52,7 @@ msgstr "コントラクト:"
 
 #: src/SiteAdaptor/DetailsView.tsx:70
 #~ msgid "Created by"
-#~ msgstr "作成者"
+#~ msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx:70
 msgid "Created by <0>{0}</0>• <1>Website</1>"
@@ -126,8 +126,8 @@ msgstr ""
 
 #: src/SiteAdaptor/ActionBar.tsx:29
 #~ msgid "This project is no more active"
-#~ msgstr "このプロジェクトはもう有効ではありません"
+#~ msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx:80
 #~ msgid "Website"
-#~ msgstr "ウェブサイト"
+#~ msgstr ""

@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:24\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -52,7 +52,7 @@ msgstr "컨트랙트:"
 
 #: src/SiteAdaptor/DetailsView.tsx:70
 #~ msgid "Created by"
-#~ msgstr "제작자"
+#~ msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx:70
 msgid "Created by <0>{0}</0>• <1>Website</1>"
@@ -126,8 +126,8 @@ msgstr ""
 
 #: src/SiteAdaptor/ActionBar.tsx:29
 #~ msgid "This project is no more active"
-#~ msgstr "활성화되지 않는 프로젝트입니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx:80
 #~ msgid "Website"
-#~ msgstr "웹사이트"
+#~ msgstr ""

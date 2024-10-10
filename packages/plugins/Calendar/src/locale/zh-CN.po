@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -37,7 +37,7 @@ msgstr "已过期"
 
 #: src/SiteAdaptor/index.tsx:9
 #~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
-#~ msgstr "与Twitter 高度关联的 Web3 新闻和事件。提供 Token 、NFT、AMA 和管理活动。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:9
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -49,7 +49,7 @@ msgstr "新闻"
 
 #: src/SiteAdaptor/CalendarContent.tsx:86
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx:163
 #: src/SiteAdaptor/components/NewsList.tsx:170

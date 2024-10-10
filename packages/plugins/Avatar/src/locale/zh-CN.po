@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:24\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,7 +40,7 @@ msgstr "通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的
 
 #: src/Application/NFTListDialog.tsx:117
 #~ msgid "Download image error"
-#~ msgstr "下载图片错误"
+#~ msgstr ""
 
 #: src/Application/RouterDialog.tsx:35
 msgid "Edit Profile"

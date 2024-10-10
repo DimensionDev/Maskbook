@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:24\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,7 +40,7 @@ msgstr "소셜 계정을 연결하여 맞춤형 NFT를 경험합니다. 새로�
 
 #: src/Application/NFTListDialog.tsx:117
 #~ msgid "Download image error"
-#~ msgstr "이미지 다운로드 오류"
+#~ msgstr ""
 
 #: src/Application/RouterDialog.tsx:35
 msgid "Edit Profile"
@@ -61,7 +61,7 @@ msgstr "NFT 아바타 설정"
 #: src/Application/RouterDialog.tsx:35
 #: src/SiteAdaptor/NFTAvatarButton.tsx:46
 msgid "NFT PFP"
-msgstr "NFT PFP"
+msgstr ""
 
 #: src/SiteAdaptor/NFTAvatar.tsx:195
 msgid "No collectible found."

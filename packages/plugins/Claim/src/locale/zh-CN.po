@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -106,7 +106,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:215
 #~ msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
-#~ msgstr "您已连接到一个钱包。请在那个钱包中切换网络，或切换到另一个钱包。"
+#~ msgstr ""
 
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."

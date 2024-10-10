@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -123,7 +123,7 @@ msgstr ""
 
 #: content-script/components/InjectedComponents/CommentBox.tsx:48
 #~ msgid "Add an encrypted comment…"
-#~ msgstr "添加加密留言…"
+#~ msgstr ""
 
 #: popups/pages/Wallet/AddToken/index.tsx:124
 msgid "Add Assets"
@@ -752,7 +752,7 @@ msgstr "複製圖片"
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:104
 #~ msgid "Copy image successfully!"
-#~ msgstr "圖片複製成功！"
+#~ msgstr ""
 
 #: popups/components/PrivateKeyDisplay/index.tsx:160
 msgid "Copy private key"
@@ -764,7 +764,7 @@ msgstr "複製文字"
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:77
 #~ msgid "Copy text successfully!"
-#~ msgstr "複製文字成功！"
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts:58
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
@@ -864,7 +864,7 @@ msgstr "已由 Mask 解密："
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx:19
 #~ msgid "Decryption failed."
-#~ msgstr "解密失敗。"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ContactList/index.tsx:293
 msgid "Delete"
@@ -1310,7 +1310,7 @@ msgstr ""
 #: popups/hooks/useGasOptionsMenu.tsx:130
 #: popups/hooks/useGasOptionsMenu.tsx:144
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:39
 msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post."
@@ -1635,20 +1635,20 @@ msgstr ""
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:26
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:27
 #~ msgid "Mask decoding…"
-#~ msgstr "Mask 正在解碼…"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:24
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:29
 #~ msgid "Mask decrypting…"
-#~ msgstr "Mask 正在解密…"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:18
 #~ msgid "Mask is getting the key to decrypt. If you see this for a long time, this post might not be shared to you."
-#~ msgstr "Mask 正在取得貼文金鑰以解密此貼文…"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx:23
 #~ msgid "Mask is looking for the public key of the author…"
-#~ msgstr "Mask 正在尋找這個作者的公鑰…"
+#~ msgstr ""
 
 #: popups/pages/RequestPermission/RequestPermission.tsx:23
 msgid "Mask needs the following permissions"
@@ -1817,7 +1817,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:187
 #~ msgid "Never share 12-word secret recovery phrase with anyone!"
-#~ msgstr "請不要忘記保存助記詞，您將需要這個才能訪問您的錢包。"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx:185
 msgid "Never share the 12-word secret mnemonic words with anyone!"
@@ -2011,7 +2011,7 @@ msgstr ""
 #: popups/pages/Wallet/hooks/usePasswordForm.ts:13
 #: popups/pages/Wallet/hooks/usePasswordForm.ts:14
 #~ msgid "Payment password must be 6 to 20 characters in length."
-#~ msgstr "密碼長度不符合規定"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:76
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx:77
@@ -2059,7 +2059,7 @@ msgstr ""
 
 #: dashboard/pages/SignUp/steps/PersonaRecovery.tsx:73
 #~ msgid "Persona created successfully."
-#~ msgstr "創建成功"
+#~ msgstr ""
 
 #: dashboard/pages/SignUp/steps/PersonaRecovery.tsx:73
 msgid "Persona created."
@@ -2116,11 +2116,11 @@ msgstr ""
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx:47
 #: content-script/site-adaptors/facebook.com/injection/Composition.tsx:68
 #~ msgid "Please click the “Post” button to open the compose dialog."
-#~ msgstr "請按「發文」按鈕以開啟發文對話框"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:61
 #~ msgid "Please copy the following text and image (if there is any) and publish it."
-#~ msgstr "請複製下方文章或圖片 (如果有的話) 然後發佈它"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx:61
 msgid "Please copy the following text and image (if there is one) and publish it."
@@ -2163,7 +2163,7 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:329
 #~ msgid "Please select the correct words based on the order of the recovery phases."
-#~ msgstr "驗證助記詞"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:326
 msgid "Please select the correct words in the correct order."
@@ -2383,7 +2383,7 @@ msgstr "恢復"
 
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx:132
 #~ msgid "Restore backup failed, Please try again."
-#~ msgstr "恢復備份失敗，請再試一次。"
+#~ msgstr ""
 
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx:132
 msgid "Restore backup failed."
@@ -2671,7 +2671,7 @@ msgstr ""
 
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:21
 #~ msgid "Successful"
-#~ msgstr "成功"
+#~ msgstr ""
 
 #: popups/pages/Wallet/AddToken/index.tsx:146
 #~ msgid "Successfully added"
@@ -2816,7 +2816,7 @@ msgstr ""
 #: popups/modals/SetBackupPasswordModal/index.tsx:95
 #: popups/pages/Wallet/hooks/usePasswordForm.ts:18
 #~ msgid "The two entered passwords are inconsistent."
-#~ msgstr "輸入的密碼不一致"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx:287
 #~ msgid "The verification post sent.<0/> <1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -3065,7 +3065,7 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx:326
 #~ msgid "Verification"
-#~ msgstr "确认"
+#~ msgstr ""
 
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx:39
 msgid "Verification code has been sent to your email. Please check your mailbox."
@@ -3252,7 +3252,7 @@ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx:137
 #~ msgid "You have successfully backed up your data."
-#~ msgstr "備份數據已成功"
+#~ msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx:191
 #~ msgid "You have successfully signed with your wallet."
@@ -3260,7 +3260,7 @@ msgstr ""
 
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:25
 #~ msgid "You have successfully verified your cloud password and recovered your backup. To unify backup passwords, do you want to synchronize your cloud password as local backup password?"
-#~ msgstr "已成功驗證您的雲端備份密碼，備份正在上傳，為了備份密碼的一致，請確認您是否願意將您的雲端備份密碼設置為本地備份密碼。"
+#~ msgstr ""
 
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx:25
 msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"

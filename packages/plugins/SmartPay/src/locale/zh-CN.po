@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -36,7 +36,7 @@ msgstr "添加 SmartPay 钱包"
 
 #: src/SiteAdaptor/components/SmartPayContent.tsx:449
 #~ msgid "Allow Mask as gas"
-#~ msgstr "设置 Mask 为可支付 gas 的代币"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayContent.tsx:449
 msgid "Allow Mask be used as gas"
@@ -56,7 +56,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:61
 #~ msgid "Congratulation! You’ve deployed SmartPay Wallet {0}."
-#~ msgstr "恭喜您! 您已成功创建了 SmartPay 钱包 {0}。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx:174
 #: src/SiteAdaptor/components/ManagePopover.tsx:140
@@ -82,7 +82,7 @@ msgstr "创建新钱包"
 
 #: src/SiteAdaptor/components/Deploy.tsx:217
 #~ msgid "Create a SmartPay Wallet with your Twitter account."
-#~ msgstr "你的 Twitter 可以创建一个免费的 SmartPay 钱包。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Deploy.tsx:217
 msgid "Create a SmartPay Wallet with your X account."
@@ -95,7 +95,7 @@ msgstr "创建 SmartPay 钱包"
 
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx:58
 #~ msgid "Created successfully!"
-#~ msgstr "创建成功！"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/AccountsManagePopover.tsx:128
 msgid "Current Management account"
@@ -116,7 +116,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:68
 #~ msgid "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips."
-#~ msgstr "可以在 Mask Network 生态内体验免 gas 的去中心化应用，如红包，ITO 和 Tips 等。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx:117
 msgid "Loading"
@@ -242,7 +242,7 @@ msgstr "在使用 SmartPay 钱包前需要先在 Polygon Network 部署该智能
 
 #: src/SiteAdaptor/components/Deploy.tsx:301
 #~ msgid "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment."
-#~ msgstr "目前 SmartPay 钱包仅支持在 Polygon Network 上体验免 gas fee 及更换管理账户的功能。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Deploy.tsx:301
 msgid "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment."

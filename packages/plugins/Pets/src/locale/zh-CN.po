@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -67,7 +67,7 @@ msgstr "小宠物"
 
 #: src/SiteAdaptor/PetDialog.tsx:45
 msgid "Non-Fungible Friends"
-msgstr "Non-Fungible Friends"
+msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:348
 msgid "Optional, 100 characters max."
@@ -75,7 +75,7 @@ msgstr "可选，最多100个字符。"
 
 #: src/SiteAdaptor/PetSetDialog.tsx:370
 #~ msgid "Powered by"
-#~ msgstr "Powered by"
+#~ msgstr ""
 
 #: src/SiteAdaptor/PreviewBox.tsx:161
 msgid "Preview"
@@ -99,7 +99,7 @@ msgstr "成功"
 
 #: src/SiteAdaptor/PetSetDialog.tsx:316
 msgid "Token ID"
-msgstr "Token ID"
+msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx:402
 #: src/SiteAdaptor/PetShareDialog.tsx:56

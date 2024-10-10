@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -106,7 +106,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx:215
 #~ msgid "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
-#~ msgstr "WalletConnect 월렛에 연결되어 있습니다. 해당 월렛에서 네트워크를 전환하기나 다른 월렛으로 바꾸세요."
+#~ msgstr ""
 
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."

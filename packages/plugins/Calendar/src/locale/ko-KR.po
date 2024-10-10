@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -37,7 +37,7 @@ msgstr "만료됨"
 
 #: src/SiteAdaptor/index.tsx:9
 #~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
-#~ msgstr "트위터에서 Web3 뉴스 및 이벤트, 또한 토큰, NFT, AMA 및 규제 정보를 제공합니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:9
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -49,7 +49,7 @@ msgstr "뉴스"
 
 #: src/SiteAdaptor/CalendarContent.tsx:86
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx:163
 #: src/SiteAdaptor/components/NewsList.tsx:170
@@ -59,7 +59,7 @@ msgstr "지난 2주 동안 내용이 없습니다."
 
 #: src/SiteAdaptor/components/Footer.tsx:100
 #~ msgid "Powered By"
-#~ msgstr "제공자"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx:100
 msgid "Powered By {0}"

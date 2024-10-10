@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -179,7 +179,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx:300
 #~ msgid "Claimed 1 {0} successfully."
-#~ msgstr "{0} 1 개가 수령되었습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:285
 #~ msgid "Claimed 1 {NFT} successfully."
@@ -424,7 +424,7 @@ msgstr "행운 드랍"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:237
 #~ msgid "masknetwork"
-#~ msgstr "masknetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:362
 msgid "Message"
@@ -502,7 +502,7 @@ msgstr "랜덤 금액"
 
 #: src/SiteAdaptor/RedPacket/index.tsx:237
 #~ msgid "realMaskNetwork"
-#~ msgstr "realMaskNetwork"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:402
 msgid "Received"
@@ -592,7 +592,7 @@ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:236
 #~ msgid "The Lucky Drop can’t be sent due to data damage."
-#~ msgstr "테이터 훼손때문에 행운 드랍을 보낼 수 없습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:356
 msgid "The Lucky Drop has been refunded."
@@ -680,7 +680,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx:518
 #~ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of 1 {0}. Please reduce the number of NFTs selected."
-#~ msgstr "NFT를 너무 많이 선택할 경우 총 가스 요금이 MetaMask 한도인 1 {0} 을(를) 초과할 수 있습니다. 선택한 NFT 수를 줄이세요."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:322
 msgid "Winners"
@@ -704,7 +704,7 @@ msgstr "행운 드롭을 발송한 후 24시간 후에 남은 자금을 인출�
 
 #: src/SiteAdaptor/RedPacket/index.tsx:287
 #~ msgid "You claimed {0} {1}."
-#~ msgstr "{0} {1} 수령되었습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx:282
 msgid "You claimed {0} ${1}."
@@ -732,7 +732,7 @@ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
 #~ msgid "You haven't created any NFT lucky drop yet. Try to create and share lucky with your friends."
-#~ msgstr "생성된 NFT 행운 드랍이 없습니다. 행운 드랍을 만들고 친구들에게 행운을 공유하세요."
+#~ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."

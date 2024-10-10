@@ -32,7 +32,7 @@
             " to find more staking projects."
         ],
         "bBzHQT": "输入金额低于最低金额",
-        "m6RmA/": [["0"], " 余额不足"],
+        "m6RmA/": ["Insufficient ", ["0"], " balance"],
         "oxKup1": ["Insufficient $", ["0"], " balance"],
         "e3hCsY": "Lido Exchange Rate",
         "yQE2r9": "加载中",
