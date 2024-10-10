@@ -237,7 +237,7 @@ export const Transaction = memo(function Transaction() {
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
-    const [params] = useSearchParams()
+    const [params, setParams] = useSearchParams()
     const hash = params.get('hash')
     const rawChainId = params.get('chainId')
     const isPending = params.has('pending')
@@ -263,7 +263,7 @@ export const Transaction = memo(function Transaction() {
     const { data: bridgeStatus } = useQuery({
         queryKey: ['okx-bridge', 'transaction-status', chainId, hash],
         queryFn: hash && tx?.kind === 'bridge' ? () => OKX.getBridgeStatus({ chainId, hash }) : skipToken,
-        refetchInterval: 60_000,
+        refetchInterval: 10_000,
     })
     const detailStatus = bridgeStatus?.detailStatus
 
@@ -279,30 +279,47 @@ export const Transaction = memo(function Transaction() {
     const leaveRef = useLeave()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const waitForTransaction = useWaitForTransaction()
-    const getReceived = useGetTransferReceived(chainId as ChainId)
+    const getReceived = useGetTransferReceived()
+    const toTxHash = bridgeStatus?.toTxHash
     useAsync(async () => {
-        if (!isPending || !chainId || !hash || !toToken) return
-        await waitForTransaction({ chainId, hash })
-        const received = await getReceived(hash, account)
+        if (!isPending || !toChainId || !toTxHash || !toToken) return
+        const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
 
-        if (received && !leaveRef.current) {
+        if (!receipt.status) {
             showSnackbar(t`Bridge`, {
-                message: (
-                    <MuiLink
-                        className={classes.toastLink}
-                        color="inherit"
-                        href={Utils.explorerResolver.transactionLink(chainId, hash)}
-                        tabIndex={-1}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} bridge completed successfully.`}{' '}
-                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                    </MuiLink>
-                ),
-                variant: 'success',
+                message: t`Failed to bridge`,
             })
+            return
+        } else {
+            const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
+
+            if (received && !leaveRef.current) {
+                showSnackbar(t`Bridge`, {
+                    message: (
+                        <MuiLink
+                            className={classes.toastLink}
+                            color="inherit"
+                            href={Utils.explorerResolver.transactionLink(toChainId, toTxHash)}
+                            tabIndex={-1}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} bridge completed successfully.`}{' '}
+                            <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                        </MuiLink>
+                    ),
+                    variant: 'success',
+                })
+            }
         }
-    }, [isPending, chainId, hash, toToken])
+
+        setParams(
+            (params) => {
+                params.delete('pending')
+                return params.toString()
+            },
+            { replace: true },
+        )
+    }, [isPending, toChainId, toTxHash, toToken])
 
     if (!tx)
         return (

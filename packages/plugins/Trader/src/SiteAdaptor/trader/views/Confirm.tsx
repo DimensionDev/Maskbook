@@ -31,6 +31,7 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useQueryClient } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -264,9 +265,10 @@ export const Confirm = memo(function Confirm() {
 
     const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
+    const queryClient = useQueryClient()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const waitForTransaction = useWaitForTransaction()
-    const getReceived = useGetTransferReceived(chainId)
+    const getReceived = useGetTransferReceived()
 
     const [{ loading: submitting }, submit] = useAsyncFn(async () => {
         if (!fromToken || !toToken || !transaction?.to || !spender) return
@@ -286,9 +288,10 @@ export const Confirm = memo(function Confirm() {
                 })
                 return
             }
+            queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
             try {
                 await waitForTransaction({ chainId, hash })
-                const received = await getReceived(hash, account)
+                const received = await getReceived({ hash, account, chainId })
                 if (received && !leaveRef.current) {
                     showSnackbar(t`Swap`, {
                         message: (

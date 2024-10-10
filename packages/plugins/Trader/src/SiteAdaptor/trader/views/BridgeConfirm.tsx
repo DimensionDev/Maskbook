@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
-import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
     formatBalance,
@@ -14,24 +14,25 @@ import {
     rightShift,
 } from '@masknet/web3-shared-base'
 import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { Box, Link as MuiLink, Typography } from '@mui/material'
+import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
+import { CoinIcon } from '../../components/CoinIcon.js'
 import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useTrade } from '../contexts/index.js'
-import { useBridgeData } from '../hooks/useBridgeData.js'
+import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
+import { useApprove } from '../hooks/useApprove.js'
 import { useBridgable } from '../hooks/useBridgable.js'
+import { useBridgeData } from '../hooks/useBridgeData.js'
+import { useLeave } from '../hooks/useLeave.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
-import { CoinIcon } from '../../components/CoinIcon.js'
-import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
-import { useLeave } from '../hooks/useLeave.js'
-import { useApprove } from '../hooks/useApprove.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -236,6 +237,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             </>
         :   null
 
+    const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM, { chainId: fromChainId })
     const gas = gasConfig.gas ?? transaction?.gasLimit ?? gasLimit
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
@@ -281,6 +283,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const showStale = isQuoteStale && !isSending && !isApproving
 
     const leaveRef = useLeave()
+    const queryClient = useQueryClient()
 
     const [{ loading: submitting }, submit] = useAsyncFn(async () => {
         if (!fromToken || !toToken || !transaction?.to || !spender || !bridge) return
@@ -300,6 +303,24 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 })
                 return
             }
+            queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
+            showSnackbar(t`Bridge`, {
+                message: (
+                    <MuiLink
+                        sx={{ wordBreak: 'break-word' }}
+                        className={classes.link}
+                        color="inherit"
+                        href={Utils.explorerResolver.transactionLink(fromChainId, hash)}
+                        tabIndex={-1}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {t`Transaction submitted.`}
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                    </MuiLink>
+                ),
+                variant: 'default',
+                processing: true,
+            })
             await addTransaction(account, {
                 kind: 'bridge',
                 hash,

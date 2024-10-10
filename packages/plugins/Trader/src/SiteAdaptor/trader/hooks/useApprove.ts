@@ -30,7 +30,11 @@ export function useApprove() {
 
     const { data: spenderFromAPI, isPending: isLoadingSpender } = useSpender()
     const spender = approveInfo?.dexContractAddress || spenderFromAPI
-    const { data: allowance = '0', isPending: isLoadingAllowance } = useERC20TokenAllowance(tokenAddress, spender, {
+    const {
+        data: allowance = '0',
+        isPending: isLoadingAllowance,
+        refetch: refetchAllowance,
+    } = useERC20TokenAllowance(tokenAddress, spender, {
         chainId,
     })
 
@@ -60,6 +64,7 @@ export function useApprove() {
             })
             const receipt = await waitForTransaction({ chainId, hash, confirmationCount: 1 })
             if (!receipt?.status) throw new Error('Failed to approve')
+            await refetchAllowance()
             return hash
         },
     })
