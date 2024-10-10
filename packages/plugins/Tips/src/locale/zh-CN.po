@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 15:16\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -80,7 +80,7 @@ msgstr "余额不足"
 
 #: src/components/TipDialog.tsx:183
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 msgid "No any collectible is available for preview. Please add your collectible here."
@@ -88,7 +88,7 @@ msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 #~ msgid "No any collectible is available to preview. Please add your collectible here."
-#~ msgstr "没有任何可预览的收藏品。请在这里添加您的收藏品。"
+#~ msgstr ""
 
 #: src/contexts/Tip/useTipValidate.ts:36
 msgid "No Enough Gas Fees"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
 #~ msgid "Send authors tips by using Mask Network’s Tips function."
-#~ msgstr "使用Mask Network发送小费给作者。"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:128
 msgid "Sending..."
@@ -112,7 +112,7 @@ msgstr "发送中..."
 
 #: src/components/TipDialog.tsx:156
 #~ msgid "Sent {1} {0} tips successfully."
-#~ msgstr "已成功发送 {0} {1} 小费。"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:157
 #~ msgid "Sent {amount} {0} tips successfully."
@@ -137,7 +137,7 @@ msgstr "发送至"
 
 #: src/components/TipDialog.tsx:182
 msgid "Tokens"
-msgstr "Tokens"
+msgstr ""
 
 #: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"

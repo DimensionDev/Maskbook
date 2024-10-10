@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 15:16\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -80,7 +80,7 @@ msgstr "残高が不足しています"
 
 #: src/components/TipDialog.tsx:183
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 msgid "No any collectible is available for preview. Please add your collectible here."
@@ -88,7 +88,7 @@ msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 #~ msgid "No any collectible is available to preview. Please add your collectible here."
-#~ msgstr "プレビュー可能なコレクションはありません。ここにコレクションを追加してください。"
+#~ msgstr ""
 
 #: src/contexts/Tip/useTipValidate.ts:36
 msgid "No Enough Gas Fees"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
 #~ msgid "Send authors tips by using Mask Network’s Tips function."
-#~ msgstr "マスクネットワークのチップ機能を使用して作者にチップを送りします。"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:128
 msgid "Sending..."
@@ -112,7 +112,7 @@ msgstr "送信中…"
 
 #: src/components/TipDialog.tsx:156
 #~ msgid "Sent {1} {0} tips successfully."
-#~ msgstr "{0} {1} チップを送信しました。"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:157
 #~ msgid "Sent {amount} {0} tips successfully."
