@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -33,3 +33,4 @@ msgstr "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적
 #: src/SiteAdaptor/index.tsx:21
 msgid "Safety Warning"
 msgstr "안전 경고"
+
