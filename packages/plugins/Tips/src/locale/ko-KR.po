@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 15:16\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -80,7 +80,7 @@ msgstr "잔액 부족"
 
 #: src/components/TipDialog.tsx:183
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 msgid "No any collectible is available for preview. Please add your collectible here."
@@ -88,7 +88,7 @@ msgstr ""
 
 #: src/components/NFTSection/index.tsx:207
 #~ msgid "No any collectible is available to preview. Please add your collectible here."
-#~ msgstr "미리 보기에 사용할 수 있는 수집품이 없습니다. 여기에 수집품을 추가하십시오."
+#~ msgstr ""
 
 #: src/contexts/Tip/useTipValidate.ts:36
 msgid "No Enough Gas Fees"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/TipsRealmContent/index.tsx:105
 #~ msgid "Send authors tips by using Mask Network’s Tips function."
-#~ msgstr "마스크 네트워크의 팁 기능을 사용하여 작성자에게 팁을 보냅니다."
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:128
 msgid "Sending..."
@@ -112,7 +112,7 @@ msgstr "발송 중..."
 
 #: src/components/TipDialog.tsx:156
 #~ msgid "Sent {1} {0} tips successfully."
-#~ msgstr "{0} {1} 팁 발송 성공"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx:157
 #~ msgid "Sent {amount} {0} tips successfully."
@@ -142,3 +142,4 @@ msgstr "토큰"
 #: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr "Explorer에서 보기"
+
