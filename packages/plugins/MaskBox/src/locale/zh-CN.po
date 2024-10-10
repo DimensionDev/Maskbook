@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -73,7 +73,7 @@ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:55
 #~ msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
-#~ msgstr "支持多链的去中心化NFT盲盒发布平台。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:227
 #: src/SiteAdaptor/components/PreviewCard.tsx:252
@@ -83,3 +83,4 @@ msgstr "重新加载"
 #: src/SiteAdaptor/components/PreviewCard.tsx:294
 msgid "Solid:"
 msgstr "卖出"
+
