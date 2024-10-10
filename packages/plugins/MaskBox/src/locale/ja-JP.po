@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -65,7 +65,7 @@ msgstr "読み込みに失敗しました"
 
 #: src/SiteAdaptor/index.tsx:35
 msgid "MaskBox"
-msgstr "MaskBox"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:55
 msgid "Professional multi-chain decentralized platform for launching NFT blind boxes."
@@ -73,7 +73,7 @@ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:55
 #~ msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
-#~ msgstr "NFTのミステリーボックスを立ち上げるためのプロフェッショナルなマルチチェーン分散型プラットフォーム。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/PreviewCard.tsx:227
 #: src/SiteAdaptor/components/PreviewCard.tsx:252
@@ -83,3 +83,4 @@ msgstr "再度読み込み"
 #: src/SiteAdaptor/components/PreviewCard.tsx:294
 msgid "Solid:"
 msgstr "安定した"
+
