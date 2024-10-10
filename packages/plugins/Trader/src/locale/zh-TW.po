@@ -46,7 +46,7 @@ msgid "{0} Pool"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:430
-#: src/SiteAdaptor/trader/views/Transaction.tsx:554
+#: src/SiteAdaptor/trader/views/Transaction.tsx:563
 msgid "{0} to {1}"
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:237
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx:158
 #: src/SiteAdaptor/trader/views/Transaction.tsx:289
-#: src/SiteAdaptor/trader/views/Transaction.tsx:514
+#: src/SiteAdaptor/trader/views/Transaction.tsx:523
 msgid "Bridge"
 msgstr ""
 
@@ -115,11 +115,11 @@ msgstr ""
 #~ msgid "Bridge network fee"
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:347
+#: src/SiteAdaptor/trader/views/Transaction.tsx:351
 msgid "Bridging"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:596
+#: src/SiteAdaptor/trader/views/Transaction.tsx:605
 msgid "Check on Explorer"
 msgstr ""
 
@@ -128,7 +128,7 @@ msgstr ""
 msgid "Checking Approve"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:371
+#: src/SiteAdaptor/trader/views/Transaction.tsx:380
 msgid "Complete"
 msgstr ""
 
@@ -164,7 +164,7 @@ msgstr ""
 msgid "Data"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:518
+#: src/SiteAdaptor/trader/views/Transaction.tsx:527
 msgid "Date"
 msgstr ""
 
@@ -182,7 +182,7 @@ msgstr ""
 msgid "Exchange"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:377
+#: src/SiteAdaptor/trader/views/Transaction.tsx:386
 msgid "Failed"
 msgstr ""
 
@@ -201,7 +201,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:377
 #: src/SiteAdaptor/trader/views/Confirm.tsx:387
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:244
-#: src/SiteAdaptor/trader/views/Transaction.tsx:384
+#: src/SiteAdaptor/trader/views/Transaction.tsx:393
 msgid "From"
 msgstr ""
 
@@ -230,11 +230,11 @@ msgstr ""
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:614
+#: src/SiteAdaptor/trader/views/Transaction.tsx:623
 msgid "Make another Bridge"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:613
+#: src/SiteAdaptor/trader/views/Transaction.tsx:622
 msgid "Make another Swap"
 msgstr ""
 
@@ -260,8 +260,8 @@ msgid "Missing dex contract address"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:420
-#: src/SiteAdaptor/trader/views/Transaction.tsx:535
 #: src/SiteAdaptor/trader/views/Transaction.tsx:544
+#: src/SiteAdaptor/trader/views/Transaction.tsx:553
 msgid "Network"
 msgstr ""
 
@@ -313,7 +313,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:507
 #: src/SiteAdaptor/trader/views/Confirm.tsx:439
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:128
-#: src/SiteAdaptor/trader/views/Transaction.tsx:572
+#: src/SiteAdaptor/trader/views/Transaction.tsx:581
 msgid "Rate"
 msgstr ""
 
@@ -330,7 +330,7 @@ msgstr ""
 msgid "Sending"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:578
+#: src/SiteAdaptor/trader/views/Transaction.tsx:587
 msgid "Sending address"
 msgstr ""
 
@@ -349,7 +349,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Confirm.tsx:310
 #: src/SiteAdaptor/trader/views/Confirm.tsx:352
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:236
-#: src/SiteAdaptor/trader/views/Transaction.tsx:514
+#: src/SiteAdaptor/trader/views/Transaction.tsx:523
 msgid "Swap"
 msgstr ""
 
@@ -357,11 +357,11 @@ msgstr ""
 msgid "Swap anyway"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:527
+#: src/SiteAdaptor/trader/views/Transaction.tsx:536
 msgid "Swap duration"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:347
+#: src/SiteAdaptor/trader/views/Transaction.tsx:351
 msgid "Swapping"
 msgstr ""
 
@@ -369,7 +369,7 @@ msgstr ""
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:361
+#: src/SiteAdaptor/trader/views/Transaction.tsx:370
 msgid "The {0} is in progress. You can check its status in History after exiting this page."
 msgstr ""
 
@@ -396,7 +396,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:398
 #: src/SiteAdaptor/trader/views/Confirm.tsx:409
-#: src/SiteAdaptor/trader/views/Transaction.tsx:463
+#: src/SiteAdaptor/trader/views/Transaction.tsx:472
 msgid "To"
 msgstr ""
 
@@ -421,7 +421,7 @@ msgstr ""
 msgid "Transaction history is only stored locally and will be deleted if you clear your browser data."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:403
+#: src/SiteAdaptor/trader/views/Transaction.tsx:412
 msgid "Transaction in progress. Thank you for your patience."
 msgstr ""
 
@@ -435,15 +435,15 @@ msgstr ""
 #~ msgid "Transaction submitted."
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:512
+#: src/SiteAdaptor/trader/views/Transaction.tsx:521
 msgid "Transaction type"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:444
+#: src/SiteAdaptor/trader/views/Transaction.tsx:453
 msgid "Transferring asset across to the {0} network via the {1}cross-chain bridge"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:615
+#: src/SiteAdaptor/trader/views/Transaction.tsx:624
 msgid "Try Again"
 msgstr ""
 
@@ -464,6 +464,6 @@ msgstr ""
 msgid "Wallet"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:350
+#: src/SiteAdaptor/trader/views/Transaction.tsx:359
 msgid "Your transaction should be done in <0/>"
 msgstr ""

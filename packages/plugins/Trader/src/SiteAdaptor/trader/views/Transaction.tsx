@@ -1,6 +1,6 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { CopyButton, EmptyStatus, NetworkIcon, Spinner } from '@masknet/shared'
+import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -343,10 +343,19 @@ export const Transaction = memo(function Transaction() {
                     <>
                         <div className={classes.header}>
                             <Spinner className={classes.spinner} variant="loading" />
-                            <Typography className={classes.title}>
+                            <ProgressiveText
+                                className={classes.title}
+                                loading={isStatusPending}
+                                skeletonWidth={95}
+                                skeletonHeight={24}>
                                 {tx.kind === 'swap' ? t`Swapping` : t`Bridging`}
-                            </Typography>
-                            <Typography component="div" className={classes.subtitle}>
+                            </ProgressiveText>
+                            <ProgressiveText
+                                component="div"
+                                className={classes.subtitle}
+                                loading={isStatusPending}
+                                skeletonWidth={200}
+                                skeletonHeight={22.5}>
                                 <Trans>
                                     Your transaction should be done in{' '}
                                     <Countdown
@@ -355,7 +364,7 @@ export const Transaction = memo(function Transaction() {
                                         endtime={tx.timestamp + tx.estimatedTime * 1000}
                                     />
                                 </Trans>
-                            </Typography>
+                            </ProgressiveText>
                         </div>
                         <Typography className={cx(classes.box, classes.note)}>
                             <Trans>
