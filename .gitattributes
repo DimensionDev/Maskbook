@@ -1,0 +1,8 @@
+packages/icons/icon-generated-as-jsx.js linguist-generated=true
+packages/icons/icon-generated-as-url.js linguist-generated=true
+*.po linguist-generated=true
+en-US.json linguist-generated=true
+ja-JP.json linguist-generated=true
+zh-CN.json linguist-generated=true
+zh-TW.json linguist-generated=true
+ko-KR.json linguist-generated=true
