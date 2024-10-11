@@ -13,7 +13,7 @@ import {
     multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
@@ -248,14 +248,14 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: gas ? multipliedBy(gas, 1.2).toFixed(0) : gas,
+            gas: fromChainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
             _disableSnackbar: true,
         })
-    }, [transaction, account, gasConfig, Web3, gas])
+    }, [transaction, fromChainId, account, gasConfig, Web3, gas])
 
     const [isBridgable, errorMessage] = useBridgable()
 
@@ -314,7 +314,9 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                         tabIndex={-1}
                         target="_blank"
                         rel="noopener noreferrer">
-                        {t`Transaction submitted.`}
+                        <Typography
+                            color={theme.palette.maskColor.success}
+                            component="span">{t`Transaction submitted.`}</Typography>
                         <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                     </MuiLink>
                 ),
