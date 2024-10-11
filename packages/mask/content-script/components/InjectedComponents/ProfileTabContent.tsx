@@ -110,6 +110,15 @@ const useStyles = makeStyles()((theme) => ({
     linkOutIcon: {
         color: theme.palette.maskColor.secondaryDark,
     },
+    currentAddress: {
+        fontSize: '18px',
+        fontWeight: 700,
+        maxWidth: 200,
+        textOverflow: 'ellipsis',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        color: theme.palette.maskColor.dark,
+    },
     mainLinkIcon: {
         margin: '0px 2px',
         color: theme.palette.maskColor.secondaryDark,
@@ -450,9 +459,7 @@ function Content(props: ProfileTabContentProps) {
                                     }}
                                     linkIconClassName={classes.mainLinkIcon}
                                     TypographyProps={{
-                                        fontSize: '18px',
-                                        fontWeight: 700,
-                                        color: (theme) => theme.palette.maskColor.dark,
+                                        className: classes.currentAddress,
                                     }}
                                     socialAccount={selectedSocialAccount}
                                 />
