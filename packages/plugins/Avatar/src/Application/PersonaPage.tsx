@@ -66,7 +66,7 @@ export function PersonaPage() {
 
     return (
         <>
-            <DialogContent sx={{ flex: 1, height: 464, padding: 2 }}>
+            <DialogContent sx={{ height: 464, padding: 2 }}>
                 {isPending ?
                     <Stack justifyContent="center" alignItems="center" height="100%">
                         <LoadingBase />
