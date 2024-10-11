@@ -1982,6 +1982,9 @@ importers:
       '@ethersproject/providers':
         specifier: ^5.7.2
         version: 5.7.2(bufferutil@4.0.7)(utf-8-validate@5.0.10)
+      '@hookform/resolvers':
+        specifier: ^3.6.0
+        version: 3.6.0(react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628))
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -2039,6 +2042,9 @@ importers:
       immer:
         specifier: ^10.1.1
         version: 10.1.1
+      react-hook-form:
+        specifier: ^7.53.0
+        version: 7.53.0(react@0.0.0-experimental-58af67a8f8-20240628)
       react-router-dom:
         specifier: ^6.24.0
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2054,6 +2060,9 @@ importers:
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
+      zod:
+        specifier: ^3.23.8
+        version: 3.23.8
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -12702,6 +12711,12 @@ packages:
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
+  react-hook-form@7.53.0:
+    resolution: {integrity: sha512-M1n3HhqCww6S2hxLxciEXy2oISPnAzxY7gvwVPrtlczTM/1dDadXgUxDpHMrMTblDOcm/AXtXxHwZ3jpg1mqKQ==}
+    engines: {node: '>=18.0.0'}
+    peerDependencies:
+      react: 0.0.0-experimental-58af67a8f8-20240628
+
   react-i18next@14.1.2:
     resolution: {integrity: sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==}
     peerDependencies:
@@ -17323,6 +17338,10 @@ snapshots:
   '@hookform/resolvers@3.6.0(react-hook-form@7.52.0(react@0.0.0-experimental-58af67a8f8-20240628))':
     dependencies:
       react-hook-form: 7.52.0(react@0.0.0-experimental-58af67a8f8-20240628)
+
+  '@hookform/resolvers@3.6.0(react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628))':
+    dependencies:
+      react-hook-form: 7.53.0(react@0.0.0-experimental-58af67a8f8-20240628)
 
   '@humanwhocodes/config-array@0.11.14':
     dependencies:
@@ -27805,6 +27824,10 @@ snapshots:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   react-hook-form@7.52.0(react@0.0.0-experimental-58af67a8f8-20240628):
+    dependencies:
+      react: 0.0.0-experimental-58af67a8f8-20240628
+
+  react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 

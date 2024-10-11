@@ -16,6 +16,7 @@ export const enum RoutePaths {
 export const DEFAULT_SLIPPAGE = '0.5'
 
 export const QUOTE_STALE_DURATION = 20_000
+export const REFETCH_INTERVAL = 20_000
 
 export const bridges = [
     {
@@ -33,7 +34,7 @@ export const bridges = [
     {
         id: 315,
         name: 'Across',
-        logoUrl: new URL('../assets/accross.svg', import.meta.url).href,
+        logoUrl: new URL('../assets/across.svg', import.meta.url).href,
     },
     {
         id: 211,
@@ -76,5 +77,10 @@ export const bridges = [
         name: 'Circle-Bridge',
         logoUrl:
             'https://static.okx.com/cdn/explorer/dex/logo/dex_Circle.png.png?x-oss-process=image/format,webp/ignore-error,1',
+    },
+    {
+        id: 476,
+        name: 'Bungee Refuel',
+        logoUrl: 'https://www.okx.com/cdn/web3/dex/logo/b53506a1-fc2b-439d-9696-8eaea55167ca.png',
     },
 ]
