@@ -378,7 +378,6 @@ export function ens_url() { return new URL("./plugins/ENS.png", import.meta.url)
 export function ens_cover_url() { return new URL("./plugins/ENSCover.svg", import.meta.url).href }
 export function file_service_url() { return new URL("./plugins/FileService.svg", import.meta.url).href }
 export function find_truman_url() { return new URL("./plugins/FindTruman.png", import.meta.url).href }
-export function friend_tech_url() { return new URL("./plugins/FriendTech.svg", import.meta.url).href }
 export function gitcoin_dark_url() { return new URL("./plugins/Gitcoin.dark.svg", import.meta.url).href }
 export function gitcoin_light_url() { return new URL("./plugins/Gitcoin.light.svg", import.meta.url).href }
 export function good_ghosting_dark_url() { return new URL("./plugins/GoodGhosting.dark.svg", import.meta.url).href }

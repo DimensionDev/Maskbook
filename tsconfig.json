@@ -138,7 +138,6 @@
       "@masknet/plugin-profilecard": ["./packages/plugins/ProfileCard/src/index.ts"],
       "@masknet/plugin-savings": ["./packages/plugins/Savings/src/index.ts"],
       "@masknet/plugin-snapshot": ["./packages/plugins/Snapshot/src/index.ts"],
-      "@masknet/plugin-friend-tech": ["./packages/plugins/FriendTech/src/tsconfig.json"],
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src/index.ts"],
       "@masknet/plugin-calendar": ["./packages/plugins/Calendar/src/index.ts"]

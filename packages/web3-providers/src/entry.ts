@@ -23,7 +23,6 @@ export { TheGraphRedPacket } from './TheGraph/index.js'
 export { SimpleHashEVM, SimpleHashSolana, SPAM_SCORE } from './SimpleHash/index.js'
 export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
-export { FriendTech } from './FriendTech/index.js'
 
 export { MaskWalletProviderInstance as MaskWalletProvider } from './Web3/EVM/providers/index.js'
 

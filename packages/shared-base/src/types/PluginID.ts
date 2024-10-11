@@ -32,7 +32,6 @@ export enum PluginID {
     Savings = 'com.savings',
     Wallet = 'com.maskbook.wallet',
     FileService = 'com.maskbook.fileservice',
-    FriendTech = 'io.mask.friend-tech',
     CyberConnect = 'me.cyberconnect.app',
     GoPlusSecurity = 'io.gopluslabs.security',
     CrossChainBridge = 'io.mask.cross-chain-bridge',
