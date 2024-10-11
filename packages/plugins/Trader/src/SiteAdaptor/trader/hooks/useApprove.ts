@@ -2,7 +2,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { OKX } from '@masknet/web3-providers'
-import { isGreaterThan, isZero } from '@masknet/web3-shared-base'
+import { isGte, isZero } from '@masknet/web3-shared-base'
 import { addGasMargin, ChainId, isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useTrade } from '../contexts/TradeProvider.js'
@@ -54,7 +54,7 @@ export function useApprove() {
             approveInfo?.gasPrice,
         ],
         mutationFn: async () => {
-            if (!approveInfo?.data || !tokenAddress || isGreaterThan(allowance, amount)) return
+            if (!approveInfo?.data || !tokenAddress || isGte(allowance, amount)) return
             const hash = await Web3.sendTransaction({
                 to: tokenAddress,
                 // gas provided by API for Arbitrum is too low, let wallet estimate itself
