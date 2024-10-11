@@ -7,11 +7,12 @@ import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@maskne
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, leftShift, TransactionStatusType } from '@masknet/web3-shared-base'
 import { type ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { alpha, Box, Button, Typography, Link as MuiLink } from '@mui/material'
+import { alpha, Box, Button, Link as MuiLink, Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import { memo, useMemo, useState } from 'react'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsync } from 'react-use'
 import urlcat from 'urlcat'
 import { formatTime } from '../../../helpers/formatTime.js'
 import { CoinIcon } from '../../components/CoinIcon.js'
@@ -21,10 +22,9 @@ import { RoutePaths } from '../../constants.js'
 import { useTransaction } from '../../storage.js'
 import { useTrade } from '../contexts/index.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
-import { useAsync } from 'react-use'
-import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
+import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
     container: {
@@ -281,6 +281,28 @@ export const Transaction = memo(function Transaction() {
     const waitForTransaction = useWaitForTransaction()
     const getReceived = useGetTransferReceived()
     const toTxHash = bridgeStatus?.toTxHash
+
+    const removePendingParam = useCallback(() => {
+        setParams(
+            (params) => {
+                params.delete('pending')
+                return params.toString()
+            },
+            { replace: true },
+        )
+    }, [setParams])
+
+    useAsync(async () => {
+        if (!isPending || !hash) return
+        const fromReceipt = await waitForTransaction({ chainId: fromChainId, hash, confirmationCount: 1 })
+        if (!fromReceipt.status) {
+            showSnackbar(t`Bridge`, {
+                message: t`Failed to bridge`,
+            })
+            removePendingParam()
+        }
+    }, [isPending, fromChainId, hash, removePendingParam])
+
     useAsync(async () => {
         if (!isPending || !toChainId || !toTxHash || !toToken) return
         const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
@@ -289,7 +311,6 @@ export const Transaction = memo(function Transaction() {
             showSnackbar(t`Bridge`, {
                 message: t`Failed to bridge`,
             })
-            return
         } else {
             const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
 
@@ -312,14 +333,8 @@ export const Transaction = memo(function Transaction() {
             }
         }
 
-        setParams(
-            (params) => {
-                params.delete('pending')
-                return params.toString()
-            },
-            { replace: true },
-        )
-    }, [isPending, toChainId, toTxHash, toToken])
+        removePendingParam()
+    }, [isPending, toChainId, toTxHash, toToken, removePendingParam])
 
     if (!tx)
         return (
