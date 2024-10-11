@@ -17,14 +17,14 @@ import {
 } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { CoinIcon } from '../../../components/CoinIcon.js'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
 import { useGasManagement, useTrade } from '../../contexts/index.js'
-import { formatTokenBalance } from '../../helpers.js'
+import { formatInput, formatTokenBalance } from '../../helpers.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
@@ -235,6 +235,8 @@ export function TradeView() {
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
     const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
     const bridgeButtonLabel = isOverSlippage ? t`Bridge anyway` : t`Bridge`
+    // When set to max, swap all amount of the token
+    const [isMax, setIsMax] = useState(false)
     return (
         <div className={classes.view}>
             <Box className={classes.container}>
@@ -295,9 +297,8 @@ export function TradeView() {
                                             const isNative = isNativeTokenAddress(fromToken.address)
                                             const balance =
                                                 isNative ? minus(fromTokenBalance, gasFee) : fromTokenBalance
-                                            setInputAmount(
-                                                trimZero(leftShift(balance, fromToken.decimals).toFixed(12, 1)),
-                                            )
+                                            setInputAmount(trimZero(leftShift(balance, fromToken.decimals).toFixed()))
+                                            setIsMax(true)
                                         }}>
                                         <Trans>MAX</Trans>
                                     </Button>
@@ -306,8 +307,9 @@ export function TradeView() {
                             <input
                                 className={classes.tokenInput}
                                 autoFocus
-                                value={inputAmount}
+                                value={isMax ? formatInput(inputAmount) : inputAmount}
                                 onChange={(e) => {
+                                    setIsMax(false)
                                     setInputAmount(e.currentTarget.value)
                                 }}
                             />
