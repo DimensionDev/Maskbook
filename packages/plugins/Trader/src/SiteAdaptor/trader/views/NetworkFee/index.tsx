@@ -1,3 +1,4 @@
+import { zodResolver } from '@hookform/resolvers/zod'
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { ProgressiveText } from '@masknet/shared'
@@ -14,11 +15,16 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
+import { isEmpty } from 'lodash-es'
 import { memo, useMemo, useRef, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
-import { GasCost } from '../../components/GasCost.js'
-import { Warning } from '../../components/Warning.js'
-import { useGasManagement, useTrade } from '../contexts/index.js'
+import { type z as zod } from 'zod'
+import { GasCost } from '../../../components/GasCost.js'
+import { Warning } from '../../../components/Warning.js'
+import { useGasManagement } from '../../contexts/GasManager.js'
+import { useTrade } from '../../contexts/TradeProvider.js'
+import { useSchema } from './schema.js'
 
 const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, _, refs) => ({
     container: {
@@ -114,6 +120,11 @@ const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, 
         color: theme.palette.maskColor.second,
         marginLeft: theme.spacing(1.5),
     },
+    error: {
+        color: theme.palette.maskColor.danger,
+        fontSize: 13,
+        lineHeight: '18px',
+    },
 }))
 
 function formatTimeCost(seconds: number | undefined) {
@@ -124,8 +135,8 @@ function formatTimeCost(seconds: number | undefined) {
 }
 
 const MIN_BASE_FEE = '0.01'
-const gweiToWei = (gwei: BigNumber.Value | undefined) => formatGweiToWei(gwei ?? '0').toFixed()
-const weiToGwei = (wei: BigNumber.Value | undefined) => formatWeiToGwei(wei ?? '0').toFixed()
+const gweiToWei = (gwei: BigNumber.Value | undefined) => (gwei ? formatGweiToWei(gwei).toFixed() : undefined)
+const weiToGwei = (wei: BigNumber.Value | undefined) => (wei ? formatWeiToGwei(wei).toFixed() : undefined)
 export const NetworkFee = memo(function NetworkFee() {
     const { classes, cx, theme } = useStyles()
     const { chainId } = useTrade()
@@ -152,9 +163,10 @@ export const NetworkFee = memo(function NetworkFee() {
     const [priorityFee = defaultPriorityFee, setPriorityFee] = useState<string>()
     const [gasPrice = defaultGasPrice, setGasPrice] = useState<string>()
     const customFeePrice = useMemo(
-        () => (isSupport1559 ? plus(baseFee ?? '0', priorityFee ?? '0') : new BigNumber(gasPrice ?? '0')),
+        () => (isSupport1559 ? plus(baseFee || '0', priorityFee || '0') : new BigNumber(gasPrice ?? '0')),
         [isSupport1559, baseFee, priorityFee, gasPrice],
     )
+
     const isTooHigh = isGreaterThan(customFeePrice, multipliedBy(gasOptions?.fast.suggestedMaxFeePerGas ?? '0', 2))
 
     const customBoxRef = useRef<HTMLDivElement>(null)
@@ -191,6 +203,20 @@ export const NetworkFee = memo(function NetworkFee() {
             customTimeCost,
         }
     }, [gasOptions, customFeePrice])
+
+    const schema = useSchema(isSupport1559)
+
+    const {
+        control,
+        setValue,
+        formState: { errors },
+    } = useForm<zod.infer<typeof schema>>({
+        mode: 'onChange',
+        resolver: zodResolver(schema),
+        context: {
+            gasOptions,
+        },
+    })
 
     return (
         <div className={classes.container}>
@@ -324,7 +350,7 @@ export const NetworkFee = memo(function NetworkFee() {
                             <Trans>Custom</Trans>
                         </Typography>
                         <Typography className={classes.boxSubtitle} variant="h3">
-                            {formatWeiToGwei(customFeePrice ?? '0').toFixed()} Gwei
+                            {customFeePrice ? formatWeiToGwei(customFeePrice).toFixed() : '--'} Gwei
                         </Typography>
                     </div>
                     <div className={classes.boxTail}>
@@ -350,29 +376,72 @@ export const NetworkFee = memo(function NetworkFee() {
                                         <Trans>Base fee required: {MIN_BASE_FEE} Gwei</Trans>
                                     </Typography>
                                 </Box>
-                                <MaskTextField
-                                    placeholder="0.1-50"
-                                    type="number"
-                                    value={weiToGwei(baseFee)}
-                                    onChange={(e) => {
-                                        setBaseFee(gweiToWei(e.target.value))
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
+                                <Controller
+                                    control={control}
+                                    name="baseFee"
+                                    render={({ field, fieldState }) => {
+                                        return (
+                                            <>
+                                                <MaskTextField
+                                                    {...field}
+                                                    placeholder="0.1-50"
+                                                    type="number"
+                                                    value={weiToGwei(baseFee)}
+                                                    onChange={(e) => {
+                                                        const value = gweiToWei(e.target.value) || ''
+                                                        setBaseFee(value)
+                                                        setValue('baseFee', value)
+                                                        field.onChange(e)
+                                                    }}
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                            <Typography className={classes.gwei}>Gwei</Typography>
+                                                        ),
+                                                    }}
+                                                />
+                                                {fieldState.error ?
+                                                    <Typography className={classes.error}>
+                                                        {fieldState.error.message}
+                                                    </Typography>
+                                                :   null}
+                                            </>
+                                        )
                                     }}
                                 />
                                 <Typography className={classes.fieldName}>
                                     <Trans>Priority fee</Trans>
                                 </Typography>
-                                <MaskTextField
-                                    placeholder="0.1-50"
-                                    type="number"
-                                    value={weiToGwei(priorityFee)}
-                                    onChange={(e) => {
-                                        setPriorityFee(gweiToWei(e.target.value))
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
+
+                                <Controller
+                                    control={control}
+                                    name="priorityFee"
+                                    render={({ field, fieldState }) => {
+                                        return (
+                                            <>
+                                                <MaskTextField
+                                                    {...field}
+                                                    placeholder="0.1-50"
+                                                    type="number"
+                                                    value={weiToGwei(priorityFee)}
+                                                    onChange={(e) => {
+                                                        const value = gweiToWei(e.target.value) || ''
+                                                        setPriorityFee(value)
+                                                        setValue('priorityFee', value)
+                                                        field.onChange(e)
+                                                    }}
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                            <Typography className={classes.gwei}>Gwei</Typography>
+                                                        ),
+                                                    }}
+                                                />
+                                                {fieldState.error ?
+                                                    <Typography className={classes.error}>
+                                                        {fieldState.error.message}
+                                                    </Typography>
+                                                :   null}
+                                            </>
+                                        )
                                     }}
                                 />
                             </>
@@ -382,15 +451,36 @@ export const NetworkFee = memo(function NetworkFee() {
                                         <Trans>Gas Price</Trans>
                                     </Typography>
                                 </Box>
-                                <MaskTextField
-                                    placeholder="0.1-50"
-                                    type="number"
-                                    value={weiToGwei(gasPrice)}
-                                    onChange={(e) => {
-                                        setGasPrice(gweiToWei(e.target.value || '0'))
-                                    }}
-                                    InputProps={{
-                                        endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,
+                                <Controller
+                                    control={control}
+                                    name="gasPrice"
+                                    render={({ field, fieldState }) => {
+                                        return (
+                                            <>
+                                                <MaskTextField
+                                                    {...field}
+                                                    placeholder="0.1-50"
+                                                    type="number"
+                                                    value={weiToGwei(gasPrice)}
+                                                    onChange={(e) => {
+                                                        const value = gweiToWei(e.target.value) || ''
+                                                        setGasPrice(value)
+                                                        setValue('gasPrice', value)
+                                                        field.onChange(e)
+                                                    }}
+                                                    InputProps={{
+                                                        endAdornment: (
+                                                            <Typography className={classes.gwei}>Gwei</Typography>
+                                                        ),
+                                                    }}
+                                                />
+                                                {fieldState.error ?
+                                                    <Typography className={classes.error}>
+                                                        {fieldState.error.message}
+                                                    </Typography>
+                                                :   null}
+                                            </>
+                                        )
                                     }}
                                 />
                             </>
@@ -407,7 +497,7 @@ export const NetworkFee = memo(function NetworkFee() {
                         <Button
                             variant="roundedContained"
                             fullWidth
-                            disabled={disabled}
+                            disabled={disabled || !isEmpty(errors)}
                             onClick={() => {
                                 if (isSupport1559) {
                                     const maxFeePerGas = plus(baseFee ?? '0', priorityFee ?? '0').toFixed()

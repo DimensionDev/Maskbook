@@ -17,6 +17,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
@@ -256,6 +257,7 @@ export function TradeView() {
                                     )
                                     if (picked) {
                                         setInputAmount('')
+                                        setIsMax(false)
                                         setFromToken(picked)
                                         if (toChainId !== picked.chainId && isSwap) setToToken(undefined)
                                     }
@@ -296,7 +298,9 @@ export function TradeView() {
                                             if (!fromToken?.address) return
                                             const isNative = isNativeTokenAddress(fromToken.address)
                                             const balance =
-                                                isNative ? minus(fromTokenBalance, gasFee) : fromTokenBalance
+                                                isNative ?
+                                                    BigNumber.max(minus(fromTokenBalance, gasFee), 0)
+                                                :   fromTokenBalance
                                             setInputAmount(trimZero(leftShift(balance, fromToken.decimals).toFixed()))
                                             setIsMax(true)
                                         }}>
