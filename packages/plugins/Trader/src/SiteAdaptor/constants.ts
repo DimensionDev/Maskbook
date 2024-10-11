@@ -34,7 +34,7 @@ export const bridges = [
     {
         id: 315,
         name: 'Across',
-        logoUrl: new URL('../assets/accross.svg', import.meta.url).href,
+        logoUrl: new URL('../assets/across.svg', import.meta.url).href,
     },
     {
         id: 211,
