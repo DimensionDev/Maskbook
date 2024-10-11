@@ -13,7 +13,7 @@ import {
     multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { formatWeiToEther } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
@@ -248,14 +248,14 @@ export const Confirm = memo(function Confirm() {
             from: account,
             value: transaction.value,
             gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: gas ? multipliedBy(gas, 1.2).toFixed(0) : gas,
+            gas: chainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
             maxPriorityFeePerGas:
                 'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                     gasConfig.maxFeePerGas
                 :   transaction.maxPriorityFeePerGas,
             _disableSnackbar: true,
         })
-    }, [transaction, account, gasConfig, Web3, gas])
+    }, [transaction, chainId, account, gasConfig, Web3, gas])
 
     const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
 
