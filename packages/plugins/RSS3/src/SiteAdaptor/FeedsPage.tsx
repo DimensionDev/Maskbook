@@ -19,6 +19,10 @@ const useStyles = makeStyles()((theme) => ({
     feedCard: {
         padding: theme.spacing(1.5),
     },
+    switchButton: {
+        textDecoration: 'underline',
+        cursor: 'pointer',
+    },
     loading: {
         color: theme.palette.maskColor.main,
     },
@@ -38,7 +42,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
-    const [{ networks, isDirect }] = useFilters()
+    const [{ networks, isDirect }, setFilters] = useFilters()
     const {
         data: feeds,
         isPending: loadingFeeds,
@@ -94,7 +98,22 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
         )
     }
     if (!feeds?.length && !loading) {
-        return <EmptyStatus height={260}>{t.no_data({ context: 'activities' })}</EmptyStatus>
+        return (
+            <EmptyStatus height={260}>
+                {t.no_data({ context: 'activities' })}{' '}
+                <span
+                    className={classes.switchButton}
+                    role="button"
+                    onClick={() => {
+                        setFilters((filters) => ({
+                            ...filters,
+                            isDirect: !filters.isDirect,
+                        }))
+                    }}>
+                    {isDirect ? 'View related' : 'View direct'}
+                </span>
+            </EmptyStatus>
+        )
     }
 
     return (
