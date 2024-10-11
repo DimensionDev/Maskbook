@@ -253,6 +253,7 @@ export function TradeView() {
                                         isSwap && toToken?.address ? [toToken.address] : [],
                                     )
                                     if (picked) {
+                                        setInputAmount('')
                                         setFromToken(picked)
                                         if (toChainId !== picked.chainId && isSwap) setToToken(undefined)
                                     }
@@ -320,6 +321,7 @@ export function TradeView() {
                     <Box
                         className={classes.swapButton}
                         onClick={() => {
+                            setInputAmount('')
                             setFromToken(toToken)
                             setToToken(fromToken)
                         }}>
