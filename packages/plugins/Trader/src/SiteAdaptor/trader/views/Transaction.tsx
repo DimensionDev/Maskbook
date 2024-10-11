@@ -293,17 +293,6 @@ export const Transaction = memo(function Transaction() {
     }, [setParams])
 
     useAsync(async () => {
-        if (!isPending || !hash) return
-        const fromReceipt = await waitForTransaction({ chainId: fromChainId, hash, confirmationCount: 1 })
-        if (!fromReceipt.status) {
-            showSnackbar(t`Bridge`, {
-                message: t`Failed to bridge`,
-            })
-            removePendingParam()
-        }
-    }, [isPending, fromChainId, hash, removePendingParam])
-
-    useAsync(async () => {
         if (!isPending || !toChainId || !toTxHash || !toToken) return
         const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
 

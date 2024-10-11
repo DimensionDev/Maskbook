@@ -304,25 +304,32 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 return
             }
             queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
-            showSnackbar(t`Bridge`, {
-                message: (
-                    <MuiLink
-                        sx={{ wordBreak: 'break-word' }}
-                        className={classes.link}
-                        color="inherit"
-                        href={Utils.explorerResolver.transactionLink(fromChainId, hash)}
-                        tabIndex={-1}
-                        target="_blank"
-                        rel="noopener noreferrer">
-                        <Typography
-                            color={theme.palette.maskColor.success}
-                            component="span">{t`Transaction submitted.`}</Typography>
-                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                    </MuiLink>
-                ),
-                variant: 'default',
-                processing: true,
-            })
+            const receipt = await Web3.getTransactionReceipt(hash)
+            if (!receipt?.status) {
+                showSnackbar(t`Bridge`, {
+                    message: t`Failed to bridge`,
+                })
+            } else {
+                showSnackbar(t`Bridge`, {
+                    message: (
+                        <MuiLink
+                            sx={{ wordBreak: 'break-word' }}
+                            className={classes.link}
+                            color="inherit"
+                            href={Utils.explorerResolver.transactionLink(fromChainId, hash)}
+                            tabIndex={-1}
+                            target="_blank"
+                            rel="noopener noreferrer">
+                            <Typography
+                                color={theme.palette.maskColor.success}
+                                component="span">{t`Transaction submitted.`}</Typography>
+                            <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                        </MuiLink>
+                    ),
+                    variant: 'default',
+                    processing: true,
+                })
+            }
             await addTransaction(account, {
                 kind: 'bridge',
                 hash,
@@ -386,6 +393,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         gasConfig.gasPrice,
         router,
         mode,
+        Web3,
     ])
 
     const loading = isSending || isCheckingApprove || isApproving || submitting
