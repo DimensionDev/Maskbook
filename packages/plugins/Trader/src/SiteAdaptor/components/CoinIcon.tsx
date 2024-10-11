@@ -12,12 +12,6 @@ import { memo } from 'react'
 const useStyles = makeStyles()(() => ({
     icon: {
         position: 'relative',
-        width: 30,
-        height: 30,
-    },
-    tokenIcon: {
-        height: 30,
-        width: 30,
     },
     badgeIcon: {
         position: 'absolute',
@@ -54,13 +48,7 @@ export const CoinIcon = memo<CoinIconProps>(function CoinIcon({
     })
     return (
         <Box className={cx(classes.icon, rest.className)}>
-            <TokenIcon
-                className={classes.tokenIcon}
-                chainId={chainId}
-                address={address || ''}
-                size={tokenIconSize}
-                logoURL={logoURL}
-            />
+            <TokenIcon chainId={chainId} address={address || ''} size={tokenIconSize} logoURL={logoURL} />
             {chainId && !disableBadge ?
                 <NetworkIcon
                     pluginID={NetworkPluginID.PLUGIN_EVM}

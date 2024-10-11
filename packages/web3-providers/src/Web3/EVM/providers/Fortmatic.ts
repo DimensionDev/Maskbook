@@ -20,7 +20,7 @@ const resolveAPI_Key = createLookupTableResolver<ChainIdFortmatic, string>(
     {
         [ChainId.Mainnet]: LIVE_KEY,
         [ChainId.BSC]: LIVE_KEY,
-        [ChainId.Matic]: LIVE_KEY,
+        [ChainId.Polygon]: LIVE_KEY,
         [ChainId.Rinkeby]: TEST_KEY,
         [ChainId.Ropsten]: TEST_KEY,
         [ChainId.Kovan]: TEST_KEY,
@@ -35,7 +35,7 @@ const isFortmaticSupported = (chainId: ChainId): chainId is ChainIdFortmatic => 
 type ChainIdFortmatic =
     | ChainId.Mainnet
     | ChainId.BSC
-    | ChainId.Matic
+    | ChainId.Polygon
     | ChainId.Rinkeby
     | ChainId.Ropsten
     | ChainId.Kovan

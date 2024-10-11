@@ -31,7 +31,7 @@ export const zerionChainIdResolver = createLookupTableResolver<string, ChainId |
         aurora: ChainId.Aurora,
         'binance-smart-chain': ChainId.BSC,
         xdai: ChainId.xDai,
-        polygon: ChainId.Matic,
+        polygon: ChainId.Polygon,
     },
     () => undefined,
 )

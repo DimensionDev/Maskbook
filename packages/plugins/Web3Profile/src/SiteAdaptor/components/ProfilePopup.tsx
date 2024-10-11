@@ -207,7 +207,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                     onClick={() =>
                         SelectProviderModal.open({
                             requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
-                            requiredSupportChainIds: [ChainId.Matic],
+                            requiredSupportChainIds: [ChainId.Polygon],
                         })
                     }>
                     <Trans>Change</Trans>

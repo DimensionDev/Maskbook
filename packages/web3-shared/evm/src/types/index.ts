@@ -37,8 +37,8 @@ export enum ChainId {
     BSC = 56,
     BSCT = 97,
 
-    // Matic
-    Matic = 137,
+    // Polygon
+    Polygon = 137,
     Mumbai = 80001,
 
     // Arbitrum
@@ -421,6 +421,12 @@ export interface Transaction {
     feeCurrency?: string // address of the ERC20 contract to use to pay for gas and the gateway fee
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
+
+    _disableSnackbar?: boolean
+    _disableSuccessSnackbar?: boolean
+    _disableExceptionSnackbar?: boolean
+
+    _isOKXSwap?: boolean
 }
 export interface UserOperation {
     sender: string

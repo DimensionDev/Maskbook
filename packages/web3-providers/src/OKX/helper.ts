@@ -14,7 +14,14 @@ export function fromOkxNativeAddress(address: string) {
 export function normalizeCode<T extends { code: number }>(res: T): T {
     return {
         ...res,
-        code: Number.parseInt(res.code as unknown as string, 10),
+        code: +res.code,
+    }
+}
+
+export function fixToken<T extends { decimals: number; decimal: string }>(res: T): T {
+    return {
+        ...res,
+        decimals: +res.decimal,
     }
 }
 

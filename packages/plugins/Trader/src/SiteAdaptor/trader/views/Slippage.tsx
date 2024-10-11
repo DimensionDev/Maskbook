@@ -4,7 +4,7 @@ import { alpha, Button, Typography } from '@mui/material'
 import { isNumber } from 'lodash-es'
 import { memo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSwap } from '../contexts/index.js'
+import { useTrade } from '../contexts/index.js'
 
 const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {
@@ -102,7 +102,7 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
 export const Slippage = memo(function Slippage() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const { isAutoSlippage, setIsAutoSlippage, setSlippage, slippage, quote } = useSwap()
+    const { mode, isAutoSlippage, setIsAutoSlippage, setSlippage, slippage, quote, toToken, bridgeQuote } = useTrade()
     const [pendingIsAutoSlippage, setPendingIsAutoSlippage] = useState(isAutoSlippage)
     const [pendingSlippage, setPendingSlippage] = useState(slippage)
 
@@ -161,10 +161,17 @@ export const Slippage = memo(function Slippage() {
                 </div>
                 <div className={classes.infoRow}>
                     <Typography className={classes.rowName}>Minimum received</Typography>
-                    {quote ?
+                    {quote && mode === 'swap' ?
                         <Typography className={classes.rowValue}>
                             {leftShift(quote.toTokenAmount, quote.toToken.decimals).toFixed(4)}
                             {quote.toToken.tokenSymbol}
+                        </Typography>
+                    : bridgeQuote && mode === 'bridge' ?
+                        <Typography className={classes.rowValue}>
+                            {leftShift(bridgeQuote.routerList[0].minimumReceived, bridgeQuote.toToken.decimals).toFixed(
+                                4,
+                            )}
+                            {toToken?.symbol ?? '--'}
                         </Typography>
                     :   null}
                 </div>

@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
 import type {
     GetBridgeQuoteResponse,
     GetQuotesResponse,
@@ -21,22 +20,19 @@ import {
     type PropsWithChildren,
     type SetStateAction,
 } from 'react'
-import { base } from '../../../base.js'
 import { DEFAULT_SLIPPAGE } from '../../constants.js'
+import { fixBridgeMessage } from '../helpers.js'
+import { useBridgeQuotes } from '../hooks/useBridgeQuotes.js'
+import { useDefaultToken } from '../hooks/useDefaultToken.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useQuotes } from '../hooks/useQuotes.js'
-import { useUsdtToken } from '../hooks/useUsdtToken.js'
-import { useBridgeQuotes } from '../hooks/useBridgeQuotes.js'
-import { fixBridgeMessage } from '../helpers.js'
-
-export type TradeMode = 'swap' | 'bridge'
+import { useDefaultParams } from './useDefaultParams.js'
+import { useMode, type TradeMode } from './useMode.js'
 
 interface Options {
     chainId: ChainId
-    setChainId: Dispatch<SetStateAction<ChainId>>
     nativeToken: Web3Helper.FungibleTokenAll | undefined
     mode: TradeMode
-    setMode: Dispatch<SetStateAction<TradeMode>>
     fromToken: Web3Helper.FungibleTokenAll | undefined
     setFromToken: Dispatch<SetStateAction<Web3Helper.FungibleTokenAll | undefined>>
     toToken: Web3Helper.FungibleTokenAll | undefined
@@ -48,6 +44,7 @@ interface Options {
     swapQuoteErrorMessage: string | undefined
     inputAmount: string
     setInputAmount: Dispatch<SetStateAction<string>>
+    amount: string
     /**
      * Disabled dexId of the liquidity pool for limited quotes.
      * We record disabled ones only, if no disabled ones, we cna omit the parameter
@@ -67,9 +64,8 @@ interface Options {
     isBridgeQuoteLoading: boolean
     updateBridgeQuote: (options?: RefetchOptions) => Promise<QueryObserverResult<GetBridgeQuoteResponse>>
     bridgeQuoteErrorMessage: string | undefined
+    reset: () => void
 }
-
-const chainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 
 function useModeState<T>(mode: TradeMode): [T | undefined, Dispatch<SetStateAction<T | undefined>>]
 function useModeState<T>(mode: TradeMode, defaultValue: T): [T, Dispatch<SetStateAction<T>>]
@@ -95,17 +91,23 @@ function useModeState<T>(mode: TradeMode, defaultValue?: T): [T | undefined, Dis
 }
 
 const SwapContext = createContext<Options>(null!)
+const otherChainIdMap: Record<number, ChainId> = {
+    [ChainId.BSC]: ChainId.Mainnet,
+    [ChainId.Mainnet]: ChainId.BSC,
+}
 export function TradeProvider({ children }: PropsWithChildren) {
-    const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const [mode, setMode] = useState<TradeMode>('swap')
-    const defaultChainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
-    const [chainId = defaultChainId, setChainId] = useState<ChainId>(defaultChainId)
-    const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { chainId: defaultChainId, nativeToken, paramToToken } = useDefaultParams()
 
-    const usdtToken = useUsdtToken(chainId)
+    const mode = useMode()
+
     const [fromToken = nativeToken, setFromToken] = useModeState<Web3Helper.FungibleTokenAll | undefined>(mode)
-    const [toToken = fromToken?.address === usdtToken?.address ? undefined : usdtToken, setToToken] =
-        useModeState<Web3Helper.FungibleTokenAll>(mode)
+    const chainId = fromToken?.chainId || defaultChainId
+
+    const defaultToToken = useDefaultToken(
+        mode === 'bridge' ? otherChainIdMap[chainId] || ChainId.Mainnet : chainId,
+        fromToken?.address,
+    )
+    const [toToken = paramToToken || defaultToToken, setToToken] = useModeState<Web3Helper.FungibleTokenAll>(mode)
 
     const [inputAmount, setInputAmount] = useModeState(mode, '')
     const decimals = fromToken?.decimals
@@ -152,7 +154,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const {
         data: bridgeQuoteRes,
         isStale: isBridgeQuoteStale,
-        isLoading: isBridgeQuoteLoading,
+        isPending: isBridgeQuoteLoading,
         refetch: updateBridgeQuote,
     } = useBridgeQuotes(
         {
@@ -175,12 +177,18 @@ export function TradeProvider({ children }: PropsWithChildren) {
     // misc, ui
     const [expand, setExpand] = useModeState(mode, false)
 
+    const reset = useCallback(() => {
+        setFromToken(undefined)
+        setToToken(undefined)
+        setSlippage(undefined)
+        setDisabledDexIds(EMPTY_LIST)
+        setInputAmount('')
+    }, [setFromToken, setToToken, setSlippage])
+
     const value = useMemo(
         () => ({
             chainId,
             mode,
-            setMode,
-            setChainId,
             quote,
             isQuoteStale,
             isQuoteLoading,
@@ -192,6 +200,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             setToToken,
             inputAmount,
             setInputAmount,
+            amount,
             swapQuoteErrorMessage,
             disabledDexIds,
             setDisabledDexIds,
@@ -207,6 +216,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             isBridgeQuoteLoading,
             updateBridgeQuote,
             bridgeQuoteErrorMessage: fixBridgeMessage(bridgeQuoteErrorMessage, fromToken),
+            reset,
         }),
         [
             chainId,
@@ -222,6 +232,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             setToToken,
             inputAmount,
             setInputAmount,
+            amount,
             swapQuoteErrorMessage,
             disabledDexIds,
             setDisabledDexIds,
@@ -235,11 +246,14 @@ export function TradeProvider({ children }: PropsWithChildren) {
             isBridgeQuoteLoading,
             updateBridgeQuote,
             bridgeQuoteErrorMessage,
+            reset,
         ],
     )
     return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>
 }
 
-export function useSwap() {
+export function useTrade() {
     return useContext(SwapContext)
 }
+
+export { type TradeMode } from './useMode.js'

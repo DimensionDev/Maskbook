@@ -4,7 +4,7 @@ import stringify from 'json-stable-stringify'
 import type { Dimension } from '../useDimension.js'
 import { format } from 'date-fns'
 import { alpha, useTheme } from '@mui/material'
-import { fixOverPosition } from './utils.js'
+import { bound, fixOverPosition } from './utils.js'
 
 // TODO chart morph transform
 export function useLineChart(
@@ -67,26 +67,43 @@ export function useLineChart(
             y: (y(max) ?? 0) - 16,
         }
 
-        const minFixedPosition = fixOverPosition(contentWidth, contentHeight, minPosition.x, minPosition.y, 40)
-        const maxFixedPosition = fixOverPosition(contentWidth, contentHeight, maxPosition.x, maxPosition.y, 40)
+        const minFixedPosition = fixOverPosition(contentWidth, contentHeight, minPosition.x, minPosition.y, 0, 10)
+        const maxFixedPosition = fixOverPosition(contentWidth, contentHeight, maxPosition.x, maxPosition.y, 0)
 
-        graph
-            .append('g')
+        const minTextSelection = graph
             .append('text')
-            .attr('transform', `translate(${minFixedPosition.x}, ${minFixedPosition.y})`)
             .style('font-size', 14)
             .style('font-weight', 700)
             .attr('fill', theme.palette.text.secondary)
             .text(formatTooltip(min))
+        const minTextNode = minTextSelection.node()
+        const minTextRect = minTextNode?.getBoundingClientRect()
 
-        graph
-            .append('g')
+        const boundedMinPosition = bound({
+            containerWidth: contentWidth,
+            containerHeight: height,
+            targetWidth: minTextRect?.width ?? 0,
+            targetHeight: minTextRect?.height ?? 0,
+            ...minFixedPosition,
+        })
+        minTextSelection.attr('transform', `translate(${boundedMinPosition.x}, ${boundedMinPosition.y})`)
+
+        const maxTextSelection = graph
             .append('text')
-            .attr('transform', `translate(${maxFixedPosition.x}, ${maxFixedPosition.y})`)
             .style('font-size', 14)
             .style('font-weight', 700)
             .attr('fill', theme.palette.text.secondary)
             .text(formatTooltip(max))
+        const maxTextNode = maxTextSelection.node()
+        const maxTextRect = maxTextNode?.getBoundingClientRect()
+        const boundedMaxPosition = bound({
+            containerWidth: contentWidth,
+            containerHeight: contentHeight,
+            targetWidth: maxTextRect?.width ?? 0,
+            targetHeight: maxTextRect?.height ?? 0,
+            ...maxFixedPosition,
+        })
+        maxTextSelection.attr('transform', `translate(${boundedMaxPosition.x}, ${boundedMaxPosition.y})`)
 
         graph
             .append('g')

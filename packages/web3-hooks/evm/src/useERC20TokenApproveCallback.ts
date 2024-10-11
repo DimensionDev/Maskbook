@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { isLessThan, toFixed, isZero } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from './useERC20TokenAllowance.js'
 
@@ -25,6 +25,7 @@ export function useERC20TokenApproveCallback(
     callback?: () => void,
     tokenChainId?: ChainId,
 ) {
+    const isNativeToken = isNativeTokenAddress(address)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // read the approved information from the chain
@@ -95,14 +96,16 @@ export function useERC20TokenApproveCallback(
             amount,
             spender,
             balance,
+            isNativeToken,
         },
         {
             ...state,
-            loading: loadingAllowance || loadingBalance || state.loading,
-            loadingApprove: state.loading,
-            loadingAllowance,
+            loading: isNativeToken ? false : loadingAllowance || loadingBalance || state.loading,
+            loadingApprove: isNativeToken ? false : state.loading,
+            loadingAllowance: isNativeToken ? false : loadingAllowance,
         },
         approveCallback,
         resetCallback,
+        revalidateAllowance,
     ] as const
 }

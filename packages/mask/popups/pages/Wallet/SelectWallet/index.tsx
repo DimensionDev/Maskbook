@@ -154,7 +154,7 @@ export const Component = memo(function SelectWallet() {
             <Box pt={1} pb={9} px={2} display="flex" flexDirection="column" rowGap="6px">
                 {wallets
                     .filter((x) => {
-                        if (x.owner && chainId !== ChainId.Matic) return false
+                        if (x.owner && chainId !== ChainId.Polygon) return false
                         if (!isVerifyWalletFlow && !isSettingNFTAvatarFlow) return true
                         return !x.owner
                     })

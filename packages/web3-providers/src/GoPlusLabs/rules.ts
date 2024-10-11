@@ -1,10 +1,12 @@
-import { parseInt } from 'lodash-es'
-import { type SecurityMessage, SecurityType, SecurityMessageLevel } from './types.js'
 import type { SecurityAPI } from '../entry-types.js'
+import { type SecurityMessage, SecurityMessageLevel, SecurityType } from './types.js'
 import { msg } from '@lingui/macro'
 
 function percentageToNumber(value?: string) {
-    return parseInt((value ?? '').replace('%', '')) * 100
+    const result =
+        value?.endsWith('%') ? Number.parseFloat(value.replace('%', '')) : Number.parseFloat(value ?? '0') * 100
+
+    return Number.isNaN(result) ? 0 : result
 }
 function isUnset(name: keyof SecurityAPI.TokenSecurityType) {
     return (info: SecurityAPI.TokenSecurityType) => info[name] === undefined

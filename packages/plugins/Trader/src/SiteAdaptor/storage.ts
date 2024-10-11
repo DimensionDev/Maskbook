@@ -1,4 +1,6 @@
 import { EMPTY_LIST, type ScopedStorage } from '@masknet/shared-base'
+import { sortBy } from 'lodash-es'
+import { useMemo } from 'react'
 import { useSubscription } from 'use-subscription'
 import type { OkxTransaction } from '../types/trader.js'
 
@@ -14,7 +16,10 @@ export function setupStorage(initialized: ScopedStorage<StorageOptions>) {
 
 export function useSwapHistory(address: string) {
     const txes = useSubscription(storage?.storage?.transactions?.subscription)
-    return txes[address.toLowerCase()] || EMPTY_LIST
+    const addr = address.toLowerCase()
+    return useMemo(() => {
+        return sortBy(txes[addr], (x) => -x.timestamp) || EMPTY_LIST
+    }, [txes, addr])
 }
 
 export async function addTransaction<T extends OkxTransaction>(address: string, transaction: T) {

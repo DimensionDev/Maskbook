@@ -2,20 +2,20 @@
     "GITCOIN_MAINTAINER_ADDRESS": {
         "Mainnet": "0xde21F729137C5Af1b01d73aF1dC21eFfa2B8a0d6",
         "Rinkeby": "0xde21F729137C5Af1b01d73aF1dC21eFfa2B8a0d6",
-        "Matic": "0x366adf5b96ee15aff5d66b0fa44a56330b55e97b",
+        "Polygon": "0x366adf5b96ee15aff5d66b0fa44a56330b55e97b",
         "Mumbai": "0x366adf5b96ee15aff5d66b0fa44a56330b55e97b"
     },
     "BULK_CHECKOUT_ADDRESS": {
         "Mainnet": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
         "Rinkeby": "0x7d655c57f71464B6f83811C55D84009Cd9f5221C",
-        "Matic": "0xb99080b9407436eBb2b8Fe56D45fFA47E9bb8877",
+        "Polygon": "0xb99080b9407436eBb2b8Fe56D45fFA47E9bb8877",
         "Mumbai": "0x3E2849E2A489C8fE47F52847c42aF2E8A82B9973"
     },
     "GITCOIN_ETH_ADDRESS": {
         "Mainnet": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Rinkeby": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "BSC": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
-        "Matic": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
+        "Polygon": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE",
         "Mumbai": "0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE"
     },
     "TOKEN_LIST": {
@@ -52,7 +52,7 @@
         "BSCT": [],
         "Base": [],
         "Base_Goerli": [],
-        "Matic": [
+        "Polygon": [
             "0x0000000000000000000000000000000000000000",
             "0x7ceB23fD6bC0adD59E62ac25578270cFf1b9f619",
             "0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174",

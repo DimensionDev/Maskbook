@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
         borderBottom: `1px solid ${theme.palette.maskColor.line}`,
         paddingBottom: theme.spacing(1.5),
+        contentVisibility: 'auto',
     },
     groupHeader: {
         display: 'flex',
@@ -143,7 +144,7 @@ export function HistoryView() {
                 const chainId = tx.kind === 'swap' || !tx.kind ? tx.chainId : tx.fromChainId
                 const network = networks.find((x) => +x.chainId === chainId)
                 const toNetwork = tx.kind === 'bridge' ? networks.find((x) => x.chainId === tx.toChainId) : null
-                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId })
+                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
                 return (
                     <div className={classes.group} key={tx.hash}>
                         <div className={classes.groupHeader}>
@@ -179,9 +180,10 @@ export function HistoryView() {
                                     </div>
                                     {toNetwork ?
                                         <Typography className={classes.network}>
-                                            {`${network?.name ?? '--'} to ${toNetwork.name ?? '--'}`}
+                                            {`${network?.fullName ?? '--'} to ${toNetwork.fullName ?? '--'}`}
                                         </Typography>
-                                    :   <Typography className={classes.network}>{network?.name ?? '--'}</Typography>}
+                                    :   <Typography className={classes.network}>{network?.fullName ?? '--'}</Typography>
+                                    }
                                 </div>
                                 <div className={classes.result}>
                                     <Typography className={classes.received}>

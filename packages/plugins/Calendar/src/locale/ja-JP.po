@@ -28,8 +28,8 @@ msgid "Date"
 msgstr "日付"
 
 #: src/SiteAdaptor/CalendarContent.tsx:85
-msgid "Events"
-msgstr "イベント"
+#~ msgid "Events"
+#~ msgstr "イベント"
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx:58
 msgid "Expired"
@@ -43,11 +43,11 @@ msgstr "期限切れ"
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
 msgstr ""
 
-#: src/SiteAdaptor/CalendarContent.tsx:84
+#: src/SiteAdaptor/CalendarContent.tsx:77
 msgid "News"
 msgstr "ニュース"
 
-#: src/SiteAdaptor/CalendarContent.tsx:86
+#: src/SiteAdaptor/CalendarContent.tsx:78
 msgid "NFTs"
 msgstr ""
 

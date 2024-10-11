@@ -25,7 +25,7 @@ import { useLingui } from '@lingui/react'
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
     [ChainId.Conflux]: pow10(9).multipliedBy(5),
-    [ChainId.Matic]: pow10(9).multipliedBy(30),
+    [ChainId.Polygon]: pow10(9).multipliedBy(30),
     [ChainId.Astar]: pow10(9).multipliedBy(5), // 5 Gwei
 }
 

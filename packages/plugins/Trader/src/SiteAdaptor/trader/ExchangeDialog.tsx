@@ -1,15 +1,17 @@
 import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskTabList } from '@masknet/theme'
+import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { Box } from '@mui/system'
-import { memo } from 'react'
+import { memo, useMemo } from 'react'
 import { matchPath, MemoryRouter, useLocation, useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { RouterDialog } from '../components/RouterDialog.js'
 import { RoutePaths } from '../constants.js'
 import { ExchangeRoutes } from './Routes.js'
-import { Providers, useSwap, type TradeMode } from './contexts/index.js'
+import { Providers, useTrade } from './contexts/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -51,7 +53,7 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
     const { pathname } = useLocation()
     const match = matchPath(RoutePaths.Trade, pathname)
     const navigate = useNavigate()
-    const { mode, setMode } = useSwap()
+    const { mode } = useTrade()
 
     const titleMap: Record<RoutePaths, string | null> = {
         [RoutePaths.Trade]: t`Exchange`,
@@ -98,7 +100,13 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
                         <MaskTabList
                             variant="base"
                             onChange={(_, tab) => {
-                                setMode(tab as TradeMode)
+                                navigate(
+                                    {
+                                        pathname: RoutePaths.Trade,
+                                        search: `?mode=${tab}`,
+                                    },
+                                    { replace: true },
+                                )
                             }}>
                             <Tab label={t`Swap`} value="swap" />
                             <Tab label={t`Bridge`} value="bridge" />
@@ -113,8 +121,19 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
     )
 })
 
-const initialEntries = [RoutePaths.Exit, RoutePaths.Trade]
 export const ExchangeDialog = memo<ExchangeDialogProps>(function ExchangeDialog(props) {
+    const initialEntries = useMemo(() => {
+        if (!props.toAddress || !props.toChainId || isNativeTokenAddress(props.toAddress))
+            return [RoutePaths.Exit, RoutePaths.Trade]
+        return [
+            RoutePaths.Exit,
+            urlcat(RoutePaths.Trade, {
+                toAddress: props.toAddress,
+                toChainId: props.toChainId,
+            }),
+        ]
+    }, [props.toAddress, props.toChainId])
+
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={1}>
             <Providers>

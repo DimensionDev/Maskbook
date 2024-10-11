@@ -163,7 +163,7 @@ const SwitchWallet = memo(function SwitchWallet() {
             <div className={classes.content}>
                 <List dense className={classes.list}>
                     {wallets.map((item) =>
-                        item.owner && chainId !== ChainId.Matic ?
+                        item.owner && chainId !== ChainId.Polygon ?
                             null
                         :   <WalletItem
                                 key={item.address}

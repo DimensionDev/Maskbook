@@ -125,6 +125,19 @@
             ["token_symbol"],
             "</1>"
         ],
+        "fpX5Gn": [
+            "Claimed: <0>",
+            ["claim_numbers"],
+            "/",
+            ["total_numbers"],
+            "</0> ",
+            ["0"],
+            "/",
+            ["1"],
+            " <1>",
+            ["tokenSymbol"],
+            "</1>"
+        ],
         "5NtcoW": [
             "Claimed: <0>",
             ["claim_numbers"],

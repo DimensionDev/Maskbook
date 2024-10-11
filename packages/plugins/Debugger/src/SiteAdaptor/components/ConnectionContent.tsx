@@ -116,7 +116,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onDeployCallback = useCallback(() => {
         return EVMWeb3.deploy?.('0x790116d0685eB197B886DAcAD9C247f785987A4a', undefined, {
-            chainId: ChainId.Matic,
+            chainId: ChainId.Polygon,
             account: '0x790116d0685eB197B886DAcAD9C247f785987A4a',
         })
     }, [])
@@ -133,7 +133,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                 signature: '',
             },
             {
-                chainId: ChainId.Matic,
+                chainId: ChainId.Polygon,
                 account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
             },
         )
@@ -141,7 +141,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
 
     const onChangeOwnerChange = useCallback(() => {
         return EVMWeb3.changeOwner?.('0x66b57885E8E9D84742faBda0cE6E3496055b012d', {
-            chainId: ChainId.Matic,
+            chainId: ChainId.Polygon,
             account: '0x96ec3286a049b42133c3ddd26777051612bdf61f',
         })
     }, [])
@@ -153,7 +153,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
             '0x31f42841c2db5173425b5223809cf3a38fede360',
             '1',
             {
-                chainId: ChainId.Matic,
+                chainId: ChainId.Polygon,
                 account: '0x66b57885E8E9D84742faBda0cE6E3496055b012d',
                 paymentToken: '0x2b9e7ccdf0f4e5b24757c1e1a80e311e34cb10c7',
             },
@@ -521,7 +521,7 @@ export function ConnectionContent(props: ConnectionContentProps) {
                                     switch (pluginID) {
                                         case NetworkPluginID.PLUGIN_EVM:
                                             await onSwitchChain(
-                                                chainId === ChainId.Mainnet ? ChainId.Matic : ChainId.Mainnet,
+                                                chainId === ChainId.Mainnet ? ChainId.Polygon : ChainId.Mainnet,
                                             )
                                             break
                                         default:

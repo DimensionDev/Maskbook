@@ -2105,6 +2105,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.0(react@0.0.0-experimental-58af67a8f8-20240628)
+      web3-core:
+        specifier: 1.10.4
+        version: 1.10.4(encoding@0.1.13)
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -30985,6 +30988,3 @@ snapshots:
   zod@3.23.8: {}
 
   zwitch@2.0.2: {}
-
-time:
-  '@types/web@0.0.150': '2024-06-26T04:08:07.551Z'

@@ -12,7 +12,7 @@ export const PlatformToChainIdMap: Partial<Record<RSS3BaseAPI.Network, ChainId>>
     crossbell: ChainId.Crossbell,
     ethereum: ChainId.Mainnet,
     'binance-smart-chain': ChainId.BSC,
-    polygon: ChainId.Matic,
+    polygon: ChainId.Polygon,
     gnosis: ChainId.xDai,
     optimism: ChainId.Optimism,
     base: ChainId.Base,
@@ -21,7 +21,7 @@ export const PlatformToChainIdMap: Partial<Record<RSS3BaseAPI.Network, ChainId>>
 export const NameServiceToChainMap = {
     eth: ChainId.Mainnet,
     csb: ChainId.Crossbell,
-    lens: ChainId.Matic,
+    lens: ChainId.Polygon,
     bnb: ChainId.BSC,
     bit: ChainId.Mainnet,
     888: ChainId.Mainnet,

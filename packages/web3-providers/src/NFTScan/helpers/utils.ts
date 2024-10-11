@@ -9,7 +9,7 @@ export function resolveNFTScanHostName(pluginId: NetworkPluginID, chainId: Web3H
     switch (chainId) {
         case ChainId.Mainnet:
             return 'https://www.nftscan.com'
-        case ChainId.Matic:
+        case ChainId.Polygon:
             return 'https://polygon.nftscan.com'
         case ChainId.BSC:
             return 'https://bnb.nftscan.com'

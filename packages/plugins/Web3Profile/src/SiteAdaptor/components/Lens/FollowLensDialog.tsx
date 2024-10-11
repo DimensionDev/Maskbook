@@ -389,7 +389,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                         <ChainBoundary
                                             disableConnectWallet
                                             expectedPluginID={pluginID}
-                                            expectedChainId={ChainId.Matic}
+                                            expectedChainId={ChainId.Polygon}
                                             ActionButtonPromiseProps={{
                                                 variant: 'roundedContained',
                                                 className: classes.followAction,
@@ -428,7 +428,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             <WalletConnectedBoundary
                                 offChain
                                 hideRiskWarningConfirmed
-                                expectedChainId={ChainId.Matic}
+                                expectedChainId={ChainId.Polygon}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
                                 {tips ?
                                     <Typography className={classes.tips}>{tips}</Typography>

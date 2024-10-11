@@ -14,8 +14,9 @@ export function querySelectorAll<T extends E>(selector: string) {
 
 // #region "Enhanced Profile"
 export function searchProfileTabListLastChildSelector() {
+    // :not(:has(a[href^="/i/"])) excludes tab list in trending page. See MF-6382
     return querySelector<E>(
-        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"] div[role="presentation"]:last-of-type a[role="tab"]',
+        '[data-testid="primaryColumn"] div + [role="navigation"][aria-label] [data-testid="ScrollSnap-List"]:not(:has(a[href^="/i/"])) div[role="presentation"]:last-of-type a[role="tab"]',
     ).closest<E>(1)
 }
 export function nextTabListSelector() {

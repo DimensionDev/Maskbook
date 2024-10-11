@@ -18,7 +18,7 @@ import { memo, useMemo, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GasCost } from '../../components/GasCost.js'
 import { Warning } from '../../components/Warning.js'
-import { useGasManagement, useSwap } from '../contexts/index.js'
+import { useGasManagement, useTrade } from '../contexts/index.js'
 
 const useStyles = makeStyles<void, 'active' | 'gasWarning' | 'gasOk'>()((theme, _, refs) => ({
     container: {
@@ -124,11 +124,11 @@ function formatTimeCost(seconds: number | undefined) {
 }
 
 const MIN_BASE_FEE = '0.01'
-const gweiToWei = (gwei: BigNumber.Value | undefined) => formatGweiToWei(gwei ?? '0').toFixed(0)
-const weiToGwei = (wei: BigNumber.Value | undefined) => formatWeiToGwei(wei ?? '0').toFixed(0)
+const gweiToWei = (gwei: BigNumber.Value | undefined) => formatGweiToWei(gwei ?? '0').toFixed()
+const weiToGwei = (wei: BigNumber.Value | undefined) => formatWeiToGwei(wei ?? '0').toFixed()
 export const NetworkFee = memo(function NetworkFee() {
     const { classes, cx, theme } = useStyles()
-    const { chainId } = useSwap()
+    const { chainId } = useTrade()
     const navigate = useNavigate()
 
     const isSupport1559 = useChainIdSupport(NetworkPluginID.PLUGIN_EVM, 'EIP1559', chainId)
@@ -153,7 +153,7 @@ export const NetworkFee = memo(function NetworkFee() {
     const [gasPrice = defaultGasPrice, setGasPrice] = useState<string>()
     const customFeePrice = useMemo(
         () => (isSupport1559 ? plus(baseFee ?? '0', priorityFee ?? '0') : new BigNumber(gasPrice ?? '0')),
-        [isSupport1559, baseFee, priorityFee],
+        [isSupport1559, baseFee, priorityFee, gasPrice],
     )
     const isTooHigh = isGreaterThan(customFeePrice, multipliedBy(gasOptions?.fast.suggestedMaxFeePerGas ?? '0', 2))
 
@@ -387,7 +387,7 @@ export const NetworkFee = memo(function NetworkFee() {
                                     type="number"
                                     value={weiToGwei(gasPrice)}
                                     onChange={(e) => {
-                                        setGasPrice(weiToGwei(e.target.value))
+                                        setGasPrice(gweiToWei(e.target.value || '0'))
                                     }}
                                     InputProps={{
                                         endAdornment: <Typography className={classes.gwei}>Gwei</Typography>,

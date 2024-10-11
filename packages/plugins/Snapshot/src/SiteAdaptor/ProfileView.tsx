@@ -6,7 +6,7 @@ import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { TabContext } from '@mui/lab'
 import { Icons } from '@masknet/icons'
-import { PluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { PluginDescriptor } from './PluginDescriptor.js'
 import { ProfileSpaceHeader } from './ProfileSpaceHeader.js'
@@ -47,7 +47,7 @@ interface ProfileViewProps extends withClasses<'content' | 'footer'> {
 
 export function ProfileView(props: ProfileViewProps) {
     const { ProfileCardProps, spaceList } = props
-    const { classes } = useStyles(undefined, { props })
+    const { classes } = useStyles()
     const theme = useTheme()
     const [currentTab, , , setTab] = useTabs<ContentTabs>(
         ContentTabs.All,
@@ -56,26 +56,26 @@ export function ProfileView(props: ProfileViewProps) {
         ContentTabs.Pending,
         ContentTabs.Closed,
     )
-    const [spaceIndex, setSpaceIndex] = useState(0)
 
     const isMinimalMode = useIsMinimalMode(PluginID.Snapshot)
 
-    const currentSpace = spaceList[spaceIndex]
+    const [spaceId = spaceList[0]?.spaceId, setSpaceId] = useState<string>()
+    const currentSpace = spaceList.find((x) => x.spaceId === spaceId) || spaceList[0]
 
-    const { value: space, loading: loadingSpaceMemberList } = useSpace(currentSpace.spaceId)
+    const { data: space, isPending: loadingSpaceMemberList } = useSpace(spaceId)
 
-    const { value: proposalList, loading: loadingProposalList } = useProposalList(
+    const { data: proposalList, isPending: loadingProposalList } = useProposalList(
         currentSpace.spaceId,
         currentSpace.strategyName ?? space?.symbol,
     )
 
     const [isPending, startTransition] = useTransition()
     const filteredProposalList = useMemo(() => {
-        if (!proposalList?.length || !space?.members) return
+        if (!proposalList?.length || !space?.members) return EMPTY_LIST
         if (currentTab === ContentTabs.All) return proposalList
         if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space.members.includes(x.author))
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
-    }, [currentTab, JSON.stringify(proposalList), JSON.stringify(space?.members)])
+    }, [currentTab, proposalList, space?.members])
 
     if (isMinimalMode) {
         return (
@@ -103,7 +103,7 @@ export function ProfileView(props: ProfileViewProps) {
                             ...currentSpace,
                             followersCount: space?.followersCount ?? currentSpace.followersCount,
                         }}
-                        setSpaceIndex={setSpaceIndex}
+                        setSpaceId={setSpaceId}
                     />
                 </ThemeProvider>
                 <TabContext value={currentTab}>
@@ -120,7 +120,7 @@ export function ProfileView(props: ProfileViewProps) {
                     </Stack>
                 </TabContext>
             </Stack>
-            {loadingProposalList || loadingSpaceMemberList || !filteredProposalList || isPending ?
+            {loadingProposalList || loadingSpaceMemberList || isPending ?
                 <CardContent className={classes.skeletonContent}>
                     <Stack height="100%" alignItems="center" justifyContent="center">
                         <LoadingBase />

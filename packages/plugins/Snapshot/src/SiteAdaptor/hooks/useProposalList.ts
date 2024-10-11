@@ -1,11 +1,13 @@
-import { useAsyncRetry } from 'react-use'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Snapshot } from '@masknet/web3-providers'
-import type { SnapshotBaseAPI } from '@masknet/web3-providers/types'
+import { useQuery } from '@tanstack/react-query'
 
 export function useProposalList(spaceId: string, strategyName?: string) {
-    return useAsyncRetry<SnapshotBaseAPI.SnapshotProposal[]>(async () => {
-        if (!spaceId) return EMPTY_LIST
-        return Snapshot.getProposalListBySpace(spaceId, strategyName)
-    }, [spaceId, strategyName])
+    return useQuery({
+        queryKey: ['proposal-list', spaceId, strategyName],
+        queryFn: async () => {
+            if (!spaceId) return EMPTY_LIST
+            return Snapshot.getProposalListBySpace(spaceId, strategyName)
+        },
+    })
 }

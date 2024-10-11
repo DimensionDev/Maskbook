@@ -17,7 +17,6 @@ import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { Trans } from '@lingui/macro'
-import { useFormatMessage } from '../../translate.js'
 
 const useStyles = makeStyles()({
     link: {
@@ -121,58 +120,63 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
         [showSnackbar, closeSnackbar, showPopupSnackbar, closePopupSnackbar],
     )
 
-    const format = useFormatMessage()
     useAsync(async () => {
         if (!progress) return
-        const computed = await TransactionFormatter?.formatTransaction(
-            progress.chainId,
-            progress.transaction,
-            progress.txHash,
-        )
-        const title = format(computed?.title)
-        if (!computed || title === 'followWithSig' || title === 'burnWithSig') return
+        const { chainId, transaction, txHash } = progress
+        const computed = await TransactionFormatter?.formatTransaction(chainId, transaction, txHash)
+        if (!computed || computed.title === 'followWithSig' || computed.title === 'burnWithSig') return
 
-        showSingletonSnackbar(
+        if (
+            ('_disableSnackbar' in transaction && transaction._disableSnackbar) ||
+            ('_disableSuccessSnackbar' in transaction && transaction._disableSuccessSnackbar)
+        ) {
+            return
+        }
+
+        const title =
             progress.status === TransactionStatusType.SUCCEED ?
-                format(computed.snackbar?.successfulTitle) ?? title
-            :   title,
-            {
-                ...resolveSnackbarConfig(progress.status),
-                ...{
-                    message: (
-                        <Link
-                            sx={{ wordBreak: 'break-word' }}
-                            className={classes.link}
-                            color="inherit"
-                            href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
-                            tabIndex={-1}
-                            target="_blank"
-                            rel="noopener noreferrer">
-                            {progress.status === TransactionStatusType.SUCCEED ?
-                                format(computed.snackbar?.successfulDescription) ?? format(computed.description)
-                            :   format(computed.description)}{' '}
-                            <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
-                        </Link>
-                    ),
-                },
+                computed.snackbar?.successfulTitle ?? computed.title
+            :   computed.title
+        showSingletonSnackbar(title, {
+            ...resolveSnackbarConfig(progress.status),
+            ...{
+                message: (
+                    <Link
+                        sx={{ wordBreak: 'break-word' }}
+                        className={classes.link}
+                        color="inherit"
+                        href={Utils.explorerResolver.transactionLink(progress.chainId, progress.txHash)}
+                        tabIndex={-1}
+                        target="_blank"
+                        rel="noopener noreferrer">
+                        {progress.status === TransactionStatusType.SUCCEED ?
+                            computed.snackbar?.successfulDescription ?? computed.description
+                        :   computed.description}{' '}
+                        <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
+                    </Link>
+                ),
             },
-        )
+        })
     }, [progress])
 
     useAsync(async () => {
         if (!errorInfo) return
+
         const transaction = errorInfo.request?.params?.[0] as
             | Web3Helper.Definition[NetworkPluginID]['Transaction']
             | undefined
+
+        if (transaction && '_disableSnackbar' in transaction && transaction._disableSnackbar) {
+            return
+        }
         const computed = transaction ? await TransactionFormatter?.formatTransaction?.(chainId, transaction) : undefined
-        const title = format(computed?.title)
-        const message =
-            errorInfo.error.isRecognized ? errorInfo.error.message : format(computed?.snackbar?.failedDescription)
+        const title = computed?.snackbar?.failedTitle ?? computed?.title
+        const message = errorInfo.error.isRecognized ? errorInfo.error.message : computed?.snackbar?.failedDescription
 
         if (!title) return
 
         if (
-            computed?.title === 'Claim your Airdrop' &&
+            title === 'Claim your Airdrop' &&
             (errorInfo.error.message.includes('Transaction was rejected') ||
                 errorInfo.error.message.includes('Signature canceled') ||
                 errorInfo.error.message.includes('User rejected the request') ||
@@ -186,5 +190,5 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
             message: message ?? snackbarConfig.message,
         })
         setErrorInfo(undefined)
-    }, [JSON.stringify(errorInfo), chainId, format])
+    }, [JSON.stringify(errorInfo), chainId])
 }

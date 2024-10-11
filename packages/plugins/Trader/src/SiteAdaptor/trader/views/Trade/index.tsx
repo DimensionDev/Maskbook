@@ -1,10 +1,10 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { NetworkIcon, PluginWalletStatusBar, SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
+import { PluginWalletStatusBar, SelectFungibleTokenModal } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworks } from '@masknet/web3-hooks-base'
+import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
 import {
     formatBalance,
     isGreaterThan,
@@ -13,18 +13,22 @@ import {
     leftShift,
     minus,
     multipliedBy,
+    trimZero,
 } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Typography } from '@mui/material'
+import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Typography } from '@mui/material'
 import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
+import { CoinIcon } from '../../../components/CoinIcon.js'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
-import { useSwap } from '../../contexts/index.js'
+import { useGasManagement, useTrade } from '../../contexts/index.js'
+import { formatTokenBalance } from '../../helpers.js'
+import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
-import { useBridgable } from '../../hooks/useBridgable.js'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -81,11 +85,6 @@ const useStyles = makeStyles()((theme) => ({
         height: 30,
         width: 30,
     },
-    badgeIcon: {
-        position: 'absolute',
-        right: -3,
-        bottom: -2,
-    },
     symbol: {
         fontSize: 14,
         lineHeight: '18px',
@@ -96,6 +95,20 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 13,
         color: theme.palette.maskColor.second,
         lineHeight: '18px',
+    },
+    tokenStatus: {
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(1),
+    },
+    balance: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
     },
     tokenInput: {
         height: '100%',
@@ -118,6 +131,15 @@ const useStyles = makeStyles()((theme) => ({
         right: 0,
         bottom: 0,
     },
+    maxButton: {
+        padding: '0 6px',
+        fontSize: 12,
+        lineHeight: '16px',
+        color: theme.palette.maskColor.bottom,
+        backgroundColor: theme.palette.maskColor.main,
+        borderRadius: 4,
+        minWidth: 0,
+    },
     diff: {
         marginLeft: theme.spacing(0.5),
     },
@@ -137,7 +159,6 @@ export function TradeView() {
     const {
         mode,
         chainId,
-        setChainId,
         fromToken,
         setFromToken,
         toToken,
@@ -151,28 +172,40 @@ export function TradeView() {
         slippage,
         isQuoteLoading,
         isBridgeQuoteLoading,
-    } = useSwap()
+    } = useTrade()
     const isSwap = mode === 'swap'
     const quote = isSwap ? swapQuote : bridgeQuote
     const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`
     const quoteErrorMessage = isSwap ? swapQuoteErrorMessage : bridgeQuoteErrorMessage
 
-    const fromNetwork = networks.find((x) => x.chainId === fromToken?.chainId)
-    const toNetwork = networks.find((x) => x.chainId === toToken?.chainId)
+    const fromChainId = fromToken?.chainId as ChainId
+    const toChainId = toToken?.chainId as ChainId
+    const fromNetwork = networks.find((x) => x.chainId === fromChainId)
+    const toNetwork = networks.find((x) => x.chainId === toChainId)
     const chainQuery = useSupportedChains()
+    const { data: fromTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, {
+        chainId: fromChainId,
+    })
+    const { gasFee } = useGasManagement()
+    const { data: toTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, toToken?.address, {
+        chainId: toChainId,
+    })
 
-    const pickToken = async (currentToken: Web3Helper.FungibleTokenAll | null | undefined, side?: 'from' | 'to') => {
+    const pickToken = async (
+        currentToken: Web3Helper.FungibleTokenAll | null | undefined,
+        side: 'from' | 'to',
+        excludes: string[],
+    ) => {
         const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
-        const isSwap = mode === 'swap'
         return SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
-            selectedTokens: currentToken ? [currentToken.address] : [],
+            selectedTokens: excludes,
             // Only from token can decide the chain
-            chainId: (isSwap ? fromToken?.chainId : currentToken?.chainId) || chainId,
+            chainId: (isSwap ? fromChainId : currentToken?.chainId) || chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
             chains: supportedChains?.map((x) => x.chainId),
             okxOnly: true,
-            lockChainId: isSwap && side === 'to' && !!fromToken?.chainId,
+            lockChainId: isSwap && side === 'to' && !!fromChainId,
         })
     }
 
@@ -198,8 +231,10 @@ export function TradeView() {
     const [isBridgable, bridgeErrorMessage] = useBridgable()
     const errorMessage = isSwap ? swapErrorMessage : bridgeErrorMessage
 
-    const isTradable = isSwap ? !isSwappable : !isBridgable
+    const isTradable = isSwap ? isSwappable : isBridgable
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
+    const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
+    const bridgeButtonLabel = isOverSlippage ? t`Bridge anyway` : t`Bridge`
     return (
         <div className={classes.view}>
             <Box className={classes.container}>
@@ -212,35 +247,31 @@ export function TradeView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(fromToken, 'from')
+                                    const picked = await pickToken(
+                                        fromToken,
+                                        'from',
+                                        isSwap && toToken?.address ? [toToken.address] : [],
+                                    )
                                     if (picked) {
-                                        setChainId(picked.chainId as ChainId)
                                         setFromToken(picked)
-                                        if (toToken?.chainId !== picked.chainId) setToToken(undefined)
+                                        if (toChainId !== picked.chainId && isSwap) setToToken(undefined)
                                     }
                                 }}>
                                 <Box className={classes.icon}>
-                                    <TokenIcon
+                                    {/* Omit logoURL, let TokenIcon resolve it itself */}
+                                    <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={fromToken?.chainId}
+                                        chainId={fromChainId as ChainId}
                                         address={fromToken?.address || ''}
-                                        logoURL={fromToken?.logoURL}
+                                        chainIconSize={12}
                                     />
-                                    {fromToken ?
-                                        <NetworkIcon
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            className={classes.badgeIcon}
-                                            chainId={fromToken?.chainId}
-                                            size={12}
-                                        />
-                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on {fromNetwork?.name ?? '--'}
+                                        {fromNetwork?.fullName ? t`on ${fromNetwork.fullName}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -249,6 +280,28 @@ export function TradeView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
+                            {fromTokenBalance ?
+                                <Box className={classes.tokenStatus}>
+                                    <Icons.Wallet size={16} />
+                                    <Typography className={classes.balance}>
+                                        {formatTokenBalance(fromTokenBalance, fromToken?.decimals)}
+                                    </Typography>
+                                    <Button
+                                        type="button"
+                                        className={classes.maxButton}
+                                        onClick={() => {
+                                            if (!fromToken?.address) return
+                                            const isNative = isNativeTokenAddress(fromToken.address)
+                                            const balance =
+                                                isNative ? minus(fromTokenBalance, gasFee) : fromTokenBalance
+                                            setInputAmount(
+                                                trimZero(leftShift(balance, fromToken.decimals).toFixed(12, 1)),
+                                            )
+                                        }}>
+                                        <Trans>MAX</Trans>
+                                    </Button>
+                                </Box>
+                            :   null}
                             <input
                                 className={classes.tokenInput}
                                 autoFocus
@@ -280,31 +333,27 @@ export function TradeView() {
                             <Box
                                 className={classes.token}
                                 onClick={async () => {
-                                    const picked = await pickToken(toToken, 'to')
+                                    const picked = await pickToken(
+                                        toToken,
+                                        'to',
+                                        isSwap && fromToken ? [fromToken.address] : [],
+                                    )
                                     if (picked) setToToken(picked)
                                 }}>
                                 <Box className={classes.icon}>
-                                    <TokenIcon
+                                    <CoinIcon
                                         className={classes.tokenIcon}
-                                        chainId={toToken?.chainId}
+                                        chainId={toChainId as ChainId}
                                         address={toToken?.address || ''}
-                                        logoURL={toToken?.logoURL}
+                                        chainIconSize={12}
                                     />
-                                    {toToken ?
-                                        <NetworkIcon
-                                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                                            className={classes.badgeIcon}
-                                            chainId={toToken.chainId}
-                                            size={12}
-                                        />
-                                    :   null}
                                 </Box>
                                 <Box display="flex" flexDirection="column">
                                     <Typography component="strong" className={classes.symbol}>
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        on {toNetwork?.name ?? '--'}
+                                        {toNetwork?.fullName ? t`on ${toNetwork.fullName}` : '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -313,6 +362,14 @@ export function TradeView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
+                            {toTokenBalance ?
+                                <Box className={classes.tokenStatus}>
+                                    <Icons.Wallet size={16} />
+                                    <Typography className={classes.balance}>
+                                        {formatTokenBalance(toTokenBalance, toToken?.decimals)}
+                                    </Typography>
+                                </Box>
+                            :   null}
                             <input
                                 className={classes.tokenInput}
                                 disabled
@@ -353,11 +410,15 @@ export function TradeView() {
                     loading={isLoading}
                     fullWidth
                     color={isOverSlippage ? 'error' : undefined}
-                    disabled={isTradable}
+                    disabled={!isTradable}
                     onClick={() => {
-                        navigate(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm)
+                        navigate(
+                            urlcat(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
+                                mode,
+                            }),
+                        )
                     }}>
-                    {errorMessage ?? (isOverSlippage ? t`Swap anyway` : t`Swap`)}
+                    {errorMessage ?? (isSwap ? swapButtonLabel : bridgeButtonLabel)}
                 </ActionButton>
             </PluginWalletStatusBar>
         </div>

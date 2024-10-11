@@ -23,7 +23,7 @@ export function isValidAsset(data: ZerionAddressPosition) {
 
 function isNativeToken(symbol: string) {
     // cspell:disable-next-line
-    return ['ETH', 'BNB', 'MATIC', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
+    return ['ETH', 'BNB', 'MATIC', 'POL', 'ARETH', 'AETH', 'ONE', 'ASTR', 'XDAI'].includes(symbol)
 }
 export function formatAsset(chainId: ChainId, data: ZerionAddressPosition): FungibleAsset<ChainId, SchemaType> {
     const { asset, chain, quantity } = data

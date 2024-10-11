@@ -88,7 +88,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
                     onClick={() =>
                         SelectProviderModal.open({
                             requiredSupportPluginID: NetworkPluginID.PLUGIN_EVM,
-                            requiredSupportChainIds: [ChainId.Matic],
+                            requiredSupportChainIds: [ChainId.Polygon],
                         })
                     }>
                     <Trans>Change</Trans>

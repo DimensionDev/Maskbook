@@ -12,7 +12,7 @@ export class Translator implements Middleware<ConnectionContext> {
 
     private translators: Partial<Record<ChainId, Translator_<ConnectionContext>>> = {
         [ChainId.Astar]: new AstarTranslator(),
-        [ChainId.Matic]: new PolygonTranslator(),
+        [ChainId.Polygon]: new PolygonTranslator(),
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {

@@ -133,7 +133,7 @@ interface WalletItemProps {
 const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
     const { classes } = useStyles({})
     const { address, owner } = wallet
-    const chainId = owner ? ChainId.Matic : ChainId.Mainnet
+    const chainId = owner ? ChainId.Polygon : ChainId.Mainnet
     const { data: balance = '0', isPending } = useBalance(NetworkPluginID.PLUGIN_EVM, {
         account: address,
         chainId,
@@ -165,7 +165,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
                     <FormattedBalance
                         value={balance}
                         decimals={18}
-                        symbol={owner ? 'Matic' : 'ETH'}
+                        symbol={owner ? 'Polygon' : 'ETH'}
                         formatter={formatBalance}
                     />
                 </ProgressiveText>

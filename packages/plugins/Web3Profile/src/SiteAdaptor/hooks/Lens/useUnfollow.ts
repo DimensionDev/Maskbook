@@ -46,7 +46,7 @@ export function useUnfollow(
 
     const broadcastAction = useCallback(
         async (cloneEvent: MouseEvent<HTMLElement>) => {
-            if (!profileId || chainId !== ChainId.Matic) return
+            if (!profileId || chainId !== ChainId.Polygon) return
             const token = await handleQueryAuthenticate()
             if (!token) return
 
@@ -90,7 +90,7 @@ export function useUnfollow(
                     lensHub?.methods.unfollow(unfollowerProfileId, idsOfProfilesToUnfollow),
                     { from: account },
                 )
-                hash = await EVMWeb3.sendTransaction(tx, { chainId: ChainId.Matic })
+                hash = await EVMWeb3.sendTransaction(tx, { chainId: ChainId.Polygon })
                 onSuccess?.(cloneEvent)
                 setLoading(false)
             }
@@ -98,7 +98,7 @@ export function useUnfollow(
             if (!hash) return
 
             const receipt = await EVMWeb3.confirmTransaction(hash, {
-                chainId: ChainId.Matic,
+                chainId: ChainId.Polygon,
                 signal: AbortSignal.timeout(3 * 60 * 1000),
             })
             if (!receipt.status) throw new Error('Failed to unfollow')
@@ -111,7 +111,7 @@ export function useUnfollow(
             const cloneEvent = cloneDeep(event)
             try {
                 setLoading(true)
-                if (!profileId || chainId !== ChainId.Matic) return
+                if (!profileId || chainId !== ChainId.Polygon) return
                 const token = await handleQueryAuthenticate()
                 if (!token) return
 

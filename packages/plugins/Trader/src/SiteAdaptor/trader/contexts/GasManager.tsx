@@ -1,8 +1,12 @@
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { multipliedBy, type GasOptionType } from '@masknet/web3-shared-base'
-import { formatWeiToEther, type EIP1559GasConfig, type GasConfig, type GasOption } from '@masknet/web3-shared-evm'
+import {
+    formatWeiToEther,
+    ZERO_ADDRESS,
+    type EIP1559GasConfig,
+    type GasConfig,
+    type GasOption,
+} from '@masknet/web3-shared-evm'
 import { type BigNumber } from 'bignumber.js'
 import {
     createContext,
@@ -13,7 +17,8 @@ import {
     type PropsWithChildren,
     type SetStateAction,
 } from 'react'
-import { useSwap } from './TradeProvider.js'
+import { useTokenPrice } from '../hooks/useTokenPrice.js'
+import { useTrade } from './TradeProvider.js'
 
 interface Options {
     gasLimit: string | undefined
@@ -27,10 +32,10 @@ interface Options {
 
 const GasManagerContext = createContext<Options>(null!)
 export function GasManager({ children }: PropsWithChildren) {
-    const { quote, chainId, fromToken, toToken } = useSwap()
-    const gasLimit = quote?.estimateGasFee ?? '1'
+    const { quote, mode, bridgeQuote, chainId, fromToken, toToken } = useTrade()
+    const gasLimit = mode === 'swap' ? quote?.estimateGasFee : bridgeQuote?.routerList[0]?.estimateGasFee
     const { gasConfig, setGasConfig, gasOptions, isLoadingGasOptions } = useGasConfig(chainId)
-    const { data: price } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const { data: price } = useTokenPrice(chainId, ZERO_ADDRESS)
 
     const fromTokenAddr = fromToken?.address
     const toTokenAddr = toToken?.address
@@ -41,7 +46,7 @@ export function GasManager({ children }: PropsWithChildren) {
 
     const gasFee = useMemo(() => {
         const price = gasConfig.gasPrice ?? (gasConfig as EIP1559GasConfig).maxFeePerGas ?? '1'
-        return multipliedBy(gasLimit, price)
+        return multipliedBy(gasLimit ?? '1', price)
     }, [gasLimit, gasConfig.gasPrice])
 
     const gasCost = useMemo(() => {

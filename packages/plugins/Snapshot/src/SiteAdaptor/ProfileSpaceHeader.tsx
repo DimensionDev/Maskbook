@@ -1,19 +1,19 @@
+import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { formatCount, type DAOResult } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { useState, useRef } from 'react'
-import { Icons } from '@masknet/icons'
-import { Box, Typography, Avatar, IconButton, Button, ThemeProvider, type Theme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Avatar, Box, Button, IconButton, ThemeProvider, Typography, type Theme } from '@mui/material'
+import { useRef, useState } from 'react'
 import { SpaceMenu } from './SpaceMenu.js'
 import { resolveSnapshotSpacePageUrl } from './helpers.js'
 import { useCurrentAccountFollowSpaceList } from './hooks/useCurrentAccountFollowSpaceList.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { Trans } from '@lingui/macro'
 
 interface ProfileSpaceHeaderProps {
     spaceList: Array<DAOResult<ChainId.Mainnet>>
     currentSpace: DAOResult<ChainId.Mainnet>
-    setSpaceIndex: (x: number) => void
+    setSpaceId(id: string): void
     theme: Theme
 }
 
@@ -63,13 +63,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
-    const { spaceList, currentSpace, setSpaceIndex, theme } = props
+export function ProfileSpaceHeader({ spaceList, currentSpace, setSpaceId, theme }: ProfileSpaceHeaderProps) {
     const { classes } = useStyles()
     const [spaceMenuOpen, setSpaceMenuOpen] = useState(false)
     const spaceRef = useRef<HTMLDivElement>(null)
     const { account } = useChainContext()
-    const { value: followedSpaceList } = useCurrentAccountFollowSpaceList()
+    const { data: followedSpaceList } = useCurrentAccountFollowSpaceList()
 
     return (
         <Box className={classes.root}>
@@ -95,13 +94,13 @@ export function ProfileSpaceHeader(props: ProfileSpaceHeaderProps) {
                                     <SpaceMenu
                                         options={spaceList}
                                         currentOption={currentSpace}
-                                        onSelect={(i) => {
-                                            setSpaceIndex(i)
+                                        onSelect={(option) => {
+                                            setSpaceId(option.spaceId)
                                             setSpaceMenuOpen(false)
                                         }}
                                         containerRef={spaceRef}
-                                        spaceMenuOpen={spaceMenuOpen}
-                                        setSpaceMenuOpen={setSpaceMenuOpen}
+                                        open={spaceMenuOpen}
+                                        onClose={() => setSpaceMenuOpen(false)}
                                     />
                                 </ThemeProvider>
                             </>

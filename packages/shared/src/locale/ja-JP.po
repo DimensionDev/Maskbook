@@ -376,7 +376,7 @@ msgstr "確認"
 msgid "Confirm Risk Warning"
 msgstr "リスク警告の確認"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
 msgid "Confirm this transaction in your wallet"
 msgstr "ウォレットで取引を確認する"
 
@@ -1400,7 +1400,7 @@ msgstr "総供給量"
 msgid "Transaction"
 msgstr "トランザクション"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
 msgid "Transaction Confirmed"
 msgstr "取引が確認されました"
 
@@ -1412,7 +1412,7 @@ msgstr "取引費用"
 msgid "Transaction failed"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
 msgid "Transaction Failed"
 msgstr "取引が失敗しました"
 

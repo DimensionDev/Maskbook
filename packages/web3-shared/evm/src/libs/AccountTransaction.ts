@@ -46,7 +46,21 @@ export class AccountTransaction {
     }
 
     fill(overrides?: Transaction): Transaction {
-        const { chainId, from, to, value, gas, gasPrice, maxPriorityFeePerGas, maxFeePerGas, data, nonce } = {
+        const {
+            chainId,
+            from,
+            to,
+            value,
+            gas,
+            gasPrice,
+            maxPriorityFeePerGas,
+            maxFeePerGas,
+            data,
+            nonce,
+            _disableExceptionSnackbar,
+            _disableSuccessSnackbar,
+            _disableSnackbar,
+        } = {
             ...this.transaction,
             ...pickBy(overrides, identity),
         }
@@ -62,6 +76,9 @@ export class AccountTransaction {
                 maxPriorityFeePerGas: maxPriorityFeePerGas ? normalizeHex(maxPriorityFeePerGas) : undefined,
                 maxFeePerGas: maxFeePerGas ? normalizeHex(maxFeePerGas) : undefined,
                 nonce,
+                _disableExceptionSnackbar,
+                _disableSuccessSnackbar,
+                _disableSnackbar,
             },
             identity,
         )

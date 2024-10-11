@@ -11,14 +11,15 @@ type OKXResponse<T> = {
     data: T
 }
 
-export type SupportedChainResponse = OKXResponse<
-    Array<{
-        chainId: number
-        chainName: string
-        /** would be empty string for non-ethereum chains */
-        dexTokenApproveAddress: string
-    }>
->
+export interface ChainDex {
+    /** API response string, we convert to number */
+    chainId: number
+    chainName: string
+    /** would be empty string for non-ethereum chains */
+    dexTokenApproveAddress: string
+}
+
+export type SupportedChainResponse = OKXResponse<ChainDex[]>
 
 export type GetTokensResponse = OKXResponse<
     Array<{
@@ -74,19 +75,27 @@ export type GetLiquidityResponse = OKXResponse<
     }>
 >
 
-export type ApproveTransactionResponse = OKXResponse<{
-    /** @example "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240" */
-    data: string
-    /** @example "0xc67879F4065d3B9fe1C09EE990B891Aa8E3a4c2f" */
-    dexContractAddress: string
-    /** @example "100000" */
-    gasLimit: string
-    /**
-     * Gas price in wei
-     * @example "100000000000000"
-     */
-    gasPrice: string
-}>
+export interface ApproveTransactionOptions {
+    chainId: number
+    tokenContractAddress: string
+    approveAmount: string
+}
+
+export type ApproveTransactionResponse = OKXResponse<
+    Array<{
+        /** @example "0x095ea7b3000000000000000000000000c67879f4065d3b9fe1c09ee990b891aa8e3a4c2f00000000000000000000000000000000000000000000000000000000000f4240" */
+        data: string
+        /** @example "0xc67879F4065d3B9fe1C09EE990B891Aa8E3a4c2f" */
+        dexContractAddress: string
+        /** @example "100000" */
+        gasLimit: string
+        /**
+         * Gas price in wei
+         * @example "100000000000000"
+         */
+        gasPrice: string
+    }>
+>
 
 export interface GetQuotesOptions {
     /** Chain ID (e.g., 1 for Ethereum) */
@@ -317,10 +326,6 @@ type Router = {
     crossChainFee: string
     /** The cross-chain bridge fee token information */
     crossChainFeeTokenAddress: string
-    /** The recommended gas limit for calling the contract */
-    estimateGasFee: string
-    /** Estimated time to complete the cross-chain swap in seconds */
-    estimatedTime: string
 }
 
 /** Represents DEX Router information */
@@ -343,7 +348,7 @@ type DexRouter = {
 }
 
 /** Represents an item in the router list */
-type RouterListItem = {
+export type RouterListItem = {
     /** The recommended gas limit for calling the contract */
     estimateGasFee: string
     /** time in seconds (It's wrongly wrote as estimatedTime) */
@@ -490,6 +495,7 @@ type Transaction = {
     randomKeyAccount: any[]
 }
 
+// cspell:ignore minmum
 /** Response type for getting a cross-chain swap */
 export type GetBridgeResponse = OKXResponse<
     Array<{
@@ -497,6 +503,8 @@ export type GetBridgeResponse = OKXResponse<
         fromTokenAmount: string
         /** The resulting amount of a token to be bought (Quantity needs to include accuracy. e.g., 1.00 USDT set as 1000000) */
         toTokenAmount: string
+        /** The minimum amount of a token to buy when the price reaches maximum slippage */
+        minmumReceive: string
         /** Bridge information */
         router: BridgeRouter
         /** On chain transaction data */
@@ -504,8 +512,57 @@ export type GetBridgeResponse = OKXResponse<
         /**
          * The randomKeyAccount parameter is not required for every transaction.
          * It is only generated and returned during certain special transactions,
-         * such as when using the bridge for cross-chain token transfers.
+         * such as when using the CCTP bridge for cross-chain token transfers.
          */
         randomKeyAccount?: string[]
     }>
 >
+
+export interface GetBridgeStatusOptions {
+    chainId?: number
+    hash: string
+}
+
+export interface BridgeStatus {
+    bridgeHash: string
+    crossChainFee: {
+        symbol: string
+        address: string
+        amount: string
+    } | null
+    crossChainInfo: {
+        memo?: string
+    } | null
+    destinationChainGasfee: string
+    /**
+     * WAITING (Order processing)
+     * FROM_SUCCESS (Source swap success)
+     * FROM_FAILURE (Source swap failure)
+     * BRIDGE_PENDING (Bridge pending)
+     * BRIDGE_SUCCESS (Bridge success)
+     * SUCCESS (Order success)
+     * REFUND (Order failure, refund)
+     */
+    detailStatus: 'WAITING' | 'FROM_SUCCESS' | 'FROM_FAILURE' | 'BRIDGE_PENDING' | 'SUCCESS' | 'REFUND'
+    errorMsg: string
+    fromAmount: string
+    /** API response string, we convert to number */
+    fromChainId: number
+    fromTokenAddress: string
+    fromTxHash: string
+    refundTokenAddress: string
+    sourceChainGasfee: string
+    /**
+     * PENDING (Order pending)
+     * SUCCESS (Order success)
+     * FAILURE (Order failure)
+     */
+    status: 'PENDING' | 'SUCCESS' | 'FAILURE'
+    toAmount: string
+    /** API response string(could be empty string), we convert to number */
+    toChainId: number
+    toTokenAddress: string
+    toTxHash: string
+}
+
+export type GetBridgeStatusResponse = OKXResponse<BridgeStatus[]>
