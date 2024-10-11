@@ -16,6 +16,7 @@ export const enum RoutePaths {
 export const DEFAULT_SLIPPAGE = '0.5'
 
 export const QUOTE_STALE_DURATION = 20_000
+export const REFETCH_INTERVAL = 20_000
 
 export const bridges = [
     {
