@@ -4092,11 +4092,6 @@ export const FindTruman = /*#__PURE__*/ __createIcon('FindTruman', [
         u: () => new URL('./plugins/FindTruman.png', import.meta.url).href,
     },
 ])
-export const FriendTech = /*#__PURE__*/ __createIcon('FriendTech', [
-    {
-        u: () => new URL('./plugins/FriendTech.svg', import.meta.url).href,
-    },
-])
 export const Gitcoin = /*#__PURE__*/ __createIcon('Gitcoin', [
     {
         c: ['dark'],

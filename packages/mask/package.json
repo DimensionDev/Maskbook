@@ -52,7 +52,6 @@
     "@masknet/plugin-cross-chain-bridge": "workspace:^",
     "@masknet/plugin-debugger": "workspace:^",
     "@masknet/plugin-file-service": "workspace:^",
-    "@masknet/plugin-friend-tech": "workspace:^",
     "@masknet/plugin-gitcoin": "workspace:^",
     "@masknet/plugin-go-plus-security": "workspace:^",
     "@masknet/plugin-handle": "workspace:^",

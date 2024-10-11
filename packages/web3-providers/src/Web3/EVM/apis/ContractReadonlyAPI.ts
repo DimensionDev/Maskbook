@@ -15,7 +15,6 @@ import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
-import type { FriendTech } from '@masknet/web3-contracts/types/FriendTech.js'
 
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
@@ -28,7 +27,6 @@ import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
 import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
 import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
 import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
-import FriendTechABI from '@masknet/web3-contracts/abis/FriendTech.json'
 
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
@@ -101,10 +99,6 @@ export class EVMContractReadonlyAPI {
 
     getPoolStateV3(address: string | undefined, initial?: EVMConnectionOptions) {
         return this.getWeb3Contract<PoolStateV3>(address, PoolStateV3ABI as AbiItem[], initial)
-    }
-
-    getFriendTech(address: string, initial?: EVMConnectionOptions) {
-        return this.getWeb3Contract<FriendTech>(address, FriendTechABI as AbiItem[], initial)
     }
 }
 export const EVMContractReadonly = EVMContractReadonlyAPI.Default

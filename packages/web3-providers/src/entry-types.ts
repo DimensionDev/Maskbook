@@ -33,7 +33,6 @@ export * from './types/Wallet.js'
 export * from './types/Lens.js'
 export * from './types/Storage.js'
 export * from './types/Snapshot.js'
-export * from './types/FriendTech.js'
 export * from './types/Store.js'
 
 // Provider Implementations
