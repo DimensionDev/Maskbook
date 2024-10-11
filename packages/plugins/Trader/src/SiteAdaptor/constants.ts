@@ -78,4 +78,9 @@ export const bridges = [
         logoUrl:
             'https://static.okx.com/cdn/explorer/dex/logo/dex_Circle.png.png?x-oss-process=image/format,webp/ignore-error,1',
     },
+    {
+        id: 476,
+        name: 'Bungee Refuel',
+        logoUrl: 'https://www.okx.com/cdn/web3/dex/logo/b53506a1-fc2b-439d-9696-8eaea55167ca.png',
+    },
 ]
