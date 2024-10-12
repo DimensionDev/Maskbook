@@ -25,7 +25,7 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:285
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:288
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:224
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx:197
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:205
 msgid "{0} (UTC+8)"
 msgstr ""
 
@@ -144,7 +144,7 @@ msgstr "덕담"
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:214
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:194
 #: src/SiteAdaptor/RedPacketERC20Form.tsx:222
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx:182
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:190
 #: src/SiteAdaptor/RedpacketMessagePanel.tsx:48
 msgid "Best Wishes!"
 msgstr "행운을 빌어요!"
@@ -190,7 +190,11 @@ msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx:224
-msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{token_symbol}</1>"
+#~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{token_symbol}</1>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:232
+msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{tokenSymbol}</1>"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:369
@@ -256,7 +260,7 @@ msgstr "다음"
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx:274
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx:220
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx:188
+#: src/SiteAdaptor/RedPacketInHistoryList.tsx:196
 msgid "Create time:"
 msgstr "생성 시간:"
 

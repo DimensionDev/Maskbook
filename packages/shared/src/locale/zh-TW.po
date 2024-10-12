@@ -376,7 +376,7 @@ msgstr ""
 msgid "Confirm Risk Warning"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
 msgid "Confirm this transaction in your wallet"
 msgstr ""
 
@@ -1400,7 +1400,7 @@ msgstr ""
 msgid "Transaction"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
 msgid "Transaction Confirmed"
 msgstr ""
 
@@ -1412,7 +1412,7 @@ msgstr ""
 msgid "Transaction failed"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
 msgid "Transaction Failed"
 msgstr ""
 

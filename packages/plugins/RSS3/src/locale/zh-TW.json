@@ -177,6 +177,7 @@
         "uAQUqI": "Status",
         "olEUh2": "Successful",
         "UvJiVZ": "There's no feed associated with this address.",
+        "qyaPGX": ["There's no feed associated with this address.<0>", ["0"], "</0>"],
         "8TMaZI": "Timestamp",
         "/jQctM": "To",
         "5HVoyc": "Transaction Details",

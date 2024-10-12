@@ -130,7 +130,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: src/SiteAdaptor/FeedsPage.tsx:117
+#: src/SiteAdaptor/FeedsPage.tsx:134
 msgid "No more data available."
 msgstr ""
 
@@ -151,7 +151,11 @@ msgid "Successful"
 msgstr ""
 
 #: src/SiteAdaptor/FeedsPage.tsx:98
-msgid "There's no feed associated with this address."
+#~ msgid "There's no feed associated with this address."
+#~ msgstr ""
+
+#: src/SiteAdaptor/FeedsPage.tsx:102
+msgid "There's no feed associated with this address.<0>{0}</0>"
 msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:122

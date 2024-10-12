@@ -376,7 +376,7 @@ msgstr "确定"
 msgid "Confirm Risk Warning"
 msgstr "确认风险提示"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:90
 msgid "Confirm this transaction in your wallet"
 msgstr "请在您的钱包中确认这笔交易"
 
@@ -1400,7 +1400,7 @@ msgstr "总供应量"
 msgid "Transaction"
 msgstr "交易记录"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:95
 msgid "Transaction Confirmed"
 msgstr "交易已确认"
 
@@ -1412,7 +1412,7 @@ msgstr "交易费用"
 msgid "Transaction failed"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:100
 msgid "Transaction Failed"
 msgstr "交易失败"
 

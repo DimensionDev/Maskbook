@@ -53,7 +53,7 @@ msgstr ""
 msgid "<0>Granted to </0><1>{0}</1>"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:479
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:475
 msgid "<0>Powered by</0><1>Mask Network</1>"
 msgstr ""
 
@@ -425,7 +425,7 @@ msgstr ""
 msgid "By proceeding you agree to the"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:412
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:410
 msgid "Can't find a valid user address data source."
 msgstr ""
 
@@ -1563,7 +1563,7 @@ msgstr ""
 msgid "Link"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:388
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:386
 msgid "Load failed"
 msgstr ""
 
@@ -2313,7 +2313,7 @@ msgstr ""
 msgid "Reject {totalMessages} Transactions"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:391
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:389
 msgid "Reload"
 msgstr ""
 

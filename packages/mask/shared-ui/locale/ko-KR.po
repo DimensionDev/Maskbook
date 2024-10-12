@@ -58,7 +58,7 @@ msgstr ""
 msgid "<0>Granted to </0><1>{0}</1>"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:479
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:475
 msgid "<0>Powered by</0><1>Mask Network</1>"
 msgstr ""
 
@@ -430,7 +430,7 @@ msgstr "브라우저 파일"
 msgid "By proceeding you agree to the"
 msgstr "계속하면 다음을 동의합니다:"
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:412
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:410
 msgid "Can't find a valid user address data source."
 msgstr ""
 
@@ -1568,7 +1568,7 @@ msgstr "라이트"
 msgid "Link"
 msgstr "링크"
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:388
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:386
 msgid "Load failed"
 msgstr "로딩 실패"
 
@@ -2318,7 +2318,7 @@ msgstr "새로고침"
 msgid "Reject {totalMessages} Transactions"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileTabContent.tsx:391
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx:389
 msgid "Reload"
 msgstr "다시 로드"
 
