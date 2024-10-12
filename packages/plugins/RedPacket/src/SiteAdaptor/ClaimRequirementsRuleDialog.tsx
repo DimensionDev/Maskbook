@@ -49,8 +49,8 @@ export const ClaimRequirementsRuleDialog = memo<ClaimRequirementsRuleDialogProps
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={onClose} classes={{ paper: classes.paper }}>
             <DialogTitle className={classes.dialogTitle}>
-                <Typography className={classes.title}>{t.claim_requirements_title()}</Typography>
                 <Icons.Close onClick={onClose} />
+                <Typography className={classes.title}>{t.claim_requirements_title()}</Typography>
             </DialogTitle>
             <DialogContent>
                 <Alert open>{t.claim_requirements_rule_tips()}</Alert>
