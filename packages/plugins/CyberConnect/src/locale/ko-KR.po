@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-13 23:58\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -20,7 +20,7 @@ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:46
 msgid "CyberConnect"
-msgstr "CyberConnect"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:45
 msgid "Decentralized social graph protocol for user-centric Web3."
@@ -54,3 +54,4 @@ msgstr "팔로잉 친구가 없습니다."
 #: src/SiteAdaptor/ConnectButton.tsx:107
 msgid "Unfollow"
 msgstr "팔로우 취소"
+
