@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:24\n"
+"PO-Revision-Date: 2024-10-13 23:57\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -3293,3 +3293,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx:95
 msgid "Your Wallet is on"
 msgstr ""
+
