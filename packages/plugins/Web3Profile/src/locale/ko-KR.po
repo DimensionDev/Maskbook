@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -32,12 +32,8 @@ msgid "Change"
 msgstr "변경"
 
 #: src/SiteAdaptor/index.tsx:61
-msgid "Choose and show your Web3 footprints on X."
+msgid "Choose and showcase your Web3 footprints on Twitter."
 msgstr ""
-
-#: src/SiteAdaptor/index.tsx:61
-#~ msgid "Choose and showcase your Web3 footprints on Twitter."
-#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
 msgid "Confirm"
@@ -79,7 +75,7 @@ msgstr "팔로잉"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:332
 msgid "Lens"
-msgstr "Lens"
+msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
 msgid "Lens Follow"
@@ -119,12 +115,8 @@ msgid "Save failed"
 msgstr "저장 실패"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-#~ msgid "Save successfully"
-#~ msgstr "저장 성공"
-
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-msgid "Saved"
-msgstr ""
+msgid "Save successfully"
+msgstr "저장 성공"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
@@ -175,3 +167,4 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
+
