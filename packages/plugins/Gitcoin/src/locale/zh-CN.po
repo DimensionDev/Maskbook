@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-13 23:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,7 +40,7 @@ msgstr ""
 
 #: src/SiteAdaptor/index.tsx:59
 msgid "Gitcoin"
-msgstr "Gitcoin"
+msgstr ""
 
 #: src/SiteAdaptor/PreviewCard.tsx:324
 msgid "No past rounds found."
@@ -69,3 +69,4 @@ msgstr ""
 #: src/SiteAdaptor/PreviewCard.tsx:258
 msgid "View"
 msgstr ""
+
