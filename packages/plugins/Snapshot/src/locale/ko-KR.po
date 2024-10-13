@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,17 +40,13 @@ msgstr "투표하세요."
 msgid "Current results"
 msgstr "현재 결과"
 
-#: src/SiteAdaptor/index.tsx:75
+#: src/SiteAdaptor/index.tsx:77
 msgid "DAO"
-msgstr "DAO"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
-#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
-#~ msgstr "각 프로젝트 또는 프로토콜의 트위터 페이지에 스냅샷 제안을 표시합니다."
-
-#: src/SiteAdaptor/index.tsx:73
-msgid "Display Snapshot proposals on the X of the respective project or protocol."
-msgstr ""
+msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+msgstr "각 프로젝트 또는 프로토콜의 트위터 페이지에 스냅샷 제안을 표시합니다."
 
 #: src/SiteAdaptor/ResultCard.tsx:180
 msgid "Download report"
@@ -82,7 +78,7 @@ msgstr "정보"
 
 #: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
-msgstr "IPFS"
+msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
 msgid "Join"
@@ -93,12 +89,8 @@ msgid "Loading"
 msgstr "로딩 중"
 
 #: src/SiteAdaptor/LoadingFailCard.tsx:75
-msgid "Loading failed due to Snapshot API service breakdown."
-msgstr ""
-
-#: src/SiteAdaptor/LoadingFailCard.tsx:75
-#~ msgid "Loading fails due to Snapshot API service breakdown."
-#~ msgstr "Snapshot API 시비스 고장으로 인해 로딩 실패"
+msgid "Loading fails due to Snapshot API service breakdown."
+msgstr "Snapshot API 시비스 고장으로 인해 로딩 실패"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
@@ -155,11 +147,11 @@ msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:217
 #~ msgid "Starts in {0}"
-#~ msgstr "시작 시간 {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
-#~ msgstr "전략"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"
@@ -176,12 +168,8 @@ msgid "Vote Overview"
 msgstr "투표 개요"
 
 #: src/SiteAdaptor/VotingCard.tsx:120
-#~ msgid "Voted successfully."
-#~ msgstr "투표 성공"
-
-#: src/SiteAdaptor/VotingCard.tsx:120
-msgid "Voted."
-msgstr ""
+msgid "Voted successfully."
+msgstr "투표 성공"
 
 #: src/SiteAdaptor/VotesCard.tsx:103
 #: src/SiteAdaptor/VotesCard.tsx:184
@@ -191,8 +179,9 @@ msgstr "투표"
 
 #: src/SiteAdaptor/VotesCard.tsx:132
 msgid "You"
-msgstr "You"
+msgstr ""
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "투표 파워"
+
