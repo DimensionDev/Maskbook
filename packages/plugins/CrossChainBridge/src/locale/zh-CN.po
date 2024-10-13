@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-13 23:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -26,3 +26,4 @@ msgstr "跨链"
 #: src/SiteAdaptor/components/BridgeStack.tsx:83
 msgid "Powered by Celer Network. Support $MASK!"
 msgstr "由Celer提供支持，支持 $MASK！"
+
