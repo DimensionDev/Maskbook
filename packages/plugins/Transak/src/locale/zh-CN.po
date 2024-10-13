@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -23,9 +23,6 @@ msgid "Fiat On-Ramp"
 msgstr "法币入金"
 
 #: src/SiteAdaptor/index.tsx:42
-#~ msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
-#~ msgstr "法币入金可支持在60多个国家内购买代币。"
+msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
+msgstr "法币入金可支持在60多个国家内购买代币。"
 
-#: src/SiteAdaptor/index.tsx:42
-msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
-msgstr ""
