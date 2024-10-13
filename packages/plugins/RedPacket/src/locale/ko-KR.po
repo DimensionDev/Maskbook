@@ -8,7 +8,7 @@ msgstr ""
 "Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:25\n"
+"PO-Revision-Date: 2024-10-13 23:58\n"
 "Last-Translator: \n"
 "Language-Team: Korean\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -737,3 +737,4 @@ msgstr ""
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx:70
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""
+
