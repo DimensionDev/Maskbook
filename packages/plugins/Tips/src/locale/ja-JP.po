@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 15:16\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -142,3 +142,4 @@ msgstr "トークン"
 #: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
+
