@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"PO-Revision-Date: 2024-10-13 23:57\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -67,3 +67,4 @@ msgstr "取り消し"
 #: src/SiteAdaptor/ApprovalDialog.tsx:92
 msgid "Tokens"
 msgstr "トークン"
+
