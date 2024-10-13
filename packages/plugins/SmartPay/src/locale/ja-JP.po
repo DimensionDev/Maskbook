@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:25\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -287,3 +287,4 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:55
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPayを使用する前に確認してください:"
+
