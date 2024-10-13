@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -17,10 +17,6 @@ msgstr ""
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1004\n"
-
-#: src/SiteAdaptor/TweetDialog.tsx:78
-msgid "<0>Latest offer at </0><1>${0}</1>"
-msgstr ""
 
 #: src/SiteAdaptor/index.tsx:18
 msgid "Buy & sell tweets autographed by their original creators."
@@ -31,10 +27,11 @@ msgid "Go"
 msgstr "开始"
 
 #: src/SiteAdaptor/TweetDialog.tsx:79
-#~ msgid "Latest offer at"
-#~ msgstr "最新报价"
+msgid "Latest offer at"
+msgstr "最新报价"
 
 #: src/SiteAdaptor/index.tsx:17
 #: src/SiteAdaptor/index.tsx:32
 msgid "Valuables"
 msgstr "贵重物品"
+
