@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,17 +40,13 @@ msgstr "投出您的票"
 msgid "Current results"
 msgstr "当前结果"
 
-#: src/SiteAdaptor/index.tsx:75
+#: src/SiteAdaptor/index.tsx:77
 msgid "DAO"
-msgstr "DAO"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
-#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
-#~ msgstr "在相应项目或协议的Twitter页面显示 Snapshot 提议。"
-
-#: src/SiteAdaptor/index.tsx:73
-msgid "Display Snapshot proposals on the X of the respective project or protocol."
-msgstr ""
+msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+msgstr "在相应项目或协议的Twitter页面显示 Snapshot 提议。"
 
 #: src/SiteAdaptor/ResultCard.tsx:180
 msgid "Download report"
@@ -62,7 +58,7 @@ msgstr "结束日期"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:219
 #~ msgid "Ended {0}"
-#~ msgstr "结束时间 {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:226
 msgid "Ended {relativeEndTime}"
@@ -82,7 +78,7 @@ msgstr "信息"
 
 #: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
-msgstr "IPFS"
+msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
 msgid "Join"
@@ -93,12 +89,8 @@ msgid "Loading"
 msgstr "加载中"
 
 #: src/SiteAdaptor/LoadingFailCard.tsx:75
-msgid "Loading failed due to Snapshot API service breakdown."
-msgstr ""
-
-#: src/SiteAdaptor/LoadingFailCard.tsx:75
-#~ msgid "Loading fails due to Snapshot API service breakdown."
-#~ msgstr "Snapshot API 服务故障导致加载失败。"
+msgid "Loading fails due to Snapshot API service breakdown."
+msgstr "Snapshot API 服务故障导致加载失败。"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
@@ -139,7 +131,7 @@ msgstr "结果"
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
 msgid "Snapshot"
-msgstr "Snapshot"
+msgstr ""
 
 #: src/SiteAdaptor/SpaceMenu.tsx:108
 msgid "Space"
@@ -155,11 +147,11 @@ msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:217
 #~ msgid "Starts in {0}"
-#~ msgstr "开始时间 {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
-#~ msgstr "策略"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"
@@ -176,12 +168,8 @@ msgid "Vote Overview"
 msgstr "投票概览"
 
 #: src/SiteAdaptor/VotingCard.tsx:120
-#~ msgid "Voted successfully."
-#~ msgstr "投票成功！"
-
-#: src/SiteAdaptor/VotingCard.tsx:120
-msgid "Voted."
-msgstr ""
+msgid "Voted successfully."
+msgstr "投票成功！"
 
 #: src/SiteAdaptor/VotesCard.tsx:103
 #: src/SiteAdaptor/VotesCard.tsx:184
@@ -196,3 +184,4 @@ msgstr "您"
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "您的投票权"
+
