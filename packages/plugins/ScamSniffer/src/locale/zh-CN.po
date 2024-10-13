@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -29,3 +29,4 @@ msgstr "注意你的访问和签名！"
 #: src/SiteAdaptor/ScamAlert.tsx:95
 msgid "Similar Project"
 msgstr "类似项目"
+
