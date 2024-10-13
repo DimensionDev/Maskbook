@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,17 +40,13 @@ msgstr "投票してください"
 msgid "Current results"
 msgstr "現在の結果"
 
-#: src/SiteAdaptor/index.tsx:75
+#: src/SiteAdaptor/index.tsx:77
 msgid "DAO"
-msgstr "DAO"
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
-#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
-#~ msgstr "それぞれのプロジェクトまたはプロトコルのTwitterページにスナップショットの提案を表示します。"
-
-#: src/SiteAdaptor/index.tsx:73
-msgid "Display Snapshot proposals on the X of the respective project or protocol."
-msgstr ""
+msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+msgstr "それぞれのプロジェクトまたはプロトコルのTwitterページにスナップショットの提案を表示します。"
 
 #: src/SiteAdaptor/ResultCard.tsx:180
 msgid "Download report"
@@ -82,7 +78,7 @@ msgstr "情報"
 
 #: src/SiteAdaptor/InformationCard.tsx:111
 msgid "IPFS"
-msgstr "IPFS"
+msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
 msgid "Join"
@@ -93,12 +89,8 @@ msgid "Loading"
 msgstr "読み込み中"
 
 #: src/SiteAdaptor/LoadingFailCard.tsx:75
-msgid "Loading failed due to Snapshot API service breakdown."
-msgstr ""
-
-#: src/SiteAdaptor/LoadingFailCard.tsx:75
-#~ msgid "Loading fails due to Snapshot API service breakdown."
-#~ msgstr "Snapshot APIサービスの故障のため、読み込みに失敗します。"
+msgid "Loading fails due to Snapshot API service breakdown."
+msgstr "Snapshot APIサービスの故障のため、読み込みに失敗します。"
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
@@ -139,7 +131,7 @@ msgstr "結果"
 #: src/SiteAdaptor/ProfileView.tsx:83
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:73
 msgid "Snapshot"
-msgstr "Snapshot"
+msgstr ""
 
 #: src/SiteAdaptor/SpaceMenu.tsx:108
 msgid "Space"
@@ -155,11 +147,11 @@ msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:217
 #~ msgid "Starts in {0}"
-#~ msgstr "開始時刻 {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx:77
 #~ msgid "Strategie(s)"
-#~ msgstr "ストラテジー"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
 msgid "View"
@@ -176,12 +168,8 @@ msgid "Vote Overview"
 msgstr "投票一覧"
 
 #: src/SiteAdaptor/VotingCard.tsx:120
-#~ msgid "Voted successfully."
-#~ msgstr "投票しました"
-
-#: src/SiteAdaptor/VotingCard.tsx:120
-msgid "Voted."
-msgstr ""
+msgid "Voted successfully."
+msgstr "投票しました"
 
 #: src/SiteAdaptor/VotesCard.tsx:103
 #: src/SiteAdaptor/VotesCard.tsx:184
@@ -196,3 +184,4 @@ msgstr "あなた"
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr "あなたの投票力"
+
