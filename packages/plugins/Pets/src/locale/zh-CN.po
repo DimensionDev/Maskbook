@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:25\n"
+"PO-Revision-Date: 2024-10-13 23:58\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -47,8 +47,7 @@ msgid "Greeting message"
 msgstr "问候语"
 
 #: src/SiteAdaptor/PetShareDialog.tsx:45
-msgid ""
-"I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
+msgid "I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
 "#mask_io #nonfungiblefriends\n"
 "⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
 msgstr ""
@@ -105,3 +104,4 @@ msgstr ""
 #: src/SiteAdaptor/PetShareDialog.tsx:56
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr "你的 Non-Fungible Friend 已经成功设置。"
+
