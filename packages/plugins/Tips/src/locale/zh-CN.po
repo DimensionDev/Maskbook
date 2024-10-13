@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 15:16\n"
+"PO-Revision-Date: 2024-10-13 23:59\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -142,3 +142,4 @@ msgstr ""
 #: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr "在区块链浏览器查看"
+
