@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:02\n"
+"PO-Revision-Date: 2024-10-14 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -40,16 +40,12 @@ msgstr ""
 msgid "Current results"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:75
+#: src/SiteAdaptor/index.tsx:77
 msgid "DAO"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
-#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:73
-msgid "Display Snapshot proposals on the X of the respective project or protocol."
+msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
 msgstr ""
 
 #: src/SiteAdaptor/ResultCard.tsx:180
@@ -93,12 +89,8 @@ msgid "Loading"
 msgstr ""
 
 #: src/SiteAdaptor/LoadingFailCard.tsx:75
-msgid "Loading failed due to Snapshot API service breakdown."
+msgid "Loading fails due to Snapshot API service breakdown."
 msgstr ""
-
-#: src/SiteAdaptor/LoadingFailCard.tsx:75
-#~ msgid "Loading fails due to Snapshot API service breakdown."
-#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
@@ -176,11 +168,7 @@ msgid "Vote Overview"
 msgstr ""
 
 #: src/SiteAdaptor/VotingCard.tsx:120
-#~ msgid "Voted successfully."
-#~ msgstr ""
-
-#: src/SiteAdaptor/VotingCard.tsx:120
-msgid "Voted."
+msgid "Voted successfully."
 msgstr ""
 
 #: src/SiteAdaptor/VotesCard.tsx:103
@@ -196,3 +184,4 @@ msgstr ""
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr ""
+
