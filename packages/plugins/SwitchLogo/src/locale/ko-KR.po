@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ko\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-13 23:59\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 01:19\n"
 "Last-Translator: \n"
+"Language: ko_KR\n"
 "Language-Team: Korean\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -18,50 +16,43 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/SwitchLogo/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 996\n"
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:165
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "<0>Powered by </0><1>Mask Network</1>"
 msgstr ""
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:122
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Classics Logo"
 msgstr "클래식 로고"
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:87
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Download https://mask.io to try more powerful tools on Twitter."
 msgstr "Twitter에서 더 많은 도구를 사용해 보려면 https://mask.io 을 다운로드하세요."
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:85
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "I just replaced Twitter X logo with the original blue bird one with Mask Network extension."
 msgstr "Mask Network 확장으로 트위터 X 로고를 블루버드 로고로 교체했습니다."
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:173
-#~ msgid "Mask Network"
-#~ msgstr ""
-
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:133
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "New Logo"
 msgstr "새 로고"
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:170
-#~ msgid "Powered by"
-#~ msgstr ""
-
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:161
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Save"
 msgstr "저장"
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:153
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Share and recommend this feature after saving."
 msgstr "저장 후 이 기능을 공유합니다."
 
-#: src/SiteAdaptor/index.tsx:9
+#: src/SiteAdaptor/index.tsx
 msgid "Switch between the classic Twitter logo and the new one."
 msgstr "클래식 트위터 로고와 새로운 트위터 로고 사이를 바꿉니다."
 
-#: src/SiteAdaptor/SwitchLogoDialog.tsx:110
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
 msgid "Switch Twitter Logo"
 msgstr "트위터 로고 전환"
 
-#: src/SiteAdaptor/index.tsx:20
+#: src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
 msgstr "트위터 로고 전환"
+
