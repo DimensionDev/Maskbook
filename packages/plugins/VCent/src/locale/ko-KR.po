@@ -18,6 +18,10 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1004\n"
 
+#: src/SiteAdaptor/TweetDialog.tsx:78
+msgid "<0>Latest offer at </0><1>${0}</1>"
+msgstr ""
+
 #: src/SiteAdaptor/index.tsx:18
 msgid "Buy & sell tweets autographed by their original creators."
 msgstr "크리에이터가 서명한 트윗을 구입 및 판매하기"
@@ -27,11 +31,10 @@ msgid "Go"
 msgstr ""
 
 #: src/SiteAdaptor/TweetDialog.tsx:79
-msgid "Latest offer at"
-msgstr "최신 오퍼"
+#~ msgid "Latest offer at"
+#~ msgstr "최신 오퍼"
 
 #: src/SiteAdaptor/index.tsx:17
 #: src/SiteAdaptor/index.tsx:32
 msgid "Valuables"
 msgstr "가치"
-

@@ -287,4 +287,3 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx:55
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPayを使用する前に確認してください:"
-

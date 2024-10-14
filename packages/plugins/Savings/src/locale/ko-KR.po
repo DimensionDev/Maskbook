@@ -155,4 +155,3 @@ msgstr "철회"
 #: src/SiteAdaptor/WithdrawForm.tsx:189
 msgid "Withdraw {0}"
 msgstr "출금 {0}"
-

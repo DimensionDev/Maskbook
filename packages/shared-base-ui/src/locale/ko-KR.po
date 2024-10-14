@@ -29,4 +29,3 @@ msgstr "GitHub에서 보고하기"
 #: src/components/ErrorBoundary/CrashUI.tsx:69
 msgid "Try to recover"
 msgstr "복구하기"
-

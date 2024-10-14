@@ -67,4 +67,3 @@ msgstr "취소 중"
 #: src/SiteAdaptor/ApprovalDialog.tsx:92
 msgid "Tokens"
 msgstr "토큰"
-

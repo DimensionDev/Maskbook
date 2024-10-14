@@ -59,7 +59,8 @@ msgid "Expired"
 msgstr ""
 
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx:83
-msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
+msgid ""
+"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
 "Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
@@ -110,4 +111,3 @@ msgstr ""
 #: src/hooks/useClaimAirdrop.tsx:102
 msgid "Your wallet cancelled the transaction."
 msgstr ""
-

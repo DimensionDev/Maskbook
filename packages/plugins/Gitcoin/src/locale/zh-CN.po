@@ -69,4 +69,3 @@ msgstr ""
 #: src/SiteAdaptor/PreviewCard.tsx:258
 msgid "View"
 msgstr ""
-

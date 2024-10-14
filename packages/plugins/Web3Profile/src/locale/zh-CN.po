@@ -32,8 +32,12 @@ msgid "Change"
 msgstr "切换"
 
 #: src/SiteAdaptor/index.tsx:61
-msgid "Choose and showcase your Web3 footprints on Twitter."
+msgid "Choose and show your Web3 footprints on X."
 msgstr ""
+
+#: src/SiteAdaptor/index.tsx:61
+#~ msgid "Choose and showcase your Web3 footprints on Twitter."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
 msgid "Confirm"
@@ -115,8 +119,12 @@ msgid "Save failed"
 msgstr "保存失败"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-msgid "Save successfully"
-msgstr "保存成功"
+#~ msgid "Save successfully"
+#~ msgstr "保存成功"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
+msgid "Saved"
+msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
@@ -167,4 +175,3 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr "Web3 名片"
-

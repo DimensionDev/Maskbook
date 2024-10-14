@@ -40,12 +40,16 @@ msgstr ""
 msgid "Current results"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:77
+#: src/SiteAdaptor/index.tsx:75
 msgid "DAO"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:74
-msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+#~ msgstr ""
+
+#: src/SiteAdaptor/index.tsx:73
+msgid "Display Snapshot proposals on the X of the respective project or protocol."
 msgstr ""
 
 #: src/SiteAdaptor/ResultCard.tsx:180
@@ -89,8 +93,12 @@ msgid "Loading"
 msgstr ""
 
 #: src/SiteAdaptor/LoadingFailCard.tsx:75
-msgid "Loading fails due to Snapshot API service breakdown."
+msgid "Loading failed due to Snapshot API service breakdown."
 msgstr ""
+
+#: src/SiteAdaptor/LoadingFailCard.tsx:75
+#~ msgid "Loading fails due to Snapshot API service breakdown."
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileProposalList.tsx:271
 msgid "My vote"
@@ -168,7 +176,11 @@ msgid "Vote Overview"
 msgstr ""
 
 #: src/SiteAdaptor/VotingCard.tsx:120
-msgid "Voted successfully."
+#~ msgid "Voted successfully."
+#~ msgstr ""
+
+#: src/SiteAdaptor/VotingCard.tsx:120
+msgid "Voted."
 msgstr ""
 
 #: src/SiteAdaptor/VotesCard.tsx:103
@@ -184,4 +196,3 @@ msgstr ""
 #: src/SiteAdaptor/VoteConfirmDialog.tsx:83
 msgid "Your voting power"
 msgstr ""
-

@@ -53,4 +53,3 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx:23
 msgid "Web3 Profile Card"
 msgstr "웹3 프로필 카드"
-

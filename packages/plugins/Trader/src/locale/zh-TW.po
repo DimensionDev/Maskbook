@@ -53,6 +53,11 @@ msgstr ""
 msgid "{seconds}sec"
 msgstr ""
 
+#: src/SiteAdaptor/trader/views/Confirm.tsx:360
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:144
+msgid "<0>Powered by </0><1>OKX<2/></1>"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Confirm.tsx:236
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
@@ -221,7 +226,8 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:384
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:401
-msgid "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
+msgid ""
+"In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
@@ -312,8 +318,6 @@ msgstr ""
 msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:361
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:145
 #: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx:80
 msgid "Powered by"
 msgstr ""
@@ -399,8 +403,12 @@ msgid "The custom amount entered may be higher than the required network fee."
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx:238
-msgid "The swap is in progress. You can check its status in History after exiting this page."
+msgid "The swap is in progress. You can check its status in History after exit this page."
 msgstr ""
+
+#: src/SiteAdaptor/trader/views/Transaction.tsx:238
+#~ msgid "The swap is in progress. You can check its status in History after exiting this page."
+#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:357
 #: src/SiteAdaptor/trader/views/Confirm.tsx:324
@@ -480,4 +488,3 @@ msgstr ""
 #: src/SiteAdaptor/trending/TickersTable.tsx:82
 msgid "Volume (24h)"
 msgstr ""
-

@@ -83,4 +83,3 @@ msgstr "다시 로드"
 #: src/SiteAdaptor/components/PreviewCard.tsx:294
 msgid "Solid:"
 msgstr ""
-

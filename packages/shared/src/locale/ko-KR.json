@@ -25,12 +25,6 @@
             ["0", "select", { "default": "<1>Size limit: 10 MB </1>", "omit": "" }],
             "<2>or </2><3>Browse File</3>"
         ],
-        "+IcE8D": [
-            "<0>Drag & Drop your file here</0>",
-            ["0", "select", { "default": "<1>Size limit: 10 MB</1>", "omit": "" }],
-            "<2>or</2><3>Browse File</3>"
-        ],
-        "p/HcJJ": ["<0>Drag & Drop your file here</0>", ["0"], "<1>or</1><2>Browse File</2>"],
         "La9ArN": ["<0>Powered by </0>", ["publisherNode"]],
         "KwJJLb": ["<0>Powered by </0><1>", ["0"], "</1>"],
         "F9r8sg": ["~ ", ["0"]],
@@ -80,9 +74,11 @@
         "Pd3dlq": "유통량",
         "CZo+KN": ["Claim 1 ", ["0"], " NFT Lucky Drop successfully."],
         "nqL5WA": "Claim Lucky Drop",
+        "WWUakJ": "Claim Lucky Drop successfully.",
         "yHrAv+": ["Claim Lucky Drop with ", ["0"], " claimed."],
         "k5G3cU": ["Claim Lucky Drop with ", ["0"], " successfully."],
         "zBftr8": "Claim NFT Lucky Drop",
+        "pY7we9": "Claim NFT Lucky Drop successfully.",
         "u2Srv1": "Claim your Airdrop",
         "saHPqg": "Claim your Lucky Drop.",
         "mUJUVX": "Claim your NFT Lucky Drop",
@@ -121,6 +117,7 @@
         "OQEwR/": "Create Lucky Drop",
         "nLr59Y": ["Create Lucky drop with ", ["0"], " successfully."],
         "F/pYeX": "Create NFT Lucky Drop",
+        "nAL2De": "Create NFT Lucky Drop successfully.",
         "ZhrWG1": "페르소나 만들기",
         "5o2pdQ": "페르소나 만들기",
         "Ry8TiY": "Create Smart Pay wallet",
@@ -257,6 +254,7 @@
         "FZg3wM": "진행",
         "A0VzMm": "토큰 이름, NFT 컬렉션, ENS 도메인 또는 월렛 주소를 사용하여 검색 결과를 최적화합니다.",
         "BzEFor": "또는",
+        "E3EnQl": "Owner changed successfully.",
         "S0vyIh": "Owner changed.",
         "UbRKMZ": "대기중",
         "gC2WI+": "페르소나",
@@ -284,9 +282,11 @@
         "GAZNIW": "가격 통계",
         "8C8O9E": ["Provided by plugin \"", ["0"], "\""],
         "LzzqJS": "Purchase Maskbox NFT",
+        "kE3X2k": "Purchase Maskbox NFT successfully.",
         "L4u25/": ["Purchase Maskbox NFT with ", ["0"], " successfully."],
         "7ogueK": "Purchase Maskbox NFT.",
         "AJNYYr": "Refund Lucky drop",
+        "7Em/uY": "Refund Lucky Drop successfully.",
         "rIqJbV": ["Refund Lucky Drop with ", ["0"], " successfully."],
         "Qd0xFm": "Refund your expired Lucky Drop.",
         "HpK/8d": "다시 로드",
@@ -298,6 +298,7 @@
         "6gRgw8": "다시 시도",
         "UxYZfY": ["Revoke the approval for ", ["0"], "."],
         "zBPjcC": "Revoke the approval for token",
+        "0sQVBz": "Revoke the approval successfully.",
         "pbOGiB": "Revoke Token",
         "ByAMF+": "리스크 경고",
         "o672x5": "WalletConnect와 호환성이 있는 월렛으로 QR 코드를 스칸하세요.",
@@ -346,6 +347,7 @@
         "iT0Qmd": "거래 실패",
         "JOP9uZ": "Transaction has been rejected!",
         "Re7Oex": "Transaction submitted.",
+        "XSs0bG": "Transaction was Rejected!",
         "1M8xFP": "슬리피지 허용 범위 나무 낮으면 거래가 실패할 수 있습니다.",
         "i1nslu": ["Transfer ", ["0"], " NFT successfully."],
         "AElxM7": ["Transfer ", ["0"], " NFT."],
@@ -361,6 +363,7 @@
         "bGMpPD": "Unlock NFT Contract",
         "ghZx62": "Unlock token",
         "ZQr5hT": "Unlock Token",
+        "fl18dw": "Unlock token successfully",
         "o1nVEi": [["0"], " 언락 중..."],
         "KWeNH6": ["Unlocking ", ["hasSymbolName"], "..."],
         "IGbphl": "Unlocking ALL...",
@@ -383,10 +386,10 @@
         "BAvIGC": "Withdraw token",
         "KojyJ4": "잘못된 네트워크",
         "RNfEI8": "You canceled the request.",
-        "3z77Gr": [
+        "dM80vS": [
             "You didn't approve ",
             ["0"],
-            " successfully. Please do not set spending cap to 0 and try it again."
+            " successfully. Please do not set spending cap as 0 and try it again."
         ],
         "njSHJP": ["You didn't approve ", ["0"], ". Please do not set spending cap to 0 and try it again."],
         "kV9Qeo": ["You have donated ", ["0"], " ", ["1"]],
@@ -396,6 +399,13 @@
             " 에게 ",
             ["1"],
             " 이용할 수 있는 스마트 컨트랙트 권한을 줘야 합니다. 다른 토큰을 이용할 때 이 작업을 다시 해야 합니다."
+        ],
+        "N7hK71": [
+            "You've approved ",
+            ["0"],
+            " for ",
+            ["1"],
+            ". If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
         ],
         "tk+uyz": [
             "You've approved ",

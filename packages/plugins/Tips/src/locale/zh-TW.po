@@ -142,4 +142,3 @@ msgstr ""
 #: src/components/RecipientSection/RecipientSelect.tsx:129
 msgid "View on Explorer"
 msgstr ""
-

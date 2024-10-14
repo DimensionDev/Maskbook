@@ -206,4 +206,3 @@ msgstr "Explorer에서 보기"
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:61
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
-

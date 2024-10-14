@@ -133,4 +133,3 @@ msgstr "토큰 ID"
 #: src/SiteAdaptor/Shared/DetailsCard.tsx:92
 msgid "Token Standard"
 msgstr "토큰 표준"
-

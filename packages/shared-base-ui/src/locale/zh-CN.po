@@ -29,4 +29,3 @@ msgstr "在 GitHub 上报告"
 #: src/components/ErrorBoundary/CrashUI.tsx:69
 msgid "Try to recover"
 msgstr "尝试恢复"
-
