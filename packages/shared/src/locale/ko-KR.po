@@ -1,1612 +1,1380 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ko\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Korean\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1012\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:178
-#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:216
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "(beta)"
 msgstr ""
 
-#: src/UI/translate.ts:141
+#: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
 
-#: src/UI/translate.ts:139
+#: src/UI/translate.ts
 msgid "{0} {1} NFT contract successfully."
 msgstr ""
 
-#: src/UI/translate.ts:159
+#: src/UI/translate.ts
 msgid "{0} {1} NFT contract."
 msgstr ""
 
-#: src/UI/translate.ts:113
+#: src/UI/translate.ts
 msgid "{0} deposited."
 msgstr ""
 
-#: src/UI/components/ChainBoundary/index.tsx:113
-#~ msgid "{0} network is not added in the wallet. Please add and try it again."
-#~ msgstr "{0} 네트워크 월렛에 추가되지 않습니다. 추가하고 다시 시도하세요."
-
-#: src/UI/components/ChainBoundary/index.tsx:113
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "{0} network is not added to the wallet. Please add it and try again."
 msgstr ""
 
-#: src/UI/translate.ts:163
+#: src/UI/translate.ts
 msgid "{0} NFT contract"
 msgstr ""
 
-#: src/UI/translate.ts:123
+#: src/UI/translate.ts
 msgid "{0} NFT contract unlocked."
 msgstr ""
 
-#: src/UI/translate.ts:111
+#: src/UI/translate.ts
 msgid "{0} NFT Lucky Drop created."
 msgstr ""
 
-#: src/UI/translate.ts:121
+#: src/UI/translate.ts
 msgid "{0} NFT transferred."
 msgstr ""
 
-#: src/UI/translate.ts:119
+#: src/UI/translate.ts
 msgid "{0} sent."
 msgstr ""
 
-#: src/UI/translate.ts:125
+#: src/UI/translate.ts
 msgid "{0} unlocked"
 msgstr ""
 
-#: src/UI/translate.ts:103
+#: src/UI/translate.ts
 msgid "{0} were claimed"
 msgstr ""
 
-#: src/UI/translate.ts:103
-#~ msgid "{0} were successfully claimed"
-#~ msgstr ""
-
-#: src/UI/translate.ts:127
+#: src/UI/translate.ts
 msgid "{0} withdrawn."
 msgstr ""
 
-#: src/UI/components/TokenSecurity/index.tsx:57
+#: src/UI/components/TokenSecurity/index.tsx
 msgid "{attentionFactors, plural, one {# Attention item} other {# Attention items}}"
 msgstr ""
 
-#: src/UI/components/TokenSecurity/index.tsx:40
+#: src/UI/components/TokenSecurity/index.tsx
 msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
-#: src/UI/components/UploadDropArea/index.tsx:123
+#: src/UI/components/UploadDropArea/index.tsx
 msgid "<0>Drag & Drop your file here </0>{0, select, default {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
 msgstr ""
 
-#: src/UI/components/UploadDropArea/index.tsx:123
-#~ msgid "<0>Drag & Drop your file here</0>{0, select, default {<1>Size limit: 10 MB</1>} omit {}}<2>or</2><3>Browse File</3>"
-#~ msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx:123
-#~ msgid "<0>Drag & Drop your file here</0>{0}<1>or</1><2>Browse File</2>"
-#~ msgstr ""
-
-#: src/UI/components/MaskPluginWrapper/index.tsx:108
+#: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
 msgstr ""
 
-#: src/UI/components/PluginCardFrame/index.tsx:66
+#: src/UI/components/PluginCardFrame/index.tsx
 msgid "<0>Powered by </0><1>{0}</1>"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/GasOption.tsx:71
-#~ msgid "~ {0}"
-#~ msgstr "~ {0}"
-
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:372
-#~ msgid "≈ {gasFeeUSD}"
-#~ msgstr ""
-
-#: src/UI/translate.ts:105
+#: src/UI/translate.ts
 msgid "1 {0} NFT Lucky Drop claimed."
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:60
-#~ msgid "1. If you haven't installed {name} Wallet"
-#~ msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:60
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "1. If you haven't installed the {name} Wallet"
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:78
-#~ msgid "2. If you have installed {name} Wallet"
-#~ msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:78
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "2. If you have installed the {name} Wallet"
 msgstr ""
 
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:100
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:168
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "24 Hour Trading Vol"
 msgstr "24 시간 거래량"
 
-#: src/UI/components/AddCollectibles/index.tsx:348
-#: src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx:32
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:230
+#: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
 msgstr "NFT 추가"
 
-#: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx:263
+#: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Added by user"
 msgstr "사용자별 추가"
 
-#: src/UI/components/TokenWithSocialGroupMenu/index.tsx:159
-#: src/UI/wallet/DeriveWalletTable.tsx:124
+#: src/UI/components/TokenWithSocialGroupMenu/index.tsx
+#: src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
 msgstr "주소"
 
-#: src/UI/components/SettingsBoard/GasSection.tsx:112
+#: src/UI/components/SettingsBoard/GasSection.tsx
 msgid "Advanced"
 msgstr "고급"
 
-#: src/UI/modals/SelectAdvancedSettingsDialog/SelectGasSettingsDialog.tsx:82
+#: src/UI/modals/SelectAdvancedSettingsDialog/SelectGasSettingsDialog.tsx
 msgid "Advanced Settings"
 msgstr "고급 설정"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:110
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "App list"
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:51
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "APP list"
 msgstr "앱 리스트"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:55
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "App Settings"
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:55
-#~ msgid "APP Settings"
-#~ msgstr "앱 설정"
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
 msgstr "어플리케이션"
 
-#: src/UI/components/GrantPermission/index.tsx:35
+#: src/UI/components/GrantPermission/index.tsx
 msgid "Approve"
 msgstr "승인"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:112
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Approve MASK?"
 msgstr "MASK 승인"
 
-#: src/hooks/useReportSpam.tsx:65
+#: src/hooks/useReportSpam.tsx
 msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr ""
 
-#: src/hooks/useReportSpam.tsx:65
-#~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
-#~ msgstr "{0} 신고하시겠습니까? 승인 후 이 NFT는 스팸으로 표시됩니다."
-
-#: src/UI/components/FungibleTokenInput/UI.tsx:171
+#: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
 msgstr "사용 가능한 잔액"
 
-#: src/UI/components/QRCode/index.tsx:45
+#: src/UI/components/QRCode/index.tsx
 msgid "Backup failed, <0>try again</0>"
 msgstr ""
 
-#: src/UI/components/FungibleTokenInput/UI.tsx:172
+#: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Balance"
 msgstr "잔액"
 
-#: src/UI/components/ERC721ContractSelectPanel/index.tsx:105
+#: src/UI/components/ERC721ContractSelectPanel/index.tsx
 msgid "Balance: {0}"
 msgstr ""
 
-#: src/UI/components/TokenAmountPanel/index.tsx:143
+#: src/UI/components/TokenAmountPanel/index.tsx
 msgid "Balance: <0/>"
 msgstr ""
 
-#: src/UI/wallet/DeriveWalletTable.tsx:129
+#: src/UI/wallet/DeriveWalletTable.tsx
 msgid "Balance({symbol})"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/GasSection.tsx:111
+#: src/UI/components/SettingsBoard/GasSection.tsx
 msgid "Basic"
 msgstr "기본"
 
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:191
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
 msgstr "Blocto는 Flow에만 지원합니다."
 
-#: src/UI/components/UploadDropArea/index.tsx:135
-#~ msgid "Browse File"
-#~ msgstr "파일 찾아보기"
-
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:116
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:140
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:127
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "취소"
 
-#: src/UI/translate.ts:58
+#: src/UI/translate.ts
 msgid "Cancel Transaction"
 msgstr ""
 
-#: src/UI/components/WalletStatusBar/Action.tsx:17
-#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx:79
-#: src/UI/components/WalletStatusBox/index.tsx:231
+#: src/UI/components/WalletStatusBar/Action.tsx
+#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
 msgstr "변경"
 
-#: src/UI/translate.ts:59
+#: src/UI/translate.ts
 msgid "Change Owner"
 msgstr ""
 
-#: src/UI/components/ChainBoundary/index.tsx:186
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Change Wallet"
 msgstr "월렛 변경"
 
-#: src/UI/modals/ConnectWalletModal/index.tsx:179
+#: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Check {providerName} to confirm connect."
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:72
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Check out the official website"
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:333
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Choose Network"
 msgstr "네트워크 선택"
 
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:89
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:157
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Circulating Supply"
 msgstr "유통량"
 
-#: src/UI/translate.ts:105
-#~ msgid "Claim 1 {0} NFT Lucky Drop successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:60
+#: src/UI/translate.ts
 msgid "Claim Lucky Drop"
 msgstr ""
 
-#: src/UI/translate.ts:107
+#: src/UI/translate.ts
 msgid "Claim Lucky Drop with {0} claimed."
 msgstr ""
 
-#: src/UI/translate.ts:107
-#~ msgid "Claim Lucky Drop with {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:61
+#: src/UI/translate.ts
 msgid "Claim NFT Lucky Drop"
 msgstr ""
 
-#: src/UI/translate.ts:62
+#: src/UI/translate.ts
 msgid "Claim your Airdrop"
 msgstr ""
 
-#: src/UI/translate.ts:26
+#: src/UI/translate.ts
 msgid "Claim your Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:27
+#: src/UI/translate.ts
 msgid "Claim your NFT Lucky Drop"
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:156
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Clear"
 msgstr "지우기"
 
-#: src/UI/components/WalletStatusBox/usePendingTransactions.tsx:61
+#: src/UI/components/WalletStatusBox/usePendingTransactions.tsx
 msgid "Clear All"
 msgstr "모두 지우기"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:152
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to hide in the App list."
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:152
-#~ msgid "Click the application icon to hide in the APP list."
-#~ msgstr "애프리케이션 아이콘을 클릭하여 앱 리스트에 숨깁니다."
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:151
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
 msgstr "애프리케이션 아이콘을 클릭하여 앱 보드에 리스트됩니다."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:214
-#~ msgid "Click the setting icon to list it on the App board."
-#~ msgstr "설정 아이콘을 클릭하여 앱 보드에 리스트됩니다."
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:214
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
 msgstr ""
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:115
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Click to retry"
 msgstr "클릭하여 재시도하기"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:116
-#~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
-#~ msgstr "확인 버튼을 클릭하면 위와 같이 발생할 수 있는 위험을 부담하는 것에 동의한다는 의미합니다."
-
-#: src/UI/components/CoinMetadataTable/index.tsx:213
-#: src/UI/components/CoinMetadataTable/index.tsx:284
+#: src/UI/components/CoinMetadataTable/index.tsx
+#: src/UI/components/CoinMetadataTable/index.tsx
 msgid "Community"
 msgstr "커뮤니티"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:97
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:103
-#: src/UI/modals/ConfirmModal/Dialog.tsx:39
-#: src/UI/modals/ConfirmModal/Dialog.tsx:43
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:292
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:238
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:133
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr "확인"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:135
-#~ msgid "Confirm Failed"
-#~ msgstr "확인 실패"
-
-#: src/UI/components/WalletConnectedBoundary/index.tsx:74
+#: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Confirm Risk Warning"
 msgstr "리스크 경고 확인"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Confirm this transaction in your wallet"
 msgstr "이 거래를 월렛에서 확인하세요"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:134
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirming"
 msgstr "확인 중"
 
-#: src/UI/components/TokenTransactionConfirmModal/index.tsx:127
-#: src/UI/components/TokenTransactionConfirmModal/index.tsx:152
+#: src/UI/components/TokenTransactionConfirmModal/index.tsx
+#: src/UI/components/TokenTransactionConfirmModal/index.tsx
 msgid "Congratulations!"
 msgstr "축하합니다!"
 
-#: src/UI/components/PersonaSelectPanel/index.tsx:185
-#: src/UI/components/PersonaSelectPanel/index.tsx:198
+#: src/UI/components/PersonaSelectPanel/index.tsx
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Connect {0}"
 msgstr ""
 
-#: src/UI/components/PersonaSelectPanel/index.tsx:176
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Connect and Verify {0}"
 msgstr ""
 
-#: src/UI/components/ConnectPersonaBoundary/index.tsx:95
+#: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Connect Persona"
 msgstr "페로소나 연결하기"
 
-#: src/UI/components/ChainBoundary/index.tsx:170
-#: src/UI/components/WalletConnectedBoundary/index.tsx:57
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:216
-#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx:105
-#: src/UI/components/WalletStatusBox/index.tsx:144
-#: src/UI/modals/SelectProviderModal/SelectProvider.tsx:96
+#: src/UI/components/ChainBoundary/index.tsx
+#: src/UI/components/WalletConnectedBoundary/index.tsx
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Connect Wallet"
 msgstr "월렛 연결"
 
-#: src/UI/modals/ConnectWalletModal/index.tsx:143
+#: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Connect with {providerName}"
 msgstr ""
 
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:178
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connect your wallet"
 msgstr "월렛 연결"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:243
-#~ msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
-#~ msgstr ""
-
-#: src/UI/components/VerifyNextIDDialog/index.tsx:244
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
 msgstr ""
 
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:197
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
 msgid "Connected wallets settings"
 msgstr "웰렛 연결 설정"
 
-#: src/UI/components/CoinMetadataTable/index.tsx:158
-#: src/UI/components/CoinMetadataTable/index.tsx:264
+#: src/UI/components/CoinMetadataTable/index.tsx
+#: src/UI/components/CoinMetadataTable/index.tsx
 msgid "Contract"
 msgstr "컨트랙트"
 
-#: src/UI/translate.ts:63
+#: src/UI/translate.ts
 msgid "Contract Deployment"
 msgstr ""
 
-#: src/UI/translate.ts:143
+#: src/UI/translate.ts
 msgid "Contract Deployment {0}"
 msgstr ""
 
-#: src/UI/translate.ts:64
+#: src/UI/translate.ts
 msgid "Contract Interaction"
 msgstr ""
 
-#: src/UI/components/CopyButton/index.tsx:74
+#: src/UI/components/CopyButton/index.tsx
 msgid "Copied!"
 msgstr "복사됨"
 
-#: src/UI/components/CopyButton/index.tsx:74
+#: src/UI/components/CopyButton/index.tsx
 msgid "Copy"
 msgstr "복사"
 
-#: src/UI/translate.ts:111
-#~ msgid "Create {0} NFT Lucky Drop successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:65
+#: src/UI/translate.ts
 msgid "Create Lucky Drop"
 msgstr ""
 
-#: src/UI/translate.ts:109
-#~ msgid "Create Lucky drop with {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:66
+#: src/UI/translate.ts
 msgid "Create NFT Lucky Drop"
 msgstr ""
 
-#: src/hooks/useCurrentPersonaConnectStatus.ts:46
-#: src/UI/components/PersonaSelectPanel/index.tsx:110
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Create persona"
 msgstr "페르소나 만들기"
 
-#: src/UI/components/ConnectPersonaBoundary/index.tsx:87
+#: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Create Persona"
 msgstr "페르소나 만들기"
 
-#: src/UI/translate.ts:67
+#: src/UI/translate.ts
 msgid "Create Smart Pay wallet"
 msgstr ""
 
-#: src/UI/translate.ts:28
+#: src/UI/translate.ts
 msgid "Create your Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:29
+#: src/UI/translate.ts
 msgid "Create your NFT Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:30
+#: src/UI/translate.ts
 msgid "Created a SmartPay wallet on Polygon network."
 msgstr ""
 
-#: src/UI/components/SettingsBoard/GasForm.tsx:176
+#: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Current base fee is {0} Gwei"
 msgstr "현재 기초 기스비는 {0} Gwei"
 
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:256
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:375
-#: src/UI/components/SettingsBoard/GasSection.tsx:99
-#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:91
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
 msgstr "커스텀"
 
-#: src/UI/components/AccountIcons/index.tsx:78
-#: src/UI/components/SocialAccountList/SocialTooltip.tsx:27
+#: src/UI/components/AccountIcons/index.tsx
+#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
 msgstr "데이터 소스가 {0}에서 검색됩니다."
 
-#: src/UI/components/MaskPluginWrapper/index.tsx:143
+#: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "Default"
 msgstr "디폴트"
 
-#: src/UI/translate.ts:31
+#: src/UI/translate.ts
 msgid "Deploy a SmartPay wallet on Polygon network."
 msgstr ""
 
-#: src/UI/translate.ts:68
+#: src/UI/translate.ts
 msgid "Deploy Smarty Pay wallet"
 msgstr ""
 
-#: src/UI/translate.ts:145
+#: src/UI/translate.ts
 msgid "Deposit {0} for savings."
 msgstr ""
 
-#: src/UI/translate.ts:113
-#~ msgid "Deposit {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:69
+#: src/UI/translate.ts
 msgid "Deposit token"
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:92
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Details"
 msgstr "디테일"
 
-#: src/UI/components/WalletStatusBox/index.tsx:221
+#: src/UI/components/WalletStatusBox/index.tsx
 msgid "Disconnect"
 msgstr "연결 해제"
 
-#: src/hooks/useOpenShareTxDialog.tsx:89
-#: src/UI/contexts/components/InjectedDialog.tsx:240
+#: src/hooks/useOpenShareTxDialog.tsx
+#: src/UI/contexts/components/InjectedDialog.tsx
 msgid "Dismiss"
 msgstr "확인"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:123
-#~ msgid "Do you want to set MASK token as gas fee?"
-#~ msgstr "MASK 토큰을 가스비로 설정하시겠습니까?"
-
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:123
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Do you want to use MASK tokens to pay gas fee?"
 msgstr ""
 
-#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "Domain Request"
 msgstr "도메인 요청"
 
-#: src/UI/translate.ts:79
+#: src/UI/translate.ts
 msgid "Donate"
 msgstr ""
 
-#: src/hooks/useSnackbarCallback.tsx:40
-#: src/hooks/useSnackbarCallback.tsx:89
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:140
+#: src/hooks/useSnackbarCallback.tsx
+#: src/hooks/useSnackbarCallback.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Done"
 msgstr "완료"
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:63
-#~ msgid "Download {name} Wallet here"
-#~ msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:63
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Download the {name} Wallet here"
 msgstr ""
 
-#: src/UI/components/UploadDropArea/index.tsx:124
-#~ msgid "Drag & Drop your file here"
-#~ msgstr "파일을 끌어서 여기에 놓으세요"
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:208
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
 msgstr "DSearch"
 
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:343
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Edit"
 msgstr "편집"
 
-#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:152
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Editor"
 msgstr "에디터"
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:81
-#~ msgid "Enable {name} Wallet extension and disable other browser extension wallets"
-#~ msgstr ""
-
-#: src/UI/components/PluginEnableBoundary/index.tsx:51
+#: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "Enable plugin"
 msgstr "플러그인 활성화"
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:81
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Enable the {name} Wallet extension and disable other wallet extensions"
 msgstr ""
 
-#: src/UI/components/CompositionDialog/CompositionUI.tsx:163
+#: src/UI/components/CompositionDialog/CompositionUI.tsx
 msgid "Encrypt"
 msgstr "암호화"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:246
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "ENS or Wallet Address"
 msgstr "ENS나 월렛 주소"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:31
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:134
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:131
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr "기스비 한도 입력"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:38
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:136
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
 msgstr "가스비 입력"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:81
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:143
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
 msgstr "최대 가스비 입력"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:58
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:141
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
 msgstr "최대 우선 가스비 입력"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:75
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Enter an amount"
 msgstr "금액 입력"
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:93
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
 msgstr "실패"
 
-#: src/UI/translate.ts:101
+#: src/UI/translate.ts
 msgid "Failed to {0} NFT contract."
 msgstr ""
 
-#: src/UI/translate.ts:32
+#: src/UI/translate.ts
 msgid "Failed to claim Lucky Drop."
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:135
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Failed to confirm"
 msgstr ""
 
-#: src/UI/translate.ts:33
+#: src/UI/translate.ts
 msgid "Failed to create Lucky Drop."
 msgstr ""
 
-#: src/UI/translate.ts:97
+#: src/UI/translate.ts
 msgid "Failed to deposit {0}."
 msgstr ""
 
-#: src/UI/translate.ts:34
+#: src/UI/translate.ts
 msgid "Failed to deposit token."
 msgstr ""
 
-#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:122
+#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Failed to load {0}. Click to retry."
 msgstr "{0} 로드 실패. 다시 시도하세요."
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:82
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Failed to load MASK. Click to retry."
 msgstr ""
 
-#: src/UI/translate.ts:35
+#: src/UI/translate.ts
 msgid "Failed to purchase Maskbox NFT."
 msgstr ""
 
-#: src/UI/translate.ts:36
+#: src/UI/translate.ts
 msgid "Failed to refund Lucky Drop."
 msgstr ""
 
-#: src/hooks/useReportSpam.tsx:81
+#: src/hooks/useReportSpam.tsx
 msgid "Failed to report spam."
 msgstr "신고 실패"
 
-#: src/UI/translate.ts:37
+#: src/UI/translate.ts
 msgid "Failed to revoke token contract."
 msgstr ""
 
-#: src/UI/translate.ts:38
+#: src/UI/translate.ts
 msgid "Failed to send token."
 msgstr ""
 
-#: src/UI/translate.ts:39
+#: src/UI/translate.ts
 msgid "Failed to transfer NFT."
 msgstr ""
 
-#: src/UI/translate.ts:40
+#: src/UI/translate.ts
 msgid "Failed to unlock NFT contract."
 msgstr ""
 
-#: src/UI/translate.ts:41
+#: src/UI/translate.ts
 msgid "Failed to unlock token contract."
 msgstr ""
 
-#: src/UI/translate.ts:99
+#: src/UI/translate.ts
 msgid "Failed to withdraw {0}."
 msgstr ""
 
-#: src/UI/components/SocialAccountList/SocialListItem.tsx:236
+#: src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Follow"
 msgstr "팔로우"
 
-#: src/UI/translate.ts:70
+#: src/UI/translate.ts
 msgid "Follow User"
 msgstr ""
 
-#: src/UI/components/SocialAccountList/SocialListItem.tsx:235
+#: src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Following"
 msgstr "팔로잉"
 
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:193
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Fortmatic only supports the ETH and BNB chain."
 msgstr "Fortmatic는 ETH 및 BNB에만 지원합니다."
 
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:361
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Gas Fee"
 msgstr "가스비"
 
-#: src/UI/modals/GasSettingModal/GasSettingModal.tsx:41
+#: src/UI/modals/GasSettingModal/GasSettingModal.tsx
 msgid "Gas fee settings"
 msgstr "기스비 설정"
 
-#: src/UI/components/SettingsBoard/GasForm.tsx:231
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:245
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:211
+#: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr "가스 한도"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:137
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:134
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:34
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas limit too low will cause the transaction to fail."
 msgstr "가스 한도가 너무 낮으면 거래가 실패할 수 있습니다."
 
-#: src/UI/components/SettingsBoard/GasForm.tsx:200
-#: src/UI/components/SettingsBoard/GasSection.tsx:92
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:218
+#: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr "가스 가격"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:54
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price is higher than necessary. You may pay more than needed."
 msgstr "가스비가 필요한 것보다 높아서 필요 이상으로 지불할 수 있습니다."
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:46
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price is too low for network conditions."
 msgstr "네트워크 컨디션에 대한 가스비가 매우 낮습니다."
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:39
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Gas price must be greater than 0 Gwei."
 msgstr "가스 가격은 0Gwei보다 높어야합니다."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:231
-#~ msgid "Get optimized search results when you look for a token."
-#~ msgstr "토큰을 찾을 때 최적화된 검색 결과를 가져옵니다."
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:231
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Get optimized search results when you're looking for a token."
 msgstr ""
 
-#: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:36
+#: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Go to Settings"
 msgstr "설정으로 가기"
 
-#: src/UI/components/SettingsBoard/GasForm.tsx:193
-#: src/UI/components/SettingsBoard/GasForm.tsx:261
-#: src/UI/components/SettingsBoard/GasForm.tsx:299
+#: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Gwei"
 msgstr "Gwei"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:254
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:271
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "GWEI"
 msgstr "GWEI"
 
-#: src/UI/components/SettingsBoard/Context.tsx:96
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:118
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:117
+#: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "높음"
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:56
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "How to use {0} Wallet?"
 msgstr ""
 
-#: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx:162
+#: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx
 msgid "Import"
 msgstr "불러오기"
 
-#: src/UI/components/AddCollectibles/index.tsx:164
-#: src/UI/components/FungibleTokenList/index.tsx:271
+#: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
 msgstr "잘못된 컨트렉트 주소"
 
-#: src/UI/components/CoinMetadataTable/index.tsx:148
-#: src/UI/components/CoinMetadataTable/index.tsx:255
+#: src/UI/components/CoinMetadataTable/index.tsx
+#: src/UI/components/CoinMetadataTable/index.tsx
 msgid "Info"
 msgstr "정보"
 
-#: src/UI/components/AddCollectibles/index.tsx:246
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "Input contract address"
 msgstr "컨트랙트 주소 입력"
 
-#: src/UI/components/SettingsBoard/Context.tsx:95
+#: src/UI/components/SettingsBoard/Context.tsx
 msgid "Instant"
 msgstr "즉시"
 
-#: src/UI/components/WalletConnectedBoundary/index.tsx:96
+#: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
 msgstr "무효한 네트워크"
 
-#: src/UI/components/SettingsBoard/hooks/useSlippageToleranceSchema.ts:18
+#: src/UI/components/SettingsBoard/hooks/useSlippageToleranceSchema.ts
 msgid "Invalid slippage tolerance."
 msgstr "무효한 슬리피지 톨러런스"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:116
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Listed"
 msgstr "Listed"
 
-#: src/UI/components/LoadRetry/index.tsx:20
-#: src/UI/components/ReloadStatus/index.tsx:46
+#: src/UI/components/LoadRetry/index.tsx
+#: src/UI/components/ReloadStatus/index.tsx
 msgid "Load failed"
 msgstr "로딩 실패"
 
-#: src/UI/components/LoadingStatus/index.tsx:40
+#: src/UI/components/LoadingStatus/index.tsx
 msgid "Loading"
 msgstr "로딩 중"
 
-#: src/UI/components/PluginCardFrame/index.tsx:86
+#: src/UI/components/PluginCardFrame/index.tsx
 msgid "Loading...."
 msgstr "로딩 중...."
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:108
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:107
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr "낮음"
 
-#: src/UI/translate.ts:42
+#: src/UI/translate.ts
 msgid "Lucky Drop claimed."
 msgstr ""
 
-#: src/UI/translate.ts:43
+#: src/UI/translate.ts
 msgid "Lucky Drop refunded."
 msgstr ""
 
-#: src/UI/translate.ts:109
+#: src/UI/translate.ts
 msgid "Lucky drop with {0} created."
 msgstr ""
 
-#: src/UI/translate.ts:117
+#: src/UI/translate.ts
 msgid "Lucky Drop with {0} refunded."
 msgstr ""
 
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:127
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Manage Token List"
 msgstr "토큰 목록 관리"
 
-#: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx:32
+#: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx
 msgid "Manage Token Lists"
 msgstr "토큰 목록 관리"
 
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:70
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:146
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Market Cap"
 msgstr "시가 총액"
 
-#: src/UI/components/PluginCardFrame/index.tsx:69
-#~ msgid "Mask Network"
-#~ msgstr "Mask Network"
-
-#: src/UI/components/GrantPermission/index.tsx:27
+#: src/UI/components/GrantPermission/index.tsx
 msgid "Mask Network requires the permission of following websites before using it."
 msgstr ""
 
-#: src/UI/components/GrantPermission/index.tsx:27
-#~ msgid "Mask Network requires you to authorize the following websites before using it."
-#~ msgstr "Mask Network를 사용하기 전에 다음 웹 사이트를 승인해야 합니다."
-
-#: src/UI/translate.ts:44
+#: src/UI/translate.ts
 msgid "Maskbox NFT purchased."
 msgstr ""
 
-#: src/UI/translate.ts:115
+#: src/UI/translate.ts
 msgid "Maskbox NFT with {0} purchased."
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:269
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee"
 msgstr "최대 가스비"
 
-#: src/UI/components/SettingsBoard/GasForm.tsx:306
+#: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Fee"
 msgstr "최대 수수료"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:146
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee cannot be lower than max priority fee"
 msgstr "최대 기스비는 최대 우선 가스비보다 낮을 수 없습니다"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:100
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee cannot be lower than max priority fee."
 msgstr "최대 기스비는 최대 우선 가스비보다 낮을 수 없습니다."
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:96
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is higher than necessary."
 msgstr "최대 가스비가 필요한 것보다 높습니다."
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:88
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max fee is too low for network conditions."
 msgstr "네트워크 컨디션에 대한 최대 가스비가 매우 낮습니다."
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:252
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee"
 msgstr "최대 우선 가스비"
 
-#: src/UI/components/SettingsBoard/GasForm.tsx:272
+#: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Max Priority Fee"
 msgstr "최대 우선 가스비"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:77
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is higher than necessary. You may pay more than needed."
 msgstr "최대 우선 가스비가 필요한 것보다 높아서 필요 이상으로 지불할 수 있습니다."
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:66
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee is too low for network conditions."
 msgstr "네트워크 컨디션에 대한 최대 우선 가스비는 매우 낮습니다."
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:142
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr "최대 우선 가스비는 0 GWEI보다 높아야 합니다"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:59
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Max priority fee must be greater than 0 Gwei."
 msgstr "최대 우선 가스비는 0 Gwei보다 높아야 합니다."
 
-#: src/UI/components/SettingsBoard/Context.tsx:97
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:113
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:112
+#: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr "보통"
 
-#: src/UI/components/PhoneNumberField/index.tsx:29
-#~ msgid "Mobile Number"
-#~ msgstr "휴대폰 번호"
-
-#: src/UI/components/TokenSecurity/index.tsx:72
+#: src/UI/components/TokenSecurity/index.tsx
 msgid "More"
 msgstr "더 보기"
 
-#: src/UI/components/FungibleTokenList/index.tsx:341
+#: src/UI/components/FungibleTokenList/index.tsx
 msgid "Name or Contract address e.g. USDC or 0x234..."
 msgstr "토큰 이름이나 컨트렉트 주소"
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:191
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Name or contract address eg. PUNK or 0x234..."
 msgstr ""
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:191
-#~ msgid "Name or Contract address eg.PUNK or 0x234..."
-#~ msgstr "이름이나 컨트랙트 주소. 예: PUNK 나 0x234"
-
-#: src/UI/components/ChainBoundary/index.tsx:124
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
 msgstr "네트워크 오류 또는 사용자가 프로세스를 취소합니다."
 
-#: src/UI/translate.ts:45
+#: src/UI/translate.ts
 msgid "NFT Lucky Drop claimed."
 msgstr ""
 
-#: src/UI/translate.ts:46
+#: src/UI/translate.ts
 msgid "NFT Lucky Drop created."
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:236
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "NFTs"
 msgstr "NFTs"
 
-#: src/UI/components/CollectibleList/CollectibleList.tsx:112
+#: src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
 msgstr "수집품이 없습니다."
 
-#: src/UI/components/EmptyStatus/index.tsx:32
+#: src/UI/components/EmptyStatus/index.tsx
 msgid "No Data"
 msgstr "데이터 없음"
 
-#: src/UI/components/WalletConnectedBoundary/index.tsx:89
+#: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "No Enough Gas Fee"
 msgstr "가스비가 없습니다"
 
-#: src/UI/components/AssetsManagement/CollectionList.tsx:241
-#: src/UI/components/AssetsManagement/CollectionList.tsx:342
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+#: src/UI/components/AssetsManagement/CollectionList.tsx
 msgid "No NFTs found."
 msgstr "NFT가 없습니다."
 
-#: src/UI/components/AddCollectibles/index.tsx:319
-#: src/UI/components/CountryCodePicker/index.tsx:145
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:208
+#: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/CountryCodePicker/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
 msgstr "결과 없음"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:78
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "No wallet selected."
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:78
-#~ msgid "Not select wallet yet."
-#~ msgstr "월렛 아직 선택하지 않습니다."
-
-#: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
+#: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
 msgstr "확인"
 
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:196
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
 msgstr "EVM 체인만 지원합니다. ETH, BNB chain, Polygon, Arb, Op 등."
 
-#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:155
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
 msgstr "현재 TypedMessageText만 지원합니다."
 
-#: src/UI/wallet/DeriveWalletTable.tsx:134
+#: src/UI/wallet/DeriveWalletTable.tsx
 msgid "Operation"
 msgstr "진행"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:212
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr "토큰 이름, NFT 컬렉션, ENS 도메인 또는 월렛 주소를 사용하여 검색 결과를 최적화합니다."
 
-#: src/UI/components/UploadDropArea/index.tsx:132
-#~ msgid "or"
-#~ msgstr "또는"
-
-#: src/UI/translate.ts:47
+#: src/UI/translate.ts
 msgid "Owner changed."
 msgstr ""
 
-#: src/UI/components/WalletStatusBar/WalletDescription.tsx:125
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:91
+#: src/UI/components/WalletStatusBar/WalletDescription.tsx
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Pending"
 msgstr "대기중"
 
-#: src/hooks/useCurrentPersonaConnectStatus.ts:45
-#: src/UI/components/PersonaSelectPanel/index.tsx:109
-#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx:74
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+#: src/UI/components/PersonaSelectPanel/index.tsx
+#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 msgid "Persona"
 msgstr "페르소나"
 
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:189
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Phantom only supports the Solana chain."
 msgstr "Phantom은 Solana에만 지원합니다."
 
-#: src/UI/components/PhoneNumberField/index.tsx:29
+#: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
 msgstr ""
 
-#: src/UI/components/PersonaSelectPanel/index.tsx:178
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} and send a proof post before using dApps."
 msgstr ""
 
-#: src/UI/components/PersonaSelectPanel/index.tsx:178
-#~ msgid "Please connect {0} and send proof post before using dApps."
-#~ msgstr "디앱을 이용하기 전에 {0} 연결하고 증명 게시글 보내세요."
-
-#: src/UI/components/PersonaSelectPanel/index.tsx:186
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
 msgstr "디엡을 이용하기 전에 {0} 연결하세요."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:266
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your persona"
 msgstr "페르소나를 연결하세요."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:261
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your wallet"
 msgstr "월렛을 연결하세요"
 
-#: src/hooks/useCurrentPersonaConnectStatus.ts:44
-#: src/UI/components/PersonaSelectPanel/index.tsx:108
-#~ msgid "Please create a Persona and verify your account to use this function."
-#~ msgstr "이 기능을 사용하려면 페르소나를 만들고 계정을 확인하세요."
-
-#: src/UI/components/PersonaSelectPanel/index.tsx:108
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
 msgstr ""
 
-#: src/hooks/useCurrentPersonaConnectStatus.ts:44
+#: src/hooks/useCurrentPersonaConnectStatus.ts
 msgid "Please create a Persona and verify your account to use this."
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:264
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please create a persona for accessing Dapps."
 msgstr "디앱을 연결하기 위해 페르소나를 맏드세요."
 
-#: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:30
+#: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
 msgstr "설정 저장 후 이 기능을 활성화하는 데 사용할 월렛을 선택하세요."
 
-#: src/UI/components/ChainBoundary/index.tsx:189
-#: src/UI/components/ChainBoundary/index.tsx:206
+#: src/UI/components/ChainBoundary/index.tsx
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Please switch to this network in the mobile application wallet you are connected to."
 msgstr ""
 
-#: src/UI/components/PersonaSelectPanel/index.tsx:192
-#~ msgid "Please verify current persona with social media account before using dApps."
-#~ msgstr "디앱 이용하기 전에 소셜 미디어 계정으로 이용 중인 페르소나를 검증하세요."
-
-#: src/UI/components/PersonaSelectPanel/index.tsx:192
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:268
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please verify your social account"
 msgstr "소셜 계정을 검증하세요."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:111
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:52
-#~ msgid "Plug-in switch"
-#~ msgstr "플러그인 전환"
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:111
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:52
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "Plugin switch"
 msgstr ""
 
-#: src/UI/components/CompositionDialog/CompositionUI.tsx:145
+#: src/UI/components/CompositionDialog/CompositionUI.tsx
 msgid "Plugins"
 msgstr "플러그인"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:255
-#: src/UI/components/VerifyNextIDDialog/index.tsx:275
+#: src/UI/components/VerifyNextIDDialog/index.tsx
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Post content:"
 msgstr ""
 
-#: src/UI/components/MaskPluginWrapper/index.tsx:109
-#: src/UI/components/PluginCardFrame/index.tsx:67
-#~ msgid "Powered by"
-#~ msgstr "Powered by"
-
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:61
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:137
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Price Statistic"
 msgstr "가격 통계"
 
-#: src/UI/components/CompositionDialog/BadgeRenderer.tsx:49
+#: src/UI/components/CompositionDialog/BadgeRenderer.tsx
 msgid "Provided by plugin \"{0}\""
 msgstr ""
 
-#: src/UI/translate.ts:71
+#: src/UI/translate.ts
 msgid "Purchase Maskbox NFT"
 msgstr ""
 
-#: src/UI/translate.ts:115
-#~ msgid "Purchase Maskbox NFT with {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:48
+#: src/UI/translate.ts
 msgid "Purchase Maskbox NFT."
 msgstr ""
 
-#: src/UI/translate.ts:72
+#: src/UI/translate.ts
 msgid "Refund Lucky drop"
 msgstr ""
 
-#: src/UI/translate.ts:117
-#~ msgid "Refund Lucky Drop with {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:49
+#: src/UI/translate.ts
 msgid "Refund your expired Lucky Drop."
 msgstr ""
 
-#: src/UI/components/LoadRetry/index.tsx:24
-#: src/UI/components/ReloadStatus/index.tsx:48
+#: src/UI/components/LoadRetry/index.tsx
+#: src/UI/components/ReloadStatus/index.tsx
 msgid "Reload"
 msgstr "다시 로드"
 
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:95
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Remove"
 msgstr ""
 
-#: src/hooks/useReportSpam.tsx:63
+#: src/hooks/useReportSpam.tsx
 msgid "Report NFT Scam Contract?"
 msgstr "NFT 사기 컨트랙트 신고"
 
-#: src/hooks/useReportSpam.tsx:79
+#: src/hooks/useReportSpam.tsx
 msgid "Report Spam"
 msgstr "스팸 신고"
 
-#: src/UI/modals/ConnectWalletModal/index.tsx:174
+#: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
 msgstr ""
 
-#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:152
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Reset"
 msgstr "초기화"
 
-#: src/UI/modals/ConnectWalletModal/index.tsx:189
+#: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Retry"
 msgstr "다시 시도"
 
-#: src/UI/translate.ts:147
+#: src/UI/translate.ts
 msgid "Revoke the approval for {0}."
 msgstr ""
 
-#: src/UI/translate.ts:50
+#: src/UI/translate.ts
 msgid "Revoke the approval for token"
 msgstr ""
 
-#: src/UI/translate.ts:73
+#: src/UI/translate.ts
 msgid "Revoke Token"
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:92
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:101
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
 msgstr "리스크 경고"
 
-#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:85
-#~ msgid "Scan QR code with a WalletConnect-compatible wallet"
-#~ msgstr "WalletConnect와 호환성이 있는 월렛으로 QR 코드를 스칸하세요."
-
-#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:85
+#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
 
-#: src/UI/components/CountryCodePicker/index.tsx:112
+#: src/UI/components/CountryCodePicker/index.tsx
 msgid "Search Area"
 msgstr "지역 찾기"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:249
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with an ENS domain or wallet address to get optimized results."
 msgstr "최적화된 결과를 얻으려면 ENS 도메인 또는 월렛 주소로 검색하세요."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:239
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
 msgstr "최적화된 결과를 얻으려면 NFT 컬렉션 이름 또는 해당 심벌을 사용하여 검색하세요."
 
-#: src/UI/components/SelectTokenChip/index.tsx:60
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:128
+#: src/UI/components/SelectTokenChip/index.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Select"
 msgstr "토큰 선택"
 
-#: src/UI/components/FungibleTokenInput/UI.tsx:221
+#: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Select a token"
 msgstr "토큰 선택"
 
-#: src/UI/components/ERC721ContractSelectPanel/index.tsx:96
+#: src/UI/components/ERC721ContractSelectPanel/index.tsx
 msgid "Select an NFT"
 msgstr "NFT 선택"
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:43
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
 msgstr "NFT 컨트렉트를 선택하세요."
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:45
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract Operator"
 msgstr "NFT 컨트렉트 오퍼레이터"
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:44
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract Owner"
 msgstr "NFT 컨트렉트 소유자를 선택하세요."
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:185
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Select Collection"
 msgstr ""
 
-#: src/UI/components/AddCollectibles/index.tsx:335
-#: src/UI/components/AssetsManagement/Collection.tsx:147
-#: src/UI/components/AssetsManagement/CollectionList.tsx:286
-#: src/UI/components/VerifyNextIDDialog/index.tsx:297
+#: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
 msgstr "발송"
 
-#: src/UI/translate.ts:149
+#: src/UI/translate.ts
 msgid "Send {0}"
 msgstr ""
 
-#: src/UI/translate.ts:119
-#~ msgid "Send {0} successfully."
-#~ msgstr ""
-
-#: src/UI/components/VerifyNextIDDialog/index.tsx:237
-#~ msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
-#~ msgstr ""
-
-#: src/hooks/useOpenShareTxDialog.tsx:89
-#: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
+#: src/hooks/useOpenShareTxDialog.tsx
+#: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "Share"
 msgstr "공유"
 
-#: src/UI/components/UploadDropArea/index.tsx:128
-#~ msgid "Size limit: 10 MB"
-#~ msgstr "사이즈 한계: 10 MB"
-
-#: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx:26
+#: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
 msgstr "슬리피지 톨러런스"
 
-#: src/UI/components/TokenSecurity/index.tsx:93
+#: src/UI/components/TokenSecurity/index.tsx
 msgid "Spam"
 msgstr "스팸"
 
-#: src/hooks/useReportSpam.tsx:81
+#: src/hooks/useReportSpam.tsx
 msgid "Spam reported."
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx:92
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Success"
 msgstr "성공"
 
-#: src/hooks/useReportSpam.tsx:76
-#~ msgid "Successfully reported."
-#~ msgstr "신고 성공"
-
-#: src/UI/components/ChainBoundary/index.tsx:109
-#: src/UI/components/ChainBoundary/index.tsx:121
+#: src/UI/components/ChainBoundary/index.tsx
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Switch Network"
 msgstr "네트워크 변경"
 
-#: src/UI/components/ChainBoundary/index.tsx:204
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Switch to {0}"
 msgstr ""
 
-#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:179
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Tell friends what's happening..."
 msgstr ""
 
-#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:179
-#~ msgid "Tell selective friends what's happening..."
-#~ msgstr "지정된 친구들에게 무슨 일이 일어나고 있는지 말해요..."
-
-#: src/UI/components/AddCollectibles/index.tsx:307
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
 msgstr "컨트랙트 조소가 잘못되거나 월렛에 해당 수집품이 없습니다."
 
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:276
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "The following wallets are not installed or in conflict with others"
 msgstr ""
 
-#: src/UI/translate.ts:51
+#: src/UI/translate.ts
 msgid "The token approval revoked."
 msgstr ""
 
-#: src/UI/components/PluginEnableBoundary/index.tsx:39
-#~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
-#~ msgstr "앱 설정에서 이 기능이 해제되었습니다. 플러그인이 완전히 액세스할 수 있도록 설정합니다."
-
-#: src/UI/components/PluginEnableBoundary/index.tsx:39
+#: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "This function has been turned off in the App settings. Enable plugins to fully access."
 msgstr ""
 
-#: src/UI/components/ChainBoundary/index.tsx:190
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "This network is not supported yet."
 msgstr "해당 네트워크가 아직 지원하지 않습니다."
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx:117
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
 msgstr "Polygon 네트워크와 상호작용하기 위해서는 MATIC 토큰을 사용하여 가스비로 결제해야 하며, SmartPay를 통해 Polygon 네트워크에서 MASK 토큰으로 가스 요금을 결제할 수 있습니다."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:228
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
 msgstr "토큰"
 
-#: src/UI/components/AddCollectibles/index.tsx:280
-#~ msgid "Token ID separated by comma, e.g. 1223,1224,"
-#~ msgstr ""
-
-#: src/UI/components/AddCollectibles/index.tsx:280
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "Token ID should be separated by comma, e.g. 1223,1224,"
 msgstr ""
 
-#: src/UI/translate.ts:52
+#: src/UI/translate.ts
 msgid "Token unlocked"
 msgstr ""
 
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:118
-#: src/UI/components/FungibleCoinMarketTable/index.tsx:178
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
+#: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Total Supply"
 msgstr "총 공급량"
 
-#: src/hooks/useOpenShareTxDialog.tsx:81
+#: src/hooks/useOpenShareTxDialog.tsx
 msgid "Transaction"
 msgstr "거래"
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Transaction Confirmed"
 msgstr "거래 확인 완료"
 
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx:337
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Transaction cost"
 msgstr "거래 수수료"
 
-#: src/UI/translate.ts:53
+#: src/UI/translate.ts
 msgid "Transaction failed"
 msgstr ""
 
-#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Transaction Failed"
 msgstr "거래 실패"
 
-#: src/UI/translate.ts:55
+#: src/UI/translate.ts
 msgid "Transaction has been rejected!"
 msgstr ""
 
-#: src/UI/translate.ts:54
+#: src/UI/translate.ts
 msgid "Transaction submitted."
 msgstr ""
 
-#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:124
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
 msgstr "슬리피지 허용 범위 나무 낮으면 거래가 실패할 수 있습니다."
 
-#: src/UI/translate.ts:121
-#~ msgid "Transfer {0} NFT successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:151
+#: src/UI/translate.ts
 msgid "Transfer {0} NFT."
 msgstr ""
 
-#: src/UI/translate.ts:74
+#: src/UI/translate.ts
 msgid "Transfer NFT"
 msgstr ""
 
-#: src/UI/translate.ts:75
+#: src/UI/translate.ts
 msgid "Transfer Token"
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:120
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Unlisted"
 msgstr "Unlisted"
 
-#: src/hooks/useGasCurrencyMenu.tsx:96
+#: src/hooks/useGasCurrencyMenu.tsx
 msgid "Unlock"
 msgstr "언락"
 
-#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:165
+#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Unlock {0}"
 msgstr ""
 
-#: src/UI/translate.ts:123
-#~ msgid "Unlock {0} NFT contract successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:153
+#: src/UI/translate.ts
 msgid "Unlock {0} NFT contract."
 msgstr ""
 
-#: src/UI/translate.ts:125
-#~ msgid "Unlock {0} successfully"
-#~ msgstr ""
-
-#: src/UI/translate.ts:155
+#: src/UI/translate.ts
 msgid "Unlock {0}."
 msgstr ""
 
-#: src/UI/translate.ts:76
+#: src/UI/translate.ts
 msgid "Unlock NFT Contract"
 msgstr ""
 
-#: src/UI/translate.ts:56
+#: src/UI/translate.ts
 msgid "Unlock token"
 msgstr ""
 
-#: src/UI/translate.ts:77
+#: src/UI/translate.ts
 msgid "Unlock Token"
 msgstr ""
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
-#~ msgid "Unlocking {0}..."
-#~ msgstr "{0} 언락 중..."
-
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:61
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Unlocking {hasSymbolName}..."
 msgstr ""
 
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:65
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:104
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Unlocking ALL..."
 msgstr ""
 
-#: src/UI/components/SettingsBoard/GasOption.tsx:78
+#: src/UI/components/SettingsBoard/GasOption.tsx
 msgid "up to {0} Gwei"
 msgstr "최대 {0} Gwei"
 
-#: src/UI/components/WalletConnectedBoundary/index.tsx:88
+#: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Updating Gas Fee…"
 msgstr "가스비 업데이트 중..."
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:237
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
 msgstr ""
 
-#: src/UI/components/AssetsManagement/CollectibleItem.tsx:186
-#: src/UI/components/AssetsManagement/Collection.tsx:197
-#: src/UI/components/AssetsManagement/CollectionHeader.tsx:67
+#: src/UI/components/AssetsManagement/CollectibleItem.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Verified by {0}"
 msgstr ""
 
-#: src/UI/components/PersonaSelectPanel/index.tsx:190
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Verify {0}"
 msgstr ""
 
-#: src/UI/components/ConnectPersonaBoundary/index.tsx:102
-#~ msgid "Verify your Twitter ID"
-#~ msgstr "X ID 인증"
-
-#: src/UI/components/ConnectPersonaBoundary/index.tsx:102
+#: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
 msgstr ""
 
-#: src/UI/components/SocialAccountList/SocialListItem.tsx:233
+#: src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "View"
 msgstr "살펴보기"
 
-#: src/hooks/useOpenShareTxDialog.tsx:67
-#: src/UI/components/WalletStatusBox/index.tsx:187
+#: src/hooks/useOpenShareTxDialog.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
 msgid "View on Explorer"
 msgstr "Explorer에서 보기"
 
-#: src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx:45
+#: src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx
 msgid "Wallet Account"
 msgstr "월렛 계정"
 
-#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:77
+#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "WalletConnect"
 msgstr "WalletConnect"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx:266
-#: src/UI/components/VerifyNextIDDialog/index.tsx:279
+#: src/UI/components/VerifyNextIDDialog/index.tsx
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
 msgstr ""
 
-#: src/UI/components/PluginCardFrame/index.tsx:56
+#: src/UI/components/PluginCardFrame/index.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
 
-#: src/UI/components/CoinMetadataTable/index.tsx:104
-#: src/UI/components/CoinMetadataTable/index.tsx:274
+#: src/UI/components/CoinMetadataTable/index.tsx
+#: src/UI/components/CoinMetadataTable/index.tsx
 msgid "Website"
 msgstr "웹사이트"
 
-#: src/UI/translate.ts:157
+#: src/UI/translate.ts
 msgid "Withdraw {0} for savings."
 msgstr ""
 
-#: src/UI/translate.ts:127
-#~ msgid "Withdraw {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts:78
+#: src/UI/translate.ts
 msgid "Withdraw token"
 msgstr ""
 
-#: src/UI/components/ChainBoundary/index.tsx:155
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Wrong Network"
 msgstr "잘못된 네트워크"
 
-#: src/UI/modals/ConnectWalletModal/index.tsx:178
+#: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "You canceled the request."
 msgstr ""
 
-#: src/UI/translate.ts:130
-#~ msgid "You didn't approve {0} successfully. Please do not set spending cap to 0 and try it again."
-#~ msgstr ""
-
-#: src/UI/translate.ts:130
+#: src/UI/translate.ts
 msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
 msgstr ""
 
-#: src/UI/translate.ts:133
+#: src/UI/translate.ts
 msgid "You have donated {0} {1}"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:131
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "You may have {0}% less received with this level of slippage tolerance."
 msgstr "현재 슬리피지 허용 범위 안에 {0}% 적게 받을 수 있습니다."
 
-#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:147
+#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
 msgstr "{0} 에게 {1} 이용할 수 있는 스마트 컨트랙트 권한을 줘야 합니다. 다른 토큰을 이용할 때 이 작업을 다시 해야 합니다."
 
-#: src/UI/translate.ts:136
+#: src/UI/translate.ts
 msgid "You've approved {0} for {1}. If you want to revoke this token, please set spending cap amount to 0."
 msgstr ""
 
-#: src/hooks/useOpenShareTxDialog.tsx:84
+#: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
-
-#: src/hooks/useOpenShareTxDialog.tsx:84
-#~ msgid "Your transaction was confirmed!"
-#~ msgstr "해당 거래는 이미 확인되었습니다."

@@ -1,15 +1,5 @@
 {
     "messages": {
-        "8m48gD": [
-            [
-                "0",
-                "plural",
-                {
-                    "one": "This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.",
-                    "other": "These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams."
-                }
-            ]
-        ],
         "JGpseC": [
             ["0", "plural", { "one": "This domain is", "other": "These domains are" }],
             " currently on the Mask Network warning list which may include malicious entries, phishing or scams."

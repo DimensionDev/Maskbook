@@ -1,85 +1,73 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Traditional\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-TW\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/MaskBox/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 974\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:376
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "{boxStateMessage} ({0} {1}/Time)"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:330
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Active"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:260
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Articles"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:316
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "by"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:330
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Closed"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:264
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Details"
 msgstr ""
 
-#: src/SiteAdaptor/components/DrawDialog.tsx:279
+#: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Draw"
 msgstr ""
 
-#: src/SiteAdaptor/components/DrawDialog.tsx:278
+#: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Drawing"
 msgstr ""
 
-#: src/SiteAdaptor/components/DrawDialog.tsx:276
+#: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Insufficient balance"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:304
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Limit:"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:210
-#: src/SiteAdaptor/components/PreviewCard.tsx:235
+#: src/SiteAdaptor/components/PreviewCard.tsx
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Load failed"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:35
+#: src/SiteAdaptor/index.tsx
 msgid "MaskBox"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:55
+#: src/SiteAdaptor/index.tsx
 msgid "Professional multi-chain decentralized platform for launching NFT blind boxes."
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:55
-#~ msgid "Professional multi-chain decentralized platform for launching NFT mystery boxes."
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/PreviewCard.tsx:227
-#: src/SiteAdaptor/components/PreviewCard.tsx:252
+#: src/SiteAdaptor/components/PreviewCard.tsx
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Reload"
 msgstr ""
 
-#: src/SiteAdaptor/components/PreviewCard.tsx:294
+#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Solid:"
 msgstr ""

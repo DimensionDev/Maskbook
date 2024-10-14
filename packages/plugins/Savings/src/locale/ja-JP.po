@@ -1,157 +1,135 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:25\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Japanese\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Savings/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 986\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/WithdrawForm.tsx:173
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "{0} days"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx:289
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Amount"
 msgstr "量"
 
-#: src/SiteAdaptor/SavingsForm.tsx:318
-#: src/SiteAdaptor/SavingsTable/index.tsx:87
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "APR"
 msgstr "4月"
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:81
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Asset"
 msgstr "資産"
 
-#: src/SiteAdaptor/SavingsDialog.tsx:136
-#: src/SiteAdaptor/SavingsForm.tsx:279
-#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:106
+#: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
 msgid "Deposit"
 msgstr "入金"
 
-#: src/SiteAdaptor/SavingsForm.tsx:237
-#: src/SiteAdaptor/SavingsForm.tsx:249
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Deposit {0}"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx:241
-#: src/SiteAdaptor/SavingsForm.tsx:253
-#: src/SiteAdaptor/SavingsForm.tsx:269
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Done"
 msgstr "完了"
 
-#: src/SiteAdaptor/SavingsForm.tsx:146
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Enter an amount"
 msgstr "金額を入力"
 
-#: src/SiteAdaptor/SavingsForm.tsx:239
-#: src/SiteAdaptor/SavingsForm.tsx:251
-#: src/SiteAdaptor/SavingsForm.tsx:266
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Failed"
 msgstr "失敗しました"
 
-#: src/SiteAdaptor/SavingsForm.tsx:198
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Hi friends, I just deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx:201
-#: src/SiteAdaptor/WithdrawForm.tsx:125
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx:147
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
 msgstr "入力金額が最小金額以下です"
 
-#: src/SiteAdaptor/SavingsForm.tsx:154
-#~ msgid "Insufficient {0} balance"
-#~ msgstr ""
-
-#: src/SiteAdaptor/SavingsForm.tsx:150
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Insufficient ${0} balance"
 msgstr ""
 
-#: src/SiteAdaptor/WithdrawForm.tsx:160
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Lido Exchange Rate"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:107
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Loading"
 msgstr "読み込み中"
 
-#: src/SiteAdaptor/SavingsForm.tsx:193
-#: src/SiteAdaptor/WithdrawForm.tsx:117
-#~ msgid "masknetwork"
-#~ msgstr ""
-
-#: src/SiteAdaptor/WithdrawForm.tsx:145
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:125
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "No deposit protocols found."
 msgstr "入金プロトコルが見つかりません。"
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:98
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Operation"
 msgstr "オペレーション"
 
-#: src/SiteAdaptor/SavingsForm.tsx:238
-#: src/SiteAdaptor/SavingsForm.tsx:250
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Deposit"
 msgstr "入金処理中"
 
-#: src/SiteAdaptor/SavingsForm.tsx:265
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Withdrawal"
 msgstr "引き出し処理中"
 
-#: src/SiteAdaptor/SavingsForm.tsx:193
-#: src/SiteAdaptor/WithdrawForm.tsx:117
-#~ msgid "realMaskNetwork"
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:14
-#: src/SiteAdaptor/SavingsDialog.tsx:129
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/SavingsDialog.tsx
 msgid "Savings"
 msgstr "普通預金"
 
-#: src/SiteAdaptor/SavingsForm.tsx:262
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Swap {0}"
 msgstr ""
 
-#: src/SiteAdaptor/WithdrawForm.tsx:177
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
 msgstr ""
 
-#: src/SiteAdaptor/WithdrawForm.tsx:170
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Waiting time"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsTable/index.tsx:93
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Wallet"
 msgstr "ウォレット"
 
-#: src/SiteAdaptor/SavingsDialog.tsx:137
-#: src/SiteAdaptor/SavingsForm.tsx:279
-#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx:107
-#: src/SiteAdaptor/WithdrawForm.tsx:133
-#: src/SiteAdaptor/WithdrawForm.tsx:140
+#: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
 msgstr "出金"
 
-#: src/SiteAdaptor/SavingsForm.tsx:263
-#: src/SiteAdaptor/WithdrawForm.tsx:189
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
 msgstr ""

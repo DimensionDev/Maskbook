@@ -1,31 +1,19 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Transak/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1002\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/index.tsx:16
+#: src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp"
 msgstr "法币入金"
 
-#: src/SiteAdaptor/index.tsx:42
-#~ msgid "Fiat On-Ramp Aggregator on Twitter. Buy crypto in 60+ countries with Transak support."
-#~ msgstr "法币入金可支持在60多个国家内购买代币。"
-
-#: src/SiteAdaptor/index.tsx:42
+#: src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
 msgstr ""

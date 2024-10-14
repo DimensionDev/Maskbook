@@ -1,56 +1,48 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Traditional\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-TW\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/CyberConnect/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 960\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/index.tsx:46
+#: src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:45
+#: src/SiteAdaptor/index.tsx
 msgid "Decentralized social graph protocol for user-centric Web3."
 msgstr ""
 
-#: src/SiteAdaptor/ConnectButton.tsx:106
+#: src/SiteAdaptor/ConnectButton.tsx
 msgid "Follow Now"
 msgstr ""
 
-#: src/SiteAdaptor/Profile.tsx:191
+#: src/SiteAdaptor/Profile.tsx
 msgid "Followers"
 msgstr ""
 
-#: src/SiteAdaptor/Profile.tsx:186
+#: src/SiteAdaptor/Profile.tsx
 msgid "Followings"
 msgstr ""
 
-#: src/SiteAdaptor/FollowersPage.tsx:24
-#: src/SiteAdaptor/Profile.tsx:130
+#: src/SiteAdaptor/FollowersPage.tsx
+#: src/SiteAdaptor/Profile.tsx
 msgid "Load failed"
 msgstr ""
 
-#: src/SiteAdaptor/Profile.tsx:123
+#: src/SiteAdaptor/Profile.tsx
 msgid "No followers."
 msgstr ""
 
-#: src/SiteAdaptor/Profile.tsx:124
+#: src/SiteAdaptor/Profile.tsx
 msgid "No following friends."
 msgstr ""
 
-#: src/SiteAdaptor/ConnectButton.tsx:107
+#: src/SiteAdaptor/ConnectButton.tsx
 msgid "Unfollow"
 msgstr ""

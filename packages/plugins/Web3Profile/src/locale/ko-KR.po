@@ -1,177 +1,161 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ko\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Korean\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1006\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:349
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "<0>{0}</0> Followers <1>{1}</1> Following"
 msgstr ""
 
-#: src/SiteAdaptor/components/ProfileCard.tsx:164
+#: src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
 msgstr "월렛 추가"
 
-#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx:94
-#: src/SiteAdaptor/components/ProfilePopup.tsx:213
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/components/ProfilePopup.tsx
 msgid "Change"
 msgstr "변경"
 
-#: src/SiteAdaptor/index.tsx:61
+#: src/SiteAdaptor/index.tsx
 msgid "Choose and show your Web3 footprints on X."
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:61
-#~ msgid "Choose and showcase your Web3 footprints on Twitter."
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Confirm"
 msgstr "확인"
 
-#: src/SiteAdaptor/components/ProfileCard.tsx:192
+#: src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Current"
 msgstr "현재"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:300
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Current wallet does not support to interact with Lens protocol."
 msgstr "현재 월렛은 Lens protocol과의 상호작용을 지원하지 않습니다."
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:126
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Failed to set up Web3 Profile wallets. Please try again."
 msgstr "Web3 Profile 월렛의 설정이 실패합니다. 다시 시도하세요."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:422
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:295
-#: src/SiteAdaptor/components/Lens/LensList.tsx:205
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/LensList.tsx
 msgid "Follow"
 msgstr "팔로우"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:289
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow for {0} {1}"
 msgstr ""
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts:168
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts
 msgid "Follow Lens handle"
 msgstr "Lens 핸들 팔로우"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:284
-#: src/SiteAdaptor/components/Lens/LensList.tsx:204
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/LensList.tsx
 msgid "Following"
 msgstr "팔로잉"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:332
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens"
 msgstr "Lens"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Follow"
 msgstr "Lens 팔로우"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:232
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Unfollow"
 msgstr "Lens 언팔로우"
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts:171
-#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts:152
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Network error, try again"
 msgstr "네트워크 오류입니다. 다시 시도하세요."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:312
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "No enough balance to complete follow process."
 msgstr "팔로우 진행에 대한 잔액이 부족합니다."
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:162
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
 msgstr "확인된 계정이 없습니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:302
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Only holding lens handle can follow."
 msgstr "Lens 핸들을 보유하는 경우에 팔로우가 가능합니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:237
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
 msgstr "이전의 팔로우 트랜잭션이 진행하고 있습니다. 다시 시도 하시길 바랍니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:236
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous unfollow transaction is in processing, please wait and try again."
 msgstr "이전의 언팔로우 트랜잭션이 진행하고 있습니다. 다시 시도 하시길 바랍니다."
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:124
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Save failed"
 msgstr "저장 실패"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-#~ msgid "Save successfully"
-#~ msgstr "저장 성공"
-
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Saved"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "Web3 발자국을 표시하고 각 소셜 미디어 계정에 팁을 받을 수 있는 지갑을 설정합니다."
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:120
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up Web3 Profile wallets successfully."
 msgstr "Web3 Profile 설정 성공"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:399
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
 msgstr "Polygon으로 전환하고 팔로우합니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:316
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr "이 월렛에서 lens가 없어서 팔로우나 언팔로우를 할 수 없습니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:286
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This profile can not be followed."
 msgstr "이 프로필을 팔로우할 수 없습니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:314
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This user has banned follow function."
 msgstr "해당 유저가 팔로우 기능을 취소했습니다."
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:284
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
 msgstr "언팔로우"
 
-#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts:149
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Unfollow lens handle"
 msgstr "Lens 핸들 언팔로우"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:378
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:384
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unlock {0} {1} and follow"
 msgstr "{0}{1} 언락하고 팔로우하기"
 
-#: src/SiteAdaptor/components/Lens/LensList.tsx:202
+#: src/SiteAdaptor/components/Lens/LensList.tsx
 msgid "View"
 msgstr "살펴보기"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx:364
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:146
-#: src/SiteAdaptor/index.tsx:29
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"

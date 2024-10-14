@@ -1,128 +1,113 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: en-US\n"
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
+"Language: \n"
 "Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/index.tsx:35
+#: src/SiteAdaptor/index.tsx
 msgid "Artblocks"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:30
+#: src/SiteAdaptor/index.tsx
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:131
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Blockchain:"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:151
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:126
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Chain"
 msgstr ""
 
-#: src/SiteAdaptor/Collectible.tsx:70
+#: src/SiteAdaptor/Collectible.tsx
 msgid "Collection"
 msgstr ""
 
-#: src/SiteAdaptor/ActionBar.tsx:30
+#: src/SiteAdaptor/ActionBar.tsx
 msgid "Completed"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:137
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Contract:"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:70
-#~ msgid "Created by"
-#~ msgstr ""
-
-#: src/SiteAdaptor/DetailsView.tsx:70
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Created by <0>{0}</0>• <1>Website</1>"
 msgstr ""
 
-#: src/SiteAdaptor/Collectible.tsx:71
+#: src/SiteAdaptor/Collectible.tsx
 msgid "Details"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:77
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:80
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:91
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Infos"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:111
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Insufficient balance"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:118
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Library:"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:111
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "License:"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:104
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Minted:"
 msgstr ""
 
-#: src/SiteAdaptor/ActionBar.tsx:31
+#: src/SiteAdaptor/ActionBar.tsx
 msgid "Paused"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:112
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Please check ToS document"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:135
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Price per mint"
 msgstr ""
 
-#: src/SiteAdaptor/DetailsView.tsx:95
+#: src/SiteAdaptor/DetailsView.tsx
 msgid "Price:"
 msgstr ""
 
-#: src/SiteAdaptor/ActionBar.tsx:32
-#: src/SiteAdaptor/PurchaseDialog.tsx:125
-#: src/SiteAdaptor/PurchaseDialog.tsx:130
+#: src/SiteAdaptor/ActionBar.tsx
+#: src/SiteAdaptor/PurchaseDialog.tsx
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchase"
 msgstr ""
 
-#: src/SiteAdaptor/PurchaseDialog.tsx:125
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchasing...."
 msgstr ""
 
-#: src/SiteAdaptor/Collectible.tsx:65
+#: src/SiteAdaptor/Collectible.tsx
 msgid "Something went wrong!"
 msgstr ""
 
-#: src/SiteAdaptor/ActionBar.tsx:29
+#: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
-
-#: src/SiteAdaptor/ActionBar.tsx:29
-#~ msgid "This project is no more active"
-#~ msgstr ""
-
-#: src/SiteAdaptor/DetailsView.tsx:80
-#~ msgid "Website"
-#~ msgstr ""

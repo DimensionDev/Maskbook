@@ -1,71 +1,63 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 09:59\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Japanese\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Gitcoin/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 968\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/PreviewCard.tsx:308
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "About"
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:229
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "contributions"
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:283
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "Created on: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:55
+#: src/SiteAdaptor/index.tsx
 msgid "Display specific information of Gitcoin projects, donate to a project directly on social media."
 msgstr "Gitcoinプロジェクトの具体的な情報を表示し、ソーシャルメディア上で直接プロジェクトに寄付してください。"
 
-#: src/SiteAdaptor/PreviewCard.tsx:225
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "funding received"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:59
+#: src/SiteAdaptor/index.tsx
 msgid "Gitcoin"
 msgstr "Gitcoin"
 
-#: src/SiteAdaptor/PreviewCard.tsx:324
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "No past rounds found."
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:301
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "Past rounds"
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:300
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "Project details"
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:237
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "rounds"
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:176
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "Something went wrong."
 msgstr "問題が発生しました"
 
-#: src/SiteAdaptor/PreviewCard.tsx:233
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "unique contributors"
 msgstr ""
 
-#: src/SiteAdaptor/PreviewCard.tsx:258
+#: src/SiteAdaptor/PreviewCard.tsx
 msgid "View"
 msgstr ""

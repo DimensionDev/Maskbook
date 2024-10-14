@@ -1,208 +1,168 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:25\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Japanese\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/GoPlusSecurity/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 970\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:196
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
 msgstr "{0} 注意要因"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:195
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
 msgstr "{0} 注意要因"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:186
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
 msgstr "{0} リスク要因"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:185
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
 msgstr "{0} リスク要因"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:102
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "<0>Dear Users,</0><1>Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.</1>"
 msgstr ""
 
-#: src/SiteAdaptor/components/Footer.tsx:12
+#: src/SiteAdaptor/components/Footer.tsx
 msgid "<0>Powered by</0><1>Go+</1>"
 msgstr ""
 
-#: src/SiteAdaptor/components/NotFound.tsx:8
+#: src/SiteAdaptor/components/NotFound.tsx
 msgid "<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"
 msgstr ""
 
-#: src/SiteAdaptor/components/NotFound.tsx:15
-#~ msgid "1. Make sure network is working;"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/NotFound.tsx:18
-#~ msgid "2. Make sure the chain network or token address is correct;"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/NotFound.tsx:21
-#~ msgid "3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later."
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:74
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:133
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/SiteAdaptor/CheckSecurityDialog.tsx:75
-#: src/SiteAdaptor/index.tsx:22
+#: src/SiteAdaptor/CheckSecurityDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Check Security"
 msgstr "セキュリティを確認"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:106
-#~ msgid "Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction."
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:47
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Close [Check Security]?"
 msgstr "[セキュリティチェック] を閉じますか？"
 
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:71
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Confirm"
 msgstr "確認"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:93
-#: src/UI/TokenSecurityBoundary.tsx:45
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
+#: src/UI/TokenSecurityBoundary.tsx
 msgid "Confirm swap risk"
 msgstr "スワップリスクの確認"
 
-#: src/SiteAdaptor/components/TokenPanel.tsx:79
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Creator"
 msgstr "コントラクト作成者"
 
-#: src/SiteAdaptor/CheckSecurityDialog.tsx:56
+#: src/SiteAdaptor/CheckSecurityDialog.tsx
 msgid "Contract Not Found"
 msgstr "コントラクトが見つかりません"
 
-#: src/SiteAdaptor/components/TokenPanel.tsx:105
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Owner"
 msgstr "コントラクト所有者"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:114
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Copy Address"
 msgstr "アドレスをコピー"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:103
-#~ msgid "Dear Users,"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/Footer.tsx:24
-#~ msgid "Go+"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/SecurityPanel.tsx:139
-#: src/SiteAdaptor/constants.tsx:23
+#: src/SiteAdaptor/components/SecurityPanel.tsx
+#: src/SiteAdaptor/constants.tsx
 msgid "High Risk"
 msgstr "高リスク"
 
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:55
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
 msgstr "「セキュリティチェック」を閉じますと、不審なブラックリストに登録され、不正な契約書やアドレスとやりとりする際に、セキュリティに関する通知が表示されなくなります。"
 
-#: src/SiteAdaptor/constants.tsx:36
+#: src/SiteAdaptor/constants.tsx
 msgid "Low Risk"
 msgstr ""
 
-#: src/SiteAdaptor/components/TokenPanel.tsx:137
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Market Cap"
 msgstr "時価総額"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:140
-#: src/SiteAdaptor/constants.tsx:29
+#: src/SiteAdaptor/components/SecurityPanel.tsx
+#: src/SiteAdaptor/constants.tsx
 msgid "Medium Risk"
 msgstr "中程度のリスク"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:159
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "More Details"
 msgstr "詳細情報"
 
-#: src/SiteAdaptor/components/DefaultPlaceholder.tsx:13
+#: src/SiteAdaptor/components/DefaultPlaceholder.tsx
 msgid "Note: Scams detections might not be 100% guaranteed."
 msgstr "注意: 詐欺行為の検出は100%保証されない場合があります."
 
-#: src/SiteAdaptor/components/SearchBox.tsx:115
+#: src/SiteAdaptor/components/SearchBox.tsx
 msgid "Please enter token contract address."
 msgstr "トークンコントラクトのアドレスを入力してください。"
 
-#: src/SiteAdaptor/components/Footer.tsx:17
-#~ msgid "Powered by"
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:46
+#: src/SiteAdaptor/index.tsx
 msgid "Provide you with fast, reliable and convenient security services."
 msgstr ""
 
-#: src/SiteAdaptor/components/NotFound.tsx:9
-#~ msgid "Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:98
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Risk Warning"
 msgstr "リスク警告"
 
-#: src/SiteAdaptor/components/SearchBox.tsx:138
+#: src/SiteAdaptor/components/SearchBox.tsx
 msgid "Search"
 msgstr "検索"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:177
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Security Detection"
 msgstr "セキュリティの検出"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:136
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Swap Anyway"
 msgstr "とにかくスワップ"
 
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:50
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
 msgstr "format@@0 dAppは、迅速で信頼性の高い便利なWeb3セキュリティサービスを提供します。"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:209
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "This token has no risky or attention factors."
 msgstr "このトークンにはリスクや注意すべき要因はありません。"
 
-#: src/SiteAdaptor/components/TokenPanel.tsx:58
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Contract Address"
 msgstr "トークンコントラクトアドレス"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:150
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Token info"
 msgstr "トークン情報"
 
-#: src/SiteAdaptor/components/TokenPanel.tsx:49
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Name"
 msgstr "トークン名"
 
-#: src/SiteAdaptor/components/TokenPanel.tsx:129
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Total Supply"
 msgstr "総供給"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx:107
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Unnamed"
 msgstr "名前なし"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx:124
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
 
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx:61
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""

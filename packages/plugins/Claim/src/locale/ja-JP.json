@@ -26,7 +26,6 @@
         "3cw8FQ": "エアドロップに参加するには、トランザクションコストをカバーするために、指定されたネットワーク上のウォレットに十分なネイティブトークンが必要です。",
         "C3Wgzy": ["You have claimed ", ["0"], " $ARB."],
         "wxZZWc": "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
-        "ayf6mz": "You’re connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet.",
         "gWcGl/": "あなたのウォレットは取引をキャンセルしました。"
     }
 }

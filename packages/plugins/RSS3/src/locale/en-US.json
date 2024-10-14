@@ -1,25 +1,9 @@
 {
     "messages": {
         "Koz2Rg": [["0", "plural", { "one": "Action", "other": "Actions" }]],
-        "xYxQCZ": [["0"], " ", ["1"]],
         "2EUnBM": [["0"], " Networks"],
-        "IHfg//": "<0/> minted <1/>",
         "f54thq": ["<0/> minted", ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }]],
         "CTSEx8": ["<0/> publish a post on ", ["0"]],
-        "3Nychn": [
-            "<0>",
-            ["user"],
-            "</0> ",
-            ["0", "select", { "send": "sent", "claim": "claimed" }],
-            " ",
-            ["1", "select", { "verbose": ["<1>", ["2"], "</1>"], "simple": "<2>an NFT</2>" }],
-            " ",
-            ["3", "select", { "send": "to", "claim": "from" }],
-            " <3>",
-            ["formattedAddress"],
-            "</3>",
-            ["4", "select", { "cost": ["for ", ["5"], " ", ["6"]], "free": "" }]
-        ],
         "L5kJP9": [
             "<0>",
             ["user"],
@@ -41,8 +25,6 @@
             ["symbolName"],
             "</3>"
         ],
-        "Cjk03s": ["<0>", ["user"], "</0> minted <1>", ["0"], "</1> for <2>", ["value"], " ", ["symbolName"], "</2>"],
-        "1mm+OF": ["<0>", ["user"], "</0> minted <1>an NFT</1> for <2>", ["value"], " ", ["symbolName"], "</2>"],
         "ONoxwH": [
             "<0>",
             ["user"],
@@ -53,26 +35,6 @@
             " ",
             ["costSymbol"],
             "</3>"
-        ],
-        "9F/Bmr": [
-            "<0>",
-            ["user"],
-            "</0> registered <1>",
-            ["0"],
-            "</1> for <2>",
-            ["costValue"],
-            " ",
-            ["costSymbol"],
-            "</2>"
-        ],
-        "39hder": [
-            "<0>",
-            ["user"],
-            "</0> registered <1>an ENS</1> for <2>",
-            ["costValue"],
-            " ",
-            ["costSymbol"],
-            "</2>"
         ],
         "jNiKlW": [
             "<0>",
@@ -101,58 +63,6 @@
             "</4> on <5>",
             ["3"],
             "</5>"
-        ],
-        "eNctfB": [
-            "<0>",
-            ["user"],
-            "</0> sold <1>",
-            ["0"],
-            "</1> to <2>",
-            ["recipient"],
-            "</2> for <3>",
-            ["1"],
-            " ",
-            ["symbolName"],
-            "</3>"
-        ],
-        "Sweufm": [
-            "<0>",
-            ["user"],
-            "</0> sold <1>",
-            ["0"],
-            "</1> to <2>",
-            ["recipient"],
-            "</2> for <3>",
-            ["1"],
-            " ",
-            ["symbolName"],
-            "</3> on <4>",
-            ["2"],
-            "</4>"
-        ],
-        "NX+qWG": [
-            "<0>",
-            ["user"],
-            "</0> sold <1>an NFT</1> to <2>",
-            ["recipient"],
-            "</2> for <3>",
-            ["0"],
-            " ",
-            ["symbolName"],
-            "</3>"
-        ],
-        "Q5Ak9U": [
-            "<0>",
-            ["user"],
-            "</0> sold <1>an NFT</1> to <2>",
-            ["recipient"],
-            "</2> for <3>",
-            ["0"],
-            " ",
-            ["symbolName"],
-            "</3> on <4>",
-            ["1"],
-            "</4>"
         ],
         "HNF104": [
             "<0>",

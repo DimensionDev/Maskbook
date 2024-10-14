@@ -1,102 +1,91 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: en-US\n"
-"Project-Id-Version: \n"
-"Report-Msgid-Bugs-To: \n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
+"Language: \n"
 "Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/PetSetDialog.tsx:259
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "(unverified)"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:369
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
 msgstr ""
 
-#: src/hooks/useEssay.ts:40
-#~ msgid "Click the Mask icon in the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
-#~ msgstr ""
-
-#: src/hooks/useEssay.ts:40
+#: src/hooks/useEssay.ts
 msgid "Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:395
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Confirm"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:42
+#: src/SiteAdaptor/index.tsx
 msgid "Discover the infinite possibilities of #NFTs."
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:348
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Greeting message"
 msgstr ""
 
-#: src/SiteAdaptor/PetShareDialog.tsx:45
+#: src/SiteAdaptor/PetShareDialog.tsx
 msgid ""
 "I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
 "#mask_io #nonfungiblefriends\n"
 "⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
 msgstr ""
 
-#: src/hooks/useEssay.ts:38
+#: src/hooks/useEssay.ts
 msgid "I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:269
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "NFT Contract"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:18
+#: src/SiteAdaptor/index.tsx
 msgid "Non-F Friends"
 msgstr ""
 
-#: src/SiteAdaptor/PetDialog.tsx:45
+#: src/SiteAdaptor/PetDialog.tsx
 msgid "Non-Fungible Friends"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:348
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Optional, 100 characters max."
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:370
-#~ msgid "Powered by"
-#~ msgstr ""
-
-#: src/SiteAdaptor/PreviewBox.tsx:161
+#: src/SiteAdaptor/PreviewBox.tsx
 msgid "Preview"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:176
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Setting failed, please try later"
 msgstr ""
 
-#: src/SiteAdaptor/PetShareDialog.tsx:60
+#: src/SiteAdaptor/PetShareDialog.tsx
 msgid "Share"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:365
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Show NFT friends on the profile page."
 msgstr ""
 
-#: src/SiteAdaptor/PetDialog.tsx:45
+#: src/SiteAdaptor/PetDialog.tsx
 msgid "Successful"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:316
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Token ID"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx:402
-#: src/SiteAdaptor/PetShareDialog.tsx:56
+#: src/SiteAdaptor/PetSetDialog.tsx
+#: src/SiteAdaptor/PetShareDialog.tsx
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr ""

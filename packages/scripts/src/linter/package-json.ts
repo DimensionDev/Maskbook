@@ -27,6 +27,10 @@ export async function lintPackageJson() {
                                 'zh-TW': 'zh-CN',
                                 default: 'en-US',
                             },
+                            formatOptions: {
+                                origins: true,
+                                lineNumbers: false,
+                            },
                         }
                         const target = { ...json.lingui }
                         const old = target.catalogs

@@ -30,14 +30,6 @@
     "date-fns": "^3.6.0"
   },
   "lingui": {
-    "catalogs": [
-      {
-        "path": "src/locale/{locale}",
-        "include": [
-          "src"
-        ]
-      }
-    ],
     "compileNamespace": "json",
     "locales": [
       "en-US",
@@ -50,6 +42,18 @@
       "zh-CN": "zh-TW",
       "zh-TW": "zh-CN",
       "default": "en-US"
-    }
+    },
+    "formatOptions": {
+      "origins": true,
+      "lineNumbers": false
+    },
+    "catalogs": [
+      {
+        "path": "src/locale/{locale}",
+        "include": [
+          "src"
+        ]
+      }
+    ]
   }
 }

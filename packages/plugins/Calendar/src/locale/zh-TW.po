@@ -1,74 +1,58 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Traditional\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-TW\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Calendar/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 952\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/Footer.tsx:95
-#: src/SiteAdaptor/index.tsx:23
+#: src/SiteAdaptor/components/Footer.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Calendar"
 msgstr ""
 
-#: src/SiteAdaptor/components/NFTList.tsx:216
+#: src/SiteAdaptor/components/NFTList.tsx
 msgid "Date"
 msgstr ""
 
-#: src/SiteAdaptor/CalendarContent.tsx:85
+#: src/SiteAdaptor/CalendarContent.tsx
 msgid "Events"
 msgstr ""
 
-#: src/SiteAdaptor/components/CountDownTimer.tsx:58
+#: src/SiteAdaptor/components/CountDownTimer.tsx
 msgid "Expired"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:9
-#~ msgid "Highly integrated Web3 news and events on Twitter, providing information on tokens, NFTs, AMAs, and regulatory events."
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:9
+#: src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
 msgstr ""
 
-#: src/SiteAdaptor/CalendarContent.tsx:84
+#: src/SiteAdaptor/CalendarContent.tsx
 msgid "News"
 msgstr ""
 
-#: src/SiteAdaptor/CalendarContent.tsx:86
+#: src/SiteAdaptor/CalendarContent.tsx
 msgid "NFTs"
 msgstr ""
 
-#: src/SiteAdaptor/components/EventList.tsx:163
-#: src/SiteAdaptor/components/NewsList.tsx:170
-#: src/SiteAdaptor/components/NFTList.tsx:229
+#: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
+#: src/SiteAdaptor/components/NFTList.tsx
 msgid "No content for the last two weeks."
 msgstr ""
 
-#: src/SiteAdaptor/components/Footer.tsx:100
-#~ msgid "Powered By"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/Footer.tsx:100
+#: src/SiteAdaptor/components/Footer.tsx
 msgid "Powered By {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/NFTList.tsx:208
+#: src/SiteAdaptor/components/NFTList.tsx
 msgid "Price"
 msgstr ""
 
-#: src/SiteAdaptor/components/NFTList.tsx:200
+#: src/SiteAdaptor/components/NFTList.tsx
 msgid "Total"
 msgstr ""

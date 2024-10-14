@@ -17,20 +17,9 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 990\n"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx:52
-#~ msgid "{0, plural, one {This domain is currently on the Mask Network warning list which may include malicious entries, phishing or scams.} other {These domains are currently on the Mask Network warning list which may include malicious entries, phishing or scams.}}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/PreviewCard.tsx:52
 msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
 msgstr "crwdns32320:00={0}crwdne32320:0"
-
-#: src/SiteAdaptor/index.tsx:23
 msgid "Detecting whether user-published crypto websites are risky or malicious. Help to save your digital assets."
 msgstr "crwdns29222:0crwdne29222:0"
-
-#: src/SiteAdaptor/index.tsx:21
 msgid "Safety Warning"
 msgstr "crwdns29224:0crwdne29224:0"
-

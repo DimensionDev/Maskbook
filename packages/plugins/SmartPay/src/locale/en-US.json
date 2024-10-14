@@ -1,47 +1,22 @@
 {
     "messages": {
-        "lclZhh": [
-            [
-                "value",
-                "plural",
-                {
-                    "one": ["The Twitter account above remains ", "#", " time to create SmartPay Wallet."],
-                    "other": ["The Twitter account above remains ", "#", " times to create SmartPay Wallet."]
-                }
-            ]
-        ],
-        "dw7gO0": [
-            [
-                "value",
-                "plural",
-                {
-                    "one": ["The X account above remains ", "#", " time to create SmartPay Wallet."],
-                    "other": ["The X account above remains ", "#", " times to create SmartPay Wallet."]
-                }
-            ]
-        ],
         "y6lE0k": "<0>Your smart contract wallet is only deployed on Polygon Network for now. Please do not receive funds on other chains with the same address.</0> We will support more chains in the future.",
         "m8Ds0H": "Add SmartPay Wallet",
-        "/829fA": "Allow Mask as gas",
         "sKW6CH": "Allow Mask be used as gas",
         "tcHpvG": "Change Owner",
         "Gi/hb0": "Click <0>here</0> and fill the SmartPay Wallet whitelist application form.",
         "b+/CRg": ["Congratulation! You've deployed SmartPay Wallet ", ["0"], "."],
-        "BRhJyf": ["Congratulation! You’ve deployed SmartPay Wallet ", ["0"], "."],
         "hYgDIe": "Create",
         "I4rME/": "Create a new Mask wallet in Pop-up.",
         "v5lIes": "Create a New Persona",
         "74cj7m": "Create a new Persona in Pop-up.",
         "S0CsaV": "Create a New Wallet",
-        "L9UK9K": "Create a SmartPay Wallet with your Twitter account.",
         "hSJPnE": "Create a SmartPay Wallet with your X account.",
         "7/e1up": "Create SmartPay Wallet",
-        "ighSWB": "Created successfully!",
         "715qtO": "Current Management account",
         "GLUC2q": "Deploy",
         "DPfwMq": "Done",
         "QjN6Ob": "Free gas experience in Mask Network's dApps like Lucky Drop and Tips.",
-        "D88yeQ": "Free gas experience in Mask Network’s dApps like Lucky Drop and Tips.",
         "yQE2r9": "Loading",
         "If2v4h": "Lucky Drop",
         "YwhjRx": "Manage Account",
@@ -78,7 +53,6 @@
         "amF6Yq": "Upgradeability",
         "5KP2UY": "User cancelled the process.",
         "zgo0BR": "User need to deploy the SmartPay Wallet on Polygon Network before using it for blockchain interaction. Wallet that has not been deployed can receive assets, but cannot send any transactions.",
-        "Mkyh69": "Users can use SmartPay Wallet (free gas fee and private key change) only on Polygon Network at the moment.",
         "l3e2pF": "Users can use SmartPay Wallet (no gas fee and private key change) only on Polygon Network at the moment.",
         "jXHtqK": "Waiting for user signature",
         "w2vrYo": "Wallet created!",

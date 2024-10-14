@@ -17,251 +17,119 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1000\n"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:333
 msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
 msgstr "crwdns28166:0gasOptionType={gasOptionType}crwdne28166:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:123
 msgid "{mins}min"
 msgstr "crwdns28168:0{mins}crwdne28168:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:121
 msgid "{seconds}sec"
 msgstr "crwdns28170:0{seconds}crwdne28170:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:236
-#~ msgid "<0>Powered by<1/></0><2>OKX</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:309
 msgid "Aggregator"
 msgstr "crwdns28172:0crwdne28172:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:454
 msgid "Approving"
 msgstr "crwdns28174:0crwdne28174:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:250
 msgid "Average"
 msgstr "crwdns28176:0crwdne28176:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:350
 msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr "crwdns28178:0{MIN_BASE_FEE}crwdne28178:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:363
 msgid "Check on Explorer"
 msgstr "crwdns28180:0crwdne28180:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:453
 msgid "Checking Approve"
 msgstr "crwdns28182:0crwdne28182:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:244
 msgid "Complete"
 msgstr "crwdns28184:0crwdne28184:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:430
 msgid "Confirm"
 msgstr "crwdns28186:0crwdne28186:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:14
 msgid "Confirm swap"
 msgstr "crwdns28188:0crwdne28188:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:455
 msgid "Confirm Swap"
 msgstr "crwdns28190:0crwdne28190:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:324
 msgid "Custom"
 msgstr "crwdns28192:0crwdne28192:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:369
 msgid "Data"
 msgstr "crwdns28194:0crwdne28194:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:320
 msgid "Date"
 msgstr "crwdns28196:0crwdne28196:0"
-
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:130
 msgid "Dex/Est received ({0})"
 msgstr "crwdns28198:0{0}crwdne28198:0"
-
-#: src/SiteAdaptor/trader/hooks/useSwappable.ts:10
 msgid "Enter an Amount"
 msgstr "crwdns28200:0crwdne28200:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:12
-#: src/SiteAdaptor/components/RouterDialog.tsx:24
 msgid "Exchange"
 msgstr "crwdns28202:0crwdne28202:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:250
 msgid "Failed"
 msgstr "crwdns28204:0crwdne28204:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:284
 msgid "Fast"
 msgstr "crwdns28206:0crwdne28206:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:261
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:195
-#: src/SiteAdaptor/trader/views/Transaction.tsx:257
 msgid "From"
 msgstr "crwdns28208:0crwdne28208:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:399
 msgid "Gas Limit"
 msgstr "crwdns28210:0crwdne28210:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:382
 msgid "Gas Price"
 msgstr "crwdns28212:0crwdne28212:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:13
 msgid "History"
 msgstr "crwdns28214:0crwdne28214:0"
-
-#: src/SiteAdaptor/trader/hooks/useSwappable.ts:15
 msgid "Insufficient {symbol} Balance"
 msgstr "crwdns28216:0{symbol}crwdne28216:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:347
 msgid "Max base fee"
 msgstr "crwdns28218:0crwdne28218:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:20
-#: src/SiteAdaptor/trader/views/Confirm.tsx:320
 msgid "Network fee"
 msgstr "crwdns28220:0crwdne28220:0"
-
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:152
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr "crwdns28222:0crwdne28222:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:360
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:139
 msgid "Powered by"
 msgstr "crwdns28224:0crwdne28224:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:365
 msgid "Priority fee"
 msgstr "crwdns28226:0crwdne28226:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:384
 msgid "Quote expired. Update to receive a new quote."
 msgstr "crwdns28228:0crwdne28228:0"
-
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:128
 msgid "Quote route"
 msgstr "crwdns28230:0crwdne28230:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:17
 msgid "Quote Route"
 msgstr "crwdns28232:0crwdne28232:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:314
-#: src/SiteAdaptor/trader/views/Transaction.tsx:338
 msgid "Rate"
 msgstr "crwdns28234:0crwdne28234:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:347
 msgid "Select liquidity"
 msgstr "crwdns28236:0crwdne28236:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:15
 msgid "Select Liquidity"
 msgstr "crwdns28238:0crwdne28238:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:452
 msgid "Sending"
 msgstr "crwdns28240:0crwdne28240:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:345
 msgid "Sending address"
 msgstr "crwdns28242:0crwdne28242:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:16
-#: src/SiteAdaptor/trader/views/Swap/Quote.tsx:105
 msgid "Slippage"
 msgstr "crwdns28244:0crwdne28244:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:212
 msgid "Slow"
 msgstr "crwdns28246:0crwdne28246:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:406
-#: src/SiteAdaptor/trader/views/Confirm.tsx:412
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:345
-#: src/SiteAdaptor/trader/views/Transaction.tsx:315
 msgid "Swap"
 msgstr "crwdns28248:0crwdne28248:0"
-
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:345
 msgid "Swap anyway"
 msgstr "crwdns28250:0crwdne28250:0"
-
-#: src/SiteAdaptor/trader/contexts/SwapProvider.tsx:99
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr "crwdns28252:0crwdne28252:0"
-
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:404
 msgid "The custom amount entered may be higher than the required network fee."
 msgstr "crwdns28254:0crwdne28254:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:235
 msgid "The swap is in progress. You can check its status in History after exiting this page."
 msgstr "crwdns28256:0crwdne28256:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:323
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr "crwdns28258:0crwdne28258:0"
-
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:135
 msgid "This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee."
 msgstr "crwdns28260:0crwdne28260:0"
-
-#: src/SiteAdaptor/trader/views/Swap/index.tsx:330
 msgid "This swap isn’t supported"
 msgstr "crwdns28262:0crwdne28262:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:283
-#: src/SiteAdaptor/trader/views/Transaction.tsx:283
 msgid "To"
 msgstr "crwdns28264:0crwdne28264:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:306
 msgid "Trading mode"
 msgstr "crwdns28266:0crwdne28266:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:18
 msgid "Trading Route"
 msgstr "crwdns28268:0crwdne28268:0"
-
-#: src/SiteAdaptor/components/RouterDialog.tsx:21
 msgid "Transaction Details"
 msgstr "crwdns28270:0crwdne28270:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:275
 msgid "Transaction in progress. Thank you for your patience."
 msgstr "crwdns28272:0crwdne28272:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:405
 msgid "Transaction rejected"
 msgstr "crwdns28274:0crwdne28274:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:411
 msgid "Transaction submitted."
 msgstr "crwdns28276:0crwdne28276:0"
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx:312
 msgid "Transaction type"
 msgstr "crwdns28278:0crwdne28278:0"
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx:395
 msgid "Update Quote"
 msgstr "crwdns28280:0crwdne28280:0"
-

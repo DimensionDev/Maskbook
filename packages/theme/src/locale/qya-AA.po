@@ -17,4 +17,3 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/theme/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1014\n"
-

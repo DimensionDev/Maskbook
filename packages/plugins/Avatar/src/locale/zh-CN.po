@@ -1,128 +1,112 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:24\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 950\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:227
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Add Collectibles"
 msgstr "添加 NFT"
 
-#: src/Application/UploadAvatarDialog.tsx:148
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Cancel"
 msgstr "取消"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:177
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Change"
 msgstr "切换"
 
-#: src/Application/NFTListDialog.tsx:245
+#: src/Application/NFTListDialog.tsx
 msgid "Coming soon"
 msgstr ""
 
-#: src/Application/PersonaPage.tsx:75
+#: src/Application/PersonaPage.tsx
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr "通过连接社交账户自定义NFT体验。享受具有 Web3 氛围的 Web2 。"
 
-#: src/Application/NFTListDialog.tsx:117
-#~ msgid "Download image error"
-#~ msgstr ""
-
-#: src/Application/RouterDialog.tsx:35
+#: src/Application/RouterDialog.tsx
 msgid "Edit Profile"
 msgstr "编辑个人资料"
 
-#: src/Application/NFTListDialog.tsx:117
+#: src/Application/NFTListDialog.tsx
 msgid "Failed to download image"
 msgstr ""
 
-#: src/SiteAdaptor/NFTBadge.tsx:42
+#: src/SiteAdaptor/NFTBadge.tsx
 msgid "Loading..."
 msgstr "加载中..."
 
-#: src/SiteAdaptor/NFTAvatar.tsx:166
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "NFT Avatar Setting"
 msgstr "头像设置"
 
-#: src/Application/RouterDialog.tsx:35
-#: src/SiteAdaptor/NFTAvatarButton.tsx:46
+#: src/Application/RouterDialog.tsx
+#: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
 msgstr "NFT 头像"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:195
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "No collectible found."
 msgstr "未找到任何 NFT。"
 
-#: src/Application/NFTListDialog.tsx:217
+#: src/Application/NFTListDialog.tsx
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr "未检测到有效的钱包。请先连接钱包或验证钱包。"
 
-#: src/Application/PersonaItem.tsx:99
+#: src/Application/PersonaItem.tsx
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
 msgstr "非当前帐户。请切换到此帐户以设置 NFT 头像。"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:196
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Retry"
 msgstr "重试"
 
-#: src/Application/UploadAvatarDialog.tsx:151
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Save"
 msgstr "保存"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:231
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Set NFT Avatar"
 msgstr "设置 NFT 头像"
 
-#: src/Application/NFTListDialog.tsx:248
+#: src/Application/NFTListDialog.tsx
 msgid "Set NFT NFT Background"
 msgstr ""
 
-#: src/Application/NFTListDialog.tsx:247
+#: src/Application/NFTListDialog.tsx
 msgid "Set NFT PFP"
 msgstr ""
 
-#: src/Application/NFTInfo.tsx:31
+#: src/Application/NFTInfo.tsx
 msgid "Set NFT PFPs"
 msgstr "设置 NFT 头像"
 
-#: src/Application/NFTInfo.tsx:28
+#: src/Application/NFTInfo.tsx
 msgid "Set up NFT PFP successfully"
 msgstr "NFT 头像设置成功"
 
-#: src/SiteAdaptor/index.tsx:51
+#: src/SiteAdaptor/index.tsx
 msgid "Set your NFT as profile picture with exclusive aura."
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:70
-#~ msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving Twitter."
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:70
+#: src/SiteAdaptor/index.tsx
 msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
 msgstr ""
 
-#: src/Application/UploadAvatarDialog.tsx:91
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Sorry, failed to save NFT Avatar. Please set again."
 msgstr "抱歉，保存 NFT 头像失败。请重新设置。"
 
-#: src/Application/UploadAvatarDialog.tsx:96
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Update NFT Avatar Success!"
 msgstr "更新 NFT 头像成功！"
 
-#: src/SiteAdaptor/NFTAvatar.tsx:170
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr "钱包"

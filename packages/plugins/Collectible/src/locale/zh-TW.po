@@ -1,135 +1,123 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Traditional\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-TW\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 956\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/Shared/DetailsCard.tsx:96
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/OfferCard.tsx:121
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "<0>Expires in </0>{0}"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx:191
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx:56
+#: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "About"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx:194
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx:58
+#: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Activities"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/DetailsCard.tsx:91
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Blockchain"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:163
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "Change NFT PFP"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:189
+#: src/SiteAdaptor/index.tsx
 msgid "Collectibles"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/DetailsCard.tsx:88
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Contract"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/DescriptionCard.tsx:57
+#: src/SiteAdaptor/Shared/DescriptionCard.tsx
 msgid "Description"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx:192
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Details"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:184
+#: src/SiteAdaptor/index.tsx
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr ""
 
-#: src/SiteAdaptor/Shared/OfferCard.tsx:123
-#~ msgid "Expires in"
-#~ msgstr ""
-
-#: src/SiteAdaptor/Shared/ActivityCard.tsx:137
-#: src/SiteAdaptor/Shared/OfferCard.tsx:105
+#: src/SiteAdaptor/Shared/ActivityCard.tsx
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "From"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:117
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "Load failed"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/OffersList.tsx:74
+#: src/SiteAdaptor/Shared/OffersList.tsx
 msgid "Load More"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/DetailsCard.tsx:82
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Mint Address"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx:175
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx:50
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "NFT Details"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx:156
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "NFT is not minted yet."
 msgstr ""
 
-#: src/SiteAdaptor/Shared/PriceCard.tsx:70
+#: src/SiteAdaptor/Shared/PriceCard.tsx
 msgid "No Listings"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx:193
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx:57
+#: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Offers"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/PropertiesCard.tsx:86
+#: src/SiteAdaptor/Shared/PropertiesCard.tsx
 msgid "Properties"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx:272
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/ActivitiesList.tsx:45
+#: src/SiteAdaptor/Shared/ActivitiesList.tsx
 msgid "This NFT didn't have any activities."
 msgstr ""
 
-#: src/SiteAdaptor/Shared/OffersList.tsx:62
+#: src/SiteAdaptor/Shared/OffersList.tsx
 msgid "This NFT didn't have any offers."
 msgstr ""
 
-#: src/SiteAdaptor/Shared/ActivityCard.tsx:149
+#: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "To <0>{0}</0>"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/DetailsCard.tsx:87
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token ID"
 msgstr ""
 
-#: src/SiteAdaptor/Shared/DetailsCard.tsx:92
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
 msgstr ""

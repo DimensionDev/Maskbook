@@ -32,17 +32,14 @@
             " to find more staking projects."
         ],
         "bBzHQT": "Input amount is below the minimum amount",
-        "m6RmA/": ["Insufficient ", ["0"], " balance"],
         "oxKup1": ["Insufficient $", ["0"], " balance"],
         "e3hCsY": "Lido Exchange Rate",
         "yQE2r9": "Loading",
-        "HsoakN": "masknetwork",
         "ojlMCx": ["Minimum withdraw amount is ", ["MINIMUM_AMOUNT"], " ", ["0"]],
         "LLf+t1": "No deposit protocols found.",
         "FZg3wM": "Operation",
         "7hZyUn": "Processing Deposit",
         "i2x+p1": "Processing Withdrawal",
-        "nVT2pJ": "realMaskNetwork",
         "Baj2MJ": "Savings",
         "Z/tioj": ["Swap ", ["0"]],
         "GWKfFr": [

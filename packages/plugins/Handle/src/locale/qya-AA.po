@@ -17,28 +17,11 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
-
-#: src/SiteAdaptor/SearchResultInspector.tsx:128
 msgid "<0>USD Value</0><1>${0}</1>"
 msgstr "crwdns32250:0${0}crwdne32250:0"
-
-#: src/SiteAdaptor/index.tsx:34
 msgid "ENS"
 msgstr "crwdns31386:0crwdne31386:0"
-
-#: src/SiteAdaptor/index.tsx:33
 msgid "Optimize the display of search results about ENS in social media."
 msgstr "crwdns31388:0crwdne31388:0"
-
-#: src/SiteAdaptor/PluginHeader.tsx:48
-#~ msgid "Powered by"
-#~ msgstr ""
-
-#: src/SiteAdaptor/PluginHeader.tsx:48
 msgid "Powered by {0}"
 msgstr "crwdns32252:0{0}crwdne32252:0"
-
-#: src/SiteAdaptor/SearchResultInspector.tsx:129
-#~ msgid "USD Value"
-#~ msgstr ""
-

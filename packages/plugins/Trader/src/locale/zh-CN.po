@@ -1,490 +1,470 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:00\n"
+"Project-Id-Version:1970-01-01 00:00+0000gs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1000\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:354
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:381
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx:218
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx:228
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx
 msgid "{0} Pool"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:347
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} to {1}"
 msgstr ""
 
-#: src/helpers/formatTime.ts:6
+#: src/helpers/formatTime.ts
 msgid "{0}m"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:367
-#: src/SiteAdaptor/trader/views/Confirm.tsx:334
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:123
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "{mins}min"
 msgstr ""
 
-#: src/helpers/formatTime.ts:4
+#: src/helpers/formatTime.ts
 msgid "{seconds}s"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:121
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "{seconds}sec"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:360
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:144
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "<0>Powered by </0><1>OKX<2/></1>"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:236
-#~ msgid "<0>Powered by<1/></0><2>OKX</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:137
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Average Price"
 msgstr "24H平均价格"
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:170
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H sale"
 msgstr "24小时销售"
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:152
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Traded Volume"
 msgstr "24H 交易量"
 
-#: src/SiteAdaptor/trending/TrendingView.tsx:232
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Activities"
 msgstr "活动"
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:310
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Aggregator"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:514
-#: src/SiteAdaptor/trader/views/Confirm.tsx:456
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Approving"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:250
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Average"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:350
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:104
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:464
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:470
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx:155
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx
 msgid "Bridge"
 msgstr ""
 
-#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:172
+#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx
 msgid "Bridge between this token pair are't supported at the moment."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:398
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Bridge network fee"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:386
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Buy Now"
 msgstr "立即购买"
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:368
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Check on Explorer"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:513
-#: src/SiteAdaptor/trader/views/Confirm.tsx:455
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Checking Approve"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:247
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Complete"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:430
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Confirm"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:60
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:515
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Confirm Bridge"
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx:14
-#~ msgid "Confirm swap"
-#~ msgstr ""
-
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:59
-#: src/SiteAdaptor/trader/views/Confirm.tsx:457
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Confirm Swap"
 msgstr "确认兑换"
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:320
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Cross-chain Swap"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:324
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Custom"
 msgstr "自定义"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:427
-#: src/SiteAdaptor/trader/views/Confirm.tsx:370
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Data"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:325
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Date"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:159
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "Dex/Est received ({0})"
 msgstr ""
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts:15
-#: src/SiteAdaptor/trader/hooks/useSwappable.ts:10
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
+#: src/SiteAdaptor/trader/hooks/useSwappable.ts
 msgid "Enter an Amount"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:77
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:57
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
-#: src/SiteAdaptor/trending/TickersTable.tsx:84
-#: src/SiteAdaptor/trending/TrendingView.tsx:232
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Exchange"
 msgstr "兑换"
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:253
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Failed"
 msgstr "失败"
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:284
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Fast"
 msgstr "快速"
 
-#: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:167
+#: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Fastest"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingView.tsx:228
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:412
+#: src/SiteAdaptor/trending/TrendingView.tsx
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Floor Price"
 msgstr "地板价"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:289
-#: src/SiteAdaptor/trader/views/Confirm.tsx:262
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:209
-#: src/SiteAdaptor/trader/views/Transaction.tsx:260
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:139
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "From"
 msgstr "从"
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:399
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Gas Limit"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:382
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Gas Price"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingView.tsx:224
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "General"
 msgstr "概况"
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:107
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Highest Price"
 msgstr "最高价格"
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:58
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "History"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:384
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:401
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid ""
 "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
 "than estimated, and any unused funds will remain in the original address."
 msgstr ""
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts:20
-#: src/SiteAdaptor/trader/hooks/useSwappable.ts:15
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
+#: src/SiteAdaptor/trader/hooks/useSwappable.ts
 msgid "Insufficient {symbol} Balance"
 msgstr ""
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:77
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Items"
 msgstr "条目"
 
-#: src/SiteAdaptor/trending/FailedTrendingView.tsx:29
+#: src/SiteAdaptor/trending/FailedTrendingView.tsx
 msgid "Load failed"
 msgstr "加载失败"
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:226
-#: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx:47
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
+#: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
 msgid "Loading"
 msgstr "加载中"
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:93
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Market Cap"
 msgstr "市值"
 
-#: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx:175
+#: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Max amount"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:347
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Max base fee"
 msgstr ""
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:137
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Method"
 msgstr "操作"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:419
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Minimum received"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:333
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Network"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:67
-#: src/SiteAdaptor/trader/views/Confirm.tsx:321
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Network fee"
 msgstr ""
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:136
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "NFT"
 msgstr "NFT"
 
-#: src/SiteAdaptor/trending/TrendingView.tsx:237
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "NFTs"
 msgstr "NFTs"
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:252
-#: src/SiteAdaptor/trending/PriceChart.tsx:89
-#: src/SiteAdaptor/trending/TickersTable.tsx:176
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:420
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
+#: src/SiteAdaptor/trending/PriceChart.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "No Data"
 msgstr "暂无数据"
 
-#: src/SiteAdaptor/trader/views/History.tsx:132
+#: src/SiteAdaptor/trader/views/History.tsx
 msgid "No recent transactions"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:181
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:396
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Open"
 msgstr "打开"
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:85
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Owners"
 msgstr "拥有者"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:85
+#: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Pair"
 msgstr "交易对"
 
-#: src/SiteAdaptor/index.tsx:102
+#: src/SiteAdaptor/index.tsx
 msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx:80
+#: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx
 msgid "Powered by"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:86
-#: src/SiteAdaptor/trending/TrendingView.tsx:228
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Price"
 msgstr "价格"
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:365
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Priority fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:442
-#: src/SiteAdaptor/trader/views/Confirm.tsx:385
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Quote expired. Update to receive a new quote."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:130
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Quote route"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:63
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:64
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Quote Route"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:339
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Rank #{0}"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:413
-#: src/SiteAdaptor/trader/views/Confirm.tsx:315
-#: src/SiteAdaptor/trader/views/Transaction.tsx:343
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Rate"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:348
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Select liquidity"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:61
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Select Liquidity"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:512
-#: src/SiteAdaptor/trader/views/Confirm.tsx:454
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Sending"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:350
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Sending address"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:62
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx:105
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Slippage"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:212
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "Slow"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:103
-#: src/SiteAdaptor/trader/views/Confirm.tsx:407
-#: src/SiteAdaptor/trader/views/Confirm.tsx:413
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:360
-#: src/SiteAdaptor/trader/views/Transaction.tsx:320
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx:376
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Swap"
 msgstr "兑换"
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:360
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "Swap anyway"
 msgstr ""
 
-#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx:149
+#: src/SiteAdaptor/trader/contexts/TradeProvider.tsx
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/NetworkFee.tsx:404
+#: src/SiteAdaptor/trader/views/NetworkFee.tsx
 msgid "The custom amount entered may be higher than the required network fee."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:238
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "The swap is in progress. You can check its status in History after exit this page."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:238
-#~ msgid "The swap is in progress. You can check its status in History after exiting this page."
-#~ msgstr ""
-
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:357
-#: src/SiteAdaptor/trader/views/Confirm.tsx:324
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/QuoteRoute.tsx:164
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:157
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "This swap isn’t supported"
 msgstr ""
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:141
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Time"
 msgstr "时间"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:311
-#: src/SiteAdaptor/trader/views/Confirm.tsx:284
-#: src/SiteAdaptor/trader/views/Transaction.tsx:286
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:140
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "To"
 msgstr "至"
 
-#: src/SiteAdaptor/trending/CoinMarketTable.tsx:122
+#: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Total Volume"
 msgstr "成交量"
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:307
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Trading mode"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:65
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Trading Route"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:68
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Transaction Details"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/History.tsx:134
+#: src/SiteAdaptor/trader/views/History.tsx
 msgid "Transaction history is only stored locally and will be deleted if you clear your browser data."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:278
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Transaction in progress. Thank you for your patience."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:463
-#: src/SiteAdaptor/trader/views/Confirm.tsx:406
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Transaction rejected"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:469
-#: src/SiteAdaptor/trader/views/Confirm.tsx:412
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Transaction submitted."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Transaction.tsx:317
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Transaction type"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:453
-#: src/SiteAdaptor/trader/views/Confirm.tsx:396
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Update Quote"
 msgstr ""
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:83
+#: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Updated"
 msgstr "已更新"
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx:138
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Value"
 msgstr "价值"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx:82
+#: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Volume (24h)"
 msgstr "交易量 (24h)"

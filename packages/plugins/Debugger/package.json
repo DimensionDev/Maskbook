@@ -34,14 +34,6 @@
     "@masknet/web3-shared-evm": "workspace:^"
   },
   "lingui": {
-    "catalogs": [
-      {
-        "path": "src/locale/{locale}",
-        "include": [
-          "src"
-        ]
-      }
-    ],
     "compileNamespace": "json",
     "locales": [
       "en-US",
@@ -54,6 +46,18 @@
       "zh-CN": "zh-TW",
       "zh-TW": "zh-CN",
       "default": "en-US"
-    }
+    },
+    "formatOptions": {
+      "origins": true,
+      "lineNumbers": false
+    },
+    "catalogs": [
+      {
+        "path": "src/locale/{locale}",
+        "include": [
+          "src"
+        ]
+      }
+    ]
   }
 }
