@@ -116,4 +116,3 @@ msgstr "NFTアバターを更新しました！"
 #: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr "ウォレット"
-

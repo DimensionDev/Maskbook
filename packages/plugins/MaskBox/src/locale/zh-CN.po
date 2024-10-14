@@ -77,4 +77,3 @@ msgstr "重新加载"
 #: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Solid:"
 msgstr "卖出"
-

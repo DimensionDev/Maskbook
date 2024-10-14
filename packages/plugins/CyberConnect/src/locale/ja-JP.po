@@ -52,4 +52,3 @@ msgstr "フォロー中の友達はいません。"
 #: src/SiteAdaptor/ConnectButton.tsx
 msgid "Unfollow"
 msgstr "フォロー解除"
-

@@ -165,4 +165,3 @@ msgstr "あなたのプロフィールをFireflyで見る"
 #: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"
-

@@ -41,7 +41,8 @@ msgid "Greeting message"
 msgstr "挨拶メッセージ"
 
 #: src/SiteAdaptor/PetShareDialog.tsx
-msgid "I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
+msgid ""
+"I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
 "#mask_io #nonfungiblefriends\n"
 "⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
 msgstr ""
@@ -94,4 +95,3 @@ msgstr "トークンID"
 #: src/SiteAdaptor/PetShareDialog.tsx
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr "ノンファンジブルな友達が正常に設定されました。"
-

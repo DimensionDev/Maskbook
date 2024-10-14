@@ -24,4 +24,3 @@ msgstr "クロスチェーン"
 #: src/SiteAdaptor/components/BridgeStack.tsx
 msgid "Powered by Celer Network. Support $MASK!"
 msgstr "Powered by Celerネットワーク. Support $MASK!"
-
