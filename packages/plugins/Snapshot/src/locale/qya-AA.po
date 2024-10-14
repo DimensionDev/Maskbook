@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"PO-Revision-Date: 2024-10-14 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,171 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
+
+#: src/SiteAdaptor/InformationCard.tsx:78
+msgid "{0, plural, one {Strategy} other {Strategies}}"
+msgstr "crwdns29334:00={0}crwdne29334:0"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:112
+msgid "{0} members"
+msgstr "crwdns29336:0{0}crwdne29336:0"
+
+#: src/SiteAdaptor/InformationCard.tsx:95
+msgid "Author"
+msgstr "crwdns29338:0crwdne29338:0"
+
+#: src/SiteAdaptor/VotingCard.tsx:145
+msgid "Cast your vote"
+msgstr "crwdns29340:0crwdne29340:0"
+
+#: src/SiteAdaptor/ResultCard.tsx:109
+#: src/SiteAdaptor/ResultCard.tsx:191
+#: src/SiteAdaptor/ResultCard.tsx:202
+msgid "Current results"
+msgstr "crwdns29342:0crwdne29342:0"
+
+#: src/SiteAdaptor/index.tsx:77
+msgid "DAO"
+msgstr "crwdns29344:0crwdne29344:0"
+
+#: src/SiteAdaptor/index.tsx:74
+msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
+msgstr "crwdns29346:0crwdne29346:0"
+
+#: src/SiteAdaptor/ResultCard.tsx:180
+msgid "Download report"
+msgstr "crwdns29348:0crwdne29348:0"
+
+#: src/SiteAdaptor/InformationCard.tsx:126
+msgid "End date"
+msgstr "crwdns29350:0crwdne29350:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:219
+#~ msgid "Ended {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:226
+msgid "Ended {relativeEndTime}"
+msgstr "crwdns31500:0{relativeEndTime}crwdne31500:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:221
+#~ msgid "Ends in {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:228
+msgid "Ends in {relativeEndTime}"
+msgstr "crwdns31502:0{relativeEndTime}crwdne31502:0"
+
+#: src/SiteAdaptor/InformationCard.tsx:76
+msgid "Information"
+msgstr "crwdns29356:0crwdne29356:0"
+
+#: src/SiteAdaptor/InformationCard.tsx:111
+msgid "IPFS"
+msgstr "crwdns29358:0crwdne29358:0"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
+msgid "Join"
+msgstr "crwdns29360:0crwdne29360:0"
+
+#: src/SiteAdaptor/ProfileView.tsx:128
+msgid "Loading"
+msgstr "crwdns29362:0crwdne29362:0"
+
+#: src/SiteAdaptor/LoadingFailCard.tsx:75
+msgid "Loading fails due to Snapshot API service breakdown."
+msgstr "crwdns29364:0crwdne29364:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:271
+msgid "My vote"
+msgstr "crwdns29366:0crwdne29366:0"
+
+#: src/SiteAdaptor/VotingCard.tsx:176
+msgid "No power"
+msgstr "crwdns29368:0crwdne29368:0"
+
+#: src/SiteAdaptor/ProfileView.tsx:138
+msgid "Oops, we can't find any results."
+msgstr "crwdns29370:0crwdne29370:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:53
+msgid "Option(s)"
+msgstr "crwdns29372:0crwdne29372:0"
+
+#: src/SiteAdaptor/VotingCard.tsx:121
+msgid "Please try again if you failed to vote."
+msgstr "crwdns29374:0crwdne29374:0"
+
+#: src/SiteAdaptor/Snapshot.tsx:102
+msgid "Progress"
+msgstr "crwdns29376:0crwdne29376:0"
+
+#: src/SiteAdaptor/Snapshot.tsx:98
+msgid "Proposal"
+msgstr "crwdns29378:0crwdne29378:0"
+
+#: src/SiteAdaptor/ResultCard.tsx:109
+#: src/SiteAdaptor/ResultCard.tsx:191
+#: src/SiteAdaptor/ResultCard.tsx:202
+msgid "Results"
+msgstr "crwdns29380:0crwdne29380:0"
+
+#: src/SiteAdaptor/InformationCard.tsx:131
+#: src/SiteAdaptor/PluginDescriptor.tsx:33
+#: src/SiteAdaptor/ProfileView.tsx:83
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:73
+msgid "Snapshot"
+msgstr "crwdns29382:0crwdne29382:0"
+
+#: src/SiteAdaptor/SpaceMenu.tsx:108
+msgid "Space"
+msgstr "crwdns29384:0crwdne29384:0"
+
+#: src/SiteAdaptor/InformationCard.tsx:121
+msgid "Start date"
+msgstr "crwdns29386:0crwdne29386:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:224
+msgid "Starts {relativeStartTime}"
+msgstr "crwdns31504:0{relativeStartTime}crwdne31504:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx:217
+#~ msgid "Starts in {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/InformationCard.tsx:77
+#~ msgid "Strategie(s)"
+#~ msgstr ""
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
+msgid "View"
+msgstr "crwdns29390:0crwdne29390:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:98
+#: src/SiteAdaptor/VotingCard.tsx:66
+#: src/SiteAdaptor/VotingCard.tsx:175
+msgid "Vote"
+msgstr "crwdns29392:0crwdne29392:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:51
+msgid "Vote Overview"
+msgstr "crwdns29394:0crwdne29394:0"
+
+#: src/SiteAdaptor/VotingCard.tsx:120
+msgid "Voted successfully."
+msgstr "crwdns29396:0crwdne29396:0"
+
+#: src/SiteAdaptor/VotesCard.tsx:103
+#: src/SiteAdaptor/VotesCard.tsx:184
+#: src/SiteAdaptor/VotesCard.tsx:190
+msgid "Votes"
+msgstr "crwdns29398:0crwdne29398:0"
+
+#: src/SiteAdaptor/VotesCard.tsx:132
+msgid "You"
+msgstr "crwdns29400:0crwdne29400:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx:83
+msgid "Your voting power"
+msgstr "crwdns29402:0crwdne29402:0"
 
