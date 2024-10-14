@@ -1,95 +1,175 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/GoPlusSecurity/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 970\n"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
 msgstr "crwdns28660:0{0}crwdne28660:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
 msgstr "crwdns28662:0{0}crwdne28662:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
 msgstr "crwdns28664:0{0}crwdne28664:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
 msgstr "crwdns28666:0{0}crwdne28666:0"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "<0>Dear Users,</0><1>Clicking the confirm button means that you agree to take the potential risks and proceed with the transaction.</1>"
 msgstr "crwdns32244:0crwdne32244:0"
+
+#: src/SiteAdaptor/components/Footer.tsx
 msgid "<0>Powered by</0><1>Go+</1>"
 msgstr "crwdns32246:0crwdne32246:0"
+
+#: src/SiteAdaptor/components/NotFound.tsx
 msgid "<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"
 msgstr "crwdns32248:0crwdne32248:0"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Cancel"
 msgstr "crwdns28674:0crwdne28674:0"
+
+#: src/SiteAdaptor/CheckSecurityDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Check Security"
 msgstr "crwdns28676:0crwdne28676:0"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Close [Check Security]?"
 msgstr "crwdns28680:0crwdne28680:0"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Confirm"
 msgstr "crwdns28682:0crwdne28682:0"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
+#: src/UI/TokenSecurityBoundary.tsx
 msgid "Confirm swap risk"
 msgstr "crwdns28684:0crwdne28684:0"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Creator"
 msgstr "crwdns28686:0crwdne28686:0"
+
+#: src/SiteAdaptor/CheckSecurityDialog.tsx
 msgid "Contract Not Found"
 msgstr "crwdns28688:0crwdne28688:0"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Contract Owner"
 msgstr "crwdns28690:0crwdne28690:0"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Copy Address"
 msgstr "crwdns28692:0crwdne28692:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
+#: src/SiteAdaptor/constants.tsx
 msgid "High Risk"
 msgstr "crwdns28698:0crwdne28698:0"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "If you decide to close [Check Security], you will no longer see security notifications when interacting with suspicious, blacklisted, or potentially fraudulent contracts and addresses."
 msgstr "crwdns28700:0crwdne28700:0"
+
+#: src/SiteAdaptor/constants.tsx
 msgid "Low Risk"
 msgstr "crwdns31674:0crwdne31674:0"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Market Cap"
 msgstr "crwdns28702:0crwdne28702:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
+#: src/SiteAdaptor/constants.tsx
 msgid "Medium Risk"
 msgstr "crwdns28704:0crwdne28704:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "More Details"
 msgstr "crwdns28706:0crwdne28706:0"
+
+#: src/SiteAdaptor/components/DefaultPlaceholder.tsx
 msgid "Note: Scams detections might not be 100% guaranteed."
 msgstr "crwdns28708:0crwdne28708:0"
+
+#: src/SiteAdaptor/components/SearchBox.tsx
 msgid "Please enter token contract address."
 msgstr "crwdns28710:0crwdne28710:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Provide you with fast, reliable and convenient security services."
 msgstr "crwdns31384:0crwdne31384:0"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Risk Warning"
 msgstr "crwdns28716:0crwdne28716:0"
+
+#: src/SiteAdaptor/components/SearchBox.tsx
 msgid "Search"
 msgstr "crwdns28718:0crwdne28718:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Security Detection"
 msgstr "crwdns28720:0crwdne28720:0"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Swap Anyway"
 msgstr "crwdns28722:0crwdne28722:0"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "The [Check Security] dApp provides quick, reliable, and convenient Web3 security services."
 msgstr "crwdns28724:0crwdne28724:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "This token has no risky or attention factors."
 msgstr "crwdns28726:0crwdne28726:0"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Contract Address"
 msgstr "crwdns28728:0crwdne28728:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Token info"
 msgstr "crwdns28730:0crwdne28730:0"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Token Name"
 msgstr "crwdns28732:0crwdne28732:0"
+
+#: src/SiteAdaptor/components/TokenPanel.tsx
 msgid "Total Supply"
 msgstr "crwdns28734:0crwdne28734:0"
+
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Unnamed"
 msgstr "crwdns28736:0crwdne28736:0"
+
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "View on Explorer"
 msgstr "crwdns28738:0crwdne28738:0"
+
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr "crwdns28740:0crwdne28740:0"
+
