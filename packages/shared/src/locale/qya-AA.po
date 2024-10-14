@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:20\n"
+"PO-Revision-Date: 2024-10-14 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,1377 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1012\n"
+
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:178
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:216
+msgid "(beta)"
+msgstr "crwdns31476:0crwdne31476:0"
+
+#: src/UI/translate.ts:141
+msgid "{0} {1} approval successfully."
+msgstr "crwdns31506:0{0}crwdnd31506:0{1}crwdne31506:0"
+
+#: src/UI/translate.ts:139
+msgid "{0} {1} NFT contract successfully."
+msgstr "crwdns31508:0{0}crwdnd31508:0{1}crwdne31508:0"
+
+#: src/UI/translate.ts:159
+msgid "{0} {1} NFT contract."
+msgstr "crwdns31510:0{0}crwdnd31510:0{1}crwdne31510:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:113
+msgid "{0} network is not added in the wallet. Please add and try it again."
+msgstr "crwdns30746:0{0}crwdne30746:0"
+
+#: src/UI/translate.ts:163
+msgid "{0} NFT contract"
+msgstr "crwdns31512:0{0}crwdne31512:0"
+
+#: src/UI/translate.ts:103
+msgid "{0} were successfully claimed"
+msgstr "crwdns31514:0{0}crwdne31514:0"
+
+#: src/UI/components/TokenSecurity/index.tsx:57
+msgid "{attentionFactors, plural, one {# Attention item} other {# Attention items}}"
+msgstr "crwdns30748:0attentionFactors={attentionFactors}crwdne30748:0"
+
+#: src/UI/components/TokenSecurity/index.tsx:40
+msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
+msgstr "crwdns30750:0riskyFactors={riskyFactors}crwdne30750:0"
+
+#: src/UI/components/SettingsBoard/GasOption.tsx:71
+msgid "~ {0}"
+msgstr "crwdns30752:0{0}crwdne30752:0"
+
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:372
+msgid "≈ {gasFeeUSD}"
+msgstr "crwdns30754:0{gasFeeUSD}crwdne30754:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:60
+msgid "1. If you haven't installed {name} Wallet"
+msgstr "crwdns30756:0{name}crwdne30756:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:78
+msgid "2. If you have installed {name} Wallet"
+msgstr "crwdns30758:0{name}crwdne30758:0"
+
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:100
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:168
+msgid "24 Hour Trading Vol"
+msgstr "crwdns30760:0crwdne30760:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:348
+#: src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx:32
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:230
+msgid "Add NFTs"
+msgstr "crwdns30762:0crwdne30762:0"
+
+#: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx:263
+msgid "Added by user"
+msgstr "crwdns30764:0crwdne30764:0"
+
+#: src/UI/components/TokenWithSocialGroupMenu/index.tsx:159
+#: src/UI/wallet/DeriveWalletTable.tsx:124
+msgid "Address"
+msgstr "crwdns30766:0crwdne30766:0"
+
+#: src/UI/components/SettingsBoard/GasSection.tsx:112
+msgid "Advanced"
+msgstr "crwdns30768:0crwdne30768:0"
+
+#: src/UI/modals/SelectAdvancedSettingsDialog/SelectGasSettingsDialog.tsx:82
+msgid "Advanced Settings"
+msgstr "crwdns30770:0crwdne30770:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:110
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:51
+msgid "APP list"
+msgstr "crwdns30772:0crwdne30772:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:55
+msgid "APP Settings"
+msgstr "crwdns30774:0crwdne30774:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:117
+msgid "Applications"
+msgstr "crwdns30776:0crwdne30776:0"
+
+#: src/UI/components/GrantPermission/index.tsx:35
+msgid "Approve"
+msgstr "crwdns30778:0crwdne30778:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:112
+msgid "Approve MASK?"
+msgstr "crwdns30780:0crwdne30780:0"
+
+#: src/hooks/useReportSpam.tsx:65
+msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
+msgstr "crwdns30782:0{0}crwdne30782:0"
+
+#: src/UI/components/FungibleTokenInput/UI.tsx:171
+msgid "Available Balance"
+msgstr "crwdns30784:0crwdne30784:0"
+
+#: src/UI/components/QRCode/index.tsx:45
+msgid "Backup failed, <0>try again</0>"
+msgstr "crwdns31478:0crwdne31478:0"
+
+#: src/UI/components/ERC721ContractSelectPanel/index.tsx:105
+#: src/UI/components/FungibleTokenInput/UI.tsx:172
+#: src/UI/components/TokenAmountPanel/index.tsx:143
+msgid "Balance"
+msgstr "crwdns30786:0crwdne30786:0"
+
+#: src/UI/wallet/DeriveWalletTable.tsx:129
+msgid "Balance({symbol})"
+msgstr "crwdns30788:0{symbol}crwdne30788:0"
+
+#: src/UI/components/SettingsBoard/GasSection.tsx:111
+msgid "Basic"
+msgstr "crwdns30790:0crwdne30790:0"
+
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:191
+msgid "Blocto only supports the Flow chain."
+msgstr "crwdns30792:0crwdne30792:0"
+
+#: src/UI/components/UploadDropArea/index.tsx:135
+msgid "Browse File"
+msgstr "crwdns30794:0crwdne30794:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:140
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:127
+msgid "Cancel"
+msgstr "crwdns30796:0crwdne30796:0"
+
+#: src/UI/translate.ts:58
+msgid "Cancel Transaction"
+msgstr "crwdns31516:0crwdne31516:0"
+
+#: src/UI/components/WalletStatusBar/Action.tsx:17
+#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx:79
+#: src/UI/components/WalletStatusBox/index.tsx:231
+msgid "Change"
+msgstr "crwdns30798:0crwdne30798:0"
+
+#: src/UI/translate.ts:59
+msgid "Change Owner"
+msgstr "crwdns31518:0crwdne31518:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:186
+msgid "Change Wallet"
+msgstr "crwdns30800:0crwdne30800:0"
+
+#: src/UI/modals/ConnectWalletModal/index.tsx:179
+msgid "Check {providerName} to confirm connect."
+msgstr "crwdns30802:0{providerName}crwdne30802:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:72
+msgid "Check out the official website"
+msgstr "crwdns30804:0crwdne30804:0"
+
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:333
+msgid "Choose Network"
+msgstr "crwdns30806:0crwdne30806:0"
+
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:89
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:157
+msgid "Circulating Supply"
+msgstr "crwdns30808:0crwdne30808:0"
+
+#: src/UI/translate.ts:105
+msgid "Claim 1 {0} NFT Lucky Drop successfully."
+msgstr "crwdns31520:0{0}crwdne31520:0"
+
+#: src/UI/translate.ts:60
+msgid "Claim Lucky Drop"
+msgstr "crwdns31522:0crwdne31522:0"
+
+#: src/UI/translate.ts:26
+msgid "Claim Lucky Drop successfully."
+msgstr "crwdns31524:0crwdne31524:0"
+
+#: src/UI/translate.ts:107
+msgid "Claim Lucky Drop with {0} successfully."
+msgstr "crwdns31526:0{0}crwdne31526:0"
+
+#: src/UI/translate.ts:61
+msgid "Claim NFT Lucky Drop"
+msgstr "crwdns31528:0crwdne31528:0"
+
+#: src/UI/translate.ts:27
+msgid "Claim NFT Lucky Drop successfully."
+msgstr "crwdns31530:0crwdne31530:0"
+
+#: src/UI/translate.ts:62
+msgid "Claim your Airdrop"
+msgstr "crwdns31532:0crwdne31532:0"
+
+#: src/UI/translate.ts:28
+msgid "Claim your Lucky Drop."
+msgstr "crwdns31534:0crwdne31534:0"
+
+#: src/UI/translate.ts:29
+msgid "Claim your NFT Lucky Drop"
+msgstr "crwdns31536:0crwdne31536:0"
+
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:156
+msgid "Clear"
+msgstr "crwdns30810:0crwdne30810:0"
+
+#: src/UI/components/WalletStatusBox/usePendingTransactions.tsx:61
+msgid "Clear All"
+msgstr "crwdns30812:0crwdne30812:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:152
+msgid "Click the application icon to hide in the APP list."
+msgstr "crwdns30814:0crwdne30814:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:151
+msgid "Click the application icon to list it on the App board."
+msgstr "crwdns30816:0crwdne30816:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:214
+msgid "Click the setting icon to list it on the App board."
+msgstr "crwdns30818:0crwdne30818:0"
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:118
+msgid "Click to retry"
+msgstr "crwdns30820:0crwdne30820:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:116
+msgid "Clicking the confirm button means that you agree to bear the above possible risks."
+msgstr "crwdns30822:0crwdne30822:0"
+
+#: src/UI/components/CoinMetadataTable/index.tsx:213
+#: src/UI/components/CoinMetadataTable/index.tsx:284
+msgid "Community"
+msgstr "crwdns30824:0crwdne30824:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:97
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:103
+#: src/UI/modals/ConfirmModal/Dialog.tsx:39
+#: src/UI/modals/ConfirmModal/Dialog.tsx:43
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:292
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:238
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:133
+msgid "Confirm"
+msgstr "crwdns30826:0crwdne30826:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:135
+msgid "Confirm Failed"
+msgstr "crwdns30828:0crwdne30828:0"
+
+#: src/UI/components/WalletConnectedBoundary/index.tsx:74
+msgid "Confirm Risk Warning"
+msgstr "crwdns30830:0crwdne30830:0"
+
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:91
+msgid "Confirm this transaction in your wallet"
+msgstr "crwdns30832:0crwdne30832:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:134
+msgid "Confirming"
+msgstr "crwdns30834:0crwdne30834:0"
+
+#: src/UI/components/TokenTransactionConfirmModal/index.tsx:127
+#: src/UI/components/TokenTransactionConfirmModal/index.tsx:152
+msgid "Congratulations!"
+msgstr "crwdns30836:0crwdne30836:0"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:185
+#: src/UI/components/PersonaSelectPanel/index.tsx:196
+msgid "Connect {0}"
+msgstr "crwdns30838:0{0}crwdne30838:0"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:176
+msgid "Connect and Verify {0}"
+msgstr "crwdns30840:0{0}crwdne30840:0"
+
+#: src/UI/components/ConnectPersonaBoundary/index.tsx:95
+msgid "Connect Persona"
+msgstr "crwdns30842:0crwdne30842:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:170
+#: src/UI/components/WalletConnectedBoundary/index.tsx:57
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:216
+#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx:105
+#: src/UI/components/WalletStatusBox/index.tsx:144
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx:96
+msgid "Connect Wallet"
+msgstr "crwdns30844:0crwdne30844:0"
+
+#: src/UI/modals/ConnectWalletModal/index.tsx:143
+msgid "Connect with {providerName}"
+msgstr "crwdns30846:0{providerName}crwdne30846:0"
+
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:178
+msgid "Connect your wallet"
+msgstr "crwdns30848:0crwdne30848:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:243
+msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+msgstr "crwdns31480:0crwdne31480:0"
+
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx:197
+msgid "Connected wallets settings"
+msgstr "crwdns30850:0crwdne30850:0"
+
+#: src/UI/components/CoinMetadataTable/index.tsx:158
+#: src/UI/components/CoinMetadataTable/index.tsx:264
+msgid "Contract"
+msgstr "crwdns30852:0crwdne30852:0"
+
+#: src/UI/translate.ts:63
+msgid "Contract Deployment"
+msgstr "crwdns31538:0crwdne31538:0"
+
+#: src/UI/translate.ts:143
+msgid "Contract Deployment {0}"
+msgstr "crwdns31540:0{0}crwdne31540:0"
+
+#: src/UI/translate.ts:64
+msgid "Contract Interaction"
+msgstr "crwdns31542:0crwdne31542:0"
+
+#: src/UI/components/CopyButton/index.tsx:74
+msgid "Copied!"
+msgstr "crwdns30854:0crwdne30854:0"
+
+#: src/UI/components/CopyButton/index.tsx:74
+msgid "Copy"
+msgstr "crwdns30856:0crwdne30856:0"
+
+#: src/UI/translate.ts:111
+msgid "Create {0} NFT Lucky Drop successfully."
+msgstr "crwdns31544:0{0}crwdne31544:0"
+
+#: src/UI/translate.ts:65
+msgid "Create Lucky Drop"
+msgstr "crwdns31546:0crwdne31546:0"
+
+#: src/UI/translate.ts:109
+msgid "Create Lucky drop with {0} successfully."
+msgstr "crwdns31548:0{0}crwdne31548:0"
+
+#: src/UI/translate.ts:66
+msgid "Create NFT Lucky Drop"
+msgstr "crwdns31550:0crwdne31550:0"
+
+#: src/UI/translate.ts:30
+msgid "Create NFT Lucky Drop successfully."
+msgstr "crwdns31552:0crwdne31552:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts:46
+#: src/UI/components/PersonaSelectPanel/index.tsx:110
+msgid "Create persona"
+msgstr "crwdns30858:0crwdne30858:0"
+
+#: src/UI/components/ConnectPersonaBoundary/index.tsx:87
+msgid "Create Persona"
+msgstr "crwdns30860:0crwdne30860:0"
+
+#: src/UI/translate.ts:67
+msgid "Create Smart Pay wallet"
+msgstr "crwdns31554:0crwdne31554:0"
+
+#: src/UI/translate.ts:31
+msgid "Create your Lucky Drop."
+msgstr "crwdns31556:0crwdne31556:0"
+
+#: src/UI/translate.ts:32
+msgid "Create your NFT Lucky Drop."
+msgstr "crwdns31558:0crwdne31558:0"
+
+#: src/UI/translate.ts:33
+msgid "Created a SmartPay wallet on Polygon network."
+msgstr "crwdns31560:0crwdne31560:0"
+
+#: src/UI/components/SettingsBoard/GasForm.tsx:176
+msgid "Current base fee is {0} Gwei"
+msgstr "crwdns30862:0{0}crwdne30862:0"
+
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:256
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:377
+#: src/UI/components/SettingsBoard/GasSection.tsx:99
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:91
+msgid "Custom"
+msgstr "crwdns30864:0crwdne30864:0"
+
+#: src/UI/components/AccountIcons/index.tsx:78
+#: src/UI/components/SocialAccountList/SocialTooltip.tsx:27
+msgid "Data source is retrieved from {0}."
+msgstr "crwdns30866:0{0}crwdne30866:0"
+
+#: src/UI/components/MaskPluginWrapper/index.tsx:141
+msgid "Default"
+msgstr "crwdns30868:0crwdne30868:0"
+
+#: src/UI/translate.ts:34
+msgid "Deploy a SmartPay wallet on Polygon network."
+msgstr "crwdns31562:0crwdne31562:0"
+
+#: src/UI/translate.ts:68
+msgid "Deploy Smarty Pay wallet"
+msgstr "crwdns31564:0crwdne31564:0"
+
+#: src/UI/translate.ts:145
+msgid "Deposit {0} for savings."
+msgstr "crwdns31566:0{0}crwdne31566:0"
+
+#: src/UI/translate.ts:113
+msgid "Deposit {0} successfully."
+msgstr "crwdns31568:0{0}crwdne31568:0"
+
+#: src/UI/translate.ts:69
+msgid "Deposit token"
+msgstr "crwdns31570:0crwdne31570:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:92
+msgid "Details"
+msgstr "crwdns30870:0crwdne30870:0"
+
+#: src/UI/components/WalletStatusBox/index.tsx:221
+msgid "Disconnect"
+msgstr "crwdns30872:0crwdne30872:0"
+
+#: src/hooks/useOpenShareTxDialog.tsx:89
+#: src/UI/contexts/components/InjectedDialog.tsx:240
+msgid "Dismiss"
+msgstr "crwdns30874:0crwdne30874:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:123
+msgid "Do you want to set MASK token as gas fee?"
+msgstr "crwdns30876:0crwdne30876:0"
+
+#: src/UI/components/CompositionDialog/PluginEntryRender.tsx:107
+msgid "Domain Request"
+msgstr "crwdns30878:0crwdne30878:0"
+
+#: src/UI/translate.ts:79
+msgid "Donate"
+msgstr "crwdns31572:0crwdne31572:0"
+
+#: src/hooks/useSnackbarCallback.tsx:40
+#: src/hooks/useSnackbarCallback.tsx:89
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:140
+msgid "Done"
+msgstr "crwdns30880:0crwdne30880:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:63
+msgid "Download {name} Wallet here"
+msgstr "crwdns30882:0{name}crwdne30882:0"
+
+#: src/UI/components/UploadDropArea/index.tsx:124
+msgid "Drag & Drop your file here"
+msgstr "crwdns30884:0crwdne30884:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:208
+msgid "DSearch"
+msgstr "crwdns30886:0crwdne30886:0"
+
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:343
+msgid "Edit"
+msgstr "crwdns30888:0crwdne30888:0"
+
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:152
+msgid "Editor"
+msgstr "crwdns30890:0crwdne30890:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:81
+msgid "Enable {name} Wallet extension and disable other browser extension wallets"
+msgstr "crwdns30892:0{name}crwdne30892:0"
+
+#: src/UI/components/PluginEnableBoundary/index.tsx:51
+msgid "Enable plugin"
+msgstr "crwdns30894:0crwdne30894:0"
+
+#: src/UI/components/CompositionDialog/CompositionUI.tsx:163
+msgid "Encrypt"
+msgstr "crwdns30896:0crwdne30896:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:246
+msgid "ENS or Wallet Address"
+msgstr "crwdns30898:0crwdne30898:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:31
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:134
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:131
+msgid "Enter a gas limit"
+msgstr "crwdns30900:0crwdne30900:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:38
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:136
+msgid "Enter a gas price"
+msgstr "crwdns30902:0crwdne30902:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:81
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:143
+msgid "Enter a max fee"
+msgstr "crwdns30904:0crwdne30904:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:58
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:141
+msgid "Enter a max priority fee"
+msgstr "crwdns30906:0crwdne30906:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:75
+msgid "Enter an amount"
+msgstr "crwdns30908:0crwdne30908:0"
+
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:93
+msgid "Failed"
+msgstr "crwdns30910:0crwdne30910:0"
+
+#: src/UI/translate.ts:101
+msgid "Failed to {0} NFT contract."
+msgstr "crwdns31574:0{0}crwdne31574:0"
+
+#: src/UI/translate.ts:35
+msgid "Failed to claim Lucky Drop."
+msgstr "crwdns31576:0crwdne31576:0"
+
+#: src/UI/translate.ts:36
+msgid "Failed to create Lucky Drop."
+msgstr "crwdns31578:0crwdne31578:0"
+
+#: src/UI/translate.ts:97
+msgid "Failed to deposit {0}."
+msgstr "crwdns31580:0{0}crwdne31580:0"
+
+#: src/UI/translate.ts:37
+msgid "Failed to deposit token."
+msgstr "crwdns31582:0crwdne31582:0"
+
+#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:122
+msgid "Failed to load {0}. Click to retry."
+msgstr "crwdns30912:0{0}crwdne30912:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:82
+msgid "Failed to load MASK. Click to retry."
+msgstr "crwdns30914:0crwdne30914:0"
+
+#: src/UI/translate.ts:38
+msgid "Failed to purchase Maskbox NFT."
+msgstr "crwdns31584:0crwdne31584:0"
+
+#: src/UI/translate.ts:39
+msgid "Failed to refund Lucky Drop."
+msgstr "crwdns31586:0crwdne31586:0"
+
+#: src/hooks/useReportSpam.tsx:76
+msgid "Failed to report spam."
+msgstr "crwdns30916:0crwdne30916:0"
+
+#: src/UI/translate.ts:40
+msgid "Failed to revoke token contract."
+msgstr "crwdns31588:0crwdne31588:0"
+
+#: src/UI/translate.ts:41
+msgid "Failed to send token."
+msgstr "crwdns31590:0crwdne31590:0"
+
+#: src/UI/translate.ts:42
+msgid "Failed to transfer NFT."
+msgstr "crwdns31592:0crwdne31592:0"
+
+#: src/UI/translate.ts:43
+msgid "Failed to unlock NFT contract."
+msgstr "crwdns31594:0crwdne31594:0"
+
+#: src/UI/translate.ts:44
+msgid "Failed to unlock token contract."
+msgstr "crwdns31596:0crwdne31596:0"
+
+#: src/UI/translate.ts:99
+msgid "Failed to withdraw {0}."
+msgstr "crwdns31598:0{0}crwdne31598:0"
+
+#: src/UI/components/SocialAccountList/SocialListItem.tsx:236
+msgid "Follow"
+msgstr "crwdns30918:0crwdne30918:0"
+
+#: src/UI/translate.ts:70
+msgid "Follow User"
+msgstr "crwdns31600:0crwdne31600:0"
+
+#: src/UI/components/SocialAccountList/SocialListItem.tsx:235
+msgid "Following"
+msgstr "crwdns30920:0crwdne30920:0"
+
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:193
+msgid "Fortmatic only supports the ETH and BNB chain."
+msgstr "crwdns30922:0crwdne30922:0"
+
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:361
+msgid "Gas Fee"
+msgstr "crwdns30924:0crwdne30924:0"
+
+#: src/UI/modals/GasSettingModal/GasSettingModal.tsx:41
+msgid "Gas fee settings"
+msgstr "crwdns30926:0crwdne30926:0"
+
+#: src/UI/components/SettingsBoard/GasForm.tsx:231
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:245
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:211
+msgid "Gas Limit"
+msgstr "crwdns30928:0crwdne30928:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:137
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:134
+msgid "Gas limit must be at least {0}"
+msgstr "crwdns30930:0{0}crwdne30930:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:34
+msgid "Gas limit too low will cause the transaction to fail."
+msgstr "crwdns30932:0crwdne30932:0"
+
+#: src/UI/components/SettingsBoard/GasForm.tsx:200
+#: src/UI/components/SettingsBoard/GasSection.tsx:92
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:218
+msgid "Gas Price"
+msgstr "crwdns30934:0crwdne30934:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:54
+msgid "Gas price is higher than necessary. You may pay more than needed."
+msgstr "crwdns30936:0crwdne30936:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:46
+msgid "Gas price is too low for network conditions."
+msgstr "crwdns30938:0crwdne30938:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:39
+msgid "Gas price must be greater than 0 Gwei."
+msgstr "crwdns30940:0crwdne30940:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:231
+msgid "Get optimized search results when you look for a token."
+msgstr "crwdns30942:0crwdne30942:0"
+
+#: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:36
+msgid "Go to Settings"
+msgstr "crwdns30944:0crwdne30944:0"
+
+#: src/UI/components/SettingsBoard/GasForm.tsx:193
+#: src/UI/components/SettingsBoard/GasForm.tsx:261
+#: src/UI/components/SettingsBoard/GasForm.tsx:299
+msgid "Gwei"
+msgstr "crwdns30946:0crwdne30946:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:254
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:271
+msgid "GWEI"
+msgstr "crwdns30948:0crwdne30948:0"
+
+#: src/UI/components/SettingsBoard/Context.tsx:96
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:118
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:117
+msgid "High"
+msgstr "crwdns30950:0crwdne30950:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:56
+msgid "How to use {0} Wallet?"
+msgstr "crwdns30952:0{0}crwdne30952:0"
+
+#: src/UI/components/FungibleTokenList/FungibleTokenItem.tsx:162
+msgid "Import"
+msgstr "crwdns30954:0crwdne30954:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:164
+#: src/UI/components/FungibleTokenList/index.tsx:271
+msgid "Incorrect contract address."
+msgstr "crwdns30956:0crwdne30956:0"
+
+#: src/UI/components/CoinMetadataTable/index.tsx:148
+#: src/UI/components/CoinMetadataTable/index.tsx:255
+msgid "Info"
+msgstr "crwdns30958:0crwdne30958:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:246
+msgid "Input contract address"
+msgstr "crwdns30960:0crwdne30960:0"
+
+#: src/UI/components/SettingsBoard/Context.tsx:95
+msgid "Instant"
+msgstr "crwdns30962:0crwdne30962:0"
+
+#: src/UI/components/WalletConnectedBoundary/index.tsx:96
+msgid "Invalid Network"
+msgstr "crwdns30964:0crwdne30964:0"
+
+#: src/UI/components/SettingsBoard/hooks/useSlippageToleranceSchema.ts:18
+msgid "Invalid slippage tolerance."
+msgstr "crwdns30966:0crwdne30966:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:116
+msgid "Listed"
+msgstr "crwdns30968:0crwdne30968:0"
+
+#: src/UI/components/LoadRetry/index.tsx:20
+#: src/UI/components/ReloadStatus/index.tsx:46
+msgid "Load failed"
+msgstr "crwdns30970:0crwdne30970:0"
+
+#: src/UI/components/LoadingStatus/index.tsx:40
+msgid "Loading"
+msgstr "crwdns30972:0crwdne30972:0"
+
+#: src/UI/components/PluginCardFrame/index.tsx:86
+msgid "Loading...."
+msgstr "crwdns30974:0crwdne30974:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:108
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:107
+msgid "Low"
+msgstr "crwdns30976:0crwdne30976:0"
+
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:127
+msgid "Manage Token List"
+msgstr "crwdns30978:0crwdne30978:0"
+
+#: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx:32
+msgid "Manage Token Lists"
+msgstr "crwdns30980:0crwdne30980:0"
+
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:70
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:146
+msgid "Market Cap"
+msgstr "crwdns30982:0crwdne30982:0"
+
+#: src/UI/components/PluginCardFrame/index.tsx:69
+msgid "Mask Network"
+msgstr "crwdns30984:0crwdne30984:0"
+
+#: src/UI/components/GrantPermission/index.tsx:27
+msgid "Mask Network requires you to authorize the following websites before using it."
+msgstr "crwdns30986:0crwdne30986:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:269
+msgid "Max fee"
+msgstr "crwdns30988:0crwdne30988:0"
+
+#: src/UI/components/SettingsBoard/GasForm.tsx:306
+msgid "Max Fee"
+msgstr "crwdns30990:0crwdne30990:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:146
+msgid "Max fee cannot be lower than max priority fee"
+msgstr "crwdns30992:0crwdne30992:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:100
+msgid "Max fee cannot be lower than max priority fee."
+msgstr "crwdns30994:0crwdne30994:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:96
+msgid "Max fee is higher than necessary."
+msgstr "crwdns30996:0crwdne30996:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:88
+msgid "Max fee is too low for network conditions."
+msgstr "crwdns30998:0crwdne30998:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:252
+msgid "Max priority fee"
+msgstr "crwdns31000:0crwdne31000:0"
+
+#: src/UI/components/SettingsBoard/GasForm.tsx:272
+msgid "Max Priority Fee"
+msgstr "crwdns31002:0crwdne31002:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:77
+msgid "Max priority fee is higher than necessary. You may pay more than needed."
+msgstr "crwdns31004:0crwdne31004:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:66
+msgid "Max priority fee is too low for network conditions."
+msgstr "crwdns31006:0crwdne31006:0"
+
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:142
+msgid "Max priority fee must be greater than 0 GWEI"
+msgstr "crwdns31008:0crwdne31008:0"
+
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts:59
+msgid "Max priority fee must be greater than 0 Gwei."
+msgstr "crwdns31010:0crwdne31010:0"
+
+#: src/UI/components/SettingsBoard/Context.tsx:97
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx:113
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx:112
+msgid "Medium"
+msgstr "crwdns31012:0crwdne31012:0"
+
+#: src/UI/components/PhoneNumberField/index.tsx:29
+msgid "Mobile Number"
+msgstr "crwdns31014:0crwdne31014:0"
+
+#: src/UI/components/TokenSecurity/index.tsx:72
+msgid "More"
+msgstr "crwdns31016:0crwdne31016:0"
+
+#: src/UI/components/FungibleTokenList/index.tsx:341
+msgid "Name or Contract address e.g. USDC or 0x234..."
+msgstr "crwdns31018:0crwdne31018:0"
+
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:191
+msgid "Name or Contract address eg.PUNK or 0x234..."
+msgstr "crwdns31020:0crwdne31020:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:124
+msgid "Network error or user cancels the process."
+msgstr "crwdns31022:0crwdne31022:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:236
+msgid "NFTs"
+msgstr "crwdns31024:0crwdne31024:0"
+
+#: src/UI/components/CollectibleList/CollectibleList.tsx:112
+msgid "No collectible found."
+msgstr "crwdns31026:0crwdne31026:0"
+
+#: src/UI/components/EmptyStatus/index.tsx:32
+msgid "No Data"
+msgstr "crwdns31028:0crwdne31028:0"
+
+#: src/UI/components/WalletConnectedBoundary/index.tsx:89
+msgid "No Enough Gas Fee"
+msgstr "crwdns31030:0crwdne31030:0"
+
+#: src/UI/components/AssetsManagement/CollectionList.tsx:241
+#: src/UI/components/AssetsManagement/CollectionList.tsx:342
+msgid "No NFTs found."
+msgstr "crwdns31032:0crwdne31032:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:319
+#: src/UI/components/CountryCodePicker/index.tsx:145
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:208
+msgid "No results"
+msgstr "crwdns31034:0crwdne31034:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:78
+msgid "Not select wallet yet."
+msgstr "crwdns31036:0crwdne31036:0"
+
+#: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
+msgid "OK"
+msgstr "crwdns31038:0crwdne31038:0"
+
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:196
+msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
+msgstr "crwdns31040:0crwdne31040:0"
+
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:155
+msgid "Only TypedMessageText is supported currently."
+msgstr "crwdns31042:0crwdne31042:0"
+
+#: src/UI/wallet/DeriveWalletTable.tsx:134
+msgid "Operation"
+msgstr "crwdns31044:0crwdne31044:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:212
+msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
+msgstr "crwdns31046:0crwdne31046:0"
+
+#: src/UI/components/UploadDropArea/index.tsx:132
+msgid "or"
+msgstr "crwdns31048:0crwdne31048:0"
+
+#: src/UI/translate.ts:45
+msgid "Owner changed successfully."
+msgstr "crwdns31602:0crwdne31602:0"
+
+#: src/UI/components/WalletStatusBar/WalletDescription.tsx:125
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:91
+msgid "Pending"
+msgstr "crwdns31050:0crwdne31050:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts:45
+#: src/UI/components/PersonaSelectPanel/index.tsx:109
+#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx:74
+msgid "Persona"
+msgstr "crwdns31052:0crwdne31052:0"
+
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:189
+msgid "Phantom only supports the Solana chain."
+msgstr "crwdns31054:0crwdne31054:0"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:178
+msgid "Please connect {0} and send proof post before using dApps."
+msgstr "crwdns31056:0{0}crwdne31056:0"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:186
+msgid "Please connect {0} before using dApps."
+msgstr "crwdns31058:0{0}crwdne31058:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:266
+msgid "Please connect your persona"
+msgstr "crwdns31060:0crwdne31060:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:261
+msgid "Please connect your wallet"
+msgstr "crwdns31062:0crwdne31062:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts:44
+#: src/UI/components/PersonaSelectPanel/index.tsx:108
+msgid "Please create a Persona and verify your account to use this function."
+msgstr "crwdns31064:0crwdne31064:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:264
+msgid "Please create a persona for accessing Dapps."
+msgstr "crwdns31066:0crwdne31066:0"
+
+#: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx:30
+msgid "Please select the wallet to activate the function after saving the settings."
+msgstr "crwdns31068:0crwdne31068:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:189
+#: src/UI/components/ChainBoundary/index.tsx:206
+msgid "Please switch to this network in the mobile application wallet you are connected to."
+msgstr "crwdns31070:0crwdne31070:0"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:192
+msgid "Please verify current persona with social media account before using dApps."
+msgstr "crwdns31072:0crwdne31072:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx:268
+msgid "Please verify your social account"
+msgstr "crwdns31074:0crwdne31074:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx:111
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx:52
+msgid "Plug-in switch"
+msgstr "crwdns31076:0crwdne31076:0"
+
+#: src/UI/components/CompositionDialog/CompositionUI.tsx:145
+msgid "Plugins"
+msgstr "crwdns31078:0crwdne31078:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:253
+#: src/UI/components/VerifyNextIDDialog/index.tsx:273
+msgid "Post content:"
+msgstr "crwdns31080:0crwdne31080:0"
+
+#: src/UI/components/MaskPluginWrapper/index.tsx:109
+#: src/UI/components/PluginCardFrame/index.tsx:67
+msgid "Powered by"
+msgstr "crwdns31082:0crwdne31082:0"
+
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:61
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:137
+msgid "Price Statistic"
+msgstr "crwdns31084:0crwdne31084:0"
+
+#: src/UI/components/CompositionDialog/BadgeRenderer.tsx:49
+msgid "Provided by plugin \"{0}\""
+msgstr "crwdns31086:0{0}crwdne31086:0"
+
+#: src/UI/translate.ts:71
+msgid "Purchase Maskbox NFT"
+msgstr "crwdns31604:0crwdne31604:0"
+
+#: src/UI/translate.ts:47
+msgid "Purchase Maskbox NFT successfully."
+msgstr "crwdns31606:0crwdne31606:0"
+
+#: src/UI/translate.ts:115
+msgid "Purchase Maskbox NFT with {0} successfully."
+msgstr "crwdns31608:0{0}crwdne31608:0"
+
+#: src/UI/translate.ts:46
+msgid "Purchase Maskbox NFT."
+msgstr "crwdns31610:0crwdne31610:0"
+
+#: src/UI/translate.ts:72
+msgid "Refund Lucky drop"
+msgstr "crwdns31612:0crwdne31612:0"
+
+#: src/UI/translate.ts:48
+msgid "Refund Lucky Drop successfully."
+msgstr "crwdns31614:0crwdne31614:0"
+
+#: src/UI/translate.ts:117
+msgid "Refund Lucky Drop with {0} successfully."
+msgstr "crwdns31616:0{0}crwdne31616:0"
+
+#: src/UI/translate.ts:49
+msgid "Refund your expired Lucky Drop."
+msgstr "crwdns31618:0crwdne31618:0"
+
+#: src/UI/components/LoadRetry/index.tsx:24
+#: src/UI/components/ReloadStatus/index.tsx:48
+msgid "Reload"
+msgstr "crwdns31088:0crwdne31088:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx:95
+msgid "Remove"
+msgstr "crwdns31090:0crwdne31090:0"
+
+#: src/hooks/useReportSpam.tsx:63
+msgid "Report NFT Scam Contract?"
+msgstr "crwdns31092:0crwdne31092:0"
+
+#: src/hooks/useReportSpam.tsx:74
+msgid "Report Spam"
+msgstr "crwdns31094:0crwdne31094:0"
+
+#: src/UI/modals/ConnectWalletModal/index.tsx:174
+msgid "Requesting Connection"
+msgstr "crwdns31096:0crwdne31096:0"
+
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:152
+msgid "Reset"
+msgstr "crwdns31098:0crwdne31098:0"
+
+#: src/UI/modals/ConnectWalletModal/index.tsx:189
+msgid "Retry"
+msgstr "crwdns31100:0crwdne31100:0"
+
+#: src/UI/translate.ts:147
+msgid "Revoke the approval for {0}."
+msgstr "crwdns31620:0{0}crwdne31620:0"
+
+#: src/UI/translate.ts:50
+msgid "Revoke the approval for token"
+msgstr "crwdns31622:0crwdne31622:0"
+
+#: src/UI/translate.ts:51
+msgid "Revoke the approval successfully."
+msgstr "crwdns31624:0crwdne31624:0"
+
+#: src/UI/translate.ts:73
+msgid "Revoke Token"
+msgstr "crwdns31626:0crwdne31626:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:92
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx:101
+msgid "Risk Warning"
+msgstr "crwdns31102:0crwdne31102:0"
+
+#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:85
+msgid "Scan QR code with a WalletConnect-compatible wallet"
+msgstr "crwdns31104:0crwdne31104:0"
+
+#: src/UI/components/CountryCodePicker/index.tsx:112
+msgid "Search Area"
+msgstr "crwdns31106:0crwdne31106:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:249
+msgid "Search with an ENS domain or wallet address to get optimized results."
+msgstr "crwdns31108:0crwdne31108:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:239
+msgid "Search with the name of an NFT collection or its symbol to get optimized results."
+msgstr "crwdns31110:0crwdne31110:0"
+
+#: src/UI/components/SelectTokenChip/index.tsx:60
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx:128
+msgid "Select"
+msgstr "crwdns31112:0crwdne31112:0"
+
+#: src/UI/components/FungibleTokenInput/UI.tsx:221
+msgid "Select a token"
+msgstr "crwdns31114:0crwdne31114:0"
+
+#: src/UI/components/ERC721ContractSelectPanel/index.tsx:96
+msgid "Select an NFT"
+msgstr "crwdns31116:0crwdne31116:0"
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:43
+msgid "Select an NFT Contract"
+msgstr "crwdns31118:0crwdne31118:0"
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:45
+msgid "Select an NFT Contract Operator"
+msgstr "crwdns31120:0crwdne31120:0"
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:44
+msgid "Select an NFT Contract Owner"
+msgstr "crwdns31122:0crwdne31122:0"
+
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx:185
+msgid "Select Collection"
+msgstr "crwdns31124:0crwdne31124:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:335
+#: src/UI/components/AssetsManagement/Collection.tsx:147
+#: src/UI/components/AssetsManagement/CollectionList.tsx:286
+#: src/UI/components/VerifyNextIDDialog/index.tsx:295
+msgid "Send"
+msgstr "crwdns31126:0crwdne31126:0"
+
+#: src/UI/translate.ts:149
+msgid "Send {0}"
+msgstr "crwdns31628:0{0}crwdne31628:0"
+
+#: src/UI/translate.ts:119
+msgid "Send {0} successfully."
+msgstr "crwdns31630:0{0}crwdne31630:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:237
+msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr "crwdns31482:0crwdne31482:0"
+
+#: src/hooks/useOpenShareTxDialog.tsx:89
+#: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx:26
+msgid "Share"
+msgstr "crwdns31128:0crwdne31128:0"
+
+#: src/UI/components/UploadDropArea/index.tsx:128
+msgid "Size limit: 10 MB"
+msgstr "crwdns31130:0crwdne31130:0"
+
+#: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx:26
+msgid "Slippage Tolerance"
+msgstr "crwdns31132:0crwdne31132:0"
+
+#: src/UI/components/TokenSecurity/index.tsx:93
+msgid "Spam"
+msgstr "crwdns31134:0crwdne31134:0"
+
+#: src/UI/components/WalletStatusBox/TransactionList.tsx:92
+msgid "Success"
+msgstr "crwdns31136:0crwdne31136:0"
+
+#: src/hooks/useReportSpam.tsx:76
+msgid "Successfully reported."
+msgstr "crwdns31138:0crwdne31138:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:109
+#: src/UI/components/ChainBoundary/index.tsx:121
+msgid "Switch Network"
+msgstr "crwdns31140:0crwdne31140:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:204
+msgid "Switch to {0}"
+msgstr "crwdns31142:0{0}crwdne31142:0"
+
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx:179
+msgid "Tell selective friends what's happening..."
+msgstr "crwdns31144:0crwdne31144:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:307
+msgid "The contract address is incorrect or the collection does not belong to you."
+msgstr "crwdns31146:0crwdne31146:0"
+
+#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx:276
+msgid "The following wallets are not installed or in conflict with others"
+msgstr "crwdns31148:0crwdne31148:0"
+
+#: src/UI/components/PluginEnableBoundary/index.tsx:39
+msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
+msgstr "crwdns31150:0crwdne31150:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:190
+msgid "This network is not supported yet."
+msgstr "crwdns31152:0crwdne31152:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx:117
+msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
+msgstr "crwdns31154:0crwdne31154:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx:228
+msgid "Token"
+msgstr "crwdns31156:0crwdne31156:0"
+
+#: src/UI/components/AddCollectibles/index.tsx:280
+msgid "Token ID separated by comma, e.g. 1223,1224,"
+msgstr "crwdns31158:0crwdne31158:0"
+
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:118
+#: src/UI/components/FungibleCoinMarketTable/index.tsx:178
+msgid "Total Supply"
+msgstr "crwdns31160:0crwdne31160:0"
+
+#: src/hooks/useOpenShareTxDialog.tsx:81
+msgid "Transaction"
+msgstr "crwdns31162:0crwdne31162:0"
+
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:96
+msgid "Transaction Confirmed"
+msgstr "crwdns31164:0crwdne31164:0"
+
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx:337
+msgid "Transaction cost"
+msgstr "crwdns31166:0crwdne31166:0"
+
+#: src/UI/translate.ts:52
+msgid "Transaction failed"
+msgstr "crwdns31632:0crwdne31632:0"
+
+#: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx:101
+msgid "Transaction Failed"
+msgstr "crwdns31168:0crwdne31168:0"
+
+#: src/UI/translate.ts:53
+msgid "Transaction submitted."
+msgstr "crwdns31634:0crwdne31634:0"
+
+#: src/UI/translate.ts:54
+msgid "Transaction was Rejected!"
+msgstr "crwdns31636:0crwdne31636:0"
+
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:124
+msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
+msgstr "crwdns31170:0crwdne31170:0"
+
+#: src/UI/translate.ts:121
+msgid "Transfer {0} NFT successfully."
+msgstr "crwdns31638:0{0}crwdne31638:0"
+
+#: src/UI/translate.ts:151
+msgid "Transfer {0} NFT."
+msgstr "crwdns31640:0{0}crwdne31640:0"
+
+#: src/UI/translate.ts:74
+msgid "Transfer NFT"
+msgstr "crwdns31642:0crwdne31642:0"
+
+#: src/UI/translate.ts:75
+msgid "Transfer Token"
+msgstr "crwdns31644:0crwdne31644:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx:120
+msgid "Unlisted"
+msgstr "crwdns31172:0crwdne31172:0"
+
+#: src/hooks/useGasCurrencyMenu.tsx:96
+msgid "Unlock"
+msgstr "crwdns31174:0crwdne31174:0"
+
+#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:165
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:100
+msgid "Unlock {0}"
+msgstr "crwdns31176:0{0}crwdne31176:0"
+
+#: src/UI/translate.ts:123
+msgid "Unlock {0} NFT contract successfully."
+msgstr "crwdns31646:0{0}crwdne31646:0"
+
+#: src/UI/translate.ts:153
+msgid "Unlock {0} NFT contract."
+msgstr "crwdns31648:0{0}crwdne31648:0"
+
+#: src/UI/translate.ts:125
+msgid "Unlock {0} successfully"
+msgstr "crwdns31650:0{0}crwdne31650:0"
+
+#: src/UI/translate.ts:155
+msgid "Unlock {0}."
+msgstr "crwdns31652:0{0}crwdne31652:0"
+
+#: src/UI/translate.ts:76
+msgid "Unlock NFT Contract"
+msgstr "crwdns31654:0crwdne31654:0"
+
+#: src/UI/translate.ts:55
+msgid "Unlock token"
+msgstr "crwdns31656:0crwdne31656:0"
+
+#: src/UI/translate.ts:77
+msgid "Unlock Token"
+msgstr "crwdns31658:0crwdne31658:0"
+
+#: src/UI/translate.ts:56
+msgid "Unlock token successfully"
+msgstr "crwdns31660:0crwdne31660:0"
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx:59
+msgid "Unlocking {0}..."
+msgstr "crwdns31178:0{0}crwdne31178:0"
+
+#: src/UI/components/SettingsBoard/GasOption.tsx:80
+msgid "up to {0} Gwei"
+msgstr "crwdns31180:0{0}crwdne31180:0"
+
+#: src/UI/components/WalletConnectedBoundary/index.tsx:88
+msgid "Updating Gas Fee…"
+msgstr "crwdns31182:0crwdne31182:0"
+
+#: src/UI/components/AssetsManagement/CollectibleItem.tsx:186
+#: src/UI/components/AssetsManagement/Collection.tsx:197
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx:67
+msgid "Verified by {0}"
+msgstr "crwdns31184:0{0}crwdne31184:0"
+
+#: src/UI/components/PersonaSelectPanel/index.tsx:190
+msgid "Verify {0}"
+msgstr "crwdns31186:0{0}crwdne31186:0"
+
+#: src/UI/components/ConnectPersonaBoundary/index.tsx:102
+msgid "Verify your Twitter ID"
+msgstr "crwdns31188:0crwdne31188:0"
+
+#: src/UI/components/SocialAccountList/SocialListItem.tsx:233
+msgid "View"
+msgstr "crwdns31190:0crwdne31190:0"
+
+#: src/hooks/useOpenShareTxDialog.tsx:67
+#: src/UI/components/WalletStatusBox/index.tsx:187
+msgid "View on Explorer"
+msgstr "crwdns31192:0crwdne31192:0"
+
+#: src/UI/modals/WalletStatusModal/WalletStatusDialog.tsx:45
+msgid "Wallet Account"
+msgstr "crwdns31194:0crwdne31194:0"
+
+#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx:77
+msgid "WalletConnect"
+msgstr "crwdns31196:0crwdne31196:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx:264
+#: src/UI/components/VerifyNextIDDialog/index.tsx:277
+msgid "We will need to verify your Twitter account and record it on the NextID. Please post it for validation."
+msgstr "crwdns31198:0crwdne31198:0"
+
+#: src/UI/components/PluginCardFrame/index.tsx:56
+msgid "Web3 Profile"
+msgstr "crwdns31200:0crwdne31200:0"
+
+#: src/UI/components/CoinMetadataTable/index.tsx:104
+#: src/UI/components/CoinMetadataTable/index.tsx:274
+msgid "Website"
+msgstr "crwdns31202:0crwdne31202:0"
+
+#: src/UI/translate.ts:157
+msgid "Withdraw {0} for savings."
+msgstr "crwdns31662:0{0}crwdne31662:0"
+
+#: src/UI/translate.ts:127
+msgid "Withdraw {0} successfully."
+msgstr "crwdns31664:0{0}crwdne31664:0"
+
+#: src/UI/translate.ts:78
+msgid "Withdraw token"
+msgstr "crwdns31666:0crwdne31666:0"
+
+#: src/UI/components/ChainBoundary/index.tsx:155
+msgid "Wrong Network"
+msgstr "crwdns31204:0crwdne31204:0"
+
+#: src/UI/modals/ConnectWalletModal/index.tsx:178
+msgid "You canceled the request."
+msgstr "crwdns31206:0crwdne31206:0"
+
+#: src/UI/translate.ts:130
+msgid "You didn't approve {0} successfully. Please do not set spending cap as 0 and try it again."
+msgstr "crwdns31668:0{0}crwdne31668:0"
+
+#: src/UI/translate.ts:133
+msgid "You have donated {0} {1}"
+msgstr "crwdns31670:0{0}crwdnd31670:0{1}crwdne31670:0"
+
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx:131
+msgid "You may have {0}% less received with this level of slippage tolerance."
+msgstr "crwdns31208:0{0}crwdne31208:0"
+
+#: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx:147
+msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
+msgstr "crwdns31210:0{0}crwdnd31210:0{1}crwdne31210:0"
+
+#: src/UI/translate.ts:136
+msgid "You've approved {0} for {1}. If you want to revoke that token, please keep custom spending cap amount as 0 and try it again."
+msgstr "crwdns31672:0{0}crwdnd31672:0{1}crwdne31672:0"
+
+#: src/hooks/useOpenShareTxDialog.tsx:84
+msgid "Your transaction was confirmed!"
+msgstr "crwdns31212:0crwdne31212:0"
 
