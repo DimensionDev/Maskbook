@@ -7,11 +7,11 @@ export async function encryptBackup(password: BufferSource, binaryBackup: Buffer
     const AESParam: AesGcmParams = { name: 'AES-GCM', iv: crypto.getRandomValues(new Uint8Array(16)) }
 
     const encrypted = new Uint8Array(await crypto.subtle.encrypt(AESParam, AESKey, binaryBackup))
-    const container = encode([pbkdf2IV, AESParam.iv, encrypted])
+    const container = encode([pbkdf2IV, AESParam.iv, encrypted]) as Uint8Array<ArrayBuffer>
     return createContainer(SupportedVersions.Version0, container)
 }
 
-export async function decryptBackup(password: BufferSource, data: ArrayBuffer) {
+export async function decryptBackup(password: BufferSource, data: ArrayBuffer | ArrayLike<number>) {
     const container = await parseEncryptedJSONContainer(SupportedVersions.Version0, data)
 
     const _ = decode(container)

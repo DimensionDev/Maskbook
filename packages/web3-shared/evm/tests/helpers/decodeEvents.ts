@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
 import { decodeEvents } from '../../src/helpers/decodeEvents.js'
 import type { AbiItem } from 'web3-utils'
 import { type Log } from 'web3-core'

@@ -83,7 +83,7 @@ export async function encryptByLocalKey(who: ProfileIdentifier, content: Uint8Ar
     })
     if (!key) throw new Error('No local key found')
     const result = await crypto.subtle.encrypt({ iv, name: 'AES-GCM' }, key, content)
-    return result as Uint8Array
+    return result
 }
 
 async function getLocalKeyOf(id: ProfileIdentifier, tx: FullPersonaDBTransaction<'readonly'>) {

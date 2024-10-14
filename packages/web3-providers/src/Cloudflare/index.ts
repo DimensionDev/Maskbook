@@ -6,7 +6,7 @@ import {
     getTokenAssetBaseURLConstants,
     isNativeTokenAddress,
 } from '@masknet/web3-shared-evm'
-import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json'
+import SPECIAL_ICON_LIST from './TokenIconSpecialIconList.json' with { type: 'json' }
 import type { TokenIconAPI } from '../entry-types.js'
 
 class CloudflareAPI implements TokenIconAPI.Provider<ChainId> {

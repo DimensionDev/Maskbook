@@ -24,10 +24,10 @@ function deriveAES(key: CryptoKey, iv: ArrayBuffer) {
 function createAES() {
     return crypto.subtle.generateKey({ name: 'AES-GCM', length: 256 }, true, ['encrypt', 'decrypt'])
 }
-function encrypt(message: ArrayBuffer, key: CryptoKey, iv: ArrayBuffer) {
+function encrypt(message: BufferSource, key: CryptoKey, iv: BufferSource) {
     return crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, message)
 }
-function decrypt(message: ArrayBuffer, key: CryptoKey, iv: ArrayBuffer) {
+function decrypt(message: BufferSource, key: CryptoKey, iv: BufferSource) {
     return crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message)
 }
 function wrapKey(key: CryptoKey, wrapKey: CryptoKey) {

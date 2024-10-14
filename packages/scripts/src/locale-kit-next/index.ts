@@ -27,7 +27,7 @@ export async function syncLanguages() {
         {
             let code = header
             for (const [language] of languages) {
-                code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+                code += `import ${language.replace('-', '_')} from './${language}.json' with { type: 'json' }\n`
             }
             code += `export const languages = {\n`
             for (const [language, familyName] of languages) {
@@ -91,10 +91,10 @@ export async function syncLanguages() {
         {
             let code = header
             for (const [language] of languages) {
-                code += `import ${language.replace('-', '_')} from './${language}.json'\n`
+                code += `import ${language.replace('-', '_')} from './${language}.json' with { type: 'json' }\n`
             }
             for (const [language] of linguiLanguages) {
-                code += `import lingui_${language.replace('-', '_')} from '${relativeToInput}/${language}.json'\n`
+                code += `import lingui_${language.replace('-', '_')} from '${relativeToInput}/${language}.json' with { type: 'json' }\n`
             }
             code += `export const languages = {\n`
             for (const [language, familyName] of languages) {

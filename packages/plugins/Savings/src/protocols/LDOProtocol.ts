@@ -15,9 +15,9 @@ import type { LidoWithdraw } from '@masknet/web3-contracts/types/LidoWithdraw.js
 import type { LidoStETH } from '@masknet/web3-contracts/types/LidoStETH.js'
 
 import { EVMWeb3, Lido as LidoAPI } from '@masknet/web3-providers'
-import LidoABI from '@masknet/web3-contracts/abis/Lido.json'
-import LidoWithdrawABI from '@masknet/web3-contracts/abis/LidoWithdraw.json'
-import LidoStEthABI from '@masknet/web3-contracts/abis/LidoStETH.json'
+import LidoABI from '@masknet/web3-contracts/abis/Lido.json' with { type: 'json' }
+import LidoWithdrawABI from '@masknet/web3-contracts/abis/LidoWithdraw.json' with { type: 'json' }
+import LidoStEthABI from '@masknet/web3-contracts/abis/LidoStETH.json' with { type: 'json' }
 import { ProtocolType, type SavingsProtocol, type TokenPair } from '../types.js'
 
 const MAX_DEADLINE = BigInt('0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff')

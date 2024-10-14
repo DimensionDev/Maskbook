@@ -4,8 +4,8 @@ import type { AbiItem } from 'web3-utils'
 import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
 import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
-import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
+import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
+import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json' with { type: 'json' }
 import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
 import { fetchFromDSearch } from '../DSearch/helpers.js'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'

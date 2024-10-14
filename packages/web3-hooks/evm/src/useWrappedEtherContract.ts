@@ -1,5 +1,5 @@
 import type { AbiItem } from 'web3-utils'
-import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
+import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json' with { type: 'json' }
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import { type ChainId, useTokenConstants } from '@masknet/web3-shared-evm'
 import { useContract } from './useContract.js'

@@ -9,9 +9,9 @@ import type { TypedMessage } from '@masknet/typed-message'
 import { createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { META_KEY_1, META_KEY_2, META_KEY_3, RECOVERY_PAGE } from './constants.js'
 import { type FileInfo, type FileInfoV1, Provider } from './types.js'
-import schemaV1 from './schema-v1.json'
-import schemaV2 from './schema-v2.json'
-import schemaV3 from './schema-v3.json'
+import schemaV1 from './schema-v1.json' with { type: 'json' }
+import schemaV2 from './schema-v2.json' with { type: 'json' }
+import schemaV3 from './schema-v3.json' with { type: 'json' }
 
 // Note: if the latest version has been changed, please update packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)

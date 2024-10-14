@@ -12,6 +12,7 @@
     { "path": "../../web3-hooks/base/tsconfig.json" },
     { "path": "../../web3-shared/base/tsconfig.json" },
     { "path": "../../web3-shared/evm/tsconfig.json" },
+    { "path": "../../web3-providers/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" }
   ]
 }

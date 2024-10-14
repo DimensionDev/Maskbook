@@ -1,8 +1,8 @@
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
-import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json'
-import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json'
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
+import AaveLendingPoolABI from '@masknet/web3-contracts/abis/AaveLendingPool.json' with { type: 'json' }
+import AaveLendingPoolAddressProviderABI from '@masknet/web3-contracts/abis/AaveLendingPoolAddressProvider.json' with { type: 'json' }
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
 import type { AaveLendingPool } from '@masknet/web3-contracts/types/AaveLendingPool.js'
 import type { AaveLendingPoolAddressProvider } from '@masknet/web3-contracts/types/AaveLendingPoolAddressProvider.js'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'

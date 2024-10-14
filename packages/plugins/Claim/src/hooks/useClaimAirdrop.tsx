@@ -3,7 +3,7 @@ import { useAsyncFn } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import { useTheme } from '@mui/material'
 import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
-import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json'
+import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json' with { type: 'json' }
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
 import {
