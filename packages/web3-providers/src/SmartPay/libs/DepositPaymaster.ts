@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { type ChainId, createContract, getSmartPayConstants, ProviderURL } from '@masknet/web3-shared-evm'
-import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.json'
+import DepositPaymasterABI from '@masknet/web3-contracts/abis/DepositPaymaster.json' with { type: 'json' }
 import type { DepositPaymaster as DepositPaymasterType } from '@masknet/web3-contracts/types/DepositPaymaster.js'
 import { createWeb3FromURL } from '../../helpers/createWeb3FromURL.js'
 

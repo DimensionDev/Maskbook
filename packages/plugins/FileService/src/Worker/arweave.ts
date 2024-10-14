@@ -7,7 +7,7 @@ import type { JWKInterface } from 'arweave/web/lib/wallet.js'
 import { fetchText } from '@masknet/web3-providers/helpers'
 import { LANDING_PAGE, MESON_PREFIX, Provider } from '../constants.js'
 import { sign } from './remote-signing.js'
-import TOKEN from './arweave-token.json'
+import TOKEN from './arweave-token.json' with { type: 'json' }
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
 

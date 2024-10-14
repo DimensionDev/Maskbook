@@ -3,7 +3,7 @@ import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { AbiItem } from 'web3-utils'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Wallet, ECKeyIdentifier, Proof, ProofPayload } from '@masknet/shared-base'
-import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json'
+import CREATE2_FACTORY_ABI from '@masknet/web3-contracts/abis/Create2Factory.json' with { type: 'json' }
 import { isValidChainId } from '../helpers/isValidChainId.js'
 import { formatEthereumAddress } from '../helpers/formatter.js'
 import { parseChainId } from '../helpers/parseChainId.js'

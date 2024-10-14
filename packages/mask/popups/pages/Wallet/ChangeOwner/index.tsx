@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom'
 import type { AbiItem } from 'web3-utils'
 import { useContainer } from '@masknet/shared-base-ui'
 import { EVMContract, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json' with { type: 'json' }
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import { Box, Link, Popover, Typography, alpha } from '@mui/material'
 import { Icons } from '@masknet/icons'

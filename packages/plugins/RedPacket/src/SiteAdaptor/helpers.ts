@@ -4,8 +4,8 @@ import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Ok, type Result } from 'ts-results-es'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
-import schemaNtf from '../schema-nft.json'
-import schema from '../schema.json'
+import schemaNtf from '../schema-nft.json' with { type: 'json' }
+import schema from '../schema.json' with { type: 'json' }
 
 const reader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, schema)
 export function RedPacketMetadataReader(

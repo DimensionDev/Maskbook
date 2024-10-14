@@ -4,21 +4,21 @@ import { abiCoder } from '@masknet/web3-shared-evm'
 import type { TransactionMethodABI } from './types.js'
 
 // built-in abis
-import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
-import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json'
-import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
-import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
-import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json'
-import WETH from '@masknet/web3-contracts/abis/WETH.json'
-import Lido from '@masknet/web3-contracts/abis/Lido.json'
-import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json'
-import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json'
-import WalletContract from '@masknet/web3-contracts/abis/Wallet.json'
-import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
-import LensHub from '@masknet/web3-contracts/abis/LensHub.json'
-import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json'
-import Airdrop from '@masknet/web3-contracts/abis/AirdropV2.json'
+import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json' with { type: 'json' }
+import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json' with { type: 'json' }
+import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
+import ERC20 from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
+import ERC721 from '@masknet/web3-contracts/abis/ERC721.json' with { type: 'json' }
+import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json' with { type: 'json' }
+import WETH from '@masknet/web3-contracts/abis/WETH.json' with { type: 'json' }
+import Lido from '@masknet/web3-contracts/abis/Lido.json' with { type: 'json' }
+import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json' with { type: 'json' }
+import SmartPayEntryPoint from '@masknet/web3-contracts/abis/SmartPayEntryPoint.json' with { type: 'json' }
+import WalletContract from '@masknet/web3-contracts/abis/Wallet.json' with { type: 'json' }
+import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json' with { type: 'json' }
+import LensHub from '@masknet/web3-contracts/abis/LensHub.json' with { type: 'json' }
+import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json' with { type: 'json' }
+import Airdrop from '@masknet/web3-contracts/abis/AirdropV2.json' with { type: 'json' }
 
 class ABI {
     private abis: Map<string, TransactionMethodABI[]> = new Map()

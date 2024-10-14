@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
-import Auth from '@masknet/web3-constants/flow/auth.json'
-import Chain from '@masknet/web3-constants/flow/chain.json'
-import Token from '@masknet/web3-constants/flow/token.json'
+import Auth from '@masknet/web3-constants/flow/auth.json' with { type: 'json' }
+import Chain from '@masknet/web3-constants/flow/chain.json' with { type: 'json' }
+import Token from '@masknet/web3-constants/flow/token.json' with { type: 'json' }
 import { transform, transformAll, transformAllHook, transformHook } from '@masknet/web3-shared-base'
 import { ChainId } from '../types.js'
 

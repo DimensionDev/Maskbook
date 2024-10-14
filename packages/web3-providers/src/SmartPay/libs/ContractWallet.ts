@@ -8,8 +8,8 @@ import {
     Web3,
 } from '@masknet/web3-shared-evm'
 import type { WalletProxy } from '@masknet/web3-contracts/types/WalletProxy.js'
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
-import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json'
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json' with { type: 'json' }
+import WalletProxyABI from '@masknet/web3-contracts/abis/WalletProxy.json' with { type: 'json' }
 import { WalletProxyByteCode } from '@masknet/web3-contracts/bytes/WalletProxy.mjs'
 
 export class ContractWallet {

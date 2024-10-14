@@ -1,8 +1,8 @@
 import { useContract } from '@masknet/web3-hooks-evm'
-import HappyRedPacketV1ABI from '@masknet/web3-contracts/abis/HappyRedPacketV1.json'
-import HappyRedPacketV2ABI from '@masknet/web3-contracts/abis/HappyRedPacketV2.json'
-import HappyRedPacketV3ABI from '@masknet/web3-contracts/abis/HappyRedPacketV3.json'
-import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import HappyRedPacketV1ABI from '@masknet/web3-contracts/abis/HappyRedPacketV1.json' with { type: 'json' }
+import HappyRedPacketV2ABI from '@masknet/web3-contracts/abis/HappyRedPacketV2.json' with { type: 'json' }
+import HappyRedPacketV3ABI from '@masknet/web3-contracts/abis/HappyRedPacketV3.json' with { type: 'json' }
+import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
 import type { HappyRedPacketV1 } from '@masknet/web3-contracts/types/HappyRedPacketV1.js'
 import type { HappyRedPacketV2 } from '@masknet/web3-contracts/types/HappyRedPacketV2.js'
 import type { HappyRedPacketV3 } from '@masknet/web3-contracts/types/HappyRedPacketV3.js'

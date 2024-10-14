@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useContract, useContracts } from './useContract.js'

@@ -5,7 +5,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'
 import { EVMWeb3, Lens } from '@masknet/web3-providers'
 import { ChainId, ContractTransaction, splitSignature, useLensConstants } from '@masknet/web3-shared-evm'
-import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
+import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json' with { type: 'json' }
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { BroadcastType, type FollowModuleTypedData } from '@masknet/web3-providers/types'

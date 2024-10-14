@@ -1,7 +1,7 @@
 import type { AbiItem } from 'web3-utils'
 import { type TransactionContext, isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId, getMaskBoxConstants, type TransactionParameter } from '@masknet/web3-shared-evm'
-import MaskBox_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
+import MaskBox_ABI from '@masknet/web3-contracts/abis/MaskBox.json' with { type: 'json' }
 import type { TransactionDescriptorFormatResult } from '../types.js'
 import { DescriptorWithTransactionDecodedReceipt, getTokenAmountDescription } from '../utils.js'
 
