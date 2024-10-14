@@ -8,7 +8,7 @@ msgstr ""
 "Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"PO-Revision-Date: 2024-10-14 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Quenya\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
@@ -17,4 +17,41 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/CyberConnect/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 960\n"
+
+#: src/SiteAdaptor/index.tsx:46
+msgid "CyberConnect"
+msgstr "crwdns28526:0crwdne28526:0"
+
+#: src/SiteAdaptor/index.tsx:45
+msgid "Decentralized social graph protocol for user-centric Web3."
+msgstr "crwdns28528:0crwdne28528:0"
+
+#: src/SiteAdaptor/ConnectButton.tsx:106
+msgid "Follow Now"
+msgstr "crwdns28530:0crwdne28530:0"
+
+#: src/SiteAdaptor/Profile.tsx:191
+msgid "Followers"
+msgstr "crwdns28532:0crwdne28532:0"
+
+#: src/SiteAdaptor/Profile.tsx:186
+msgid "Followings"
+msgstr "crwdns28534:0crwdne28534:0"
+
+#: src/SiteAdaptor/FollowersPage.tsx:24
+#: src/SiteAdaptor/Profile.tsx:130
+msgid "Load failed"
+msgstr "crwdns28536:0crwdne28536:0"
+
+#: src/SiteAdaptor/Profile.tsx:123
+msgid "No followers."
+msgstr "crwdns28538:0crwdne28538:0"
+
+#: src/SiteAdaptor/Profile.tsx:124
+msgid "No following friends."
+msgstr "crwdns28540:0crwdne28540:0"
+
+#: src/SiteAdaptor/ConnectButton.tsx:107
+msgid "Unfollow"
+msgstr "crwdns28542:0crwdne28542:0"
 
