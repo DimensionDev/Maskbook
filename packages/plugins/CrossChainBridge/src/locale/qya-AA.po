@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-14 00:00\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 01:19\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -18,12 +16,12 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/CrossChainBridge/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 958\n"
 
-#: src/SiteAdaptor/CrossChainBridgeDialog.tsx:24
-#: src/SiteAdaptor/index.tsx:15
+#: src/SiteAdaptor/CrossChainBridgeDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Cross-chain"
 msgstr "crwdns28522:0crwdne28522:0"
 
-#: src/SiteAdaptor/components/BridgeStack.tsx:83
+#: src/SiteAdaptor/components/BridgeStack.tsx
 msgid "Powered by Celer Network. Support $MASK!"
 msgstr "crwdns28524:0$MASKcrwdne28524:0"
 
