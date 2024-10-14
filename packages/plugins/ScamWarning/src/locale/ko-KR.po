@@ -1,15 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"Project-Id-Version: mask-network\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:05\n"
 "Last-Translator: \n"
-"Language: \n"
-"Language-Team: \n"
-"Content-Type: \n"
+"Language: ko_KR\n"
+"Language-Team: Korean\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 990\n"
 
 #: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
@@ -22,3 +27,4 @@ msgstr "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적
 #: src/SiteAdaptor/index.tsx
 msgid "Safety Warning"
 msgstr "안전 경고"
+
