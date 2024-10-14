@@ -1,15 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"Project-Id-Version: mask-network\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
-"Language: \n"
-"Language-Team: \n"
-"Content-Type: \n"
+"Language: ko_KR\n"
+"Language-Team: Korean\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 1006\n"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "<0>{0}</0> Followers <1>{1}</1> Following"
@@ -68,7 +73,7 @@ msgstr "팔로잉"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens"
-msgstr "Lens"
+msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Lens Follow"
@@ -160,3 +165,4 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
+
