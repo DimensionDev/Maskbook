@@ -1,77 +1,141 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FriendTech/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 966\n"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
 msgid "{0, plural, one {# Key} other {# Keys}}"
 msgstr "crwdns31368:00={0}crwdne31368:0"
+
+#: src/SiteAdaptor/components/HistoryList.tsx
 msgid "{0} bought {shareAmount} <0>{1}</0> {shareAmount, plural, one {key} other {keys}}"
 msgstr "crwdns32236:00={0}crwdnd32236:0shareAmount={shareAmount}crwdnd32236:01={1}crwdnd32236:0shareAmount={shareAmount}crwdne32236:0"
+
+#: src/SiteAdaptor/components/HistoryList.tsx
 msgid "{0} sold {shareAmount} <0>{1}</0> {shareAmount, plural, one {key} other {keys}}"
 msgstr "crwdns32238:00={0}crwdnd32238:0shareAmount={shareAmount}crwdnd32238:01={1}crwdnd32238:0shareAmount={shareAmount}crwdne32238:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
 msgid "{ownCount, plural, one {# Key} other {# Keys}}"
 msgstr "crwdns31374:0ownCount={ownCount}crwdne31374:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "Action"
 msgstr "crwdns28592:0crwdne28592:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "Amount"
 msgstr "crwdns28594:0crwdne28594:0"
+
+#: src/SiteAdaptor/Main.tsx
 msgid "Connecting to the wallet to see what keys are held."
 msgstr "crwdns28596:0crwdne28596:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Display the user's friend key related information on the timeline on x.com."
 msgstr "crwdns28598:0crwdne28598:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Friend"
 msgstr "crwdns28600:0crwdne28600:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "From"
 msgstr "crwdns28602:0crwdne28602:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "Gas fee"
 msgstr "crwdns28604:0crwdne28604:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "History"
 msgstr "crwdns28606:0crwdne28606:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
 msgid "Holders"
 msgstr "crwdns28608:0crwdne28608:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
+#: src/SiteAdaptor/UserDetail.tsx
 msgid "Holding"
 msgstr "crwdns28610:0crwdne28610:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
 msgid "Key Price"
 msgstr "crwdns28612:0crwdne28612:0"
+
+#: src/SiteAdaptor/components/HoldingCard.tsx
+#: src/SiteAdaptor/components/HoldingCard.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Keys"
 msgstr "crwdns28614:0crwdne28614:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Sell"
 msgstr "crwdns28616:0crwdne28616:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "Sell <0>{count}</0> {count, plural, one {key} other {keys}} for <1>{cost}</1> ETH"
 msgstr "crwdns32240:0count={count}crwdnd32240:0count={count}crwdnd32240:0cost={cost}crwdne32240:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "Sell Key"
 msgstr "crwdns28618:0crwdne28618:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
+#: src/SiteAdaptor/Order.tsx
 msgid "The price of next share is equal to the S^2 / 16000*1 ether where S is the current number of keys."
 msgstr "crwdns28620:0crwdne28620:0"
+
+#: src/SiteAdaptor/components/HoldingList.tsx
 msgid "There's no one holding. <0>go explore</0>"
 msgstr "crwdns31380:0crwdne31380:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "To"
 msgstr "crwdns28622:0crwdne28622:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "Total Amount"
 msgstr "crwdns28624:0crwdne28624:0"
+
+#: src/SiteAdaptor/UserDetail.tsx
 msgid "Trades"
 msgstr "crwdns28626:0crwdne28626:0"
+
+#: src/SiteAdaptor/components/HoldingCard.tsx
+#: src/SiteAdaptor/components/HoldingCard.tsx
 msgid "Value"
 msgstr "crwdns28628:0crwdne28628:0"
+
+#: src/SiteAdaptor/Order.tsx
 msgid "You currently hold: {own} {count, plural, one {key} other {keys}}"
 msgstr "crwdns32242:0own={own}crwdnd32242:0count={count}crwdne32242:0"
+
+#: src/SiteAdaptor/components/HoldingList.tsx
 msgid "You don't have any keys in your wallet. <0>go explore</0>"
 msgstr "crwdns31382:0crwdne31382:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
 msgid "You Own"
 msgstr "crwdns28630:0crwdne28630:0"
+
+#: src/SiteAdaptor/components/UserProfile.tsx
 msgid "Your Rank"
 msgstr "crwdns28632:0crwdne28632:0"
+
