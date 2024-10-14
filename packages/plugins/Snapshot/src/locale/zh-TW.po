@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-14 00:00\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 01:19\n"
 "Last-Translator: \n"
+"Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -18,181 +16,154 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
 
-#: src/SiteAdaptor/InformationCard.tsx:78
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "{0, plural, one {Strategy} other {Strategies}}"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileSpaceHeader.tsx:112
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "{0} members"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:95
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "Author"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx:145
+#: src/SiteAdaptor/VotingCard.tsx
 msgid "Cast your vote"
 msgstr ""
 
-#: src/SiteAdaptor/ResultCard.tsx:109
-#: src/SiteAdaptor/ResultCard.tsx:191
-#: src/SiteAdaptor/ResultCard.tsx:202
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
 msgid "Current results"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:75
+#: src/SiteAdaptor/index.tsx
 msgid "DAO"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:74
-#~ msgid "Display Snapshot proposals on the Twitter page of the respective project or protocol."
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:73
+#: src/SiteAdaptor/index.tsx
 msgid "Display Snapshot proposals on the X of the respective project or protocol."
 msgstr ""
 
-#: src/SiteAdaptor/ResultCard.tsx:180
+#: src/SiteAdaptor/ResultCard.tsx
 msgid "Download report"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:126
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "End date"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:219
-#~ msgid "Ended {0}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/ProfileProposalList.tsx:226
+#: src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Ended {relativeEndTime}"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:221
-#~ msgid "Ends in {0}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/ProfileProposalList.tsx:228
+#: src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Ends in {relativeEndTime}"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:76
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "Information"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:111
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "IPFS"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileSpaceHeader.tsx:125
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "Join"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileView.tsx:128
+#: src/SiteAdaptor/ProfileView.tsx
 msgid "Loading"
 msgstr ""
 
-#: src/SiteAdaptor/LoadingFailCard.tsx:75
+#: src/SiteAdaptor/LoadingFailCard.tsx
 msgid "Loading failed due to Snapshot API service breakdown."
 msgstr ""
 
-#: src/SiteAdaptor/LoadingFailCard.tsx:75
-#~ msgid "Loading fails due to Snapshot API service breakdown."
-#~ msgstr ""
-
-#: src/SiteAdaptor/ProfileProposalList.tsx:271
+#: src/SiteAdaptor/ProfileProposalList.tsx
 msgid "My vote"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx:176
+#: src/SiteAdaptor/VotingCard.tsx
 msgid "No power"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileView.tsx:138
+#: src/SiteAdaptor/ProfileView.tsx
 msgid "Oops, we can't find any results."
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx:53
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Option(s)"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx:121
+#: src/SiteAdaptor/VotingCard.tsx
 msgid "Please try again if you failed to vote."
 msgstr ""
 
-#: src/SiteAdaptor/Snapshot.tsx:102
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "Progress"
 msgstr ""
 
-#: src/SiteAdaptor/Snapshot.tsx:98
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "Proposal"
 msgstr ""
 
-#: src/SiteAdaptor/ResultCard.tsx:109
-#: src/SiteAdaptor/ResultCard.tsx:191
-#: src/SiteAdaptor/ResultCard.tsx:202
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
 msgid "Results"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:131
-#: src/SiteAdaptor/PluginDescriptor.tsx:33
-#: src/SiteAdaptor/ProfileView.tsx:83
-#: src/SiteAdaptor/VoteConfirmDialog.tsx:73
+#: src/SiteAdaptor/InformationCard.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Snapshot"
 msgstr ""
 
-#: src/SiteAdaptor/SpaceMenu.tsx:108
+#: src/SiteAdaptor/SpaceMenu.tsx
 msgid "Space"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx:121
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "Start date"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:224
+#: src/SiteAdaptor/ProfileProposalList.tsx
 msgid "Starts {relativeStartTime}"
 msgstr ""
 
-#: src/SiteAdaptor/ProfileProposalList.tsx:217
-#~ msgid "Starts in {0}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/InformationCard.tsx:77
-#~ msgid "Strategie(s)"
-#~ msgstr ""
-
-#: src/SiteAdaptor/ProfileSpaceHeader.tsx:124
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "View"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx:98
-#: src/SiteAdaptor/VotingCard.tsx:66
-#: src/SiteAdaptor/VotingCard.tsx:175
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingCard.tsx
 msgid "Vote"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx:51
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Vote Overview"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx:120
-#~ msgid "Voted successfully."
-#~ msgstr ""
-
-#: src/SiteAdaptor/VotingCard.tsx:120
+#: src/SiteAdaptor/VotingCard.tsx
 msgid "Voted."
 msgstr ""
 
-#: src/SiteAdaptor/VotesCard.tsx:103
-#: src/SiteAdaptor/VotesCard.tsx:184
-#: src/SiteAdaptor/VotesCard.tsx:190
+#: src/SiteAdaptor/VotesCard.tsx
+#: src/SiteAdaptor/VotesCard.tsx
+#: src/SiteAdaptor/VotesCard.tsx
 msgid "Votes"
 msgstr ""
 
-#: src/SiteAdaptor/VotesCard.tsx:132
+#: src/SiteAdaptor/VotesCard.tsx
 msgid "You"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx:83
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Your voting power"
 msgstr ""
+
