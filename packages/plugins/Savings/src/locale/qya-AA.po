@@ -1,73 +1,142 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:07\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Savings/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 986\n"
+
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "{0} days"
 msgstr "crwdns29164:0{0}crwdne29164:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Amount"
 msgstr "crwdns29166:0crwdne29166:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "APR"
 msgstr "crwdns29168:0crwdne29168:0"
+
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Asset"
 msgstr "crwdns29170:0crwdne29170:0"
+
+#: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
 msgid "Deposit"
 msgstr "crwdns29172:0crwdne29172:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Deposit {0}"
 msgstr "crwdns32318:0{0}crwdne32318:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Done"
 msgstr "crwdns29174:0crwdne29174:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Enter an amount"
 msgstr "crwdns29176:0crwdne29176:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Failed"
 msgstr "crwdns29178:0crwdne29178:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Hi friends, I just deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr "crwdns31760:0{0}crwdnd31760:0{1}crwdnd31760:0{2}crwdnd31760:0{3}crwdne31760:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr "crwdns31762:0{0}crwdnd31762:0{1}crwdnd31762:0{2}crwdnd31762:0{3}crwdne31762:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
 msgstr "crwdns29180:0crwdne29180:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Insufficient ${0} balance"
 msgstr "crwdns29182:0${0}crwdne29182:0"
+
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Lido Exchange Rate"
 msgstr "crwdns29184:0crwdne29184:0"
+
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Loading"
 msgstr "crwdns29186:0crwdne29186:0"
+
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr "crwdns29190:0{MINIMUM_AMOUNT}crwdnd29190:0{0}crwdne29190:0"
+
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "No deposit protocols found."
 msgstr "crwdns29192:0crwdne29192:0"
+
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Operation"
 msgstr "crwdns29194:0crwdne29194:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Deposit"
 msgstr "crwdns29196:0crwdne29196:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Processing Withdrawal"
 msgstr "crwdns29198:0crwdne29198:0"
+
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/SavingsDialog.tsx
 msgid "Savings"
 msgstr "crwdns29202:0crwdne29202:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Swap {0}"
 msgstr "crwdns29204:0{0}crwdne29204:0"
+
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
 msgstr "crwdns29206:0{0}crwdne29206:0"
+
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Waiting time"
 msgstr "crwdns29208:0crwdne29208:0"
+
+#: src/SiteAdaptor/SavingsTable/index.tsx
 msgid "Wallet"
 msgstr "crwdns29210:0crwdne29210:0"
+
+#: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
 msgstr "crwdns29212:0crwdne29212:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
 msgstr "crwdns29214:0{0}crwdne29214:0"
+
