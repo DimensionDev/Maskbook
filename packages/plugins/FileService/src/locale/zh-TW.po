@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"PO-Revision-Date: 2024-10-14 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -194,3 +194,4 @@ msgstr ""
 #: src/SiteAdaptor/FileViewer.tsx:36
 #~ msgid "You’ve saved {0} to Web3 file service."
 #~ msgstr ""
+
