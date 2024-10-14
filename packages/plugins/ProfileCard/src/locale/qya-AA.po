@@ -1,35 +1,50 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ProfileCard/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 980\n"
+
+#: src/SiteAdaptor/index.tsx
 msgid "General user"
 msgstr "crwdns31390:0crwdne31390:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "NFT collection"
 msgstr "crwdns31392:0crwdne31392:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Stay on top of NFT trending information, hot projects, notable transactions, etc."
 msgstr "crwdns31394:0crwdne31394:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Token"
 msgstr "crwdns31396:0crwdne31396:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "View multiple accounts Web3 profile by hovering over the mini Mask icon at the corner of Avatar or token tags in timeline."
 msgstr "crwdns28890:0crwdne28890:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "View real-time crypto prices, market cap, trading volume, etc."
 msgstr "crwdns31398:0crwdne31398:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "View user's Web3 footprints, including NFTs, social media posts and other transaction activities based on public data source."
 msgstr "crwdns32260:0crwdne32260:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile Card"
 msgstr "crwdns28892:0crwdne28892:0"
+
