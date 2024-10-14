@@ -126,13 +126,10 @@ export function PluginGuide({
 
             if (cr) {
                 const bottomAvailable = window.innerHeight - cr.height - cr.top > 200
-                // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
                 setBottomAvailable(bottomAvailable)
                 if (!cr.width) {
-                    // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
                     setClientRect({ ...cr.toJSON(), top: 30, left: 'calc(100vw - 300px)' })
                 } else {
-                    // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
                     setClientRect(cr)
                 }
             }

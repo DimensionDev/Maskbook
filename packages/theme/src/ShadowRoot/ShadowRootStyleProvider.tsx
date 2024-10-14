@@ -25,7 +25,6 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
         if (!props.preventPropagation) return
         const ac = new AbortController()
         const signal = ac.signal
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         preventEventPropagationList.forEach((event) => shadow.addEventListener(event, stopPropagation, { signal }))
         return () => ac.abort()
     }, [props.preventPropagation, preventEventPropagationList, shadow])

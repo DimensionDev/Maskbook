@@ -385,20 +385,13 @@ function InjectProfileTab() {
     useEffect(() => {
         const ac = new AbortController()
         const signal = ac.signal
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         web3TabRef.current?.addEventListener('mouseenter', onMouseEnter, { signal })
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         web3TabRef.current?.addEventListener('mouseleave', onMouseLeave, { signal })
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         nextArrow?.addEventListener('click', onNextClick, { signal })
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         nextArrow?.addEventListener('mouseenter', onEnterNextArrow, { signal })
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         nextArrow?.addEventListener('mouseleave', onLeaveNextArrow, { signal })
         tabList.map((v) => {
-            // eslint-disable-next-line react/web-api/no-leaked-event-listener
             v.closest('div')?.addEventListener('mouseenter', onMouseEnter, { signal })
-            // eslint-disable-next-line react/web-api/no-leaked-event-listener
             v.closest('div')?.addEventListener('mouseleave', onMouseLeave, { signal })
         })
         return () => ac.abort()

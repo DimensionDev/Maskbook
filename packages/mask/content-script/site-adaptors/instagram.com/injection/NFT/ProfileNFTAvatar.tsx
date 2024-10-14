@@ -55,7 +55,6 @@ function NFTAvatarButtonInDialog() {
         const dom = searchInstagramAvatarListSelector().evaluate()
         if (!dom) return
         const css = window.getComputedStyle(dom)
-        // eslint-disable-next-line react/hooks-extra/no-direct-set-state-in-use-effect
         setStyle({
             minHeight: Number(css.minHeight.replace('px', '')),
             fontSize: Number(css.fontSize.replace('px', '')),

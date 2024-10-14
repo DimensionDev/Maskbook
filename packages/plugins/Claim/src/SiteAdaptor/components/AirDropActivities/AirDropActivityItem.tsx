@@ -106,7 +106,7 @@ export const AirDropActivityItem = memo<AirDropActivityItemProps>(
     }) => {
         const { classes } = useStyles()
         const { account, providerType } = useChainContext()
-        const [now, setNow] = useState(new Date())
+        const [now, setNow] = useState(() => new Date())
         const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
 
         const activityStatus = useMemo(() => {

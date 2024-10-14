@@ -119,11 +119,6 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 computedFlags.sourceMapKind ?
                     { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
                 :   null,
-                // Patch old regenerator-runtime
-                {
-                    test: /\..?js$/,
-                    loader: require.resolve('./loaders/fix-regenerator-runtime.js'),
-                },
                 // TypeScript
                 {
                     test: /\.[mc]?[jt]sx?$/i,
