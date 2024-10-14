@@ -138,7 +138,7 @@ export class ECKeyIdentifier extends Identifier {
     }
     declare [Symbol.toStringTag]: string
     #ec: undefined
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return typeof x === 'object' && x !== null && #ec in x
     }
     static {
@@ -190,7 +190,7 @@ export class PostIVIdentifier extends Identifier {
     }
     declare [Symbol.toStringTag]: string
     #post_iv: undefined
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return typeof x === 'object' && x !== null && #post_iv in x
     }
     static {
@@ -240,7 +240,7 @@ export class PostIdentifier extends Identifier {
     }
     declare [Symbol.toStringTag]: string
     #post: undefined
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return typeof x === 'object' && x !== null && #post in x
     }
     static {
@@ -304,7 +304,7 @@ export class ProfileIdentifier extends Identifier {
     }
     declare [Symbol.toStringTag]: string
     #profile: undefined
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return typeof x === 'object' && x !== null && #profile in x
     }
     static {

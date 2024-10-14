@@ -13,6 +13,7 @@
     "noImplicitThis": true,
     // noPropertyAccessFromIndexSignature: false,
     // noUncheckedIndexedAccess: false,
+    "noUncheckedSideEffectImports": true,
     // noUnusedLocals: false,
     // noUnusedParameters: false,
     "useUnknownInCatchVariables": true,

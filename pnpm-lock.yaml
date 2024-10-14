@@ -10,7 +10,7 @@ overrides:
   '@mui/base': 5.0.0-beta.40
   '@mui/icons-material': 5.15.21
   '@mui/material': 5.15.20
-  '@swc/core': 1.6.13
+  '@swc/core': 1.7.35
   '@protobufjs/inquire': 1.1.0
   '@splinetool/runtime': 0.9.342
   '@tanstack/react-query': ^5.49.2
@@ -96,11 +96,11 @@ importers:
         specifier: 11.11.5
         version: 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.1)
       '@lingui/core':
-        specifier: ^4.11.3
-        version: 4.11.3
+        specifier: ^4.12.0
+        version: 4.12.0
       '@lingui/react':
-        specifier: ^4.11.3
-        version: 4.11.3(react@0.0.0-experimental-58af67a8f8-20240628)
+        specifier: ^4.12.0
+        version: 4.12.0(react@0.0.0-experimental-58af67a8f8-20240628)
       '@masknet/kit':
         specifier: 0.4.1
         version: 0.4.1
@@ -175,14 +175,14 @@ importers:
         specifier: ^1.1.1
         version: 1.1.1
       '@lingui/cli':
-        specifier: ^4.11.3
-        version: 4.11.3(typescript@5.7.0-beta)
+        specifier: ^4.12.0
+        version: 4.12.0(typescript@5.7.0-beta)
       '@lingui/macro':
-        specifier: ^4.11.3
-        version: 4.11.3(@lingui/react@4.11.3(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta)
+        specifier: ^4.12.0
+        version: 4.12.0(@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta)
       '@lingui/swc-plugin':
-        specifier: ^4.0.8
-        version: 4.0.8(@lingui/macro@4.11.3(@lingui/react@4.11.3(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta))(@swc/core@1.6.13)
+        specifier: ^4.0.10
+        version: 4.0.10(@lingui/macro@4.12.0(@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta))(@swc/core@1.7.35)
       '@magic-works/i18n-codegen':
         specifier: ^0.6.1
         version: 0.6.1(typescript@5.7.0-beta)
@@ -200,10 +200,10 @@ importers:
         version: 3.5.1
       '@swc-node/register':
         specifier: ^1.10.9
-        version: 1.10.9(@swc/core@1.6.13)(@swc/types@0.1.12)(typescript@5.7.0-beta)
+        version: 1.10.9(@swc/core@1.7.35)(@swc/types@0.1.13)(typescript@5.7.0-beta)
       '@swc/core':
-        specifier: 1.6.13
-        version: 1.6.13
+        specifier: 1.7.35
+        version: 1.7.35
       '@tanstack/eslint-plugin-query':
         specifier: ^5.59.7
         version: 5.59.7(eslint@9.12.0(jiti@1.21.0))(typescript@5.7.0-beta)
@@ -293,8 +293,8 @@ importers:
   packages/base:
     dependencies:
       '@masknet/kit':
-        specifier: 0.4.0
-        version: 0.4.0
+        specifier: 0.4.1
+        version: 0.4.1
       anchorme:
         specifier: ^2.1.2
         version: 2.1.2
@@ -362,7 +362,7 @@ importers:
         version: 4.18.0
       rollup-plugin-swc3:
         specifier: ^0.11.2
-        version: 0.11.2(@swc/core@1.6.13)(rollup@4.18.0)
+        version: 0.11.2(@swc/core@1.7.35)(rollup@4.18.0)
 
   packages/mask:
     dependencies:
@@ -620,7 +620,7 @@ importers:
         version: 2.0.0
       file-loader:
         specifier: ^6.2.0
-        version: 6.2.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 6.2.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -705,13 +705,13 @@ importers:
     devDependencies:
       '@lavamoat/webpack':
         specifier: 0.3.0-beta.0
-        version: 0.3.0-beta.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 0.3.0-beta.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       '@nice-labs/emit-file-webpack-plugin':
         specifier: ^1.1.4
-        version: 1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.15
-        version: 0.5.15(react-refresh@0.14.2)(type-fest@4.23.0)(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 0.5.15(react-refresh@0.14.2)(type-fest@4.23.0)(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       '@types/color':
         specifier: ^3.0.6
         version: 3.0.6
@@ -723,13 +723,13 @@ importers:
         version: 0.0.0-experimental-938cd9a-20240601
       copy-webpack-plugin:
         specifier: ^12.0.2
-        version: 12.0.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 12.0.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       devtools-ignore-webpack-plugin:
         specifier: ^0.1.2
-        version: 0.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 0.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       html-webpack-plugin:
         specifier: ^5.6.0
-        version: 5.6.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 5.6.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       react-compiler-webpack:
         specifier: ^0.1.2
         version: 0.1.2(babel-plugin-react-compiler@0.0.0-experimental-938cd9a-20240601)
@@ -744,19 +744,19 @@ importers:
         version: 5.0.7
       source-map-loader:
         specifier: ^5.0.0
-        version: 5.0.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 5.0.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       svgo-loader:
         specifier: ^4.0.0
         version: 4.0.0
       swc-loader:
         specifier: ^0.2.6
-        version: 0.2.6(@swc/core@1.6.13)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 0.2.6(@swc/core@1.7.35)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       terser-webpack-plugin:
         specifier: ^5.3.10
-        version: 5.3.10(@swc/core@1.6.13)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 5.3.10(@swc/core@1.7.35)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       webpack:
         specifier: Jack-Works/webpack#lazy-import
-        version: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+        version: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
       webpack-cli:
         specifier: ^5.1.4
         version: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2)
@@ -765,7 +765,7 @@ importers:
         version: 5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2)
       webpack-target-webextension:
         specifier: ^1.1.2
-        version: 1.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+        version: 1.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
 
   packages/mask-sdk:
     devDependencies:
@@ -783,7 +783,7 @@ importers:
         version: 4.18.0
       rollup-plugin-swc3:
         specifier: ^0.11.2
-        version: 0.11.2(@swc/core@1.6.13)(rollup@4.18.0)
+        version: 0.11.2(@swc/core@1.7.35)(rollup@4.18.0)
 
   packages/plugin-infra:
     dependencies:
@@ -1822,7 +1822,7 @@ importers:
         version: link:../../web3-providers
       '@scamsniffer/detector':
         specifier: 0.0.39
-        version: 0.0.39(@babel/core@7.24.6)(@swc/core@1.6.13)(babel-jest@28.1.3(@babel/core@7.24.6))(bufferutil@4.0.7)(encoding@0.1.13)(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta)(utf-8-validate@5.0.10)
+        version: 0.0.39(@babel/core@7.24.6)(@swc/core@1.7.35)(babel-jest@28.1.3(@babel/core@7.24.6))(bufferutil@4.0.7)(encoding@0.1.13)(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta)(utf-8-validate@5.0.10)
       react-use:
         specifier: ^17.5.0
         version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2283,7 +2283,7 @@ importers:
         version: 4.18.0
       rollup-plugin-swc3:
         specifier: ^0.11.2
-        version: 0.11.2(@swc/core@1.6.13)(rollup@4.18.0)
+        version: 0.11.2(@swc/core@1.7.35)(rollup@4.18.0)
 
   packages/polyfills/types: {}
 
@@ -2322,7 +2322,7 @@ importers:
     dependencies:
       '@masknet/static-module-record-swc':
         specifier: ^0.6.0
-        version: 0.6.0(@swc/core@1.6.13)
+        version: 0.6.0(@swc/core@1.7.35)
       chalk:
         specifier: ^5.3.0
         version: 5.3.0
@@ -4820,46 +4820,46 @@ packages:
     resolution: {integrity: sha512-eZX+5ByUAzh8DrfjCan0spZGpvF7SxEBz4tOPoBMBCuKJJLr+8EokBO/5E3ceIw04f5+lAcD3CO3bccuKomp3Q==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
 
-  '@lingui/babel-plugin-extract-messages@4.11.3':
-    resolution: {integrity: sha512-wLiquhtxE7qUmoKl4UStFI1XgrCkk9zwxc8z62LPpbutkyxO21B5k8fBUGlgWoKJaXbpvS8VIU8j2663q99JnQ==}
+  '@lingui/babel-plugin-extract-messages@4.12.0':
+    resolution: {integrity: sha512-PPDFIfdtga3CVjgWzWCi2tYzOI1l+X2WxLZazVtqDPHVFz/m74+j0doC4DfQnoAr8TJDBSq3qA183GX5i5Kzlw==}
     engines: {node: '>=16.0.0'}
 
-  '@lingui/cli@4.11.3':
-    resolution: {integrity: sha512-ykJLmQciK81I0Cd/iLg8dSpESV9Hnsbw5+G98IEAf4exvoUGRJ2UzkeNc/HeGx3D5Fg+TI8YNWwCbZ7NAOsDCQ==}
+  '@lingui/cli@4.12.0':
+    resolution: {integrity: sha512-a63VrY41tI8JD9p4t/zyOh0mehBSewtdlBSLtoE4urgdzHtCTdQGXzhrs+T090hFicKFkdI1+J0W6aOv9ehxcA==}
     engines: {node: '>=16.0.0'}
     hasBin: true
 
-  '@lingui/conf@4.11.3':
-    resolution: {integrity: sha512-KwUJDrbzlZEXmlmqttpB/Sd9hiIo0sqccsZaYTHzW/uULZT9T11aw/f6RcPLCVJeSKazg/7dJhR1cKlxKzvjKA==}
+  '@lingui/conf@4.12.0':
+    resolution: {integrity: sha512-RExMUKnIUNEt91yFlBxklXCMC8ZgFX0eEF066hPIEX8NXCqowm7pbiNy+UlRfxgB7mdIlPDqXCkN94CH9jnpHw==}
     engines: {node: '>=16.0.0'}
 
-  '@lingui/core@4.11.3':
-    resolution: {integrity: sha512-IjJxn0Kvzv+ICnGlMqn8wRIQLikCJVrolb1oyi6GqtbiuPiwKYeU0D6Hbe146lMaTN8juc3tOCBS+Fr02XqFIQ==}
+  '@lingui/core@4.12.0':
+    resolution: {integrity: sha512-mzu55Ka7fTr+gTdv2AoJl1kP2X6FLuolVtkY2eWiJ7SvyOv294kw30VCHrrSUctzYuOsktUE59RA6mlng70P1g==}
     engines: {node: '>=16.0.0'}
 
-  '@lingui/format-po@4.11.3':
-    resolution: {integrity: sha512-RgEkoo0aEAk7X1xGrApcpqkz6GLdzkRLGw2jo3mmCVR0P7P9sWbJL/cd01GmR+HzAOo8Zx5oIayaKh9iyJS8tA==}
+  '@lingui/format-po@4.12.0':
+    resolution: {integrity: sha512-L3Jr1XD+pSXrhQxsZPf6Kf+3iUcOrJZlVpFgoygqKQzwi9R7pJcEHcl7oo0RyioKgjD11epaFKBfMrd/XbEITQ==}
     engines: {node: '>=16.0.0'}
 
-  '@lingui/macro@4.11.3':
-    resolution: {integrity: sha512-D0me8ZRtH0ylSavhKZu0FYf5mJ1y6kDMMPjYVDyiT5ooOI/5jjv9LIAqrdYGCBygnwsxOG1dzDw6+3s5GTs+Bg==}
+  '@lingui/macro@4.12.0':
+    resolution: {integrity: sha512-hB6BufKWZSKW0pRfT0rKAbpydxxHEvfmXDkwoIlBHVqsD8sRdJVCWS3oSoTvz6zWTfjkjV92gaN4o0E09RdVZQ==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       '@lingui/react': ^4.0.0
       babel-plugin-macros: 2 || 3
 
-  '@lingui/message-utils@4.11.3':
-    resolution: {integrity: sha512-ZSw3OoKbknOw3nSrqt194g2F8r0guKow9csb46zlL7zX/yOWCaj767wvSvMoglZtVvurfQs4NPv2cohYlWORNw==}
+  '@lingui/message-utils@4.12.0':
+    resolution: {integrity: sha512-K1ROdcjJXCPBed6NhI6RvOWwRZW+rnYQCnWL7pJS+R9h+Lkc51hyTEfXb4nWdfZzu6l0BAGasq0S5ZnfCjbjXw==}
     engines: {node: '>=16.0.0'}
 
-  '@lingui/react@4.11.3':
-    resolution: {integrity: sha512-FuorwDsz5zDpUNpyj7J8ZKqJrrVxOz1EtQ3aJGJsmnTtVO01N3nR3ckMzpYvZ71XXdDEvhUC9ihmiKbFvpaZ/w==}
+  '@lingui/react@4.12.0':
+    resolution: {integrity: sha512-jsclwIPpqMSzCZTyIvpFS9FqOaysz1gr5j15NlUlK1KWgxAZjZT64NHMVPwVcg2TXMFnAZhgwI0dWbUgYQSm6g==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
-  '@lingui/swc-plugin@4.0.8':
-    resolution: {integrity: sha512-zWvfFAvo2NOV+yFAjTbuEE0x53XEJlBS3EQ1R4xswjWSgpXWbLg45Rg37Ai2Ud0qeQkQLZnL93yt7dOwstX5eQ==}
+  '@lingui/swc-plugin@4.0.10':
+    resolution: {integrity: sha512-CPZkywUdG8HsEIxsRAAvx30KZmfxzh126yCvHq0suyvZZRLOVoNdlrUw1N9MfsB7YJsPLgD+XLGjRkeyo7ZduQ==}
     peerDependencies:
       '@lingui/macro': '4'
       '@swc/core': '*'
@@ -4903,9 +4903,6 @@ packages:
     peerDependencies:
       eslint: '>= 8'
 
-  '@masknet/kit@0.4.0':
-    resolution: {integrity: sha512-Vi6H0uTj8R+WKBUDuuSAgTl8W3ySx6Y9T9+9OMN5YdOKbsud0y7FzkVP7Dt00Vn2XhsAh1juTmfKM9WGvMim0A==}
-
   '@masknet/kit@0.4.1':
     resolution: {integrity: sha512-Wc2QPj0+55sGDP4j+rGfVggFnDN2h0gscAJChdbJrBpYCdYYNXBLRsgJwXR7268ynLLVpYXZ3uGYMH/N9+okLA==}
 
@@ -4918,7 +4915,7 @@ packages:
   '@masknet/static-module-record-swc@0.6.0':
     resolution: {integrity: sha512-DzM4zDPnjoAF4O36upupPn/2dI0/S3H4UkaMhg2X/nZbGgg+aPCqt1V9eGamqeci7id/feSbdQs5HcJn/1ia1g==}
     peerDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
     peerDependenciesMeta:
       '@swc/core':
         optional: true
@@ -5917,80 +5914,80 @@ packages:
     resolution: {integrity: sha512-OGsvXIid2Go21kiNqeTIn79jcaX4l0G93X2rAnas4LFoDyA9wAwVK7xZdm+QsKoMn5Mus2yFLCc4OtX2dD/PWA==}
     engines: {node: '>= 10'}
     peerDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       '@swc/types': '>= 0.1'
 
   '@swc-node/register@1.10.9':
     resolution: {integrity: sha512-iXy2sjP0phPEpK2yivjRC3PAgoLaT4sjSk0LDWCTdcTBJmR4waEog0E6eJbvoOkLkOtWw37SB8vCkl/bbh4+8A==}
     peerDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       typescript: '>= 4.3'
 
   '@swc-node/sourcemap-support@0.5.1':
     resolution: {integrity: sha512-JxIvIo/Hrpv0JCHSyRpetAdQ6lB27oFYhv0PKCNf1g2gUXOjpeR1exrXccRxLMuAV5WAmGFBwRnNOJqN38+qtg==}
 
-  '@swc/core-darwin-arm64@1.6.13':
-    resolution: {integrity: sha512-SOF4buAis72K22BGJ3N8y88mLNfxLNprTuJUpzikyMGrvkuBFNcxYtMhmomO0XHsgLDzOJ+hWzcgjRNzjMsUcQ==}
+  '@swc/core-darwin-arm64@1.7.35':
+    resolution: {integrity: sha512-BQSSozVxjxS+SVQz6e3GC/+OBWGIK3jfe52pWdANmycdjF3ch7lrCKTHTU7eHwyoJ96mofszPf5AsiVJF34Fwg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [darwin]
 
-  '@swc/core-darwin-x64@1.6.13':
-    resolution: {integrity: sha512-AW8akFSC+tmPE6YQQvK9S2A1B8pjnXEINg+gGgw0KRUUXunvu1/OEOeC5L2Co1wAwhD7bhnaefi06Qi9AiwOag==}
+  '@swc/core-darwin-x64@1.7.35':
+    resolution: {integrity: sha512-44TYdKN/EWtkU88foXR7IGki9JzhEJzaFOoPevfi9Xe7hjAD/x2+AJOWWqQNzDPMz9+QewLdUVLyR6s5okRgtg==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [darwin]
 
-  '@swc/core-linux-arm-gnueabihf@1.6.13':
-    resolution: {integrity: sha512-f4gxxvDXVUm2HLYXRd311mSrmbpQF2MZ4Ja6XCQz1hWAxXdhRl1gpnZ+LH/xIfGSwQChrtLLVrkxdYUCVuIjFg==}
+  '@swc/core-linux-arm-gnueabihf@1.7.35':
+    resolution: {integrity: sha512-ccfA5h3zxwioD+/z/AmYtkwtKz9m4rWTV7RoHq6Jfsb0cXHrd6tbcvgqRWXra1kASlE+cDWsMtEZygs9dJRtUQ==}
     engines: {node: '>=10'}
     cpu: [arm]
     os: [linux]
 
-  '@swc/core-linux-arm64-gnu@1.6.13':
-    resolution: {integrity: sha512-Nf/eoW2CbG8s+9JoLtjl9FByBXyQ5cjdBsA4efO7Zw4p+YSuXDgc8HRPC+E2+ns0praDpKNZtLvDtmF2lL+2Gg==}
+  '@swc/core-linux-arm64-gnu@1.7.35':
+    resolution: {integrity: sha512-hx65Qz+G4iG/IVtxJKewC5SJdki8PAPFGl6gC/57Jb0+jA4BIoGLD/J3Q3rCPeoHfdqpkCYpahtyUq8CKx41Jg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
 
-  '@swc/core-linux-arm64-musl@1.6.13':
-    resolution: {integrity: sha512-2OysYSYtdw79prJYuKIiux/Gj0iaGEbpS2QZWCIY4X9sGoETJ5iMg+lY+YCrIxdkkNYd7OhIbXdYFyGs/w5LDg==}
+  '@swc/core-linux-arm64-musl@1.7.35':
+    resolution: {integrity: sha512-kL6tQL9No7UEoEvDRuPxzPTpxrvbwYteNRbdChSSP74j13/55G2/2hLmult5yFFaWuyoyU/2lvzjRL/i8OLZxg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [linux]
 
-  '@swc/core-linux-x64-gnu@1.6.13':
-    resolution: {integrity: sha512-PkR4CZYJNk5hcd2+tMWBpnisnmYsUzazI1O5X7VkIGFcGePTqJ/bWlfUIVVExWxvAI33PQFzLbzmN5scyIUyGQ==}
+  '@swc/core-linux-x64-gnu@1.7.35':
+    resolution: {integrity: sha512-Ke4rcLQSwCQ2LHdJX1FtnqmYNQ3IX6BddKlUtS7mcK13IHkQzZWp0Dcu6MgNA3twzb/dBpKX5GLy07XdGgfmyw==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
 
-  '@swc/core-linux-x64-musl@1.6.13':
-    resolution: {integrity: sha512-OdsY7wryTxCKwGQcwW9jwWg3cxaHBkTTHi91+5nm7hFPpmZMz1HivJrWAMwVE7iXFw+M4l6ugB/wCvpYrUAAjA==}
+  '@swc/core-linux-x64-musl@1.7.35':
+    resolution: {integrity: sha512-T30tlLnz0kYyDFyO5RQF5EQ4ENjW9+b56hEGgFUYmfhFhGA4E4V67iEx7KIG4u0whdPG7oy3qjyyIeTb7nElEw==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [linux]
 
-  '@swc/core-win32-arm64-msvc@1.6.13':
-    resolution: {integrity: sha512-ap6uNmYjwk9M/+bFEuWRNl3hq4VqgQ/Lk+ID/F5WGqczNr0L7vEf+pOsRAn0F6EV+o/nyb3ePt8rLhE/wjHpPg==}
+  '@swc/core-win32-arm64-msvc@1.7.35':
+    resolution: {integrity: sha512-CfM/k8mvtuMyX+okRhemfLt784PLS0KF7Q9djA8/Dtavk0L5Ghnq+XsGltO3d8B8+XZ7YOITsB14CrjehzeHsg==}
     engines: {node: '>=10'}
     cpu: [arm64]
     os: [win32]
 
-  '@swc/core-win32-ia32-msvc@1.6.13':
-    resolution: {integrity: sha512-IJ8KH4yIUHTnS/U1jwQmtbfQals7zWPG0a9hbEfIr4zI0yKzjd83lmtS09lm2Q24QBWOCFGEEbuZxR4tIlvfzA==}
+  '@swc/core-win32-ia32-msvc@1.7.35':
+    resolution: {integrity: sha512-ATB3uuH8j/RmS64EXQZJSbo2WXfRNpTnQszHME/sGaexsuxeijrp3DTYSFAA3R2Bu6HbIIX6jempe1Au8I3j+A==}
     engines: {node: '>=10'}
     cpu: [ia32]
     os: [win32]
 
-  '@swc/core-win32-x64-msvc@1.6.13':
-    resolution: {integrity: sha512-f6/sx6LMuEnbuxtiSL/EkR0Y6qUHFw1XVrh6rwzKXptTipUdOY+nXpKoh+1UsBm/r7H0/5DtOdrn3q5ZHbFZjQ==}
+  '@swc/core-win32-x64-msvc@1.7.35':
+    resolution: {integrity: sha512-iDGfQO1571NqWUXtLYDhwIELA/wadH42ioGn+J9R336nWx40YICzy9UQyslWRhqzhQ5kT+QXAW/MoCWc058N6Q==}
     engines: {node: '>=10'}
     cpu: [x64]
     os: [win32]
 
-  '@swc/core@1.6.13':
-    resolution: {integrity: sha512-eailUYex6fkfaQTev4Oa3mwn0/e3mQU4H8y1WPuImYQESOQDtVrowwUGDSc19evpBbHpKtwM+hw8nLlhIsF+Tw==}
+  '@swc/core@1.7.35':
+    resolution: {integrity: sha512-3cUteCTbr2r5jqfgx0r091sfq5Mgh6F1SQh8XAOnSvtKzwv2bC31mvBHVAieD1uPa2kHJhLav20DQgXOhpEitw==}
     engines: {node: '>=10'}
     peerDependencies:
       '@swc/helpers': '*'
@@ -6001,8 +5998,8 @@ packages:
   '@swc/counter@0.1.3':
     resolution: {integrity: sha512-e2BR4lsJkkRlKZ/qCHPw9ZaSxc0MVUd7gtbtaB7aMvHeJVYe8sOB8DBZkP2DtISHGSku9sCK6T6cnY0CtXrOCQ==}
 
-  '@swc/types@0.1.12':
-    resolution: {integrity: sha512-wBJA+SdtkbFhHjTMYH+dEH1y4VpfGdAc2Kw/LK09i9bXd/K6j6PkDcFCEzb6iVfZMkPRrl/q0e3toqTAJdkIVA==}
+  '@swc/types@0.1.13':
+    resolution: {integrity: sha512-JL7eeCk6zWCbiYQg2xQSdLXQJl8Qoc9rXmG2cEKvHe3CKwMHwHGpfOb8frzNLmbycOo6I51qxnLnn9ESf4I20Q==}
 
   '@szmarczak/http-timer@4.0.6':
     resolution: {integrity: sha512-4BAffykYOgO+5nzBWYwE3W90sBgLJoUPRWWcL8wlyiM8IB8ipJz3UMJ9KXQd1RKQXpKp8Tutn80HZtWsu2u76w==}
@@ -11685,10 +11682,6 @@ packages:
   micromark@4.0.0:
     resolution: {integrity: sha512-o/sd0nMof8kYff+TqcDx3VSrgBTcZpSvYcAHIfHhv5VAuNmisCxjhx6YmxS8PFEpb9z5WKWKPdzf0jM23ro3RQ==}
 
-  micromatch@4.0.2:
-    resolution: {integrity: sha512-y7FpHSbMUMoyPbYUSzO6PaZ6FyRnQOpHuKwbo1G+Knck95XVU4QAiKdGEnj5wwoS7PlOgthX/09u5iFJ+aYf5Q==}
-    engines: {node: '>=8'}
-
   micromatch@4.0.7:
     resolution: {integrity: sha512-LPP/3KorzCwBxfeUuZmaR6bG2kdeHSbe0P2tY3FLRU4vYrjYz5hI4QZwV0njUx3jeuKe67YukQ1LSPZBKDqO/Q==}
     engines: {node: '>=8.6'}
@@ -13171,7 +13164,7 @@ packages:
     resolution: {integrity: sha512-o1ih9B806fV2wBSNk46T0cYfTF2eiiKmYXRpWw3K4j/Cp3tCAt10UCVsTqvUhGP58pcB3/GZcAVl5e7TCSKN6Q==}
     engines: {node: '>=12'}
     peerDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       rollup: ^2.0.0 || ^3.0.0 || ^4.0.0
 
   rollup-preserve-directives@1.1.1:
@@ -13855,7 +13848,7 @@ packages:
     resolution: {integrity: sha512-9Zi9UP2YmDpgmQVbyOPJClY0dwf58JDyDMQ7uRc4krmc72twNI2fvlBWHLqVekBpPc7h5NJkGVT1zNDxFrqhvg==}
     version: 0.2.6
     peerDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
 
   symbol-tree@3.2.4:
@@ -14146,7 +14139,7 @@ packages:
     resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
     hasBin: true
     peerDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       '@swc/wasm': '>=1.2.50'
       '@types/node': 22.7.5
       typescript: '>=2.7'
@@ -15523,7 +15516,7 @@ snapshots:
       '@babel/helper-module-imports': 7.24.6
       '@babel/helper-simple-access': 7.24.6
       '@babel/helper-split-export-declaration': 7.24.6
-      '@babel/helper-validator-identifier': 7.24.6
+      '@babel/helper-validator-identifier': 7.24.7
 
   '@babel/helper-plugin-utils@7.24.6': {}
 
@@ -17545,7 +17538,7 @@ snapshots:
       jest-util: 28.1.3
       slash: 3.0.0
 
-  '@jest/core@28.1.3(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))':
+  '@jest/core@28.1.3(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))':
     dependencies:
       '@jest/console': 28.1.3
       '@jest/reporters': 28.1.3(node-notifier@10.0.1)
@@ -17559,7 +17552,7 @@ snapshots:
       exit: 0.1.2
       graceful-fs: 4.2.11
       jest-changed-files: 28.1.3
-      jest-config: 28.1.3(@types/node@22.7.5)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))
+      jest-config: 28.1.3(@types/node@22.7.5)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))
       jest-haste-map: 28.1.3
       jest-message-util: 28.1.3
       jest-regex-util: 28.0.2
@@ -17775,14 +17768,14 @@ snapshots:
     dependencies:
       resolve: 1.22.8
 
-  '@lavamoat/webpack@0.3.0-beta.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
+  '@lavamoat/webpack@0.3.0-beta.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))':
     dependencies:
       '@lavamoat/aa': 4.2.0
       browser-resolve: 2.0.0
       json-stable-stringify: 1.1.1
       lavamoat-core: 15.3.0
       ses: 1.4.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
     transitivePeerDependencies:
       - supports-color
 
@@ -17845,20 +17838,20 @@ snapshots:
       multiformats: 11.0.2
       uint8arrays: 4.0.3
 
-  '@lingui/babel-plugin-extract-messages@4.11.3': {}
+  '@lingui/babel-plugin-extract-messages@4.12.0': {}
 
-  '@lingui/cli@4.11.3(typescript@5.7.0-beta)':
+  '@lingui/cli@4.12.0(typescript@5.7.0-beta)':
     dependencies:
       '@babel/core': 7.24.6
       '@babel/generator': 7.24.6
       '@babel/parser': 7.24.6
       '@babel/runtime': 7.24.7
       '@babel/types': 7.24.6
-      '@lingui/babel-plugin-extract-messages': 4.11.3
-      '@lingui/conf': 4.11.3(typescript@5.7.0-beta)
-      '@lingui/core': 4.11.3
-      '@lingui/format-po': 4.11.3(typescript@5.7.0-beta)
-      '@lingui/message-utils': 4.11.3
+      '@lingui/babel-plugin-extract-messages': 4.12.0
+      '@lingui/conf': 4.12.0(typescript@5.7.0-beta)
+      '@lingui/core': 4.12.0
+      '@lingui/format-po': 4.12.0(typescript@5.7.0-beta)
+      '@lingui/message-utils': 4.12.0
       babel-plugin-macros: 3.1.0
       chalk: 4.1.2
       chokidar: 3.5.1
@@ -17869,7 +17862,7 @@ snapshots:
       esbuild: 0.17.19
       glob: 7.2.3
       inquirer: 7.3.3
-      micromatch: 4.0.2
+      micromatch: 4.0.7
       normalize-path: 3.0.0
       ora: 5.4.1
       pathe: 1.1.1
@@ -17882,7 +17875,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@lingui/conf@4.11.3(typescript@5.7.0-beta)':
+  '@lingui/conf@4.12.0(typescript@5.7.0-beta)':
     dependencies:
       '@babel/runtime': 7.24.7
       chalk: 4.1.2
@@ -17893,49 +17886,49 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@lingui/core@4.11.3':
+  '@lingui/core@4.12.0':
     dependencies:
       '@babel/runtime': 7.24.7
-      '@lingui/message-utils': 4.11.3
+      '@lingui/message-utils': 4.12.0
       unraw: 3.0.0
 
-  '@lingui/format-po@4.11.3(typescript@5.7.0-beta)':
+  '@lingui/format-po@4.12.0(typescript@5.7.0-beta)':
     dependencies:
-      '@lingui/conf': 4.11.3(typescript@5.7.0-beta)
-      '@lingui/message-utils': 4.11.3
+      '@lingui/conf': 4.12.0(typescript@5.7.0-beta)
+      '@lingui/message-utils': 4.12.0
       date-fns: 3.6.0
       pofile: 1.1.4
     transitivePeerDependencies:
       - typescript
 
-  '@lingui/macro@4.11.3(@lingui/react@4.11.3(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta)':
+  '@lingui/macro@4.12.0(@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta)':
     dependencies:
       '@babel/runtime': 7.24.7
       '@babel/types': 7.24.6
-      '@lingui/conf': 4.11.3(typescript@5.7.0-beta)
-      '@lingui/core': 4.11.3
-      '@lingui/message-utils': 4.11.3
-      '@lingui/react': 4.11.3(react@0.0.0-experimental-58af67a8f8-20240628)
+      '@lingui/conf': 4.12.0(typescript@5.7.0-beta)
+      '@lingui/core': 4.12.0
+      '@lingui/message-utils': 4.12.0
+      '@lingui/react': 4.12.0(react@0.0.0-experimental-58af67a8f8-20240628)
       babel-plugin-macros: 3.1.0
     transitivePeerDependencies:
       - typescript
 
-  '@lingui/message-utils@4.11.3':
+  '@lingui/message-utils@4.12.0':
     dependencies:
       '@messageformat/parser': 5.1.0
       js-sha256: 0.10.1
 
-  '@lingui/react@4.11.3(react@0.0.0-experimental-58af67a8f8-20240628)':
+  '@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628)':
     dependencies:
       '@babel/runtime': 7.24.7
-      '@lingui/core': 4.11.3
+      '@lingui/core': 4.12.0
       react: 0.0.0-experimental-58af67a8f8-20240628
 
-  '@lingui/swc-plugin@4.0.8(@lingui/macro@4.11.3(@lingui/react@4.11.3(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta))(@swc/core@1.6.13)':
+  '@lingui/swc-plugin@4.0.10(@lingui/macro@4.12.0(@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta))(@swc/core@1.7.35)':
     dependencies:
-      '@lingui/macro': 4.11.3(@lingui/react@4.11.3(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta)
+      '@lingui/macro': 4.12.0(@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta)
     optionalDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
 
   '@locker/near-membrane-base@0.13.1':
     dependencies:
@@ -17982,8 +17975,6 @@ snapshots:
     dependencies:
       eslint: 9.12.0(jiti@1.21.0)
 
-  '@masknet/kit@0.4.0': {}
-
   '@masknet/kit@0.4.1': {}
 
   '@masknet/membrane@0.2.0':
@@ -17996,11 +17987,11 @@ snapshots:
       elliptic: 6.5.5
       pvtsutils: 1.3.5
 
-  '@masknet/static-module-record-swc@0.6.0(@swc/core@1.6.13)':
+  '@masknet/static-module-record-swc@0.6.0(@swc/core@1.7.35)':
     dependencies:
       cjs-module-lexer: 1.3.1
     optionalDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
 
   '@masknet/stego-js@0.14.2':
     dependencies:
@@ -18409,9 +18400,9 @@ snapshots:
       '@tybys/wasm-util': 0.9.0
     optional: true
 
-  '@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
+  '@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   '@nice-labs/git-rev@3.5.1': {}
 
@@ -18657,7 +18648,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@pmmmwh/react-refresh-webpack-plugin@0.5.15(react-refresh@0.14.2)(type-fest@4.23.0)(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
+  '@pmmmwh/react-refresh-webpack-plugin@0.5.15(react-refresh@0.14.2)(type-fest@4.23.0)(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))':
     dependencies:
       ansi-html: 0.0.9
       core-js-pure: 3.32.1
@@ -18667,7 +18658,7 @@ snapshots:
       react-refresh: 0.14.2
       schema-utils: 4.2.0
       source-map: 0.7.4
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
     optionalDependencies:
       type-fest: 4.23.0
       webpack-dev-server: 5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2)
@@ -18850,7 +18841,7 @@ snapshots:
   '@rollup/rollup-win32-x64-msvc@4.18.0':
     optional: true
 
-  '@scamsniffer/detector@0.0.39(@babel/core@7.24.6)(@swc/core@1.6.13)(babel-jest@28.1.3(@babel/core@7.24.6))(bufferutil@4.0.7)(encoding@0.1.13)(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta)(utf-8-validate@5.0.10)':
+  '@scamsniffer/detector@0.0.39(@babel/core@7.24.6)(@swc/core@1.7.35)(babel-jest@28.1.3(@babel/core@7.24.6))(bufferutil@4.0.7)(encoding@0.1.13)(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta)(utf-8-validate@5.0.10)':
     dependencies:
       '@types/isomorphic-fetch': 0.0.36
       '@types/node': 22.7.5
@@ -18861,8 +18852,8 @@ snapshots:
       isomorphic-fetch: 3.0.0(encoding@0.1.13)
       jsdom: 20.0.0(bufferutil@4.0.7)(utf-8-validate@5.0.10)
       parse-domain: 3.0.3(encoding@0.1.13)
-      ts-jest: 28.0.5(@babel/core@7.24.6)(babel-jest@28.1.3(@babel/core@7.24.6))(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta)
-      ts-node: 10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)
+      ts-jest: 28.0.5(@babel/core@7.24.6)(babel-jest@28.1.3(@babel/core@7.24.6))(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta)
+      ts-node: 10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -19151,16 +19142,16 @@ snapshots:
 
   '@streamparser/json@0.0.20': {}
 
-  '@swc-node/core@1.13.3(@swc/core@1.6.13)(@swc/types@0.1.12)':
+  '@swc-node/core@1.13.3(@swc/core@1.7.35)(@swc/types@0.1.13)':
     dependencies:
-      '@swc/core': 1.6.13
-      '@swc/types': 0.1.12
+      '@swc/core': 1.7.35
+      '@swc/types': 0.1.13
 
-  '@swc-node/register@1.10.9(@swc/core@1.6.13)(@swc/types@0.1.12)(typescript@5.7.0-beta)':
+  '@swc-node/register@1.10.9(@swc/core@1.7.35)(@swc/types@0.1.13)(typescript@5.7.0-beta)':
     dependencies:
-      '@swc-node/core': 1.13.3(@swc/core@1.6.13)(@swc/types@0.1.12)
+      '@swc-node/core': 1.13.3(@swc/core@1.7.35)(@swc/types@0.1.13)
       '@swc-node/sourcemap-support': 0.5.1
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       colorette: 2.0.20
       debug: 4.3.5
       oxc-resolver: 1.10.2
@@ -19176,55 +19167,55 @@ snapshots:
       source-map-support: 0.5.21
       tslib: 2.6.3
 
-  '@swc/core-darwin-arm64@1.6.13':
+  '@swc/core-darwin-arm64@1.7.35':
     optional: true
 
-  '@swc/core-darwin-x64@1.6.13':
+  '@swc/core-darwin-x64@1.7.35':
     optional: true
 
-  '@swc/core-linux-arm-gnueabihf@1.6.13':
+  '@swc/core-linux-arm-gnueabihf@1.7.35':
     optional: true
 
-  '@swc/core-linux-arm64-gnu@1.6.13':
+  '@swc/core-linux-arm64-gnu@1.7.35':
     optional: true
 
-  '@swc/core-linux-arm64-musl@1.6.13':
+  '@swc/core-linux-arm64-musl@1.7.35':
     optional: true
 
-  '@swc/core-linux-x64-gnu@1.6.13':
+  '@swc/core-linux-x64-gnu@1.7.35':
     optional: true
 
-  '@swc/core-linux-x64-musl@1.6.13':
+  '@swc/core-linux-x64-musl@1.7.35':
     optional: true
 
-  '@swc/core-win32-arm64-msvc@1.6.13':
+  '@swc/core-win32-arm64-msvc@1.7.35':
     optional: true
 
-  '@swc/core-win32-ia32-msvc@1.6.13':
+  '@swc/core-win32-ia32-msvc@1.7.35':
     optional: true
 
-  '@swc/core-win32-x64-msvc@1.6.13':
+  '@swc/core-win32-x64-msvc@1.7.35':
     optional: true
 
-  '@swc/core@1.6.13':
+  '@swc/core@1.7.35':
     dependencies:
       '@swc/counter': 0.1.3
-      '@swc/types': 0.1.12
+      '@swc/types': 0.1.13
     optionalDependencies:
-      '@swc/core-darwin-arm64': 1.6.13
-      '@swc/core-darwin-x64': 1.6.13
-      '@swc/core-linux-arm-gnueabihf': 1.6.13
-      '@swc/core-linux-arm64-gnu': 1.6.13
-      '@swc/core-linux-arm64-musl': 1.6.13
-      '@swc/core-linux-x64-gnu': 1.6.13
-      '@swc/core-linux-x64-musl': 1.6.13
-      '@swc/core-win32-arm64-msvc': 1.6.13
-      '@swc/core-win32-ia32-msvc': 1.6.13
-      '@swc/core-win32-x64-msvc': 1.6.13
+      '@swc/core-darwin-arm64': 1.7.35
+      '@swc/core-darwin-x64': 1.7.35
+      '@swc/core-linux-arm-gnueabihf': 1.7.35
+      '@swc/core-linux-arm64-gnu': 1.7.35
+      '@swc/core-linux-arm64-musl': 1.7.35
+      '@swc/core-linux-x64-gnu': 1.7.35
+      '@swc/core-linux-x64-musl': 1.7.35
+      '@swc/core-win32-arm64-msvc': 1.7.35
+      '@swc/core-win32-ia32-msvc': 1.7.35
+      '@swc/core-win32-x64-msvc': 1.7.35
 
   '@swc/counter@0.1.3': {}
 
-  '@swc/types@0.1.12':
+  '@swc/types@0.1.13':
     dependencies:
       '@swc/counter': 0.1.3
 
@@ -20618,19 +20609,19 @@ snapshots:
       '@webassemblyjs/ast': 1.11.6
       '@xtuc/long': 4.2.2
 
-  '@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
+  '@webpack-cli/configtest@2.1.1(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2)
 
-  '@webpack-cli/info@2.0.2(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
+  '@webpack-cli/info@2.0.2(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2)
 
-  '@webpack-cli/serve@2.0.5(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))':
+  '@webpack-cli/serve@2.0.5(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2)
     optionalDependencies:
       webpack-dev-server: 5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2)
@@ -22000,7 +21991,7 @@ snapshots:
     dependencies:
       toggle-selection: 1.0.6
 
-  copy-webpack-plugin@12.0.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  copy-webpack-plugin@12.0.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
       fast-glob: 3.3.2
       glob-parent: 6.0.2
@@ -22008,7 +21999,7 @@ snapshots:
       normalize-path: 3.0.0
       schema-utils: 4.2.0
       serialize-javascript: 6.0.2
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   core-js-compat@3.37.1:
     dependencies:
@@ -22661,9 +22652,9 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  devtools-ignore-webpack-plugin@0.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  devtools-ignore-webpack-plugin@0.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   did-jwt@5.12.3:
     dependencies:
@@ -23931,11 +23922,11 @@ snapshots:
     dependencies:
       flat-cache: 4.0.1
 
-  file-loader@6.2.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  file-loader@6.2.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   file-uri-to-path@1.0.0: {}
 
@@ -24683,7 +24674,7 @@ snapshots:
 
   html-void-elements@3.0.0: {}
 
-  html-webpack-plugin@5.6.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  html-webpack-plugin@5.6.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
       '@types/html-minifier-terser': 6.0.0
       html-minifier-terser: 6.0.2
@@ -24691,7 +24682,7 @@ snapshots:
       pretty-error: 4.0.0
       tapable: 2.2.1
     optionalDependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   htmlparser2@6.1.0:
     dependencies:
@@ -25532,16 +25523,16 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  jest-cli@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)):
+  jest-cli@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)):
     dependencies:
-      '@jest/core': 28.1.3(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))
+      '@jest/core': 28.1.3(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))
       '@jest/test-result': 28.1.3
       '@jest/types': 28.1.3
       chalk: 4.1.2
       exit: 0.1.2
       graceful-fs: 4.2.11
       import-local: 3.1.0
-      jest-config: 28.1.3(@types/node@22.7.5)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))
+      jest-config: 28.1.3(@types/node@22.7.5)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))
       jest-util: 28.1.3
       jest-validate: 28.1.3
       prompts: 2.4.2
@@ -25553,7 +25544,7 @@ snapshots:
       - supports-color
       - ts-node
 
-  jest-config@28.1.3(@types/node@22.7.5)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)):
+  jest-config@28.1.3(@types/node@22.7.5)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)):
     dependencies:
       '@babel/core': 7.24.6
       '@jest/test-sequencer': 28.1.3
@@ -25579,7 +25570,7 @@ snapshots:
       strip-json-comments: 3.1.1
     optionalDependencies:
       '@types/node': 22.7.5
-      ts-node: 10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)
+      ts-node: 10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)
     transitivePeerDependencies:
       - supports-color
 
@@ -25816,12 +25807,12 @@ snapshots:
       merge-stream: 2.0.0
       supports-color: 8.1.1
 
-  jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)):
+  jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)):
     dependencies:
-      '@jest/core': 28.1.3(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))
+      '@jest/core': 28.1.3(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))
       '@jest/types': 28.1.3
       import-local: 3.1.0
-      jest-cli: 28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))
+      jest-cli: 28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))
     optionalDependencies:
       node-notifier: 10.0.1
     transitivePeerDependencies:
@@ -26785,11 +26776,6 @@ snapshots:
       micromark-util-types: 2.0.0
     transitivePeerDependencies:
       - supports-color
-
-  micromatch@4.0.2:
-    dependencies:
-      braces: 3.0.3
-      picomatch: 2.3.1
 
   micromatch@4.0.7:
     dependencies:
@@ -28406,11 +28392,11 @@ snapshots:
     dependencies:
       bn.js: 5.2.1
 
-  rollup-plugin-swc3@0.11.2(@swc/core@1.6.13)(rollup@4.18.0):
+  rollup-plugin-swc3@0.11.2(@swc/core@1.7.35)(rollup@4.18.0):
     dependencies:
       '@fastify/deepmerge': 1.3.0
       '@rollup/pluginutils': 5.1.0(rollup@4.18.0)
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       get-tsconfig: 4.7.3
       rollup: 4.18.0
       rollup-preserve-directives: 1.1.1(rollup@4.18.0)
@@ -28833,11 +28819,11 @@ snapshots:
 
   source-map-js@1.2.0: {}
 
-  source-map-loader@5.0.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  source-map-loader@5.0.0(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
       iconv-lite: 0.6.3
       source-map-js: 1.0.2
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   source-map-support@0.5.13:
     dependencies:
@@ -29214,11 +29200,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  swc-loader@0.2.6(@swc/core@1.6.13)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  swc-loader@0.2.6(@swc/core@1.7.35)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
       '@swc/counter': 0.1.3
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   symbol-tree@3.2.4: {}
 
@@ -29258,16 +29244,16 @@ snapshots:
       ansi-escapes: 4.3.2
       supports-hyperlinks: 2.3.0
 
-  terser-webpack-plugin@5.3.10(@swc/core@1.6.13)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  terser-webpack-plugin@5.3.10(@swc/core@1.7.35)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 3.3.0
       serialize-javascript: 6.0.1
       terser: 5.31.1
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
     optionalDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
 
   terser@5.19.3:
     dependencies:
@@ -29459,11 +29445,11 @@ snapshots:
     dependencies:
       typescript: 5.7.0-beta
 
-  ts-jest@28.0.5(@babel/core@7.24.6)(babel-jest@28.1.3(@babel/core@7.24.6))(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta):
+  ts-jest@28.0.5(@babel/core@7.24.6)(babel-jest@28.1.3(@babel/core@7.24.6))(jest@28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta)))(typescript@5.7.0-beta):
     dependencies:
       bs-logger: 0.2.6
       fast-json-stable-stringify: 2.1.0
-      jest: 28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta))
+      jest: 28.1.3(@types/node@22.7.5)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta))
       jest-util: 28.1.3
       json5: 2.2.3
       lodash.memoize: 4.1.2
@@ -29475,7 +29461,7 @@ snapshots:
       '@babel/core': 7.24.6
       babel-jest: 28.1.3(@babel/core@7.24.6)
 
-  ts-node@10.9.1(@swc/core@1.6.13)(@types/node@22.7.5)(typescript@5.7.0-beta):
+  ts-node@10.9.1(@swc/core@1.7.35)(@types/node@22.7.5)(typescript@5.7.0-beta):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.9
@@ -29493,7 +29479,7 @@ snapshots:
       v8-compile-cache-lib: 3.0.1
       yn: 3.1.1
     optionalDependencies:
-      '@swc/core': 1.6.13
+      '@swc/core': 1.7.35
 
   ts-pattern@5.4.0: {}
 
@@ -30551,9 +30537,9 @@ snapshots:
   webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2):
     dependencies:
       '@discoveryjs/json-ext': 0.5.7
-      '@webpack-cli/configtest': 2.1.1(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
-      '@webpack-cli/info': 2.0.2(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
-      '@webpack-cli/serve': 2.0.5(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+      '@webpack-cli/configtest': 2.1.1(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
+      '@webpack-cli/info': 2.0.2(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
+      '@webpack-cli/serve': 2.0.5(webpack-cli@5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2))(webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2))(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       colorette: 2.0.19
       commander: 10.0.1
       cross-spawn: 7.0.3
@@ -30562,12 +30548,12 @@ snapshots:
       import-local: 3.1.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
       webpack-merge: 5.8.0
     optionalDependencies:
       webpack-dev-server: 5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2)
 
-  webpack-dev-middleware@7.2.1(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  webpack-dev-middleware@7.2.1(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
       colorette: 2.0.20
       memfs: 4.9.3
@@ -30576,7 +30562,7 @@ snapshots:
       range-parser: 1.2.1
       schema-utils: 4.2.0
     optionalDependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
   webpack-dev-server@5.0.4(bufferutil@4.0.7)(utf-8-validate@5.0.10)(webpack-cli@5.1.4)(webpack@5.88.2):
     dependencies:
@@ -30608,10 +30594,10 @@ snapshots:
       serve-index: 1.9.1
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack-dev-middleware: 7.2.1(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+      webpack-dev-middleware: 7.2.1(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       ws: 8.17.1(bufferutil@4.0.7)(utf-8-validate@5.0.10)
     optionalDependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
       webpack-cli: 5.1.4(webpack-dev-server@5.0.4)(webpack@5.88.2)
     transitivePeerDependencies:
       - bufferutil
@@ -30626,11 +30612,11 @@ snapshots:
 
   webpack-sources@3.2.3: {}
 
-  webpack-target-webextension@1.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)):
+  webpack-target-webextension@1.1.2(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)):
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4)
+      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4)
 
-  webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4):
+  webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4):
     dependencies:
       '@types/eslint-scope': 3.7.4
       '@types/estree': 1.0.5
@@ -30653,7 +30639,7 @@ snapshots:
       neo-async: 2.6.2
       schema-utils: 3.3.0
       tapable: 2.2.1
-      terser-webpack-plugin: 5.3.10(@swc/core@1.6.13)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.6.13)(webpack-cli@5.1.4))
+      terser-webpack-plugin: 5.3.10(@swc/core@1.7.35)(webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.7.35)(webpack-cli@5.1.4))
       watchpack: 2.4.0
       webpack-sources: 3.2.3
     optionalDependencies:

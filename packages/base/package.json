@@ -12,7 +12,7 @@
     },
     "types": "./dist/index.d.ts",
     "dependencies": {
-        "@masknet/kit": "0.4.0",
+        "@masknet/kit": "0.4.1",
         "anchorme": "^2.1.2",
         "pvtsutils": "^1.3.5",
         "tiny-secp256k1": "^2.2.3",
