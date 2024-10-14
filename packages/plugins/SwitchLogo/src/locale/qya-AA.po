@@ -1,19 +1,58 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:07\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/SwitchLogo/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 996\n"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "<0>Powered by </0><1>Mask Network</1>"
+msgstr "crwdns32440:0crwdne32440:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "Classics Logo"
+msgstr "crwdns29404:0crwdne29404:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "Download https://mask.io to try more powerful tools on Twitter."
+msgstr "crwdns29406:0crwdne29406:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "I just replaced Twitter X logo with the original blue bird one with Mask Network extension."
+msgstr "crwdns29408:0crwdne29408:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "New Logo"
+msgstr "crwdns29412:0crwdne29412:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "Save"
+msgstr "crwdns29416:0crwdne29416:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "Share and recommend this feature after saving."
+msgstr "crwdns29418:0crwdne29418:0"
+
+#: src/SiteAdaptor/index.tsx
+msgid "Switch between the classic Twitter logo and the new one."
+msgstr "crwdns29420:0crwdne29420:0"
+
+#: src/SiteAdaptor/SwitchLogoDialog.tsx
+msgid "Switch Twitter Logo"
+msgstr "crwdns29422:0crwdne29422:0"
+
+#: src/SiteAdaptor/index.tsx
+msgid "Switch X Logo"
+msgstr "crwdns29424:0crwdne29424:0"
+
