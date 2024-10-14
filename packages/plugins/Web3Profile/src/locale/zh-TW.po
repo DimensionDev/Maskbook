@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:02\n"
+"PO-Revision-Date: 2024-10-14 00:00\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -32,12 +32,8 @@ msgid "Change"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx:61
-msgid "Choose and show your Web3 footprints on X."
+msgid "Choose and showcase your Web3 footprints on Twitter."
 msgstr ""
-
-#: src/SiteAdaptor/index.tsx:61
-#~ msgid "Choose and showcase your Web3 footprints on Twitter."
-#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:198
 msgid "Confirm"
@@ -119,11 +115,7 @@ msgid "Save failed"
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-#~ msgid "Save successfully"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx:118
-msgid "Saved"
+msgid "Save successfully"
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx:154
@@ -175,3 +167,4 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx:29
 msgid "Web3 Profile"
 msgstr ""
+
