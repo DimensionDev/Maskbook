@@ -19,6 +19,7 @@ class CoinGeckoTrendingAPI implements TrendingAPI.Provider<Web3Helper.ChainIdAll
     }
 
     async getCoinInfoByAddress(address: string, chainId?: number): Promise<TrendingAPI.CoinInfo | undefined> {
+        console.log('getCoinInfoByAddress', { address, chainId })
         const chainIds = chainId ? [chainId] : COINGECKO_CHAIN_ID_LIST
         return attemptUntil(
             chainIds.map((chainId) => async () => {
