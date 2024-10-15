@@ -7,6 +7,7 @@ import { CollectibleCard } from '../CollectibleCard.js'
 import { FigureCard } from '../../Shared/FigureCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
 import { Context } from '../../Context/index.js'
+import { useMemo } from 'react'
 
 const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCard }) => ({
     body: {
@@ -21,8 +22,8 @@ const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCa
     },
 }))
 
-const resolveTopListing = (orders?: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
-    if (!orders?.length) return
+const resolveTopListing = (orders: Array<NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>) => {
+    if (!orders.length) return
     return first(
         orders.sort((a, b) => {
             const value_a = new BigNumber(a.priceInToken?.amount ?? 0)
@@ -40,7 +41,7 @@ interface AboutTabProps {
 export function AboutTab(props: AboutTabProps) {
     const { asset, isLoading } = props
     const { orders, offers, sourceType } = Context.useContainer()
-    const topListing = resolveTopListing(offers)
+    const topListing = useMemo(() => resolveTopListing(offers), [offers])
     const hidePriceCard = !topListing && Boolean(orders.error) && !sourceType
     const { classes } = useStyles({ hidePriceCard })
 

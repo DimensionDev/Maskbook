@@ -55,8 +55,7 @@ interface PriceCardProps {
     topListing?: NonFungibleTokenOrder<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
 }
 
-export function PriceCard(props: PriceCardProps) {
-    const { topListing } = props
+export function PriceCard({ topListing }: PriceCardProps) {
     const { setSourceType, sourceType = topListing?.source, orders } = Context.useContainer()
     const t = useCollectibleTrans()
     const { classes } = useStyles()
