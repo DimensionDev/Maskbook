@@ -80,7 +80,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
     tokenSelector: {
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 12,
+        gap: theme.spacing(1),
         width: '100%',
         height: 255,
         overflowY: 'auto',
@@ -91,6 +91,7 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         '&::-webkit-scrollbar': {
             display: 'none',
         },
+        scrollbarWidth: 'none',
     },
     selectWrapper: {
         position: 'relative',
@@ -100,7 +101,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         padding: 0,
         marginBottom: theme.spacing(1),
         background: theme.palette.background.paper,
-        width: 120,
         height: 150,
         overflow: 'hidden',
     },
