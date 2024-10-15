@@ -40,6 +40,7 @@ import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.j
 import { RedPacketPast } from './RedPacketPast.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
 import { base } from '../base.js'
+import { queryClient } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -231,6 +232,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         ) => {
             onCreateOrSelect(payload, payloadImage, claimRequirements, publicKey)
             setSettings(undefined)
+            queryClient.invalidateQueries({ queryKey: ['redpacket', 'history'] })
         },
         [onCreateOrSelect],
     )

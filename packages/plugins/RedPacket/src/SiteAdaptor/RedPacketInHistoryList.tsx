@@ -2,7 +2,7 @@ import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { ChainId, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
@@ -208,7 +208,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     </Typography>
                                 </div>
                             </div>
-                            {redpacket_status && redpacket_status !== FireflyRedPacketAPI.RedPacketStatus.View ?
+                            {redpacket_status ?
                                 <RedPacketActionButton
                                     redpacketStatus={redpacket_status}
                                     rpid={redpacket_id}

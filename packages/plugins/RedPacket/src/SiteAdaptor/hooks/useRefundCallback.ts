@@ -15,7 +15,7 @@ export function useRefundCallback(version: number, from: string, id?: string, ex
         if (!redPacketContract || !id) return
 
         setIsRefunded(false)
-        console.log(redPacketContract)
+
         const tx = await new ContractTransaction(redPacketContract).fillAll(redPacketContract.methods.refund(id), {
             from,
         })

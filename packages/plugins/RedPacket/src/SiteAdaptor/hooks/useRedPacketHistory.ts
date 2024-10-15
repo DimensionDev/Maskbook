@@ -14,7 +14,7 @@ export function useRedPacketHistory(
     >
 > {
     return useSuspenseInfiniteQuery({
-        queryKey: ['RedPacketHistory', address, historyType],
+        queryKey: ['redpacket', 'history', address, historyType],
         initialPageParam: createIndicator(undefined, ''),
         queryFn: async ({ pageParam }) => {
             const res = await FireflyRedPacket.getHistory(

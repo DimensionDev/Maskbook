@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -72,8 +72,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         totalAmount,
         createdAt,
     } = props
-    const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const t = useRedPacketTrans()
     const compositionType = useContext(CompositionTypeContext)
@@ -124,15 +123,12 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         )
     }, [])
 
-    const redpacketStatus = updatedStatus || _redpacketStatus
+    const redpacketStatus = refunded ? FireflyRedPacketAPI.RedPacketStatus.Refund : _redpacketStatus
 
     const handleClick = useCallback(async () => {
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) await shareCallback()
         if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) await refundCallback()
     }, [redpacketStatus, shareCallback, refundCallback])
-
-    if (refunded && updatedStatus !== FireflyRedPacketAPI.RedPacketStatus.Refund)
-        setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
 
     return (
         <ActionButton
@@ -141,7 +137,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
             onClick={() => {
                 handleClick()
             }}
-            className={cx(classes.actionButton)}
+            className={classes.actionButton}
             disabled={
                 redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Empty ||
                 redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Expired ||
