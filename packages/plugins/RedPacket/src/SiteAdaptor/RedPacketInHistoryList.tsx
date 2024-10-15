@@ -1,17 +1,20 @@
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useEverSeen } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { ChainId, NETWORK_DESCRIPTORS, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import { format, fromUnixTime } from 'date-fns'
 import { memo } from 'react'
 import { RedPacketTrans, useRedPacketTrans } from '../locales/index.js'
+import { RedPacketRPC } from '../messages.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
 import { useRedpacketToken } from './hooks/useRedpacketToken.js'
-import { useEverSeen } from '@masknet/shared-base-ui'
+import { useCreateRedPacketReceipt } from './hooks/useCreateRedPacketReceipt.js'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string }>()((
@@ -145,7 +148,7 @@ interface RedPacketInHistoryListProps {
 }
 
 export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props: RedPacketInHistoryListProps) {
-    const { history } = props
+    const { history, onSelect } = props
     const {
         rp_msg,
         create_time,
@@ -178,6 +181,14 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
     const { data: tokenAddress } = useRedpacketToken(chainId, history.trans_hash, seen && token_symbol === 'MATIC')
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress, undefined, { chainId })
     const tokenSymbol = token?.symbol ?? token_symbol
+    const contractAddress = useRedPacketConstants(chainId).HAPPY_RED_PACKET_ADDRESS_V4
+    const { data: redpacketRecord } = useQuery({
+        queryKey: ['redpacket', 'by-tx-hash', history.trans_hash],
+        queryFn: async () => RedPacketRPC.getRedPacketRecord(history.trans_hash),
+    })
+    const { data: createSuccessResult } = useCreateRedPacketReceipt(history.trans_hash, chainId)
+    const canResend =
+        redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View && !!redpacketRecord && !!createSuccessResult
 
     return (
         <ListItem className={classes.root}>
@@ -225,6 +236,26 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     chainId={chainId}
                                     totalAmount={total_amounts}
                                     createdAt={create_time}
+                                    canResend={canResend}
+                                    onResend={() => {
+                                        if (!canResend) return
+                                        onSelect({
+                                            txid: history.trans_hash,
+                                            contract_address: contractAddress!,
+                                            rpid: history.redpacket_id,
+                                            shares: +history.total_numbers,
+                                            is_random: createSuccessResult.ifrandom,
+                                            creation_time: history.create_time,
+                                            contract_version: 4,
+                                            sender: {
+                                                address: account,
+                                                name: createSuccessResult.name,
+                                                message: createSuccessResult.message,
+                                            },
+                                            total: history.total_amounts,
+                                            duration: +createSuccessResult.duration,
+                                        })
+                                    }}
                                 />
                             :   null}
                         </section>

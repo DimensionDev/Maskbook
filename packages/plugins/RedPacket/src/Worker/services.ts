@@ -1,4 +1,3 @@
-import type { ChainId } from '@masknet/web3-shared-evm'
 import {
     type RedPacketRecord,
     type RedPacketJSONPayloadFromChain,
@@ -9,7 +8,7 @@ import * as nftDb from './databaseForNft.js'
 
 export { addRedPacketNft, getRedPacketNft, updateRedPacketNft } from './databaseForNft.js'
 
-export async function addRedPacket(record: RedPacketRecord, chainId: ChainId) {
+export async function addRedPacket(record: RedPacketRecord) {
     await database.addRedPacket(record)
 }
 

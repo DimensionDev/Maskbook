@@ -1,46 +1,46 @@
-import { useCallback, useContext, useMemo, useState, Suspense } from 'react'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { DialogContent, Tab, useTheme } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
-import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
-import {
-    ApplicationBoardModal,
-    InjectedDialog,
-    NetworkTab,
-    useCurrentLinkedPersona,
-    LoadingStatus,
-} from '@masknet/shared'
-import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
-import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
-import { Icons } from '@masknet/icons'
+import {
+    ApplicationBoardModal,
+    InjectedDialog,
+    LoadingStatus,
+    NetworkTab,
+    useCurrentLinkedPersona,
+} from '@masknet/shared'
+import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketTrans } from '../locales/index.js'
-import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
+import { TabContext, TabPanel } from '@mui/lab'
+import { DialogContent, Tab, useTheme } from '@mui/material'
+import { Suspense, useCallback, useContext, useMemo, useState } from 'react'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import { base } from '../base.js'
 import { RedPacketMetaKey } from '../constants.js'
+import { useRedPacketTrans } from '../locales/index.js'
+import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
+import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
+import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
+import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
+import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistoryDetails.js'
+import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
+import { openComposition } from './openComposition.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
-import { openComposition } from './openComposition.js'
-import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
-import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistoryDetails.js'
-import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
-import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
-import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
-import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
-import { RedPacketPast } from './RedPacketPast.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
-import { base } from '../base.js'
-import { queryClient } from '@masknet/shared-base-ui'
+import { RedPacketPast } from './RedPacketPast.js'
+import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
