@@ -22,6 +22,7 @@ import {
 import { Box, Link, Typography, alpha } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
+import { format } from 'date-fns'
 import { capitalize } from 'lodash-es'
 import { memo, useCallback } from 'react'
 import { Navigate, useLocation } from 'react-router-dom'
@@ -347,6 +348,12 @@ export const Component = memo(function TransactionDetail() {
                                 <FormattedCurrency value={gasCost} formatter={formatCurrency} />
                             </>
                         :   ''}
+                    </ProgressiveText>
+                </Box>
+                <Box className={classes.field}>
+                    <Typography className={classes.fieldName}>Time</Typography>
+                    <ProgressiveText loading={loadingTx} className={classes.fieldValue}>
+                        {tx ? format(tx.block_timestamp, 'MMM-dd-yyyy hh:mm:ss aa OOO').replace('GMT', 'UTC') : '--'}
                     </ProgressiveText>
                 </Box>
                 {logs.length ?

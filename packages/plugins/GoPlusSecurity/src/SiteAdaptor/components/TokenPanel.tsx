@@ -34,7 +34,7 @@ const DEFAULT_PLACEHOLDER = '--'
 
 interface TokenPanelProps extends RefAttributes<HTMLDivElement> {
     tokenSecurity: SecurityAPI.TokenSecurityType
-    tokenMarketCap?: number
+    tokenMarketCap?: number | null
 }
 
 export function TokenPanel({ tokenSecurity, tokenMarketCap, ref }: TokenPanelProps) {

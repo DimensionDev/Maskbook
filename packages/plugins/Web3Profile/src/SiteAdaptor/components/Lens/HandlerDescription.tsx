@@ -1,6 +1,6 @@
 import { memo, useMemo, useState } from 'react'
 import { Box, Button, Typography } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { WalletIcon, SelectProviderModal } from '@masknet/shared'
 import {
     useChainContext,
@@ -30,12 +30,16 @@ const useStyles = makeStyles()((theme) => ({
     description: {
         display: 'flex',
         columnGap: 4,
+        minWidth: 0,
     },
     name: {
         fontWeight: 700,
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
     },
     address: {
         fontWeight: 700,
@@ -55,7 +59,12 @@ interface HandlerDescriptionProps extends withClasses<'container'> {
     onChange: (profile: LensBaseAPI.Profile) => void
 }
 
-export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, currentProfile, onChange, ...props }) => {
+export const HandlerDescription = memo<HandlerDescriptionProps>(function HandlerDescription({
+    profiles,
+    currentProfile,
+    onChange,
+    ...props
+}) {
     const t = useWeb3ProfileTrans()
     const { classes } = useStyles(undefined, { props })
     const { pluginID } = useNetworkContext()
@@ -98,15 +107,15 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(({ profiles, cur
         )
     }
     const avatar = getProfileAvatar(currentProfile) || new URL('../../assets/Lens.png', import.meta.url).href
-
+    const displayName = currentProfile.metadata?.displayName ?? currentProfile.handle.localName
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
                 <WalletIcon classes={{ mainIcon: classes.avatar }} size={36} mainIcon={avatar} />
-                <Box>
-                    <Typography className={classes.name}>
-                        {currentProfile.metadata?.displayName ?? currentProfile.handle.localName}
-                    </Typography>
+                <Box minWidth={0}>
+                    <TextOverflowTooltip as={ShadowRootTooltip} placement="top" title={displayName}>
+                        <Typography className={classes.name}>{displayName}</Typography>
+                    </TextOverflowTooltip>
                     <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
                 </Box>
             </Box>
