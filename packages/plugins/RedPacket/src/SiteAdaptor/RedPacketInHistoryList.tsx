@@ -4,8 +4,14 @@ import { useEverSeen } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { formatBalance } from '@masknet/web3-shared-base'
-import { ChainId, NETWORK_DESCRIPTORS, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { formatBalance, TokenType } from '@masknet/web3-shared-base'
+import {
+    ChainId,
+    isNativeTokenAddress,
+    NETWORK_DESCRIPTORS,
+    SchemaType,
+    useRedPacketConstants,
+} from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { format, fromUnixTime } from 'date-fns'
@@ -187,8 +193,8 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
         queryFn: async () => RedPacketRPC.getRedPacketRecord(history.trans_hash),
     })
     const { data: createSuccessResult } = useCreateRedPacketReceipt(history.trans_hash, chainId)
-    const canResend =
-        redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View && !!redpacketRecord && !!createSuccessResult
+    const isViewStatus = redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View
+    const canResend = isViewStatus && !!redpacketRecord && !!createSuccessResult
 
     return (
         <ListItem className={classes.root}>
@@ -219,7 +225,7 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                     </Typography>
                                 </div>
                             </div>
-                            {redpacket_status ?
+                            {redpacket_status && !(isViewStatus && !redpacketRecord) ?
                                 <RedPacketActionButton
                                     redpacketStatus={redpacket_status}
                                     rpid={redpacket_id}
@@ -254,6 +260,20 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
                                             },
                                             total: history.total_amounts,
                                             duration: +createSuccessResult.duration,
+                                            token: {
+                                                type: TokenType.Fungible,
+                                                schema:
+                                                    isNativeTokenAddress(createSuccessResult.token_address) ?
+                                                        SchemaType.Native
+                                                    :   SchemaType.ERC20,
+                                                id: createSuccessResult.token_address,
+                                                chainId: history.chain_id,
+                                                address: createSuccessResult.token_address,
+                                                symbol: history.token_symbol,
+                                                decimals: history.token_decimal,
+                                                name: history.token_symbol,
+                                            },
+                                            password: redpacketRecord.password,
                                         })
                                     }}
                                 />
