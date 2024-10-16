@@ -88,20 +88,10 @@ export function CalendarContent({ target, disableSetting }: Props) {
                     currentTab={currentTab}
                 />
                 <TabPanel value={tabs.news} className={classes.tabPanel}>
-                    <NewsList
-                        list={newsList}
-                        isLoading={newsLoading}
-                        empty={!Object.keys(newsList).length}
-                        dateString={dateString}
-                    />
+                    <NewsList list={newsList} isLoading={newsLoading} dateString={dateString} />
                 </TabPanel>
                 <TabPanel value={tabs.nfts} className={classes.tabPanel}>
-                    <NFTList
-                        list={nftList}
-                        isLoading={nftLoading}
-                        empty={!Object.keys(newsList).length}
-                        dateString={dateString}
-                    />
+                    <NFTList list={nftList} isLoading={nftLoading} dateString={dateString} />
                 </TabPanel>
                 <Footer provider={currentTab} disableSetting={disableSetting} />
             </TabContext>
