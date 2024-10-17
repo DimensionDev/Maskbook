@@ -1,7 +1,6 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mask-network\n"
-"POT-Creation-Date: \n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
 "PO-Revision-Date: 2024-10-17 09:47\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
