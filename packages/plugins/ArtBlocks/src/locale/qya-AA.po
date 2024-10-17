@@ -1,119 +1,69 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:06\n"
-"Last-Translator: \n"
-"Language: qya_AA\n"
-"Language-Team: Quenya\n"
+"POT-Creation-Date: 1970-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: qya\n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-10-10 05:25\n"
+"Last-Translator: \n"
+"Language-Team: Quenya\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ArtBlocks/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 948\n"
-
-#: src/SiteAdaptor/index.tsx
 msgid "Artblocks"
 msgstr "crwdns28310:0crwdne28310:0"
-
-#: src/SiteAdaptor/index.tsx
 msgid "Artblocks allow you to pick a style that you like, pay for the work, and a randomly generated version of the content is created by an algorithm and sent to your Ethereum account."
 msgstr "crwdns28312:0crwdne28312:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Blockchain:"
 msgstr "crwdns28314:0crwdne28314:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "By checking this box, I agree to ArtBlocks's <0>Terms of Service</0>."
 msgstr "crwdns31326:0crwdne31326:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Chain"
 msgstr "crwdns28316:0crwdne28316:0"
-
-#: src/SiteAdaptor/Collectible.tsx
 msgid "Collection"
 msgstr "crwdns28318:0crwdne28318:0"
-
-#: src/SiteAdaptor/ActionBar.tsx
 msgid "Completed"
 msgstr "crwdns28320:0crwdne28320:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Contract:"
 msgstr "crwdns28322:0crwdne28322:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Created by <0>{0}</0>• <1>Website</1>"
 msgstr "crwdns32208:0{0}crwdne32208:0"
-
-#: src/SiteAdaptor/Collectible.tsx
 msgid "Details"
 msgstr "crwdns28326:0crwdne28326:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
 msgstr "crwdns28328:0{0}crwdnd28328:0{1}crwdnd28328:0{2}crwdne28328:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
 msgstr "crwdns28330:0{0}crwdnd28330:0{1}crwdnd28330:0{2}crwdne28330:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Infos"
 msgstr "crwdns28332:0crwdne28332:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Insufficient balance"
 msgstr "crwdns28334:0crwdne28334:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Library:"
 msgstr "crwdns28336:0crwdne28336:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "License:"
 msgstr "crwdns28338:0crwdne28338:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Minted:"
 msgstr "crwdns28340:0crwdne28340:0"
-
-#: src/SiteAdaptor/ActionBar.tsx
 msgid "Paused"
 msgstr "crwdns28342:0crwdne28342:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Please check ToS document"
 msgstr "crwdns28344:0crwdne28344:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Price per mint"
 msgstr "crwdns28346:0crwdne28346:0"
-
-#: src/SiteAdaptor/DetailsView.tsx
 msgid "Price:"
 msgstr "crwdns28348:0crwdne28348:0"
-
-#: src/SiteAdaptor/ActionBar.tsx
-#: src/SiteAdaptor/PurchaseDialog.tsx
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchase"
 msgstr "crwdns28350:0crwdne28350:0"
-
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchasing...."
 msgstr "crwdns28352:0crwdne28352:0"
-
-#: src/SiteAdaptor/Collectible.tsx
 msgid "Something went wrong!"
 msgstr "crwdns28354:0crwdne28354:0"
-
-#: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr "crwdns32210:0crwdne32210:0"
-

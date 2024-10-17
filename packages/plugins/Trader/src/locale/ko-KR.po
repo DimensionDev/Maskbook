@@ -1,19 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:05\n"
+"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: ko_KR\n"
-"Language-Team: Korean\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: \n"
 "Report-Msgid-Bugs-To: \n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1000\n"
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -270,11 +266,11 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "NFT"
-msgstr ""
+msgstr "NFT"
 
 #: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "NFTs"
-msgstr ""
+msgstr "NFTs"
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 #: src/SiteAdaptor/trending/PriceChart.tsx
@@ -309,7 +305,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx
 msgid "Powered by"
-msgstr ""
+msgstr "Powered by"
 
 #: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx

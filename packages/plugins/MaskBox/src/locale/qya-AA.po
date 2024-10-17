@@ -1,79 +1,49 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:06\n"
-"Last-Translator: \n"
-"Language: qya_AA\n"
-"Language-Team: Quenya\n"
+"POT-Creation-Date: 1970-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: qya\n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-10-10 05:26\n"
+"Last-Translator: \n"
+"Language-Team: Quenya\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/MaskBox/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 974\n"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "{boxStateMessage} ({0} {1}/Time)"
 msgstr "crwdns28746:0{boxStateMessage}crwdnd28746:0{0}crwdnd28746:0{1}crwdne28746:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Active"
 msgstr "crwdns28748:0crwdne28748:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Articles"
 msgstr "crwdns28750:0crwdne28750:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "by"
 msgstr "crwdns28752:0crwdne28752:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Closed"
 msgstr "crwdns28754:0crwdne28754:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Details"
 msgstr "crwdns28756:0crwdne28756:0"
-
-#: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Draw"
 msgstr "crwdns28758:0crwdne28758:0"
-
-#: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Drawing"
 msgstr "crwdns28760:0crwdne28760:0"
-
-#: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Insufficient balance"
 msgstr "crwdns28762:0crwdne28762:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Limit:"
 msgstr "crwdns28764:0crwdne28764:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Load failed"
 msgstr "crwdns28766:0crwdne28766:0"
-
-#: src/SiteAdaptor/index.tsx
 msgid "MaskBox"
 msgstr "crwdns28768:0crwdne28768:0"
-
-#: src/SiteAdaptor/index.tsx
 msgid "Professional multi-chain decentralized platform for launching NFT blind boxes."
 msgstr "crwdns32254:0crwdne32254:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Reload"
 msgstr "crwdns28772:0crwdne28772:0"
-
-#: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Solid:"
 msgstr "crwdns28774:0crwdne28774:0"
-

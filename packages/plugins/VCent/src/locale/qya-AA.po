@@ -1,34 +1,19 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:07\n"
-"Last-Translator: \n"
-"Language: qya_AA\n"
-"Language-Team: Quenya\n"
+"POT-Creation-Date: 1970-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: qya\n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-09-03 09:19\n"
+"Last-Translator: \n"
+"Language-Team: Quenya\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1004\n"
-
-#: src/SiteAdaptor/TweetDialog.tsx
-msgid "<0>Latest offer at </0><1>${0}</1>"
-msgstr "crwdns32448:0${0}crwdne32448:0"
-
-#: src/SiteAdaptor/index.tsx
-msgid "Buy & sell tweets autographed by their original creators."
-msgstr "crwdns29516:0crwdne29516:0"
-
-#: src/SiteAdaptor/TweetDialog.tsx
-msgid "Go"
-msgstr "crwdns29518:0crwdne29518:0"
-
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/index.tsx
-msgid "Valuables"
-msgstr "crwdns29522:0crwdne29522:0"
-

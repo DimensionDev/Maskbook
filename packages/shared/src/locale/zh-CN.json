@@ -17,7 +17,7 @@
         "OAZ+tI": [
             ["attentionFactors", "plural", { "one": ["#", " Attention item"], "other": ["#", " Attention items"] }]
         ],
-        "QyZU8V": [["riskyFactors", "plural", { "one": ["#", " 个风险条目"], "other": ["#", " 个风险条目"] }]],
+        "QyZU8V": [["riskyFactors", "plural", { "one": ["#", " Risky item"], "other": ["#", " Risky items"] }]],
         "zGO131": [
             "<0>Drag & Drop your file here </0>",
             ["0", "select", { "default": "<1>Size limit: 10 MB </1>", "omit": "" }],

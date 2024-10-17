@@ -1,19 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:05\n"
+"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: ja_JP\n"
-"Language-Team: Japanese\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: \n"
 "Report-Msgid-Bugs-To: \n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 994\n"
 
 #: src/SiteAdaptor/InformationCard.tsx
 msgid "{0, plural, one {Strategy} other {Strategies}}"
@@ -39,7 +35,7 @@ msgstr "現在の結果"
 
 #: src/SiteAdaptor/index.tsx
 msgid "DAO"
-msgstr ""
+msgstr "DAO"
 
 #: src/SiteAdaptor/index.tsx
 msgid "Display Snapshot proposals on the X of the respective project or protocol."
@@ -67,7 +63,7 @@ msgstr "情報"
 
 #: src/SiteAdaptor/InformationCard.tsx
 msgid "IPFS"
-msgstr ""
+msgstr "IPFS"
 
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "Join"
@@ -120,7 +116,7 @@ msgstr "結果"
 #: src/SiteAdaptor/ProfileView.tsx
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Snapshot"
-msgstr ""
+msgstr "Snapshot"
 
 #: src/SiteAdaptor/SpaceMenu.tsx
 msgid "Space"

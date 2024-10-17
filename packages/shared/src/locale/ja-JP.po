@@ -1,19 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:06\n"
+"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: ja_JP\n"
-"Language-Team: Japanese\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: \n"
 "Report-Msgid-Bugs-To: \n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1012\n"
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
@@ -486,7 +482,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
-msgstr ""
+msgstr "DSearch"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Edit"
@@ -683,7 +679,7 @@ msgstr "Gwei（グワイ）"
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "GWEI"
-msgstr ""
+msgstr "GWEI"
 
 #: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -868,7 +864,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "NFTs"
-msgstr ""
+msgstr "NFTs"
 
 #: src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
@@ -899,7 +895,7 @@ msgstr ""
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
-msgstr ""
+msgstr "OK"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."

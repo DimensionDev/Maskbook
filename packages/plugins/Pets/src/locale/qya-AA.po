@@ -1,96 +1,59 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
-"PO-Revision-Date: 2024-10-14 03:06\n"
-"Last-Translator: \n"
-"Language: qya_AA\n"
-"Language-Team: Quenya\n"
+"POT-Creation-Date: 1970-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: qya\n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
+"PO-Revision-Date: 2024-10-10 05:26\n"
+"Last-Translator: \n"
+"Language-Team: Quenya\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Pets/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 978\n"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "(unverified)"
 msgstr "crwdns28856:0crwdne28856:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
 msgstr "crwdns32256:0crwdne32256:0"
-
-#: src/hooks/useEssay.ts
 msgid "Click the Mask icon on the sidebar and access the Non-F Friends app to configure your personalized desktop NFT pet."
 msgstr "crwdns32258:0crwdne32258:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Confirm"
 msgstr "crwdns28858:0crwdne28858:0"
-
-#: src/SiteAdaptor/index.tsx
 msgid "Discover the infinite possibilities of #NFTs."
 msgstr "crwdns28860:0crwdne28860:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Greeting message"
 msgstr "crwdns28862:0crwdne28862:0"
-
-#: src/SiteAdaptor/PetShareDialog.tsx
 msgid "I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
 "#mask_io #nonfungiblefriends\n"
 "⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
 msgstr "crwdns28864:0crwdne28864:0"
-
-#: src/hooks/useEssay.ts
 msgid "I'm CryptoPunk #6128! Voyagers, welcome to the uncharted waters of WEB3!"
 msgstr "crwdns31678:0crwdne31678:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "NFT Contract"
 msgstr "crwdns28866:0crwdne28866:0"
-
-#: src/SiteAdaptor/index.tsx
 msgid "Non-F Friends"
 msgstr "crwdns28868:0crwdne28868:0"
-
-#: src/SiteAdaptor/PetDialog.tsx
 msgid "Non-Fungible Friends"
 msgstr "crwdns28870:0crwdne28870:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Optional, 100 characters max."
 msgstr "crwdns28872:0crwdne28872:0"
-
-#: src/SiteAdaptor/PreviewBox.tsx
 msgid "Preview"
 msgstr "crwdns28876:0crwdne28876:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Setting failed, please try later"
 msgstr "crwdns28878:0crwdne28878:0"
-
-#: src/SiteAdaptor/PetShareDialog.tsx
 msgid "Share"
 msgstr "crwdns28880:0crwdne28880:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Show NFT friends on the profile page."
 msgstr "crwdns28882:0crwdne28882:0"
-
-#: src/SiteAdaptor/PetDialog.tsx
 msgid "Successful"
 msgstr "crwdns28884:0crwdne28884:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Token ID"
 msgstr "crwdns28886:0crwdne28886:0"
-
-#: src/SiteAdaptor/PetSetDialog.tsx
-#: src/SiteAdaptor/PetShareDialog.tsx
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr "crwdns28888:0crwdne28888:0"
-
