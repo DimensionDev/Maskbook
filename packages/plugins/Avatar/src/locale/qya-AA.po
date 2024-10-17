@@ -1,69 +1,118 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:48\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Avatar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 950\n"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Add Collectibles"
 msgstr "crwdns28370:0crwdne28370:0"
+
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Cancel"
 msgstr "crwdns28372:0crwdne28372:0"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Change"
 msgstr "crwdns28374:0crwdne28374:0"
+
+#: src/Application/NFTListDialog.tsx
 msgid "Coming soon"
 msgstr "crwdns31328:0crwdne31328:0"
+
+#: src/Application/PersonaPage.tsx
 msgid "Customize NFT experience by connecting social accounts. Enjoy Web2 with a whole new Web3 vibe."
 msgstr "crwdns28376:0crwdne28376:0"
+
+#: src/Application/RouterDialog.tsx
 msgid "Edit Profile"
 msgstr "crwdns28380:0crwdne28380:0"
+
+#: src/Application/NFTListDialog.tsx
 msgid "Failed to download image"
 msgstr "crwdns32212:0crwdne32212:0"
+
+#: src/SiteAdaptor/NFTBadge.tsx
 msgid "Loading..."
 msgstr "crwdns28382:0crwdne28382:0"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "NFT Avatar Setting"
 msgstr "crwdns28384:0crwdne28384:0"
+
+#: src/Application/RouterDialog.tsx
+#: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
 msgstr "crwdns28386:0crwdne28386:0"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "No collectible found."
 msgstr "crwdns28388:0crwdne28388:0"
+
+#: src/Application/NFTListDialog.tsx
 msgid "No valid wallet detected. Please connect wallet or verify wallet firstly."
 msgstr "crwdns28390:0crwdne28390:0"
+
+#: src/Application/PersonaItem.tsx
 msgid "Not current account. Please switch to this account to set up NFTs Profile."
 msgstr "crwdns28392:0crwdne28392:0"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Retry"
 msgstr "crwdns28394:0crwdne28394:0"
+
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Save"
 msgstr "crwdns28396:0crwdne28396:0"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Set NFT Avatar"
 msgstr "crwdns28398:0crwdne28398:0"
+
+#: src/Application/NFTListDialog.tsx
 msgid "Set NFT NFT Background"
 msgstr "crwdns31330:0crwdne31330:0"
+
+#: src/Application/NFTListDialog.tsx
 msgid "Set NFT PFP"
 msgstr "crwdns31332:0crwdne31332:0"
+
+#: src/Application/NFTInfo.tsx
 msgid "Set NFT PFPs"
 msgstr "crwdns28400:0crwdne28400:0"
+
+#: src/Application/NFTInfo.tsx
 msgid "Set up NFT PFP successfully"
 msgstr "crwdns28402:0crwdne28402:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Set your NFT as profile picture with exclusive aura."
 msgstr "crwdns31334:0crwdne31334:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Socialize and show off your NFTs. People can bid, buy and view your valuable NFTs without leaving X."
 msgstr "crwdns32214:0crwdne32214:0"
+
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Sorry, failed to save NFT Avatar. Please set again."
 msgstr "crwdns28404:0crwdne28404:0"
+
+#: src/Application/UploadAvatarDialog.tsx
 msgid "Update NFT Avatar Success!"
 msgstr "crwdns28406:0crwdne28406:0"
+
+#: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr "crwdns28408:0crwdne28408:0"
+

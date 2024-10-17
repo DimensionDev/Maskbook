@@ -1,62 +1,106 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:48\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 954\n"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
+#: src/SiteAdaptor/components/ClaimDialog/index.tsx
+#: src/SiteAdaptor/components/ClaimEntry/index.tsx
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Claim"
 msgstr "crwdns28432:0crwdne28432:0"
+
+#: src/hooks/useClaimAirdrop.tsx
 msgid "Claim your Airdrop"
 msgstr "crwdns28434:0crwdne28434:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Claimable"
 msgstr "crwdns28436:0crwdne28436:0"
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Claimed {amount} ${0} successfully."
 msgstr "crwdns28438:0{amount}crwdnd28438:0${0}crwdne28438:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Claiming will be live until: <0>{days} d {0} h {1} m</0>"
 msgstr "crwdns31338:0{days}crwdnd31338:0{0}crwdnd31338:0{1}crwdne31338:0"
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Congratulations!"
 msgstr "crwdns28440:0crwdne28440:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Eligible to claim"
 msgstr "crwdns28442:0crwdne28442:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Ended on <0>{0}</0>"
 msgstr "crwdns31340:0{0}crwdne31340:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Expired"
 msgstr "crwdns28444:0crwdne28444:0"
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
 "Install https://mask.io to explore more airdrop activities."
 msgstr "crwdns28446:0{amount}crwdnd28446:0{0}crwdne28446:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Mask Community $ARB Giveaway"
 msgstr "crwdns28448:0$ARBcrwdne28448:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "No activities found."
 msgstr "crwdns28450:0crwdne28450:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "Please connect wallet"
 msgstr "crwdns28452:0crwdne28452:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Please connect wallet to check if you are eligible to claim $ARB."
 msgstr "crwdns28454:0$ARBcrwdne28454:0"
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Share"
 msgstr "crwdns28456:0crwdne28456:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
 msgstr "crwdns28458:0$ARBcrwdne28458:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Start Time: <0>{0}</0>"
 msgstr "crwdns31342:0{0}crwdne31342:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/index.tsx
 msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
 msgstr "crwdns28460:0crwdne28460:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "You have claimed {0} $ARB."
 msgstr "crwdns28462:0{0}crwdnd28462:0$ARBcrwdne28462:0"
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "You're connected to a WalletConnect wallet. Please switch network in that wallet, or switch to another wallet."
 msgstr "crwdns32220:0crwdne32220:0"
+
+#: src/hooks/useClaimAirdrop.tsx
 msgid "Your wallet cancelled the transaction."
 msgstr "crwdns28466:0crwdne28466:0"
+

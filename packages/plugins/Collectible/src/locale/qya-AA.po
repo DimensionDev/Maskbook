@@ -1,73 +1,129 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:48\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 956\n"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
 msgstr "crwdns28468:0{0}crwdne28468:0"
+
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "<0>Expires in </0>{0}"
 msgstr "crwdns32222:0{0}crwdne32222:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "About"
 msgstr "crwdns28470:0crwdne28470:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Activities"
 msgstr "crwdns28472:0crwdne28472:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Blockchain"
 msgstr "crwdns28474:0crwdne28474:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "Change NFT PFP"
 msgstr "crwdns28476:0crwdne28476:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Collectibles"
 msgstr "crwdns28478:0crwdne28478:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Contract"
 msgstr "crwdns28480:0crwdne28480:0"
+
+#: src/SiteAdaptor/Shared/DescriptionCard.tsx
 msgid "Description"
 msgstr "crwdns28482:0crwdne28482:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Details"
 msgstr "crwdns28484:0crwdne28484:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr "crwdns28486:0crwdne28486:0"
+
+#: src/SiteAdaptor/Shared/ActivityCard.tsx
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "From"
 msgstr "crwdns28490:0crwdne28490:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "Load failed"
 msgstr "crwdns28492:0crwdne28492:0"
+
+#: src/SiteAdaptor/Shared/OffersList.tsx
 msgid "Load More"
 msgstr "crwdns28494:0crwdne28494:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Mint Address"
 msgstr "crwdns28496:0crwdne28496:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
 msgstr "crwdns28498:0{0}crwdne28498:0"
+
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "NFT Details"
 msgstr "crwdns28500:0crwdne28500:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "NFT is not minted yet."
 msgstr "crwdns28502:0crwdne28502:0"
+
+#: src/SiteAdaptor/Shared/PriceCard.tsx
 msgid "No Listings"
 msgstr "crwdns28504:0crwdne28504:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Offers"
 msgstr "crwdns28506:0crwdne28506:0"
+
+#: src/SiteAdaptor/Shared/PropertiesCard.tsx
 msgid "Properties"
 msgstr "crwdns28508:0crwdne28508:0"
+
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
 msgstr "crwdns28510:0{0}crwdne28510:0"
+
+#: src/SiteAdaptor/Shared/ActivitiesList.tsx
 msgid "This NFT didn't have any activities."
 msgstr "crwdns28512:0crwdne28512:0"
+
+#: src/SiteAdaptor/Shared/OffersList.tsx
 msgid "This NFT didn't have any offers."
 msgstr "crwdns28514:0crwdne28514:0"
+
+#: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "To <0>{0}</0>"
 msgstr "crwdns28516:0{0}crwdne28516:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token ID"
 msgstr "crwdns28518:0crwdne28518:0"
+
+#: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
 msgstr "crwdns28520:0crwdne28520:0"
+
