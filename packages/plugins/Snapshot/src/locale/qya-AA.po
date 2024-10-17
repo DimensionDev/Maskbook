@@ -1,19 +1,169 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:49\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
+
+#: src/SiteAdaptor/InformationCard.tsx
+msgid "{0, plural, one {Strategy} other {Strategies}}"
+msgstr "crwdns29334:00={0}crwdne29334:0"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx
+msgid "{0} members"
+msgstr "crwdns29336:0{0}crwdne29336:0"
+
+#: src/SiteAdaptor/InformationCard.tsx
+msgid "Author"
+msgstr "crwdns29338:0crwdne29338:0"
+
+#: src/SiteAdaptor/VotingCard.tsx
+msgid "Cast your vote"
+msgstr "crwdns29340:0crwdne29340:0"
+
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
+msgid "Current results"
+msgstr "crwdns29342:0crwdne29342:0"
+
+#: src/SiteAdaptor/index.tsx
+msgid "DAO"
+msgstr "crwdns29344:0crwdne29344:0"
+
+#: src/SiteAdaptor/index.tsx
+msgid "Display Snapshot proposals on the X of the respective project or protocol."
+msgstr "crwdns32434:0crwdne32434:0"
+
+#: src/SiteAdaptor/ResultCard.tsx
+msgid "Download report"
+msgstr "crwdns29348:0crwdne29348:0"
+
+#: src/SiteAdaptor/InformationCard.tsx
+msgid "End date"
+msgstr "crwdns29350:0crwdne29350:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx
+msgid "Ended {relativeEndTime}"
+msgstr "crwdns31500:0{relativeEndTime}crwdne31500:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx
+msgid "Ends in {relativeEndTime}"
+msgstr "crwdns31502:0{relativeEndTime}crwdne31502:0"
+
+#: src/SiteAdaptor/InformationCard.tsx
+msgid "Information"
+msgstr "crwdns29356:0crwdne29356:0"
+
+#: src/SiteAdaptor/InformationCard.tsx
+msgid "IPFS"
+msgstr "crwdns29358:0crwdne29358:0"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx
+msgid "Join"
+msgstr "crwdns29360:0crwdne29360:0"
+
+#: src/SiteAdaptor/ProfileView.tsx
+msgid "Loading"
+msgstr "crwdns29362:0crwdne29362:0"
+
+#: src/SiteAdaptor/LoadingFailCard.tsx
+msgid "Loading failed due to Snapshot API service breakdown."
+msgstr "crwdns32436:0crwdne32436:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx
+msgid "My vote"
+msgstr "crwdns29366:0crwdne29366:0"
+
+#: src/SiteAdaptor/VotingCard.tsx
+msgid "No power"
+msgstr "crwdns29368:0crwdne29368:0"
+
+#: src/SiteAdaptor/ProfileView.tsx
+msgid "Oops, we can't find any results."
+msgstr "crwdns29370:0crwdne29370:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
+msgid "Option(s)"
+msgstr "crwdns29372:0crwdne29372:0"
+
+#: src/SiteAdaptor/VotingCard.tsx
+msgid "Please try again if you failed to vote."
+msgstr "crwdns29374:0crwdne29374:0"
+
+#: src/SiteAdaptor/Snapshot.tsx
+msgid "Progress"
+msgstr "crwdns29376:0crwdne29376:0"
+
+#: src/SiteAdaptor/Snapshot.tsx
+msgid "Proposal"
+msgstr "crwdns29378:0crwdne29378:0"
+
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
+#: src/SiteAdaptor/ResultCard.tsx
+msgid "Results"
+msgstr "crwdns29380:0crwdne29380:0"
+
+#: src/SiteAdaptor/InformationCard.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
+msgid "Snapshot"
+msgstr "crwdns29382:0crwdne29382:0"
+
+#: src/SiteAdaptor/SpaceMenu.tsx
+msgid "Space"
+msgstr "crwdns29384:0crwdne29384:0"
+
+#: src/SiteAdaptor/InformationCard.tsx
+msgid "Start date"
+msgstr "crwdns29386:0crwdne29386:0"
+
+#: src/SiteAdaptor/ProfileProposalList.tsx
+msgid "Starts {relativeStartTime}"
+msgstr "crwdns31504:0{relativeStartTime}crwdne31504:0"
+
+#: src/SiteAdaptor/ProfileSpaceHeader.tsx
+msgid "View"
+msgstr "crwdns29390:0crwdne29390:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingCard.tsx
+msgid "Vote"
+msgstr "crwdns29392:0crwdne29392:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
+msgid "Vote Overview"
+msgstr "crwdns29394:0crwdne29394:0"
+
+#: src/SiteAdaptor/VotingCard.tsx
+msgid "Voted."
+msgstr "crwdns32438:0crwdne32438:0"
+
+#: src/SiteAdaptor/VotesCard.tsx
+#: src/SiteAdaptor/VotesCard.tsx
+#: src/SiteAdaptor/VotesCard.tsx
+msgid "Votes"
+msgstr "crwdns29398:0crwdne29398:0"
+
+#: src/SiteAdaptor/VotesCard.tsx
+msgid "You"
+msgstr "crwdns29400:0crwdne29400:0"
+
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
+msgid "Your voting power"
+msgstr "crwdns29402:0crwdne29402:0"
+
