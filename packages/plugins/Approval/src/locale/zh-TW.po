@@ -1,15 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"Project-Id-Version: mask-network\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:46\n"
 "Last-Translator: \n"
-"Language: \n"
-"Language-Team: \n"
-"Content-Type: \n"
+"Language: zh_TW\n"
+"Language-Team: Chinese Traditional\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: zh-TW\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 946\n"
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
 #: src/SiteAdaptor/index.tsx
@@ -60,3 +65,4 @@ msgstr ""
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr ""
+
