@@ -1,91 +1,171 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 05:26\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:48\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FileService/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 964\n"
+
+#: src/SiteAdaptor/components/FileChip.tsx
 msgid "{0} files selected"
 msgstr "crwdns28544:0{0}crwdne28544:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "Arweave"
 msgstr "crwdns28546:0crwdne28546:0"
+
+#: src/SiteAdaptor/components/FileChip.tsx
 msgid "Attached File: {name} ({size})"
 msgstr "crwdns28548:0{name}crwdnd28548:0{size}crwdne28548:0"
+
+#: src/SiteAdaptor/components/Terms.tsx
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
 msgstr "crwdns31344:0crwdne31344:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx
+#: src/SiteAdaptor/components/Terms.tsx
 msgid "Cancel"
 msgstr "crwdns28550:0crwdne28550:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx
+#: src/SiteAdaptor/components/Terms.tsx
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Confirm"
 msgstr "crwdns28552:0crwdne28552:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Decentralized file storage, permanently. Upload and share files to your Mask friends on top of Arweave Network."
 msgstr "crwdns28554:0crwdne28554:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Delete"
 msgstr "crwdns28556:0crwdne28556:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "Delete File"
 msgstr "crwdns28558:0crwdne28558:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "Do you want to delete file <0>{0}</0>"
 msgstr "crwdns31352:0{0}crwdne31352:0"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Download"
 msgstr "crwdns28560:0crwdne28560:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "Failed to delete, please try again."
 msgstr "crwdns31354:0crwdne31354:0"
+
+#: src/SiteAdaptor/FileViewer.tsx
 msgid "Failed to save file"
 msgstr "crwdns31356:0crwdne31356:0"
+
+#: src/SiteAdaptor/FileViewer.tsx
 msgid "Failed to save the file. Please try again."
 msgstr "crwdns31358:0crwdne31358:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "File {0} deleted."
 msgstr "crwdns32224:0{0}crwdne32224:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "File delete"
 msgstr "crwdns32226:0crwdne32226:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "File delete failed"
 msgstr "crwdns32228:0crwdne32228:0"
+
+#: src/SiteAdaptor/components/Files/DisplayingFile.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#: src/SiteAdaptor/components/Files/SelectableFile.tsx
 msgid "File Key: <0>{0}</0>"
 msgstr "crwdns31360:0{0}crwdne31360:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "File name must between 3 to 20 characters."
 msgstr "crwdns28562:0crwdne28562:0"
+
+#: src/SiteAdaptor/FileViewer.tsx
 msgid "File saved"
 msgstr "crwdns32230:0crwdne32230:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "File Service"
 msgstr "crwdns28564:0crwdne28564:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "IPFS"
 msgstr "crwdns28566:0crwdne28566:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "Make It Encrypted"
 msgstr "crwdns28568:0crwdne28568:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "No results found"
 msgstr "crwdns28570:0crwdne28570:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "Please click Browse Files button to select files to upload."
 msgstr "crwdns28572:0crwdne28572:0"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Rename"
 msgstr "crwdns28574:0crwdne28574:0"
+
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "size"
 msgstr "crwdns28576:0crwdne28576:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Upload File"
 msgstr "crwdns28578:0crwdne28578:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "Uploaded files"
 msgstr "crwdns28580:0crwdne28580:0"
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "Use Meson CDN"
 msgstr "crwdns28582:0crwdne28582:0"
+
+#: src/SiteAdaptor/components/FileList.tsx
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
 msgstr "crwdns28584:0crwdne28584:0"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 File Service"
 msgstr "crwdns28586:0crwdne28586:0"
+
+#: src/SiteAdaptor/components/Terms.tsx
 msgid "Web3 File Service is a decentralized storage service provided by Mask Network. It allows users to store files in different decentralized networks. This feature is powered by Mask Network's partner file storage protocols such as IPFS, Arweave and Meson Network. It supports files in PDF, DOC, JPG, PNG, MP3, MP4 and other formats. At present, the maximum file size is 10 MB.<0/><1/>You can store files in multiple decentralized networks through the Web3 file service. When uploading files, you can choose to encrypt or decrypt them. According to the selected encryption method, you can obtain two file links with and without encryption. Users of Mask Network can share files to social platforms through this link. By using the encryption, you can ensure the security of your files and prevent privacy leakage.<2/><3/>It should be noted that any user who has the link can download and share the file. With the characteristics of decentralized file storage systems, your uploaded files can never be deleted or tampered. Be caution when uploading files with personal privacy.<4/><5/>The Web3 File Service provided by Mask Network enables individuals to be free from data restrictions imposed by traditional social platforms, enabling free encrypted transmission and sharing of files. At present, the service is provisionally free for all users with Mask Network. Mask Network will provide updates on costs users may have to pay in the future."
 msgstr "crwdns32232:0crwdne32232:0"
+
+#: src/SiteAdaptor/components/Terms.tsx
 msgid "What is Web3 File Service?"
 msgstr "crwdns28588:0crwdne28588:0"
+
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "You haven't uploaded any files yet."
 msgstr "crwdns28590:0crwdne28590:0"
+
+#: src/SiteAdaptor/FileViewer.tsx
 msgid "You've saved {0} to Web3 file service."
 msgstr "crwdns32234:0{0}crwdne32234:0"
+
