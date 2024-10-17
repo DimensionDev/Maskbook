@@ -29,6 +29,7 @@ import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
 import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
 import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
 import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
+import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -84,6 +85,7 @@ const router = createHashRouter([
                     { path: PopupRoutes.Wallet, element: <WalletFrame />, children: walletRoutes },
                     { path: PopupRoutes.Friends, element: <ContactsFrame />, children: contactsRoutes },
                     { path: PopupRoutes.Settings, lazy: () => import('./pages/Settings/index.js') },
+                    { path: PopupRoutes.Trader, element: <TraderFrame />, children: traderRoutes },
                 ],
             },
             { path: PopupRoutes.RequestPermission, lazy: () => import('./pages/RequestPermission/index.js') },

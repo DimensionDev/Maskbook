@@ -44,6 +44,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NormalHeaderProps {
+    title?: string
     tabList?: ReactNode
     onClose?: () => void
 }
@@ -54,11 +55,11 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader(props) {
-    const { onClose, tabList } = props
+export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onClose, title: propTitle, tabList }) {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { title, extension, customBackHandler } = useContext(PageTitleContext)
+    const { title: contextTitle, extension, customBackHandler } = useContext(PageTitleContext)
+    const title = propTitle || contextTitle
 
     const canBack = canNavBack()
     const showTitle = title !== undefined

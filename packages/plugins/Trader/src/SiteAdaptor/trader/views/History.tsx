@@ -1,3 +1,4 @@
+import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -10,7 +11,6 @@ import { Link } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { useSwapHistory } from '../../storage.js'
-import { t } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PopupRoutes, type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type ChainId } from '@masknet/web3-shared-evm'
@@ -22,7 +22,7 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             color: theme.palette.maskColor.second,
-            width: 'calc(50% - 16px)',
+            width: 112,
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
             backgroundColor: theme.palette.maskColor.bottom,
@@ -95,6 +95,15 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 }}>
                 <Icons.ArrowDownward size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t.wallet_receive()}</Typography>
+            </button>
+            <button
+                type="button"
+                className={classes.button}
+                onClick={() => {
+                    navigate(PopupRoutes.Trader)
+                }}>
+                <Icons.Cached size={20} color={theme.palette.maskColor.main} />
+                <Typography className={classes.label}>{t.wallet_swap()}</Typography>
             </button>
         </Box>
     )
