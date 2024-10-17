@@ -1,61 +1,103 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 15:16\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:49\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Tips/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 998\n"
+
+#: src/components/TipDialog.tsx
 msgid "{amount} {0} tips sent."
 msgstr "crwdns32336:0{amount}crwdnd32336:0{0}crwdne32336:0"
+
+#: src/components/TipDialog.tsx
 msgid "1 {0} tips sent."
 msgstr "crwdns32338:0{0}crwdne32338:0"
+
+#: src/components/NFTSection/index.tsx
 msgid "Add Collectibles"
 msgstr "crwdns29426:0crwdne29426:0"
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx
 msgid "Close"
 msgstr "crwdns29428:0crwdne29428:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social media."
 msgstr "crwdns31402:0crwdne31402:0"
+
+#: src/components/TipDialog.tsx
 msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\n{promote}"
 msgstr "crwdns32340:0amount={amount}crwdnd32340:00={0}crwdnd32340:01={1}crwdnd32340:0recipientUserId={recipientUserId}crwdnd32340:02={2}crwdnd32340:03={3}crwdnd32340:0promote={promote}crwdne32340:0"
+
+#: src/components/TipDialog.tsx
 msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\n{promote}"
 msgstr "crwdns32342:0NFT_Name={NFT_Name}crwdnd32342:0recipientUserId={recipientUserId}crwdnd32342:00={0}crwdnd32342:0recipientAddress={recipientAddress}crwdnd32342:0promote={promote}crwdne32342:0"
+
+#: src/components/TipDialog.tsx
 msgid "Install https://mask.io/download-links to send your first tip."
 msgstr "crwdns31786:0crwdne31786:0"
+
+#: src/contexts/Tip/useTipValidate.ts
 msgid "Insufficient balance"
 msgstr "crwdns29430:0crwdne29430:0"
+
+#: src/components/TipDialog.tsx
 msgid "NFTs"
 msgstr "crwdns29432:0crwdne29432:0"
+
+#: src/components/NFTSection/index.tsx
 msgid "No any collectible is available for preview. Please add your collectible here."
 msgstr "crwdns32344:0crwdne32344:0"
+
+#: src/contexts/Tip/useTipValidate.ts
 msgid "No Enough Gas Fees"
 msgstr "crwdns29436:0crwdne29436:0"
+
+#: src/components/TipDialog.tsx
 msgid "Send"
 msgstr "crwdns29438:0crwdne29438:0"
+
+#: src/SiteAdaptor/components/TipsRealmContent/index.tsx
 msgid "Send authors tips by using Mask Network's Tips function."
 msgstr "crwdns32346:0crwdne32346:0"
+
+#: src/components/TipDialog.tsx
 msgid "Sending..."
 msgstr "crwdns29442:0crwdne29442:0"
+
+#: src/contexts/Tip/useRecipientValidate.ts
 msgid "The receiving address is a contract address. Please check again."
 msgstr "crwdns29448:0crwdne29448:0"
+
+#: src/contexts/Tip/useRecipientValidate.ts
 msgid "The receiving address may be a malicious address."
 msgstr "crwdns29450:0crwdne29450:0"
+
+#: src/components/TipDialog.tsx
+#: src/components/TipDialog.tsx
 msgid "Tips"
 msgstr "crwdns29452:0crwdne29452:0"
+
+#: src/components/RecipientSection/index.tsx
 msgid "To"
 msgstr "crwdns29454:0crwdne29454:0"
+
+#: src/components/TipDialog.tsx
 msgid "Tokens"
 msgstr "crwdns29456:0crwdne29456:0"
+
+#: src/components/RecipientSection/RecipientSelect.tsx
 msgid "View on Explorer"
 msgstr "crwdns29458:0crwdne29458:0"
+
