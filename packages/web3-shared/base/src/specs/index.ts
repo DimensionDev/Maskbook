@@ -606,7 +606,7 @@ export interface NonFungibleAsset<ChainId, SchemaType> extends NonFungibleToken<
     /** source type */
     source?: SourceType
     /** token count */
-    tokenCount: number
+    tokenCount?: number
 }
 
 /**

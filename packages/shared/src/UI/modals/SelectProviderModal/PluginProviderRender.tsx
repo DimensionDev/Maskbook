@@ -180,9 +180,6 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
-        if (provider === SolProviderType.Phantom) {
-            return t.plugin_wallet_solana_tips()
-        }
         if (provider === ProviderType.Fortmatic) {
             return t.plugin_wallet_fortmatic_tips()
         }
