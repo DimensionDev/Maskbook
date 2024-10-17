@@ -137,7 +137,7 @@ export class ECKeyIdentifier extends Identifier {
         )
     }
     declare [Symbol.toStringTag]: string
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return toText(x)?.startsWith('ec_key:') ?? false
     }
     static {
@@ -183,7 +183,7 @@ export class PostIVIdentifier extends Identifier {
         return new Uint8Array(decodeArrayBuffer(x))
     }
     declare [Symbol.toStringTag]: string
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return toText(x)?.startsWith('post_iv:') ?? false
     }
     static {
@@ -232,7 +232,7 @@ export class PostIdentifier extends Identifier {
         return this.postID
     }
     declare [Symbol.toStringTag]: string
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return toText(x)?.startsWith('post:') ?? false
     }
     static {
@@ -290,7 +290,7 @@ export class ProfileIdentifier extends Identifier {
         return `person:${this.network}/${this.userId}`
     }
     declare [Symbol.toStringTag]: string
-    static [Symbol.hasInstance](x: any): boolean {
+    static override [Symbol.hasInstance](x: any): boolean {
         return toText(x)?.startsWith('person:') ?? false
     }
     static {
