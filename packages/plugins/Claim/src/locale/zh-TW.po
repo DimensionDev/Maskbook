@@ -1,15 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
+"Project-Id-Version: mask-network\n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2024-10-17 09:48\n"
 "Last-Translator: \n"
-"Language: \n"
-"Language-Team: \n"
-"Content-Type: \n"
+"Language: zh_TW\n"
+"Language-Team: Chinese Traditional\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: zh-TW\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 954\n"
 
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 #: src/SiteAdaptor/components/ClaimDialog/index.tsx
@@ -52,8 +57,7 @@ msgid "Expired"
 msgstr ""
 
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid ""
-"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
+msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
 "Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
@@ -100,3 +104,4 @@ msgstr ""
 #: src/hooks/useClaimAirdrop.tsx
 msgid "Your wallet cancelled the transaction."
 msgstr ""
+
