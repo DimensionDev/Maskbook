@@ -62,4 +62,3 @@ msgstr "가격"
 #: src/SiteAdaptor/components/NFTList.tsx
 msgid "Total"
 msgstr "전체"
-

@@ -32,4 +32,3 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Valuables"
 msgstr "가치"
-

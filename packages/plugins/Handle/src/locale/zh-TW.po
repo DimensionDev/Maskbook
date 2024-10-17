@@ -31,4 +31,3 @@ msgstr ""
 #: src/SiteAdaptor/PluginHeader.tsx
 msgid "Powered by {0}"
 msgstr ""
-

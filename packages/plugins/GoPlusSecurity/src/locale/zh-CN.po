@@ -172,4 +172,3 @@ msgstr "在区块链浏览器查看"
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
-

@@ -646,4 +646,3 @@ msgstr ""
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""
-

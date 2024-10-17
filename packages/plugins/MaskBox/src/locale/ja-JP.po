@@ -77,4 +77,3 @@ msgstr "再度読み込み"
 #: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "Solid:"
 msgstr "安定した"
-
