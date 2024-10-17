@@ -1,15 +1,19 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: 1970-01-01 00:00+0000gs-To:\n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
-"Language: \n"
-"Language-Team: \n"
-"Content-Type: \n"
+"Language: ko_KR\n"
+"Language-Team: Korean\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
 "Report-Msgid-Bugs-To: \n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: ko\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 1012\n"
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
@@ -482,7 +486,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
-msgstr "DSearch"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Edit"
@@ -674,12 +678,12 @@ msgstr "설정으로 가기"
 #: src/UI/components/SettingsBoard/GasForm.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Gwei"
-msgstr "Gwei"
+msgstr ""
 
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -723,7 +727,7 @@ msgstr "무효한 슬리피지 톨러런스"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Listed"
-msgstr "Listed"
+msgstr ""
 
 #: src/UI/components/LoadRetry/index.tsx
 #: src/UI/components/ReloadStatus/index.tsx
@@ -864,7 +868,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
@@ -1243,7 +1247,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Unlisted"
-msgstr "Unlisted"
+msgstr ""
 
 #: src/hooks/useGasCurrencyMenu.tsx
 msgid "Unlock"
@@ -1324,7 +1328,7 @@ msgstr "월렛 계정"
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "WalletConnect"
-msgstr "WalletConnect"
+msgstr ""
 
 #: src/UI/components/VerifyNextIDDialog/index.tsx
 #: src/UI/components/VerifyNextIDDialog/index.tsx

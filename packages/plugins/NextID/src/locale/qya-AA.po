@@ -1,19 +1,94 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/NextID/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 976\n"
+
+#: src/components/Actions/index.tsx
+msgid "Add wallet"
+msgstr "crwdns28776:0crwdne28776:0"
+
+#: src/hooks/useWalletSign.ts
+msgid "Confirm this transaction in your wallet."
+msgstr "crwdns28778:0crwdne28778:0"
+
+#: src/components/Actions/index.tsx
+msgid "Create Persona"
+msgstr "crwdns28780:0crwdne28780:0"
+
+#: src/components/BindPanelUI.tsx
+#: src/components/BindPanelUI.tsx
+msgid "Done"
+msgstr "crwdns28782:0crwdne28782:0"
+
+#: src/components/Actions/index.tsx
+msgid "In the Web3 tab, you can show your wallet addresses for NFT collections, donation records, and other on-chain feeds to friends who have also installed the Mask extension."
+msgstr "crwdns28784:0crwdne28784:0"
+
+#: src/components/BindPanelUI.tsx
+msgid "Persona"
+msgstr "crwdns28786:0crwdne28786:0"
+
+#: src/components/BindPanelUI.tsx
+msgid "Persona Sign"
+msgstr "crwdns28788:0crwdne28788:0"
+
+#: src/components/Actions/index.tsx
+msgid "Please create your persona to use Web3 Profile."
+msgstr "crwdns28790:0crwdne28790:0"
+
+#: src/components/Actions/index.tsx
+msgid "The user has not set this."
+msgstr "crwdns28792:0crwdne28792:0"
+
+#: src/components/BindPanelUI.tsx
+msgid "This wallet address has already been connected."
+msgstr "crwdns28794:0crwdne28794:0"
+
+#: src/components/BindPanelUI.tsx
+msgid "Unsupported Network"
+msgstr "crwdns28796:0crwdne28796:0"
+
+#: src/components/BindDialog.tsx
+msgid "Verify your wallet"
+msgstr "crwdns28798:0crwdne28798:0"
+
+#: src/SiteAdaptor/VerificationPayload.tsx
+msgid "View"
+msgstr "crwdns28800:0crwdne28800:0"
+
+#: src/components/BindPanelUI.tsx
+msgid "Wallet"
+msgstr "crwdns28802:0crwdne28802:0"
+
+#: src/components/BindDialog.tsx
+#: src/components/BindDialog.tsx
+#: src/components/BindPanelUI.tsx
+#: src/hooks/useWalletSign.ts
+#: src/hooks/useWalletSign.ts
+msgid "Wallet Sign"
+msgstr "crwdns28804:0crwdne28804:0"
+
+#: src/hooks/useWalletSign.ts
+msgid "Wallet sign cancelled."
+msgstr "crwdns28806:0crwdne28806:0"
+
+#: src/components/BindDialog.tsx
+msgid "Wallet sign failed."
+msgstr "crwdns28808:0crwdne28808:0"
+
+#: src/components/BindDialog.tsx
+msgid "Wallet sign succeeded."
+msgstr "crwdns28810:0crwdne28810:0"
+

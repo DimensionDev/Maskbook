@@ -1,1257 +1,2805 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-10-10 15:16\n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:06\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/mask/shared-ui/locale/en-US.po\n"
 "X-Crowdin-File-ID: 944\n"
+
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "(the name is set by the web site)"
 msgstr "crwdns29840:0crwdne29840:0"
+
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
 msgstr "crwdns29842:0{0}crwdne29842:0"
+
+#: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
 msgstr "crwdns29844:0{0}crwdne29844:0"
+
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
 msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
 msgstr "crwdns31974:0decryptProgress={decryptProgress}crwdne31974:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
 msgstr "crwdns30744:0shareWithNum={shareWithNum}crwdne30744:0"
+
+#: dashboard/components/BackupPreview/index.tsx
 msgid "{walletLength, plural, one {# Wallet} other {# Wallets}}"
 msgstr "crwdns31976:0walletLength={walletLength}crwdne31976:0"
+
+#: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "<0>Granted to </0><1>{0}</1>"
 msgstr "crwdns31978:0{0}crwdne31978:0"
+
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "<0>Powered by</0><1>Mask Network</1>"
 msgstr "crwdns31980:0crwdne31980:0"
+
+#: popups/components/TransactionPreview/index.tsx
 msgid "<0>To</0>: <1>{to}</1>"
 msgstr "crwdns31982:0{to}crwdne31982:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "12-word recovery phrase is used to recover your persona data."
 msgstr "crwdns29526:0crwdne29526:0"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
 msgid "a token"
 msgstr "crwdns29848:0crwdne29848:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "About"
 msgstr "crwdns29850:0crwdne29850:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "About {collectionName}"
 msgstr "crwdns31984:0{collectionName}crwdne31984:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "Account connected.<0/><1/>Try to explore more features powered by Mask Network."
 msgstr "crwdns31986:0crwdne31986:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
 msgid "Account successfully connected to persona"
 msgstr "crwdns29854:0crwdne29854:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "accounts"
 msgstr "crwdns29528:0crwdne29528:0"
+
+#: popups/pages/Wallet/components/WalletAssets/index.tsx
 msgid "Activities"
 msgstr "crwdns29856:0crwdne29856:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Activity Log"
 msgstr "crwdns29858:0crwdne29858:0"
+
+#: popups/modals/SwitchPersonaModal/index.tsx
+#: popups/pages/Friends/ContactCard/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add"
 msgstr "crwdns29860:0crwdne29860:0"
+
+#: content-script/components/InjectedComponents/CommentBox.tsx
 msgid "Add an encrypted comment..."
 msgstr "crwdns31988:0crwdne31988:0"
+
+#: popups/pages/Wallet/AddToken/index.tsx
 msgid "Add Assets"
 msgstr "crwdns29864:0crwdne29864:0"
+
+#: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Add Contact"
 msgstr "crwdns29866:0crwdne29866:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Add Network"
 msgstr "crwdns29870:0crwdne29870:0"
+
+#: popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Add new address to an existing group"
 msgstr "crwdns29872:0crwdne29872:0"
+
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Add Suggested Token"
 msgstr "crwdns29874:0crwdne29874:0"
+
+#: popups/pages/Wallet/components/StartUp/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Add Wallet"
 msgstr "crwdns29876:0crwdne29876:0"
+
+#: popups/components/TokenPicker/TokenItem.tsx
+#: popups/pages/Wallet/components/AssetsList/index.tsx
 msgid "Added by user"
 msgstr "crwdns29878:0crwdne29878:0"
+
+#: popups/pages/Friends/ContactCard/index.tsx
 msgid "Added successfully"
 msgstr "crwdns29880:0crwdne29880:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Adding your wallets will allow you to own, view, and utilize your digital identities via Next.ID service. Note that you will be required to sign and authenticate the transaction to prove ownership of your wallet."
 msgstr "crwdns29884:0crwdne29884:0"
+
+#: popups/modals/AddContactModal/index.tsx
 msgid "Address"
 msgstr "crwdns29530:0crwdne29530:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "Address: <0>{address}</0>"
 msgstr "crwdns31990:0{address}crwdne31990:0"
+
+#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "After connecting and verifying your persona, you can set up associated address for displaying your web3 footprints or receiving tips."
 msgstr "crwdns29886:0crwdne29886:0"
+
+#: popups/pages/Personas/Logout/index.tsx
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
 msgstr "crwdns31992:0crwdne31992:0"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Agree"
 msgstr "crwdns29532:0crwdne29532:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "All"
 msgstr "crwdns29890:0crwdne29890:0"
+
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "All Mask Network users"
 msgstr "crwdns31994:0crwdne31994:0"
+
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Allow this site to switch the network?"
 msgstr "crwdns29894:0crwdne29894:0"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Allow us to collect your usage information to help us improve Mask."
 msgstr "crwdns31996:0crwdne31996:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Amount"
 msgstr "crwdns29896:0crwdne29896:0"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
 msgid "an NFT"
 msgstr "crwdns29898:0crwdne29898:0"
+
+#: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Appearance"
 msgstr "crwdns29900:0crwdne29900:0"
+
+#: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
+#: popups/modals/UpdatePermissionModal/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Approve"
 msgstr "crwdns29902:0crwdne29902:0"
+
+#: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Approve amount"
 msgstr "crwdns29904:0crwdne29904:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
 msgstr "crwdns31998:0crwdne31998:0"
+
+#: popups/modals/WalletRemoveModal/index.tsx
 msgid "Are you sure to remove this wallet?"
 msgstr "crwdns29906:0crwdne29906:0"
+
+#: popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Are you sure?"
 msgstr "crwdns29908:0crwdne29908:0"
+
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Are your sure you want to disconnect? You may lose part of functionalities of this website."
 msgstr "crwdns32000:0crwdne32000:0"
+
+#: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Asset is hidden."
 msgstr "crwdns32002:0crwdne32002:0"
+
+#: dashboard/components/BackupPreview/index.tsx
 msgid "Associated Accounts"
 msgstr "crwdns29536:0crwdne29536:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "At least 6 characters"
 msgstr "crwdns29538:0crwdne29538:0"
+
+#: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
 msgstr "crwdns29916:0crwdne29916:0"
+
+#: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock Time"
 msgstr "crwdns29918:0crwdne29918:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Avatar set successfully"
 msgstr "crwdns29920:0crwdne29920:0"
+
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
+#: popups/pages/Personas/AccountDetail/UI.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Back"
 msgstr "crwdns29540:0crwdne29540:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: popups/modals/SwitchPersonaModal/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Backup"
 msgstr "crwdns29542:0crwdne29542:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Backup & Recovery"
 msgstr "crwdns29922:0crwdne29922:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Backup downloaded and merged to local successfully."
 msgstr "crwdns29546:0crwdne29546:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
 msgstr "crwdns29548:0crwdne29548:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup is saved to Mask Cloud Service."
 msgstr "crwdns32004:0crwdne32004:0"
+
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
 msgstr "crwdns29924:0{0}crwdne29924:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Backup password"
 msgstr "crwdns29550:0crwdne29550:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Backup Password"
 msgstr "crwdns29552:0crwdne29552:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password must be 8-20 characters, including uppercase, lowercase, special characters and numbers."
 msgstr "crwdns29926:0crwdne29926:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password set successfully"
 msgstr "crwdns29928:0crwdne29928:0"
+
+#: popups/modals/PersonaSettingModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Backup Persona"
 msgstr "crwdns29930:0crwdne29930:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Backup to Mask Cloud Service"
 msgstr "crwdns29556:0crwdne29556:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup to the Cloud"
 msgstr "crwdns32006:0crwdne32006:0"
+
+#: popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
 msgid "Backup Wallet"
 msgstr "crwdns29932:0crwdne29932:0"
+
+#: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Balance"
 msgstr "crwdns29934:0crwdne29934:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Base"
 msgstr "crwdns29936:0crwdne29936:0"
+
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Basic setting"
 msgstr "crwdns29938:0crwdne29938:0"
+
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Be aware, check the token before adding it."
 msgstr "crwdns29940:0crwdne29940:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Block Explorer URL"
 msgstr "crwdns29944:0crwdne29944:0"
+
+#: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx
 msgid "Browse the Web3 footprints of your X friends, enjoy the freedom of Web3."
 msgstr "crwdns32008:0crwdne32008:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Browser File"
 msgstr "crwdns29948:0crwdne29948:0"
+
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "By proceeding you agree to the"
 msgstr "crwdns29952:0crwdne29952:0"
+
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "Can't find a valid user address data source."
 msgstr "crwdns32010:0crwdne32010:0"
+
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+#: popups/modals/AddContactModal/index.tsx
+#: popups/modals/DeleteContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Cancel"
 msgstr "crwdns29558:0crwdne29558:0"
+
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Cannot switch to a unknown network."
 msgstr "crwdns29956:0crwdne29956:0"
+
+#: popups/components/SignRequestInfo/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Chain ID"
 msgstr "crwdns29958:0crwdne29958:0"
+
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Chain ID: {0}"
 msgstr "crwdns32012:0{0}crwdne32012:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Change"
 msgstr "crwdns29960:0crwdne29960:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Change another account and try again."
 msgstr "crwdns32014:0crwdne32014:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Change Backup Password"
 msgstr "crwdns29962:0crwdne29962:0"
+
+#: popups/pages/Wallet/WalletSettings/ChangeNetwork.tsx
 msgid "Change Network"
 msgstr "crwdns29964:0crwdne29964:0"
+
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
 msgid "Change Owner"
 msgstr "crwdns29966:0crwdne29966:0"
+
+#: popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
+#: popups/pages/Wallet/WalletSettings/ChangePaymentPassword.tsx
 msgid "Change Payment Password"
 msgstr "crwdns29968:0crwdne29968:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Choose another wallet"
 msgstr "crwdns29972:0crwdne29972:0"
+
+#: popups/modals/ChooseToken/index.tsx
 msgid "Choose Token"
 msgstr "crwdns29974:0crwdne29974:0"
+
+#: content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Click here to have a quick start."
 msgstr "crwdns29976:0crwdne29976:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Click on <0/> at the top-right of your browser."
 msgstr "crwdns32016:0crwdne32016:0"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Click on the down-arrow to see the private key."
 msgstr "crwdns32018:0crwdne32018:0"
+
+#: content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Close"
 msgstr "crwdns29982:0crwdne29982:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Cloud Backup"
 msgstr "crwdns29560:0crwdne29560:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Collectible"
 msgstr "crwdns29984:0crwdne29984:0"
+
+#: popups/components/NFTAvatarPicker/index.tsx
 msgid "Coming soon"
 msgstr "crwdns29986:0crwdne29986:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Completed"
 msgstr "crwdns29562:0crwdne29562:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: popups/components/NFTAvatarPicker/index.tsx
+#: popups/modals/AddContactModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/modals/ConfirmModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/modals/PersonaRenameModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletAutoLockSettingModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Confirm"
 msgstr "crwdns29564:0crwdne29564:0"
+
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
 msgstr "crwdns29988:0crwdne29988:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Confirm Payment Password"
 msgstr "crwdns29566:0crwdne29566:0"
+
+#: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any time."
 msgstr "crwdns29992:0{0}crwdne29992:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time."
 msgstr "crwdns32020:0{name}crwdne32020:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Congratulations"
 msgstr "crwdns29568:0crwdne29568:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: popups/components/ConnectedWallet/index.tsx
+#: popups/components/SocialAccounts/index.tsx
+#: popups/modals/SelectProviderModal/index.tsx
 msgid "Connect"
 msgstr "crwdns29994:0crwdne29994:0"
+
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Connect and switch between your wallets."
 msgstr "crwdns29996:0crwdne29996:0"
+
+#: popups/modals/SelectProviderModal/index.tsx
 msgid "Connect Mask Network Account using your wallet."
 msgstr "crwdns29998:0crwdne29998:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Connect Persona"
 msgstr "crwdns30000:0crwdne30000:0"
+
+#: popups/modals/ConnectSocialAccountModal/index.tsx
 msgid "Connect Social Account"
 msgstr "crwdns30002:0crwdne30002:0"
+
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Connect Wallet"
 msgstr "crwdns30004:0crwdne30004:0"
+
+#: popups/pages/Wallet/Interaction/AddChainRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Connect with Mask Wallet"
 msgstr "crwdns30006:0crwdne30006:0"
+
+#: popups/components/SocialAccounts/index.tsx
 msgid "Connect your social platform accounts."
 msgstr "crwdns30008:0crwdne30008:0"
+
+#: content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
+#: popups/modals/SelectProviderModal/index.tsx
 msgid "Connect your wallet"
 msgstr "crwdns30010:0crwdne30010:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Connected {0} with {walletName}."
 msgstr "crwdns32022:0{0}crwdnd32022:0{walletName}crwdne32022:0"
+
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+#: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 msgid "Connected sites"
 msgstr "crwdns30012:0crwdne30012:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
 msgstr "crwdns30014:0crwdne30014:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Connecting operation cancelled in third-party wallet."
 msgstr "crwdns30018:0crwdne30018:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Connecting your {providerType} wallet"
 msgstr "crwdns32024:0{providerType}crwdne32024:0"
+
+#: popups/modals/AddContactModal/index.tsx
 msgid "Contact added."
 msgstr "crwdns32026:0crwdne32026:0"
+
+#: popups/modals/DeleteContactModal/index.tsx
 msgid "Contact deleted."
 msgstr "crwdns32028:0crwdne32028:0"
+
+#: popups/modals/EditContactModal/index.tsx
 msgid "Contact edited."
 msgstr "crwdns32030:0crwdne32030:0"
+
+#: dashboard/components/BackupPreview/index.tsx
+#: popups/pages/Friends/Home/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
 msgstr "crwdns29570:0crwdne29570:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
+#: dashboard/components/Restore/RestoreFromMnemonic.tsx
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Continue"
 msgstr "crwdns29572:0crwdne29572:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Contract"
 msgstr "crwdns30022:0crwdne30022:0"
+
+#: popups/components/TransactionPreview/index.tsx
 msgid "Contract Interaction"
 msgstr "crwdns30024:0crwdne30024:0"
+
+#: popups/components/PrivateKeyDisplay/index.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
 msgstr "crwdns30026:0crwdne30026:0"
+
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copy"
 msgstr "crwdns30028:0crwdne30028:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy image"
 msgstr "crwdns30030:0crwdne30030:0"
+
+#: popups/components/PrivateKeyDisplay/index.tsx
 msgid "Copy private key"
 msgstr "crwdns30034:0crwdne30034:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Copy text"
 msgstr "crwdns30036:0crwdne30036:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Could not fetch chain ID. Is your RPC URL correct?"
 msgstr "crwdns30040:0crwdne30040:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
 msgstr "crwdns29574:0crwdne29574:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Create a New Wallet"
 msgstr "crwdns30042:0crwdne30042:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr "crwdns29576:0crwdne29576:0"
+
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Create Password"
 msgstr "crwdns30044:0crwdne30044:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Create Persona"
 msgstr "crwdns30046:0crwdne30046:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
 msgstr "crwdns29578:0crwdne29578:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Creating your"
 msgstr "crwdns29580:0crwdne29580:0"
+
+#: popups/modals/ChooseCurrencyModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 msgid "Currency"
 msgstr "crwdns30048:0crwdne30048:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Currency Symbol (Optional)"
 msgstr "crwdns30050:0crwdne30050:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Current account is not the verifying account."
 msgstr "crwdns32032:0crwdne32032:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Current base fee is {0} Gwei"
 msgstr "crwdns30052:0{0}crwdne30052:0"
+
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Current Management Account"
 msgstr "crwdns30054:0crwdne30054:0"
+
+#: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "Custom"
 msgstr "crwdns30056:0crwdne30056:0"
+
+#: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Dark"
 msgstr "crwdns30058:0crwdne30058:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "data"
 msgstr "crwdns29582:0crwdne29582:0"
+
+#: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Data"
 msgstr "crwdns30060:0crwdne30060:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Data correlation"
 msgstr "crwdns27972:0crwdne27972:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
 msgstr "crwdns32034:0crwdne32034:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
 msgstr "crwdns29586:0crwdne29586:0"
+
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Decrypted by Mask Network"
 msgstr "crwdns30062:0crwdne30062:0"
+
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Delete"
 msgstr "crwdns30066:0crwdne30066:0"
+
+#: popups/modals/DeleteContactModal/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Delete Contact"
 msgstr "crwdns30068:0crwdne30068:0"
+
+#: popups/pages/Friends/Detail/index.tsx
 msgid "Deleted successfully"
 msgstr "crwdns30072:0crwdne30072:0"
+
+#: popups/components/TransactionPreview/index.tsx
 msgid "Deploy Contract"
 msgstr "crwdns30074:0crwdne30074:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Description"
 msgstr "crwdns30076:0crwdne30076:0"
+
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnect"
 msgstr "crwdns30078:0crwdne30078:0"
+
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnect all accounts"
 msgstr "crwdns30080:0crwdne30080:0"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect failed."
 msgstr "crwdns30082:0crwdne30082:0"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnect Social Account?"
 msgstr "crwdns30084:0crwdne30084:0"
+
+#: popups/components/ConnectedWallet/index.tsx
 msgid "Disconnect Wallet?"
 msgstr "crwdns30088:0crwdne30088:0"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
 msgid "Disconnected."
 msgstr "crwdns32036:0crwdne32036:0"
+
+#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Display the following address on your Web3 profile page and use it to receive tips."
 msgstr "crwdns30090:0crwdne30090:0"
+
+#: content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Do you need to paste encrypted content manually?"
 msgstr "crwdns30092:0crwdne30092:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Domain"
 msgstr "crwdns30094:0crwdne30094:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Don't forget to pin Mask Network in the browser toolbar to access Web3 easily."
 msgstr "crwdns32038:0crwdne32038:0"
+
+#: popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
 msgid "Don't see your NFT?"
 msgstr "crwdns30098:0crwdne30098:0"
+
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Done"
 msgstr "crwdns29588:0crwdne29588:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Download"
 msgstr "crwdns30100:0crwdne30100:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Download backup"
 msgstr "crwdns29590:0crwdne29590:0"
+
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Download Backup"
 msgstr "crwdns29592:0crwdne29592:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Downloading"
 msgstr "crwdns29596:0crwdne29596:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Drag & Drop your file here"
 msgstr "crwdns30102:0crwdne30102:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "E-mail"
 msgstr "crwdns29598:0crwdne29598:0"
+
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit"
 msgstr "crwdns30104:0crwdne30104:0"
+
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit Contact"
 msgstr "crwdns30106:0crwdne30106:0"
+
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr "crwdns32040:0crwdne32040:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Email"
 msgstr "crwdns29600:0crwdne29600:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Email verification code"
 msgstr "crwdns29602:0crwdne29602:0"
+
+#: content-script/components/CompositionDialog/CompositionUI.tsx
 msgid "Enable auto paste"
 msgstr "crwdns30112:0crwdne30112:0"
+
+#: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
 msgid "Enable the plugin"
 msgstr "crwdns32042:0crwdne32042:0"
+
+#: content-script/components/CompositionDialog/CompositionUI.tsx
 msgid "Encrypt"
 msgstr "crwdns30116:0crwdne30116:0"
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Encrypt the message in an image"
 msgstr "crwdns32044:0crwdne32044:0"
+
+#: content-script/components/CompositionDialog/Composition.tsx
 msgid "Encrypted Post"
 msgstr "crwdns30120:0crwdne30120:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Encrypting your"
 msgstr "crwdns29604:0crwdne29604:0"
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Encryption Method"
 msgstr "crwdns30122:0crwdne30122:0"
+
+#: popups/components/AddContactInputPanel/index.tsx
 msgid "Ens or Address(0x)"
 msgstr "crwdns30124:0crwdne30124:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr "crwdns30126:0crwdne30126:0"
+
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
 msgstr "crwdns30128:0crwdne30128:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Enter a max fee"
 msgstr "crwdns30130:0crwdne30130:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Enter a max priority fee"
 msgstr "crwdns30132:0crwdne30132:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "Enter Max spend limit"
 msgstr "crwdns30134:0crwdne30134:0"
+
+#: popups/pages/Wallet/WalletSettings/ShowPrivateKey.tsx
 msgid "Enter Payment Password"
 msgstr "crwdns30136:0crwdne30136:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Entered passwords are inconsistent."
 msgstr "crwdns32046:0crwdne32046:0"
+
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 msgid "Error: {0}"
 msgstr "crwdns32048:0{0}crwdne32048:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Ethereum {HD_PATH_WITHOUT_INDEX_ETHEREUM}"
 msgstr "crwdns29606:0{HD_PATH_WITHOUT_INDEX_ETHEREUM}crwdne29606:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Everyone"
 msgstr "crwdns30138:0crwdne30138:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Example: Alice"
 msgstr "crwdns29608:0crwdne29608:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
 msgstr "crwdns29610:0crwdne29610:0"
+
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Explore multi-chain dApps."
 msgstr "crwdns30140:0crwdne30140:0"
+
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Export"
 msgstr "crwdns30142:0crwdne30142:0"
+
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Failed"
 msgstr "crwdns30144:0crwdne30144:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Failed to add the wallet, please try again."
 msgstr "crwdns30146:0crwdne30146:0"
+
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
 msgid "Failed to decrypt."
 msgstr "crwdns32050:0crwdne32050:0"
+
+#: popups/components/ConnectedWallet/index.tsx
 msgid "Failed to disconnect wallet"
 msgstr "crwdns32052:0crwdne32052:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Failed to download and merge the backup."
 msgstr "crwdns32054:0crwdne32054:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Failed to save network"
 msgstr "crwdns30148:0crwdne30148:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Failed to set Avatar."
 msgstr "crwdns30150:0crwdne30150:0"
+
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Failed to transfer token: {message}"
 msgstr "crwdns30152:0{message}crwdne30152:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "FAQ&Tutorial"
 msgstr "crwdns30154:0crwdne30154:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Feedback"
 msgstr "crwdns30156:0crwdne30156:0"
+
+#: dashboard/components/BackupPreview/index.tsx
 msgid "File"
 msgstr "crwdns29612:0crwdne29612:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Find Mask Network in the extension list and click the <0/> button."
 msgstr "crwdns32056:0crwdne32056:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Floor price"
 msgstr "crwdns30160:0crwdne30160:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Follow @realMaskNetwork to explore Web3."
 msgstr "crwdns32058:0crwdne32058:0"
+
+#: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/modals/SelectLanguageModal/index.tsx
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Follow System"
 msgstr "crwdns30164:0crwdne30164:0"
+
+#: popups/pages/Wallet/Unlock/index.tsx
 msgid "Forgot payment password?"
 msgstr "crwdns30166:0crwdne30166:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "From"
 msgstr "crwdns30168:0crwdne30168:0"
+
+#: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Function: {0}"
 msgstr "crwdns30170:0{0}crwdne30170:0"
+
+#: popups/components/TransactionPreview/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Gas Fee"
 msgstr "crwdns30172:0crwdne30172:0"
+
+#: popups/pages/Wallet/GasSetting/index.tsx
+#: popups/pages/Wallet/GasSetting/index.tsx
 msgid "Gas fee settings"
 msgstr "crwdns30174:0crwdne30174:0"
+
+#: popups/pages/Wallet/GasSetting/index.tsx
 msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
 msgstr "crwdns32060:0crwdne32060:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr "crwdns30178:0crwdne30178:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Limit (Units)"
 msgstr "crwdns30180:0crwdne30180:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr "crwdns30182:0{0}crwdne30182:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas limit must be bigger than {minGas}."
 msgstr "crwdns30184:0{minGas}crwdne30184:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas limit must be smaller than {maxGas}."
 msgstr "crwdns30186:0{maxGas}crwdne30186:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr "crwdns30188:0crwdne30188:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Price (GWEI)"
 msgstr "crwdns30190:0crwdne30190:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas price is too low and will cause the transaction fail"
 msgstr "crwdns32062:0crwdne32062:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas price should be greater than 0"
 msgstr "crwdns30194:0crwdne30194:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Gas Used (Units)"
 msgstr "crwdns30196:0crwdne30196:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "General"
 msgstr "crwdns30198:0crwdne30198:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Generate a new persona"
 msgstr "crwdns30200:0crwdne30200:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Generate a new wallet address"
 msgstr "crwdns30202:0crwdne30202:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Generating your"
 msgstr "crwdns29614:0crwdne29614:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Got it"
 msgstr "crwdns29616:0crwdne29616:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gwei"
 msgstr "crwdns30206:0crwdne30206:0"
+
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "GWEI"
 msgstr "crwdns30208:0crwdne30208:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post."
 msgstr "crwdns30210:0crwdne30210:0"
+
+#: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
 msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
 msgstr "crwdns32064:0crwdne32064:0"
+
+#: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Hide {0}"
 msgstr "crwdns30212:0{0}crwdne30212:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Hide {name}"
 msgstr "crwdns32066:0{name}crwdne32066:0"
+
+#: popups/components/MnemonicDisplay/index.tsx
 msgid "Hide mnemonic words"
 msgstr "crwdns32068:0crwdne32068:0"
+
+#: popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Hide tokens with value less than $1"
 msgstr "crwdns30216:0crwdne30216:0"
+
+#: popups/pages/Wallet/WalletSettings/HidingScamTx.tsx
 msgid "Hiding Scam Transactions"
 msgstr "crwdns30218:0crwdne30218:0"
+
+#: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "crwdns30220:0crwdne30220:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "I wrote down those words in the correct order"
 msgstr "crwdns32070:0crwdne32070:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "identity"
 msgstr "crwdns29620:0crwdne29620:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
 msgstr "crwdns29622:0crwdne29622:0"
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Image"
 msgstr "crwdns30222:0crwdne30222:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Image copied!"
 msgstr "crwdns32072:0crwdne32072:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Import"
 msgstr "crwdns29624:0crwdne29624:0"
+
+#: popups/pages/Wallet/components/WalletAssets/WalletCollections.tsx
 msgid "Import NFT"
 msgstr "crwdns30224:0crwdne30224:0"
+
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Import Wallet"
 msgstr "crwdns30226:0crwdne30226:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Import Wallets"
 msgstr "crwdns30228:0crwdne30228:0"
+
+#: popups/components/WalletItem/index.tsx
 msgid "Imported"
 msgstr "crwdns30230:0crwdne30230:0"
+
+#: popups/modals/WalletGroupModal/index.tsx
 msgid "Imported Wallets"
 msgstr "crwdns30232:0crwdne30232:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Incorrect backup password."
 msgstr "crwdns30234:0crwdne30234:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Incorrect Backup Password."
 msgstr "crwdns29626:0crwdne29626:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
 msgstr "crwdns29628:0crwdne29628:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Keystore Password."
 msgstr "crwdns29630:0crwdne29630:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Mnemonic Words."
 msgstr "crwdns32074:0crwdne32074:0"
+
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Wallet/Unlock/index.tsx
 msgid "Incorrect password"
 msgstr "crwdns30236:0crwdne30236:0"
+
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Incorrect Password"
 msgstr "crwdns29634:0crwdne29634:0"
+
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Incorrect payment password."
 msgstr "crwdns30238:0crwdne30238:0"
+
+#: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
 msgid "Incorrect Payment Password."
 msgstr "crwdns30240:0crwdne30240:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Incorrect Private Key"
 msgstr "crwdns29636:0crwdne29636:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Incorrect recovery phrase."
 msgstr "crwdns29638:0crwdne29638:0"
+
+#: popups/hooks/useContactsContext.ts
+#: popups/modals/AddContactModal/index.tsx
 msgid "Incorrect wallet address."
 msgstr "crwdns30242:0crwdne30242:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Incorrect words selected. Please try again!"
 msgstr "crwdns32076:0crwdne32076:0"
+
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
 msgid "Input your Private Key"
 msgstr "crwdns29640:0crwdne29640:0"
+
+#: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "Instant"
 msgstr "crwdns30244:0crwdne30244:0"
+
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Insufficient funds for gas."
 msgstr "crwdns30246:0crwdne30246:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid Block Explorer URL."
 msgstr "crwdns30248:0crwdne30248:0"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Invalid email address format."
 msgstr "crwdns29642:0crwdne29642:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid email address."
 msgstr "crwdns32078:0crwdne32078:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid number"
 msgstr "crwdns30250:0crwdne30250:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Invalid phone number, please check and try again."
 msgstr "crwdns29644:0crwdne29644:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
 msgstr "crwdns30252:0crwdne30252:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Invalid verification code."
 msgstr "crwdns29646:0crwdne29646:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Issued at"
 msgstr "crwdns30254:0crwdne30254:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Just Me"
 msgstr "crwdns30256:0crwdne30256:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Just Selected Contacts"
 msgstr "crwdns30258:0crwdne30258:0"
+
+#: popups/pages/Wallet/components/StartUp/index.tsx
 msgid "Keep your transactions and assets safe with Mask Wallet."
 msgstr "crwdns30260:0crwdne30260:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
 msgstr "crwdns29648:0crwdne29648:0"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
 msgstr "crwdns30262:0crwdne30262:0"
+
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Keystore password"
 msgstr "crwdns29650:0crwdne29650:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
 msgstr "crwdns30264:0crwdne30264:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Language"
 msgstr "crwdns30266:0crwdne30266:0"
+
+#: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Light"
 msgstr "crwdns30268:0crwdne30268:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Link"
 msgstr "crwdns30270:0crwdne30270:0"
+
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "Load failed"
 msgstr "crwdns30272:0crwdne30272:0"
+
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: popups/components/WalletSettingList/index.tsx
+#: popups/pages/Friends/Home/UI.tsx
 msgid "Loading"
 msgstr "crwdns30274:0crwdne30274:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Local Backup"
 msgstr "crwdns29652:0crwdne29652:0"
+
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Local persona or wallet only"
 msgstr "crwdns30276:0crwdne30276:0"
+
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Lock Wallet"
 msgstr "crwdns30278:0crwdne30278:0"
+
+#: popups/modals/PersonaSettingModal/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
 msgstr "crwdns30280:0crwdne30280:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "Login to Mask Cloud"
 msgstr "crwdns32080:0crwdne32080:0"
+
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Logout failed"
 msgstr "crwdns30282:0crwdne30282:0"
+
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Logout successfully"
 msgstr "crwdns30284:0crwdne30284:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr "crwdns30286:0crwdne30286:0"
+
+#: popups/modals/ChooseNetworkModal/index.tsx
+#: popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Manage Network"
 msgstr "crwdns30288:0crwdne30288:0"
+
+#: popups/modals/SupportedSitesModal/index.tsx
 msgid "Manage the permissions of the Mask Network. Once turned off, Mask Network will not be turned on on those websites."
 msgstr "crwdns32082:0crwdne32082:0"
+
+#: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Mask needs the following permissions"
 msgstr "crwdns30300:0crwdne30300:0"
+
+#: content-script/components/InjectedComponents/PostDialogHint.tsx
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Mask Network"
 msgstr "crwdns30302:0crwdne30302:0"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
 msgid "masknetwork"
 msgstr "crwdns30304:0crwdne30304:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Max"
 msgstr "crwdns30306:0crwdne30306:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max Fee"
 msgstr "crwdns30308:0crwdne30308:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Max Fee (GWEI)"
 msgstr "crwdns30310:0crwdne30310:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max fee cannot be lower than max priority fee"
 msgstr "crwdns30312:0crwdne30312:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max fee is higher than necessary"
 msgstr "crwdns30314:0crwdne30314:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max fee is too low for network conditions."
 msgstr "crwdns30316:0crwdne30316:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max fee should be greater than base fee of {0} Gwei."
 msgstr "crwdns30318:0{0}crwdne30318:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max Priority Fee"
 msgstr "crwdns30320:0crwdne30320:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max priority fee is higher than necessary. You may pay more than needed."
 msgstr "crwdns30322:0crwdne30322:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max priority fee is too high for network conditions."
 msgstr "crwdns30324:0crwdne30324:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max priority fee is too low for network conditions"
 msgstr "crwdns30326:0crwdne30326:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max priority fee is too low for network conditions."
 msgstr "crwdns30328:0crwdne30328:0"
+
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr "crwdns30330:0crwdne30330:0"
+
+#: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr "crwdns30332:0crwdne30332:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Merge data to local database"
 msgstr "crwdns29656:0crwdne29656:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge to local"
 msgstr "crwdns29658:0crwdne29658:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Message"
 msgstr "crwdns30334:0crwdne30334:0"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
 msgstr "crwdns30336:0crwdne30336:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "Mnemonic word"
 msgstr "crwdns29660:0crwdne29660:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "Mobile"
 msgstr "crwdns29662:0crwdne29662:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 msgid "Mobile number"
 msgstr "crwdns29664:0crwdne29664:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Mobile verification code"
 msgstr "crwdns29666:0crwdne29666:0"
+
+#: popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Multiple transaction requests {0} / {1}"
 msgstr "crwdns30338:0{0}crwdnd30338:0{1}crwdne30338:0"
+
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "My Wallets"
 msgstr "crwdns30340:0crwdne30340:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "N/A"
 msgstr "crwdns30342:0crwdne30342:0"
+
+#: popups/modals/AddContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Name"
 msgstr "crwdns30344:0crwdne30344:0"
+
+#: popups/modals/ChooseNetworkModal/index.tsx
 msgid "Network"
 msgstr "crwdns30346:0crwdne30346:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network added"
 msgstr "crwdns32084:0crwdne32084:0"
+
+#: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Network error or execute smart contract failed."
 msgstr "crwdns30348:0crwdne30348:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network Name"
 msgstr "crwdns30350:0crwdne30350:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network removed."
 msgstr "crwdns32086:0crwdne32086:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network saved"
 msgstr "crwdns32088:0crwdne32088:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Never share 12-word secret mnemonic with anyone!"
 msgstr "crwdns32090:0crwdne32090:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Never share the 12-word secret mnemonic words with anyone!"
 msgstr "crwdns32092:0crwdne32092:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "New password"
 msgstr "crwdns30354:0crwdne30354:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "New password cannot be the same as your current password."
 msgstr "crwdns30356:0crwdne30356:0"
+
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "New Payment Password"
 msgstr "crwdns30358:0crwdne30358:0"
+
+#: content-script/components/GuideStep/index.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
 msgstr "crwdns29670:0crwdne29670:0"
+
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Next.ID"
 msgstr "crwdns30360:0crwdne30360:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Wallet/AddToken/index.tsx
+#: popups/pages/Wallet/components/WalletAssets/index.tsx
+#: popups/pages/Wallet/Transfer/index.tsx
 msgid "NFTs"
 msgstr "crwdns30362:0crwdne30362:0"
+
+#: popups/pages/Wallet/AddToken/index.tsx
 msgid "NFTs added"
 msgstr "crwdns32094:0crwdne32094:0"
+
+#: popups/pages/Friends/Detail/UI.tsx
 msgid "No associated accounts"
 msgstr "crwdns30364:0crwdne30364:0"
+
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "No back up"
 msgstr "crwdns30366:0crwdne30366:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "No backups found"
 msgstr "crwdns29672:0crwdne29672:0"
+
+#: popups/pages/Friends/Contacts/index.tsx
 msgid "No contacts stored locally, you can try searching."
 msgstr "crwdns32096:0crwdne32096:0"
+
+#: popups/pages/Wallet/components/ActivityList/index.tsx
 msgid "No Data"
 msgstr "crwdns30368:0crwdne30368:0"
+
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "No friends are stored locally, please try search one."
 msgstr "crwdns32098:0crwdne32098:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
 msgstr "crwdns30372:0crwdne30372:0"
+
+#: popups/components/NFTAvatarPicker/CollectionList.tsx
 msgid "No NFTs found."
 msgstr "crwdns30374:0crwdne30374:0"
+
+#: content-script/components/shared/SelectRecipients/SelectRecipients.tsx
 msgid "No results"
 msgstr "crwdns30378:0crwdne30378:0"
+
+#: popups/pages/Friends/SearchList/index.tsx
 msgid "No search results"
 msgstr "crwdns30380:0crwdne30380:0"
+
+#: popups/components/SignRequestInfo/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Nonce"
 msgstr "crwdns30382:0crwdne30382:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Not connected"
 msgstr "crwdns30384:0crwdne30384:0"
+
+#: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Not enough data to present."
 msgstr "crwdns30386:0crwdne30386:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Not found your {providerType} wallet"
 msgstr "crwdns32100:0{providerType}crwdne32100:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Not set"
 msgstr "crwdns30390:0crwdne30390:0"
+
+#: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
 msgstr "crwdns30394:0crwdne30394:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "OK"
 msgstr "crwdns30396:0crwdne30396:0"
+
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Old Payment Password"
 msgstr "crwdns30398:0crwdne30398:0"
+
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Only visible to yourself"
 msgstr "crwdns30400:0crwdne30400:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Open in a new tab"
 msgstr "crwdns30402:0crwdne30402:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Open Mask Wallet"
 msgstr "crwdns29674:0crwdne29674:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Or"
 msgstr "crwdns30404:0crwdne30404:0"
+
+#: popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Or create a new wallet group"
 msgstr "crwdns30406:0crwdne30406:0"
+
+#: content-script/components/InjectedComponents/DecryptedPost/authorDifferentMessage.tsx
 msgid "Originally posted by {0}"
 msgstr "crwdns30408:0{0}crwdne30408:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Overwrite Backup"
 msgstr "crwdns29676:0crwdne29676:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Overwrite current backup"
 msgstr "crwdns29678:0crwdne29678:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Password"
 msgstr "crwdns30410:0crwdne30410:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Paste manually"
 msgstr "crwdns30412:0crwdne30412:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Payment Password"
 msgstr "crwdns29680:0crwdne29680:0"
+
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Payment password changed."
 msgstr "crwdns32102:0crwdne32102:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Payment password must be 6 to 20 characters."
 msgstr "crwdns32104:0crwdne32104:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Payment password set."
 msgstr "crwdns32106:0crwdne32106:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Payment Password should be between 6 and 20 characters."
 msgstr "crwdns29684:0crwdne29684:0"
+
+#: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Payment password stored locally and you could try as many as you want to unlock your wallet."
 msgstr "crwdns32108:0crwdne32108:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Pending"
 msgstr "crwdns30416:0crwdne30416:0"
+
+#: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Permissions"
 msgstr "crwdns30418:0crwdne30418:0"
+
+#: popups/modals/UpdatePermissionModal/index.tsx
 msgid "Permissions List"
 msgstr "crwdns32110:0crwdne32110:0"
+
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Persona"
 msgstr "crwdns29686:0crwdne29686:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Persona already exists."
 msgstr "crwdns29688:0crwdne29688:0"
+
+#: dashboard/pages/SignUp/steps/PersonaRecovery.tsx
 msgid "Persona created."
 msgstr "crwdns32112:0crwdne32112:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Persona Name"
 msgstr "crwdns29692:0crwdne29692:0"
+
+#: popups/modals/PersonaRenameModal/index.tsx
 msgid "Persona name must between 1 to 24 characters."
 msgstr "crwdns30420:0crwdne30420:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Persona Recovery Phrase"
 msgstr "crwdns29694:0crwdne29694:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Persona required."
 msgstr "crwdns30422:0crwdne30422:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Persona: {personaName}"
 msgstr "crwdns32114:0{personaName}crwdne32114:0"
+
+#: dashboard/components/BackupPreview/index.tsx
 msgid "Personas"
 msgstr "crwdns29696:0crwdne29696:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 msgid "Phone verification code"
 msgstr "crwdns29698:0crwdne29698:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "crwdns29700:0crwdne29700:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Pinned successfully."
 msgstr "crwdns30424:0crwdne30424:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
+#: content-script/site-adaptors/facebook.com/injection/Composition.tsx
 msgid "Please click the \"Post\" button to open the compose dialog."
 msgstr "crwdns32116:0crwdne32116:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Please copy the following text and image (if there is one) and publish it."
 msgstr "crwdns32118:0crwdne32118:0"
+
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Please enter backup password to export persona private key."
 msgstr "crwdns30430:0crwdne30430:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
 msgstr "crwdns29702:0crwdne29702:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Please enter the correct mnemonic words, private key, or upload the correct keystore file."
 msgstr "crwdns32120:0crwdne32120:0"
+
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Please enter your backup password."
 msgstr "crwdns30432:0crwdne30432:0"
+
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Please enter your payment password."
 msgstr "crwdns30434:0crwdne30434:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Please install your metamask wallet and set up your first wallet."
 msgstr "crwdns30436:0crwdne30436:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
 msgstr "crwdns29706:0crwdne29706:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please select the correct words in the correct order."
 msgstr "crwdns32122:0crwdne32122:0"
+
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Please set the backup password to back up"
 msgstr "crwdns30438:0crwdne30438:0"
+
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Please set up backup password to export private key."
 msgstr "crwdns30440:0crwdne30440:0"
+
+#: popups/modals/WalletAutoLockSettingModal/index.tsx
 msgid "Please set up the amount of time before we automatically lock your wallet."
 msgstr "crwdns30442:0crwdne30442:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "Please sign up or login {siteName} to connect Mask Network."
 msgstr "crwdns30444:0{siteName}crwdne30444:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "Please use your frequently used email or phone number for backup."
 msgstr "crwdns32124:0crwdne32124:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please write down or copy these words and save them in a secure place."
 msgstr "crwdns32126:0crwdne32126:0"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
 msgstr "crwdns30446:0crwdne30446:0"
+
+#: content-script/components/CompositionDialog/CompositionUI.tsx
 msgid "Plugins"
 msgstr "crwdns30448:0crwdne30448:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "Post content:"
 msgstr "crwdns30450:0crwdne30450:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
 msgstr "crwdns29714:0crwdne29714:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Priority Fee (GWEI)"
 msgstr "crwdns30454:0crwdne30454:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Priority fee should be greater than 0."
 msgstr "crwdns30456:0crwdne30456:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Privacy Policy"
 msgstr "crwdns30458:0crwdne30458:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Private"
 msgstr "crwdns30460:0crwdne30460:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
 msgstr "crwdns29716:0crwdne29716:0"
+
+#: popups/modals/PersonaSettingModal/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Profile Photo"
 msgstr "crwdns30462:0crwdne30462:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Properties"
 msgstr "crwdns30464:0crwdne30464:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Public Key: <0>{publicKey}</0>"
 msgstr "crwdns32128:0{publicKey}crwdne32128:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
 msgstr "crwdns30466:0crwdne30466:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "ready 🚀"
 msgstr "crwdns29720:0crwdne29720:0"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
 msgid "realMaskNetwork"
 msgstr "crwdns30468:0crwdne30468:0"
+
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
+#: popups/pages/Wallet/Receive/index.tsx
 msgid "Receive"
 msgstr "crwdns30470:0crwdne30470:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recover your data"
 msgstr "crwdns29722:0crwdne29722:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Recover your wallet"
 msgstr "crwdns29724:0crwdne29724:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Recovery"
 msgstr "crwdns29726:0crwdne29726:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recovery Phrase"
 msgstr "crwdns29728:0crwdne29728:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Refresh"
 msgstr "crwdns29730:0crwdne29730:0"
+
+#: popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Reject {totalMessages} Transactions"
 msgstr "crwdns32130:0{totalMessages}crwdne32130:0"
+
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "Reload"
 msgstr "crwdns30474:0crwdne30474:0"
+
+#: popups/modals/WalletRemoveModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove"
 msgstr "crwdns30476:0crwdne30476:0"
+
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove Wallet"
 msgstr "crwdns30478:0crwdne30478:0"
+
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove Wallet?"
 msgstr "crwdns30480:0crwdne30480:0"
+
+#: popups/modals/PersonaRenameModal/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
 msgid "Rename"
 msgstr "crwdns30482:0crwdne30482:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Request ID"
 msgstr "crwdns30484:0crwdne30484:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Request is valid not after"
 msgstr "crwdns30486:0crwdne30486:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Request is valid not before"
 msgstr "crwdns30488:0crwdne30488:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Request Source"
 msgstr "crwdns30490:0crwdne30490:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Reselect"
 msgstr "crwdns29732:0crwdne29732:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 msgid "Resend"
 msgstr "crwdns29734:0crwdne29734:0"
+
+#: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Reset Wallet"
 msgstr "crwdns30492:0crwdne30492:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Resource"
 msgstr "crwdns30494:0crwdne30494:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Restore"
 msgstr "crwdns29736:0crwdne29736:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Restore backup failed."
 msgstr "crwdns32132:0crwdne32132:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Restore Database"
 msgstr "crwdns30496:0crwdne30496:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx
 msgid "Restore failed"
 msgstr "crwdns29740:0crwdne29740:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Restore from a previous database backup"
 msgstr "crwdns30498:0crwdne30498:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Restore or Login"
 msgstr "crwdns30500:0crwdne30500:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Retry"
 msgstr "crwdns30502:0crwdne30502:0"
+
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "RPC URL"
 msgstr "crwdns30504:0crwdne30504:0"
+
+#: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Save"
 msgstr "crwdns30506:0crwdne30506:0"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Save failed"
 msgstr "crwdns30508:0crwdne30508:0"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Saved"
 msgstr "crwdns32134:0crwdne32134:0"
+
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "Scam tx"
 msgstr "crwdns30514:0crwdne30514:0"
+
+#: popups/pages/Wallet/Receive/index.tsx
 msgid "Scan QR code to receive payment"
 msgstr "crwdns30516:0crwdne30516:0"
+
+#: popups/pages/Personas/WalletConnect/index.tsx
 msgid "Scan QR code with WalletConnect-compatible wallet"
 msgstr "crwdns30518:0crwdne30518:0"
+
+#: popups/pages/Friends/Search/index.tsx
 msgid "Search Next.ID, X, Lens, ENS or Address"
 msgstr "crwdns32136:0crwdne32136:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Select Address"
 msgstr "crwdns29742:0crwdne29742:0"
+
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Select All"
 msgstr "crwdns30528:0crwdne30528:0"
+
+#: popups/modals/SelectProviderModal/index.tsx
 msgid "Select and Connect to your wallet"
 msgstr "crwdns30530:0crwdne30530:0"
+
+#: popups/modals/SelectLanguageModal/index.tsx
 msgid "Select language"
 msgstr "crwdns30532:0crwdne30532:0"
+
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Select the contents of the backup"
 msgstr "crwdns29744:0crwdne29744:0"
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
 msgstr "crwdns30534:0crwdne30534:0"
+
+#: popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Select Wallet"
 msgstr "crwdns30536:0crwdne30536:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
+#: popups/components/TransactionPreview/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/Transfer/index.tsx
 msgid "Send"
 msgstr "crwdns29746:0crwdne29746:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Service Agreement"
 msgstr "crwdns30538:0crwdne30538:0"
+
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Set a New Management Account"
 msgstr "crwdns30540:0crwdne30540:0"
+
+#: content-script/site-adaptors/instagram.com/injection/NFT/NFTAvatarSettingDialog.tsx
 msgid "Set NFT Photo"
 msgstr "crwdns30542:0crwdne30542:0"
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
 msgstr "crwdns29748:0crwdne29748:0"
+
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set payment password successfully."
 msgstr "crwdns29750:0crwdne29750:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Set Your Payment Password"
 msgstr "crwdns29752:0crwdne29752:0"
+
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set Your Persona Name"
 msgstr "crwdns29754:0crwdne29754:0"
+
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Set your persona name with maximum length of 24 characters"
 msgstr "crwdns29756:0crwdne29756:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Settings"
 msgstr "crwdns30544:0crwdne30544:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Share with"
 msgstr "crwdns30546:0crwdne30546:0"
+
+#: content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Show me how"
 msgstr "crwdns30548:0crwdne30548:0"
+
+#: popups/pages/Wallet/components/AssetsList/MoreBar.tsx
 msgid "Show tokens with value less than $1"
 msgstr "crwdns30550:0crwdne30550:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/Wallet/Interaction/WalletSignRequest.tsx
 msgid "Sign"
 msgstr "crwdns30552:0crwdne30552:0"
+
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Sign Up"
 msgstr "crwdns29758:0crwdne29758:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
 msgstr "crwdns30554:0crwdne30554:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Signature Request"
 msgstr "crwdns30556:0crwdne30556:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Signing ..."
 msgstr "crwdns30558:0crwdne30558:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Raw)"
 msgstr "crwdns30560:0crwdne30560:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Signing Message (Text)"
 msgstr "crwdns30562:0crwdne30562:0"
+
+#: popups/modals/UpdatePermissionModal/index.tsx
 msgid "Since X is now using the new domain name x.com, Mask Network requires users to grant new permissions in order to continue working on x.com."
 msgstr "crwdns32138:0crwdne32138:0"
+
+#: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Sites"
 msgstr "crwdns30564:0crwdne30564:0"
+
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Size limit: 10 MB"
 msgstr "crwdns30566:0crwdne30566:0"
+
+#: content-script/components/GuideStep/index.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Skip"
 msgstr "crwdns29760:0crwdne29760:0"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
 msgstr "crwdns30568:0crwdne30568:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Sorry, signature failed! Please try signing again."
 msgstr "crwdns30570:0crwdne30570:0"
+
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Speed Up"
 msgstr "crwdns30572:0crwdne30572:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Spend limit requested by"
 msgstr "crwdns30574:0crwdne30574:0"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Spend more transaction fees to cancel the previous transaction."
 msgstr "crwdns30576:0crwdne30576:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/PinExtension.tsx
 msgid "Start"
 msgstr "crwdns30578:0crwdne30578:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "status"
 msgstr "crwdns30580:0crwdne30580:0"
+
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Step {step}/{step}"
 msgstr "crwdns29762:0{step}crwdnd29762:0{step}crwdne29762:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Step {step}/{totalSteps}"
 msgstr "crwdns29764:0{step}crwdnd29764:0{totalSteps}crwdne29764:0"
+
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Step 1/2"
 msgstr "crwdns29766:0crwdne29766:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Step 1/3"
 msgstr "crwdns29768:0crwdne29768:0"
+
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Step 2/2"
 msgstr "crwdns29770:0crwdne29770:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Success"
 msgstr "crwdns30582:0crwdne30582:0"
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Suggest to send transactions and sign messages"
 msgstr "crwdns30588:0crwdne30588:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Support"
 msgstr "crwdns30590:0crwdne30590:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Support Identity code, private key, local backups or cloud backups to access your personal data."
 msgstr "crwdns30592:0crwdne30592:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 msgid "Support mnemonic phrase, private key or keystore file."
 msgstr "crwdns32140:0crwdne32140:0"
+
+#: popups/modals/SupportedSitesModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr "crwdns30596:0crwdne30596:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Switch other account"
 msgstr "crwdns29776:0crwdne29776:0"
+
+#: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Switch Persona"
 msgstr "crwdns30600:0crwdne30600:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Switch to other accounts"
 msgstr "crwdns32142:0crwdne32142:0"
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Text"
 msgstr "crwdns30602:0crwdne30602:0"
+
+#: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 msgid "Text copied!"
 msgstr "crwdns32144:0crwdne32144:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "The approval for this contract will be revoked in case of the amount is 0."
 msgstr "crwdns32146:0crwdne32146:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "The chainID is not equal to the currently connected one."
 msgstr "crwdns30606:0crwdne30606:0"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx
+#: dashboard/contexts/CloudBackupFormContext.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "The code is incorrect."
 msgstr "crwdns29780:0crwdne29780:0"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "The download link is expired"
 msgstr "crwdns32148:0crwdne32148:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "The mnemonic word has been copied, please keep it in a safe place."
 msgstr "crwdns32150:0crwdne32150:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "The mnemonic words has been copied, please keep it in a safe place."
 msgstr "crwdns32152:0crwdne32152:0"
+
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts
 msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
 msgstr "crwdns32154:0{formChainId}crwdnd32154:0{0}crwdne32154:0"
+
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
 msgstr "crwdns30610:0crwdne30610:0"
+
+#: popups/modals/PersonaRenameModal/index.tsx
 msgid "The persona name already exists."
 msgstr "crwdns30612:0crwdne30612:0"
+
+#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "crwdns29784:0crwdne29784:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
 msgstr "crwdns32156:0{rpcChainId}crwdne32156:0"
+
+#: popups/pages/Wallet/TransactionDetail/useTransactionLogs.ts
 msgid "The transaction was complete and has been recorded on blockchain at {0}"
 msgstr "crwdns30616:0{0}crwdne30616:0"
+
+#: popups/pages/Wallet/TransactionDetail/useTransactionLogs.ts
 msgid "The transaction was confirmed at {0}"
 msgstr "crwdns30618:0{0}crwdne30618:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
 msgstr "crwdns32158:0crwdne32158:0"
+
+#: popups/modals/AddContactModal/index.tsx
 msgid "The wallet address already exists."
 msgstr "crwdns30620:0crwdne30620:0"
+
+#: popups/modals/AddContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
 msgid "The wallet name already exists."
 msgstr "crwdns30622:0crwdne30622:0"
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "The web site can"
 msgstr "crwdns30624:0crwdne30624:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "The website ({messageOrigin}) is asking you to sign in to another domain ({0}). This may be a phishing attack."
 msgstr "crwdns30626:0{messageOrigin}crwdnd30626:0{0}crwdne30626:0"
+
+#: popups/pages/Wallet/Interaction/interaction.tsx
 msgid "There was a network or RPC provider error, please try again later!"
 msgstr "crwdns30628:0crwdne30628:0"
+
+#: popups/hooks/useContactsContext.ts
 msgid "This address is a contract address."
 msgstr "crwdns30630:0crwdne30630:0"
+
+#: popups/hooks/useContactsContext.ts
 msgid "This address may be a scam address."
 msgstr "crwdns30632:0crwdne30632:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "This allows the third party to spend {value} {0} from your current balance."
 msgstr "crwdns30634:0{value}crwdnd30634:0{0}crwdne30634:0"
+
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "This allows the third party to spend all your token balance until it reaches the cap or you revoke the spending cap. If this is not intended, consider setting a lower spending cap."
 msgstr "crwdns30636:0crwdne30636:0"
+
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts
 msgid "This Chain ID is currently used by the {0} network."
 msgstr "crwdns30638:0{0}crwdne30638:0"
+
+#: popups/hooks/useContactsContext.ts
 msgid "This ENS does not exist or not be resolved."
 msgstr "crwdns30640:0crwdne30640:0"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
 msgstr "crwdns30642:0crwdne30642:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "This message contains a invalid EIP-4361 message. It is better to reject this request."
 msgstr "crwdns30644:0crwdne30644:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This network name already exists"
 msgstr "crwdns30646:0crwdne30646:0"
+
+#: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "This QR includes your identity, please keep it safely."
 msgstr "crwdns32160:0crwdne32160:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/ComponentToPrint.tsx
 msgid "This QR includes your mnemonic words, please keep it safely."
 msgstr "crwdns32162:0crwdne32162:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "This request has been expired."
 msgstr "crwdns30648:0crwdne30648:0"
+
+#: popups/pages/Wallet/Interaction/interaction.tsx
 msgid "This request may be a phishing attach. I understand this and want to continue."
 msgstr "crwdns30650:0crwdne30650:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "This request should only be sign in the future."
 msgstr "crwdns30652:0crwdne30652:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This RPC URL is currently used by the {0} network"
 msgstr "crwdns30654:0{0}crwdne30654:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."
 msgstr "crwdns30656:0{0}crwdne30656:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
 msgstr "crwdns32164:0crwdne32164:0"
+
+#: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "To"
 msgstr "crwdns30658:0crwdne30658:0"
+
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to {0}"
 msgstr "crwdns30660:0{0}crwdne30660:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "To verify your X account and record it on the NextID, please send this post for the verification."
 msgstr "crwdns32166:0crwdne32166:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "To verify your X account and record it on the NextID, you will need to send a post for the verification."
 msgstr "crwdns32168:0crwdne32168:0"
+
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Token"
 msgstr "crwdns30662:0crwdne30662:0"
+
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Token Address"
 msgstr "crwdns30664:0crwdne30664:0"
+
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Token now is hidden."
 msgstr "crwdns32170:0crwdne32170:0"
+
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
+#: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Token Value"
 msgstr "crwdns30666:0crwdne30666:0"
+
+#: popups/pages/Wallet/AddToken/index.tsx
+#: popups/pages/Wallet/components/WalletAssets/index.tsx
+#: popups/pages/Wallet/Transfer/index.tsx
 msgid "Tokens"
 msgstr "crwdns30668:0crwdne30668:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Fee"
 msgstr "crwdns30670:0crwdne30670:0"
+
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Hash"
 msgstr "crwdns30672:0crwdne30672:0"
+
+#: content-script/components/GuideStep/index.tsx
 msgid "Try"
 msgstr "crwdns30674:0crwdne30674:0"
+
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Two entered passwords are different."
 msgstr "crwdns32172:0crwdne32172:0"
+
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Two entered passwords are not the same."
 msgstr "crwdns32174:0crwdne32174:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Unknown EIP-4361 message version."
 msgstr "crwdns30678:0crwdne30678:0"
+
+#: popups/pages/Wallet/Unlock/index.tsx
 msgid "Unlock"
 msgstr "crwdns30680:0crwdne30680:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Unpacking"
 msgstr "crwdns29794:0crwdne29794:0"
+
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unsupported data backup"
 msgstr "crwdns29796:0crwdne29796:0"
+
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 msgid "Unsupported key store data"
 msgstr "crwdns29798:0crwdne29798:0"
+
+#: popups/pages/Wallet/SelectWallet/index.tsx
 msgid "Unsupported network type"
 msgstr "crwdns30682:0crwdne30682:0"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
 msgid "Update permission for X.com"
 msgstr "crwdns32176:0crwdne32176:0"
+
+#: popups/modals/UpdatePermissionModal/index.tsx
 msgid "Update X.com Permissions"
 msgstr "crwdns32178:0crwdne32178:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Upload backup"
 msgstr "crwdns29802:0crwdne29802:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Uploading"
 msgstr "crwdns29804:0crwdne29804:0"
+
+#: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "URLs require the appropriate HTTPS prefix."
 msgstr "crwdns30684:0crwdne30684:0"
+
+#: content-script/site-adaptors/instagram.com/injection/NFT/ProfileNFTAvatar.tsx
 msgid "Use NFT"
 msgstr "crwdns30686:0crwdne30686:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Use Persona to encrypt and decrypt social media posts & messages."
 msgstr "crwdns30688:0crwdne30688:0"
+
+#: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Use text encryption"
 msgstr "crwdns30690:0crwdne30690:0"
+
+#: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "value"
 msgstr "crwdns30692:0crwdne30692:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
 msgstr "crwdns32180:0crwdne32180:0"
+
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Verification code has been sent to your phone."
 msgstr "crwdns32182:0crwdne32182:0"
+
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 msgid "Verification code sent"
 msgstr "crwdns29808:0crwdne29808:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Verify"
 msgstr "crwdns29812:0crwdne29812:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
+#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Verify Account"
 msgstr "crwdns30694:0crwdne30694:0"
+
+#: popups/components/SignRequestInfo/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Version"
 msgstr "crwdns30696:0crwdne30696:0"
+
+#: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "View full transaction details"
 msgstr "crwdns30698:0crwdne30698:0"
+
+#: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
+#: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "View on Explorer"
 msgstr "crwdns30700:0crwdne30700:0"
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "View your account balance and history"
 msgstr "crwdns32184:0crwdne32184:0"
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "View your address"
 msgstr "crwdns32186:0crwdne32186:0"
+
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "View your Tokens and NFTs"
 msgstr "crwdns32188:0crwdne32188:0"
+
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Visible To"
 msgstr "crwdns30702:0crwdne30702:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Waiting for {providerType}"
 msgstr "crwdns32190:0{providerType}crwdne32190:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "wallet"
 msgstr "crwdns29814:0crwdne29814:0"
+
+#: popups/modals/WalletGroupModal/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Wallet Account"
 msgstr "crwdns30706:0crwdne30706:0"
+
+#: popups/components/ConnectedWallet/index.tsx
 msgid "Wallet disconnected"
 msgstr "crwdns32192:0crwdne32192:0"
+
+#: popups/modals/WalletGroupModal/index.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Wallet Group #{0}"
 msgstr "crwdns30712:0#{0}crwdne30712:0"
+
+#: popups/pages/Wallet/ConnectedSites/index.tsx
 msgid "Wallet name is connected to these sites, they can view your account address."
 msgstr "crwdns30714:0crwdne30714:0"
+
+#: popups/modals/WalletRenameModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
 msgid "Wallet name must between 3 to 18 characters."
 msgstr "crwdns30716:0crwdne30716:0"
+
+#: popups/modals/ConnectProvider/index.tsx
 msgid "Wallet request timed out"
 msgstr "crwdns30718:0crwdne30718:0"
+
+#: popups/pages/Wallet/SwitchWallet/index.tsx
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Wallet Settings"
 msgstr "crwdns30720:0crwdne30720:0"
+
+#: popups/pages/Personas/WalletConnect/index.tsx
 msgid "WalletConnect"
 msgstr "crwdns30722:0crwdne30722:0"
+
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "We are pleased to inform you that the update for X (formerly named Twitter) website has been completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!"
 msgstr "crwdns32194:0crwdne32194:0"
+
+#: content-script/components/InjectedComponents/ProfileCard/index.tsx
 msgid "Web3 Profile Card"
 msgstr "crwdns30726:0crwdne30726:0"
+
+#: popups/pages/Settings/index.tsx
 msgid "Website"
 msgstr "crwdns30728:0crwdne30728:0"
+
+#: popups/pages/Wallet/Unlock/index.tsx
 msgid "Welcome Back"
 msgstr "crwdns30730:0crwdne30730:0"
+
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Welcome to Mask Cloud Services"
 msgstr "crwdns29820:0crwdne29820:0"
+
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Welcome to Mask Network"
 msgstr "crwdns30732:0crwdne30732:0"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Welcome to use Mask Network"
 msgstr "crwdns29822:0crwdne29822:0"
+
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Write down mnemonic words"
 msgstr "crwdns30734:0crwdne30734:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Write down recovery phrase"
 msgstr "crwdns32196:0crwdne32196:0"
+
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "You have backed up your data."
 msgstr "crwdns32198:0crwdne32198:0"
+
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "You have signed with your wallet."
 msgstr "crwdns32200:0crwdne32200:0"
+
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"
 msgstr "crwdns32202:0crwdne32202:0"
+
+#: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
 msgid "You need to open the dApp to view the specific content."
 msgstr "crwdns32204:0crwdne32204:0"
+
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
 msgstr "crwdns30740:0crwdne30740:0"
+
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
 msgstr "crwdns32206:0crwdne32206:0"
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr "crwdns29836:0crwdne29836:0"
+

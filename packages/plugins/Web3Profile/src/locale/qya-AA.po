@@ -1,19 +1,167 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
-"Project-Id-Version: mask-network\n"
-"Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:20\n"
+"Project-Id-Version: 1970-01-01 00:00+0000Creation-Date: \n"
+"PO-Revision-Date: 2024-10-14 03:07\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Report-Msgid-Bugs-To: \n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+msgstr "crwdns31788:0{0}crwdnd31788:0{1}crwdne31788:0"
+
+#: src/SiteAdaptor/components/ProfileCard.tsx
+msgid "Add Wallet"
+msgstr "crwdns31406:0crwdne31406:0"
+
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/components/ProfilePopup.tsx
+msgid "Change"
+msgstr "crwdns31408:0crwdne31408:0"
+
+#: src/SiteAdaptor/index.tsx
+msgid "Choose and show your Web3 footprints on X."
+msgstr "crwdns32450:0crwdne32450:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "Confirm"
+msgstr "crwdns31412:0crwdne31412:0"
+
+#: src/SiteAdaptor/components/ProfileCard.tsx
+msgid "Current"
+msgstr "crwdns31414:0crwdne31414:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Current wallet does not support to interact with Lens protocol."
+msgstr "crwdns31416:0crwdne31416:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "Failed to set up Web3 Profile wallets. Please try again."
+msgstr "crwdns31418:0crwdne31418:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Firefly"
+msgstr "crwdns31420:0crwdne31420:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/LensList.tsx
+msgid "Follow"
+msgstr "crwdns31422:0crwdne31422:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Follow for {0} {1}"
+msgstr "crwdns31424:0{0}crwdnd31424:0{1}crwdne31424:0"
+
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts
+msgid "Follow Lens handle"
+msgstr "crwdns31426:0crwdne31426:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/LensList.tsx
+msgid "Following"
+msgstr "crwdns31428:0crwdne31428:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Lens"
+msgstr "crwdns31430:0crwdne31430:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Lens Follow"
+msgstr "crwdns31432:0crwdne31432:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Lens Unfollow"
+msgstr "crwdns31434:0crwdne31434:0"
+
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
+msgid "Network error, try again"
+msgstr "crwdns31436:0crwdne31436:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "No enough balance to complete follow process."
+msgstr "crwdns31438:0crwdne31438:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "No verified account found here."
+msgstr "crwdns31440:0crwdne31440:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Only holding lens handle can follow."
+msgstr "crwdns31442:0crwdne31442:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Previous follow transaction is in processing, please wait and try again."
+msgstr "crwdns31444:0crwdne31444:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Previous unfollow transaction is in processing, please wait and try again."
+msgstr "crwdns31446:0crwdne31446:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "Save failed"
+msgstr "crwdns31448:0crwdne31448:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "Saved"
+msgstr "crwdns32452:0crwdne32452:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
+msgstr "crwdns31452:0crwdne31452:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+msgid "Set up Web3 Profile wallets successfully."
+msgstr "crwdns31454:0crwdne31454:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Switch to Polygon and Follow"
+msgstr "crwdns31456:0crwdne31456:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "The current wallet does not hold a lens and cannot follow/unfollow"
+msgstr "crwdns31458:0crwdne31458:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "This profile can not be followed."
+msgstr "crwdns31460:0crwdne31460:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "This user has banned follow function."
+msgstr "crwdns31462:0crwdne31462:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Unfollow"
+msgstr "crwdns31464:0crwdne31464:0"
+
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
+msgid "Unfollow lens handle"
+msgstr "crwdns31466:0crwdne31466:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Unlock {0} {1} and follow"
+msgstr "crwdns31468:0{0}crwdnd31468:0{1}crwdne31468:0"
+
+#: src/SiteAdaptor/components/Lens/LensList.tsx
+msgid "View"
+msgstr "crwdns31470:0crwdne31470:0"
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "View your profile in firefly"
+msgstr "crwdns31472:0crwdne31472:0"
+
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+#: src/SiteAdaptor/index.tsx
+msgid "Web3 Profile"
+msgstr "crwdns31474:0crwdne31474:0"
+
