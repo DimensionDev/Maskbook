@@ -1,10 +1,7 @@
-import type { PublicKey, BlockResponse, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
 import type { Web3State as Web3StateShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
     Mainnet = 101,
-    Testnet = 102,
-    Devnet = 103,
     // For any chains not supported yet.
     Invalid = 0,
 }
@@ -26,9 +23,6 @@ export enum NetworkType {
 
 export enum ProviderType {
     None = 'None',
-    Phantom = 'Phantom',
-    Solflare = 'Solflare',
-    Coin98 = 'Coin98',
 }
 
 // Learn more at https://docs.phantom.app/integrating/extension-and-mobile-browser/detecting-the-provider
@@ -54,9 +48,9 @@ export interface Payload {
     params?: unknown
 }
 
-export type Web3 = typeof import('@solana/web3.js')
+export type Web3 = never
 export type Web3Provider = {
-    publicKey: PublicKey
+    publicKey: never
     on(name: string, callback: () => void): void
     request(payload: Payload): Promise<unknown>
     connect(): Promise<{
@@ -66,14 +60,14 @@ export type Web3Provider = {
 }
 export type Signature = string
 export type GasOption = never
-export type Block = BlockResponse
+export type Block = never
 export type MessageRequest = never
 export type MessageResponse = never
 export type Operation = never
-export type Transaction = SolanaTransaction
+export type Transaction = never
 export type TransactionReceipt = never
-export type TransactionDetailed = TransactionResponse
-export type TransactionSignature = SolanaTransaction
+export type TransactionDetailed = never
+export type TransactionSignature = never
 export type TransactionParameter = string
 
 export type Web3State = Web3StateShared<

@@ -1,23 +1,10 @@
-import bs58 from 'bs58'
 import { memoize } from 'lodash-es'
-import * as Web3 from /* webpackDefer: true */ '@solana/web3.js'
 import { getEnumAsArray } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant } from '../constants/constants.js'
 import { ZERO_ADDRESS } from '../constants/primitives.js'
-import { isTronAddress } from './isTronAddress.js'
-
-export function encodePublicKey(key: Web3.PublicKey) {
-    return key.toBase58()
-}
-
-export function decodeAddress(initData: string | Buffer | Uint8Array) {
-    const data = typeof initData === 'string' ? bs58.decode(initData) : initData
-    if (!Web3.PublicKey.isOnCurve(data)) throw new Error(`Failed to create public key from ${bs58.encode(data)}.`)
-    return new Web3.PublicKey(data)
-}
 
 export function formatAddress(address: string, size = 0) {
     if (!isValidAddress(address, false)) return address
@@ -43,14 +30,7 @@ export function formatTokenId(tokenId = '', size_ = 4) {
 }
 
 export function isValidAddress(address?: string, strict?: boolean): address is string {
-    const length = address?.length
-    if (!length || length < 32 || length > 44) return false
-    try {
-        const buffer = bs58.decode(address)
-        return strict === false ? true : Web3.PublicKey.isOnCurve(buffer) && !isTronAddress(address)
-    } catch {
-        return false
-    }
+    return false
 }
 
 export const isValidChainId: (chainId?: ChainId) => boolean = memoize((chainId?: ChainId): chainId is ChainId => {

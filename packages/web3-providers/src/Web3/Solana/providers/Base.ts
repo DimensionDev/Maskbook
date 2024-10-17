@@ -1,7 +1,6 @@
-import type { Transaction } from '@solana/web3.js'
 import { Emitter } from '@servie/events'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
-import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
+import { ChainId, type ProviderType, type Transaction, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { SolanaWalletProvider } from './index.js'
 
