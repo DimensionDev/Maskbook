@@ -4,7 +4,6 @@ import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/sha
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
