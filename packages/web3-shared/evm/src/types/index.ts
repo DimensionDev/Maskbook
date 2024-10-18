@@ -315,11 +315,6 @@ export enum NetworkType {
 
 export enum ProviderType {
     None = 'None',
-    Browser = 'Browser',
-    WalletConnect = 'WalletConnect',
-    MaskWallet = 'Maskbook',
-    MetaMask = 'MetaMask',
-    Fortmatic = 'Fortmatic',
     CustomEvent = 'CustomEvent',
 }
 

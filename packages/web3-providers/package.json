@@ -32,7 +32,6 @@
     }
   },
   "dependencies": {
-    "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",
@@ -45,8 +44,6 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@servie/events": "^3.0.0",
-    "@solana/buffer-layout": "^4.0.1",
-    "@solana/spl-token": "^0.1.8",
     "bignumber.js": "9.1.2",
     "bn.js": "^4.12.0",
     "bs58": "^5.0.0",

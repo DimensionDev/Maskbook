@@ -1,11 +1,10 @@
-import { difference } from 'lodash-es'
 import {
     type ChainDescriptor,
     type NetworkDescriptor,
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSite, EnhanceableSiteList, ExtensionSiteList, NetworkPluginID } from '@masknet/shared-base'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { ChainIdList, getTokenConstant } from './constants.js'
@@ -396,48 +395,6 @@ export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaTyp
 
 export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [
     {
-        ID: `${PLUGIN_ID}_maskwallet`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.MaskWallet,
-        name: 'Mask Network',
-        icon: new URL('../assets/maskwallet.png', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: difference(EnhanceableSiteList, [
-                EnhanceableSite.Localhost,
-                EnhanceableSite.Firefly,
-            ]),
-            supportedExtensionSites: ExtensionSiteList,
-        },
-        homeLink: 'https://mask.io',
-        shortenLink: 'mask.io',
-        downloadLink: 'https://mask.io/download-links',
-        iconFilterColor: 'rgba(28, 104, 243, 0.2)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(98, 152, 234, 0.2) 1.03%, rgba(98, 152, 234, 0.2) 1.04%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
-        ID: `${PLUGIN_ID}_browser`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Browser,
-        name: 'Browser Wallet',
-        icon: new URL('../assets/metamask.svg', import.meta.url).href,
-        enableRequirements:
-            process.env.NODE_ENV === 'development' ?
-                {
-                    supportedChainIds: ChainIdList,
-                    supportedEnhanceableSites: EnhanceableSiteList,
-                    supportedExtensionSites: ExtensionSiteList,
-                }
-            :   undefined,
-        homeLink: '',
-        shortenLink: '',
-        downloadLink: '',
-        iconFilterColor: 'rgba(216, 124, 48, 0.3)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
         ID: `${PLUGIN_ID}_customEvent`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.CustomEvent,
@@ -451,24 +408,6 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         homeLink: '',
         shortenLink: '',
         downloadLink: '',
-        iconFilterColor: 'rgba(216, 124, 48, 0.3)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
-        ID: `${PLUGIN_ID}_metamask`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.MetaMask,
-        name: 'MetaMask',
-        icon: new URL('../assets/metamask.svg', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: EnhanceableSiteList,
-            supportedExtensionSites: ExtensionSiteList,
-        },
-        homeLink: 'https://metamask.io',
-        shortenLink: 'metamask.io',
-        downloadLink: 'https://metamask.io/download/',
         iconFilterColor: 'rgba(216, 124, 48, 0.3)',
         backgroundGradient:
             'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',

@@ -1,5 +1,3 @@
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
-
 export enum ImportSource {
     WalletRPC = 'wallet_rpc',
     LocalGenerated = 'local_generated',
@@ -25,7 +23,7 @@ export interface Wallet {
     /** the derivation path when wallet last was derived */
     latestDerivationPath?: string
     /** the internal presentation of mask wallet sdk */
-    storedKeyInfo?: api.IStoredKeyInfo
+    storedKeyInfo?: never
     /** record created at */
     createdAt: Date
     /** record updated at */

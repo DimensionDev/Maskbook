@@ -1,28 +1,14 @@
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
-import {
-    alpha,
-    Box,
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    IconButton,
-    List,
-    ListItem,
-    ListItemButton,
-    Typography,
-} from '@mui/material'
+import { Box, List, ListItem, Typography } from '@mui/material'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { getSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { getAllPluginsWeb3State, getConnection } from '@masknet/web3-providers'
-import { makeStyles, ShadowRootTooltip, usePortalShadowRoot } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { type NetworkDescriptor } from '@masknet/web3-shared-base'
-import { ChainId, NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS, ProviderType } from '@masknet/web3-shared-evm'
-import {
-    NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
-    ProviderType as SolProviderType,
-} from '@masknet/web3-shared-solana'
-import { DialogDismissIconUI, ImageIcon, useSharedTrans } from '@masknet/shared'
+import { NETWORK_DESCRIPTORS as EVM_NETWORK_DESCRIPTORS } from '@masknet/web3-shared-evm'
+import { NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS } from '@masknet/web3-shared-solana'
+import { useSharedTrans } from '@masknet/shared'
 import { ProviderItem } from './ProviderItem.js'
 
 const descriptors: Record<
@@ -147,14 +133,8 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     const t = useSharedTrans()
     const [selectChainDialogOpen, setSelectChainDialogOpen] = useState(false)
 
-    const fortmaticProviderDescriptor = providers.find((x) => x.type === ProviderType.Fortmatic)
-
     const [, handleClick] = useAsyncFn(
         async (provider: Web3Helper.ProviderDescriptorAll, expectedChainId?: Web3Helper.ChainIdAll) => {
-            if (provider.type === ProviderType.Fortmatic && !expectedChainId) {
-                setSelectChainDialogOpen(true)
-                return
-            }
             const target = getAllPluginsWeb3State()[provider.providerAdaptorPluginID]
             // note: unsafe cast, we cannot ensure provider.type is the isReady implementation we intended to call
             const isReady = target?.Provider?.isReady(provider.type as any as never)
@@ -165,10 +145,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
             }
 
             const connection = getConnection(provider.providerAdaptorPluginID, { providerType: provider.type })
-            const chainId =
-                expectedChainId ?? provider.type === ProviderType.WalletConnect ?
-                    ChainId.Mainnet
-                :   await connection?.getChainId()
+            const chainId = expectedChainId ?? (await connection?.getChainId())
 
             // use the currently connected network (if known to mask). otherwise, use the default mainnet
             const networkDescriptor = descriptors[provider.providerAdaptorPluginID].find((x) => x.chainId === chainId)
@@ -180,10 +157,6 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
-        if (provider === ProviderType.Fortmatic) {
-            return t.plugin_wallet_fortmatic_tips()
-        }
-
         return t.plugin_wallet_support_chains_tips()
     }, [])
 
@@ -244,11 +217,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                     )}
                                     disabled={getDisabled(provider)}
                                     onClick={() => {
-                                        if (provider.type === ProviderType.WalletConnect) {
-                                            handleClick(provider, ChainId.Mainnet)
-                                        } else {
-                                            handleClick(provider)
-                                        }
+                                        handleClick(provider)
                                     }}>
                                     <ProviderItem
                                         className={classes.providerIcon}
@@ -282,11 +251,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                                             )}
                                             disabled={getDisabled(provider)}
                                             onClick={() => {
-                                                if (provider.type === ProviderType.WalletConnect) {
-                                                    handleClick(provider, ChainId.Mainnet)
-                                                } else {
-                                                    handleClick(provider)
-                                                }
+                                                handleClick(provider)
                                             }}>
                                             <ProviderItem
                                                 className={classes.providerIcon}
@@ -302,50 +267,6 @@ export const PluginProviderRender = memo(function PluginProviderRender({
                     </>
                 :   null}
             </Box>
-            {usePortalShadowRoot((container) => (
-                <Dialog
-                    container={container}
-                    open={selectChainDialogOpen}
-                    classes={{ paper: classes.dialogPaper }}
-                    onClose={() => setSelectChainDialogOpen(false)}>
-                    <DialogTitle
-                        sx={{
-                            whiteSpace: 'nowrap',
-                            display: 'grid',
-                            alignItems: 'center',
-                            gridTemplateColumns: '50px auto 50px',
-                        }}>
-                        <IconButton
-                            className={classes.dialogCloseButton}
-                            onClick={() => setSelectChainDialogOpen(false)}>
-                            <DialogDismissIconUI />
-                        </IconButton>
-                        <Typography className={classes.dialogTitle}>{t.plugin_wallet_choose_network()}</Typography>
-                    </DialogTitle>
-                    <DialogContent sx={{ minWidth: 352 }}>
-                        <List className={classes.list}>
-                            {EVM_NETWORK_DESCRIPTORS.filter((x) =>
-                                [ChainId.Mainnet, ChainId.BSC].includes(x.chainId),
-                            ).map((x) => (
-                                <ListItemButton
-                                    key={x.chainId}
-                                    className={classes.listItem}
-                                    onClick={() => {
-                                        if (!fortmaticProviderDescriptor) return
-                                        handleClick(fortmaticProviderDescriptor, x.chainId)
-                                    }}>
-                                    <ImageIcon
-                                        icon={x.icon}
-                                        size={30}
-                                        iconFilterColor={x.iconColor ? alpha(x.iconColor, 0.2) : undefined}
-                                    />
-                                    <Typography className={classes.listItemText}>{x.name}</Typography>
-                                </ListItemButton>
-                            ))}
-                        </List>
-                    </DialogContent>
-                </Dialog>
-            ))}
         </>
     )
 })

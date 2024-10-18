@@ -4,7 +4,6 @@ import { ConnectWalletModal, InjectedDialog, useSharedTrans } from '@masknet/sha
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { DialogContent } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
@@ -43,12 +42,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const handleSelect = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             setProvider(undefined)
-            // Do not close the dialog for WalletConnect until the wallet gets connected
-            const isNotWalletConnect = provider.type !== ProviderType.WalletConnect
-
-            if (isNotWalletConnect) {
-                onClose()
-            }
+            onClose()
             await delay(500)
 
             const connected = await ConnectWalletModal.openAndWaitForClose({
@@ -58,7 +52,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             })
 
             if (connected) onConnect?.()
-            else if (isNotWalletConnect) onClose()
+            onClose()
         },
         [onConnect, onClose],
     )

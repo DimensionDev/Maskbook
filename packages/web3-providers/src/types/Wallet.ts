@@ -12,7 +12,6 @@ import type {
 } from '@masknet/shared-base'
 import type { JsonRpcPayload, JsonRpcResponse } from 'web3-core-helpers'
 import type { ChainId, TransactionOptions } from '@masknet/web3-shared-evm'
-import type { api } from '@dimensiondev/mask-wallet-core/proto'
 
 export namespace WalletAPI {
     export interface ProviderEvents<ChainId, ProviderType> {
@@ -52,7 +51,7 @@ export namespace WalletAPI {
             updates?: {
                 name?: string
                 derivationPath?: string
-                storedKeyInfo?: api.IStoredKeyInfo
+                storedKeyInfo?: never
             },
         ): Promise<string>
         /** Connect origin to Mask wallet  */

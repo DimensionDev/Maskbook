@@ -133,7 +133,7 @@ export const ConnectWalletModal = forwardRef<
     if (!open) return null
 
     // Do not show loading for WalletConnect
-    if (!pluginID || !providerType || !networkType || providerType === ProviderType.WalletConnect) return null
+    if (!pluginID || !providerType || !networkType) return null
 
     const providerName = providerDescriptor?.name || '...'
     const { maskColor } = theme.palette

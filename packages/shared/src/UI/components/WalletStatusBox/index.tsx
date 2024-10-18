@@ -115,10 +115,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
         contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
         disableChange: props.disableChange,
         withinRiskWarningDialog: props.withinRiskWarningDialog,
-        textColor:
-            providerDescriptor?.type === ProviderType.MaskWallet ?
-                theme.palette.maskColor.dark
-            :   theme.palette.text.primary,
+        textColor: theme.palette.text.primary,
     })
 
     const Web3 = useWeb3Connection()

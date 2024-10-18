@@ -21,22 +21,13 @@ import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel.js'
 import { BaseDescriptor } from './TransactionFormatter/descriptors/Base.js'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket.js'
-import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
-import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
-import { SmartPayDescriptor } from './TransactionFormatter/descriptors/SmartPay.js'
 import { TransactionFormatterState } from '../../Base/state/TransactionFormatter.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
 export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, TransactionParameter, Transaction> {
     private descriptors: Record<TransactionDescriptorType, TransactionDescriptor[]> = {
         [TransactionDescriptorType.TRANSFER]: [new TransferTokenDescriptor()],
-        [TransactionDescriptorType.INTERACTION]: [
-            new RedPacketDescriptor(),
-            new SmartPayDescriptor(),
-            new ERC20Descriptor(),
-            new ERC721Descriptor(),
-            new BaseDescriptor(),
-        ],
+        [TransactionDescriptorType.INTERACTION]: [new RedPacketDescriptor(), new BaseDescriptor()],
         [TransactionDescriptorType.DEPLOYMENT]: [new ContractDeploymentDescriptor()],
         [TransactionDescriptorType.RETRY]: [],
         [TransactionDescriptorType.CANCEL]: [new CancelDescriptor()],

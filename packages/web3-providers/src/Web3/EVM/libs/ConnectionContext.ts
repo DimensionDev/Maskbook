@@ -23,7 +23,7 @@ export class ConnectionContext {
     private _result: unknown
     private _account = ''
     private _chainId = ChainId.Mainnet
-    private _providerType = ProviderType.MaskWallet
+    private _providerType = ProviderType.CustomEvent
 
     constructor(
         private _requestArguments: RequestArguments,
@@ -42,7 +42,7 @@ export class ConnectionContext {
 
         this._account = this._init?.getDefaultAccount?.(this.providerType) ?? ''
         this._chainId = this._init?.getDefaultChainId?.(this.providerType) ?? ChainId.Mainnet
-        this._providerType = this._init?.getDefaultProviderType() ?? ProviderType.MaskWallet
+        this._providerType = this._init?.getDefaultProviderType() ?? ProviderType.CustomEvent
     }
 
     private get errorEditor() {

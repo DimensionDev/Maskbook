@@ -8,12 +8,7 @@ export class Interceptor implements Middleware<ConnectionContext> {
     constructor(private signWithPersona: WalletAPI.SignWithPersona) {
         this.composers = {
             [ProviderType.None]: Composer.from(new NoneWallet()),
-            [ProviderType.Browser]: null,
-            [ProviderType.MaskWallet]: null,
-            [ProviderType.WalletConnect]: null,
-            [ProviderType.Fortmatic]: null,
             [ProviderType.CustomEvent]: Composer.from(new MetaMaskLike(ProviderType.CustomEvent)),
-            [ProviderType.MetaMask]: Composer.from(new MetaMaskLike(ProviderType.MetaMask)),
         }
     }
     private composers: Record<ProviderType, Composer<ConnectionContext> | null>
