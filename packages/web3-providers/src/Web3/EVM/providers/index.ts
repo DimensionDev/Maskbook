@@ -12,11 +12,6 @@ export let EVMWalletProviders: ReturnType<typeof createEVMWalletProviders>
 export function createEVMWalletProviders() {
     const p = {
         [ProviderType.None]: new EVMNoneProvider(),
-        [ProviderType.Browser]: new EVMNoneProvider(),
-        [ProviderType.MetaMask]: new EVMNoneProvider(),
-        [ProviderType.MaskWallet]: new EVMNoneProvider(),
-        [ProviderType.WalletConnect]: new EVMNoneProvider(),
-        [ProviderType.Fortmatic]: new EVMNoneProvider(),
         [ProviderType.CustomEvent]: new EVMCustomEventProvider(),
     } satisfies Record<ProviderType, EVMWalletProvider>
     EVMWalletProviders = p

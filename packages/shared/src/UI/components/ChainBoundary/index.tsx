@@ -1,6 +1,4 @@
 import React, { memo } from 'react'
-import { useAsyncFn } from 'react-use'
-import { delay } from '@masknet/kit'
 import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles, ShadowRootTooltip, ActionButton, useCustomSnackbar } from '@masknet/theme'
@@ -12,11 +10,9 @@ import {
     useChainIdValid,
     RevokeChainContextProvider,
     useWeb3Utils,
-    useWeb3Connection,
 } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { useSharedTrans } from '../../../locales/index.js'
@@ -41,21 +37,17 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClasses<'switchButton'> {
+    className?: string
     /** The expected network plugin ID */
     expectedPluginID: T
     /** The expected sub-network under the network plugin */
     expectedChainId: Web3Helper.Definition[T]['ChainId']
-    /** Judge the network is available for children components */
-    predicate?: (actualPluginID: NetworkPluginID, actualChainId: Web3Helper.Definition[T]['ChainId']) => boolean
     expectedAccount?: string
-    className?: string
     hiddenConnectButton?: boolean
-    switchChainWithoutPopup?: boolean
     forceShowingWrongNetworkButton?: boolean
     children?: React.ReactNode
     ActionButtonPromiseProps?: Partial<ActionButtonPromiseProps>
     actualNetworkPluginID?: T
-    switchText?: string
     disableConnectWallet?: boolean
 }
 
@@ -65,11 +57,8 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         expectedChainId,
         expectedAccount,
         actualNetworkPluginID,
-        switchText,
         forceShowingWrongNetworkButton = false,
         disableConnectWallet = false,
-        predicate = (actualPluginID, actualChainId) =>
-            actualPluginID === expectedPluginID && actualChainId === expectedChainId,
     } = props
 
     const t = useSharedTrans()
@@ -77,55 +66,17 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const { pluginID: actualPluginID } = useNetworkContext(actualNetworkPluginID)
 
-    const Web3 = useWeb3Connection(actualPluginID)
-
-    const { showSnackbar } = useCustomSnackbar()
-    const {
-        account,
-        chainId: actualChainId,
-        providerType: actualProviderType,
-    } = useChainContext({ account: expectedAccount })
+    const { account } = useChainContext({ account: expectedAccount })
 
     const expectedUtils = useWeb3Utils(expectedPluginID)
     const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
 
     const chainIdValid = useChainIdValid(actualPluginID)
 
-    const expectedChainName = expectedUtils.chainResolver.chainName(expectedChainId)
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
     const expectedChainAllowed = expectedUtils.chainResolver.isValidChainId(expectedChainId, expectedAllowTestnet)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
-    const isMatched = predicate(actualPluginID, actualChainId)
-
-    const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
-        try {
-            if (actualProviderType !== ProviderType.WalletConnect || isMatched || !expectedChainAllowed) return
-            await Web3.switchChain?.(expectedChainId)
-            await delay(1500)
-
-            return 'complete'
-        } catch (error) {
-            if (error instanceof Error) {
-                if (error.message === 'Chain currently not supported' || error.message === 'Invalid Request') {
-                    showSnackbar(t.plugin_wallet_switch_network_title(), {
-                        processing: false,
-                        variant: 'error',
-                        message: t.plugin_wallet_unsupported_chain({ network: expectedChainName ?? '' }),
-                        autoHideDuration: 5000,
-                    })
-                } else {
-                    showSnackbar(t.plugin_wallet_switch_network_title(), {
-                        processing: false,
-                        variant: 'error',
-                        message: t.plugin_wallet_switch_chain_failed(),
-                        autoHideDuration: 5000,
-                    })
-                }
-            }
-            return 'failed'
-        }
-    }, [expectedChainAllowed, isMatched, expectedChainId, actualProviderType, Web3, expectedChainName])
 
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
@@ -175,32 +126,13 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
             <ActionButton
                 fullWidth
                 className={classes.switchButton}
-                disabled={actualProviderType === ProviderType.WalletConnect}
                 startIcon={<WalletIcon mainIcon={expectedNetworkDescriptor?.icon} size={18} />}
                 sx={props.ActionButtonPromiseProps?.sx}
                 onClick={() => SelectProviderModal.open()}
                 {...props.ActionButtonPromiseProps}>
                 {t.plugin_wallet_change_wallet()}
             </ActionButton>,
-            actualProviderType === ProviderType.WalletConnect ?
-                t.plugin_wallet_connect_tips()
-            :   t.plugin_wallet_not_support_network(),
-        )
-    }
-
-    // Provider is Wallet Connect
-    if (actualProviderType === ProviderType.WalletConnect && !isMatched) {
-        return renderBox(
-            <ActionButton
-                startIcon={<WalletIcon mainIcon={expectedNetworkDescriptor?.icon} size={18} />}
-                onClick={onSwitchChain}
-                loading={loading}
-                className={classes.switchButton}
-                sx={props.ActionButtonPromiseProps?.sx}
-                {...props.ActionButtonPromiseProps}>
-                {switchText ?? t.plugin_wallet_switch_network({ network: expectedChainName ?? '' })}
-            </ActionButton>,
-            t.plugin_wallet_connect_tips(),
+            t.plugin_wallet_not_support_network(),
         )
     }
 

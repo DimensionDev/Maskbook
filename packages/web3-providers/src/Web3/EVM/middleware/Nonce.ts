@@ -1,11 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import {
-    type ChainId,
-    EthereumMethodType,
-    ProviderType,
-    type Middleware,
-    checksumAddress,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, EthereumMethodType, type Middleware, checksumAddress } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 
@@ -37,26 +30,6 @@ class NonceAPI implements Middleware<ConnectionContext> {
     }
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
-        // set a nonce for Mask wallets
-        if (
-            !context.owner &&
-            context.account &&
-            context.providerType === ProviderType.MaskWallet &&
-            context.method === EthereumMethodType.ETH_SEND_TRANSACTION
-        ) {
-            context.requestArguments = {
-                method: context.method,
-                params: [
-                    {
-                        ...context.config,
-                        nonce: web3_utils.toHex(
-                            await this.syncRemoteNonce(context.chainId, context.account, context.providerURL),
-                        ),
-                    },
-                ],
-            }
-        }
-
         await next() // send transaction
 
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return

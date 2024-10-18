@@ -43,12 +43,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const handleSelect = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             setProvider(undefined)
-            // Do not close the dialog for WalletConnect until the wallet gets connected
-            const isNotWalletConnect = provider.type !== ProviderType.WalletConnect
-
-            if (isNotWalletConnect) {
-                onClose()
-            }
+            onClose()
             await delay(500)
 
             const connected = await ConnectWalletModal.openAndWaitForClose({
@@ -58,7 +53,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             })
 
             if (connected) onConnect?.()
-            else if (isNotWalletConnect) onClose()
+            onClose()
         },
         [onConnect, onClose],
     )

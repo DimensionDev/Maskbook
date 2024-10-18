@@ -77,7 +77,7 @@ export namespace NonFungibleTokenAPI {
             address: string,
             tokenId: string,
             options?: BaseHubOptions<ChainId>,
-            skipScoreCheck?: boolean
+            skipScoreCheck?: boolean,
         ) => Promise<NonFungibleAsset<ChainId, SchemaType> | undefined>
         /** Get non-fungible assets owned by the given account. */
         getAssets?: (

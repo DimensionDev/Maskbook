@@ -8,9 +8,6 @@ export class PolygonTranslator extends BaseTranslator {
         await super.encode(context)
         if (!context.config) return
 
-        // the current version of metamask doesn't support polygon with EIP1559
-        if (context.providerType !== ProviderType.MetaMask) return
-
         if (context.method !== EthereumMethodType.ETH_SEND_TRANSACTION) return
 
         const config = {

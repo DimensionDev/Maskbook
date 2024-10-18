@@ -65,15 +65,6 @@ export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkTyp
         },
         silent?: boolean,
     ): Promise<Account<ChainId>> {
-        // Disconnect WalletConnect, prevents its session lasting too long.
-        if (providerType !== ProviderType.WalletConnect && this.providers[ProviderType.WalletConnect].connected) {
-            try {
-                await super.disconnect(ProviderType.WalletConnect)
-            } catch {
-                // do nothing
-            }
-        }
-
         return super.connect(providerType, chainId, address, owner, silent)
     }
 }
