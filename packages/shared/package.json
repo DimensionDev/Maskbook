@@ -12,7 +12,7 @@
   },
   "types": "./dist/index.d.ts",
   "dependencies": {
-    "@hookform/resolvers": "^3.1.1",
+    "@hookform/resolvers": "^3.9.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/public-api": "workspace:^",
@@ -31,12 +31,12 @@
     "date-fns": "^2.30.0",
     "fuse.js": "^7.0.0",
     "lodash-es": "^4.17.21",
-    "react-hook-form": "^7.45.2",
+    "react-hook-form": "^7.53.0",
     "react-use": "^17.5.1",
     "unstated-next": "^1.1.0",
     "use-subscription": "^1.8.2",
     "web3-core-helpers": "1.10.2",
-    "zod": "^3.22.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/use-subscription": "^1.0.2"

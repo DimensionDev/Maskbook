@@ -47,7 +47,6 @@
     "@servie/events": "^3.0.0",
     "@solana/buffer-layout": "^4.0.1",
     "@solana/spl-token": "^0.1.8",
-    "@solana/web3.js": "^1.95.2",
     "bignumber.js": "9.1.2",
     "bn.js": "^4.12.0",
     "bs58": "^5.0.0",
@@ -62,7 +61,7 @@
     "web3-core-helpers": "1.10.2",
     "web3-eth": "1.10.2",
     "web3-utils": "1.10.2",
-    "zod": "^3.22.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "@types/bn.js": "^4.11.6",

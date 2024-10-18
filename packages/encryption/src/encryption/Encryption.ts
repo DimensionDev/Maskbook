@@ -56,7 +56,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
         .NoSign({
             version: options.version,
             author: options.author,
-            authorPublicKey: options.authorPublicKey,
+            authorPublicKey: options.authorPublicKey ?? None,
             encryption,
             encrypted: await encryptedMessage,
             signature: None,
@@ -74,7 +74,7 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
 type Context = {
     postIV: Uint8Array
     postKeyEncoded: Promise<Uint8Array>
-    authorPublic: Option<EC_Key<EC_Public_CryptoKey>>
+    authorPublic?: Option<EC_Key<EC_Public_CryptoKey>>
 }
 
 /** @internal */
@@ -93,7 +93,7 @@ async function e2e_v37(
     io: EncryptIO,
 ): Promise<[PayloadWellFormed.EndToEndEncryption, EncryptResult['e2e']]> {
     const { authorPublic, postIV, postKeyEncoded } = context
-    if (!authorPublic.isSome()) throw new Error(EncryptErrorReasons.PublicKeyNotFound)
+    if (!authorPublic?.isSome()) throw new Error(EncryptErrorReasons.PublicKeyNotFound)
 
     const { ephemeralKeys, getEphemeralKey } = createEphemeralKeysMap(io)
     const ecdhResult = v37_addReceiver(true, { ...context, getEphemeralKey }, target, io)

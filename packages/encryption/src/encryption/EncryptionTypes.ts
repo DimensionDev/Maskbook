@@ -15,7 +15,7 @@ export interface EncryptOptions {
     /** Current author who started the encryption. */
     author: Option<ProfileIdentifier>
     /** Public key of the current author. */
-    authorPublicKey: Option<EC_Key<EC_Public_CryptoKey>>
+    authorPublicKey?: Option<EC_Key<EC_Public_CryptoKey>>
     /** Network of the encryption */
     network: string
     /** The message to be encrypted. */
