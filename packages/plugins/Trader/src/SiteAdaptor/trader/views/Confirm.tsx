@@ -15,6 +15,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
+import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -24,6 +25,7 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useTrade } from '../contexts/index.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { useApprove } from '../hooks/useApprove.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
@@ -31,8 +33,6 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useQueryClient } from '@tanstack/react-query'
-import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -170,7 +170,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Confirm = memo(function Confirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
-    const { basepath } = useRuntime()
+    const { basepath, showToolTip } = useRuntime()
     const {
         mode,
         inputAmount,
@@ -387,6 +387,7 @@ export const Confirm = memo(function Confirm() {
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isSwappable || loading || dexIdsCount === 0
 
+    const networkTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -453,10 +454,16 @@ export const Confirm = memo(function Confirm() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={networkTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Network fee`,
+                                            message: networkTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Link

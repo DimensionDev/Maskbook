@@ -1,6 +1,11 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createContext, useContext, type PropsWithChildren } from 'react'
 
+export interface ShowTooltipOptions {
+    title: string
+    message: string
+}
+
 export interface RuntimeOptions {
     basepath: string
     pickToken(
@@ -8,6 +13,7 @@ export interface RuntimeOptions {
         side: 'from' | 'to',
         excludes: string[],
     ): Promise<Web3Helper.FungibleTokenAll | null>
+    showToolTip(options: ShowTooltipOptions): void
 }
 
 const RuntimeContext = createContext<RuntimeOptions>(null!)

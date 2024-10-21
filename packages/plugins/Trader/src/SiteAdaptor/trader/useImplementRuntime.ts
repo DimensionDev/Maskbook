@@ -2,10 +2,11 @@ import { SelectFungibleTokenModal } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { noop } from 'lodash-es'
 import { useCallback, useMemo } from 'react'
-import { useSupportedChains } from './hooks/useSupportedChains.js'
 import type { RuntimeOptions } from './contexts/RuntimeProvider.js'
 import { useTrade } from './contexts/TradeProvider.js'
+import { useSupportedChains } from './hooks/useSupportedChains.js'
 
 export function useImplementRuntime(): RuntimeOptions {
     const chainQuery = useSupportedChains()
@@ -32,5 +33,5 @@ export function useImplementRuntime(): RuntimeOptions {
         },
         [isSwap, chainQuery.data, fromChainId],
     )
-    return useMemo(() => ({ pickToken, basepath: '' }), [pickToken])
+    return useMemo(() => ({ pickToken, basepath: '', showToolTip: noop }), [pickToken])
 }

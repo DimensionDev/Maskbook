@@ -70,7 +70,7 @@ interface QuoteProps extends BoxProps {
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
-    const { basepath } = useRuntime()
+    const { basepath, showToolTip } = useRuntime()
     const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode, bridgeQuote } = useTrade()
     const isSwap = mode === 'swap'
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -105,6 +105,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
         return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed(2)
     }, [gasCost, bestRouter, nativeTokenPrice])
 
+    const slippageTooltip = t`Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund.`
     return (
         <Box {...props} className={cx(classes.quote, props.className)}>
             <div className={classes.infoRow}>
@@ -140,7 +141,17 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Slippage</Trans>
-                            <Icons.Questions size={16} />
+                            <ShadowRootTooltip title={slippageTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Slippage`,
+                                            message: slippageTooltip,
+                                        })
+                                    }}
+                                />
+                            </ShadowRootTooltip>
                         </Typography>
                         <Typography
                             component={Link}

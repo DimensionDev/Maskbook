@@ -1,9 +1,9 @@
-import { useSupportedChains, useTrade } from '@masknet/plugin-trader'
+import { useSupportedChains, useTrade, type ShowTooltipOptions } from '@masknet/plugin-trader'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
-import { ChooseTokenModal } from '../../modals/modal-controls.js'
-import { TokenType } from '@masknet/web3-shared-base'
+import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
@@ -39,5 +39,19 @@ export function useImplementRuntime() {
         },
         [isSwap, chainQuery.data, fromChainId],
     )
-    return useMemo(() => ({ pickToken, basepath: '/trader' }), [pickToken])
+
+    const showToolTip = useCallback(({ title, message }: ShowTooltipOptions) => {
+        ConfirmModal.open({
+            title,
+            message,
+            disableConfirmButton: true,
+            messageProps: {
+                style: {
+                    textAlign: 'left',
+                },
+            },
+        })
+    }, [])
+
+    return useMemo(() => ({ pickToken, basepath: '/trader', showToolTip }), [pickToken, showToolTip])
 }

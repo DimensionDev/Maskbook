@@ -172,7 +172,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { classes, cx, theme } = useStyles()
-    const { basepath } = useRuntime()
+    const { basepath, showToolTip } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -400,6 +400,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isBridgable || loading
+    const fromNetworkFeeTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
+    const toNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
+The actual cost may be lower
+than estimated, and any unused funds will remain in the original address.`
+    const bridgeNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
+The actual cost may be lower
+than estimated, and any unused funds will remain in the original address.`
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -468,10 +475,16 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>{fromNetwork?.name} Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={fromNetworkFeeTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Network fee`,
+                                            message: fromNetworkFeeTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Link
@@ -497,12 +510,16 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>{toNetwork?.name} Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
-The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={toNetworkFeeTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Network fee`,
+                                            message: toNetworkFeeTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Typography className={classes.rowValue}>
@@ -514,12 +531,16 @@ than estimated, and any unused funds will remain in the original address.`}>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>{bridge?.router.bridgeName} Bridge Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
-The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={bridgeNetworkFeeTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Bridge Network fee`,
+                                            message: bridgeNetworkFeeTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Typography className={classes.rowValue}>
