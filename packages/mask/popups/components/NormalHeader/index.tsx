@@ -44,8 +44,11 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NormalHeaderProps {
+    /** Override header title in context */
     title?: string
     tabList?: ReactNode
+    /** Override header extension in context */
+    extension?: ReactNode
     onClose?: () => void
 }
 
@@ -55,11 +58,17 @@ function canNavBack() {
     } catch {}
     return false
 }
-export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({ onClose, title: propTitle, tabList }) {
+export const NormalHeader = memo<NormalHeaderProps>(function NormalHeader({
+    onClose,
+    title: propTitle,
+    extension: propExtension,
+    tabList,
+}) {
     const { classes } = useStyles()
     const navigate = useNavigate()
-    const { title: contextTitle, extension, customBackHandler } = useContext(PageTitleContext)
+    const { title: contextTitle, extension: contextExtension, customBackHandler } = useContext(PageTitleContext)
     const title = propTitle || contextTitle
+    const extension = propExtension || contextExtension
 
     const canBack = canNavBack()
     const showTitle = title !== undefined

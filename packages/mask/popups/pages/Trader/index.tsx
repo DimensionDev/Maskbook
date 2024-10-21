@@ -12,6 +12,7 @@ import {
     TradingRoute,
     Transaction,
     Providers,
+    RuntimeProvider,
 } from '@masknet/plugin-trader'
 import { RestorableScrollContext } from '@masknet/shared'
 import { memo, Suspense, type PropsWithChildren } from 'react'
@@ -19,7 +20,6 @@ import { Outlet, type RouteObject } from 'react-router-dom'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { Header } from './Header.js'
 import { useImplementRuntime } from './useImplementRuntime.js'
-import { RuntimeProvider } from '../../../../plugins/Trader/src/SiteAdaptor/trader/contexts/RuntimeProvider.js'
 
 export const traderRoutes: RouteObject[] = [
     { index: true, element: <TradeView /> },

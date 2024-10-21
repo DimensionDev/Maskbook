@@ -1,7 +1,7 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
 import {
@@ -394,7 +394,10 @@ export function TradeView() {
                     <Quote className={classes.box} quote={quote} />
                 :   null}
             </Box>
-            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <PluginWalletStatusBar
+                className={classes.footer}
+                requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}
+                disablePending={Sniffings.is_popup_page}>
                 <ActionButton
                     loading={isLoading}
                     fullWidth

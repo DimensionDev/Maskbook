@@ -1,7 +1,7 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
@@ -150,7 +150,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
-        maxHeight: 60,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
@@ -244,19 +243,24 @@ export const Confirm = memo(function Confirm() {
     const gas = gasConfig.gas ?? transaction?.gas ?? gasLimit
     const [{ loading: isSending }, sendSwap] = useAsyncFn(async () => {
         if (!transaction?.data) return
-        return Web3.sendTransaction({
-            data: transaction.data,
-            to: transaction.to,
-            from: account,
-            value: transaction.value,
-            gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: chainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
-            maxPriorityFeePerGas:
-                'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
-                    gasConfig.maxFeePerGas
-                :   transaction.maxPriorityFeePerGas,
-            _disableSnackbar: true,
-        })
+        return Web3.sendTransaction(
+            {
+                data: transaction.data,
+                to: transaction.to,
+                from: account,
+                value: transaction.value,
+                gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
+                gas: chainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
+                maxPriorityFeePerGas:
+                    'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
+                        gasConfig.maxFeePerGas
+                    :   transaction.maxPriorityFeePerGas,
+                _disableSnackbar: true,
+            },
+            {
+                silent: Sniffings.is_popup_page,
+            },
+        )
     }, [transaction, chainId, account, gasConfig, Web3, gas])
 
     const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
@@ -518,7 +522,10 @@ export const Confirm = memo(function Confirm() {
                     :   null}
                 </div>
             </div>
-            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <PluginWalletStatusBar
+                className={classes.footer}
+                requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}
+                disablePending={Sniffings.is_popup_page}>
                 {showStale ?
                     <ActionButton
                         fullWidth

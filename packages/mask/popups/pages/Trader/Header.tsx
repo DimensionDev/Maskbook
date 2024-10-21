@@ -1,13 +1,15 @@
+import { Icons } from '@masknet/icons'
 import { RoutePaths, useTrade } from '@masknet/plugin-trader'
 import { PopupRoutes } from '@masknet/shared-base'
 import { MaskTabList } from '@masknet/theme'
+import { TabContext } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { NormalHeader } from '../../components/index.js'
-import { TabContext } from '@mui/lab'
 
 export function Header() {
     const { mode } = useTrade()
+    const basepath = '/trader'
     const titleMap: Record<RoutePaths, string | null> = {
         [RoutePaths.Trade]: 'Exchange',
         [RoutePaths.History]: 'History',
@@ -31,6 +33,16 @@ export function Header() {
         <TabContext value={mode}>
             <NormalHeader
                 title={titleMap[title] || 'Exchange'}
+                extension={
+                    match ?
+                        <Icons.History
+                            size={24}
+                            onClick={() => {
+                                navigate(basepath + RoutePaths.History)
+                            }}
+                        />
+                    :   null
+                }
                 tabList={
                     match ?
                         <MaskTabList

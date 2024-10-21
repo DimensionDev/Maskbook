@@ -1,7 +1,7 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
@@ -26,6 +26,7 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useTrade } from '../contexts/index.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
 import { useApprove } from '../hooks/useApprove.js'
 import { useBridgable } from '../hooks/useBridgable.js'
@@ -33,7 +34,6 @@ import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
-import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -158,7 +158,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
-        maxHeight: 60,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
@@ -571,7 +570,10 @@ than estimated, and any unused funds will remain in the original address.`}>
                     :   null}
                 </div>
             </div>
-            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <PluginWalletStatusBar
+                className={classes.footer}
+                requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}
+                disablePending={Sniffings.is_popup_page}>
                 {showStale ?
                     <ActionButton
                         fullWidth
