@@ -1,9 +1,8 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar, SelectFungibleTokenModal } from '@masknet/shared'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleTokenBalance, useNetworks } from '@masknet/web3-hooks-base'
 import {
     formatBalance,
@@ -25,9 +24,9 @@ import { CoinIcon } from '../../../components/CoinIcon.js'
 import { Warning } from '../../../components/Warning.js'
 import { RoutePaths } from '../../../constants.js'
 import { useGasManagement, useTrade } from '../../contexts/index.js'
+import { useRuntime } from '../../contexts/RuntimeProvider.js'
 import { formatInput, formatTokenBalance } from '../../helpers.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
-import { useSupportedChains } from '../../hooks/useSupportedChains.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
 
@@ -159,7 +158,6 @@ export function TradeView() {
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
     const {
         mode,
-        chainId,
         fromToken,
         setFromToken,
         toToken,
@@ -183,7 +181,6 @@ export function TradeView() {
     const toChainId = toToken?.chainId as ChainId
     const fromNetwork = networks.find((x) => x.chainId === fromChainId)
     const toNetwork = networks.find((x) => x.chainId === toChainId)
-    const chainQuery = useSupportedChains()
     const { data: fromTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, {
         chainId: fromChainId,
     })
@@ -192,23 +189,7 @@ export function TradeView() {
         chainId: toChainId,
     })
 
-    const pickToken = async (
-        currentToken: Web3Helper.FungibleTokenAll | null | undefined,
-        side: 'from' | 'to',
-        excludes: string[],
-    ) => {
-        const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
-        return SelectFungibleTokenModal.openAndWaitForClose({
-            disableNativeToken: false,
-            selectedTokens: excludes,
-            // Only from token can decide the chain
-            chainId: (isSwap ? fromChainId : currentToken?.chainId) || chainId,
-            pluginID: NetworkPluginID.PLUGIN_EVM,
-            chains: supportedChains?.map((x) => x.chainId),
-            okxOnly: true,
-            lockChainId: isSwap && side === 'to' && !!fromChainId,
-        })
-    }
+    const { pickToken } = useRuntime()
 
     const toTokenAmount = isSwap ? quote?.toTokenAmount : bridgeQuote?.toTokenAmount
     const { fromTokenValue, toTokenValue, priceDiff } = useMemo(() => {

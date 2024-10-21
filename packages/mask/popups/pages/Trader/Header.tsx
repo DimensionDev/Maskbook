@@ -28,9 +28,9 @@ export function Header() {
     const title = (pathname.startsWith('/trader') ? pathname.slice('/trader'.length) : pathname) as RoutePaths
 
     return (
-        <TabContext value={mode || 'Exchange'}>
+        <TabContext value={mode}>
             <NormalHeader
-                title={titleMap[title] || 'Trader'}
+                title={titleMap[title] || 'Exchange'}
                 tabList={
                     match ?
                         <MaskTabList

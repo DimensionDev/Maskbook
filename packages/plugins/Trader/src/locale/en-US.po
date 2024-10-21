@@ -88,12 +88,12 @@ msgstr ""
 msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:112
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:115
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:300
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:309
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:313
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:375
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:238
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:219
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx:158
 #: src/SiteAdaptor/trader/views/Transaction.tsx:300
 #: src/SiteAdaptor/trader/views/Transaction.tsx:307
@@ -101,7 +101,7 @@ msgstr ""
 msgid "Bridge"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:238
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:219
 msgid "Bridge anyway"
 msgstr ""
 
@@ -135,7 +135,7 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:62
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:64
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:585
 msgid "Confirm Bridge"
 msgstr ""
@@ -144,7 +144,7 @@ msgstr ""
 #~ msgid "Confirm swap"
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:61
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:63
 #: src/SiteAdaptor/trader/views/Confirm.tsx:532
 msgid "Confirm Swap"
 msgstr ""
@@ -179,8 +179,8 @@ msgstr ""
 msgid "Enter gas limit"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:59
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:72
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:61
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:74
 msgid "Exchange"
 msgstr ""
 
@@ -207,7 +207,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:408
 #: src/SiteAdaptor/trader/views/Confirm.tsx:390
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:247
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:228
 #: src/SiteAdaptor/trader/views/Transaction.tsx:414
 msgid "From"
 msgstr ""
@@ -228,7 +228,7 @@ msgstr ""
 msgid "Gas price should be greater than 0"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:60
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:62
 msgid "History"
 msgstr ""
 
@@ -253,7 +253,7 @@ msgstr ""
 msgid "Make another Swap"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:307
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:288
 msgid "MAX"
 msgstr ""
 
@@ -285,7 +285,7 @@ msgstr ""
 msgid "Network"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:69
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:71
 #: src/SiteAdaptor/trader/views/Confirm.tsx:448
 msgid "Network fee"
 msgstr ""
@@ -298,8 +298,8 @@ msgstr ""
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:279
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:364
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:260
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:345
 msgid "on {0}"
 msgstr ""
 
@@ -325,8 +325,8 @@ msgstr ""
 msgid "Quote route"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:65
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:66
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:67
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:68
 msgid "Quote Route"
 msgstr ""
 
@@ -341,7 +341,7 @@ msgstr ""
 msgid "Select liquidity"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:63
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:65
 msgid "Select Liquidity"
 msgstr ""
 
@@ -354,7 +354,7 @@ msgstr ""
 msgid "Sending address"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:64
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:66
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:140
 msgid "Slippage"
 msgstr ""
@@ -363,17 +363,17 @@ msgstr ""
 msgid "Slow"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:111
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:114
 #: src/SiteAdaptor/trader/views/Confirm.tsx:285
 #: src/SiteAdaptor/trader/views/Confirm.tsx:296
 #: src/SiteAdaptor/trader/views/Confirm.tsx:313
 #: src/SiteAdaptor/trader/views/Confirm.tsx:355
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:237
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:218
 #: src/SiteAdaptor/trader/views/Transaction.tsx:544
 msgid "Swap"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:237
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:218
 msgid "Swap anyway"
 msgstr ""
 
@@ -410,7 +410,7 @@ msgstr ""
 msgid "This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Trade/index.tsx:179
+#: src/SiteAdaptor/trader/views/Trade/index.tsx:177
 msgid "This swap isn’t supported"
 msgstr ""
 
@@ -429,11 +429,11 @@ msgstr ""
 msgid "Trading route"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:67
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:69
 msgid "Trading Route"
 msgstr ""
 
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx:70
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx:72
 msgid "Transaction Details"
 msgstr ""
 

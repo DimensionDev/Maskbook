@@ -14,10 +14,12 @@ import {
     Providers,
 } from '@masknet/plugin-trader'
 import { RestorableScrollContext } from '@masknet/shared'
-import { memo, Suspense } from 'react'
+import { memo, Suspense, type PropsWithChildren } from 'react'
 import { Outlet, type RouteObject } from 'react-router-dom'
 import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
 import { Header } from './Header.js'
+import { useImplementRuntime } from './useImplementRuntime.js'
+import { RuntimeProvider } from '../../../../plugins/Trader/src/SiteAdaptor/trader/contexts/RuntimeProvider.js'
 
 export const traderRoutes: RouteObject[] = [
     { index: true, element: <TradeView /> },
@@ -36,13 +38,21 @@ export const traderRoutes: RouteObject[] = [
     ...x,
     path: x.path ? x.path.slice(1) : undefined,
 }))
+
+function Runtime({ children }: PropsWithChildren) {
+    const runtime = useImplementRuntime()
+    return <RuntimeProvider runtime={runtime}>{children}</RuntimeProvider>
+}
+
 export const TraderFrame = memo(function TraderFrame() {
     return (
         <Suspense fallback={<LoadingPlaceholder />}>
             <RestorableScrollContext>
                 <Providers>
-                    <Header />
-                    <Outlet />
+                    <Runtime>
+                        <Header />
+                        <Outlet />
+                    </Runtime>
                 </Providers>
             </RestorableScrollContext>
         </Suspense>
