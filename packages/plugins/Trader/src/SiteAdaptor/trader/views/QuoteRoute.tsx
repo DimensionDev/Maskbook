@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -138,6 +139,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 
 export const QuoteRoute = memo(function QuoteRoute() {
     const { classes, theme } = useStyles()
+    const { basepath } = useRuntime()
     const { quote, chainId } = useTrade()
 
     const compareList = useCompareList(quote, chainId)
@@ -204,7 +206,10 @@ export const QuoteRoute = memo(function QuoteRoute() {
                                 <Icons.Gas size={16} />${new BigNumber(compare.tradeFee).toFixed(4)}
                             </Typography>
                             {isBest ?
-                                <Typography component={Link} className={classes.tag} to={RoutePaths.TradingRoute}>
+                                <Typography
+                                    component={Link}
+                                    className={classes.tag}
+                                    to={basepath + RoutePaths.TradingRoute}>
                                     Route info <Icons.ArrowRight size={16} />
                                 </Typography>
                             :   null}

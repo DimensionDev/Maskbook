@@ -13,6 +13,7 @@ import { Link } from 'react-router-dom'
 import { formatTime } from '../../../helpers/formatTime.js'
 import { bridges, RoutePaths } from '../../constants.js'
 import { useTrade } from '../contexts/index.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>()((theme, _, refs) => ({
     container: {
@@ -106,6 +107,7 @@ const useStyles = makeStyles<void, 'active' | 'label' | 'fastestTag' | 'maxTag'>
 
 export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     const { classes, theme, cx } = useStyles()
+    const { basepath } = useRuntime()
     const { bridgeQuote, fromToken, toToken, mode } = useTrade()
     const [bridgeId = bridgeQuote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
     const chainId = fromToken?.chainId as ChainId
@@ -193,7 +195,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
                                 component={Link}
                                 className={classes.tag}
                                 to={{
-                                    pathname: RoutePaths.TradingRoute,
+                                    pathname: basepath + RoutePaths.TradingRoute,
                                     search: `?router-bridge-id=${currBridgeId}&mode=${mode}`,
                                 }}>
                                 Route info <Icons.ArrowRight size={16} />

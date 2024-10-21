@@ -25,6 +25,7 @@ import { okxTokenToFungibleToken } from '../helpers.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
     container: {
@@ -236,6 +237,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 export const Transaction = memo(function Transaction() {
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
+    const { basepath } = useRuntime()
     const navigate = useNavigate()
     const [params, setParams] = useSearchParams()
     const hash = params.get('hash')
@@ -635,7 +637,7 @@ export const Transaction = memo(function Transaction() {
                             if (txSucceed) reset()
                             setFromToken(okxTokenToFungibleToken(tx.fromToken))
                             setToToken(okxTokenToFungibleToken(tx.toToken))
-                            navigate(urlcat(RoutePaths.Trade, { mode: tx.kind }))
+                            navigate(basepath + urlcat(RoutePaths.Trade, { mode: tx.kind }))
                         }}>
                         <Icons.Cached color={theme.palette.maskColor.bottom} />
                         {txSucceed ?

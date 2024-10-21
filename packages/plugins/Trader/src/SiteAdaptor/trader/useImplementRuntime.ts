@@ -32,5 +32,5 @@ export function useImplementRuntime(): RuntimeOptions {
         },
         [isSwap, chainQuery.data, fromChainId],
     )
-    return useMemo(() => ({ pickToken }), [pickToken])
+    return useMemo(() => ({ pickToken, basepath: '' }), [pickToken])
 }

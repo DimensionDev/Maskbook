@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
 import { useSwapHistory } from '../../storage.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -122,6 +123,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function HistoryView() {
     const { classes, theme } = useStyles()
+    const { basepath } = useRuntime()
     const address = useAccount(NetworkPluginID.PLUGIN_EVM)
     const history = useSwapHistory(address)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -144,7 +146,7 @@ export function HistoryView() {
                 const chainId = tx.kind === 'swap' || !tx.kind ? tx.chainId : tx.fromChainId
                 const network = networks.find((x) => +x.chainId === chainId)
                 const toNetwork = tx.kind === 'bridge' ? networks.find((x) => x.chainId === tx.toChainId) : null
-                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
+                const url = basepath + urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
                 return (
                     <div className={classes.group} key={tx.hash}>
                         <div className={classes.groupHeader}>

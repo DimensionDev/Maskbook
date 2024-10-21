@@ -2,6 +2,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { createContext, useContext, type PropsWithChildren } from 'react'
 
 export interface RuntimeOptions {
+    basepath: string
     pickToken(
         currentToken: Web3Helper.FungibleTokenAll | null | undefined,
         side: 'from' | 'to',

@@ -32,6 +32,7 @@ import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
 import { useQueryClient } from '@tanstack/react-query'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -170,6 +171,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Confirm = memo(function Confirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
+    const { basepath } = useRuntime()
     const {
         mode,
         inputAmount,
@@ -350,7 +352,7 @@ export const Confirm = memo(function Confirm() {
             })
             if (leaveRef.current) return
             const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
-            navigate(url, { replace: true })
+            navigate(basepath + url, { replace: true })
         } catch (err) {
             showSnackbar(t`Swap`, {
                 message: (err as Error).message,
@@ -358,6 +360,7 @@ export const Confirm = memo(function Confirm() {
             })
         }
     }, [
+        basepath,
         fromToken,
         toToken,
         transaction,
@@ -454,7 +457,7 @@ export const Confirm = memo(function Confirm() {
                         </Typography>
                         <Link
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
+                            to={{ pathname: basepath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
@@ -479,7 +482,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography
                             className={cx(classes.rowValue, classes.link)}
                             onClick={() => {
-                                navigate(urlcat(RoutePaths.SelectLiquidity, { mode }))
+                                navigate(urlcat(basepath, RoutePaths.SelectLiquidity, { mode }))
                             }}>
                             {dexIdsCount}/{liquidityList.length}
                             <Icons.ArrowRight size={20} />

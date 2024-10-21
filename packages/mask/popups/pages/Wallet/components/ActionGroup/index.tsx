@@ -100,7 +100,11 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                 type="button"
                 className={classes.button}
                 onClick={() => {
-                    navigate(PopupRoutes.Trader)
+                    const url = urlcat(PopupRoutes.Trader, {
+                        toAddress: asset?.address,
+                        toChainId: asset?.chainId,
+                    })
+                    navigate(url)
                 }}>
                 <Icons.Cached size={20} color={theme.palette.maskColor.main} />
                 <Typography className={classes.label}>{t.wallet_swap()}</Typography>

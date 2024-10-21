@@ -33,6 +33,7 @@ import { useBridgeData } from '../hooks/useBridgeData.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -172,6 +173,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { classes, cx, theme } = useStyles()
+    const { basepath } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -370,7 +372,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 mode,
                 pending: true,
             })
-            navigate(url, { replace: true })
+            navigate(basepath + url, { replace: true })
         } catch (err) {
             showSnackbar(t`Bridge`, {
                 message: (err as Error).message,
@@ -378,6 +380,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
         }
     }, [
+        basepath,
         fromToken,
         toToken,
         fromTokenAmount,
@@ -474,7 +477,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                         </Typography>
                         <Link
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
+                            to={{ pathname: basepath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
