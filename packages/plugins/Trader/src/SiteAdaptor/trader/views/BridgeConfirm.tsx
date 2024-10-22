@@ -39,7 +39,8 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        minHeight: 0,
+        flexGrow: 1,
         boxSizing: 'border-box',
         scrollbarWidth: 'none',
     },

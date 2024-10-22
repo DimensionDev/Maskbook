@@ -5,12 +5,14 @@ import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-sh
 import { useCallback, useMemo } from 'react'
 import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
 import { usePopupCustomSnackbar } from '@masknet/theme'
+import { usePopupTheme } from '../../hooks/usePopupTheme.js'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
     const { mode, chainId, fromToken } = useTrade()
     const isSwap = mode === 'swap'
     const fromChainId = fromToken?.chainId as ChainId
+    const theme = usePopupTheme()
     const pickToken = useCallback(
         async (
             currentToken: Web3Helper.FungibleTokenAll | null | undefined,
@@ -25,6 +27,7 @@ export function useImplementRuntime() {
                 address: currentToken?.address,
                 chains: supportedChains?.map((x) => x.chainId),
                 lockChainId: isSwap && side === 'to' && !!fromChainId,
+                assetSource: 'okx',
             })
             if (!picked) return null
             return {
@@ -41,18 +44,26 @@ export function useImplementRuntime() {
         [isSwap, chainQuery.data, fromChainId],
     )
 
-    const showToolTip = useCallback(({ title, message }: ShowTooltipOptions) => {
-        ConfirmModal.open({
-            title,
-            message,
-            disableConfirmButton: true,
-            messageProps: {
-                style: {
-                    textAlign: 'left',
+    const showToolTip = useCallback(
+        ({ title, message }: ShowTooltipOptions) => {
+            ConfirmModal.open({
+                title,
+                message,
+                disableConfirmButton: true,
+                messageProps: {
+                    style: {
+                        textAlign: 'left',
+                        fontSize: '15px',
+                        lineHeight: '20px',
+                        fontWeight: 400,
+                        color: theme.palette.maskColor.main,
+                        marginTop: 16,
+                    },
                 },
-            },
-        })
-    }, [])
+            })
+        },
+        [theme.palette.maskColor.main],
+    )
 
     const { showSnackbar } = usePopupCustomSnackbar()
 

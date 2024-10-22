@@ -38,7 +38,8 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        minHeight: 0,
+        flexGrow: 1,
         boxSizing: 'border-box',
         scrollbarWidth: 'none',
     },
@@ -382,6 +383,7 @@ export const Confirm = memo(function Confirm() {
         mode,
         waitForTransaction,
         gasOptions,
+        approveMutation.mutateAsync,
     ])
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isSwappable || loading || dexIdsCount === 0
@@ -492,7 +494,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography
                             className={cx(classes.rowValue, classes.link)}
                             onClick={() => {
-                                navigate(urlcat(basepath, RoutePaths.SelectLiquidity, { mode }))
+                                navigate(basepath + urlcat(RoutePaths.SelectLiquidity, { mode }))
                             }}>
                             {dexIdsCount}/{liquidityList.length}
                             <Icons.ArrowRight size={20} />

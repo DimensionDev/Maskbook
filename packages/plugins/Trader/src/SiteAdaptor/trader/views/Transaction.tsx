@@ -32,7 +32,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box',
-        ...(Sniffings.is_popup_page ? { minHeight: 0 } : { height: '100%' }),
+        ...(Sniffings.is_popup_page ? { minHeight: 0, flexGrow: 1 } : { height: '100%' }),
     },
     content: {
         display: 'flex',

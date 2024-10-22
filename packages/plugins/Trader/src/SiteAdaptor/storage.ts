@@ -1,7 +1,7 @@
 import { EMPTY_LIST, type ScopedStorage } from '@masknet/shared-base'
+import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import type { OkxTransaction } from '../types/trader.js'
-import { useQuery } from '@tanstack/react-query'
 
 export interface StorageOptions {
     /** isolated by wallet */
@@ -61,6 +61,6 @@ export async function updateTransaction<T extends OkxTransaction>(
 }
 
 export function useTransaction(address: string, hash: string | null) {
-    const { data: txes = [] } = useTradeHistory(address)
-    return hash ? txes.find((x) => x.hash === hash) : null
+    const { data: txes } = useTradeHistory(address)
+    return hash && txes ? txes.find((x) => x.hash === hash) : null
 }
