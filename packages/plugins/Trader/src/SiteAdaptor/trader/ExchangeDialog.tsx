@@ -38,6 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         boxSizing: 'border-box',
         scrollbarWith: 'none',
+        display: 'flex',
+        flexDirection: 'column',
         '&::-webkit-scrollbar': {
             display: 'none',
         },

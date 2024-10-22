@@ -2,7 +2,6 @@ import { queryClient } from '@masknet/shared-base-ui'
 import { rightShift, TokenType, type FungibleToken } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import urlcat from 'urlcat'
-import { v4 as uuid } from 'uuid'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { blockedTokenMap, NATIVE_TOKEN_ADDRESS, OKX_HOST } from './constant.js'
 import { fixToken, fromOkxNativeAddress, normalizeCode, toOkxNativeAddress } from './helper.js'
@@ -182,27 +181,6 @@ export class OKX {
         return fetchFromOKX<SwapResponse>(url)
     }
 
-    /**
-     * @deprecated Unused since API always responses "Invalid Request uri"
-     * @see https://www.okx.com/web3/build/docs/waas/api-wallet-create-wallet
-     */
-    static async createWallet(address: string): Promise<string | null> {
-        const chains = (await OKX.getSupportedChains()) || []
-        const walletId = uuid()
-        const addresses = chains.map((chain) => ({ address, chainId: chain.chainId.toString() }))
-        const res = await fetchFromOKX(`${OKX_HOST}/api/v5/waas/wallet/create-wallet`, {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                addresses,
-                walletId,
-            }),
-        })
-        return res.code === 0 ? walletId : null
-    }
     /** Get token price in favor of swap quote API */
     static async getTokenPrice(address: string, chainId: string) {
         const intChainId = +chainId

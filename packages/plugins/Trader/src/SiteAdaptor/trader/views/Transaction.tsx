@@ -1,7 +1,7 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
@@ -31,8 +31,14 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
         boxSizing: 'border-box',
+        ...(Sniffings.is_popup_page ?
+            {
+                minHeight: 0,
+            }
+        :   {
+                height: '100%',
+            }),
     },
     content: {
         display: 'flex',
