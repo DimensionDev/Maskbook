@@ -22,11 +22,11 @@ msgstr ""
 msgid "{0} {1} bridge completed successfully."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:310
+#: src/SiteAdaptor/trader/views/Confirm.tsx:311
 msgid "{0} {1} swap completed successfully."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:532
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:533
 msgid "{0} Bridge Network fee"
 msgstr ""
 
@@ -35,8 +35,8 @@ msgstr ""
 #~ msgid "{0} fee"
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:476
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:511
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:477
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:512
 msgid "{0} Network fee"
 msgstr ""
 
@@ -45,7 +45,7 @@ msgstr ""
 msgid "{0} Pool"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:469
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:470
 #: src/SiteAdaptor/trader/views/Transaction.tsx:585
 msgid "{0} to {1}"
 msgstr ""
@@ -54,8 +54,8 @@ msgstr ""
 msgid "{0}m"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:497
-#: src/SiteAdaptor/trader/views/Confirm.tsx:477
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:498
+#: src/SiteAdaptor/trader/views/Confirm.tsx:478
 msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
 msgstr ""
 
@@ -75,13 +75,13 @@ msgstr ""
 #~ msgid "<0>Powered by<1/></0><2>OKX</2>"
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:445
+#: src/SiteAdaptor/trader/views/Confirm.tsx:446
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:126
 msgid "Aggregator"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:609
-#: src/SiteAdaptor/trader/views/Confirm.tsx:548
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:610
+#: src/SiteAdaptor/trader/views/Confirm.tsx:549
 msgid "Approving"
 msgstr ""
 
@@ -94,10 +94,10 @@ msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:117
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:300
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:309
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:313
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:375
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:301
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:310
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:314
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:376
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:220
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx:158
 #: src/SiteAdaptor/trader/views/Transaction.tsx:301
@@ -118,7 +118,7 @@ msgstr ""
 #~ msgid "Bridge network fee"
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:538
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:539
 msgid "Bridge Network fee"
 msgstr ""
 
@@ -130,8 +130,8 @@ msgstr ""
 msgid "Check on Explorer"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:608
-#: src/SiteAdaptor/trader/views/Confirm.tsx:547
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:609
+#: src/SiteAdaptor/trader/views/Confirm.tsx:548
 msgid "Checking Approve"
 msgstr ""
 
@@ -145,7 +145,7 @@ msgid "Confirm"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:66
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:610
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:611
 msgid "Confirm Bridge"
 msgstr ""
 
@@ -154,7 +154,7 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:65
-#: src/SiteAdaptor/trader/views/Confirm.tsx:549
+#: src/SiteAdaptor/trader/views/Confirm.tsx:550
 msgid "Confirm Swap"
 msgstr ""
 
@@ -166,8 +166,8 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:574
-#: src/SiteAdaptor/trader/views/Confirm.tsx:513
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:575
+#: src/SiteAdaptor/trader/views/Confirm.tsx:514
 msgid "Data"
 msgstr ""
 
@@ -197,7 +197,7 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:310
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:311
 #: src/SiteAdaptor/trader/views/Transaction.tsx:302
 msgid "Failed to bridge"
 msgstr ""
@@ -214,8 +214,8 @@ msgstr ""
 msgid "Fastest"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:416
-#: src/SiteAdaptor/trader/views/Confirm.tsx:398
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:417
+#: src/SiteAdaptor/trader/views/Confirm.tsx:399
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:229
 #: src/SiteAdaptor/trader/views/Transaction.tsx:415
 msgid "From"
@@ -241,8 +241,8 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:403
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:406
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:404
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:407
 msgid ""
 "In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.\n"
 "The actual cost may be lower\n"
@@ -279,7 +279,7 @@ msgstr ""
 msgid "Max base fee should be greater than 0"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:566
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:567
 msgid "Minimum received"
 msgstr ""
 
@@ -288,17 +288,17 @@ msgstr ""
 msgid "Missing dex contract address"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:459
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:460
 #: src/SiteAdaptor/trader/views/Transaction.tsx:566
 #: src/SiteAdaptor/trader/views/Transaction.tsx:575
 msgid "Network"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:73
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:482
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:517
-#: src/SiteAdaptor/trader/views/Confirm.tsx:456
-#: src/SiteAdaptor/trader/views/Confirm.tsx:462
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:483
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:518
+#: src/SiteAdaptor/trader/views/Confirm.tsx:457
+#: src/SiteAdaptor/trader/views/Confirm.tsx:463
 msgid "Network fee"
 msgstr ""
 
@@ -319,7 +319,7 @@ msgstr ""
 msgid "Overall Best"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:504
+#: src/SiteAdaptor/trader/views/Confirm.tsx:505
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:220
 msgid "Powered by"
 msgstr ""
@@ -328,8 +328,8 @@ msgstr ""
 msgid "Priority fee"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:589
-#: src/SiteAdaptor/trader/views/Confirm.tsx:528
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:590
+#: src/SiteAdaptor/trader/views/Confirm.tsx:529
 msgid "Quote expired. Update to receive a new quote."
 msgstr ""
 
@@ -346,14 +346,14 @@ msgstr ""
 msgid "Rank"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:560
-#: src/SiteAdaptor/trader/views/Confirm.tsx:450
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:561
+#: src/SiteAdaptor/trader/views/Confirm.tsx:451
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:131
 #: src/SiteAdaptor/trader/views/Transaction.tsx:603
 msgid "Rate"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:491
+#: src/SiteAdaptor/trader/views/Confirm.tsx:492
 msgid "Select liquidity"
 msgstr ""
 
@@ -361,8 +361,8 @@ msgstr ""
 msgid "Select Liquidity"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:607
-#: src/SiteAdaptor/trader/views/Confirm.tsx:546
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:608
+#: src/SiteAdaptor/trader/views/Confirm.tsx:547
 msgid "Sending"
 msgstr ""
 
@@ -385,10 +385,10 @@ msgid "Slow"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx:116
-#: src/SiteAdaptor/trader/views/Confirm.tsx:290
-#: src/SiteAdaptor/trader/views/Confirm.tsx:301
-#: src/SiteAdaptor/trader/views/Confirm.tsx:318
-#: src/SiteAdaptor/trader/views/Confirm.tsx:360
+#: src/SiteAdaptor/trader/views/Confirm.tsx:291
+#: src/SiteAdaptor/trader/views/Confirm.tsx:302
+#: src/SiteAdaptor/trader/views/Confirm.tsx:319
+#: src/SiteAdaptor/trader/views/Confirm.tsx:361
 #: src/SiteAdaptor/trader/views/Trade/index.tsx:219
 #: src/SiteAdaptor/trader/views/Transaction.tsx:545
 msgid "Swap"
@@ -422,8 +422,8 @@ msgstr ""
 #~ msgid "The swap is in progress. You can check its status in History after exiting this page."
 #~ msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:402
-#: src/SiteAdaptor/trader/views/Confirm.tsx:390
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:403
+#: src/SiteAdaptor/trader/views/Confirm.tsx:391
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr ""
 
@@ -435,13 +435,13 @@ msgstr ""
 msgid "This swap isn’t supported"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:437
-#: src/SiteAdaptor/trader/views/Confirm.tsx:420
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:438
+#: src/SiteAdaptor/trader/views/Confirm.tsx:421
 #: src/SiteAdaptor/trader/views/Transaction.tsx:494
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:442
+#: src/SiteAdaptor/trader/views/Confirm.tsx:443
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx:123
 msgid "Trading mode"
 msgstr ""
@@ -466,12 +466,12 @@ msgstr ""
 msgid "Transaction in progress. Thank you for your patience."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:301
-#: src/SiteAdaptor/trader/views/Confirm.tsx:291
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:302
+#: src/SiteAdaptor/trader/views/Confirm.tsx:292
 msgid "Transaction rejected"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:325
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:326
 msgid "Transaction submitted."
 msgstr ""
 
@@ -491,16 +491,16 @@ msgstr ""
 msgid "Try token from different chains"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:603
-#: src/SiteAdaptor/trader/views/Confirm.tsx:542
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:604
+#: src/SiteAdaptor/trader/views/Confirm.tsx:543
 msgid "Update Quote"
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/Confirm.tsx:319
+#: src/SiteAdaptor/trader/views/Confirm.tsx:320
 msgid "Wait too long for the confirmation."
 msgstr ""
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:551
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx:552
 msgid "Wallet"
 msgstr ""
 
