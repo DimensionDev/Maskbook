@@ -2,7 +2,7 @@ import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { LoadingBase, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, OKX } from '@masknet/web3-providers'
 import { dividedBy, formatBalance, formatCompact, leftShift, TransactionStatusType } from '@masknet/web3-shared-base'
@@ -21,24 +21,18 @@ import { GasCost } from '../../components/GasCost.js'
 import { RoutePaths } from '../../constants.js'
 import { useTransaction } from '../../storage.js'
 import { useTrade } from '../contexts/index.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
         boxSizing: 'border-box',
-        ...(Sniffings.is_popup_page ?
-            {
-                minHeight: 0,
-            }
-        :   {
-                height: '100%',
-            }),
+        ...(Sniffings.is_popup_page ? { minHeight: 0 } : { height: '100%' }),
     },
     content: {
         display: 'flex',
@@ -243,7 +237,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 export const Transaction = memo(function Transaction() {
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
-    const { basepath } = useRuntime()
+    const { basepath, showSnackbar } = useRuntime()
     const navigate = useNavigate()
     const [params, setParams] = useSearchParams()
     const hash = params.get('hash')
@@ -283,7 +277,6 @@ export const Transaction = memo(function Transaction() {
     const txPending = status === TransactionStatusType.NOT_DEPEND
     const [expand = bridgeStatus?.status === 'PENDING', setExpand] = useState<boolean>()
 
-    const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const waitForTransaction = useWaitForTransaction()

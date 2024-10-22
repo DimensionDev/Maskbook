@@ -2,7 +2,7 @@ import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
@@ -170,7 +170,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Confirm = memo(function Confirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
-    const { basepath, showToolTip } = useRuntime()
+    const { basepath, showToolTip, showSnackbar } = useRuntime()
     const {
         mode,
         inputAmount,
@@ -269,7 +269,6 @@ export const Confirm = memo(function Confirm() {
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
     const showStale = isQuoteStale && !isSending && !isApproving
 
-    const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
     const queryClient = useQueryClient()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)

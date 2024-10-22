@@ -7,6 +7,7 @@ import { useCallback, useMemo } from 'react'
 import type { RuntimeOptions } from './contexts/RuntimeProvider.js'
 import { useTrade } from './contexts/TradeProvider.js'
 import { useSupportedChains } from './hooks/useSupportedChains.js'
+import { useCustomSnackbar } from '@masknet/theme'
 
 export function useImplementRuntime(): RuntimeOptions {
     const chainQuery = useSupportedChains()
@@ -33,5 +34,8 @@ export function useImplementRuntime(): RuntimeOptions {
         },
         [isSwap, chainQuery.data, fromChainId],
     )
-    return useMemo(() => ({ pickToken, basepath: '', showToolTip: noop }), [pickToken])
+
+    const { showSnackbar } = useCustomSnackbar()
+
+    return useMemo(() => ({ pickToken, basepath: '', showToolTip: noop, showSnackbar }), [pickToken, showSnackbar])
 }

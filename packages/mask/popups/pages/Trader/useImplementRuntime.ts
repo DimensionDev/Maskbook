@@ -4,6 +4,7 @@ import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
 import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
+import { usePopupCustomSnackbar } from '@masknet/theme'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
@@ -53,5 +54,10 @@ export function useImplementRuntime() {
         })
     }, [])
 
-    return useMemo(() => ({ pickToken, basepath: '/trader', showToolTip }), [pickToken, showToolTip])
+    const { showSnackbar } = usePopupCustomSnackbar()
+
+    return useMemo(
+        () => ({ pickToken, basepath: '/trader', showToolTip, showSnackbar }),
+        [pickToken, showToolTip, showSnackbar],
+    )
 }

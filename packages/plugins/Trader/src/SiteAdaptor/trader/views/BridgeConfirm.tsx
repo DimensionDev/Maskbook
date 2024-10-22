@@ -2,7 +2,7 @@ import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
@@ -172,7 +172,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { classes, cx, theme } = useStyles()
-    const { basepath, showToolTip } = useRuntime()
+    const { basepath, showToolTip, showSnackbar } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -265,7 +265,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
 
-    const { showSnackbar } = useCustomSnackbar()
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: toChainId,
     })
