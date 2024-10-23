@@ -1,4 +1,3 @@
 {
-  "extends": "../../tsconfig.leaf.json",
-  "references": [{ "path": "./RedPacket/tsconfig.json" }]
+  "extends": "../../tsconfig.leaf.json"
 }

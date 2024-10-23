@@ -23,7 +23,6 @@ Request to deploy contracts on <!-- Replace it with the chain name -->.
 
 The following contracts are requested.
 
-+ [RedPacket](https://github.com/DimensionDev/RedPacket)
 + [Initial Twitter Offer](https://github.com/DimensionDev/InitialTwitterOffering)
 + Dummy Qualification
 + BalanceChecker

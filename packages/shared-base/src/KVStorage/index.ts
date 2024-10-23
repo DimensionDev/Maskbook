@@ -1,5 +1,4 @@
 import { MaskMessages } from '../Messages/index.js'
-import { PluginID } from '../types/PluginID.js'
 import { createProxyKVStorageBackend, type KVStorageBackend, createKVStorageHost } from './kv-storage/index.js'
 
 const indexedDBProxy = createProxyKVStorageBackend()
@@ -63,9 +62,7 @@ export const PersistentStorages = {
             [key: string]: boolean
         }
     }>(ApplicationEntryUnlistedListKey, {
-        current: {
-            [PluginID.RedPacket]: false,
-        },
+        current: {},
     }),
     ApplicationEntryUnListed: createPersistentKVStorage<{ data: string[] }>(APPLICATION_ENTRY_UNLISTED, { data: [] }),
 }
