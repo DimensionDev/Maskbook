@@ -6,6 +6,7 @@ import { useCallback, useMemo } from 'react'
 import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { usePopupTheme } from '../../hooks/usePopupTheme.js'
+import { AssetSource } from '../../components/index.js'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
@@ -27,7 +28,7 @@ export function useImplementRuntime() {
                 address: currentToken?.address,
                 chains: supportedChains?.map((x) => x.chainId),
                 lockChainId: isSwap && side === 'to' && !!fromChainId,
-                assetSource: 'okx',
+                assetSource: AssetSource.Okx,
             })
             if (!picked) return null
             return {

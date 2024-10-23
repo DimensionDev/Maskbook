@@ -161,7 +161,7 @@ export function HistoryView() {
                 const chainId = tx.kind === 'swap' || !tx.kind ? tx.chainId : tx.fromChainId
                 const network = networks.find((x) => +x.chainId === chainId)
                 const toNetwork = tx.kind === 'bridge' ? networks.find((x) => x.chainId === tx.toChainId) : null
-                const url = basepath + urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
+                const url = urlcat(basepath, RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
                 return (
                     <div className={classes.group} key={tx.hash}>
                         <div className={classes.groupHeader}>

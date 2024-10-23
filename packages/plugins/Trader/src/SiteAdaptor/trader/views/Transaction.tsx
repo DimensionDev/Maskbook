@@ -636,7 +636,7 @@ export const Transaction = memo(function Transaction() {
                             if (txSucceed) reset()
                             setFromToken(okxTokenToFungibleToken(tx.fromToken))
                             setToToken(okxTokenToFungibleToken(tx.toToken))
-                            navigate(basepath + urlcat(RoutePaths.Trade, { mode: tx.kind }))
+                            navigate(urlcat(basepath, RoutePaths.Trade, { mode: tx.kind }))
                         }}>
                         <Icons.Cached color={theme.palette.maskColor.bottom} />
                         {txSucceed ?

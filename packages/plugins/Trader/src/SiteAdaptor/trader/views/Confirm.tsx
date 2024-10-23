@@ -355,8 +355,8 @@ export const Confirm = memo(function Confirm() {
                 gasPrice: gasConfig.gasPrice || '0',
             })
             if (leaveRef.current) return
-            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
-            navigate(basepath + url, { replace: true })
+            const url = urlcat(basepath, RoutePaths.Transaction, { hash, chainId, mode })
+            navigate(url, { replace: true })
         } catch (err) {
             showSnackbar(t`Swap`, {
                 message: (err as Error).message,
@@ -494,7 +494,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography
                             className={cx(classes.rowValue, classes.link)}
                             onClick={() => {
-                                navigate(basepath + urlcat(RoutePaths.SelectLiquidity, { mode }))
+                                navigate(urlcat(basepath, RoutePaths.SelectLiquidity, { mode }))
                             }}>
                             {dexIdsCount}/{liquidityList.length}
                             <Icons.ArrowRight size={20} />

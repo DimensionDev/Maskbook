@@ -365,13 +365,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 bridgeName: router?.bridgeName,
             })
             if (leaveRef.current) return
-            const url = urlcat(RoutePaths.Transaction, {
+            const url = urlcat(basepath, RoutePaths.Transaction, {
                 hash,
                 chainId: fromChainId,
                 mode,
                 pending: true,
             })
-            navigate(basepath + url, { replace: true })
+            navigate(url, { replace: true })
         } catch (err) {
             showSnackbar(t`Bridge`, {
                 message: (err as Error).message,

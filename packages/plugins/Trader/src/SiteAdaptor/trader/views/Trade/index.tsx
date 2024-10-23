@@ -405,10 +405,10 @@ export function TradeView() {
                     color={isOverSlippage ? 'error' : undefined}
                     disabled={!isTradable}
                     onClick={() => {
-                        const url = urlcat(isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
+                        const url = urlcat(basepath, isSwap ? RoutePaths.Confirm : RoutePaths.BridgeConfirm, {
                             mode,
                         })
-                        navigate(basepath + url)
+                        navigate(url)
                     }}>
                     {errorMessage ?? (isSwap ? swapButtonLabel : bridgeButtonLabel)}
                 </ActionButton>

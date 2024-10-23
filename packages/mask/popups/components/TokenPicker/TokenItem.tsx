@@ -77,7 +77,7 @@ const useStyles = makeStyles()((theme) => {
 
 export interface TokenItemProps extends Omit<ListItemProps, 'onSelect'> {
     asset: Web3Helper.FungibleAssetAll | Web3Helper.FungibleTokenAll
-    network: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
+    network?: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
     selected?: boolean
 
     onSelect?(asset: Web3Helper.FungibleAssetAll | Web3Helper.FungibleTokenAll): void
