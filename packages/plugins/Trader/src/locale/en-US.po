@@ -135,7 +135,7 @@ msgid "Complete"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx:520
-#: src/SiteAdaptor/trader/views/SelectLiquidity.tsx:236
+#: src/SiteAdaptor/trader/views/SelectLiquidity.tsx:237
 msgid "Confirm"
 msgstr ""
 

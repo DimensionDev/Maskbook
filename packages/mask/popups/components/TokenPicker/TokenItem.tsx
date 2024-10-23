@@ -160,7 +160,7 @@ export const TokenItem = memo(function TokenItem({
                     <NetworkIcon
                         className={classes.badgeIcon}
                         pluginID={NetworkPluginID.PLUGIN_EVM}
-                        chainId={network.chainId}
+                        chainId={network?.chainId || asset.chainId}
                         size={16}
                         network={network}
                     />
