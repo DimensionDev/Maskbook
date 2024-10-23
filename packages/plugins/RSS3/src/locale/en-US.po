@@ -12,3 +12,7 @@ msgstr ""
 "Last-Translator: \n"
 "Language-Team: \n"
 "Plural-Forms: \n"
+
+#: src/SiteAdaptor/SocialFeeds/SocialFeed.tsx:71
+msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} other {<4>{handle}</4> post stuff on <5>{3}</5>}}"
+msgstr ""

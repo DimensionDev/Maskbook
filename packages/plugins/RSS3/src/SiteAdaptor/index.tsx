@@ -12,6 +12,7 @@ import { PLUGIN_ID } from '../constants.js'
 import { toggleFilter, useInsideFeedsTab, useIsTabActionEnabled } from './emitter.js'
 import { type FeedsPageProps, FeedsPage } from './FeedsPage.js'
 import { Modals } from './modals/index.js'
+import { SocialFeeds } from './SocialFeeds/index.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -128,25 +129,50 @@ const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = creat
     priority: 2,
 })
 
-const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+const LegacySocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
     slot: 'profile-page',
-    label: 'Social',
+    label: 'LegacySocial',
+    priority: 1,
     feedsPageProps: {
         tags: [RSS3BaseAPI.Tag.Social],
     },
-    priority: 1,
 })
-const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
-    slot: 'profile-card',
+
+const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_social_feeds`,
     label: 'Social',
-    feedsPageProps: {
-        tags: [RSS3BaseAPI.Tag.Social],
-        height: 392,
-        overflow: 'auto',
-        listProps,
-    },
     priority: 1,
-})
+    UI: {
+        TabContent: ({ socialAccount, identity }) => {
+            return (
+                <EVMWeb3ContextProvider>
+                    <SocialFeeds address={socialAccount?.address} userId={identity?.identifier?.userId} />
+                </EVMWeb3ContextProvider>
+            )
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
+}
+
+const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_profile_card_social_feeds`,
+    label: 'Social',
+    priority: 1,
+    UI: {
+        TabContent: ({ socialAccount, identity }) => {
+            return (
+                <EVMWeb3ContextProvider>
+                    <SocialFeeds address={socialAccount?.address} userId={identity?.identifier?.userId} />
+                </EVMWeb3ContextProvider>
+            )
+        },
+    },
+    Utils: {
+        shouldDisplay,
+    },
+}
 const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
     slot: 'search',
     label: 'Social',
@@ -178,7 +204,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             />
         )
     }),
-    ProfileTabs: [FinanceTabConfig, SocialTabConfig],
+    ProfileTabs: [FinanceTabConfig, SocialTabConfig, LegacySocialTabConfig],
     ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard],
     SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult],
 }
