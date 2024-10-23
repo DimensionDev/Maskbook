@@ -1,9 +1,9 @@
-import { memo, Suspense, useEffect } from 'react'
-import { useSearchParams, useMatch, type RouteObject, Navigate, Outlet } from 'react-router-dom'
-import { PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
-import { useModalNavigate, NormalHeader } from '../../components/index.js'
 import { RestorableScrollContext } from '@masknet/shared'
+import { PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { memo, Suspense, useEffect } from 'react'
+import { Navigate, Outlet, useMatch, useSearchParams, type RouteObject } from 'react-router-dom'
+import { LoadingPlaceholder } from '../../components/LoadingPlaceholder/index.js'
+import { NormalHeader, useModalNavigate } from '../../components/index.js'
 
 const r = relativeRouteOf(PopupRoutes.Friends)
 

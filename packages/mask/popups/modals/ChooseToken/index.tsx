@@ -21,7 +21,7 @@ const ChooseTokenDrawer = memo(function ChooseTokenDrawer({ title, open, onClose
 })
 
 export type ChooseTokenModalOpenProps = Omit<ChooseTokenModalProps, 'title' | 'open'>
-export type ChooseTokenModalCloseProps = Web3Helper.FungibleAssetAll | void
+export type ChooseTokenModalCloseProps = Web3Helper.FungibleAssetAll | Web3Helper.FungibleTokenAll | void
 export function ChooseTokenModal({ ref }: SingletonModalProps<ChooseTokenModalOpenProps, ChooseTokenModalCloseProps>) {
     const t = useMaskSharedTrans()
     const [props, setProps] = useState<ChooseTokenModalOpenProps>({})

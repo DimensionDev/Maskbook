@@ -76,11 +76,11 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface TokenItemProps extends Omit<ListItemProps, 'onSelect'> {
-    asset: Web3Helper.FungibleAssetAll
-    network: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
+    asset: Web3Helper.FungibleAssetAll | Web3Helper.FungibleTokenAll
+    network?: ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>
     selected?: boolean
 
-    onSelect?(asset: Web3Helper.FungibleAssetAll): void
+    onSelect?(asset: Web3Helper.FungibleAssetAll | Web3Helper.FungibleTokenAll): void
 }
 
 export const TokenItem = memo(function TokenItem({
@@ -110,13 +110,14 @@ export const TokenItem = memo(function TokenItem({
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
     const supportedByDebank = CHAIN_ID_TO_DEBANK_CHAIN_MAP[asset.chainId]
-    const tryRpc = !supportedByDebank && seen
+    const tryRpc = (!supportedByDebank || !('balance' in asset)) && seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,
         { chainId: asset.chainId as ChainId, providerURL },
         tryRpc,
     )
+    const assetBalance = 'balance' in asset ? asset.balance : undefined
     const balance = useMemo(() => {
         if (tryRpc) {
             return {
@@ -126,9 +127,9 @@ export const TokenItem = memo(function TokenItem({
         }
         return {
             pending: false,
-            value: formatTokenBalance(asset.balance, asset.decimals),
+            value: formatTokenBalance(assetBalance, asset.decimals),
         }
-    }, [tryRpc, rpcBalance, asset.balance, asset.decimals, isPending])
+    }, [tryRpc, rpcBalance, assetBalance, asset.decimals, isPending])
     // #endregion
 
     const forkedRef = useForkRef(liRef, ref)
@@ -153,6 +154,7 @@ export const TokenItem = memo(function TokenItem({
                         chainId={asset.chainId}
                         address={asset.address}
                         name={asset.name}
+                        logoURL={asset.logoURL}
                         size={36}
                     />
                     <NetworkIcon

@@ -1,4 +1,4 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useAccount, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { OKX } from '@masknet/web3-providers'
@@ -55,13 +55,18 @@ export function useApprove() {
         ],
         mutationFn: async () => {
             if (!approveInfo?.data || !tokenAddress || isGte(allowance, amount)) return
-            const hash = await Web3.sendTransaction({
-                to: tokenAddress,
-                // gas provided by API for Arbitrum is too low, let wallet estimate itself
-                gas: chainId === ChainId.Arbitrum ? undefined : addGasMargin(approveInfo.gasLimit).toFixed(0),
-                gasPrice: approveInfo.gasPrice,
-                data: approveInfo.data,
-            })
+            const hash = await Web3.sendTransaction(
+                {
+                    to: tokenAddress,
+                    // gas provided by API for Arbitrum is too low, let wallet estimate itself
+                    gas: chainId === ChainId.Arbitrum ? undefined : addGasMargin(approveInfo.gasLimit).toFixed(0),
+                    gasPrice: approveInfo.gasPrice,
+                    data: approveInfo.data,
+                },
+                {
+                    silent: Sniffings.is_popup_page,
+                },
+            )
             const receipt = await waitForTransaction({ chainId, hash, confirmationCount: 1 })
             if (!receipt?.status) throw new Error('Failed to approve')
             await refetchAllowance()
