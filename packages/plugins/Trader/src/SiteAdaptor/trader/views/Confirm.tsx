@@ -1,8 +1,8 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
+import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
@@ -15,6 +15,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
+import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
 import { memo, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
@@ -24,6 +25,7 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useTrade } from '../contexts/index.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { useApprove } from '../hooks/useApprove.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
@@ -31,13 +33,13 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useQueryClient } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        minHeight: 0,
+        flexGrow: 1,
         boxSizing: 'border-box',
         scrollbarWidth: 'none',
     },
@@ -149,7 +151,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
-        maxHeight: 60,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
@@ -170,6 +171,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Confirm = memo(function Confirm() {
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
+    const { basepath, showToolTip, showSnackbar } = useRuntime()
     const {
         mode,
         inputAmount,
@@ -242,19 +244,24 @@ export const Confirm = memo(function Confirm() {
     const gas = gasConfig.gas ?? transaction?.gas ?? gasLimit
     const [{ loading: isSending }, sendSwap] = useAsyncFn(async () => {
         if (!transaction?.data) return
-        return Web3.sendTransaction({
-            data: transaction.data,
-            to: transaction.to,
-            from: account,
-            value: transaction.value,
-            gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: chainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
-            maxPriorityFeePerGas:
-                'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
-                    gasConfig.maxFeePerGas
-                :   transaction.maxPriorityFeePerGas,
-            _disableSnackbar: true,
-        })
+        return Web3.sendTransaction(
+            {
+                data: transaction.data,
+                to: transaction.to,
+                from: account,
+                value: transaction.value,
+                gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
+                gas: chainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
+                maxPriorityFeePerGas:
+                    'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
+                        gasConfig.maxFeePerGas
+                    :   transaction.maxPriorityFeePerGas,
+                _disableSnackbar: true,
+            },
+            {
+                silent: Sniffings.is_popup_page,
+            },
+        )
     }, [transaction, chainId, account, gasConfig, Web3, gas])
 
     const [{ isLoadingApproveInfo, isLoadingSpender, isLoadingAllowance, spender }, approveMutation] = useApprove()
@@ -263,7 +270,6 @@ export const Confirm = memo(function Confirm() {
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
     const showStale = isQuoteStale && !isSending && !isApproving
 
-    const { showSnackbar } = useCustomSnackbar()
     const leaveRef = useLeave()
     const queryClient = useQueryClient()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
@@ -349,7 +355,7 @@ export const Confirm = memo(function Confirm() {
                 gasPrice: gasConfig.gasPrice || '0',
             })
             if (leaveRef.current) return
-            const url = urlcat(RoutePaths.Transaction, { hash, chainId, mode })
+            const url = urlcat(basepath, RoutePaths.Transaction, { hash, chainId, mode })
             navigate(url, { replace: true })
         } catch (err) {
             showSnackbar(t`Swap`, {
@@ -358,6 +364,7 @@ export const Confirm = memo(function Confirm() {
             })
         }
     }, [
+        basepath,
         fromToken,
         toToken,
         transaction,
@@ -376,10 +383,12 @@ export const Confirm = memo(function Confirm() {
         mode,
         waitForTransaction,
         gasOptions,
+        approveMutation.mutateAsync,
     ])
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isSwappable || loading || dexIdsCount === 0
 
+    const networkTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -446,15 +455,21 @@ export const Confirm = memo(function Confirm() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={networkTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Network fee`,
+                                            message: networkTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Link
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
+                            to={{ pathname: basepath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${nativeToken?.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
@@ -479,7 +494,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography
                             className={cx(classes.rowValue, classes.link)}
                             onClick={() => {
-                                navigate(urlcat(RoutePaths.SelectLiquidity, { mode }))
+                                navigate(urlcat(basepath, RoutePaths.SelectLiquidity, { mode }))
                             }}>
                             {dexIdsCount}/{liquidityList.length}
                             <Icons.ArrowRight size={20} />
@@ -515,7 +530,10 @@ export const Confirm = memo(function Confirm() {
                     :   null}
                 </div>
             </div>
-            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <PluginWalletStatusBar
+                className={classes.footer}
+                requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}
+                disablePending={Sniffings.is_popup_page}>
                 {showStale ?
                     <ActionButton
                         fullWidth

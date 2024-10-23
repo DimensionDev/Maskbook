@@ -53,7 +53,7 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
     return EVMChainResolver.chainName(chain.chainId) ?? chain.name
 }
 
-export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
+export const SearchBox = memo<SearchBoxProps>(function SearchBox({ onSearch }) {
     const t = useGoPlusLabsTrans()
     const { classes } = useStyles()
     const [selectedChain, setSelectedChain] = useState<
@@ -85,7 +85,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         </Stack>
                     </MenuItem>
                 )
-            }) ?? [],
+            }),
         { classes: { paper: classes.menu } },
     )
 

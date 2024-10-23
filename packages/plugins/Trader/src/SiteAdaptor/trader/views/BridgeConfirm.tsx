@@ -1,8 +1,8 @@
 import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip, useCustomSnackbar } from '@masknet/theme'
+import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
 import {
     dividedBy,
@@ -26,6 +26,7 @@ import { Warning } from '../../components/Warning.js'
 import { DEFAULT_SLIPPAGE, RoutePaths } from '../../constants.js'
 import { addTransaction } from '../../storage.js'
 import { useGasManagement, useTrade } from '../contexts/index.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
 import { useApprove } from '../hooks/useApprove.js'
 import { useBridgable } from '../hooks/useBridgable.js'
@@ -38,7 +39,8 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        minHeight: 0,
+        flexGrow: 1,
         boxSizing: 'border-box',
         scrollbarWidth: 'none',
     },
@@ -157,7 +159,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
-        maxHeight: 60,
         overflow: 'auto',
         scrollbarWidth: 'none',
     },
@@ -172,6 +173,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
     const { classes, cx, theme } = useStyles()
+    const { basepath, showToolTip, showSnackbar } = useRuntime()
     const navigate = useNavigate()
     const {
         mode,
@@ -264,7 +266,6 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
 
-    const { showSnackbar } = useCustomSnackbar()
     const { data: toChainNativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
         chainId: toChainId,
     })
@@ -364,7 +365,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 bridgeName: router?.bridgeName,
             })
             if (leaveRef.current) return
-            const url = urlcat(RoutePaths.Transaction, {
+            const url = urlcat(basepath, RoutePaths.Transaction, {
                 hash,
                 chainId: fromChainId,
                 mode,
@@ -378,6 +379,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
         }
     }, [
+        basepath,
         fromToken,
         toToken,
         fromTokenAmount,
@@ -398,6 +400,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isBridgable || loading
+    const fromNetworkFeeTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
+    const toNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
+The actual cost may be lower
+than estimated, and any unused funds will remain in the original address.`
+    const bridgeNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
+The actual cost may be lower
+than estimated, and any unused funds will remain in the original address.`
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -466,15 +475,21 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>{fromNetwork?.name} Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={fromNetworkFeeTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Network fee`,
+                                            message: fromNetworkFeeTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Link
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
+                            to={{ pathname: basepath + RoutePaths.NetworkFee, search: `?mode=${mode}` }}>
                             <Box display="flex" flexDirection="column">
                                 <Typography className={classes.text}>
                                     {`${formatWeiToEther(gasFee).toFixed(4)} ${fromNetwork?.nativeCurrency.symbol ?? 'ETH'}${gasCost ? ` ≈ $${gasCost}` : ''}`}
@@ -495,12 +510,16 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>{toNetwork?.name} Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
-The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={toNetworkFeeTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Network fee`,
+                                            message: toNetworkFeeTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Typography className={classes.rowValue}>
@@ -512,12 +531,16 @@ than estimated, and any unused funds will remain in the original address.`}>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>{bridge?.router.bridgeName} Bridge Network fee</Trans>
-                            <ShadowRootTooltip
-                                placement="top"
-                                title={t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
-The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`}>
-                                <Icons.Questions size={16} />
+                            <ShadowRootTooltip placement="top" title={bridgeNetworkFeeTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Bridge Network fee`,
+                                            message: bridgeNetworkFeeTooltip,
+                                        })
+                                    }}
+                                />
                             </ShadowRootTooltip>
                         </Typography>
                         <Typography className={classes.rowValue}>
@@ -568,7 +591,10 @@ than estimated, and any unused funds will remain in the original address.`}>
                     :   null}
                 </div>
             </div>
-            <PluginWalletStatusBar className={classes.footer} requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}>
+            <PluginWalletStatusBar
+                className={classes.footer}
+                requiredSupportPluginID={NetworkPluginID.PLUGIN_EVM}
+                disablePending={Sniffings.is_popup_page}>
                 {showStale ?
                     <ActionButton
                         fullWidth

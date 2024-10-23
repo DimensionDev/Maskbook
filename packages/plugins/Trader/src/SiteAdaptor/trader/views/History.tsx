@@ -1,6 +1,7 @@
+import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { TokenIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { LoadingStatus, TokenIcon } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useNetworks } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -9,8 +10,8 @@ import { format } from 'date-fns'
 import { Link } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { RoutePaths } from '../../constants.js'
-import { useSwapHistory } from '../../storage.js'
-import { t } from '@lingui/macro'
+import { useTradeHistory } from '../../storage.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -18,6 +19,12 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
         display: 'flex',
         flexDirection: 'column',
+        minHeight: 0,
+        overflow: 'auto',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
     },
     group: {
         display: 'flex',
@@ -122,9 +129,18 @@ const useStyles = makeStyles()((theme) => ({
 
 export function HistoryView() {
     const { classes, theme } = useStyles()
+    const { basepath } = useRuntime()
     const address = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const history = useSwapHistory(address)
+    const { data: history = EMPTY_LIST, isLoading } = useTradeHistory(address)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
+
+    if (isLoading) {
+        return (
+            <div className={classes.statusBox}>
+                <LoadingStatus />
+            </div>
+        )
+    }
 
     if (!history.length) {
         return (
@@ -137,14 +153,15 @@ export function HistoryView() {
             </Box>
         )
     }
+
     return (
-        <div className={classes.container}>
+        <div className={classes.container} no-scrollbar>
             {history.map((tx) => {
                 const { fromToken, toToken, fromTokenAmount, toTokenAmount } = tx
                 const chainId = tx.kind === 'swap' || !tx.kind ? tx.chainId : tx.fromChainId
                 const network = networks.find((x) => +x.chainId === chainId)
                 const toNetwork = tx.kind === 'bridge' ? networks.find((x) => x.chainId === tx.toChainId) : null
-                const url = urlcat(RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
+                const url = urlcat(basepath, RoutePaths.Transaction, { hash: tx.hash, chainId, mode: tx.kind })
                 return (
                     <div className={classes.group} key={tx.hash}>
                         <div className={classes.groupHeader}>

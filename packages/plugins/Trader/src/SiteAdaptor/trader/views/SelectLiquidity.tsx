@@ -15,7 +15,8 @@ const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        flexGrow: 1,
+        minHeight: 0,
         boxSizing: 'border-box',
         gap: theme.spacing(1.5),
     },

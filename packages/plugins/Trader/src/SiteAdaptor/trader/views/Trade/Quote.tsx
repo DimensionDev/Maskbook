@@ -4,14 +4,15 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { OKXBridgeQuote, OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact, leftShift, multipliedBy } from '@masknet/web3-shared-base'
+import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { bridges, DEFAULT_SLIPPAGE, RoutePaths } from '../../../constants.js'
 import { useGasManagement, useTrade } from '../../contexts/index.js'
+import { useRuntime } from '../../contexts/RuntimeProvider.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 import { useTokenPrice } from '../../hooks/useTokenPrice.js'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -69,6 +70,7 @@ interface QuoteProps extends BoxProps {
 
 export function Quote({ quote, ...props }: QuoteProps) {
     const { classes, theme, cx } = useStyles()
+    const { basepath, showToolTip } = useRuntime()
     const { chainId, disabledDexIds, expand, setExpand, isAutoSlippage, slippage, mode, bridgeQuote } = useTrade()
     const isSwap = mode === 'swap'
     const [forwardCompare, setForwardCompare] = useState(true)
@@ -103,6 +105,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
         return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed(2)
     }, [gasCost, bestRouter, nativeTokenPrice])
 
+    const slippageTooltip = t`Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund.`
     return (
         <Box {...props} className={cx(classes.quote, props.className)}>
             <div className={classes.infoRow}>
@@ -138,12 +141,22 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Slippage</Trans>
-                            <Icons.Questions size={16} />
+                            <ShadowRootTooltip title={slippageTooltip}>
+                                <Icons.Questions
+                                    size={16}
+                                    onClick={() => {
+                                        showToolTip({
+                                            title: t`Slippage`,
+                                            message: slippageTooltip,
+                                        })
+                                    }}
+                                />
+                            </ShadowRootTooltip>
                         </Typography>
                         <Typography
                             component={Link}
                             className={cx(classes.rowValue, classes.link)}
-                            to={{ pathname: RoutePaths.Slippage, search: `?mode=${mode}` }}>
+                            to={{ pathname: basepath + RoutePaths.Slippage, search: `?mode=${mode}` }}>
                             <TextOverflowTooltip
                                 as={ShadowRootTooltip}
                                 placement="top"
@@ -166,7 +179,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             <Typography
                                 component={Link}
                                 className={cx(classes.rowValue, classes.link)}
-                                to={{ pathname: RoutePaths.SelectLiquidity, search: '?mode=swap' }}>
+                                to={{ pathname: basepath + RoutePaths.SelectLiquidity, search: '?mode=swap' }}>
                                 {dexIdsCount}/{liquidityList.length}
                                 <Icons.ArrowRight size={20} />
                             </Typography>
@@ -181,8 +194,8 @@ export function Quote({ quote, ...props }: QuoteProps) {
                             className={cx(classes.rowValue, classes.link)}
                             to={
                                 isSwap ?
-                                    { pathname: RoutePaths.QuoteRoute, search: '?mode=swap' }
-                                :   { pathname: RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
+                                    { pathname: basepath + RoutePaths.QuoteRoute, search: '?mode=swap' }
+                                :   { pathname: basepath + RoutePaths.BridgeQuoteRoute, search: '?mode=bridge' }
                             }>
                             {!isSwap && bestRouter ?
                                 <span className={classes.bestRoute}>
