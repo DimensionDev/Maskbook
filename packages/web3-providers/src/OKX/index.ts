@@ -62,15 +62,16 @@ export class OKX {
                     return !blockedList.includes(x.tokenContractAddress.toLowerCase())
                 })
                 .map((x) => {
+                    const address = fromOkxNativeAddress(x.tokenContractAddress)
                     return {
-                        id: x.tokenContractAddress,
+                        id: address,
                         chainId,
                         name: x.tokenName,
                         symbol: x.tokenSymbol,
                         // string to number for /api/v5/dex/aggregator/all-tokens
                         decimals: +x.decimals,
                         logoURL: x.tokenLogoUrl,
-                        address: fromOkxNativeAddress(x.tokenContractAddress),
+                        address,
                         type: TokenType.Fungible,
                         schema: SchemaType.ERC20,
                     } satisfies FungibleToken<ChainId, SchemaType>

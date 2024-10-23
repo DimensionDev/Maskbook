@@ -154,6 +154,7 @@ export const TokenItem = memo(function TokenItem({
                         chainId={asset.chainId}
                         address={asset.address}
                         name={asset.name}
+                        logoURL={asset.logoURL}
                         size={36}
                     />
                     <NetworkIcon

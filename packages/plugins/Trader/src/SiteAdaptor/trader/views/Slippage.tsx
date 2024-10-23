@@ -10,7 +10,8 @@ const useStyles = makeStyles<void, 'active'>()((theme, _, refs) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
-        height: '100%',
+        minHeight: 0,
+        flexGrow: 1,
         boxSizing: 'border-box',
         gap: theme.spacing(1.5),
     },
