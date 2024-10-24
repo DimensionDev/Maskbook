@@ -806,7 +806,7 @@ type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
     name: string
     symbol: string
     amount: string
-    direction: string
+    direction: LiteralUnion<'send' | 'receive'>
 }
 
 export interface Transaction<ChainId, SchemaType> {

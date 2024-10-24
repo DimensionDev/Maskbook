@@ -1,10 +1,10 @@
 import { Select, Trans } from '@lingui/macro'
+import { Image } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import type { Social } from '@masknet/web3-providers/types'
 import { Typography, type TypographyProps } from '@mui/material'
 import { memo } from 'react'
 import { Label } from '../components/common.js'
-import { Image } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles<{ size: number }>()((theme, { size }) => ({
     summary: {
@@ -52,7 +52,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ post, ...rest }) {
     const pfp = post.author.pfp
 
     return (
-        <Typography {...rest} className={cx(classes.summary, rest.className)}>
+        <Typography component="div" {...rest} className={cx(classes.summary, rest.className)}>
             <Select
                 value={post.type}
                 _Post={

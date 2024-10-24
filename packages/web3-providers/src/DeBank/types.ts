@@ -69,6 +69,7 @@ export interface ProjectItem {
 export interface TokenItem {
     decimals: number
     display_symbol?: string
+    /** could be native token id, for example arb */
     id: string
     is_core: boolean
     is_swap_common?: boolean
