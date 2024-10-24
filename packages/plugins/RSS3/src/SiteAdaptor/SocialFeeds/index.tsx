@@ -1,14 +1,11 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
-import { FireflyFarcaster, Lens } from '@masknet/web3-providers'
-import { useInfiniteQuery, useQuery } from '@tanstack/react-query'
-import { memo } from 'react'
-import { SocialFeed } from './SocialFeed.js'
-import { Box, Skeleton, Typography } from '@mui/material'
-import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
-import { range, sortBy } from 'lodash-es'
-import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Trans } from '@lingui/macro'
+import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
+import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Box, Skeleton, Typography } from '@mui/material'
+import { range } from 'lodash-es'
+import { memo, type HTMLProps } from 'react'
+import { useSocialFeeds } from '../hooks/useSocialFeeds.js'
+import { SocialFeed } from './SocialFeed.js'
 
 const useStyles = makeStyles()((theme) => ({
     loading: {
@@ -19,81 +16,24 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
-    address: string | undefined
-    userId: string | undefined
+export interface SocialFeedsProps extends HTMLProps<HTMLDivElement> {
+    address?: string
+    userId?: string
 }
-export const SocialFeeds = memo<Props>(function SocialFeeds({ userId }) {
+export const SocialFeeds = memo<SocialFeedsProps>(function SocialFeeds({ userId, address, ...rest }) {
     const { classes } = useStyles()
-    const { data: farcasterAccounts = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
-    const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
-
-    const lensHandles = lensAccounts.map((x) => x.handle)
-    const { data: lensIds = EMPTY_LIST } = useQuery({
-        queryKey: ['lens', 'popup-list', lensHandles],
-        queryFn: async () => {
-            const profiles = await Lens.getProfilesByHandles(lensHandles)
-            return profiles.map((x) => x.id)
-        },
-    })
-    const fids = farcasterAccounts.map((x) => x.id.toString())
-    console.log({ lensAccounts, lensIds })
-
-    const {
-        data: farcasterPosts = EMPTY_LIST,
-        error: farcasterError,
-        fetchNextPage: fetchNextFarcasterPage,
-        isFetchingNextPage: isFetchingFarcasterNextPage,
-        isPending: loadingFarcasterFeeds,
-        hasNextPage: hasNextFarcasterPage,
-    } = useInfiniteQuery({
-        queryKey: ['social-feeds', 'farcaster', fids],
-        queryFn: async ({ pageParam }) => {
-            return FireflyFarcaster.getPostsByProfileId(fids, pageParam)
-        },
-        initialPageParam: undefined as any,
-        getNextPageParam: (lastPage) => lastPage?.nextIndicator,
-        select(res) {
-            return res.pages.flatMap((page) => page.data)
-        },
-    })
-
-    const {
-        data: lensPosts = EMPTY_LIST,
-        error: lensError,
-        fetchNextPage: fetchNextLensPage,
-        isFetchingNextPage: isFetchingLensNextPage,
-        isPending: loadingLensFeeds,
-        hasNextPage: hasNextLensPage,
-    } = useInfiniteQuery({
-        queryKey: ['social-feeds', 'lens', lensIds],
-        queryFn: async ({ pageParam }) => {
-            return Lens.getPostsByProfileId(lensIds, pageParam)
-        },
-        initialPageParam: undefined as any,
-        getNextPageParam: (lastPage) => lastPage?.nextIndicator,
-        select(res) {
-            return res.pages.flatMap((page) => page.data)
-        },
-    })
-
-    const error = farcasterError || lensError
-    console.log({ hasNextPage: hasNextFarcasterPage, isFetchingFarcasterNextPage, farcasterError, lensError })
-    const feeds = sortBy([...farcasterPosts, ...lensPosts], (x) => (x.timestamp ? -x.timestamp : 0))
-    const loading = isFetchingFarcasterNextPage || loadingFarcasterFeeds || isFetchingLensNextPage || loadingLensFeeds
-    const hasNextPage = hasNextFarcasterPage || hasNextLensPage
-    console.log({ farcasterPosts, lensPosts })
+    const { error, feeds, loading, isInitialLoading, hasNextPage, fetchNextPage } = useSocialFeeds({ userId, address })
 
     if (error && !feeds.length)
         return (
             <Box p={2} boxSizing="border-box">
                 <Box mt="100px" color={(theme) => theme.palette.maskColor.main}>
-                    <ReloadStatus onRetry={fetchNextFarcasterPage} />
+                    <ReloadStatus onRetry={fetchNextPage} />
                 </Box>
             </Box>
         )
 
-    if (loading && !feeds.length) {
+    if (isInitialLoading || (loading && !feeds.length)) {
         return (
             <Box p={2} boxSizing="border-box">
                 {range(3).map((i) => (
@@ -112,18 +52,13 @@ export const SocialFeeds = memo<Props>(function SocialFeeds({ userId }) {
         )
     }
     return (
-        <div>
+        <div {...rest}>
             {feeds.map((post) => (
                 <SocialFeed key={post.postId} post={post} />
             ))}
 
             {hasNextPage ?
-                <ElementAnchor
-                    height={10}
-                    callback={() => {
-                        fetchNextFarcasterPage()
-                        fetchNextLensPage()
-                    }}>
+                <ElementAnchor height={10} callback={fetchNextPage}>
                     {loading ?
                         <LoadingBase className={classes.loading} />
                     :   null}

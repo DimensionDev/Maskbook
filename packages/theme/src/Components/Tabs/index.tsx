@@ -199,7 +199,7 @@ export function MaskTabList(props: MaskTabListProps) {
     // #endregion
 
     const children = Children.map(props.children, (child) => {
-        if (!isValidElement(child)) return null // throw new TypeError('Invalided Children')
+        if (!isValidElement(child)) throw new TypeError('Invalided Children')
         const childProps: any = child.props
         const extra = {
             'aria-controls': getPanelId(context, childProps.value),

@@ -129,15 +129,6 @@ const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = creat
     priority: 2,
 })
 
-const LegacySocialTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
-    slot: 'profile-page',
-    label: 'LegacySocial',
-    priority: 1,
-    feedsPageProps: {
-        tags: [RSS3BaseAPI.Tag.Social],
-    },
-})
-
 const SocialTabConfig: Plugin.SiteAdaptor.ProfileTab = {
     ID: `${PLUGIN_ID}_social_feeds`,
     label: 'Social',
@@ -173,17 +164,28 @@ const SocialTabConfigInProfileCard: Plugin.SiteAdaptor.ProfileTab = {
         shouldDisplay,
     },
 }
-const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = createSearchTabConfig({
-    slot: 'search',
+const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
+    ID: `${PLUGIN_ID}_Social`,
     label: 'Social',
-    feedsPageProps: {
-        tags: [RSS3BaseAPI.Tag.Social],
-        height: 478,
-        overflow: 'auto',
-        listProps,
-    },
     priority: 1,
-})
+    UI: {
+        TabContent({ result }) {
+            const socialAccount = {
+                pluginID: NetworkPluginID.PLUGIN_EVM,
+                address: result.type === SearchResultType.Domain ? result.address ?? '' : result.keyword,
+                label: result.type === SearchResultType.Domain ? result.keyword : '',
+                supportedAddressTypes: [SocialAddressType.ENS],
+            }
+            return (
+                <Box style={{ minHeight: 300 }}>
+                    <EVMWeb3ContextProvider>
+                        <SocialFeeds key={socialAccount.address} address={socialAccount.address} />
+                    </EVMWeb3ContextProvider>
+                </Box>
+            )
+        },
+    },
+}
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -204,7 +206,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             />
         )
     }),
-    ProfileTabs: [FinanceTabConfig, SocialTabConfig, LegacySocialTabConfig],
+    ProfileTabs: [FinanceTabConfig, SocialTabConfig],
     ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard],
     SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult],
 }

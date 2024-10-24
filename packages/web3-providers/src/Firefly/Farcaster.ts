@@ -7,7 +7,7 @@ import { formatFarcasterPostFromFirefly, resolveFireflyResponseData } from './he
 import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export class FireflyFarcaster {
-    static async getPostsByProfileId(fids: string | string[], indicator?: PageIndicator) {
+    static async getPostsByProfileId(fids: string | string[] | number | number[], indicator?: PageIndicator) {
         const url = urlcat(FIREFLY_BASE_URL, '/v2/user/timeline/farcaster/casts')
         const response = await fetchJSON<FireflyFarcasterAPI.CastsResponse>(url, {
             method: 'POST',
@@ -15,7 +15,7 @@ export class FireflyFarcaster {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                fids: Array.isArray(fids) ? fids : [fids],
+                fids: Array.isArray(fids) ? fids.map((x) => x.toString()) : [fids.toString()],
                 size: 25,
                 cursor: indicator?.id && !isZero(indicator.id) ? indicator.id : undefined,
             }),

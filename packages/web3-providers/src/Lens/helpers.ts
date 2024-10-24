@@ -1,3 +1,4 @@
+// cspell:ignore ment,agment,ment,Multirecipient
 import type {
     AnyPublicationFragment,
     ArticleMetadataV3Fragment,

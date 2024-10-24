@@ -671,17 +671,11 @@ export class Lens {
             },
             cursor: indicator?.id && !isZero(indicator.id) ? indicator.id : undefined,
         })
-        try {
-            const page = createPageable(
-                result.items.map(formatLensPost),
-                createIndicator(indicator),
-                result.pageInfo.next ? createNextIndicator(indicator, result.pageInfo.next) : undefined,
-            )
-            return page
-        } catch (err) {
-            console.log('err', err)
-            debugger
-            throw err
-        }
+        const page = createPageable(
+            result.items.map(formatLensPost),
+            createIndicator(indicator),
+            result.pageInfo.next ? createNextIndicator(indicator, result.pageInfo.next) : undefined,
+        )
+        return page
     }
 }

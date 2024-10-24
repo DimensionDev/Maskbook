@@ -129,14 +129,9 @@ export const composePollFrameUrl = (url: string, source: Social.SocialSource) =>
 }
 
 export function getPollFrameUrl(pollId: string, source?: Social.SocialSource, author?: Social.Profile) {
-    const profile = author
-    console.log('author', profile ? getProfileUrl(profile) : null, typeof profile)
-    console.log('handle', profile?.handle)
-    console.log('source', source)
-
     return urlcat(FRAME_SERVER_URL, `/polls/${pollId}`, {
-        author: profile ? getProfileUrl(profile) : null,
-        handle: profile?.handle,
+        author: author ? getProfileUrl(author) : null,
+        handle: author?.handle,
         source: source?.toLowerCase(),
     })
 }

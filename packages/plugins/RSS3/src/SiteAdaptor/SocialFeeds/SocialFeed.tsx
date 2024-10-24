@@ -5,83 +5,209 @@ import { Social } from '@masknet/web3-providers/types'
 import { Link, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { memo, type HTMLProps } from 'react'
-import { Trans, Select } from '@lingui/macro'
 import { formatTimestamp } from '../components/share.js'
-import { Label } from '../components/common.js'
+import { SocialFeedDetailsModal } from '../modals/modals.js'
+import { FeedSummary } from './FeedSummary.js'
+import { useMarkdownStyles } from '../hooks/index.js'
 
-const useStyles = makeStyles<void, 'image'>()((theme, _, refs) => ({
-    feed: {
-        cursor: 'pointer',
-        padding: theme.spacing(1.5),
-        '&:hover': {
-            backgroundColor: theme.palette.maskColor.bg,
+const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body' | 'playButton' | 'verbose'>()(
+    (theme, _, refs) => ({
+        markdown: {},
+        inspectable: {
+            cursor: 'pointer',
+            padding: theme.spacing(1.5),
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.bg,
+            },
+            [`.${refs.markdown}`]: {
+                display: '-webkit-box',
+                WebkitBoxOrient: 'vertical',
+                WebkitLineClamp: 3,
+                overflow: 'hidden',
+                '& *': {
+                    display: 'contents',
+                },
+            },
         },
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        gap: theme.spacing(1),
-    },
-    timestamp: {
-        fontSize: 14,
-        fontWeight: 400,
-        color: theme.palette.maskColor.third,
-    },
-    body: {
-        display: 'flex',
-        flexDirection: 'row',
-        marginTop: theme.spacing(0.5),
-        [`.${refs.image}`]: {
+        header: {
+            display: 'flex',
+            alignItems: 'center',
+            gap: theme.spacing(1),
+        },
+        timestamp: {
+            fontSize: 14,
+            fontWeight: 400,
+            color: theme.palette.maskColor.third,
+        },
+        body: {
+            display: 'flex',
+            flexDirection: 'row',
+            marginTop: theme.spacing(0.5),
+            [`.${refs.image}`]: {
+                width: 64,
+                aspectRatio: '1 / 1',
+                borderRadius: 8,
+                overflow: 'hidden',
+                flexShrink: 0,
+            },
+        },
+        failedImage: {},
+        soloImage: {
+            // If only single image, place it center
+            marginTop: theme.spacing(5),
+            [`&.${refs.image}`]: {
+                marginTop: theme.spacing(5),
+            },
+        },
+        summary: {
+            color: theme.palette.maskColor.main,
+            display: 'flex',
+            alignItems: 'center',
+            whiteSpace: 'pre',
+            overflow: 'auto',
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        image: {
+            img: {
+                objectFit: 'cover',
+            },
+            [`& + .${refs.markdown}`]: {
+                marginLeft: theme.spacing(1.5),
+            },
+        },
+        playButton: {
+            color: theme.palette.maskColor.main,
             width: 64,
-            aspectRatio: '1 / 1',
-            borderRadius: 8,
-            overflow: 'hidden',
+            height: 64,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
             flexShrink: 0,
+            backgroundColor: theme.palette.maskColor.bg,
+            [`& + .${refs.markdown}`]: {
+                marginLeft: theme.spacing(1.5),
+            },
         },
-    },
-    summary: {
-        color: theme.palette.maskColor.main,
-        display: 'flex',
-        alignItems: 'center',
-        whiteSpace: 'pre',
-        overflow: 'auto',
-        scrollbarWidth: 'none',
-        '&::-webkit-scrollbar': {
-            display: 'none',
+        verbose: {
+            [`.${refs.body}`]: {
+                flexDirection: 'column-reverse',
+            },
+            [`.${refs.image}`]: {
+                width: '100%',
+                marginTop: theme.spacing(1.5),
+                height: 'auto',
+                [`& + .${refs.markdown}`]: {
+                    marginTop: theme.spacing(1.5),
+                    marginLeft: 0,
+                },
+                aspectRatio: 'auto',
+                img: {
+                    objectFit: 'unset',
+                },
+            },
+            [`.${refs.image}.${refs.failedImage}`]: {
+                height: 100,
+                width: 100,
+                marginLeft: 'auto',
+                marginRight: 'auto',
+            },
+            [`.${refs.markdown}`]: {
+                marginLeft: 0,
+            },
+            [`.${refs.playButton}`]: {
+                marginLeft: 'auto',
+                marginRight: 'auto',
+            },
         },
-    },
-    image: {
-        img: {
-            objectFit: 'cover',
+
+        // quoted post
+        quoted: {
+            marginBottom: theme.spacing(1),
         },
-    },
-    playButton: {
-        color: theme.palette.maskColor.main,
-        width: 64,
-        height: 64,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        flexShrink: 0,
-        backgroundColor: theme.palette.maskColor.bg,
-    },
-}))
+        line: {
+            width: 1,
+            borderLeft: `1px solid ${theme.palette.maskColor.line}`,
+            marginLeft: 10,
+        },
+        target: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: theme.spacing(1, 0),
+            color: theme.palette.maskColor.main,
+            fontSize: 14,
+            [`.${refs.image}`]: {
+                width: 120,
+                height: 90,
+                borderRadius: 8,
+                overflow: 'hidden',
+                flexShrink: 0,
+                marginRight: theme.spacing(1.5),
+            },
+            [`&.${refs.verbose}`]: {
+                display: 'block',
+                [`.${refs.image}`]: {
+                    width: '100%',
+                    height: 'auto',
+                    borderRadius: 8,
+                    marginRight: 0,
+                    marginTop: theme.spacing(1),
+                },
+                [`.${refs.image}.${refs.failedImage}`]: {
+                    height: 100,
+                    width: 100,
+                    marginLeft: 'auto',
+                    marginRight: 'auto',
+                    marginTop: theme.spacing(1),
+                },
+                [`.${refs.markdown}`]: {
+                    marginLeft: 0,
+                    maxHeight: 'none',
+                    display: 'block',
+                },
+            },
+        },
+        quotedPost: {
+            display: 'flex',
+            gap: theme.spacing(1.5),
+        },
+    }),
+)
 
 const PlatformIconMap = {
     [Social.Source.Farcaster]: Icons.Farcaster,
     [Social.Source.Lens]: Icons.Lens,
 }
 
-interface Props extends HTMLProps<HTMLDivElement> {
+export interface SocialFeedProps extends HTMLProps<HTMLDivElement> {
     post: Social.Post
+    verbose?: boolean
 }
-export const SocialFeed = memo<Props>(function SocialFeed({ post, className, ...rest }) {
+export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verbose, className, ...rest }) {
     const { classes, cx } = useStyles()
+    const { classes: mdClasses } = useMarkdownStyles()
     const PlatformIcon = PlatformIconMap[post.source]
-    const handle = post.author.fullHandle || post.author.handle
     const media = post.metadata.content?.asset
+    const postContent = post.metadata.content?.content
+
+    const isImagePost = postContent ? /https?:\/\/.*?\.(jpg|png)$/.test(postContent) : false
+    const soloImage = verbose && isImagePost
+
+    const imageSize = verbose ? '100%' : 64
+    const target = post.type === 'Quote' ? post.quoteOn : null
+
     return (
-        <article {...rest} className={cx(classes.feed, className)}>
+        <article
+            {...rest}
+            className={cx(className, verbose ? classes.verbose : classes.inspectable)}
+            onClick={() => {
+                if (verbose) return
+                SocialFeedDetailsModal.open({
+                    post,
+                })
+            }}>
             <div className={classes.header}>
                 {PlatformIcon ?
                     <PlatformIcon height={18} width="auto" />
@@ -94,35 +220,49 @@ export const SocialFeed = memo<Props>(function SocialFeed({ post, className, ...
                     </ShadowRootTooltip>
                 :   null}
             </div>
-            <Typography className={classes.summary}>
-                <Select
-                    value={post.type}
-                    _Post={
-                        <Trans>
-                            <Label>{handle}</Label> published a post on <Label>{post.source}</Label>
-                        </Trans>
-                    }
-                    _Comment={
-                        <Trans>
-                            <Label>{handle}</Label> made a comment on <Label>{post.source}</Label>
-                        </Trans>
-                    }
-                    other={
-                        <Trans>
-                            <Label>{handle}</Label> post stuff on <Label>{post.source}</Label>
-                        </Trans>
-                    }
-                />
-            </Typography>
+            {target ?
+                <div className={classes.quoted}>
+                    <FeedSummary className={classes.summary} post={target} mt={0.5} />
+                    <div className={classes.quotedPost}>
+                        <div className={classes.line} />
+                        <article className={cx(classes.target, verbose ? classes.verbose : null)}>
+                            {!verbose && target.metadata.content?.asset?.type === 'Image' ?
+                                <Image
+                                    classes={{ container: classes.image, failed: classes.failedImage }}
+                                    src={target.metadata.content?.asset.uri}
+                                    width={120}
+                                    height={90}
+                                />
+                            :   null}
+                            <div>
+                                {target.metadata.content?.content ?
+                                    <Markdown className={cx(mdClasses.markdown, classes.markdown)}>
+                                        {target.metadata.content?.content}
+                                    </Markdown>
+                                :   null}
+                            </div>
+                            {verbose && target.metadata.content?.asset?.type === 'Image' ?
+                                <Image
+                                    classes={{ container: classes.image, failed: classes.failedImage }}
+                                    src={target.metadata.content?.asset.uri}
+                                    width="100%"
+                                />
+                            :   null}
+                        </article>
+                    </div>
+                </div>
+            :   null}
+            <FeedSummary post={post} mt={0.5} />
             <div className={classes.body}>
                 {media?.type === 'Image' ?
                     <Image
                         classes={{
-                            container: classes.image,
+                            container: cx(classes.image, soloImage ? classes.soloImage : undefined),
+                            failed: classes.failedImage,
                         }}
                         src={media.uri}
-                        height={64}
-                        width={64}
+                        height={imageSize}
+                        width={imageSize}
                     />
                 : media?.type === 'Video' ?
                     <Link
@@ -134,7 +274,9 @@ export const SocialFeed = memo<Props>(function SocialFeed({ post, className, ...
                     </Link>
                 :   null}
                 {post.metadata.content?.content ?
-                    <Markdown>{post.metadata.content?.content}</Markdown>
+                    <Markdown defaultStyle={!verbose} className={classes.markdown}>
+                        {post.metadata.content?.content}
+                    </Markdown>
                 :   null}
             </div>
         </article>
