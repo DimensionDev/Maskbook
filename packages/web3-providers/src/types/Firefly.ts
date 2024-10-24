@@ -107,6 +107,23 @@ export namespace FireflyConfigAPI {
         code: number
         data: UnionProfile
     }
+
+    export interface Collection {
+        collection_details: {
+            top_contracts: string[]
+            name: string
+            description: string
+            image_url: string
+        }
+    }
+
+    export interface CollectionsResponse {
+        code: number
+        data: {
+            collections: Collection[]
+            cursor: string
+        }
+    }
 }
 
 export namespace FireflyRedPacketAPI {

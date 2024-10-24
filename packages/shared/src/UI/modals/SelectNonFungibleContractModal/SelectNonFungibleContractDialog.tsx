@@ -2,7 +2,11 @@ import { Icons } from '@masknet/icons'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useAllNonFungibleCollections,
+    useWeb3State,
+} from '@masknet/web3-hooks-base'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { DialogContent, List } from '@mui/material'
@@ -89,16 +93,9 @@ export const SelectNonFungibleContractDialog = memo(
         const handleClear = () => {
             setKeyword('')
         }
-        const {
-            data: collections = EMPTY_LIST,
-            isPending,
-            isError,
-            refetch,
-        } = useNonFungibleCollections(pluginID, {
-            chainId,
-            schemaType,
-        })
+        const { data: collections = EMPTY_LIST, isPending, isError, refetch } = useAllNonFungibleCollections(pluginID)
 
+        console.log(collections)
         const { Token } = useWeb3State(pluginID)
         const account = useAccount().toLowerCase()
         const customizedCollectionMap = useSubscription(Token?.nonFungibleCollectionMap! ?? EMPTY_ENTRY)
