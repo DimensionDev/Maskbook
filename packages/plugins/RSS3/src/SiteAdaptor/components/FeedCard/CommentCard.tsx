@@ -8,7 +8,7 @@ import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { AccountLabel, LinkifyOptions, htmlToPlain } from '../common.js'
-import { useMarkdownStyles } from './useMarkdownStyles.js'
+import { useMarkdownStyles } from '../../hooks/index.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {

@@ -75,6 +75,15 @@ export namespace FireflyConfigAPI {
 
         attributes: any[]
     }
+    export interface LensProfileV3 {
+        id: string
+        ownedBy: string
+        nameSpace: string
+        /** @example "bob" */
+        localName: string
+        /** @example "lens/bob" */
+        fullHandle: string
+    }
     export interface FarcasterProfile {
         id: number
         fid: string
@@ -107,6 +116,8 @@ export namespace FireflyConfigAPI {
         lensProfiles: LensProfile[]
         farcasterProfiles: FarcasterProfile[]
         walletProfiles: WalletProfile[]
+        lensProfilesV2: unknown[]
+        lensProfilesV3: LensProfileV3[]
     }
     export interface UnionProfileResponse {
         code: number

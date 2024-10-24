@@ -6,8 +6,8 @@ import Linkify from 'linkify-react'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { LinkifyOptions, htmlToPlain } from '../common.js'
-import { useMarkdownStyles } from './useMarkdownStyles.js'
 import { VoteAction } from '../FeedActions/VoteAction.js'
+import { useMarkdownStyles } from '../../hooks/useMarkdownStyles.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

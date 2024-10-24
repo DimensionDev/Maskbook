@@ -9,8 +9,8 @@ import { useCallback } from 'react'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { LinkifyOptions, htmlToPlain } from '../common.js'
-import { useMarkdownStyles } from './useMarkdownStyles.js'
 import { NoteAction } from '../FeedActions/NoteAction.js'
+import { useMarkdownStyles } from '../../hooks/index.js'
 
 const useStyles = makeStyles<
     void,

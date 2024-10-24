@@ -1,9 +1,18 @@
-import { NameServiceID } from '@masknet/shared-base'
+import { LensClient, production, PublicationType } from '@lens-protocol/client'
+import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    NameServiceID,
+    type PageIndicator,
+} from '@masknet/shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { isValidAddress } from '@masknet/web3-shared-evm'
 import { first } from 'lodash-es'
 import { LimitType, type FollowModuleTypedData, type LensBaseAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { LENS_ROOT_API } from './constants.js'
+import { formatLensPost } from './helpers.js'
 
 const LensProfileQuery = `
           id
@@ -87,6 +96,7 @@ const LensProfileQuery = `
           }
 `
 
+let lensClient: LensClient | null = null
 export class Lens {
     static readonly id = NameServiceID.Lens
     static async getProfileByHandle(handle: string): Promise<LensBaseAPI.Profile> {
@@ -645,5 +655,27 @@ export class Lens {
         })
 
         return result?.data?.dataAvailabilityTransaction?.publicationId
+    }
+
+    static async getPostsByProfileId(profileIds: string | string[], indicator?: PageIndicator) {
+        if (!lensClient) {
+            lensClient = new LensClient({
+                environment: production,
+            })
+        }
+        const result = await lensClient.publication.fetchAll({
+            where: {
+                from: Array.isArray(profileIds) ? profileIds : [profileIds],
+                metadata: null,
+                publicationTypes: [PublicationType.Post, PublicationType.Mirror, PublicationType.Quote],
+            },
+            cursor: indicator?.id && !isZero(indicator.id) ? indicator.id : undefined,
+        })
+        const page = createPageable(
+            result.items.map(formatLensPost),
+            createIndicator(indicator),
+            result.pageInfo.next ? createNextIndicator(indicator, result.pageInfo.next) : undefined,
+        )
+        return page
     }
 }
