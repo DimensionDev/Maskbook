@@ -4,7 +4,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Box, Skeleton, Typography } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, type HTMLProps } from 'react'
-import { useSocialFeeds } from '../hooks/useSocialFeeds.js'
+import { useSocialFeeds } from './useSocialFeeds.js'
 import { SocialFeed } from './SocialFeed.js'
 
 const useStyles = makeStyles()((theme) => ({

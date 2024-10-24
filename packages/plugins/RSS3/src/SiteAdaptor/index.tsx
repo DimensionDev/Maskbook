@@ -13,6 +13,7 @@ import { toggleFilter, useInsideFeedsTab, useIsTabActionEnabled } from './emitte
 import { type FeedsPageProps, FeedsPage } from './FeedsPage.js'
 import { Modals } from './modals/index.js'
 import { SocialFeeds } from './SocialFeeds/index.js'
+import { FinanceFeeds } from './FinanceFeeds/index.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -92,7 +93,18 @@ const createSearchTabConfig = ({
 }
 
 const FinanceTags = [RSS3BaseAPI.Tag.Exchange, RSS3BaseAPI.Tag.Transaction]
-const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = createProfileTabConfig({
+const FinanceTabConfig: Plugin.SiteAdaptor.ProfileTab = {
+    ID: `${PLUGIN_ID}_finance_feeds`,
+    label: 'Finance',
+    priority: 2,
+    UI: {
+        TabContent({ socialAccount }) {
+            return <FinanceFeeds address={socialAccount?.address} />
+        },
+    },
+}
+
+const LegacyFinanceTabConfig = createProfileTabConfig({
     slot: 'profile-page',
     label: 'Finance',
     feedsPageProps: { tags: FinanceTags },
@@ -177,7 +189,7 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
                 supportedAddressTypes: [SocialAddressType.ENS],
             }
             return (
-                <Box style={{ minHeight: 300 }}>
+                <Box minHeight={300} sx={{ scrollbarWidth: 'none' }}>
                     <EVMWeb3ContextProvider>
                         <SocialFeeds key={socialAccount.address} address={socialAccount.address} />
                     </EVMWeb3ContextProvider>
@@ -206,7 +218,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             />
         )
     }),
-    ProfileTabs: [FinanceTabConfig, SocialTabConfig],
+    ProfileTabs: [LegacyFinanceTabConfig, FinanceTabConfig, SocialTabConfig],
     ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard],
     SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult],
 }
