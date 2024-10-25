@@ -34,6 +34,8 @@
   "dependencies": {
     "@bonfida/spl-name-service": "^0.1.50",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
+    "@lens-protocol/client": "^2.3.1",
+    "@lens-protocol/metadata": "^1.2.0",
     "@masknet/flags": "workspace:^",
     "@masknet/icons": "workspace:^",
     "@masknet/injected-script": "workspace:^",

@@ -6,8 +6,8 @@ import { type HTMLProps, memo, useState } from 'react'
 import { CardType } from '../share.js'
 import { Slider } from '../Slider.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { useMarkdownStyles } from './useMarkdownStyles.js'
 import { DonationAction } from '../FeedActions/DonationAction.js'
+import { useMarkdownStyles } from '../../hooks/useMarkdownStyles.js'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {

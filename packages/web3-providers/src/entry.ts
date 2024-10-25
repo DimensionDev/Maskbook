@@ -104,7 +104,7 @@ export { Airdrop } from './Airdrop/index.js'
 
 // Firefly
 
-export { FireflyConfig, FireflyRedPacket, FireflyTwitter } from './Firefly/index.js'
+export { FireflyConfig, FireflyRedPacket, FireflyTwitter, FireflyFarcaster } from './Firefly/index.js'
 
 // FiatCurrencyRate
 export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'

@@ -51,9 +51,9 @@ export function TokenSwapAction({ feed, ...rest }: TokenSwapActionProps) {
                             values={{
                                 user,
                                 from_value: formatValue(metadata?.from),
-                                from_symbol: metadata?.from.symbol ?? 'Unknown Token',
+                                from_symbol: metadata?.from?.symbol ?? 'Unknown Token',
                                 to_value: formatValue(metadata?.to),
-                                to_symbol: metadata?.to.symbol ?? 'Unknown Token',
+                                to_symbol: metadata?.to?.symbol ?? 'Unknown Token',
                                 platform: feed.platform!,
                             }}
                             components={{
