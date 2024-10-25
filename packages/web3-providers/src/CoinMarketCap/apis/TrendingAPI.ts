@@ -38,7 +38,7 @@ async function getCoinInfo(id: string) {
         /** id, coin-info pair */
         data: Record<string, CoinInfo>
         status: Status
-    }>(`${CMC_BASE_URL}/cryptocurrency/info?${params.toString()}`, {
+    }>(`${CMC_BASE_URL}/v2/cryptocurrency/info?${params.toString()}`, {
         cache: 'default',
     })
     return {
@@ -67,7 +67,7 @@ async function getLatestMarketPairs(id: string, currency: string) {
                 symbol: string
             }
             status: Status
-        }>(`${CMC_BASE_URL}/cryptocurrency/market-pairs/latest?${params.toString()}`, {
+        }>(`${CMC_BASE_URL}/v2/cryptocurrency/market-pairs/latest?${params.toString()}`, {
             cache: 'default',
         })
     } catch {
@@ -100,7 +100,7 @@ class CoinMarketCapTrendingAPI implements TrendingAPI.Provider<ChainId> {
 
         const response = await fetchFromCoinMarketCap<
             ResultData<Record<string, Record<string, TrendingAPI.Stat>> | TrendingAPI.HistoricalCoinInfo>
-        >(`${CMC_BASE_URL}/cryptocurrency/quotes/historical?${params.toString()}`, {
+        >(`${CMC_BASE_URL}/v1/cryptocurrency/quotes/historical?${params.toString()}`, {
             cache: 'default',
         })
 
