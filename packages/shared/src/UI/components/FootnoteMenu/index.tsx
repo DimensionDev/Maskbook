@@ -97,7 +97,7 @@ export function FootnoteMenu(props: FootnoteMenuProps) {
                 </Typography>
                 {children}
             </Link>
-            {menu}
+            {options.length ? menu : null}
         </>
     )
 }
