@@ -14,7 +14,7 @@ import {
 } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
-import { PostInfoContext, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { PostInfoContext, usePostInfoDetails, usePostInfoPostIVIdentifier } from '@masknet/plugin-infra/content-script'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
 import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRecipientsList.js'
 import Services from '#services'
@@ -52,7 +52,7 @@ const DecryptPostSuccessBase = memo(function DecryptPostSuccessNoShare(
     props: React.PropsWithChildren<DecryptPostSuccessProps>,
 ) {
     const { message, author, postedBy } = props
-    const iv = usePostInfoDetails.postIVIdentifier()
+    const iv = usePostInfoPostIVIdentifier()
 
     useEffect(() => {
         if (message.meta || !iv?.toText()) return
@@ -146,7 +146,7 @@ interface Props {
 }
 function AppendShareDetail({ recipients, selectedRecipients, onClose, whoAmI, retry }: Props) {
     const info = useContext(PostInfoContext)!
-    const iv = usePostInfoDetails.postIVIdentifier()!
+    const iv = usePostInfoPostIVIdentifier()!
 
     useEffect(recipients.request, [])
 

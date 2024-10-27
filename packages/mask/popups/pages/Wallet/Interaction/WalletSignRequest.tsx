@@ -59,6 +59,7 @@ export function WalletSignRequest(props: InteractionItemProps) {
         interactingWallet = String(interactingWallet)
 
         const { useInteractionWallet } = useInteractionWalletContext()
+        // eslint-disable-next-line react-compiler/react-compiler
         useInteractionWallet(interactingWallet)
     }
     const rawMessage = useMemo((): RawSigningMessage | undefined => {

@@ -162,8 +162,8 @@ export const RecipientSelect = memo(({ className }: Props) => {
                     horizontal: 'center',
                 },
                 disableScrollLock: true,
-                container: selectRef.current,
-                anchorEl: selectRef.current,
+                container: () => selectRef.current,
+                anchorEl: () => selectRef.current!,
                 BackdropProps: {
                     invisible: true,
                 },

@@ -355,7 +355,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             disableScrollLock={false}
                                             open={walletMenuOpen}
                                             onClose={closeMenu}
-                                            anchorEl={titleRef.current}
+                                            anchorEl={() => titleRef.current!}
                                             onAddressChange={openRss3Profile}
                                             collectionList={collectionList}
                                             socialAccounts={socialAccounts}

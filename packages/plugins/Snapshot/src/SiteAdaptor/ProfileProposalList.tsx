@@ -166,8 +166,8 @@ interface ProfileProposalProps {
 function ProfileProposalListItem(props: ProfileProposalProps) {
     const { proposal } = props
     const { classes } = useStyles({})
-    const ref = useRef<HTMLLIElement | null>(null)
-    const entry = useIntersectionObserver(ref.current, {})
+    const ref = useRef<HTMLLIElement>(null!)
+    const entry = useIntersectionObserver(ref, {})
     const [isViewed, setIsViewed] = useState(false)
 
     if (!isViewed && entry?.isIntersecting && entry.intersectionRatio > 0) setIsViewed(true)

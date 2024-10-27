@@ -248,6 +248,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         previewInfo,
         control,
         t,
+        // eslint-disable-next-line react-compiler/react-compiler
         JSON.stringify(errors),
         backupWallets,
         setBackupWallets,

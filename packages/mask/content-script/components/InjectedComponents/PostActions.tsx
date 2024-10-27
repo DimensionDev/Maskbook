@@ -2,7 +2,7 @@ import {
     createInjectHooksRenderer,
     Plugin,
     useActivatedPluginsSiteAdaptor,
-    usePostInfoDetails,
+    usePostInfoAuthor,
 } from '@masknet/plugin-infra/content-script'
 
 const ActionsRenderer = createInjectHooksRenderer(
@@ -11,7 +11,7 @@ const ActionsRenderer = createInjectHooksRenderer(
 )
 
 export function PostActions() {
-    const identifier = usePostInfoDetails.author()
+    const identifier = usePostInfoAuthor()
     if (!identifier) return null
     return <ActionsRenderer identity={identifier} slot={Plugin.SiteAdaptor.TipsSlot.Post} />
 }

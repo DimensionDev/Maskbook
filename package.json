@@ -83,6 +83,7 @@
     "eslint-import-resolver-typescript": "^3.6.3",
     "eslint-plugin-i": "^2.29.1",
     "eslint-plugin-lingui": "^0.4.0",
+    "eslint-plugin-react-compiler": "19.0.0-beta-8a03594-20241020",
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-tss-unused-classes": "^1.0.3",
     "eslint-plugin-unicorn": "^56.0.0",

@@ -6,7 +6,9 @@ export interface CSSVariableInjectorProps extends React.PropsWithChildren {
     useTheme?: () => Theme
 }
 export function CSSVariableInjector(props: CSSVariableInjectorProps) {
-    const { current: useConsistentTheme } = useRef(props.useTheme || useTheme)
+    // eslint-disable-next-line react-compiler/react-compiler
+    const useConsistentTheme = useRef(props.useTheme || useTheme).current
+    // eslint-disable-next-line react-compiler/react-compiler
     const colorScheme = useConsistentTheme().palette.mode
 
     return <GlobalStyles styles={CSSVariableInjectorCSS(colorScheme)} />

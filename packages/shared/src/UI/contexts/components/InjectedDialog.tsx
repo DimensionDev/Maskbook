@@ -144,6 +144,7 @@ export function InjectedDialog(props: InjectedDialogProps) {
     const clean = site === EnhanceableSite.Minds || site === EnhanceableSite.Facebook
 
     const useSiteOverwrite = useRef(overwrite.InjectedDialog?.classes || (() => ({ classes: undefined }))).current
+    // eslint-disable-next-line react-compiler/react-compiler
     const siteOverwrite = useSiteOverwrite().classes
     const styles = useStyles({ clean }, { props })
     const cx = styles.cx

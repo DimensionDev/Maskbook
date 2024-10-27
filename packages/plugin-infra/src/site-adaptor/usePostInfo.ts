@@ -1,10 +1,10 @@
 import { useMemo } from 'react'
-import { usePostInfoDetails } from './PostContext.js'
+import { usePostInfoIdentifier, usePostInfoPostID } from './PostContext.js'
 import { getPostURL } from './context.js'
 
 export function usePostLink() {
-    const id = usePostInfoDetails.postID()
-    const identifier = usePostInfoDetails.identifier()
+    const id = usePostInfoPostID()
+    const identifier = usePostInfoIdentifier()
     return useMemo(() => {
         if (!id || !identifier) return ''
         return getPostURL(identifier) ?? ''

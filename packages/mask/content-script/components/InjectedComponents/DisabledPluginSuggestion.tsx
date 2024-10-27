@@ -8,7 +8,8 @@ import {
     PluginTransFieldRender,
     registeredPlugins,
     useActivatedPluginsSiteAdaptor,
-    usePostInfoDetails,
+    usePostInfoMentionedLinks,
+    usePostInfoRawMessage,
 } from '@masknet/plugin-infra/content-script'
 import { MaskPostExtraInfoWrapper } from '@masknet/shared'
 import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
@@ -53,8 +54,8 @@ export function useDisabledPluginSuggestionFromMeta(meta: undefined | ReadonlyMa
 }
 
 export function PossiblePluginSuggestionPostInspector() {
-    const message = extractTextFromTypedMessage(usePostInfoDetails.rawMessage())
-    const metaLinks = usePostInfoDetails.mentionedLinks()
+    const message = extractTextFromTypedMessage(usePostInfoRawMessage())
+    const metaLinks = usePostInfoMentionedLinks()
     const matches = useDisabledPluginSuggestionFromPost(message, metaLinks)
     return <PossiblePluginSuggestionUI plugins={matches} />
 }

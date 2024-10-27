@@ -1,4 +1,4 @@
-import { memo, useRef, type ReactNode, useEffect } from 'react'
+import { memo, type ReactNode, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Drawer, Typography, backdropClasses } from '@mui/material'
@@ -52,10 +52,9 @@ export interface BottomDrawerProps extends withClasses<'title' | 'root' | 'heade
 export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open, onClose, children, title, ...rest }) {
     const { classes } = useStyles(undefined, { props: rest })
     const handleClose = () => onClose?.()
-    const everOpenRef = useRef(false)
-    useEffect(() => {
-        if (open) everOpenRef.current = true
-    }, [open])
+    const [openedOnce, setOpenedOnce] = useState(false)
+    if (open && !openedOnce) setOpenedOnce(true)
+
     return (
         <Drawer
             anchor="bottom"
@@ -68,7 +67,7 @@ export const BottomDrawer = memo<BottomDrawerProps>(function BottomDrawer({ open
                 </TextOverflowTooltip>
                 <Icons.Close className={classes.closeButton} size={24} onClick={handleClose} />
             </Box>
-            {open || everOpenRef.current ? children : null}
+            {openedOnce ? children : null}
         </Drawer>
     )
 })

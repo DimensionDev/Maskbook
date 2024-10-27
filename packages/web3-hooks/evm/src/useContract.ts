@@ -32,6 +32,7 @@ export function useContracts<T extends BaseContract>(
             listOfAddress
                 .map((address) => createContract<T>(EVMWeb3.getWeb3({ chainId }), address, ABI))
                 .filter(Boolean) as T[],
+        // eslint-disable-next-line react-compiler/react-compiler
         [JSON.stringify(listOfAddress), ABI],
     )
 }

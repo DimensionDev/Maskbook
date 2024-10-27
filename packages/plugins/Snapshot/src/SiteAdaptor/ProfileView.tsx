@@ -75,6 +75,7 @@ export function ProfileView(props: ProfileViewProps) {
         if (currentTab === ContentTabs.All) return proposalList
         if (currentTab === ContentTabs.Core) return proposalList.filter((x) => space.members.includes(x.author))
         return proposalList.filter((x) => x.state.toLowerCase() === currentTab.toLowerCase())
+        // eslint-disable-next-line react-compiler/react-compiler
     }, [currentTab, JSON.stringify(proposalList), JSON.stringify(space?.members)])
 
     if (isMinimalMode) {

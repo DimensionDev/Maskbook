@@ -1,5 +1,5 @@
 import { memo, useCallback, useContext } from 'react'
-import { type PostInfo, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
+import { type PostInfo, PostInfoContext, usePostInfoEncryptComment } from '@masknet/plugin-infra/content-script'
 import { type DOMProxy, MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { makeStyles } from '@masknet/theme'
 import { MaskMessages } from '@masknet/shared-base'
@@ -27,7 +27,7 @@ export const injectCommentBoxDefaultFactory = function <T extends string>(
 ) {
     const CommentBoxUI = memo(function CommentBoxUI({ dom }: { dom: HTMLElement | null }) {
         const info = useContext(PostInfoContext)
-        const encryptComment = usePostInfoDetails.encryptComment()
+        const encryptComment = usePostInfoEncryptComment()
         const { classes } = useCustomStyles()
         const props = additionPropsToCommentBox(classes)
         const onCallback = useCallback(

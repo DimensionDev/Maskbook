@@ -23,6 +23,7 @@ export const RestorableScroll = memo(function RestorableScroll<T>({ scrollKey, t
         const target = targetRef?.current || containerRef.current
         if (!target) return
 
+        // eslint-disable-next-line react-compiler/react-compiler
         target.scrollTop = mapRef.current.get(scrollKey) || 0
         return () => {
             mapRef.current.set(scrollKey, target.scrollTop)

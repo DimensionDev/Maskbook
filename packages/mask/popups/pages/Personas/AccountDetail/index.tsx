@@ -82,6 +82,8 @@ export const Component = memo(() => {
     const handleDetachProfile = useCallback(async () => {
         try {
             if (!selectedAccount?.identifier) return
+            // false positive?
+            // eslint-disable-next-line react-compiler/react-compiler
             currentSetupGuideStatus[selectedAccount.identifier.network].value = ''
             await Service.Identity.detachProfile(selectedAccount.identifier)
             MaskMessages.events.ownPersonaChanged.sendToAll()

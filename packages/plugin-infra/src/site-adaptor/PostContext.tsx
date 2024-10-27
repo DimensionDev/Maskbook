@@ -132,12 +132,16 @@ export const usePostInfoDetails: {
                     if (!postInfo) throw new TypeError('No post context')
                     if (!(key in postInfo)) throw new TypeError('postInfo.' + (key as string) + ' is not found')
                     const k = postInfo[key as keyof PostInfo]
+                    // eslint-disable-next-line react-compiler/react-compiler
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     if (k instanceof ValueRef) return useValueRef<any>(k)
+                    // eslint-disable-next-line react-compiler/react-compiler
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     if (k instanceof ObservableMap) return useObservableValues<any>(k)
+                    // eslint-disable-next-line react-compiler/react-compiler
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     if (k instanceof ObservableSet) return useObservableValues<any>(k)
+                    // eslint-disable-next-line react-compiler/react-compiler
                     // eslint-disable-next-line react-hooks/rules-of-hooks
                     if (isSubscription(k)) return useSubscription<any>(k)
                     return k
@@ -148,6 +152,23 @@ export const usePostInfoDetails: {
         },
     ),
 } as any
+
+export const {
+    postID: usePostInfoPostID,
+    identifier: usePostInfoIdentifier,
+    postIVIdentifier: usePostInfoPostIVIdentifier,
+    rawMessage: usePostInfoRawMessage,
+    mentionedLinks: usePostInfoMentionedLinks,
+    author: usePostInfoAuthor,
+    nickname: usePostInfoNickname,
+    coAuthors: usePostInfoCoAuthors,
+    encryptComment: usePostInfoEncryptComment,
+    decryptComment: usePostInfoDecryptComment,
+    url: usePostInfoURL,
+    source: usePostInfoSource,
+    site: usePostInfoSite,
+    postMetadataImages: usePostInfoPostMetadataImages,
+} = usePostInfoDetails
 function isSubscription(x: any): x is Subscription<any> {
     return (
         typeof x === 'object' &&

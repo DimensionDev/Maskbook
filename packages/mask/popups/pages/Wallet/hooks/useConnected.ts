@@ -1,10 +1,11 @@
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
 
-export function useConnectedWallets(origin: string | null) {
+export function useConnectedWallets(_origin: string | null) {
     return useQuery({
-        queryKey: ['origin-connected-wallets', origin],
+        queryKey: ['origin-connected-wallets', _origin],
         queryFn: async () => {
+            let origin = _origin
             if (origin === null) {
                 const result = await Services.Helper.queryCurrentActiveTab()
                 if (!result.url || !URL.canParse(result.url)) return null

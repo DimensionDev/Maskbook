@@ -33,6 +33,7 @@ export function ENSProvider({ children, result }: PropsWithChildren<SearchResult
             domain,
             nextIdBindings,
         }),
+        // eslint-disable-next-line react-compiler/react-compiler
         [address, tokenId, domain, JSON.stringify(nextIdBindings)],
     )
 

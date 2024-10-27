@@ -23,6 +23,7 @@ export function ContentScriptGlobalProvider(children: React.ReactNode) {
         <SharedContextProvider />,
         <LinguiProviderHMR i18n={i18n} />,
         <I18NextProviderHMR i18n={i18NextInstance} />,
+        // eslint-disable-next-line react-compiler/react-compiler
         <MaskThemeProvider useMaskIconPalette={useSiteThemeMode} useTheme={useMaskSiteAdaptorMixedTheme} />,
     )(
         cloneElement,

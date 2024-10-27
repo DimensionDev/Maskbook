@@ -104,11 +104,11 @@ export const SelectNonFungibleContractDialog = memo(
         const { Token } = useWeb3State(pluginID)
         const account = useAccount().toLowerCase()
         const customizedCollectionMap = useSubscription(Token?.nonFungibleCollectionMap ?? EMPTY_ENTRY)
+        const list = customizedCollectionMap[account]
         // Convert StorageCollection to NonFungibleCollection
         const customizedCollections = useMemo((): Array<
             NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
         > => {
-            const list = customizedCollectionMap[account]
             if (!list) return EMPTY_LIST
             const addresses = compact(collections.map((x) => x.address?.toLowerCase()))
             return list
@@ -123,7 +123,7 @@ export const SelectNonFungibleContractDialog = memo(
                     balance: tokenIds.length,
                     source: contract.source,
                 }))
-        }, [customizedCollectionMap[account], collections])
+        }, [list, collections])
 
         const filteredCollections = useMemo(() => {
             const allCollections = [...customizedCollections, ...collections]

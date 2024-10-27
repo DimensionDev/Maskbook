@@ -5,7 +5,9 @@ import {
     type PostInfo,
     PostInfoContext,
     useActivatedPluginsSiteAdaptor,
-    usePostInfoDetails,
+    usePostInfoAuthor,
+    usePostInfoCoAuthors,
+    usePostInfoNickname,
 } from '@masknet/plugin-infra/content-script'
 import { EVMWeb3ContextProvider, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -20,9 +22,9 @@ const ActionsRenderer = createInjectHooksRenderer(
 function PostActions() {
     const Utils = useWeb3Utils()
 
-    const identifier = usePostInfoDetails.author()
-    const nickname = usePostInfoDetails.nickname() as string | null
-    const coAuthors = usePostInfoDetails.coAuthors()
+    const identifier = usePostInfoAuthor()
+    const nickname = usePostInfoNickname()
+    const coAuthors = usePostInfoCoAuthors()
 
     if (!identifier) return null
     return (

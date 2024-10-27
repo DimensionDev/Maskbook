@@ -5,12 +5,12 @@ import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
+import ReactCompilerPlugin from 'eslint-plugin-react-compiler'
 // @ts-expect-error
 import ImportPlugin from 'eslint-plugin-i'
 import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
-// @ts-expect-error
 import LinguiPlugin from 'eslint-plugin-lingui'
 import { fixupPluginRules } from '@eslint/compat'
 
@@ -67,6 +67,7 @@ const avoidMistakeRules = {
     // 'react/no-children-prop': 'error',
     'react/no-children-to-array': 'error',
     // 'react/no-clone-element': 'error',
+    'react-compiler/react-compiler': 'error',
     /// TypeScript bad practice
     '@typescript-eslint/no-restricted-types': [
         'error',
@@ -554,6 +555,7 @@ const plugins = {
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': ReactHooksPlugin,
+    'react-compiler': ReactCompilerPlugin,
     '@tanstack/query': ReactQueryPlugin,
     '@lingui': fixupPluginRules(LinguiPlugin),
 }

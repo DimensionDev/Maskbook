@@ -88,14 +88,12 @@ export const Component = memo(function Recovery() {
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
 
-    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
-
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {
             try {
                 const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
                 if (persona) {
-                    await changeCurrentPersona(persona)
+                    await Services.Settings.setCurrentPersonaIdentifier(persona)
                     // Waiting persona changed event notify
                     await delay(100)
                     navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
@@ -109,7 +107,7 @@ export const Component = memo(function Recovery() {
                 setError(<Trans>Incorrect recovery phrase.</Trans>)
             }
         },
-        [t, navigate, changeCurrentPersona],
+        [t, navigate],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
@@ -117,7 +115,7 @@ export const Component = memo(function Recovery() {
             try {
                 const persona = await Services.Identity.loginExistPersonaByPrivateKey(data.privateKey)
                 if (persona) {
-                    await changeCurrentPersona(persona)
+                    await Services.Settings.setCurrentPersonaIdentifier(persona)
                     // Waiting persona changed event notify
                     await delay(100)
                     navigate(DashboardRoutes.SignUpPersonaOnboarding)
@@ -134,18 +132,19 @@ export const Component = memo(function Recovery() {
         [t, navigate],
     )
 
+    const hasNoPersona = !currentPersona
     const onRestore = useCallback(
         async (count?: number) => {
-            if (!currentPersona) {
+            if (hasNoPersona) {
                 const lastedPersona = await Services.Identity.queryLastPersonaCreated()
                 if (lastedPersona) {
-                    await changeCurrentPersona(lastedPersona)
+                    await Services.Settings.setCurrentPersonaIdentifier(lastedPersona)
                     await delay(1000)
                 }
             }
             navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count }), { replace: true })
         },
-        [!currentPersona, changeCurrentPersona, navigate],
+        [hasNoPersona, Services.Settings.setCurrentPersonaIdentifier, navigate],
     )
 
     return (

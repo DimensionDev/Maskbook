@@ -1,4 +1,4 @@
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoSource } from '@masknet/plugin-infra/content-script'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
 import { Trans } from '@lingui/macro'
@@ -16,7 +16,7 @@ interface OperationFooterProps {
 }
 export function RequestLoginFooter({ onRequest }: OperationFooterProps) {
     const { classes } = useStyles()
-    const source = usePostInfoDetails.source()
+    const source = usePostInfoSource()
 
     return (
         <Box className={classes.footer}>

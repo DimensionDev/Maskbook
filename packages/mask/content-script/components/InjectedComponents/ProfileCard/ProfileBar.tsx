@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import { Icons } from '@masknet/icons'
 import { AddressItem, CopyButton, Image, TokenWithSocialGroupMenu, useCollectionByTwitterHandle } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, type SocialAccount, type SocialIdentity } from '@masknet/shared-base'
@@ -123,7 +123,6 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
 }) {
     const { _ } = useLingui()
     const { classes, theme, cx } = useStyles()
-    const { current: avatarClipPathId } = useRef<string>(crypto.randomUUID())
     const { anchorEl, anchorBounding } = useAnchor()
 
     const collectionList = useCollectionByTwitterHandle(identity.identifier?.userId)
@@ -152,9 +151,6 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                     alt={identity.nickname}
                     containerProps={{
                         className: classes.avatarImageContainer,
-                        style: {
-                            WebkitClipPath: `url(#${avatarClipPathId}-clip-path)`,
-                        },
                     }}
                 />
                 <AvatarDecoration className={classes.avatarDecoration} userId={identity.identifier?.userId} size={40} />

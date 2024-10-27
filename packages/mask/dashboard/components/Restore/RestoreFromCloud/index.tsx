@@ -49,13 +49,11 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
 
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
 
-    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
-
     const restoreCallback = useCallback(async () => {
         if (!currentPersona) {
             const lastedPersona = await Services.Identity.queryLastPersonaCreated()
             if (lastedPersona) {
-                await changeCurrentPersona(lastedPersona)
+                await Services.Settings.setCurrentPersonaIdentifier(lastedPersona)
             }
         }
         if (account) {
@@ -66,7 +64,7 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
             }
         }
         toggleSynchronizePasswordDialog(true)
-    }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog, updateUser, changeCurrentPersona])
+    }, [currentPersona, account, accountType, user, toggleSynchronizePasswordDialog, updateUser])
 
     const handleRestore = useCallback(async () => {
         dispatch({ type: 'SET_LOADING', loading: true })

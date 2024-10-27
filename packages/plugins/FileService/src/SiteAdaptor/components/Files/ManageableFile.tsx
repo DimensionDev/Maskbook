@@ -87,7 +87,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                     />
                     <ShadowRootMenu
                         classes={{ paper: classes.menu }}
-                        anchorEl={menuRef.current}
+                        anchorEl={() => menuRef.current!}
                         anchorOrigin={{
                             horizontal: 'right',
                             vertical: 'bottom',

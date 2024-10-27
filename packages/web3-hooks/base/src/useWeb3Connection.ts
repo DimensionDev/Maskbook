@@ -9,5 +9,6 @@ export function useWeb3Connection<T extends NetworkPluginID = NetworkPluginID>(
     options?: ConnectionOptions<T>,
 ) {
     const { pluginID } = useNetworkContext(expectedPluginID)
+    // eslint-disable-next-line react-compiler/react-compiler
     return useMemo(() => getConnection(pluginID, options) as Connection<T>, [pluginID, JSON.stringify(options)])
 }

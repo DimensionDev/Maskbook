@@ -8,7 +8,7 @@ import {
     getSearchResultContentForProfileTab,
     getSearchResultTabContent,
     getSearchResultTabs,
-    useActivatedPluginsSiteAdaptor,
+    useActivatedPluginsSiteAdaptorNotMinimal,
     usePluginTransField,
     useIsMinimalMode,
     getAvailablePlugins,
@@ -66,7 +66,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
 
     const keyword_ = useSearchedKeyword()
     const keyword = props.keyword || keyword_
-    const activatedPlugins = useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode()
+    const activatedPlugins = useActivatedPluginsSiteAdaptorNotMinimal()
 
     const resultList = useAsyncRetry(async () => {
         if (!keyword) return

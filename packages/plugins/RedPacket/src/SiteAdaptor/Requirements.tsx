@@ -1,5 +1,5 @@
 import { Icons, type GeneratedIcon, type GeneratedIconProps } from '@masknet/icons'
-import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { usePostInfoURL, usePostLink } from '@masknet/plugin-infra/content-script'
 import { MaskColors, makeStyles } from '@masknet/theme'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
@@ -178,7 +178,7 @@ function FollowProfile({ payload }: FollowProfileProps) {
 export function Requirements({ onClose, statusList, showResults = true, ...props }: Props) {
     const { classes, cx } = useStyles()
     const postLink = usePostLink()
-    const postUrl = usePostInfoDetails.url()
+    const postUrl = usePostInfoURL()
     const link = postUrl?.href || postLink.toString()
     const platform = usePlatformType() as FireflyRedPacketAPI.PlatformType
     const requirements = useMemo(() => {

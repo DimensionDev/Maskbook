@@ -1,3 +1,4 @@
+/* eslint-disable react-compiler/react-compiler */
 import { memo, useContext, useEffect } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, Link, Typography, type Theme } from '@mui/material'

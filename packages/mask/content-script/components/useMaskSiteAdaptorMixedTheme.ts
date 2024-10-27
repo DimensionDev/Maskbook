@@ -12,6 +12,8 @@ const defaultUseTheme = (t: Theme) => t
 
 export function useMaskSiteAdaptorMixedTheme() {
     const { mode } = useThemeSettings()
+    // false positive
+    // eslint-disable-next-line react-compiler/react-compiler
     const useMixedTheme = useRef(activatedSiteAdaptorUI!.customization.useTheme || defaultUseTheme).current
 
     const [localization] = useThemeLanguage(useValueRef(languageSettings))
@@ -19,5 +21,6 @@ export function useMaskSiteAdaptorMixedTheme() {
         mode === ThemeMode.Dark ? MaskDarkTheme : MaskLightTheme,
         localization,
     )
+    // eslint-disable-next-line react-compiler/react-compiler
     return useMixedTheme(theme)
 }

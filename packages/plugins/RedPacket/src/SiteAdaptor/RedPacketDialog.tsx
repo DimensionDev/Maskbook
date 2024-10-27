@@ -1,4 +1,4 @@
-import { useCallback, useContext, useMemo, useState, Suspense } from 'react'
+import { useCallback, useContext, useState, Suspense } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { DialogContent, Tab, useTheme } from '@mui/material'
 import { TabContext, TabPanel } from '@mui/lab'
@@ -88,6 +88,7 @@ interface RedPacketDialogProps {
     fireflyContext?: FireflyContext
 }
 
+const defaultChains = [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
 export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [showHistory, setShowHistory] = useState(false)
     const [showDetails, setShowDetails] = useState(false)
@@ -106,10 +107,10 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory && currentTab === 'tokens' })
 
-    const chainIds: ChainId[] = useMemo(() => {
-        if (currentTab === tabs.tokens) return base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
-        return [ChainId.Mainnet, ChainId.BSC, ChainId.Matic]
-    }, [currentTab === tabs.tokens])
+    const chainIds =
+        currentTab === tabs.tokens ?
+            base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
+        :   defaultChains
     const chainId = chainIds.includes(contextChainId) ? contextChainId : ChainId.Mainnet
     if (process.env.NODE_ENV === 'development' && !chainIds.includes(contextChainId)) {
         console.error(`${contextChainId} is not in supportedChainIds list, will fallback to mainnet`)
@@ -185,6 +186,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         [senderName, handleClose, compositionType],
     )
 
+    const isSmartPay = props.source === PluginID.SmartPay
     const onBack = useCallback(() => {
         if (step === CreateRedPacketPageStep.ConfirmPage) {
             if (isFirefly) setStep(CreateRedPacketPageStep.ClaimRequirementsPage)
@@ -195,11 +197,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
         }
         if (step === CreateRedPacketPageStep.NewRedPacketPage) {
             handleClose()
-            if (props.source === PluginID.SmartPay) {
+            if (isSmartPay) {
                 CrossIsolationMessages.events.smartPayDialogEvent.sendToAll({ open: true })
             }
         }
-    }, [step, props.source === PluginID.SmartPay, handleClose, isFirefly])
+    }, [step, isSmartPay, handleClose, isFirefly])
     const isCreateStep = step === CreateRedPacketPageStep.NewRedPacketPage
     const onNext = useCallback(() => {
         if (!isCreateStep) return

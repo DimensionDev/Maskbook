@@ -1,3 +1,4 @@
+/* eslint-disable react-compiler/react-compiler */
 /* eslint-disable react-hooks/rules-of-hooks */
 import { type DetailedHTMLProps, type HTMLAttributes, useContext, useLayoutEffect, useRef, useState } from 'react'
 import { Flags } from '@masknet/flags'

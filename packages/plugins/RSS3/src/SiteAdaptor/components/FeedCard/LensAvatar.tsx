@@ -5,10 +5,9 @@ interface Props {
     size?: number | string
     className?: string
 }
-const uuid = () => crypto.randomUUID()
 export const LensAvatar = memo<Props>(({ handle, size, className }) => {
-    const id1 = useMemo(uuid, [])
-    const id2 = useMemo(uuid, [])
+    const id1 = useMemo(() => crypto.randomUUID(), [])
+    const id2 = useMemo(() => crypto.randomUUID(), [])
     return (
         <svg
             xmlns="http://www.w3.org/2000/svg"

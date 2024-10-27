@@ -115,17 +115,15 @@ export const Component = memo(function SignUpMnemonic() {
         link.click()
     }, [])
 
-    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
-
     const [{ loading }, handleCreate] = useAsyncFn(async () => {
         try {
             const identifier = await createPersona(words.join(' '), state.personaName)
-            await changeCurrentPersona(identifier)
+            await Services.Settings.setCurrentPersonaIdentifier(identifier)
             navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { isCreate: true }))
         } catch (error) {
             showSnackbar((error as Error).message, { variant: 'error' })
         }
-    }, [words, changeCurrentPersona])
+    }, [words])
 
     const handleRecovery = useCallback(() => {
         navigate(DashboardRoutes.RecoveryPersona)
