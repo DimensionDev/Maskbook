@@ -1,14 +1,16 @@
+import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EthereumBlockie, ReversedAddress } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { leftShift } from '@masknet/web3-shared-base'
+import { useNetwork } from '@masknet/web3-hooks-base'
+import { TransactionStatusType, trimZero, type Transaction } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Tooltip, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
-import { useRSS3Trans } from '../../../locales/i18n_generated.js'
-import { FeedActions } from '../../components/FeedActions/index.js'
 import { formatTimestamp, ONE_WEEK } from '../../components/share.js'
+import { FeedSummary } from '../../FinanceFeeds/FeedSummary.js'
 
 const useStyles = makeStyles()((theme) => ({
     group: {
@@ -70,109 +72,95 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface TxDetailsProps {
-    feed: RSS3BaseAPI.Web3Feed
+    transaction: Transaction<ChainId, SchemaType>
 }
 
-export function TxDetails({ feed }: TxDetailsProps) {
-    const t = useRSS3Trans()
+export function TxDetails({ transaction: tx }: TxDetailsProps) {
     const { classes, theme } = useStyles()
 
     const timestamp = useMemo(() => {
-        const date = new Date(feed.timestamp)
+        const date = new Date(tx.timestamp)
         const ms = date.getTime()
         const distance = Date.now() - ms
-        const formatted = formatDateTime(feed.timestamp * 1000, 'MMM dd, yyyy HH:mm:ss')
+        const formatted = formatDateTime(tx.timestamp * 1000, 'MMM dd, yyyy HH:mm:ss')
         if (distance > ONE_WEEK) return formatted
-        const timeAgo = formatTimestamp(feed.timestamp)
+        const timeAgo = formatTimestamp(tx.timestamp)
         return timeAgo
-    }, [feed.timestamp])
+    }, [tx.timestamp])
+
+    const network = useNetwork(NetworkPluginID.PLUGIN_EVM, tx.chainId)
 
     return (
         <Box>
             <Typography className={classes.title}>
                 <Icons.Approve size={24} />
-                {t.transaction_details()}
+                {t`Transaction Details`}
             </Typography>
             <div className={classes.group}>
                 <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                    <Typography className={classes.key}>{t.hash()}</Typography>
+                    <Typography className={classes.key}>{t`Hash`}</Typography>
                     <Typography
                         className={classes.value}
                         component="div"
                         style={{ display: 'block', color: theme.palette.maskColor.second, marginLeft: 4 }}>
-                        {feed.id}
-                        <CopyButton text={feed.id} size={20} />
+                        {tx.hash}
+                        <CopyButton text={tx.hash!} size={20} />
                     </Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.status()}</Typography>
+                    <Typography className={classes.key}>{t`Status`}</Typography>
                     <Typography className={classes.value}>
-                        <span className={classes.tag}>{feed.success ? t.successful() : t.failed()}</span>
+                        <span className={classes.tag}>
+                            {tx.status === TransactionStatusType.SUCCEED ? t`Successful` : t`Failed`}
+                        </span>
                     </Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.timestamp()}</Typography>
+                    <Typography className={classes.key}>{t`Timestamp`}</Typography>
                     <Typography className={classes.value}>{timestamp}</Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.network()}</Typography>
+                    <Typography className={classes.key}>{t`Network`}</Typography>
                     <Typography className={classes.value}>
-                        <span className={classes.tag}>{feed.network}</span>
-                    </Typography>
-                </Box>
-                {feed.platform ?
-                    <Box className={classes.field}>
-                        <Typography className={classes.key}>{t.platform()}</Typography>
-                        <Typography className={classes.value}>
-                            <span className={classes.tag}>{feed.platform}</span>
-                        </Typography>
-                    </Box>
-                :   null}
-                <Box className={classes.field}>
-                    <Typography className={classes.key}>{t.category()}</Typography>
-                    <Typography className={classes.value} component="div">
-                        <div className={classes.tags}>
-                            <span className={classes.tag}>{feed.tag}</span>
-                            <span className={classes.tag}>{feed.type}</span>
-                        </div>
+                        <span className={classes.tag}>{network?.name}</span>
                     </Typography>
                 </Box>
             </div>
             <Box className={classes.sep} />
             <Box className={classes.field}>
-                <Typography className={classes.key}>{t.from()}</Typography>
-                <Tooltip title={feed.from}>
+                <Typography className={classes.key}>{t`From`}</Typography>
+                <Tooltip title={tx.from}>
                     <Typography className={classes.value} gap={10} component="div">
-                        <EthereumBlockie address={feed.from} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={feed.from} fontWeight={400} />
-                        <CopyButton text={feed.from} size={20} />
+                        <EthereumBlockie address={tx.from} classes={{ icon: classes.blockieIcon }} />
+                        <ReversedAddress address={tx.from} fontWeight={400} />
+                        <CopyButton text={tx.from} size={20} />
                     </Typography>
                 </Tooltip>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.key}>{t.to()}</Typography>
-                <Tooltip title={feed.to}>
+                <Typography className={classes.key}>{t`To`}</Typography>
+                <Tooltip title={tx.to}>
                     <Typography className={classes.value} gap={10} component="div">
-                        <EthereumBlockie address={feed.to} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={feed.to} fontWeight={400} />
-                        <CopyButton text={feed.to} size={20} />
+                        <EthereumBlockie address={tx.to} classes={{ icon: classes.blockieIcon }} />
+                        <ReversedAddress address={tx.to} fontWeight={400} />
+                        <CopyButton text={tx.to} size={20} />
                     </Typography>
                 </Tooltip>
             </Box>
             <Box className={classes.sep} />
             <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                <Typography className={classes.key}>{t.actions({ count: feed.actions.length })}</Typography>
+                <Typography className={classes.key}>{t`Actions`}</Typography>
                 <Typography className={classes.value} component="div">
-                    <FeedActions feed={feed} />
+                    <FeedSummary transaction={tx} mt={0.5} />
                 </Typography>
             </Box>
-            {feed.fee ?
+            {tx.feeInfo ?
                 <>
                     <Box className={classes.sep} />
                     <Box className={classes.field}>
-                        <Typography className={classes.key}>{t.tx_fee()}</Typography>
+                        <Typography className={classes.key}>{t`Tx Fee`}</Typography>
                         <Typography className={classes.value}>
-                            {leftShift(feed.fee.amount, feed.fee.decimal).toFixed(6)}
+                            {trimZero(tx.feeInfo.amount)} {tx.feeInfo.symbol}
                             <Icons.Gas size={16} />
                         </Typography>
                     </Box>

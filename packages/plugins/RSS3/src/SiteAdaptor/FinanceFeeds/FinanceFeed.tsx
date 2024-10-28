@@ -8,6 +8,8 @@ import { NetworkIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { Typography } from '@mui/material'
 import { FeedSummary } from './FeedSummary.js'
+import { FinanceFeedDetailsModal } from '../modals/modals.js'
+import { useFeedOwner } from '../contexts/FeedOwnerContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     verbose: {},
@@ -36,12 +38,17 @@ export interface FinanceFeedProps extends HTMLProps<HTMLDivElement> {
 }
 export const FinanceFeed = memo<FinanceFeedProps>(function FinanceFeed({ transaction, verbose, className, ...rest }) {
     const { classes, cx } = useStyles()
+    const feedOwner = useFeedOwner()
     return (
         <article
             {...rest}
             className={cx(className, verbose ? classes.verbose : classes.inspectable)}
             onClick={() => {
-                //
+                if (verbose) return
+                FinanceFeedDetailsModal.open({
+                    transaction,
+                    feedOwner,
+                })
             }}>
             <div className={classes.header}>
                 <NetworkIcon pluginID={NetworkPluginID.PLUGIN_EVM} chainId={transaction.chainId} size={18} />

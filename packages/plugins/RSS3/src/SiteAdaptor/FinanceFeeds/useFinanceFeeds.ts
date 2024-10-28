@@ -1,4 +1,4 @@
-import { DeBankHistory } from '@masknet/web3-providers'
+import { Zerion } from '@masknet/web3-providers'
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 
 interface Options {
@@ -12,7 +12,7 @@ export function useFinanceFeeds({ address }: Options) {
         queryFn:
             address ?
                 async ({ pageParam }) => {
-                    return DeBankHistory.getAllTransactions(address, { indicator: pageParam })
+                    return Zerion.getTransactions(address, { indicator: pageParam })
                 }
             :   skipToken,
         getNextPageParam: (lp) => lp.nextIndicator,

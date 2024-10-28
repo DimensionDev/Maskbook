@@ -53,7 +53,55 @@
                 }
             ]
         ],
+        "cgUaK4": [
+            "<0/>",
+            [
+                "txType",
+                "select",
+                {
+                    "burn": "burned",
+                    "deposit": "deposited",
+                    "mint": "minted",
+                    "receive": "received",
+                    "send": "sent",
+                    "withdraw": "withdrawn"
+                }
+            ],
+            "<1>",
+            ["0"],
+            " ",
+            ["1"],
+            "</1>"
+        ],
+        "xPHFvT": ["<0/>", ["txType", "select", { "deploy": "deployed", "execute": "executed" }], "<1/>"],
+        "Lkd7tY": [
+            "<0/>",
+            ["txType", "select", { "trade": "traded", "mint": "minted", "other": "traded" }],
+            "<1>",
+            ["0"],
+            " ",
+            ["1"],
+            "</1> for<2>",
+            ["2"],
+            " ",
+            ["3"],
+            "</2>"
+        ],
+        "U9kQrG": ["<0/>approved<1>", ["0"], " ", ["1"], "</1>"],
+        "rgsCjq": "<0/>interacted with<1/>",
+        "YFrbUO": ["<0/>unapproved<1>", ["0"], "</1>"],
+        "7L01XJ": "Actions",
+        "7Bj3x9": "Failed",
+        "ejVYRQ": "From",
+        "OAfk3i": "Hash",
+        "OR475H": "Network",
         "8IN0ph": "No more data available.",
-        "UvJiVZ": "There's no feed associated with this address."
+        "uAQUqI": "Status",
+        "olEUh2": "Successful",
+        "UvJiVZ": "There's no feed associated with this address.",
+        "8TMaZI": "Timestamp",
+        "/jQctM": "To",
+        "5HVoyc": "Transaction Details",
+        "mNUsxu": "Tx Fee"
     }
 }
