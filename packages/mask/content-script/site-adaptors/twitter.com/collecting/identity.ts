@@ -55,12 +55,14 @@ function resolveLastRecognizedIdentityInner(
             searchSelfHandleSelector().evaluate()?.dataset.testid?.trim().slice('UserAvatar-Container-'.length) ||
             selfInfo.handle
         const nickname = getNickname(selfInfo.nickname) ?? ''
+        const userInfo = handle ? await FireflyTwitter.getUserInfo(handle) : null
 
         if (handle) {
             ref.value = {
                 avatar,
                 nickname,
                 identifier: ProfileIdentifier.of(twitterBase.networkIdentifier, handle).unwrapOr(undefined),
+                profileId: userInfo?.rest_id,
                 isOwner: true,
             }
         }

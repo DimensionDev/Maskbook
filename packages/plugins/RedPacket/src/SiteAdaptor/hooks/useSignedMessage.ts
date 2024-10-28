@@ -15,16 +15,16 @@ export function useSignedMessage(
     const platform = usePlatformType()
     const me = useLastRecognizedIdentity()
     const profile =
-        platform ?
+        platform && me?.profileId ?
             {
                 needLensAndFarcasterHandle: true,
                 platform,
-                profileId: me?.profileId,
-                handle: me?.identifier?.userId,
-                lensToken: me?.lensToken,
-                farcasterMessage: me?.farcasterMessage as HexString,
-                farcasterSigner: me?.farcasterSigner as HexString,
-                farcasterSignature: me?.farcasterSignature as HexString,
+                profileId: me.profileId,
+                handle: me.identifier?.userId,
+                lensToken: me.lensToken,
+                farcasterMessage: me.farcasterMessage as HexString,
+                farcasterSigner: me.farcasterSigner as HexString,
+                farcasterSignature: me.farcasterSignature as HexString,
             }
         :   undefined
 
