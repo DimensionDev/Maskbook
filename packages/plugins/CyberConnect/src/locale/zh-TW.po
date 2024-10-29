@@ -11,6 +11,10 @@ msgstr ""
 "Plural-Forms: \n"
 "Report-Msgid-Bugs-To: \n"
 
+#: src/SiteAdaptor/ConnectButton.tsx
+msgid "Coming soon"
+msgstr ""
+
 #: src/SiteAdaptor/index.tsx
 msgid "CyberConnect"
 msgstr ""

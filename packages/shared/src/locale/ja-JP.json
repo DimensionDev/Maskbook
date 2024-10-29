@@ -1,6 +1,7 @@
 {
     "messages": {
         "m/TPEz": "(beta)",
+        "Hz5HKj": [["0", "plural", { "one": ["#", " Pending"], "other": ["#", " Pendings"] }]],
         "b/mMOj": [["0"], " ", ["1"], " approval successfully."],
         "BFhvNB": [["0"], " ", ["1"], " NFT contract successfully."],
         "87Poy7": [["0"], " ", ["1"], " NFT contract."],
@@ -105,7 +106,22 @@
         "qkhZxp": "Created a SmartPay wallet on Polygon network.",
         "Jg5pf7": ["現在の基本手数料は ", ["0"], " Gweiです"],
         "8Tg/JR": "カスタム",
+        "ulAtwO": [
+            "Data source is retrieved from ",
+            ["0", "select", { "other": "", "twitter": "Twitter profile and", "next_id": "NEXT.ID and" }],
+            ["sources"],
+            "."
+        ],
         "Cf/0to": ["データソースは ", ["0"], " から取得されます。"],
+        "Yc+m57": [
+            "Data source is retrieved from ",
+            [
+                "platform",
+                "select",
+                { "twitter": "Twitter profile", "facebook": "Facebook profile", "next_id": "NEXT.ID" }
+            ],
+            "."
+        ],
         "ovBPCi": "デフォルト",
         "f61qKX": "Deploy a SmartPay wallet on Polygon network.",
         "/JOEaC": "Deploy Smarty Pay wallet",
@@ -131,6 +147,7 @@
         "n42fmQ": "最大手数料を入力してください",
         "MOHcKb": "最大優先料金を入力してください",
         "iPMIoT": "金額を入力します",
+        "ct8YaX": "Exceeded the maximum file size of 10MB.",
         "7Bj3x9": "失敗しました",
         "z1i6et": ["Failed to ", ["0"], " NFT contract."],
         "v7U98p": "Failed to claim Lucky Drop.",
@@ -148,6 +165,7 @@
         "F8VT6y": "Failed to transfer NFT.",
         "FiKDfi": "Failed to unlock NFT contract.",
         "elyK4N": "Failed to unlock token contract.",
+        "4Gz2wC": "Failed to upload file",
         "apl8rz": ["Failed to withdraw ", ["0"], "."],
         "MKEPCY": "フォロー",
         "nDzNGQ": "Follow User",
@@ -280,6 +298,7 @@
         "YOacnL": "Tell friends what's happening...",
         "FY2gWe": "コントラクトアドレスが正しくないか、コレクションはあなたに属していません。",
         "i4umqX": "以下のウォレットがインストールされていないか、他のウォレットと競合しています",
+        "Eefe1a": "The input is not a single file.",
         "Mi8ATZ": "The token approval revoked.",
         "++B0oY": "This function has been turned off in the App settings. Enable plugins to fully access.",
         "gKSsH7": [["network"], " はまだサポートされていません."],

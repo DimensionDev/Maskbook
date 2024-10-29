@@ -15,6 +15,10 @@ msgstr ""
 msgid "<0>USD Value</0><1>${0}</1>"
 msgstr ""
 
+#: src/SiteAdaptor/PluginHeader.tsx
+msgid "DSearch"
+msgstr ""
+
 #: src/SiteAdaptor/index.tsx
 msgid "ENS"
 msgstr ""

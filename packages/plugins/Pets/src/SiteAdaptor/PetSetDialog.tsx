@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { PluginWalletStatusBar, useSharedTrans } from '@masknet/shared'
+import { PluginWalletStatusBar } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { ActionButton, LoadingBase, ShadowRootPopper, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -117,7 +117,6 @@ interface PetSetDialogProps {
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
     const { _ } = useLingui()
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
@@ -392,7 +391,9 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                     className={classes.btn}
                     onClick={saveHandle}
                     disabled={!collection?.name || !metaData.image || !!wallet?.owner}>
-                    {wallet?.owner ? sharedI18N.coming_soon() : <Trans>Confirm</Trans>}
+                    {wallet?.owner ?
+                        <Trans>Coming soon</Trans>
+                    :   <Trans>Confirm</Trans>}
                 </ActionButton>
             </PluginWalletStatusBar>
 

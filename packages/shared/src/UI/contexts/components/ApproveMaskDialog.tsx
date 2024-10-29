@@ -9,7 +9,6 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { toFixed } from '@masknet/web3-shared-base'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
-import { useSharedTrans } from '../../../index.js'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -44,7 +43,6 @@ export interface ApproveMaskDialogProps {
 }
 
 export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClose }) => {
-    const sharedI18N = useSharedTrans()
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
     const [amount, setAmount] = useState('')
@@ -103,7 +101,7 @@ export const ApproveMaskDialog = memo<ApproveMaskDialogProps>(({ open, handleClo
                 <Trans>Confirm</Trans>
             </ActionButton>
         )
-    }, [approveStateType, approveCallback, sharedI18N, transactionState, onApprove])
+    }, [approveStateType, approveCallback, transactionState, onApprove])
 
     return usePortalShadowRoot((container) => (
         <Dialog container={container} open={open} onClose={handleClose} classes={{ paper: classes.paper }}>

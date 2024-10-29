@@ -61,6 +61,11 @@ msgstr ""
 msgid "Create a SmartPay Wallet with your X account."
 msgstr ""
 
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+msgid "Create persona"
+msgstr ""
+
 #: src/hooks/useDeploy.tsx
 #: src/hooks/useDeploy.tsx
 msgid "Create SmartPay Wallet"
@@ -115,8 +120,18 @@ msgstr ""
 msgid "Network error."
 msgstr ""
 
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+msgid "Persona"
+msgstr ""
+
 #: src/SiteAdaptor/components/ManagePopover.tsx
 msgid "Personas"
+msgstr ""
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+msgid "Please create a Persona and verify your account to use this feature."
 msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx

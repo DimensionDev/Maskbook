@@ -16,6 +16,10 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#: src/UI/components/WalletStatusBox/usePendingTransactions.tsx
+msgid "{0, plural, one {# Pending} other {# Pendings}}"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
@@ -421,9 +425,17 @@ msgid "Custom"
 msgstr "커스텀"
 
 #: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
+msgstr ""
+
+#: src/UI/components/AccountIcons/index.tsx
 #: src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
 msgstr "데이터 소스가 {0}에서 검색됩니다."
+
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile} next_id {NEXT.ID}}."
+msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "Default"
@@ -533,6 +545,10 @@ msgstr "최대 우선 가스비 입력"
 msgid "Enter an amount"
 msgstr "금액 입력"
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Exceeded the maximum file size of 10MB."
+msgstr ""
+
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
 msgstr "실패"
@@ -599,6 +615,10 @@ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Failed to unlock token contract."
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Failed to upload file"
 msgstr ""
 
 #: src/UI/translate.ts
@@ -1162,6 +1182,10 @@ msgstr "컨트랙트 조소가 잘못되거나 월렛에 해당 수집품이 없
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "The following wallets are not installed or in conflict with others"
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "The input is not a single file."
 msgstr ""
 
 #: src/UI/translate.ts

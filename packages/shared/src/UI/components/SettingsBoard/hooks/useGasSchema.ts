@@ -1,6 +1,5 @@
 import { useMemo } from 'react'
 import { z as zod } from 'zod'
-import { useSharedTrans } from '@masknet/shared'
 import { type ChainId, formatGweiToWei, type GasOption, type Transaction } from '@masknet/web3-shared-evm'
 import {
     type GasOptionType,
@@ -21,7 +20,6 @@ export function useGasSchema(
     gasOptions: Record<GasOptionType, GasOption> | undefined,
 ) {
     const { _ } = useLingui()
-    const t = useSharedTrans()
 
     return useMemo(() => {
         return zod
@@ -100,5 +98,5 @@ export function useGasSchema(
                 message: _(msg`Max fee cannot be lower than max priority fee.`),
                 path: ['maxFeePerGas'],
             })
-    }, [t, transaction?.gas, gasOptions])
+    }, [_, transaction?.gas, gasOptions])
 }

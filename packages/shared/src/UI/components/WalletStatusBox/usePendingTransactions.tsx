@@ -8,8 +8,7 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { TransactionList } from './TransactionList.js'
-import { useSharedTrans } from '../../../index.js'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
@@ -32,7 +31,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export function usePendingTransactions() {
     const { classes, cx } = useStyles()
-    const t = useSharedTrans()
 
     // #region recent pending transactions
     const pendingTransactions = useRecentTransactions(undefined, TransactionStatusType.NOT_DEPEND)
@@ -52,7 +50,7 @@ export function usePendingTransactions() {
                 <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
                     {pendingTransactions.length ?
                         <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
-                            {t.wallet_status_pending({ count: pendingTransactions.length })}
+                            <Plural one="# Pending" other="# Pendings" value={pendingTransactions.length} />
                         </Typography>
                     :   null}
                 </div>

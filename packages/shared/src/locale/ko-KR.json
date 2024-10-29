@@ -1,6 +1,7 @@
 {
     "messages": {
         "m/TPEz": "(beta)",
+        "Hz5HKj": [["0", "plural", { "one": ["#", " Pending"], "other": ["#", " Pendings"] }]],
         "b/mMOj": [["0"], " ", ["1"], " approval successfully."],
         "BFhvNB": [["0"], " ", ["1"], " NFT contract successfully."],
         "87Poy7": [["0"], " ", ["1"], " NFT contract."],
@@ -105,7 +106,22 @@
         "qkhZxp": "Created a SmartPay wallet on Polygon network.",
         "Jg5pf7": ["현재 기초 기스비는 ", ["0"], " Gwei"],
         "8Tg/JR": "커스텀",
+        "ulAtwO": [
+            "Data source is retrieved from ",
+            ["0", "select", { "other": "", "twitter": "Twitter profile and", "next_id": "NEXT.ID and" }],
+            ["sources"],
+            "."
+        ],
         "Cf/0to": ["데이터 소스가 ", ["0"], "에서 검색됩니다."],
+        "Yc+m57": [
+            "Data source is retrieved from ",
+            [
+                "platform",
+                "select",
+                { "twitter": "Twitter profile", "facebook": "Facebook profile", "next_id": "NEXT.ID" }
+            ],
+            "."
+        ],
         "ovBPCi": "디폴트",
         "f61qKX": "Deploy a SmartPay wallet on Polygon network.",
         "/JOEaC": "Deploy Smarty Pay wallet",
@@ -131,6 +147,7 @@
         "n42fmQ": "최대 가스비 입력",
         "MOHcKb": "최대 우선 가스비 입력",
         "iPMIoT": "금액 입력",
+        "ct8YaX": "Exceeded the maximum file size of 10MB.",
         "7Bj3x9": "실패",
         "z1i6et": ["Failed to ", ["0"], " NFT contract."],
         "v7U98p": "Failed to claim Lucky Drop.",
@@ -148,6 +165,7 @@
         "F8VT6y": "Failed to transfer NFT.",
         "FiKDfi": "Failed to unlock NFT contract.",
         "elyK4N": "Failed to unlock token contract.",
+        "4Gz2wC": "Failed to upload file",
         "apl8rz": ["Failed to withdraw ", ["0"], "."],
         "MKEPCY": "팔로우",
         "nDzNGQ": "Follow User",
@@ -280,6 +298,7 @@
         "YOacnL": "Tell friends what's happening...",
         "FY2gWe": "컨트랙트 조소가 잘못되거나 월렛에 해당 수집품이 없습니다.",
         "i4umqX": "The following wallets are not installed or in conflict with others",
+        "Eefe1a": "The input is not a single file.",
         "Mi8ATZ": "The token approval revoked.",
         "++B0oY": "This function has been turned off in the App settings. Enable plugins to fully access.",
         "gKSsH7": "해당 네트워크가 아직 지원하지 않습니다.",

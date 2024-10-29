@@ -19,6 +19,10 @@ msgstr ""
 msgid "{0} members"
 msgstr ""
 
+#: src/SiteAdaptor/PluginDescriptor.tsx
+msgid "<0>Powered by</0> <1>Mask Network</1>"
+msgstr ""
+
 #: src/SiteAdaptor/InformationCard.tsx
 msgid "Author"
 msgstr ""
@@ -69,6 +73,10 @@ msgstr ""
 msgid "Join"
 msgstr ""
 
+#: src/SiteAdaptor/LoadingFailCard.tsx
+msgid "Load failed"
+msgstr ""
+
 #: src/SiteAdaptor/ProfileView.tsx
 msgid "Loading"
 msgstr ""
@@ -105,10 +113,18 @@ msgstr ""
 msgid "Proposal"
 msgstr ""
 
+#: src/SiteAdaptor/LoadingFailCard.tsx
+msgid "Reload"
+msgstr ""
+
 #: src/SiteAdaptor/ResultCard.tsx
 #: src/SiteAdaptor/ResultCard.tsx
 #: src/SiteAdaptor/ResultCard.tsx
 msgid "Results"
+msgstr ""
+
+#: src/SiteAdaptor/LoadingFailCard.tsx
+msgid "Retry"
 msgstr ""
 
 #: src/SiteAdaptor/InformationCard.tsx

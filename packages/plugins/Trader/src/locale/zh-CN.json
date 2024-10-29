@@ -34,6 +34,7 @@
         "HKH+W+": "Data",
         "mYGY3B": "Date",
         "ctb8Cs": ["Dex/Est received (", ["0"], ")"],
+        "Lho4Qd": "DSearch",
         "kPQQEW": "Enter an Amount",
         "Citz6F": "兑换",
         "7Bj3x9": "失败",
@@ -103,6 +104,8 @@
         "XcWehA": "Update Quote",
         "+b7T3G": "已更新",
         "wMHvYH": "价值",
-        "Fn9Tvh": "交易量 (24h)"
+        "Fn9Tvh": "交易量 (24h)",
+        "2GHENQ": "Web3 Profile",
+        "EGWr+Q": "Web3 Profile Card"
     }
 }

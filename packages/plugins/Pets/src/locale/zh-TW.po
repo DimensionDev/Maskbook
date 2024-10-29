@@ -24,6 +24,10 @@ msgid "Click the Mask icon on the sidebar and access the Non-F Friends app to co
 msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx
+msgid "Coming soon"
+msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Confirm"
 msgstr ""
 

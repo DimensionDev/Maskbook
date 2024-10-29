@@ -61,6 +61,11 @@ msgstr "새로운 월렛 만들기"
 msgid "Create a SmartPay Wallet with your X account."
 msgstr ""
 
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+msgid "Create persona"
+msgstr ""
+
 #: src/hooks/useDeploy.tsx
 #: src/hooks/useDeploy.tsx
 msgid "Create SmartPay Wallet"
@@ -115,9 +120,19 @@ msgstr "Multisigs 및 소셜 복구"
 msgid "Network error."
 msgstr "네트워크 오류."
 
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+msgid "Persona"
+msgstr ""
+
 #: src/SiteAdaptor/components/ManagePopover.tsx
 msgid "Personas"
 msgstr "페르소나"
+
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+msgid "Please create a Persona and verify your account to use this feature."
+msgstr ""
 
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx
 msgid "Post-quantum safe signature algorithms (eg. Lamport, Winternitz)"

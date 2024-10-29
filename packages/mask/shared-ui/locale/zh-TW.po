@@ -363,6 +363,7 @@ msgstr ""
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
@@ -473,6 +474,7 @@ msgid "Completed"
 msgstr ""
 
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: popups/components/NFTAvatarPicker/index.tsx
 #: popups/modals/AddContactModal/index.tsx
@@ -1437,6 +1439,10 @@ msgstr ""
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Mask Network"
+msgstr ""
+
+#: content-script/components/InjectedComponents/PermissionBoundary.tsx
+msgid "Mask Network requires you to authorize the following websites before using it."
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts

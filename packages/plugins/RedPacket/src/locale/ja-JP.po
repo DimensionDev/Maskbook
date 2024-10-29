@@ -349,6 +349,10 @@ msgstr "いいね"
 msgid "Like / Repost / Comment"
 msgstr "いいね/リポスト/コメント"
 
+#: src/SiteAdaptor/NftRedPacketHistoryList.tsx
+msgid "Loading"
+msgstr ""
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 msgid "Loading token..."

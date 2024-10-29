@@ -6,8 +6,7 @@ import { resolveSocialAddressLink } from '@masknet/web3-shared-base'
 import { Typography, type TooltipProps, Link } from '@mui/material'
 import { compact } from 'lodash-es'
 import { Linking } from '../../../index.js'
-import { useSharedTrans } from '../../../locales/index.js'
-import { Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,7 +63,6 @@ interface AccountTooltipsProps extends Omit<TooltipProps, 'title'> {
 
 function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
     return (
         <ShadowRootTooltip
             classes={{ tooltip: classes.tooltip }}
@@ -72,9 +70,16 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
             title={
                 <Typography fontSize={14} lineHeight="18px">
                     {SocialAddressType.Address === type ?
-                        t.account_icon_tooltips_only({
-                            context: platform!,
-                        })
+                        <Trans>
+                            Data source is retrieved from{' '}
+                            <Select
+                                _twitter="Twitter profile"
+                                _facebook="Facebook profile"
+                                _next_id="NEXT.ID"
+                                value={platform}
+                            />
+                            .
+                        </Trans>
                     :   <Trans>Data source is retrieved from {type?.replace('_', ' ') ?? ''}.</Trans>}
                 </Typography>
             }
@@ -90,7 +95,6 @@ export interface AccountIconProps extends withClasses<'icon'> {
 }
 
 export function AccountIcons({ socialAccount, classes: externalClasses }: AccountIconProps) {
-    const t = useSharedTrans()
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
 
     const { supportedAddressTypes } = socialAccount
@@ -234,13 +238,21 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
             classes={{ tooltip: classes.tooltip }}
             title={
                 <Typography fontSize={14} lineHeight="18px" component="div">
-                    {t.account_icon_merged_tooltip({
-                        context:
-                            fromTwitter ? AddressPlatform.Twitter
-                            : fromNextId ? AddressPlatform.NextId
-                            : 'normal',
-                    })}
-                    <>{sources}</>
+                    <Trans>
+                        Data source is retrieved from{' '}
+                        <Select
+                            other=""
+                            _twitter="Twitter profile and "
+                            _next_id="NEXT.ID and "
+                            value={
+                                fromTwitter ? AddressPlatform.Twitter
+                                : fromNextId ?
+                                    AddressPlatform.NextId
+                                :   'normal'
+                            }
+                        />
+                        {sources}.
+                    </Trans>
                 </Typography>
             }>
             <span className={classes.iconStack}>

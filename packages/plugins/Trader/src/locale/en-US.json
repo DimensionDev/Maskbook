@@ -34,6 +34,7 @@
         "HKH+W+": "Data",
         "mYGY3B": "Date",
         "ctb8Cs": ["Dex/Est received (", ["0"], ")"],
+        "Lho4Qd": "DSearch",
         "kPQQEW": "Enter an Amount",
         "Citz6F": "Exchange",
         "7Bj3x9": "Failed",
@@ -103,6 +104,8 @@
         "XcWehA": "Update Quote",
         "+b7T3G": "Updated",
         "wMHvYH": "Value",
-        "Fn9Tvh": "Volume (24h)"
+        "Fn9Tvh": "Volume (24h)",
+        "2GHENQ": "Web3 Profile",
+        "EGWr+Q": "Web3 Profile Card"
     }
 }

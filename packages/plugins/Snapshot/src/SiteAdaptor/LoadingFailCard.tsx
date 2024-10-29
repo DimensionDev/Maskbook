@@ -1,7 +1,6 @@
 import { Component, type PropsWithChildren, type ReactNode } from 'react'
 import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
-import { useSharedTrans } from '@masknet/shared'
 import { Trans } from '@lingui/macro'
 
 export class LoadingFailCard extends Component<
@@ -39,11 +38,10 @@ export class LoadingFailCard extends Component<
     }
 }
 function Full(props: { onClick: () => void }) {
-    const t2 = useSharedTrans()
     return (
         <Box style={{ textAlign: 'center', padding: 16 }}>
             <Typography textAlign="center" color="error">
-                {t2.load_failed()}
+                <Trans>Load failed</Trans>
             </Typography>
             <Button
                 sx={{
@@ -61,14 +59,13 @@ function Full(props: { onClick: () => void }) {
                 }}
                 variant="roundedContained"
                 onClick={props.onClick}>
-                {t2.reload()}
+                <Trans>Reload</Trans>
             </Button>
         </Box>
     )
 }
 
 function NotFull(props: { onClick: () => void }) {
-    const t2 = useSharedTrans()
     return (
         <Box style={{ textAlign: 'center' }}>
             <Typography color={(t) => t.palette.maskColor.publicMain}>
@@ -90,7 +87,7 @@ function NotFull(props: { onClick: () => void }) {
                     },
                 }}
                 onClick={props.onClick}>
-                {t2.retry()}
+                <Trans>Retry</Trans>
             </Button>
         </Box>
     )

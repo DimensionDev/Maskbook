@@ -1,5 +1,5 @@
 import { makeStyles } from '@masknet/theme'
-import { EmptyStatus, LoadingStatus, useSharedTrans } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -48,7 +48,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export function NftRedPacketHistoryList({ onSend, ...rest }: Props) {
     const { classes, cx } = useStyles()
-    const sharedI18N = useSharedTrans()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { data: histories, isPending } = useNftRedPacketHistory(account, chainId)
     const { data: collections = EMPTY_LIST } = useNonFungibleCollections(NetworkPluginID.PLUGIN_EVM, {
@@ -59,7 +58,7 @@ export function NftRedPacketHistoryList({ onSend, ...rest }: Props) {
     if (isPending) {
         return (
             <LoadingStatus className={classes.placeholder} iconSize={30}>
-                {sharedI18N.loading()}
+                <Trans>Loading</Trans>
             </LoadingStatus>
         )
     }

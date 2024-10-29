@@ -16,6 +16,10 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#: src/UI/components/WalletStatusBox/usePendingTransactions.tsx
+msgid "{0, plural, one {# Pending} other {# Pendings}}"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
@@ -421,9 +425,17 @@ msgid "Custom"
 msgstr "自定义"
 
 #: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
+msgstr ""
+
+#: src/UI/components/AccountIcons/index.tsx
 #: src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
 msgstr "数据来源于{0} 。"
+
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile} next_id {NEXT.ID}}."
+msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "Default"
@@ -533,6 +545,10 @@ msgstr "请输入最大优先级费用"
 msgid "Enter an amount"
 msgstr "输入金额"
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Exceeded the maximum file size of 10MB."
+msgstr ""
+
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
 msgstr "失败"
@@ -599,6 +615,10 @@ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Failed to unlock token contract."
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Failed to upload file"
 msgstr ""
 
 #: src/UI/translate.ts
@@ -1162,6 +1182,10 @@ msgstr "合约地址不正确或此 NFT 不属于您。"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "The following wallets are not installed or in conflict with others"
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "The input is not a single file."
 msgstr ""
 
 #: src/UI/translate.ts

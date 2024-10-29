@@ -151,6 +151,10 @@ msgstr ""
 msgid "Dex/Est received ({0})"
 msgstr ""
 
+#: src/SiteAdaptor/trending/PluginDescriptor.tsx
+msgid "DSearch"
+msgstr ""
+
 #: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
 msgid "Enter an Amount"
@@ -469,3 +473,11 @@ msgstr "価値"
 #: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Volume (24h)"
 msgstr "数量(24時間)"
+
+#: src/SiteAdaptor/trending/PluginDescriptor.tsx
+msgid "Web3 Profile"
+msgstr ""
+
+#: src/SiteAdaptor/trending/PluginDescriptor.tsx
+msgid "Web3 Profile Card"
+msgstr ""
