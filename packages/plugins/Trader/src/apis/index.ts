@@ -1,11 +1,6 @@
 import { SourceType, type NonFungibleCollectionOverview, attemptUntil } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import {
-    CoinGeckoTrending,
-    NFTScanTrending_EVM,
-    NFTScanTrending_Solana,
-    SimpleHashEVM,
-} from '@masknet/web3-providers'
+import { CoinGeckoTrending, NFTScanTrending_EVM, NFTScanTrending_Solana, SimpleHashEVM } from '@masknet/web3-providers'
 import { type TrendingAPI } from '@masknet/web3-providers/types'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'

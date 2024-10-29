@@ -43,25 +43,6 @@ export const DSearchHandlers = [
             { status: 200 },
         )
     }),
-    http.get(`${baseURL}/fungible-tokens/coinmarketcap.json`, () => {
-        return HttpResponse.json(
-            [
-                {
-                    pluginID: 'com.mask.evm',
-                    name: 'ethInCMC',
-                    symbol: 'eth',
-                    type: 'FungibleToken',
-                },
-                {
-                    pluginID: 'com.mask.evm',
-                    name: 'test thefuzzy search',
-                    symbol: 'thefuzzy',
-                    type: 'FungibleToken',
-                },
-            ],
-            { status: 200 },
-        )
-    }),
     http.get(`${baseURL}/non-fungible-tokens/nftscan.json`, () => {
         return HttpResponse.json([], { status: 200 })
     }),

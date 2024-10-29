@@ -312,6 +312,9 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                             pure_getters: false,
                             sequences: false,
                         },
+                        output: {
+                            ascii_only: true,
+                        },
                         mangle: false,
                     },
                 }),
