@@ -53,19 +53,6 @@
                 "emitTS": true,
                 "shouldUnescape": true
             }
-        },
-        {
-            "input": "./packages/plugins/RSS3/src/locales/en-US.json",
-            "output": "./packages/plugins/RSS3/src/locales/i18n_generated",
-            "parser": { "type": "i18next", "contextSeparator": "$", "pluralSeparator": "_" },
-            "generator": {
-                "type": "i18next/react-hooks",
-                "hooks": "useRSS3Trans",
-                "namespace": "bio.rss3",
-                "trans": "RSS3Trans",
-                "emitTS": true,
-                "shouldUnescape": true
-            }
         }
     ]
 }

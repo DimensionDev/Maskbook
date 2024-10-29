@@ -1,9 +1,9 @@
 import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
-import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel } from '../common.js'
+import { Trans } from '@lingui/macro'
+import { Typography } from '@mui/material'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -41,19 +41,13 @@ export function CommentAction({ feed, ...rest }: CommentActionProps) {
         <div {...rest} className={cx(rest.className, classes.actions)}>
             {feed.actions.map((action, index) => {
                 const metadata = action.metadata
+                const user = metadata?.handle ?? 'Unknown'
+                const platform = action.platform!
                 return (
                     <Typography className={classes.summary} key={index} component="div">
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <RSS3Trans.note
-                            values={{
-                                user: metadata?.handle ?? 'Unknown',
-                                platform: action.platform!,
-                                context: 'comment',
-                            }}
-                            components={{
-                                user: <AccountLabel address={metadata?.handle} />,
-                            }}
-                        />
+                        <Trans>
+                            <AccountLabel address={metadata?.handle}>{user}</AccountLabel> made a comment on {platform}
+                        </Trans>
                     </Typography>
                 )
             })}

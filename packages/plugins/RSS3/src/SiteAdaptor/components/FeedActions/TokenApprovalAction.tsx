@@ -3,11 +3,11 @@ import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isGreaterThan, leftShift } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, Label } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -46,23 +46,32 @@ export function TokenApprovalAction({ feed, action: act, ...rest }: TokenApprova
     const user = useAddressLabel(owner.address)
 
     const parsedAmount = leftShift(metadata!.value, metadata?.decimals)
-    const uiAmount = isGreaterThan(parsedAmount, '1e+10') ? 'infinite' : parsedAmount.toFixed(2)
+    const amount = isGreaterThan(parsedAmount, '1e+10') ? 'infinite' : parsedAmount.toFixed(2)
+    const symbol = metadata!.symbol!
+    const contract = formatEthereumAddress(action.to!, 4)
+    const context = metadata!.action
     const content = (
         <Typography className={classes.summary} component="div">
-            {/* eslint-disable-next-line react/naming-convention/component-name */}
-            <RSS3Trans.tokenApproval
-                values={{
-                    user,
-                    amount: uiAmount,
-                    symbol: metadata!.symbol!,
-                    contract: formatEthereumAddress(action.to!, 4),
-                    context: metadata!.action,
-                }}
-                components={{
-                    user: <AccountLabel address={owner.address} />,
-                    asset: <Label />,
-                    contract: <AccountLabel address={action.to!} />,
-                }}
+            <Select
+                _approve={
+                    <Trans>
+                        <AccountLabel address={owner.address}>{user}</AccountLabel> approved{' '}
+                        <Label>
+                            {amount} {symbol}
+                        </Label>{' '}
+                        to <AccountLabel address={action.to!}>{contract}</AccountLabel>
+                    </Trans>
+                }
+                _revoke={
+                    <Trans>
+                        <AccountLabel address={owner.address}>{user}</AccountLabel> revoked the approval of{' '}
+                        <Label>
+                            {amount} {symbol}
+                        </Label>{' '}
+                        to <AccountLabel address={action.to!}>{contract}</AccountLabel>
+                    </Trans>
+                }
+                value={context}
             />
         </Typography>
     )

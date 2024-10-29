@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label } from '../common.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -35,20 +35,13 @@ export function ProfileProxyAction({ feed, ...rest }: ProfileProxyActionProps) {
 
     const user = useAddressLabel(feed.owner)
 
+    const platform = feed.platform!
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.profile_proxy
-                    values={{
-                        user,
-                        platform: feed.platform!,
-                    }}
-                    components={{
-                        user: <Label />,
-                        platform: <Label />,
-                    }}
-                />
+                <Trans>
+                    <Label>{user}</Label> appointed a proxy on <Label>{platform}</Label>
+                </Trans>
             </Typography>
         </div>
     )

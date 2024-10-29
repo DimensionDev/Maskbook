@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label, formatValue } from '../common.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -41,24 +41,27 @@ export function TokenBridgeAction({ feed, ...rest }: TokenBridgeActionProps) {
 
     const user = useAddressLabel(feed.owner)
 
+    const amount = formatValue(metadata?.token)
+    const symbol = metadata!.token.symbol
+    const source = feed.network
+    const target = metadata!.target_network.name
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.tokenBridge
-                    values={{
-                        user,
-                        amount: formatValue(metadata?.token),
-                        symbol: metadata!.token.symbol,
-                        source: feed.network,
-                        target: metadata!.target_network.name,
-                    }}
-                    components={{
-                        user: <Label title={feed.owner} />,
-                        platform: <Label title={feed.platform!} sx={{ textTransform: 'capitalize' }} />,
-                        bold: <Label />,
-                    }}
-                />
+                <Trans>
+                    <Label title={feed.owner}>{user}</Label> bridged{' '}
+                    <Label>
+                        {amount} {symbol}
+                    </Label>{' '}
+                    from{' '}
+                    <Label title={feed.platform!} sx={{ textTransform: 'capitalize' }}>
+                        {source}
+                    </Label>{' '}
+                    to{' '}
+                    <Label title={feed.platform!} sx={{ textTransform: 'capitalize' }}>
+                        {target}
+                    </Label>
+                </Trans>
             </Typography>
         </div>
     )

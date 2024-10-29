@@ -1,9 +1,152 @@
 {
     "messages": {
         "Koz2Rg": [["0", "plural", { "one": "Action", "other": "Actions" }]],
+        "hh6gKU": [
+            [
+                "0",
+                "select",
+                {
+                    "create": ["<0>", ["user"], "</0> created a profile on <1>", ["platform"], "</1>"],
+                    "update": ["<2>", ["user"], "</2> updated a profile on <3>", ["platform"], "</3>"]
+                }
+            ]
+        ],
         "2EUnBM": [["0"], " Networks"],
+        "0C9wtf": [
+            [
+                "2",
+                "select",
+                {
+                    "approve": ["<0>", ["user"], "</0> approved ", ["0"], " to <1>", ["contract"], "</1>"],
+                    "revoke": ["<2>", ["user"], "</2> approved ", ["1"], " to <3>", ["contract"], "</3>"]
+                }
+            ]
+        ],
+        "iq8d8s": [
+            [
+                "actionType",
+                "select",
+                {
+                    "stake": ["<0>", ["user"], "</0> staked <1>", ["symbol"], "</1>"],
+                    "claim": ["<2>", ["user"], "</2> claimed <3>", ["symbol"], "</3>"],
+                    "unstake": ["<4>", ["user"], "</4> un-staked <5>", ["symbol"], "</5>"]
+                }
+            ]
+        ],
+        "zZ5rE8": [
+            [
+                "context",
+                "select",
+                {
+                    "approve": [
+                        "<0>",
+                        ["user"],
+                        "</0> approved <1>",
+                        ["amount"],
+                        " ",
+                        ["symbol"],
+                        "</1> to <2>",
+                        ["contract"],
+                        "</2>"
+                    ],
+                    "revoke": [
+                        "<3>",
+                        ["user"],
+                        "</3> revoked the approval of <4>",
+                        ["amount"],
+                        " ",
+                        ["symbol"],
+                        "</4> to <5>",
+                        ["contract"],
+                        "</5>"
+                    ]
+                }
+            ]
+        ],
+        "ldhzoI": [
+            [
+                "context",
+                "select",
+                {
+                    "mint": ["<0>", ["to"], "</0> minted <1>", ["value"], " ", ["symbol"], "</1>"],
+                    "send": ["<2>", ["from"], "</2> sent <3>", ["asset"], "</3> to <4>", ["to"], "</4>"],
+                    "claim": ["<5>", ["to"], "</5> claimed from <6>", ["from"], "</6>"],
+                    "burn": ["<7>", ["from"], "</7> burned <8>", ["value"], " ", ["symbol"], "</8>"],
+                    "deposit": ["<9>", ["from"], "</9> deposited on <10>", ["exchange"], "</10>"],
+                    "withdraw": ["<11>", ["from"], "</11> withdrew on <12>", ["exchange"], "</12>"]
+                }
+            ]
+        ],
+        "f1TiS9": [
+            [
+                "type",
+                "select",
+                {
+                    "post": ["<0>", ["user"], "</0> publish a post on ", ["platform"]],
+                    "mint": ["<1>", ["user"], "</1> minted a post on ", ["platform"]],
+                    "revise": ["<2>", ["user"], "</2> revised a post on ", ["platform"]],
+                    "share": ["<3>", ["user"], "</3> shared a post on ", ["platform"]]
+                }
+            ]
+        ],
         "f54thq": ["<0/> minted", ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }]],
         "CTSEx8": ["<0/> publish a post on ", ["0"]],
+        "Vh2I2e": [
+            "<0>",
+            ["formattedUser"],
+            "</0> ",
+            ["0", "select", { "follow": "followed", "unfollow": "un-followed" }],
+            " <1>",
+            ["other"],
+            "</1> on <2>",
+            ["1"],
+            "</2>"
+        ],
+        "fLG7oy": [
+            "<0>",
+            ["user"],
+            "</0> ",
+            [
+                "0",
+                "select",
+                {
+                    "supply": "supplied",
+                    "add": "added",
+                    "repay": "repaid",
+                    "withdraw": "withdrew",
+                    "collect": "collected",
+                    "remove": "removed",
+                    "borrow": "borrowed"
+                }
+            ],
+            " liquidity on <1>",
+            ["1"],
+            "</1>"
+        ],
+        "gwuMzD": ["<0>", ["user"], "</0> appointed a proxy on <1>", ["platform"], "</1>"],
+        "E399AQ": [
+            "<0>",
+            ["user"],
+            "</0> bridged <1>",
+            ["amount"],
+            " ",
+            ["symbol"],
+            "</1> from <2>",
+            ["source"],
+            "</2> to <3>",
+            ["target"],
+            "</3>"
+        ],
+        "6mHGOS": ["<0>", ["user"], "</0> burned <1>", ["1", "select", { "nft": "an NFT", "name": [["0"]] }], "</1>"],
+        "TppkTk": [
+            "<0>",
+            ["user"],
+            "</0> carried out an activity to <1>",
+            ["target"],
+            "</1> on <2>",
+            ["platform"],
+            "</2>"
+        ],
         "L5kJP9": [
             "<0>",
             ["user"],
@@ -14,6 +157,19 @@
             "</3>",
             ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": "" }]
         ],
+        "V6YDUB": ["<0>", ["user"], "</0> donated <1>", ["costValue"], " ", ["costSymbol"], "</1>"],
+        "WqzYn1": [
+            "<0>",
+            ["user"],
+            "</0> donated <1>",
+            ["costValue"],
+            " ",
+            ["costSymbol"],
+            "</1> to <2>",
+            ["project"],
+            "</2>"
+        ],
+        "eoeq4k": ["<0>", ["user"], "</0> made a comment on ", ["platform"]],
         "BI6MFi": [
             "<0>",
             ["user"],
@@ -25,6 +181,7 @@
             ["symbolName"],
             "</3>"
         ],
+        "CJviCK": ["<0>", ["user"], "</0> proposed"],
         "ONoxwH": [
             "<0>",
             ["user"],
@@ -64,6 +221,22 @@
             ["3"],
             "</5>"
         ],
+        "of3mx/": [
+            "<0>",
+            ["user"],
+            "</0> swapped <1>",
+            ["from_value"],
+            " ",
+            ["from_symbol"],
+            "</1> to <2>",
+            ["to_value"],
+            " ",
+            ["to_symbol"],
+            "</2> on <3>",
+            ["platform"],
+            "</3>"
+        ],
+        "EfAke+": ["<0>", ["user"], "</0> voted for <1>", ["option"], "</1> on <2>", ["platform"], "</2>"],
         "HNF104": [
             "<0>",
             ["user"],
