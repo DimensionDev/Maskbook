@@ -92,7 +92,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             timer1 && clearTimeout(timer1)
             timer2 && clearTimeout(timer2)
         }
-    }, [resultList, profileTabType])
+    }, [resultList.value, profileTabType])
 
     const currentResult = props.currentSearchResult ?? resultList.value?.[0]
 
