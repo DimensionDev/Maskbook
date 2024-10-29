@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -68,7 +67,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Onboarding() {
-    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { _ } = useLingui()
 
@@ -96,7 +94,7 @@ export const Component = memo(function Onboarding() {
                 {_(msg`ready 🚀`)}
             </Typography>,
         ]
-    }, [t])
+    }, [_])
 
     return (
         <>

@@ -5,7 +5,6 @@ import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import Services from '#services'
 import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
-import { DashboardTrans } from '../../../locales/index.js'
 import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 
@@ -108,27 +107,25 @@ export const Component = memo(function Welcome() {
                     </PrimaryButton>
                 </div>
                 <Typography className={classes.policy}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <DashboardTrans.welcome_new_agreement_policy
-                        components={{
-                            agreement: (
-                                <a
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
-                                />
-                            ),
-                            policy: (
-                                <a
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noreferrer noopener"
-                                    href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        By continuing to the app, you agree to these{' '}
+                        <a
+                            className={classes.link}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html">
+                            Service Agreement
+                        </a>{' '}
+                        and{' '}
+                        <a
+                            className={classes.link}
+                            target="_blank"
+                            rel="noreferrer noopener"
+                            href="https://legal.mask.io/maskbook/privacy-policy-browser.html">
+                            Privacy Policy
+                        </a>
+                        .
+                    </Trans>
                 </Typography>
             </SetupFrameController>
         </>

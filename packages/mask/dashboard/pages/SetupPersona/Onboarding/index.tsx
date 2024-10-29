@@ -1,5 +1,4 @@
 import { memo, useCallback, useEffect, useMemo } from 'react'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -17,7 +16,7 @@ import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg, plural, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -78,7 +77,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Onboarding() {
-    const t = useDashboardTrans()
     const { _ } = useLingui()
     const { classes } = useStyles()
 
@@ -134,17 +132,20 @@ export const Component = memo(function Onboarding() {
                 {_(msg`data`)}
             </Typography>,
             <Typography key="ready">
-                {_('Your Persona is on ')}
-                {_('ready 🚀')}
+                {_(msg`Your Persona is on `)}
+                {_(msg`ready 🚀`)}
             </Typography>,
             count && !isZero(count) ?
                 <Typography key="wallets">
-                    {_('You have recovered ')}
-                    {t.persona_onboarding_wallets({ count: Number(count) })}
+                    {_(msg`You have recovered `)}
+                    {plural(count, {
+                        one: '# Wallet 🚀',
+                        other: '# Wallets 🚀',
+                    })}
                 </Typography>
             :   undefined,
         ])
-    }, [t])
+    }, [_])
 
     return (
         <>

@@ -2,7 +2,6 @@ import { memo, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { DashboardTrans, useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Typography, Box, Tab } from '@mui/material'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { UserContext } from '../../../../shared-ui/index.js'
@@ -60,7 +59,6 @@ const useStyles = makeStyles()((theme) => ({
 
 const CloudBackupInner = memo(function CloudBackupInner() {
     const { _ } = useLingui()
-    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const navigate = useNavigate()
@@ -107,29 +105,25 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                 }),
             )
         },
-        [currentTab, tabs, formState, navigate, updateUser, user],
+        [_, currentTab, tabs, formState, navigate, updateUser, user],
     )
 
     const description = useMemo(() => {
         if (user.cloudBackupMethod === BackupAccountType.Email && user.email)
             return (
-                // eslint-disable-next-line react/naming-convention/component-name
-                <DashboardTrans.cloud_backup_backup_exists
-                    components={{ strong: <strong /> }}
-                    values={{ account: user.email }}
-                />
+                <Trans>
+                    You used <strong>{user.email}</strong> for the last cloud backup.
+                </Trans>
             )
         if (user.cloudBackupMethod === BackupAccountType.Phone && user.phone)
             return (
-                // eslint-disable-next-line react/naming-convention/component-name
-                <DashboardTrans.cloud_backup_backup_exists
-                    components={{ strong: <strong /> }}
-                    values={{ account: user.phone }}
-                />
+                <Trans>
+                    You used <strong>{user.email}</strong> for the last cloud backup.
+                </Trans>
             )
 
         return <Trans>Please use your frequently used email or phone number for backup.</Trans>
-    }, [user, DashboardTrans, t])
+    }, [user])
     return (
         <>
             <Box>

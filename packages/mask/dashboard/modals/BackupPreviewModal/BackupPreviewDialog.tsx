@@ -1,6 +1,5 @@
 import { InjectedDialog, LoadingStatus } from '@masknet/shared'
 import { memo, useCallback, useMemo, useRef } from 'react'
-import { useDashboardTrans } from '../../locales/i18n_generated.js'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
@@ -80,7 +79,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { classes, theme } = useStyles()
     const [params, setParams] = useSearchParams()
     const navigate = useNavigate()
-    const t = useDashboardTrans()
     const { updateUser } = UserContext.useContainer()
     const {
         hasPassword,
@@ -152,7 +150,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 return false
             }
         },
-        [code, hasPassword, backupWallets, abstract, code, account, type, t, navigate, updateUser, params],
+        [code, hasPassword, backupWallets, abstract, code, account, type, _, navigate, updateUser, params],
     )
 
     const handleClose = useCallback(() => {
@@ -247,7 +245,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         loading,
         previewInfo,
         control,
-        t,
+        _,
         // eslint-disable-next-line react-compiler/react-compiler
         JSON.stringify(errors),
         backupWallets,
@@ -293,7 +291,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         backupWallets,
         value,
         uploadLoading,
-        t,
         handleClose,
         handleSubmit,
         handleUploadBackup,

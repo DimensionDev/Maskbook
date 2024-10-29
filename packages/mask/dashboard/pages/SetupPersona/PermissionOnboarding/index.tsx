@@ -1,5 +1,4 @@
 import { memo, useCallback, useMemo } from 'react'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { Box, Typography, useTheme } from '@mui/material'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -10,7 +9,6 @@ import { EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
 
 import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
-import { compact } from 'lodash-es'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 import { Trans } from '@lingui/macro'
@@ -85,7 +83,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Onboarding() {
-    const t = useDashboardTrans()
     const { classes } = useStyles()
 
     const theme = useTheme()
@@ -102,7 +99,7 @@ export const Component = memo(function Onboarding() {
     }, [])
 
     const words = useMemo(() => {
-        return compact([
+        return [
             <Typography key="identity">
                 <Trans>
                     We are pleased to inform you that the update for X (formerly named Twitter) website has been
@@ -110,8 +107,8 @@ export const Component = memo(function Onboarding() {
                     your continuous support!
                 </Trans>
             </Typography>,
-        ])
-    }, [t])
+        ]
+    }, [])
 
     return (
         <>

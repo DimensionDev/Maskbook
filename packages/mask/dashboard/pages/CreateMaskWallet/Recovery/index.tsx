@@ -16,7 +16,6 @@ import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Rest
 import { RestoreWalletFromLocal } from '../../../components/Restore/RestoreWalletFromLocal.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { RecoveryContext, RecoveryProvider } from '../../../contexts/index.js'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { ResetWalletContext } from '../context.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -87,7 +86,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function Recovery() {
     const { _ } = useLingui()
-    const t = useDashboardTrans()
     const location = useLocation()
     const { cx, classes } = useStyles()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
@@ -126,7 +124,7 @@ export const Component = memo(function Recovery() {
                 setError(errorMsg === 'Invalid mnemonic words.' ? <Trans>Incorrect Mnemonic Words.</Trans> : errorMsg)
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password],
+        [navigate, location.state?.isReset, location.state?.password],
     )
 
     const { NameService } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
@@ -154,7 +152,7 @@ export const Component = memo(function Recovery() {
                 })
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password, newWalletName],
+        [_, navigate, location.state?.isReset, location.state?.password, newWalletName],
     )
 
     const onRestore = useCallback(
@@ -190,7 +188,7 @@ export const Component = memo(function Recovery() {
                 )
             }
         },
-        [t, navigate, location.state?.isReset, location.state?.password, newWalletName],
+        [navigate, location.state?.isReset, location.state?.password, newWalletName],
     )
 
     const handleRecovery = useCallback(() => {

@@ -23,6 +23,10 @@ msgstr "{0} 可用"
 msgid "{0} Mins"
 msgstr "{0} 分钟"
 
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "{count, plural, one {# Wallet 🚀} other {# Wallets 🚀}}"
+msgstr ""
+
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
 msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
 msgstr ""
@@ -342,6 +346,11 @@ msgstr ""
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Browser File"
 msgstr "浏览文件"
+
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+msgid "By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>."
+msgstr ""
 
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "By proceeding you agree to the"
@@ -1960,6 +1969,7 @@ msgid "Re-enter"
 msgstr "重新输入"
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "ready 🚀"
 msgstr "准备🚀"
 
@@ -2775,6 +2785,10 @@ msgstr ""
 msgid "You have backed up your data."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "You have recovered"
+msgstr ""
+
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "You have signed with your wallet."
 msgstr ""
@@ -2787,12 +2801,21 @@ msgstr ""
 msgid "You need to open the dApp to view the specific content."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
+msgid "You used <0>{0}</0> for the last cloud backup."
+msgstr ""
+
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "Your Persona is on"
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx

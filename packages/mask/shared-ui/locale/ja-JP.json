@@ -3,6 +3,7 @@
         "H8rw2f": "(名前はウェブサイトによって設定されます)",
         "KMgp2+": [["0"], " 利用可能です"],
         "y6VCOb": [["0"], " 分"],
+        "FKrzPv": [["count", "plural", { "one": ["#", " Wallet 🚀"], "other": ["#", " Wallets 🚀"] }]],
         "yx3mb0": [
             [
                 "decryptProgress",
@@ -85,6 +86,7 @@
         "2Xze/r": "ブロックエクスプローラーのURL",
         "tCAZi9": "Browse the Web3 footprints of your X friends, enjoy the freedom of Web3.",
         "JlIzk8": "ブラウザファイル",
+        "ZTXjJ3": "By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>.",
         "HVRhUV": "続行することで、以下に同意します。",
         "vhqFTT": "Can't find a valid user address data source.",
         "dEgA5A": "Cancel",
@@ -639,11 +641,14 @@
         "Qbo7Ev": "ニーモニックワードを書き留めてください",
         "f5AidZ": "Write down recovery phrase",
         "FP6WjU": "You have backed up your data.",
+        "dyqtoj": "You have recovered",
         "QU9aqK": "You have signed with your wallet.",
         "zkEW09": "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?",
         "qcqdIh": "You need to open the dApp to view the specific content.",
+        "pHqZUU": ["You used <0>", ["0"], "</0> for the last cloud backup."],
         "FnQek5": "このサイトへの接続は暗号化されていないため、敵対的な第三者によって変更されます。このリクエストを拒否することを強くお勧めします。",
         "Q68Nuc": "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it.",
+        "N19nSk": "Your Persona is on",
         "0kr+x1": "Your Wallet is on"
     }
 }

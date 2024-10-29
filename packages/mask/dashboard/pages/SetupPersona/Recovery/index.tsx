@@ -7,7 +7,6 @@ import { Box } from '@mui/system'
 import { memo, use, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
@@ -79,7 +78,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function Recovery() {
     const { _ } = useLingui()
-    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { currentPersona } = PersonaContext.useContainer()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
@@ -107,7 +105,7 @@ export const Component = memo(function Recovery() {
                 setError(<Trans>Incorrect recovery phrase.</Trans>)
             }
         },
-        [t, navigate],
+        [navigate],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
@@ -129,7 +127,7 @@ export const Component = memo(function Recovery() {
                 onError('privateKey', { type: 'value', message: _(msg`Incorrect Private Key`) })
             }
         },
-        [t, navigate],
+        [_, navigate],
     )
 
     const hasNoPersona = !currentPersona
