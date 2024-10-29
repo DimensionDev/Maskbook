@@ -109,22 +109,23 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
             [
                 () =>
                     ENS.lookup(domain).then((x = '') => {
-                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        if (!x || isZeroAddressEVM(x)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Mainnet]
                     }),
                 () =>
                     SpaceID.lookup(domain).then((x = '') => {
-                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        if (!x || isZeroAddressEVM(x)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.BSC]
                     }),
                 () =>
                     ARBID.lookup(domain).then((x = '') => {
-                        if (!x || isZeroAddressEVM(address)) throw new Error(`No result for ${domain}`)
+                        if (!x || isZeroAddressEVM(x)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Arbitrum]
                     }),
             ],
             ['', ChainIdEVM.Mainnet],
         )
+
         if (!isValidAddressEVM(address) || isZeroAddressEVM(address)) return EMPTY_LIST
 
         return [
@@ -437,7 +438,8 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
             if (keyword.endsWith('.eth')) Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchEns)
             else Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
-            return this.searchRSS3Handle(keyword) as Promise<T[]>
+            const domains = (await this.searchRSS3Handle(keyword)) as T[]
+            if (domains.length) return domains
         }
         if (keyword.endsWith('.bit')) {
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)

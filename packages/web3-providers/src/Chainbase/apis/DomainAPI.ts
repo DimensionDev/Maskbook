@@ -19,7 +19,7 @@ class ChainbaseDomainAPI implements DomainAPI.Provider<ChainId> {
         const response = await fetchFromChainbase<ENSRecord>(
             urlcat(`/v1/${chainId !== ChainId.BSC ? 'ens' : 'space-id'}/records`, { chain_id: chainId, domain: name }),
         )
-        return response?.address
+        return response?.address || undefined
     }
 
     private async getName(chainId: ChainId, address: string) {

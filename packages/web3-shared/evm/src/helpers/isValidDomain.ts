@@ -1,6 +1,8 @@
 import punycode from 'punycode'
 
-const NAME_SERVICE_RE = /\.(eth|bnb|arb|lens|zeta|mode|taiko|mint)$/
+// cspell:ignore binanceus klever kresus
+const NAME_SERVICE_RE =
+    /\.(eth|bnb|arb|lens|zeta|mode|taiko|mint|x|polygon|nft|crypto|blockchain|bitcoin|dao|888|wallet|binanceus|hi|klever|kresus|anime|manga|go|zil)$/
 const DOMAIN_RE = /^(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+[a-z0-9][-a-z0-9]*[a-z0-9]$/u
 const ENS_SUBDOMAIN_RE = /\[.{64}?\]\.(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+[a-z0-9][-a-z0-9]*[a-z0-9]$/u
 

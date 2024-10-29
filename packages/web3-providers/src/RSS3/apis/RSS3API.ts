@@ -134,7 +134,8 @@ export class RSS3 {
             account,
         })
 
-        const response = await fetchFromRSS3<RSS3BaseAPI.ProfilesResponse>(url)
+        const response = await fetchFromRSS3<RSS3BaseAPI.ProfilesResponse | { error: string }>(url)
+        if ('error' in response) return []
 
         return response
     }

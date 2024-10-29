@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'vitest'
 import { resolveNonFungibleTokenIdFromEnsDomain } from '../../src/helpers/resolveNonFungibleTokenIdFromEnsDomain.js'
 
+// cspell:ignore suji
 describe('resolveNonFungibleTokenIdFromEnsDomain', () => {
     test('resolve token Id', () => {
         const tokenId = resolveNonFungibleTokenIdFromEnsDomain('suji.eth')

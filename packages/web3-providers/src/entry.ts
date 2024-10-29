@@ -86,6 +86,8 @@ export {
 // Chainbase
 export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
 
+export { Unstoppable } from './Unstoppable/index.js'
+
 // Zerion
 export { Zerion, ZerionGas, ZerionNonFungibleToken } from './Zerion/index.js'
 

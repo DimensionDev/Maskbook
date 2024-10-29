@@ -1,6 +1,7 @@
 import { expect, test } from 'vitest'
 import { parseEIP4361Message } from '../../src/helpers/eip4361-parser.js'
 
+// cspell:ignore evfyavhwq
 const case1 = `example.com wants you to sign in with your Ethereum account:
 0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2
 
