@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, memo } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { compact, first } from 'lodash-es'
+import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Tab, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -174,9 +174,6 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
             label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
         }))
     }, [activatedPlugins, translate])
-    const tabActions = getAvailablePlugins(activatedPlugins, (plugins) => {
-        return compact(plugins.map((x) => x.ProfileTabActions))
-    })
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
@@ -232,13 +229,6 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                                                 classes={{ root: classes.tabRoot, textColorPrimary: classes.tabRoot }}
                                             />
                                         ))}
-                                        {tabActions.length ?
-                                            <span className={classes.actions}>
-                                                {tabActions.map((Action, i) => (
-                                                    <Action key={i} slot="profile-card" />
-                                                ))}
-                                            </span>
-                                        :   null}
                                     </MaskTabList>
                                 </TabContext>
                             </div>

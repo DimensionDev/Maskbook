@@ -1,17 +1,14 @@
-import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { NetworkPluginID, type SocialAccount, SocialAddressType, type SocialIdentity } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { Box } from '@mui/material'
-import { memo } from 'react'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
-import { toggleFilter, useIsTabActionEnabled } from './emitter.js'
+import { FinanceFeeds } from './FinanceFeeds/index.js'
 import { Modals } from './modals/index.js'
 import { SocialFeeds } from './SocialFeeds/index.js'
-import { FinanceFeeds } from './FinanceFeeds/index.js'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -136,20 +133,6 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <Modals />
     },
-    ProfileTabActions: memo(function FeedFilterButton({ slot }) {
-        const enabled = useIsTabActionEnabled(slot)
-        return (
-            <Icons.Filter
-                size={24}
-                onClick={() => {
-                    if (!enabled) return
-                    toggleFilter(slot)
-                }}
-                disabled={!enabled}
-                style={enabled ? undefined : { color: 'rgba(172, 180, 193, 1)', cursor: 'not-allowed' }}
-            />
-        )
-    }),
     ProfileTabs: [FinanceTabConfig, SocialTabConfig],
     ProfileCardTabs: [FinanceTabConfigInProfileCard, SocialTabConfigInProfileCard],
     SearchResultTabs: [FinanceTabConfigInSearchResult, SocialTabConfigInSearchResult],
