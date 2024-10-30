@@ -62,4 +62,3 @@ msgstr ""
 #: src/SiteAdaptor/components/NFTList.tsx
 msgid "Total"
 msgstr ""
-
