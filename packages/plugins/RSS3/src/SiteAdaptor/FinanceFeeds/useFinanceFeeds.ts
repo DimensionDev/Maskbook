@@ -17,7 +17,7 @@ export function useFinanceFeeds({ address }: Options) {
             :   skipToken,
         getNextPageParam: (lp) => lp.nextIndicator,
         select(data) {
-            return data.pages.flatMap((page) => page.data).filter((x) => !x.isScam)
+            return data.pages.flatMap((page) => page.data)
         },
     })
 }

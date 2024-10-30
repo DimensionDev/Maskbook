@@ -1,5 +1,12 @@
 import { compact, first, unionWith } from 'lodash-es'
-import { createPageable, createIndicator, createNextIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
+import {
+    createPageable,
+    createIndicator,
+    createNextIndicator,
+    type Pageable,
+    EMPTY_LIST,
+    type PageIndicator,
+} from '@masknet/shared-base'
 import {
     type Transaction,
     isSameAddress,
@@ -71,8 +78,14 @@ class ZerionAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType>, Histo
         })
         const res = await fetchJSON<TransactionsResponse>(url)
         const transactions = compact(res.data.map((x) => formatRestTransaction(x)))
+        let nextIndicator: PageIndicator | undefined = undefined
+        if (res.links.next) {
+            const url = new URL(res.links.next)
+            const pageAfter = url ? url.searchParams.get('page[after]') : undefined
+            nextIndicator = pageAfter ? createNextIndicator(indicator, pageAfter) : undefined
+        }
 
-        return createPageable(transactions, createIndicator(indicator), createNextIndicator(indicator))
+        return createPageable(transactions, createIndicator(indicator), nextIndicator)
     }
 }
 

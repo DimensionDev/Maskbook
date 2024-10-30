@@ -3,6 +3,7 @@ import {
     createIndicator,
     createNextIndicator,
     createPageable,
+    EMPTY_LIST,
     NameServiceID,
     type PageIndicator,
 } from '@masknet/shared-base'
@@ -662,6 +663,9 @@ export class Lens {
             lensClient = new LensClient({
                 environment: production,
             })
+        }
+        if (!profileIds.length) {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
         const result = await lensClient.publication.fetchAll({
             where: {

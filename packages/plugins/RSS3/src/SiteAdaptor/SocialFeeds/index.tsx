@@ -58,7 +58,7 @@ export const SocialFeeds = memo<SocialFeedsProps>(function SocialFeeds({ userId,
             ))}
 
             {hasNextPage ?
-                <ElementAnchor height={10} callback={fetchNextPage}>
+                <ElementAnchor height={30} callback={fetchNextPage}>
                     {loading ?
                         <LoadingBase className={classes.loading} />
                     :   null}

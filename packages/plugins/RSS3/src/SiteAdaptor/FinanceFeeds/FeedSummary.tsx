@@ -18,7 +18,8 @@ const useStyles = makeStyles<{ size: number }>()((theme) => ({
 }))
 
 function formatAmount(amount: string) {
-    return trimZero(new BigNumber(amount).toFixed(4))
+    const bn = new BigNumber(amount)
+    return Number.isNaN(bn.toNumber()) ? amount : trimZero(bn.toFixed(4))
 }
 
 function SummaryTypography(props: TypographyProps<'div'>) {
@@ -130,7 +131,15 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
     }
 
     if (txType === 'approve') {
-        return approvalSummaries
+        return approvalSummaries?.length ? approvalSummaries : (
+                <SummaryTypography {...rest}>
+                    <Trans>
+                        <AccountLabel address={owner.address} />
+                        approved with
+                        <AccountLabel address={transaction.to} />
+                    </Trans>
+                </SummaryTypography>
+            )
     }
 
     return (

@@ -27,11 +27,13 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
     const {
         error,
         data: feeds = EMPTY_LIST,
-        isPending: loading,
+        isPending,
         isLoading: isInitialLoading,
+        isFetchingNextPage,
         hasNextPage,
         fetchNextPage,
     } = useFinanceFeeds({ address })
+    const loading = isPending || isFetchingNextPage
 
     const Utils = useWeb3Utils()
     const { data: reversedName } = useReverseAddress(undefined, address)
@@ -81,7 +83,7 @@ export const FinanceFeeds = memo<FinanceFeedsProps>(function FinanceFeeds({ addr
                 ))}
 
                 {hasNextPage ?
-                    <ElementAnchor height={10} callback={() => fetchNextPage()}>
+                    <ElementAnchor height={30} callback={() => fetchNextPage()}>
                         {loading ?
                             <LoadingBase className={classes.loading} />
                         :   null}
