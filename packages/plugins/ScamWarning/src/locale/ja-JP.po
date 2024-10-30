@@ -27,4 +27,3 @@ msgstr "ユーザーが公開した暗号化ウェブサイトが危険か悪意
 #: src/SiteAdaptor/index.tsx
 msgid "Safety Warning"
 msgstr "安全警告"
-
