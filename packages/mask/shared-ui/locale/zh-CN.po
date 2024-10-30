@@ -20,8 +20,8 @@ msgid "{0, plural, one {# Hour} other {# Hours}}"
 msgstr ""
 
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
-msgid "{0, plural, one {# Pending} other {# Pendings}}"
-msgstr ""
+#~ msgid "{0, plural, one {# Pending} other {# Pendings}}"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
@@ -30,6 +30,10 @@ msgstr "{0} 可用"
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
 msgstr "{0} 分钟"
+
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
+msgid "{0} Pending"
+msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "{count, plural, one {# Wallet 🚀} other {# Wallets 🚀}}"
@@ -40,8 +44,8 @@ msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to de
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "{promote_file_service} \\n{encrypted}"
-msgstr ""
+#~ msgid "{promote_file_service} \\n{encrypted}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"

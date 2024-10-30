@@ -30,7 +30,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
-import { Plural, Trans } from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -178,7 +178,7 @@ function useToolbox() {
         return (
             <>
                 <span style={{ marginRight: 12 }}>
-                    <Plural value={pendingTransactions.length} one="# Pending" other="# Pendings" />
+                    <Trans>{pendingTransactions.length} Pending</Trans>
                 </span>
                 <CircularProgress thickness={6} size={20} color="inherit" />
             </>

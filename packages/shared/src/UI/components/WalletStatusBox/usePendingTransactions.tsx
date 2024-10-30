@@ -8,7 +8,7 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { TransactionList } from './TransactionList.js'
-import { Plural, Trans } from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {
@@ -50,7 +50,7 @@ export function usePendingTransactions() {
                 <div className={cx(pendingTransactions.length ? '' : classes.hide)}>
                     {pendingTransactions.length ?
                         <Typography className={classes.pendingSummary} variant="body2" mr={1} fontWeight={700}>
-                            <Plural one="# Pending" other="# Pendings" value={pendingTransactions.length} />
+                            <Trans>{pendingTransactions.length} Pending</Trans>
                         </Typography>
                     :   null}
                 </div>

@@ -113,7 +113,7 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                             <br />
                             <br />
                             Mask Network provides non-commercial free services. The plug-ins are provided by community
-                            members and other excellent third-party DApp teams. Due to the natrue of the decentralized
+                            members and other excellent third-party DApp teams. Due to the nature of the decentralized
                             network and other uncertain risk factors, users are requested to properly protect their
                             sensitive information such as wallet mnemonic words and private keys. Please be cautious
                             when interact with any blockchain contract. The risks caused by any third-party DApps

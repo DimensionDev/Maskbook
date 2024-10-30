@@ -100,7 +100,7 @@ function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Me
         const promote_file_service = _(
             msg`📃📃📃 Try to permanently use decentralized file storage on ${sns}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions.`,
         )
-        return _(msg`${promote_file_service} \n${encrypted}`)
+        return `${promote_file_service} \n${encrypted}`
     }
     return null
 }
