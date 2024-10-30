@@ -12,14 +12,14 @@ import { PopupRoutes, type PersonaInformation, type Wallet, PopupModalRoutes } f
 import { useWallet, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, MaskWalletProvider, EVMWeb3 } from '@masknet/web3-providers'
 import { type ChainId, ProviderType, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { useMaskSharedTrans, UserContext } from '../../../../shared-ui/index.js'
+import { UserContext } from '../../../../shared-ui/index.js'
 import Services from '#services'
 import { useTitle, PopupContext, useHasPassword } from '../../../hooks/index.js'
 import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
-import { Trans, msg } from '@lingui/macro'
+import { Plural, Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -133,7 +133,6 @@ const LogoutUI = memo<LogoutUIProps>(
         chainId,
     }) => {
         const { _ } = useLingui()
-        const t = useMaskSharedTrans()
         const theme = useTheme()
         const modalNavigate = useModalNavigate()
         const { classes } = useStyles()
@@ -234,7 +233,7 @@ const LogoutUI = memo<LogoutUIProps>(
             }
 
             return
-        }, [manageWallets, hasPassword, paymentPassword, paymentPasswordError, backupPassword, password, error, t])
+        }, [manageWallets, hasPassword, paymentPassword, paymentPasswordError, backupPassword, password, error, _])
 
         return (
             <Box flex={1} maxHeight="544px" overflow="auto" data-hide-scrollbar>
@@ -297,10 +296,12 @@ const LogoutUI = memo<LogoutUIProps>(
                         </Trans>
                         {currentPersona && manageWallets.length ?
                             <Typography mt={2}>
-                                {t.popups_log_out_with_smart_pay_tips({
-                                    persona: currentPersona.nickname || '',
-                                    count: manageWallets.length,
-                                })}
+                                <Trans>
+                                    Please note: This Persona {currentPersona.nickname} is the management account of
+                                    above listed SmartPay{' '}
+                                    <Plural one="wallet" other="wallets" value={manageWallets.length} />. You cannot use
+                                    SmartPay wallet to interact with blockchain after logging out persona.
+                                </Trans>
                             </Typography>
                         :   null}
                     </Typography>

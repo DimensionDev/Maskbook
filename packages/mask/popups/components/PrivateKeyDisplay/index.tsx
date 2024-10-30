@@ -4,7 +4,6 @@ import { useAsync, useCopyToClipboard } from 'react-use'
 import { memo, useCallback, useState } from 'react'
 import Services from '#services'
 import { Icons } from '@masknet/icons'
-import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import { Box, Typography, alpha } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletBalance } from '../index.js'
@@ -145,10 +144,9 @@ export const PrivateKeyDisplay = memo<PrimaryKeyDisplayProps>(function PrivateKe
                             <Box className={classes.mask} onClick={toggle}>
                                 <Icons.EyeOff size={24} />
                                 <Typography className={classes.tips}>
-                                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                    <MaskSharedTrans.popups_wallet_backup_private_key_view_tips
-                                        components={{ br: <br /> }}
-                                    />
+                                    <Trans>
+                                        Tap to view the private key <br /> Make sure no one is looking at your screen
+                                    </Trans>
                                 </Typography>
                             </Box>
                         :   null}

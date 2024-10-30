@@ -437,6 +437,10 @@ msgstr "数据来源于{0} 。"
 msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile} next_id {NEXT.ID}}."
 msgstr ""
 
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the natrue of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."
+msgstr ""
+
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "Default"
 msgstr "默认"

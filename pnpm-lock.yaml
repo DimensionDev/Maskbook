@@ -18,13 +18,12 @@ overrides:
   '@types/react': npm:types-react@beta
   '@types/react-dom': npm:types-react-dom@beta
   glob-stream: 7.0.0
-  i18next-translation-parser>html-parse-stringify2: github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c
   react: 0.0.0-experimental-58af67a8f8-20240628
   react-dom: 0.0.0-experimental-58af67a8f8-20240628
   reflect-metadata: 0.1.13
   webpack@5: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
 
-pnpmfileChecksum: wyceoz3gqmntogdvqfopqxokfq
+pnpmfileChecksum: 6lrt4fdzpwjn4722kn5a7ujkd4
 
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1':
@@ -134,9 +133,6 @@ importers:
       '@typescript/lib-dom':
         specifier: npm:@types/web@^0.0.171
         version: '@types/web@0.0.171'
-      i18next:
-        specifier: ^23.11.5
-        version: 23.11.5
       knip:
         specifier: ^5.23.2
         version: 5.23.2(@types/node@22.7.5)(typescript@5.7.0-beta)
@@ -149,9 +145,6 @@ importers:
       react-dom:
         specifier: 0.0.0-experimental-58af67a8f8-20240628
         version: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
-      react-i18next:
-        specifier: ^14.1.2
-        version: 14.1.2(i18next@23.11.5)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       ses:
         specifier: 1.9.0
         version: 1.9.0
@@ -183,9 +176,6 @@ importers:
       '@lingui/swc-plugin':
         specifier: ^4.0.10
         version: 4.0.10(@lingui/macro@4.12.0(@lingui/react@4.12.0(react@0.0.0-experimental-58af67a8f8-20240628))(babel-plugin-macros@3.1.0)(typescript@5.7.0-beta))(@swc/core@1.7.35)
-      '@magic-works/i18n-codegen':
-        specifier: ^0.6.1
-        version: 0.6.1(typescript@5.7.0-beta)
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
@@ -2572,9 +2562,6 @@ importers:
       dompurify:
         specifier: ^3.1.5
         version: 3.1.5
-      i18next-browser-languagedetector:
-        specifier: ^8.0.0
-        version: 8.0.0
       idb:
         specifier: ^8.0.0
         version: 8.0.0
@@ -3909,6 +3896,9 @@ packages:
     resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
+    peerDependenciesMeta:
+      '@types/webextension-polyfill':
+        optional: true
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
@@ -4959,12 +4949,6 @@ packages:
 
   '@locker/near-membrane-shared@0.13.1':
     resolution: {integrity: sha512-xUVT0H9Xp1ITQiO3bZwcrSoS0gL94ePmBzE6Pse3bpX/JFxmGV1/rCAiK0GTkQ7A5mBTNzSpVVmvotEapr7xtQ==}
-
-  '@magic-works/i18n-codegen@0.6.1':
-    resolution: {integrity: sha512-RVvmAKv7avaoppZhnasCDuTKYg0DClieP5bVdALDMBGyyL2gNRYMABJfr3+y6MzyQ91Zbzy4oFtEmUOCscwAEw==}
-    hasBin: true
-    peerDependencies:
-      typescript: ^5.4
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -10157,13 +10141,6 @@ packages:
     engines: {node: '>=12'}
     hasBin: true
 
-  html-parse-stringify2@https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    resolution: {tarball: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c}
-    version: 2.0.1
-
-  html-parse-stringify@3.0.1:
-    resolution: {integrity: sha512-KknJ50kTInJ7qIScF3jeaFRpMpE8/lfiTdzf/twXyPBLAGrLRTmkz3AdTnKeh40X8k9L2fdYwEp/42WGXIRGcg==}
-
   html-to-image@1.11.11:
     resolution: {integrity: sha512-9gux8QhvjRO/erSnDPv28noDZcPZmYE7e1vFsBLKLlRlKDSqNJYebj6Qz1TGd5lsRV+X+xYyjCKjuZdABinWjA==}
 
@@ -10292,15 +10269,6 @@ packages:
 
   hyphenate-style-name@1.0.4:
     resolution: {integrity: sha512-ygGZLjmXfPHj+ZWh6LwbC37l43MhfztxetbFCoYTM2VjkIUpeHgSNn7QIyVFj7YQ1Wl9Cbw5sholVJPzWvC2MQ==}
-
-  i18next-browser-languagedetector@8.0.0:
-    resolution: {integrity: sha512-zhXdJXTTCoG39QsrOCiOabnWj2jecouOqbchu3EfhtSHxIB5Uugnm9JaizenOy39h7ne3+fLikIjeW88+rgszw==}
-
-  i18next-translation-parser@1.0.1:
-    resolution: {integrity: sha512-SdB8Z8Hlx73aymNz+70+zddBdZvZ/4ACs8WteQy+e+kRM4qe714zAylN+D1gzl75iyhj0IqPllrSmRlZXCQCvg==}
-
-  i18next@23.11.5:
-    resolution: {integrity: sha512-41pvpVbW9rhZPk5xjCX2TPJi2861LEig/YRhUkY+1FQ2IQPS0bKUDYnEqY8XPPbB48h1uIwLnP9iiEfuSl20CA==}
 
   iconv-lite@0.4.24:
     resolution: {integrity: sha512-v3MXnZAcvnywkTUEZomIActle7RXXeedOR31wwl7VlyoXO4Qi9arvSenNQWne1TcRwhCL1HwLI21bEqdpj8/rA==}
@@ -12884,19 +12852,6 @@ packages:
     peerDependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
-  react-i18next@14.1.2:
-    resolution: {integrity: sha512-FSIcJy6oauJbGEXfhUgVeLzvWBhIBIS+/9c6Lj4niwKZyGaGb4V4vUbATXSlsHJDXXB+ociNxqFNiFuV1gmoqg==}
-    peerDependencies:
-      i18next: '>= 23.2.3'
-      react: 0.0.0-experimental-58af67a8f8-20240628
-      react-dom: '*'
-      react-native: '*'
-    peerDependenciesMeta:
-      react-dom:
-        optional: true
-      react-native:
-        optional: true
-
   react-idle-timer@5.7.2:
     resolution: {integrity: sha512-+BaPfc7XEUU5JFkwZCx6fO1bLVK+RBlFH+iY4X34urvIzZiZINP6v2orePx3E6pAztJGE7t4DzvL7if2SL/0GQ==}
     peerDependencies:
@@ -14820,14 +14775,6 @@ packages:
   vlq@0.2.3:
     resolution: {integrity: sha512-DRibZL6DsNhIgYQ+wNdWDL2SL3bKPlVrRiBqV5yuMm++op8W4kGFtaQfCs4KEJn0wBZcHVHJ3eoywX8983k1ow==}
 
-  void-elements@2.0.1:
-    resolution: {integrity: sha512-qZKX4RnBzH2ugr8Lxa7x+0V6XD9Sb/ouARtiasEQCHB1EVU4NXtmHsDDrx1dO4ne5fc3J6EW05BP1Dl0z0iung==}
-    engines: {node: '>=0.10.0'}
-
-  void-elements@3.1.0:
-    resolution: {integrity: sha512-Dhxzh5HZuiHQhbvTW9AMetFfBHDMYpo23Uo9btPXgdYP+3T5S+p+jgNy7spra+veYhBP2dCSgxR/i2Y02h5/6w==}
-    engines: {node: '>=0.10.0'}
-
   vscode-languageserver-textdocument@1.0.11:
     resolution: {integrity: sha512-X+8T3GoiwTVlJbicx/sIAF+yuJAqz8VvwJyoMVhwEMoEKE/fkDmrqUgDMyBECcM2A2frVZIUj5HI/ErRXCfOeA==}
 
@@ -16599,9 +16546,10 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
-      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.6.2
+    optionalDependencies:
+      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
     dependencies:
@@ -18127,13 +18075,6 @@ snapshots:
 
   '@locker/near-membrane-shared@0.13.1': {}
 
-  '@magic-works/i18n-codegen@0.6.1(typescript@5.7.0-beta)':
-    dependencies:
-      chokidar: 3.5.3
-      i18next-translation-parser: 1.0.1
-      typescript: 5.7.0-beta
-      yargs: 17.7.2
-
   '@manypkg/find-root@1.1.0':
     dependencies:
       '@babel/runtime': 7.24.7
@@ -19480,20 +19421,20 @@ snapshots:
 
   '@types/babel__core@7.20.0':
     dependencies:
-      '@babel/parser': 7.24.6
-      '@babel/types': 7.24.6
+      '@babel/parser': 7.25.8
+      '@babel/types': 7.25.8
       '@types/babel__generator': 7.6.4
       '@types/babel__template': 7.4.1
       '@types/babel__traverse': 7.20.5
 
   '@types/babel__generator@7.6.4':
     dependencies:
-      '@babel/types': 7.24.6
+      '@babel/types': 7.25.8
 
   '@types/babel__template@7.4.1':
     dependencies:
-      '@babel/parser': 7.24.6
-      '@babel/types': 7.24.6
+      '@babel/parser': 7.25.8
+      '@babel/types': 7.25.8
 
   '@types/babel__traverse@7.20.5':
     dependencies:
@@ -21210,8 +21151,8 @@ snapshots:
 
   babel-plugin-jest-hoist@28.1.3:
     dependencies:
-      '@babel/template': 7.24.6
-      '@babel/types': 7.24.6
+      '@babel/template': 7.25.7
+      '@babel/types': 7.25.8
       '@types/babel__core': 7.20.0
       '@types/babel__traverse': 7.20.5
 
@@ -24818,14 +24759,6 @@ snapshots:
       relateurl: 0.2.7
       terser: 5.19.3
 
-  html-parse-stringify2@https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c:
-    dependencies:
-      void-elements: 2.0.1
-
-  html-parse-stringify@3.0.1:
-    dependencies:
-      void-elements: 3.1.0
-
   html-to-image@1.11.11: {}
 
   html-url-attributes@3.0.0: {}
@@ -24968,18 +24901,6 @@ snapshots:
   hyperdyperid@1.2.0: {}
 
   hyphenate-style-name@1.0.4: {}
-
-  i18next-browser-languagedetector@8.0.0:
-    dependencies:
-      '@babel/runtime': 7.24.0
-
-  i18next-translation-parser@1.0.1:
-    dependencies:
-      html-parse-stringify2: https://codeload.github.com/locize/html-parse-stringify2/tar.gz/d463109433b2c49c74a081044f54b2a6a1ccad7c
-
-  i18next@23.11.5:
-    dependencies:
-      '@babel/runtime': 7.24.0
 
   iconv-lite@0.4.24:
     dependencies:
@@ -25547,7 +25468,7 @@ snapshots:
   istanbul-lib-instrument@5.2.1:
     dependencies:
       '@babel/core': 7.24.6
-      '@babel/parser': 7.24.6
+      '@babel/parser': 7.25.8
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.0
       semver: 6.3.1
@@ -25794,7 +25715,7 @@ snapshots:
 
   jest-message-util@28.1.3:
     dependencies:
-      '@babel/code-frame': 7.24.6
+      '@babel/code-frame': 7.25.7
       '@jest/types': 28.1.3
       '@types/stack-utils': 2.0.1
       chalk: 4.1.2
@@ -25890,10 +25811,10 @@ snapshots:
   jest-snapshot@28.1.3:
     dependencies:
       '@babel/core': 7.24.6
-      '@babel/generator': 7.24.6
+      '@babel/generator': 7.25.7
       '@babel/plugin-syntax-typescript': 7.24.6(@babel/core@7.24.6)
-      '@babel/traverse': 7.24.6
-      '@babel/types': 7.24.6
+      '@babel/traverse': 7.25.7
+      '@babel/types': 7.25.8
       '@jest/expect-utils': 28.1.3
       '@jest/transform': 28.1.3
       '@jest/types': 28.1.3
@@ -28125,15 +28046,6 @@ snapshots:
     dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
 
-  react-i18next@14.1.2(i18next@23.11.5)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
-    dependencies:
-      '@babel/runtime': 7.24.0
-      html-parse-stringify: 3.0.1
-      i18next: 23.11.5
-      react: 0.0.0-experimental-58af67a8f8-20240628
-    optionalDependencies:
-      react-dom: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
-
   react-idle-timer@5.7.2(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       react: 0.0.0-experimental-58af67a8f8-20240628
@@ -30261,10 +30173,6 @@ snapshots:
       - terser
 
   vlq@0.2.3: {}
-
-  void-elements@2.0.1: {}
-
-  void-elements@3.1.0: {}
 
   vscode-languageserver-textdocument@1.0.11: {}
 

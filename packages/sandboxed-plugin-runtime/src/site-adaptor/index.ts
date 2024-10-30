@@ -2,7 +2,7 @@ import { PluginRuntime } from '../runtime/runtime.js'
 import { type BasicHostHooks, type BasicHostInstance, SandboxedPluginHost } from '../runtime/runner.js'
 import { getURL } from '../utils/url.js'
 import { addPeerDependencies } from '../peer-dependencies/index.js'
-import { addPeerDependenciesDOM, createI18nHooksAndTranslate } from '../peer-dependencies-dom/index.js'
+import { addPeerDependenciesDOM } from '../peer-dependencies-dom/index.js'
 import { AsyncCall, AsyncGeneratorCall } from 'async-call-rpc/full'
 import { encoder } from '@masknet/shared-base'
 import { isManifest } from '../utils/manifest.js'
@@ -93,7 +93,6 @@ export class SiteAdaptorPluginHost extends SandboxedPluginHost<SiteAdaptorHostHo
         })
 
         runtime.addNamespaceModule('@masknet/plugin-hooks', {
-            ...createI18nHooksAndTranslate(id),
             // TODO: implement this
             // TODO: move this to @masknet/plugin/content-script/react
             usePluginWrapper: () => void 0,

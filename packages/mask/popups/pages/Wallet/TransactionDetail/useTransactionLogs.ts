@@ -1,7 +1,6 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useMemo } from 'react'
 import { format } from 'date-fns'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import type { TransactionState } from './types.js'
 import { useQuery } from '@tanstack/react-query'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
@@ -17,7 +16,6 @@ import { useLingui } from '@lingui/react'
  */
 export function useTransactionLogs(transactionState: TransactionState) {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { data: txes } = useQuery({
@@ -44,7 +42,7 @@ export function useTransactionLogs(transactionState: TransactionState) {
             ].filter(Boolean)
         }
         return EMPTY_LIST
-    }, [transactionState, t, txes])
+    }, [transactionState, _, txes])
 
     return logs
 }

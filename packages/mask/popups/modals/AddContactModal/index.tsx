@@ -10,7 +10,6 @@ import { isValidAddress } from '@masknet/web3-shared-evm'
 import { IconButton, InputAdornment, Typography, useTheme } from '@mui/material'
 import { evm } from '@masknet/web3-providers'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
@@ -65,7 +64,6 @@ interface AddContactModalProps extends BottomDrawerProps {
 function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
     const { _ } = useLingui()
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
     const theme = useTheme()
 
     const contacts = useContacts()
@@ -86,14 +84,14 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
         await evm.state!.AddressBook?.addContact({ name, address })
         showSnackbar(<Trans>Contact added.</Trans>)
         onConfirm?.()
-    }, [name, address, onConfirm, t])
+    }, [name, address, onConfirm])
 
     const validationMessage = useMemo(() => {
         if (addressError) return <Trans>Incorrect wallet address.</Trans>
         if (nameExistError) return <Trans>The wallet name already exists.</Trans>
         if (addressExistError) return <Trans>The wallet address already exists.</Trans>
         return ''
-    }, [t, addressError, nameExistError, addressExistError])
+    }, [addressError, nameExistError, addressExistError])
 
     return (
         <BottomDrawer {...rest}>

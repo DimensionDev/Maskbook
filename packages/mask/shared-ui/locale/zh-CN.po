@@ -15,6 +15,14 @@ msgstr ""
 msgid "(the name is set by the web site)"
 msgstr ""
 
+#: popups/pages/Wallet/WalletSettings/AutoLock.tsx
+msgid "{0, plural, one {# Hour} other {# Hours}}"
+msgstr ""
+
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
+msgid "{0, plural, one {# Pending} other {# Pendings}}"
+msgstr ""
+
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
 msgstr "{0} 可用"
@@ -31,12 +39,32 @@ msgstr ""
 msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
 msgstr ""
 
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "{promote_file_service} \\n{encrypted}"
+msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
+msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "{promote_red_packet} Follow @{officialAccount} for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
+msgstr ""
+
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
 msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx
 msgid "{walletLength, plural, one {# Wallet} other {# Wallets}}"
+msgstr ""
+
+#: popups/pages/Settings/index.tsx
+msgid "<0>{websiteCount}</0> {websiteCount, plural, one {Website} other {Websites}}"
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "<0>@{currentUserId}</0> connected already."
 msgstr ""
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
@@ -47,8 +75,16 @@ msgstr ""
 msgid "<0>Powered by</0><1>Mask Network</1>"
 msgstr ""
 
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
+msgid "<0>Service Agreement</0> and <1>Privacy Policy</1>"
+msgstr ""
+
 #: popups/components/TransactionPreview/index.tsx
 msgid "<0>To</0>: <1>{to}</1>"
+msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "📃📃📃 Try to permanently use decentralized file storage on {sns}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
@@ -206,6 +242,10 @@ msgstr "已批准的金额"
 msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
 msgstr ""
 
+#: popups/components/ConnectedWallet/index.tsx
+msgid "Are you sure to remove the connected wallet <0>{0}</0>?"
+msgstr ""
+
 #: popups/modals/WalletRemoveModal/index.tsx
 msgid "Are you sure to remove this wallet?"
 msgstr "您确定要删除此钱包吗？"
@@ -350,6 +390,14 @@ msgstr "浏览文件"
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>."
+msgstr ""
+
+#: popups/components/UnlockERC20Token/index.tsx
+msgid "By granting permission, you are allowing the following <0/> contract to access your funds"
+msgstr ""
+
+#: popups/components/UnlockERC721Token/index.tsx
+msgid "By granting permission, you are allowing the following <0/> contract to access your NFTs."
 msgstr ""
 
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
@@ -568,6 +616,10 @@ msgstr "连接您的社交媒体帐户。"
 msgid "Connect your wallet"
 msgstr "连接您的钱包"
 
+#: popups/pages/Wallet/components/WalletHeader/UI.tsx
+msgid "Connected"
+msgstr ""
+
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Connected {0} with {walletName}."
 msgstr ""
@@ -710,6 +762,10 @@ msgstr "当前基础手续费是 {0} Gwei"
 msgid "Current Management Account"
 msgstr "当前的管理账户"
 
+#: popups/pages/Wallet/WalletSettings/index.tsx
+msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
+msgstr ""
+
 #: popups/components/GasSettingMenu/index.tsx
 #: popups/hooks/useGasOptionsMenu.tsx
 msgid "Custom"
@@ -741,6 +797,10 @@ msgstr ""
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
 msgstr "备份解密失败，请检查密码"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Decrypt this post with #mask_io! 🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet. {encrypted}"
+msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptedPostSuccess.tsx
 msgid "Decrypted by Mask Network"
@@ -802,6 +862,10 @@ msgstr "在您的 Web3 个人资料页面上显示以下地址并使用它来接
 #: content-script/components/InjectedComponents/PageInspector.tsx
 msgid "Do you need to paste encrypted content manually?"
 msgstr "您需要手动粘贴加密内容吗？"
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+msgid "Do you want to remove the verified association between the X account @<0>{0}</0> and {1}?"
+msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Domain"
@@ -1038,6 +1102,10 @@ msgstr "设置支付密码?"
 msgid "From"
 msgstr "从"
 
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+msgid "from <0>{fromAddress}</0>"
+msgstr ""
+
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Function: {0}"
 msgstr "功能：{0}"
@@ -1121,6 +1189,11 @@ msgstr "生成一个新的钱包地址"
 msgid "Generating your"
 msgstr ""
 
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
+msgid "Give permission to access <0/> your {0}?"
+msgstr ""
+
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Got it"
 msgstr "好的"
@@ -1143,6 +1216,10 @@ msgstr ""
 
 #: content-script/site-adaptors/twitter.com/injection/PostDialogHint.tsx
 msgid "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3."
+msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim."
 msgstr ""
 
 #: popups/pages/Wallet/TokenDetail/index.tsx
@@ -1183,6 +1260,10 @@ msgstr "身份"
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
 msgstr "身份助记词"
+
+#: popups/pages/Wallet/ResetWallet/index.tsx
+msgid "If you forget payment password, you can type 'RESET' to reset your wallet. <0>Remember, this action will erase all your previous wallets.</0>"
+msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
@@ -1372,6 +1453,10 @@ msgstr "语言"
 #: popups/pages/Settings/index.tsx
 msgid "Light"
 msgstr "浅色"
+
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+msgid "Likely in < {estimateSecond} seconds"
+msgstr ""
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Link"
@@ -1635,6 +1720,10 @@ msgstr ""
 msgid "No associated accounts"
 msgstr "无关联账号"
 
+#: popups/components/WalletSettingList/index.tsx
+msgid "No associated wallet. <0>Add Wallet.</0>"
+msgstr ""
+
 #: popups/pages/Settings/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "No back up"
@@ -1683,6 +1772,10 @@ msgstr ""
 msgid "Not connected"
 msgstr "未连接"
 
+#: popups/pages/Wallet/components/WalletHeader/UI.tsx
+msgid "Not Connected"
+msgstr ""
+
 #: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Not enough data to present."
 msgstr "没有足够可显示的数据"
@@ -1730,6 +1823,10 @@ msgstr "或者创建一个新的钱包组"
 #: content-script/components/InjectedComponents/DecryptedPost/authorDifferentMessage.tsx
 msgid "Originally posted by {0}"
 msgstr "最初发布于 {0}"
+
+#: popups/pages/Personas/AccountDetail/UI.tsx
+msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
+msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
@@ -1879,6 +1976,10 @@ msgstr "请输入密码。"
 msgid "Please install your metamask wallet and set up your first wallet."
 msgstr "请安装您的 metamask 钱包并设置您的第一个钱包。"
 
+#: popups/pages/Personas/Logout/index.tsx
+msgid "Please note: This Persona {0} is the management account of above listed SmartPay {1, plural, one {wallet} other {wallets}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona."
+msgstr ""
+
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
@@ -1906,6 +2007,10 @@ msgstr "请在自动锁定您的钱包之前设置时间。"
 msgid "Please sign up or login {siteName} to connect Mask Network."
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Please switch to <0>@{expectAccount}</0> to continue the account verification progress."
+msgstr ""
+
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "Please use your frequently used email or phone number for backup."
 msgstr ""
@@ -1926,6 +2031,10 @@ msgstr "插件"
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "Post content:"
 msgstr "发布内容："
+
+#: content-script/components/InjectedComponents/ProfileCard/index.tsx
+msgid "Powered by <0>RSS3</0>"
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
@@ -2368,6 +2477,14 @@ msgstr "切换 Persona"
 msgid "Switch to other accounts"
 msgstr ""
 
+#: popups/components/MnemonicDisplay/index.tsx
+msgid "Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"
+msgstr ""
+
+#: popups/components/PrivateKeyDisplay/index.tsx
+msgid "Tap to view the private key <0/> Make sure no one is looking at your screen"
+msgstr ""
+
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
 msgid "Text"
@@ -2410,6 +2527,18 @@ msgstr ""
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
 msgstr "新密码不匹配"
+
+#: content-script/components/shared/SelectRecipients/ProfileInList.tsx
+msgid "The Persona is connected to the account @${0}."
+msgstr ""
+
+#: content-script/components/shared/SelectRecipients/ProfileInList.tsx
+msgid "The Persona is connected to the following accounts: {list}"
+msgstr ""
+
+#: content-script/components/shared/SelectRecipients/ProfileInList.tsx
+msgid "The Persona is not connected to any accounts."
+msgstr ""
 
 #: popups/modals/PersonaRenameModal/index.tsx
 msgid "The persona name already exists."
@@ -2481,6 +2610,10 @@ msgstr ""
 msgid "This ENS does not exist or not be resolved."
 msgstr "此ENS不存在或未被解析。"
 
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
+msgid "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0>Global Backup </0>"
+msgstr ""
+
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
 msgstr "此 JSON 文件使用您当前的支付密码加密。导入此钱包时解密需要相同的密码。"
@@ -2518,6 +2651,10 @@ msgstr ""
 msgid "This RPC URL is currently used by the {0} network"
 msgstr "RPC URL已经被{0} 网络使用"
 
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
+msgstr ""
+
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."
 msgstr "钱包已经链接到当前的身份{0}。"
@@ -2535,6 +2672,10 @@ msgstr "至"
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to {0}"
 msgstr "至: {0}"
+
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+msgid "to <0>{toAddress}</0>"
+msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "To verify your X account and record it on the NextID, please send this post for the verification."

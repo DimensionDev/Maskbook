@@ -24,7 +24,6 @@
     "async-call-rpc": "^6.4.2",
     "bignumber.js": "9.1.2",
     "dompurify": "^3.1.5",
-    "i18next-browser-languagedetector": "^8.0.0",
     "idb": "^8.0.0",
     "json-stable-stringify": "^1.1.1",
     "pvtsutils": "^1.3.5",

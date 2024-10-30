@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { Trans } from '@lingui/macro'
 
@@ -91,15 +90,9 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
         return (
             <Frame {...rest}>
                 <Typography className={classes.text}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <MaskSharedTrans.connected_already
-                        values={{
-                            account: currentUserId!,
-                        }}
-                        components={{
-                            bold: <b />,
-                        }}
-                    />
+                    <Trans>
+                        <b>@{currentUserId}</b> connected already.
+                    </Trans>
                 </Typography>
                 <Typography className={classes.text} mt="1.5em">
                     <Trans>Change another account and try again.</Trans>
@@ -119,15 +112,9 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                     <Trans>Current account is not the verifying account.</Trans>
                 </Typography>
                 <Typography className={classes.text} mt="1.5em">
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <MaskSharedTrans.request_to_switch_account
-                        values={{
-                            account: expectAccount,
-                        }}
-                        components={{
-                            bold: <b />,
-                        }}
-                    />
+                    <Trans>
+                        Please switch to <b>@{expectAccount}</b> to continue the account verification progress.
+                    </Trans>
                 </Typography>
             </Frame>
         )

@@ -102,26 +102,11 @@ async function createNewPackage({ path, npmName, type, pluginID }: PackageOption
             content.replace('PluginID.Example', `PluginID.${NormativeName}`),
         )
         /**
-         * .i18n-codegen.json
          * packages/plugins/tsconfig.json
          * packages/plugin-infra/src/types.ts
          * packages/mask/shared/plugin-infra/register.ts
          * packages/mask/package.json
          */
-        await changeFile.JSON(new URL('.i18n-codegen.json', ROOT_PATH), (content) => {
-            content.list.push({
-                input: `./${path}/src/locales/en-US.json`,
-                output: `./${path}/src/locales/i18n_generated`,
-                parser: { type: 'i18next', contextSeparator: '$', pluralSeparator: '_' },
-                generator: {
-                    type: 'i18next/react-hooks',
-                    hooks: 'useI18N',
-                    namespace: pluginID,
-                    trans: 'Translate',
-                    emitTS: true,
-                },
-            })
-        })
         await changeFile.JSON(new URL('packages/plugins/tsconfig.json', ROOT_PATH), (content) => {
             Array.from(content.references)
                 .sort((a: any, b: any) => String(a.path).localeCompare(b.path, 'en'))

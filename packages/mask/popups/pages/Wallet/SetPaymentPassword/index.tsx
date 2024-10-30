@@ -19,7 +19,6 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import type { z as zod } from 'zod'
 import Services from '#services'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useQueryClient } from '@tanstack/react-query'
@@ -299,27 +298,23 @@ export const Component = memo(function SetPaymentPassword() {
                             fontSize={14}
                             textAlign="center"
                             fontWeight={700}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <MaskSharedTrans.popups_wallet_term_of_service_agree_part_2
-                                components={{
-                                    agreement: (
-                                        <a
-                                            className={classes.strong}
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                            href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
-                                        />
-                                    ),
-                                    policy: (
-                                        <a
-                                            className={classes.strong}
-                                            target="_blank"
-                                            rel="noreferrer noopener"
-                                            href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
-                                        />
-                                    ),
-                                }}
-                            />
+                            <Trans>
+                                <a
+                                    className={classes.strong}
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html">
+                                    Service Agreement
+                                </a>{' '}
+                                and{' '}
+                                <a
+                                    className={classes.strong}
+                                    target="_blank"
+                                    rel="noreferrer noopener"
+                                    href="https://legal.mask.io/maskbook/privacy-policy-browser.html">
+                                    Privacy Policy
+                                </a>
+                            </Trans>
                         </Typography>
                     </>
                 :   <>

@@ -17,7 +17,6 @@ import { Button, IconButton, Skeleton, Typography } from '@mui/material'
 import { memo, useContext, useEffect, useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { TransferTabType } from '../type.js'
@@ -162,7 +161,6 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function CollectibleDetail() {
     const { _ } = useLingui()
     const { classes } = useStyles()
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const location = useLocation()
     const { chainId, address, params } = useTokenParams()
@@ -225,7 +223,7 @@ export const Component = memo(function CollectibleDetail() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [classes.iconButton, t, name, account, navigate, showSnackbar])
+    }, [classes.iconButton, name, account, navigate, showSnackbar])
 
     return (
         <article className={classes.page} data-hide-scrollbar>

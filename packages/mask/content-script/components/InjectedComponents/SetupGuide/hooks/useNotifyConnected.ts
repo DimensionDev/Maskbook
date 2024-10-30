@@ -1,13 +1,11 @@
 import { useCallback } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
 export function useNotifyConnected() {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
     const { showSnackbar } = useCustomSnackbar()
     const { configuration } = activatedSiteAdaptorUI!
     const platform = configuration.nextIDConfig?.platform
@@ -17,6 +15,6 @@ export function useNotifyConnected() {
             variant: 'success',
             message: _(msg`Account successfully connected to persona`),
         })
-    }, [t, showSnackbar])
+    }, [_, showSnackbar])
     return notify
 }

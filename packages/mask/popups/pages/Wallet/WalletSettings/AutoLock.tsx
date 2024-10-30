@@ -2,14 +2,12 @@ import { useMemo } from 'react'
 import { Icons } from '@masknet/icons'
 import { Box, ListItem, Typography } from '@mui/material'
 import { millisecondsToMinutes, millisecondsToHours } from 'date-fns'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useStyles } from './useStyles.js'
 import { WalletAutoLockSettingModal } from '../../../modals/modal-controls.js'
 import { useWalletAutoLockTime } from '../hooks/useWalletAutoLockTime.js'
-import { Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/macro'
 
 export function AutoLock() {
-    const t = useMaskSharedTrans()
     const { classes, theme } = useStyles()
 
     const { value } = useWalletAutoLockTime()
@@ -33,7 +31,7 @@ export function AutoLock() {
                 {value ?
                     <Typography className={classes.itemText}>
                         {minutes && minutes >= 60 ?
-                            t['popups_wallet_settings_auto-unlock_time_hour']({ count: millisecondsToHours(value) })
+                            <Plural value={millisecondsToHours(value)} one="# Hour" other="# Hours" />
                         :   <Trans>{millisecondsToMinutes(value)} Mins</Trans>}
                     </Typography>
                 :   null}

@@ -3,7 +3,6 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { Trans } from '@lingui/macro'
@@ -104,10 +103,12 @@ export const Component = memo(function ResetWallet() {
                     </Trans>
                 </Typography>
                 <Typography className={classes.description}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <MaskSharedTrans.popups_wallet_reset_wallet_description_2
-                        components={{ strong: <strong className={classes.strong} /> }}
-                    />
+                    <Trans>
+                        If you forget payment password, you can type 'RESET' to reset your wallet.{' '}
+                        <strong className={classes.strong}>
+                            Remember, this action will erase all your previous wallets.
+                        </strong>
+                    </Trans>
                 </Typography>
                 <Typography className={classes.description}>
                     <Trans>

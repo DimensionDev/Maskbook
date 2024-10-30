@@ -25,7 +25,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { MaskSharedTrans, requestPermissionFromExtensionPage, useMaskSharedTrans } from '../../../../shared-ui/index.js'
+import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
@@ -34,7 +34,6 @@ import { useLingui } from '@lingui/react'
 
 export const Component = memo(() => {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const theme = useTheme()
     const { selectedAccount, currentPersona, walletProofs } = PersonaContext.useContainer()
@@ -116,7 +115,7 @@ export const Component = memo(() => {
         }
 
         refetch()
-    }, [pendingUnlistedConfig, t, updateConfig])
+    }, [pendingUnlistedConfig, updateConfig])
 
     const pubkey = currentPersona?.identifier.publicKeyAsHex
     const releaseBinding = useCallback(async () => {
@@ -199,20 +198,13 @@ export const Component = memo(() => {
                             title: <Trans>Disconnect Social Account?</Trans>,
                             confirmVariant: 'warning',
                             message: (
-                                // eslint-disable-next-line react/naming-convention/component-name
-                                <MaskSharedTrans.popups_persona_disconnect_tips
-                                    components={{
-                                        strong: (
-                                            <strong
-                                                style={{ color: theme.palette.maskColor.main, wordBreak: 'keep-all' }}
-                                            />
-                                        ),
-                                    }}
-                                    values={{
-                                        identity: selectedAccount?.identifier.userId || '',
-                                        personaName: currentPersona.nickname || '',
-                                    }}
-                                />
+                                <Trans>
+                                    Do you want to remove the verified association between the X account @
+                                    <strong style={{ color: theme.palette.maskColor.main, wordBreak: 'keep-all' }}>
+                                        {selectedAccount?.identifier.userId}
+                                    </strong>{' '}
+                                    and {currentPersona.nickname}?
+                                </Trans>
                             ),
                         })
                         if (confirmed) {

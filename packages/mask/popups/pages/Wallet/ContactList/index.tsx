@@ -9,7 +9,6 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar, FormattedAddress, useMenuConfig } from '@masknet/shared'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle, ContactsContext, PageTitleContext } from '../../../hooks/index.js'
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modal-controls.js'
@@ -139,7 +138,6 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
 
 const ContactListUI = memo(function ContactListUI() {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { setExtension } = useContext(PageTitleContext)
     const state = useLocation().state as
@@ -160,7 +158,7 @@ const ContactListUI = memo(function ContactListUI() {
             address: '',
             name: '',
         })
-    }, [t])
+    }, [])
 
     useEffect(() => {
         if (!isManage) return
@@ -261,7 +259,6 @@ interface ContactListItemProps extends ListItemProps {
 }
 
 function ContactListItem({ address, name, contactType, onSelectContact, ...rest }: ContactListItemProps) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles({ showDivideLine: contactType === ContactType.Recipient })
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const theme = useTheme()
@@ -273,7 +270,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
             name,
             type: contactType,
         })
-    }, [address, name, contactType, t])
+    }, [address, name, contactType])
 
     const deleteContact = useCallback(() => {
         return DeleteContactModal.openAndWaitForClose({
@@ -281,7 +278,7 @@ function ContactListItem({ address, name, contactType, onSelectContact, ...rest 
             address,
             name,
         })
-    }, [address, name, t])
+    }, [address, name])
 
     const menuOptions = [
         {

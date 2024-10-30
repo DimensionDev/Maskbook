@@ -1,13 +1,4 @@
-export {
-    codegen,
-    codegenWatch,
-    i18nCodegen,
-    i18nCodegenWatch,
-    iconCodegen,
-    iconCodegenWatch,
-    typescript,
-    typescriptWatch,
-} from './codegen/index.js'
+export { codegen, codegenWatch, iconCodegen, iconCodegenWatch, typescript, typescriptWatch } from './codegen/index.js'
 export { ciBuild, buildChrome, extensionWatch } from './extension/index.js'
 export { buildCloudflare } from './cloudflare/index.js'
 
@@ -15,7 +6,6 @@ export { buildCloudflare } from './cloudflare/index.js'
 export { clean, createPackageInteractive, syncDevelop, changesetRelease } from './commands/index.js'
 export { syncLanguages } from './locale-kit-next/index.js'
 export { runLinguiExtract, runLinguiCompile } from './locale-kit-next/run-lingui.js'
-export { migrate } from './locale-kit-next/migrate.js'
 export { reorderSpellcheck } from './spellcheck/index.js'
 
 // Sub-projects build commands

@@ -1,10 +1,6 @@
-import { readdir, writeFile, readFile } from 'fs/promises'
-import { dirname, join } from 'path'
-import { upperFirst } from 'lodash-es'
+import { readdir, writeFile } from 'fs/promises'
+import { dirname } from 'path'
 import { ROOT_PATH, task, prettier } from '../utils/index.js'
-import { exists } from 'fs-extra'
-import { relative } from 'path/posix'
-import { fileURLToPath } from 'url'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
@@ -38,7 +34,7 @@ export async function syncLanguages() {
             if (!poFile.includes('plugin')) {
                 const target = `@masknet/shared-base`
                 code += `import { createI18NBundle } from '${target}'\n`
-                code += `export const addI18N = createI18NBundle('_', languages as any)\n`
+                code += `export const addI18N = createI18NBundle(languages as any)\n`
             }
 
             {
@@ -60,107 +56,9 @@ export async function syncLanguages() {
             await writeFile(new URL('languages.ts', inputDir), code, { encoding: 'utf8' })
         }
     }
-    const config = JSON.parse(await readFile(new URL('.i18n-codegen.json', ROOT_PATH), 'utf-8')).list
-    for (const { input, generator } of config) {
-        const { namespace } = generator
-
-        const inputDir = new URL(dirname(input) + '/', ROOT_PATH)
-        const linguiDir =
-            input.includes('packages/mask') ?
-                new URL('../../../mask/shared-ui/locale/', import.meta.url)
-            :   new URL(join(dirname(input), '../locale') + '/', ROOT_PATH)
-        const relativeToInput = relative(fileURLToPath(inputDir), fileURLToPath(linguiDir))
-
-        const languages = getLanguageFamilyName(
-            (await readdir(inputDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
-        )
-        const linguiLanguages =
-            (await exists(linguiDir)) ?
-                getLanguageFamilyName(
-                    (await readdir(linguiDir, { withFileTypes: true })).filter((x) => x.isFile()).map((x) => x.name),
-                )
-            :   new Map<string, string>()
-
-        {
-            let code = header
-            code += `\nexport * from './i18n_generated.js'\n`
-            code = await prettier(code)
-            await writeFile(new URL('index.ts', inputDir), code, { encoding: 'utf8' })
-        }
-
-        {
-            let code = header
-            for (const [language] of languages) {
-                code += `import ${language.replace('-', '_')} from './${language}.json' with { type: 'json' }\n`
-            }
-            for (const [language] of linguiLanguages) {
-                code += `import lingui_${language.replace('-', '_')} from '${relativeToInput}/${language}.json' with { type: 'json' }\n`
-            }
-            code += `export const languages = {\n`
-            for (const [language, familyName] of languages) {
-                code += `    '${familyName}': ${language.replace('-', '_')},\n`
-            }
-            code += `}\n`
-            if (linguiLanguages.size) {
-                code += `export const linguiLanguages = {\n`
-                for (const [language, familyName] of linguiLanguages) {
-                    code += `    '${familyName}': lingui_${language.replace('-', '_')},\n`
-                }
-                code += `}\n`
-            }
-            // Non-plugin i18n files
-            if (!namespace.includes('.')) {
-                const target = `@masknet/shared-base`
-                code += `import { createI18NBundle } from '${target}'\n`
-                code += `export const add${upperFirst(namespace)}I18N = createI18NBundle('${namespace}', ${linguiLanguages.size ? '[languages, linguiLanguages as any]' : 'languages'})\n`
-            }
-
-            {
-                const allImportPath: string[] = []
-                const linguiImportPath: string[] = []
-                const binding: string[] = []
-                const linguiBinding: string[] = []
-                for (const [language, familyName] of languages) {
-                    allImportPath.push(`./${language}.json`)
-                    binding.push(`'${familyName}': ${language.replace('-', '_')}`)
-                }
-                for (const [language, familyName] of linguiLanguages) {
-                    linguiImportPath.push(`${relativeToInput}/${language}.json`)
-                    linguiBinding.push(`'${familyName}': lingui_${language.replace('-', '_')}`)
-                }
-                code +=
-                    `// @ts-ignore
-                        if (import.meta.webpackHot) {
-                            // @ts-ignore
-                            import.meta.webpackHot.accept(
-                                ${JSON.stringify(allImportPath)},
-                                () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR', {
-                                    detail: ['${namespace}', { ${binding.join(', ')} }]
-                                }))
-                            )
-                            ` +
-                    (linguiBinding.length ?
-                        `// @ts-ignore
-                        import.meta.webpackHot.accept(
-                            ${JSON.stringify(linguiImportPath)},
-                            () => globalThis.dispatchEvent?.(new CustomEvent('MASK_I18N_HMR_LINGUI', {
-                                detail: { ${linguiBinding.join(', ')} }
-                            }))
-                        )`
-                    :   '') +
-                    '}'
-            }
-            code = await prettier(code)
-            await writeFile(new URL('languages.ts', inputDir), code, { encoding: 'utf8' })
-        }
-    }
 
     {
         const map: Record<string, string> = {}
-        for (const { input, generator } of config) {
-            const { namespace } = generator
-            map[`${input.slice('./packages/'.length).replace('en-US', '%locale%')}`] = namespace
-        }
         const code = await prettier(`${basicHeader}\nexport default ${JSON.stringify(map)}`)
         await writeFile(new URL('packages/mask/background/services/helper/i18n-cache-query-list.ts', ROOT_PATH), code, {
             encoding: 'utf8',

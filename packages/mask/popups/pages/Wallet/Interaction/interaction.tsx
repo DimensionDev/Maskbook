@@ -8,7 +8,6 @@ import { TransactionRequest } from './TransactionRequest.js'
 import { Box, Dialog, DialogActions, DialogContent, DialogContentText, IconButton, Typography } from '@mui/material'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { ActionButton, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Icons } from '@masknet/icons'
 import { useAsyncFn } from 'react-use'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -49,7 +48,6 @@ interface InteractionProps {
 
 export const Interaction = memo((props: InteractionProps) => {
     const { currentRequest } = props
-    const t = useMaskSharedTrans()
     const navigate = useNavigate()
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { showSnackbar } = usePopupCustomSnackbar()
@@ -103,7 +101,7 @@ export const Interaction = memo((props: InteractionProps) => {
                 { variant: 'error', autoHideDuration: 5000 },
             )
         }
-    }, [isLastRequest, onRequestCountMightChanged, showSnackbar, t])
+    }, [isLastRequest, onRequestCountMightChanged, showSnackbar])
 
     const actionRunning = confirmLoading || cancelLoading
     const CancelButton = (

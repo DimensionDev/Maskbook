@@ -13,7 +13,6 @@ import { memo, useCallback, useContext, useEffect, useMemo, useState } from 'rea
 import { useForm } from 'react-hook-form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { type ZodCustomIssue, type z } from 'zod'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { createSchema } from './network-schema.js'
 import { useWarnings } from './useWarnings.js'
@@ -65,7 +64,6 @@ const useStyles = makeStyles()((theme) => ({
 const QUERY_KEY = ['system', 'wallet', 'networks']
 export const Component = memo(function EditNetwork() {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const id = useParams<{ id: string }>().id
@@ -119,7 +117,7 @@ export const Component = memo(function EditNetwork() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [isBuiltIn, id, classes.iconButton, showSnackbar, t, Network, currentChainId, queryClient])
+    }, [isBuiltIn, id, classes.iconButton, showSnackbar, Network, currentChainId, queryClient])
 
     const schema = useMemo(() => {
         return createSchema(
@@ -130,7 +128,7 @@ export const Component = memo(function EditNetwork() {
             networks,
             id,
         )
-    }, [t, id, networks])
+    }, [id, networks])
 
     type FormInputs = z.infer<typeof schema>
     const {
@@ -151,14 +149,13 @@ export const Component = memo(function EditNetwork() {
                 issues.forEach((issue) => {
                     // We assume there is no multiple paths.
                     setError(issue.path[0] as keyof FormInputs, {
-                        // @ts-expect-error i18n-todo: figure out type of issue.message.
-                        message: t[issue.message](issue.params),
+                        message: issue.message,
                     })
                 })
             } catch {}
             return false
         },
-        [setError, t],
+        [setError],
     )
 
     const formChainId = +watch('chainId')

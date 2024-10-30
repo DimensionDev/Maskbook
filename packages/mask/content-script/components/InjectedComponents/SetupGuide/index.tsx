@@ -12,7 +12,6 @@ import { makeStyles } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { memo, useCallback } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PinExtension } from './PinExtension.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { VerifyNextID } from './VerifyNextID.js'
@@ -24,7 +23,6 @@ import { useLingui } from '@lingui/react'
 
 function SetupGuideUI() {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
 
     const { step } = SetupGuideContext.useContainer()
     const { networkIdentifier } = activatedSiteAdaptorUI!
@@ -47,7 +45,7 @@ function SetupGuideUI() {
             _(msg`Please click the "Post" button to open the compose dialog.`),
             { target: EncryptionTargetType.Public },
         )
-    }, [t])
+    }, [_])
 
     const onPinClose = useCallback(() => {
         userPinExtension.value = true

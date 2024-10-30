@@ -31,7 +31,6 @@ import {
 import { Alert, Box, Button, TextField, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
@@ -83,7 +82,6 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
     nonce,
     config,
 }) {
-    const t = useMaskSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
     const gasRatio = useGasRatio(config.paymentToken)
@@ -313,9 +311,7 @@ export const GasSettingDialog = memo<GasSettingDialogProps>(function GasSettingM
             :   null}
             {estimateSecond && !replaceType ?
                 <Typography className={classes.seconds}>
-                    {}
-                    {/* @ts-expect-error https://github.com/Jack-Works/i18n-codegen/issues/10 */}
-                    {t.popups_wallet_gas_price_estimate_second({ seconds: String(estimateSecond) })}
+                    <Trans>Likely in &lt; {estimateSecond} seconds</Trans>
                 </Typography>
             :   null}
             {gasOptions?.normal.baseFeePerGas && isSupport1559 && (!error || !replaceType) ?

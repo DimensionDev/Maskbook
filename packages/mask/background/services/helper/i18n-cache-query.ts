@@ -19,7 +19,7 @@ export async function queryRemoteI18NBundle(lang: string): Promise<Bundle[]> {
 const I18N_LOCALES_HOST = 'https://maskbook.pages.dev/'
 
 function fetchTranslatedBundle(lang: string) {
-    return Object.entries(list).map(async ([url, namespace]): Promise<Bundle | null> => {
+    return Object.entries(list as Record<string, string>).map(async ([url, namespace]): Promise<Bundle | null> => {
         try {
             const path = url.replace('%locale%', lang)
             const response = await fetch(I18N_LOCALES_HOST + path, fetchOption)
@@ -32,7 +32,7 @@ function fetchTranslatedBundle(lang: string) {
     })
 }
 function fetchEnglishBundle() {
-    return Object.entries(list).map(async ([url, namespace]): Promise<Bundle | null> => {
+    return Object.entries(list as Record<string, string>).map(async ([url, namespace]): Promise<Bundle | null> => {
         try {
             const path = url.replace('%locale%', 'en-US')
             const response = await fetch(I18N_LOCALES_HOST + path, fetchOption)

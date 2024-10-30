@@ -9,7 +9,6 @@ import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
-import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import Services from '#services'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { useModalNavigate } from '../ActionModal/index.js'
@@ -193,15 +192,13 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                     title: <Trans>Disconnect Wallet?</Trans>,
                                     confirmVariant: 'warning',
                                     message: (
-                                        // eslint-disable-next-line react/naming-convention/component-name
-                                        <MaskSharedTrans.popups_wallet_disconnect_tips
-                                            components={{
-                                                strong: <strong style={{ color: theme.palette.maskColor.main }} />,
-                                            }}
-                                            values={{
-                                                wallet: formatEthereumAddress(wallet.identity, 4),
-                                            }}
-                                        />
+                                        <Trans>
+                                            Are you sure to remove the connected wallet{' '}
+                                            <strong style={{ color: theme.palette.maskColor.main }}>
+                                                {formatEthereumAddress(wallet.identity, 4)}
+                                            </strong>
+                                            ?
+                                        </Trans>
                                     ),
                                 })
                                 if (confirmed) return handleConfirmRelease(wallet)

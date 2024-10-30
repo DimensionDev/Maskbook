@@ -6,7 +6,6 @@ import {
     BooleanPreference,
     MaskMessages,
     createI18NBundle,
-    i18NextInstance,
     InMemoryStorages,
     PersistentStorages,
 } from '@masknet/shared-base'
@@ -55,7 +54,7 @@ export function createPluginHost<Definition, Context>(
         disabled,
         minimalMode,
         addI18NResource(plugin, resource) {
-            createI18NBundle(plugin, resource)(i18NextInstance, i18n)
+            createI18NBundle(resource)(i18n)
         },
         createContext,
         permission,
