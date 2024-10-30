@@ -185,6 +185,11 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
             )
         },
     },
+    Utils: {
+        shouldDisplay(result) {
+            return [SearchResultType.Domain, SearchResultType.EOA].includes(result.type)
+        },
+    },
 }
 
 const site: Plugin.SiteAdaptor.Definition = {
