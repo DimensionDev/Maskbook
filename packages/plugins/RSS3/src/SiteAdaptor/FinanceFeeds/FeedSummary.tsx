@@ -19,7 +19,7 @@ const useStyles = makeStyles<{ size: number }>()((theme) => ({
 
 function formatAmount(amount: string) {
     const bn = new BigNumber(amount)
-    return Number.isNaN(bn.toNumber()) ? amount : trimZero(bn.toFixed(4))
+    return Number.isNaN(bn.toNumber()) ? amount : trimZero(bn.toPrecision(4))
 }
 
 function SummaryTypography(props: TypographyProps<'div'>) {

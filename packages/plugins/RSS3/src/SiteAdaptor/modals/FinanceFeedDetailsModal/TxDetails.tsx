@@ -136,7 +136,6 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     </Typography>
                 </Tooltip>
             </Box>
-            <Box className={classes.sep} />
             {tx.feeInfo ?
                 <>
                     <Box className={classes.sep} />

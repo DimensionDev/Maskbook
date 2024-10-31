@@ -39,12 +39,6 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
                 display: 'none',
             },
         },
-        actions: {
-            marginLeft: 'auto',
-            display: 'inline-flex',
-            alignItems: 'center',
-            color: theme.palette.maskColor.publicMain,
-        },
     }),
 )
 
