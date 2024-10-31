@@ -78,22 +78,22 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:152
-msgid "Actions"
-msgstr ""
+#~ msgid "Actions"
+#~ msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:114
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:106
 msgid "Failed"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:131
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:123
 msgid "From"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:101
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:93
 msgid "Hash"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:123
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:115
 msgid "Network"
 msgstr ""
 
@@ -102,11 +102,11 @@ msgstr ""
 msgid "No more data available."
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:111
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:103
 msgid "Status"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:114
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:106
 msgid "Successful"
 msgstr ""
 
@@ -115,18 +115,18 @@ msgstr ""
 msgid "There's no feed associated with this address."
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:119
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:111
 msgid "Timestamp"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:141
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:132
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:97
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:89
 msgid "Transaction Details"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:161
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:144
 msgid "Tx Fee"
 msgstr ""

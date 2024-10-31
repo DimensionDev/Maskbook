@@ -1,6 +1,6 @@
 import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { CopyButton, EthereumBlockie, ReversedAddress } from '@masknet/shared'
+import { CopyButton } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useNetwork } from '@masknet/web3-hooks-base'
@@ -10,7 +10,7 @@ import { Box, Tooltip, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
 import { formatTimestamp, ONE_WEEK } from '../../components/share.js'
-import { FeedSummary } from '../../FinanceFeeds/FeedSummary.js'
+import { AccountLabel } from '../../components/common.js'
 
 const useStyles = makeStyles()((theme) => ({
     group: {
@@ -51,10 +51,6 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         margin: theme.spacing(3, 0),
     },
-    tags: {
-        display: 'flex',
-        gap: 10,
-    },
     tag: {
         padding: '4px 6px',
         borderRadius: 4,
@@ -64,10 +60,6 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.main,
         textTransform: 'capitalize',
-    },
-    blockieIcon: {
-        height: 16,
-        width: 16,
     },
 }))
 
@@ -131,8 +123,7 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                 <Typography className={classes.key}>{t`From`}</Typography>
                 <Tooltip title={tx.from}>
                     <Typography className={classes.value} gap={10} component="div">
-                        <EthereumBlockie address={tx.from} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={tx.from} fontWeight={400} />
+                        <AccountLabel address={tx.from} size={16} />
                         <CopyButton text={tx.from} size={20} />
                     </Typography>
                 </Tooltip>
@@ -141,19 +132,11 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                 <Typography className={classes.key}>{t`To`}</Typography>
                 <Tooltip title={tx.to}>
                     <Typography className={classes.value} gap={10} component="div">
-                        <EthereumBlockie address={tx.to} classes={{ icon: classes.blockieIcon }} />
-                        <ReversedAddress address={tx.to} fontWeight={400} />
-                        <CopyButton text={tx.to} size={20} />
+                        <AccountLabel address={tx.to} size={16} /> <CopyButton text={tx.to} size={20} />
                     </Typography>
                 </Tooltip>
             </Box>
             <Box className={classes.sep} />
-            <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                <Typography className={classes.key}>{t`Actions`}</Typography>
-                <Typography className={classes.value} component="div">
-                    <FeedSummary transaction={tx} mt={0.5} />
-                </Typography>
-            </Box>
             {tx.feeInfo ?
                 <>
                     <Box className={classes.sep} />
