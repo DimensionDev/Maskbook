@@ -208,10 +208,6 @@ function Content(props: ProfileTabContentProps) {
         }))
     }, [activatedPlugins, translate])
 
-    const tabActions = getAvailablePlugins(activatedPlugins, (plugins) => {
-        return compact(plugins.map((x) => x.ProfileTabActions))
-    })
-
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
     const isWeb3ProfileDisabled = useIsMinimalMode(PluginID.Web3Profile)
@@ -513,13 +509,6 @@ function Content(props: ProfileTabContentProps) {
                                 {tabs.map((tab) => (
                                     <Tab key={tab.id} label={tab.label} value={tab.id} />
                                 ))}
-                                {tabActions.length ?
-                                    <span className={classes.actions}>
-                                        {tabActions.map((Action, i) => (
-                                            <Action key={i} slot="profile-page" />
-                                        ))}
-                                    </span>
-                                :   null}
                             </MaskTabList>
                         </TabContext>
                     </div>

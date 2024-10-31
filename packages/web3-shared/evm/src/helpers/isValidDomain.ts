@@ -1,6 +1,6 @@
 import punycode from 'punycode'
 
-const NAME_SERVICE_RE = /\.(eth|bnb|arb|lens)$/
+const NAME_SERVICE_RE = /\.(eth|bnb|arb|lens|zeta|mode|taiko|mint)$/
 const DOMAIN_RE = /^(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+[a-z0-9][-a-z0-9]*[a-z0-9]$/u
 const ENS_SUBDOMAIN_RE = /\[.{64}?\]\.(?:[a-z0-9](?:[-a-z0-9]*[a-z0-9])?\.)+[a-z0-9][-a-z0-9]*[a-z0-9]$/u
 

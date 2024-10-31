@@ -1,40 +1,25 @@
-import { createLookupTableResolver } from '@masknet/shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { delay } from '@masknet/kit'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { mapKeys } from 'lodash-es'
 import io from 'socket.io-client'
+import { zerionChainIdResolver } from './helpers.js'
 import {
     SocketRequestNameSpace,
-    type SocketRequestBody,
-    type SocketNameSpace,
     SocketRequestType,
+    type SocketNameSpace,
+    type SocketRequestBody,
     type SocketResponseBody,
     type ZerionAssetResponseBody,
-    type ZerionTransactionResponseBody,
-    type ZerionNonFungibleTokenResponseBody,
     type ZerionGasResponseBody,
+    type ZerionNonFungibleTokenResponseBody,
+    type ZerionTransactionResponseBody,
 } from './types.js'
-import { delay } from '@masknet/kit'
 
 const ZERION_API = 'wss://api-v4.zerion.io'
 // cspell:disable-next-line
 const ZERION_TOKEN = 'Mask.yEUEfDnoxgLBwNEcYPVussxxjdrGwapj'
 
 let socket: SocketIOClient.Socket | null = null
-
-export const zerionChainIdResolver = createLookupTableResolver<string, ChainId | undefined>(
-    {
-        ethereum: ChainId.Mainnet,
-        optimism: ChainId.Optimism,
-        fantom: ChainId.Fantom,
-        avalanche: ChainId.Avalanche,
-        arbitrum: ChainId.Arbitrum,
-        aurora: ChainId.Aurora,
-        'binance-smart-chain': ChainId.BSC,
-        xdai: ChainId.xDai,
-        polygon: ChainId.Polygon,
-    },
-    () => undefined,
-)
 
 function createSocket(namespace: SocketRequestNameSpace = SocketRequestNameSpace.Address) {
     if (socket?.connected) return socket
