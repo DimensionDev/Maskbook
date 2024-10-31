@@ -229,6 +229,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                             requirements: selectedRules,
                             nftHolderContract: selectedCollection?.address,
                             nftCollectionName: selectedCollection?.name,
+                            nftChainId: selectedCollection?.chainId,
                         })
                     }>
                     {t.next_button()}

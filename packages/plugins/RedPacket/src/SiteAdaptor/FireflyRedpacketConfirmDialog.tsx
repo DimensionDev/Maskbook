@@ -258,7 +258,7 @@ export function FireflyRedpacketConfirmDialog({
                             type: FireflyRedPacketAPI.StrategyType.nftOwned,
                             payload: [
                                 {
-                                    chainId,
+                                    chainId: fireflySettings.nftChainId ?? chainId,
                                     contractAddress: fireflySettings.nftHolderContract,
                                     collectionName: fireflySettings.nftCollectionName,
                                 },
