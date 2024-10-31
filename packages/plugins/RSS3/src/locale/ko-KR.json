@@ -53,6 +53,43 @@
                 }
             ]
         ],
+        "WdQnax": [
+            "<0/> ",
+            [
+                "txType",
+                "select",
+                {
+                    "burn": "burned",
+                    "deposit": "deposited",
+                    "mint": "minted",
+                    "receive": "received",
+                    "send": "sent",
+                    "withdraw": "withdrawn"
+                }
+            ],
+            " <1>",
+            ["0"],
+            " ",
+            ["1"],
+            "</1>"
+        ],
+        "REeHKm": [
+            "<0/> ",
+            ["txType", "select", { "trade": "traded", "mint": "minted", "other": "traded" }],
+            " <1>",
+            ["0"],
+            " ",
+            ["1"],
+            "</1> for <2>",
+            ["2"],
+            " ",
+            ["3"],
+            "</2>"
+        ],
+        "msszNj": ["<0/> approved <1>", ["0"], " ", ["1"], "</1>"],
+        "dCpOJ5": "<0/> approved with <1/>",
+        "ZdnQsW": "<0/> interacted with <1/>",
+        "NTnXx/": ["<0/> unapproved <1>", ["0"], "</1>"],
         "cgUaK4": [
             "<0/>",
             [

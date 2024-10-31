@@ -8,7 +8,7 @@ interface Options {
 export function useFinanceFeeds({ address }: Options) {
     return useInfiniteQuery({
         initialPageParam: undefined as any,
-        queryKey: ['debank', 'all-history-list', address],
+        queryKey: ['zerion', 'history-list', address],
         queryFn:
             address ?
                 async ({ pageParam }) => {

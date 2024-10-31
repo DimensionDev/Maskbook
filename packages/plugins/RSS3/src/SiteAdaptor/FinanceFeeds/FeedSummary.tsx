@@ -48,13 +48,10 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
                 className={cx(classes.summary, rest.className)}>
                 {asset.amount === '0' ?
                     <Trans>
-                        <AccountLabel address={asset.sender} />
-                        unapproved
-                        <Label>{asset.symbol || asset.name}</Label>
+                        <AccountLabel address={asset.sender} /> unapproved <Label>{asset.symbol || asset.name}</Label>
                     </Trans>
                 :   <Trans>
-                        <AccountLabel address={asset.sender} />
-                        approved
+                        <AccountLabel address={asset.sender} /> approved{' '}
                         <Label>
                             {formatAmount(asset.amount)} {asset.symbol || asset.name}
                         </Label>
@@ -73,15 +70,15 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
                 {inAsset && outAsset ?
                     <SummaryTypography {...rest}>
                         <Trans>
-                            <AccountLabel address={owner.address} />
-                            <Select value={txType} _trade="traded" _mint="minted" other="traded" />
+                            <AccountLabel address={owner.address} />{' '}
+                            <Select value={txType} _trade="traded" _mint="minted" other="traded" />{' '}
                             <Label>
                                 {formatAmount(inAsset.amount)} {inAsset.symbol || inAsset.name}
                             </Label>{' '}
-                            for
+                            for{' '}
                             <Label>
                                 {formatAmount(outAsset.amount)} {outAsset.symbol || outAsset.name}
-                            </Label>{' '}
+                            </Label>
                         </Trans>
                     </SummaryTypography>
                 :   null}
@@ -95,7 +92,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
                 {transaction.assets.map((asset, index) => (
                     <SummaryTypography key={`burn-${index}`} {...rest}>
                         <Trans>
-                            <AccountLabel address={owner.address} />
+                            <AccountLabel address={owner.address} />{' '}
                             <Select
                                 value={txType}
                                 _burn="burned"
@@ -104,7 +101,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
                                 _receive="received"
                                 _send="sent"
                                 _withdraw="withdrawn"
-                            />
+                            />{' '}
                             <Label>
                                 {formatAmount(asset.amount)} {asset.symbol || asset.name}
                             </Label>{' '}
@@ -134,9 +131,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
         return approvalSummaries?.length ? approvalSummaries : (
                 <SummaryTypography {...rest}>
                     <Trans>
-                        <AccountLabel address={owner.address} />
-                        approved with
-                        <AccountLabel address={transaction.to} />
+                        <AccountLabel address={owner.address} /> approved with <AccountLabel address={transaction.to} />
                     </Trans>
                 </SummaryTypography>
             )
@@ -145,9 +140,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
     return (
         <SummaryTypography {...rest}>
             <Trans>
-                <AccountLabel address={owner.address} />
-                interacted with
-                <AccountLabel address={otherAddress} />
+                <AccountLabel address={owner.address} /> interacted with <AccountLabel address={otherAddress} />
             </Trans>
         </SummaryTypography>
     )
