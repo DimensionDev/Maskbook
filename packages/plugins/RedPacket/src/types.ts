@@ -1,3 +1,5 @@
+import type { ChainId } from '@masknet/web3-shared-evm'
+
 export enum NFTSelectOption {
     All = 'All',
     Partial = 'Partial',
@@ -15,6 +17,7 @@ export type FireflyRedpacketSettings = {
     requirements: RequirementType[]
     nftHolderContract?: string
     nftCollectionName?: string
+    nftChainId?: ChainId
 }
 
 export type FireflySocialProfile = {
