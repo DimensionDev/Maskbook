@@ -132,6 +132,6 @@ msgstr ""
 msgid "Transaction Details"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:144
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:143
 msgid "Tx Fee"
 msgstr ""
