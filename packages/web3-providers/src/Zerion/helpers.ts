@@ -136,8 +136,7 @@ export function formatRestTransaction(transaction: RestTransaction): Transaction
     const assets = attrs.transfers.map((x): TransactionAsset<ChainId, SchemaType> | null => {
         if (x.fungible_info) {
             const implement = x.fungible_info.implementations.find((x) => x.chain_id === zerionChainId)
-            const amount =
-                isGte(x.quantity.int, MaxUint256) ? 'unlimited' : formatAmount(x.quantity.int, -x.quantity.decimals)
+            const amount = isGte(x.quantity.int, MaxUint256) ? 'unlimited' : x.quantity.float.toString()
             return {
                 id: x.fungible_info.symbol,
                 type: TokenType.Fungible,

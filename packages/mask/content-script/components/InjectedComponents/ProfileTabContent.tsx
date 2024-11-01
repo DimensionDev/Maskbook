@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { compact, first } from 'lodash-es'
+import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -115,12 +115,6 @@ const useStyles = makeStyles()((theme) => ({
     reload: {
         borderRadius: 20,
         minWidth: 254,
-    },
-    actions: {
-        marginLeft: 'auto',
-        display: 'inline-flex',
-        alignItems: 'center',
-        color: theme.palette.maskColor.publicMain,
     },
 }))
 

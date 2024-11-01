@@ -103,12 +103,6 @@ const useStyles = makeStyles()((theme) => {
             color: theme.palette.text.secondary,
             fontWeight: 700,
         },
-        actions: {
-            marginLeft: 'auto',
-            display: 'inline-flex',
-            alignItems: 'center',
-            color: theme.palette.maskColor.main,
-        },
     }
 })
 
