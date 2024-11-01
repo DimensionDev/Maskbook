@@ -1025,6 +1025,7 @@ export interface IdentityResolved {
     homepage?: string
     identifier?: ProfileIdentifier
     isOwner?: boolean
+    /** Required to claim redpacket */
     profileId?: string
     /** Firefly only */
     lensToken?: string
