@@ -79,28 +79,31 @@ export function useCreateFTRedpacketCallback(
 
         // the events log is not available
         if (!events?.CreationSuccess?.returnValues.id) return
-
-        payload.current.sender = {
-            address: account,
-            name: currentAccount || settings.name,
-            message: settings.message,
-        }
-        payload.current.is_random = settings.isRandom
-        payload.current.shares = settings.shares
-        payload.current.password = privateKey
-        payload.current.rpid = CreationSuccess.id
-        payload.current.total = CreationSuccess.total
-        payload.current.duration = settings.duration
-        payload.current.creation_time = Number.parseInt(CreationSuccess.creation_time, 10) * 1000
-        payload.current.token = settings.token
+        const redpacketPayload = {
+            sender: {
+                address: account,
+                name: currentAccount || settings.name,
+                message: settings.message,
+            },
+            is_random: settings.isRandom,
+            shares: settings.shares,
+            password: privateKey,
+            rpid: CreationSuccess.id,
+            total: CreationSuccess.total,
+            duration: settings.duration,
+            creation_time: Number.parseInt(CreationSuccess.creation_time, 10) * 1000,
+            token: settings.token,
+        } as const
+        Object.assign(payload.current, redpacketPayload)
 
         const record: RedPacketRecord = {
+            chainId,
             id: receipt.transactionHash,
             from: '',
             password: privateKey,
             contract_version,
         }
-        RedPacketRPC.addRedPacket(record, chainId)
+        RedPacketRPC.addRedPacket(record)
 
         // output the redpacket as JSON payload
         onCreated?.(payload.current)

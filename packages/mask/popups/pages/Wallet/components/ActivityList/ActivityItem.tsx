@@ -33,8 +33,8 @@ import {
 import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItemProps } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo, type JSX } from 'react'
-import { formatTokenBalance } from '../../../../../shared/index.js'
 import { MaskSharedTrans, useMaskSharedTrans } from '../../../../../shared-ui/index.js'
+import { formatTokenBalance } from '../../../../../shared/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
@@ -46,7 +46,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
     const backgroundColorMap: Record<string, string> = {
         send: alpha(theme.palette.maskColor.warn, 0.1),
         receive: alpha(theme.palette.maskColor.success, 0.1),
-        default: alpha(theme.palette.maskColor.success, 0.1),
+        default: alpha(theme.palette.maskColor.primary, 0.1),
     }
     const boxShadowMap: Record<string, string> = {
         send: alpha(theme.palette.maskColor.warn, 0.2),

@@ -14,6 +14,7 @@ import { Link } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
+import { useRuntime } from '../contexts/RuntimeProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -138,6 +139,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 
 export const QuoteRoute = memo(function QuoteRoute() {
     const { classes, theme } = useStyles()
+    const { basepath, showToolTip } = useRuntime()
     const { quote, chainId } = useTrade()
 
     const compareList = useCompareList(quote, chainId)
@@ -151,6 +153,9 @@ export const QuoteRoute = memo(function QuoteRoute() {
 
     const bestValue = compareList[0] ? calcValue(compareList[0], toToken.tokenUnitPrice) : 0
 
+    const rankTooltip = t`This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee.`
+
+    const dexTooltip = t`OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly.`
     return (
         <div className={classes.container}>
             <Box className={classes.infoRow} py={0.5}>
@@ -159,9 +164,17 @@ export const QuoteRoute = memo(function QuoteRoute() {
                 </Typography>
                 <Typography className={classes.rowValue}>
                     Rank
-                    <ShadowRootTooltip
-                        title={t`This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee.`}>
-                        <Icons.Questions size={16} color={theme.palette.maskColor.second} />
+                    <ShadowRootTooltip title={rankTooltip}>
+                        <Icons.Questions
+                            size={16}
+                            color={theme.palette.maskColor.second}
+                            onClick={() => {
+                                showToolTip({
+                                    title: t`Rank`,
+                                    message: rankTooltip,
+                                })
+                            }}
+                        />
                     </ShadowRootTooltip>
                 </Typography>
             </Box>
@@ -177,9 +190,16 @@ export const QuoteRoute = memo(function QuoteRoute() {
                             <img src={compare.dexLogo} width={16} height={16} />
                             {compare.dexName}
                             {compare.dexName.toLowerCase().includes('okx') ?
-                                <ShadowRootTooltip
-                                    title={t`OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly.`}>
-                                    <Icons.Questions size={16} />
+                                <ShadowRootTooltip title={dexTooltip}>
+                                    <Icons.Questions
+                                        size={16}
+                                        onClick={() => {
+                                            showToolTip({
+                                                title: 'OKX',
+                                                message: dexTooltip,
+                                            })
+                                        }}
+                                    />
                                 </ShadowRootTooltip>
                             :   null}
                         </Typography>
@@ -204,7 +224,10 @@ export const QuoteRoute = memo(function QuoteRoute() {
                                 <Icons.Gas size={16} />${new BigNumber(compare.tradeFee).toFixed(4)}
                             </Typography>
                             {isBest ?
-                                <Typography component={Link} className={classes.tag} to={RoutePaths.TradingRoute}>
+                                <Typography
+                                    component={Link}
+                                    className={classes.tag}
+                                    to={basepath + RoutePaths.TradingRoute}>
                                     Route info <Icons.ArrowRight size={16} />
                                 </Typography>
                             :   null}

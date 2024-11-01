@@ -1145,6 +1145,7 @@
     "not_enough_data_to_present": "Not enough data to present.",
     "wallet_send": "Send",
     "wallet_receive": "Receive",
+    "wallet_swap": "Swap",
     "wallet_add_contact": "Add Contact",
     "wallet_add_contact_successfully": "Add contact successfully.",
     "wallet_edit_contact": "Edit Contact",

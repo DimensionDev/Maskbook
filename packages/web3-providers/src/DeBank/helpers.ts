@@ -94,7 +94,7 @@ function toTxAsset(
         schema,
         name: token.name || token.collection?.name || fallbackName,
         symbol: token.optimized_symbol || token.collection?.name || fallbackName,
-        address: token.decimals ? token_id : token.contract_id,
+        address: token.decimals ? token.contract_id : ZERO_ADDRESS,
         decimals: token.decimals || 1,
         direction,
         amount: amount?.toString(),

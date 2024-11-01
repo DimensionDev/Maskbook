@@ -38,8 +38,8 @@ describe('DSearch test', () => {
 
         expect(result.length).toBe(1)
         expect(result[0]).toStrictEqual({
-            name: 'test thefuzzy search',
-            symbol: 'thefuzzy',
+            name: 'test thefuzzy search empty',
+            symbol: 'fuzzy',
             type: 'FungibleToken',
             keyword: 'efuzzy',
             pluginID: 'com.mask.evm',

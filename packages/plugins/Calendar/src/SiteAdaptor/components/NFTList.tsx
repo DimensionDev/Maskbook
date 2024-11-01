@@ -110,7 +110,6 @@ const useStyles = makeStyles()((theme) => ({
 interface NFTListProps {
     list: Record<string, any[]>
     isLoading: boolean
-    empty: boolean
     dateString: string
 }
 
@@ -125,7 +124,8 @@ const sortPlat = (_: any, b: { type: string }) => {
     else return 0
 }
 
-export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
+export function NFTList({ list, isLoading, dateString }: NFTListProps) {
+    const empty = !Object.keys(list).length
     const { classes, cx } = useStyles()
     const t = useCalendarTrans()
     const listAfterDate = useMemo(() => {
@@ -144,7 +144,7 @@ export function NFTList({ list, isLoading, empty, dateString }: NFTListProps) {
     return (
         <div className={classes.container} ref={listRef} key={dateString}>
             <div className={classes.paddingWrap}>
-                {isLoading && !list?.length ?
+                {isLoading && empty ?
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
                     </div>

@@ -51,7 +51,6 @@ export enum SourceType {
     Flow = 'Flow',
     Solana = 'Solana',
     CoinGecko = 'CoinGecko',
-    CoinMarketCap = 'CoinMarketCap',
     UniswapInfo = 'UniswapInfo',
     CF = 'CloudFlare',
     GoPlus = 'GoPlus',
@@ -803,17 +802,24 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     children?: Array<TransactionContext<ChainId, Parameter>>
 }
 
-type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
+export type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
     name: string
     symbol: string
     amount: string
-    direction: string
+    direction: LiteralUnion<'send' | 'receive' | 'self'>
+    sender?: string
+    recipient?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: LiteralUnion<'burn' | 'contract interaction' | 'transfer'>
+    type?:
+        | LiteralUnion<'burn' | 'contract interaction' | 'transfer'>
+        // Zerion operation types
+        | LiteralUnion<
+              'approve' | 'burn' | 'deploy' | 'deposit' | 'execute' | 'mint' | 'receive' | 'send' | 'trade' | 'withdraw'
+          >
     cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
     cateName?: string
     /** address */
@@ -825,8 +831,21 @@ export interface Transaction<ChainId, SchemaType> {
     status: TransactionStatusType
     /** transferred assets */
     assets: Array<TransactionAsset<ChainId, SchemaType>>
+    approveAssets?: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */
     fee?: Price
+    feeInfo?: {
+        name?: string
+        symbol?: string
+        /** url */
+        icon?: string
+        /** ui amount */
+        amount: string
+        /** price per token */
+        price: number
+        /** value in usd */
+        value: number
+    }
     input?: string
     hash?: string
     methodId?: string

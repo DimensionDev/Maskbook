@@ -12,14 +12,6 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
             description: 'Unite State Dollar',
         },
     ],
-    [SourceType.CoinMarketCap]: [
-        {
-            id: '2781',
-            name: 'USD',
-            symbol: '$',
-            description: 'Unite State Dollar',
-        },
-    ],
     [SourceType.NFTScan]: [
         {
             id: 'eth',

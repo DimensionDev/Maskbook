@@ -1,6 +1,7 @@
 import { createNormalReactRoot } from '../../shared-ui/utils/createNormalReactRoot.js'
 import Popups from '../Popup.js'
 import { setupUIContext } from '../../shared-ui/initUIContext.js'
+import './trader.js'
 
 setupUIContext()
 if (location.hash === '') location.assign('#/personas')

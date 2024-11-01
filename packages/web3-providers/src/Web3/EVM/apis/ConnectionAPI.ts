@@ -426,7 +426,10 @@ export class ConnectionAPI
 
         return new Promise<string>((resolve, reject) => {
             const { Transaction, TransactionWatcher } = evm.state!
-            if (!Transaction || !TransactionWatcher) reject(new Error('No context found.'))
+            if (!Transaction || !TransactionWatcher) {
+                reject(new Error('No context found.'))
+                return
+            }
 
             const onProgress = async (
                 chainId: ChainId,
@@ -436,14 +439,14 @@ export class ConnectionAPI
             ) => {
                 if (status === TransactionStatusType.NOT_DEPEND) return
                 if (!transaction?.from) return
-                const transactions = await Transaction?.getTransactions?.(chainId, transaction.from)
+                const transactions = await Transaction.getTransactions?.(chainId, transaction.from)
                 const currentTransaction = transactions?.find((x) => {
                     const hashes = Object.keys(x.candidates)
                     return hashes.includes(hash) && hashes.includes(id)
                 })
                 if (currentTransaction) resolve(currentTransaction.indexId)
             }
-            TransactionWatcher?.emitter.on('progress', onProgress)
+            TransactionWatcher.emitter.on('progress', onProgress)
         })
     }
 

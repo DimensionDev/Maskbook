@@ -10,8 +10,10 @@ import { matchPath, MemoryRouter, useLocation, useNavigate } from 'react-router-
 import urlcat from 'urlcat'
 import { RouterDialog } from '../components/RouterDialog.js'
 import { RoutePaths } from '../constants.js'
-import { ExchangeRoutes } from './Routes.js'
 import { Providers, useTrade } from './contexts/index.js'
+import { RuntimeProvider } from './contexts/RuntimeProvider.js'
+import { ExchangeRoutes } from './Routes.js'
+import { useImplementRuntime } from './useImplementRuntime.js'
 
 const useStyles = makeStyles()((theme) => ({
     icons: {
@@ -36,6 +38,8 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'auto',
         boxSizing: 'border-box',
         scrollbarWith: 'none',
+        display: 'flex',
+        flexDirection: 'column',
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -70,6 +74,7 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
         [RoutePaths.Transaction]: t`Transaction Details`,
     }
     const title = titleMap[pathname as RoutePaths] ?? t`Exchange`
+    const runtime = useImplementRuntime()
 
     return (
         <RouterDialog
@@ -115,7 +120,9 @@ export const Dialog = memo<ExchangeDialogProps>(function Dialog({ onClose }) {
                 :   null
             }>
             <DialogContent className={classes.content}>
-                <ExchangeRoutes />
+                <RuntimeProvider runtime={runtime}>
+                    <ExchangeRoutes />
+                </RuntimeProvider>
             </DialogContent>
         </RouterDialog>
     )

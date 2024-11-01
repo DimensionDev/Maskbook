@@ -58,6 +58,8 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     requiredSupportPluginID?: NetworkPluginID
     readonlyMode?: boolean
     disableSwitchAccount?: boolean
+    /** Hide pending indicator, defaults to false */
+    disablePending?: boolean
 }
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
@@ -71,6 +73,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         requiredSupportPluginID,
         readonlyMode,
         disableSwitchAccount,
+        disablePending,
     }) => {
         const t = useSharedTrans()
         const { classes, cx } = useStyles()
@@ -112,7 +115,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
         return (
             <Box className={cx(classes.root, className)}>
                 <WalletDescription
-                    pending={!!pendingTransactions.length}
+                    pending={disablePending ? false : !!pendingTransactions.length}
                     providerIcon={providerDescriptor?.icon}
                     networkIcon={networkDescriptor?.icon}
                     iconFilterColor={providerDescriptor?.iconFilterColor}

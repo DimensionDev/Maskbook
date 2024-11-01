@@ -1,5 +1,5 @@
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
+import { Typography, type TypographyProps } from '@mui/material'
 import { useState } from 'react'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import type { SingletonModalProps } from '@masknet/shared-base'
@@ -22,19 +22,32 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ConfirmModalProps extends BottomDrawerProps {
     message: string
+    disableConfirmButton?: boolean
     buttonLabel?: string
     onConfirm?(): void
+    messageProps?: Partial<TypographyProps>
 }
 
-function ConfirmDrawer({ message, buttonLabel, onConfirm, ...rest }: ConfirmModalProps) {
-    const { classes } = useStyles()
+function ConfirmDrawer({
+    message,
+    buttonLabel,
+    disableConfirmButton,
+    onConfirm,
+    messageProps,
+    ...rest
+}: ConfirmModalProps) {
+    const { classes, cx } = useStyles()
     const t = useMaskSharedTrans()
     return (
         <BottomDrawer {...rest}>
-            <Typography className={classes.message}>{message}</Typography>
-            <ActionButton className={classes.button} onClick={onConfirm}>
-                {buttonLabel || t.confirm()}
-            </ActionButton>
+            <Typography {...messageProps} className={cx(classes.message, messageProps?.className)}>
+                {message}
+            </Typography>
+            {!disableConfirmButton ?
+                <ActionButton className={classes.button} onClick={onConfirm}>
+                    {buttonLabel || t.confirm()}
+                </ActionButton>
+            :   null}
         </BottomDrawer>
     )
 }

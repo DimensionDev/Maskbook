@@ -17,3 +17,121 @@ msgstr ""
 "X-Crowdin-Language: ja\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 982\n"
+
+#: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx:56
+msgid "{0, select, Post {<0/><1>{handle}</1> published a post on <2>{1}</2>} Comment {<3/><4>{handle}</4> made a comment on <5>{2}</5>} Mirror {<6/><7>{3}</7> mirrored a post post by<8/><9>{handle}</9> on <10>{4}</10>} Quote {<11/><12>{handle}</12> quoted a post post on <13>{5}</13>} other {<14/><15>{handle}</15> post stuff on <16>{6}</16>}}"
+msgstr ""
+
+#: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx:14
+#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} Mirror {<4>{3}</4> mirrored a post post by <5>{handle}</5> on <6>{4}</6>} Quote {<7>{5}</7> quoted a post post on <8>{6}</8>} other {<9>{handle}</9> post stuff on <10>{7}</10>}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SocialFeeds/SocialFeed.tsx:71
+#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} other {<4>{handle}</4> post stuff on <5>{3}</5>}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:94
+msgid "<0/> {txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}} <1>{0} {1}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:72
+msgid "<0/> {txType, select, trade {traded} mint {minted} other {traded}} <1>{0} {1}</1> for <2>{2} {3}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:53
+msgid "<0/> approved <1>{0} {1}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:133
+msgid "<0/> approved with <1/>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:142
+msgid "<0/> interacted with <1/>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:50
+msgid "<0/> unapproved <1>{0}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:97
+#~ msgid "<0/>{txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}}<1>{0} {1}</1>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:119
+msgid "<0/>{txType, select, deploy {deployed} execute {executed}}<1/>"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:75
+#~ msgid "<0/>{txType, select, trade {traded} mint {minted} other {traded}}<1>{0} {1}</1> for<2>{2} {3}</2>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:136
+#~ msgid "<0/>approved with<1/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:55
+#~ msgid "<0/>approved<1>{0} {1}</1>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:147
+#~ msgid "<0/>interacted with<1/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx:50
+#~ msgid "<0/>unapproved<1>{0}</1>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:152
+#~ msgid "Actions"
+#~ msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:106
+msgid "Failed"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:123
+msgid "From"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:93
+msgid "Hash"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:115
+msgid "Network"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/index.tsx:92
+#: src/SiteAdaptor/SocialFeeds/index.tsx:67
+msgid "No more data available."
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:103
+msgid "Status"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:106
+msgid "Successful"
+msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/index.tsx:74
+#: src/SiteAdaptor/SocialFeeds/index.tsx:50
+msgid "There's no feed associated with this address."
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:111
+msgid "Timestamp"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:132
+msgid "To"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:89
+msgid "Transaction Details"
+msgstr ""
+
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx:143
+msgid "Tx Fee"
+msgstr ""

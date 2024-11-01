@@ -246,7 +246,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                         chainId,
                         address,
                     })
-                    if (picked) handleSelectAsset(picked)
+                    if (picked) handleSelectAsset(picked as Web3Helper.FungibleAssetAll)
                 }}>
                 <Box position="relative" height={36} width={36}>
                     <TokenIcon

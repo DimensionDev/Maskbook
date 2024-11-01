@@ -1,5 +1,5 @@
 import { useEffect } from 'react'
-import { useAsync, useAsyncFn } from 'react-use'
+import { useAsyncFn } from 'react-use'
 import { toNumber } from 'lodash-es'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -16,12 +16,15 @@ import { Footer } from './components/Footer.js'
 import { NotFound } from './components/NotFound.js'
 import { SearchBox } from './components/SearchBox.js'
 import { SecurityPanel } from './components/SecurityPanel.js'
+import { skipToken, useQuery } from '@tanstack/react-query'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
         height: 510,
         maxHeight: 510,
-        padding: theme.spacing(2),
+        padding: 0,
+        display: 'flex',
+        flexDirection: 'column',
     },
     footer: {
         boxShadow:
@@ -58,49 +61,50 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
         [],
     )
 
-    const { data: tokenDetailed, isPending: loadingToken } = useFungibleToken(
+    const { data: tokenDetailed, isFetching: loadingToken } = useFungibleToken(
         NetworkPluginID.PLUGIN_EVM,
         value?.contract,
     )
 
     const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
-    const { value: tokenMarketCap } = useAsync(async () => {
-        if (!value?.contract || !value.token_symbol) return
-        const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(value.contract)
-        return marketInfo?.market_cap ? toNumber(marketInfo.market_cap) : undefined
-    }, [value?.contract, !value?.token_symbol])
+    const { data: tokenMarketCap } = useQuery({
+        queryKey: ['coingecko', 'market-info', value?.contract, value?.token_symbol],
+        queryFn:
+            value?.contract && value.token_symbol && !searching ?
+                async () => {
+                    const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(value.contract)
+                    return marketInfo?.market_cap ? toNumber(marketInfo.market_cap) : null
+                }
+            :   skipToken,
+    })
 
     return (
         <InjectedDialog title={t.__plugin_name()} open={open} onClose={onClose}>
             <DialogContent className={classes.content}>
-                <Stack height="100%" spacing={2}>
+                <Stack minHeight={0} flexGrow={1}>
                     {!searchHidden && (
-                        <Box>
+                        <Box m={2}>
                             <SearchBox onSearch={onSearch} />
                         </Box>
                     )}
-                    <Stack flex={1}>
+                    <Stack flex={1} overflow="auto" p={2}>
                         {searching || loadingToken ?
                             <Stack height="100%" justifyContent="center" alignItems="center">
                                 <LoadingBase size={36} />
                             </Stack>
-                        :   null}
-                        {error && !searching && !loadingToken ?
+                        : error ?
                             <NotFound />
-                        :   null}
-                        {!error && !searching && !loadingToken && value ?
+                        : value ?
                             <SecurityPanel
                                 tokenInfo={tokenDetailed}
                                 tokenSecurity={value}
                                 tokenPrice={tokenPrice}
-                                tokenMarketCap={tokenMarketCap}
+                                tokenMarketCap={tokenMarketCap ?? undefined}
                             />
-                        :   null}
-                        {!error && !searching && !loadingToken && !value && (
-                            <Stack height="100%" justifyContent="center" alignItems="center">
+                        :   <Stack height="100%" justifyContent="center" alignItems="center">
                                 <DefaultPlaceholder />
                             </Stack>
-                        )}
+                        }
                     </Stack>
                 </Stack>
             </DialogContent>

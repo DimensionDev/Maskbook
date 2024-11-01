@@ -4,6 +4,8 @@ import type { BigNumber } from 'bignumber.js'
 
 // #region erc20 red packet
 export interface RedPacketRecord {
+    /** since 2.27.1 */
+    chainId: number
     id: string
     /** From twitter/facebook url */
     from: string

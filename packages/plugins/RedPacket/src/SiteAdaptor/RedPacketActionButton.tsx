@@ -1,4 +1,4 @@
-import { memo, useCallback, useState, useContext } from 'react'
+import { memo, useCallback, useContext } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { useRedPacketTrans } from '../locales/index.js'
@@ -44,6 +44,7 @@ interface TokenInfo {
     decimals: number
     amount?: string
 }
+const RedPacketStatus = FireflyRedPacketAPI.RedPacketStatus
 interface Props {
     rpid: string
     account: string
@@ -55,7 +56,10 @@ interface Props {
     redpacketMsg?: string
     chainId: ChainId
     totalAmount?: string
+    /** timestamp in seconds */
     createdAt?: number
+    canResend?: boolean
+    onResend?(): void
 }
 
 export const RedPacketActionButton = memo(function RedPacketActionButton(props: Props) {
@@ -71,21 +75,22 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         chainId,
         totalAmount,
         createdAt,
+        canResend,
+        onResend,
     } = props
-    const [updatedStatus, setUpdatedStatus] = useState<FireflyRedPacketAPI.RedPacketStatus>()
-    const { classes, cx } = useStyles()
+    const { classes } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const t = useRedPacketTrans()
     const compositionType = useContext(CompositionTypeContext)
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
     const statusToTransMap = {
-        [FireflyRedPacketAPI.RedPacketStatus.Send]: t.send(),
-        [FireflyRedPacketAPI.RedPacketStatus.Expired]: t.expired(),
-        [FireflyRedPacketAPI.RedPacketStatus.Empty]: t.empty(),
-        [FireflyRedPacketAPI.RedPacketStatus.Refund]: t.expired(),
-        [FireflyRedPacketAPI.RedPacketStatus.View]: t.view(),
-        [FireflyRedPacketAPI.RedPacketStatus.Refunding]: t.refund(),
+        [RedPacketStatus.Send]: t.send(),
+        [RedPacketStatus.Expired]: t.expired(),
+        [RedPacketStatus.Empty]: t.empty(),
+        [RedPacketStatus.Refund]: t.expired(),
+        [RedPacketStatus.View]: canResend ? t.share() : t.view(),
+        [RedPacketStatus.Refunding]: t.refund(),
     }
 
     const [{ loading: isSharing }, shareCallback] = useAsyncFn(async () => {
@@ -124,15 +129,14 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         )
     }, [])
 
-    const redpacketStatus = updatedStatus || _redpacketStatus
+    const redpacketStatus = refunded ? RedPacketStatus.Refund : _redpacketStatus
 
     const handleClick = useCallback(async () => {
-        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Send) await shareCallback()
-        if (redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refunding) await refundCallback()
-    }, [redpacketStatus, shareCallback, refundCallback])
-
-    if (refunded && updatedStatus !== FireflyRedPacketAPI.RedPacketStatus.Refund)
-        setUpdatedStatus(FireflyRedPacketAPI.RedPacketStatus.Refund)
+        if (canResend) onResend?.()
+        else if (redpacketStatus === RedPacketStatus.Send || redpacketStatus === RedPacketStatus.View)
+            await shareCallback()
+        else if (redpacketStatus === RedPacketStatus.Refunding) await refundCallback()
+    }, [redpacketStatus, shareCallback, refundCallback, canResend, onResend])
 
     return (
         <ActionButton
@@ -141,11 +145,11 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
             onClick={() => {
                 handleClick()
             }}
-            className={cx(classes.actionButton)}
+            className={classes.actionButton}
             disabled={
-                redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Empty ||
-                redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Expired ||
-                redpacketStatus === FireflyRedPacketAPI.RedPacketStatus.Refund
+                redpacketStatus === RedPacketStatus.Empty ||
+                redpacketStatus === RedPacketStatus.Expired ||
+                redpacketStatus === RedPacketStatus.Refund
             }
             size="large">
             <span>{statusToTransMap[redpacketStatus]}</span>

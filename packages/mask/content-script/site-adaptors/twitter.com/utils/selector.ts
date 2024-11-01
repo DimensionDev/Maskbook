@@ -107,7 +107,9 @@ export function postEditorContentInPopupSelector() {
     )
 }
 export function postEditorInPopupSelector() {
-    return querySelector<E>('div[data-testid="toolBar"] [role="presentation"]:has(> button[data-testid="geoButton"])')
+    return querySelector<E>(
+        '[role="dialog"] div[data-testid="toolBar"] [role="presentation"]:has(> button[data-testid="geoButton"])',
+    )
 }
 export function sideBarProfileSelector() {
     return querySelector<E>('[role="banner"] [role="navigation"] [data-testid="AppTabBar_Profile_Link"] > div')
