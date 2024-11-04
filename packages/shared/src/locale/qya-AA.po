@@ -1,14 +1,16 @@
 msgid ""
 msgstr ""
+"POT-Creation-Date: 1970-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2024-11-04 08:54\n"
 "Last-Translator: \n"
-"Language: qya_AA\n"
 "Language-Team: Quenya\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -36,6 +38,10 @@ msgstr "crwdns31510:0{0}crwdnd31510:0{1}crwdne31510:0"
 #: src/UI/translate.ts
 msgid "{0} deposited."
 msgstr "crwdns32454:0{0}crwdne32454:0"
+
+#: src/UI/components/ChainBoundary/index.tsx
+#~ msgid "{0} network is not added in the wallet. Please add and try it again."
+#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "{0} network is not added to the wallet. Please add it and try again."
@@ -74,6 +80,10 @@ msgid "{0} were claimed"
 msgstr "crwdns32468:0{0}crwdne32468:0"
 
 #: src/UI/translate.ts
+#~ msgid "{0} were successfully claimed"
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "{0} withdrawn."
 msgstr "crwdns32470:0{0}crwdne32470:0"
 
@@ -89,6 +99,14 @@ msgstr "crwdns30750:0riskyFactors={riskyFactors}crwdne30750:0"
 msgid "<0>Drag & Drop your file here </0>{0, select, default {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
 msgstr "crwdns32472:00={0}crwdne32472:0"
 
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "<0>Drag & Drop your file here</0>{0, select, default {<1>Size limit: 10 MB</1>} omit {}}<2>or</2><3>Browse File</3>"
+#~ msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "<0>Drag & Drop your file here</0>{0}<1>or</1><2>Browse File</2>"
+#~ msgstr ""
+
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
 msgstr "crwdns32474:0{publisherNode}crwdne32474:0"
@@ -97,13 +115,29 @@ msgstr "crwdns32474:0{publisherNode}crwdne32474:0"
 msgid "<0>Powered by </0><1>{0}</1>"
 msgstr "crwdns32476:0{0}crwdne32476:0"
 
+#: src/UI/components/SettingsBoard/GasOption.tsx
+#~ msgid "~ {0}"
+#~ msgstr ""
+
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#~ msgid "≈ {gasFeeUSD}"
+#~ msgstr ""
+
 #: src/UI/translate.ts
 msgid "1 {0} NFT Lucky Drop claimed."
 msgstr "crwdns32478:0{0}crwdne32478:0"
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
+#~ msgid "1. If you haven't installed {name} Wallet"
+#~ msgstr ""
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "1. If you haven't installed the {name} Wallet"
 msgstr "crwdns32480:0{name}crwdne32480:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
+#~ msgid "2. If you have installed {name} Wallet"
+#~ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "2. If you have installed the {name} Wallet"
@@ -151,6 +185,11 @@ msgid "App Settings"
 msgstr "crwdns32486:0crwdne32486:0"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
+#~ msgid "APP Settings"
+#~ msgstr ""
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
 msgstr "crwdns30776:0crwdne30776:0"
 
@@ -165,6 +204,10 @@ msgstr "crwdns30780:0crwdne30780:0"
 #: src/hooks/useReportSpam.tsx
 msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr "crwdns32488:00={0}crwdnd32488:01={1}crwdne32488:0"
+
+#: src/hooks/useReportSpam.tsx
+#~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -197,6 +240,10 @@ msgstr "crwdns30790:0crwdne30790:0"
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
 msgstr "crwdns30792:0crwdne30792:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Browse File"
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
@@ -243,12 +290,20 @@ msgid "Circulating Supply"
 msgstr "crwdns30808:0crwdne30808:0"
 
 #: src/UI/translate.ts
+#~ msgid "Claim 1 {0} NFT Lucky Drop successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Claim Lucky Drop"
 msgstr "crwdns31522:0crwdne31522:0"
 
 #: src/UI/translate.ts
 msgid "Claim Lucky Drop with {0} claimed."
 msgstr "crwdns32496:0{0}crwdne32496:0"
+
+#: src/UI/translate.ts
+#~ msgid "Claim Lucky Drop with {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Claim NFT Lucky Drop"
@@ -279,8 +334,16 @@ msgid "Click the application icon to hide in the App list."
 msgstr "crwdns32498:0crwdne32498:0"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
+#~ msgid "Click the application icon to hide in the APP list."
+#~ msgstr ""
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
 msgstr "crwdns30816:0crwdne30816:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
+#~ msgid "Click the setting icon to list it on the App board."
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
@@ -289,6 +352,10 @@ msgstr "crwdns32500:0crwdne32500:0"
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Click to retry"
 msgstr "crwdns30820:0crwdne30820:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
+#~ msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx
 #: src/UI/components/CoinMetadataTable/index.tsx
@@ -304,6 +371,10 @@ msgstr "crwdns30824:0crwdne30824:0"
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr "crwdns30826:0crwdne30826:0"
+
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#~ msgid "Confirm Failed"
+#~ msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Confirm Risk Warning"
@@ -353,6 +424,10 @@ msgid "Connect your wallet"
 msgstr "crwdns30848:0crwdne30848:0"
 
 #: src/UI/components/VerifyNextIDDialog/index.tsx
+#~ msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
+#~ msgstr ""
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
 msgstr "crwdns32502:0crwdne32502:0"
 
@@ -386,8 +461,16 @@ msgid "Copy"
 msgstr "crwdns30856:0crwdne30856:0"
 
 #: src/UI/translate.ts
+#~ msgid "Create {0} NFT Lucky Drop successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Create Lucky Drop"
 msgstr "crwdns31546:0crwdne31546:0"
+
+#: src/UI/translate.ts
+#~ msgid "Create Lucky drop with {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Create NFT Lucky Drop"
@@ -463,6 +546,10 @@ msgid "Deposit {0} for savings."
 msgstr "crwdns31566:0{0}crwdne31566:0"
 
 #: src/UI/translate.ts
+#~ msgid "Deposit {0} successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Deposit token"
 msgstr "crwdns31570:0crwdne31570:0"
 
@@ -478,6 +565,10 @@ msgstr "crwdns30872:0crwdne30872:0"
 #: src/UI/contexts/components/InjectedDialog.tsx
 msgid "Dismiss"
 msgstr "crwdns30874:0crwdne30874:0"
+
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#~ msgid "Do you want to set MASK token as gas fee?"
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Do you want to use MASK tokens to pay gas fee?"
@@ -498,8 +589,16 @@ msgid "Done"
 msgstr "crwdns30880:0crwdne30880:0"
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
+#~ msgid "Download {name} Wallet here"
+#~ msgstr ""
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Download the {name} Wallet here"
 msgstr "crwdns32506:0{name}crwdne32506:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Drag & Drop your file here"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
@@ -512,6 +611,10 @@ msgstr "crwdns30888:0crwdne30888:0"
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Editor"
 msgstr "crwdns30890:0crwdne30890:0"
+
+#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
+#~ msgid "Enable {name} Wallet extension and disable other browser extension wallets"
+#~ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "Enable plugin"
@@ -692,6 +795,10 @@ msgid "Gas price must be greater than 0 Gwei."
 msgstr "crwdns30940:0crwdne30940:0"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
+#~ msgid "Get optimized search results when you look for a token."
+#~ msgstr ""
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Get optimized search results when you're looking for a token."
 msgstr "crwdns32512:0crwdne32512:0"
 
@@ -801,9 +908,17 @@ msgstr "crwdns30980:0crwdne30980:0"
 msgid "Market Cap"
 msgstr "crwdns30982:0crwdne30982:0"
 
+#: src/UI/components/PluginCardFrame/index.tsx
+#~ msgid "Mask Network"
+#~ msgstr ""
+
 #: src/UI/components/GrantPermission/index.tsx
 msgid "Mask Network requires the permission of following websites before using it."
 msgstr "crwdns32522:0crwdne32522:0"
+
+#: src/UI/components/GrantPermission/index.tsx
+#~ msgid "Mask Network requires you to authorize the following websites before using it."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Maskbox NFT purchased."
@@ -867,6 +982,10 @@ msgstr "crwdns31010:0crwdne31010:0"
 msgid "Medium"
 msgstr "crwdns31012:0crwdne31012:0"
 
+#: src/UI/components/PhoneNumberField/index.tsx
+#~ msgid "Mobile Number"
+#~ msgstr ""
+
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "More"
 msgstr "crwdns31016:0crwdne31016:0"
@@ -878,6 +997,10 @@ msgstr "crwdns31018:0crwdne31018:0"
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Name or contract address eg. PUNK or 0x234..."
 msgstr "crwdns32528:0crwdne32528:0"
+
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#~ msgid "Name or Contract address eg.PUNK or 0x234..."
+#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
@@ -922,6 +1045,10 @@ msgstr "crwdns31034:0crwdne31034:0"
 msgid "No wallet selected."
 msgstr "crwdns32534:0crwdne32534:0"
 
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#~ msgid "Not select wallet yet."
+#~ msgstr ""
+
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
 msgstr "crwdns31038:0crwdne31038:0"
@@ -941,6 +1068,10 @@ msgstr "crwdns31044:0crwdne31044:0"
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr "crwdns31046:0crwdne31046:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "or"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Owner changed."
@@ -970,6 +1101,10 @@ msgid "Please connect {0} and send a proof post before using dApps."
 msgstr "crwdns32540:0{0}crwdne32540:0"
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
+#~ msgid "Please connect {0} and send proof post before using dApps."
+#~ msgstr ""
+
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
 msgstr "crwdns31058:0{0}crwdne31058:0"
 
@@ -980,6 +1115,11 @@ msgstr "crwdns31060:0crwdne31060:0"
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your wallet"
 msgstr "crwdns31062:0crwdne31062:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+#: src/UI/components/PersonaSelectPanel/index.tsx
+#~ msgid "Please create a Persona and verify your account to use this function."
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -1003,12 +1143,21 @@ msgid "Please switch to this network in the mobile application wallet you are co
 msgstr "crwdns31070:0crwdne31070:0"
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
+#~ msgid "Please verify current persona with social media account before using dApps."
+#~ msgstr ""
+
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
 msgstr "crwdns32546:0crwdne32546:0"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please verify your social account"
 msgstr "crwdns31074:0crwdne31074:0"
+
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
+#~ msgid "Plug-in switch"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -1024,6 +1173,11 @@ msgstr "crwdns31078:0crwdne31078:0"
 msgid "Post content:"
 msgstr "crwdns31080:0crwdne31080:0"
 
+#: src/UI/components/MaskPluginWrapper/index.tsx
+#: src/UI/components/PluginCardFrame/index.tsx
+#~ msgid "Powered by"
+#~ msgstr ""
+
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Price Statistic"
@@ -1038,12 +1192,20 @@ msgid "Purchase Maskbox NFT"
 msgstr "crwdns31604:0crwdne31604:0"
 
 #: src/UI/translate.ts
+#~ msgid "Purchase Maskbox NFT with {0} successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Purchase Maskbox NFT."
 msgstr "crwdns31610:0crwdne31610:0"
 
 #: src/UI/translate.ts
 msgid "Refund Lucky drop"
 msgstr "crwdns31612:0crwdne31612:0"
+
+#: src/UI/translate.ts
+#~ msgid "Refund Lucky Drop with {0} successfully."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Refund your expired Lucky Drop."
@@ -1094,6 +1256,10 @@ msgstr "crwdns31626:0crwdne31626:0"
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
 msgstr "crwdns31102:0crwdne31102:0"
+
+#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
+#~ msgid "Scan QR code with a WalletConnect-compatible wallet"
+#~ msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
@@ -1151,10 +1317,22 @@ msgstr "crwdns31126:0crwdne31126:0"
 msgid "Send {0}"
 msgstr "crwdns31628:0{0}crwdne31628:0"
 
+#: src/UI/translate.ts
+#~ msgid "Send {0} successfully."
+#~ msgstr ""
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx
+#~ msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+#~ msgstr ""
+
 #: src/hooks/useOpenShareTxDialog.tsx
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "Share"
 msgstr "crwdns31128:0crwdne31128:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Size limit: 10 MB"
+#~ msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
@@ -1172,6 +1350,10 @@ msgstr "crwdns32552:0crwdne32552:0"
 msgid "Success"
 msgstr "crwdns31136:0crwdne31136:0"
 
+#: src/hooks/useReportSpam.tsx
+#~ msgid "Successfully reported."
+#~ msgstr ""
+
 #: src/UI/components/ChainBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Switch Network"
@@ -1184,6 +1366,10 @@ msgstr "crwdns31142:0{0}crwdne31142:0"
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Tell friends what's happening..."
 msgstr "crwdns32554:0crwdne32554:0"
+
+#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
+#~ msgid "Tell selective friends what's happening..."
+#~ msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
@@ -1202,6 +1388,10 @@ msgid "The token approval revoked."
 msgstr "crwdns32556:0crwdne32556:0"
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
+#~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
+#~ msgstr ""
+
+#: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "This function has been turned off in the App settings. Enable plugins to fully access."
 msgstr "crwdns32558:0crwdne32558:0"
 
@@ -1216,6 +1406,10 @@ msgstr "crwdns31154:0crwdne31154:0"
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
 msgstr "crwdns31156:0crwdne31156:0"
+
+#: src/UI/components/AddCollectibles/index.tsx
+#~ msgid "Token ID separated by comma, e.g. 1223,1224,"
+#~ msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "Token ID should be separated by comma, e.g. 1223,1224,"
@@ -1263,6 +1457,10 @@ msgid "Transaction with extremely low slippage tolerance might be reverted becau
 msgstr "crwdns31170:0crwdne31170:0"
 
 #: src/UI/translate.ts
+#~ msgid "Transfer {0} NFT successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Transfer {0} NFT."
 msgstr "crwdns31640:0{0}crwdne31640:0"
 
@@ -1287,8 +1485,16 @@ msgid "Unlock {0}"
 msgstr "crwdns31176:0{0}crwdne31176:0"
 
 #: src/UI/translate.ts
+#~ msgid "Unlock {0} NFT contract successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Unlock {0} NFT contract."
 msgstr "crwdns31648:0{0}crwdne31648:0"
+
+#: src/UI/translate.ts
+#~ msgid "Unlock {0} successfully"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Unlock {0}."
@@ -1305,6 +1511,10 @@ msgstr "crwdns31656:0crwdne31656:0"
 #: src/UI/translate.ts
 msgid "Unlock Token"
 msgstr "crwdns31658:0crwdne31658:0"
+
+#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
+#~ msgid "Unlocking {0}..."
+#~ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
@@ -1337,6 +1547,10 @@ msgstr "crwdns31184:0{0}crwdne31184:0"
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Verify {0}"
 msgstr "crwdns31186:0{0}crwdne31186:0"
+
+#: src/UI/components/ConnectPersonaBoundary/index.tsx
+#~ msgid "Verify your Twitter ID"
+#~ msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -1378,6 +1592,10 @@ msgid "Withdraw {0} for savings."
 msgstr "crwdns31662:0{0}crwdne31662:0"
 
 #: src/UI/translate.ts
+#~ msgid "Withdraw {0} successfully."
+#~ msgstr ""
+
+#: src/UI/translate.ts
 msgid "Withdraw token"
 msgstr "crwdns31666:0crwdne31666:0"
 
@@ -1388,6 +1606,10 @@ msgstr "crwdns31204:0crwdne31204:0"
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "You canceled the request."
 msgstr "crwdns31206:0crwdne31206:0"
+
+#: src/UI/translate.ts
+#~ msgid "You didn't approve {0} successfully. Please do not set spending cap to 0 and try it again."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
@@ -1412,4 +1634,8 @@ msgstr "crwdns32576:0{0}crwdnd32576:0{1}crwdne32576:0"
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr "crwdns32578:0crwdne32578:0"
+
+#: src/hooks/useOpenShareTxDialog.tsx
+#~ msgid "Your transaction was confirmed!"
+#~ msgstr ""
 
