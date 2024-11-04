@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2024-11-04 08:54\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -178,8 +178,12 @@ msgid "Successful"
 msgstr "crwdns28918:0crwdne28918:0"
 
 #: src/SiteAdaptor/FeedsPage.tsx
-msgid "There's no feed associated with this address."
-msgstr "crwdns31704:0crwdne31704:0"
+#~ msgid "There's no feed associated with this address."
+#~ msgstr ""
+
+#: src/SiteAdaptor/FeedsPage.tsx
+msgid "There's no feed associated with this address.<0>{0}</0>"
+msgstr "crwdns32926:0{0}crwdne32926:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Timestamp"
