@@ -165,4 +165,3 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
-

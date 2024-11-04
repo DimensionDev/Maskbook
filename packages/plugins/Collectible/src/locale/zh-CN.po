@@ -127,4 +127,3 @@ msgstr ""
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
 msgstr "代币标准"
-

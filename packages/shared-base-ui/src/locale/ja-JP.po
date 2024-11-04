@@ -27,4 +27,3 @@ msgstr "GitHubで報告"
 #: src/components/ErrorBoundary/CrashUI.tsx
 msgid "Try to recover"
 msgstr "復旧を試みます"
-

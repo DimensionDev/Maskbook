@@ -92,4 +92,3 @@ msgstr "签名失败"
 #: src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
 msgstr "签名成功"
-
