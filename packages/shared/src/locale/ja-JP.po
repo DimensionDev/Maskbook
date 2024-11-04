@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-11-04 08:54\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -117,7 +117,7 @@ msgstr ""
 
 #: src/UI/components/SettingsBoard/GasOption.tsx
 #~ msgid "~ {0}"
-#~ msgstr "~ {0}"
+#~ msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #~ msgid "≈ {gasFeeUSD}"
@@ -187,7 +187,7 @@ msgstr ""
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #~ msgid "APP Settings"
-#~ msgstr "アプリ設定"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: src/hooks/useReportSpam.tsx
 #~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
-#~ msgstr "{0}を報告してもよろしいですか？承認すると、このNFTはスパムとしてマークされます。"
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -243,7 +243,7 @@ msgstr "Blocto は Flow チェーンのみを対応します。"
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "Browse File"
-#~ msgstr "ファイルを開く"
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
@@ -335,7 +335,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 #~ msgid "Click the application icon to hide in the APP list."
-#~ msgstr "アプリアイコンをクリックして、アプリ一覧で非表示にします。"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
@@ -343,7 +343,7 @@ msgstr "アプリのアイコンをクリックして、アプリボードに表
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 #~ msgid "Click the setting icon to list it on the App board."
-#~ msgstr "設定アイコンをクリックしてアプリボードに表示します。"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
@@ -355,7 +355,7 @@ msgstr "クリックして再試行"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
-#~ msgstr "確認ボタンをクリックすると、上記のリスクを負うことに同意することになります。"
+#~ msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx
 #: src/UI/components/CoinMetadataTable/index.tsx
@@ -374,7 +374,7 @@ msgstr "確認"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #~ msgid "Confirm Failed"
-#~ msgstr "確認に失敗しました"
+#~ msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Confirm Risk Warning"
@@ -568,7 +568,7 @@ msgstr "解除"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #~ msgid "Do you want to set MASK token as gas fee?"
-#~ msgstr "MASKトークンをガス料金を支払いに設定しますか？"
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Do you want to use MASK tokens to pay gas fee?"
@@ -598,11 +598,11 @@ msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "Drag & Drop your file here"
-#~ msgstr "ここにファイルをドラッグ&ドロップしてください"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
-msgstr "DSearch"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Edit"
@@ -796,7 +796,7 @@ msgstr "ガス価格は0Gwei以上でなければなりません。"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 #~ msgid "Get optimized search results when you look for a token."
-#~ msgstr "トークンを探すときに最適化された検索結果を取得します。"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Get optimized search results when you're looking for a token."
@@ -815,7 +815,7 @@ msgstr "Gwei（グワイ）"
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -910,7 +910,7 @@ msgstr "時価総額"
 
 #: src/UI/components/PluginCardFrame/index.tsx
 #~ msgid "Mask Network"
-#~ msgstr "Mask Network"
+#~ msgstr ""
 
 #: src/UI/components/GrantPermission/index.tsx
 msgid "Mask Network requires the permission of following websites before using it."
@@ -918,7 +918,7 @@ msgstr ""
 
 #: src/UI/components/GrantPermission/index.tsx
 #~ msgid "Mask Network requires you to authorize the following websites before using it."
-#~ msgstr "Mask Networkは、利用する前に次のウェブサイトを承認する必要があります。"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Maskbox NFT purchased."
@@ -984,7 +984,7 @@ msgstr "中"
 
 #: src/UI/components/PhoneNumberField/index.tsx
 #~ msgid "Mobile Number"
-#~ msgstr "携帯番号"
+#~ msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "More"
@@ -1000,7 +1000,7 @@ msgstr ""
 
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #~ msgid "Name or Contract address eg.PUNK or 0x234..."
-#~ msgstr "名前またはコントラクトアドレス。例：PUNK or 0x234..."
+#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
@@ -1016,7 +1016,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
@@ -1047,11 +1047,11 @@ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #~ msgid "Not select wallet yet."
-#~ msgstr "ウォレットを選択していません"
+#~ msgstr ""
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
-msgstr "OK"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
@@ -1071,7 +1071,7 @@ msgstr "トークン名、NFTコレクション、ENSドメイン、またはウ
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "or"
-#~ msgstr "または"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Owner changed."
@@ -1102,7 +1102,7 @@ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Please connect {0} and send proof post before using dApps."
-#~ msgstr "dAppsを利用する前に{0}を接続し、プルーフポストを送信してください。"
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
@@ -1119,7 +1119,7 @@ msgstr "ウォレットに接続してください"
 #: src/hooks/useCurrentPersonaConnectStatus.ts
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Please create a Persona and verify your account to use this function."
-#~ msgstr "本機能を利用するには、ペルソナを作成し、アカウントを認証してください。"
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -1144,7 +1144,7 @@ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Please verify current persona with social media account before using dApps."
-#~ msgstr "dAppsを使用する前に、ソーシャルメディアアカウントで現在のペルソナを確認してください。"
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
@@ -1157,7 +1157,7 @@ msgstr "ソーシャルアカウントを確認してください"
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #~ msgid "Plug-in switch"
-#~ msgstr "プラグイン・スイッチ"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -1176,7 +1176,7 @@ msgstr "投稿内容"
 #: src/UI/components/MaskPluginWrapper/index.tsx
 #: src/UI/components/PluginCardFrame/index.tsx
 #~ msgid "Powered by"
-#~ msgstr "以下により提供されています"
+#~ msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -1259,7 +1259,7 @@ msgstr "リスク警告"
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 #~ msgid "Scan QR code with a WalletConnect-compatible wallet"
-#~ msgstr "WalletConnect対応ウォレットでQRコードスキャン"
+#~ msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
@@ -1332,7 +1332,7 @@ msgstr "シェア"
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "Size limit: 10 MB"
-#~ msgstr "サイズ制限：10 MB"
+#~ msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
@@ -1352,7 +1352,7 @@ msgstr "完了"
 
 #: src/hooks/useReportSpam.tsx
 #~ msgid "Successfully reported."
-#~ msgstr "報告に成功しました。"
+#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx
@@ -1369,7 +1369,7 @@ msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 #~ msgid "Tell selective friends what's happening..."
-#~ msgstr "選択的な友達に何が起きているのか伝えてください..."
+#~ msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
@@ -1389,7 +1389,7 @@ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
 #~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
-#~ msgstr "この機能はアプリ設定でオフになっています。プラグインに完全にアクセスできるようにしてください。"
+#~ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "This function has been turned off in the App settings. Enable plugins to fully access."
@@ -1514,7 +1514,7 @@ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #~ msgid "Unlocking {0}..."
-#~ msgstr "{0} のロックを解除中..."
+#~ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
@@ -1550,7 +1550,7 @@ msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 #~ msgid "Verify your Twitter ID"
-#~ msgstr "Twitter IDの認証"
+#~ msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -1637,4 +1637,5 @@ msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx
 #~ msgid "Your transaction was confirmed!"
-#~ msgstr "トランザクションが確認されました！"
+#~ msgstr ""
+
