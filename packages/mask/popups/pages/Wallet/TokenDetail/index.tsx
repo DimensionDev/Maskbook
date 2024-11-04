@@ -21,7 +21,6 @@ import { type ChainId, SchemaType, isNativeTokenAddress } from '@masknet/web3-sh
 import { Box, Button, Skeleton, ThemeProvider, Typography } from '@mui/material'
 import React, { memo, useContext, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { ActionGroup } from '../components/index.js'
@@ -138,7 +137,6 @@ const usePageStyles = makeStyles()((theme) => {
 
 export const Component = memo(function TokenDetailPage() {
     const { classes, theme } = usePageStyles()
-    const t = useMaskSharedTrans()
     const { chainId, address } = useTokenParams()
     const navigate = useNavigate()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
@@ -182,7 +180,7 @@ export const Component = memo(function TokenDetailPage() {
             </Button>,
         )
         return () => setExtension(undefined)
-    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, t, account])
+    }, [chainId, asset, isNativeToken, classes.deleteButton, showSnackbar, account])
 
     return (
         <div className={classes.halo}>

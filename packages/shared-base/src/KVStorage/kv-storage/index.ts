@@ -8,7 +8,7 @@ export { createProxyKVStorageBackend } from './proxy.js'
 export type { ProxiedKVStorageBackend } from './proxy.js'
 
 export const removed = Symbol.for('removed')
-export * from './types.js'
+export type * from './types.js'
 
 /**
  * Create a root scope of simple K/V storage.

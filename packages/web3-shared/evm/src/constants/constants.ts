@@ -1,30 +1,30 @@
-import Aave from '@masknet/web3-constants/evm/aave.json'
-import Airdrop from '@masknet/web3-constants/evm/airdrop.json'
-import Arb from '@masknet/web3-constants/evm/arb.json'
-import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json'
-import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
-import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json'
-import DeBank from '@masknet/web3-constants/evm/debank.json'
-import ENS from '@masknet/web3-constants/evm/ens.json'
-import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
-import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
-import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json'
-import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json'
-import LensProfile from '@masknet/web3-constants/evm/lens-profile.json'
-import Lens from '@masknet/web3-constants/evm/lens.json'
-import Lido from '@masknet/web3-constants/evm/lido.json'
-import MaskBox from '@masknet/web3-constants/evm/mask-box.json'
-import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
-import OpenOcean from '@masknet/web3-constants/evm/openocean.json'
-import Pet from '@masknet/web3-constants/evm/pet.json'
-import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
-import BUILTIN_RPC from '@masknet/web3-constants/evm/rpc.json'
-import SmartPay from '@masknet/web3-constants/evm/smart-pay.json'
-import SpaceId from '@masknet/web3-constants/evm/space-id.json'
-import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
-import TokenList from '@masknet/web3-constants/evm/token-list.json'
-import Token from '@masknet/web3-constants/evm/token.json'
-import Trending from '@masknet/web3-constants/evm/trending.json'
+import Aave from '@masknet/web3-constants/evm/aave.json' with { type: 'json' }
+import Airdrop from '@masknet/web3-constants/evm/airdrop.json' with { type: 'json' }
+import Arb from '@masknet/web3-constants/evm/arb.json' with { type: 'json' }
+import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json' with { type: 'json' }
+import CoinGecko from '@masknet/web3-constants/evm/coingecko.json' with { type: 'json' }
+import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json' with { type: 'json' }
+import DeBank from '@masknet/web3-constants/evm/debank.json' with { type: 'json' }
+import ENS from '@masknet/web3-constants/evm/ens.json' with { type: 'json' }
+import Ethereum from '@masknet/web3-constants/evm/ethereum.json' with { type: 'json' }
+import Etherscan from '@masknet/web3-constants/evm/etherscan.json' with { type: 'json' }
+import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json' with { type: 'json' }
+import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json' with { type: 'json' }
+import LensProfile from '@masknet/web3-constants/evm/lens-profile.json' with { type: 'json' }
+import Lens from '@masknet/web3-constants/evm/lens.json' with { type: 'json' }
+import Lido from '@masknet/web3-constants/evm/lido.json' with { type: 'json' }
+import MaskBox from '@masknet/web3-constants/evm/mask-box.json' with { type: 'json' }
+import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json' with { type: 'json' }
+import OpenOcean from '@masknet/web3-constants/evm/openocean.json' with { type: 'json' }
+import Pet from '@masknet/web3-constants/evm/pet.json' with { type: 'json' }
+import RedPacket from '@masknet/web3-constants/evm/red-packet.json' with { type: 'json' }
+import BUILTIN_RPC from '@masknet/web3-constants/evm/rpc.json' with { type: 'json' }
+import SmartPay from '@masknet/web3-constants/evm/smart-pay.json' with { type: 'json' }
+import SpaceId from '@masknet/web3-constants/evm/space-id.json' with { type: 'json' }
+import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json' with { type: 'json' }
+import TokenList from '@masknet/web3-constants/evm/token-list.json' with { type: 'json' }
+import Token from '@masknet/web3-constants/evm/token.json' with { type: 'json' }
+import Trending from '@masknet/web3-constants/evm/trending.json' with { type: 'json' }
 
 import { getEnumAsArray } from '@masknet/kit'
 import { transform, transformAll, transformAllHook, transformHook } from '@masknet/web3-shared-base'

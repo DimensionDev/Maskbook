@@ -115,6 +115,8 @@ export function useConfettiExplosion() {
         if (!canvas) return
         const ctx = canvas.getContext('2d')
         if (!ctx) return
+        // TODO: ??? global state?
+        // eslint-disable-next-line react-compiler/react-compiler
         buttonOffsetWidth = width
         buttonOffsetHeight = height
         canvasWidth = canvas.width

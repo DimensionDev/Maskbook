@@ -1,2 +1,2 @@
-export * from './SiteAdaptor.js'
-export * from './SiteAdaptorUI.js'
+export type * from './SiteAdaptor.js'
+export type * from './SiteAdaptorUI.js'

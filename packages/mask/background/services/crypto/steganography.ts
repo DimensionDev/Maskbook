@@ -11,7 +11,7 @@ async function fetchImage(url: string) {
 const steganographyDownloadImage = memoizePromise(memoize, fetchImage, (x) => x)
 
 export function steganographyEncodeImage(
-    buf: ArrayBuffer,
+    buf: ArrayLike<number> | ArrayBufferLike,
     options: Omit<EncodeImageOptions, 'downloadImage'>,
 ): Promise<Uint8Array> {
     return __steganographyEncodeImage(buf, { ...options, downloadImage: steganographyDownloadImage })

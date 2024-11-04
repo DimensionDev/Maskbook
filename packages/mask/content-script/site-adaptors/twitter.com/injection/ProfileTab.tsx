@@ -327,7 +327,7 @@ function hiddenNextArrow() {
 }
 
 function InjectProfileTab() {
-    const web3TabRef = useRef<HTMLDivElement>(null)
+    const [web3TabRef, setWeb3TabRef] = useState<HTMLDivElement | null>(null)
     const { classes } = useStyles({ minWidth: 56 })
     const windowSize = useWindowSize()
     const timeoutRef = useRef<any>(undefined)
@@ -340,7 +340,7 @@ function InjectProfileTab() {
             timeoutRef.current = null
         }
         const parent = searchProfileTabListLastChildSelector().closest<HTMLElement>(1).evaluate()
-        if (!parent || !web3TabRef.current) return
+        if (!parent || !web3TabRef) return
         if (Math.abs(parent.scrollWidth - (parent.scrollLeft + parent.clientWidth)) < 10) return
         if (parent.clientWidth < parent.scrollWidth) {
             showNextArrow()
@@ -383,30 +383,22 @@ function InjectProfileTab() {
     const tabList = searchProfileTabListSelector().evaluate()
     const nextArrow = nextTabListSelector().evaluate()
     useEffect(() => {
-        web3TabRef.current?.addEventListener('mouseenter', onMouseEnter)
-        web3TabRef.current?.addEventListener('mouseleave', onMouseLeave)
-        nextArrow?.addEventListener('click', onNextClick)
-        nextArrow?.addEventListener('mouseenter', onEnterNextArrow)
-        nextArrow?.addEventListener('mouseleave', onLeaveNextArrow)
+        const ac = new AbortController()
+        const signal = ac.signal
+        web3TabRef?.addEventListener('mouseenter', onMouseEnter, { signal })
+        web3TabRef?.addEventListener('mouseleave', onMouseLeave, { signal })
+        nextArrow?.addEventListener('click', onNextClick, { signal })
+        nextArrow?.addEventListener('mouseenter', onEnterNextArrow, { signal })
+        nextArrow?.addEventListener('mouseleave', onLeaveNextArrow, { signal })
         tabList.map((v) => {
-            v.closest('div')?.addEventListener('mouseenter', onMouseEnter)
-            v.closest('div')?.addEventListener('mouseleave', onMouseLeave)
+            v.closest('div')?.addEventListener('mouseenter', onMouseEnter, { signal })
+            v.closest('div')?.addEventListener('mouseleave', onMouseLeave, { signal })
         })
-        return () => {
-            web3TabRef.current?.removeEventListener('mouseenter', onMouseEnter)
-            web3TabRef.current?.removeEventListener('mouseleave', onMouseLeave)
-            nextArrow?.removeEventListener('click', onNextClick)
-            nextArrow?.removeEventListener('mouseenter', onEnterNextArrow)
-            nextArrow?.removeEventListener('mouseleave', onLeaveNextArrow)
-            tabList.map((v) => {
-                v.closest('div')?.removeEventListener('mouseenter', onMouseEnter)
-                v.closest('div')?.removeEventListener('mouseleave', onMouseLeave)
-            })
-        }
-    }, [windowSize, tabList, web3TabRef.current, nextArrow])
+        return () => ac.abort()
+    }, [windowSize, tabList, web3TabRef, nextArrow])
 
     return (
-        <div ref={web3TabRef} className={classes.bar}>
+        <div ref={setWeb3TabRef} className={classes.bar}>
             <ProfileTabForTokenAndPersona />
             <ProfileTabForDAO />
         </div>

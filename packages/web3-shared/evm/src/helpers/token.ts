@@ -1,6 +1,6 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { createFungibleToken, createFungibleTokensFromConstants } from '@masknet/web3-shared-base'
-import Token from '@masknet/web3-constants/evm/token.json'
+import Token from '@masknet/web3-constants/evm/token.json' with { type: 'json' }
 import { CHAIN_DESCRIPTORS } from '../constants/index.js'
 import { ChainId, SchemaType } from '../types/index.js'
 

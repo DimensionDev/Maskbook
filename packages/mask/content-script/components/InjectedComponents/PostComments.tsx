@@ -6,7 +6,7 @@ import { Lock } from '@mui/icons-material'
 import type { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import { usePostInfoDecryptComment } from '@masknet/plugin-infra/content-script'
 
 const useStyle = makeStyles()({
     root: {
@@ -42,7 +42,7 @@ export interface PostCommentProps {
 export function PostComment(props: PostCommentProps) {
     const { needZip } = props
     const comment = useValueRef(props.comment)
-    const decrypt = usePostInfoDetails.decryptComment()
+    const decrypt = usePostInfoDecryptComment()
 
     const { value } = useAsync(async () => decrypt?.(comment), [decrypt, comment])
 

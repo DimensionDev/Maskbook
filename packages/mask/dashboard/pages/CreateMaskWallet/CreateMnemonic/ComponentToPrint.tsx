@@ -87,9 +87,10 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
     const { words, address } = props
     const { classes } = useStyles()
 
+    const wordsStr = words.join(' ')
     const qrValue = useMemo(() => {
-        return `mask://wallet/mnemonic/${btoa(words.join(' '))}`
-    }, [words.join(',')])
+        return `mask://wallet/mnemonic/${btoa(wordsStr)}`
+    }, [wordsStr])
 
     return (
         <Box className={classes.container} ref={props.ref}>

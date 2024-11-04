@@ -2,10 +2,10 @@ import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatDomainName } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -55,25 +55,21 @@ export function ProfileLinkAction({ feed, ...rest }: ProfileLinkActionProps) {
     const formattedUser = formatDomainName(user, 16, true)
     const otherEns = useAddressLabel(metadata?.address ?? '')
     const other = metadata ? resolveHandle(metadata) : otherEns
-    const formattedOther = formatDomainName(other, 16, true)
+    const formattedOtherUser = formatDomainName(other, 16, true)
 
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.profile_link
-                    values={{
-                        user: formattedUser,
-                        other: formattedOther,
-                        platform: feed.platform!,
-                        context: feed.type,
-                    }}
-                    components={{
-                        user: <Label title={user} fontSize={14} />,
-                        other: <Label title={other} fontSize={14} />,
-                        platform: <Label fontSize={14} />,
-                    }}
-                />
+                <Trans>
+                    <Label title={user} fontSize={14}>
+                        {formattedUser}
+                    </Label>{' '}
+                    <Select _follow="followed" _unfollow="un-followed" value={feed.type} />{' '}
+                    <Label title={formattedOtherUser} fontSize={14}>
+                        {other}
+                    </Label>{' '}
+                    on <Label fontSize={14}>{feed.platform}</Label>
+                </Trans>
             </Typography>
         </div>
     )

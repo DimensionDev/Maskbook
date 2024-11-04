@@ -80,10 +80,11 @@ export function ComponentToPrint(props: ComponentToPrintProps) {
     const { words, privateKey, personaName, publicKey, ref } = props
     const { classes } = useStyles()
 
+    const wordsStr = words.join(' ')
     const qrValue = useMemo(() => {
-        const main = words?.length ? `mnemonic/${btoa(words.join(' '))}` : `privatekey/${privateKey}`
+        const main = words?.length ? `mnemonic/${btoa(wordsStr)}` : `privatekey/${privateKey}`
         return `mask://persona/${main}?nickname=${personaName}`
-    }, [words?.join(','), privateKey, personaName])
+    }, [wordsStr, privateKey, personaName])
 
     return (
         <Box className={classes.container} ref={ref}>

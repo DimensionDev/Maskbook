@@ -47,7 +47,7 @@ export function CalendarContent({ target, disableSetting }: Props) {
     const [pathname, setPathname] = useState(location.pathname)
     const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
     const [currentTab, onChange, tabs] = useTabs('news', 'nfts')
-    const [selectedDate, setSelectedDate] = useState(new Date())
+    const [selectedDate, setSelectedDate] = useState(() => new Date())
     const [open, setOpen] = useState(false)
     const { data: newsList = EMPTY_OBJECT, isPending: newsLoading } = useNewsList(selectedDate, currentTab === 'news')
     const { data: nftList = EMPTY_OBJECT, isPending: nftLoading } = useNFTList(selectedDate, currentTab === 'nfts')

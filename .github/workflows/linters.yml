@@ -55,10 +55,6 @@ jobs:
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: packages/plugins/tsconfig.json'
-      - run: npx gulp lint-po
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: po files'
   prettier:
     runs-on: ubuntu-latest
     permissions:

@@ -14,13 +14,16 @@ function getMagicHeader(version: SupportedVersions) {
 }
 
 /** @internal */
-export async function createContainer(version: SupportedVersions, data: ArrayBuffer) {
+export async function createContainer(version: SupportedVersions, data: ArrayBuffer | Uint8Array<ArrayBuffer>) {
     const checksum = await crypto.subtle.digest({ name: 'SHA-256' }, data)
     return concatArrayBuffer(getMagicHeader(version), data, checksum)
 }
 
 /** @internal */
-export async function parseEncryptedJSONContainer(version: SupportedVersions, _container: ArrayBuffer) {
+export async function parseEncryptedJSONContainer(
+    version: SupportedVersions,
+    _container: ArrayBuffer | ArrayLike<number>,
+) {
     const container = new Uint8Array(_container)
 
     for (const [index, value] of getMagicHeader(version).entries()) {

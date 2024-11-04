@@ -1,6 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import type { MaskBox } from '@masknet/web3-contracts/types/MaskBox.js'
-import MASK_BOX_ABI from '@masknet/web3-contracts/abis/MaskBox.json'
+import MASK_BOX_ABI from '@masknet/web3-contracts/abis/MaskBox.json' with { type: 'json' }
 import { useMaskBoxConstants, type ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'

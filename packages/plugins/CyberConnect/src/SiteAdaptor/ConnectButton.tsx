@@ -6,7 +6,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { useSharedTrans, WalletConnectedBoundary } from '@masknet/shared'
+import { WalletConnectedBoundary } from '@masknet/shared'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -45,7 +45,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export default function ConnectButton({ address }: { address: string }) {
-    const sharedI18N = useSharedTrans()
     const { classes, cx } = useStyles()
     const { account, chainId } = useChainContext()
     const wallet = useWallet()
@@ -101,7 +100,7 @@ export default function ConnectButton({ address }: { address: string }) {
                     variant="roundedContained"
                     disabled={!!wallet?.owner}>
                     {wallet?.owner ?
-                        sharedI18N.coming_soon()
+                        <Trans>Coming soon</Trans>
                     : !isFollowing ?
                         <Trans>Follow Now</Trans>
                     :   <Trans>Unfollow</Trans>}

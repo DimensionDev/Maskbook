@@ -72,6 +72,7 @@ export const LensBadge = memo(({ slot, accounts, userId }: Props) => {
             hide()
             ob.disconnect()
         }
+        // eslint-disable-next-line react-compiler/react-compiler
     }, [buttonRef.current])
 
     return (

@@ -5,12 +5,12 @@ import UnicornPlugin from 'eslint-plugin-unicorn'
 import UnusedImportsPlugin from 'eslint-plugin-unused-imports'
 import UnusedClassesPlugin from 'eslint-plugin-tss-unused-classes'
 import ReactHooksPlugin from 'eslint-plugin-react-hooks'
+import ReactCompilerPlugin from 'eslint-plugin-react-compiler'
 // @ts-expect-error
 import ImportPlugin from 'eslint-plugin-i'
 import ReactPlugin from '@eslint-react/eslint-plugin'
 import MasknetPlugin from '@masknet/eslint-plugin'
 import ReactQueryPlugin from '@tanstack/eslint-plugin-query'
-// @ts-expect-error
 import LinguiPlugin from 'eslint-plugin-lingui'
 import { fixupPluginRules } from '@eslint/compat'
 
@@ -67,6 +67,7 @@ const avoidMistakeRules = {
     // 'react/no-children-prop': 'error',
     'react/no-children-to-array': 'error',
     // 'react/no-clone-element': 'error',
+    'react-compiler/react-compiler': 'error',
     /// TypeScript bad practice
     '@typescript-eslint/no-restricted-types': [
         'error',
@@ -211,6 +212,7 @@ const avoidMistakeRules = {
     'react/dom/no-children-in-void-dom-elements': 'warn', // <img>children</img>
     'react/web-api/no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
     'react/web-api/no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
+    'react/web-api/no-leaked-resize-observer': 'warn', // new ResizeObserver in hooks without disconnect
     'react/web-api/no-leaked-timeout': 'warn', // setTimeout in hooks without clearTimeout
     'react/no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     // 'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} /> this rule has bug?
@@ -226,9 +228,9 @@ const avoidMistakeRules = {
     'react/no-missing-key': 'warn',
     'react/no-unstable-context-value': 'warn',
     'react/no-unstable-default-props': 'warn',
-    // 'react/hooks-extra/ensure-use-callback-has-non-empty-deps': 'warn',
-    // 'react/hooks-extra/ensure-use-memo-has-non-empty-deps': 'warn',
     'react/hooks-extra/no-direct-set-state-in-use-effect': 'error',
+    // 'react/hooks-extra/no-unnecessary-use-callback': 'warn',
+    // 'react/hooks-extra/no-unnecessary-use-memo': 'warn',
     'react/hooks-extra/prefer-use-state-lazy-initialization': 'warn',
     'unicorn/consistent-function-scoping': 'warn', // hoist unnecessary higher order functions
 }
@@ -312,6 +314,7 @@ const codeStyleRules = {
     // 'unicorn/prefer-dom-node-remove': 'warn',
     // 'unicorn/prefer-dom-node-text-content': 'warn',
     'unicorn/prefer-event-target': 'warn', // prevent use of Node's EventEmitter
+    'unicorn/prefer-math-min-max': 'warn', // Math.min/max than x < y ? x : y
     'unicorn/prefer-math-trunc': 'warn',
     'unicorn/prefer-modern-dom-apis': 'warn',
     'unicorn/prefer-modern-math-apis': 'warn',
@@ -383,6 +386,7 @@ const codeStyleRules = {
     'no-irregular-whitespace': 'warn', // unusual but safe
     yoda: 'warn',
     'unicorn/better-regex': 'error', // RegEx
+    'unicorn/consistent-existence-index-check': 'warn', // index === -1
     'unicorn/escape-case': 'warn', // correct casing of escape '\xA9'
     'unicorn/no-hex-escape': 'warn', // correct casing of escape '\u001B'
     // 'unicorn/numeric-separators-style': 'warn', // correct using of 1_234_567
@@ -551,6 +555,7 @@ const plugins = {
     '@masknet': MasknetPlugin,
     'unused-imports': UnusedImportsPlugin,
     'react-hooks': ReactHooksPlugin,
+    'react-compiler': ReactCompilerPlugin,
     '@tanstack/query': ReactQueryPlugin,
     '@lingui': fixupPluginRules(LinguiPlugin),
 }

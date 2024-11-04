@@ -14,7 +14,12 @@ import {
 } from '@masknet/typed-message'
 import { MaskMessages } from '@masknet/shared-base'
 import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import {
+    usePostInfoAuthor,
+    usePostInfoPostIVIdentifier,
+    usePostInfoRawMessage,
+    usePostInfoURL,
+} from '@masknet/plugin-infra/content-script'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
@@ -33,8 +38,9 @@ export interface PostReplacerProps {
 export function PostReplacer(props: PostReplacerProps) {
     const { classes } = useStyles()
 
-    const [postMessage, setPostMessage] = useState(usePostInfoDetails.rawMessage())
-    const iv = usePostInfoDetails.postIVIdentifier()
+    const initialPostMessage = usePostInfoRawMessage()
+    const [postMessage, setPostMessage] = useState(initialPostMessage)
+    const iv = usePostInfoPostIVIdentifier()
     useEffect(() => {
         if (postMessage?.meta || !iv?.toText()) return
         return MaskMessages.events.postReplacerHidden.on(() => {
@@ -46,9 +52,9 @@ export function PostReplacer(props: PostReplacerProps) {
         })
     }, [postMessage?.meta, iv?.toText])
 
-    const author = usePostInfoDetails.author()
+    const author = usePostInfoAuthor()
     const currentProfile = useCurrentIdentity()?.identifier
-    const url = usePostInfoDetails.url()
+    const url = usePostInfoURL()
 
     const initialTransformationContext = useMemo((): TransformationContext => {
         return {

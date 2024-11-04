@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -38,20 +38,22 @@ export function ProfileAction({ feed, ...rest }: ProfileActionProps) {
     const action = feed.actions[0]
     const metadata = action.metadata
 
+    const platform = metadata?.platform ?? 'Unknown platform'
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.profile
-                    values={{
-                        user,
-                        platform: metadata?.platform ?? 'Unknown platform',
-                        context: metadata?.action,
-                    }}
-                    components={{
-                        user: <Label />,
-                        platform: <Label />,
-                    }}
+                <Select
+                    _create={
+                        <Trans>
+                            <Label>{user}</Label> created a profile on <Label>{platform}</Label>
+                        </Trans>
+                    }
+                    _update={
+                        <Trans>
+                            <Label>{user}</Label> updated a profile on <Label>{platform}</Label>
+                        </Trans>
+                    }
+                    value={metadata?.action}
                 />
             </Typography>
         </div>

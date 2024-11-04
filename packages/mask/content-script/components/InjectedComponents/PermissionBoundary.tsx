@@ -1,11 +1,12 @@
 import { memo, type PropsWithChildren, type ReactNode, useImperativeHandle, useMemo, useRef, useState } from 'react'
 import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { PluginWrapperComponentProps, Plugin, PluginWrapperMethods } from '@masknet/plugin-infra/content-script'
-import { MaskPostExtraPluginWrapper, useSharedTrans } from '@masknet/shared'
+import { MaskPostExtraPluginWrapper } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, useTheme } from '@mui/material'
 import { useCheckPermissions, useGrantPermissions } from '../DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
+import { Trans } from '@lingui/macro'
 
 interface PermissionBoundaryProps extends PropsWithChildren {
     permissions: string[]
@@ -35,7 +36,6 @@ export function MaskPostExtraPluginWrapperWithPermission({
 }: PluginWrapperComponentProps<Plugin.SiteAdaptor.Definition>) {
     const wrapperMethodsRef = useRef<PluginWrapperMethods | null>(null)
     const theme = useTheme()
-    const t = useSharedTrans()
     const [open, setOpen] = useState<boolean>(false)
 
     const refItem = useMemo((): PluginWrapperMethods => {
@@ -68,7 +68,9 @@ export function MaskPostExtraPluginWrapperWithPermission({
                                 textAlign="left"
                                 component="div"
                                 px="18px">
-                                {t.authorization_descriptions()}
+                                <Trans>
+                                    Mask Network requires you to authorize the following websites before using it.
+                                </Trans>
                                 <Typography component="div">
                                     {props.definition.enableRequirement.host_permissions?.join(',')}
                                 </Typography>

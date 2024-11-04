@@ -10,7 +10,8 @@ const langs: Record<SupportedLanguages, Localization> = {
     [SupportedLanguages.zhTW]: zhTW,
     [SupportedLanguages.zhCN]: zhCN,
 }
-export function useThemeLanguage(language: LanguageOptions): [loc: Localization, RTL: boolean] {
+export function useThemeLanguage(_language: LanguageOptions): [loc: Localization, RTL: boolean] {
+    let language = _language
     useEffect(() => {
         if (language !== LanguageOptions.__auto__) return
         startTransition(() => updateLanguage(language))

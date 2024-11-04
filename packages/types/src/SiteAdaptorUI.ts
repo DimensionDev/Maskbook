@@ -235,13 +235,7 @@ export namespace SiteAdaptorUI {
             RenderFragments?: RenderFragmentsContextType
         }
         export interface I18NOverwrite {
-            [namespace: string]: I18NOverwriteNamespace
-        }
-        export interface I18NOverwriteNamespace {
-            [i18nKey: string]: I18NOverwriteNamespaceString
-        }
-        export interface I18NOverwriteNamespaceString {
-            [overwritingLanguage: string]: string
+            postBoxEncryptedTextWrapper?: (encrypted: string) => string
         }
     }
     export namespace Configuration {

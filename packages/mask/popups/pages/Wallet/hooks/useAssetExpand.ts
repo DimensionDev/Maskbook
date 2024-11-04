@@ -12,9 +12,11 @@ const subscription: Subscription<boolean> = {
         return assetExpandRef.addListener(callback)
     },
 }
+// TODO: this should be a hoist context instead of a global state
 export function useAssetExpand() {
     const isExpand = useSubscription(subscription)
     const setAssetsIsExpand = useCallback((val: boolean | ((oldVal: boolean) => boolean)) => {
+        // eslint-disable-next-line react-compiler/react-compiler
         assetExpandRef.value = typeof val === 'function' ? val(assetExpandRef.value) : val
     }, [])
     return [isExpand, setAssetsIsExpand] as const

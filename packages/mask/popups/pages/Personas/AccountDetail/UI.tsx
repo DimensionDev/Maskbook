@@ -2,7 +2,6 @@ import { memo, useCallback } from 'react'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { AccountAvatar } from '../components/AccountAvatar/index.js'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useNavigate } from 'react-router-dom'
 import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
 
@@ -83,10 +82,15 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(
                                 After connecting and verifying your persona, you can set up associated address for
                                 displaying your web3 footprints or receiving tips.
                             </Trans>
-                            // eslint-disable-next-line react/naming-convention/component-name
-                        :   <MaskSharedTrans.popups_other_social_accounts_tips
-                                components={{ strong: <strong />, br: <br /> }}
-                            />
+                        :   <Trans>
+                                Other social networking platforms, such as <strong>Instagram, </strong>
+                                <strong>Facebook,</strong> and <strong>Minds,</strong> do not have a verified
+                                relationship like X's Next.ID verified connection.
+                                <br />
+                                <br />
+                                When connecting a persona with an account on these platforms, they only support sending
+                                encrypted posts.
+                            </Trans>
                         }
                     </Typography>
 

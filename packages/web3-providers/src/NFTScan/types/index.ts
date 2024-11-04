@@ -1,5 +1,5 @@
 export * from './EVM.js'
-export * from './Solana.js'
+export type * from './Solana.js'
 
 export interface Response<T> {
     msg: string

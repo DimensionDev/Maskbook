@@ -1,13 +1,11 @@
 import type { SiteAdaptorUI } from '@masknet/types'
-import { languages } from '../locales/languages.js'
+import { msg } from '@lingui/macro'
+import { i18n } from '@lingui/core'
 
 export const i18NOverwriteTwitter: SiteAdaptorUI.Customization.I18NOverwrite = {
-    mask: {},
-}
-const resource = languages
-for (const language of Object.keys(resource) as Array<keyof typeof resource>) {
-    for (const key of Object.keys(resource[language]) as Array<keyof (typeof resource)[typeof language]>) {
-        i18NOverwriteTwitter.mask[key] ??= {}
-        i18NOverwriteTwitter.mask[key][language] = resource[language][key]
-    }
+    postBoxEncryptedTextWrapper(encrypted: string) {
+        return i18n._(
+            msg`This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\n\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ${encrypted} to send your first encrypted tweet.`,
+        )
+    },
 }

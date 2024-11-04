@@ -2,11 +2,11 @@ import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     action: {
@@ -40,21 +40,24 @@ export function CollectibleApprovalAction({ feed, ...rest }: CollectibleApproval
 
     const owner = useFeedOwner()
     const user = useAddressLabel(owner.address)
-
+    const contract = formatEthereumAddress(action.to!, 4)
     return (
         <div {...rest}>
             <Typography className={classes.action} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.collectible_approval
-                    values={{
-                        user,
-                        collection: metadata?.collection ?? 'Unknown',
-                        contract: formatEthereumAddress(action.to!, 4),
-                        context: metadata?.action,
-                    }}
-                    components={{
-                        bold: <Label />,
-                    }}
+                <Select
+                    _approve={
+                        <Trans>
+                            <Label>{user}</Label> approved {metadata?.collection ?? 'Unknown'} to{' '}
+                            <Label>{contract}</Label>
+                        </Trans>
+                    }
+                    _revoke={
+                        <Trans>
+                            <Label>{user}</Label> approved {metadata?.collection ?? 'Unknown'} to{' '}
+                            <Label>{contract}</Label>
+                        </Trans>
+                    }
+                    value={metadata?.action}
                 />
             </Typography>
         </div>

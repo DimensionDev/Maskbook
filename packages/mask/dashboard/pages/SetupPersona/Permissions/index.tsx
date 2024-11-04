@@ -2,7 +2,6 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
-import { DashboardTrans } from '../../../locales/i18n_generated.js'
 import Services from '#services'
 import { useAsync } from 'react-use'
 import { sortBy } from 'lodash-es'
@@ -134,27 +133,25 @@ export const Component = memo(function Permission() {
                     </PrimaryButton>
                 </div>
                 <Typography className={classes.policy}>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <DashboardTrans.welcome_new_agreement_policy
-                        components={{
-                            agreement: (
-                                <a
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html"
-                                />
-                            ),
-                            policy: (
-                                <a
-                                    className={classes.link}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    href="https://legal.mask.io/maskbook/privacy-policy-browser.html"
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        By continuing to the app, you agree to these{' '}
+                        <a
+                            className={classes.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://legal.mask.io/maskbook/service-agreement-beta-browser.html">
+                            Service Agreement
+                        </a>{' '}
+                        and{' '}
+                        <a
+                            className={classes.link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            href="https://legal.mask.io/maskbook/privacy-policy-browser.html">
+                            Privacy Policy
+                        </a>
+                        .
+                    </Trans>
                 </Typography>
             </SetupFrameController>
         </>

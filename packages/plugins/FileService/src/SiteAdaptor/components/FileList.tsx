@@ -1,4 +1,4 @@
-import { type HTMLProps, useCallback, useRef } from 'react'
+import { type HTMLProps, useCallback } from 'react'
 import { List, ListItem, Typography } from '@mui/material'
 import { EMPTY_LIST } from '@masknet/shared-base'
 
@@ -165,19 +165,14 @@ export function SelectableFileList({
 }: SelectableFileListProps) {
     const { classes, cx } = useStyles()
 
-    const selectedIdsRef = useRef(selectedIds)
-    const filesRef = useRef(files)
-    const onChangeRef = useRef(onChange)
-
-    selectedIdsRef.current = selectedIds
-    filesRef.current = files
-    onChangeRef.current = onChange
-
-    const handleChange = useCallback((fileId: string, checked: boolean) => {
-        const oldIds = selectedIdsRef.current
-        const newIds = filesRef.current.map((x) => x.id).filter((id) => (id === fileId ? checked : oldIds.includes(id)))
-        onChangeRef.current?.(newIds)
-    }, [])
+    const handleChange = useCallback(
+        (fileId: string, checked: boolean) => {
+            const oldIds = selectedIds
+            const newIds = files.map((x) => x.id).filter((id) => (id === fileId ? checked : oldIds.includes(id)))
+            onChange?.(newIds)
+        },
+        [selectedIds, files, onChange],
+    )
 
     return (
         <section className={cx(classes.container, className)} {...rest}>

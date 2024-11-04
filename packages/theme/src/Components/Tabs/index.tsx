@@ -193,11 +193,13 @@ export function MaskTabList(props: MaskTabListProps) {
         const [oldWidth, setOldWidth] = useState(width)
         if (oldWidth !== width) {
             setOldWidth(width)
+            // eslint-disable-next-line react-compiler/react-compiler
             innerRef(innerElementRef.current || null)
         }
     }
     // #endregion
 
+    // eslint-disable-next-line react-compiler/react-compiler
     const children = Children.map(props.children, (child) => {
         if (!isValidElement(child)) throw new TypeError('Invalided Children')
         const childProps: any = child.props

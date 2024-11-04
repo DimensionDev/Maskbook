@@ -55,6 +55,7 @@ export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>
                     throw error
                 },
             ),
+        // eslint-disable-next-line react-compiler/react-compiler
         [...deps!, showSnackbar, executor, onError, onSuccess, key, successText, errorText],
     )
 }
@@ -104,6 +105,7 @@ export function usePopupSnackbarCallback<P extends (...args: any[]) => Promise<T
                     throw error
                 },
             ),
+        // eslint-disable-next-line react-compiler/react-compiler
         [...deps!, showSnackbar, executor, onError, onSuccess, key, successText],
     )
 }

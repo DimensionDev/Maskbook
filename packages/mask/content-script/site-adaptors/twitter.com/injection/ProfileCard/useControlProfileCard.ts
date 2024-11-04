@@ -20,6 +20,8 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
     const [placement, setPlacement] = useState<PopperPlacementType>('bottom')
     const hasDialogRef = useRef(false)
     const { stack } = useDialogStacking()
+    // TODO: is this the best we can have?
+    // eslint-disable-next-line react-compiler/react-compiler
     hasDialogRef.current = stack.length > 0
 
     const hideProfileCard = useCallback((byClick?: boolean) => {
@@ -41,6 +43,8 @@ export function useControlProfileCard(holderRef: RefObject<HTMLDivElement | null
         setPlacement(placement)
     }, [])
 
+    // TODO: is this the best we can have?
+    // eslint-disable-next-line react-compiler/react-compiler
     if (!holderRef.current) hideProfileCard()
 
     useEffect(() => {

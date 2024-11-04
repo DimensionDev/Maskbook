@@ -1,4 +1,4 @@
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useCallback } from 'react'
 import urlcat from 'urlcat'
 import { useAsync, useAsyncFn } from 'react-use'
 import { useNavigate } from 'react-router-dom'
@@ -115,13 +115,13 @@ export const Component = memo(function ConnectWalletPage() {
         return NextIDProof.queryIsBound(currentPersona.identifier.publicKeyAsHex, NextIDPlatform.Ethereum, account)
     }, [account, currentPersona?.identifier.publicKeyAsHex])
 
-    const walletAlias = useMemo(() => {
+    const walletAlias = (() => {
         if (domain) return formatDomainName(domain)
         if (providerType !== ProviderType.MaskWallet) return `${EVMProviderResolver.providerName(providerType)} Wallet`
         return wallets.find((x) => isSameAddress(x.address, account))?.name ?? formatEthereumAddress(account, 4)
-    }, [JSON.stringify(wallets), account, domain, providerType])
+    })()
 
-    const walletName = useMemo(() => {
+    const walletName = (() => {
         if (providerType === ProviderType.MaskWallet)
             return (
                 wallets.find((x) => isSameAddress(x.address, account))?.name ??
@@ -129,7 +129,7 @@ export const Component = memo(function ConnectWalletPage() {
             )
 
         return domain || formatEthereumAddress(account, 4)
-    }, [providerType, account, domain, JSON.stringify(wallets)])
+    })()
 
     const bindProof = useCallback(
         async (payload: NextIDPayload, walletSignature: string, signature: string) => {

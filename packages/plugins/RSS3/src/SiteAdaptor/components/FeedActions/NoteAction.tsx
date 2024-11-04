@@ -2,10 +2,10 @@ import { NameServiceID, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -50,20 +50,45 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
     )
     const user = action.metadata?.handle || owner
     const handle = type === Type.Mint || type === Type.Share ? owner : action.metadata?.handle
+    const platform = action.platform!
 
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.note
-                    values={{
-                        user,
-                        platform: action.platform!,
-                        context: type,
-                    }}
-                    components={{
-                        user: <AccountLabel address={feed.owner} handle={handle} />,
-                    }}
+                <Select
+                    _post={
+                        <Trans>
+                            <AccountLabel address={feed.owner} handle={handle}>
+                                {user}
+                            </AccountLabel>{' '}
+                            publish a post on {platform}
+                        </Trans>
+                    }
+                    _mint={
+                        <Trans>
+                            <AccountLabel address={feed.owner} handle={handle}>
+                                {user}
+                            </AccountLabel>{' '}
+                            minted a post on {platform}
+                        </Trans>
+                    }
+                    _revise={
+                        <Trans>
+                            <AccountLabel address={feed.owner} handle={handle}>
+                                {user}
+                            </AccountLabel>{' '}
+                            revised a post on {platform}
+                        </Trans>
+                    }
+                    _share={
+                        <Trans>
+                            <AccountLabel address={feed.owner} handle={handle}>
+                                {user}
+                            </AccountLabel>{' '}
+                            shared a post on {platform}
+                        </Trans>
+                    }
+                    value={type}
                 />
             </Typography>
         </div>

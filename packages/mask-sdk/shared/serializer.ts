@@ -32,7 +32,7 @@ const [ArrayBufferEncode, ArrayBufferDecode] = createClassSerializer(
     (e) => [...new Uint8Array(e)],
     (e) => new Uint8Array(e).buffer,
 )
-const [U8ArrayEncode, U8ArrayDecode] = createClassSerializer(
+const [U8ArrayEncode, U8ArrayDecode] = createClassSerializer<Uint8Array, number[]>(
     Uint8Array,
     (e) => [...e],
     (e) => new Uint8Array(e),

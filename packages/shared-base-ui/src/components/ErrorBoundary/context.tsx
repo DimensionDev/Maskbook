@@ -20,6 +20,7 @@ export function BuildInfoProvider(props: React.PropsWithChildren<{ value: () => 
     return <BuildInfo.Provider {...props} />
 }
 export function useBuildInfo() {
+    // eslint-disable-next-line react-compiler/react-compiler
     return useRef(useContext(BuildInfo)).current()
 }
 export function useBuildInfoMarkdown() {

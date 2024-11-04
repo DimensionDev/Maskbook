@@ -23,8 +23,10 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     const preventEventPropagationList = useContext(PreventShadowRootEventPropagationListContext)
     useEffect(() => {
         if (!props.preventPropagation) return
-        preventEventPropagationList.forEach((event) => shadow.addEventListener(event, stopPropagation))
-        return () => preventEventPropagationList.forEach((event) => shadow.removeEventListener(event, stopPropagation))
+        const ac = new AbortController()
+        const signal = ac.signal
+        preventEventPropagationList.forEach((event) => shadow.addEventListener(event, stopPropagation, { signal }))
+        return () => ac.abort()
     }, [props.preventPropagation, preventEventPropagationList, shadow])
 
     return (

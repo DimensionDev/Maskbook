@@ -12,11 +12,12 @@ export function useRecipientsList(): LazyRecipients {
         [current],
     )
     const [recipients, setRecipients] = useState<ProfileInformation[] | undefined>(undefined)
+    const hasRecipientsInState = !!recipients
     const request = useCallback(() => {
         if (!current) return
-        if (recipients) return
+        if (hasRecipientsInState) return
         Services.Crypto.getRecipients(current).then(setRecipients)
-    }, [current, !!recipients])
+    }, [current, hasRecipientsInState])
 
     return useMemo(
         () => ({

@@ -3,8 +3,8 @@ import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { AbiItem } from 'web3-utils'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import { isGreaterThan, multipliedBy, toFixed } from '@masknet/web3-shared-base'
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
-import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json'
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json' with { type: 'json' }
+import EntryPointABI from '@masknet/web3-contracts/abis/EntryPoint.json' with { type: 'json' }
 import type { Wallet } from '@masknet/web3-contracts/types/Wallet.js'
 import type { EntryPoint } from '@masknet/web3-contracts/types/EntryPoint.js'
 import {

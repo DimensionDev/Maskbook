@@ -9,7 +9,6 @@ import { Icons } from '@masknet/icons'
 import { isGreaterThan, isZero, leftShift, rightShift } from '@masknet/web3-shared-base'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -178,15 +177,14 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
     return (
         <Box>
             <Typography className={classes.title}>
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <MaskSharedTrans.popups_wallet_unlock_erc20_title
-                    components={{ br: <br /> }}
-                    values={{ symbol: token?.symbol || '' }}
-                />
+                <Trans>
+                    Give permission to access <br /> your {token?.symbol || ''}?
+                </Trans>
             </Typography>
             <Typography className={classes.tips}>
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <MaskSharedTrans.popups_wallet_unlock_erc20_tips components={{ br: <br /> }} />
+                <Trans>
+                    By granting permission, you are allowing the following <br /> contract to access your funds
+                </Trans>
             </Typography>
             <Box className={classes.tokenInfo}>
                 <TokenIcon

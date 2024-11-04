@@ -1,11 +1,11 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, Label } from '../common.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -49,17 +49,24 @@ export function StakingAction({ feed, ...rest }: StakingFeedActionProps) {
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.tokenStaking
-                    values={{
-                        user,
-                        symbol,
-                        context: actionType,
-                    }}
-                    components={{
-                        bold: <Label />,
-                        user: <AccountLabel address={owner.address} />,
-                    }}
+                <Select
+                    _stake={
+                        <Trans>
+                            <AccountLabel address={owner.address}>{user}</AccountLabel> staked <Label>{symbol}</Label>
+                        </Trans>
+                    }
+                    _claim={
+                        <Trans>
+                            <AccountLabel address={owner.address}>{user}</AccountLabel> claimed <Label>{symbol}</Label>
+                        </Trans>
+                    }
+                    _unstake={
+                        <Trans>
+                            <AccountLabel address={owner.address}>{user}</AccountLabel> un-staked{' '}
+                            <Label>{symbol}</Label>
+                        </Trans>
+                    }
+                    value={actionType}
                 />
             </Typography>
         </div>

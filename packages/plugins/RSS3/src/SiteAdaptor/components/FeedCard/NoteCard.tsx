@@ -166,13 +166,14 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const type = action.type
 
     const imageSize = rest.verbose ? '100%' : 64
+    const firstURL = action.related_urls?.[0]
     const transformUri = useCallback(
         (uri: string) => {
-            if (action.platform === 'Planet' && action.related_urls?.[0] && !uri.match(/^https?:\/\//))
-                return `https://thumbor.rss3.dev/unsafe/${action.related_urls[0]}/${uri}`
+            if (action.platform === 'Planet' && firstURL && !uri.match(/^https?:\/\//))
+                return `https://thumbor.rss3.dev/unsafe/${firstURL}/${uri}`
             return resolveIPFS_URL(uri)!
         },
-        [action.platform, action.related_urls?.[0]],
+        [action.platform, firstURL],
     )
 
     const media = metadata?.media?.[0]

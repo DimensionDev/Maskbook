@@ -7,7 +7,6 @@ import { Composition } from '../../../components/CompositionDialog/Composition.j
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
 import { startWatch } from '../../../utils/startWatch.js'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 
@@ -48,7 +47,6 @@ export function injectCompositionFacebook(signal: AbortSignal) {
 }
 function CompositionUI() {
     const { _ } = useLingui()
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const onHintButtonClicked = useCallback(
         () => CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({ reason: 'popup', open: true }),
@@ -69,7 +67,7 @@ function CompositionUI() {
                     data.options,
                 )
             }),
-        [t],
+        [_],
     )
     return (
         <span style={{ display: 'block', padding: 0, marginTop: 0 }}>

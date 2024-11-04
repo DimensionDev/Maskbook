@@ -4,11 +4,11 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Button, Typography } from '@mui/material'
 import { useState } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, formatValue, Label } from '../common.js'
 import { TokenApprovalAction } from './TokenApprovalAction.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -78,8 +78,8 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                 const asset = metadata ? `${formatValue(metadata)} ${metadata.symbol}` : ''
                 const isFromOwner = isSameAddress(owner.address, action.from)
                 // Always treat as send action
-                const sender = isFromOwner ? action.from! : action.to!
-                const receiver = isFromOwner ? action.to! : action.from!
+                const from = isFromOwner ? action.from! : action.to!
+                const to = isFromOwner ? action.to! : action.from!
 
                 if (action.tag === Tag.Transaction && action.type === Type.Approval) {
                     return (
@@ -98,25 +98,53 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
 
                 const type = action ? action.type : feed.type
                 const context = contextMap[type] || 'send'
+                const value = formatValue(metadata)
+                const symbol = metadata!.symbol
+                const exchange = action.platform!
                 return (
                     <Typography className={classes.action} key={index} component="div">
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <RSS3Trans.tokenOperation
-                            values={{
-                                from: sender,
-                                to: receiver,
-                                value: formatValue(metadata),
-                                symbol: metadata!.symbol,
-                                exchange: action.platform!,
-                                context,
-                                asset,
-                            }}
-                            components={{
-                                from: <AccountLabel address={sender} />,
-                                to: <AccountLabel address={receiver} />,
-                                bold: <Label />,
-                                asset: <Label />,
-                            }}
+                        <Select
+                            _mint={
+                                <Trans>
+                                    <AccountLabel address={to}>{to}</AccountLabel> minted{' '}
+                                    <Label>
+                                        {value} {symbol}
+                                    </Label>
+                                </Trans>
+                            }
+                            _send={
+                                <Trans>
+                                    <AccountLabel address={from}>{from}</AccountLabel> sent <Label>{asset}</Label> to{' '}
+                                    <AccountLabel address={to}>{to}</AccountLabel>
+                                </Trans>
+                            }
+                            _claim={
+                                <Trans>
+                                    <AccountLabel address={to}>{to}</AccountLabel> claimed from{' '}
+                                    <AccountLabel address={from}>{from}</AccountLabel>
+                                </Trans>
+                            }
+                            _burn={
+                                <Trans>
+                                    <AccountLabel address={from}>{from}</AccountLabel> burned{' '}
+                                    <Label>
+                                        {value} {symbol}
+                                    </Label>
+                                </Trans>
+                            }
+                            _deposit={
+                                <Trans>
+                                    <AccountLabel address={from}>{from}</AccountLabel> deposited on{' '}
+                                    <Label>{exchange}</Label>
+                                </Trans>
+                            }
+                            _withdraw={
+                                <Trans>
+                                    <AccountLabel address={from}>{from}</AccountLabel> withdrew on{' '}
+                                    <Label>{exchange}</Label>
+                                </Trans>
+                            }
+                            value={context}
                         />
                     </Typography>
                 )

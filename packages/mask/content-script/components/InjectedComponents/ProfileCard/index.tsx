@@ -28,7 +28,6 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Trans } from '@lingui/macro'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
@@ -250,21 +249,17 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                             <Trans>Web3 Profile Card</Trans>
                         </Typography>
                         <Typography variant="body1" className={classes.powered}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <MaskSharedTrans.powered_by_whom
-                                values={{ whom: 'RSS3' }}
-                                components={{
-                                    span: (
-                                        <Typography
-                                            fontWeight={700}
-                                            fontSize="inherit"
-                                            variant="body1"
-                                            component="strong"
-                                            color={(theme) => theme.palette.text.primary}
-                                        />
-                                    ),
-                                }}
-                            />
+                            <Trans>
+                                Powered by{' '}
+                                <Typography
+                                    fontWeight={700}
+                                    fontSize="inherit"
+                                    variant="body1"
+                                    component="strong"
+                                    color={(theme) => theme.palette.text.primary}>
+                                    RSS3
+                                </Typography>
+                            </Trans>
                         </Typography>
                         <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
                     </div>

@@ -79,7 +79,7 @@ export async function fetchFollowers(
     const data = {
         query: `query FullIdentityQuery {
         identity(address: "${address.toLowerCase()}") {
-                ${category.toLowerCase()}(first: ${size > PageSize ? PageSize : size}, after: "${
+                ${category.toLowerCase()}(first: ${Math.min(size, PageSize)}, after: "${
                     Number.parseInt(indicator?.id ?? '0', 10) - 1
                 }"){
                 pageInfo {

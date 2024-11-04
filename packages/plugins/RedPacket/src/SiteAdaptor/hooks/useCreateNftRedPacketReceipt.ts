@@ -2,7 +2,7 @@ import { useAsyncRetry } from 'react-use'
 import type { AbiItem } from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { type ChainId, useNftRedPacketConstants, decodeEvents } from '@masknet/web3-shared-evm'
-import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
+import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json' with { type: 'json' }
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'

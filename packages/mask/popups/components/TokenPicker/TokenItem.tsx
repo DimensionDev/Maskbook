@@ -102,7 +102,7 @@ export const TokenItem = memo(function TokenItem({
     useEffect(() => {
         if (!selected) return
         liRef.current?.scrollIntoView()
-    }, [selected, liRef.current])
+    }, [selected])
 
     // #region Try getting balance through RPC.
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined

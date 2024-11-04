@@ -1,5 +1,5 @@
 import { memo, useCallback, useEffect, type ReactNode } from 'react'
-import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
+import { ApplicationEntry, LeavePageConfirmModal, PersonaSelectPanelModal } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { Icons } from '@masknet/icons'
@@ -17,8 +17,6 @@ interface SmartPayEntryProps {
 }
 
 export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
-    const t = useSharedTrans()
-
     const wallets = useWallets()
     const personas = useAllPersonas()
 
@@ -45,9 +43,9 @@ export const SmartPayEntry = memo<SmartPayEntryProps>((props) => {
                 info: {
                     target: 'dashboard',
                     url: DashboardRoutes.SignUpPersona,
-                    text: t.create_persona_hint(),
-                    title: t.create_persona_title(),
-                    actionHint: t.create_persona_action(),
+                    text: <Trans>Please create a Persona and verify your account to use this feature.</Trans>,
+                    title: <Trans>Persona</Trans>,
+                    actionHint: <Trans>Create persona</Trans>,
                     position: 'center',
                 },
                 openDashboard,

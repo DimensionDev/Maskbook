@@ -108,6 +108,7 @@ export default function Popups() {
 
     return jsxCompose(
         <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
+        // eslint-disable-next-line react-compiler/react-compiler
         <PageUIProvider useTheme={usePopupTheme} />,
         <PopupSnackbarProvider children={null!} />,
         <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,

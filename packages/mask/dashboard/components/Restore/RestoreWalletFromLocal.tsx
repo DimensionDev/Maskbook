@@ -5,7 +5,6 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
-import { useDashboardTrans } from '../../locales/index.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { Trans, msg } from '@lingui/macro'
@@ -35,7 +34,6 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
 }: RestoreFromLocalProps) {
     const { _ } = useLingui()
     const { classes, theme } = useStyles()
-    const t = useDashboardTrans()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
     const [keyStoreContent, setKeyStoreContent] = useState('')
@@ -46,20 +44,17 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     const { showSnackbar } = useCustomSnackbar()
     const [readingFile, setReadingFile] = useState(false)
 
-    const handleSetFile = useCallback(
-        async (file: File) => {
-            setFile(file)
-            if (file.type === 'application/json') {
-                setReadingFile(true)
-                const [value] = await Promise.all([file.text(), delay(1000)])
-                setKeyStoreContent(value)
-                setReadingFile(false)
-            } else {
-                showSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
-            }
-        },
-        [t],
-    )
+    const handleSetFile = useCallback(async (file: File) => {
+        setFile(file)
+        if (file.type === 'application/json') {
+            setReadingFile(true)
+            const [value] = await Promise.all([file.text(), delay(1000)])
+            setKeyStoreContent(value)
+            setReadingFile(false)
+        } else {
+            showSnackbar(<Trans>Unsupported key store data</Trans>, { variant: 'error' })
+        }
+    }, [])
     const reset = useCallback(() => {
         setFile(null)
     }, [])
@@ -76,7 +71,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                 <Trans>Continue</Trans>
             </PrimaryButton>,
         )
-    }, [t, disabled, keyStoreContent, keyStorePassword])
+    }, [disabled, keyStoreContent, keyStorePassword])
 
     return (
         <Box width="100%">

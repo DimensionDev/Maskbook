@@ -4,7 +4,6 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { getCost, getLastAction } from '../share.js'
@@ -187,21 +186,18 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                         </Trans>
                     )
                 }
-            case Type.Burn:
+            case Type.Burn: {
+                const Tag = verbose ? Label : 'span'
                 metadata = getLastAction(feed as RSS3BaseAPI.CollectibleBurnFeed).metadata
                 return (
-                    // eslint-disable-next-line react/naming-convention/component-name
-                    <RSS3Trans.collectible_burn
-                        values={{
-                            user,
-                            collectible: verbose ? metadata!.name : 'an NFT',
-                        }}
-                        components={{
-                            user: <Label />,
-                            collectible: verbose ? <Label /> : <span />,
-                        }}
-                    />
+                    <Trans>
+                        <Label>{user}</Label> burned{' '}
+                        <Tag>
+                            <Select _nft="an NFT" _name={metadata?.name} value={verbose ? 'name' : 'nft'} />
+                        </Tag>
+                    </Trans>
                 )
+            }
         }
 
         return null

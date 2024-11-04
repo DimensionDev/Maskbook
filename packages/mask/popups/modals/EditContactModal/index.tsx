@@ -12,7 +12,6 @@ import { EVMWeb3, evm } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { ContactType } from '../../pages/Wallet/type.js'
 import { Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -97,7 +96,6 @@ interface EditContactModalProps extends BottomDrawerProps {
 function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }: EditContactModalProps) {
     const { _ } = useLingui()
     const { classes, cx } = useStyles()
-    const t = useMaskSharedTrans()
 
     const contacts = useContacts()
     const wallets = useWallets()
@@ -112,7 +110,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
     const validationMessage = useMemo(() => {
         if (nameAlreadyExist) return <Trans>The wallet name already exists.</Trans>
         return ''
-    }, [t, nameAlreadyExist])
+    }, [nameAlreadyExist])
 
     const [{ loading }, edit] = useAsyncFn(async () => {
         const _name = name.trim()

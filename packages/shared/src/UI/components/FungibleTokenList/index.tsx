@@ -343,6 +343,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             error: !!searchError,
             ...props.SearchTextFieldProps,
         }),
+        // eslint-disable-next-line react-compiler/react-compiler
         [searchError, JSON.stringify(props.SearchTextFieldProps)],
     )
 

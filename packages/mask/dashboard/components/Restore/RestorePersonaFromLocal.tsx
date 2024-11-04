@@ -9,7 +9,6 @@ import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import Services from '#services'
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
-import { useDashboardTrans } from '../../locales/index.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { AccountStatusBar } from './AccountStatusBar.js'
@@ -48,7 +47,6 @@ interface RestoreFromLocalProps {
 export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ onRestore }: RestoreFromLocalProps) {
     const { _ } = useLingui()
     const { classes, theme } = useStyles()
-    const t = useDashboardTrans()
     const { showSnackbar } = useCustomSnackbar()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
@@ -115,7 +113,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
             setReadingFile(false)
             setProcessing(false)
         }
-    }, [file, password, t])
+    }, [file, password])
 
     const restoreDB = useCallback(async () => {
         try {

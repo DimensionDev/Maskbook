@@ -18,7 +18,7 @@ export interface EncodeImageOptions extends SteganographyIO {
     preset: SteganographyPreset
 }
 
-export async function steganographyEncodeImage(buf: ArrayBuffer, options: EncodeImageOptions) {
+export async function steganographyEncodeImage(buf: ArrayLike<number> | ArrayBufferLike, options: EncodeImageOptions) {
     const { downloadImage, data, password, grayscaleAlgorithm } = options
     const preset = getPreset(options.preset)
     if (!preset) throw new Error('Failed to find preset.')

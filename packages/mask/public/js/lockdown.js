@@ -18,6 +18,7 @@ if (
             errorTaming: 'unsafe',
             errorTrapping: 'none',
             unhandledRejectionTrapping: 'none',
+            legacyRegeneratorRuntimeTaming: 'unsafe-ignore',
         })
     } catch {}
 }

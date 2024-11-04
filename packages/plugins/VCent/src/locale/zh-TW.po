@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:02\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-10-30 09:48\n"
 "Last-Translator: \n"
+"Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -18,23 +16,19 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1004\n"
 
-#: src/SiteAdaptor/TweetDialog.tsx:78
+#: src/SiteAdaptor/TweetDialog.tsx
 msgid "<0>Latest offer at </0><1>${0}</1>"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx:18
+#: src/SiteAdaptor/index.tsx
 msgid "Buy & sell tweets autographed by their original creators."
 msgstr ""
 
-#: src/SiteAdaptor/TweetDialog.tsx:91
+#: src/SiteAdaptor/TweetDialog.tsx
 msgid "Go"
 msgstr ""
 
-#: src/SiteAdaptor/TweetDialog.tsx:79
-#~ msgid "Latest offer at"
-#~ msgstr ""
-
-#: src/SiteAdaptor/index.tsx:17
-#: src/SiteAdaptor/index.tsx:32
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Valuables"
 msgstr ""

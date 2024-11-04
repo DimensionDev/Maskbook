@@ -43,6 +43,7 @@ export function useMnemonicWordsPuzzle() {
                 rightAnswer: words[index],
                 options: shuffle(randomWords.concat(words[index])),
             }
+            // eslint-disable-next-line react-compiler/react-compiler
             restWords = remove(clone(restWords), (word) => !randomWords.includes(word))
 
             return result

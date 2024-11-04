@@ -5,7 +5,7 @@ import { LanguageOptions } from '@masknet/public-api'
 import { makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, useLanguage } from '../../../shared-ui/index.js'
+import { useLanguage } from '../../../shared-ui/index.js'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -24,7 +24,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLanguageModal(props) {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const lang = useLanguage()
     const handleLanguageChange = useCallback(async (target: LanguageOptions) => {
@@ -39,7 +38,7 @@ export const SelectLanguageModal = memo<ActionModalBaseProps>(function SelectLan
             [LanguageOptions.jaJP]: '日本語',
             [LanguageOptions.koKR]: '한국어',
         }),
-        [t],
+        [],
     )
 
     return (

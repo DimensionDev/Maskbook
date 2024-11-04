@@ -1,10 +1,10 @@
 import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, formatValue, Label } from '../common.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -44,24 +44,24 @@ export function TokenSwapAction({ feed, ...rest }: TokenSwapActionProps) {
         <div {...rest} className={cx(rest.className, classes.actions)}>
             {feed.actions.map((action, index) => {
                 const metadata = action.metadata
+                const from_value = formatValue(metadata?.from)
+                const from_symbol = metadata?.from.symbol ?? 'Unknown Token'
+                const to_value = formatValue(metadata?.to)
+                const to_symbol = metadata?.to.symbol ?? 'Unknown Token'
+                const platform = feed.platform!
                 return (
                     <Typography className={classes.summary} key={index} component="div">
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <RSS3Trans.tokenSwap
-                            values={{
-                                user,
-                                from_value: formatValue(metadata?.from),
-                                from_symbol: metadata?.from.symbol ?? 'Unknown Token',
-                                to_value: formatValue(metadata?.to),
-                                to_symbol: metadata?.to.symbol ?? 'Unknown Token',
-                                platform: feed.platform!,
-                            }}
-                            components={{
-                                user: <AccountLabel address={action.from!} />,
-                                platform: <Label title={feed.platform} />,
-                                bold: <Label />,
-                            }}
-                        />
+                        <Trans>
+                            <AccountLabel address={action.from!}>{user}</AccountLabel> swapped{' '}
+                            <Label>
+                                {from_value} {from_symbol}
+                            </Label>{' '}
+                            to{' '}
+                            <Label>
+                                {to_value} {to_symbol}
+                            </Label>{' '}
+                            on <Label title={feed.platform}>{platform}</Label>
+                        </Trans>
                     </Typography>
                 )
             })}

@@ -6,8 +6,9 @@ import { Checkbox, ListItem, ListItemAvatar, ListItemText } from '@mui/material'
 import { truncate } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Avatar } from '../../../../shared-ui/components/Avatar.js'
+import { Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -85,7 +86,7 @@ interface ProfileInListProps {
 }
 
 export const ProfileInList = memo(function ProfileInList(props: ProfileInListProps) {
-    const t = useMaskSharedTrans()
+    const { i18n } = useLingui()
     const { classes, cx } = useStyles()
     const { profile, selected, disabled, highlightText, onChange } = props
     const searchWords = useMemo(() => (highlightText ? [highlightText] : EMPTY_LIST), [highlightText])
@@ -101,10 +102,12 @@ export const ProfileInList = memo(function ProfileInList(props: ProfileInListPro
 
     const tooltipTitle = (() => {
         const linkedNames = profile.linkedTwitterNames ?? []
-        if (linkedNames.length < 2)
-            return `${t.select_friends_dialog_persona_connect({ count: 1 })} @${profile.identifier.userId}.`
+        if (linkedNames.length === 0) return <Trans>The Persona is not connected to any accounts.</Trans>
+        if (linkedNames.length === 1)
+            return <Trans>The Persona is connected to the account @${profile.identifier.userId}.</Trans>
         const mentions = profile.linkedTwitterNames?.map((username) => '@' + username) ?? []
-        return `${t.select_friends_dialog_persona_connect({ count: linkedNames.length })} ${mentions.join(', ')}.`
+        const list = new Intl.ListFormat(i18n.locale).format(mentions)
+        return <Trans>The Persona is connected to the following accounts: {list}</Trans>
     })()
 
     const handleClick = useCallback(() => onChange(profile, !selected), [onChange, selected])

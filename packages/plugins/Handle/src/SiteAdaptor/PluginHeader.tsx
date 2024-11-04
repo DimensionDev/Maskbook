@@ -2,33 +2,29 @@ import { PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Stack, Typography, useTheme } from '@mui/material'
-import { useSharedTrans } from '@masknet/shared'
 import { Box } from '@mui/system'
 import { PluginTransFieldRender, useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { Trans } from '@lingui/macro'
 
-const useStyles = makeStyles()((theme, props) => {
-    return {
-        provider: {
-            display: 'flex',
-            alignItems: 'center',
-            gap: theme.spacing(0.5),
-            '& > a': {
-                lineHeight: 0,
-            },
+const useStyles = makeStyles()((theme) => ({
+    provider: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.5),
+        '& > a': {
+            lineHeight: 0,
         },
+    },
 
-        providerBy: {
-            color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
-        },
-        wrapper: {
-            padding: theme.spacing(2),
-        },
-    }
-})
+    providerBy: {
+        color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
+    },
+    wrapper: {
+        padding: theme.spacing(2),
+    },
+}))
 
 export function PluginHeader() {
-    const t = useSharedTrans()
     const theme = useTheme()
     const { classes } = useStyles()
 
@@ -40,7 +36,7 @@ export function PluginHeader() {
             <Stack flexDirection="row" justifyContent="space-between" gap={0.5} alignItems="center">
                 <Icons.DecentralizedSearch size={24} />
                 <Typography color={theme.palette.maskColor.dark} fontWeight="bolder">
-                    {t.decentralized_search_name()}
+                    <Trans>DSearch</Trans>
                 </Typography>
             </Stack>
             <Box className={classes.provider}>

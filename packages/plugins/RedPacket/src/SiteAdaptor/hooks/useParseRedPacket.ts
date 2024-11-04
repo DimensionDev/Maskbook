@@ -1,4 +1,9 @@
-import { useLastRecognizedIdentity, usePostInfoDetails } from '@masknet/plugin-infra/content-script'
+import {
+    useLastRecognizedIdentity,
+    usePostInfoPostMetadataImages,
+    usePostInfoSite,
+    usePostInfoSource,
+} from '@masknet/plugin-infra/content-script'
 import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
@@ -11,16 +16,16 @@ import { useQuery } from '@tanstack/react-query'
  * Firefly only.
  */
 export function useParseRedPacket(chainId: ChainId) {
-    const images = usePostInfoDetails.postMetadataImages()
+    const images = usePostInfoPostMetadataImages()
     const { pluginID } = useNetworkContext()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
         chainId,
         account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
     })
-    const source = usePostInfoDetails.source()
+    const source = usePostInfoSource()
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
-    const site = usePostInfoDetails.site()
+    const site = usePostInfoSite()
     const isOnFirefly = site === EnhanceableSite.Firefly
 
     const query = useQuery({

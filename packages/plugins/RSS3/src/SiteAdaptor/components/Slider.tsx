@@ -47,9 +47,11 @@ export function Slider({ children, className, onUpdate, count, ...rest }: Props)
     const [index, setIndex] = useState(0)
 
     const [style, setStyle] = useState<CSSProperties>({})
+    const [width, setWidth] = useState(0)
     useLayoutEffect(() => {
         if (!containerRef.current) return
         const offsetWidth = containerRef.current.offsetWidth
+        setWidth(offsetWidth)
         setStyle({
             width: offsetWidth * count,
             transform: `translate(${-offsetWidth * index}px, 0)`,
@@ -65,7 +67,7 @@ export function Slider({ children, className, onUpdate, count, ...rest }: Props)
             <div className={classes.slider}>
                 <div className={classes.sliderWrapper} style={style}>
                     {Children.map(children, (child, index) => (
-                        <div key={index} className={classes.slide} style={{ width: containerRef.current?.offsetWidth }}>
+                        <div key={index} className={classes.slide} style={{ width }}>
                             {child}
                         </div>
                     ))}

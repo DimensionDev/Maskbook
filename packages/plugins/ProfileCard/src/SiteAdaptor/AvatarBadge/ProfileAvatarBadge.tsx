@@ -22,11 +22,9 @@ export function ProfileAvatarBadge({ userId, address, className, ...rest }: Prop
     useEffect(() => {
         const button = buttonRef.current
         if (!button) return
-        let closeTimer: ReturnType<typeof setTimeout>
         let openTimer: ReturnType<typeof setTimeout>
         const enter = () => {
             clearTimeout(openTimer)
-            clearTimeout(closeTimer)
 
             openTimer = setTimeout(() => {
                 CrossIsolationMessages.events.profileCardEvent.sendToLocal({
@@ -48,10 +46,8 @@ export function ProfileAvatarBadge({ userId, address, className, ...rest }: Prop
         // Other badges might want to open the profile card
         const unsubscribe = CrossIsolationMessages.events.profileCardEvent.on((event) => {
             if (!event.open) return
-            clearTimeout(closeTimer)
         })
         return () => {
-            clearTimeout(closeTimer)
             clearTimeout(openTimer)
             button.removeEventListener('mouseenter', enter)
             button.removeEventListener('mouseleave', leave)

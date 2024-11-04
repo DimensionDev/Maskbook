@@ -37,6 +37,7 @@ export function useTransakURL(config?: Partial<TransakConfig>) {
         const params = new URLSearchParams()
         Object.entries(config_).forEach(([key, value = '']) => params.append(key, String(value)))
         return params.toString()
+        // eslint-disable-next-line react-compiler/react-compiler
     }, [theme.palette.primary.main, stringify(config)])
     return `${HOST_MAP[process.env.NODE_ENV]}?${search}`
 }

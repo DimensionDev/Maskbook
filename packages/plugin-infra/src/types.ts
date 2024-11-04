@@ -97,12 +97,12 @@ export namespace Plugin.Shared {
         ID: PluginID
         /**
          * The human readable name of the plugin.
-         * @example { i18nKey: "name", fallback: "Never gonna give you up" }
+         * @example { fallback: "Never gonna give you up" }
          */
         name: I18NStringField
         /**
          * A brief description of this plugin.
-         * @example { i18nKey: "description", fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
+         * @example { fallback: "This plugin is going to replace every link in the page to https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
          */
         description?: I18NStringField
         /**
@@ -201,10 +201,7 @@ export namespace Plugin.Shared {
     export type I18NLanguage = string
     export type I18NKey = string
     export type I18NValue = string
-    export type I18NResource =
-        | I18NLanguageResourcePair
-        | LinguiI18NResource
-        | Array<I18NLanguageResourcePair | LinguiI18NResource>
+    export type I18NResource = LinguiI18NResource | LinguiI18NResource[]
     export type I18NLanguageResourcePair = Record<I18NLanguage, Record<I18NKey, I18NValue>>
     export type LinguiI18NResource = Record<I18NLanguage, { messages: any }>
 
@@ -1015,8 +1012,6 @@ export type IndexableTaggedUnion = {
 }
 
 export interface I18NStringField {
-    /** The i18n key of the string content. */
-    i18nKey?: string
     /** The fallback content to display if there is no i18n string found. */
     fallback: string
 }

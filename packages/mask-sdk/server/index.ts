@@ -2,7 +2,7 @@ import type { MaskEthereumProviderRpcError } from '../shared/error.js'
 import { type BridgeAPI, type UserScriptAPI, createMaskSDKChannel, encoder } from '../shared/index.js'
 import { AsyncCall, type AsyncVersionOf } from 'async-call-rpc/full'
 
-export * from '../shared/types.js'
+export type * from '../shared/types.js'
 export {
     MaskEthereumProviderRpcError,
     type BridgeAPI,

@@ -81,7 +81,6 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
     const { classes } = useStyles()
     const mapping = {
         [NetworkPluginID.PLUGIN_EVM]: (
-            // eslint-disable-next-line react/naming-convention/component-name
             <Icons.ETH
                 size={20}
                 className={classes.pluginIcon}
@@ -163,8 +162,8 @@ export const RecipientSelect = memo(({ className }: Props) => {
                     horizontal: 'center',
                 },
                 disableScrollLock: true,
-                container: selectRef.current,
-                anchorEl: selectRef.current,
+                container: () => selectRef.current,
+                anchorEl: () => selectRef.current!,
                 BackdropProps: {
                     invisible: true,
                 },

@@ -13,7 +13,7 @@ import {
     NetworkPluginID,
     Sniffings,
 } from '@masknet/shared-base'
-import CHAINS from './chains.json'
+import CHAINS from './chains.json' with { type: 'json' }
 import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
 import { ChainIdList, getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'

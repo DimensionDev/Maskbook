@@ -1,11 +1,11 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
 import { Trans } from '@lingui/macro'
+import { usePostInfoPostID } from '../../../../plugin-infra/src/site-adaptor/PostContext.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -36,7 +36,7 @@ const site: Plugin.SiteAdaptor.Definition = {
 export default site
 
 function Component() {
-    const tweetAddress = usePostInfoDetails.postID() as string | null
+    const tweetAddress = usePostInfoPostID()
 
     if (!tweetAddress) return null
     if (!location.href.includes(`/status/${tweetAddress}`)) return null

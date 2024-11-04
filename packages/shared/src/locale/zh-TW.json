@@ -11,6 +11,7 @@
         "i70ilP": [["0"], " NFT contract unlocked."],
         "76Ml+j": [["0"], " NFT Lucky Drop created."],
         "78Kj7O": [["0"], " NFT transferred."],
+        "MpnSqP": [["0"], " Pending"],
         "clw/Xh": [["0"], " sent."],
         "VvPeyR": [["0"], " unlocked"],
         "BQi2Kk": [["0"], " were claimed"],
@@ -129,7 +130,23 @@
         "qkhZxp": "Created a SmartPay wallet on Polygon network.",
         "Jg5pf7": ["当前基础手续费是 ", ["0"], " Gwei"],
         "8Tg/JR": "自定义",
+        "ulAtwO": [
+            "Data source is retrieved from ",
+            ["0", "select", { "other": "", "twitter": "Twitter profile and", "next_id": "NEXT.ID and" }],
+            ["sources"],
+            "."
+        ],
         "Cf/0to": ["数据来源于", ["0"], " 。"],
+        "Yc+m57": [
+            "Data source is retrieved from ",
+            [
+                "platform",
+                "select",
+                { "twitter": "Twitter profile", "facebook": "Facebook profile", "next_id": "NEXT.ID" }
+            ],
+            "."
+        ],
+        "bQXBhp": "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves.",
         "ovBPCi": "默认",
         "f61qKX": "Deploy a SmartPay wallet on Polygon network.",
         "/JOEaC": "Deploy Smarty Pay wallet",
@@ -160,6 +177,7 @@
         "n42fmQ": "输入最大手续费",
         "MOHcKb": "请输入最大优先级费用",
         "iPMIoT": "输入金额",
+        "ct8YaX": "Exceeded the maximum file size of 10MB.",
         "7Bj3x9": "失败",
         "z1i6et": ["Failed to ", ["0"], " NFT contract."],
         "v7U98p": "Failed to claim Lucky Drop.",
@@ -177,6 +195,7 @@
         "F8VT6y": "Failed to transfer NFT.",
         "FiKDfi": "Failed to unlock NFT contract.",
         "elyK4N": "Failed to unlock token contract.",
+        "4Gz2wC": "Failed to upload file",
         "apl8rz": ["Failed to withdraw ", ["0"], "."],
         "MKEPCY": "关注",
         "nDzNGQ": "Follow User",
@@ -329,6 +348,7 @@
         "iReGax": "告诉朋友发生了什么...",
         "FY2gWe": "合约地址不正确或此 NFT 不属于您。",
         "i4umqX": "The following wallets are not installed or in conflict with others",
+        "Eefe1a": "The input is not a single file.",
         "Mi8ATZ": "The token approval revoked.",
         "VMTGSu": "此功能已在应用设置中被关闭。启用插件以完全访问。",
         "++B0oY": "This function has been turned off in the App settings. Enable plugins to fully access.",

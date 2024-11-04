@@ -1,170 +1,197 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: en-US\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
+"Language: \n"
 "Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:184
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "{0, plural, one {Action} other {Actions}}"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx:81
-#~ msgid "{0} {1}"
-#~ msgstr ""
+#: src/SiteAdaptor/components/FeedActions/ProfileAction.tsx
+msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>}}"
+msgstr ""
 
-#: src/SiteAdaptor/FeedFilters.tsx:56
+#: src/SiteAdaptor/FeedFilters.tsx
 msgid "{0} Networks"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:80
-#~ msgid "<0/> minted <1/>"
-#~ msgstr ""
+#: src/SiteAdaptor/components/FeedActions/CollectibleApprovalAction.tsx
+msgid "{2, select, approve {<0>{user}</0> approved {0} to <1>{contract}</1>} revoke {<2>{user}</2> approved {1} to <3>{contract}</3>}}"
+msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:77
+#: src/SiteAdaptor/components/FeedActions/StakingAction.tsx
+msgid "{actionType, select, stake {<0>{user}</0> staked <1>{symbol}</1>} claim {<2>{user}</2> claimed <3>{symbol}</3>} unstake {<4>{user}</4> un-staked <5>{symbol}</5>}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/TokenApprovalAction.tsx
+msgid "{context, select, approve {<0>{user}</0> approved <1>{amount} {symbol}</1> to <2>{contract}</2>} revoke {<3>{user}</3> revoked the approval of <4>{amount} {symbol}</4> to <5>{contract}</5>}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx
+msgid "{context, select, mint {<0>{to}</0> minted <1>{value} {symbol}</1>} send {<2>{from}</2> sent <3>{asset}</3> to <4>{to}</4>} claim {<5>{to}</5> claimed from <6>{from}</6>} burn {<7>{from}</7> burned <8>{value} {symbol}</8>} deposit {<9>{from}</9> deposited on <10>{exchange}</10>} withdraw {<11>{from}</11> withdrew on <12>{exchange}</12>}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/NoteAction.tsx
+msgid "{type, select, post {<0>{user}</0> publish a post on {platform}} mint {<1>{user}</1> minted a post on {platform}} revise {<2>{user}</2> revised a post on {platform}} share {<3>{user}</3> shared a post on {platform}}}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx:134
+#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx
 msgid "<0/> publish a post on {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:171
-#~ msgid "<0>{user}</0> {0, select, send {sent} claim {claimed}} {1, select, verbose {<1>{2}</1>} simple {<2>an NFT</2>}} {3, select, send {to} claim {from}} <3>{formattedAddress}</3>{4, select, cost {for {5} {6}} free {}}"
-#~ msgstr ""
+#: src/SiteAdaptor/components/FeedActions/ProfileLinkAction.tsx
+msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed}} <1>{other}</1> on <2>{1}</2>"
+msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:174
+#: src/SiteAdaptor/components/FeedActions/LiquidityAction.tsx
+msgid "<0>{user}</0> {0, select, supply {supplied} add {added} repay {repaid} withdraw {withdrew} collect {collected} remove {removed} borrow {borrowed}} liquidity on <1>{1}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/ProfileProxy.tsx
+msgid "<0>{user}</0> appointed a proxy on <1>{platform}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/TokenBridgeAction.tsx
+msgid "<0>{user}</0> bridged <1>{amount} {symbol}</1> from <2>{source}</2> to <3>{target}</3>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+msgid "<0>{user}</0> burned <1>{1, select, nft {an NFT} name {{0}}}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/UnknownAction.tsx
+msgid "<0>{user}</0> carried out an activity to <1>{target}</1> on <2>{platform}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}from <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:62
+#: src/SiteAdaptor/components/FeedActions/DonationAction.tsx
+msgid "<0>{user}</0> donated <1>{costValue} {costSymbol}</1>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/DonationAction.tsx
+msgid "<0>{user}</0> donated <1>{costValue} {costSymbol}</1> to <2>{project}</2>"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CommentAction.tsx
+#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx
+msgid "<0>{user}</0> made a comment on {platform}"
+msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}for <3>{value} {symbolName}</3>"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:63
-#~ msgid "<0>{user}</0> minted <1>{0}</1> for <2>{value} {symbolName}</2>"
-#~ msgstr ""
+#: src/SiteAdaptor/components/FeedActions/ProposeAction.tsx
+msgid "<0>{user}</0> proposed"
+msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:71
-#~ msgid "<0>{user}</0> minted <1>an NFT</1> for <2>{value} {symbolName}</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:131
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>}}for <3>{costValue} {costSymbol}</3>"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:143
-#~ msgid "<0>{user}</0> registered <1>{0}</1> for <2>{costValue} {costSymbol}</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:152
-#~ msgid "<0>{user}</0> registered <1>an ENS</1> for <2>{costValue} {costSymbol}</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:110
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:94
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:116
-#~ msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3>"
-#~ msgstr ""
+#: src/SiteAdaptor/components/FeedActions/TokenSwapAction.tsx
+msgid "<0>{user}</0> swapped <1>{from_value} {from_symbol}</1> to <2>{to_value} {to_symbol}</2> on <3>{platform}</3>"
+msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:93
-#~ msgid "<0>{user}</0> sold <1>{0}</1> to <2>{recipient}</2> for <3>{1} {symbolName}</3> on <4>{2}</4>"
-#~ msgstr ""
+#: src/SiteAdaptor/components/FeedActions/VoteAction.tsx
+msgid "<0>{user}</0> voted for <1>{option}</1> on <2>{platform}</2>"
+msgstr ""
 
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:126
-#~ msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:104
-#~ msgid "<0>{user}</0> sold <1>an NFT</1> to <2>{recipient}</2> for <3>{0} {symbolName}</3> on <4>{1}</4>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx:157
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:146
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx:68
+#: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx
 msgid "Details"
 msgstr ""
 
-#: src/SiteAdaptor/FeedFilters.tsx:65
+#: src/SiteAdaptor/FeedFilters.tsx
 msgid "Direct"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:116
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Failed"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:159
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "From"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:98
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Hash"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:128
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Network"
 msgstr ""
 
-#: src/SiteAdaptor/FeedsPage.tsx:134
+#: src/SiteAdaptor/FeedsPage.tsx
 msgid "No more data available."
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:137
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Platform"
 msgstr ""
 
-#: src/SiteAdaptor/FeedFilters.tsx:66
+#: src/SiteAdaptor/FeedFilters.tsx
 msgid "Related"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:110
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Status"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:115
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Successful"
 msgstr ""
 
-#: src/SiteAdaptor/FeedsPage.tsx:98
+#: src/SiteAdaptor/FeedsPage.tsx
 #~ msgid "There's no feed associated with this address."
 #~ msgstr ""
 
-#: src/SiteAdaptor/FeedsPage.tsx:102
+#: src/SiteAdaptor/FeedsPage.tsx
 msgid "There's no feed associated with this address.<0>{0}</0>"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:122
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Timestamp"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:171
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:93
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Transaction Details"
 msgstr ""
 
-#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx:195
+#: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Tx Fee"
 msgstr ""

@@ -32,7 +32,6 @@ const site: Plugin.SiteAdaptor.Definition = {
             marketListSortingPriority: 20,
             description: <Trans>Optimize the display of search results about ENS in social media.</Trans>,
             name: <Trans>ENS</Trans>,
-            // eslint-disable-next-line react/naming-convention/component-name
             icon: <Icons.ENS size={36} />,
         },
     ],

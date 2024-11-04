@@ -28,7 +28,6 @@ import {
 import { WalletIcon, SelectProviderModal, WalletStatusModal } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 import { Trans } from '@lingui/macro'
@@ -163,7 +162,6 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 }
 
 function useToolbox() {
-    const t = useMaskSharedTrans()
     const { account } = useChainContext()
     const chainColor = useChainColor()
     const chainIdValid = useChainIdValid()
@@ -180,9 +178,7 @@ function useToolbox() {
         return (
             <>
                 <span style={{ marginRight: 12 }}>
-                    {t.plugin_wallet_pending_transactions({
-                        count: pendingTransactions.length,
-                    })}
+                    <Trans>{pendingTransactions.length} Pending</Trans>
                 </span>
                 <CircularProgress thickness={6} size={20} color="inherit" />
             </>

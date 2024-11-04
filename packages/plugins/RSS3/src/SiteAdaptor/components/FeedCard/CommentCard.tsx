@@ -4,7 +4,6 @@ import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
 import { CardType } from '../share.js'
 import { AccountLabel, LinkifyOptions, htmlToPlain } from '../common.js'
@@ -126,6 +125,8 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
 
     const target = metadata?.target
 
+    const user = metadata?.handle ?? 'unknown'
+    const platform = action.platform!
     return (
         <CardFrame type={CardType.NoteLink} feed={feed} {...rest}>
             {target ?
@@ -174,17 +175,12 @@ export function CommentCard({ feed, ...rest }: CommentCardProps) {
                 </div>
             :   null}
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.note
-                    values={{
-                        user: metadata?.handle ?? 'unknown',
-                        platform: action.platform!,
-                        context: action.type,
-                    }}
-                    components={{
-                        user: <AccountLabel address={feed.owner} handle={metadata?.handle} />,
-                    }}
-                />
+                <Trans>
+                    <AccountLabel address={feed.owner} handle={metadata?.handle}>
+                        {user}
+                    </AccountLabel>{' '}
+                    made a comment on {platform}
+                </Trans>
             </Typography>
             <Typography className={classes.comment}>
                 <Linkify options={LinkifyOptions}>{metadata?.body}</Linkify>

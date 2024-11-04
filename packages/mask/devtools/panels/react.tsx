@@ -14,7 +14,6 @@ const registerOnStyleChange = (() => {
     type StyleChangeListener = (newText: string) => void
     const StyleChange = new EventTarget()
     function registerOnStyleChange(callback: StyleChangeListener, signal: AbortSignal) {
-        // eslint-disable-next-line react/web-api/no-leaked-event-listener
         StyleChange.addEventListener('style', () => callback(lastText), { signal })
         callback(lastText)
     }
@@ -226,7 +225,7 @@ export async function startReactDevTools(signal: AbortSignal) {
         root.render(<Host />)
         signal.addEventListener(
             'abort',
-            // eslint-disable-next-line react/web-api/no-leaked-event-listener
+
             () => {
                 componentsWindow && showDisabled(componentsWindow)
                 profilerWindow && showDisabled(profilerWindow)
@@ -282,7 +281,6 @@ export async function startReactDevTools(signal: AbortSignal) {
         setReactSelectionFromBrowser()
     }
 
-    // eslint-disable-next-line react/web-api/no-leaked-event-listener
     window.addEventListener('beforeunload', () => DevtoolsMessage.farewell.sendByBroadcast(), { signal })
 }
 

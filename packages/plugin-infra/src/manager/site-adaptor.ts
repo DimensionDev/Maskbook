@@ -51,19 +51,22 @@ function assertLocation() {
     }
 }
 
+export function useActivatedPluginsSiteAdaptorMinimal() {
+    assertLocation()
+    return useValueRef(ActivatedPluginsSiteAdaptorTrue)
+}
+export function useActivatedPluginsSiteAdaptorNotMinimal() {
+    assertLocation()
+    return useValueRef(ActivatedPluginsSiteAdaptorFalse)
+}
+export function useActivatedPluginsSiteAdaptorAny() {
+    assertLocation()
+    return useValueRef(ActivatedPluginsSiteAdaptorAny)
+}
 useActivatedPluginsSiteAdaptor.visibility = {
-    useMinimalMode: () => {
-        assertLocation()
-        return useValueRef(ActivatedPluginsSiteAdaptorTrue)
-    },
-    useNotMinimalMode: () => {
-        assertLocation()
-        return useValueRef(ActivatedPluginsSiteAdaptorFalse)
-    },
-    useAnyMode: () => {
-        assertLocation()
-        return useValueRef(ActivatedPluginsSiteAdaptorAny)
-    },
+    useMinimalMode: useActivatedPluginsSiteAdaptorMinimal,
+    useNotMinimalMode: useActivatedPluginsSiteAdaptorNotMinimal,
+    useAnyMode: useActivatedPluginsSiteAdaptorAny,
 }
 
 // this should never be used for a normal plugin
@@ -102,10 +105,19 @@ export function useActivatedPluginSiteAdaptor(pluginID: string, minimalModeEqual
     }
     unreachable(minimalModeEqualsTo)
 }
+export function useActivatedPluginSiteAdaptorMinimal(pluginID: string) {
+    return useActivatedPluginSiteAdaptor(pluginID, true)
+}
+export function useActivatedPluginSiteAdaptorNotMinimal(pluginID: string) {
+    return useActivatedPluginSiteAdaptor(pluginID, false)
+}
+export function useActivatedPluginSiteAdaptorAny(pluginID: string) {
+    return useActivatedPluginSiteAdaptor(pluginID, 'any')
+}
 useActivatedPluginSiteAdaptor.visibility = {
-    useMinimalMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, true),
-    useNotMinimalMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, false),
-    useAnyMode: (pluginID: string) => useActivatedPluginSiteAdaptor(pluginID, 'any'),
+    useMinimalMode: useActivatedPluginSiteAdaptorMinimal,
+    useNotMinimalMode: useActivatedPluginSiteAdaptorNotMinimal,
+    useAnyMode: useActivatedPluginSiteAdaptorAny,
 }
 
 export function startPluginSiteAdaptor(

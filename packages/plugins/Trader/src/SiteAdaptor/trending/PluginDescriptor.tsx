@@ -1,8 +1,8 @@
 import { Icons } from '@masknet/icons'
 import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useSharedTrans } from '@masknet/shared'
 import { Box } from '@mui/system'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -25,7 +25,6 @@ export function PluginDescriptor({
     isTokenTagPopper,
 }: PluginHeaderProps) {
     const { classes } = useStyles()
-    const t = useSharedTrans()
 
     return (
         <Stack flexDirection="row" justifyContent="space-between" alignItems="center" width="100%">
@@ -44,10 +43,10 @@ export function PluginDescriptor({
                         :   theme.palette.maskColor.dark
                     }>
                     {isTokenTagPopper || isCollectionProjectPopper ?
-                        t.web3_profile_card_name()
+                        <Trans>Web3 Profile Card</Trans>
                     : isProfilePage ?
-                        t.profile_card_name()
-                    :   t.decentralized_search_name()}
+                        <Trans>Web3 Profile</Trans>
+                    :   <Trans>DSearch</Trans>}
                 </Typography>
             </Stack>
             <Box>{children}</Box>

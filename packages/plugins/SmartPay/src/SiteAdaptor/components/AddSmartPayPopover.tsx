@@ -3,7 +3,7 @@ import { useAsyncRetry, useUpdateEffect } from 'react-use'
 import { useNavigate } from 'react-router-dom'
 import { Box, Button, Popover, Typography } from '@mui/material'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
-import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal, useSharedTrans } from '@masknet/shared'
+import { Icon, LeavePageConfirmModal, PersonaSelectPanelModal } from '@masknet/shared'
 import { CrossIsolationMessages, DashboardRoutes, PluginID } from '@masknet/shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { SmartPayFunder } from '@masknet/web3-providers'
@@ -59,7 +59,6 @@ interface AddSmartPayPopoverProps {
 }
 
 export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorEl, onClose }) => {
-    const sharedI18N = useSharedTrans()
     const navigate = useNavigate()
     const { classes } = useStyles()
     const { setSigner } = SmartPayContext.useContainer()
@@ -84,9 +83,9 @@ export const AddSmartPayPopover = memo<AddSmartPayPopoverProps>(({ open, anchorE
                 info: {
                     target: 'dashboard',
                     url: DashboardRoutes.SignUpPersona,
-                    text: sharedI18N.create_persona_hint(),
-                    title: sharedI18N.create_persona_title(),
-                    actionHint: sharedI18N.create_persona_action(),
+                    text: <Trans>Please create a Persona and verify your account to use this feature.</Trans>,
+                    title: <Trans>Persona</Trans>,
+                    actionHint: <Trans>Create persona</Trans>,
                     position: 'center',
                 },
             })

@@ -6,7 +6,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { useDashboardTrans } from '../../../locales/index.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
@@ -62,7 +61,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function CreateWalletForm() {
     const { _ } = useLingui()
-    const t = useDashboardTrans()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
@@ -85,7 +83,7 @@ export const Component = memo(function CreateWalletForm() {
                 message: _(msg`Entered passwords are inconsistent.`),
                 path: ['confirm'],
             })
-    }, [t])
+    }, [_])
 
     const {
         control,

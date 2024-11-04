@@ -3,7 +3,7 @@ import { Button, Stack } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes, type PersonaIdentifier, type PersonaInformation, type PluginID } from '@masknet/shared-base'
-import { type PersonaConnectStatus, useCurrentPersonaConnectStatus, useSharedTrans } from '../../../index.js'
+import { type PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
 import { Trans } from '@lingui/macro'
 
@@ -64,7 +64,6 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
         identity,
         openDashboard,
     }) => {
-        const t = useSharedTrans()
         const { classes } = useStyles()
 
         const { value: status, loading: statusLoading } = useCurrentPersonaConnectStatus(
@@ -103,7 +102,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                     </Button>
                 )
             return null
-        }, [t, status, statusLoading, customHint, isFnChildren, children])
+        }, [status, statusLoading, customHint, isFnChildren, children])
 
         const handleClick = useCallback(() => {
             beforeAction?.(status)

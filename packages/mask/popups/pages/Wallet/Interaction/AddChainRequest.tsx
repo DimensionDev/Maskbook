@@ -1,7 +1,6 @@
 import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Typography } from '@mui/material'
-import { useMaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useTitle } from 'react-use'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
@@ -21,12 +20,9 @@ export function AddChainRequest(props: InteractionItemProps) {
     const { _ } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
-    const t = useMaskSharedTrans()
     const origin = props.currentRequest.origin
 
     useTitle(_(msg`Connect with Mask Wallet`))
-
-    t.wallet_status_pending({ count: 1 })
 
     if (!origin) return null
     setConfirmAction(async () => {

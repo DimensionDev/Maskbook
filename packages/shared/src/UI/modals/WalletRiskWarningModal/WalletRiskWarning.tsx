@@ -2,7 +2,7 @@ import { useCallback } from 'react'
 import { Icons } from '@masknet/icons'
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@masknet/theme'
-import { InjectedDialog, ActionButtonPromise, WalletStatusBox, SharedTrans } from '@masknet/shared'
+import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
@@ -104,12 +104,21 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                     className={classes.article}
                     variant="body2"
                     children={
-                        // eslint-disable-next-line react/naming-convention/component-name
-                        <SharedTrans.wallet_risk_warning_content
-                            components={{
-                                br: <br />,
-                            }}
-                        />
+                        <Trans>
+                            Dear User,
+                            <br />
+                            <br />
+                            When using any wallet-related plugins in Mask Network, please confirm the following usage
+                            risks:
+                            <br />
+                            <br />
+                            Mask Network provides non-commercial free services. The plug-ins are provided by community
+                            members and other excellent third-party DApp teams. Due to the nature of the decentralized
+                            network and other uncertain risk factors, users are requested to properly protect their
+                            sensitive information such as wallet mnemonic words and private keys. Please be cautious
+                            when interact with any blockchain contract. The risks caused by any third-party DApps
+                            (plug-ins) are borne by the third-party DApps themselves.
+                        </Trans>
                     }
                 />
                 <Typography className={classes.article}>

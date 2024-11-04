@@ -177,6 +177,7 @@ function EIP4361Render({ message, messageOrigin, invalidFields }: EIP4361RenderP
     const { classes, cx } = useStyles()
 
     const { useInteractionWallet } = useInteractionWalletContext()
+    // eslint-disable-next-line react-compiler/react-compiler
     useInteractionWallet(address)
 
     // TODO: show warning for non https request

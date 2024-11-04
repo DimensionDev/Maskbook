@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url'
 const DIST_PATH = new URL('dist/cloudflare', ROOT_PATH)
 
 function copyLocalesJSON() {
-    return src('**/locales/*.json', {
+    return src('**/locale/*.json', {
         cwd: fileURLToPath(PKG_PATH),
         ignore: ['**/node_modules/**', '**/dist/**'],
     }).pipe(dest(fileURLToPath(DIST_PATH)))

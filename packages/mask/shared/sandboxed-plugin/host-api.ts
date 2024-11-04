@@ -1,5 +1,5 @@
 import { Environment, MessageTarget, WebExtensionMessage } from '@dimensiondev/holoflows-kit'
-import { createI18NBundle, i18NextInstance } from '@masknet/shared-base'
+import { createI18NBundle } from '@masknet/shared-base'
 import type { BasicHostHooks } from '@masknet/sandboxed-plugin-runtime'
 import { i18n } from '@lingui/core'
 
@@ -33,7 +33,7 @@ export function createHostAPIs(isBackground: boolean): BasicHostHooks {
                 if (_.status === 'rejected') continue
                 locales[_.value.language] = _.value.locales
             }
-            createI18NBundle(id, locales)(i18NextInstance, i18n)
+            createI18NBundle(locales)(i18n)
         },
         createRpcChannel(id, signal) {
             message ??= new WebExtensionMessage({ domain: `mask-plugin-${id}-rpc` })

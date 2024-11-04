@@ -41,7 +41,7 @@ export const PlatformAvatar = memo(function PlatformAvatar(props: PlatformAvatar
     const { size = 24, badgeSize = 14, inverse = false, networkIcon, providerIcon } = props
     const { classes, cx } = useStyles(
         {
-            size: badgeSize > size ? badgeSize : size,
+            size: Math.max(badgeSize, size),
             isBorderColorNotDefault: props.isBorderColorNotDefault,
         },
         { props },

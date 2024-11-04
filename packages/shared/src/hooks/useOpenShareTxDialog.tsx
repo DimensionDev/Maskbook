@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
-import { useSharedTrans } from '../locales/index.js'
 import { ConfirmModal } from '../UI/modals/index.js'
 import { Trans } from '@lingui/macro'
 
@@ -73,23 +72,18 @@ const ShareTransaction = memo(({ message, content, hash }: ShareTransactionProps
 })
 
 export function useOpenShareTxDialog() {
-    const t = useSharedTrans()
-
-    return useCallback(
-        async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
-            const confirmed = await ConfirmModal.openAndWaitForClose({
-                title: title ?? <Trans>Transaction</Trans>,
-                content: (
-                    <ShareTransaction
-                        message={message ?? <Trans>Your transaction has been confirmed!</Trans>}
-                        content={content}
-                        hash={hash}
-                    />
-                ),
-                confirmLabel: onShare ? buttonLabel ?? <Trans>Share</Trans> : <Trans>Dismiss</Trans>,
-            })
-            if (confirmed) onShare?.()
-        },
-        [t],
-    )
+    return useCallback(async ({ title, message, content, hash, buttonLabel, onShare }: ShareTransactionOptions) => {
+        const confirmed = await ConfirmModal.openAndWaitForClose({
+            title: title ?? <Trans>Transaction</Trans>,
+            content: (
+                <ShareTransaction
+                    message={message ?? <Trans>Your transaction has been confirmed!</Trans>}
+                    content={content}
+                    hash={hash}
+                />
+            ),
+            confirmLabel: onShare ? buttonLabel ?? <Trans>Share</Trans> : <Trans>Dismiss</Trans>,
+        })
+        if (confirmed) onShare?.()
+    }, [])
 }

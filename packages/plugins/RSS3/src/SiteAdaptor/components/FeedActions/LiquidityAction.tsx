@@ -1,12 +1,12 @@
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useFeedOwner } from '../../contexts/index.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label, AccountLabel } from '../common.js'
 import { TokenOperationAction } from './TokenOperationAction.js'
+import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -58,19 +58,20 @@ export function LiquidityAction({ feed, ...rest }: TokenFeedActionProps) {
 
                 return (
                     <Typography className={classes.summary} key={index} component="div">
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <RSS3Trans.liquidity
-                            values={{
-                                user,
-                                platform: feed.platform!,
-                                context: metadata?.action,
-                            }}
-                            components={{
-                                user: <AccountLabel address={action.from} />,
-                                platform: <Label />,
-                                bold: <Label />,
-                            }}
-                        />
+                        <Trans>
+                            <AccountLabel address={action.from}>{user}</AccountLabel>{' '}
+                            <Select
+                                _supply="supplied"
+                                _add="added"
+                                _repay="repaid"
+                                _withdraw="withdrew"
+                                _collect="collected"
+                                _remove="removed"
+                                _borrow="borrowed"
+                                value={metadata?.action}
+                            />{' '}
+                            liquidity on <Label>{feed.platform!}</Label>
+                        </Trans>
                     </Typography>
                 )
             })}

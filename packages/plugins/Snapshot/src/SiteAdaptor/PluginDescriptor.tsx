@@ -1,7 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { Stack, Typography, Link } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { useSharedTrans } from '@masknet/shared'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -22,7 +21,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function PluginDescriptor() {
-    const tr = useSharedTrans()
     const { classes } = useStyles()
 
     return (
@@ -34,8 +32,10 @@ export function PluginDescriptor() {
                 </Typography>
             </Stack>
             <Stack direction="row" gap={0.5}>
-                <Typography className={classes.item1}>{tr.plugin_card_frame_default_provided_by()}</Typography>
-                <Typography className={classes.item2}>{tr.plugin_card_frame_default_provided_by_value()}</Typography>
+                <Trans>
+                    <Typography className={classes.item1}>Powered by</Typography>{' '}
+                    <Typography className={classes.item2}>Mask Network</Typography>
+                </Trans>
                 <Link
                     underline="none"
                     target="_blank"

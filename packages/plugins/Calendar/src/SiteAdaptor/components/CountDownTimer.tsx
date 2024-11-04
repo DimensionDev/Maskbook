@@ -27,7 +27,7 @@ export function CountdownTimer({ targetDate }: CountDownTimerProps) {
     const calculateRemainingTime = useCallback((targetDate: Date) => {
         const currentDate = new Date()
         const difference = differenceInSeconds(targetDate, currentDate)
-        return difference > 0 ? difference : 0
+        return Math.max(difference, 0)
     }, [])
 
     const [remainingTime, setRemainingTime] = useState(() => calculateRemainingTime(targetDate))

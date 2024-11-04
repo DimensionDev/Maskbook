@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react'
+import { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useCustomSnackbar } from '@masknet/theme'
 import { DashboardRoutes, EMPTY_LIST, type ECKeyIdentifier, type EC_Public_JsonWebKey } from '@masknet/shared-base'
@@ -30,8 +30,6 @@ export function Component() {
         if (state.privateKey) return
         navigate(DashboardRoutes.SignUp, { replace: true })
     }, [state.mnemonic, state.privateKey])
-
-    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
 
     const [{ loading }, onNext] = useAsyncFn(
         async (personaName: string) => {
@@ -69,7 +67,7 @@ export function Component() {
                     return
                 }
 
-                await changeCurrentPersona(identifier)
+                await Services.Settings.setCurrentPersonaIdentifier(identifier)
                 showSnackbar(<Trans>Persona created.</Trans>, { variant: 'success' })
 
                 await delay(300)
@@ -83,7 +81,7 @@ export function Component() {
                 setError((error as Error).message)
             }
         },
-        [state?.mnemonic, state?.privateKey, changeCurrentPersona],
+        [state?.mnemonic, state?.privateKey],
     )
 
     return <PersonaNameUI onNext={onNext} error={error} loading={loading} />

@@ -7,14 +7,8 @@ import { openWindow } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Box, List, ListItem, ListItemText, Typography, useTheme } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
-import { Trans, msg } from '@lingui/macro'
-import {
-    UserContext,
-    useAppearance,
-    useLanguage,
-    useMaskSharedTrans,
-    MaskSharedTrans,
-} from '../../../shared-ui/index.js'
+import { Plural, Trans, msg } from '@lingui/macro'
+import { UserContext, useAppearance, useLanguage } from '../../../shared-ui/index.js'
 import { NormalHeader, useModalNavigate } from '../../components/index.js'
 import { useSupportedSites } from '../../hooks/useSupportedSites.js'
 import { useTitle } from '../../hooks/useTitle.js'
@@ -109,7 +103,6 @@ const HOME_LINK = 'Mask.io'
 export const Component = memo(function SettingsPage() {
     const { _ } = useLingui()
     const theme = useTheme()
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const modalNavigate = useModalNavigate()
 
@@ -127,7 +120,7 @@ export const Component = memo(function SettingsPage() {
             [LanguageOptions.jaJP]: '日本語',
             [LanguageOptions.koKR]: '한국인',
         }),
-        [t],
+        [],
     )
 
     const APPEARANCE_OPTIONS_MAP = useMemo(
@@ -136,7 +129,7 @@ export const Component = memo(function SettingsPage() {
             [Appearance.light]: <Trans>Light</Trans>,
             [Appearance.dark]: <Trans>Dark</Trans>,
         }),
-        [t],
+        [],
     )
 
     const itemClasses = useMemo(
@@ -175,6 +168,7 @@ export const Component = memo(function SettingsPage() {
 
     useTitle(_(msg`Settings`))
 
+    const websiteCount = data?.filter((x) => x.allowInject && x.hasPermission).length
     return (
         <>
             <NormalHeader />
@@ -221,15 +215,10 @@ export const Component = memo(function SettingsPage() {
                                 classes={itemClasses}
                                 primary={<Trans>Supported Sites</Trans>}
                                 secondary={
-                                    // eslint-disable-next-line react/naming-convention/component-name
-                                    <MaskSharedTrans.popups_settings_supported_website
-                                        components={{
-                                            strong: <span style={{ color: theme.palette.maskColor.main }} />,
-                                        }}
-                                        values={{
-                                            count: data?.filter((x) => x.allowInject && x.hasPermission).length || '',
-                                        }}
-                                    />
+                                    <Trans>
+                                        <span style={{ color: theme.palette.maskColor.main }}>{websiteCount}</span>{' '}
+                                        <Plural value={websiteCount} one="Website" other="Websites" />
+                                    </Trans>
                                 }
                             />
                             <Icons.ArrowRight size={24} className={classes.arrow} />

@@ -2,8 +2,8 @@ import React, { cloneElement, Suspense } from 'react'
 import { StyledEngineProvider, type Theme } from '@mui/material'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { CSSVariableInjector, CustomSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
-import { I18NextProviderHMR, LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
-import { jsxCompose, i18NextInstance } from '@masknet/shared-base'
+import { LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
+import { jsxCompose } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { i18n } from '@lingui/core'
 
@@ -17,7 +17,6 @@ export function PageUIProvider({ children, useTheme, fallback }: PageUIProviderP
         // Avoid the crash due to unhandled suspense
         <Suspense />,
         // Provide the minimal environment (i18n context) for CrashUI in page mode
-        <I18NextProviderHMR i18n={i18NextInstance} />,
         <LinguiProviderHMR i18n={i18n} />,
         <StyledEngineProvider injectFirst />,
         <ErrorBoundary />,

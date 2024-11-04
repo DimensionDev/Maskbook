@@ -1,7 +1,7 @@
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { SourceType } from '@masknet/web3-shared-base'
 import { CURRENCIES_MAP } from './constants.js'
-import MIRRORED_TOKENS from './mirrored_tokens.json'
+import MIRRORED_TOKENS from './mirrored_tokens.json' with { type: 'json' }
 import type { TrendingAPI } from '../entry-types.js'
 
 export function isMirroredKeyword(symbol: string) {

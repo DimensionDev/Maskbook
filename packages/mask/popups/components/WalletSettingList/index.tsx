@@ -24,9 +24,8 @@ import {
     List,
 } from '@mui/material'
 import { useMemo, useCallback, memo } from 'react'
-import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import { LoadingBase } from '@masknet/theme'
-import { useNavigate } from 'react-router-dom'
+import { Link as RouterLink } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Trans } from '@lingui/macro'
 
@@ -120,7 +119,6 @@ export const WalletList = memo<WalletListProps>(function WalletList({
     identity,
 }) {
     const theme = useTheme()
-    const navigate = useNavigate()
     if (!isValid) return null
 
     if (loading)
@@ -138,21 +136,14 @@ export const WalletList = memo<WalletListProps>(function WalletList({
             <Box flex={1} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
                 <Icons.EmptySimple size={36} />
                 <Typography fontSize={14} color={theme.palette.maskColor.second} mt={1.5} textAlign="center">
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <MaskSharedTrans.popups_empty_wallet_proofs_tips
-                        components={{
-                            strong: (
-                                <strong
-                                    onClick={() =>
-                                        navigate(
-                                            urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets }),
-                                        )
-                                    }
-                                    style={{ display: 'block', color: theme.palette.maskColor.main, cursor: 'pointer' }}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        No associated wallet.{' '}
+                        <RouterLink
+                            to={urlcat(PopupRoutes.Personas, { tab: PopupHomeTabType.ConnectedWallets })}
+                            style={{ display: 'block', color: theme.palette.maskColor.main, cursor: 'pointer' }}>
+                            Add Wallet.
+                        </RouterLink>
+                    </Trans>
                 </Typography>
             </Box>
         )

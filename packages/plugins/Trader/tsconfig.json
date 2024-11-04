@@ -9,7 +9,7 @@
   "references": [
     { "path": "../Transak/tsconfig.json" },
     { "path": "../GoPlusSecurity/tsconfig.json" },
-    { "path": "../../plugin-infra/tsconfig.json" },
+    { "path": "../../encryption/tsconfig.json" },
     { "path": "../../plugin-infra/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
     { "path": "../../shared/tsconfig.json" }

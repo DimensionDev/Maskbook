@@ -7,10 +7,10 @@ import type { ReasonableNetwork } from '@masknet/web3-shared-base'
 import { formatEthereumAddress, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, Link, Typography } from '@mui/material'
 import { memo, type MouseEvent } from 'react'
-import { useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
     const isDark = theme.palette.mode === 'dark'
@@ -142,7 +142,6 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
     disableCopy = false,
     origin,
 }) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles({ disabled })
     const { data: connectedWallets, isPending } = useConnectedWallets(origin)
     const connected = connectedWallets?.has(wallet.address)
@@ -185,9 +184,9 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                     )}
                                 />
                                 <span>
-                                    {t.popups_wallet_connected_status({
-                                        context: connected ? 'connected' : 'unconnected',
-                                    })}
+                                    {connected ?
+                                        <Trans>Connected</Trans>
+                                    :   <Trans>Not Connected</Trans>}
                                 </span>
                             </ProgressiveText>
                         )}

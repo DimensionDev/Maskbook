@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { memo, useCallback, useMemo } from 'react'
 import { ActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { useMaskSharedTrans, useAppearance } from '../../../shared-ui/index.js'
+import { useAppearance } from '../../../shared-ui/index.js'
 import { Appearance } from '@masknet/public-api'
 import { List, ListItemButton, ListItemIcon, ListItemText, Radio } from '@mui/material'
 import { getEnumAsArray } from '@masknet/kit'
@@ -39,7 +39,6 @@ const APPEARANCE_ICON_MAP = {
 }
 
 export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectAppearanceModal() {
-    const t = useMaskSharedTrans()
     const { classes } = useStyles()
     const mode = useAppearance()
     const APPEARANCE_OPTIONS_MAP = useMemo(
@@ -48,7 +47,7 @@ export const SelectAppearanceModal = memo<ActionModalBaseProps>(function SelectA
             [Appearance.light]: <Trans>Light</Trans>,
             [Appearance.dark]: <Trans>Dark</Trans>,
         }),
-        [t],
+        [],
     )
 
     const handleAppearanceChange = useCallback(async (target: Appearance) => {

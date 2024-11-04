@@ -4,7 +4,6 @@ import { Box } from '@mui/material'
 import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
 import Services from '#services'
 import { usePersonaRecovery } from '../../../contexts/index.js'
-import { useDashboardTrans } from '../../../locales/index.js'
 import { fetchBackupValue } from '../../../utils/api.js'
 import PasswordField from '../../PasswordField/index.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
@@ -17,7 +16,6 @@ import { useLingui } from '@lingui/react'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
     const { _ } = useLingui()
-    const t = useDashboardTrans()
     const [password, setPassword] = useState('')
     const [errorMessage, setErrorMessage] = useState<ReactNode | undefined>(undefined)
     const { state, dispatch } = RestoreContext.useContainer()
@@ -66,7 +64,7 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
                 <Trans>Restore</Trans>
             </PrimaryButton>,
         )
-    }, [handleNext, t, loading])
+    }, [handleNext, loading])
 
     if (!backupFileInfo) return null
 

@@ -71,7 +71,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
                 await recoverWalletFromMnemonicWords(
                     name,
                     wallet.mnemonic.value.words,
-                    index > -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.value.path,
+                    index !== -1 ? `${HD_PATH_WITHOUT_INDEX_ETHEREUM}/${index}` : wallet.mnemonic.value.path,
                 )
             }
         } catch (error) {

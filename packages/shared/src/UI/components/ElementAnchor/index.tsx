@@ -7,12 +7,13 @@ interface ElementAnchorProps extends StackProps {
 }
 
 export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children, ...rest }) => {
-    const elementRef = useRef<HTMLDivElement>(null)
-    const intersection = useIntersectionObserver(elementRef.current, {
+    const elementRef = useRef<HTMLDivElement>(null!)
+    const intersection = useIntersectionObserver(elementRef, {
         rootMargin: '200px',
     })
 
     const callbackRef = useRef(callback)
+    // eslint-disable-next-line react-compiler/react-compiler
     callbackRef.current = callback
     useEffect(() => {
         if (!intersection?.isIntersecting) return

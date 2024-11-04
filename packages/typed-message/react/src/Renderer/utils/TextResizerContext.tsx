@@ -21,6 +21,7 @@ export function useTextResize(shouldEnable: boolean) {
         const updateFontSize = () => {
             const algr = typeof provider === 'function' ? provider : defaultAlgr
             const scale = algr(element.textContent?.length ?? 0)
+            // eslint-disable-next-line react-compiler/react-compiler
             element.style.fontSize = `${scale}rem`
         }
         updateFontSize()

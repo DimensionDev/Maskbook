@@ -14,6 +14,6 @@ export interface InitInformation {
 }
 export { encoder } from './serializer.js'
 export { createMaskSDKChannel } from './channel.js'
-export * from './types.js'
+export type * from './types.js'
 export * from './error.js'
 export * from './error-generated.js'

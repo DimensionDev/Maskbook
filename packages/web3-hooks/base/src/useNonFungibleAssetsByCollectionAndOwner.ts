@@ -16,7 +16,9 @@ export function useNonFungibleAssetsByCollectionAndOwner<
 
     // create iterator
     const iterator = useMemo(() => {
+        // eslint-disable-next-line react-compiler/react-compiler
         setAssets(EMPTY_LIST)
+        // eslint-disable-next-line react-compiler/react-compiler
         setDone(false)
 
         return pageableToIterator(async (indicator) => {

@@ -42,6 +42,7 @@
         "HKH+W+": "Data",
         "mYGY3B": "Date",
         "ctb8Cs": ["Dex/Est received (", ["0"], ")"],
+        "Lho4Qd": "DSearch",
         "kPQQEW": "Enter an Amount",
         "yNBZ3N": "Enter gas limit",
         "Citz6F": "Exchange",
@@ -133,6 +134,8 @@
         "Fn9Tvh": "Volume (24h)",
         "lyjM6U": "Wait too long for the confirmation.",
         "sb9Y58": "Wallet",
+        "2GHENQ": "Web3 Profile",
+        "EGWr+Q": "Web3 Profile Card",
         "N931rj": "Your transaction should be done in <0/>"
     }
 }

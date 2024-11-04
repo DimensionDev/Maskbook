@@ -7,7 +7,6 @@ import { Box } from '@mui/system'
 import { memo, use, useCallback, useMemo, useState, type ReactNode } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
 import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
 import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
@@ -79,7 +78,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function Recovery() {
     const { _ } = useLingui()
-    const t = useDashboardTrans()
     const { classes } = useStyles()
     const { currentPersona } = PersonaContext.useContainer()
     const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
@@ -88,14 +86,12 @@ export const Component = memo(function Recovery() {
 
     const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
 
-    const changeCurrentPersona = useCallback(Services.Settings.setCurrentPersonaIdentifier, [])
-
     const handleRestoreFromMnemonic = useCallback(
         async (values: string[]) => {
             try {
                 const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
                 if (persona) {
-                    await changeCurrentPersona(persona)
+                    await Services.Settings.setCurrentPersonaIdentifier(persona)
                     // Waiting persona changed event notify
                     await delay(100)
                     navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
@@ -109,7 +105,7 @@ export const Component = memo(function Recovery() {
                 setError(<Trans>Incorrect recovery phrase.</Trans>)
             }
         },
-        [t, navigate, changeCurrentPersona],
+        [navigate],
     )
 
     const handleRestoreFromPrivateKey = useCallback(
@@ -117,7 +113,7 @@ export const Component = memo(function Recovery() {
             try {
                 const persona = await Services.Identity.loginExistPersonaByPrivateKey(data.privateKey)
                 if (persona) {
-                    await changeCurrentPersona(persona)
+                    await Services.Settings.setCurrentPersonaIdentifier(persona)
                     // Waiting persona changed event notify
                     await delay(100)
                     navigate(DashboardRoutes.SignUpPersonaOnboarding)
@@ -131,21 +127,22 @@ export const Component = memo(function Recovery() {
                 onError('privateKey', { type: 'value', message: _(msg`Incorrect Private Key`) })
             }
         },
-        [t, navigate],
+        [_, navigate],
     )
 
+    const hasNoPersona = !currentPersona
     const onRestore = useCallback(
         async (count?: number) => {
-            if (!currentPersona) {
+            if (hasNoPersona) {
                 const lastedPersona = await Services.Identity.queryLastPersonaCreated()
                 if (lastedPersona) {
-                    await changeCurrentPersona(lastedPersona)
+                    await Services.Settings.setCurrentPersonaIdentifier(lastedPersona)
                     await delay(1000)
                 }
             }
             navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count }), { replace: true })
         },
-        [!currentPersona, changeCurrentPersona, navigate],
+        [hasNoPersona, Services.Settings.setCurrentPersonaIdentifier, navigate],
     )
 
     return (

@@ -10,9 +10,11 @@ export interface Filters {
 
 const filtersRef = new ValueRef<Filters>({ networks: Networks, isDirect: true })
 
+// TODO: should be a context instead of a global state
 export function useFilters() {
     const filters = useValueRef(filtersRef)
     const setFilters = useCallback((val: Filters | ((v: Filters) => Filters)) => {
+        // eslint-disable-next-line react-compiler/react-compiler
         filtersRef.value = typeof val === 'function' ? val(filtersRef.value) : val
     }, [])
 

@@ -1,7 +1,7 @@
 import { fetchJSON } from '@masknet/plugin-infra/dom/context'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useCustomSnackbar, type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
-import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json'
+import LensHubABI from '@masknet/web3-contracts/abis/LensHub.json' with { type: 'json' }
 import type { LensHub } from '@masknet/web3-contracts/types/LensHub.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { useContract } from '@masknet/web3-hooks-evm'

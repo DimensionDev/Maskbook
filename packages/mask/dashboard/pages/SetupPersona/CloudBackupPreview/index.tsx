@@ -8,7 +8,6 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/kit'
 import { EmptyStatus } from '@masknet/shared'
-import { useDashboardTrans } from '../../../locales/i18n_generated.js'
 import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
 import type { BackupAccountType } from '@masknet/shared-base'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
@@ -52,8 +51,6 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CloudBackupPreview() {
-    const t = useDashboardTrans()
-
     const { classes, theme, cx } = useStyles()
     const [params] = useSearchParams()
 
@@ -90,7 +87,7 @@ export const Component = memo(function CloudBackupPreview() {
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as BackupAccountType,
         })
-    }, [t, previewInfo])
+    }, [previewInfo])
 
     const handleBackupClick = useCallback(() => {
         if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
@@ -101,7 +98,7 @@ export const Component = memo(function CloudBackupPreview() {
             type: previewInfo.type as BackupAccountType,
             account: previewInfo.account,
         })
-    }, [t, previewInfo])
+    }, [previewInfo])
 
     const [{ loading: overwriteLoading }, handleOverwriteClick] = useAsyncFn(async () => {
         await ConfirmDialog.openAndWaitForClose({
@@ -125,7 +122,7 @@ export const Component = memo(function CloudBackupPreview() {
                 })
             },
         })
-    }, [t, previewInfo])
+    }, [previewInfo])
 
     return (
         <>

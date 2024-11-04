@@ -1,2 +1,2 @@
-export * from './type.js'
+export type * from './type.js'
 export * from './web.js'

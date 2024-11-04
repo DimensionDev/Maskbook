@@ -18,7 +18,7 @@ import {
 } from '@masknet/shared-base'
 import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
-import PRESET_LENS from './preset-lens.json'
+import PRESET_LENS from './preset-lens.json' with { type: 'json' }
 import { fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
 import type { NextIDBaseAPI } from '../entry-types.js'
 import { Expiration, stableSquashedCached } from '../entry-helpers.js'

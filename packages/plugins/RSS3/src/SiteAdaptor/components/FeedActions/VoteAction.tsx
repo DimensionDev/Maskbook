@@ -2,10 +2,10 @@ import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { useMemo } from 'react'
-import { RSS3Trans } from '../../../locales/i18n_generated.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, Label } from '../common.js'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {
@@ -48,21 +48,14 @@ export function VoteAction({ feed, ...rest }: VoteActionProps) {
 
     if (!metadata) return null
 
+    const platform = action.platform!
     return (
         <div {...rest}>
             <Typography className={classes.summary} component="div">
-                {/* eslint-disable-next-line react/naming-convention/component-name */}
-                <RSS3Trans.vote
-                    values={{
-                        user,
-                        option,
-                        platform: action.platform!,
-                    }}
-                    components={{
-                        bold: <Label />,
-                        user: <AccountLabel address={feed.owner} />,
-                    }}
-                />
+                <Trans>
+                    <AccountLabel address={feed.owner}>{user}</AccountLabel> voted for <Label>{option}</Label> on{' '}
+                    <Label>{platform}</Label>
+                </Trans>
             </Typography>
         </div>
     )

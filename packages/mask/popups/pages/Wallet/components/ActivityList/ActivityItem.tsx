@@ -34,7 +34,6 @@ import { Box, ListItem, ListItemText, Skeleton, Typography, alpha, type ListItem
 import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo, type JSX } from 'react'
 import { formatTokenBalance } from '../../../../../shared/index.js'
-import { MaskSharedTrans, useMaskSharedTrans } from '../../../../../shared-ui/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
 import { Trans } from '@lingui/macro'
 
@@ -259,16 +258,20 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
                                 <Trans>Failed</Trans>
                             </Typography>
                         :   null}
-                        {/* eslint-disable-next-line react/naming-convention/component-name */}
-                        <MaskSharedTrans.other_address
-                            context={isOut ? 'to' : 'from'}
-                            values={{
-                                address: isOut ? toAddress : fromAddress,
-                            }}
-                            components={{
-                                addr: <ReversedAddress address={isOut ? toAddress : fromAddress} component="span" />,
-                            }}
-                        />
+                        {isOut ?
+                            <Trans>
+                                to{' '}
+                                <ReversedAddress address={toAddress} component="span">
+                                    {toAddress}
+                                </ReversedAddress>
+                            </Trans>
+                        :   <Trans>
+                                from{' '}
+                                <ReversedAddress address={fromAddress} component="span">
+                                    {fromAddress}
+                                </ReversedAddress>
+                            </Trans>
+                        }
                     </ProgressiveText>
                 }>
                 <Typography className={classes.txName}>
@@ -327,7 +330,6 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
     onView,
     ...rest
 }) {
-    const t = useMaskSharedTrans()
     const { classes, cx } = useStyles({})
     // candidate is current transaction
     const candidate = transaction.candidates[transaction.indexId]
@@ -341,7 +343,7 @@ export const RecentActivityItem = memo<RecentActivityItemProps>(function RecentA
         if (domain) return <Trans>to {formatDomainName(domain)}</Trans>
         if (toAddress) return <Trans>to {formatEthereumAddress(toAddress, 4)}</Trans>
         return undefined
-    }, [domain, t])
+    }, [domain])
 
     return (
         <ListItem className={cx(classes.item, className)} onClick={() => onView(transaction, candidate)} {...rest}>

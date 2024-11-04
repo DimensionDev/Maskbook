@@ -5,7 +5,6 @@ import type { Meta } from '@masknet/typed-message'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useCallback } from 'react'
-import { useMaskSharedTrans } from '../../../shared-ui/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
@@ -14,7 +13,6 @@ import { msg } from '@lingui/macro'
 import { useLingui, type I18nContext } from '@lingui/react'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
-    const t = useMaskSharedTrans()
     const { _ } = useLingui()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
@@ -37,16 +35,15 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             const decoratedText =
                 encode === 'image' ?
-                    decorateEncryptedText('', t, _, content.meta)
-                :   decorateEncryptedText(encrypted, t, _, content.meta)
+                    decorateEncryptedText('', _, content.meta)
+                :   decorateEncryptedText(encrypted, _, content.meta)
 
-            const options = { interpolation: { escapeValue: false } }
+            const wrapperText = encode === 'image' ? 'https://mask.io/' : encrypted
             const defaultText: string =
-                encode === 'image' ?
-                    t.additional_post_box__encrypted_post_pre({
-                        encrypted: 'https://mask.io/',
-                    })
-                :   t.additional_post_box__encrypted_post_pre({ encrypted, ...options })
+                activatedSiteAdaptorUI?.customization.i18nOverwrite?.postBoxEncryptedTextWrapper?.(wrapperText) ||
+                _(
+                    msg`Decrypt this post with #mask_io! 🎭🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install Mask.io to send your first encrypted tweet. ${encrypted}`,
+                )
             const mediaObject =
                 encode === 'image' ?
                     // We can send raw binary through the image, but for the text we still use the old way.
@@ -75,18 +72,13 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             onClose()
         },
-        [t, lastRecognizedIdentity, onClose, reason],
+        [_, lastRecognizedIdentity, onClose, reason],
     )
 }
 
 // TODO: Provide API to plugin to post-process post content,
 // then we can move these -PreText's and meta readers into plugin's own context
-function decorateEncryptedText(
-    encrypted: string,
-    t: ReturnType<typeof useMaskSharedTrans>,
-    _: I18nContext['_'],
-    meta?: Meta,
-): string | null {
+function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Meta): string | null {
     if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
     const officialAccount = Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`)
@@ -96,23 +88,19 @@ function decorateEncryptedText(
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta.has(`${PluginID.RedPacket}:1`) || meta.has(`${PluginID.RedPacket}_nft:1`)) {
+        const promote_red_packet = _(msg`Hi friends, I just created ${token} Lucky Drop. Download Mask.io to claim.`)
         return hasOfficialAccount ?
-                t.additional_post_box__encrypted_post_pre_red_packet_sns_official_account({
-                    encrypted,
-                    account: officialAccount,
-                    ...options,
-                })
-            :   t.additional_post_box__encrypted_post_pre_red_packet({ encrypted, ...options })
+                _(
+                    msg`${promote_red_packet} Follow @${officialAccount} for Web3 updates and insights. \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n${encrypted}`,
+                )
+            :   _(
+                    msg`${promote_red_packet} \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n${encrypted}`,
+                )
     } else if (meta.has(`${PluginID.FileService}:3`)) {
-        return hasOfficialAccount ?
-                t.additional_post_box__encrypted_post_pre_file_service_sns_official_account({
-                    encrypted,
-                    ...options,
-                })
-            :   t.additional_post_box__encrypted_post_pre_file_service({
-                    encrypted,
-                    ...options,
-                })
+        const promote_file_service = _(
+            msg`📃📃📃 Try to permanently use decentralized file storage on ${sns}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions.`,
+        )
+        return `${promote_file_service} \n${encrypted}`
     }
     return null
 }

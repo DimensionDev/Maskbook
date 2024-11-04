@@ -1,13 +1,12 @@
 import { memo, useCallback } from 'react'
 import { useTitle } from '../../../hooks/index.js'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { Box, Button, Link, Typography, useTheme } from '@mui/material'
 
 import { PersonaContext } from '@masknet/shared'
 import Services from '#services'
 import { useAsync, useCopyToClipboard } from 'react-use'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { Trans } from '@lingui/macro'
@@ -51,18 +50,14 @@ export const Component = memo(function ExportPrivateKey() {
                     </Typography>
                 :   null}
                 <Typography>
-                    {/* eslint-disable-next-line react/naming-convention/component-name */}
-                    <MaskSharedTrans.popups_export_private_key_tips
-                        components={{
-                            a: (
-                                <Link
-                                    onClick={() => {
-                                        navigate(PopupRoutes.Settings)
-                                    }}
-                                />
-                            ),
-                        }}
-                    />
+                    <Trans>
+                        This export is only for exporting private key. We do not export any other data. If you need more
+                        data, please go to Settings:{' '}
+                        <Link component={RouterLink} to={PopupRoutes.Settings}>
+                            {' '}
+                            Global Backup{' '}
+                        </Link>
+                    </Trans>
                 </Typography>
             </Box>
             <BottomController>

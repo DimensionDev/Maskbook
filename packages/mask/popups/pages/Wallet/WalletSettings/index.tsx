@@ -8,7 +8,6 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Box, List, Typography } from '@mui/material'
 import { first } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
-import { MaskSharedTrans } from '../../../../shared-ui/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletRemoveModal } from '../../../modals/modal-controls.js'
@@ -114,17 +113,20 @@ export const Component = memo(function WalletSettings() {
                                     title: <Trans>Remove Wallet?</Trans>,
                                     message: (
                                         <Typography className={classes.confirmMessage}>
-                                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                                            <MaskSharedTrans.remove_wallet_message
-                                                values={{
-                                                    wallet: currentWallet,
-                                                    other_wallets,
-                                                }}
-                                                components={{
-                                                    bold: <Typography className={classes.bold} component="span" />,
-                                                    br: <br />,
-                                                }}
-                                            />
+                                            <Trans>
+                                                Current wallet (
+                                                <Typography className={classes.bold} component="span">
+                                                    {currentWallet}
+                                                </Typography>
+                                                ) is the management account of SmartPay wallet (
+                                                <Typography className={classes.bold} component="span">
+                                                    {other_wallets}
+                                                </Typography>
+                                                ).
+                                                <br />
+                                                Deleting the current wallet will result in the deletion of the SmartPay
+                                                wallet simultaneously.
+                                            </Trans>
                                         </Typography>
                                     ),
                                 })

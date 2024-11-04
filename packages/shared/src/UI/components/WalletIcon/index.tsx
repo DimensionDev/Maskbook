@@ -39,7 +39,7 @@ export function WalletIcon(props: WalletIconProps) {
     const { size = 24, badgeSize = 14, mainIcon, badgeIcon, badgeIconBorderColor, iconFilterColor, ...rest } = props
     const { classes, cx } = useStyles(
         {
-            size: badgeSize > size ? badgeSize : size,
+            size: Math.max(badgeSize, size),
             badgeIconBorderColor,
         },
         { props: { classes: props.classes } },

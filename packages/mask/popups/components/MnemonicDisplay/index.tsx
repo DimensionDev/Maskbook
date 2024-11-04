@@ -4,7 +4,6 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { MaskSharedTrans } from '../../../shared-ui/index.js'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -89,8 +88,9 @@ export const MnemonicDisplay = memo<MnemonicDisplayProps>(function MnemonicDispl
                     <Box className={classes.mask} onClick={toggle}>
                         <Icons.EyeOff size={24} />
                         <Typography className={classes.tips}>
-                            {/* eslint-disable-next-line react/naming-convention/component-name */}
-                            <MaskSharedTrans.popups_wallet_backup_mnemonic_view_tips components={{ br: <br /> }} />
+                            <Trans>
+                                Tap to view the mnemonic words <br /> Make sure no one is looking at your screen
+                            </Trans>
                         </Typography>
                     </Box>
                 :   null}

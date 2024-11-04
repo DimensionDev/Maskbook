@@ -1,5 +1,5 @@
 import { PluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginSiteAdaptorAny } from '@masknet/plugin-infra/content-script'
 import { makeStyles } from '@masknet/theme'
 import { NetworkTab } from '@masknet/shared'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
@@ -19,7 +19,7 @@ export function NetworkSection() {
     const { setTargetChainId } = TargetRuntimeContext.useContainer()
 
     const { pluginID } = useNetworkContext()
-    const tipsDefinition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.Tips)
+    const tipsDefinition = useActivatedPluginSiteAdaptorAny(PluginID.Tips)
     const chainIdList = tipsDefinition?.enableRequirement.web3?.[pluginID]?.supportedChainIds ?? EMPTY_LIST
 
     if (!chainIdList.length) return null

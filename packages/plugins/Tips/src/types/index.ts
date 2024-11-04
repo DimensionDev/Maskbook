@@ -1,2 +1,2 @@
-export * from './tip.js'
-export * from './validation.js'
+export type * from './tip.js'
+export type * from './validation.js'

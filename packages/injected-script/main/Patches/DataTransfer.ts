@@ -139,7 +139,7 @@ export class __FileList extends $unsafe.NewObject implements FileList {
         if (!(#files in list)) return $.apply($.FileListPrototypeDesc.item.value!, this, arguments)
         return list.#files[index] ?? null
     }
-    [Symbol.iterator](): IterableIterator<File> {
+    [Symbol.iterator](): ArrayIterator<File> {
         const list = $unsafe.unwrapXRayVision(this)
         if (!(#files in list)) return $.apply($.FileListPrototypeDesc[Symbol.iterator].value!, this, arguments)
         return $unsafe.Array_values(list.#files)
@@ -254,7 +254,7 @@ export class __DataTransferItemList extends $unsafe.NewObject implements DataTra
             new $.DOMException('The object is in an invalid state.', 'InvalidStateError'),
         )
     }
-    [Symbol.iterator](): IterableIterator<DataTransferItem> {
+    [Symbol.iterator](): ArrayIterator<DataTransferItem> {
         const list = $unsafe.unwrapXRayVision(this)
         if (!(#items in list))
             return $.apply($.DataTransferItemListPrototypeDesc[Symbol.iterator].value!, this, arguments)
