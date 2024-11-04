@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-22 10:01\n"
+"PO-Revision-Date: 2024-11-04 08:54\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Simplified\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -93,7 +93,7 @@ msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
-msgstr ""
+msgstr "{riskyFactors, plural, one {# 个风险条目} other {# 个风险条目}}"
 
 #: src/UI/components/UploadDropArea/index.tsx
 msgid "<0>Drag & Drop your file here </0>{0, select, default {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
@@ -117,7 +117,7 @@ msgstr ""
 
 #: src/UI/components/SettingsBoard/GasOption.tsx
 #~ msgid "~ {0}"
-#~ msgstr "~ {0}"
+#~ msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #~ msgid "≈ {gasFeeUSD}"
@@ -187,7 +187,7 @@ msgstr ""
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #~ msgid "APP Settings"
-#~ msgstr "应用设置"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
@@ -207,7 +207,7 @@ msgstr ""
 
 #: src/hooks/useReportSpam.tsx
 #~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
-#~ msgstr "您确认举报{0}? 批准后，这个 NFT 会被标记为垃圾。"
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -243,7 +243,7 @@ msgstr "Blocto 只支持 Flow 链。"
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "Browse File"
-#~ msgstr "浏览文件"
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
@@ -335,7 +335,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 #~ msgid "Click the application icon to hide in the APP list."
-#~ msgstr "点击应用图标将会在应用列表中隐藏。"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
@@ -343,7 +343,7 @@ msgstr "点击应用图标将会在应用列表中显示。"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 #~ msgid "Click the setting icon to list it on the App board."
-#~ msgstr "单击设置图标以在应用板上列出它。"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
@@ -355,7 +355,7 @@ msgstr "点击重试"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
-#~ msgstr "点击确认按钮意味着您同意承担上述风险。"
+#~ msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx
 #: src/UI/components/CoinMetadataTable/index.tsx
@@ -374,7 +374,7 @@ msgstr "确定"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #~ msgid "Confirm Failed"
-#~ msgstr "确认失败"
+#~ msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Confirm Risk Warning"
@@ -568,7 +568,7 @@ msgstr "关闭"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #~ msgid "Do you want to set MASK token as gas fee?"
-#~ msgstr "您想设置 MASK 代币用于支付网络费吗?"
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Do you want to use MASK tokens to pay gas fee?"
@@ -598,11 +598,11 @@ msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "Drag & Drop your file here"
-#~ msgstr "将您的文件拖放到此处"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
-msgstr "DSearch"
+msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Edit"
@@ -796,7 +796,7 @@ msgstr "Gas Price 必须大于 0 Gwei。"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 #~ msgid "Get optimized search results when you look for a token."
-#~ msgstr "当您查询代币时，获取优化后的搜索结果。"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Get optimized search results when you're looking for a token."
@@ -810,12 +810,12 @@ msgstr "前往设置"
 #: src/UI/components/SettingsBoard/GasForm.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Gwei"
-msgstr "Gwei"
+msgstr ""
 
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "GWEI"
-msgstr "GWEI"
+msgstr ""
 
 #: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -910,7 +910,7 @@ msgstr "市值"
 
 #: src/UI/components/PluginCardFrame/index.tsx
 #~ msgid "Mask Network"
-#~ msgstr "Mask Network"
+#~ msgstr ""
 
 #: src/UI/components/GrantPermission/index.tsx
 msgid "Mask Network requires the permission of following websites before using it."
@@ -918,7 +918,7 @@ msgstr ""
 
 #: src/UI/components/GrantPermission/index.tsx
 #~ msgid "Mask Network requires you to authorize the following websites before using it."
-#~ msgstr "Mask Network 需要您在使用前授权以下网站。"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Maskbox NFT purchased."
@@ -984,7 +984,7 @@ msgstr "中等"
 
 #: src/UI/components/PhoneNumberField/index.tsx
 #~ msgid "Mobile Number"
-#~ msgstr "手机号码"
+#~ msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "More"
@@ -1000,7 +1000,7 @@ msgstr ""
 
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #~ msgid "Name or Contract address eg.PUNK or 0x234..."
-#~ msgstr "名称或合同地址 eg.PUNK 或 0x234..."
+#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
@@ -1016,7 +1016,7 @@ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "NFTs"
-msgstr "NFTs"
+msgstr ""
 
 #: src/UI/components/CollectibleList/CollectibleList.tsx
 msgid "No collectible found."
@@ -1047,7 +1047,7 @@ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #~ msgid "Not select wallet yet."
-#~ msgstr "尚未选择钱包。"
+#~ msgstr ""
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
@@ -1071,7 +1071,7 @@ msgstr "使用 Token 名称、 NFT 收藏品、 ENS 域名或钱包地址优化�
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "or"
-#~ msgstr "或者"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Owner changed."
@@ -1102,7 +1102,7 @@ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Please connect {0} and send proof post before using dApps."
-#~ msgstr "请在使用 dApp之前连接到 {0} 并发送验证推文。"
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
@@ -1119,7 +1119,7 @@ msgstr "请连接您的钱包"
 #: src/hooks/useCurrentPersonaConnectStatus.ts
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Please create a Persona and verify your account to use this function."
-#~ msgstr "使用此功能需要先创建一个身份并验证您的社交媒体账号。"
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -1144,7 +1144,7 @@ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #~ msgid "Please verify current persona with social media account before using dApps."
-#~ msgstr "请在使用 dApp之前验证当前使用社交媒体账号的身份。"
+#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
@@ -1157,7 +1157,7 @@ msgstr "请验证您的社交账户"
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #~ msgid "Plug-in switch"
-#~ msgstr "插件开关"
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -1259,7 +1259,7 @@ msgstr "风险提示"
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 #~ msgid "Scan QR code with a WalletConnect-compatible wallet"
-#~ msgstr "使用WalletConnect兼容的钱包扫描二维码"
+#~ msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
@@ -1332,7 +1332,7 @@ msgstr "分享"
 
 #: src/UI/components/UploadDropArea/index.tsx
 #~ msgid "Size limit: 10 MB"
-#~ msgstr "大小限制：10 MB"
+#~ msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
@@ -1352,7 +1352,7 @@ msgstr "成功"
 
 #: src/hooks/useReportSpam.tsx
 #~ msgid "Successfully reported."
-#~ msgstr "举报成功。"
+#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx
@@ -1369,7 +1369,7 @@ msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 #~ msgid "Tell selective friends what's happening..."
-#~ msgstr "告诉朋友发生了什么..."
+#~ msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
@@ -1389,7 +1389,7 @@ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
 #~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
-#~ msgstr "此功能已在应用设置中被关闭。启用插件以完全访问。"
+#~ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "This function has been turned off in the App settings. Enable plugins to fully access."
@@ -1405,7 +1405,7 @@ msgstr "MATIC 代币用于支付与 Polygon Network 交互时支付的网络费�
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
-msgstr "Token"
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 #~ msgid "Token ID separated by comma, e.g. 1223,1224,"
@@ -1514,7 +1514,7 @@ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #~ msgid "Unlocking {0}..."
-#~ msgstr "正在解锁 {0}..."
+#~ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
@@ -1550,7 +1550,7 @@ msgstr "验证 {0}"
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 #~ msgid "Verify your Twitter ID"
-#~ msgstr "验证您的Twitter ID"
+#~ msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -1571,7 +1571,7 @@ msgstr "钱包账户"
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "WalletConnect"
-msgstr "WalletConnect"
+msgstr ""
 
 #: src/UI/components/VerifyNextIDDialog/index.tsx
 #: src/UI/components/VerifyNextIDDialog/index.tsx
@@ -1637,4 +1637,5 @@ msgstr ""
 
 #: src/hooks/useOpenShareTxDialog.tsx
 #~ msgid "Your transaction was confirmed!"
-#~ msgstr "您的交易已确认！"
+#~ msgstr ""
+
