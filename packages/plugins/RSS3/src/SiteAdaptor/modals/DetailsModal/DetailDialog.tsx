@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
@@ -8,7 +9,6 @@ import type { FeedCardProps } from '../../components/base.js'
 import { FeedCard } from '../../components/index.js'
 import { FeedOwnerContext, type FeedOwnerOptions } from '../../contexts/index.js'
 import { TxDetails } from './TxDetails.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     detailsDialog: {

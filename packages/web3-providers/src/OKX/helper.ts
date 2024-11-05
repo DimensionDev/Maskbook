@@ -24,10 +24,3 @@ export function fixToken<T extends { decimals: number; decimal: string }>(res: T
         decimals: +res.decimal,
     }
 }
-
-export function fixToken<T extends { decimals: number; decimal: string }>(res: T): T {
-    return {
-        ...res,
-        decimals: +res.decimal,
-    }
-}

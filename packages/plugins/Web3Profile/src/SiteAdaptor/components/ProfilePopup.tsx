@@ -43,6 +43,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         fontWeight: 700,
         lineHeight: '18px',
+        overflow: 'hidden',
+        whiteSpace: 'nowrap',
+        textOverflow: 'ellipsis',
+        paddingRight: 50,
     },
     second: {
         display: 'flex',

@@ -17,12 +17,13 @@ export function RedPacketInPost({ payload }: RedPacketProps) {
         if (!payload.txid && payload.contract_version !== 1) return
         if (!payload.password) return
         const record: RedPacketRecord = {
+            chainId,
             id: payload.contract_version === 1 ? payload.rpid : payload.txid,
             from: fromUrl.toString(),
             password: payload.password,
             contract_version: payload.contract_version,
         }
-        RedPacketRPC.addRedPacket(record, chainId)
+        RedPacketRPC.addRedPacket(record)
     }, [fromUrl, chainId])
     // #endregion
 

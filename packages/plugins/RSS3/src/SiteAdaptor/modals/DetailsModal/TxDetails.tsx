@@ -83,7 +83,7 @@ export function TxDetails({ feed }: TxDetailsProps) {
         const formatted = formatDateTime(feed.timestamp * 1000, 'MMM dd, yyyy HH:mm:ss')
         if (distance > ONE_WEEK) return formatted
         const timeAgo = formatTimestamp(feed.timestamp)
-        return `${formatTimestamp} ${timeAgo}`
+        return timeAgo
     }, [feed.timestamp])
 
     return (

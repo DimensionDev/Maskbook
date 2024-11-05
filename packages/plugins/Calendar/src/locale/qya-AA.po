@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-04 08:54\n"
+"PO-Revision-Date: 2024-10-30 09:47\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -24,6 +24,10 @@ msgstr "crwdns28410:0crwdne28410:0"
 #: src/SiteAdaptor/components/NFTList.tsx
 msgid "Date"
 msgstr "crwdns28412:0crwdne28412:0"
+
+#: src/SiteAdaptor/CalendarContent.tsx
+msgid "Events"
+msgstr "crwdns28414:0crwdne28414:0"
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
 msgid "Expired"

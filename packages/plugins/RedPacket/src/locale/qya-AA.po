@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-04 08:54\n"
+"PO-Revision-Date: 2024-10-30 09:48\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -155,12 +155,8 @@ msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
 msgstr "crwdns31722:0{0}crwdnd31722:0{1}crwdnd31722:0{2}crwdne31722:0"
 
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx
-#~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{token_symbol}</1>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx
-msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{tokenSymbol}</1>"
-msgstr "crwdns32928:0{claim_numbers}crwdnd32928:0{total_numbers}crwdnd32928:0{0}crwdnd32928:0{1}crwdnd32928:0{tokenSymbol}crwdne32928:0"
+msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{token_symbol}</1>"
+msgstr "crwdns31724:0{claim_numbers}crwdnd31724:0{total_numbers}crwdnd31724:0{0}crwdnd31724:0{1}crwdnd31724:0{token_symbol}crwdne31724:0"
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"

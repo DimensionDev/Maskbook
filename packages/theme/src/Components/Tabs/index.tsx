@@ -200,8 +200,11 @@ export function MaskTabList(props: MaskTabListProps) {
     // #endregion
 
     // eslint-disable-next-line react-compiler/react-compiler
-    const children = Children.map(props.children, (child) => {
-        if (!isValidElement(child)) throw new TypeError('Invalided Children')
+    const children = Children.map(props.children, (child, index) => {
+        if (!isValidElement(child)) {
+            if (child === null) return null
+            throw new TypeError(`Invalided child at ${index}, got ${typeof child}`)
+        }
         const childProps: any = child.props
         const extra = {
             'aria-controls': getPanelId(context, childProps.value),

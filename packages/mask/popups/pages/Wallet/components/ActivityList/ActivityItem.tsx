@@ -46,7 +46,7 @@ const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' },
     const backgroundColorMap: Record<string, string> = {
         send: alpha(theme.palette.maskColor.warn, 0.1),
         receive: alpha(theme.palette.maskColor.success, 0.1),
-        default: alpha(theme.palette.maskColor.success, 0.1),
+        default: alpha(theme.palette.maskColor.primary, 0.1),
     }
     const boxShadowMap: Record<string, string> = {
         send: alpha(theme.palette.maskColor.warn, 0.2),

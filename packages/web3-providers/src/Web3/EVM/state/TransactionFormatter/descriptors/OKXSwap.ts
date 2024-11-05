@@ -1,6 +1,5 @@
 import { type TransactionContext } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import type { TransactionDescriptor } from '../types.js'
 import { BaseDescriptor } from './Base.js'
 
 type ParameterTuple = {
@@ -14,10 +13,10 @@ type ParameterTuple = {
     /** #2 */
     dest: string
 }
-export class OKXSwapDescriptor extends BaseDescriptor implements TransactionDescriptor {
+export class OKXSwapDescriptor extends BaseDescriptor {
     override async compute(context_: TransactionContext<ChainId, string | boolean | undefined>) {
         const context = context_ as unknown as TransactionContext<ChainId, ParameterTuple[]>
-        console.log('context', { context })
+
         if (!context.methods?.length) return
 
         return {
@@ -33,6 +32,6 @@ export class OKXSwapDescriptor extends BaseDescriptor implements TransactionDesc
             popup: {
                 method: 'Swap',
             },
-        }
+        } as const
     }
 }

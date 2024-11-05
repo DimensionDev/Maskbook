@@ -8,7 +8,7 @@ msgstr ""
 "Language: ja\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-11-04 08:53\n"
+"PO-Revision-Date: 2024-09-03 09:19\n"
 "Last-Translator: \n"
 "Language-Team: Japanese\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -82,19 +82,19 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Average Price"
-msgstr "24時間平均価格"
+msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H sale"
-msgstr "24時間売上"
+msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Traded Volume"
-msgstr "24時間の取引量"
+msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Activities"
-msgstr "アクティビティ"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
@@ -125,7 +125,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridge"
-msgstr "ブリッジ"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "Bridge anyway"
@@ -139,13 +139,17 @@ msgstr ""
 #~ msgid "Bridge network fee"
 #~ msgstr ""
 
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+msgid "Bridge Network fee"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridging"
 msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Buy Now"
-msgstr "今すぐ購入"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Check on Explorer"
@@ -177,7 +181,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Confirm Swap"
-msgstr "スワップを確認"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 #~ msgid "Cross-chain Swap"
@@ -185,7 +189,7 @@ msgstr "スワップを確認"
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Custom"
-msgstr "カスタム"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
@@ -219,11 +223,11 @@ msgstr ""
 #: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Exchange"
-msgstr "取引所"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Failed"
-msgstr "失敗しました"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
@@ -236,7 +240,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Fast"
-msgstr "高速"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeQuoteRoute.tsx
 msgid "Fastest"
@@ -245,7 +249,7 @@ msgstr ""
 #: src/SiteAdaptor/trending/TrendingView.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Floor Price"
-msgstr "フロア価格"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
@@ -253,7 +257,7 @@ msgstr "フロア価格"
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "From"
-msgstr "から"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Gas Limit"
@@ -273,11 +277,11 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "General"
-msgstr "一般"
+msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Highest Price"
-msgstr "最高価格"
+msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "History"
@@ -298,16 +302,16 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Items"
-msgstr "アイテム"
+msgstr ""
 
 #: src/SiteAdaptor/trending/FailedTrendingView.tsx
 msgid "Load failed"
-msgstr "読み込み失敗"
+msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
 msgid "Loading"
-msgstr "読み込み中"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Make another Bridge"
@@ -319,7 +323,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Market Cap"
-msgstr "時価総額"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "MAX"
@@ -340,7 +344,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Method"
-msgstr "方法"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Minimum received"
@@ -358,6 +362,9 @@ msgid "Network"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Network fee"
 msgstr ""
@@ -375,7 +382,7 @@ msgstr ""
 #: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "No Data"
-msgstr "データなし"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/History.tsx
 msgid "No recent transactions"
@@ -392,7 +399,7 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Open"
-msgstr "オープン"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Overall Best"
@@ -400,11 +407,11 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Owners"
-msgstr "所有者"
+msgstr ""
 
 #: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Pair"
-msgstr "ペア "
+msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade, also invest in the best performing managers."
@@ -412,12 +419,12 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingViewDescriptor.tsx
 msgid "Powered by"
-msgstr "以下により提供されています"
+msgstr ""
 
 #: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Price"
-msgstr "価格"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Priority fee"
@@ -435,6 +442,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Quote Route"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx
+msgid "Rank"
 msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
@@ -467,7 +478,12 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Slippage"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
+msgid "Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund."
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
@@ -483,7 +499,7 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Swap"
-msgstr "スワップ"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "Swap anyway"
@@ -528,18 +544,18 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Time"
-msgstr "時刻"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "To"
-msgstr "宛先"
+msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "Total Volume"
-msgstr "合計量"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
@@ -598,15 +614,15 @@ msgstr ""
 
 #: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Updated"
-msgstr "更新済"
+msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Value"
-msgstr "価値"
+msgstr ""
 
 #: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Volume (24h)"
-msgstr "数量(24時間)"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Wait too long for the confirmation."

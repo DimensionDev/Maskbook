@@ -23,6 +23,8 @@ const map: Record<
     MessageDescriptor
 > = {
     '': null!,
+    Swap: msg`Swap`,
+    'Failed to swap': msg`Failed to swap`,
     'Claim your Lucky Drop.': msg`Claim your Lucky Drop.`,
     'Claim your NFT Lucky Drop': msg`Claim your NFT Lucky Drop`,
     'Create your Lucky Drop.': msg`Create your Lucky Drop.`,
@@ -77,6 +79,7 @@ const map: Record<
     'Unlock Token': msg`Unlock Token`,
     'Withdraw token': msg`Withdraw token`,
     Donate: msg`Donate`,
+    'Swap completed successfully.': msg`Swap completed successfully.`,
 }
 export function useFormatMessage() {
     const { _ } = useLingui()

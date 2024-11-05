@@ -1,6 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo } from 'react'
 import { useAsyncRetry } from 'react-use'
-import { compact, first } from 'lodash-es'
+import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Stack, Tab } from '@mui/material'
 import {
@@ -11,7 +11,6 @@ import {
     useActivatedPluginsSiteAdaptorNotMinimal,
     usePluginTransField,
     useIsMinimalMode,
-    getAvailablePlugins,
 } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, PluginID, type SocialIdentity, type ProfileTabs } from '@masknet/shared-base'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
@@ -39,12 +38,6 @@ const useStyles = makeStyles<{ isProfilePage?: boolean; searchType?: SearchResul
             '&::-webkit-scrollbar': {
                 display: 'none',
             },
-        },
-        actions: {
-            marginLeft: 'auto',
-            display: 'inline-flex',
-            alignItems: 'center',
-            color: theme.palette.maskColor.publicMain,
         },
     }),
 )
@@ -90,7 +83,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             timer1 && clearTimeout(timer1)
             timer2 && clearTimeout(timer2)
         }
-    }, [resultList, profileTabType])
+    }, [resultList.value, profileTabType])
 
     const currentResult = props.currentSearchResult ?? resultList.value?.[0]
 
@@ -115,9 +108,6 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         if (!currentResult) return EMPTY_LIST
         return getSearchResultTabs(activatedPlugins, currentResult, translate)
     }, [activatedPlugins, resultList.value, translate])
-    const tabActions = getAvailablePlugins(activatedPlugins, (plugins) => {
-        return compact(plugins.map((x) => x.ProfileTabActions))
-    })
 
     const defaultTab = first(tabs)?.id ?? PluginID.Collectible
     const [currentTab, onChange, , setTab] = useTabs(defaultTab, ...tabs.map((tab) => tab.id))
@@ -147,13 +137,6 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
                                     {tabs.map((tab) => (
                                         <Tab key={tab.id} label={tab.label} value={tab.id} />
                                     ))}
-                                    {tabActions.length ?
-                                        <span className={classes.actions}>
-                                            {tabActions.map((Action, i) => (
-                                                <Action key={i} slot="search" />
-                                            ))}
-                                        </span>
-                                    :   null}
                                 </MaskTabList>
                             </TabContext>
                         </Stack>

@@ -78,6 +78,7 @@ export enum PopupRoutes {
     WalletConnect = '/personas/wallet-connect',
     ExportPrivateKey = '/personas/export-private-key',
     PersonaAvatarSetting = '/personas/avatar-setting',
+    Trader = '/trader',
 }
 export interface PopupRoutesParamsMap {
     [PopupRoutes.PersonaSignRequest]: {

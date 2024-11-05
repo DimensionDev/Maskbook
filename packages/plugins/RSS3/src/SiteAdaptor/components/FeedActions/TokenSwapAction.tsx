@@ -1,10 +1,10 @@
+import { Trans } from '@lingui/macro'
 import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, formatValue, Label } from '../common.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {

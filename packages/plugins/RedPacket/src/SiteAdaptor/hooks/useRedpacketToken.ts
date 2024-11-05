@@ -1,5 +1,5 @@
 import { NetworkPluginID } from '@masknet/shared-base'
-import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
+import HappyRedPacketV4ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
 import { useWeb3, useWeb3Connection } from '@masknet/web3-hooks-base'
 
 import { CREATE_LUCKY_DROP_TOPIC } from '@masknet/web3-providers'

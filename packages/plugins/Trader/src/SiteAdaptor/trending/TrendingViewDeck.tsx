@@ -26,7 +26,7 @@ import { LoadingBase, MaskColors, MaskLightTheme, makeStyles } from '@masknet/th
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
-import { SourceType, TokenType, formatCurrency } from '@masknet/web3-shared-base'
+import { TokenType, formatCurrency } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import {
@@ -41,7 +41,7 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { first, last } from 'lodash-es'
+import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { ContentTab, type Currency, type Stat } from '../../types/index.js'
 import { CoinIcon } from './CoinIcon.js'
@@ -294,10 +294,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
         }
     }, [isCollectionProjectPopper, isTokenTagPopper, isProfilePage, isNFT])
 
-    const floorPrice =
-        trending.dataProvider === SourceType.CoinMarketCap ?
-            last(stats)?.[1] ?? market?.current_price
-        :   market?.current_price
+    const floorPrice = market?.current_price
     return (
         <TrendingCard {...TrendingCardProps}>
             <Stack className={classes.cardHeader}>

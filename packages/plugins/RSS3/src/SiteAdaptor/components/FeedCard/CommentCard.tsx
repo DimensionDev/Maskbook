@@ -1,14 +1,14 @@
+import { Trans } from '@lingui/macro'
 import { Image, Markdown } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { resolveResourceURL } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import Linkify from 'linkify-react'
+import { useMarkdownStyles } from '../../hooks/index.js'
 import { CardFrame, type FeedCardProps } from '../base.js'
-import { CardType } from '../share.js'
 import { AccountLabel, LinkifyOptions, htmlToPlain } from '../common.js'
-import { useMarkdownStyles } from './useMarkdownStyles.js'
-import { Trans } from '@lingui/macro'
+import { CardType } from '../share.js'
 
 const useStyles = makeStyles<void, 'image' | 'verbose' | 'content' | 'failedImage'>()((theme, _, refs) => ({
     summary: {

@@ -501,6 +501,7 @@ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
+#: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Share"

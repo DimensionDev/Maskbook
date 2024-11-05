@@ -32,7 +32,7 @@ export function CardDialog(props: CardDialogProps) {
     const { classes } = useStyles()
     const { chainId, pluginID, tokenId, tokenAddress } = Context.useContainer()
 
-    const [currentTab, onChange] = useTabs<TabType>(TabType.About, TabType.Offers, TabType.Activities)
+    const [currentTab, onChange] = useTabs(TabType.About, TabType.Activities)
 
     if (!chainId || !pluginID) return null
 
@@ -54,7 +54,6 @@ export function CardDialog(props: CardDialogProps) {
                 <TabContext value={currentTab}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="NFTCard">
                         <Tab label={<Trans>About</Trans>} value={TabType.About} />
-                        <Tab label={<Trans>Offers</Trans>} value={TabType.Offers} />
                         <Tab label={<Trans>Activities</Trans>} value={TabType.Activities} />
                     </MaskTabList>
                 </TabContext>

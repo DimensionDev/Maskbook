@@ -51,7 +51,6 @@ export enum SourceType {
     Flow = 'Flow',
     Solana = 'Solana',
     CoinGecko = 'CoinGecko',
-    CoinMarketCap = 'CoinMarketCap',
     UniswapInfo = 'UniswapInfo',
     CF = 'CloudFlare',
     GoPlus = 'GoPlus',
@@ -783,11 +782,13 @@ export type FormattedTransactionTitle =
     | 'Create Smart Pay wallet'
     | 'Deploy Smarty Pay wallet'
     | 'Change Owner'
+    | 'Swap'
 export type FormattedTransactionDescription =
     // General
     | 'Revoke the approval for token'
     | 'Transaction submitted.'
     | 'Unlock token'
+    | 'Swap completed successfully.'
     | { key: '{data}'; data: string }
     | { key: '{action} {symbol} NFT contract.'; action: string; symbol: string }
     | { key: 'Contract Deployment {token}'; token: string }
@@ -829,6 +830,7 @@ export type FormattedTransactionSnackbarSuccessDescription =
     // General
     | 'The token approval revoked.'
     | 'Token unlocked'
+    | 'Swap completed successfully.'
     | { key: '{symbol} NFT transferred.'; symbol: string }
     | { key: '{action} {symbol} approval successfully.'; action: string; symbol: string }
     | { key: '{action} {symbol} NFT contract successfully.'; action: string; symbol: string }
@@ -878,6 +880,7 @@ export type FormattedTransactionSnackbarFailedDescription =
     | 'Failed to unlock NFT contract.'
     | 'Failed to unlock token contract.'
     | 'Transaction failed'
+    | 'Failed to swap'
     | 'Transaction has been rejected!'
     | { key: 'Failed to {action} NFT contract.'; action: string }
     // Lucky Drop
@@ -930,17 +933,24 @@ export interface TransactionContext<ChainId, Parameter = string | undefined> {
     children?: Array<TransactionContext<ChainId, Parameter>>
 }
 
-type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
+export type TransactionAsset<ChainId, SchemaType> = Token<ChainId, SchemaType> & {
     name: string
     symbol: string
     amount: string
-    direction: string
+    direction: LiteralUnion<'send' | 'receive' | 'self'>
+    sender?: string
+    recipient?: string
 }
 
 export interface Transaction<ChainId, SchemaType> {
     id: string
     chainId: ChainId
-    type?: LiteralUnion<'burn' | 'contract interaction' | 'transfer'>
+    type?:
+        | LiteralUnion<'burn' | 'contract interaction' | 'transfer'>
+        // Zerion operation types
+        | LiteralUnion<
+              'approve' | 'burn' | 'deploy' | 'deposit' | 'execute' | 'mint' | 'receive' | 'send' | 'trade' | 'withdraw'
+          >
     cateType?: LiteralUnion<'approve' | 'receive' | 'send'>
     cateName?: string
     /** address */
@@ -952,8 +962,21 @@ export interface Transaction<ChainId, SchemaType> {
     status: TransactionStatusType
     /** transferred assets */
     assets: Array<TransactionAsset<ChainId, SchemaType>>
+    approveAssets?: Array<TransactionAsset<ChainId, SchemaType>>
     /** estimated tx fee */
     fee?: Price
+    feeInfo?: {
+        name?: string
+        symbol?: string
+        /** url */
+        icon?: string
+        /** ui amount */
+        amount: string
+        /** price per token */
+        price: number
+        /** value in usd */
+        value: number
+    }
     input?: string
     hash?: string
     methodId?: string

@@ -91,7 +91,6 @@ msgid "No Listings"
 msgstr ""
 
 #: src/SiteAdaptor/Card/Collectible.tsx
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Offers"
 msgstr ""
 

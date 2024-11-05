@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-04 08:52\n"
+"PO-Revision-Date: 2024-10-30 09:45\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -1580,7 +1580,7 @@ msgstr "最大优先费用在当前网络环境下过高。"
 
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max priority fee is too low for network conditions"
-msgstr "Max pirority fee 在当前网络环境下过低"
+msgstr "Max priority fee 在当前网络环境下过低"
 
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max priority fee is too low for network conditions."
@@ -2464,6 +2464,10 @@ msgstr ""
 #: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr "所支持的网站"
+
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
+msgid "Swap"
+msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx

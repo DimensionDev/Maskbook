@@ -1,5 +1,12 @@
-import { first, unionWith } from 'lodash-es'
-import { createPageable, createIndicator, createNextIndicator, type Pageable, EMPTY_LIST } from '@masknet/shared-base'
+import { compact, first, unionWith } from 'lodash-es'
+import {
+    createPageable,
+    createIndicator,
+    createNextIndicator,
+    type Pageable,
+    EMPTY_LIST,
+    type PageIndicator,
+} from '@masknet/shared-base'
 import {
     type Transaction,
     isSameAddress,
@@ -8,24 +15,10 @@ import {
     GasOptionType,
     toFixed,
 } from '@masknet/web3-shared-base'
-import {
-    ChainId,
-    type GasOption,
-    SchemaType,
-    isValidChainId,
-    resolveImageURL,
-    ChainIdList,
-} from '@masknet/web3-shared-evm'
+import { ChainId, type GasOption, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
 import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection } from './types.js'
-import { formatAsset, formatTransactions, isValidAsset } from './helpers.js'
-import {
-    getAssetsList,
-    getGasOptions,
-    getNonFungibleAsset,
-    getNonFungibleAssets,
-    getTransactionList,
-    zerionChainIdResolver,
-} from './base-api.js'
+import { formatAsset, formatRestTransaction, isValidAsset, zerionChainIdResolver } from './helpers.js'
+import { getAssetsList, getGasOptions, getNonFungibleAsset, getNonFungibleAssets } from './base-api.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import { getNativeAssets } from '../helpers/getNativeAssets.js'
 import type {
@@ -35,9 +28,13 @@ import type {
     BaseHubOptions,
     NonFungibleTokenAPI,
 } from '../entry-types.js'
+import urlcat from 'urlcat'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
+import type { TransactionsResponse } from './reset-types.js'
 
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
+const ZERION_REST_API = 'https://zerion-proxy.r2d2.to/'
 
 class ZerionAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType>, HistoryAPI.Provider<ChainId, SchemaType> {
     async getAssets(address: string, options?: BaseHubOptions<ChainId>) {
@@ -71,20 +68,24 @@ class ZerionAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType>, Histo
 
     async getTransactions(
         address: string,
-        { indicator, chainId }: BaseHubOptions<ChainId> = {},
+        { indicator, size = 20 }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<Transaction<ChainId, SchemaType>>> {
-        const pairs = ChainIdList.filter((x) => x === chainId).map((x) => [x, 'transactions'] as const)
-        const allSettled = await Promise.allSettled(
-            pairs.map(async ([chainId, scope]) => {
-                if (!scope) return EMPTY_LIST
-                const { meta, payload } = await getTransactionList(address, scope)
-                if (meta.status !== 'ok') return EMPTY_LIST
-                return formatTransactions(chainId, payload.transactions)
-            }),
-        )
-        const transactions = allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
+        const url = urlcat(ZERION_REST_API, '/v1/wallets/:address/transactions', {
+            address,
+            'page[after]': indicator?.id,
+            'page[size]': size,
+            'filter[trash]': 'only_non_trash',
+        })
+        const res = await fetchJSON<TransactionsResponse>(url)
+        const transactions = compact(res.data.map((x) => formatRestTransaction(x)))
+        let nextIndicator: PageIndicator | undefined = undefined
+        if (res.links.next) {
+            const url = new URL(res.links.next)
+            const pageAfter = url ? url.searchParams.get('page[after]') : undefined
+            nextIndicator = pageAfter ? createNextIndicator(indicator, pageAfter) : undefined
+        }
 
-        return createPageable(transactions, createIndicator(indicator))
+        return createPageable(transactions, createIndicator(indicator), nextIndicator)
     }
 }
 

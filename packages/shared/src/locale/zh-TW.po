@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-11-04 08:54\n"
+"PO-Revision-Date: 2024-09-22 10:02\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -718,6 +718,10 @@ msgid "Failed to send token."
 msgstr ""
 
 #: src/UI/translate.ts
+msgid "Failed to swap"
+msgstr ""
+
+#: src/UI/translate.ts
 msgid "Failed to transfer NFT."
 msgstr ""
 
@@ -1353,6 +1357,14 @@ msgstr ""
 #: src/hooks/useReportSpam.tsx
 #~ msgid "Successfully reported."
 #~ msgstr ""
+
+#: src/UI/translate.ts
+msgid "Swap"
+msgstr ""
+
+#: src/UI/translate.ts
+msgid "Swap completed successfully."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx

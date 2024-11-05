@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
-import { SearchResultType, SourceType } from '@masknet/web3-shared-base'
+import { SearchResultType } from '@masknet/web3-shared-base'
 import { TrendingPopper } from './TrendingPopper.js'
 import { TrendingView } from './TrendingView.js'
 import { TrendingViewProvider } from './context.js'
@@ -75,9 +75,6 @@ function TrendingViewWrapper({
             if (!keyword) return EMPTY_LIST
             const results = await DSearch.search<Web3Helper.TokenResultAll>(keyword, searchType)
             return results
-        },
-        select(data) {
-            return data.sort((a) => (a.source === SourceType.CoinMarketCap ? 1 : 0))
         },
     })
 

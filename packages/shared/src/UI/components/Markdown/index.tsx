@@ -15,6 +15,9 @@ const useStyles = makeStyles()((theme) => ({
         color: 'inherit',
         fontSize: 'inherit',
         fontFamily: 'sans-serif',
+        '& blockquote': {
+            display: 'contents',
+        },
         '& p, & li': {
             margin: 0,
             fontSize: 12,

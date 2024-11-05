@@ -34,7 +34,6 @@ import {
 } from '@masknet/web3-shared-solana'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinGeckoTrending } from '../CoinGecko/apis/TrendingAPI.js'
-import { CoinMarketCapSearchAPI } from '../CoinMarketCap/apis/DSearchAPI.js'
 import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/apis/DSearchAPI.js'
 import { RSS3 } from '../RSS3/index.js'
 import { ENS } from '../ENS/index.js'
@@ -88,7 +87,6 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
     private NFTScanClient = new NFTScanSearchAPI<ChainId, SchemaType>()
     private NFTScanCollectionClient = new NFTScanCollectionSearchAPI<ChainId, SchemaType>()
     private CoinGeckoClient = new CoinGeckoSearchAPI<ChainId, SchemaType>()
-    private CoinMarketCapClient = new CoinMarketCapSearchAPI<ChainId, SchemaType>()
 
     private parseKeyword(keyword: string): { word: string; field?: string } {
         const words = keyword.split(':')
@@ -226,19 +224,15 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                 >,
         )
 
-        const normalTokens = (
-            await Promise.allSettled([
-                this.NFTScanClient.get(),
-                this.CoinGeckoClient.get(),
-                this.CoinMarketCapClient.get(),
-            ])
-        ).flatMap((v) => {
-            return (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
-                | FungibleTokenResult<ChainId, SchemaType>
-                | NonFungibleTokenResult<ChainId, SchemaType>
-                | NonFungibleCollectionResult<ChainId, SchemaType>
-            >
-        })
+        const normalTokens = (await Promise.allSettled([this.NFTScanClient.get(), this.CoinGeckoClient.get()])).flatMap(
+            (v) => {
+                return (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
+                    | FungibleTokenResult<ChainId, SchemaType>
+                    | NonFungibleTokenResult<ChainId, SchemaType>
+                    | NonFungibleCollectionResult<ChainId, SchemaType>
+                >
+            },
+        )
 
         return {
             specificTokens,
@@ -350,15 +344,12 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         }
         return result.sort((a, b) => {
             if (
-                (a.rank &&
-                    a.rank <= 200 &&
-                    a.type === SearchResultType.FungibleToken &&
-                    b.type !== SearchResultType.FungibleToken) ||
-                (a.source === SourceType.CoinGecko && b.source === SourceType.CoinMarketCap)
+                a.rank &&
+                a.rank <= 200 &&
+                a.type === SearchResultType.FungibleToken &&
+                b.type !== SearchResultType.FungibleToken
             )
                 return -1
-
-            if (a.source === SourceType.CoinMarketCap && b.source === SourceType.CoinGecko) return 1
 
             return (a.rank ?? 0) - (b.rank ?? 0)
         })
@@ -388,13 +379,7 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         twitterHandle: string,
     ): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const collections = uniqWith(
-            (
-                await Promise.allSettled([
-                    this.CoinGeckoClient.get(),
-                    this.CoinMarketCapClient.get(),
-                    this.NFTScanCollectionClient.get(),
-                ])
-            )
+            (await Promise.allSettled([this.CoinGeckoClient.get(), this.NFTScanCollectionClient.get()]))
                 .flatMap(
                     (v) =>
                         (v.status === 'fulfilled' && v.value ? v.value : []) as Array<
@@ -414,12 +399,7 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                         ((x.rank && x.rank <= 500) || x.id === 'mask-network')
                     )
                 })
-                .sort((a, b) => {
-                    if (a.source === SourceType.CoinGecko && b.source === SourceType.CoinMarketCap) return -1
-                    if (a.source === SourceType.CoinMarketCap && b.source === SourceType.CoinGecko) return 1
-
-                    return (a.rank ?? 0) - (b.rank ?? 0)
-                }),
+                .sort((a, b) => (a.rank || 0) - (b.rank || 0)),
             (a, b) => a.id === b.id,
         )
 

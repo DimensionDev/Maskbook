@@ -1,10 +1,10 @@
-import { ActionButton, makeStyles } from '@masknet/theme'
-import { Typography } from '@mui/material'
-import { useState, type ReactNode } from 'react'
-import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
+import { Trans } from '@lingui/macro'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { Typography, type TypographyProps } from '@mui/material'
+import { useState, type ReactNode } from 'react'
+import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -22,18 +22,31 @@ const useStyles = makeStyles()((theme) => ({
 
 interface ConfirmModalProps extends BottomDrawerProps {
     message: ReactNode
+    disableConfirmButton?: boolean
     buttonLabel?: ReactNode
     onConfirm?(): void
+    messageProps?: Partial<TypographyProps>
 }
 
-function ConfirmDrawer({ message, buttonLabel, onConfirm, ...rest }: ConfirmModalProps) {
-    const { classes } = useStyles()
+function ConfirmDrawer({
+    message,
+    buttonLabel,
+    disableConfirmButton,
+    onConfirm,
+    messageProps,
+    ...rest
+}: ConfirmModalProps) {
+    const { classes, cx } = useStyles()
     return (
         <BottomDrawer {...rest}>
-            <Typography className={classes.message}>{message}</Typography>
-            <ActionButton className={classes.button} onClick={onConfirm}>
-                {buttonLabel || <Trans>Confirm</Trans>}
-            </ActionButton>
+            <Typography {...messageProps} className={cx(classes.message, messageProps?.className)}>
+                {message}
+            </Typography>
+            {!disableConfirmButton ?
+                <ActionButton className={classes.button} onClick={onConfirm}>
+                    {buttonLabel || <Trans>Confirm</Trans>}
+                </ActionButton>
+            :   null}
         </BottomDrawer>
     )
 }

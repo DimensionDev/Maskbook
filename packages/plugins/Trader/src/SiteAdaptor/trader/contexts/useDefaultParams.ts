@@ -1,10 +1,10 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNativeToken } from '@masknet/web3-hooks-base'
+import { useOKXTokenList } from '@masknet/web3-hooks-evm'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useSearchParams } from 'react-router-dom'
 import { base } from '../../../base.js'
-import { useOKXTokenList } from '@masknet/web3-hooks-evm'
-import { isSameAddress } from '@masknet/web3-shared-base'
 
 const supportedChainIds = base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
 

@@ -63,7 +63,7 @@ export function AccountLabel({
         :   <Label className={className} {...rest} />
     return (
         <>
-            <UserAvatar identity={reversed || address} style={{ marginRight: 6 }} />
+            <UserAvatar identity={reversed || address} />
             {label}
         </>
     )

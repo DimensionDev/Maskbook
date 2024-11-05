@@ -1,7 +1,6 @@
 import type { AbiItem } from 'web3-utils'
 import { isUndefined, omitBy } from 'lodash-es'
 import { createContract } from '@masknet/web3-shared-evm'
-import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json' with { type: 'json' }
 import type { BalanceChecker } from '@masknet/web3-contracts/types/BalanceChecker.js'
 import type { ERC20 } from '@masknet/web3-contracts/types/ERC20.js'
 import type { ERC20Bytes32 } from '@masknet/web3-contracts/types/ERC20Bytes32.js'
@@ -16,6 +15,7 @@ import type { AirdropV2 } from '@masknet/web3-contracts/types/AirdropV2.js'
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
 
+import AirDropV2ABI from '@masknet/web3-contracts/abis/AirdropV2.json' with { type: 'json' }
 import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json' with { type: 'json' }
 import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
 import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json' with { type: 'json' }

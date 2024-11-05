@@ -713,6 +713,10 @@ msgid "Failed to send token."
 msgstr ""
 
 #: src/UI/translate.ts
+msgid "Failed to swap"
+msgstr ""
+
+#: src/UI/translate.ts
 msgid "Failed to transfer NFT."
 msgstr ""
 
@@ -1348,6 +1352,14 @@ msgstr ""
 #: src/hooks/useReportSpam.tsx
 #~ msgid "Successfully reported."
 #~ msgstr ""
+
+#: src/UI/translate.ts
+msgid "Swap"
+msgstr ""
+
+#: src/UI/translate.ts
+msgid "Swap completed successfully."
+msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx

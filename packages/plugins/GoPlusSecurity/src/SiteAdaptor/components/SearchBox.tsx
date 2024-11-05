@@ -1,15 +1,14 @@
-import { memo, useState } from 'react'
-import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
-import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
-import { makeStyles, MaskTextField } from '@masknet/theme'
+import { Trans, t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
+import { WalletIcon, useMenuConfig } from '@masknet/shared'
+import { MaskTextField, makeStyles } from '@masknet/theme'
 import { EVMChainResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { WalletIcon, useMenuConfig } from '@masknet/shared'
+import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
+import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
+import { memo, useState } from 'react'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     option: {},
@@ -55,7 +54,6 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
 }
 
 export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
-    const { _ } = useLingui()
     const { classes } = useStyles()
     const [selectedChain, setSelectedChain] = useState<
         SecurityAPI.SupportedChain<ChainId> & {
@@ -86,7 +84,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         </Stack>
                     </MenuItem>
                 )
-            }) ?? [],
+            }),
         { classes: { paper: classes.menu } },
     )
 
@@ -112,7 +110,7 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
             <Stack direction="row" flex={1} spacing={1}>
                 <Box flex={1}>
                     <MaskTextField
-                        placeholder={_(msg`Please enter token contract address.`)}
+                        placeholder={t`Please enter token contract address.`}
                         autoFocus
                         fullWidth
                         onKeyPress={(event) => {

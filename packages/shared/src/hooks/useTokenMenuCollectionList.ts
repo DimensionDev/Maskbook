@@ -17,16 +17,15 @@ export function useTokenMenuCollectionList(
         if (
             currentCollection &&
             x.source !== currentCollection.source &&
-            [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(currentCollection.source) &&
-            [SourceType.CoinMarketCap, SourceType.CoinGecko].includes(x.source)
+            SourceType.CoinGecko === currentCollection.source &&
+            SourceType.CoinGecko === x.source
         ) {
             return false
         }
 
         if (
             (currentCollection?.source === SourceType.NFTScan || !currentCollection) &&
-            SourceTypeList.includes(SourceType.CoinGecko) &&
-            x.source === SourceType.CoinMarketCap
+            SourceTypeList.includes(SourceType.CoinGecko)
         ) {
             return false
         }

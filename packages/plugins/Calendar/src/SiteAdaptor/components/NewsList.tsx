@@ -105,11 +105,11 @@ const useStyles = makeStyles()((theme) => ({
 interface NewsListProps {
     list: Record<string, any[]>
     isLoading: boolean
-    empty: boolean
     dateString: string
 }
 
-export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) {
+export function NewsList({ list, isLoading, dateString }: NewsListProps) {
+    const empty = !Object.keys(list).length
     const { classes, cx } = useStyles()
     const futureNewsList = useMemo(() => {
         const newsList: string[] = []
@@ -127,7 +127,7 @@ export function NewsList({ list, isLoading, empty, dateString }: NewsListProps) 
     return (
         <div className={classes.container} ref={listRef} key={dateString}>
             <div className={classes.paddingWrap}>
-                {isLoading && !list?.length ?
+                {isLoading && empty ?
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
                     </div>

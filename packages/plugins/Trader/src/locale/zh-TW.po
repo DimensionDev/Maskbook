@@ -8,7 +8,7 @@ msgstr ""
 "Language: zh\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-11-04 08:53\n"
+"PO-Revision-Date: 2024-09-03 09:19\n"
 "Last-Translator: \n"
 "Language-Team: Chinese Traditional\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
@@ -138,6 +138,10 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #~ msgid "Bridge network fee"
 #~ msgstr ""
+
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+msgid "Bridge Network fee"
+msgstr ""
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridging"
@@ -358,6 +362,9 @@ msgid "Network"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Network fee"
 msgstr ""
@@ -437,6 +444,10 @@ msgstr ""
 msgid "Quote Route"
 msgstr ""
 
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx
+msgid "Rank"
+msgstr ""
+
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Rank #{0}"
 msgstr ""
@@ -467,7 +478,12 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Slippage"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
+msgid "Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund."
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx

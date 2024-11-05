@@ -35,13 +35,13 @@ export function ActivitiesList() {
         },
     )
     const events = useMemo(() => data?.pages.flatMap((x) => x.data) ?? EMPTY_LIST, [data?.pages])
-    if (isPending && !events.length) return <LoadingStatus className={classes.wrapper} />
+    if (isPending && !events.length) return <LoadingStatus height="100%" />
 
-    if (error) return <ReloadStatus className={classes.wrapper} onRetry={refetch} />
+    if (error) return <ReloadStatus height="100%" onRetry={refetch} />
 
     if (!events.length)
         return (
-            <EmptyStatus height={215}>
+            <EmptyStatus height="100%">
                 <Trans>This NFT didn't have any activities.</Trans>
             </EmptyStatus>
         )

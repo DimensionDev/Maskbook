@@ -1,7 +1,6 @@
 import { EMPTY_LIST, type ScopedStorage } from '@masknet/shared-base'
+import { useQuery } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
-import { useMemo } from 'react'
-import { useSubscription } from 'use-subscription'
 import type { OkxTransaction } from '../types/trader.js'
 
 export interface StorageOptions {
@@ -14,12 +13,19 @@ export function setupStorage(initialized: ScopedStorage<StorageOptions>) {
     storage = initialized
 }
 
-export function useSwapHistory(address: string) {
-    const txes = useSubscription(storage?.storage?.transactions?.subscription)
-    const addr = address.toLowerCase()
-    return useMemo(() => {
-        return sortBy(txes[addr], (x) => -x.timestamp) || EMPTY_LIST
-    }, [txes, addr])
+export function useTradeHistory(address: string) {
+    return useQuery({
+        enabled: storage.storage.transactions.initialized,
+        queryKey: ['trade-history', address],
+        refetchOnMount: 'always',
+        queryFn: async () => {
+            return storage.storage.transactions.value
+        },
+        select(data) {
+            const addr = address.toLowerCase()
+            return sortBy(data[addr], (x) => -x.timestamp) || EMPTY_LIST
+        },
+    })
 }
 
 export async function addTransaction<T extends OkxTransaction>(address: string, transaction: T) {
@@ -55,6 +61,6 @@ export async function updateTransaction<T extends OkxTransaction>(
 }
 
 export function useTransaction(address: string, hash: string | null) {
-    const txes = useSwapHistory(address)
-    return hash ? txes.find((x) => x.hash === hash) : null
+    const { data: txes } = useTradeHistory(address)
+    return hash && txes ? txes.find((x) => x.hash === hash) : null
 }

@@ -134,6 +134,10 @@ msgstr ""
 #~ msgid "Bridge network fee"
 #~ msgstr ""
 
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+msgid "Bridge Network fee"
+msgstr ""
+
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridging"
 msgstr ""
@@ -353,6 +357,9 @@ msgid "Network"
 msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Network fee"
 msgstr ""
@@ -432,6 +439,10 @@ msgstr ""
 msgid "Quote Route"
 msgstr ""
 
+#: src/SiteAdaptor/trader/views/QuoteRoute.tsx
+msgid "Rank"
+msgstr ""
+
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Rank #{0}"
 msgstr ""
@@ -462,7 +473,12 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Slippage"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
+msgid "Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund."
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx

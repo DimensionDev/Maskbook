@@ -13,7 +13,6 @@ export { Twitter } from './Twitter/index.js'
 export { Minds } from './Minds/index.js'
 export { Instagram } from './Instagram/index.js'
 export { DSearch } from './DSearch/index.js'
-export { CoinMarketCap } from './CoinMarketCap/index.js'
 export { Mirror } from './Mirror/index.js'
 export { CryptoScamDB } from './CryptoScamDB/index.js'
 export { Multicall } from './Multicall/index.js'
@@ -104,7 +103,7 @@ export { Airdrop } from './Airdrop/index.js'
 
 // Firefly
 
-export { FireflyConfig, FireflyRedPacket, FireflyTwitter } from './Firefly/index.js'
+export { FireflyConfig, FireflyRedPacket, FireflyTwitter, FireflyFarcaster } from './Firefly/index.js'
 
 // FiatCurrencyRate
 export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'

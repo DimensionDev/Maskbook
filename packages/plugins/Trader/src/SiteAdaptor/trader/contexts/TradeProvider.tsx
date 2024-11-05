@@ -154,7 +154,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
     const {
         data: bridgeQuoteRes,
         isStale: isBridgeQuoteStale,
-        isPending: isBridgeQuoteLoading,
+        isLoading: isBridgeQuoteLoading,
         refetch: updateBridgeQuote,
     } = useBridgeQuotes(
         {

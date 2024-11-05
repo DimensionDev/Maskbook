@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
-import { compact, first } from 'lodash-es'
+import { first } from 'lodash-es'
 import { TabContext } from '@mui/lab'
 import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
@@ -116,12 +116,6 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 20,
         minWidth: 254,
     },
-    actions: {
-        marginLeft: 'auto',
-        display: 'inline-flex',
-        alignItems: 'center',
-        color: theme.palette.maskColor.publicMain,
-    },
 }))
 
 interface ProfileTabContentProps extends withClasses<'text' | 'button' | 'root'> {}
@@ -205,10 +199,6 @@ function Content(props: ProfileTabContentProps) {
             label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
         }))
     }, [activatedPlugins, translate])
-
-    const tabActions = getAvailablePlugins(activatedPlugins, (plugins) => {
-        return compact(plugins.map((x) => x.ProfileTabActions))
-    })
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
@@ -513,13 +503,6 @@ function Content(props: ProfileTabContentProps) {
                                 {tabs.map((tab) => (
                                     <Tab key={tab.id} label={tab.label} value={tab.id} />
                                 ))}
-                                {tabActions.length ?
-                                    <span className={classes.actions}>
-                                        {tabActions.map((Action, i) => (
-                                            <Action key={i} slot="profile-page" />
-                                        ))}
-                                    </span>
-                                :   null}
                             </MaskTabList>
                         </TabContext>
                     </div>
