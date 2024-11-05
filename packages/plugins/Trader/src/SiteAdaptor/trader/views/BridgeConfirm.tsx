@@ -3,7 +3,14 @@ import { Icons } from '@masknet/icons'
 import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useAccount, useNativeTokenPrice, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
+import {
+    useAccount,
+    useNativeTokenPrice,
+    useNetwork,
+    useReverseAddress,
+    useWeb3Connection,
+    useWeb3Utils,
+} from '@masknet/web3-hooks-base'
 import {
     dividedBy,
     formatBalance,
@@ -13,7 +20,7 @@ import {
     multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { ChainId, formatEthereumAddress, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
@@ -187,6 +194,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
         updateQuote,
     } = useTrade()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { data: reversedName } = useReverseAddress(NetworkPluginID.PLUGIN_EVM, account)
     const fromChainId = fromToken?.chainId as ChainId
     const toChainId = toToken?.chainId as ChainId
     const fromNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, fromChainId)
@@ -527,9 +535,14 @@ than estimated, and any unused funds will remain in the original address.`
                                 />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Typography className={classes.rowValue}>
+                        <Typography className={classes.rowValue} textAlign="right">
                             {toChainNetworkFee ?
-                                `${formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)} ${toNetwork?.nativeCurrency.symbol ?? 'ETH'} $(${toNetworkFeeValue})`
+                                <>
+                                    {formatBalance(toChainNetworkFee, toNetwork?.nativeCurrency.decimals)}{' '}
+                                    {toNetwork?.nativeCurrency.symbol ?? 'ETH'}
+                                    <br />
+                                    (${toNetworkFeeValue})
+                                </>
                             :   '--'}
                         </Typography>
                     </div>
@@ -548,16 +561,20 @@ than estimated, and any unused funds will remain in the original address.`
                                 />
                             </ShadowRootTooltip>
                         </Typography>
-                        <Typography className={classes.rowValue}>
-                            {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'} (${bridgeFeeValue})
+                        <Typography className={classes.rowValue} textAlign="right">
+                            {router?.crossChainFee} {bridgeFeeToken?.symbol ?? '--'}
+                            <br />
+                            (${bridgeFeeValue})
                         </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
                             <Trans>Wallet</Trans>
                         </Typography>
-                        <Typography className={classes.rowValue}>
-                            {account}
+                        <Typography className={classes.rowValue} component="div">
+                            <Box maxWidth="175px" sx={{ wordBreak: 'break-all', textAlign: 'right' }}>
+                                {reversedName || formatEthereumAddress(account, 4)}
+                            </Box>
                             <CopyButton text={account} size={16} display="flex" />
                         </Typography>
                     </div>
