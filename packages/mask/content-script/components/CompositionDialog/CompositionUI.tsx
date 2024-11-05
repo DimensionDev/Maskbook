@@ -129,7 +129,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     const [currentPostSize, __updatePostSize] = useState(0)
 
     const [isSelectRecipientOpen, setSelectRecipientOpen] = useState(false)
-    const [Editor, setEditor] = useState<TypedMessageEditorRef | null>(null)
+    const EditorRef = useRef<TypedMessageEditorRef | null>(null)
     const PluginEntry = useRef<PluginEntryRenderRef>(null)
 
     const [sending, setSending] = useState(false)
@@ -142,20 +142,20 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     const { setEncryptionKind, encryptionKind, recipients, setRecipients } = useSetEncryptionKind(props, encodingKind)
     const reset = useCallback(() => {
         startTransition(() => {
-            Editor?.reset()
+            EditorRef.current?.reset()
             setEncryptionKind(EncryptionTargetType.Public)
             setRecipients([])
             // Don't clean up the image/text selection across different encryption.
             // setEncoding('text')
             setSending(false)
         })
-    }, [Editor])
+    }, [])
 
     const refItem = useMemo(
         (): CompositionRef => ({
             setMessage: (msg) => {
                 // eslint-disable-next-line react-compiler/react-compiler
-                if (Editor) Editor.value = msg
+                if (EditorRef.current) EditorRef.current.value = msg
             },
             setEncryptionKind,
             startPlugin: (id, props) => {
@@ -163,35 +163,35 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
             },
             reset,
         }),
-        [reset, Editor],
+        [reset],
     )
 
     useImperativeHandle(ref, () => refItem, [refItem])
 
     useEffect(() => {
-        if (!props.initialMeta || !Editor) return
+        if (!props.initialMeta || !EditorRef.current) return
         for (const [meta, data] of Object.entries(props.initialMeta)) {
-            Editor.attachMetadata(meta, data)
+            EditorRef.current.attachMetadata(meta, data)
         }
-    }, [props.initialMeta, Editor])
+    }, [props.initialMeta])
 
     const context = useMemo(
         (): CompositionContext => ({
             type: props.type,
-            getMetadata: () => Editor?.value.meta,
-            attachMetadata: (meta, data) => Editor?.attachMetadata(meta, data),
-            dropMetadata: (meta) => Editor?.dropMetadata(meta),
+            getMetadata: () => EditorRef.current?.value.meta,
+            attachMetadata: (meta, data) => EditorRef.current?.attachMetadata(meta, data),
+            dropMetadata: (meta) => EditorRef.current?.dropMetadata(meta),
         }),
-        [props.type, Editor],
+        [props.type],
     )
 
     const submitAvailable = currentPostSize > 0 && currentPostSize < (props.maxLength ?? Number.POSITIVE_INFINITY)
     const onSubmit = useCallback(() => {
-        if (!Editor) return
+        if (!EditorRef.current) return
         setSending(true)
         props
             .onSubmit({
-                content: Editor.value,
+                content: EditorRef.current.value,
                 encode: encodingKind,
                 target:
                     encryptionKind === EncryptionTargetType.Public ?
@@ -215,12 +215,12 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                         autoFocus
                         readonly={sending}
                         ref={(element) => {
-                            setEditor(element)
+                            EditorRef.current = element
                             if (element) updatePostSize(element.estimatedLength)
                         }}
                         onChange={(message) => {
                             startTransition(() => props.onChange?.(message))
-                            updatePostSize(Editor?.estimatedLength || 0)
+                            updatePostSize(EditorRef.current?.estimatedLength || 0)
                         }}
                     />
                 </div>
