@@ -121,8 +121,8 @@ export const UploadDropArea = memo(
                 <Trans>
                     <Typography className={classes.tips}>Drag & Drop your file here </Typography>
                     <Select
-                        value={omitSizeLimit ? 'omit' : null}
-                        default={<Typography className={classes.limit}>Size limit: 10 MB </Typography>}
+                        value={omitSizeLimit ? 'omit' : ''}
+                        other={<Typography className={classes.limit}>Size limit: 10 MB </Typography>}
                         _omit=""
                     />
                     <Typography className={classes.or}>or </Typography>
@@ -134,3 +134,4 @@ export const UploadDropArea = memo(
         )
     },
 )
+UploadDropArea.displayName = 'UploadDropArea'

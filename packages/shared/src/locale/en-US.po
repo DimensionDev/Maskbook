@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: en-US\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
 "PO-Revision-Date: \n"
 "Last-Translator: \n"
+"Language: \n"
 "Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
@@ -33,10 +31,6 @@ msgstr ""
 #: src/UI/translate.ts
 msgid "{0} deposited."
 msgstr ""
-
-#: src/UI/components/ChainBoundary/index.tsx
-#~ msgid "{0} network is not added in the wallet. Please add and try it again."
-#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "{0} network is not added to the wallet. Please add it and try again."
@@ -75,10 +69,6 @@ msgid "{0} were claimed"
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "{0} were successfully claimed"
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "{0} withdrawn."
 msgstr ""
 
@@ -91,16 +81,8 @@ msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "<0>Drag & Drop your file here </0>{0, select, default {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
+msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
 msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx
-#~ msgid "<0>Drag & Drop your file here</0>{0, select, default {<1>Size limit: 10 MB</1>} omit {}}<2>or</2><3>Browse File</3>"
-#~ msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx
-#~ msgid "<0>Drag & Drop your file here</0>{0}<1>or</1><2>Browse File</2>"
-#~ msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
@@ -110,29 +92,13 @@ msgstr ""
 msgid "<0>Powered by </0><1>{0}</1>"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/GasOption.tsx
-#~ msgid "~ {0}"
-#~ msgstr ""
-
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
-#~ msgid "≈ {gasFeeUSD}"
-#~ msgstr ""
-
 #: src/UI/translate.ts
 msgid "1 {0} NFT Lucky Drop claimed."
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
-#~ msgid "1. If you haven't installed {name} Wallet"
-#~ msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "1. If you haven't installed the {name} Wallet"
 msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
-#~ msgid "2. If you have installed {name} Wallet"
-#~ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "2. If you have installed the {name} Wallet"
@@ -180,11 +146,6 @@ msgid "App Settings"
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
-#~ msgid "APP Settings"
-#~ msgstr ""
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Applications"
 msgstr ""
 
@@ -199,10 +160,6 @@ msgstr ""
 #: src/hooks/useReportSpam.tsx
 msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr ""
-
-#: src/hooks/useReportSpam.tsx
-#~ msgid "Are you sure to report {0}? After approving, this NFT will be marked as spam."
-#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -235,10 +192,6 @@ msgstr ""
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
 msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx
-#~ msgid "Browse File"
-#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
@@ -285,20 +238,12 @@ msgid "Circulating Supply"
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Claim 1 {0} NFT Lucky Drop successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Claim Lucky Drop"
 msgstr ""
 
 #: src/UI/translate.ts
 msgid "Claim Lucky Drop with {0} claimed."
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Claim Lucky Drop with {0} successfully."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Claim NFT Lucky Drop"
@@ -329,16 +274,8 @@ msgid "Click the application icon to hide in the App list."
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
-#~ msgid "Click the application icon to hide in the APP list."
-#~ msgstr ""
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Click the application icon to list it on the App board."
 msgstr ""
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
-#~ msgid "Click the setting icon to list it on the App board."
-#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Click the settings icon to list it on the App board."
@@ -347,10 +284,6 @@ msgstr ""
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Click to retry"
 msgstr ""
-
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#~ msgid "Clicking the confirm button means that you agree to bear the above possible risks."
-#~ msgstr ""
 
 #: src/UI/components/CoinMetadataTable/index.tsx
 #: src/UI/components/CoinMetadataTable/index.tsx
@@ -366,10 +299,6 @@ msgstr ""
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr ""
-
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#~ msgid "Confirm Failed"
-#~ msgstr ""
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Confirm Risk Warning"
@@ -419,10 +348,6 @@ msgid "Connect your wallet"
 msgstr ""
 
 #: src/UI/components/VerifyNextIDDialog/index.tsx
-#~ msgid "Connected successfully. <0/><1/>Trying exploring more features powered by Mask Network."
-#~ msgstr ""
-
-#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Connected successfully.<0/><1/>Trying exploring more features powered by Mask Network."
 msgstr ""
 
@@ -456,16 +381,8 @@ msgid "Copy"
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Create {0} NFT Lucky Drop successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Create Lucky Drop"
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Create Lucky drop with {0} successfully."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Create NFT Lucky Drop"
@@ -541,10 +458,6 @@ msgid "Deposit {0} for savings."
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Deposit {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Deposit token"
 msgstr ""
 
@@ -560,10 +473,6 @@ msgstr ""
 #: src/UI/contexts/components/InjectedDialog.tsx
 msgid "Dismiss"
 msgstr ""
-
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#~ msgid "Do you want to set MASK token as gas fee?"
-#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Do you want to use MASK tokens to pay gas fee?"
@@ -584,16 +493,8 @@ msgid "Done"
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
-#~ msgid "Download {name} Wallet here"
-#~ msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Download the {name} Wallet here"
 msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx
-#~ msgid "Drag & Drop your file here"
-#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
@@ -606,10 +507,6 @@ msgstr ""
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Editor"
 msgstr ""
-
-#: src/UI/modals/SelectProviderModal/GuideDialog.tsx
-#~ msgid "Enable {name} Wallet extension and disable other browser extension wallets"
-#~ msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "Enable plugin"
@@ -794,10 +691,6 @@ msgid "Gas price must be greater than 0 Gwei."
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
-#~ msgid "Get optimized search results when you look for a token."
-#~ msgstr ""
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Get optimized search results when you're looking for a token."
 msgstr ""
 
@@ -907,17 +800,9 @@ msgstr ""
 msgid "Market Cap"
 msgstr ""
 
-#: src/UI/components/PluginCardFrame/index.tsx
-#~ msgid "Mask Network"
-#~ msgstr ""
-
 #: src/UI/components/GrantPermission/index.tsx
 msgid "Mask Network requires the permission of following websites before using it."
 msgstr ""
-
-#: src/UI/components/GrantPermission/index.tsx
-#~ msgid "Mask Network requires you to authorize the following websites before using it."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Maskbox NFT purchased."
@@ -981,10 +866,6 @@ msgstr ""
 msgid "Medium"
 msgstr ""
 
-#: src/UI/components/PhoneNumberField/index.tsx
-#~ msgid "Mobile Number"
-#~ msgstr ""
-
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "More"
 msgstr ""
@@ -996,10 +877,6 @@ msgstr ""
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Name or contract address eg. PUNK or 0x234..."
 msgstr ""
-
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#~ msgid "Name or Contract address eg.PUNK or 0x234..."
-#~ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Network error or user cancels the process."
@@ -1044,10 +921,6 @@ msgstr ""
 msgid "No wallet selected."
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#~ msgid "Not select wallet yet."
-#~ msgstr ""
-
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
 msgstr ""
@@ -1067,10 +940,6 @@ msgstr ""
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx
-#~ msgid "or"
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Owner changed."
@@ -1100,10 +969,6 @@ msgid "Please connect {0} and send a proof post before using dApps."
 msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
-#~ msgid "Please connect {0} and send proof post before using dApps."
-#~ msgstr ""
-
-#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
 msgstr ""
 
@@ -1114,11 +979,6 @@ msgstr ""
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please connect your wallet"
 msgstr ""
-
-#: src/hooks/useCurrentPersonaConnectStatus.ts
-#: src/UI/components/PersonaSelectPanel/index.tsx
-#~ msgid "Please create a Persona and verify your account to use this function."
-#~ msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please create a persona and verify your account to use this."
@@ -1142,21 +1002,12 @@ msgid "Please switch to this network in the mobile application wallet you are co
 msgstr ""
 
 #: src/UI/components/PersonaSelectPanel/index.tsx
-#~ msgid "Please verify current persona with social media account before using dApps."
-#~ msgstr ""
-
-#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please verify the current persona with a social media account before using dApps."
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please verify your social account"
 msgstr ""
-
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
-#~ msgid "Plug-in switch"
-#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
@@ -1172,11 +1023,6 @@ msgstr ""
 msgid "Post content:"
 msgstr ""
 
-#: src/UI/components/MaskPluginWrapper/index.tsx
-#: src/UI/components/PluginCardFrame/index.tsx
-#~ msgid "Powered by"
-#~ msgstr ""
-
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 msgid "Price Statistic"
@@ -1191,20 +1037,12 @@ msgid "Purchase Maskbox NFT"
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Purchase Maskbox NFT with {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Purchase Maskbox NFT."
 msgstr ""
 
 #: src/UI/translate.ts
 msgid "Refund Lucky drop"
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Refund Lucky Drop with {0} successfully."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Refund your expired Lucky Drop."
@@ -1255,10 +1093,6 @@ msgstr ""
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
 msgstr ""
-
-#: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
-#~ msgid "Scan QR code with a WalletConnect-compatible wallet"
-#~ msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
@@ -1316,22 +1150,10 @@ msgstr ""
 msgid "Send {0}"
 msgstr ""
 
-#: src/UI/translate.ts
-#~ msgid "Send {0} successfully."
-#~ msgstr ""
-
-#: src/UI/components/VerifyNextIDDialog/index.tsx
-#~ msgid "Sent verification post successfully.<0/> <1/>You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
-#~ msgstr ""
-
 #: src/hooks/useOpenShareTxDialog.tsx
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "Share"
 msgstr ""
-
-#: src/UI/components/UploadDropArea/index.tsx
-#~ msgid "Size limit: 10 MB"
-#~ msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
@@ -1348,10 +1170,6 @@ msgstr ""
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Success"
 msgstr ""
-
-#: src/hooks/useReportSpam.tsx
-#~ msgid "Successfully reported."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Swap"
@@ -1374,10 +1192,6 @@ msgstr ""
 msgid "Tell friends what's happening..."
 msgstr ""
 
-#: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
-#~ msgid "Tell selective friends what's happening..."
-#~ msgstr ""
-
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "The contract address is incorrect or the collection does not belong to you."
 msgstr ""
@@ -1395,10 +1209,6 @@ msgid "The token approval revoked."
 msgstr ""
 
 #: src/UI/components/PluginEnableBoundary/index.tsx
-#~ msgid "This function has been turned off in the App settings. Enable plug-ins to fully access."
-#~ msgstr ""
-
-#: src/UI/components/PluginEnableBoundary/index.tsx
 msgid "This function has been turned off in the App settings. Enable plugins to fully access."
 msgstr ""
 
@@ -1413,10 +1223,6 @@ msgstr ""
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
 msgstr ""
-
-#: src/UI/components/AddCollectibles/index.tsx
-#~ msgid "Token ID separated by comma, e.g. 1223,1224,"
-#~ msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "Token ID should be separated by comma, e.g. 1223,1224,"
@@ -1464,10 +1270,6 @@ msgid "Transaction with extremely low slippage tolerance might be reverted becau
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Transfer {0} NFT successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Transfer {0} NFT."
 msgstr ""
 
@@ -1492,16 +1294,8 @@ msgid "Unlock {0}"
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Unlock {0} NFT contract successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Unlock {0} NFT contract."
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Unlock {0} successfully"
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Unlock {0}."
@@ -1518,10 +1312,6 @@ msgstr ""
 #: src/UI/translate.ts
 msgid "Unlock Token"
 msgstr ""
-
-#: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
-#~ msgid "Unlocking {0}..."
-#~ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
@@ -1554,10 +1344,6 @@ msgstr ""
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Verify {0}"
 msgstr ""
-
-#: src/UI/components/ConnectPersonaBoundary/index.tsx
-#~ msgid "Verify your Twitter ID"
-#~ msgstr ""
 
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Verify your X ID"
@@ -1599,10 +1385,6 @@ msgid "Withdraw {0} for savings."
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Withdraw {0} successfully."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Withdraw token"
 msgstr ""
 
@@ -1613,10 +1395,6 @@ msgstr ""
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "You canceled the request."
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "You didn't approve {0} successfully. Please do not set spending cap to 0 and try it again."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
@@ -1641,7 +1419,3 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
-
-#: src/hooks/useOpenShareTxDialog.tsx
-#~ msgid "Your transaction was confirmed!"
-#~ msgstr ""

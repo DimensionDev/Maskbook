@@ -21,7 +21,7 @@ export const DecryptPostAwaiting = memo(function DecryptPostAwaiting(props: Decr
                     value={decryptProgress}
                     _finding_post_key="Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you."
                     _finding_person_public_key="Mask is looking for the public key of the author..."
-                    _other="Mask is decrypting..."
+                    other="Mask is decrypting..."
                 />
             }
             progress

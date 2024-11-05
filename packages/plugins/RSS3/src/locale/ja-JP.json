@@ -32,38 +32,6 @@
                 }
             ]
         ],
-        "yPokRK": [
-            [
-                "0",
-                "select",
-                {
-                    "Post": ["<0>", ["handle"], "</0> published a post on <1>", ["1"], "</1>"],
-                    "Comment": ["<2>", ["handle"], "</2> made a comment on <3>", ["2"], "</3>"],
-                    "Mirror": [
-                        "<4>",
-                        ["3"],
-                        "</4> mirrored a post post by <5>",
-                        ["handle"],
-                        "</5> on <6>",
-                        ["4"],
-                        "</6>"
-                    ],
-                    "Quote": ["<7>", ["5"], "</7> quoted a post post on <8>", ["6"], "</8>"],
-                    "other": ["<9>", ["handle"], "</9> post stuff on <10>", ["7"], "</10>"]
-                }
-            ]
-        ],
-        "oJnJVD": [
-            [
-                "0",
-                "select",
-                {
-                    "Post": ["<0>", ["handle"], "</0> published a post on <1>", ["1"], "</1>"],
-                    "Comment": ["<2>", ["handle"], "</2> made a comment on <3>", ["2"], "</3>"],
-                    "other": ["<4>", ["handle"], "</4> post stuff on <5>", ["3"], "</5>"]
-                }
-            ]
-        ],
         "2EUnBM": [["0"], " Networks"],
         "0C9wtf": [
             [
@@ -181,44 +149,7 @@
         "f54thq": ["<0/> minted", ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }]],
         "CTSEx8": ["<0/> publish a post on ", ["0"]],
         "NTnXx/": ["<0/> unapproved <1>", ["0"], "</1>"],
-        "cgUaK4": [
-            "<0/>",
-            [
-                "txType",
-                "select",
-                {
-                    "burn": "burned",
-                    "deposit": "deposited",
-                    "mint": "minted",
-                    "receive": "received",
-                    "send": "sent",
-                    "withdraw": "withdrawn"
-                }
-            ],
-            "<1>",
-            ["0"],
-            " ",
-            ["1"],
-            "</1>"
-        ],
         "xPHFvT": ["<0/>", ["txType", "select", { "deploy": "deployed", "execute": "executed" }], "<1/>"],
-        "Lkd7tY": [
-            "<0/>",
-            ["txType", "select", { "trade": "traded", "mint": "minted", "other": "traded" }],
-            "<1>",
-            ["0"],
-            " ",
-            ["1"],
-            "</1> for<2>",
-            ["2"],
-            " ",
-            ["3"],
-            "</2>"
-        ],
-        "Xf0GQD": "<0/>approved with<1/>",
-        "U9kQrG": ["<0/>approved<1>", ["0"], " ", ["1"], "</1>"],
-        "rgsCjq": "<0/>interacted with<1/>",
-        "YFrbUO": ["<0/>unapproved<1>", ["0"], "</1>"],
         "Vh2I2e": [
             "<0>",
             ["formattedUser"],
@@ -375,7 +306,6 @@
             "</3>",
             ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": "" }]
         ],
-        "7L01XJ": "Actions",
         "K7tIrx": "Category",
         "URmyfc": "Details",
         "fYUNRJ": "Direct",

@@ -1,22 +1,15 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: zh\n"
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:19\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Chinese Simplified\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1000\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "{0} {1} bridge completed successfully."
@@ -29,11 +22,6 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} Bridge Network fee"
 msgstr ""
-
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#~ msgid "{0} fee"
-#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
@@ -75,10 +63,6 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "<0>Powered by</0><1>OKX<2/></1>"
 msgstr ""
-
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#~ msgid "<0>Powered by<1/></0><2>OKX</2>"
-#~ msgstr ""
 
 #: src/SiteAdaptor/trending/CoinMarketTable.tsx
 msgid "24H Average Price"
@@ -136,10 +120,6 @@ msgid "Bridge between this token pair are't supported at the moment."
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#~ msgid "Bridge network fee"
-#~ msgstr ""
-
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Bridge Network fee"
 msgstr ""
 
@@ -174,18 +154,10 @@ msgstr ""
 msgid "Confirm Bridge"
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
-#~ msgid "Confirm swap"
-#~ msgstr ""
-
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "Confirm Swap"
 msgstr ""
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#~ msgid "Cross-chain Swap"
-#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Custom"
@@ -524,10 +496,6 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "The custom amount entered may be higher than the required network fee."
 msgstr ""
-
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#~ msgid "The swap is in progress. You can check its status in History after exiting this page."
-#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx

@@ -75,19 +75,6 @@
         "hRWvpI": "Claimed",
         "bTp+bt": ["Claimed ", ["0"], "/", ["1"]],
         "WsNUie": ["Claimed: <0>", ["0"], "/", ["1"], "</0> <1>", ["2"], "</1>"],
-        "vcyM3U": [
-            "Claimed: <0>",
-            ["claim_numbers"],
-            "/",
-            ["total_numbers"],
-            "</0> ",
-            ["0"],
-            "/",
-            ["1"],
-            " <1>",
-            ["token_symbol"],
-            "</1>"
-        ],
         "fpX5Gn": [
             "Claimed: <0>",
             ["claim_numbers"],

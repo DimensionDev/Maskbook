@@ -1,22 +1,15 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: ja\n"
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-09-03 09:18\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language-Team: Japanese\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 982\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "{0, plural, one {Action} other {Actions}}"
@@ -29,14 +22,6 @@ msgstr ""
 #: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
 msgid "{0, select, Post {<0/><1>{handle}</1> published a post on <2>{1}</2>} Comment {<3/><4>{handle}</4> made a comment on <5>{2}</5>} Mirror {<6/><7>{3}</7> mirrored a post post by<8/><9>{handle}</9> on <10>{4}</10>} Quote {<11/><12>{handle}</12> quoted a post post on <13>{5}</13>} other {<14/><15>{handle}</15> post stuff on <16>{6}</16>}}"
 msgstr ""
-
-#: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
-#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} Mirror {<4>{3}</4> mirrored a post post by <5>{handle}</5> on <6>{4}</6>} Quote {<7>{5}</7> quoted a post post on <8>{6}</8>} other {<9>{handle}</9> post stuff on <10>{7}</10>}}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/SocialFeeds/SocialFeed.tsx
-#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} other {<4>{handle}</4> post stuff on <5>{3}</5>}}"
-#~ msgstr ""
 
 #: src/SiteAdaptor/FeedFilters.tsx
 msgid "{0} Networks"
@@ -95,32 +80,8 @@ msgid "<0/> unapproved <1>{0}</1>"
 msgstr ""
 
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>{txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}}<1>{0} {1}</1>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/>{txType, select, deploy {deployed} execute {executed}}<1/>"
 msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>{txType, select, trade {traded} mint {minted} other {traded}}<1>{0} {1}</1> for<2>{2} {3}</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>approved with<1/>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>approved<1>{0} {1}</1>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>interacted with<1/>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>unapproved<1>{0}</1>"
-#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/ProfileLinkAction.tsx
 msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed}} <1>{other}</1> on <2>{1}</2>"
@@ -194,10 +155,6 @@ msgstr ""
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
 msgstr ""
-
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
-#~ msgid "Actions"
-#~ msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
