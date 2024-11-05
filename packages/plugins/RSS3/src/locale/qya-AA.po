@@ -1,14 +1,16 @@
 msgid ""
 msgstr ""
+"POT-Creation-Date: 1970-01-01 00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @lingui/cli\n"
+"Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2024-11-05 07:15\n"
 "Last-Translator: \n"
-"Language: qya_AA\n"
 "Language-Team: Quenya\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -23,6 +25,18 @@ msgstr "crwdns31680:00={0}crwdne31680:0"
 #: src/SiteAdaptor/components/FeedActions/ProfileAction.tsx
 msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>}}"
 msgstr "crwdns32842:00={0}crwdnd32842:0user={user}crwdnd32842:0platform={platform}crwdnd32842:0user={user}crwdnd32842:0platform={platform}crwdne32842:0"
+
+#: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
+msgid "{0, select, Post {<0/><1>{handle}</1> published a post on <2>{1}</2>} Comment {<3/><4>{handle}</4> made a comment on <5>{2}</5>} Mirror {<6/><7>{3}</7> mirrored a post post by<8/><9>{handle}</9> on <10>{4}</10>} Quote {<11/><12>{handle}</12> quoted a post post on <13>{5}</13>} other {<14/><15>{handle}</15> post stuff on <16>{6}</16>}}"
+msgstr "crwdns35418:00={0}crwdnd35418:0handle={handle}crwdnd35418:01={1}crwdnd35418:0handle={handle}crwdnd35418:02={2}crwdnd35418:03={3}crwdnd35418:0handle={handle}crwdnd35418:04={4}crwdnd35418:0handle={handle}crwdnd35418:05={5}crwdnd35418:0handle={handle}crwdnd35418:06={6}crwdne35418:0"
+
+#: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
+#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} Mirror {<4>{3}</4> mirrored a post post by <5>{handle}</5> on <6>{4}</6>} Quote {<7>{5}</7> quoted a post post on <8>{6}</8>} other {<9>{handle}</9> post stuff on <10>{7}</10>}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SocialFeeds/SocialFeed.tsx
+#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} other {<4>{handle}</4> post stuff on <5>{3}</5>}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FeedFilters.tsx
 msgid "{0} Networks"
@@ -48,6 +62,26 @@ msgstr "crwdns32850:0context={context}crwdnd32850:0to={to}crwdnd32850:0value={va
 msgid "{type, select, post {<0>{user}</0> publish a post on {platform}} mint {<1>{user}</1> minted a post on {platform}} revise {<2>{user}</2> revised a post on {platform}} share {<3>{user}</3> shared a post on {platform}}}"
 msgstr "crwdns32852:0type={type}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdne32852:0"
 
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> {txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}} <1>{0} {1}</1>"
+msgstr "crwdns35420:0txType={txType}crwdnd35420:00={0}crwdnd35420:01={1}crwdne35420:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> {txType, select, trade {traded} mint {minted} other {traded}} <1>{0} {1}</1> for <2>{2} {3}</2>"
+msgstr "crwdns35422:0txType={txType}crwdnd35422:00={0}crwdnd35422:01={1}crwdnd35422:02={2}crwdnd35422:03={3}crwdne35422:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> approved <1>{0} {1}</1>"
+msgstr "crwdns35424:0{0}crwdnd35424:0{1}crwdne35424:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> approved with <1/>"
+msgstr "crwdns35426:0crwdne35426:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> interacted with <1/>"
+msgstr "crwdns35428:0crwdne35428:0"
+
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}"
 msgstr "crwdns32262:00={0}crwdnd32262:01={1}crwdne32262:0"
@@ -55,6 +89,38 @@ msgstr "crwdns32262:00={0}crwdnd32262:01={1}crwdne32262:0"
 #: src/SiteAdaptor/components/FeedCard/CommentCard.tsx
 msgid "<0/> publish a post on {0}"
 msgstr "crwdns31684:0{0}crwdne31684:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> unapproved <1>{0}</1>"
+msgstr "crwdns35430:0{0}crwdne35430:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>{txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}}<1>{0} {1}</1>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/>{txType, select, deploy {deployed} execute {executed}}<1/>"
+msgstr "crwdns35432:0txType={txType}crwdne35432:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>{txType, select, trade {traded} mint {minted} other {traded}}<1>{0} {1}</1> for<2>{2} {3}</2>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>approved with<1/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>approved<1>{0} {1}</1>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>interacted with<1/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>unapproved<1>{0}</1>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/ProfileLinkAction.tsx
 msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed}} <1>{other}</1> on <2>{1}</2>"
@@ -129,11 +195,17 @@ msgstr "crwdns32876:0{user}crwdnd32876:0{option}crwdnd32876:0{platform}crwdne328
 msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
 msgstr "crwdns32274:0user={user}crwdnd32274:00={0}crwdnd32274:01={1}crwdnd32274:0formattedAddress={formattedAddress}crwdnd32274:02={2}crwdnd32274:03={3}crwdnd32274:04={4}crwdne32274:0"
 
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
+#~ msgid "Actions"
+#~ msgstr ""
+
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
 msgstr "crwdns28896:0crwdne28896:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/DetailDialog.tsx
+#: src/SiteAdaptor/modals/SocialFeedDetailsModal/DetailDialog.tsx
 msgid "Details"
 msgstr "crwdns28898:0crwdne28898:0"
 
@@ -142,22 +214,28 @@ msgid "Direct"
 msgstr "crwdns28900:0crwdne28900:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Failed"
 msgstr "crwdns28902:0crwdne28902:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "From"
 msgstr "crwdns28904:0crwdne28904:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Hash"
 msgstr "crwdns28906:0crwdne28906:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Network"
 msgstr "crwdns28908:0crwdne28908:0"
 
 #: src/SiteAdaptor/FeedsPage.tsx
+#: src/SiteAdaptor/FinanceFeeds/index.tsx
+#: src/SiteAdaptor/SocialFeeds/index.tsx
 msgid "No more data available."
 msgstr "crwdns28910:0crwdne28910:0"
 
@@ -170,30 +248,41 @@ msgid "Related"
 msgstr "crwdns28914:0crwdne28914:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Status"
 msgstr "crwdns28916:0crwdne28916:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Successful"
 msgstr "crwdns28918:0crwdne28918:0"
 
-#: src/SiteAdaptor/FeedsPage.tsx
+#: src/SiteAdaptor/FinanceFeeds/index.tsx
+#: src/SiteAdaptor/SocialFeeds/index.tsx
 msgid "There's no feed associated with this address."
-msgstr "crwdns31704:0crwdne31704:0"
+msgstr "crwdns35434:0crwdne35434:0"
+
+#: src/SiteAdaptor/FeedsPage.tsx
+msgid "There's no feed associated with this address.<0>{0}</0>"
+msgstr "crwdns32926:0{0}crwdne32926:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Timestamp"
 msgstr "crwdns28920:0crwdne28920:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "To"
 msgstr "crwdns28922:0crwdne28922:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Transaction Details"
 msgstr "crwdns28924:0crwdne28924:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Tx Fee"
 msgstr "crwdns28926:0crwdne28926:0"
 
