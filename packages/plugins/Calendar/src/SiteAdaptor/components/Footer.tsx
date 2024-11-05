@@ -33,6 +33,7 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         fontSize: '14px',
         fontWeight: 700,
+        gap: theme.spacing(0.5),
         lineHeight: '18px',
         alignItems: 'center',
         whiteSpace: 'nowrap',
@@ -96,7 +97,7 @@ export function Footer({ provider, disableSetting }: FooterProps) {
                     </Typography>
                 </div>
                 <div className={classes.poweredByWrap}>
-                    <Typography className={classes.poweredBy}>
+                    <Typography className={classes.poweredBy} component="div">
                         <Trans>Powered By {providerMap[provider]}</Trans>
                     </Typography>
                     {disableSetting ? null : (

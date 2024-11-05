@@ -18,6 +18,9 @@ const useStyles = makeStyles()((theme) => ({
 
     providerBy: {
         color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
+        display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.5),
     },
     wrapper: {
         padding: theme.spacing(2),
@@ -40,24 +43,22 @@ export function PluginHeader() {
                 </Typography>
             </Stack>
             <Box className={classes.provider}>
-                <Typography variant="body1" fontSize={14} fontWeight="700" className={classes.providerBy}>
-                    <Trans>
-                        Powered by{' '}
-                        {publisher ?
-                            <>
-                                <Typography
-                                    variant="body1"
-                                    fontSize={14}
-                                    fontWeight="700"
-                                    component="div"
-                                    color={MaskColorVar.textPluginColor}>
-                                    <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
-                                </Typography>
-                                <Icons.RSS3 size={24} />
-                            </>
-                        :   null}
-                    </Trans>
-                </Typography>
+                {publisher ?
+                    <Typography variant="body1" fontSize={14} fontWeight="700" className={classes.providerBy}>
+                        <Trans>
+                            Powered by{' '}
+                            <Typography
+                                variant="body1"
+                                fontSize={14}
+                                fontWeight="700"
+                                component="span"
+                                color={MaskColorVar.textPluginColor}>
+                                <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
+                            </Typography>
+                            <Icons.RSS3 size={24} />
+                        </Trans>
+                    </Typography>
+                :   null}
             </Box>
         </Stack>
     )
