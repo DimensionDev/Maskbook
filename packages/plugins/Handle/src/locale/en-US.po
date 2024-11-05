@@ -28,5 +28,9 @@ msgid "Optimize the display of search results about ENS in social media."
 msgstr ""
 
 #: src/SiteAdaptor/PluginHeader.tsx
-msgid "Powered by {0}"
+#~ msgid "Powered by {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx
+msgid "Powered by <0><1/></0><2/>"
 msgstr ""

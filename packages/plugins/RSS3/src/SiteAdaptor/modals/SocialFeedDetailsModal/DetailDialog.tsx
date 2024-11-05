@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
@@ -30,7 +30,7 @@ export function SocialFeedDetailsDialog({ post, onClose, ...rest }: FeedDetailsD
                 paper: classes.detailsDialog,
             }}
             {...rest}
-            title={t`Details`}
+            title={<Trans>Details</Trans>}
             onClose={() => {
                 onClose?.()
             }}>

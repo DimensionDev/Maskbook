@@ -1,4 +1,4 @@
-import { t, Trans } from '@lingui/macro'
+import { msg, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -26,6 +26,7 @@ import { okxTokenToFungibleToken } from '../helpers.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useLeave } from '../hooks/useLeave.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
     container: {
@@ -235,6 +236,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 }))
 
 export const Transaction = memo(function Transaction() {
+    const { _ } = useLingui()
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
     const { basePath, showSnackbar } = useRuntime()
@@ -298,14 +300,14 @@ export const Transaction = memo(function Transaction() {
         const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
 
         if (!receipt.status) {
-            showSnackbar(t`Bridge`, {
-                message: t`Failed to bridge`,
+            showSnackbar(_(msg`Bridge`), {
+                message: <Trans>Failed to bridge</Trans>,
             })
         } else {
             const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
 
             if (received && !leaveRef.current) {
-                showSnackbar(t`Bridge`, {
+                showSnackbar(_(msg`Bridge`), {
                     message: (
                         <MuiLink
                             className={classes.toastLink}
@@ -314,7 +316,10 @@ export const Transaction = memo(function Transaction() {
                             tabIndex={-1}
                             target="_blank"
                             rel="noopener noreferrer">
-                            {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} bridge completed successfully.`}{' '}
+                            <Trans>
+                                {formatBalance(received, toToken.decimals)} {toToken.symbol} bridge completed
+                                successfully.
+                            </Trans>{' '}
                             <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                         </MuiLink>
                     ),
@@ -370,7 +375,9 @@ export const Transaction = memo(function Transaction() {
                                 loading={isStatusPending}
                                 skeletonWidth={95}
                                 skeletonHeight={24}>
-                                {tx.kind === 'swap' ? t`Swapping` : t`Bridging`}
+                                {tx.kind === 'swap' ?
+                                    <Trans>Swapping</Trans>
+                                :   <Trans>Bridging</Trans>}
                             </ProgressiveText>
                             <ProgressiveText
                                 component="div"
@@ -546,7 +553,11 @@ export const Transaction = memo(function Transaction() {
                         <Typography className={classes.rowName}>
                             <Trans>Transaction type</Trans>
                         </Typography>
-                        <Typography className={classes.rowValue}>{tx.kind === 'swap' ? t`Swap` : t`Bridge`}</Typography>
+                        <Typography className={classes.rowValue}>
+                            {tx.kind === 'swap' ?
+                                <Trans>Swap</Trans>
+                            :   <Trans>Bridge</Trans>}
+                        </Typography>
                     </div>
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>

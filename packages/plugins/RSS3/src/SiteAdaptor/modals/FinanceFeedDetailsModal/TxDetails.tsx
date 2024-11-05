@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -86,11 +86,13 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
         <Box>
             <Typography className={classes.title}>
                 <Icons.Approve size={24} />
-                {t`Transaction Details`}
+                <Trans>Transaction Details</Trans>
             </Typography>
             <div className={classes.group}>
                 <Box className={classes.field} style={{ alignItems: 'flex-start' }}>
-                    <Typography className={classes.key}>{t`Hash`}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Hash</Trans>
+                    </Typography>
                     <Typography
                         className={classes.value}
                         component="div"
@@ -100,19 +102,27 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                     </Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t`Status`}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Status</Trans>
+                    </Typography>
                     <Typography className={classes.value}>
                         <span className={classes.tag}>
-                            {tx.status === TransactionStatusType.SUCCEED ? t`Successful` : t`Failed`}
+                            {tx.status === TransactionStatusType.SUCCEED ?
+                                <Trans>Successful</Trans>
+                            :   <Trans>Failed</Trans>}
                         </span>
                     </Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t`Timestamp`}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Timestamp</Trans>
+                    </Typography>
                     <Typography className={classes.value}>{timestamp}</Typography>
                 </Box>
                 <Box className={classes.field}>
-                    <Typography className={classes.key}>{t`Network`}</Typography>
+                    <Typography className={classes.key}>
+                        <Trans>Network</Trans>
+                    </Typography>
                     <Typography className={classes.value}>
                         <span className={classes.tag}>{network?.name}</span>
                     </Typography>
@@ -120,7 +130,9 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
             </div>
             <Box className={classes.sep} />
             <Box className={classes.field}>
-                <Typography className={classes.key}>{t`From`}</Typography>
+                <Typography className={classes.key}>
+                    <Trans>From</Trans>
+                </Typography>
                 <Tooltip title={tx.from}>
                     <Typography className={classes.value} gap={10} component="div">
                         <AccountLabel address={tx.from} size={16} />
@@ -129,7 +141,9 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                 </Tooltip>
             </Box>
             <Box className={classes.field}>
-                <Typography className={classes.key}>{t`To`}</Typography>
+                <Typography className={classes.key}>
+                    <Trans>To</Trans>
+                </Typography>
                 <Tooltip title={tx.to}>
                     <Typography className={classes.value} gap={10} component="div">
                         <AccountLabel address={tx.to} size={16} /> <CopyButton text={tx.to} size={20} />
@@ -140,7 +154,9 @@ export function TxDetails({ transaction: tx }: TxDetailsProps) {
                 <>
                     <Box className={classes.sep} />
                     <Box className={classes.field}>
-                        <Typography className={classes.key}>{t`Tx Fee`}</Typography>
+                        <Typography className={classes.key}>
+                            <Trans>Tx Fee</Trans>
+                        </Typography>
                         <Typography className={classes.value}>
                             {trimZero(tx.feeInfo.amount)} {tx.feeInfo.symbol}
                             <Icons.Gas size={16} />

@@ -1,4 +1,4 @@
-import { t, Trans } from '@lingui/macro'
+import { msg, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -29,6 +29,7 @@ import { formatInput, formatTokenBalance } from '../../helpers.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     view: {
@@ -154,6 +155,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function TradeView() {
+    const { _ } = useLingui()
     const navigate = useNavigate()
     const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -175,7 +177,7 @@ export function TradeView() {
     } = useTrade()
     const isSwap = mode === 'swap'
     const quote = isSwap ? swapQuote : bridgeQuote
-    const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // t`This bridge isn’t supported`
+    const quoteErrorTitle = isSwap ? _(msg`This swap isn’t supported`) : undefined // `This bridge isn’t supported`
     const quoteErrorMessage = isSwap ? swapQuoteErrorMessage : bridgeQuoteErrorMessage
 
     const fromChainId = fromToken?.chainId as ChainId
@@ -216,8 +218,8 @@ export function TradeView() {
 
     const isTradable = isSwap ? isSwappable : isBridgable
     const isLoading = isSwap ? isQuoteLoading : isBridgeQuoteLoading
-    const swapButtonLabel = isOverSlippage ? t`Swap anyway` : t`Swap`
-    const bridgeButtonLabel = isOverSlippage ? t`Bridge anyway` : t`Bridge`
+    const swapButtonLabel = isOverSlippage ? <Trans>Swap anyway</Trans> : <Trans>Swap</Trans>
+    const bridgeButtonLabel = isOverSlippage ? <Trans>Bridge anyway</Trans> : <Trans>Bridge</Trans>
     // When set to max, swap all amount of the token
     const [isMax, setIsMax] = useState(false)
     return (
@@ -258,7 +260,9 @@ export function TradeView() {
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {fromNetwork?.fullName ? t`on ${fromNetwork.fullName}` : '--'}
+                                        {fromNetwork?.fullName ?
+                                            <Trans>on {fromNetwork.fullName}</Trans>
+                                        :   '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />
@@ -343,7 +347,9 @@ export function TradeView() {
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {toNetwork?.fullName ? t`on ${toNetwork.fullName}` : '--'}
+                                        {toNetwork?.fullName ?
+                                            <Trans>on {toNetwork.fullName}</Trans>
+                                        :   '--'}
                                     </Typography>
                                 </Box>
                                 <Icons.ArrowDrop size={16} />

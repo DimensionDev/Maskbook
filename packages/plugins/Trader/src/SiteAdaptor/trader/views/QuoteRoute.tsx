@@ -1,4 +1,4 @@
-import { t, Trans } from '@lingui/macro'
+import { msg, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -15,6 +15,7 @@ import { RoutePaths } from '../../constants.js'
 import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useRuntime } from '../contexts/RuntimeProvider.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -138,6 +139,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
 }
 
 export const QuoteRoute = memo(function QuoteRoute() {
+    const { _ } = useLingui()
     const { classes, theme } = useStyles()
     const { basePath, showToolTip } = useRuntime()
     const { quote, chainId } = useTrade()
@@ -153,9 +155,13 @@ export const QuoteRoute = memo(function QuoteRoute() {
 
     const bestValue = compareList[0] ? calcValue(compareList[0], toToken.tokenUnitPrice) : 0
 
-    const rankTooltip = t`This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee.`
+    const rankTooltip = _(
+        msg`This is the price difference between the DEX with the highest composite price and other DEXs, which factors in the estimated received amount and network fee.`,
+    )
 
-    const dexTooltip = t`OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly.`
+    const dexTooltip = _(
+        msg`OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly.`,
+    )
     return (
         <div className={classes.container}>
             <Box className={classes.infoRow} py={0.5}>
@@ -170,7 +176,7 @@ export const QuoteRoute = memo(function QuoteRoute() {
                             color={theme.palette.maskColor.second}
                             onClick={() => {
                                 showToolTip({
-                                    title: t`Rank`,
+                                    title: _(msg`Rank`),
                                     message: rankTooltip,
                                 })
                             }}

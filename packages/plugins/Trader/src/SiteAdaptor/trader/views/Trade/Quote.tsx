@@ -1,4 +1,4 @@
-import { t, Trans } from '@lingui/macro'
+import { msg, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
@@ -13,6 +13,7 @@ import { useGasManagement, useTrade } from '../../contexts/index.js'
 import { useRuntime } from '../../contexts/RuntimeProvider.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 import { useTokenPrice } from '../../hooks/useTokenPrice.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -104,8 +105,11 @@ export function Quote({ quote, ...props }: QuoteProps) {
         if (!bestRouter || !nativeTokenPrice) return gasCost
         return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed(2)
     }, [gasCost, bestRouter, nativeTokenPrice])
+    const { _ } = useLingui()
 
-    const slippageTooltip = t`Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund.`
+    const slippageTooltip = _(
+        msg`Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund.`,
+    )
     return (
         <Box {...props} className={cx(classes.quote, props.className)}>
             <div className={classes.infoRow}>
@@ -146,7 +150,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: t`Slippage`,
+                                            title: _(msg`Slippage`),
                                             message: slippageTooltip,
                                         })
                                     }}
@@ -187,7 +191,9 @@ export function Quote({ quote, ...props }: QuoteProps) {
                     :   null}
                     <div className={classes.infoRow}>
                         <Typography className={classes.rowName}>
-                            {isSwap ? t`Quote route` : t`Trading route`}
+                            {isSwap ?
+                                <Trans>Quote route</Trans>
+                            :   <Trans>Trading route</Trans>}
                         </Typography>
                         <Typography
                             component={Link}

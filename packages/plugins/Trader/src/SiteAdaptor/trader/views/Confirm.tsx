@@ -1,4 +1,4 @@
-import { Select, t, Trans } from '@lingui/macro'
+import { msg, Select, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -33,6 +33,7 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
+import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -169,6 +170,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Confirm = memo(function Confirm() {
+    const { _ } = useLingui()
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const { basePath, showToolTip, showSnackbar } = useRuntime()
@@ -288,8 +290,8 @@ export const Confirm = memo(function Confirm() {
             })
 
             if (!hash) {
-                showSnackbar(t`Swap`, {
-                    message: t`Transaction rejected`,
+                showSnackbar(_(msg`Swap`), {
+                    message: <Trans>Transaction rejected</Trans>,
                     variant: 'error',
                 })
                 return
@@ -299,7 +301,7 @@ export const Confirm = memo(function Confirm() {
                 await waitForTransaction({ chainId, hash })
                 const received = await getReceived({ hash, account, chainId })
                 if (received && !leaveRef.current) {
-                    showSnackbar(t`Swap`, {
+                    showSnackbar(_(msg`Swap`), {
                         message: (
                             <MuiLink
                                 className={classes.toastLink}
@@ -308,7 +310,10 @@ export const Confirm = memo(function Confirm() {
                                 tabIndex={-1}
                                 target="_blank"
                                 rel="noopener noreferrer">
-                                {t`${formatBalance(received, toToken.decimals)} ${toToken.symbol} swap completed successfully.`}{' '}
+                                <Trans>
+                                    {formatBalance(received, toToken.decimals)} {toToken.symbol} swap completed
+                                    successfully.
+                                </Trans>{' '}
                                 <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />
                             </MuiLink>
                         ),
@@ -316,8 +321,8 @@ export const Confirm = memo(function Confirm() {
                     })
                 }
             } catch (error) {
-                showSnackbar(t`Swap`, {
-                    message: t`Wait too long for the confirmation.`,
+                showSnackbar(_(msg`Swap`), {
+                    message: <Trans>Wait too long for the confirmation.</Trans>,
                     variant: 'error',
                 })
             }
@@ -358,7 +363,7 @@ export const Confirm = memo(function Confirm() {
             const url = urlcat(basePath, RoutePaths.Transaction, { hash, chainId, mode })
             navigate(url, { replace: true })
         } catch (err) {
-            showSnackbar(t`Swap`, {
+            showSnackbar(_(msg`Swap`), {
                 message: (err as Error).message,
                 variant: 'error',
             })
@@ -388,7 +393,9 @@ export const Confirm = memo(function Confirm() {
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isSwappable || loading || dexIdsCount === 0
 
-    const networkTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
+    const networkTooltip = _(
+        msg`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`,
+    )
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -460,7 +467,7 @@ export const Confirm = memo(function Confirm() {
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: t`Network fee`,
+                                            title: _(msg`Network fee`),
                                             message: networkTooltip,
                                         })
                                     }}
@@ -526,7 +533,7 @@ export const Confirm = memo(function Confirm() {
                         <Typography className={classes.data}>{transaction?.data}</Typography>
                     :   null}
                     {showStale ?
-                        <Warning description={t`Quote expired. Update to receive a new quote.`} />
+                        <Warning description={_(msg`Quote expired. Update to receive a new quote.`)} />
                     :   null}
                 </div>
             </div>
@@ -540,14 +547,14 @@ export const Confirm = memo(function Confirm() {
                         onClick={async () => {
                             await updateQuote()
                         }}>
-                        {t`Update Quote`}
+                        <Trans>Update Quote</Trans>
                     </ActionButton>
                 :   <ActionButton fullWidth loading={loading} disabled={disabled} onClick={submit}>
                         {errorMessage ??
-                            (isSending ? t`Sending`
-                            : isCheckingApprove ? t`Checking Approve`
-                            : isApproving ? t`Approving`
-                            : t`Confirm Swap`)}
+                            (isSending ? <Trans>Sending</Trans>
+                            : isCheckingApprove ? <Trans>Checking Approve</Trans>
+                            : isApproving ? <Trans>Approving</Trans>
+                            : <Trans>Confirm Swap</Trans>)}
                     </ActionButton>
                 }
             </PluginWalletStatusBar>
