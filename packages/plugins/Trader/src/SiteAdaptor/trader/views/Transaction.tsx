@@ -533,6 +533,10 @@ export const Transaction = memo(function Transaction() {
                                     target="_blank">
                                     <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
                                 </a>
+                            : tx.kind === 'swap' ?
+                                <a href={EVMExplorerResolver.transactionLink(tx.chainId, tx.hash)} target="_blank">
+                                    <Icons.LinkOut color={theme.palette.maskColor.second} size={16} />
+                                </a>
                             :   null}
                         </div>
                     </div>
