@@ -1,21 +1,27 @@
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { createContainer } from '@masknet/shared-base-ui'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 
 function useMap(initialState?: Record<string, string>) {
-    const [map, setMap] = useState<Record<string, string>>({})
+    const [updatedMap, setUpdatedMap] = useState<Record<string, string>>(EMPTY_OBJECT)
 
     const setPair = useCallback((address: string, domain: string) => {
-        setMap((map) => {
+        setUpdatedMap((map) => {
             const key = address.toLowerCase()
-            if (map[key] === domain || !domain.includes('.')) return map
+            if (map?.[key] === domain || !domain.includes('.')) return map
             return { ...map, [key]: domain }
         })
     }, [])
+
+    const map = useMemo(() => {
+        return { ...initialState, ...updatedMap }
+    }, [initialState, updatedMap])
+
     const getDomain = useCallback(
         (address: string) => {
-            return initialState?.[address.toLowerCase()] || map[address.toLowerCase()]
+            return map[address.toLowerCase()]
         },
-        [map, initialState],
+        [map],
     )
 
     return { setPair, getDomain, map }

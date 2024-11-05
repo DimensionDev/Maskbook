@@ -1,15 +1,16 @@
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { formatTimestamp } from '../components/share.js'
-import { type Transaction } from '@masknet/web3-shared-base'
-import { format as formatDateTime } from 'date-fns'
-import { memo, type HTMLProps } from 'react'
 import { NetworkIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
+import { type Transaction } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
-import { FeedSummary } from './FeedSummary.js'
-import { FinanceFeedDetailsModal } from '../modals/modals.js'
+import { format as formatDateTime } from 'date-fns'
+import { memo, type HTMLProps } from 'react'
+import { formatTimestamp } from '../components/share.js'
 import { useFeedOwner } from '../contexts/FeedOwnerContext.js'
+import { FinanceFeedDetailsModal } from '../modals/modals.js'
+import { FeedSummary } from './FeedSummary.js'
 
 const useStyles = makeStyles()((theme) => ({
     verbose: {},
@@ -39,6 +40,7 @@ export interface FinanceFeedProps extends HTMLProps<HTMLDivElement> {
 export const FinanceFeed = memo<FinanceFeedProps>(function FinanceFeed({ transaction, verbose, className, ...rest }) {
     const { classes, cx } = useStyles()
     const feedOwner = useFeedOwner()
+    const { map } = ScopedDomainsContainer.useContainer()
     return (
         <article
             {...rest}
@@ -46,6 +48,7 @@ export const FinanceFeed = memo<FinanceFeedProps>(function FinanceFeed({ transac
             onClick={() => {
                 if (verbose) return
                 FinanceFeedDetailsModal.open({
+                    scopedDomainsMap: map,
                     transaction,
                     feedOwner,
                 })

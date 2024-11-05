@@ -1,6 +1,7 @@
 import { Trans } from '@lingui/macro'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
+import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { DialogContent } from '@mui/material'
 import { type PropsWithChildren } from 'react'
 import { FinanceFeed, type FinanceFeedProps } from '../../FinanceFeeds/FinanceFeed.js'
@@ -20,11 +21,13 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface FeedDetailsDialogProps
+export interface FeedDetailsDialogProps
     extends PropsWithChildren<InjectedDialogProps>,
-        Pick<FinanceFeedProps, 'transaction'> {}
+        Pick<FinanceFeedProps, 'transaction'> {
+    scopedDomainsMap: Record<string, string>
+}
 
-export function FinanceFeedDetailsDialog({ transaction, onClose, ...rest }: FeedDetailsDialogProps) {
+export function FinanceFeedDetailsDialog({ transaction, onClose, scopedDomainsMap, ...rest }: FeedDetailsDialogProps) {
     const { classes } = useStyles()
 
     return (
@@ -38,8 +41,10 @@ export function FinanceFeedDetailsDialog({ transaction, onClose, ...rest }: Feed
                 onClose?.()
             }}>
             <DialogContent className={classes.content}>
-                <FinanceFeed transaction={transaction} verbose />
-                <TxDetails transaction={transaction} />
+                <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
+                    <FinanceFeed transaction={transaction} verbose />
+                    <TxDetails transaction={transaction} />
+                </ScopedDomainsContainer.Provider>
             </DialogContent>
         </InjectedDialog>
     )

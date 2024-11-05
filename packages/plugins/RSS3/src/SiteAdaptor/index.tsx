@@ -1,7 +1,13 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { NetworkPluginID, type SocialAccount, SocialAddressType, type SocialIdentity } from '@masknet/shared-base'
+import {
+    EMPTY_OBJECT,
+    NetworkPluginID,
+    type SocialAccount,
+    SocialAddressType,
+    type SocialIdentity,
+} from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { SearchResultType } from '@masknet/web3-shared-base'
 import { Box } from '@mui/material'
 import { base } from '../base.js'
@@ -9,6 +15,7 @@ import { PLUGIN_ID } from '../constants.js'
 import { FinanceFeeds } from './FinanceFeeds/index.js'
 import { Modals } from './modals/index.js'
 import { SocialFeeds } from './SocialFeeds/index.js'
+import { useMemo } from 'react'
 
 function shouldDisplay(_?: SocialIdentity, socialAccount?: SocialAccount<Web3Helper.ChainIdAll>) {
     return socialAccount?.pluginID === NetworkPluginID.PLUGIN_EVM
@@ -48,10 +55,19 @@ const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
     priority: 2,
     UI: {
         TabContent({ result }) {
+            const hasAddress = result.type === SearchResultType.Domain || result.type === SearchResultType.EOA
+            const map = useMemo(() => {
+                if (!hasAddress || !result.address || !result.domain) return EMPTY_OBJECT
+                return {
+                    [result.address]: result.domain,
+                }
+            }, [result])
             if (result.type === SearchResultType.Domain || result.type === SearchResultType.EOA) {
                 return (
                     <Box style={{ minHeight: 300 }}>
-                        <FinanceFeeds address={result.address} />
+                        <ScopedDomainsContainer.Provider initialState={map}>
+                            <FinanceFeeds address={result.address} />
+                        </ScopedDomainsContainer.Provider>
                     </Box>
                 )
             }

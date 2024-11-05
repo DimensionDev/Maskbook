@@ -5,6 +5,7 @@ import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 // cspell:disable-next-line
+import { ScopedDomainsContainer, useReverseAddress } from '@masknet/web3-hooks-base'
 import { type IntermediateRepresentation, type Opts } from 'linkifyjs'
 import { useState, type ComponentProps } from 'react'
 import { UserAvatar } from './UserAvatar/index.js'
@@ -45,10 +46,13 @@ export function AccountLabel({
 }: AccountLabelProps) {
     const { classes, cx } = useStyles()
     const [reversed, setReversed] = useState('')
+    const { getDomain } = ScopedDomainsContainer.useContainer()
+    const { data: reversedName } = useReverseAddress(undefined, address)
+    const name = handle || (address ? getDomain(address) || reversedName : reversedName)
     const label =
-        handle ?
+        name ?
             <Label className={className} {...rest}>
-                {handle}
+                {name}
             </Label>
         : address ?
             <ReversedAddress

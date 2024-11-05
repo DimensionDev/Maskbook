@@ -10,6 +10,7 @@ export interface FinanceFeedDetailsModalOpenProps
     extends Omit<PropsWithChildren<InjectedDialogProps>, 'open'>,
         Pick<FinanceFeedProps, 'transaction'> {
     feedOwner: FeedOwnerOptions
+    scopedDomainsMap: Record<string, string>
 }
 
 export function FinanceFeedDetailsModal({ ref }: SingletonModalProps<FinanceFeedDetailsModalOpenProps>) {
