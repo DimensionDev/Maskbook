@@ -12,6 +12,7 @@ import { useCallback, useImperativeHandle, useState, useRef, memo, useMemo, useE
 import { BadgeRenderer } from './BadgeRenderer.js'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useLatest } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -83,7 +84,8 @@ const emptyMessage = makeTypedMessageText('')
 // This is an **uncontrolled** component. (performance consideration, because it will be re-rendered very frequently).
 export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedMessageEditorProps) {
     const { _ } = useLingui()
-    const { onChange, readonly, ref } = props
+    const { readonly, ref } = props
+    const onChange = useLatest(props.onChange)
     const { classes, cx } = useStyles()
 
     const [value, setValue] = useState(props.defaultValue ?? emptyMessage)
@@ -95,29 +97,20 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
 
     currentValue.current = value
 
-    const setMessage = useCallback(
-        (value: SerializableTypedMessages) => {
-            if (isTypedMessageEqual(currentValue.current, value)) return
-            setValue(value)
-            currentValue.current = value
-            onChange?.(value)
-        },
-        [onChange],
-    )
-    const setAsText = useCallback(
-        (val: string | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
-            const text = typeof val === 'string' ? val : val.target.value
-            const newValue = makeTypedMessageText(text, currentValue.current.meta)
-            setMessage(newValue)
-        },
-        [setMessage],
-    )
-    const deleteMetaID = useCallback(
-        (meta: string) => {
-            setMessage(editTypedMessageMeta(currentValue.current, (map) => map.delete(meta)))
-        },
-        [setMessage],
-    )
+    const setMessage = useCallback((value: SerializableTypedMessages) => {
+        if (isTypedMessageEqual(currentValue.current, value)) return
+        setValue(value)
+        currentValue.current = value
+        onChange.current?.(value)
+    }, [])
+    const setAsText = useCallback((val: string | React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
+        const text = typeof val === 'string' ? val : val.target.value
+        const newValue = makeTypedMessageText(text, currentValue.current.meta)
+        setMessage(newValue)
+    }, [])
+    const deleteMetaID = useCallback((meta: string) => {
+        setMessage(editTypedMessageMeta(currentValue.current, (map) => map.delete(meta)))
+    }, [])
     const refItem = useMemo((): TypedMessageEditorRef => {
         return {
             get estimatedLength() {

@@ -215,7 +215,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                         autoFocus
                         readonly={sending}
                         ref={(element) => {
-                            setEditor(element)
+                            if (Editor !== element) setEditor(element)
                             if (element) updatePostSize(element.estimatedLength)
                         }}
                         onChange={(message) => {
