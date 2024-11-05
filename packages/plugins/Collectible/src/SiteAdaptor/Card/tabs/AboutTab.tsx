@@ -1,13 +1,13 @@
-import { BigNumber } from 'bignumber.js'
-import { first } from 'lodash-es'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenOrder } from '@masknet/web3-shared-base'
-import { CollectibleCard } from '../CollectibleCard.js'
+import { BigNumber } from 'bignumber.js'
+import { first } from 'lodash-es'
+import { useMemo } from 'react'
+import { Context } from '../../Context/index.js'
 import { FigureCard } from '../../Shared/FigureCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
-import { Context } from '../../Context/index.js'
-import { useMemo } from 'react'
+import { CollectibleCard } from '../CollectibleCard.js'
 
 const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCard }) => ({
     body: {

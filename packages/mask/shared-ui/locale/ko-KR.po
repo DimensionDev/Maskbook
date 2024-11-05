@@ -380,6 +380,10 @@ msgstr ""
 msgid "Block Explorer URL"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
+msgid "Bridge"
+msgstr ""
+
 #: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx
 msgid "Browse the Web3 footprints of your X friends, enjoy the freedom of Web3."
 msgstr ""
@@ -550,6 +554,10 @@ msgstr "완료됨"
 msgid "Confirm"
 msgstr "확인"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Confirm Bridge"
+msgstr ""
+
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
@@ -558,6 +566,10 @@ msgstr "비밀번호 확인"
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Confirm Payment Password"
 msgstr "결재 비밀번호 다시 설정"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Confirm Swap"
+msgstr ""
 
 #: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any time."
@@ -1015,6 +1027,11 @@ msgstr "공개"
 msgid "Example: Alice"
 msgstr "예: Alice"
 
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Trader/Header.tsx
+msgid "Exchange"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
@@ -1249,6 +1266,10 @@ msgstr ""
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "높음"
+
+#: popups/pages/Trader/Header.tsx
+msgid "History"
+msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "I wrote down those words in the correct order"
@@ -1662,6 +1683,10 @@ msgstr ""
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Network error or execute smart contract failed."
 msgstr "네트워크나 컨트랙트 오류"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Network fee"
+msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network Name"
@@ -2079,6 +2104,11 @@ msgstr "속성"
 msgid "Public Key: <0>{publicKey}</0>"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Trader/Header.tsx
+msgid "Quote Route"
+msgstr ""
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
@@ -2262,6 +2292,10 @@ msgstr "월렛 선택 및 연결"
 msgid "Select language"
 msgstr "언어 선택"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Select Liquidity"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Select the contents of the backup"
 msgstr "백업 내용을 선택하세요."
@@ -2386,6 +2420,10 @@ msgstr ""
 msgid "Skip"
 msgstr "넘어가기"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Slippage"
+msgstr ""
+
 #: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
@@ -2465,6 +2503,7 @@ msgstr ""
 msgid "Supported Sites"
 msgstr "지원되는 사이트"
 
+#: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 msgid "Swap"
 msgstr ""
@@ -2712,6 +2751,14 @@ msgstr ""
 #: popups/pages/Wallet/Transfer/index.tsx
 msgid "Tokens"
 msgstr "토큰"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Trading Route"
+msgstr ""
+
+#: popups/pages/Trader/Header.tsx
+msgid "Transaction Details"
+msgstr ""
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Fee"

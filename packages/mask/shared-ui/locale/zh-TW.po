@@ -380,6 +380,10 @@ msgstr ""
 msgid "Block Explorer URL"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
+msgid "Bridge"
+msgstr ""
+
 #: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx
 msgid "Browse the Web3 footprints of your X friends, enjoy the freedom of Web3."
 msgstr ""
@@ -550,6 +554,10 @@ msgstr ""
 msgid "Confirm"
 msgstr "確認"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Confirm Bridge"
+msgstr ""
+
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
@@ -558,6 +566,10 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Confirm Payment Password"
 msgstr "再次輸入支付密碼"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Confirm Swap"
+msgstr ""
 
 #: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any time."
@@ -1015,6 +1027,11 @@ msgstr ""
 msgid "Example: Alice"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Trader/Header.tsx
+msgid "Exchange"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
@@ -1248,6 +1265,10 @@ msgstr ""
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "High"
+msgstr ""
+
+#: popups/pages/Trader/Header.tsx
+msgid "History"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
@@ -1661,6 +1682,10 @@ msgstr ""
 
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Network error or execute smart contract failed."
+msgstr ""
+
+#: popups/pages/Trader/Header.tsx
+msgid "Network fee"
 msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx
@@ -2079,6 +2104,11 @@ msgstr ""
 msgid "Public Key: <0>{publicKey}</0>"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Trader/Header.tsx
+msgid "Quote Route"
+msgstr ""
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
@@ -2262,6 +2292,10 @@ msgstr ""
 msgid "Select language"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
+msgid "Select Liquidity"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Select the contents of the backup"
 msgstr ""
@@ -2386,6 +2420,10 @@ msgstr ""
 msgid "Skip"
 msgstr "跳過"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Slippage"
+msgstr ""
+
 #: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
@@ -2465,6 +2503,7 @@ msgstr ""
 msgid "Supported Sites"
 msgstr ""
 
+#: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 msgid "Swap"
 msgstr ""
@@ -2711,6 +2750,14 @@ msgstr ""
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
 msgid "Tokens"
+msgstr ""
+
+#: popups/pages/Trader/Header.tsx
+msgid "Trading Route"
+msgstr ""
+
+#: popups/pages/Trader/Header.tsx
+msgid "Transaction Details"
 msgstr ""
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx
