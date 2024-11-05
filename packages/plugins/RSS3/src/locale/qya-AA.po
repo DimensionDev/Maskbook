@@ -1,16 +1,14 @@
 msgid ""
 msgstr ""
-"POT-Creation-Date: 1970-01-01 00:00+0000\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"X-Generator: @lingui/cli\n"
-"Language: qya\n"
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2024-11-05 07:15\n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2024-11-05 11:54\n"
 "Last-Translator: \n"
+"Language: qya_AA\n"
 "Language-Team: Quenya\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Crowdin-Project: mask-network\n"
 "X-Crowdin-Project-ID: 468872\n"
@@ -29,14 +27,6 @@ msgstr "crwdns32842:00={0}crwdnd32842:0user={user}crwdnd32842:0platform={platfor
 #: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
 msgid "{0, select, Post {<0/><1>{handle}</1> published a post on <2>{1}</2>} Comment {<3/><4>{handle}</4> made a comment on <5>{2}</5>} Mirror {<6/><7>{3}</7> mirrored a post post by<8/><9>{handle}</9> on <10>{4}</10>} Quote {<11/><12>{handle}</12> quoted a post post on <13>{5}</13>} other {<14/><15>{handle}</15> post stuff on <16>{6}</16>}}"
 msgstr "crwdns35418:00={0}crwdnd35418:0handle={handle}crwdnd35418:01={1}crwdnd35418:0handle={handle}crwdnd35418:02={2}crwdnd35418:03={3}crwdnd35418:0handle={handle}crwdnd35418:04={4}crwdnd35418:0handle={handle}crwdnd35418:05={5}crwdnd35418:0handle={handle}crwdnd35418:06={6}crwdne35418:0"
-
-#: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
-#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} Mirror {<4>{3}</4> mirrored a post post by <5>{handle}</5> on <6>{4}</6>} Quote {<7>{5}</7> quoted a post post on <8>{6}</8>} other {<9>{handle}</9> post stuff on <10>{7}</10>}}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/SocialFeeds/SocialFeed.tsx
-#~ msgid "{0, select, Post {<0>{handle}</0> published a post on <1>{1}</1>} Comment {<2>{handle}</2> made a comment on <3>{2}</3>} other {<4>{handle}</4> post stuff on <5>{3}</5>}}"
-#~ msgstr ""
 
 #: src/SiteAdaptor/FeedFilters.tsx
 msgid "{0} Networks"
@@ -95,32 +85,8 @@ msgid "<0/> unapproved <1>{0}</1>"
 msgstr "crwdns35430:0{0}crwdne35430:0"
 
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>{txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}}<1>{0} {1}</1>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/>{txType, select, deploy {deployed} execute {executed}}<1/>"
 msgstr "crwdns35432:0txType={txType}crwdne35432:0"
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>{txType, select, trade {traded} mint {minted} other {traded}}<1>{0} {1}</1> for<2>{2} {3}</2>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>approved with<1/>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>approved<1>{0} {1}</1>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>interacted with<1/>"
-#~ msgstr ""
-
-#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-#~ msgid "<0/>unapproved<1>{0}</1>"
-#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/ProfileLinkAction.tsx
 msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed}} <1>{other}</1> on <2>{1}</2>"
@@ -194,10 +160,6 @@ msgstr "crwdns32876:0{user}crwdnd32876:0{option}crwdnd32876:0{platform}crwdne328
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
 msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
 msgstr "crwdns32274:0user={user}crwdnd32274:00={0}crwdnd32274:01={1}crwdnd32274:0formattedAddress={formattedAddress}crwdnd32274:02={2}crwdnd32274:03={3}crwdnd32274:04={4}crwdne32274:0"
-
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
-#~ msgid "Actions"
-#~ msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
