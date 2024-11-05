@@ -23,4 +23,3 @@ msgstr "法币入金"
 #: src/SiteAdaptor/index.tsx
 msgid "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
 msgstr ""
-
