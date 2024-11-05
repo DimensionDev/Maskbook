@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:47\n"
+"PO-Revision-Date: 2024-11-05 07:15\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -380,6 +380,10 @@ msgstr "crwdns29940:0crwdne29940:0"
 msgid "Block Explorer URL"
 msgstr "crwdns29944:0crwdne29944:0"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Bridge"
+msgstr "crwdns35394:0crwdne35394:0"
+
 #: content-script/site-adaptors/twitter.com/injection/ToolboxHint_UI.tsx
 msgid "Browse the Web3 footprints of your X friends, enjoy the freedom of Web3."
 msgstr "crwdns32008:0crwdne32008:0"
@@ -550,6 +554,10 @@ msgstr "crwdns29562:0crwdne29562:0"
 msgid "Confirm"
 msgstr "crwdns29564:0crwdne29564:0"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Confirm Bridge"
+msgstr "crwdns35396:0crwdne35396:0"
+
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
@@ -558,6 +566,10 @@ msgstr "crwdns29988:0crwdne29988:0"
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Confirm Payment Password"
 msgstr "crwdns29566:0crwdne29566:0"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Confirm Swap"
+msgstr "crwdns35398:0crwdne35398:0"
 
 #: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any time."
@@ -1015,6 +1027,11 @@ msgstr "crwdns30138:0crwdne30138:0"
 msgid "Example: Alice"
 msgstr "crwdns29608:0crwdne29608:0"
 
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Trader/Header.tsx
+msgid "Exchange"
+msgstr "crwdns35400:0crwdne35400:0"
+
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
@@ -1249,6 +1266,10 @@ msgstr "crwdns30218:0crwdne30218:0"
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "crwdns30220:0crwdne30220:0"
+
+#: popups/pages/Trader/Header.tsx
+msgid "History"
+msgstr "crwdns35402:0crwdne35402:0"
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "I wrote down those words in the correct order"
@@ -1662,6 +1683,10 @@ msgstr "crwdns32084:0crwdne32084:0"
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Network error or execute smart contract failed."
 msgstr "crwdns30348:0crwdne30348:0"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Network fee"
+msgstr "crwdns35404:0crwdne35404:0"
 
 #: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Network Name"
@@ -2079,6 +2104,11 @@ msgstr "crwdns30464:0crwdne30464:0"
 msgid "Public Key: <0>{publicKey}</0>"
 msgstr "crwdns32128:0{publicKey}crwdne32128:0"
 
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Trader/Header.tsx
+msgid "Quote Route"
+msgstr "crwdns35406:0crwdne35406:0"
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
@@ -2262,6 +2292,10 @@ msgstr "crwdns30530:0crwdne30530:0"
 msgid "Select language"
 msgstr "crwdns30532:0crwdne30532:0"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Select Liquidity"
+msgstr "crwdns35408:0crwdne35408:0"
+
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Select the contents of the backup"
 msgstr "crwdns29744:0crwdne29744:0"
@@ -2386,6 +2420,10 @@ msgstr "crwdns30566:0crwdne30566:0"
 msgid "Skip"
 msgstr "crwdns29760:0crwdne29760:0"
 
+#: popups/pages/Trader/Header.tsx
+msgid "Slippage"
+msgstr "crwdns35410:0crwdne35410:0"
+
 #: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
@@ -2464,6 +2502,11 @@ msgstr "crwdns32140:0crwdne32140:0"
 #: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr "crwdns30596:0crwdne30596:0"
+
+#: popups/pages/Trader/Header.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
+msgid "Swap"
+msgstr "crwdns35412:0crwdne35412:0"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
@@ -2708,6 +2751,14 @@ msgstr "crwdns30666:0crwdne30666:0"
 #: popups/pages/Wallet/Transfer/index.tsx
 msgid "Tokens"
 msgstr "crwdns30668:0crwdne30668:0"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Trading Route"
+msgstr "crwdns35414:0crwdne35414:0"
+
+#: popups/pages/Trader/Header.tsx
+msgid "Transaction Details"
+msgstr "crwdns35416:0crwdne35416:0"
 
 #: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Transaction Fee"
