@@ -244,19 +244,24 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
     const gas = gasConfig.gas ?? transaction?.gasLimit ?? gasLimit
     const [{ loading: isSending }, sendBridge] = useAsyncFn(async () => {
         if (!transaction?.data) return
-        return Web3.sendTransaction({
-            data: transaction.data,
-            to: transaction.to,
-            from: account,
-            value: transaction.value,
-            gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-            gas: fromChainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
-            maxPriorityFeePerGas:
-                'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
-                    gasConfig.maxFeePerGas
-                :   transaction.maxPriorityFeePerGas,
-            _disableSnackbar: true,
-        })
+        return Web3.sendTransaction(
+            {
+                data: transaction.data,
+                to: transaction.to,
+                from: account,
+                value: transaction.value,
+                gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
+                gas: fromChainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
+                maxPriorityFeePerGas:
+                    'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
+                        gasConfig.maxFeePerGas
+                    :   transaction.maxPriorityFeePerGas,
+                _disableSnackbar: true,
+            },
+            {
+                silent: Sniffings.is_popup_page,
+            },
+        )
     }, [transaction, fromChainId, account, gasConfig, Web3, gas])
 
     const [isBridgable, errorMessage] = useBridgable()
