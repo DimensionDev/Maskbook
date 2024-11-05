@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:46\n"
+"PO-Revision-Date: 2024-11-05 18:22\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -33,5 +33,10 @@ msgid "Optimize the display of search results about ENS in social media."
 msgstr ""
 
 #: src/SiteAdaptor/PluginHeader.tsx
-msgid "Powered by {0}"
+#~ msgid "Powered by {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx
+msgid "Powered by <0><1/></0><2/>"
 msgstr ""
+
