@@ -42,11 +42,17 @@
         "oX+QCa": "<0>Powered by</0><1>Mask Network</1>",
         "BkN2qg": "<0>Service Agreement</0> and <1>Privacy Policy</1>",
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
+        "Eda+dy": [
+            "🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
+            ["encrypted"],
+            " to send your first encrypted tweet."
+        ],
         "3dAaqV": [
             "📃📃📃 Try to permanently use decentralized file storage on ",
             ["sns"],
             ". Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."
         ],
+        "8wEOMN": "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.",
         "lKldOY": "12単語の復元フレーズは、ペルソナデータを回復するために使用されます。",
         "llLBQ1": "トークン",
         "uyJsf6": "詳細",
@@ -278,6 +284,7 @@
         "J2eKUI": "ファイル",
         "RZOA0N": "Find Mask Network in the extension list and click the <0/> button.",
         "IX1M/E": "フロア価格",
+        "u8AUxz": ["Follow @", ["officialAccount"], " for Web3 updates and insights."],
         "exaugT": "Follow @realMaskNetwork to explore Web3.",
         "Ea4oxV": "システムに従う",
         "X200Sr": "パスワードを忘れましたか？",
@@ -662,6 +669,7 @@
         "yFpcbN": "このリクエストはフィッシングの添付かもしれません。私はこれを理解し続けたいです。",
         "Gw91G1": "このリクエストは、将来的にのみ署名する必要があります。",
         "dAMTl9": ["この RPC URL は現在 ", ["0"], " ネットワークによって使用されています"],
+        "oZw0Iw": "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑",
         "I6BEL9": [
             "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
             ["encrypted"],

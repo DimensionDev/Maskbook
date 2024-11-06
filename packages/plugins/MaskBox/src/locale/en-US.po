@@ -43,6 +43,10 @@ msgstr ""
 msgid "Drawing"
 msgstr ""
 
+#: src/SiteAdaptor/components/DrawResultDialog.tsx
+msgid "I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box!"
+msgstr ""
+
 #: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Insufficient balance"
 msgstr ""

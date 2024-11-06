@@ -11,6 +11,8 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
+import { useLingui } from '@lingui/react'
+import { msg } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     main: { padding: 8 },
@@ -40,7 +42,10 @@ export function DrawResultDialog(props: DrawResultDialogProps) {
     const { lastPurchasedTokenIds } = useContainer(Context)
 
     const postLink = usePostLink()
-    const shareText = `I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box! \n ${postLink}`
+    const { _ } = useLingui()
+    const shareText =
+        _(msg`I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box!`) +
+        `\n${postLink}`
 
     const onShare = () => {
         onClose()

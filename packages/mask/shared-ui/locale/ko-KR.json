@@ -42,11 +42,17 @@
         "oX+QCa": "<0>Powered by</0><1>Mask Network</1>",
         "BkN2qg": "<0>Service Agreement</0> and <1>Privacy Policy</1>",
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
+        "Eda+dy": [
+            "🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
+            ["encrypted"],
+            " to send your first encrypted tweet."
+        ],
         "3dAaqV": [
             "📃📃📃 Try to permanently use decentralized file storage on ",
             ["sns"],
             ". Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."
         ],
+        "8wEOMN": "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.",
         "lKldOY": "12개 복구 문구로 페르소나 데어터를 복구할 수 있습니다.",
         "llLBQ1": "a token",
         "uyJsf6": "알아보기",
@@ -278,6 +284,7 @@
         "J2eKUI": "파일",
         "RZOA0N": "Find Mask Network in the extension list and click the <0/> button.",
         "IX1M/E": "최저 가격",
+        "u8AUxz": ["Follow @", ["officialAccount"], " for Web3 updates and insights."],
         "exaugT": "Follow @realMaskNetwork to explore Web3.",
         "Ea4oxV": "시스템에 따라 설정",
         "X200Sr": "결제 비밀번호를 잊었습니까?",
@@ -662,6 +669,7 @@
         "yFpcbN": "This request may be a phishing attach. I understand this and want to continue.",
         "Gw91G1": "This request should only be sign in the future.",
         "dAMTl9": ["이 RPC URL는 ", ["0"], " 네트워크에서 사용되고 있습니다."],
+        "oZw0Iw": "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑",
         "I6BEL9": [
             "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
             ["encrypted"],

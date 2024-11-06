@@ -239,8 +239,9 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
         const sender = payload.senderName
         const networkName = network?.name || ''
         if (availability?.isClaimed) {
-            return _(
-                msg`I just claimed an NFT lucky drop from @${sender} on ${networkName} network. ${account_promote}\n${promote_short}\n#mask_io #LuckyDrop\n${postLink}`,
+            return (
+                _(msg`I just claimed an NFT lucky drop from @${sender} on ${networkName} network.`) +
+                `${account_promote}\n${promote_short}\n#mask_io #LuckyDrop\n${postLink}`
             )
         }
         return _(

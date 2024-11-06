@@ -23,28 +23,36 @@ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{claimed}\\n{promote_short}\\n{0}"
+#~ msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#~ msgid "{claimed}\\n{promote_short}\\n{0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "{head} Follow @{0} (mask.io) to claim lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{head} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
-msgstr ""
+#~ msgid "{head} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{notClaimed}\\nClaim on Farcaster: {link}"
-msgstr ""
+#~ msgid "{notClaimed}\\nClaim on Farcaster: {link}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{notClaimed}\\nClaim on Lens: {link}"
-msgstr ""
+#~ msgid "{notClaimed}\\nClaim on Lens: {link}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{notClaimed}\\nClaim on: {link}"
-msgstr ""
+#~ msgid "{notClaimed}\\nClaim on: {link}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -56,12 +64,20 @@ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}.\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
+msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !\\n\\nClaim on Lens: {link}"
+#~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}.\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !"
 msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#~ msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !\\n\\nClaim on Lens: {link}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -128,6 +144,19 @@ msgstr ""
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Claim"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on Farcaster: {link}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on Lens: {link}"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on: {link}"
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
@@ -298,6 +327,10 @@ msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Grow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
 msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
 msgstr ""
 
@@ -310,8 +343,12 @@ msgid "I just claimed a lucky drop from @{0} on {1} network."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network. {account_promote}\\n{promote_short}\\n#mask_io #LuckyDrop\\n{postLink}"
+msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network."
 msgstr ""
+
+#: src/SiteAdaptor/RedPacketNft.tsx
+#~ msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network. {account_promote}\\n{promote_short}\\n#mask_io #LuckyDrop\\n{postLink}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 msgid "Identical"

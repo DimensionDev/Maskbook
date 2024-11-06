@@ -45,12 +45,12 @@ msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to de
 msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
-msgstr ""
+#~ msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "{promote_red_packet} Follow @{officialAccount} for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
-msgstr ""
+#~ msgid "{promote_red_packet} Follow @{officialAccount} for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
@@ -84,8 +84,16 @@ msgstr ""
 msgid "<0>To</0>: <1>{to}</1>"
 msgstr ""
 
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+msgid "🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
+msgstr ""
+
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "📃📃📃 Try to permanently use decentralized file storage on {sns}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."
+msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
@@ -1099,6 +1107,10 @@ msgstr ""
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Floor price"
+msgstr ""
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Follow @{officialAccount} for Web3 updates and insights."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
@@ -2700,8 +2712,12 @@ msgid "This RPC URL is currently used by the {0} network"
 msgstr ""
 
 #: content-script/site-adaptors/twitter.com/customization/i18n.ts
-msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
+msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
 msgstr ""
+
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
+#~ msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."

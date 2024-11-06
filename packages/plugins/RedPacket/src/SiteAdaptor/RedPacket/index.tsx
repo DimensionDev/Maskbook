@@ -204,22 +204,27 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         (hasClaimed: boolean) => {
             const sender = handle ?? ''
             const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
-            const farcaster_lens_claimed = _(
-                msg`🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @${sender} !\n\nClaim on Lens: ${link}`,
-            )
-            const notClaimed = _(
-                msg`🤑 Check this Lucky Drop  🧧💰✨ sent by @${sender}.\n\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\n`,
-            )
+            const farcaster_lens_claimed =
+                _(msg`🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @${sender} !`) +
+                '\n\n' +
+                _(msg`Claim on Lens: ${link}`)
+            const notClaimed =
+                _(msg`🤑 Check this Lucky Drop  🧧💰✨ sent by @${sender}.`) +
+                '\n\n' +
+                _(
+                    msg`Grow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !`,
+                ) +
+                '\n'
             if (isOnFirefly) {
                 if (platform === 'farcaster') {
                     if (hasClaimed) {
                         return farcaster_lens_claimed
-                    } else return _(msg`${notClaimed}\nClaim on Farcaster: ${link}`)
+                    } else return notClaimed + '\n' + _(msg`Claim on Farcaster: ${link}`)
                 } else if (platform === 'lens') {
                     if (hasClaimed) {
                         return farcaster_lens_claimed
-                    } else return _(msg`${notClaimed}\nClaim on Lens: ${link}`)
-                } else return _(msg`${notClaimed}\nClaim on: ${link}`)
+                    } else return notClaimed + '\n' + _(msg`Claim on Lens: ${link}`)
+                } else return notClaimed + '\n' + _(msg`Claim on: ${link}`)
             }
             const isOnTwitter = Sniffings.is_twitter_page
             const isOnFacebook = Sniffings.is_facebook_page
@@ -235,19 +240,17 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     msg`I just claimed a lucky drop from @${shareTextOption.sender} on ${shareTextOption.network} network.`,
                 )
                 return isOnTwitter || isOnFacebook ?
-                        _(
-                            msg`${claimed} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`,
-                        )
-                    :   _(msg`${claimed}\n${promote_short}\n${shareTextOption.payload}`)
+                        _(msg`${claimed} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.`) +
+                            `\npromote_short\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
+                    :   `${claimed}\n${promote_short}\n${shareTextOption.payload}`
             }
             const head = _(
                 msg`Hi friends, I just found a lucky drop sent by @${shareTextOption.sender} on ${shareTextOption.network} network.`,
             )
 
             return isOnTwitter || isOnFacebook ?
-                    _(
-                        msg`${head} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`,
-                    )
+                    _(msg`${head} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.`) +
+                        `\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
                 :   `${head}\n${promote_short}\n${shareTextOption.payload}`
         },
         [payload, link, claimTxHash, network?.name, platform, isOnFirefly, handle, _],

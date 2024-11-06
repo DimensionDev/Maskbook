@@ -97,24 +97,31 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
         const recipientName = recipient?.label || recipientEns
         const promote = _(msg`Install https://mask.io/download-links to send your first tip.`)
         if (isTokenTip) {
-            return _(
-                msg`I just tipped ${amount} ${select(token?.symbol ? 'namedToken' : 'token', {
-                    namedToken: token?.symbol || '',
-                    other: 'token',
-                })} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
-                    name: 'wallet',
-                    address: 'wallet address',
-                    other: 'wallet',
-                })} ${recipientName || recipientAddress}\n\n${promote}`,
+            return (
+                _(
+                    msg`I just tipped ${amount} ${select(token?.symbol ? 'namedToken' : 'token', {
+                        namedToken: token?.symbol || '',
+                        other: 'token',
+                    })} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
+                        name: 'wallet',
+                        address: 'wallet address',
+                        other: 'wallet',
+                    })} ${recipientName || recipientAddress}`,
+                ) + `\n\n${promote}`
             )
         } else {
             const NFT_Name = nonFungibleTokenContract?.name || 'NFT'
-            return _(
-                msg`I just tipped a ${NFT_Name} to @${recipientUserId}'s ${select(recipientName ? 'name' : 'address', {
-                    name: 'wallet',
-                    address: 'wallet address',
-                    other: 'wallet',
-                })} ${recipientAddress}\n\n${promote}`,
+            return (
+                _(
+                    msg`I just tipped a ${NFT_Name} to @${recipientUserId}'s ${select(
+                        recipientName ? 'name' : 'address',
+                        {
+                            name: 'wallet',
+                            address: 'wallet address',
+                            other: 'wallet',
+                        },
+                    )} ${recipientAddress}`,
+                ) + `\n\n${promote}`
             )
         }
     }, [amount, isTokenTip, nonFungibleTokenContract?.name, token, recipient, recipientUserId, _, recipientEns])

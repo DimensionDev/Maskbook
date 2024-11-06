@@ -10,6 +10,7 @@
             " $",
             ["symbol"]
         ],
+        "nMUHWK": [["claimed"], " Follow @", ["0"], " (mask.io) to claim lucky drops."],
         "ElFfM9": [
             ["claimed"],
             " Follow @",
@@ -20,6 +21,7 @@
             ["1"]
         ],
         "SNhOHw": [["claimed"], "\\n", ["promote_short"], "\\n", ["0"]],
+        "HvfPuG": [["head"], " Follow @", ["0"], " (mask.io) to claim lucky drops."],
         "0dXDGt": [
             ["head"],
             " Follow @",
@@ -45,11 +47,13 @@
             ["postLink"]
         ],
         "0aBHf4": ["<0>", ["0"], "</0> ", ["1", "plural", { "one": "NFT", "other": "NFTs" }], "NFT"],
+        "r0eAyS": ["🤑 Check this Lucky Drop  🧧💰✨ sent by @", ["sender"], "."],
         "jIsF03": [
             "🤑 Check this Lucky Drop  🧧💰✨ sent by @",
             ["sender"],
             ".\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
         ],
+        "JkfFCL": ["🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @", ["sender"], " !"],
         "1y9bVB": [
             "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @",
             ["sender"],
@@ -71,6 +75,9 @@
         "ihTzdK": "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products.",
         "MpAucy": "コレクションを選択してください",
         "hom7qf": "受取る",
+        "4iA6eo": ["Claim on Farcaster: ", ["link"]],
+        "Jc0uDj": ["Claim on Lens: ", ["link"]],
+        "3vMA+/": ["Claim on: ", ["link"]],
         "s13D96": "要件を要求する",
         "hRWvpI": "受け取り済",
         "bTp+bt": ["Claimed ", ["0"], "/", ["1"]],
@@ -135,9 +142,11 @@
             ["0"],
             " にラッキードロップスマートコントラクトへのアクセスを許可します。トークンごとに1回だけ行う必要があります"
         ],
+        "S0movx": "Grow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !",
         "bPNJ+3": ["Hi friends, I just found a lucky drop sent by @", ["0"], " on ", ["1"], " network."],
         "0caMy7": "履歴",
         "5Jczad": ["I just claimed a lucky drop from @", ["0"], " on ", ["1"], " network."],
+        "jbu3VI": ["I just claimed an NFT lucky drop from @", ["sender"], " on ", ["networkName"], " network."],
         "duwlhY": [
             "I just claimed an NFT lucky drop from @",
             ["sender"],

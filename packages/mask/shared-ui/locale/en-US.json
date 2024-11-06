@@ -42,11 +42,17 @@
         "oX+QCa": "<0>Powered by</0><1>Mask Network</1>",
         "BkN2qg": "<0>Service Agreement</0> and <1>Privacy Policy</1>",
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
+        "Eda+dy": [
+            "🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
+            ["encrypted"],
+            " to send your first encrypted tweet."
+        ],
         "3dAaqV": [
             "📃📃📃 Try to permanently use decentralized file storage on ",
             ["sns"],
             ". Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."
         ],
+        "8wEOMN": "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.",
         "lKldOY": "12-word recovery phrase is used to recover your persona data.",
         "llLBQ1": "a token",
         "uyJsf6": "About",
@@ -278,6 +284,7 @@
         "J2eKUI": "File",
         "RZOA0N": "Find Mask Network in the extension list and click the <0/> button.",
         "IX1M/E": "Floor price",
+        "u8AUxz": ["Follow @", ["officialAccount"], " for Web3 updates and insights."],
         "exaugT": "Follow @realMaskNetwork to explore Web3.",
         "Ea4oxV": "Follow System",
         "X200Sr": "Forgot payment password?",
@@ -662,6 +669,7 @@
         "yFpcbN": "This request may be a phishing attach. I understand this and want to continue.",
         "Gw91G1": "This request should only be sign in the future.",
         "dAMTl9": ["This RPC URL is currently used by the ", ["0"], " network"],
+        "oZw0Iw": "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑",
         "I6BEL9": [
             "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
             ["encrypted"],

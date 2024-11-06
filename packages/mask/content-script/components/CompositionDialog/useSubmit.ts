@@ -84,23 +84,21 @@ function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Me
     const officialAccount = Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`)
     const token = meta.has(`${PluginID.RedPacket}:1`) ? _(msg`a token`) : _(msg`an NFT`)
     const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier]
-    const options = { interpolation: { escapeValue: false }, token, sns }
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.
     if (meta.has(`${PluginID.RedPacket}:1`) || meta.has(`${PluginID.RedPacket}_nft:1`)) {
         const promote_red_packet = _(msg`Hi friends, I just created ${token} Lucky Drop. Download Mask.io to claim.`)
+        const promote_red_packet2 = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
         return hasOfficialAccount ?
-                _(
-                    msg`${promote_red_packet} Follow @${officialAccount} for Web3 updates and insights. \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n${encrypted}`,
-                )
-            :   _(
-                    msg`${promote_red_packet} \n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \n\n${encrypted}`,
-                )
+                promote_red_packet +
+                    _(msg`Follow @${officialAccount} for Web3 updates and insights.`) +
+                    +` \n\n${promote_red_packet2}\n\n${encrypted}`
+            :   `${promote_red_packet}\n\n${promote_red_packet2}\n\n${encrypted}`
     } else if (meta.has(`${PluginID.FileService}:3`)) {
         const promote_file_service = _(
             msg`📃📃📃 Try to permanently use decentralized file storage on ${sns}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions.`,
         )
-        return `${promote_file_service} \n${encrypted}`
+        return `${promote_file_service}\n${encrypted}`
     }
     return null
 }
