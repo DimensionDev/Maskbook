@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-05 07:14\n"
+"PO-Revision-Date: 2024-11-06 07:55\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -2059,8 +2059,12 @@ msgid "Post content:"
 msgstr "投稿内容"
 
 #: content-script/components/InjectedComponents/ProfileCard/index.tsx
-msgid "Powered by <0>RSS3</0>"
+msgid "Powered by <0>Mask Network</0>"
 msgstr ""
+
+#: content-script/components/InjectedComponents/ProfileCard/index.tsx
+#~ msgid "Powered by <0>RSS3</0>"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
@@ -3020,3 +3024,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
+
