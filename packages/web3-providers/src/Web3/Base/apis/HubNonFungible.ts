@@ -114,6 +114,7 @@ export abstract class BaseHubNonFungible<ChainId, SchemaType> extends AbstractBa
         return attemptUntil(
             providers.map((x) => () => x.getEvents?.(address, tokenId, options)),
             createPageable(EMPTY_LIST, createIndicator(options.indicator)),
+            (res) => !res?.data.length,
         )
     }
 
