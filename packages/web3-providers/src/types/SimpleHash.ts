@@ -175,4 +175,40 @@ export namespace SimpleHash {
         first_acquired_date: string
         last_acquired_date: string
     }
+
+    export interface SaleDetails {
+        marketplace_id: string
+        marketplace_name: string
+        is_bundle_sale: boolean
+        payment_token: PaymentToken
+        unit_price: number
+        total_price: number
+    }
+
+    export interface Transfer {
+        nft_id: string
+        chain: string
+        contract_address: string
+        token_id: string
+        collection_id: string
+        event_type: LiteralUnion<'transfer' | 'sale'>
+        from_address: string | null
+        to_address: string
+        quantity: number
+        timestamp: string
+        block_number: number
+        block_hash: string
+        transaction: string
+        transaction_initiator: string
+        log_index: number
+        batch_transfer_index: number
+        sale_details: SaleDetails | null
+    }
+
+    export interface TransfersResponse {
+        next_cursor: string | null
+        next: string | null
+        previous: string | null
+        transfers: Transfer[]
+    }
 }

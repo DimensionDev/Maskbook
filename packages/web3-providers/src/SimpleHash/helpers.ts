@@ -174,6 +174,16 @@ export const resolveChainId: (chain: string) => ChainId | undefined = memoize(fu
     }
 })
 
+export const resolveActivityType = (eventType: string) => {
+    const map: Record<string, ActivityType> = {
+        transfer: ActivityType.Transfer,
+        sale: ActivityType.Sale,
+        mint: ActivityType.Mint,
+        list: ActivityType.List,
+    }
+    return map[eventType] || ActivityType.Transfer
+}
+
 const ChainNameMap: Record<NetworkPluginID, Record<number, string>> = {
     [NetworkPluginID.PLUGIN_EVM]: {
         [ChainId.Mainnet]: 'ethereum',

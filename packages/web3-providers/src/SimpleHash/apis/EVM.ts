@@ -20,10 +20,18 @@ import {
     TokenType,
     leftShift,
     type NonFungibleCollectionOverview,
+    type NonFungibleTokenEvent,
 } from '@masknet/web3-shared-base'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { subSeconds, isAfter, secondsToMilliseconds, millisecondsToSeconds } from 'date-fns'
-import { ChainId, SchemaType, isValidChainId, ZERO_ADDRESS, isValidAddress } from '@masknet/web3-shared-evm'
+import {
+    ChainId,
+    SchemaType,
+    isValidChainId,
+    ZERO_ADDRESS,
+    isValidAddress,
+    createERC20Token,
+} from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,
     createNonFungibleAsset,
@@ -35,6 +43,7 @@ import {
     resolveSimpleHashRange,
     checkBlurToken,
     isLensFollower,
+    resolveActivityType,
 } from '../helpers.js'
 import { LooksRare } from '../../LooksRare/index.js'
 import { OpenSea } from '../../OpenSea/index.js'
@@ -45,6 +54,7 @@ import type { BaseHubOptions, NonFungibleTokenAPI, TrendingAPI } from '../../ent
 import { historicalPriceState } from '../historicalPriceState.js'
 import { SIMPLE_HASH_HISTORICAL_PRICE_START_TIME, SPAM_SCORE } from '../constants.js'
 import { SimpleHash } from '../../types/SimpleHash.js'
+import { createPermalink } from '../../NFTScan/helpers/EVM.js'
 
 class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getCollectionByContractAddress(
@@ -140,6 +150,54 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
             average_price_24h: formatBalance(floorPriceResponse['1_day_average'], overview.payment_token.decimals),
             total_volume: formatBalance(overview.all_time_volume, overview.payment_token.decimals),
         }
+    }
+
+    async getEvents(address: string, tokenId: string, options?: BaseHubOptions<ChainId>) {
+        const path = urlcat('/api/v0/nfts/transfers/ethereum/:address/:tokenId', {
+            address,
+            tokenId,
+            cursor: options?.indicator?.id,
+        })
+        const response = await fetchFromSimpleHash<SimpleHash.TransfersResponse>(path)
+        const events: Array<NonFungibleTokenEvent<ChainId, SchemaType>> = response.transfers.map((transfer) => {
+            const chainId = resolveChainId(transfer.chain) || ChainId.Mainnet
+            const sale_details = transfer.sale_details
+            const from_address = transfer.from_address!
+            const to_address = transfer.to_address!
+            return {
+                id: transfer.transaction,
+                chainId,
+                type: resolveActivityType(transfer.event_type),
+                assetPermalink: createPermalink(chainId || ChainId.Mainnet, address, tokenId),
+                quantity: '1',
+                hash: transfer.transaction,
+                from: {
+                    address: from_address,
+                },
+                to: {
+                    address: to_address,
+                },
+                send: {
+                    address: from_address,
+                },
+                receive: {
+                    address: to_address,
+                },
+                timestamp: new Date(transfer.timestamp).getTime(),
+                PaymentToken:
+                    sale_details?.payment_token.address ?
+                        createERC20Token(chainId, sale_details.payment_token.address)
+                    :   EVMChainResolver.nativeCurrency(chainId),
+                source: SourceType.SimpleHash,
+            }
+        })
+        return createPageable(
+            events,
+            createIndicator(options?.indicator),
+            events.length && response.next_cursor ?
+                createNextIndicator(options?.indicator, response.next_cursor)
+            :   undefined,
+        )
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
