@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-05 11:54\n"
+"PO-Revision-Date: 2024-11-06 12:25\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -28,28 +28,36 @@ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
 msgstr "crwdns32276:00={0}crwdnd32276:01={1}crwdnd32276:0total={total}crwdnd32276:0symbol={symbol}crwdne32276:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
-msgstr "crwdns32278:0{claimed}crwdnd32278:0{0}crwdnd32278:0{promote_short}crwdnd32278:0{1}crwdne32278:0"
+msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
+msgstr "crwdns35466:0{claimed}crwdnd35466:0{0}crwdne35466:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{claimed}\\n{promote_short}\\n{0}"
-msgstr "crwdns32280:0{claimed}crwdnd32280:0{promote_short}crwdnd32280:0{0}crwdne32280:0"
+#~ msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{head} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
-msgstr "crwdns32282:0{head}crwdnd32282:0{0}crwdnd32282:0{promote_short}crwdnd32282:0{1}crwdne32282:0"
+#~ msgid "{claimed}\\n{promote_short}\\n{0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{notClaimed}\\nClaim on Farcaster: {link}"
-msgstr "crwdns32284:0{notClaimed}crwdnd32284:0{link}crwdne32284:0"
+msgid "{head} Follow @{0} (mask.io) to claim lucky drops."
+msgstr "crwdns35468:0{head}crwdnd35468:0{0}crwdne35468:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{notClaimed}\\nClaim on Lens: {link}"
-msgstr "crwdns32286:0{notClaimed}crwdnd32286:0{link}crwdne32286:0"
+#~ msgid "{head} Follow @{0} (mask.io) to claim lucky drops.\\n{promote_short}\\n#mask_io #LuckyDrop\\n{1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{notClaimed}\\nClaim on: {link}"
-msgstr "crwdns32288:0{notClaimed}crwdnd32288:0{link}crwdne32288:0"
+#~ msgid "{notClaimed}\\nClaim on Farcaster: {link}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#~ msgid "{notClaimed}\\nClaim on Lens: {link}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#~ msgid "{notClaimed}\\nClaim on: {link}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -61,12 +69,20 @@ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
 msgstr "crwdns32290:00={0}crwdnd32290:01={1}crwdne32290:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}.\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
-msgstr "crwdns32292:0{sender}crwdne32292:0"
+msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}."
+msgstr "crwdns35470:0{sender}crwdne35470:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !\\n\\nClaim on Lens: {link}"
-msgstr "crwdns32294:0{sender}crwdnd32294:0{link}crwdne32294:0"
+#~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}.\\n\\nGrow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !\\n"
+#~ msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !"
+msgstr "crwdns35472:0{sender}crwdne35472:0"
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#~ msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !\\n\\nClaim on Lens: {link}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -134,6 +150,19 @@ msgstr "crwdns28948:0crwdne28948:0"
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Claim"
 msgstr "crwdns28950:0crwdne28950:0"
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on Farcaster: {link}"
+msgstr "crwdns35474:0{link}crwdne35474:0"
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on Lens: {link}"
+msgstr "crwdns35476:0{link}crwdne35476:0"
+
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on: {link}"
+msgstr "crwdns35478:0{link}crwdne35478:0"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
@@ -303,6 +332,10 @@ msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have
 msgstr "crwdns29016:0{0}crwdne29016:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Grow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !"
+msgstr "crwdns35480:0crwdne35480:0"
+
+#: src/SiteAdaptor/RedPacket/index.tsx
 msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
 msgstr "crwdns32304:0{0}crwdnd32304:0{1}crwdne32304:0"
 
@@ -315,8 +348,12 @@ msgid "I just claimed a lucky drop from @{0} on {1} network."
 msgstr "crwdns32306:0{0}crwdnd32306:0{1}crwdne32306:0"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network. {account_promote}\\n{promote_short}\\n#mask_io #LuckyDrop\\n{postLink}"
-msgstr "crwdns31742:0{sender}crwdnd31742:0{networkName}crwdnd31742:0{account_promote}crwdnd31742:0{promote_short}crwdnd31742:0{postLink}crwdne31742:0"
+msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network."
+msgstr "crwdns35482:0{sender}crwdnd35482:0{networkName}crwdne35482:0"
+
+#: src/SiteAdaptor/RedPacketNft.tsx
+#~ msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network. {account_promote}\\n{promote_short}\\n#mask_io #LuckyDrop\\n{postLink}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 msgid "Identical"
