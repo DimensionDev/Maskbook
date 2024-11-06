@@ -1,12 +1,12 @@
 import { Select, Trans } from '@lingui/macro'
-import { isSameAddress, trimZero, type Transaction } from '@masknet/web3-shared-base'
-import { Typography, type TypographyProps } from '@mui/material'
-import { memo } from 'react'
 import { makeStyles } from '@masknet/theme'
+import { formatCompact, isSameAddress, trimZero, type Transaction } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { Typography, type TypographyProps } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { memo } from 'react'
 import { AccountLabel, Label } from '../components/common.js'
 import { useFeedOwner } from '../contexts/FeedOwnerContext.js'
-import { BigNumber } from 'bignumber.js'
 
 const useStyles = makeStyles<{ size: number }>()((theme) => ({
     summary: {
@@ -19,7 +19,14 @@ const useStyles = makeStyles<{ size: number }>()((theme) => ({
 
 function formatAmount(amount: string) {
     const bn = new BigNumber(amount)
-    return Number.isNaN(bn.toNumber()) ? amount : trimZero(bn.toPrecision(4))
+    if (Number.isNaN(bn.toNumber())) {
+        return amount
+    }
+    return trimZero(
+        formatCompact(bn.toNumber(), {
+            maximumFractionDigits: 4,
+        }),
+    )
 }
 
 function SummaryTypography(props: TypographyProps<'div'>) {
