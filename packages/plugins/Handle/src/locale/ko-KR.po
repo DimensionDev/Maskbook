@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-05 18:22\n"
+"PO-Revision-Date: 2024-11-06 07:55\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -37,6 +37,10 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/PluginHeader.tsx
-msgid "Powered by <0><1/></0><2/>"
+#~ msgid "Powered by <0><1/></0><2/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx
+msgid "Powered by <0>Mask Network<1><2/></1></0>"
 msgstr ""
 
