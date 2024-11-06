@@ -206,7 +206,7 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
                 version: encodingKind === EncryptionMethodType.Text ? -37 : -38,
             })
             .finally(reset)
-    }, [encodingKind, encryptionKind, recipients, props.onSubmit])
+    }, [Editor, encodingKind, encryptionKind, recipients, props.onSubmit])
     return (
         <CompositionContext value={context}>
             <div className={classes.root}>
