@@ -241,11 +241,11 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
                                     variant="body1"
                                     component="strong"
                                     color={(theme) => theme.palette.text.primary}>
-                                    RSS3
+                                    Mask Network
                                 </Typography>
                             </Trans>
                         </Typography>
-                        <Icons.RSS3 size={24} sx={{ ml: '4px' }} />
+                        <Icons.MaskBlue size={24} sx={{ ml: '4px' }} />
                     </div>
                 </div>
             </ScopedDomainsContainer>

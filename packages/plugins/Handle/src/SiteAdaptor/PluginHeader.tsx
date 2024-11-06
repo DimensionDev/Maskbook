@@ -1,9 +1,9 @@
 import { PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { Stack, Typography, useTheme } from '@mui/material'
+import { Link, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
-import { PluginTransFieldRender, useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
+import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -19,6 +19,11 @@ const useStyles = makeStyles()((theme) => ({
     providerBy: {
         color: theme.palette.mode === 'dark' ? theme.palette.grey[700] : theme.palette.text.secondary,
         display: 'flex',
+        alignItems: 'center',
+        gap: theme.spacing(0.5),
+    },
+    publisher: {
+        display: 'inline-flex',
         alignItems: 'center',
         gap: theme.spacing(0.5),
     },
@@ -48,14 +53,22 @@ export function PluginHeader() {
                         <Trans>
                             Powered by{' '}
                             <Typography
+                                className={classes.publisher}
                                 variant="body1"
                                 fontSize={14}
                                 fontWeight="700"
                                 component="span"
                                 color={MaskColorVar.textPluginColor}>
-                                <PluginTransFieldRender pluginID={PluginID.RSS3} field={publisher.name} />
+                                Mask Network
+                                <Link
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href="https://mask.io"
+                                    fontSize={0}
+                                    color={MaskColorVar.textPluginColor}>
+                                    <Icons.LinkOut size={20} />
+                                </Link>
                             </Typography>
-                            <Icons.RSS3 size={24} />
                         </Trans>
                     </Typography>
                 :   null}
