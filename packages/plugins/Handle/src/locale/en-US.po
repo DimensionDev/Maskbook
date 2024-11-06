@@ -32,5 +32,9 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/PluginHeader.tsx
-msgid "Powered by <0><1/></0><2/>"
+#~ msgid "Powered by <0><1/></0><2/>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/PluginHeader.tsx
+msgid "Powered by <0>Mask Network<1><2/></1></0>"
 msgstr ""

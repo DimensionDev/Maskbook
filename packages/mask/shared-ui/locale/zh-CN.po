@@ -2059,8 +2059,12 @@ msgid "Post content:"
 msgstr "发布内容："
 
 #: content-script/components/InjectedComponents/ProfileCard/index.tsx
-msgid "Powered by <0>RSS3</0>"
+msgid "Powered by <0>Mask Network</0>"
 msgstr ""
+
+#: content-script/components/InjectedComponents/ProfileCard/index.tsx
+#~ msgid "Powered by <0>RSS3</0>"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
