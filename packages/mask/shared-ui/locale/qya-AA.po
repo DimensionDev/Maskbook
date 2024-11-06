@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-05 07:15\n"
+"PO-Revision-Date: 2024-11-06 07:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -2059,8 +2059,12 @@ msgid "Post content:"
 msgstr "crwdns30450:0crwdne30450:0"
 
 #: content-script/components/InjectedComponents/ProfileCard/index.tsx
-msgid "Powered by <0>RSS3</0>"
-msgstr "crwdns32812:0crwdne32812:0"
+msgid "Powered by <0>Mask Network</0>"
+msgstr "crwdns35452:0crwdne35452:0"
+
+#: content-script/components/InjectedComponents/ProfileCard/index.tsx
+#~ msgid "Powered by <0>RSS3</0>"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
