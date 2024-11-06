@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-06 07:55\n"
+"PO-Revision-Date: 2024-11-06 12:25\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -45,12 +45,12 @@ msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to de
 msgstr "crwdns31974:0decryptProgress={decryptProgress}crwdne31974:0"
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
-msgstr "crwdns32762:0{promote_red_packet}crwdnd32762:0{encrypted}crwdne32762:0"
+#~ msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
-msgid "{promote_red_packet} Follow @{officialAccount} for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
-msgstr "crwdns32764:0{promote_red_packet}crwdnd32764:0{officialAccount}crwdnd32764:0{encrypted}crwdne32764:0"
+#~ msgid "{promote_red_packet} Follow @{officialAccount} for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
@@ -84,9 +84,17 @@ msgstr "crwdns32770:0crwdne32770:0"
 msgid "<0>To</0>: <1>{to}</1>"
 msgstr "crwdns31982:0{to}crwdne31982:0"
 
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+msgid "🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
+msgstr "crwdns35456:0{encrypted}crwdne35456:0"
+
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "📃📃📃 Try to permanently use decentralized file storage on {sns}. Install Mask.io to upload and share first permanent decentralized file, powered by mainstream decentralized storage solutions."
 msgstr "crwdns32772:0{sns}crwdne32772:0"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+msgstr "crwdns35458:0crwdne35458:0"
 
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "12-word recovery phrase is used to recover your persona data."
@@ -1100,6 +1108,10 @@ msgstr "crwdns32056:0crwdne32056:0"
 #: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Floor price"
 msgstr "crwdns30160:0crwdne30160:0"
+
+#: content-script/components/CompositionDialog/useSubmit.ts
+msgid "Follow @{officialAccount} for Web3 updates and insights."
+msgstr "crwdns35460:0{officialAccount}crwdne35460:0"
 
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Follow @realMaskNetwork to explore Web3."
@@ -2700,8 +2712,12 @@ msgid "This RPC URL is currently used by the {0} network"
 msgstr "crwdns30654:0{0}crwdne30654:0"
 
 #: content-script/site-adaptors/twitter.com/customization/i18n.ts
-msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
-msgstr "crwdns32826:0{encrypted}crwdne32826:0"
+msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
+msgstr "crwdns35462:0crwdne35462:0"
+
+#: content-script/site-adaptors/twitter.com/customization/i18n.ts
+#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
+#~ msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."
