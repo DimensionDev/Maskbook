@@ -8,6 +8,7 @@ import { memo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Trans } from '@lingui/macro'
+import { useSupportedChains } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -22,7 +23,8 @@ const useStyles = makeStyles()((theme) => {
         },
         button: {
             color: theme.palette.maskColor.second,
-            width: 112,
+            flexGrow: 1,
+            minWidth: 0,
             height: theme.spacing(4.5),
             boxSizing: 'border-box',
             backgroundColor: theme.palette.maskColor.bottom,
@@ -61,6 +63,8 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
     const { classes, cx, theme } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
+    const { data: supportedChainIds, isLoading } = useSupportedChains()
+    const supported = supportedChainIds ? supportedChainIds.find((x) => x.chainId === chainId) : false
 
     return (
         <Box className={cx(classes.container, className)} {...rest}>
@@ -99,21 +103,24 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                     <Trans>Receive</Trans>
                 </Typography>
             </button>
-            <button
-                type="button"
-                className={classes.button}
-                onClick={() => {
-                    const url = urlcat(PopupRoutes.Trader, {
-                        toAddress: asset?.address,
-                        toChainId: asset?.chainId,
-                    })
-                    navigate(url)
-                }}>
-                <Icons.Cached size={20} color={theme.palette.maskColor.main} />
-                <Typography className={classes.label}>
-                    <Trans>Swap</Trans>
-                </Typography>
-            </button>
+            {supported || isLoading ?
+                <button
+                    type="button"
+                    className={classes.button}
+                    disabled={isLoading}
+                    onClick={() => {
+                        const url = urlcat(PopupRoutes.Trader, {
+                            toAddress: asset?.address,
+                            toChainId: asset?.chainId,
+                        })
+                        navigate(url)
+                    }}>
+                    <Icons.Cached size={20} color={theme.palette.maskColor.main} />
+                    <Typography className={classes.label}>
+                        <Trans>Swap</Trans>
+                    </Typography>
+                </button>
+            :   null}
         </Box>
     )
 })
