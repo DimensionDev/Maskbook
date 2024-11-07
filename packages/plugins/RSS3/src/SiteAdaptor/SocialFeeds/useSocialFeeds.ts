@@ -2,7 +2,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 import { FireflyConfig, FireflyFarcaster, Lens } from '@masknet/web3-providers'
 import { useQuery, useInfiniteQuery, skipToken } from '@tanstack/react-query'
-import { sortBy } from 'lodash-es'
+import { sortBy, uniq } from 'lodash-es'
 import { useCallback } from 'react'
 
 interface Options {
@@ -17,10 +17,15 @@ export function useSocialFeeds({ userId, address }: Options) {
     const { data: profiles } = useQuery({
         queryKey: ['firefly', 'profiles-by-address', address],
         queryFn: address ? () => FireflyConfig.getUnionProfile({ walletAddress: address }) : skipToken,
+        select(data) {
+            return {
+                fids: data.farcasterProfiles.map((x) => x.fid),
+                lensHandles: data.lensProfiles.map((x) => x.handle).concat(data.lensProfilesV3.map((x) => x.localName)),
+            }
+        },
     })
-    const { farcasterProfiles = [], lensProfiles = [], lensProfilesV3 = [] } = profiles || {}
 
-    const fids = userId ? farAccounts.map((x) => x.id) : farcasterProfiles.map((x) => x.fid) || []
+    const fids = uniq(farAccounts.map((x) => x.id.toString()).concat(profiles?.fids || []))
     const {
         data: farcasterPosts = EMPTY_LIST,
         error: farcasterError,
@@ -41,10 +46,7 @@ export function useSocialFeeds({ userId, address }: Options) {
         },
     })
 
-    const lensHandles =
-        userId ?
-            lensAccounts.map((x) => x.handle)
-        :   [...lensProfiles.map((x) => x.handle), ...lensProfilesV3.map((x) => x.localName)]
+    const lensHandles = uniq(lensAccounts.map((x) => x.handle).concat(profiles?.lensHandles || []))
     const { data: lensIds = EMPTY_LIST } = useQuery({
         queryKey: ['lens', 'popup-list', lensHandles],
         queryFn: async () => {
