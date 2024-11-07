@@ -8,6 +8,7 @@ import { useMessages } from '@masknet/web3-hooks-base'
 export function useMessageGuard() {
     const matchInteraction = useMatch(PopupRoutes.ContractInteraction)
     const messages = useMessages()
+    const nonSilentMessages = messages.filter((x) => !x.request.options.silent)
 
-    return !matchInteraction && messages.length > 0
+    return !matchInteraction && nonSilentMessages.length > 0
 }

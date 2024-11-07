@@ -1,6 +1,8 @@
 import { EMPTY_LIST, type ScopedStorage } from '@masknet/shared-base'
-import { useQuery } from '@tanstack/react-query'
+import { queryClient } from '@masknet/shared-base-ui'
 import { sortBy } from 'lodash-es'
+import { useMemo } from 'react'
+import { useSubscription } from 'use-subscription'
 import type { OkxTransaction } from '../types/trader.js'
 
 export interface StorageOptions {
@@ -14,18 +16,12 @@ export function setupStorage(initialized: ScopedStorage<StorageOptions>) {
 }
 
 export function useTradeHistory(address: string) {
-    return useQuery({
-        enabled: storage.storage.transactions.initialized,
-        queryKey: ['trade-history', address],
-        refetchOnMount: 'always',
-        queryFn: async () => {
-            return storage.storage.transactions.value
-        },
-        select(data) {
-            const addr = address.toLowerCase()
-            return sortBy(data[addr], (x) => -x.timestamp) || EMPTY_LIST
-        },
-    })
+    const transactions = useSubscription(storage.storage.transactions.subscription)
+    return useMemo(() => {
+        if (!storage.storage.transactions.initialized) return null
+        const addr = address.toLowerCase()
+        return sortBy(transactions[addr], (x) => -x.timestamp) || EMPTY_LIST
+    }, [transactions])
 }
 
 export async function addTransaction<T extends OkxTransaction>(address: string, transaction: T) {
@@ -38,6 +34,7 @@ export async function addTransaction<T extends OkxTransaction>(address: string, 
         ...txObject.value,
         [addr]: [...transactions, transaction],
     })
+    queryClient.refetchQueries({ queryKey: ['trade-history'] })
 }
 
 export async function updateTransaction<T extends OkxTransaction>(
@@ -61,6 +58,6 @@ export async function updateTransaction<T extends OkxTransaction>(
 }
 
 export function useTransaction(address: string, hash: string | null) {
-    const { data: txes } = useTradeHistory(address)
+    const txes = useTradeHistory(address)
     return hash && txes ? txes.find((x) => x.hash === hash) : null
 }

@@ -1,4 +1,5 @@
 import { msg, Select, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -10,10 +11,9 @@ import {
     formatCompact,
     GasOptionType,
     leftShift,
-    multipliedBy,
     rightShift,
 } from '@masknet/web3-shared-base'
-import { ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
+import { addGasMargin, ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Box, Link as MuiLink, Typography } from '@mui/material'
 import { useQueryClient } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
@@ -33,7 +33,6 @@ import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -253,7 +252,7 @@ export const Confirm = memo(function Confirm() {
                 from: account,
                 value: transaction.value,
                 gasPrice: gasConfig.gasPrice ?? transaction.gasPrice,
-                gas: chainId !== ChainId.Arbitrum && gas ? multipliedBy(gas, 1.2).toFixed(0) : undefined,
+                gas: gas ? addGasMargin(gas, chainId === ChainId.Arbitrum ? 1 : 0.3) : undefined,
                 maxPriorityFeePerGas:
                     'maxPriorityFeePerGas' in gasConfig && gasConfig.maxFeePerGas ?
                         gasConfig.maxFeePerGas
@@ -270,7 +269,6 @@ export const Confirm = memo(function Confirm() {
 
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
-    const showStale = isQuoteStale && !isSending && !isApproving
 
     const leaveRef = useLeave()
     const queryClient = useQueryClient()
@@ -388,8 +386,8 @@ export const Confirm = memo(function Confirm() {
         mode,
         waitForTransaction,
         gasOptions,
-        approveMutation.mutateAsync,
     ])
+    const showStale = isQuoteStale && !isSending && !isApproving && !submitting
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isSwappable || loading || dexIdsCount === 0
 

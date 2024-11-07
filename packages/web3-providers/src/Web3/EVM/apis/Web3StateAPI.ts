@@ -91,5 +91,7 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
                 transactions: state.Transaction!.transactions!,
             }),
     })
+    // Warming up
+    state.TransactionWatcher
     return state
 }

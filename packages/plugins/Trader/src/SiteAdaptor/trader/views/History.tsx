@@ -1,7 +1,7 @@
 import { t } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus, TokenIcon } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useNetworks } from '@masknet/web3-hooks-base'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -131,10 +131,10 @@ export function HistoryView() {
     const { classes, theme } = useStyles()
     const { basePath } = useRuntime()
     const address = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { data: history = EMPTY_LIST, isLoading } = useTradeHistory(address)
+    const history = useTradeHistory(address)
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 
-    if (isLoading) {
+    if (!history) {
         return (
             <div className={classes.statusBox}>
                 <LoadingStatus />

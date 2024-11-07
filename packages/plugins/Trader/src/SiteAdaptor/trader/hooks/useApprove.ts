@@ -58,8 +58,8 @@ export function useApprove() {
             const hash = await Web3.sendTransaction(
                 {
                     to: tokenAddress,
-                    // gas provided by API for Arbitrum is too low, let wallet estimate itself
-                    gas: chainId === ChainId.Arbitrum ? undefined : addGasMargin(approveInfo.gasLimit).toFixed(0),
+                    // Add more gas margin for Arbitrum, since gas for Arbitrum that provided by API is too low.
+                    gas: addGasMargin(approveInfo.gasLimit, chainId === ChainId.Arbitrum ? 1 : 0.3),
                     gasPrice: approveInfo.gasPrice,
                     data: approveInfo.data,
                 },

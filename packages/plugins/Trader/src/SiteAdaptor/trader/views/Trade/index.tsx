@@ -15,7 +15,7 @@ import {
     trimZero,
 } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Button, Skeleton, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -184,9 +184,13 @@ export function TradeView() {
     const toChainId = toToken?.chainId as ChainId
     const fromNetwork = networks.find((x) => x.chainId === fromChainId)
     const toNetwork = networks.find((x) => x.chainId === toChainId)
-    const { data: fromTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, fromToken?.address, {
-        chainId: fromChainId,
-    })
+    const { data: fromTokenBalance, isLoading: isLoadingFromTokenBalance } = useFungibleTokenBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        fromToken?.address,
+        {
+            chainId: fromChainId,
+        },
+    )
     const { gasFee } = useGasManagement()
     const { data: toTokenBalance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, toToken?.address, {
         chainId: toChainId,
@@ -271,7 +275,15 @@ export function TradeView() {
                     </Box>
                     <Box flexGrow={1}>
                         <Box height="100%" position="relative">
-                            {fromTokenBalance ?
+                            {isLoadingFromTokenBalance ?
+                                <Box className={classes.tokenStatus}>
+                                    <Icons.Wallet size={16} />
+                                    <Skeleton className={classes.balance} width={50} variant="rounded" />
+                                    <Button type="button" className={classes.maxButton} disabled>
+                                        <Trans>MAX</Trans>
+                                    </Button>
+                                </Box>
+                            : fromTokenBalance ?
                                 <Box className={classes.tokenStatus}>
                                     <Icons.Wallet size={16} />
                                     <Typography className={classes.balance}>
