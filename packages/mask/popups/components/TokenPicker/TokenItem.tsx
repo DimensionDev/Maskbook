@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -18,9 +19,8 @@ import {
     useForkRef,
     type ListItemProps,
 } from '@mui/material'
-import { memo, useEffect, useMemo, useRef } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { formatTokenBalance } from '../../../shared/index.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -99,10 +99,6 @@ export const TokenItem = memo(function TokenItem({
     }, [asset.address, asset.chainId, Utils.explorerResolver.fungibleTokenLink])
 
     const liRef = useRef<HTMLLIElement>(null)
-    useEffect(() => {
-        if (!selected) return
-        liRef.current?.scrollIntoView()
-    }, [selected])
 
     // #region Try getting balance through RPC.
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined

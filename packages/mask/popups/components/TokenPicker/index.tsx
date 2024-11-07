@@ -2,10 +2,10 @@ import { SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useFungibleAssets, useNetworks, useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useFungibleAssets, useNetworks, useTokenBalances, useWallet } from '@masknet/web3-hooks-base'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'
-import { isSameAddress, type ReasonableNetwork } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { isSameAddress, leftShift, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import { ChainId, getMaskTokenAddress, getNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, type ListChildComponentProps } from 'react-window'
@@ -90,16 +90,50 @@ export const TokenPicker = memo(function TokenPicker({
     const [standardAssets] = useFungibleAssets(NetworkPluginID.PLUGIN_EVM, undefined, {
         chainId,
     })
-    const { data: okxTokens } = useOKXTokenList(chainId, assetSource === AssetSource.Okx)
+    const isFromOkx = assetSource === AssetSource.Okx
+    const { data: okxTokens } = useOKXTokenList(chainId, isFromOkx)
+    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const { data: balances } = useTokenBalances(
+        chainId,
+        account,
+        isFromOkx && okxTokens ? okxTokens.map((x) => x.address) : [],
+    )
     const okxAssets = useMemo(() => {
         if (!okxTokens?.length) return EMPTY_LIST
-        const balanceMap = new Map(standardAssets.map((x) => [x.address.toLowerCase(), x.balance]))
-        // To reduce queries, get balance from standardAssets and patch okxTokens with it
-        return okxTokens.map((x) => {
-            const balance = balanceMap.get(x.address.toLowerCase())
-            return !balance || balance === '0' ? x : { ...x, balance }
-        }) as typeof okxTokens
-    }, [okxTokens, standardAssets])
+        if (!balances) {
+            const balanceMap = new Map(standardAssets.map((x) => [x.address.toLowerCase(), x.balance]))
+            // To reduce queries, get balance from standardAssets and patch okxTokens with it
+            return okxTokens.map((x) => {
+                const balance = balanceMap.get(x.address.toLowerCase())
+                return !balance || balance === '0' ? x : { ...x, balance }
+            }) as typeof okxTokens
+        } else {
+            const assets = okxTokens.map((x) => {
+                const balance = balances.get(x.address)
+                return !balance || balance === '0' ? x : { ...x, balance }
+            }) as Array<Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>> // typeof okxTokens
+            return assets.sort((a, z) => {
+                // native token
+                const isNativeTokenA = isSameAddress(a.address, getNativeTokenAddress(a.chainId))
+                if (isNativeTokenA) return -1
+                const isNativeTokenZ = isSameAddress(z.address, getNativeTokenAddress(z.chainId))
+                if (isNativeTokenZ) return 1
+
+                const aBalance = leftShift(a.balance ?? '0', a.decimals)
+                const zBalance = leftShift(z.balance ?? '0', z.decimals)
+                // token balance
+                if (!aBalance.isEqualTo(zBalance)) return zBalance.gt(aBalance) ? 1 : -1
+
+                const isMaskTokenA = isSameAddress(a.address, getMaskTokenAddress(a.chainId))
+                const isMaskTokenZ = isSameAddress(z.address, getMaskTokenAddress(z.chainId))
+                // mask token with position value
+                if (isMaskTokenA) return -1
+                if (isMaskTokenZ) return 1
+
+                return 0
+            })
+        }
+    }, [okxTokens, standardAssets, balances])
     const assets = assetSource === AssetSource.Okx ? okxAssets : standardAssets
     const handleChainChange = useCallback(
         (chainId: Web3Helper.ChainIdAll | undefined) => {
@@ -119,6 +153,7 @@ export const TokenPicker = memo(function TokenPicker({
         const list = isSmartPay ? networks.filter((x) => x.chainId === ChainId.Polygon && !x.isCustomized) : networks
         return chains ? list.filter((x) => chains.includes(x.chainId)) : list
     }, [chains, networks, isSmartPay])
+    const selectedIndex = availableAssets.findIndex((x) => x.chainId === chainId && isSameAddress(x.address, address))
 
     return (
         <Box className={cx(classes.picker, className)} {...rest}>
@@ -137,6 +172,8 @@ export const TokenPicker = memo(function TokenPicker({
                 itemSize={71}
                 height={455}
                 overscanCount={20}
+                // show half of previous token
+                initialScrollOffset={Math.max(0, selectedIndex - 0.5) * 71}
                 itemData={{
                     tokens: availableAssets,
                     networks: filteredNetworks,
