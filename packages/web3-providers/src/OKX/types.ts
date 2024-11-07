@@ -564,3 +564,17 @@ export interface BridgeStatus {
 }
 
 export type GetBridgeStatusResponse = OKXResponse<BridgeStatus[]>
+
+export interface TokenAsset {
+    chainIndex: string
+    tokenAddress: HexString
+    symbol: string
+    balance: string
+    tokenPrice: string
+    tokenType: string
+    isRiskToken: boolean
+    transferAmount: string
+    availableAmount: string
+}
+
+export type GetAllTokenBalancesByAddressResponse = OKXResponse<[{ tokenAssets: TokenAsset[] }]>
