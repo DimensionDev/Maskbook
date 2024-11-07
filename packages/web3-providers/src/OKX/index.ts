@@ -9,6 +9,7 @@ import type {
     ApproveTransactionOptions,
     ApproveTransactionResponse,
     BridgeOptions,
+    GetAllTokenBalancesByAddressResponse,
     GetBridgeQuoteOptions,
     GetBridgeQuoteResponse,
     GetBridgeResponse,
@@ -23,7 +24,6 @@ import type {
     SwapOptions,
     SwapResponse,
 } from './types.js'
-
 /** request okx official API, and normalize the code */
 function fetchFromOKX<T extends { code: number }>(input: RequestInfo | URL, init?: RequestInit) {
     if (process.env.NODE_ENV === 'development') {
@@ -282,5 +282,14 @@ export class OKX {
             return res.data[0]
         }
         return null
+    }
+
+    static async getUserTokenBalances(chainId: ChainId | ChainId[], account: string) {
+        const url = urlcat(OKX_HOST, '/api/v5/wallet/asset/all-token-balances-by-address', {
+            chains: chainId,
+            address: account,
+        })
+        const res = await fetchFromOKX<GetAllTokenBalancesByAddressResponse>(url)
+        return res.data[0].tokenAssets
     }
 }

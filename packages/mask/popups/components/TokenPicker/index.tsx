@@ -2,9 +2,16 @@ import { SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useFungibleAssets, useNetworks, useTokenBalances, useWallet } from '@masknet/web3-hooks-base'
+import { useAccount, useFungibleAssets, useNetworks, useUserTokenBalances, useWallet } from '@masknet/web3-hooks-base'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'
-import { isSameAddress, leftShift, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import {
+    isEqual,
+    isGreaterThan,
+    isSameAddress,
+    multipliedBy,
+    rightShift,
+    type ReasonableNetwork,
+} from '@masknet/web3-shared-base'
 import { ChainId, getMaskTokenAddress, getNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, type BoxProps } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -93,11 +100,7 @@ export const TokenPicker = memo(function TokenPicker({
     const isFromOkx = assetSource === AssetSource.Okx
     const { data: okxTokens } = useOKXTokenList(chainId, isFromOkx)
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
-    const { data: balances } = useTokenBalances(
-        chainId,
-        account,
-        isFromOkx && okxTokens ? okxTokens.map((x) => x.address) : [],
-    )
+    const { data: balances } = useUserTokenBalances(chainId, account, isFromOkx)
     const okxAssets = useMemo(() => {
         if (!okxTokens?.length) return EMPTY_LIST
         if (!balances) {
@@ -109,8 +112,8 @@ export const TokenPicker = memo(function TokenPicker({
             }) as typeof okxTokens
         } else {
             const assets = okxTokens.map((x) => {
-                const balance = balances.get(x.address)
-                return !balance || balance === '0' ? x : { ...x, balance }
+                const balance = balances.get(x.address.toLowerCase())
+                return !balance ? x : { ...x, balance: rightShift(balance.balance, x.decimals).toFixed(0) }
             }) as Array<Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>> // typeof okxTokens
             return assets.sort((a, z) => {
                 // native token
@@ -119,13 +122,23 @@ export const TokenPicker = memo(function TokenPicker({
                 const isNativeTokenZ = isSameAddress(z.address, getNativeTokenAddress(z.chainId))
                 if (isNativeTokenZ) return 1
 
-                const aBalance = leftShift(a.balance ?? '0', a.decimals)
-                const zBalance = leftShift(z.balance ?? '0', z.decimals)
-                // token balance
-                if (!aBalance.isEqualTo(zBalance)) return zBalance.gt(aBalance) ? 1 : -1
-
+                const aBalance = balances.get(a.address.toLowerCase())
+                const zBalance = balances.get(z.address.toLowerCase())
                 const isMaskTokenA = isSameAddress(a.address, getMaskTokenAddress(a.chainId))
                 const isMaskTokenZ = isSameAddress(z.address, getMaskTokenAddress(z.chainId))
+                // mask token with position value
+                const aUSD = multipliedBy(aBalance?.balance ?? 0, aBalance?.tokenPrice ?? 0)
+                if (aUSD.isPositive() && isMaskTokenA) return -1
+                const zUSD = multipliedBy(zBalance?.balance ?? 0, zBalance?.tokenPrice ?? 0)
+                if (zUSD.isPositive() && isMaskTokenZ) return 1
+
+                // token value
+                if (!aUSD.isEqualTo(zUSD)) return zUSD.gt(aUSD) ? 1 : -1
+
+                // token balance
+                if (!isEqual(aBalance?.balance || 0, zBalance?.balance || 0))
+                    return isGreaterThan(zBalance?.balance || 0, aBalance?.balance || 0) ? 1 : -1
+
                 // mask token with position value
                 if (isMaskTokenA) return -1
                 if (isMaskTokenZ) return 1
