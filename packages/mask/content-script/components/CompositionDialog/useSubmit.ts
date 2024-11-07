@@ -92,7 +92,7 @@ function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Me
         return hasOfficialAccount ?
                 promote_red_packet +
                     _(msg`Follow @${officialAccount} for Web3 updates and insights.`) +
-                    +` \n\n${promote_red_packet2}\n\n${encrypted}`
+                    ` \n\n${promote_red_packet2}\n\n${encrypted}`
             :   `${promote_red_packet}\n\n${promote_red_packet2}\n\n${encrypted}`
     } else if (meta.has(`${PluginID.FileService}:3`)) {
         const promote_file_service = _(
