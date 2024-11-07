@@ -298,6 +298,7 @@ msgid "Market Cap"
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "MAX"
 msgstr ""
 
