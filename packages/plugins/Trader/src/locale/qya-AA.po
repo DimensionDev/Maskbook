@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-05 11:54\n"
+"PO-Revision-Date: 2024-11-07 06:31\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -301,6 +301,7 @@ msgstr "crwdns32956:0crwdne32956:0"
 msgid "Market Cap"
 msgstr "crwdns29482:0crwdne29482:0"
 
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "MAX"
 msgstr "crwdns32958:0crwdne32958:0"
