@@ -72,26 +72,28 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
     if (['trade', 'mint'].includes(txType) && transaction.assets.length === 2) {
         const inAsset = transaction.assets.find((x) => x.direction === 'receive')
         const outAsset = transaction.assets.find((x) => x.direction === 'send')
-        return (
-            <>
-                {inAsset && outAsset ?
-                    <SummaryTypography {...rest}>
-                        <Trans>
-                            <AccountLabel address={owner.address} />{' '}
-                            <Select value={txType} _trade="traded" _mint="minted" other="traded" />{' '}
-                            <Label>
-                                {formatAmount(inAsset.amount)} {inAsset.symbol || inAsset.name}
-                            </Label>{' '}
-                            for{' '}
-                            <Label>
-                                {formatAmount(outAsset.amount)} {outAsset.symbol || outAsset.name}
-                            </Label>
-                        </Trans>
-                    </SummaryTypography>
-                :   null}
-                {approvalSummaries}
-            </>
-        )
+        if ((inAsset && outAsset) || approvalSummaries?.length) {
+            return (
+                <>
+                    {inAsset && outAsset ?
+                        <SummaryTypography {...rest}>
+                            <Trans>
+                                <AccountLabel address={owner.address} />{' '}
+                                <Select value={txType} _trade="traded" _mint="minted" other="traded" />{' '}
+                                <Label>
+                                    {formatAmount(inAsset.amount)} {inAsset.symbol || inAsset.name}
+                                </Label>{' '}
+                                for{' '}
+                                <Label>
+                                    {formatAmount(outAsset.amount)} {outAsset.symbol || outAsset.name}
+                                </Label>
+                            </Trans>
+                        </SummaryTypography>
+                    :   null}
+                    {approvalSummaries}
+                </>
+            )
+        }
     }
     if (['burn', 'deposit', 'mint', 'receive', 'send', 'withdraw'].includes(txType)) {
         return (
