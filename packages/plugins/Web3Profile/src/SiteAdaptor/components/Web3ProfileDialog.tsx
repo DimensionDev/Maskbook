@@ -85,7 +85,7 @@ export const Web3ProfileDialog = memo(function Web3ProfileDialog({ open, onClose
         signWithPersona,
     )
 
-    const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>({})
+    const [pendingUnlistedConfig, setPendingUnlistedConfig] = useState<Record<string, string[]>>(unlistedAddressConfig)
     useRenderPhraseCallbackOnDepsChange(() => {
         setPendingUnlistedConfig(unlistedAddressConfig)
     }, [unlistedAddressConfig])
