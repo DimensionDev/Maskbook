@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -6,7 +7,6 @@ import { memo } from 'react'
 import { AccountAvatar } from '../../pages/Personas/components/AccountAvatar/index.js'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { ConnectSocialAccounts } from '../ConnectSocialAccounts/index.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     tips: {

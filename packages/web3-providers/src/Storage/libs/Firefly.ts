@@ -1,7 +1,7 @@
 import urlcat from 'urlcat'
-import { FIREFLY_API_URL } from '../constants/index.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import { parseJSON } from '../../helpers/parseJSON.js'
+import { FIREFLY_API_URL } from '../constants/index.js'
 
 interface ResponseData {
     code: number
@@ -29,7 +29,12 @@ export class FireflyGetterSetter {
     }
 
     async set<T>(namespace: string, userId: string, address: string, value: T, signature: string): Promise<void> {
-        if (!userId || !address || !value || !signature) return
+        if (!userId || !address || !value || !signature) {
+            if (process.env.NODE_ENV === 'development') {
+                console.log('Failed to set data, invalid parameters:', { userId, address, value, signature })
+            }
+            return
+        }
         const response = await fetch(`${FIREFLY_API_URL}/set`, {
             method: 'POST',
             headers: {
