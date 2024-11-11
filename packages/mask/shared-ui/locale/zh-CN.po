@@ -2291,6 +2291,10 @@ msgstr ""
 msgid "Search Next.ID, X, Lens, ENS or Address"
 msgstr ""
 
+#: popups/pages/Trader/useImplementRuntime.tsx
+msgid "Select"
+msgstr ""
+
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Select Address"
 msgstr "选择地址"
