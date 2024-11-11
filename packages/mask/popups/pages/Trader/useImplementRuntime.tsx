@@ -1,12 +1,13 @@
+import { Trans } from '@lingui/macro'
 import { useSupportedChains, useTrade, type ShowTooltipOptions } from '@masknet/plugin-trader'
+import { usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useMemo } from 'react'
-import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
-import { usePopupCustomSnackbar } from '@masknet/theme'
-import { usePopupTheme } from '../../hooks/usePopupTheme.js'
 import { AssetSource } from '../../components/index.js'
+import { usePopupTheme } from '../../hooks/usePopupTheme.js'
+import { ChooseTokenModal, ConfirmModal } from '../../modals/modal-controls.js'
 
 export function useImplementRuntime() {
     const chainQuery = useSupportedChains()
@@ -23,6 +24,7 @@ export function useImplementRuntime() {
             const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
 
             const picked = await ChooseTokenModal.openAndWaitForClose({
+                title: <Trans>Select</Trans>,
                 // Only from token can decide the chain
                 chainId: ((isSwap ? fromChainId : currentToken?.chainId) || chainId) as ChainId,
                 address: currentToken?.address,
