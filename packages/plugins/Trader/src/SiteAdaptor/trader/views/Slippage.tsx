@@ -148,6 +148,7 @@ export const Slippage = memo(function Slippage() {
                                     min: 0.1,
                                     max: 50,
                                 },
+                                endAdornment: <Typography>%</Typography>,
                             }}
                             value={pendingSlippage}
                             onChange={(e) => {
