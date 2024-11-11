@@ -1,10 +1,10 @@
 import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { OKXBridgeQuote, OKXSwapQuote } from '@masknet/web3-providers/types'
 import { dividedBy, formatCompact, leftShift, multipliedBy } from '@masknet/web3-shared-base'
-import { ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -13,7 +13,6 @@ import { useGasManagement, useTrade } from '../../contexts/index.js'
 import { useRuntime } from '../../contexts/RuntimeProvider.js'
 import { useLiquidityResources } from '../../hooks/useLiquidityResources.js'
 import { useTokenPrice } from '../../hooks/useTokenPrice.js'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     quote: {
@@ -89,7 +88,6 @@ export function Quote({ quote, ...props }: QuoteProps) {
     const { data: liquidityList = EMPTY_LIST } = useLiquidityResources(chainId)
     const dexIdsCount = liquidityList.filter((x) => !disabledDexIds.includes(x.id)).length
 
-    const { data: nativeTokenPrice } = useTokenPrice(chainId, ZERO_ADDRESS)
     const { gasCost } = useGasManagement()
 
     const rateNode = (
@@ -101,10 +99,11 @@ export function Quote({ quote, ...props }: QuoteProps) {
     )
 
     const bestRouter = isSwap ? undefined : bridgeQuote?.routerList[0]
+    const { data: crossChainFeeTokenPrice } = useTokenPrice(chainId, bestRouter?.router.crossChainFeeTokenAddress)
     const totalNetworkFee = useMemo(() => {
-        if (!bestRouter || !nativeTokenPrice) return gasCost
-        return multipliedBy(bestRouter.router.crossChainFee, nativeTokenPrice).plus(gasCost).toFixed(2)
-    }, [gasCost, bestRouter, nativeTokenPrice])
+        if (!bestRouter || !crossChainFeeTokenPrice) return gasCost
+        return multipliedBy(bestRouter.router.crossChainFee, crossChainFeeTokenPrice).plus(gasCost).toFixed(2)
+    }, [gasCost, bestRouter, crossChainFeeTokenPrice])
     const { _ } = useLingui()
 
     const slippageTooltip = _(
