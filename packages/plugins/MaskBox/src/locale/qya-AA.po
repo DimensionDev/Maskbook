@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2024-11-11 10:53\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -47,6 +47,10 @@ msgstr "crwdns28758:0crwdne28758:0"
 #: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Drawing"
 msgstr "crwdns28760:0crwdne28760:0"
+
+#: src/SiteAdaptor/components/DrawResultDialog.tsx
+msgid "I just claimed a #MaskBox with @realMaskNetwork. Install mask.io and create your own NFT mystery box!"
+msgstr "crwdns35464:0crwdne35464:0"
 
 #: src/SiteAdaptor/components/DrawDialog.tsx
 msgid "Insufficient balance"
