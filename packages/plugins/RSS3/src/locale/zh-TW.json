@@ -307,7 +307,7 @@
             ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": "" }]
         ],
         "K7tIrx": "Category",
-        "URmyfc": "Details",
+        "URmyfc": "详情",
         "fYUNRJ": "Direct",
         "7Bj3x9": "Failed",
         "ejVYRQ": "From",

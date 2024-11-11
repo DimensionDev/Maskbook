@@ -32,4 +32,3 @@ msgstr "开始"
 #: src/SiteAdaptor/index.tsx
 msgid "Valuables"
 msgstr "贵重物品"
-

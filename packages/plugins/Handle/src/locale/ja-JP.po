@@ -43,4 +43,3 @@ msgstr ""
 #: src/SiteAdaptor/PluginHeader.tsx
 msgid "Powered by <0>Mask Network<1><2/></1></0>"
 msgstr ""
-

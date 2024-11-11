@@ -55,4 +55,3 @@ msgstr "切换 Twitter 标志"
 #: src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
 msgstr "切换 X 标志"
-
