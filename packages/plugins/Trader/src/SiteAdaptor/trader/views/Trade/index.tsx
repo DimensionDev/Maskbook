@@ -1,4 +1,5 @@
 import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -29,7 +30,6 @@ import { formatInput, formatTokenBalance } from '../../helpers.js'
 import { useBridgable } from '../../hooks/useBridgable.js'
 import { useSwappable } from '../../hooks/useSwappable.js'
 import { Quote } from './Quote.js'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     view: {

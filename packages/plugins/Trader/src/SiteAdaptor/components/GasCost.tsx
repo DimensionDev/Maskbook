@@ -1,5 +1,6 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useNativeToken } from '@masknet/web3-hooks-base'
+import { formatCompact } from '@masknet/web3-shared-base'
 import { type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { Typography, type TypographyProps } from '@mui/material'
 import { type BigNumber } from 'bignumber.js'
@@ -15,7 +16,7 @@ interface Props extends TypographyProps {
 export function GasCost({ chainId, gasPrice, gasLimit, gasFee: txGasFee, ...rest }: Props) {
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { gasFee, gasCost } = useGasCost(gasPrice || '0', gasLimit || '1', txGasFee)
-    const tokenCost = `${formatWeiToEther(gasFee)} ${nativeToken?.symbol ?? '--'}`
+    const tokenCost = `${formatCompact(formatWeiToEther(gasFee).toNumber(), { maximumFractionDigits: 8 })} ${nativeToken?.symbol ?? '--'}`
     return (
         <Typography {...rest}>
             {tokenCost}

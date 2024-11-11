@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { type ChainId } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, type ChainId } from '@masknet/web3-shared-evm'
 import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
@@ -109,7 +109,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                     disabled={isLoading}
                     onClick={() => {
                         const url = urlcat(PopupRoutes.Trader, {
-                            toAddress: asset?.address,
+                            toAddress: isNativeTokenAddress(asset?.address) ? undefined : asset?.address,
                             toChainId: asset?.chainId,
                         })
                         navigate(url)
