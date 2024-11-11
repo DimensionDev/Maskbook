@@ -17,9 +17,8 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            paddingTop: 16,
-            paddingBottom: 16,
             gap: theme.spacing(2),
+            padding: theme.spacing(2),
         },
         button: {
             color: theme.palette.maskColor.second,
