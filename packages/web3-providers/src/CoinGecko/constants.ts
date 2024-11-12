@@ -24,6 +24,8 @@ export const COINGECKO_CHAIN_ID_LIST = [
     ChainId.Cronos,
     ChainId.BitTorrent,
     ChainId.Boba,
+    ChainId.Metis,
+    ChainId.Scroll,
 ]
 
 if (process.env.NODE_ENV === 'development') {
