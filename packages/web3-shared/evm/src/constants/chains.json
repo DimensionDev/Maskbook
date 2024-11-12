@@ -1142,6 +1142,7 @@
         "name": "Metis",
         "type": "Metis",
         "network": "mainnet",
+        "fullName": "Metis",
         "features": [],
         "nativeCurrency": {
             "chainId": 1088,

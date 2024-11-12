@@ -183,7 +183,9 @@ export function TradeView() {
     const fromChainId = fromToken?.chainId as ChainId
     const toChainId = toToken?.chainId as ChainId
     const fromNetwork = networks.find((x) => x.chainId === fromChainId)
+    const fromNetworkName = fromNetwork?.fullName || fromNetwork?.name
     const toNetwork = networks.find((x) => x.chainId === toChainId)
+    const toNetworkName = toNetwork?.fullName || toNetwork?.name
     const { data: fromTokenBalance, isLoading: isLoadingFromTokenBalance } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         fromToken?.address,
@@ -264,8 +266,8 @@ export function TradeView() {
                                         {fromToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {fromNetwork?.fullName ?
-                                            <Trans>on {fromNetwork.fullName}</Trans>
+                                        {fromNetworkName ?
+                                            <Trans>on {fromNetworkName}</Trans>
                                         :   '--'}
                                     </Typography>
                                 </Box>
@@ -359,8 +361,8 @@ export function TradeView() {
                                         {toToken?.symbol ?? '--'}
                                     </Typography>
                                     <Typography component="span" className={classes.chain}>
-                                        {toNetwork?.fullName ?
-                                            <Trans>on {toNetwork.fullName}</Trans>
+                                        {toNetworkName ?
+                                            <Trans>on {toNetworkName}</Trans>
                                         :   '--'}
                                     </Typography>
                                 </Box>

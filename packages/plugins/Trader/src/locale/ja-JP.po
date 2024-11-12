@@ -367,7 +367,15 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-msgid "on {0}"
+#~ msgid "on {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
+msgid "on {fromNetworkName}"
+msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
+msgid "on {toNetworkName}"
 msgstr ""
 
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx

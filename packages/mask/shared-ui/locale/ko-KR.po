@@ -1684,6 +1684,10 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: popups/components/TokenPicker/index.tsx
+msgid "Name or Contract address e.g. USDC or 0x234..."
+msgstr ""
+
 #: popups/modals/ChooseNetworkModal/index.tsx
 msgid "Network"
 msgstr "네트워크"
@@ -1787,6 +1791,10 @@ msgstr ""
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
 msgstr "로컬 키 없음"
+
+#: popups/components/TokenPicker/index.tsx
+msgid "No matched tokens"
+msgstr ""
 
 #: popups/components/NFTAvatarPicker/CollectionList.tsx
 msgid "No NFTs found."

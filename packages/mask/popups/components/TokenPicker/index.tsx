@@ -1,6 +1,8 @@
-import { SelectNetworkSidebar } from '@masknet/shared'
+import { t, Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { EmptyStatus, SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskTextField } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useFungibleAssets, useNetworks, useUserTokenBalances, useWallet } from '@masknet/web3-hooks-base'
 import { useOKXTokenList } from '@masknet/web3-hooks-evm'
@@ -14,6 +16,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { ChainId, getMaskTokenAddress, getNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, type BoxProps } from '@mui/material'
+import Fuse from 'fuse.js'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { FixedSizeList, type ListChildComponentProps } from 'react-window'
 import { TokenItem, type TokenItemProps } from './TokenItem.js'
@@ -58,6 +61,13 @@ const useStyles = makeStyles()((theme) => {
         },
         sidebar: {
             paddingRight: theme.spacing(1),
+        },
+        content: {
+            flexGrow: 1,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: theme.spacing(1),
+            boxSizing: 'border-box',
         },
     }
 })
@@ -155,10 +165,24 @@ export const TokenPicker = memo(function TokenPicker({
         },
         [onChainChange],
     )
+    const [keyword, setKeyword] = useState('')
     const availableAssets = useMemo(() => {
         if (!sidebarChainId) return assets
         return assets.filter((x) => x.chainId === sidebarChainId)
     }, [assets, sidebarChainId])
+    const fuse = useMemo(() => {
+        return new Fuse(availableAssets, {
+            shouldSort: true,
+            isCaseSensitive: false,
+            threshold: 0.45,
+            minMatchCharLength: 1,
+            keys: ['address', 'symbol', 'name'],
+        })
+    }, [availableAssets])
+    const filteredAssets = useMemo(() => {
+        if (!keyword) return availableAssets
+        return fuse.search(keyword).map((x) => x.item)
+    }, [fuse, keyword])
 
     const isSmartPay = !!useWallet()?.owner
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
@@ -166,7 +190,7 @@ export const TokenPicker = memo(function TokenPicker({
         const list = isSmartPay ? networks.filter((x) => x.chainId === ChainId.Polygon && !x.isCustomized) : networks
         return chains ? list.filter((x) => chains.includes(x.chainId)) : list
     }, [chains, networks, isSmartPay])
-    const selectedIndex = availableAssets.findIndex((x) => x.chainId === chainId && isSameAddress(x.address, address))
+    const selectedIndex = filteredAssets.findIndex((x) => x.chainId === chainId && isSameAddress(x.address, address))
 
     return (
         <Box className={cx(classes.picker, className)} {...rest}>
@@ -180,30 +204,55 @@ export const TokenPicker = memo(function TokenPicker({
                     onChainChange={handleChainChange}
                 />
             :   null}
-            <FixedSizeList
-                itemCount={availableAssets.length}
-                itemSize={71}
-                height={455}
-                overscanCount={20}
-                // show half of previous token
-                initialScrollOffset={Math.max(0, selectedIndex - 0.5) * 71}
-                itemData={{
-                    tokens: availableAssets,
-                    networks: filteredNetworks,
-                    chainId,
-                    address,
-                    onSelect,
-                }}
-                itemKey={(index, data) => {
-                    const asset = data.tokens[index]
-                    return `${asset.chainId}.${asset.address}`
-                }}
-                style={{
-                    scrollbarWidth: 'none',
-                }}
-                width="100%">
-                {Row}
-            </FixedSizeList>
+            <div className={classes.content}>
+                <MaskTextField
+                    value={keyword}
+                    placeholder={t`Name or Contract address e.g. USDC or 0x234...`}
+                    autoFocus
+                    fullWidth
+                    wrapperProps={{
+                        padding: '2px',
+                    }}
+                    InputProps={{
+                        style: { height: 40 },
+                        inputProps: { style: { paddingLeft: 4 } },
+                        startAdornment: <Icons.Search size={18} />,
+                        endAdornment: keyword ? <Icons.Close size={18} onClick={() => setKeyword('')} /> : null,
+                    }}
+                    onChange={(e) => {
+                        setKeyword(e.target.value)
+                    }}
+                />
+                {keyword && !filteredAssets.length ?
+                    <EmptyStatus flexGrow={1} alignItems="center">
+                        <Trans>No matched tokens</Trans>
+                    </EmptyStatus>
+                :   <FixedSizeList
+                        itemCount={filteredAssets.length}
+                        itemSize={71}
+                        height={403}
+                        overscanCount={20}
+                        // show half of previous token
+                        initialScrollOffset={Math.max(0, selectedIndex - 0.5) * 71}
+                        itemData={{
+                            tokens: filteredAssets,
+                            networks: filteredNetworks,
+                            chainId,
+                            address,
+                            onSelect,
+                        }}
+                        itemKey={(index, data) => {
+                            const asset = data.tokens[index]
+                            return `${asset.chainId}.${asset.address}`
+                        }}
+                        style={{
+                            scrollbarWidth: 'none',
+                        }}
+                        width="100%">
+                        {Row}
+                    </FixedSizeList>
+                }
+            </div>
         </Box>
     )
 })
