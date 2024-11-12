@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, SelectNetworkSidebar } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -207,7 +207,7 @@ export const TokenPicker = memo(function TokenPicker({
             <div className={classes.content}>
                 <MaskTextField
                     value={keyword}
-                    placeholder="Search"
+                    placeholder={t`Name or Contract address e.g. USDC or 0x234...`}
                     autoFocus
                     fullWidth
                     wrapperProps={{
