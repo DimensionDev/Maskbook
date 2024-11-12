@@ -45,7 +45,7 @@
     "@masknet/web3-shared-solana": "workspace:^",
     "@servie/events": "^3.0.0",
     "bignumber.js": "9.1.2",
-    "bn.js": "^4.12.0",
+    "bn.js": "^4.12.1",
     "bs58": "^5.0.0",
     "buffer": "^6.0.3",
     "date-fns": "^2.30.0",

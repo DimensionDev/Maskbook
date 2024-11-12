@@ -56,8 +56,8 @@ importers:
         specifier: 11.11.0
         version: 11.11.0(@emotion/react@11.11.1)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
       '@masknet/kit':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: ^0.4.2
+        version: 0.4.2
       '@mui/icons-material':
         specifier: 5.15.12
         version: 5.15.12(@mui/material@5.15.12)(@types/react@18.2.48)(react@0.0.0-experimental-8039e6d0b-20231026)
@@ -213,8 +213,8 @@ importers:
   packages/base:
     dependencies:
       '@masknet/kit':
-        specifier: 0.3.0
-        version: 0.3.0
+        specifier: ^0.4.2
+        version: 0.4.2
       anchorme:
         specifier: ^3.0.8
         version: 3.0.8
@@ -784,8 +784,8 @@ importers:
         version: 1.10.2
     devDependencies:
       bn.js:
-        specifier: ^4.12.0
-        version: 4.12.0
+        specifier: ^4.12.1
+        version: 4.12.1
 
   packages/web3-helpers:
     dependencies:
@@ -917,8 +917,8 @@ importers:
         specifier: 9.1.2
         version: 9.1.2
       bn.js:
-        specifier: ^4.12.0
-        version: 4.12.0
+        specifier: ^4.12.1
+        version: 4.12.1
       bs58:
         specifier: ^5.0.0
         version: 5.0.0
@@ -2639,8 +2639,8 @@ packages:
       eslint: 8.57.0
     dev: true
 
-  /@masknet/kit@0.3.0:
-    resolution: {integrity: sha512-/7kJ/i0R5QXU1VMjY//vCkH2tnBhw5ffDTECT8zh40WfSedema0K4XriYrVa5IAI1VwHJMMqqCcRPnqCJ7nZZA==}
+  /@masknet/kit@0.4.2:
+    resolution: {integrity: sha512-1GdoZCJT72N+rR/mj0+TM0smdrRaHbzYDKf2vqvn+ox0ZDbnQnHaD6xQ8eaKDV04fSwpaIkYWRs5O0mfvGfsvA==}
     dev: false
 
   /@masknet/secp256k1-webcrypto@1.0.0:
@@ -4968,8 +4968,8 @@ packages:
     resolution: {integrity: sha512-XWwnNNFCuuSQ0m3r3C4LE3EiORltHd9M05pq6FOlVeiophzRbMo50Sbz1ehl8K3Z+jw9+vmgnXefY1hz8X+2wA==}
     dev: false
 
-  /bn.js@4.12.0:
-    resolution: {integrity: sha512-c98Bf3tPniI+scsdk237ku1Dc3ujXQTSgyiPUDEOe7tRkhrqridvh8klBv0HCEso1OLOYcHuCv/cS6DNxKH+ZA==}
+  /bn.js@4.12.1:
+    resolution: {integrity: sha512-k8TVBiPkPJT9uHLdOKfFpqcfprwBFOAAXXozRubr7R7PfIuKvQlzcI4M0pALeqXN09vdaMbUdUj+pass+uULAg==}
 
   /bn.js@5.2.1:
     resolution: {integrity: sha512-eXRvHzWyYPBuB4NBy0cmYQjGitUrtqwbvlzP3G6VFnNRbsZQIxQ10PbKKHt8gZ/HW/D/747aDl+QkDqg3KQLMQ==}
@@ -6550,7 +6550,7 @@ packages:
   /elliptic@6.5.4:
     resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       brorand: 1.1.0
       hash.js: 1.1.7
       hmac-drbg: 1.0.1
@@ -7185,7 +7185,7 @@ packages:
   /eth-lib@0.1.29:
     resolution: {integrity: sha512-bfttrr3/7gG4E02HoWTDUcDDslN003OlOoBxk9virpAZQ1ja/jDgwkWB8QfJF7ojuEowrqy+lzp9VcJG7/k5bQ==}
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       elliptic: 6.5.4
       nano-json-stream-parser: 0.1.2
       servify: 0.1.12
@@ -7200,7 +7200,7 @@ packages:
   /eth-lib@0.2.8:
     resolution: {integrity: sha512-ArJ7x1WcWOlSpzdoTBX8vkwlkSQ85CjjifSZtV4co64vWxSV8geWfPI9x4SVYu3DSxnX4yWFVTtGL+j9DUFLNw==}
     dependencies:
-      bn.js: 4.12.0
+      bn.js: 4.12.1
       elliptic: 6.5.4
       xhr-request-promise: 0.1.3
     dev: false
@@ -14935,10 +14935,12 @@ packages:
 time:
   /@emotion/styled@11.11.0: '2023-05-06T08:49:15.982Z'
   /@hookform/resolvers@3.9.0: '2024-07-05T23:11:40.870Z'
+  /@masknet/kit@0.4.2: '2024-10-20T06:52:06.765Z'
   /@react-hookz/web@23.1.0: '2023-06-30T06:39:12.288Z'
   /@types/use-subscription@1.0.2: '2023-11-07T18:34:22.454Z'
   /@types/web@0.0.143: '2024-04-15T04:20:47.209Z'
   /anchorme@3.0.8: '2024-04-08T09:26:57.773Z'
+  /bn.js@4.12.1: '2024-11-11T15:19:31.661Z'
   /date-fns@2.30.0: '2023-04-30T02:49:47.228Z'
   /react-hook-form@7.53.0: '2024-08-24T04:17:01.608Z'
   /react-use@17.5.1: '2024-07-20T13:41:18.645Z'

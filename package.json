@@ -31,7 +31,7 @@
     "@emotion/cache": "11.11.0",
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
-    "@masknet/kit": "0.3.0",
+    "@masknet/kit": "^0.4.2",
     "@mui/icons-material": "5.15.12",
     "@mui/lab": "5.0.0-alpha.167",
     "@mui/material": "5.15.12",

@@ -13,6 +13,6 @@
     "web3-eth-contract": "1.10.2"
   },
   "devDependencies": {
-    "bn.js": "^4.12.0"
+    "bn.js": "^4.12.1"
   }
 }
