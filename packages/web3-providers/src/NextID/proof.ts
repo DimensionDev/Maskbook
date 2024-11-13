@@ -43,7 +43,7 @@ function relationServiceDomainQuery(depth?: number) {
       platform
       displayName
       uuid
-      nft(category: ["ENS"], limit: 100, offset: 0) {
+      nft(category: ["ens"], limit: 100, offset: 0) {
         uuid
         category
         chain
@@ -53,7 +53,7 @@ function relationServiceDomainQuery(depth?: number) {
         ... on ProofRecord {
           source
           from {
-            nft(category: ["ENS"], limit: 100, offset: 0) {
+            nft(category: ["ens"], limit: 100, offset: 0) {
               uuid
               category
               chain
@@ -65,7 +65,7 @@ function relationServiceDomainQuery(depth?: number) {
             displayName
           }
           to {
-            nft(category: ["ENS"], limit: 100, offset: 0) {
+            nft(category: ["ens"], limit: 100, offset: 0) {
               uuid
               category
               chain
@@ -80,7 +80,7 @@ function relationServiceDomainQuery(depth?: number) {
         ... on HoldRecord {
           source
           from {
-            nft(category: ["ENS"], limit: 100, offset: 0) {
+            nft(category: ["ens"], limit: 100, offset: 0) {
               uuid
               category
               chain
@@ -92,7 +92,7 @@ function relationServiceDomainQuery(depth?: number) {
             displayName
           }
           to {
-            nft(category: ["ENS"], limit: 100, offset: 0) {
+            nft(category: ["ens"], limit: 100, offset: 0) {
               uuid
               category
               chain
@@ -123,7 +123,7 @@ function relationServiceIdentityQuery(depth = 5) {
           identity
           displayName
         }
-        nft(category: ["ENS"], limit: 100, offset: 0) {
+        nft(category: ["ens"], limit: 100, offset: 0) {
           uuid
           category
           chain
@@ -134,7 +134,7 @@ function relationServiceIdentityQuery(depth = 5) {
           ... on ProofRecord {
             source
             from {
-              nft(category: ["ENS"], limit: 100, offset: 0) {
+              nft(category: ["ens"], limit: 100, offset: 0) {
                 uuid
                 category
                 chain
@@ -147,7 +147,7 @@ function relationServiceIdentityQuery(depth = 5) {
               displayName
             }
             to {
-              nft(category: ["ENS"], limit: 100, offset: 0) {
+              nft(category: ["ens"], limit: 100, offset: 0) {
                 uuid
                 category
                 chain
@@ -163,7 +163,7 @@ function relationServiceIdentityQuery(depth = 5) {
           ... on HoldRecord {
             source
             from {
-              nft(category: ["ENS"], limit: 100, offset: 0) {
+              nft(category: ["ens"], limit: 100, offset: 0) {
                 uuid
                 category
                 chain
@@ -176,7 +176,7 @@ function relationServiceIdentityQuery(depth = 5) {
               displayName
             }
             to {
-              nft(category: ["ENS"], limit: 100, offset: 0) {
+              nft(category: ["ens"], limit: 100, offset: 0) {
                 uuid
                 category
                 chain
