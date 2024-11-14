@@ -10,20 +10,20 @@ if (process.env.NODE_ENV === 'development') {
     Reflect.defineProperty(globalThis, '__mask_shared_base__', { value: true })
 }
 
-// https://github.com/lingui/js-lingui/issues/2021 lingui does not support fallback
-const map: Record<string, string> = {
-    [LanguageOptions.enUS]: 'en',
-    [LanguageOptions.jaJP]: 'ja',
-    [LanguageOptions.koKR]: 'ko',
-    [LanguageOptions.zhCN]: 'zh-CN',
-    [LanguageOptions.zhTW]: 'zh',
+function detectLanguage(language: string) {
+    if (language.startsWith('en')) return 'en'
+    if (language.startsWith('ja')) return 'ja'
+    if (language.startsWith('ko')) return 'ko'
+    if (language === 'zh-TW') return 'zh'
+    if (language.startsWith('zh')) return 'zh-CN'
+    return undefined
 }
 export function updateLanguage(next: LanguageOptions) {
     if (next === LanguageOptions.__auto__) {
-        const result = navigator.languages
-        i18n.activate(map[result[0] || LanguageOptions.enUS])
+        const result = navigator.languages.map(detectLanguage).find(Boolean)
+        i18n.activate(result || 'en')
     } else {
-        i18n.activate(map[next])
+        i18n.activate(detectLanguage(next) || 'en')
     }
 }
 
