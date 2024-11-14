@@ -1,8 +1,4 @@
-import {
-    type ChainId,
-    getRedPacketConstant,
-    getNftRedPacketConstant,
-} from '@masknet/web3-shared-evm'
+import { type ChainId, getRedPacketConstant, getNftRedPacketConstant } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
 
 export function getAllMaskDappContractInfo(chainId: ChainId, type: 'token' | 'nft') {
