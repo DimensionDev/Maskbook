@@ -27,6 +27,8 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
     },
     footer: {
+        height: 56,
+        boxSizing: 'border-box',
         boxShadow:
             theme.palette.mode === 'light' ?
                 '0px 0px 20px rgba(0, 0, 0, 0.05)'

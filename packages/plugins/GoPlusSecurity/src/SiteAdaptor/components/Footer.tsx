@@ -1,7 +1,7 @@
-import { Box, Link, Stack, Typography } from '@mui/material'
-import { GoPlusLabLogo } from '../icons/Logo.js'
-import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants.js'
 import { Trans } from '@lingui/macro'
+import { Box, Link, Stack, Typography } from '@mui/material'
+import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants.js'
+import { GoPlusLabLogo } from '../icons/Logo.js'
 
 export function Footer() {
     return (

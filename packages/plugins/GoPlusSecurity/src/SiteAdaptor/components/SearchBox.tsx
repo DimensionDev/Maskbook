@@ -1,12 +1,11 @@
 import { Trans, t } from '@lingui/macro'
-import { Icons } from '@masknet/icons'
 import { WalletIcon, useMenuConfig } from '@masknet/shared'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import { EVMChainResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { KeyboardArrowDown as KeyboardArrowDownIcon } from '@mui/icons-material'
-import { Box, Button, InputAdornment, MenuItem, Stack, Typography } from '@mui/material'
+import { Box, Button, MenuItem, Stack, Typography } from '@mui/material'
 import { memo, useState } from 'react'
 import { useSupportedChains } from '../hooks/useSupportedChains.js'
 
@@ -53,7 +52,7 @@ function getChainName(chain?: SecurityAPI.SupportedChain<ChainId>) {
     return EVMChainResolver.chainName(chain.chainId) ?? chain.name
 }
 
-export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
+export const SearchBox = memo<SearchBoxProps>(function SearchBox({ onSearch }) {
     const { classes } = useStyles()
     const [selectedChain, setSelectedChain] = useState<
         SecurityAPI.SupportedChain<ChainId> & {
@@ -120,11 +119,6 @@ export const SearchBox = memo<SearchBoxProps>(({ onSearch }) => {
                         onChange={(e) => setSearchSearchContent(e.target.value)}
                         InputProps={{
                             classes: { root: classes.search },
-                            startAdornment: (
-                                <InputAdornment position="start">
-                                    <Icons.Search />
-                                </InputAdornment>
-                            ),
                         }}
                     />
                 </Box>
