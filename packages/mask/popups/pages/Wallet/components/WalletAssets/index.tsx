@@ -25,6 +25,7 @@ const useStyles = makeStyles()((theme) => {
         },
         header: {
             display: 'flex',
+            alignItems: 'center',
         },
         tab: {
             height: 34,
