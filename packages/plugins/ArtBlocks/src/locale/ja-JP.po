@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:51\n"
+"PO-Revision-Date: 2024-11-14 10:08\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -117,3 +117,4 @@ msgstr "問題が発生しました!"
 #: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
+
