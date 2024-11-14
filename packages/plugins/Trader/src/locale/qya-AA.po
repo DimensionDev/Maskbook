@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:52\n"
+"PO-Revision-Date: 2024-11-14 06:06\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -371,8 +371,16 @@ msgstr "crwdns28222:0crwdne28222:0"
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-msgid "on {0}"
-msgstr "crwdns32964:0{0}crwdne32964:0"
+#~ msgid "on {0}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
+msgid "on {fromNetworkName}"
+msgstr "crwdns35554:0{fromNetworkName}crwdne35554:0"
+
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
+msgid "on {toNetworkName}"
+msgstr "crwdns35556:0{toNetworkName}crwdne35556:0"
 
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Open"
