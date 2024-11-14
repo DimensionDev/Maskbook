@@ -58,4 +58,3 @@ msgstr "価格"
 #: src/SiteAdaptor/components/NFTList.tsx
 msgid "Total"
 msgstr "合計"
-

@@ -1396,4 +1396,3 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
-

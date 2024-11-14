@@ -3036,4 +3036,3 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
-
