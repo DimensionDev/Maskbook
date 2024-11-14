@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:53\n"
+"PO-Revision-Date: 2024-11-14 06:06\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1684,6 +1684,10 @@ msgstr "crwdns30342:0crwdne30342:0"
 msgid "Name"
 msgstr "crwdns30344:0crwdne30344:0"
 
+#: popups/components/TokenPicker/index.tsx
+msgid "Name or Contract address e.g. USDC or 0x234..."
+msgstr "crwdns35548:0crwdne35548:0"
+
 #: popups/modals/ChooseNetworkModal/index.tsx
 msgid "Network"
 msgstr "crwdns30346:0crwdne30346:0"
@@ -1787,6 +1791,10 @@ msgstr "crwdns32098:0crwdne32098:0"
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
 msgstr "crwdns30372:0crwdne30372:0"
+
+#: popups/components/TokenPicker/index.tsx
+msgid "No matched tokens"
+msgstr "crwdns35550:0crwdne35550:0"
 
 #: popups/components/NFTAvatarPicker/CollectionList.tsx
 msgid "No NFTs found."
@@ -2290,6 +2298,10 @@ msgstr "crwdns30518:0crwdne30518:0"
 #: popups/pages/Friends/Search/index.tsx
 msgid "Search Next.ID, X, Lens, ENS or Address"
 msgstr "crwdns32136:0crwdne32136:0"
+
+#: popups/pages/Trader/useImplementRuntime.tsx
+msgid "Select"
+msgstr "crwdns35552:0crwdne35552:0"
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Select Address"
