@@ -139,4 +139,3 @@ msgstr ""
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
 msgstr ""
-

@@ -117,4 +117,3 @@ msgstr "오류가 발생합니다."
 #: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
-
