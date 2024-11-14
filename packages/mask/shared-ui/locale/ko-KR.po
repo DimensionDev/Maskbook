@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 04:46\n"
+"PO-Revision-Date: 2024-11-14 06:06\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -1684,6 +1684,10 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
+#: popups/components/TokenPicker/index.tsx
+msgid "Name or Contract address e.g. USDC or 0x234..."
+msgstr ""
+
 #: popups/modals/ChooseNetworkModal/index.tsx
 msgid "Network"
 msgstr "네트워크"
@@ -1787,6 +1791,10 @@ msgstr ""
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "No local key"
 msgstr "로컬 키 없음"
+
+#: popups/components/TokenPicker/index.tsx
+msgid "No matched tokens"
+msgstr ""
 
 #: popups/components/NFTAvatarPicker/CollectionList.tsx
 msgid "No NFTs found."
@@ -2289,6 +2297,10 @@ msgstr ""
 
 #: popups/pages/Friends/Search/index.tsx
 msgid "Search Next.ID, X, Lens, ENS or Address"
+msgstr ""
+
+#: popups/pages/Trader/useImplementRuntime.tsx
+msgid "Select"
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
@@ -3040,3 +3052,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
+
