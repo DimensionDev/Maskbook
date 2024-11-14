@@ -1,20 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:50\n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: ko_KR\n"
-"Language-Team: Korean\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/mask/shared-ui/locale/en-US.po\n"
-"X-Crowdin-File-ID: 944\n"
+"Plural-Forms: \n"
 
 #: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "(the name is set by the web site)"
@@ -43,14 +38,6 @@ msgstr ""
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
 msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
 msgstr ""
-
-#: content-script/components/CompositionDialog/useSubmit.ts
-#~ msgid "{promote_red_packet} \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
-#~ msgstr ""
-
-#: content-script/components/CompositionDialog/useSubmit.ts
-#~ msgid "{promote_red_packet} Follow @{officialAccount} for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n{encrypted}"
-#~ msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
@@ -2082,10 +2069,6 @@ msgstr ""
 msgid "Powered by <0>Mask Network</0>"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ProfileCard/index.tsx
-#~ msgid "Powered by <0>RSS3</0>"
-#~ msgstr ""
-
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Previous"
 msgstr "이전"
@@ -2726,10 +2709,6 @@ msgstr "이 RPC URL는 {0} 네트워크에서 사용되고 있습니다."
 #: content-script/site-adaptors/twitter.com/customization/i18n.ts
 msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
 msgstr ""
-
-#: content-script/site-adaptors/twitter.com/customization/i18n.ts
-#~ msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install {encrypted} to send your first encrypted tweet."
-#~ msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."

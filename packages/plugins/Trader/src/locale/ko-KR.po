@@ -1,20 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:52\n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: ko_KR\n"
-"Language-Team: Korean\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ko\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1000\n"
+"Plural-Forms: \n"
 
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "{0} {1} bridge completed successfully."
@@ -369,11 +364,6 @@ msgstr ""
 #: src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to place an order through all integrated third-party DEXs (some of them are shown below).  Note that OKX DEX derives all its liquidity from third-party liquidity pools. OKX DEX does NOT conduct any transactions directly."
 msgstr ""
-
-#: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/Trade/index.tsx
-#~ msgid "on {0}"
-#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "on {fromNetworkName}"

@@ -366,11 +366,6 @@ msgid "OKX DEX refers to the OKX DEX aggregator, which chooses the best route to
 msgstr ""
 
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/Trade/index.tsx
-#~ msgid "on {0}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "on {fromNetworkName}"
 msgstr ""
 

@@ -1,20 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:51\n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: zh_CN\n"
-"Language-Team: Chinese Simplified\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 972\n"
+"Plural-Forms: \n"
 
 #: src/SiteAdaptor/SearchResultInspector.tsx
 msgid "<0>USD Value</0><1>${0}</1>"
@@ -31,14 +26,6 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Optimize the display of search results about ENS in social media."
 msgstr ""
-
-#: src/SiteAdaptor/PluginHeader.tsx
-#~ msgid "Powered by {0}"
-#~ msgstr ""
-
-#: src/SiteAdaptor/PluginHeader.tsx
-#~ msgid "Powered by <0><1/></0><2/>"
-#~ msgstr ""
 
 #: src/SiteAdaptor/PluginHeader.tsx
 msgid "Powered by <0>Mask Network<1><2/></1></0>"

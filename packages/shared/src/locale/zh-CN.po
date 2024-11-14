@@ -1,20 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:52\n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: zh_CN\n"
-"Language-Team: Chinese Simplified\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/shared/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 1012\n"
+"Plural-Forms: \n"
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
@@ -232,10 +227,6 @@ msgstr ""
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "Check out the official website"
 msgstr ""
-
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-#~ msgid "Choose Network"
-#~ msgstr "选择网络"
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -595,10 +586,6 @@ msgid "Failed to load MASK. Click to retry."
 msgstr ""
 
 #: src/UI/translate.ts
-#~ msgid "Failed to purchase Maskbox NFT."
-#~ msgstr ""
-
-#: src/UI/translate.ts
 msgid "Failed to refund Lucky Drop."
 msgstr ""
 
@@ -649,10 +636,6 @@ msgstr ""
 #: src/UI/components/SocialAccountList/SocialListItem.tsx
 msgid "Following"
 msgstr "已关注"
-
-#: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-#~ msgid "Fortmatic only supports the ETH and BNB chain."
-#~ msgstr "Formatic 仅支持 ETH 和 BNB 链。"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Gas Fee"
@@ -808,14 +791,6 @@ msgstr "市值"
 #: src/UI/components/GrantPermission/index.tsx
 msgid "Mask Network requires the permission of following websites before using it."
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Maskbox NFT purchased."
-#~ msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Maskbox NFT with {0} purchased."
-#~ msgstr ""
 
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee"
@@ -1036,14 +1011,6 @@ msgstr "价格统计数据"
 #: src/UI/components/CompositionDialog/BadgeRenderer.tsx
 msgid "Provided by plugin \"{0}\""
 msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Purchase Maskbox NFT"
-#~ msgstr ""
-
-#: src/UI/translate.ts
-#~ msgid "Purchase Maskbox NFT."
-#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Refund Lucky drop"

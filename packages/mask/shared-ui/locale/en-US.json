@@ -17,18 +17,6 @@
                 }
             ]
         ],
-        "dlcyk4": [
-            ["promote_red_packet"],
-            " \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n",
-            ["encrypted"]
-        ],
-        "7oQtrL": [
-            ["promote_red_packet"],
-            " Follow @",
-            ["officialAccount"],
-            " for Web3 updates and insights. \\n\\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io. \\n\\n",
-            ["encrypted"]
-        ],
         "ANYjcp": [["shareWithNum", "plural", { "one": "1 friend", "other": ["#", " friends"] }]],
         "k57+C7": [["walletLength", "plural", { "one": ["#", " Wallet"], "other": ["#", " Wallets"] }]],
         "kr2cTE": [
@@ -509,7 +497,6 @@
         "ohUJJM": "Plugins",
         "04MqGo": "Post content:",
         "4HavhE": "Powered by <0>Mask Network</0>",
-        "V0Fs71": "Powered by <0>RSS3</0>",
         "DHhJ7s": "Previous",
         "2MPu+c": "Priority Fee (GWEI)",
         "DnmyoA": "Priority fee should be greater than 0.",
@@ -673,11 +660,6 @@
         "Gw91G1": "This request should only be sign in the future.",
         "dAMTl9": ["This RPC URL is currently used by the ", ["0"], " network"],
         "oZw0Iw": "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑",
-        "I6BEL9": [
-            "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑\\n\\n🎭 🎭🎭 Tired of plaintext? Try to send encrypted messages to your friends. Install ",
-            ["encrypted"],
-            " to send your first encrypted tweet."
-        ],
         "iuCSJl": ["This wallet is connected to current persona ", ["0"], "."],
         "oCBTyI": "This will overwrite the existing cloud backup with the local data, this cannot be undo.",
         "/jQctM": "To",

@@ -1,20 +1,15 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: mask-network\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:52\n"
+"PO-Revision-Date: \n"
 "Last-Translator: \n"
-"Language: ja_JP\n"
-"Language-Team: Japanese\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: \n"
+"Content-Type: \n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: nplurals=1; plural=0;\n"
-"X-Crowdin-Project: mask-network\n"
-"X-Crowdin-Project-ID: 468872\n"
-"X-Crowdin-Language: ja\n"
-"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Tips/src/locale/en-US.po\n"
-"X-Crowdin-File-ID: 998\n"
+"Plural-Forms: \n"
 
 #: src/components/TipDialog.tsx
 msgid "{amount} {0} tips sent."
@@ -41,16 +36,8 @@ msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{r
 msgstr ""
 
 #: src/components/TipDialog.tsx
-#~ msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\n{promote}"
-#~ msgstr ""
-
-#: src/components/TipDialog.tsx
 msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}"
 msgstr ""
-
-#: src/components/TipDialog.tsx
-#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\n{promote}"
-#~ msgstr ""
 
 #: src/components/TipDialog.tsx
 msgid "Install https://mask.io/download-links to send your first tip."
