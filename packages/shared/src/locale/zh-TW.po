@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:53\n"
+"PO-Revision-Date: 2024-11-14 04:48\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -1424,3 +1424,4 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
+
