@@ -12,7 +12,6 @@ import { RainbowProvider } from './Rainbow.js'
 import { OneKeyProvider } from './OneKey.js'
 import { RabbyProvider } from './Rabby.js'
 import { CloverProvider } from './Clover.js'
-import { FortmaticProvider } from './Fortmatic.js'
 import { OperaProvider } from './Opera.js'
 import { ZerionProvider } from './Zerion.js'
 import { MaskWalletProvider, setMaskWalletProviderInstance } from './MaskWallet.js'
@@ -54,7 +53,6 @@ export function createEVMWalletProviders(
         [ProviderType.Trust]: new TrustProvider(),
         [ProviderType.TokenPocket]: new TokenPocketProvider(),
         [ProviderType.Clover]: new CloverProvider(),
-        [ProviderType.Fortmatic]: new FortmaticProvider(),
         [ProviderType.Opera]: new OperaProvider(),
         [ProviderType.Zerion]: new ZerionProvider(),
         [ProviderType.CustomEvent]: new EVMCustomEventProvider(),

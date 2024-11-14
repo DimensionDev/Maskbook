@@ -65,7 +65,6 @@
     "bs58": "^5.0.0",
     "buffer": "^6.0.3",
     "date-fns": "^3.6.0",
-    "fortmatic": "^2.4.0",
     "fuse.js": "^7.0.0",
     "graphql-request": "^7.0.1",
     "immer": "^10.1.1",

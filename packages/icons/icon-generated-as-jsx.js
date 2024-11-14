@@ -4122,11 +4122,6 @@ export const MarketsClaim = /*#__PURE__*/ __createIcon('MarketsClaim', [
         u: () => new URL('./plugins/MarketsClaim.svg', import.meta.url).href,
     },
 ])
-export const MaskBox = /*#__PURE__*/ __createIcon('MaskBox', [
-    {
-        u: () => new URL('./plugins/MaskBox.svg', import.meta.url).href,
-    },
-])
 export const NFTAvatar = /*#__PURE__*/ __createIcon('NFTAvatar', [
     {
         u: () => new URL('./plugins/NFTAvatar.svg', import.meta.url).href,

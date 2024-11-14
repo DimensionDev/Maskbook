@@ -611,24 +611,6 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         downloadLink: 'https://clv.org/?type=wallet',
     },
     {
-        ID: `${PLUGIN_ID}_fortmatic`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.Fortmatic,
-        name: 'Fortmatic',
-        icon: new URL('../assets/fortmatic.png', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: Sniffings.is_firefox ? [] : [ChainId.Mainnet, ChainId.BSC],
-            supportedEnhanceableSites: Sniffings.is_firefox ? [] : EnhanceableSiteList,
-            supportedExtensionSites: Sniffings.is_firefox ? [] : ExtensionSiteList,
-        },
-        homeLink: 'https://fortmatic.com',
-        shortenLink: 'fortmatic.com',
-        downloadLink: 'https://fortmatic.com',
-        iconFilterColor: 'rgba(104, 81, 255, 0.2)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(104, 81, 255, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-    {
         ID: `${PLUGIN_ID}_bitget`,
         providerAdaptorPluginID: PLUGIN_ID,
         type: ProviderType.BitGet,

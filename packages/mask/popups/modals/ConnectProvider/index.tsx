@@ -104,18 +104,14 @@ export const ConnectProviderModal = memo<ActionModalBaseProps>(function ConnectP
             const connect = async () => {
                 // wait for web3 state init
                 await delay(1500)
-                const chainId =
-                    providerType === ProviderType.Fortmatic ?
-                        ChainId.Mainnet
-                    :   await EVMWeb3.getChainId({ providerType })
+                const chainId = await EVMWeb3.getChainId({ providerType })
                 return EVMWeb3.connect({
                     chainId,
                     providerType: providerType as ProviderType,
                 })
             }
 
-            // Fortmatic takes extra time because it requires the user to enter an account and password, a verification code
-            const result = await timeout(connect(), providerType === ProviderType.Fortmatic ? 5 * 60 * 1000 : 30 * 1000)
+            const result = await timeout(connect(), 30 * 1000)
             if (!result) return
             navigate(PopupRoutes.ConnectWallet, {
                 replace: true,

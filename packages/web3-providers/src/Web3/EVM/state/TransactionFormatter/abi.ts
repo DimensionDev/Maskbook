@@ -9,7 +9,6 @@ import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json' with {
 import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
 import ERC20 from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }
 import ERC721 from '@masknet/web3-contracts/abis/ERC721.json' with { type: 'json' }
-import MaskBox from '@masknet/web3-contracts/abis/MaskBox.json' with { type: 'json' }
 import WETH from '@masknet/web3-contracts/abis/WETH.json' with { type: 'json' }
 import Lido from '@masknet/web3-contracts/abis/Lido.json' with { type: 'json' }
 import AaveLendingPool from '@masknet/web3-contracts/abis/AaveLendingPool.json' with { type: 'json' }
@@ -27,7 +26,6 @@ class ABI {
         this.construct(BulkCheckout as AbiItem[]) // donate gitcoin grants
         this.construct(NftRedPacket as AbiItem[])
         this.construct(HappyRedPacketV4 as AbiItem[])
-        this.construct(MaskBox as AbiItem[])
         this.construct(ERC721 as AbiItem[])
         this.construct(ERC20 as AbiItem[])
         this.construct(WETH as AbiItem[]) // wrap & unwrap

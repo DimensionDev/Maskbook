@@ -384,7 +384,6 @@ export function good_ghosting_dark_url() { return new URL("./plugins/GoodGhostin
 export function good_ghosting_light_url() { return new URL("./plugins/GoodGhosting.light.svg", import.meta.url).href }
 export function markets_url() { return new URL("./plugins/Markets.png", import.meta.url).href }
 export function markets_claim_url() { return new URL("./plugins/MarketsClaim.svg", import.meta.url).href }
-export function mask_box_url() { return new URL("./plugins/MaskBox.svg", import.meta.url).href }
 export function nft_avatar_url() { return new URL("./plugins/NFTAvatar.svg", import.meta.url).href }
 export function pool_together_url() { return new URL("./plugins/PoolTogether.png", import.meta.url).href }
 export function savings_url() { return new URL("./plugins/Savings.svg", import.meta.url).href }
