@@ -20,6 +20,8 @@ permissions:
 
 jobs:
   check:
+    # disable
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - name: Check Milestone
