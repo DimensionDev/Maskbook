@@ -82,11 +82,6 @@ export const getTrendingConstants = transformAll(ChainId, Trending)
 export const useTrendingConstant = transformHook(getTrendingConstants)
 export const useTrendingConstants = transformAllHook(getTrendingConstants)
 
-export const getMaskBoxConstant = transform(ChainId, MaskBox)
-export const getMaskBoxConstants = transformAll(ChainId, MaskBox)
-export const useMaskBoxConstant = transformHook(getMaskBoxConstants)
-export const useMaskBoxConstants = transformAllHook(getMaskBoxConstants)
-
 export const getRPCConstant = transform(ChainId, RPC)
 export const getRPCConstants = transformAll(ChainId, RPC)
 export const useRPCConstant = transformHook(getRPCConstants)

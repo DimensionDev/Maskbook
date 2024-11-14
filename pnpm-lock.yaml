@@ -428,9 +428,6 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../plugin-infra
-      '@masknet/plugin-maskbox':
-        specifier: workspace:^
-        version: link:../plugins/MaskBox
       '@masknet/plugin-nextid':
         specifier: workspace:^
         version: link:../plugins/NextID
@@ -1402,75 +1399,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
-
-  packages/plugins/MaskBox:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/typed-message':
-        specifier: workspace:^0.2.0
-        version: link:../../typed-message/base
-      '@masknet/web3-contracts':
-        specifier: workspace:^
-        version: link:../../web3-contracts
-      '@masknet/web3-helpers':
-        specifier: workspace:^
-        version: link:../../web3-helpers
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../../web3-hooks/base
-      '@masknet/web3-hooks-evm':
-        specifier: workspace:^
-        version: link:../../web3-hooks/evm
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../../web3-shared/evm
-      '@types/color':
-        specifier: ^3.0.6
-        version: 3.0.6
-      bignumber.js:
-        specifier: 9.1.2
-        version: 9.1.2
-      buffer:
-        specifier: ^6.0.3
-        version: 6.0.3
-      color:
-        specifier: ^4.2.3
-        version: 4.2.3
-      date-fns:
-        specifier: ^3.6.0
-        version: 3.6.0
-      react-use:
-        specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-      urlcat:
-        specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
-      web3-utils:
-        specifier: 1.10.2
-        version: 1.10.2
 
   packages/plugins/NextID:
     dependencies:
