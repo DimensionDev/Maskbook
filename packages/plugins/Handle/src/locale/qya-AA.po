@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:53\n"
+"PO-Revision-Date: 2024-11-14 10:10\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -15,13 +15,24 @@ msgstr ""
 "X-Crowdin-Language: qya-AA\n"
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
+
+#: src/SiteAdaptor/SearchResultInspector.tsx
 msgid "<0>USD Value</0><1>${0}</1>"
 msgstr "crwdns32250:0${0}crwdne32250:0"
+
+#: src/SiteAdaptor/PluginHeader.tsx
 msgid "DSearch"
 msgstr "crwdns32838:0crwdne32838:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "ENS"
 msgstr "crwdns31386:0crwdne31386:0"
+
+#: src/SiteAdaptor/index.tsx
 msgid "Optimize the display of search results about ENS in social media."
 msgstr "crwdns31388:0crwdne31388:0"
+
+#: src/SiteAdaptor/PluginHeader.tsx
 msgid "Powered by <0>Mask Network<1><2/></1></0>"
 msgstr "crwdns35454:0crwdne35454:0"
+
