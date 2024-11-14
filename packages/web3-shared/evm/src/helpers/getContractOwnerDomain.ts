@@ -3,7 +3,6 @@ import Aave from '@masknet/web3-constants/evm/aave.json' with { type: 'json' }
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json' with { type: 'json' }
 import Gitcoin from '@masknet/web3-constants/evm/gitcoin.json' with { type: 'json' }
 import Lido from '@masknet/web3-constants/evm/lido.json' with { type: 'json' }
-import MaskBox from '@masknet/web3-constants/evm/mask-box.json' with { type: 'json' }
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json' with { type: 'json' }
 import RedPacket from '@masknet/web3-constants/evm/red-packet.json' with { type: 'json' }
 
@@ -34,7 +33,6 @@ const domainAddressMap: Record<string, string[]> = {
             'HAPPY_RED_PACKET_ADDRESS_V4',
         ]),
         ...collect(NftRedPacket, ['RED_PACKET_NFT_ADDRESS']),
-        ...collect(MaskBox, ['MASK_BOX_CONTRACT_ADDRESS']),
     ],
 }
 

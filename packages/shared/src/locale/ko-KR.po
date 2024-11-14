@@ -234,8 +234,8 @@ msgid "Check out the official website"
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Choose Network"
-msgstr "네트워크 선택"
+#~ msgid "Choose Network"
+#~ msgstr "네트워크 선택"
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -595,8 +595,8 @@ msgid "Failed to load MASK. Click to retry."
 msgstr ""
 
 #: src/UI/translate.ts
-msgid "Failed to purchase Maskbox NFT."
-msgstr ""
+#~ msgid "Failed to purchase Maskbox NFT."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Failed to refund Lucky Drop."
@@ -651,8 +651,8 @@ msgid "Following"
 msgstr "팔로잉"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Fortmatic only supports the ETH and BNB chain."
-msgstr "Fortmatic는 ETH 및 BNB에만 지원합니다."
+#~ msgid "Fortmatic only supports the ETH and BNB chain."
+#~ msgstr "Fortmatic는 ETH 및 BNB에만 지원합니다."
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Gas Fee"
@@ -810,12 +810,12 @@ msgid "Mask Network requires the permission of following websites before using i
 msgstr ""
 
 #: src/UI/translate.ts
-msgid "Maskbox NFT purchased."
-msgstr ""
+#~ msgid "Maskbox NFT purchased."
+#~ msgstr ""
 
 #: src/UI/translate.ts
-msgid "Maskbox NFT with {0} purchased."
-msgstr ""
+#~ msgid "Maskbox NFT with {0} purchased."
+#~ msgstr ""
 
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Max fee"
@@ -1038,12 +1038,12 @@ msgid "Provided by plugin \"{0}\""
 msgstr ""
 
 #: src/UI/translate.ts
-msgid "Purchase Maskbox NFT"
-msgstr ""
+#~ msgid "Purchase Maskbox NFT"
+#~ msgstr ""
 
 #: src/UI/translate.ts
-msgid "Purchase Maskbox NFT."
-msgstr ""
+#~ msgid "Purchase Maskbox NFT."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Refund Lucky drop"

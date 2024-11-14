@@ -18,7 +18,6 @@ export enum PluginID {
     Handle = 'com.maskbook.handle',
     NextID = 'com.mask.next_id',
     Gitcoin = 'co.gitcoin',
-    MaskBox = 'com.maskbook.box',
     Trader = 'com.maskbook.trader',
     Tips = 'com.maskbook.tip',
     Transak = 'com.maskbook.transak',

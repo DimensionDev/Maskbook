@@ -14,7 +14,6 @@
     { "path": "./Gitcoin/tsconfig.json" },
     { "path": "./GoPlusSecurity/tsconfig.json" },
     { "path": "./Handle/tsconfig.json" },
-    { "path": "./MaskBox/tsconfig.json" },
     { "path": "./NextID/tsconfig.json" },
     { "path": "./Pets/tsconfig.json" },
     { "path": "./ProfileCard/tsconfig.json" },

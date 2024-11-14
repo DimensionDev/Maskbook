@@ -145,7 +145,6 @@
       "@project-serum/sol-wallet-adapter@0.2.6": "patches/@project-serum__sol-wallet-adapter@0.2.6.patch",
       "@types/react-highlight-words@0.20.0": "patches/@types__react-highlight-words@0.20.0.patch",
       "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
-      "fortmatic@2.4.0": "patches/fortmatic@2.4.0.patch",
       "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
       "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
       "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",

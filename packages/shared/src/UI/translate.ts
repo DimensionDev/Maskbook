@@ -34,7 +34,6 @@ const map: Record<
     'Failed to claim Lucky Drop.': msg`Failed to claim Lucky Drop.`,
     'Failed to create Lucky Drop.': msg`Failed to create Lucky Drop.`,
     'Failed to deposit token.': msg`Failed to deposit token.`,
-    'Failed to purchase Maskbox NFT.': msg`Failed to purchase Maskbox NFT.`,
     'Failed to refund Lucky Drop.': msg`Failed to refund Lucky Drop.`,
     'Failed to revoke token contract.': msg`Failed to revoke token contract.`,
     'Failed to send token.': msg`Failed to send token.`,
@@ -43,11 +42,9 @@ const map: Record<
     'Failed to unlock token contract.': msg`Failed to unlock token contract.`,
     'Lucky Drop claimed.': msg`Lucky Drop claimed.`,
     'Lucky Drop refunded.': msg`Lucky Drop refunded.`,
-    'Maskbox NFT purchased.': msg`Maskbox NFT purchased.`,
     'NFT Lucky Drop claimed.': msg`NFT Lucky Drop claimed.`,
     'NFT Lucky Drop created.': msg`NFT Lucky Drop created.`,
     'Owner changed.': msg`Owner changed.`,
-    'Purchase Maskbox NFT.': msg`Purchase Maskbox NFT.`,
     'Refund your expired Lucky Drop.': msg`Refund your expired Lucky Drop.`,
     'Revoke the approval for token': msg`Revoke the approval for token`,
     'The token approval revoked.': msg`The token approval revoked.`,
@@ -70,7 +67,6 @@ const map: Record<
     'Deploy Smarty Pay wallet': msg`Deploy Smarty Pay wallet`,
     'Deposit token': msg`Deposit token`,
     'Follow User': msg`Follow User`,
-    'Purchase Maskbox NFT': msg`Purchase Maskbox NFT`,
     'Refund Lucky drop': msg`Refund Lucky drop`,
     'Revoke Token': msg`Revoke Token`,
     'Transfer NFT': msg`Transfer NFT`,
@@ -114,8 +110,6 @@ export function useFormatMessage() {
                     return _(msg`${message.symbol} NFT Lucky Drop created.`)
                 case '{token} deposited.':
                     return _(msg`${message.token} deposited.`)
-                case 'Maskbox NFT with {token} purchased.':
-                    return _(msg`Maskbox NFT with ${message.token} purchased.`)
                 case 'Lucky Drop with {token} refunded.':
                     return _(msg`Lucky Drop with ${message.token} refunded.`)
                 case '{token} sent.':

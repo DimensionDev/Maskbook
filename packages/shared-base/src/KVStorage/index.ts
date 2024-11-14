@@ -67,7 +67,6 @@ export const PersistentStorages = {
             [PluginID.RedPacket]: false,
             [PluginID.FileService]: false,
             [PluginID.CrossChainBridge]: false,
-            [PluginID.MaskBox]: false,
             [PluginID.Savings]: false,
             [PluginID.Avatar]: false,
             [PluginID.Trader]: false,
