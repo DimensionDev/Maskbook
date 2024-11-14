@@ -250,7 +250,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             !currentProfile ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
-            providerType === ProviderType.Fortmatic ||
             followLoading ||
             unfollowLoading ||
             profile?.followModule?.type === FollowModuleType.UnknownFollowModule ||
@@ -296,7 +295,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
-        if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
+        if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM)
             return <Trans>Current wallet does not support to interact with Lens protocol.</Trans>
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
             return <Trans>Only holding lens handle can follow.</Trans>
