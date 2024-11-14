@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:52\n"
+"PO-Revision-Date: 2024-11-14 04:48\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -235,7 +235,7 @@ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 #~ msgid "Choose Network"
-#~ msgstr "네트워크 선택"
+#~ msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -652,7 +652,7 @@ msgstr "팔로잉"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 #~ msgid "Fortmatic only supports the ETH and BNB chain."
-#~ msgstr "Fortmatic는 ETH 및 BNB에만 지원합니다."
+#~ msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Gas Fee"
@@ -1424,3 +1424,4 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
+
