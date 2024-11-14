@@ -76,49 +76,6 @@ const useStyles = makeStyles()((theme) => {
                 background: theme.palette.maskColor.bg,
             },
         },
-        dialogTitle: {
-            fontSize: 18,
-            fontWeight: 700,
-            color: theme.palette.maskColor.main,
-            textAlign: 'center',
-        },
-        dialogCloseButton: {
-            color: theme.palette.text.primary,
-            padding: 0,
-            width: 24,
-            height: 24,
-            '& > svg': {
-                fontSize: 24,
-            },
-        },
-        list: {
-            display: 'grid',
-            gridTemplateColumns: 'repeat(2, 1fr)',
-            gridGap: '12px 12px',
-        },
-        listItem: {
-            padding: theme.spacing(1.5),
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            rowGap: 12,
-            borderRadius: 12,
-        },
-        listItemText: {
-            fontSize: 12,
-            fontWeight: 700,
-            color: theme.palette.maskColor.main,
-        },
-        dialogPaper: {
-            margin: 0,
-            maxWidth: 400,
-            background: theme.palette.maskColor.bottom,
-            boxShadow:
-                theme.palette.mode === 'dark' ?
-                    '0px 0px 20px rgba(255, 255, 255, 0.12)'
-                :   '0px 0px 20px rgba(0, 0, 0, 0.05)',
-        },
     }
 })
 
