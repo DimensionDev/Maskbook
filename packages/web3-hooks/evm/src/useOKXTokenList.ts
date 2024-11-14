@@ -4,7 +4,7 @@ import { skipToken, useQuery } from '@tanstack/react-query'
 
 export function useOKXTokenList(chainId: ChainId | undefined, enabled = true) {
     return useQuery({
-        enabled,
+        enabled: enabled && !!chainId,
         queryKey: ['okx-tokens', chainId],
         queryFn: chainId ? () => OKX.getTokens(chainId) : skipToken,
     })

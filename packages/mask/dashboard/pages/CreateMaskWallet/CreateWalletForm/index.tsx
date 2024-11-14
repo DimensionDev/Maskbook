@@ -122,7 +122,7 @@ export const Component = memo(function CreateWalletForm() {
             <Typography className={classes.tips}>
                 <Trans>Payment Password should be between 6 and 20 characters.</Trans>
             </Typography>
-            <form className={classes.form} onSubmit={onSubmit}>
+            <form className={classes.form} onSubmit={onSubmit} autoComplete="off">
                 <Box style={{ marginTop: 24, display: 'flex', flexDirection: 'column', rowGap: 10 }}>
                     <Controller
                         control={control}

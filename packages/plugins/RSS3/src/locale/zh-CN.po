@@ -1,15 +1,20 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: \n"
+"Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: \n"
+"PO-Revision-Date: 2024-11-11 10:52\n"
 "Last-Translator: \n"
-"Language: \n"
-"Language-Team: \n"
-"Content-Type: \n"
+"Language: zh_CN\n"
+"Language-Team: Chinese Simplified\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: \n"
-"Plural-Forms: \n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+"X-Crowdin-Project: mask-network\n"
+"X-Crowdin-Project-ID: 468872\n"
+"X-Crowdin-Language: zh-CN\n"
+"X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
+"X-Crowdin-File-ID: 982\n"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "{0, plural, one {Action} other {Actions}}"
@@ -164,7 +169,7 @@ msgstr ""
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/DetailDialog.tsx
 #: src/SiteAdaptor/modals/SocialFeedDetailsModal/DetailDialog.tsx
 msgid "Details"
-msgstr ""
+msgstr "详情"
 
 #: src/SiteAdaptor/FeedFilters.tsx
 msgid "Direct"

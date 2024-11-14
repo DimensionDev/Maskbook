@@ -82,6 +82,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
                             className: classes.input,
                             disableUnderline: true,
                         }}
+                        autoComplete="off"
                         multiline={multiline}
                         rows={multiline ? 6 : undefined}
                         sx={{ width: '100%' }}

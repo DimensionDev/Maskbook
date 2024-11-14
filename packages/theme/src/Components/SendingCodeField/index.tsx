@@ -54,6 +54,7 @@ export function SendingCodeField({
             helperText={errorMessage}
             onBlur={() => onBlur?.(code)}
             disabled={disabled}
+            autoComplete="off"
             InputProps={{
                 disableUnderline: true,
                 endAdornment: (

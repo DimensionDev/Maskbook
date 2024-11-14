@@ -12,6 +12,7 @@ export const PasswordField = memo(function PasswordField({
         <StyledInput
             {...rest}
             type={showPassword ? 'text' : 'password'}
+            autoComplete="off"
             InputProps={{
                 ...rest.InputProps,
                 endAdornment: (

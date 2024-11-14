@@ -16,7 +16,7 @@ export function getInjectNodeInfo(ele: HTMLElement) {
                 avatarParent.style.clipPath !== 'url("#shape-square-rx-8")' &&
                 !document.getElementById('shape-hex')
             ) {
-                console.error("Twitter DOM might get updated, can not find clip path by 'shape-hex'")
+                console.error("Twitter DOM might get updated, can not find clip path by 'shape-hex'", ele)
             }
         }
     }

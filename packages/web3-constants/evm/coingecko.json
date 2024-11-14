@@ -37,8 +37,6 @@
         "Moonriver": "moonriver",
         "Cronos": "crypto-com-chain",
         "BitTorrent": "bittorrent",
-        "Boba": "boba-network",
-        "Metis": "metis-token",
-        "Scroll": "ethereum"
+        "Boba": "boba-network"
     }
 }

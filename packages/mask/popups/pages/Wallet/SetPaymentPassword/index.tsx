@@ -247,7 +247,7 @@ export const Component = memo(function SetPaymentPassword() {
                 </Box>
                 {isCreating ?
                     <>
-                        <form className={classes.form} onSubmit={onSubmit}>
+                        <form className={classes.form} onSubmit={onSubmit} autoComplete="off">
                             <div className={classes.textField} style={{ marginBottom: 12 }}>
                                 <Controller
                                     control={control}

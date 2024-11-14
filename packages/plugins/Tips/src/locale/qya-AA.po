@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2024-11-11 10:53\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -37,12 +37,20 @@ msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social m
 msgstr "crwdns31402:0crwdne31402:0"
 
 #: src/components/TipDialog.tsx
-msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\n{promote}"
-msgstr "crwdns32340:0amount={amount}crwdnd32340:00={0}crwdnd32340:01={1}crwdnd32340:0recipientUserId={recipientUserId}crwdnd32340:02={2}crwdnd32340:03={3}crwdnd32340:0promote={promote}crwdne32340:0"
+msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}"
+msgstr "crwdns35484:0amount={amount}crwdnd35484:00={0}crwdnd35484:01={1}crwdnd35484:0recipientUserId={recipientUserId}crwdnd35484:02={2}crwdnd35484:03={3}crwdne35484:0"
 
 #: src/components/TipDialog.tsx
-msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\n{promote}"
-msgstr "crwdns32342:0NFT_Name={NFT_Name}crwdnd32342:0recipientUserId={recipientUserId}crwdnd32342:00={0}crwdnd32342:0recipientAddress={recipientAddress}crwdnd32342:0promote={promote}crwdne32342:0"
+#~ msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\n{promote}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx
+msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}"
+msgstr "crwdns35486:0NFT_Name={NFT_Name}crwdnd35486:0recipientUserId={recipientUserId}crwdnd35486:00={0}crwdnd35486:0recipientAddress={recipientAddress}crwdne35486:0"
+
+#: src/components/TipDialog.tsx
+#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\n{promote}"
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx
 msgid "Install https://mask.io/download-links to send your first tip."
