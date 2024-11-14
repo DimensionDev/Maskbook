@@ -1450,6 +1450,7 @@ msgstr ""
 msgid "Kept safely"
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
@@ -1631,6 +1632,7 @@ msgstr ""
 msgid "Message"
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
 msgstr ""
@@ -2090,6 +2092,7 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx

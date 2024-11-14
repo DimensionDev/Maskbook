@@ -1450,6 +1450,7 @@ msgstr "Mask Wallet으로 거래 및 자산을 안정하게 보관합니다."
 msgid "Kept safely"
 msgstr "안전 보관"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
@@ -1631,6 +1632,7 @@ msgstr "로컬로 합병하기"
 msgid "Message"
 msgstr "메시지"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
 msgstr "니모닉"
@@ -2090,6 +2092,7 @@ msgstr "개인정보처리방침"
 msgid "Private"
 msgstr "비공개"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx

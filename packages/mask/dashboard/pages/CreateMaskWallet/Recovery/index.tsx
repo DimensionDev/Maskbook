@@ -236,9 +236,13 @@ export const Component = memo(function Recovery() {
                     <TabContext value={currentTab}>
                         <div className={classes.tabList}>
                             <MaskTabList variant="base" onChange={onTabChange} aria-label="Recovery Methods">
-                                <Tab className={classes.tab} label="Mnemonic" value={tabs.mnemonic} />
-                                <Tab className={classes.tab} label="Private Key" value={tabs.privateKey} />
-                                <Tab className={classes.tab} label="Keystore" value={tabs.local} />
+                                <Tab className={classes.tab} label={<Trans>Mnemonic</Trans>} value={tabs.mnemonic} />
+                                <Tab
+                                    className={classes.tab}
+                                    label={<Trans>Private Key</Trans>}
+                                    value={tabs.privateKey}
+                                />
+                                <Tab className={classes.tab} label={<Trans>Keystore</Trans>} value={tabs.local} />
                             </MaskTabList>
                         </div>
                         <div className={classes.panelContainer}>

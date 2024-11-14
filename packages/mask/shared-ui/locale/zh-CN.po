@@ -1450,6 +1450,7 @@ msgstr "使用 Mask 钱包来保证您的交易和资产安全。"
 msgid "Kept safely"
 msgstr "确认保存"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
@@ -1631,6 +1632,7 @@ msgstr "合并至本地数据"
 msgid "Message"
 msgstr "信息"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
 msgstr "助记词"
@@ -2090,6 +2092,7 @@ msgstr "隐私政策"
 msgid "Private"
 msgstr "私密"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx

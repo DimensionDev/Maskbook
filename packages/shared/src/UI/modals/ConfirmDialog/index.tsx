@@ -4,6 +4,7 @@ import { useState, type ReactNode, memo } from 'react'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { InjectedDialog } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -55,8 +56,8 @@ interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmit' | 'o
     title?: ReactNode
     message?: ReactNode | string
     description?: ReactNode | string
-    confirmLabel?: string
-    cancelLabel?: string
+    confirmLabel?: ReactNode
+    cancelLabel?: ReactNode
     /** Change color of confirm button */
     confirmVariant?: 'error' | 'warning'
     onConfirm(): void
@@ -68,8 +69,8 @@ const Dialog = memo(function Dialog({
     title,
     message,
     description,
-    confirmLabel = 'Confirm',
-    cancelLabel = 'Cancel',
+    confirmLabel,
+    cancelLabel,
     confirmVariant = 'error',
     onConfirm,
     onClose,
@@ -91,14 +92,14 @@ const Dialog = memo(function Dialog({
                 </Typography>
                 <Box className={classes.buttonGroup}>
                     <ActionButton fullWidth variant="roundedOutlined" onClick={() => onClose?.()}>
-                        {cancelLabel}
+                        {cancelLabel ?? <Trans>Cancel</Trans>}
                     </ActionButton>
                     <ActionButton
                         fullWidth
                         variant="roundedContained"
                         color={confirmVariant}
                         onClick={() => onConfirm()}>
-                        {confirmLabel}
+                        {confirmLabel ?? <Trans>Confirm</Trans>}
                     </ActionButton>
                 </Box>
             </DialogContent>
