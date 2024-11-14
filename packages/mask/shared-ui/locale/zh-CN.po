@@ -1685,8 +1685,8 @@ msgid "Name"
 msgstr "名称"
 
 #: popups/components/TokenPicker/index.tsx
-msgid "Name or Contract address e.g. USDC or 0x234..."
-msgstr ""
+#~ msgid "Name or Contract address e.g. USDC or 0x234..."
+#~ msgstr ""
 
 #: popups/modals/ChooseNetworkModal/index.tsx
 msgid "Network"
@@ -1793,8 +1793,8 @@ msgid "No local key"
 msgstr "缺失本地密钥"
 
 #: popups/components/TokenPicker/index.tsx
-msgid "No matched tokens"
-msgstr ""
+#~ msgid "No matched tokens"
+#~ msgstr ""
 
 #: popups/components/NFTAvatarPicker/CollectionList.tsx
 msgid "No NFTs found."
@@ -2300,8 +2300,8 @@ msgid "Search Next.ID, X, Lens, ENS or Address"
 msgstr ""
 
 #: popups/pages/Trader/useImplementRuntime.tsx
-msgid "Select"
-msgstr ""
+#~ msgid "Select"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Select Address"
@@ -3052,4 +3052,3 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
-
