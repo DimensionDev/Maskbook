@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:11\n"
+"PO-Revision-Date: 2024-11-15 09:10\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -203,6 +203,7 @@ msgid "By confirming means that you agree to bear the possible risks above."
 msgstr "crwdns32494:0crwdne32494:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "crwdns30796:0crwdne30796:0"
@@ -293,6 +294,7 @@ msgstr "crwdns30824:0crwdne30824:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
