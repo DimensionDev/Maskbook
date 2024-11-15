@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:10\n"
+"PO-Revision-Date: 2024-11-15 09:10\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1455,6 +1455,7 @@ msgstr "crwdns30260:0crwdne30260:0"
 msgid "Kept safely"
 msgstr "crwdns29648:0crwdne29648:0"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Keystore"
@@ -1636,6 +1637,7 @@ msgstr "crwdns29658:0crwdne29658:0"
 msgid "Message"
 msgstr "crwdns30334:0crwdne30334:0"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Mnemonic"
 msgstr "crwdns30336:0crwdne30336:0"
@@ -2095,6 +2097,7 @@ msgstr "crwdns30458:0crwdne30458:0"
 msgid "Private"
 msgstr "crwdns30460:0crwdne30460:0"
 
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
