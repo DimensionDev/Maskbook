@@ -171,9 +171,9 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                         className={classes.avatar}
                                         size={36}
                                         src={avatar}
-                                        fallback={<Icons.Lens size={36} className={classes.avatar} />}
+                                        fallback={<Icons.DarkLens size={36} className={classes.avatar} />}
                                     />
-                                :   <Icons.Lens size={36} className={classes.avatar} />}
+                                :   <Icons.DarkLens size={36} className={classes.avatar} />}
                             </ListItemIcon>
                             <ListItemText
                                 classes={{ primary: classes.primary, root: classes.listItemText }}

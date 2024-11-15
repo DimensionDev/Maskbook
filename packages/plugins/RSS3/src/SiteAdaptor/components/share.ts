@@ -139,7 +139,7 @@ export const hostIconMap: Record<string, IconComponent> = {
     'polygonscan.com': Icons.PolygonScan,
     'crossbell.io': Icons.Crossbell,
     'scan.crossbell.io': Icons.Crossbell,
-    'lenster.xyz': Icons.Lens,
+    'lenster.xyz': Icons.DarkLens,
     'looksrare.org': Icons.LooksRare,
     'gitcoin.co': Icons.Gitcoin,
     'bscscan.com': Icons.BSC,

@@ -171,7 +171,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
 
 const platformIconMap = {
     [FireflyRedPacketAPI.PlatformType.twitter]: <Icons.TwitterX size={18} />,
-    [FireflyRedPacketAPI.PlatformType.lens]: <Icons.Lens size={18} />,
+    [FireflyRedPacketAPI.PlatformType.lens]: <Icons.DarkLens size={18} />,
     [FireflyRedPacketAPI.PlatformType.farcaster]: <Icons.Farcaster size={18} />,
 }
 

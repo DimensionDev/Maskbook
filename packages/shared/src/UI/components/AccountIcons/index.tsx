@@ -1,12 +1,12 @@
+import { Select, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { SocialAddressType, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { resolveSocialAddressLink } from '@masknet/web3-shared-base'
-import { Typography, type TooltipProps, Link } from '@mui/material'
+import { Link, Typography, type TooltipProps } from '@mui/material'
 import { compact } from 'lodash-es'
 import { Linking } from '../../../index.js'
-import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -191,7 +191,7 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
         supportedAddressTypes.includes(SocialAddressType.Lens) ?
             {
                 type: SocialAddressType.Lens,
-                icon: <Icons.Lens className={roundedClasses} size={18} style={iconStyle} />,
+                icon: <Icons.DarkLens className={roundedClasses} size={18} style={iconStyle} />,
             }
         :   null,
     ])
