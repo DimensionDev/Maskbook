@@ -101,6 +101,7 @@ export namespace SiteAdaptorUI {
             avatar?(signal: AbortSignal): void
             tips?(signal: AbortSignal): void
             lens?(signal: AbortSignal): void
+            badges?(signal: AbortSignal): void
             farcaster?(signal: AbortSignal): void
             nameWidget?(signal: AbortSignal): void
             profileCard?(signal: AbortSignal): void

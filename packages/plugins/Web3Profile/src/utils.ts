@@ -1,4 +1,4 @@
-import type { LensBaseAPI } from '@masknet/web3-providers/types'
+import type { FireflyConfigAPI, LensBaseAPI, NextIDBaseAPI } from '@masknet/web3-providers/types'
 import urlcat from 'urlcat'
 
 export function getFireflyLensProfileLink(handle: string) {
@@ -10,4 +10,15 @@ export function getProfileAvatar(profile: LensBaseAPI.Profile | undefined) {
     if (!picture) return
     if ('optimized' in picture) return picture.optimized?.uri || picture.raw.uri
     return picture.image.optimized?.uri || picture.image.raw.uri
+}
+
+export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): FireflyConfigAPI.LensAccount => {
+    return {
+        address: account.address,
+        name: account.displayName,
+        handle: account.handle,
+        bio: '',
+        url: '',
+        profileUri: [],
+    }
 }

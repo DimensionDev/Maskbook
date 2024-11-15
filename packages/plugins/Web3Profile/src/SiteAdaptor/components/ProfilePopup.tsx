@@ -1,6 +1,12 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
+import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
+import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { LensBaseAPI } from '@masknet/web3-providers/types'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import {
     Box,
     Button,
@@ -14,13 +20,7 @@ import {
     Typography,
 } from '@mui/material'
 import { memo } from 'react'
-import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { getProfileAvatar } from '../../utils.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

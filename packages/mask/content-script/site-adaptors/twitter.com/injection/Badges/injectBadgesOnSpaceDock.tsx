@@ -1,14 +1,38 @@
-import { memo, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { querySelectorAll } from '../../utils/selector.js'
-import { startWatch } from '../../../../utils/startWatch.js'
 
-function selector() {
-    return querySelectorAll<HTMLElement>('[data-testid=conversation] div:not([tabindex]) div[dir] + div[dir]')
+function avatarSelector() {
+    return querySelectorAll<HTMLElement>(
+        '[data-testid=SpaceDockExpanded] [data-testid^=UserAvatar-Container-],[data-testid=sheetDialog] [data-testid^=UserAvatar-Container-]',
+    ).map((node) => {
+        const span = node.parentElement?.parentElement?.nextElementSibling?.querySelector('div > span + span > span')
+        return span
+    })
+}
+
+/**
+ * Inject on space dock
+ */
+export function injectBadgesOnSpaceDock(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(avatarSelector())
+    startWatch(watcher, signal)
+    watcher.useForeach((node, _, proxy) => {
+        const avatar = node
+            .closest('div[dir]')
+            ?.previousElementSibling?.querySelector<HTMLElement>('[data-testid^=UserAvatar-Container-]')
+        if (!avatar) return
+        const userId = avatar.dataset.testid?.slice('UserAvatar-Container-'.length)
+        if (!userId) return
+        attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
+            <SpaceDockBadgesSlot userId={userId} />,
+        )
+    })
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -42,24 +66,24 @@ function createRootElement() {
     return span
 }
 
-const ConversationFarcasterSlot = memo(function ConversationFarcasterSlot({ userId }: Props) {
+function SpaceDockBadgesSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Farcaster?.UI?.Content,
+            (plugin) => plugin.Badges?.UI?.Content,
             undefined,
             createRootElement,
         )
-        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrapOr(null)
+        const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
         if (!identifier) return null
 
         return (
             <Component
                 identity={identifier}
-                slot={Plugin.SiteAdaptor.FarcasterSlot.Sidebar}
+                slot={Plugin.SiteAdaptor.BadgesSlot.Sidebar}
                 onStatusUpdate={setDisabled}
             />
         )
@@ -68,29 +92,4 @@ const ConversationFarcasterSlot = memo(function ConversationFarcasterSlot({ user
     if (!component) return null
 
     return <span className={cx(classes.slot, disabled ? classes.hide : null)}>{component}</span>
-})
-
-/**
- * Inject on conversation, including both DM drawer and message page (/messages/xxx)
- */
-export function injectFarcasterOnConversation(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(selector())
-    startWatch(watcher, signal)
-    watcher.useForeach((node, _, proxy) => {
-        const spans = node
-            .closest('[data-testid=conversation]')
-            ?.querySelectorAll<HTMLElement>('[tabindex] [dir] span:not([data-testid=tweetText])')
-        if (!spans) return
-        const userId = [...spans].reduce((id, node) => {
-            if (id) return id
-            if (node.textContent?.match(/@\w/)) {
-                return node.textContent.trim().slice(1)
-            }
-            return ''
-        }, '')
-        if (!userId) return
-        attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
-            <ConversationFarcasterSlot userId={userId} />,
-        )
-    })
 }

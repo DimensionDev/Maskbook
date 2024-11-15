@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import {
     ChainBoundary,
@@ -21,9 +22,8 @@ import { getFireflyLensProfileLink, getProfileAvatar } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
-import { HandlerDescription } from './HandlerDescription.js'
 import { useUpdateFollowingStatus } from '../../hooks/Lens/useUpdateFollowingStatus.js'
-import { Trans } from '@lingui/macro'
+import { HandlerDescription } from './HandlerDescription.js'
 
 const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
     container: {

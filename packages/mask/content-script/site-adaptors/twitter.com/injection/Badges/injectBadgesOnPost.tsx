@@ -14,7 +14,7 @@ function selector() {
 }
 
 // structure: <user-name> <user-id> <timestamp>
-export function injectLensOnPost(signal: AbortSignal) {
+export function injectBadgesOnPost(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     watcher.useForeach((node, _, proxy) => {
@@ -26,7 +26,7 @@ export function injectLensOnPost(signal: AbortSignal) {
         const userId = href?.split('/')[1]
         if (!userId) return
         attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
-            <PostLensSlot userId={userId} />,
+            <PostBadgesSlot userId={userId} />,
         )
     })
 }
@@ -58,21 +58,23 @@ function createRootElement() {
     })
     return span
 }
-function PostLensSlot({ userId }: Props) {
+function PostBadgesSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Lens?.UI?.Content,
+            (plugin) => plugin.Badges?.UI?.Content,
             undefined,
             createRootElement,
         )
         const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
         if (!identifier) return null
 
-        return <Component identity={identifier} slot={Plugin.SiteAdaptor.LensSlot.Post} onStatusUpdate={setDisabled} />
+        return (
+            <Component identity={identifier} slot={Plugin.SiteAdaptor.BadgesSlot.Post} onStatusUpdate={setDisabled} />
+        )
     }, [userId])
 
     if (!component) return null

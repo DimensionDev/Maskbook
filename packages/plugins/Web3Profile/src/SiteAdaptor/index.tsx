@@ -11,10 +11,9 @@ import { useEffect, useMemo } from 'react'
 import { Trans } from '@lingui/macro'
 import { base } from '../base.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
-import { FarcasterBadge } from './components/Farcaster/FarcasterBadge.js'
-import { LensBadge } from './components/Lens/LensBadge.js'
-import { NextIdLensToFireflyLens } from './components/Lens/LensPopup.js'
 import { setupStorage } from './context.js'
+import { SocialBadges } from './components/SocialBadges/Badges.js'
+import { NextIdLensToFireflyLens } from '../utils.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -62,13 +61,15 @@ const site: Plugin.SiteAdaptor.Definition = {
             }
         })(),
     ],
-    Lens: {
-        ID: `${base.ID}_lens`,
+    Badges: {
+        ID: `${base.ID}_badges`,
         UI: {
             Content({ identity, slot, onStatusUpdate }) {
                 const userId = identity?.userId
+
+                // #region lens
                 const { data: accounts = EMPTY_LIST } = useFireflyLensAccounts(userId, true)
-                const isProfile = slot === Plugin.SiteAdaptor.LensSlot.ProfileName
+                const isProfile = slot === Plugin.SiteAdaptor.BadgesSlot.ProfileName
 
                 const handle = accounts[0]?.handle
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
@@ -84,32 +85,27 @@ const site: Plugin.SiteAdaptor.Definition = {
                     () => (isProfile ? uniqBy([...accounts, ...nextIdLens], (x) => x.handle) : accounts),
                     [isProfile, accounts, nextIdLens],
                 )
+                // #endregion
 
-                const disabled = !lensAccounts.length
+                // #region farcaster
+                const { data: farcasterAccounts = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
+                // #endregion
+
+                const disabled = !lensAccounts.length && !farcasterAccounts.length
                 useEffect(() => {
                     onStatusUpdate?.(disabled)
                 }, [onStatusUpdate, disabled])
 
                 if (!accounts.length || !userId) return null
 
-                return <LensBadge slot={slot} accounts={lensAccounts} userId={userId} />
-            },
-        },
-    },
-    Farcaster: {
-        ID: `${base.ID}_farcaster`,
-        UI: {
-            Content({ identity, slot, onStatusUpdate }) {
-                const userId = identity?.userId
-
-                const { data: profiles = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
-                const disabled = !profiles.length
-
-                useEffect(() => {
-                    onStatusUpdate?.(disabled)
-                }, [onStatusUpdate, disabled])
-                if (!userId) return null
-                return <FarcasterBadge slot={slot} accounts={profiles} userId={userId} />
+                return (
+                    <SocialBadges
+                        slot={slot}
+                        lensAccounts={lensAccounts}
+                        farcasterAccounts={farcasterAccounts}
+                        userId={userId}
+                    />
+                )
             },
         },
     },

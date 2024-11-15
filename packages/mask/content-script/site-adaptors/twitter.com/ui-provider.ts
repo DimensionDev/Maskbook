@@ -40,12 +40,10 @@ import { TwitterRenderFragments } from './customization/render-fragments.js'
 import { injectProfileCover } from './injection/ProfileCover.js'
 import { injectProfileCardHolder } from './injection/ProfileCard/index.js'
 import { injectAvatar } from './injection/Avatar/index.js'
-import { injectLens } from './injection/Lens/index.js'
 import { injectNFTAvatarInTwitter } from './injection/NFT/index.js'
 import { injectSwitchLogoButton } from './injection/SwitchLogo.js'
 import { injectCalendar } from './injection/Calendar.js'
-import { injectNameWidget } from './injection/NameWidget/index.js'
-import { injectFarcaster } from './injection/Farcaster/index.js'
+import { injectBadges } from './injection/Badges/index.js'
 
 const useInjectedDialogClassesOverwriteTwitter = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -205,9 +203,7 @@ const twitterUI: SiteAdaptorUI.Definition = {
         openNFTAvatarSettingDialog,
         avatar: injectAvatar,
         tips: injectTips,
-        lens: injectLens,
-        farcaster: injectFarcaster,
-        nameWidget: injectNameWidget,
+        badges: injectBadges,
         profileCard: injectProfileCardHolder,
         switchLogo: injectSwitchLogoButton,
         calendar: injectCalendar,

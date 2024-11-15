@@ -3,6 +3,7 @@ import { Emitter } from '@servie/events'
 
 interface OpenPopupOptions {
     lensAccounts: FireflyConfigAPI.LensAccount[]
+    farcasterAccounts: FireflyConfigAPI.FarcasterProfile[]
     /** For lazy load lens accounts from NextID */
     userId: string
     popupAnchorEl: HTMLElement | null

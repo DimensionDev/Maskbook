@@ -1,15 +1,15 @@
+import { memo, useRef, useEffect } from 'react'
+import { IconButton } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
-import { makeStyles } from '@masknet/theme'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
-import { IconButton } from '@mui/material'
-import { memo, useEffect, useRef } from 'react'
-import { closeFarcasterPopup, openFarcasterPopup } from '../../emitter.js'
+import { closePopup, openPopup } from '../../emitter.js'
 
-const FarcasterIconSizeMap: Record<Plugin.SiteAdaptor.FarcasterSlot, number> = {
-    [Plugin.SiteAdaptor.FarcasterSlot.Post]: 18,
-    [Plugin.SiteAdaptor.FarcasterSlot.ProfileName]: 18,
-    [Plugin.SiteAdaptor.FarcasterSlot.Sidebar]: 16,
+const BadgesIconSizeMap: Record<Plugin.SiteAdaptor.BadgesSlot, number> = {
+    [Plugin.SiteAdaptor.BadgesSlot.Post]: 18,
+    [Plugin.SiteAdaptor.BadgesSlot.ProfileName]: 18,
+    [Plugin.SiteAdaptor.BadgesSlot.Sidebar]: 16,
 }
 
 const useStyles = makeStyles()({
@@ -17,14 +17,23 @@ const useStyles = makeStyles()({
         padding: 0,
         verticalAlign: 'baseline',
     },
+    farcaster: {
+        marginLeft: -5,
+    },
 })
 interface Props {
-    slot: Plugin.SiteAdaptor.FarcasterSlot
-    accounts: FireflyConfigAPI.FarcasterProfile[]
+    slot: Plugin.SiteAdaptor.BadgesSlot
+    lensAccounts: FireflyConfigAPI.LensAccount[]
+    farcasterAccounts: FireflyConfigAPI.FarcasterProfile[]
     userId: string
 }
 
-export const FarcasterBadge = memo(({ slot, accounts, userId }: Props) => {
+export const SocialBadges = memo(function SocialBadges({
+    slot,
+    lensAccounts,
+    farcasterAccounts,
+    userId,
+}: Props) {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes } = useStyles()
 
@@ -36,8 +45,9 @@ export const FarcasterBadge = memo(({ slot, accounts, userId }: Props) => {
             clearTimeout(openTimer)
 
             openTimer = setTimeout(() => {
-                openFarcasterPopup({
-                    accounts,
+                openPopup({
+                    lensAccounts,
+                    farcasterAccounts,
                     userId,
                     popupAnchorEl: buttonRef.current,
                 })
@@ -53,11 +63,11 @@ export const FarcasterBadge = memo(({ slot, accounts, userId }: Props) => {
             button.removeEventListener('mouseenter', enter)
             button.removeEventListener('mouseleave', leave)
         }
-    }, [accounts, userId])
+    }, [lensAccounts, userId, farcasterAccounts])
 
     useEffect(() => {
         function hide() {
-            closeFarcasterPopup({
+            closePopup({
                 popupAnchorEl: buttonRef.current,
             })
         }
@@ -75,11 +85,15 @@ export const FarcasterBadge = memo(({ slot, accounts, userId }: Props) => {
         // eslint-disable-next-line react-compiler/react-compiler
     }, [buttonRef.current])
 
+    const size = BadgesIconSizeMap[slot]
     return (
         <IconButton disableRipple className={classes.badge} ref={buttonRef}>
-            <Icons.Farcaster size={FarcasterIconSizeMap[slot]} />
+            {lensAccounts.length ?
+                <Icons.DarkLens size={size} />
+            :   null}
+            {farcasterAccounts.length ?
+                <Icons.Farcaster className={classes.farcaster} size={size} />
+            :   null}
         </IconButton>
     )
 })
-
-FarcasterBadge.displayName = 'FarcasterBadge'

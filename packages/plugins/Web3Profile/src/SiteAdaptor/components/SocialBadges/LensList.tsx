@@ -1,35 +1,20 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PersistentStorages } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { memo } from 'react'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { Lens } from '@masknet/web3-providers'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { List, ListItem, Typography, type ListProps } from '@mui/material'
+import { ListItem, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { compact, first } from 'lodash-es'
+import { memo } from 'react'
 import { useSubscription } from 'use-subscription'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
-        list: {
-            backgroundColor: isDark ? '#030303' : theme.palette.common.white,
-            maxWidth: 320,
-            // Show up to 6 item
-            maxHeight: 244,
-            overflow: 'auto',
-            minWidth: 240,
-            padding: theme.spacing(1.5),
-            boxSizing: 'border-box',
-            borderRadius: 16,
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         listItem: {
             cursor: 'default',
             display: 'flex',
@@ -90,12 +75,11 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-interface Props extends ListProps {
+interface Props {
     accounts: FireflyConfigAPI.LensAccount[]
 }
 
-export const LensList = memo(({ className, accounts, ...rest }: Props) => {
-    const { classes, cx } = useStyles()
+export const LensList = memo(function LensList({ accounts }: Props) {
     const { account: wallet } = useChainContext()
 
     const latestProfile = useSubscription(PersistentStorages.Settings.storage.latestLensProfile.subscription)
@@ -152,22 +136,20 @@ export const LensList = memo(({ className, accounts, ...rest }: Props) => {
     })
 
     return (
-        <List className={cx(classes.list, className)} {...rest}>
+        <>
             {data.map((account, key) => {
                 return <LensListItem account={account} key={key} loading={isPending} />
             })}
-        </List>
+        </>
     )
 })
-
-LensList.displayName = 'LensList'
 
 interface LensListItemProps {
     account: FireflyConfigAPI.LensAccount
     loading: boolean
 }
 
-const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
+const LensListItem = memo<LensListItemProps>(function LensListItem({ account, loading }) {
     const { classes } = useStyles()
     const { account: wallet } = useChainContext()
     const profileUri = account.profileUri.filter(Boolean)
@@ -207,5 +189,3 @@ const LensListItem = memo<LensListItemProps>(({ account, loading }) => {
         </ListItem>
     )
 })
-
-LensListItem.displayName = 'LensListItem'

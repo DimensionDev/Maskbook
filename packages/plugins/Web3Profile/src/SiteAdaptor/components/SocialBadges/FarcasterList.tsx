@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
-import { List, ListItem, Typography, type ListProps, Link } from '@mui/material'
+import { ListItem, Typography, Link } from '@mui/material'
 import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => {
@@ -69,29 +69,25 @@ const useStyles = makeStyles()((theme) => {
         },
     }
 })
-interface Props extends ListProps {
+interface Props {
     accounts: FireflyConfigAPI.FarcasterProfile[]
 }
 
-export const FarcasterList = memo(({ className, accounts, ...rest }: Props) => {
-    const { classes, cx } = useStyles()
-
+export const FarcasterList = memo(function FarcasterList({ accounts }: Props) {
     return (
-        <List className={cx(classes.list, className)} {...rest}>
+        <>
             {accounts.map((account, key) => {
                 return <FarcasterListItem account={account} key={key} />
             })}
-        </List>
+        </>
     )
 })
-
-FarcasterList.displayName = 'FarcasterList'
 
 interface FarcasterListItemProps {
     account: FireflyConfigAPI.FarcasterProfile
 }
 
-const FarcasterListItem = memo<FarcasterListItemProps>(({ account }) => {
+const FarcasterListItem = memo<FarcasterListItemProps>(function FarcasterListItem({ account }) {
     const { classes } = useStyles()
     const profileUri = `https://firefly.mask.social/profile/farcaster/${account.fid}`
     const farcasterIcon = <Icons.Farcaster size={30} />
@@ -117,5 +113,3 @@ const FarcasterListItem = memo<FarcasterListItemProps>(({ account }) => {
         </ListItem>
     )
 })
-
-FarcasterListItem.displayName = 'FarcasterListItem'

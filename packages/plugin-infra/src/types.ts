@@ -260,6 +260,7 @@ export namespace Plugin.SiteAdaptor {
         Lens?: LensWidget
         /** This UI will be rendered components on the Lens realm */
         Farcaster?: FarcasterWidget
+        Badges?: BadgesWidget
         NameWidget?: NameWidget
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
@@ -540,6 +541,13 @@ export namespace Plugin.SiteAdaptor {
         Sidebar = 'sidebar',
     }
 
+    export enum BadgesSlot {
+        ProfileName = 'profile-name',
+        Post = 'post',
+        Sidebar = 'sidebar',
+    }
+
+    /** @deprecated */
     export interface LensOptions {
         identity?: ProfileIdentifier
         slot: LensSlot
@@ -547,6 +555,7 @@ export namespace Plugin.SiteAdaptor {
         /** To update enabled/disabled status */
         onStatusUpdate?(disabled: boolean): void
     }
+    /** @deprecated */
     export interface FarcasterOptions {
         identity?: ProfileIdentifier
         slot: FarcasterSlot
@@ -555,6 +564,14 @@ export namespace Plugin.SiteAdaptor {
         onStatusUpdate?(disabled: boolean): void
     }
 
+    export interface SocialBadgeOptions {
+        identity?: ProfileIdentifier
+        slot: BadgesSlot
+        /** To update enabled/disabled status */
+        onStatusUpdate?(disabled: boolean): void
+    }
+
+    /** @deprecated */
     export interface LensWidget {
         ID: string
         UI?: {
@@ -564,6 +581,7 @@ export namespace Plugin.SiteAdaptor {
             Content: InjectUI<LensOptions>
         }
     }
+    /** @deprecated */
     export interface FarcasterWidget {
         ID: string
         UI?: {
@@ -573,6 +591,16 @@ export namespace Plugin.SiteAdaptor {
             Content: InjectUI<FarcasterOptions>
         }
     }
+    export interface BadgesWidget {
+        ID: string
+        UI?: {
+            /**
+             * The injected Social Badge Content component
+             */
+            Content: InjectUI<SocialBadgeOptions>
+        }
+    }
+
     export enum NameWidgetSlot {
         ProfileName = 'profile-name',
         Post = 'post',

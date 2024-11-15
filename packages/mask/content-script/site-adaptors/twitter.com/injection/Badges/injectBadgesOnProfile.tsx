@@ -11,10 +11,10 @@ function selector() {
     return querySelector<HTMLElement>('[data-testid=UserName] div[dir]')
 }
 
-export function injectFarcasterOnProfile(signal: AbortSignal) {
+export function injectBadgesOnProfile(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
-    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileFarcasterSlot />)
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileBadgesSlot />)
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function ProfileFarcasterSlot() {
+function ProfileBadgesSlot() {
     const visitingIdentity = useCurrentVisitingIdentity()
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
@@ -40,13 +40,13 @@ function ProfileFarcasterSlot() {
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Farcaster?.UI?.Content,
+            (plugin) => plugin.Badges?.UI?.Content,
         )
 
         return (
             <Component
                 identity={visitingIdentity.identifier}
-                slot={Plugin.SiteAdaptor.FarcasterSlot.ProfileName}
+                slot={Plugin.SiteAdaptor.BadgesSlot.ProfileName}
                 onStatusUpdate={setDisabled}
             />
         )

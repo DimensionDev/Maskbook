@@ -1,37 +1,30 @@
 import { useMemo, useState } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
 import { createInjectHooksRenderer, Plugin, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { startWatch } from '../../../../utils/startWatch.js'
-import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import { querySelectorAll } from '../../utils/selector.js'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
+import { startWatch } from '../../../../utils/startWatch.js'
 
-function avatarSelector() {
+function selector() {
+    // [href^="/search"] is a hash tag
     return querySelectorAll<HTMLElement>(
-        '[data-testid=SpaceDockExpanded] [data-testid^=UserAvatar-Container-],[data-testid=sheetDialog] [data-testid^=UserAvatar-Container-]',
-    ).map((node) => {
-        const span = node.parentElement?.parentElement?.nextElementSibling?.querySelector('div > span + span > span')
-        return span
-    })
+        '[data-testid=UserCell] div > a[role=link]:not([tabindex]):not([href^="/search"]) [dir]:last-of-type',
+    )
 }
 
 /**
- * Inject on space dock
+ * Inject on sidebar user cell
  */
-export function injectFarcasterOnSpaceDock(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(avatarSelector())
+export function injectBadgesOnUserCell(signal: AbortSignal) {
+    const watcher = new MutationObserverWatcher(selector())
     startWatch(watcher, signal)
     watcher.useForeach((node, _, proxy) => {
-        const avatar = node
-            .closest('div[dir]')
-            ?.previousElementSibling?.querySelector<HTMLElement>('[data-testid^=UserAvatar-Container-]')
-        if (!avatar) return
-        const userId = avatar.dataset.testid?.slice('UserAvatar-Container-'.length)
+        const userId = node.closest('[role=link]')?.getAttribute('href')?.slice(1)
         if (!userId) return
-        attachReactTreeWithContainer(proxy.afterShadow, { signal, untilVisible: true }).render(
-            <SpaceDockFarcasterSlot userId={userId} />,
-        )
+        // Intended to set `untilVisible` to true, but mostly user cells are fixed and visible
+        attachReactTreeWithContainer(proxy.afterShadow, { signal }).render(<UserCellBadgesSlot userId={userId} />)
     })
 }
 
@@ -61,29 +54,30 @@ function createRootElement() {
         height: '21px',
         alignItems: 'center',
         justifyContent: 'center',
-        display: 'inline-flex',
+        display: 'flex',
     } as CSSStyleDeclaration)
     return span
 }
 
-function SpaceDockFarcasterSlot({ userId }: Props) {
+function UserCellBadgesSlot({ userId }: Props) {
     const [disabled, setDisabled] = useState(true)
     const { classes, cx } = useStyles()
 
     const component = useMemo(() => {
         const Component = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
-            (plugin) => plugin.Farcaster?.UI?.Content,
+            (plugin) => plugin.Badges?.UI?.Content,
             undefined,
             createRootElement,
         )
+        if (userId.includes('/')) return null
         const identifier = ProfileIdentifier.of(EnhanceableSite.Twitter, userId).unwrap()
         if (!identifier) return null
 
         return (
             <Component
                 identity={identifier}
-                slot={Plugin.SiteAdaptor.FarcasterSlot.Sidebar}
+                slot={Plugin.SiteAdaptor.BadgesSlot.Sidebar}
                 onStatusUpdate={setDisabled}
             />
         )
