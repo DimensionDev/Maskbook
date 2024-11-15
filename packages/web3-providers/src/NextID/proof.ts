@@ -498,7 +498,10 @@ export class NextIDProof {
             mode: 'cors',
             body: JSON.stringify({
                 operationName: 'GET_LENS_PROFILES',
-                variables: { domainSystem: 'lens', domain: lowerCaseId },
+                variables: {
+                    domainSystem: 'lens',
+                    domain: lowerCaseId.endsWith('.lens') ? lowerCaseId : `${lowerCaseId}.lens`,
+                },
                 query: `
                     query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
                         ${relationServiceDomainQuery(depth)}
