@@ -11,7 +11,7 @@ import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet 
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/types'
 import { ZERO, formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, ProviderType, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography, buttonClasses } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'

@@ -7,7 +7,7 @@ import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext, useProviderDescriptor, useWeb3State } from '@masknet/web3-hooks-base'
 import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
+import { type ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
 import { Trans } from '@lingui/macro'
 
