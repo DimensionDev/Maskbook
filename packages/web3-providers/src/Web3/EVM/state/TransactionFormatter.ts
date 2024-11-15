@@ -21,7 +21,6 @@ import { ContractDeploymentDescriptor } from './TransactionFormatter/descriptors
 import { CancelDescriptor } from './TransactionFormatter/descriptors/Cancel.js'
 import { BaseDescriptor } from './TransactionFormatter/descriptors/Base.js'
 import { GitcoinDescriptor } from './TransactionFormatter/descriptors/Gitcoin.js'
-import { MaskBoxDescriptor } from './TransactionFormatter/descriptors/MaskBox.js'
 import { RedPacketDescriptor } from './TransactionFormatter/descriptors/RedPacket.js'
 import { ERC20Descriptor } from './TransactionFormatter/descriptors/ERC20.js'
 import { ERC721Descriptor } from './TransactionFormatter/descriptors/ERC721.js'
@@ -40,7 +39,6 @@ export class EVMTransactionFormatter extends TransactionFormatterState<ChainId, 
             new LensDescriptor(),
             new SavingsDescriptor(),
             new GitcoinDescriptor(),
-            new MaskBoxDescriptor(),
             new RedPacketDescriptor(),
             new SmartPayDescriptor(),
             new ERC20Descriptor(),

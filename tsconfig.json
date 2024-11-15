@@ -124,7 +124,6 @@
       "@masknet/plugin-gitcoin": ["./packages/plugins/Gitcoin/src/index.ts"],
       "@masknet/plugin-avatar": ["./packages/plugins/Avatar/src/index.ts"],
       "@masknet/plugin-redpacket": ["./packages/plugins/RedPacket/src/index.ts"],
-      "@masknet/plugin-maskbox": ["./packages/plugins/MaskBox/src/index.ts"],
       "@masknet/plugin-smart-pay": ["./packages/plugins/SmartPay/src/index.ts"],
       "@masknet/plugin-transak": ["./packages/plugins/Transak/src/index.ts"],
       "@masknet/plugin-vcent": ["./packages/plugins/VCent/src/index.ts"],

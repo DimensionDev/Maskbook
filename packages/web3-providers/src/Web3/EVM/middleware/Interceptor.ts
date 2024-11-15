@@ -4,7 +4,6 @@ import { NoneWallet } from '../interceptors/None.js'
 import { MaskWallet } from '../interceptors/MaskWallet.js'
 import { WalletConnect } from '../interceptors/WalletConnect.js'
 import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
-import { Fortmatic } from '../interceptors/Fortmatic.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
@@ -35,7 +34,6 @@ export class Interceptor implements Middleware<ConnectionContext> {
             [ProviderType.OKX]: Composer.from(new MetaMaskLike(ProviderType.OKX)),
             [ProviderType.WalletConnect]: Composer.from(new WalletConnect()),
             [ProviderType.Coin98]: Composer.from(new MetaMaskLike(ProviderType.Coin98)),
-            [ProviderType.Fortmatic]: Composer.from(new Fortmatic()),
             [ProviderType.Opera]: Composer.from(new MetaMaskLike(ProviderType.Opera)),
             [ProviderType.Rabby]: Composer.from(new MetaMaskLike(ProviderType.Rabby)),
             [ProviderType.Rainbow]: Composer.from(new MetaMaskLike(ProviderType.Rainbow)),

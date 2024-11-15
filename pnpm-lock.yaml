@@ -53,9 +53,6 @@ patchedDependencies:
   eslint-plugin-i@2.29.1:
     hash: zgide6rxzjqivhxxv36ouq6c4y
     path: patches/eslint-plugin-i@2.29.1.patch
-  fortmatic@2.4.0:
-    hash: tlk6cnwltokwhdaixd62dypmxe
-    path: patches/fortmatic@2.4.0.patch
   gulp@5.0.0:
     hash: 43h33nymtjr4cs2ejuui5ulgfe
     path: patches/gulp@5.0.0.patch
@@ -428,9 +425,6 @@ importers:
       '@masknet/plugin-infra':
         specifier: workspace:^
         version: link:../plugin-infra
-      '@masknet/plugin-maskbox':
-        specifier: workspace:^
-        version: link:../plugins/MaskBox
       '@masknet/plugin-nextid':
         specifier: workspace:^
         version: link:../plugins/NextID
@@ -1402,75 +1396,6 @@ importers:
       '@masknet/web3-shared-evm':
         specifier: workspace:^
         version: link:../../web3-shared/evm
-
-  packages/plugins/MaskBox:
-    dependencies:
-      '@masknet/icons':
-        specifier: workspace:^
-        version: link:../../icons
-      '@masknet/plugin-infra':
-        specifier: workspace:^
-        version: link:../../plugin-infra
-      '@masknet/shared':
-        specifier: workspace:^
-        version: link:../../shared
-      '@masknet/shared-base':
-        specifier: workspace:^
-        version: link:../../shared-base
-      '@masknet/shared-base-ui':
-        specifier: workspace:^
-        version: link:../../shared-base-ui
-      '@masknet/theme':
-        specifier: workspace:^
-        version: link:../../theme
-      '@masknet/typed-message':
-        specifier: workspace:^0.2.0
-        version: link:../../typed-message/base
-      '@masknet/web3-contracts':
-        specifier: workspace:^
-        version: link:../../web3-contracts
-      '@masknet/web3-helpers':
-        specifier: workspace:^
-        version: link:../../web3-helpers
-      '@masknet/web3-hooks-base':
-        specifier: workspace:^
-        version: link:../../web3-hooks/base
-      '@masknet/web3-hooks-evm':
-        specifier: workspace:^
-        version: link:../../web3-hooks/evm
-      '@masknet/web3-providers':
-        specifier: workspace:^
-        version: link:../../web3-providers
-      '@masknet/web3-shared-base':
-        specifier: workspace:^
-        version: link:../../web3-shared/base
-      '@masknet/web3-shared-evm':
-        specifier: workspace:^
-        version: link:../../web3-shared/evm
-      '@types/color':
-        specifier: ^3.0.6
-        version: 3.0.6
-      bignumber.js:
-        specifier: 9.1.2
-        version: 9.1.2
-      buffer:
-        specifier: ^6.0.3
-        version: 6.0.3
-      color:
-        specifier: ^4.2.3
-        version: 4.2.3
-      date-fns:
-        specifier: ^3.6.0
-        version: 3.6.0
-      react-use:
-        specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
-      urlcat:
-        specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
-      web3-utils:
-        specifier: 1.10.2
-        version: 1.10.2
 
   packages/plugins/NextID:
     dependencies:
@@ -2906,9 +2831,6 @@ importers:
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
-      fortmatic:
-        specifier: ^2.4.0
-        version: 2.4.0(patch_hash=tlk6cnwltokwhdaixd62dypmxe)
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -9862,9 +9784,6 @@ packages:
   formdata-polyfill@4.0.10:
     resolution: {integrity: sha512-buewHzMvYL29jdeQTVILecSaZKnt/RJWjoZCF5OW60Z67/GmSLBkOFM7qh1PI3zFNtJbaZL5eQu1vLfazOwj4g==}
     engines: {node: '>=12.20.0'}
-
-  fortmatic@2.4.0:
-    resolution: {integrity: sha512-4LVxybyWcz8eFkTjIW12JRyRCUV9/qih435l0+5ncTVIb+zzXjvjQ5dZU0eBAXXyAgmV9BIRYkQL9H/lc76w/w==}
 
   forwarded@0.2.0:
     resolution: {integrity: sha512-buRG0fpBtRHSTCOASe6hD258tEubFoRLb4ZNA6NxMVHNw2gOcwHo9wyablzMzOA5z9xA9L1KNjk/Nt6MT9aYow==}
@@ -25088,8 +25007,6 @@ snapshots:
   formdata-polyfill@4.0.10:
     dependencies:
       fetch-blob: 3.2.0
-
-  fortmatic@2.4.0(patch_hash=tlk6cnwltokwhdaixd62dypmxe): {}
 
   forwarded@0.2.0: {}
 

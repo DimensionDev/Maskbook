@@ -11,7 +11,7 @@ import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet 
 import { Lens } from '@masknet/web3-providers'
 import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/types'
 import { ZERO, formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, ProviderType, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
+import { ChainId, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Button, CircularProgress, DialogContent, Typography, buttonClasses } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
@@ -250,7 +250,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             !currentProfile ||
             !!wallet?.owner ||
             pluginID !== NetworkPluginID.PLUGIN_EVM ||
-            providerType === ProviderType.Fortmatic ||
             followLoading ||
             unfollowLoading ||
             profile?.followModule?.type === FollowModuleType.UnknownFollowModule ||
@@ -296,7 +295,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     }, [isFollowing, isHovering, profile])
 
     const tips = useMemo(() => {
-        if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM || providerType === ProviderType.Fortmatic)
+        if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM)
             return <Trans>Current wallet does not support to interact with Lens protocol.</Trans>
         else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
             return <Trans>Only holding lens handle can follow.</Trans>

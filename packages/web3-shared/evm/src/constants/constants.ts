@@ -13,7 +13,6 @@ import GoPlusLabs from '@masknet/web3-constants/evm/gopluslabs.json' with { type
 import LensProfile from '@masknet/web3-constants/evm/lens-profile.json' with { type: 'json' }
 import Lens from '@masknet/web3-constants/evm/lens.json' with { type: 'json' }
 import Lido from '@masknet/web3-constants/evm/lido.json' with { type: 'json' }
-import MaskBox from '@masknet/web3-constants/evm/mask-box.json' with { type: 'json' }
 import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json' with { type: 'json' }
 import OpenOcean from '@masknet/web3-constants/evm/openocean.json' with { type: 'json' }
 import Pet from '@masknet/web3-constants/evm/pet.json' with { type: 'json' }
@@ -81,11 +80,6 @@ export const getTrendingConstant = transform(ChainId, Trending)
 export const getTrendingConstants = transformAll(ChainId, Trending)
 export const useTrendingConstant = transformHook(getTrendingConstants)
 export const useTrendingConstants = transformAllHook(getTrendingConstants)
-
-export const getMaskBoxConstant = transform(ChainId, MaskBox)
-export const getMaskBoxConstants = transformAll(ChainId, MaskBox)
-export const useMaskBoxConstant = transformHook(getMaskBoxConstants)
-export const useMaskBoxConstants = transformAllHook(getMaskBoxConstants)
 
 export const getRPCConstant = transform(ChainId, RPC)
 export const getRPCConstants = transformAll(ChainId, RPC)

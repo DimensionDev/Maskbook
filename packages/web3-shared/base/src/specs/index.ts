@@ -767,8 +767,6 @@ export type FormattedTransactionTitle =
     | 'Follow User'
     // Gitcoin
     | 'Donate'
-    // MaskBox
-    | 'Purchase Maskbox NFT'
     // RedPacket
     | 'Claim Lucky Drop'
     | 'Claim NFT Lucky Drop'
@@ -799,8 +797,6 @@ export type FormattedTransactionDescription =
     | { key: 'Unlock {symbol} NFT contract.'; symbol: string }
     // Airdrop
     | 'Transaction submitted.'
-    // MaskBox
-    | 'Purchase Maskbox NFT.'
     // RedPacket
     | 'Claim your Lucky Drop.'
     | 'Claim your NFT Lucky Drop'
@@ -861,9 +857,6 @@ export type FormattedTransactionSnackbarSuccessDescription =
     | { key: 'Lucky Drop with {token} refunded.'; token: string }
     | { key: 'Lucky Drop with {token} claimed.'; token: string }
     | { key: 'Lucky drop with {token} created.'; token: string }
-    // MaskBox
-    | 'Maskbox NFT purchased.'
-    | { key: 'Maskbox NFT with {token} purchased.'; token: string }
     // Savings
     | { key: '{token} withdrawn.'; token: string }
     | { key: '{token} deposited.'; token: string }
@@ -891,8 +884,6 @@ export type FormattedTransactionSnackbarFailedDescription =
     | 'Failed to deposit token.'
     | { key: 'Failed to deposit {symbol}.'; symbol: string }
     | { key: 'Failed to withdraw {symbol}.'; symbol: string }
-    // MaskBox
-    | 'Failed to purchase Maskbox NFT.'
 
 export interface TransactionDescriptorPopup {
     /** The spender address of erc20 approve */
