@@ -2,10 +2,6 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useState } from 'react'
 import { Box, useTheme } from '@mui/material'
 
-interface ImageLoaderProps {
-    src: string
-}
-
 const MASK_DARK_FALLBACK = new URL('../assets/mask.dark.svg', import.meta.url).href
 const MASK_LIGHT_FALLBACK = new URL('../assets/mask.light.svg', import.meta.url).href
 
@@ -34,6 +30,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
+interface ImageLoaderProps {
+    src: string
+}
 export function ImageLoader({ src }: ImageLoaderProps) {
     const [loaded, setLoaded] = useState(false)
     const [failed, setFailed] = useState(false)

@@ -236,6 +236,6 @@
     ],
     "ignoreRegExpList": ["/[A-Za-z0-9]{44}/", "/[A-Za-z0-9]{46}/", "/[A-Za-z0-9]{59}/"],
     "overrides": [],
-    "words": ["endregion"]
+    "words": ["endregion", "Luma"]
 }
 

@@ -138,7 +138,7 @@ export function ProfileCardTitle({
                             disablePortal
                             anchorPosition={{
                                 top: 50,
-                                left: itsMe ? 390 : 370,
+                                left: itsMe ? 490 : 470,
                             }}
                             anchorReference="anchorPosition"
                         />

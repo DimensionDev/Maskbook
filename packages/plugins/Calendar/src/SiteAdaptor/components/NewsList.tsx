@@ -1,9 +1,11 @@
-import { EmptyStatus, LoadingStatus, Image } from '@masknet/shared'
+import { Trans } from '@lingui/macro'
+import { EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
+import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import { useCallback, useMemo } from 'react'
-import { Trans } from '@lingui/macro'
+import { useCallback, useEffect, useMemo } from 'react'
+import { useNewsList } from '../../hooks/useEventList.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -103,23 +105,28 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface NewsListProps {
-    list: Record<string, any[]>
-    isLoading: boolean
-    dateString: string
+    date: Date
+    onDatesUpdate?(/** locale date string list */ dates: string[]): void
 }
 
-export function NewsList({ list, isLoading, dateString }: NewsListProps) {
+export function NewsList({ date, onDatesUpdate }: NewsListProps) {
+    const { data: list = EMPTY_OBJECT, isLoading } = useNewsList(date, true)
+    const dateString = date.toLocaleDateString()
     const empty = !Object.keys(list).length
     const { classes, cx } = useStyles()
     const futureNewsList = useMemo(() => {
         const newsList: string[] = []
         for (const key in list) {
-            if (new Date(key) >= new Date(dateString)) {
+            if (new Date(key) >= date) {
                 newsList.push(key)
             }
         }
         return newsList
-    }, [list, dateString])
+    }, [list, date])
+    useEffect(() => {
+        onDatesUpdate?.(Object.keys(list))
+    }, [list, onDatesUpdate])
+
     const listRef = useCallback((el: HTMLDivElement | null) => {
         el?.scrollTo({ top: 0 })
     }, [])

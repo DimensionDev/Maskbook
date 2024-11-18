@@ -1,8 +1,8 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { querySelector } from '../utils/selector.js'
-import { startWatch } from '../../../utils/startWatch.js'
+import { Calendar } from '@masknet/plugin-calendar'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { CalendarContent } from '@masknet/plugin-calendar'
+import { startWatch } from '../../../utils/startWatch.js'
+import { querySelector } from '../utils/selector.js'
 
 function sidebarSearchSelector() {
     return querySelector<HTMLElement>(
@@ -28,13 +28,11 @@ export function injectCalendar(signal: AbortSignal) {
     startWatch(watcher, signal)
     startWatch(exploreWatcher, signal)
     startWatch(searchWatcher, signal)
-    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(
-        <CalendarContent />,
-    )
+    attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { untilVisible: true, signal }).render(<Calendar />)
     attachReactTreeWithContainer(exploreWatcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
-        <CalendarContent target="/explore" />,
+        <Calendar target="/explore" />,
     )
     attachReactTreeWithContainer(searchWatcher.firstDOMProxy.beforeShadow, { untilVisible: true, signal }).render(
-        <CalendarContent target="/search" />,
+        <Calendar target="/search" />,
     )
 }

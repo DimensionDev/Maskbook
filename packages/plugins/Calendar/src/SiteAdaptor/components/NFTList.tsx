@@ -1,12 +1,12 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, LoadingStatus, Image } from '@masknet/shared'
+import { EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import { useMemo, type ReactNode, useCallback } from 'react'
+import { useCallback, useMemo, type ReactNode } from 'react'
 import { CountdownTimer } from './CountDownTimer.js'
 import { formatDate } from './EventList.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

@@ -1,17 +1,13 @@
-import { safeUnreachable } from '@masknet/kit'
-import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { EMPTY_OBJECT, PluginID } from '@masknet/shared-base'
-import { useLocationChange } from '@masknet/shared-base-ui'
+import { Trans } from '@lingui/macro'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { useMemo, useState } from 'react'
-import { useNFTList, useNewsList } from '../hooks/useEventList.js'
+import { useState, type HTMLProps } from 'react'
 import { DatePickerTab } from './components/DatePickerTab.js'
+import { EventList } from './components/EventList.js'
 import { Footer } from './components/Footer.js'
-import { NFTList } from './components/NFTList.js'
 import { NewsList } from './components/NewsList.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     calendar: {
@@ -37,62 +33,41 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props {
+interface Props extends HTMLProps<HTMLDivElement> {
     target?: string
-    disableSetting?: boolean
 }
 
-export function CalendarContent({ target, disableSetting }: Props) {
-    const { classes } = useStyles()
-    const [pathname, setPathname] = useState(location.pathname)
-    const isMinimalMode = useIsMinimalMode(PluginID.Calendar)
-    const [currentTab, onChange, tabs] = useTabs('news', 'nfts')
-    const [selectedDate, setSelectedDate] = useState(() => new Date())
+export function CalendarContent(props: Props) {
+    const { classes, cx } = useStyles()
+    const [currentTab, onChange, tabs] = useTabs('news', 'events')
+    const [date, setDate] = useState(() => new Date())
     const [open, setOpen] = useState(false)
-    const { data: newsList = EMPTY_OBJECT, isPending: newsLoading } = useNewsList(selectedDate, currentTab === 'news')
-    const { data: nftList = EMPTY_OBJECT, isPending: nftLoading } = useNFTList(selectedDate, currentTab === 'nfts')
-    const list = useMemo(() => {
-        switch (currentTab) {
-            case 'news':
-                return newsList
-            case 'nfts':
-                return nftList
-            default:
-                safeUnreachable(currentTab)
-                return null
-        }
-    }, [currentTab, newsList, nftList])
-    const dateString = useMemo(() => selectedDate.toLocaleDateString(), [selectedDate])
 
-    useLocationChange(() => {
-        setPathname(location.pathname)
-    })
-    if (isMinimalMode || (target && !pathname.includes(target))) return null
+    const [allowedDates, setAllowedDates] = useState<string[]>(EMPTY_LIST)
 
     return (
-        <div className={classes.calendar} style={{ marginTop: pathname.includes('explore') ? 24 : 0 }}>
+        <div {...props} className={cx(classes.calendar, props.className)}>
             <TabContext value={currentTab}>
                 <div className={classes.tabList}>
                     <MaskTabList variant="base" onChange={onChange} aria-label="">
                         <Tab className={classes.tab} label={<Trans>News</Trans>} value={tabs.news} />
-                        <Tab className={classes.tab} label={<Trans>NFTs</Trans>} value={tabs.nfts} />
+                        <Tab className={classes.tab} label={<Trans>Events</Trans>} value={tabs.events} />
                     </MaskTabList>
                 </div>
                 <DatePickerTab
                     open={open}
-                    setOpen={setOpen}
-                    selectedDate={selectedDate}
-                    setSelectedDate={setSelectedDate}
-                    list={list}
-                    currentTab={currentTab}
+                    onToggle={setOpen}
+                    date={date}
+                    onChange={setDate}
+                    allowedDates={allowedDates}
                 />
                 <TabPanel value={tabs.news} className={classes.tabPanel}>
-                    <NewsList list={newsList} isLoading={newsLoading} dateString={dateString} />
+                    <NewsList date={date} />
                 </TabPanel>
-                <TabPanel value={tabs.nfts} className={classes.tabPanel}>
-                    <NFTList list={nftList} isLoading={nftLoading} dateString={dateString} />
+                <TabPanel value={tabs.events} className={classes.tabPanel}>
+                    <EventList date={date} onDatesUpdate={setAllowedDates} />
                 </TabPanel>
-                <Footer provider={currentTab} disableSetting={disableSetting} />
+                <Footer provider={currentTab} />
             </TabContext>
         </div>
     )

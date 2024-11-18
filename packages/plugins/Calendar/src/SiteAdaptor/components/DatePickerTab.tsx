@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react'
-import { makeStyles } from '@masknet/theme'
-import { startOfWeek, endOfWeek, eachDayOfInterval } from 'date-fns'
-import { ClickAwayListener, IconButton, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { ClickAwayListener, IconButton, Typography } from '@mui/material'
+import { eachDayOfInterval, endOfWeek, startOfWeek } from 'date-fns'
+import { useMemo } from 'react'
 import { DatePicker } from './DatePicker.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -31,6 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     isActive: {
         border: `0.5px ${theme.palette.maskColor.main} solid`,
+        fontWeight: '700',
     },
     disabled: {
         color: theme.palette.maskColor.second,
@@ -40,50 +42,51 @@ const useStyles = makeStyles()((theme) => ({
 
 interface DatePickerTabProps {
     open: boolean
-    setOpen: (x: boolean) => void
-    selectedDate: Date
-    setSelectedDate: (date: Date) => void
-    list: Record<string, any[]> | null
-    currentTab: 'news' | 'event' | 'nfts'
+    onToggle: (x: boolean) => void
+    /** locale date string list */
+    allowedDates: string[]
+    date: Date
+    onChange: (date: Date) => void
 }
 
-export function DatePickerTab({ selectedDate, setSelectedDate, list, open, setOpen, currentTab }: DatePickerTabProps) {
+export function DatePickerTab({ date, onChange, allowedDates = EMPTY_LIST, open, onToggle }: DatePickerTabProps) {
     const { classes } = useStyles()
-    const week = useMemo(() => {
-        return eachDayOfInterval({ start: startOfWeek(selectedDate), end: endOfWeek(selectedDate) })
-    }, [selectedDate])
+    const days = useMemo(() => {
+        return eachDayOfInterval({ start: startOfWeek(date), end: endOfWeek(date) })
+    }, [date])
     return (
         <div className={classes.container}>
-            {week.map((v) => {
+            {days.map((v) => {
+                const localeDateString = v.toLocaleDateString()
                 return (
                     <div
-                        className={`${classes.date} ${selectedDate.getDate() === v.getDate() ? classes.isActive : ''} ${
-                            list && !list[v.toLocaleDateString()] ? classes.disabled : ''
+                        className={`${classes.date} ${date.getDate() === v.getDate() ? classes.isActive : ''} ${
+                            allowedDates.includes(localeDateString) ? classes.disabled : ''
                         }`}
                         key={v.toString()}
                         onClick={() => {
-                            if (list && !list[v.toLocaleDateString()]) return
-                            setSelectedDate(v)
+                            if (!allowedDates.includes(localeDateString)) return
+                            onChange(v)
                         }}>
                         <Typography>{v.getDate()}</Typography>
                     </div>
                 )
             })}
-            <ClickAwayListener onClickAway={() => setOpen(false)}>
+            <ClickAwayListener onClickAway={() => onToggle(false)}>
                 <div>
                     <IconButton
                         size="small"
                         onClick={() => {
-                            setOpen(!open)
+                            onToggle(!open)
                         }}>
                         <Icons.LinearCalendar size={24} />
                     </IconButton>
                     <DatePicker
                         open={open}
-                        setOpen={(open) => setOpen(open)}
-                        selectedDate={selectedDate}
-                        setSelectedDate={setSelectedDate}
-                        currentTab={currentTab}
+                        setOpen={(open) => onToggle(open)}
+                        date={date}
+                        onChange={onChange}
+                        allowedDates={allowedDates}
                     />
                 </div>
             </ClickAwayListener>

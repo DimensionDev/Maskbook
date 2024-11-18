@@ -36,6 +36,7 @@ export * from './types/Lens.js'
 export type * from './types/Storage.js'
 export type * from './types/Snapshot.js'
 export type * from './types/Store.js'
+export type * from './types/Luma.js'
 
 // Provider Implementations
 export * from './DeBank/types.js'

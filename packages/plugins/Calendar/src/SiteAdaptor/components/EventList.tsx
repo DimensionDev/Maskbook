@@ -1,11 +1,14 @@
-import { EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
+import { Trans } from '@lingui/macro'
+import { ElementAnchor, EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import { useCallback, useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import { useLumaEvents } from '../../hooks/useLumaEvents.js'
 import { ImageLoader } from './ImageLoader.js'
-import { Trans } from '@lingui/macro'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import { uniq } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -87,81 +90,100 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         padding: '10px 0',
     },
+    loading: {
+        color: theme.palette.maskColor.main,
+    },
 }))
 
 interface EventListProps {
-    list: Record<string, any[]>
-    isLoading: boolean
-    empty: boolean
-    dateString: string
+    date: Date
+    onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
 export const formatDate = (date: string) => {
-    const dateFormat = 'MMM dd, yyyy HH:mm'
-    return format(new Date(date), dateFormat)
+    return format(new Date(date), 'MMM dd, yyyy HH:mm')
 }
 
-export function EventList({ list, isLoading, empty, dateString }: EventListProps) {
+export function EventList({ date, onDatesUpdate }: EventListProps) {
     const { classes, cx } = useStyles()
-    const futureEvents = useMemo(() => {
-        const listAfterDate: string[] = []
-        for (const key in list) {
-            if (new Date(key) >= new Date(dateString)) {
-                listAfterDate.push(key)
-            }
-        }
-        return listAfterDate
-    }, [list, dateString])
+    const { isLoading, isFetching, data, hasNextPage, fetchNextPage } = useLumaEvents()
 
-    const listRef = useCallback((el: HTMLDivElement | null) => {
-        el?.scrollTo({ top: 0 })
-    }, [])
+    const comingEvents = useMemo(() => {
+        if (!data) return EMPTY_LIST
+        return data.filter((x) => new Date(x.start_at) >= date || new Date(x.event.end_at) >= date)
+    }, [data, date])
 
-    return (
-        <div className={classes.container} ref={listRef} key={dateString}>
-            <div className={classes.paddingWrap}>
-                {isLoading && !list?.length ?
+    useEffect(() => {
+        if (!data) return onDatesUpdate(EMPTY_LIST)
+        onDatesUpdate(uniq(data.map((x) => new Date(x.start_at).toLocaleDateString())))
+    }, [onDatesUpdate, data])
+
+    if (isLoading) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.paddingWrap}>
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
                     </div>
-                : !empty && futureEvents.length ?
-                    futureEvents.map((key) => {
-                        return (
-                            <div key={key}>
-                                <Typography className={classes.dateDiv}>
-                                    {format(new Date(key), 'MMM dd,yyy')}
-                                </Typography>
-                                {list[key].map((v) => (
-                                    <Link
-                                        key={v.event_url}
-                                        className={classes.eventCard}
-                                        href={v.event_url}
-                                        rel="noopener noreferrer"
-                                        target="_blank">
-                                        <div className={classes.eventHeader}>
-                                            <div className={classes.projectWrap}>
-                                                <Image
-                                                    src={resolveIPFS_URL(v.project.logo)}
-                                                    classes={{ container: classes.logo }}
-                                                    size={24}
-                                                    alt={v.project.name}
-                                                />
-                                                <Typography className={classes.projectName}>
-                                                    {v.project.name}
-                                                </Typography>
-                                            </div>
-                                        </div>
-                                        <Typography className={classes.eventTitle}>{v.event_title}</Typography>
-                                        <Typography className={classes.time}>{formatDate(v.event_date)}</Typography>
-                                        <ImageLoader src={v.poster_url} />
-                                    </Link>
-                                ))}
-                            </div>
-                        )
-                    })
-                :   <EmptyStatus className={classes.empty}>
-                        <Trans>No content for the last two weeks.</Trans>
-                    </EmptyStatus>
+                </div>
+            </div>
+        )
+    }
+    if (!comingEvents.length) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.paddingWrap}>
+                    <div className={cx(classes.empty, classes.eventTitle)}>
+                        <EmptyStatus>
+                            <Trans>No events</Trans>
+                        </EmptyStatus>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <div className={classes.container}>
+            <div className={classes.paddingWrap}>
+                {comingEvents.map((entry) => {
+                    return (
+                        <div key={entry.api_id}>
+                            <Typography className={classes.dateDiv}>
+                                {format(new Date(entry.start_at), 'MMM dd,yyy')}
+                            </Typography>
+                            <Link
+                                className={classes.eventCard}
+                                href={`https://lu.ma/${entry.event.url}`}
+                                rel="noopener noreferrer"
+                                target="_blank">
+                                <div className={classes.eventHeader}>
+                                    <div className={classes.projectWrap}>
+                                        <Image
+                                            src={resolveIPFS_URL(entry.event.cover_url)}
+                                            classes={{ container: classes.logo }}
+                                            size={24}
+                                            alt={entry.event.name}
+                                        />
+                                        <Typography className={classes.projectName}>{entry.event.name}</Typography>
+                                    </div>
+                                </div>
+                                <Typography className={classes.eventTitle}>{entry.event.name}</Typography>
+                                <Typography className={classes.time}>{formatDate(entry.start_at)}</Typography>
+                                <ImageLoader src={entry.event.cover_url} />
+                            </Link>
+                        </div>
+                    )
+                })}
+                {hasNextPage ?
+                    <ElementAnchor height={30} callback={() => fetchNextPage()}>
+                        {isFetching ?
+                            <LoadingBase className={classes.loading} />
+                        :   null}
+                    </ElementAnchor>
+                :   <Typography color={(theme) => theme.palette.maskColor.second} textAlign="center" py={2}>
+                        <Trans>No more data available.</Trans>
+                    </Typography>
                 }
             </div>
         </div>
