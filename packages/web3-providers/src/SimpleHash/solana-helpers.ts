@@ -34,7 +34,7 @@ export function createSolanaNonFungibleAsset(
             address: asset.contract.deployed_by,
         },
         owner: {
-            address: asset.owners?.[0].owner_address,
+            address: asset.owners?.[0]?.owner_address,
         },
         // TODO
         priceInToken: undefined,
