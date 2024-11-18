@@ -21,6 +21,22 @@ import { SPAM_SCORE } from '../constants.js'
 import type { SimpleHash } from '../../types/SimpleHash.js'
 
 class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
+    async getCollectionByContractAddress(
+        address: string,
+        { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {},
+    ): Promise<SimpleHash.Collection | undefined> {
+        const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
+        if (!chain || !address || !isValidChainId(chainId)) return
+        const path = urlcat('/api/v0/nfts/collections/:chain/:address', {
+            chain,
+            address,
+        })
+
+        const { collections } = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
+
+        return collections[0]
+    }
+
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !address || !isValidChainId(chainId)) return
@@ -53,6 +69,32 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
         return createPageable(
             assets,
             indicator,
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
+    }
+
+    async getAssetsByCollectionId(
+        collectionId: string,
+        { chainId = ChainId.Mainnet, indicator, }: BaseHubOptions<ChainId> = {},
+    ) {
+        const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
+        if (!collectionId || !isValidChainId(chainId) || !chain) {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
+        const path = urlcat('/api/v0/nfts/collection/:collectionId', {
+            chains: chain,
+            collectionId,
+            cursor: typeof indicator?.index !== 'undefined' && indicator.index !== 0 ? indicator.id : undefined,
+        })
+
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
+        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
+            NonFungibleAsset<ChainId, SchemaType>
+        >
+
+        return createPageable(
+            assets,
+            createIndicator(indicator),
             response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
         )
     }
@@ -151,6 +193,52 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
         if (!response.collections.length) return []
         const marketplaces = response.collections[0].marketplace_pages?.filter((x) => x.verified) || []
         return marketplaces.map((x) => x.marketplace_name)
+    }
+
+    async getTopCollectorsByCollectionId(
+        collectionId: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20 }: BaseHubOptions<ChainId> = {},
+    ) {
+        const path = urlcat('/api/v0/nfts/top_collectors/collection/:collectionId', {
+            collectionId,
+            cursor: indicator?.id || undefined,
+            limit: size,
+            include_owner_image: '1',
+        })
+        const response = await fetchFromSimpleHash<{ next_cursor: string; top_collectors: SimpleHash.TopCollector[] }>(
+            path,
+        )
+        return createPageable(
+            response.top_collectors,
+            indicator,
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+        )
+    }
+
+    async getSimpleHashCollection(id: string): Promise<SimpleHash.Collection | undefined> {
+        const path = urlcat('/api/v0/nfts/collections/ids', {
+            collection_ids: id,
+        })
+        const response = await fetchFromSimpleHash<{ collections: SimpleHash.Collection[] }>(path)
+        return response.collections[0]
+    }
+
+    async getPoapEvent(eventId: number, { indicator, size = 20 }: Omit<BaseHubOptions<ChainId>, 'chainId'> = {}) {
+        const path = urlcat('/api/v0/nfts/poap_event/:event_id', {
+            cursor: indicator?.id || undefined,
+            limit: size,
+            event_id: eventId,
+            count: 1,
+        })
+        const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[]; count?: number }>(
+            path,
+        )
+        return createPageable(
+            response.nfts,
+            indicator,
+            response.next_cursor ? createNextIndicator(indicator, response.next_cursor) : undefined,
+            response.count,
+        )
     }
 }
 export const SimpleHashSolana = new SimpleHashAPI_Solana()

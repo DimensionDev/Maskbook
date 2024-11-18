@@ -9,7 +9,7 @@ import type {
     NonFungibleTokenRarity,
     NonFungibleTokenStats,
 } from '@masknet/web3-shared-base'
-import type { BaseHubOptions } from '../entry-types.js'
+import type { BaseHubOptions, SimpleHash } from '../entry-types.js'
 
 export namespace NonFungibleTokenAPI {
     export interface AttributesValue {
@@ -84,6 +84,12 @@ export namespace NonFungibleTokenAPI {
             account: string,
             options?: BaseHubOptions<ChainId>,
         ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>>>
+        /** Get non-fungible assets of the given collection ID. */
+        getAssetsByCollectionId?: (
+            collectionId: string,
+            options?: BaseHubOptions<ChainId>,
+            skipScoreCheck?: boolean,
+        ) => Promise<Pageable<NonFungibleAsset<ChainId, SchemaType>> | undefined>
         /** Get non-fungible assets of the given collection. */
         getAssetsByCollection?: (
             address: string,
@@ -135,5 +141,11 @@ export namespace NonFungibleTokenAPI {
         fulfillOrder?: (/** TODO: add parameters */) => Promise<void>
         /** Cancel an order. */
         cancelOrder?: (/** TODO: add parameters */) => Promise<void>
+
+        /** Get top collectors of a collection. */
+        getTopCollectorsByCollectionId?: (
+            collectionId: string,
+            options?: BaseHubOptions<ChainId>,
+        ) => Promise<Pageable<SimpleHash.TopCollector, PageIndicator | undefined>>
     }
 }
