@@ -22,5 +22,5 @@ export function useSocialAccountListByAddressOrDomain(
             undefined,
             (result) => !result?.length,
         )
-    }, [address, domain, JSON.stringify(defaultBindingProofs)])
+    }, [address, domain, defaultBindingProofs])
 }

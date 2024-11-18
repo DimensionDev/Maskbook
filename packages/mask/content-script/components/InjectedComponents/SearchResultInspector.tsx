@@ -61,14 +61,14 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
     const keyword = props.keyword || keyword_
     const activatedPlugins = useActivatedPluginsSiteAdaptorNotMinimal()
 
-    const resultList = useAsyncRetry(async () => {
+    const { value: resultList } = useAsyncRetry(async () => {
         if (!keyword) return
         return props.searchResults ?? DSearch.search(keyword)
     }, [keyword, props.searchResults])
 
     useEffect(() => {
-        if (profileTabType || !resultList.value?.length) return
-        const type = resultList.value[0].type
+        if (profileTabType || !resultList?.length) return
+        const type = resultList[0].type
         let timer1: NodeJS.Timeout | undefined
         let timer2: NodeJS.Timeout | undefined
         if (
@@ -83,31 +83,31 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
             timer1 && clearTimeout(timer1)
             timer2 && clearTimeout(timer2)
         }
-    }, [resultList.value, profileTabType])
+    }, [resultList, profileTabType])
 
-    const currentResult = props.currentSearchResult ?? resultList.value?.[0]
+    const currentResult = props.currentSearchResult ?? resultList?.[0]
 
     const { classes } = useStyles({ isProfilePage, searchType: currentResult?.type })
     const contentComponent = useMemo(() => {
-        if (!currentResult || !resultList.value?.length) return null
+        if (!currentResult || !resultList?.length) return null
 
         const Component =
             profileTabType ? getSearchResultContentForProfileTab(currentResult) : getSearchResultContent(currentResult)
 
         return (
             <Component
-                resultList={resultList.value}
+                resultList={resultList}
                 currentResult={currentResult}
                 isProfilePage={isProfilePage}
                 identity={identity}
             />
         )
-    }, [currentResult, resultList.value, isProfilePage, identity, profileTabType])
+    }, [currentResult, resultList, isProfilePage, identity, profileTabType])
 
     const tabs = useMemo(() => {
         if (!currentResult) return EMPTY_LIST
         return getSearchResultTabs(activatedPlugins, currentResult, translate)
-    }, [activatedPlugins, resultList.value, translate])
+    }, [activatedPlugins, resultList, translate])
 
     const defaultTab = first(tabs)?.id ?? PluginID.Collectible
     const [currentTab, onChange, , setTab] = useTabs(defaultTab, ...tabs.map((tab) => tab.id))
@@ -119,7 +119,7 @@ export function SearchResultInspector(props: SearchResultInspectorProps) {
         if (!currentResult) return null
         const Component = getSearchResultTabContent(currentTab)
         return <Component result={currentResult} />
-    }, [currentTab, resultList.value])
+    }, [currentTab, resultList])
 
     if (isMinimalMode && !isProfilePage) return null
     if (!keyword && !currentResult) return null
