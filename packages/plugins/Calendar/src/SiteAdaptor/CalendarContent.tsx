@@ -67,7 +67,7 @@ export function CalendarContent(props: Props) {
                     allowedDates={allowedDates}
                 />
                 <TabPanel value={tabs.news} className={classes.tabPanel}>
-                    <NewsList date={date} />
+                    <NewsList date={date} onDatesUpdate={setAllowedDates} />
                 </TabPanel>
                 <TabPanel value={tabs.events} className={classes.tabPanel}>
                     <EventList date={date} onDatesUpdate={setAllowedDates} />

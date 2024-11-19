@@ -100,22 +100,18 @@ interface EventListProps {
     onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
-export const formatDate = (date: string) => {
-    return format(new Date(date), 'MMM dd, yyyy HH:mm')
-}
-
 export function EventList({ date, onDatesUpdate }: EventListProps) {
     const { classes, cx } = useStyles()
     const { isLoading, isFetching, data, hasNextPage, fetchNextPage } = useLumaEvents()
 
     const comingEvents = useMemo(() => {
         if (!data) return EMPTY_LIST
-        return data.filter((x) => new Date(x.start_at) >= date || new Date(x.event.end_at) >= date)
+        return data.filter((x) => new Date(x.event_date) >= date)
     }, [data, date])
 
     useEffect(() => {
         if (!data) return onDatesUpdate(EMPTY_LIST)
-        onDatesUpdate(uniq(data.map((x) => new Date(x.start_at).toLocaleDateString())))
+        onDatesUpdate(uniq(data.map((x) => new Date(x.event_date).toLocaleDateString())))
     }, [onDatesUpdate, data])
 
     if (isLoading) {
@@ -148,29 +144,31 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
             <div className={classes.paddingWrap}>
                 {comingEvents.map((entry) => {
                     return (
-                        <div key={entry.api_id}>
+                        <div key={entry.event_id}>
                             <Typography className={classes.dateDiv}>
-                                {format(new Date(entry.start_at), 'MMM dd,yyy')}
+                                {format(new Date(entry.event_date), 'MMM dd,yyy')}
                             </Typography>
                             <Link
                                 className={classes.eventCard}
-                                href={entry.event.url}
+                                href={entry.event_url}
                                 rel="noopener noreferrer"
                                 target="_blank">
                                 <div className={classes.eventHeader}>
                                     <div className={classes.projectWrap}>
                                         <Image
-                                            src={resolveIPFS_URL(entry.event.cover_url)}
+                                            src={resolveIPFS_URL(entry.poster_url)}
                                             classes={{ container: classes.logo }}
                                             size={24}
-                                            alt={entry.event.name}
+                                            alt={entry.event_title}
                                         />
-                                        <Typography className={classes.projectName}>{entry.event.name}</Typography>
+                                        <Typography className={classes.projectName}>{entry.event_title}</Typography>
                                     </div>
                                 </div>
-                                <Typography className={classes.eventTitle}>{entry.event.name}</Typography>
-                                <Typography className={classes.time}>{formatDate(entry.start_at)}</Typography>
-                                <ImageLoader src={entry.event.cover_url} />
+                                <Typography className={classes.eventTitle}>{entry.event_title}</Typography>
+                                <Typography className={classes.time}>
+                                    {format(new Date(date), 'MMM dd, yyyy HH:mm')}
+                                </Typography>
+                                <ImageLoader src={entry.poster_url} />
                             </Link>
                         </div>
                     )

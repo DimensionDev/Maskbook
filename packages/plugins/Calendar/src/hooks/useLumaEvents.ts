@@ -1,4 +1,4 @@
-import { Luma } from '@masknet/web3-providers'
+import { Calendar } from '@masknet/web3-providers'
 import { useInfiniteQuery } from '@tanstack/react-query'
 
 export function useLumaEvents() {
@@ -6,7 +6,7 @@ export function useLumaEvents() {
         queryKey: ['lumaEvents'],
         initialPageParam: undefined as any,
         queryFn: async ({ pageParam }) => {
-            return Luma.getEvents(pageParam)
+            return Calendar.getEventList(pageParam)
         },
         getNextPageParam(page) {
             return page.nextIndicator

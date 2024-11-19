@@ -106,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NewsListProps {
     date: Date
-    onDatesUpdate?(/** locale date string list */ dates: string[]): void
+    onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
 export function NewsList({ date, onDatesUpdate }: NewsListProps) {
@@ -123,6 +123,7 @@ export function NewsList({ date, onDatesUpdate }: NewsListProps) {
         }
         return newsList
     }, [list, date])
+
     useEffect(() => {
         onDatesUpdate?.(Object.keys(list))
     }, [list, onDatesUpdate])
