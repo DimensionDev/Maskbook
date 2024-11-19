@@ -61,7 +61,7 @@ export function DatePickerTab({ date, onChange, allowedDates = EMPTY_LIST, open,
                 return (
                     <div
                         className={`${classes.date} ${date.getDate() === v.getDate() ? classes.isActive : ''} ${
-                            allowedDates.includes(localeDateString) ? classes.disabled : ''
+                            allowedDates.includes(localeDateString) ? '' : classes.disabled
                         }`}
                         key={v.toString()}
                         onClick={() => {
@@ -83,7 +83,7 @@ export function DatePickerTab({ date, onChange, allowedDates = EMPTY_LIST, open,
                     </IconButton>
                     <DatePicker
                         open={open}
-                        setOpen={(open) => onToggle(open)}
+                        onToggle={onToggle}
                         date={date}
                         onChange={onChange}
                         allowedDates={allowedDates}

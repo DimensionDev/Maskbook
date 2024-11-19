@@ -6,12 +6,12 @@ import { addMonths, endOfMonth, format, isAfter, startOfMonth } from 'date-fns'
 import { range } from 'lodash-es'
 import { useMemo, useState } from 'react'
 
-const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
+const useStyles = makeStyles()((theme) => ({
     container: {
         background: theme.palette.maskColor.bottom,
         boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
         borderRadius: '16px',
-        display: open ? 'flex' : 'none',
+        display: 'flex',
         flexDirection: 'column',
         gap: '24px',
         width: '320px',
@@ -75,14 +75,14 @@ const useStyles = makeStyles<{ open: boolean }>()((theme, { open }) => ({
 
 interface DatePickerProps {
     open: boolean
-    setOpen: (x: boolean) => void
+    onToggle: (x: boolean) => void
     date: Date
     onChange: (date: Date) => void
     allowedDates: string[]
 }
 
-export function DatePicker({ date, onChange, open, setOpen, allowedDates }: DatePickerProps) {
-    const { classes } = useStyles({ open })
+export function DatePicker({ date, onChange, open, onToggle, allowedDates }: DatePickerProps) {
+    const { classes } = useStyles()
     const [currentDate, setCurrentDate] = useState(date)
     const monthStart = startOfMonth(currentDate)
     const startingDayOfWeek = monthStart.getDay()
@@ -96,9 +96,11 @@ export function DatePicker({ date, onChange, open, setOpen, allowedDates }: Date
         return isAfter(addMonths(currentDate, 1), addMonths(endOfMonth(new Date()), 2))
     }, [currentDate])
 
+    if (!open) return null
+
     const handleDateClick = (date: Date) => {
         onChange(date)
-        setOpen(false)
+        onToggle(false)
     }
 
     const changeMonth = (amount: number) => {

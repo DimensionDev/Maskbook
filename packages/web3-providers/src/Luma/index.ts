@@ -19,6 +19,9 @@ export class Luma {
         if (!res?.entries.length) {
             return createPageable([], indicator, createNextIndicator(indicator))
         }
+        res.entries.forEach((entry) => {
+            entry.event.url = `https://lu.ma/${entry.event.url}`
+        })
         return createPageable(res.entries, indicator, createNextIndicator(indicator, res.next_cursor))
     }
 }

@@ -1,4 +1,4 @@
-// cspell:ignore wabrf0h5
+// cspell:ignore wabrf0h5, cout, submited
 export interface LumaEvent {
     api_id: string
     calendar_api_id: string
@@ -20,6 +20,7 @@ export interface LumaEvent {
      * @example wabrf0h5
      *
      * then full url will be `https://lu.ma/wabrf0h5`
+     * Will prepend `https://lu.ma/` after fetching data
      */
     url: string
     user_api_id: string

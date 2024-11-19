@@ -1,14 +1,14 @@
 import { Trans } from '@lingui/macro'
 import { ElementAnchor, EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
+import { uniq } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { useLumaEvents } from '../../hooks/useLumaEvents.js'
 import { ImageLoader } from './ImageLoader.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { uniq } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -154,7 +154,7 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
                             </Typography>
                             <Link
                                 className={classes.eventCard}
-                                href={`https://lu.ma/${entry.event.url}`}
+                                href={entry.event.url}
                                 rel="noopener noreferrer"
                                 target="_blank">
                                 <div className={classes.eventHeader}>
