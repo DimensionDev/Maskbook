@@ -14,9 +14,12 @@ export interface ExtensionInfo {
     }
     poster_url: string
 }
+
+/** Calendar Event */
 export interface Event {
     event_content: string
-    event_date: string
+    /** timestamp, API returns in seconds, string type, will convert into number */
+    event_date: number
     event_description: string
     event_id: string
     event_source: string

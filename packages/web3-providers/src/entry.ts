@@ -112,7 +112,6 @@ export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'
 
 // Calendar
 export { Calendar } from './Calendar/index.js'
-export { Luma } from './Luma/index.js'
 
 // NFT Spam
 export { NFTSpam } from './NFTSpam/index.js'

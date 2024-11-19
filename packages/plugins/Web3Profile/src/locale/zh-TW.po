@@ -54,7 +54,7 @@ msgid "Firefly"
 msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Follow"
 msgstr ""
 
@@ -67,7 +67,7 @@ msgid "Follow Lens handle"
 msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr ""
 
@@ -153,7 +153,7 @@ msgstr ""
 msgid "Unlock {0} {1} and follow"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
 msgstr ""
 

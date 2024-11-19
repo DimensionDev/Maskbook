@@ -54,7 +54,7 @@ msgid "Firefly"
 msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Follow"
 msgstr "팔로우"
 
@@ -67,7 +67,7 @@ msgid "Follow Lens handle"
 msgstr "Lens 핸들 팔로우"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "팔로잉"
 
@@ -153,7 +153,7 @@ msgstr "Lens 핸들 언팔로우"
 msgid "Unlock {0} {1} and follow"
 msgstr "{0}{1} 언락하고 팔로우하기"
 
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
 msgstr "살펴보기"
 

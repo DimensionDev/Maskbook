@@ -22,8 +22,12 @@ msgid "Calendar"
 msgstr "カレンダー"
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Date"
-msgstr "日付"
+#~ msgid "Date"
+#~ msgstr "日付"
+
+#: src/SiteAdaptor/CalendarContent.tsx
+msgid "Events"
+msgstr ""
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
 msgid "Expired"
@@ -38,23 +42,29 @@ msgid "News"
 msgstr "ニュース"
 
 #: src/SiteAdaptor/CalendarContent.tsx
-msgid "NFTs"
+#~ msgid "NFTs"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/NewsList.tsx
+msgid "No content for the last two weeks."
+msgstr "過去２週間のコンテンツはありません。"
+
+#: src/SiteAdaptor/components/EventList.tsx
+msgid "No events"
 msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
-#: src/SiteAdaptor/components/NewsList.tsx
-#: src/SiteAdaptor/components/NFTList.tsx
-msgid "No content for the last two weeks."
-msgstr "過去２週間のコンテンツはありません。"
+msgid "No more data available."
+msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx
 msgid "Powered By {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Price"
-msgstr "価格"
+#~ msgid "Price"
+#~ msgstr "価格"
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Total"
-msgstr "合計"
+#~ msgid "Total"
+#~ msgstr "合計"

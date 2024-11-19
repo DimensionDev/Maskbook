@@ -54,7 +54,7 @@ msgid "Firefly"
 msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Follow"
 msgstr "フォロー"
 
@@ -67,7 +67,7 @@ msgid "Follow Lens handle"
 msgstr "レンズの指示に従ってください"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "フォロー中"
 
@@ -153,7 +153,7 @@ msgstr "レンズハンドルのフォローを解除"
 msgid "Unlock {0} {1} and follow"
 msgstr "{0} {1} をロック解除してフォロー"
 
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
 msgstr "表示"
 
