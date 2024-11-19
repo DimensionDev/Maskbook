@@ -9,29 +9,34 @@ import { EventList } from './components/EventList.js'
 import { Footer } from './components/Footer.js'
 import { NewsList } from './components/NewsList.js'
 
-const useStyles = makeStyles()((theme) => ({
-    calendar: {
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: '12px',
-        border: `1px solid ${theme.palette.maskColor.line}`,
-        position: 'relative',
-        marginBottom: '20px',
-    },
-    tab: {
-        fontSize: 16,
-        fontWeight: 700,
-    },
-    tabList: {
-        background:
-            'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.80) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.20) 0%, rgba(69, 163, 251, 0.20) 100%), #FFF',
-        padding: '8px 16px 0 16px',
-        borderRadius: '12px 12px 0 0',
-    },
-    tabPanel: {
-        padding: '0 4px 0 12px',
-    },
-}))
+const useStyles = makeStyles()((theme) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        calendar: {
+            display: 'flex',
+            flexDirection: 'column',
+            borderRadius: '12px',
+            border: `1px solid ${theme.palette.maskColor.line}`,
+            position: 'relative',
+            marginBottom: '20px',
+        },
+        tab: {
+            fontSize: 16,
+            fontWeight: 700,
+        },
+        tabList: {
+            background:
+                isDark ?
+                    'linear-gradient(180deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.06) 100%)'
+                :   'linear-gradient(180deg, rgba(255, 255, 255, 0.00) 0%, rgba(255, 255, 255, 0.80) 100%), linear-gradient(90deg, rgba(28, 104, 243, 0.20) 0%, rgba(69, 163, 251, 0.20) 100%), #FFF',
+            padding: '8px 16px 0 16px',
+            borderRadius: '12px 12px 0 0',
+        },
+        tabPanel: {
+            padding: '0 4px 0 12px',
+        },
+    }
+})
 
 interface Props extends HTMLProps<HTMLDivElement> {
     target?: string

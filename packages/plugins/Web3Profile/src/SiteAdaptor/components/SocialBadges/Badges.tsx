@@ -28,12 +28,7 @@ interface Props {
     userId: string
 }
 
-export const SocialBadges = memo(function SocialBadges({
-    slot,
-    lensAccounts,
-    farcasterAccounts,
-    userId,
-}: Props) {
+export const SocialBadges = memo(function SocialBadges({ slot, lensAccounts, farcasterAccounts, userId }: Props) {
     const buttonRef = useRef<HTMLButtonElement>(null)
     const { classes } = useStyles()
 
