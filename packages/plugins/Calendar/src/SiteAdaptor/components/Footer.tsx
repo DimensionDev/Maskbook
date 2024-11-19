@@ -3,7 +3,6 @@ import { ApplicationSettingTabs, useOpenApplicationSettings } from '@masknet/sha
 import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
-import { type ReactNode } from 'react'
 import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -60,32 +59,25 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export interface FooterProps {
-    provider: string
-    disableSetting?: boolean
+    tab: 'news' | 'events'
 }
 
-export function Footer({ provider, disableSetting }: FooterProps) {
+export function Footer({ tab }: FooterProps) {
     const { classes } = useStyles()
-    const providerMap: Record<string, ReactNode> = {
+    const providerMap = {
         news: (
             <>
                 <Typography className={classes.providerName}>CoinCarp</Typography>
                 <Icons.CoinCarp size={24} />
             </>
         ),
-        event: (
+        events: (
             <>
-                <Typography className={classes.providerName}>LINK3</Typography>
-                <Icons.Link3 size={24} />
+                <Typography className={classes.providerName}></Typography>
+                <Icons.Luma size={24} />
             </>
         ),
-        nfts: (
-            <>
-                <Typography className={classes.providerName}>NFTGO</Typography>
-                <Icons.NFTGo size={24} />
-            </>
-        ),
-    }
+    } as const
     const openApplicationBoardDialog = useOpenApplicationSettings()
     return (
         <div className={classes.container}>
@@ -98,17 +90,15 @@ export function Footer({ provider, disableSetting }: FooterProps) {
                 </div>
                 <div className={classes.poweredByWrap}>
                     <Typography className={classes.poweredBy} component="div">
-                        <Trans>Powered By {providerMap[provider]}</Trans>
+                        <Trans>Powered By {providerMap[tab]}</Trans>
                     </Typography>
-                    {disableSetting ? null : (
-                        <IconButton
-                            sx={{ width: '16px', height: '16px' }}
-                            onClick={() =>
-                                openApplicationBoardDialog(ApplicationSettingTabs.pluginSwitch, PluginID.Calendar)
-                            }>
-                            <Icons.Gear size={16} />
-                        </IconButton>
-                    )}
+                    <IconButton
+                        sx={{ width: '16px', height: '16px' }}
+                        onClick={() =>
+                            openApplicationBoardDialog(ApplicationSettingTabs.pluginSwitch, PluginID.Calendar)
+                        }>
+                        <Icons.Gear size={16} />
+                    </IconButton>
                 </div>
             </div>
         </div>

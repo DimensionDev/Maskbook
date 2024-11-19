@@ -2644,6 +2644,16 @@ export const Lock = /*#__PURE__*/ __createIcon(
     ],
     [24, 25],
 )
+export const Luma = /*#__PURE__*/ __createIcon('Luma', [
+    {
+        c: ['dark'],
+        u: () => new URL('./general/Luma.dark.svg', import.meta.url).href,
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./general/Luma.light.svg', import.meta.url).href,
+    },
+])
 export const MaskAvatar = /*#__PURE__*/ __createIcon('MaskAvatar', [
     {
         c: ['dark'],

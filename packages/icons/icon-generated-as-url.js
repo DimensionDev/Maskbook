@@ -256,6 +256,8 @@ export function loading_base_dark_url() { return new URL("./general/LoadingBase.
 export function loading_base_light_url() { return new URL("./general/LoadingBase.light.svg", import.meta.url).href }
 export function local_backup_url() { return new URL("./general/LocalBackup.png", import.meta.url).href }
 export function lock_url() { return new URL("./general/Lock.svg", import.meta.url).href }
+export function luma_dark_url() { return new URL("./general/Luma.dark.svg", import.meta.url).href }
+export function luma_light_url() { return new URL("./general/Luma.light.svg", import.meta.url).href }
 export function mask_avatar_dark_url() { return new URL("./general/MaskAvatar.dark.svg", import.meta.url).href }
 export function mask_avatar_light_url() { return new URL("./general/MaskAvatar.light.svg", import.meta.url).href }
 export function mask_in_minds_url() { return new URL("./general/MaskInMinds.svg", import.meta.url).href }

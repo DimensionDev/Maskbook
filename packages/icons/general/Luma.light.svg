@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+    <g clip-path="url('#Luma_light_svg__clip0_11498_6572')">
+        <rect width="24" height="24" fill="#000" rx="4"/>
+        <path fill="#fff" d="M21 12a9 9 0 0 1-9-9 9 9 0 0 1-9 9 9 9 0 0 1 9 9 9 9 0 0 1 9-9"/>
+    </g>
+    <defs>
+        <clipPath id="Luma_light_svg__clip0_11498_6572">
+            <path fill="#fff" d="M0 0h24v24H0z"/>
+        </clipPath>
+    </defs>
+</svg>

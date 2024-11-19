@@ -72,7 +72,7 @@ export function CalendarContent(props: Props) {
                 <TabPanel value={tabs.events} className={classes.tabPanel}>
                     <EventList date={date} onDatesUpdate={setAllowedDates} />
                 </TabPanel>
-                <Footer provider={currentTab} />
+                <Footer tab={currentTab} />
             </TabContext>
         </div>
     )
