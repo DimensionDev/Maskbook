@@ -1,4 +1,3 @@
-import { number } from 'zod'
 
 export interface ProjectInfo {
     links: Array<{
