@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:10\n"
+"PO-Revision-Date: 2024-11-20 03:31\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -22,7 +22,11 @@ msgid "Calendar"
 msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Date"
+#~ msgid "Date"
+#~ msgstr ""
+
+#: src/SiteAdaptor/CalendarContent.tsx
+msgid "Events"
 msgstr ""
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
@@ -38,13 +42,19 @@ msgid "News"
 msgstr ""
 
 #: src/SiteAdaptor/CalendarContent.tsx
-msgid "NFTs"
+#~ msgid "NFTs"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/NewsList.tsx
+msgid "No content for the last two weeks."
 msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
-#: src/SiteAdaptor/components/NewsList.tsx
-#: src/SiteAdaptor/components/NFTList.tsx
-msgid "No content for the last two weeks."
+msgid "No events"
+msgstr ""
+
+#: src/SiteAdaptor/components/EventList.tsx
+msgid "No more data available."
 msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx
@@ -52,9 +62,10 @@ msgid "Powered By {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Price"
-msgstr ""
+#~ msgid "Price"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Total"
-msgstr ""
+#~ msgid "Total"
+#~ msgstr ""
+
