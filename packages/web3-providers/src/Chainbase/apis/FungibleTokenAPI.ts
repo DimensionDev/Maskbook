@@ -68,7 +68,7 @@ class ChainbaseFungibleTokenAPI implements FungibleTokenAPI.Provider<ChainId, Sc
     async getFungibleTokenPrice(chainId: ChainId, address: string) {
         if (isNativeTokenAddress(address) || !isValidAddress(address) || chainId !== ChainId.Mainnet) return undefined
         const data = await fetchFromChainbase<FT_Price>(
-            urlcat('/v1/token/price', { chain_id: ChainId.Mainnet, contract_address: address }),
+            urlcat('/v1/token/price', { chain_id: chainId, contract_address: address }),
         )
 
         return data?.price

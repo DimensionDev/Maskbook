@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { RestorableScroll, UserAssetsProvider, useParamTab } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -11,7 +12,6 @@ import { WalletAssetTabs } from '../../type.js'
 import { ActivityList } from '../ActivityList/index.js'
 import { AssetsList } from '../AssetsList/index.js'
 import { WalletCollections } from './WalletCollections.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'

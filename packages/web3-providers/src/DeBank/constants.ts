@@ -40,6 +40,7 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
     movr: ChainId.Moonriver,
     nova: ChainId.Arbitrum_Nova,
     okt: ChainId.OKXChain,
+    xlayer: ChainId.XLayer,
     op: ChainId.Optimism,
     palm: ChainId.Palm,
     pls: ChainId.Pulse,
