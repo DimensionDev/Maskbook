@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:08\n"
+"PO-Revision-Date: 2024-11-20 03:31\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -22,8 +22,12 @@ msgid "Calendar"
 msgstr "캘린더"
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Date"
-msgstr "날짜"
+#~ msgid "Date"
+#~ msgstr ""
+
+#: src/SiteAdaptor/CalendarContent.tsx
+msgid "Events"
+msgstr ""
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
 msgid "Expired"
@@ -38,23 +42,30 @@ msgid "News"
 msgstr "뉴스"
 
 #: src/SiteAdaptor/CalendarContent.tsx
-msgid "NFTs"
+#~ msgid "NFTs"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/NewsList.tsx
+msgid "No content for the last two weeks."
+msgstr "지난 2주 동안 내용이 없습니다."
+
+#: src/SiteAdaptor/components/EventList.tsx
+msgid "No events"
 msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
-#: src/SiteAdaptor/components/NewsList.tsx
-#: src/SiteAdaptor/components/NFTList.tsx
-msgid "No content for the last two weeks."
-msgstr "지난 2주 동안 내용이 없습니다."
+msgid "No more data available."
+msgstr ""
 
 #: src/SiteAdaptor/components/Footer.tsx
 msgid "Powered By {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Price"
-msgstr "가격"
+#~ msgid "Price"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Total"
-msgstr "전체"
+#~ msgid "Total"
+#~ msgstr ""
+
