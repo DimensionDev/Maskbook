@@ -1,6 +1,6 @@
 import { EMPTY_OBJECT } from '@masknet/shared-base'
 import { Calendar } from '@masknet/web3-providers'
-import type { Event } from '@masknet/web3-providers/types'
+import type { ParsedEvent } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 import { addDays, startOfMonth } from 'date-fns'
 
@@ -13,7 +13,7 @@ export function useNewsList(date: Date, enabled = true) {
         queryFn: async () => Calendar.getNewsList(startTime, endTime),
         select(data) {
             if (!data) return EMPTY_OBJECT
-            return data.reduce((acc: Record<string, Event[]>, v) => {
+            return data.reduce((acc: Record<string, ParsedEvent[]>, v) => {
                 const date = new Date(v.event_date).toLocaleDateString()
                 acc[date] = acc[date] || []
                 acc[date].push(v)

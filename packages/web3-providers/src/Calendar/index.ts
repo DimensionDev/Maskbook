@@ -1,14 +1,14 @@
 import { createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
-import type { Event, EventResponse } from './types.js'
+import type { Event, EventResponse, ParsedEvent } from './types.js'
 
 const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/crypto_event_list'
 
-function fixEvent(event: Event): Event {
+function fixEvent(event: Event): ParsedEvent {
     return {
         ...event,
-        event_date: event.event_date * 1000,
+        event_date: +event.event_date * 1000,
     }
 }
 

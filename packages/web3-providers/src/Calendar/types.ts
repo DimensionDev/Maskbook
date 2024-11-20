@@ -1,3 +1,5 @@
+import { number } from 'zod'
+
 export interface ProjectInfo {
     links: Array<{
         type: string
@@ -18,8 +20,7 @@ export interface ExtensionInfo {
 /** Calendar Event */
 export interface Event {
     event_content: string
-    /** timestamp, API returns in seconds, string type, will convert into number */
-    event_date: number
+    event_date: string
     event_description: string
     event_id: string
     event_source: string
@@ -31,6 +32,11 @@ export interface Event {
     ext_info?: ExtensionInfo
     /** data from provider */
     raw_data: unknown
+}
+
+/** API returns in seconds, string type, will convert into number */
+export type ParsedEvent = Omit<Event, 'event_date'> & {
+    event_date: number
 }
 
 interface Response<T> {

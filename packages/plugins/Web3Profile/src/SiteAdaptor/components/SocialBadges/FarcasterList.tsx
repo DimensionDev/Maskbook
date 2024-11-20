@@ -6,22 +6,7 @@ import { ListItem, Typography, Link } from '@mui/material'
 import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => {
-    const isDark = theme.palette.mode === 'dark'
     return {
-        list: {
-            backgroundColor: isDark ? '#030303' : theme.palette.common.white,
-            maxWidth: 250,
-            // Show up to 6 item
-            maxHeight: 244,
-            overflow: 'auto',
-            minWidth: 240,
-            padding: theme.spacing(1.5),
-            boxSizing: 'border-box',
-            borderRadius: 16,
-            '&::-webkit-scrollbar': {
-                display: 'none',
-            },
-        },
         listItem: {
             cursor: 'default',
             display: 'flex',
