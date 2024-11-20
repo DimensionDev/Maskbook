@@ -1,4 +1,3 @@
-
 export interface ProjectInfo {
     links: Array<{
         type: string
