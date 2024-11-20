@@ -37,7 +37,12 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
         return collections[0]
     }
 
-    async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
+    async getAsset(
+        address: string,
+        tokenId: string,
+        { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {},
+        skipScoreCheck = false,
+    ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !address || !isValidChainId(chainId)) return
         const path = urlcat('/api/v0/nfts/:chain/:address', {
@@ -46,7 +51,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
             tokenId,
         })
         const response = await fetchFromSimpleHash<SimpleHash.Asset>(path)
-        return createSolanaNonFungibleAsset(response)
+        return createSolanaNonFungibleAsset(response, skipScoreCheck)
     }
 
     async getAssets(account: string, { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {}) {
@@ -76,6 +81,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
     async getAssetsByCollectionId(
         collectionId: string,
         { chainId = ChainId.Mainnet, indicator, }: BaseHubOptions<ChainId> = {},
+        skipScoreCheck = false,
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!collectionId || !isValidChainId(chainId) || !chain) {
@@ -88,7 +94,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
         })
 
         const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
-        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
+        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x, skipScoreCheck)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 
@@ -102,6 +108,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
     async getAssetsByCollection(
         address: string,
         { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
+        skipScoreCheck = false,
     ) {
         const chain = resolveChain(NetworkPluginID.PLUGIN_SOLANA, chainId)
         if (!chain || !address || !isValidChainId(chainId)) {
@@ -115,7 +122,7 @@ class SimpleHashAPI_Solana implements NonFungibleTokenAPI.Provider<ChainId, Sche
 
         const response = await fetchFromSimpleHash<{ next_cursor: string; nfts: SimpleHash.Asset[] }>(path)
 
-        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x)).filter(Boolean) as Array<
+        const assets = response.nfts.map((x) => createSolanaNonFungibleAsset(x, skipScoreCheck)).filter(Boolean) as Array<
             NonFungibleAsset<ChainId, SchemaType>
         >
 

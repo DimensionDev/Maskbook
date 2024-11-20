@@ -8,6 +8,7 @@ import { SPAM_SCORE } from './constants.js'
 
 export function createSolanaNonFungibleAsset(
     asset: SimpleHash.Asset,
+    skipScoreCheck?: boolean,
 ): NonFungibleAsset<ChainId, SchemaType> | undefined {
     if (isEmpty(asset)) return
     const chainId = resolveSolanaChainId(asset.chain)
@@ -15,7 +16,13 @@ export function createSolanaNonFungibleAsset(
     const schema = SchemaType.NonFungible
 
     const spam_score = asset.collection.spam_score
-    if (!chainId || !isValidChainId(chainId) || !address || (spam_score !== null && spam_score >= SPAM_SCORE)) return
+    if (
+        !chainId ||
+        !isValidChainId(chainId) ||
+        !address ||
+        (spam_score !== null && spam_score >= SPAM_SCORE && !skipScoreCheck)
+    )
+        return
     // On Solana the contract is synonymous with the mint address - the field name on collection is recommended instead
     const name =
         isValidDomain(asset.name) ?
