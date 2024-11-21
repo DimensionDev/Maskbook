@@ -49,13 +49,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '20px',
         alignItems: 'center',
     },
-    providerName: {
-        color: theme.palette.maskColor.main,
-        fontSize: '14px',
-        fontWeight: 700,
-        lineHeight: '18px',
-        alignItems: 'center',
-    },
 }))
 
 export interface FooterProps {
@@ -65,18 +58,8 @@ export interface FooterProps {
 export function Footer({ tab }: FooterProps) {
     const { classes } = useStyles()
     const providerMap = {
-        news: (
-            <>
-                <Typography className={classes.providerName}>CoinCarp</Typography>
-                <Icons.CoinCarp size={24} />
-            </>
-        ),
-        events: (
-            <>
-                <Typography className={classes.providerName}></Typography>
-                <Icons.Luma size={24} />
-            </>
-        ),
+        news: <Icons.CoinCarp size={24} />,
+        events: <Icons.Luma size={24} />,
     } as const
     const openApplicationBoardDialog = useOpenApplicationSettings()
     return (

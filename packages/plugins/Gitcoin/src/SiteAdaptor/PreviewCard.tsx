@@ -278,7 +278,7 @@ export function PreviewCard(props: PreviewCardProps) {
                     </Typography>
                 ))}
                 <Box className={classes.linkItem} key="created">
-                    <Icons.CalendarDark size={16} />
+                    <Icons.LinearCalendar variant="dark" size={16} />
                     <Typography className={classes.link}>
                         <Trans>Created on: {format(project.metadata.createdAt, 'MMMM do, yyyy')}</Trans>
                     </Typography>

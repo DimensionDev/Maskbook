@@ -9,6 +9,7 @@ import { uniq } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { useLumaEvents } from '../../hooks/useLumaEvents.js'
 import { ImageLoader } from './ImageLoader.js'
+import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -75,20 +76,16 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: '14px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.mode === 'dark' ? theme.palette.maskColor.second : theme.palette.maskColor.main,
+        color: theme.palette.maskColor.main,
     },
-    time: {
-        fontSize: '14px',
+    info: {
+        fontSize: '13px',
         fontWeight: 400,
         lineHeight: '18px',
-        color: theme.palette.maskColor.second,
-    },
-    dateDiv: {
-        fontSize: '14px',
-        fontWeight: 700,
-        lineHeight: '18px',
         color: theme.palette.maskColor.main,
-        padding: '10px 0',
+        display: 'flex',
+        gap: theme.spacing(1.5),
+        alignItems: 'center',
     },
     loading: {
         color: theme.palette.maskColor.main,
@@ -142,35 +139,38 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
     return (
         <div className={classes.container}>
             <div className={classes.paddingWrap}>
-                {comingEvents.map((entry) => {
+                {comingEvents.map((event) => {
                     return (
-                        <div key={entry.event_id}>
-                            <Typography className={classes.dateDiv}>
-                                {format(new Date(entry.event_date), 'MMM dd,yyy')}
-                            </Typography>
-                            <Link
-                                className={classes.eventCard}
-                                href={entry.event_url}
-                                rel="noopener noreferrer"
-                                target="_blank">
-                                <div className={classes.eventHeader}>
-                                    <div className={classes.projectWrap}>
-                                        <Image
-                                            src={resolveIPFS_URL(entry.poster_url)}
-                                            classes={{ container: classes.logo }}
-                                            size={24}
-                                            alt={entry.event_title}
-                                        />
-                                        <Typography className={classes.projectName}>{entry.event_title}</Typography>
-                                    </div>
+                        <Link
+                            key={event.event_id}
+                            className={classes.eventCard}
+                            href={event.event_url}
+                            rel="noopener noreferrer"
+                            target="_blank">
+                            <div className={classes.eventHeader}>
+                                <div className={classes.projectWrap}>
+                                    <Image
+                                        src={resolveIPFS_URL(event.poster_url)}
+                                        classes={{ container: classes.logo }}
+                                        size={24}
+                                        alt={event.event_title}
+                                    />
+                                    <Typography className={classes.projectName}>{event.event_title}</Typography>
                                 </div>
-                                <Typography className={classes.eventTitle}>{entry.event_title}</Typography>
-                                <Typography className={classes.time}>
-                                    {format(new Date(entry.event_date), 'MMM dd, yyyy HH:mm')}
+                            </div>
+                            <Typography className={classes.eventTitle}>{event.event_title}</Typography>
+                            {event.event_full_location ?
+                                <Typography className={classes.info}>
+                                    <Icons.Location size={18} />
+                                    {event.event_full_location}
                                 </Typography>
-                                <ImageLoader src={entry.poster_url} />
-                            </Link>
-                        </div>
+                            :   null}
+                            <Typography className={classes.info}>
+                                <Icons.LinearCalendar size={18} />
+                                {format(event.event_date, 'MMM dd, yyyy HH:mm')}
+                            </Typography>
+                            <ImageLoader src={event.poster_url} />
+                        </Link>
                     )
                 })}
                 {hasNextPage ?

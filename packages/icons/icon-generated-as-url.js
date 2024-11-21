@@ -156,7 +156,6 @@ export function bordered_success_url() { return new URL("./general/BorderedSucce
 export function busy_wallet_nav_url() { return new URL("./general/BusyWalletNav.svg", import.meta.url).href }
 export function buy_url() { return new URL("./general/Buy.svg", import.meta.url).href }
 export function cached_url() { return new URL("./general/Cached.svg", import.meta.url).href }
-export function calendar_dark_url() { return new URL("./general/CalendarDark.svg", import.meta.url).href }
 export function call_send_url() { return new URL("./general/CallSend.svg", import.meta.url).href }
 export function candle_url() { return new URL("./general/candle.svg", import.meta.url).href }
 export function car_url() { return new URL("./general/Car.svg", import.meta.url).href }
@@ -255,6 +254,7 @@ export function loader_url() { return new URL("./general/Loader.svg", import.met
 export function loading_base_dark_url() { return new URL("./general/LoadingBase.dark.svg", import.meta.url).href }
 export function loading_base_light_url() { return new URL("./general/LoadingBase.light.svg", import.meta.url).href }
 export function local_backup_url() { return new URL("./general/LocalBackup.png", import.meta.url).href }
+export function location_url() { return new URL("./general/Location.svg", import.meta.url).href }
 export function lock_url() { return new URL("./general/Lock.svg", import.meta.url).href }
 export function luma_dark_url() { return new URL("./general/Luma.dark.svg", import.meta.url).href }
 export function luma_light_url() { return new URL("./general/Luma.light.svg", import.meta.url).href }

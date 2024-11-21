@@ -4,7 +4,7 @@ import type { ParsedEvent } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 import { addDays, startOfMonth } from 'date-fns'
 
-export function useNewsList(date: Date, enabled = true) {
+export function useNewsList(date: Date) {
     const startTime = startOfMonth(date).getTime() / 1000
     const endTime = Math.floor(addDays(date, 45).getTime() / 1000)
     return useQuery({

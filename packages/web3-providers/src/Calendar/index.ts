@@ -1,14 +1,34 @@
 import { createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
+import { compact } from 'lodash-es'
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
 import type { Event, EventResponse, ParsedEvent } from './types.js'
 
 const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/crypto_event_list'
 
-function fixEvent(event: Event): ParsedEvent {
+function fixEventDate(event: Event): ParsedEvent {
     return {
         ...event,
         event_date: +event.event_date * 1000,
+    }
+}
+
+function fixEvent(event: Event): ParsedEvent {
+    const originData = (
+        event.raw_data as {
+            calendar: {
+                geo_city: string
+                geo_country: string
+                geo_region: string
+            }
+        }
+    ).calendar
+    return {
+        ...event,
+        event_date: +event.event_date * 1000,
+        event_city: originData.geo_city,
+        event_country: originData.geo_country,
+        event_full_location: compact([originData.geo_region, originData.geo_city, originData.geo_country]).join(', '),
     }
 }
 
@@ -23,7 +43,7 @@ export class Calendar {
             }),
         )
         if (!list.data) return
-        return list.data.events.map(fixEvent)
+        return list.data.events.map(fixEventDate)
     }
     static async getEventList(indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(

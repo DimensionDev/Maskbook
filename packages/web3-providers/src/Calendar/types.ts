@@ -35,6 +35,9 @@ export interface Event {
 /** API returns in seconds, string type, will convert into number */
 export type ParsedEvent = Omit<Event, 'event_date'> & {
     event_date: number
+    event_city?: string
+    event_country?: string
+    event_full_location?: string
 }
 
 interface Response<T> {
