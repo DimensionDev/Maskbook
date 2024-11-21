@@ -166,7 +166,7 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
                                 </div>
                                 <Typography className={classes.eventTitle}>{entry.event_title}</Typography>
                                 <Typography className={classes.time}>
-                                    {format(new Date(date), 'MMM dd, yyyy HH:mm')}
+                                    {format(new Date(entry.event_date), 'MMM dd, yyyy HH:mm')}
                                 </Typography>
                                 <ImageLoader src={entry.poster_url} />
                             </Link>
