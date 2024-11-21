@@ -15,6 +15,7 @@ export type DebankChains =
     | 'avax'
     | 'base'
     | 'boba'
+    | 'sei'
     | 'brise'
     | 'bsc'
     | 'btt'

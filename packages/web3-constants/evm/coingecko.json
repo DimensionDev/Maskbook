@@ -38,6 +38,7 @@
         "Cronos": "crypto-com-chain",
         "BitTorrent": "bittorrent",
         "Boba": "boba-network",
-        "XLayer": "okb"
+        "XLayer": "okb",
+        "Sei": "sei-network"
     }
 }

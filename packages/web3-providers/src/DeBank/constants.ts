@@ -48,6 +48,7 @@ export const DEBANK_CHAIN_TO_CHAIN_ID_MAP: Record<DebankChains, ChainId | number
     sbch: ChainId.SmartBitcoinCash,
     sdn: ChainId.Shiden,
     sgb: ChainId.SongbirdCanary,
+    sei: ChainId.Sei,
     step: ChainId.Step,
     swm: 73772,
     tlos: ChainId.Telos,
