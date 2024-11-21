@@ -8,7 +8,7 @@ const MASK_LIGHT_FALLBACK = new URL('../assets/mask.light.svg', import.meta.url)
 const useStyles = makeStyles()((theme) => ({
     container: {
         width: '100%',
-        height: '156px',
+        minHeight: '156px',
         display: 'flex',
         borderRadius: '8px',
         justifyContent: 'center',
@@ -19,7 +19,6 @@ const useStyles = makeStyles()((theme) => ({
     poster: {
         borderRadius: '8px',
         width: '100%',
-        height: '156px',
         objectFit: 'cover',
     },
     iconContainer: {
