@@ -4,6 +4,7 @@ import type { TwitterBaseAPI } from '../../entry-types.js'
 import { staleCached } from '../../helpers/fetchCached.js'
 import { fetchGlobal } from '../../helpers/fetchGlobal.js'
 import { getHeaders } from './getTokens.js'
+import { createUser } from './helpers.js'
 
 const features = {
     responsive_web_twitter_blue_verified_badge_is_enabled: true,
@@ -25,7 +26,7 @@ const features = {
     responsive_web_twitter_article_notes_tab_enabled: false,
 }
 
-async function createRequest(screenName: string) {
+function createRequest(screenName: string) {
     // cspell:disable-next-line
     const url = urlcat('https://x.com/i/api/graphql/Yka-W8dz7RaEuQNkroPkYw/UserByScreenName', {
         variables: JSON.stringify({
@@ -45,29 +46,13 @@ async function createRequest(screenName: string) {
     })
 }
 
-function createUser(response: TwitterBaseAPI.UserResponse) {
-    const result = response.data.user.result
-    return {
-        verified: result.legacy?.verified ?? false,
-        has_nft_avatar: result.has_nft_avatar ?? false,
-        userId: result.rest_id,
-        nickname: result.legacy?.name ?? '',
-        screenName: result.legacy?.screen_name ?? '', // handle
-        avatarURL: result.legacy?.profile_image_url_https.replace(/_normal(\.\w+)$/, '_400x400$1'),
-        bio: result.legacy?.description,
-        location: result.legacy?.location,
-        homepage: result.legacy?.entities.url.urls[0]?.expanded_url,
-    }
-}
-
 export async function getUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-    const request = await createRequest(screenName)
-    if (!request) return null
+    const request = createRequest(screenName)
 
     const response = await fetchGlobal(request, undefined)
     if (response.ok) {
         const json: TwitterBaseAPI.UserResponse = await response.json()
-        return createUser(json)
+        return createUser(json.data.user.result)
     }
 
     const patchingFeatures: string[] = []
@@ -88,12 +73,12 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
 }
 
 export async function staleUserByScreenName(screenName: string): Promise<TwitterBaseAPI.User | null> {
-    const request = await createRequest(screenName)
+    const request = createRequest(screenName)
     if (!request) return null
 
     const response = await staleCached(request)
     if (!response?.ok) return null
 
     const json: TwitterBaseAPI.UserResponse = await response.json()
-    return createUser(json)
+    return createUser(json.data.user.result)
 }

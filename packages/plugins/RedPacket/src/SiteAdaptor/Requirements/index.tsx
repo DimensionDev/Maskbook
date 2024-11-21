@@ -3,13 +3,14 @@ import { usePostInfoURL, usePostLink } from '@masknet/plugin-infra/content-scrip
 import { MaskColors, makeStyles } from '@masknet/theme'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
-import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { type FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { Fragment, useMemo } from 'react'
-import { usePlatformType } from './hooks/usePlatformType.js'
 import { Trans } from '@lingui/macro'
+import { usePlatformType } from '../hooks/usePlatformType.js'
+import { MentionLink } from './MentionLink.js'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -102,16 +103,6 @@ const IconMap: Record<FireflyRedPacketAPI.PostReactionKind, GeneratedIcon> = {
     collect: Icons.Heart,
 }
 
-function resolveProfileUrl(platform: FireflyRedPacketAPI.PlatformType, handle: string) {
-    switch (platform) {
-        case FireflyRedPacketAPI.PlatformType.farcaster:
-            return `/profile/farcaster/${handle}`
-        case FireflyRedPacketAPI.PlatformType.lens:
-            return `/profile/lens/${handle}`
-        case FireflyRedPacketAPI.PlatformType.twitter:
-            return `/${handle}`
-    }
-}
 interface NFTListProps {
     nfts: Array<{
         chainId: number
@@ -151,25 +142,14 @@ function NFTList({ nfts }: NFTListProps) {
 }
 
 interface FollowProfileProps {
-    payload: Array<{ platform: FireflyRedPacketAPI.PlatformType; profileId: string; handle: string }>
-    platform: FireflyRedPacketAPI.PlatformType
+    payload: FireflyRedPacketAPI.ProfileFollowStrategyPayload[]
 }
 
 function FollowProfile({ payload }: FollowProfileProps) {
-    const { classes } = useStyles()
     return (
         <span>
-            {payload.map(({ handle, profileId, platform }) => (
-                <Link
-                    key={handle}
-                    href={resolveProfileUrl(
-                        platform,
-                        platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : handle,
-                    )}
-                    target="_blank"
-                    className={classes.textLink}>
-                    @{handle}
-                </Link>
+            {payload.map((payload) => (
+                <MentionLink key={payload.profileId} {...payload} />
             ))}
         </span>
     )
@@ -192,7 +172,7 @@ export function Requirements({ onClose, statusList, showResults = true, ...props
                         <Icons.UserPlus className={classes.icon} size={16} />
                         <Typography className={classes.text}>
                             <Trans>
-                                Follow <FollowProfile platform={platform} payload={payload} /> on {platform}
+                                Follow <FollowProfile payload={payload} /> on {platform}
                             </Trans>
                         </Typography>
                         {showResults ?

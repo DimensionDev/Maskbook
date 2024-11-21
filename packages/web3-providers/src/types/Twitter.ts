@@ -246,72 +246,44 @@ export namespace TwitterBaseAPI {
     export interface UserResponse {
         data: {
             user: {
-                result: {
-                    id: string
-                    rest_id: string
-                    affiliates_highlighted_label: any
-                    /** Only web API provides */
-                    has_nft_avatar?: boolean
-                    legacy?: {
-                        blocked_by?: boolean
-                        blocking?: boolean
-                        can_dm?: boolean
-                        can_media_tag?: boolean
-                        /** ISODateTime */
-                        created_at: string
-                        default_profile: boolean
-                        default_profile_image: boolean
-                        description: string
-                        entities: {
-                            description: {
-                                urls: any[]
-                            }
-                            url: {
-                                urls: UserUrl[]
+                result: LegacyUserResult
+            }
+        }
+    }
+
+    export interface TimelineEntry {
+        entryId: string
+        /** decimal string */
+        soringIndex: string
+        content: {
+            entryType: LiteralUnion<'TimelineTimelineItem' | 'TimelineTimelineCursor'>
+            itemContent: {
+                tweet_results: {
+                    result: {
+                        core: {
+                            user_results: {
+                                result: LegacyUserResult
                             }
                         }
-                        fast_followers_count?: number
-                        favourites_count: number
-                        follow_request_sent: boolean | null
-                        followed_by?: boolean
-                        followers_count: number
-                        following: boolean | null
-                        friends_count: number
-                        has_custom_timelines: boolean
-                        is_translator: boolean
-                        listed_count: number
-                        location: string
-                        media_count: number
-                        muting?: boolean
-                        name: string
-                        normal_followers_count?: number
-                        notifications: boolean | null
-                        pinned_tweet_ids_str?: []
-                        possibly_sensitive?: boolean
-                        /** unused data, declare details when you need */
-                        profile_banner_extensions?: any
-                        profile_banner_url: string
-                        /** unused data, declare details when you need */
-                        profile_image_extensions?: any
-                        profile_image_url_https: string
-                        profile_interstitial_type?: string
-                        protected: boolean
-                        screen_name: string
-                        statuses_count: number
-                        translator_type: string
-                        /** t.co url */
-                        url: string
-                        verified: boolean
-                        want_retweets?: boolean
-                        withheld_in_countries: []
                     }
-                    smart_blocked_by?: boolean
-                    smart_blocking?: boolean
-                    super_follow_eligible?: boolean
-                    super_followed_by?: boolean
-                    super_following?: boolean
-                    legacy_extended_profile?: any
-                    is_profile_translatable?: boolean
+                }
+            }
+        }
+    }
+
+    /** Partial response data */
+    export interface TimelineV2Response {
+        data: {
+            user: {
+                result: {
+                    timeline_v2: {
+                        timeline: {
+                            instructions: [
+                                { type: 'TimelineClearCache' },
+                                { type: 'TimelineAddEntries'; entries: TimelineEntry[] },
+                            ]
+                        }
+                    }
                 }
             }
         }
@@ -336,7 +308,66 @@ export namespace TwitterBaseAPI {
             h: number
         }
     }
+    export interface LegacyUserInfo {
+        can_dm: boolean
+        can_media_tag: boolean
+        // e.g., Thu Aug 04 06:28:33 +0000 2011
+        created_at: string
+        default_profile: boolean
+        default_profile_image: boolean
+        description: string
+        entities: {
+            description: {
+                urls: []
+            }
+            url?: {
+                urls: Array<{
+                    display_url: string
+                    expanded_url: string
+                    url: string
+                    indices: number[]
+                }>
+            }
+        }
+        fast_followers_count: number
+        favourites_count: number
+        followers_count: number
+        friends_count: number
+        has_custom_timelines: boolean
+        is_translator: boolean
+        listed_count: number
+        location: string
+        media_count: number
+        name: string
+        needs_phone_verification: boolean
 
+        normal_followers_count: number
+        pinned_tweet_ids_str: string[]
+        possibly_sensitive: boolean
+
+        profile_banner_url: string
+        profile_image_url_https: string
+        profile_interstitial_type: string
+        screen_name: string
+        statuses_count: number
+        translator_type: string
+        url: string
+        verified: boolean
+        want_retweets: boolean
+        withheld_in_countries: string[]
+    }
+
+    export interface LegacyUserResult {
+        __typename: 'User'
+        id: string
+        rest_id: string
+        affiliates_highlighted_label: any
+        has_graduated_access: boolean
+        is_blue_verified: boolean
+        profile_image_shape: 'Circle'
+        legacy: LegacyUserInfo
+        has_nft_avatar?: boolean
+    }
     export interface CreateTweetResponse {
         data: {
             [key in 'create_tweet' | 'notetweet_create' | 'posttweet_created']: {
@@ -346,63 +377,7 @@ export namespace TwitterBaseAPI {
                         rest_id: string
                         core: {
                             user_results: {
-                                result: {
-                                    __typename: 'User'
-                                    id: string
-                                    rest_id: string
-                                    affiliates_highlighted_label: any
-                                    has_graduated_access: boolean
-                                    is_blue_verified: boolean
-                                    profile_image_shape: 'Circle'
-                                    legacy: {
-                                        can_dm: boolean
-                                        can_media_tag: boolean
-                                        // e.g., Thu Aug 04 06:28:33 +0000 2011
-                                        created_at: string
-                                        default_profile: boolean
-                                        default_profile_image: boolean
-                                        description: string
-                                        entities: {
-                                            description: {
-                                                urls: []
-                                            }
-                                            url: {
-                                                urls: {
-                                                    display_url: string
-                                                    expanded_url: string
-                                                    url: string
-                                                    indices: number[]
-                                                }
-                                            }
-                                        }
-                                        fast_followers_count: number
-                                        favourites_count: number
-                                        followers_count: number
-                                        friends_count: number
-                                        has_custom_timelines: boolean
-                                        is_translator: boolean
-                                        listed_count: number
-                                        location: string
-                                        media_count: number
-                                        name: string
-                                        needs_phone_verification: boolean
-
-                                        normal_followers_count: number
-                                        pinned_tweet_ids_str: string[]
-                                        possibly_sensitive: boolean
-
-                                        profile_banner_url: string
-                                        profile_image_url_https: string
-                                        profile_interstitial_type: string
-                                        screen_name: string
-                                        statuses_count: number
-                                        translator_type: string
-                                        url: string
-                                        verified: boolean
-                                        want_retweets: boolean
-                                        withheld_in_countries: string[]
-                                    }
-                                }
+                                result: LegacyUserResult
                             }
                         }
                         edit_control: {

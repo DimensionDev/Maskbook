@@ -166,7 +166,7 @@ export class FireflyRedPacket {
             method: 'POST',
             body: JSON.stringify(options),
         })
-        return data.signedMessage
+        return data?.signedMessage
     }
 
     static async getHistory<

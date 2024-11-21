@@ -1,4 +1,6 @@
 /* eslint-disable no-irregular-whitespace */
+import { Plural, Trans, msg } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
@@ -12,7 +14,7 @@ import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Requirements } from '../Requirements.js'
+import { Requirements } from '../Requirements/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
@@ -20,8 +22,6 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { Plural, Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
