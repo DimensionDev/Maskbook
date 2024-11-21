@@ -80,12 +80,13 @@ export function OnboardingWriter({ words, ...props }: OnboardingWriterProps) {
                     :   undefined,
                 ),
             }
-            if (take < text.length) newJsx.push(cloneElement(fragment, props, [text.slice(0, take)]))
+            // the trailing space gets trimmed by i18n marco
+            if (take <= text.length) newJsx.push(cloneElement(fragment, props, [text.slice(0, take)]))
             else
                 newJsx.push(
                     cloneElement(fragment, props, [
                         text,
-                        <strong key={size}>{strongText.slice(0, take - text.length)}</strong>,
+                        <strong key={size}> {strongText.slice(0, take - text.length)}</strong>,
                     ]),
                 )
         }
