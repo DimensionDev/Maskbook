@@ -1,6 +1,6 @@
 import { unreachable } from '@masknet/kit'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { type EnhanceableSite, ValueRef, ValueRefWithReady, Sniffings } from '@masknet/shared-base'
+import { type EnhanceableSite, ValueRefWithReady, Sniffings } from '@masknet/shared-base'
 import { createManager } from './manage.js'
 import { getPluginDefine } from './store.js'
 import type { Plugin } from '../types.js'
@@ -70,10 +70,10 @@ useActivatedPluginsSiteAdaptor.visibility = {
 }
 
 // this should never be used for a normal plugin
-const TRUE = new ValueRef(true)
 export function useIsMinimalMode(pluginID: string) {
     assertLocation()
-    return useValueRef(minimalModeSub[pluginID] || TRUE)
+    const minimalPlugins = useActivatedPluginsSiteAdaptorMinimal()
+    return minimalPlugins.some((p) => p.ID === pluginID)
 }
 
 export async function checkIsMinimalMode(pluginID: string) {
