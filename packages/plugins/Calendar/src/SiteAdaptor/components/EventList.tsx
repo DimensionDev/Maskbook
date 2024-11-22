@@ -1,15 +1,14 @@
 import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
 import { ElementAnchor, EmptyStatus, Image, LoadingStatus, ReloadStatus } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
 import { uniq } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
 import { useLumaEvents } from '../../hooks/useLumaEvents.js'
 import { ImageLoader } from './ImageLoader.js'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -159,17 +158,19 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
                             href={event.event_url}
                             rel="noopener noreferrer"
                             target="_blank">
-                            <div className={classes.eventHeader}>
-                                <div className={classes.projectWrap}>
-                                    <Image
-                                        src={resolveIPFS_URL(event.poster_url)}
-                                        classes={{ container: classes.logo }}
-                                        size={24}
-                                        alt={event.event_title}
-                                    />
-                                    <Typography className={classes.projectName}>{event.event_title}</Typography>
+                            {event.host_name && event.host_avatar ?
+                                <div className={classes.eventHeader}>
+                                    <div className={classes.projectWrap}>
+                                        <Image
+                                            src={event.host_avatar}
+                                            classes={{ container: classes.logo }}
+                                            size={24}
+                                            alt={event.host_name}
+                                        />
+                                        <Typography className={classes.projectName}>{event.host_name}</Typography>
+                                    </div>
                                 </div>
-                            </div>
+                            :   null}
                             <Typography className={classes.eventTitle}>{event.event_title}</Typography>
                             {event.event_full_location ?
                                 <Typography className={classes.info}>

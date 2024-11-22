@@ -34,19 +34,28 @@ interface LumaRawEvent {
             type: string
         }
     }
+    hosts: Array<{
+        avatar_url: string
+        name: string
+    }>
 }
 function fixEvent(event: Event): ParsedEvent {
     const rawEvent = event.raw_data ? (event.raw_data as LumaRawEvent) : null
+    if (!rawEvent) return fixEventDate(event)
+    const host = rawEvent.hosts[0]
+
     return {
         ...event,
         event_date: +event.event_date * 1000,
-        event_city: rawEvent?.calendar.geo_city,
-        event_country: rawEvent?.calendar.geo_country,
+        event_city: rawEvent.calendar.geo_city,
+        event_country: rawEvent.calendar.geo_country,
         event_full_location:
-            rawEvent?.event.geo_address_info.full_address ||
-            compact([rawEvent?.calendar.geo_region, rawEvent?.calendar.geo_city, rawEvent?.calendar.geo_country]).join(
+            rawEvent.event.geo_address_info.full_address ||
+            compact([rawEvent.calendar.geo_region, rawEvent.calendar.geo_city, rawEvent.calendar.geo_country]).join(
                 ', ',
             ),
+        host_name: host?.name,
+        host_avatar: host?.avatar_url,
     }
 }
 

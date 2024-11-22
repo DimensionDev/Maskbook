@@ -125,7 +125,7 @@ export function NewsList({ date, onDatesUpdate }: NewsListProps) {
     }, [list, date])
 
     useEffect(() => {
-        onDatesUpdate?.(Object.keys(list))
+        onDatesUpdate(Object.keys(list))
     }, [list, onDatesUpdate])
 
     const listRef = useCallback((el: HTMLDivElement | null) => {

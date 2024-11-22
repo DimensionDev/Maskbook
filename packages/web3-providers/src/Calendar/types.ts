@@ -38,6 +38,9 @@ export type ParsedEvent = Omit<Event, 'event_date'> & {
     event_city?: string
     event_country?: string
     event_full_location?: string
+    host_name?: string
+    /** avatar url */
+    host_avatar?: string
 }
 
 interface Response<T> {
