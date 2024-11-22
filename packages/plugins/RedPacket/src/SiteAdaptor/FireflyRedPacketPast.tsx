@@ -22,7 +22,7 @@ interface Props {
     handleOpenDetails: (rpid: string) => void
 }
 
-export const FireflyRedPacketPast = memo(function RedPacketPast({ tabs, handleOpenDetails }: Props) {
+export const FireflyRedPacketPast = memo(function FireflyRedPacketPast({ tabs, handleOpenDetails }: Props) {
     const { classes } = useStyles()
 
     return (

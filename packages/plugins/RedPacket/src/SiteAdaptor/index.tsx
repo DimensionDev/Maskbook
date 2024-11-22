@@ -6,14 +6,8 @@ import { Trans } from 'react-i18next'
 import { base } from '../base.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketInjection } from './RedPacketInjection.js'
-import { RedPacketNftInPost } from './RedPacketNftInPost.js'
 import { openDialog } from './emitter.js'
-import {
-    RedPacketMetadataReader,
-    RedPacketNftMetadataReader,
-    renderWithRedPacketMetadata,
-    renderWithRedPacketNftMetadata,
-} from './helpers.js'
+import { RedPacketMetadataReader, renderWithRedPacketMetadata } from './helpers.js'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -41,14 +35,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 </Render>
             )
 
-        if (RedPacketNftMetadataReader(meta).isOk())
-            return (
-                <Render name="NFT Lucky Drop">
-                    {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
-                        <RedPacketNftInPost payload={r} />
-                    ))}
-                </Render>
-            )
         return null
     }),
     GlobalInjection: RedPacketInjection,

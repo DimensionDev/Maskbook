@@ -1,23 +1,14 @@
-import urlcat from 'urlcat'
-import { mapKeys, sortBy } from 'lodash-es'
-import type { AbiItem } from 'web3-utils'
-import { createIndicator, createPageable, type PageIndicator, type Pageable } from '@masknet/shared-base'
-import { type Transaction, attemptUntil, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import NFT_REDPACKET_ABI from '@masknet/web3-contracts/abis/NftRedPacket.json'
-import { DSEARCH_BASE_URL } from '../DSearch/constants.js'
-import { fetchFromDSearch } from '../DSearch/helpers.js'
+import { attemptUntil, type Transaction } from '@masknet/web3-shared-base'
+import { decodeFunctionParams, type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { sortBy } from 'lodash-es'
+import type { AbiItem } from 'web3-utils'
 import { ChainbaseRedPacketAPI } from '../Chainbase/index.js'
 import { EtherscanRedPacket } from '../Etherscan/index.js'
-import { ContractRedPacket } from './api.js'
-import {
-    type RedPacketJSONPayloadFromChain,
-    type NftRedPacketJSONPayload,
-    type CreateNFTRedpacketParam,
-} from './types.js'
 import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
-import type { BaseHubOptions, RedPacketBaseAPI } from '../entry-types.js'
+import type { RedPacketBaseAPI } from '../entry-types.js'
+import { ContractRedPacket } from './api.js'
+import { type RedPacketJSONPayloadFromChain } from './types.js'
 
 function toNumber(val: any) {
     if (typeof val.toNumber === 'function') return val.toNumber()
@@ -63,25 +54,6 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
         )
     }
 
-    async getNFTHistories(
-        chainId: ChainId,
-        senderAddress: string,
-        contractAddress: string,
-        methodId: string,
-        fromBlock: number,
-        endBlock: number,
-    ): Promise<NftRedPacketJSONPayload[] | undefined> {
-        const transactions = await this.getHistoryTransactions(
-            chainId,
-            senderAddress,
-            contractAddress,
-            methodId,
-            fromBlock,
-            endBlock,
-        )
-        return this.parseNFTRedPacketCreationTransactions(transactions, senderAddress)
-    }
-
     async getHistoryTransactions(
         chainId: ChainId,
         senderAddress: string,
@@ -108,65 +80,6 @@ class RedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
             })
         }
         return attemptUntil(attempts, [])
-    }
-
-    async getCollectionsByOwner(
-        account: string,
-        { chainId, indicator }: BaseHubOptions<ChainId> = {},
-    ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
-        const result = await fetchFromDSearch<{
-            [owner: string]: Array<NonFungibleCollection<ChainId, SchemaType>>
-        }>(urlcat(DSEARCH_BASE_URL, '/nft-lucky-drop/specific-list.json'))
-        const list = mapKeys(result, (_v, k) => k.toLowerCase())[account.toLowerCase()].filter(
-            (x) => x.chainId === chainId,
-        )
-        return createPageable(list, createIndicator(indicator))
-    }
-
-    private parseNFTRedPacketCreationTransactions(
-        transactions: Array<Transaction<ChainId, SchemaType>> | undefined,
-        senderAddress: string,
-    ): NftRedPacketJSONPayload[] {
-        if (!transactions) return []
-
-        return transactions.flatMap((tx) => {
-            if (!tx.input) return []
-            try {
-                const decodedInputParam = decodeFunctionParams(
-                    NFT_REDPACKET_ABI as AbiItem[],
-                    tx.input,
-                    'create_red_packet',
-                ) as CreateNFTRedpacketParam
-
-                const redpacketPayload: NftRedPacketJSONPayload = {
-                    contract_address: tx.to,
-                    txid: tx.hash ?? '',
-                    contract_version: 1,
-                    shares: decodedInputParam._erc721_token_ids.length,
-                    network: EVMChainResolver.networkType(tx.chainId),
-                    token_address: decodedInputParam._token_addr,
-                    chainId: tx.chainId,
-                    sender: {
-                        address: senderAddress,
-                        name: decodedInputParam._name,
-                        message: decodedInputParam._message,
-                    },
-                    duration: toNumber(decodedInputParam._duration) * 1000,
-                    token_ids: decodedInputParam._erc721_token_ids.map((x) => x.toString()),
-                    // #region Retrieve at NFT History List Item.
-                    rpid: '',
-                    creation_time: 0,
-                    // #endregion
-                    // #region Retrieve from database
-                    password: '',
-                    // #endregion
-                }
-
-                return redpacketPayload
-            } catch {
-                return []
-            }
-        })
     }
 
     private parseRedPacketCreationTransactions(
