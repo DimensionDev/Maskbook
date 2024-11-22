@@ -110,7 +110,7 @@ interface NewsListProps {
 }
 
 export function NewsList({ date, onDatesUpdate }: NewsListProps) {
-    const { data: list = EMPTY_OBJECT, isLoading } = useNewsList(date, true)
+    const { data: list = EMPTY_OBJECT, isLoading } = useNewsList(date)
     const dateString = date.toLocaleDateString()
     const empty = !Object.keys(list).length
     const { classes, cx } = useStyles()

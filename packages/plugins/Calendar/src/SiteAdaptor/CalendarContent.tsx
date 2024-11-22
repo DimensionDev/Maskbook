@@ -45,7 +45,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
 export function CalendarContent(props: Props) {
     const { classes, cx } = useStyles()
     const [currentTab, onChange, tabs] = useTabs('news', 'events')
-    const [date, setDate] = useState(() => new Date())
+    const [date, setDate] = useState(() => new Date(Math.floor(Date.now() / 1000) * 1000)) // round to seconds
     const [open, setOpen] = useState(false)
 
     const [allowedDates, setAllowedDates] = useState<string[]>(EMPTY_LIST)

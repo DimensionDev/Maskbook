@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/macro'
-import { ElementAnchor, EmptyStatus, Image, LoadingStatus } from '@masknet/shared'
+import { ElementAnchor, EmptyStatus, Image, LoadingStatus, ReloadStatus } from '@masknet/shared'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { resolveIPFS_URL } from '@masknet/web3-shared-base'
@@ -99,7 +99,7 @@ interface EventListProps {
 
 export function EventList({ date, onDatesUpdate }: EventListProps) {
     const { classes, cx } = useStyles()
-    const { isLoading, isFetching, data, hasNextPage, fetchNextPage } = useLumaEvents()
+    const { isLoading, isFetching, data, error, hasNextPage, fetchNextPage } = useLumaEvents(date)
 
     const comingEvents = useMemo(() => {
         if (!data) return EMPTY_LIST
@@ -117,6 +117,18 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
                 <div className={classes.paddingWrap}>
                     <div className={cx(classes.empty, classes.eventTitle)}>
                         <LoadingStatus />
+                    </div>
+                </div>
+            </div>
+        )
+    }
+
+    if (error) {
+        return (
+            <div className={classes.container}>
+                <div className={classes.paddingWrap}>
+                    <div className={cx(classes.empty, classes.eventTitle)}>
+                        <ReloadStatus message={error.message}></ReloadStatus>
                     </div>
                 </div>
             </div>
