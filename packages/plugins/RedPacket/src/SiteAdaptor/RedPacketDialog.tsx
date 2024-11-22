@@ -1,35 +1,34 @@
-import { useCallback, useContext, useMemo, useState, Suspense } from 'react'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { DialogContent, Tab, useTheme } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
-import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
-import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
-import { InjectedDialog, NetworkTab, useCurrentLinkedPersona, LoadingStatus } from '@masknet/shared'
-import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
-import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { Icons } from '@masknet/icons'
 import {
     useActivatedPluginSiteAdaptor,
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
-import { Icons } from '@masknet/icons'
+import { InjectedDialog, LoadingStatus, useCurrentLinkedPersona } from '@masknet/shared'
+import { CrossIsolationMessages, EMPTY_LIST, NetworkPluginID, PluginID } from '@masknet/shared-base'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { useRedPacketTrans } from '../locales/index.js'
-import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
+import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
+import { TabContext } from '@mui/lab'
+import { DialogContent, Tab, useTheme } from '@mui/material'
+import { Suspense, useCallback, useContext, useMemo, useState } from 'react'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { RedPacketMetaKey } from '../constants.js'
-import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { RedPacketERC20Form } from './RedPacketERC20Form.js'
-import { RedPacketERC721Form } from './RedPacketERC721Form.js'
-import { openComposition } from './openComposition.js'
-import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
-import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistoryDetails.js'
+import { useRedPacketTrans } from '../locales/index.js'
+import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
-import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.js'
+import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistoryDetails.js'
+import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
+import type { RedPacketSettings } from './hooks/useCreateCallback.js'
+import { openComposition } from './openComposition.js'
+import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { CompositionTypeContext } from './RedPacketInjection.js'
+import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -88,21 +87,17 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
 
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
-    const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
     const { account, chainId: contextChainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const definition = useActivatedPluginSiteAdaptor.visibility.useAnyMode(PluginID.RedPacket)
-    const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('claimed', 'sent')
     const theme = useTheme()
     const mode = useSiteThemeMode(theme)
 
-    const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory && currentTab === 'tokens' })
+    const { classes } = useStyles({ isDim: mode === 'dim', scrollY: !showHistory })
 
     const chainIdList: ChainId[] = useMemo(() => {
-        if (currentTab === tabs.tokens)
-            return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
-        return [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon]
-    }, [currentTab === tabs.tokens, definition?.enableRequirement.web3])
+        return definition?.enableRequirement.web3?.[NetworkPluginID.PLUGIN_EVM]?.supportedChainIds ?? EMPTY_LIST
+    }, [definition?.enableRequirement.web3])
     const chainId = chainIdList.includes(contextChainId) ? contextChainId : ChainId.Mainnet
 
     // #region token lucky drop
@@ -277,48 +272,18 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     }, [])
 
     return (
-        <TabContext value={showHistory ? currentHistoryTab : currentTab}>
+        <TabContext value={showHistory ? currentHistoryTab : ''}>
             <InjectedDialog
                 isOpenFromApplicationBoard={props.isOpenFromApplicationBoard}
                 open={props.open}
                 title={title}
                 titleTail={titleTail}
                 titleTabs={
-                    step === CreateRedPacketPageStep.NewRedPacketPage && !openNFTConfirmDialog && !showDetails ?
-                        showHistory ?
-                            <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
-                                <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
-                                <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
-                            </MaskTabList>
-                        :   <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
-                                <Tab label={t.erc20_tab_title()} value={tabs.tokens} />
-                                <Tab
-                                    className={classes.disabledTab}
-                                    label={t.nfts()}
-                                    value={tabs.collectibles}
-                                    disabled
-                                />
-                            </MaskTabList>
-
-                    :   null
-                }
-                networkTabs={
-                    (
-                        currentTab === tabs.collectibles &&
-                        step === CreateRedPacketPageStep.NewRedPacketPage &&
-                        !openNFTConfirmDialog &&
-                        !openSelectNFTDialog &&
-                        !showHistory &&
-                        !showDetails
-                    ) ?
-                        <div className={classes.abstractTabWrapper}>
-                            <NetworkTab
-                                chains={chainIdList}
-                                hideArrowButton={currentTab === tabs.collectibles}
-                                pluginID={NetworkPluginID.PLUGIN_EVM}
-                                classes={{ arrowButton: classes.arrowButton }}
-                            />
-                        </div>
+                    step === CreateRedPacketPageStep.NewRedPacketPage && showHistory && !showDetails ?
+                        <MaskTabList variant="base" onChange={onChangeHistoryTab} aria-label="Redpacket">
+                            <Tab label={t.claimed_tab_title()} value={historyTabs.claimed} />
+                            <Tab label={t.sent_tab_title()} value={historyTabs.sent} />
+                        </MaskTabList>
                     :   null
                 }
                 onClose={onDialogClose}
@@ -332,38 +297,20 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                         <>
                             <div
                                 style={{
-                                    ...(showHistory || showDetails ? { display: 'none' } : {}),
-                                    height:
-                                        showHistory || showDetails ? 0
-                                        : currentTab === 'collectibles' && isNFTRedPacketLoaded ? 'calc(100% + 84px)'
-                                        : 'auto',
+                                    ...(showHistory || showDetails ?
+                                        { display: 'none', height: 0 }
+                                    :   { height: 'auto', paddingBottom: 100 }),
                                 }}>
-                                <TabPanel value={tabs.tokens} style={{ padding: 0, height: 474 }}>
-                                    <RedPacketERC20Form
-                                        expectedChainId={chainId}
-                                        origin={settings}
-                                        gasOption={gasOption}
-                                        onClose={handleClose}
-                                        onNext={onNext}
-                                        onChange={_onChange}
-                                        onGasOptionChange={handleGasSettingChange}
-                                        onChainChange={setChainId}
-                                    />
-                                </TabPanel>
-                                <TabPanel
-                                    value={tabs.collectibles}
-                                    style={{ padding: 0, overflow: 'auto', height: openNFTConfirmDialog ? 564 : 474 }}>
-                                    <RedPacketERC721Form
-                                        openSelectNFTDialog={openSelectNFTDialog}
-                                        setOpenSelectNFTDialog={setOpenSelectNFTDialog}
-                                        setOpenNFTConfirmDialog={setOpenNFTConfirmDialog}
-                                        openNFTConfirmDialog={openNFTConfirmDialog}
-                                        onClose={handleClose}
-                                        setIsNFTRedPacketLoaded={setIsNFTRedPacketLoaded}
-                                        gasOption={gasOption}
-                                        onGasOptionChange={handleGasSettingChange}
-                                    />
-                                </TabPanel>
+                                <RedPacketERC20Form
+                                    expectedChainId={chainId}
+                                    origin={settings}
+                                    gasOption={gasOption}
+                                    onClose={handleClose}
+                                    onNext={onNext}
+                                    onChange={_onChange}
+                                    onGasOptionChange={handleGasSettingChange}
+                                    onChainChange={setChainId}
+                                />
                             </div>
                             {showHistory && !showDetails ?
                                 <FireflyRedPacketPast tabs={historyTabs} handleOpenDetails={handleOpenDetails} />
