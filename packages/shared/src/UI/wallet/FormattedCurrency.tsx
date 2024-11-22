@@ -1,6 +1,6 @@
 import { Fragment } from 'react'
 import type { BigNumber } from 'bignumber.js'
-import { useCurrencyType, useFiatCurrencyRate } from '@masknet/web3-hooks-base'
+import { useFiatCurrencyRate } from '@masknet/web3-hooks-base'
 import { CurrencyType, type FormatterCurrencyOptions } from '@masknet/web3-shared-base'
 
 export interface FormattedCurrencyProps {
@@ -18,13 +18,12 @@ export function FormattedCurrency({
     // eslint-disable-next-line @typescript-eslint/no-base-to-string
     formatter = (value, sign) => `${sign} ${value}`.trim(),
 }: FormattedCurrencyProps) {
-    const currentSign = useCurrencyType()
     const { data: currentFiatCurrencyRate } = useFiatCurrencyRate()
     const rate = options?.fiatCurrencyRate ?? (sign === CurrencyType.USD ? 1 : currentFiatCurrencyRate)
 
     return (
         <Fragment>
-            {formatter(value, rate === 1 ? CurrencyType.USD : sign ?? currentSign, {
+            {formatter(value, rate === 1 ? CurrencyType.USD : sign ?? CurrencyType.USD, {
                 ...options,
                 fiatCurrencyRate: rate,
             })}

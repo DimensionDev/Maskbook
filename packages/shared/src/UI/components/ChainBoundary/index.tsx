@@ -6,7 +6,6 @@ import {
     useNetworkContext,
     useChainContext,
     useNetworkDescriptor,
-    useAllowTestnet,
     useChainIdValid,
     RevokeChainContextProvider,
     useWeb3Utils,
@@ -69,12 +68,11 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const { account } = useChainContext({ account: expectedAccount })
 
     const expectedUtils = useWeb3Utils(expectedPluginID)
-    const expectedAllowTestnet = useAllowTestnet(expectedPluginID)
 
     const chainIdValid = useChainIdValid(actualPluginID)
 
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-    const expectedChainAllowed = expectedUtils.chainResolver.isValidChainId(expectedChainId, expectedAllowTestnet)
+    const expectedChainAllowed = expectedUtils.chainResolver.isValidChainId(expectedChainId, false)
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
 

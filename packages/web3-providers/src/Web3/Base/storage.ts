@@ -1,13 +1,4 @@
-import { PersistentStorages, NetworkPluginID, EMPTY_LIST, InMemoryStorages, getSiteType } from '@masknet/shared-base'
-import { CurrencyType, GasOptionType, SourceType, type Contact } from '@masknet/web3-shared-base'
-import { ProviderType, getDefaultChainId } from '@masknet/web3-shared-evm'
-
-export function addressStorage(plugin: NetworkPluginID) {
-    const { value: address } = PersistentStorages.Web3.createSubScope(`${plugin}_AddressBookV2`, {
-        value: EMPTY_LIST as Contact[],
-    }).storage
-    return address.initializedPromise.then(() => address)
-}
+import { PersistentStorages, NetworkPluginID, InMemoryStorages, getSiteType } from '@masknet/shared-base'
 
 export function networkStorage(plugin: NetworkPluginID) {
     const { storage: network } = PersistentStorages.Web3.createSubScope(`${plugin}_Network`, {
@@ -38,20 +29,6 @@ export function tokenStorage(plugin: NetworkPluginID) {
     ]).then(() => token)
 }
 
-export function settingsStorage(plugin: NetworkPluginID) {
-    const { storage: settings } = PersistentStorages.Web3.createSubScope(`${plugin}_Settings`, {
-        currencyType: CurrencyType.USD,
-        gasOptionType: GasOptionType.NORMAL,
-        fungibleAssetSourceType: SourceType.DeBank,
-        nonFungibleAssetSourceType: SourceType.OpenSea,
-    })
-    return Promise.all([
-        settings.currencyType.initializedPromise,
-        settings.fungibleAssetSourceType.initializedPromise,
-        settings.gasOptionType.initializedPromise,
-        settings.nonFungibleAssetSourceType.initializedPromise,
-    ]).then(() => settings)
-}
 export function providerStorage<ChainId extends number, ProviderType extends string>(
     pluginID: NetworkPluginID,
     defaultChainId: ChainId,
