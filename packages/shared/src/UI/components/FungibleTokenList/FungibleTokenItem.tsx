@@ -1,19 +1,15 @@
-import { memo, useMemo } from 'react'
-import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { TokenIcon } from '../TokenIcon/index.js'
 import { Icons } from '@masknet/icons'
-import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
+import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { formatBalance } from '@masknet/web3-shared-base'
+import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { memo, useMemo } from 'react'
 import { useSharedTrans } from '../../../locales/index.js'
-import { TokenListMode } from './type.js'
-import { SettingSwitch } from '../SettingSwitch/index.js'
-import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
 import { DotLoading, NetworkIcon } from '../index.js'
-import { useAsyncFn } from 'react-use'
+import { TokenIcon } from '../TokenIcon/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -94,17 +90,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const getFungibleTokenItem = <T extends NetworkPluginID>(
-    getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
     isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean,
-    mode: TokenListMode,
-    addOrRemoveTokenToLocal: (
-        token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        strategy: 'add' | 'remove',
-    ) => Promise<void>,
-    trustOrBlockTokenToLocal: (
-        token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        strategy: 'trust' | 'block',
-    ) => Promise<void>,
     isHiddenChainIcon?: boolean,
     isCustomToken?: boolean,
 ) => {
@@ -118,68 +104,12 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
 
         const { chainId, address, name, symbol, decimals, logoURL, balance } = token
 
-        const isBlocked = useTokenBlocked(address)
-        const isTrust = useTokenTrusted(address, token.chainId)
-
         const { pluginID } = useNetworkContext<T>()
         const network = useNetwork(pluginID, chainId)
-
-        const source = useMemo(() => getSource(address), [getSource, address])
-        const selected = useMemo(() => isSelected(address, chainId), [isSelected, address, chainId])
-
-        const [{ loading: onAddOrRemoveTokenToLocalLoading }, onAddOrRemoveTokenToLocal] = useAsyncFn(
-            async (event: React.MouseEvent<HTMLButtonElement | HTMLElement>, strategy: 'add' | 'remove') => {
-                event.stopPropagation()
-                if (token) await addOrRemoveTokenToLocal(token, strategy)
-            },
-            [token, addOrRemoveTokenToLocal],
-        )
-
-        const [{ loading: onTrustOrBlockTokenToLocalLoading }, onTrustOrBlockTokenToLocal] = useAsyncFn(
-            async (event: React.ChangeEvent<HTMLInputElement>) => {
-                event.stopPropagation()
-                if (token) await trustOrBlockTokenToLocal(token, event.target.checked ? 'trust' : 'block')
-            },
-            [token, trustOrBlockTokenToLocal],
-        )
-
-        const explorerLink = useMemo(() => {
-            return Utils.explorerResolver.fungibleTokenLink(token.chainId, token.address)
-        }, [token.address, token.chainId, Utils.explorerResolver.fungibleTokenLink])
+        const selected = isSelected(address, chainId)
+        const explorerLink = Utils.explorerResolver.fungibleTokenLink(token.chainId, token.address)
 
         const action = useMemo(() => {
-            if (mode === TokenListMode.Manage) {
-                if (source === 'personal')
-                    return <Icons.TrashLine onClick={(e) => onAddOrRemoveTokenToLocal(e, 'remove')} size={24} />
-                return (
-                    <>
-                        {isCustomToken ?
-                            <ActionButton
-                                color="primary"
-                                disabled={onAddOrRemoveTokenToLocalLoading}
-                                loading={onAddOrRemoveTokenToLocalLoading}
-                                className={classes.importButton}
-                                onClick={(e) => onAddOrRemoveTokenToLocal(e, 'add')}>
-                                {t.import()}
-                            </ActionButton>
-                        :   <SettingSwitch
-                                disabled={
-                                    (source === 'official-native' && mode === TokenListMode.Manage) ||
-                                    onTrustOrBlockTokenToLocalLoading
-                                }
-                                classes={{ root: classes.switch }}
-                                onChange={async (event) => {
-                                    event.stopPropagation()
-                                    event.preventDefault()
-                                    await onTrustOrBlockTokenToLocal(event)
-                                }}
-                                size="small"
-                                checked={!isBlocked}
-                            />
-                        }
-                    </>
-                )
-            }
             return (
                 <Typography className={classes.balance}>
                     {balance === undefined ?
@@ -195,7 +125,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     }
                 </Typography>
             )
-        }, [balance, decimals, isBlocked, source, mode, isTrust])
+        }, [balance, decimals])
 
         const { data: tokenBalance, isPending: isLoadingTokenBalance } = useFungibleTokenBalance(
             NetworkPluginID.PLUGIN_EVM,
@@ -212,8 +142,8 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     key={address}
                     button
                     className={`${classes.list} dashboard token-list`}
-                    onClick={mode === TokenListMode.List ? () => onSelect(token) : undefined}
-                    disabled={!!(selected && mode === TokenListMode.List)}>
+                    onClick={() => onSelect(token)}
+                    disabled={selected}>
                     <ListItemIcon>
                         <Box position="relative">
                             <TokenIcon
