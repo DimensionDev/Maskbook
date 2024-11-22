@@ -7,7 +7,6 @@ import {
     getDefaultChainId,
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
-import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
 import * as RiskWarning from /* webpackDefer: true */ '../state/RiskWarning.js'
 import * as Token from /* webpackDefer: true */ '../state/Token.js'
 import * as Transaction from /* webpackDefer: true */ '../state/Transaction.js'
@@ -23,7 +22,7 @@ import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
 import { getEnumAsArray } from '@masknet/kit'
-import { addressStorage, networkStorage, tokenStorage, settingsStorage, providerStorage } from '../../Base/storage.js'
+import { networkStorage, tokenStorage, providerStorage } from '../../Base/storage.js'
 
 // If you use defer loading you will miss the subscription time.
 import * as TransactionWatcher from '../state/TransactionWatcher.js'
@@ -45,11 +44,9 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         messages: {},
     }).storage
 
-    const [address, network, token, settings, provider] = await Promise.all([
-        addressStorage(NetworkPluginID.PLUGIN_EVM),
+    const [network, token, provider] = await Promise.all([
         networkStorage(NetworkPluginID.PLUGIN_EVM),
         tokenStorage(NetworkPluginID.PLUGIN_EVM),
-        settingsStorage(NetworkPluginID.PLUGIN_EVM),
         providerStorage(NetworkPluginID.PLUGIN_EVM, getDefaultChainId(), getDefaultProviderType()),
         nameService.initializedPromise,
         transaction.initializedPromise,
@@ -62,7 +59,6 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
         Network: () => new Network.EVMNetwork(NetworkPluginID.PLUGIN_EVM, network.networkID, network.networks),
-        AddressBook: () => new AddressBook.EVMAddressBook(address),
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),
         RiskWarning: () => new RiskWarning.EVMRiskWarning(state.Provider?.account, riskWarning),

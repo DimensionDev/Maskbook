@@ -883,18 +883,6 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
-export interface AddressBookState {
-    /** The tracked addresses of currently chosen sub-network */
-    contacts?: Subscription<Contact[]>
-
-    /** Add a contact into address book. */
-    addContact: (contact: Contact) => Promise<void>
-    /** Remove a contact from address book. */
-    removeContact: (address: string) => Promise<void>
-    /** Rename an name of contact from address book. */
-    renameContact: (contact: Contact) => Promise<void>
-}
-
 export interface NetworkState<ChainId, SchemaType, NetworkType> {
     /** The id of the used network. */
     networkID?: Subscription<string>
@@ -1138,7 +1126,6 @@ export interface Web3State<
     Transaction,
     TransactionParameter,
 > {
-    AddressBook?: AddressBookState
     Network?: NetworkState<ChainId, SchemaType, NetworkType>
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
