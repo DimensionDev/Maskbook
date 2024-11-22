@@ -6,7 +6,6 @@ import { forwardRef, useState } from 'react'
 import { SelectFungibleTokenDialog } from './SelectFungibleTokenDialog.js'
 
 export interface SelectFungibleTokenModalOpenProps {
-    enableManage?: boolean
     networkPluginID?: NetworkPluginID
     pluginID?: PluginID
     chainId?: Web3Helper.ChainIdAll
@@ -25,7 +24,6 @@ export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | n
 export const SelectFungibleTokenModal = forwardRef<
     SingletonModalRefCreator<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>
 >((props, ref) => {
-    const [enableManage, setEnableManage] = useState<boolean>()
     const [networkPluginID, setNetworkPluginID] = useState<NetworkPluginID>()
     const [pluginID, setPluginID] = useState<PluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -40,7 +38,6 @@ export const SelectFungibleTokenModal = forwardRef<
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setEnableManage(props.enableManage)
             setNetworkPluginID(props.networkPluginID)
             setPluginID(props.pluginID)
             setChainId(props.chainId)
@@ -59,7 +56,6 @@ export const SelectFungibleTokenModal = forwardRef<
     return (
         <SelectFungibleTokenDialog
             open
-            enableManage={enableManage}
             networkPluginID={networkPluginID}
             pluginID={pluginID}
             chainId={chainId}

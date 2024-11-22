@@ -1,3 +1,4 @@
+import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, type PluginID } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -6,19 +7,16 @@ import { useNativeTokenAddress, useNetworkContext, useNetworks } from '@masknet/
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { DialogContent, inputClasses, type Theme, useMediaQuery } from '@mui/material'
-import { useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { useSharedTrans } from '../../../locales/index.js'
-import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar } from '../../components/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
 
 interface StyleProps {
     compact: boolean
-    isList: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
+const useStyles = makeStyles<StyleProps>()((theme, { compact }) => ({
     container: {
         display: 'flex',
         flex: 1,
@@ -28,7 +26,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
     },
     sidebarContainer: {
         width: 27,
-        height: isList ? 486 : undefined,
+        height: 486,
     },
     content: {
         ...(compact ? { minWidth: 552 } : {}),
@@ -56,7 +54,6 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
 
 interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID> {
     open: boolean
-    enableManage?: boolean
     networkPluginID?: T
     pluginID?: PluginID
     chainId?: Web3Helper.Definition[T]['ChainId']
@@ -86,16 +83,14 @@ export function SelectFungibleTokenDialog({
     selectedChainId,
     selectedTokens = EMPTY_LIST,
     title,
-    enableManage = true,
     onClose,
     setChainId,
 }: SelectFungibleTokenDialogProps) {
     const t = useSharedTrans()
     const { networkIdentifier } = useBaseUIRuntime()
-    const [mode, setMode] = useState(TokenListMode.List)
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(networkPluginID)
-    const { classes } = useStyles({ compact, isList: mode === TokenListMode.List })
+    const { classes } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const plugin = useActivatedPluginSiteAdaptor(pluginID, 'any')
@@ -120,14 +115,9 @@ export function SelectFungibleTokenDialog({
             titleBarIconStyle="back"
             open={open}
             onClose={() => {
-                mode === TokenListMode.List ? onClose(null) : setMode(TokenListMode.List)
+                onClose(null)
             }}
-            title={
-                title ? title
-                : mode === TokenListMode.Manage ?
-                    t.manage_token_list()
-                :   t.select_token()
-            }>
+            title={title ? title : t.select_token()}>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={classes.container}>
                     <SelectNetworkSidebar
@@ -139,13 +129,10 @@ export function SelectFungibleTokenDialog({
                         pluginID={NetworkPluginID.PLUGIN_EVM}
                     />
                     <FungibleTokenList
-                        mode={mode}
-                        setMode={setMode}
                         pluginID={currentPluginID}
                         chainId={chainId}
                         tokens={tokens ?? EMPTY_LIST}
                         whitelist={whitelist}
-                        enableManage={enableManage}
                         blacklist={
                             disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                         }
