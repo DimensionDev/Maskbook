@@ -13,7 +13,6 @@ import * as Token from /* webpackDefer: true */ '../state/Token.js'
 import * as Transaction from /* webpackDefer: true */ '../state/Transaction.js'
 import * as NameService from /* webpackDefer: true */ '../state/NameService.js'
 import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
-import * as Settings from /* webpackDefer: true */ '../state/Settings.js'
 import * as TransactionFormatter from /* webpackDefer: true */ '../state/TransactionFormatter.js'
 
 import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
@@ -59,7 +58,6 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
     ] as const)
 
     const state: Web3State = lazyObject({
-        Settings: () => new Settings.EVMSettings(settings),
         Provider: () => new Provider.EVMProvider(context, provider),
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
         BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),

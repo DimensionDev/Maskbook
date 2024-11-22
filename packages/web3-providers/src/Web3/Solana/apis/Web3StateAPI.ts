@@ -9,7 +9,6 @@ import {
 } from '@masknet/web3-shared-solana'
 import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
 import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
-import * as Settings from /* webpackDefer: true */ '../state/Settings.js'
 import * as Transaction from /* webpackDefer: true */ '../state/Transaction.js'
 import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
 import * as Network from /* webpackDefer: true */ '../state/Network.js'
@@ -34,7 +33,6 @@ export async function createSolanaState(context: WalletAPI.IOContext): Promise<W
         Provider: () => new Provider.SolanaProvider(context.signWithPersona, provider),
         AddressBook: () => new AddressBook.SolanaAddressBook(address),
         IdentityService: () => new IdentityService.SolanaIdentityService(),
-        Settings: () => new Settings.SolanaSettings(settings),
         Network: () => new Network.SolanaNetwork(NetworkPluginID.PLUGIN_SOLANA, network.networkID, network.networks),
         Transaction: () =>
             new Transaction.SolanaTransaction(
