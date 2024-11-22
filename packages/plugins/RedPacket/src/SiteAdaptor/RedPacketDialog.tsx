@@ -296,11 +296,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
                     {step === CreateRedPacketPageStep.NewRedPacketPage ?
                         <>
                             <div
-                                style={{
-                                    ...(showHistory || showDetails ?
+                                style={
+                                    showHistory || showDetails ?
                                         { display: 'none', height: 0 }
-                                    :   { height: 'auto', paddingBottom: 100 }),
-                                }}>
+                                    :   { height: 'auto', paddingBottom: 100 }
+                                }>
                                 <RedPacketERC20Form
                                     expectedChainId={chainId}
                                     origin={settings}

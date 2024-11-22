@@ -68,46 +68,6 @@ export interface RedpacketAvailability {
 }
 // #endregion
 
-// #region nft red packet
-export interface RedPacketNftJSONPayload {
-    id: string
-    txid: string
-    duration: number
-    message: string
-    senderName: string
-    contractName: string
-    contractAddress: string
-    contractVersion: number
-    contractTokenURI: string
-    privateKey: string
-    chainId: ChainId
-}
-
-export interface NftRedPacketJSONPayload extends Omit<RedPacketBasic, 'is_random' | 'total'> {
-    contract_version: number
-    sender: {
-        address: string
-        name: string
-        message: string
-    }
-    chainId: ChainId
-    network?: string
-    token_ids: string[]
-    token_address: string
-    token?: Pick<FungibleToken<ChainId, SchemaType>, 'address' | 'name' | 'decimals' | 'symbol'>
-}
-
-export interface RedPacketNftRecord {
-    id: string
-    password: string
-    contract_version: number
-}
-
-export interface RedPacketNftRecordInDatabase extends RedPacketNftRecord {
-    /** An unique record type in DB */
-    type: 'red-packet-nft'
-}
-
 export type CreateRedpacketParam = {
     _duration: BigNumber
     _ifrandom: boolean
@@ -119,14 +79,4 @@ export type CreateRedpacketParam = {
     _token_addr: string
     _token_type: BigNumber
     _total_tokens: BigNumber
-}
-
-export type CreateNFTRedpacketParam = {
-    _public_key: string
-    _duration: BigNumber
-    _seed: string
-    _message: string
-    _name: string
-    _token_addr: string
-    _erc721_token_ids: BigNumber[]
 }

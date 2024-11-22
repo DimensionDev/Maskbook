@@ -1,10 +1,9 @@
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Ok, type Result } from 'ts-results-es'
-import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
-import schemaNtf from '../schema-nft.json'
+import { RedPacketMetaKey } from '../constants.js'
 import schema from '../schema.json'
 
 const reader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, schema)
@@ -29,9 +28,3 @@ export function RedPacketMetadataReader(
     return result
 }
 export const renderWithRedPacketMetadata = createRenderWithMetadata(RedPacketMetadataReader)
-
-export const RedPacketNftMetadataReader = createTypedMessageMetadataReader<RedPacketNftJSONPayload>(
-    RedPacketNftMetaKey,
-    schemaNtf,
-)
-export const renderWithRedPacketNftMetadata = createRenderWithMetadata(RedPacketNftMetadataReader)

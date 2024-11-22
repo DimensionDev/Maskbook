@@ -1,8 +1,8 @@
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { REDPACKET_API_URL, NFT_REDPACKET_API_URL } from '../constants.js'
+import { REDPACKET_API_URL } from '../constants.js'
 import { EVMChainResolver } from '../../Web3/EVM/apis/ResolverAPI.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
-import type { NftRedPacketJSONPayload, RedPacketJSONPayloadFromChain } from '../../entry-types.js'
+import type { RedPacketJSONPayloadFromChain } from '../../entry-types.js'
 
 type CreateSuccessRecord = {
     creator: string
@@ -18,23 +18,6 @@ type CreateSuccessRecord = {
     total: string
     txid: string
     is_random: boolean
-    id: string
-}
-
-type NFTRedpacketRecord = {
-    txid: string
-    shares: number
-    token_ids: string[]
-    token_contract: {
-        address: string
-    }
-    duration: number
-    creation_time: number
-    creator: {
-        address: string
-    }
-    name: string
-    message: string
     id: string
 }
 
@@ -98,68 +81,6 @@ export class TheGraphRedPacket {
                     password: '',
                     is_random: x.is_random,
                 }) as RedPacketJSONPayloadFromChain,
-        )
-    }
-
-    static async getNFTHistories(chainId: ChainId, senderAddress: string, contractAddress: string) {
-        if (!senderAddress || !contractAddress) return
-
-        const response = await fetchJSON<{
-            data: {
-                nftredPackets: NFTRedpacketRecord[]
-            }
-        }>(NFT_REDPACKET_API_URL, {
-            method: 'POST',
-            body: JSON.stringify({
-                query: `{
-                    nftredPackets(where: { creator_address: "${senderAddress}" }) {
-                        id
-                        txid
-                        shares
-                        token_ids
-                        token_contract {
-                            address
-                        }
-                        duration
-                        creation_time
-                        creator {
-                            address
-                        }
-                        name
-                        message
-                        id
-                    }
-                }`,
-            }),
-        })
-
-        if (!response.data.nftredPackets.length) return
-        return response.data.nftredPackets.map(
-            (x) =>
-                ({
-                    id: x.id,
-                    chainId,
-                    contract_address: contractAddress,
-                    txid: x.txid,
-                    contract_version: 1,
-                    shares: x.shares,
-                    network: EVMChainResolver.networkType(chainId),
-                    token_address: x.token_contract.address,
-                    sender: {
-                        address: x.creator.address,
-                        name: x.name,
-                        message: x.message,
-                    },
-                    duration: x.duration * 1000,
-                    token_ids: x.token_ids,
-                    // #region Retrieve at NFT History List Item.
-                    rpid: '',
-                    creation_time: 0,
-                    // #endregion
-                    // #region Retrieve from database
-                    password: '',
-                    // #endregion
-                }) as NftRedPacketJSONPayload,
         )
     }
 }
