@@ -11,6 +11,8 @@ import {
     unstable_STYLE_META,
     makeTypedMessageTuple,
     FlattenTypedMessage,
+    makeTypedMessagePromise,
+    type TypedMessageImage,
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
 
@@ -102,6 +104,32 @@ export function postContentMessageParser(node: HTMLElement): TypedMessage {
         } else if (node instanceof HTMLAnchorElement) {
             const anchor = node
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
+            if (href?.includes('/photo/')) {
+                const image = node.querySelector<HTMLImageElement>('img')
+                if (image)
+                    return makeTypedMessageImage(image.src, { width: node.clientWidth, height: node.clientHeight })
+                return makeTypedMessagePromise(
+                    new Promise<TypedMessageImage>((resolve) => {
+                        const ob = new MutationObserver(() => {
+                            const image = node.querySelector<HTMLImageElement>('img')
+                            if (image) {
+                                ob.disconnect()
+                                resolve(
+                                    makeTypedMessageImage(image.src, {
+                                        width: node.clientWidth,
+                                        height: node.clientHeight,
+                                    }),
+                                )
+                            }
+                        })
+                        ob.observe(node, { childList: true, subtree: true })
+                        setTimeout(() => {
+                            ob.disconnect()
+                        }, 60 * 1000)
+                    }),
+                    makeTypedMessageEmpty(),
+                )
+            }
             const content = anchor.textContent
             if (!content) return makeTypedMessageEmpty()
             const altImage = node.querySelector('img')
