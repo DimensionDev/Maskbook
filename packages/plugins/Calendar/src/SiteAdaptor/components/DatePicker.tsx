@@ -6,72 +6,75 @@ import { addMonths, endOfMonth, format, isAfter, startOfMonth } from 'date-fns'
 import { range } from 'lodash-es'
 import { useMemo, useState } from 'react'
 
-const useStyles = makeStyles()((theme) => ({
-    container: {
-        background: theme.palette.maskColor.bottom,
-        boxShadow: '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
-        borderRadius: '16px',
-        display: 'flex',
-        flexDirection: 'column',
-        gap: '24px',
-        width: '320px',
-        height: '355px',
-        padding: '24px',
-        position: 'absolute',
-        left: '-16px',
-        zIndex: 999,
-    },
-    daysOfWeek: {
-        fontSize: 12,
-        fontWeight: 700,
-        color: theme.palette.maskColor.third,
-        marginBottom: '24px',
-    },
-    header: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-    },
-    headerText: {
-        color: theme.palette.maskColor.main,
-        fontSize: '24px',
-        fontWeight: 700,
-        lineHeight: '120%',
-    },
-    headerIcon: {
-        display: 'flex',
-        alignItems: 'center',
-    },
-    dateItem: {
-        fontSize: '16px',
-        fontWeight: 400,
-        lineHeight: '20px',
-        color: theme.palette.maskColor.third,
-        width: '38px',
-        height: '38px',
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 999,
-    },
-    row: {
-        marginBottom: '8px',
-    },
-    canClick: {
-        color: theme.palette.maskColor.main,
-        cursor: 'pointer',
-    },
-    active: {
-        color: theme.palette.maskColor.white,
-        background: theme.palette.maskColor.primary,
-    },
-    button: {
-        outline: 'none',
-        background: 'none',
-        border: 'none',
-        padding: 0,
-    },
-}))
+const useStyles = makeStyles()((theme) => {
+    const isDark = theme.palette.mode === 'dark'
+    return {
+        container: {
+            background: theme.palette.maskColor.bottom,
+            boxShadow: isDark ? '0px 4px 30px 0px rgba(255, 255, 255, 0.1)' : '0px 4px 30px 0px rgba(0, 0, 0, 0.1)',
+            borderRadius: '16px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '24px',
+            width: '320px',
+            height: '355px',
+            padding: '24px',
+            position: 'absolute',
+            left: '-16px',
+            zIndex: 999,
+        },
+        daysOfWeek: {
+            fontSize: 12,
+            fontWeight: 700,
+            color: theme.palette.maskColor.third,
+            marginBottom: '24px',
+        },
+        header: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+        },
+        headerText: {
+            color: theme.palette.maskColor.main,
+            fontSize: '24px',
+            fontWeight: 700,
+            lineHeight: '120%',
+        },
+        headerIcon: {
+            display: 'flex',
+            alignItems: 'center',
+        },
+        dateItem: {
+            fontSize: '16px',
+            fontWeight: 400,
+            lineHeight: '20px',
+            color: theme.palette.maskColor.third,
+            width: '38px',
+            height: '38px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            borderRadius: 999,
+        },
+        row: {
+            marginBottom: '8px',
+        },
+        canClick: {
+            color: theme.palette.maskColor.main,
+            cursor: 'pointer',
+        },
+        active: {
+            color: theme.palette.maskColor.white,
+            background: theme.palette.maskColor.primary,
+        },
+        button: {
+            outline: 'none',
+            background: 'none',
+            border: 'none',
+            padding: 0,
+        },
+    }
+})
 
 interface DatePickerProps {
     open: boolean
