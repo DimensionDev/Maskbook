@@ -55,4 +55,3 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
 msgstr ""
-

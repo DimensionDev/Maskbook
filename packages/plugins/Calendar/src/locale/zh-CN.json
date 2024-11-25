@@ -1,9 +1,9 @@
 {
     "messages": {
         "AjVXBS": "日历",
-        "mYGY3B": "日期",
+        "mYGY3B": "Date",
         "tst44n": "Events",
-        "M1RnFv": "已过期",
+        "M1RnFv": "Expired",
         "YSi9PS": "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events.",
         "qdyV/M": "新闻",
         "8Dh77Z": "NFTs",
@@ -11,7 +11,7 @@
         "ekZ9la": "No events",
         "8IN0ph": "No more data available.",
         "Y9mYPy": ["Powered By ", ["0"]],
-        "a7u1N9": "价格",
-        "72c5Qo": "总额"
+        "a7u1N9": "Price",
+        "72c5Qo": "Total"
     }
 }
