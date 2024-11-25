@@ -272,7 +272,7 @@ msgstr ""
 msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
 msgstr ""
 
-#: src/SiteAdaptor/Requirements.tsx
+#: src/SiteAdaptor/Requirements/index.tsx
 msgid "Follow <0/> on {platform}"
 msgstr ""
 
@@ -386,7 +386,7 @@ msgstr ""
 msgid "NFT holder"
 msgstr ""
 
-#: src/SiteAdaptor/Requirements.tsx
+#: src/SiteAdaptor/Requirements/index.tsx
 msgid "NFT Holder of <0/>"
 msgstr ""
 
@@ -458,7 +458,7 @@ msgstr ""
 msgid "Repost"
 msgstr ""
 
-#: src/SiteAdaptor/Requirements.tsx
+#: src/SiteAdaptor/Requirements/index.tsx
 msgid "Requirements"
 msgstr ""
 

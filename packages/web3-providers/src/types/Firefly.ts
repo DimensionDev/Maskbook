@@ -167,7 +167,11 @@ export namespace FireflyRedPacketAPI {
     export interface ProfileFollowStrategyPayload {
         platform: PlatformType
         profileId: string
-        handle: string
+        /**
+         * Depends on the platform which created the redpacket
+         * for example, Firefly APP doesn't provide it, but Firefly Web does
+         */
+        handle?: string
     }
 
     export interface PostReactionStrategyPayload {
@@ -314,9 +318,12 @@ export namespace FireflyRedPacketAPI {
         publicKey: HexString
     }>
 
-    export type ClaimResponse = FireflyResponse<{
-        signedMessage: HexString
-    }>
+    export type ClaimResponse = FireflyResponse<
+        | {
+              signedMessage: HexString
+          }
+        | undefined
+    >
 
     export type HistoryResponse = FireflyResponse<{
         cursor: number

@@ -23,11 +23,7 @@ function resolveProfileUrl(platform: FireflyRedPacketAPI.PlatformType, handle: s
     }
 }
 
-interface MentionLinkProps {
-    platform: FireflyRedPacketAPI.PlatformType
-    profileId: string
-    handle: string
-}
+interface MentionLinkProps extends FireflyRedPacketAPI.ProfileFollowStrategyPayload {}
 
 export function MentionLink({ platform, profileId, handle }: MentionLinkProps) {
     const { classes } = useStyles()
@@ -51,7 +47,7 @@ export function MentionLink({ platform, profileId, handle }: MentionLinkProps) {
         <Link
             href={resolveProfileUrl(
                 platform,
-                platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : screenName,
+                platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : screenName!,
             )}
             target="_blank"
             className={classes.textLink}>

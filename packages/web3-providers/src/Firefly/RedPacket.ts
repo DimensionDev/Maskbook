@@ -160,7 +160,7 @@ export class FireflyRedPacket {
 
     static async createClaimSignature(
         options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions,
-    ): Promise<HexString> {
+    ): Promise<HexString | undefined> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claim')
         const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ClaimResponse>(url, {
             method: 'POST',
