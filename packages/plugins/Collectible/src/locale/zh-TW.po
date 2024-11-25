@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:10\n"
+"PO-Revision-Date: 2024-11-25 07:10\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -126,3 +126,4 @@ msgstr ""
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
 msgstr ""
+
