@@ -8,8 +8,9 @@ import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { forwardRef, useMemo } from 'react'
-import { RedPacketTrans, useRedPacketTrans } from '../locales/i18n_generated.js'
-import { usePlatformType } from './hooks/usePlatformType.js'
+import { RedPacketTrans, useRedPacketTrans } from '../../locales/i18n_generated.js'
+import { usePlatformType } from '../hooks/usePlatformType.js'
+import { MentionLink } from './MentionLink.js'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -151,25 +152,15 @@ function NFTList({ nfts }: NFTListProps) {
 }
 
 interface FollowProfileProps {
-    payload: Array<{ platform: FireflyRedPacketAPI.PlatformType; profileId: string; handle: string }>
+    payload: Array<FireflyRedPacketAPI.ProfileFollowStrategyPayload>
     platform: FireflyRedPacketAPI.PlatformType
 }
 
 function FollowProfile({ payload }: FollowProfileProps) {
-    const { classes } = useStyles()
     return (
         <span>
-            {payload.map(({ handle, profileId, platform }) => (
-                <Link
-                    key={handle}
-                    href={resolveProfileUrl(
-                        platform,
-                        platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : handle,
-                    )}
-                    target="_blank"
-                    className={classes.textLink}>
-                    @{handle}
-                </Link>
+            {payload.map((payload) => (
+                <MentionLink key={payload.profileId} {...payload} />
             ))}
         </span>
     )

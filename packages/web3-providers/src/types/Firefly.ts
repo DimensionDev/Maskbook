@@ -1,6 +1,11 @@
 type WithoutChainId<T> = Omit<T, 'chain_id'>
 type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
 
+export interface FireflyResponse<T> {
+    code: number
+    data: T
+}
+
 export namespace FireflyConfigAPI {
     export type Result<T> = {
         code: number
@@ -168,6 +173,11 @@ export namespace FireflyRedPacketAPI {
     export interface ProfileFollowStrategyPayload {
         platform: PlatformType
         profileId: string
+        /**
+         * Depends on the platform which created the redpacket
+         * for example, Firefly APP doesn't provide it, but Firefly Web does
+         */
+        handle?: string
     }
 
     export interface PostReactionStrategyPayload {
@@ -424,4 +434,139 @@ export namespace FireflyRedPacketAPI {
     }>
 
     export type ThemeByIdResponse = Response<ThemeGroupSettings>
+}
+
+export namespace FireflyTwitterAPI {
+    export interface TwitterUserInfo {
+        __typename: 'User'
+        id: string
+        rest_id: string
+        affiliates_highlighted_label: Record<string, unknown>
+        has_graduated_access: boolean
+        is_blue_verified: boolean
+        profile_image_shape: string
+        legacy: {
+            following: boolean
+            can_dm: boolean
+            can_media_tag: boolean
+            /**  "Sat May 02 08:47:28 +0000 2009" */
+            created_at: string
+            default_profile: boolean
+            default_profile_image: boolean
+            /** bio */
+            description: string
+            entities: {
+                description?: {
+                    urls: Array<{
+                        display_url: string
+                        expanded_url: string
+                        url: string
+                        indices: [number, number]
+                    }>
+                }
+                url?: {
+                    urls: Array<{
+                        display_url: string
+                        expanded_url: string
+                        url: string
+                        indices: [number, number]
+                    }>
+                }
+            }
+            fast_followers_count: number
+            favourites_count: number
+            followers_count: number
+            friends_count: number
+            has_custom_timelines: boolean
+            is_translator: boolean
+            listed_count: number
+            location: string
+            media_count: number
+            /** nick name */
+            name: string
+            normal_followers_count: number
+            pinned_tweet_ids_str: string[]
+            possibly_sensitive: boolean
+            profile_banner_url: string
+            profile_image_url_https: string
+            profile_interstitial_type: string
+            screen_name: string
+            statuses_count: number
+            translator_type: string
+            verified: boolean
+            want_retweets: boolean
+            withheld_in_countries: unknown[]
+        }
+        professional?: {
+            rest_id: string
+            professional_type: string
+            category: Array<{
+                id: number
+                name: string
+                icon_name: string
+            }>
+        }
+        // cspell:disable-next-line
+        tipjar_settings: {
+            is_enabled: boolean
+            ethereum_handle: string
+        }
+        smart_blocked_by: boolean
+        smart_blocking: boolean
+        legacy_extended_profile: Record<string, unknown>
+        is_profile_translatable: boolean
+        has_hidden_subscriptions_on_profile: boolean
+        verification_info: {
+            is_identity_verified: boolean
+        }
+        highlights_info: {
+            can_highlight_tweets: boolean
+            highlighted_tweets: string
+        }
+        user_seed_tweet_count: number
+        business_account: Record<string, unknown>
+        creator_subscriptions_count: number
+    }
+
+    export type TwitterUserInfoResponse = FireflyResponse<{ data: { user: { result: TwitterUserInfo } } }>
+
+    export interface UserV2 {
+        id: string
+        name: string
+        username: string
+        created_at?: string
+        protected?: boolean
+        withheld?: {
+            country_codes?: string[]
+            scope?: 'user'
+        }
+        location?: string
+        url?: string
+        description?: string
+        verified?: boolean
+        verified_type?: 'none' | 'blue' | 'business' | 'government'
+        entities?: {
+            url?: {
+                urls: unknown[]
+            }
+            description: {
+                urls?: unknown[]
+                hashtags?: unknown[]
+                cashtags?: unknown[]
+                mentions?: unknown[]
+            }
+        }
+        profile_image_url?: string
+        public_metrics?: {
+            followers_count?: number
+            following_count?: number
+            tweet_count?: number
+            listed_count?: number
+            like_count?: number
+        }
+        pinned_tweet_id?: string
+        connection_status?: string[]
+    }
+
+    export type TwitterUserV2Response = FireflyResponse<UserV2>
 }
