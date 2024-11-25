@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:08\n"
+"PO-Revision-Date: 2024-11-25 07:09\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -23,7 +23,7 @@ msgstr "캘린더"
 
 #: src/SiteAdaptor/components/NFTList.tsx
 #~ msgid "Date"
-#~ msgstr "날짜"
+#~ msgstr ""
 
 #: src/SiteAdaptor/CalendarContent.tsx
 msgid "Events"
@@ -31,7 +31,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
 #~ msgid "Expired"
-#~ msgstr "만료됨"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -63,8 +63,9 @@ msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
 #~ msgid "Price"
-#~ msgstr "가격"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
 #~ msgid "Total"
-#~ msgstr "전체"
+#~ msgstr ""
+
