@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:10\n"
+"PO-Revision-Date: 2024-11-25 13:32\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -277,7 +277,7 @@ msgstr "crwdns31728:0crwdne31728:0"
 msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
 msgstr "crwdns31730:0crwdne31730:0"
 
-#: src/SiteAdaptor/Requirements.tsx
+#: src/SiteAdaptor/Requirements/index.tsx
 msgid "Follow <0/> on {platform}"
 msgstr "crwdns31732:0{platform}crwdne31732:0"
 
@@ -391,7 +391,7 @@ msgstr "crwdns29046:0crwdne29046:0"
 msgid "NFT holder"
 msgstr "crwdns29048:0crwdne29048:0"
 
-#: src/SiteAdaptor/Requirements.tsx
+#: src/SiteAdaptor/Requirements/index.tsx
 msgid "NFT Holder of <0/>"
 msgstr "crwdns31744:0crwdne31744:0"
 
@@ -463,7 +463,7 @@ msgstr "crwdns29078:0crwdne29078:0"
 msgid "Repost"
 msgstr "crwdns29080:0crwdne29080:0"
 
-#: src/SiteAdaptor/Requirements.tsx
+#: src/SiteAdaptor/Requirements/index.tsx
 msgid "Requirements"
 msgstr "crwdns29082:0crwdne29082:0"
 
