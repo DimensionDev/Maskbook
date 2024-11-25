@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:53\n"
+"PO-Revision-Date: 2024-11-25 07:10\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -22,12 +22,16 @@ msgid "Calendar"
 msgstr "crwdns28410:0crwdne28410:0"
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Date"
-msgstr "crwdns28412:0crwdne28412:0"
+#~ msgid "Date"
+#~ msgstr ""
+
+#: src/SiteAdaptor/CalendarContent.tsx
+msgid "Events"
+msgstr "crwdns35566:0crwdne35566:0"
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
-msgid "Expired"
-msgstr "crwdns28416:0crwdne28416:0"
+#~ msgid "Expired"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
@@ -38,24 +42,30 @@ msgid "News"
 msgstr "crwdns28420:0crwdne28420:0"
 
 #: src/SiteAdaptor/CalendarContent.tsx
-msgid "NFTs"
-msgstr "crwdns28422:0crwdne28422:0"
+#~ msgid "NFTs"
+#~ msgstr ""
 
-#: src/SiteAdaptor/components/EventList.tsx
 #: src/SiteAdaptor/components/NewsList.tsx
-#: src/SiteAdaptor/components/NFTList.tsx
 msgid "No content for the last two weeks."
 msgstr "crwdns28424:0crwdne28424:0"
+
+#: src/SiteAdaptor/components/EventList.tsx
+msgid "No events"
+msgstr "crwdns35568:0crwdne35568:0"
+
+#: src/SiteAdaptor/components/EventList.tsx
+msgid "No more data available."
+msgstr "crwdns35570:0crwdne35570:0"
 
 #: src/SiteAdaptor/components/Footer.tsx
 msgid "Powered By {0}"
 msgstr "crwdns32218:0{0}crwdne32218:0"
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Price"
-msgstr "crwdns28428:0crwdne28428:0"
+#~ msgid "Price"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/NFTList.tsx
-msgid "Total"
-msgstr "crwdns28430:0crwdne28430:0"
+#~ msgid "Total"
+#~ msgstr ""
 
