@@ -1,7 +1,7 @@
-import { getDefaultChainId, type ChainId, getNetworkPluginID } from '@masknet/web3-shared-evm'
+import { CurrencyType } from '@masknet/web3-shared-base'
+import { ChainId, getDefaultChainId, getNetworkPluginID } from '@masknet/web3-shared-evm'
 import { HubOptionsProvider } from '../../Base/apis/HubOptions.js'
 import { evm } from '../../../Manager/registry.js'
-import type { CurrencyType } from '@masknet/web3-shared-base'
 
 export class EVMHubOptionsProvider extends HubOptionsProvider<ChainId> {
     protected override getDefaultChainId = getDefaultChainId
@@ -12,10 +12,10 @@ export class EVMHubOptionsProvider extends HubOptionsProvider<ChainId> {
     }
 
     protected override getChainId(): ChainId | undefined {
-        return evm.state?.Provider?.chainId?.getCurrentValue()
+        return ChainId.Mainnet
     }
 
     protected override getCurrencyType(): CurrencyType | undefined {
-        return evm.state?.Settings?.currencyType?.getCurrentValue()
+        return CurrencyType.USD
     }
 }
