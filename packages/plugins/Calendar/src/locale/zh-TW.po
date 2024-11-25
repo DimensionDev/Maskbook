@@ -30,8 +30,8 @@ msgid "Events"
 msgstr ""
 
 #: src/SiteAdaptor/components/CountDownTimer.tsx
-msgid "Expired"
-msgstr ""
+#~ msgid "Expired"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "Highly integrated Web3 news and events on X, providing information on tokens, NFTs, AMAs, and regulatory events."
