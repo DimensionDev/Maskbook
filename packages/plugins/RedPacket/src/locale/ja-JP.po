@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-25 07:09\n"
+"PO-Revision-Date: 2024-11-26 10:57\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -652,3 +652,4 @@ msgstr ""
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""
+
