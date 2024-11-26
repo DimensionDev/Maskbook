@@ -24,3 +24,4 @@ msgstr ""
 #: src/SiteAdaptor/components/BridgeStack.tsx
 msgid "Powered by Celer Network. Support $MASK!"
 msgstr ""
+
