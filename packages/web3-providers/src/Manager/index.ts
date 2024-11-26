@@ -56,5 +56,5 @@ export function getAllPluginsWeb3State(): {
 
 export function getActivatedPluginWeb3State<T extends NetworkPluginID>(pluginID: T): Web3Helper.Web3State<T>
 export function getActivatedPluginWeb3State(pluginID: NetworkPluginID): Web3Helper.Web3State<NetworkPluginID> {
-    return getRegistry(pluginID).state!
+    return getRegistry(pluginID).state ?? {}
 }
