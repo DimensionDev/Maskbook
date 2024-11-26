@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:10\n"
+"PO-Revision-Date: 2024-11-26 09:12\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -355,7 +355,6 @@ msgid "NFTs"
 msgstr "crwdns29488:0crwdne29488:0"
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-#: src/SiteAdaptor/trending/PriceChart.tsx
 #: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "No Data"
