@@ -172,4 +172,3 @@ msgstr "エクスプローラーで表示"
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
-

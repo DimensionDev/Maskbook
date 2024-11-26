@@ -117,4 +117,3 @@ msgstr "問題が発生しました!"
 #: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
-
