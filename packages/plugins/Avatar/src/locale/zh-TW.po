@@ -116,3 +116,4 @@ msgstr ""
 #: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr ""
+
