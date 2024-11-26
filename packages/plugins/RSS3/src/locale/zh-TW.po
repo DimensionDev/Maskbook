@@ -247,3 +247,4 @@ msgstr ""
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Tx Fee"
 msgstr ""
+
