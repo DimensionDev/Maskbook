@@ -122,7 +122,7 @@ interface Group {
 }
 export function NewsList({ date, onDatesUpdate }: NewsListProps) {
     const { classes, cx } = useStyles()
-    const { isLoading, isFetching, data: newsList, error, hasNextPage, fetchNextPage } = useNewsList(date)
+    const { isPending, isFetching, data: newsList, error, hasNextPage, fetchNextPage } = useNewsList(date)
 
     const groups = useMemo(() => {
         if (!newsList?.length) return EMPTY_LIST
@@ -147,7 +147,7 @@ export function NewsList({ date, onDatesUpdate }: NewsListProps) {
         onDatesUpdate(uniq(newsList.map((x) => new Date(x.event_date).toLocaleDateString())))
     }, [onDatesUpdate, newsList])
 
-    if (isLoading) {
+    if (isPending && !groups.length) {
         return (
             <div className={classes.container}>
                 <div className={classes.paddingWrap}>

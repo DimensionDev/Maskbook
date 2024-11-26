@@ -1,4 +1,4 @@
-import { createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
+import { createIndicator, createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
 import { compact } from 'lodash-es'
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
@@ -64,30 +64,39 @@ export class Calendar {
         const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, {
                 provider_type: 'coincarp',
+                size: 100,
                 start_date: Math.floor(startDate / 1000),
                 end_date: endDate ? Math.floor(endDate / 1000) : 0,
                 cursor: indicator?.id,
             }),
         )
-        if (!res.data) return createPageable([], indicator, createNextIndicator(indicator))
+        if (!res.data?.events.length) return createPageable([], createIndicator(indicator))
         const events = res.data.events.map(fixEventDate)
-        return createPageable(events, indicator, createNextIndicator(indicator, res.data.page.next))
+        const next = res.data.page.next
+        return createPageable(
+            events,
+            indicator,
+            createNextIndicator(indicator, next && next !== '0' ? next : undefined),
+        )
     }
     static async getEventList(start_date: number, end_date: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, {
                 provider_type: 'luma',
-                size: 20,
+                size: 100,
                 cursor: indicator?.id,
                 start_date: start_date / 1000,
                 end_date: end_date / 1000,
             }),
         )
-        if (!res?.data?.events.length) {
-            return createPageable([], indicator, createNextIndicator(indicator))
-        }
+        if (!res.data?.events.length) return createPageable([], createIndicator(indicator))
 
         const events = res.data.events.map(fixEvent)
-        return createPageable(events, indicator, createNextIndicator(indicator, res.data.page.next))
+        const next = res.data.page.next
+        return createPageable(
+            events,
+            indicator,
+            createNextIndicator(indicator, next && next !== '0' ? next : undefined),
+        )
     }
 }

@@ -98,7 +98,7 @@ interface EventListProps {
 
 export function EventList({ date, onDatesUpdate }: EventListProps) {
     const { classes, cx } = useStyles()
-    const { isLoading, isFetching, data, error, hasNextPage, fetchNextPage } = useLumaEvents(date)
+    const { isPending, isFetching, data, error, hasNextPage, fetchNextPage } = useLumaEvents(date)
 
     const comingEvents = useMemo(() => {
         if (!data) return EMPTY_LIST
@@ -110,7 +110,7 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
         onDatesUpdate(uniq(data.map((x) => new Date(x.event_date).toLocaleDateString())))
     }, [onDatesUpdate, data])
 
-    if (isLoading) {
+    if (isPending && !comingEvents.length) {
         return (
             <div className={classes.container}>
                 <div className={classes.paddingWrap}>
