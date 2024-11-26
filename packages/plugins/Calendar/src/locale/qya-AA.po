@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-25 07:10\n"
+"PO-Revision-Date: 2024-11-26 10:58\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -45,15 +45,17 @@ msgstr "crwdns28420:0crwdne28420:0"
 #~ msgid "NFTs"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/EventList.tsx
 #: src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
 msgstr "crwdns28424:0crwdne28424:0"
 
 #: src/SiteAdaptor/components/EventList.tsx
-msgid "No events"
-msgstr "crwdns35568:0crwdne35568:0"
+#~ msgid "No events"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No more data available."
 msgstr "crwdns35570:0crwdne35570:0"
 
