@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-25 07:09\n"
+"PO-Revision-Date: 2024-11-26 10:56\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -116,3 +116,4 @@ msgstr "更新 NFT 头像成功！"
 #: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr "钱包"
+
