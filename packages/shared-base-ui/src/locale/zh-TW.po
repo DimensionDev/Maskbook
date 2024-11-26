@@ -27,3 +27,4 @@ msgstr ""
 #: src/components/ErrorBoundary/CrashUI.tsx
 msgid "Try to recover"
 msgstr ""
+
