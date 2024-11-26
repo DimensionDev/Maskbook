@@ -126,3 +126,4 @@ msgstr ""
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
 msgstr ""
+
