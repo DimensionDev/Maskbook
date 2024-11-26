@@ -8,10 +8,7 @@ import {
     createNextIndicator,
     NetworkPluginID,
 } from '@masknet/shared-base'
-import {
-    type NonFungibleAsset,
-    type NonFungibleCollection,
-} from '@masknet/web3-shared-base'
+import { type NonFungibleAsset, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import {
     fetchFromSimpleHash,

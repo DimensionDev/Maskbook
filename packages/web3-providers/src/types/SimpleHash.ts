@@ -1,7 +1,7 @@
 import { type BigNumber } from 'bignumber.js'
 
 export namespace SimpleHash {
-    interface FloorPrice {
+    export interface FloorPrice {
         marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
         marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
         value: number
