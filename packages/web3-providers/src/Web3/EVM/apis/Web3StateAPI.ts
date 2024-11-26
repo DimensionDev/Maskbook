@@ -1,3 +1,4 @@
+import { getEnumAsArray } from '@masknet/kit'
 import { lazyObject, PersistentStorages, NetworkPluginID, InMemoryStorages, NameServiceID } from '@masknet/shared-base'
 import {
     type ChainId,
@@ -17,11 +18,9 @@ import * as TransactionFormatter from /* webpackDefer: true */ '../state/Transac
 import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
 import * as BalanceNotifier from /* webpackDefer: true */ '../state/BalanceNotifier.js'
 import * as BlockNumberNotifier from /* webpackDefer: true */ '../state/BlockNumberNotifier.js'
-import * as Message from /* webpackDefer: true */ '../state/Message.js'
 import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
-import { getEnumAsArray } from '@masknet/kit'
 import { networkStorage, tokenStorage, providerStorage } from '../../Base/storage.js'
 
 // If you use defer loading you will miss the subscription time.
@@ -62,7 +61,6 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),
         RiskWarning: () => new RiskWarning.EVMRiskWarning(state.Provider?.account, riskWarning),
-        Message: () => new Message.EVMMessage(context.MessageContext, messages),
         Token: () => new Token.EVMToken({ account: state.Provider?.account, chainId: state.Provider?.chainId }, token),
         Transaction: () =>
             new Transaction.EVMTransaction(

@@ -42,8 +42,6 @@ export declare namespace Web3Helper {
                 Definition[T]['SchemaType'],
                 Definition[T]['ProviderType'],
                 Definition[T]['NetworkType'],
-                Definition[T]['MessageRequest'],
-                Definition[T]['MessageResponse'],
                 Definition[T]['Transaction'],
                 Definition[T]['TransactionParameter']
             >
@@ -149,8 +147,6 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['NetworkType'],
-        Definition[NetworkPluginID]['MessageRequest'],
-        Definition[NetworkPluginID]['MessageResponse'],
         Definition[NetworkPluginID]['Transaction'],
         Definition[NetworkPluginID]['TransactionParameter']
     >
@@ -248,8 +244,6 @@ export declare namespace Web3Helper {
             Definition[T]['SchemaType'],
             Definition[T]['ProviderType'],
             Definition[T]['NetworkType'],
-            Definition[T]['MessageRequest'],
-            Definition[T]['MessageResponse'],
             Definition[T]['Transaction'],
             Definition[T]['TransactionParameter']
         >

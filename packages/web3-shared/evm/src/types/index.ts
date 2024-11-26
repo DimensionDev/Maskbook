@@ -435,8 +435,6 @@ export type Web3State = Web3StateShared<
     SchemaType,
     ProviderType,
     NetworkType,
-    MessageRequest,
-    MessageResponse,
     Transaction,
     TransactionParameter
 >

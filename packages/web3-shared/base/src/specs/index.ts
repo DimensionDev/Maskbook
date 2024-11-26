@@ -1116,23 +1116,13 @@ export interface BlockNumberNotifierState<ChainId> {
     emitter: Emitter<BlockNumberEvent<ChainId>>
 }
 
-export interface Web3State<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    MessageRequest,
-    MessageResponse,
-    Transaction,
-    TransactionParameter,
-> {
+export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
     Network?: NetworkState<ChainId, SchemaType, NetworkType>
     BalanceNotifier?: BalanceNotifierState<ChainId>
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Message?: MessageState<MessageRequest, MessageResponse>
     Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>
     TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
