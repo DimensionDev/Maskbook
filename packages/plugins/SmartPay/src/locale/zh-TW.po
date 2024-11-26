@@ -268,3 +268,4 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx
 msgid "You need to know before using SmartPay:"
 msgstr ""
+
