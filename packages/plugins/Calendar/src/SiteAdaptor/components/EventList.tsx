@@ -5,8 +5,6 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import { uniq } from 'lodash-es'
-import { useEffect, useMemo } from 'react'
 import { useLumaEvents } from '../../hooks/useLumaEvents.js'
 import { ImageLoader } from './ImageLoader.js'
 
@@ -93,24 +91,13 @@ const useStyles = makeStyles()((theme) => ({
 
 interface EventListProps {
     date: Date
-    onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
-export function EventList({ date, onDatesUpdate }: EventListProps) {
+export function EventList({ date }: EventListProps) {
     const { classes, cx } = useStyles()
-    const { isLoading, isFetching, data, error, hasNextPage, fetchNextPage } = useLumaEvents(date)
+    const { isPending, isFetching, data = EMPTY_LIST, error, hasNextPage, fetchNextPage } = useLumaEvents(date)
 
-    const comingEvents = useMemo(() => {
-        if (!data) return EMPTY_LIST
-        return data.filter((x) => new Date(x.event_date) >= date)
-    }, [data, date])
-
-    useEffect(() => {
-        if (!data) return onDatesUpdate(EMPTY_LIST)
-        onDatesUpdate(uniq(data.map((x) => new Date(x.event_date).toLocaleDateString())))
-    }, [onDatesUpdate, data])
-
-    if (isLoading) {
+    if (isPending && !data.length) {
         return (
             <div className={classes.container}>
                 <div className={classes.paddingWrap}>
@@ -133,7 +120,7 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
             </div>
         )
     }
-    if (!comingEvents.length) {
+    if (!data.length) {
         return (
             <div className={classes.container}>
                 <div className={classes.paddingWrap}>
@@ -150,7 +137,7 @@ export function EventList({ date, onDatesUpdate }: EventListProps) {
     return (
         <div className={classes.container}>
             <div className={classes.paddingWrap}>
-                {comingEvents.map((event) => {
+                {data.map((event) => {
                     return (
                         <Link
                             key={event.event_id}

@@ -1,10 +1,10 @@
-import { createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
+import { createIndicator, createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
 import { compact } from 'lodash-es'
 import urlcat from 'urlcat'
 import { fetchCachedJSON } from '../entry-helpers.js'
-import type { Event, EventResponse, ParsedEvent } from './types.js'
+import type { Event, EventDatesResponse, EventProvider, EventResponse, ParsedEvent } from './types.js'
 
-const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/crypto_event_list'
+const BASE_URL = 'https://mask-network-dev.firefly.land/v1/calendar/'
 
 function fixEventDate(event: Event): ParsedEvent {
     return {
@@ -59,35 +59,55 @@ function fixEvent(event: Event): ParsedEvent {
     }
 }
 
+const SIZE = 50
 export class Calendar {
     static async getNewsList(startDate: number, endDate?: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(
-            urlcat(BASE_URL, {
+            urlcat(BASE_URL, 'crypto_event_list', {
                 provider_type: 'coincarp',
+                size: SIZE,
                 start_date: Math.floor(startDate / 1000),
                 end_date: endDate ? Math.floor(endDate / 1000) : 0,
                 cursor: indicator?.id,
             }),
         )
-        if (!res.data) return createPageable([], indicator, createNextIndicator(indicator))
+        if (!res.data?.events.length) return createPageable([], createIndicator(indicator))
         const events = res.data.events.map(fixEventDate)
-        return createPageable(events, indicator, createNextIndicator(indicator, res.data.page.next))
+        const next = events.length < SIZE ? undefined : res.data.page.next
+        return createPageable(
+            events,
+            indicator,
+            createNextIndicator(indicator, next && next !== '0' ? next : undefined),
+        )
     }
     static async getEventList(start_date: number, end_date: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(
-            urlcat(BASE_URL, {
+            urlcat(BASE_URL, 'crypto_event_list', {
                 provider_type: 'luma',
-                size: 20,
+                size: SIZE,
                 cursor: indicator?.id,
                 start_date: start_date / 1000,
                 end_date: end_date / 1000,
             }),
         )
-        if (!res?.data?.events.length) {
-            return createPageable([], indicator, createNextIndicator(indicator))
-        }
+        if (!res.data?.events.length) return createPageable([], createIndicator(indicator))
 
         const events = res.data.events.map(fixEvent)
-        return createPageable(events, indicator, createNextIndicator(indicator, res.data.page.next))
+        const next = events.length < SIZE ? undefined : res.data.page.next
+        return createPageable(
+            events,
+            indicator,
+            createNextIndicator(indicator, next && next !== '0' ? next : undefined),
+        )
+    }
+    static async getAvailableDates(type: EventProvider, start_date: number, end_date: number) {
+        const res = await fetchCachedJSON<EventDatesResponse>(
+            urlcat(BASE_URL, 'crypto_event_date_list', {
+                provider_type: type,
+                start_date: start_date / 1000,
+                end_date: end_date / 1000,
+            }),
+        )
+        return (res.data || []).map((x) => x * 1000)
     }
 }

@@ -43,17 +43,24 @@ export type ParsedEvent = Omit<Event, 'event_date'> & {
     host_avatar?: string
 }
 
+export enum EventProvider {
+    CoinCarp = 'coincarp',
+    Luma = 'luma',
+}
+
 interface Response<T> {
     code: number
-    data?: {
-        events: T[]
-        page: {
-            cursor: string
-            next: string
-        }
-    }
+    data: T
     message: string
     reason?: string
 }
 
-export type EventResponse = Response<Event>
+export type EventResponse = Response<{
+    events: Event[]
+    page: {
+        cursor: string
+        next: string
+    }
+}>
+
+export type EventDatesResponse = Response<number[]>

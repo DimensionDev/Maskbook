@@ -1,12 +1,11 @@
 import { Trans } from '@lingui/macro'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
+import { EventProvider } from '@masknet/web3-providers/types'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Tab } from '@mui/material'
-import { uniq } from 'lodash-es'
-import { useMemo, useState, type HTMLProps } from 'react'
-import { useNewsList } from '../hooks/useEventList.js'
-import { useLumaEvents } from '../hooks/useLumaEvents.js'
+import { useState, type HTMLProps } from 'react'
+import { useAvailableDates } from '../hooks/useAvailableDates.js'
 import { DatePickerTab } from './components/DatePickerTab.js'
 import { EventList } from './components/EventList.js'
 import { Footer } from './components/Footer.js'
@@ -52,16 +51,11 @@ export function CalendarContent(props: Props) {
     const [pickerDate, setPickerDate] = useState(date)
     const [open, setOpen] = useState(false)
 
-    const [allowedDates, setAllowedDates] = useState<string[]>(EMPTY_LIST)
-
-    const { data: newsList = EMPTY_LIST } = useNewsList(pickerDate, currentTab === tabs.news)
-    const { data: eventList = EMPTY_LIST } = useLumaEvents(pickerDate, currentTab === tabs.events)
-
-    const allAllowedDates = useMemo(() => {
-        const list = currentTab === tabs.news ? newsList : eventList
-        const dates = list.map((x) => new Date(x.event_date).toLocaleDateString())
-        return uniq([...dates, ...allowedDates])
-    }, [allowedDates, newsList, eventList, currentTab])
+    const isNews = currentTab === tabs.news
+    const { data: allowedDates = EMPTY_LIST } = useAvailableDates(
+        isNews ? EventProvider.CoinCarp : EventProvider.Luma,
+        pickerDate,
+    )
 
     return (
         <div {...props} className={cx(classes.calendar, props.className)}>
@@ -77,14 +71,14 @@ export function CalendarContent(props: Props) {
                     onToggle={setOpen}
                     date={date}
                     onChange={setDate}
-                    allowedDates={allAllowedDates}
+                    allowedDates={allowedDates}
                     onMonthChange={setPickerDate}
                 />
                 <TabPanel value={tabs.news} className={classes.tabPanel}>
-                    <NewsList date={date} onDatesUpdate={setAllowedDates} />
+                    <NewsList date={date} />
                 </TabPanel>
                 <TabPanel value={tabs.events} className={classes.tabPanel}>
-                    <EventList date={date} onDatesUpdate={setAllowedDates} />
+                    <EventList date={date} />
                 </TabPanel>
                 <Footer tab={currentTab} />
             </TabContext>

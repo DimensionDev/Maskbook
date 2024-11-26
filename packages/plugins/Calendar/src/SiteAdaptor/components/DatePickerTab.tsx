@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { ClickAwayListener, IconButton, Typography } from '@mui/material'
-import { eachDayOfInterval, endOfWeek, startOfWeek } from 'date-fns'
+import { eachDayOfInterval, endOfWeek, format, startOfWeek } from 'date-fns'
 import { useMemo } from 'react'
 import { DatePicker, type DatePickerProps } from './DatePicker.js'
 
@@ -52,7 +52,7 @@ export function DatePickerTab(props: DatePickerTabProps) {
     return (
         <div className={classes.container}>
             {days.map((v) => {
-                const localeDateString = v.toLocaleDateString()
+                const localeDateString = format(v, 'MM/dd/yyyy')
                 return (
                     <div
                         className={`${classes.date} ${date.getDate() === v.getDate() ? classes.isActive : ''} ${

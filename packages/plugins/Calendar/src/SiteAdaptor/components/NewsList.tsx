@@ -5,8 +5,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { ParsedEvent } from '@masknet/web3-providers/types'
 import { Link, Typography } from '@mui/material'
 import { format } from 'date-fns'
-import { uniq } from 'lodash-es'
-import { useEffect, useMemo } from 'react'
+import { useMemo } from 'react'
 import { useNewsList } from '../../hooks/useEventList.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -111,7 +110,6 @@ const useStyles = makeStyles()((theme) => ({
 
 interface NewsListProps {
     date: Date
-    onDatesUpdate(/** locale date string list */ dates: string[]): void
 }
 
 interface Group {
@@ -120,17 +118,16 @@ interface Group {
     label: string
     events: ParsedEvent[]
 }
-export function NewsList({ date, onDatesUpdate }: NewsListProps) {
+export function NewsList({ date }: NewsListProps) {
     const { classes, cx } = useStyles()
-    const { isLoading, isFetching, data: newsList, error, hasNextPage, fetchNextPage } = useNewsList(date)
+    const { isPending, isFetching, data: newsList, error, hasNextPage, fetchNextPage } = useNewsList(date)
 
     const groups = useMemo(() => {
         if (!newsList?.length) return EMPTY_LIST
         const groups: Group[] = []
         newsList.forEach((event) => {
             const eventDate = new Date(event.event_date)
-            if (eventDate < date) return
-            const label = eventDate.toLocaleDateString()
+            const label = format(eventDate, 'MM/dd/yyyy')
             const group: Group = groups.find((g) => g.label === label) || {
                 date: event.event_date,
                 label,
@@ -142,12 +139,7 @@ export function NewsList({ date, onDatesUpdate }: NewsListProps) {
         return groups
     }, [newsList, date])
 
-    useEffect(() => {
-        if (!newsList) return onDatesUpdate(EMPTY_LIST)
-        onDatesUpdate(uniq(newsList.map((x) => new Date(x.event_date).toLocaleDateString())))
-    }, [onDatesUpdate, newsList])
-
-    if (isLoading) {
+    if (isPending && !groups.length) {
         return (
             <div className={classes.container}>
                 <div className={classes.paddingWrap}>
