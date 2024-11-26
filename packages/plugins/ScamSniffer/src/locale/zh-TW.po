@@ -27,3 +27,4 @@ msgstr ""
 #: src/SiteAdaptor/ScamAlert.tsx
 msgid "Similar Project"
 msgstr ""
+
