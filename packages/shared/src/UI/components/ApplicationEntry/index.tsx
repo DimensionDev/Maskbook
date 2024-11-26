@@ -1,5 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { makeStyles, ShadowRootTooltip, useBoundedPopperProps } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip, useBoundedPopperProps } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 
 const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
@@ -11,7 +11,10 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             alignItems: 'center',
             backgroundColor: theme.palette.maskColor.bg,
             borderRadius: '8px',
-            height: 100,
+            height: 104,
+            gap: theme.spacing(1),
+            padding: 4,
+            boxSizing: 'border-box',
         },
         applicationBoxHover: {
             cursor: 'pointer',
@@ -25,8 +28,14 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             },
         },
         title: {
-            whiteSpace: 'nowrap',
             fontSize: 14,
+            height: 36,
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            textAlign: 'center',
+            lineHeight: '18px',
         },
         disabled: {
             opacity: 0.4,
@@ -41,11 +50,7 @@ const useStyles = makeStyles<{ disabled: boolean; iconFilterColor?: string }>()(
             ...(iconFilterColor ? { filter: `drop-shadow(0px 6px 12px ${iconFilterColor})` } : {}),
         },
         arrow: {
-            marginLeft: '-12px',
             color: theme.palette.mode === 'light' ? theme.palette.common.black : theme.palette.common.white,
-        },
-        firstAreaArrow: {
-            marginLeft: '12px !important',
         },
         recommendFeatureApplicationBox: {
             width: 257,
@@ -140,9 +145,23 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                 variant="text"
                 disabled={disabled}>
                 <div className={classes.iconWrapper}>{icon}</div>
-                <Typography className={classes.title} color="textPrimary">
-                    {title}
-                </Typography>
+                <TextOverflowTooltip
+                    title={title}
+                    as={ShadowRootTooltip}
+                    arrow={false}
+                    disableInteractive
+                    componentsProps={{
+                        tooltip: {
+                            style: {
+                                padding: 6,
+                                fontSize: 10,
+                            },
+                        },
+                    }}>
+                    <Typography className={classes.title} color="textPrimary">
+                        {title}
+                    </Typography>
+                </TextOverflowTooltip>
                 {secondTitle ?
                     <Typography variant="body2" color="textSecondary">
                         {secondTitle}
@@ -157,7 +176,7 @@ export function ApplicationEntry(props: ApplicationEntryProps) {
                     placement: recommendFeature ? 'bottom' : 'top',
                 }}
                 classes={{
-                    arrow: cx(classes.arrow, recommendFeature?.isFirst ? classes.firstAreaArrow : ''),
+                    arrow: classes.arrow,
                 }}
                 placement={recommendFeature ? 'bottom' : 'top'}
                 arrow
