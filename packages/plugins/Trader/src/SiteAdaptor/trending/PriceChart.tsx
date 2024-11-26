@@ -1,10 +1,9 @@
-import { useRef } from 'react'
-import { Stack, Typography } from '@mui/material'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useRef, type HTMLProps } from 'react'
+import { Box, Stack } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import { openWindow } from '@masknet/shared-base-ui'
-import { useDimension, usePriceLineChart, type Dimension } from '@masknet/shared'
+import { EmptyStatus, LoadingStatus, useDimension, usePriceLineChart, type Dimension } from '@masknet/shared'
 import type { Coin, Currency, Stat } from '../../types/index.js'
-import { Trans } from '@lingui/macro'
 
 const DEFAULT_DIMENSION: Dimension = {
     top: 32,
@@ -15,19 +14,18 @@ const DEFAULT_DIMENSION: Dimension = {
     height: 190,
 }
 
-const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             position: 'relative',
-            cursor: stats.length && coin?.platform_url ? 'pointer' : 'default',
+        },
+        chart: {
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
         },
         svg: {
             display: 'block',
-        },
-        progress: {
-            position: 'absolute',
-            left: 275,
-            top: 85,
         },
         placeholder: {
             paddingTop: theme.spacing(10),
@@ -37,7 +35,7 @@ const useStyles = makeStyles<PriceChartProps>()((theme, { stats, coin }) => {
     }
 })
 
-interface PriceChartProps extends withClasses<'root'> {
+interface PriceChartProps extends HTMLProps<HTMLDivElement> {
     coin?: Coin
     currency: Currency
     stats: Stat[]
@@ -49,7 +47,8 @@ interface PriceChartProps extends withClasses<'root'> {
 }
 
 export function PriceChart(props: PriceChartProps) {
-    const { classes } = useStyles(props, { props })
+    const { stats, loading, currency, children, coin, className, ...rest } = props
+    const { classes, cx } = useStyles()
     const rootRef = useRef<HTMLDivElement>(null)
     const svgRef = useRef<SVGSVGElement>(null)
 
@@ -57,40 +56,43 @@ export function PriceChart(props: PriceChartProps) {
 
     usePriceLineChart(
         svgRef,
-        props.stats.map(([date, price]) => ({
+        stats.map(([date, price]) => ({
             date: new Date(date),
             value: price,
         })),
         DEFAULT_DIMENSION,
         'x-trader-price-line-chart',
-        { sign: props.currency.name ?? 'USD' },
+        { sign: currency.name ?? 'USD' },
     )
 
     return (
-        <div className={classes.root} ref={rootRef}>
-            {props.loading && props.stats.length ?
-                <LoadingBase className={classes.progress} color="primary" size={15} />
-            :   null}
-
+        <Box
+            className={cx(classes.root, className)}
+            {...rest}
+            ref={rootRef}
+            sx={{
+                cursor: stats.length && coin?.platform_url ? 'pointer' : 'default',
+            }}>
             <Stack gap={2}>
-                {props.stats.length ?
-                    <svg
-                        className={classes.svg}
-                        ref={svgRef}
-                        width={DEFAULT_DIMENSION.width}
-                        height={DEFAULT_DIMENSION.height}
-                        viewBox={`0 0 ${DEFAULT_DIMENSION.width} ${DEFAULT_DIMENSION.height}`}
-                        preserveAspectRatio="xMidYMid meet"
-                        onClick={() => {
-                            props.stats.length && openWindow(props.coin?.platform_url)
-                        }}
-                    />
-                :   <Typography className={classes.placeholder} align="center" color="textSecondary">
-                        <Trans>No Data</Trans>
-                    </Typography>
-                }
-                {props.children}
+                <Box className={classes.chart} height={DEFAULT_DIMENSION.height}>
+                    {loading ?
+                        <LoadingStatus iconSize={36} />
+                    : stats.length ?
+                        <svg
+                            className={classes.svg}
+                            ref={svgRef}
+                            width={DEFAULT_DIMENSION.width}
+                            height={DEFAULT_DIMENSION.height}
+                            viewBox={`0 0 ${DEFAULT_DIMENSION.width} ${DEFAULT_DIMENSION.height}`}
+                            preserveAspectRatio="xMidYMid meet"
+                            onClick={() => {
+                                stats.length && openWindow(coin?.platform_url)
+                            }}
+                        />
+                    :   <EmptyStatus className={classes.placeholder} />}
+                </Box>
+                {children}
             </Stack>
-        </div>
+        </Box>
     )
 }

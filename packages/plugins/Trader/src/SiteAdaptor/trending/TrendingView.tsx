@@ -1,33 +1,33 @@
-import { useEffect, useMemo, useState, useContext, useCallback, useLayoutEffect } from 'react'
-import { compact, first } from 'lodash-es'
-import { TabContext } from '@mui/lab'
-import { Box, useTheme } from '@mui/system'
-import { Stack, Tab, ThemeProvider } from '@mui/material'
+import { Trans } from '@lingui/macro'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { SourceType, TokenType } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { NFTList, PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
-import { EMPTY_LIST, PluginID, NetworkPluginID, type SocialIdentity, Days } from '@masknet/shared-base'
+import { Days, EMPTY_LIST, NetworkPluginID, PluginID, type SocialIdentity } from '@masknet/shared-base'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
+import { SourceType, TokenType } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { TrendingViewContext } from './context.js'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { TabContext } from '@mui/lab'
+import { Stack, Tab, ThemeProvider } from '@mui/material'
+import { Box, useTheme } from '@mui/system'
+import { compact, first } from 'lodash-es'
+import { useCallback, useContext, useEffect, useLayoutEffect, useMemo, useState } from 'react'
 import { usePriceStats } from '../../trending/usePriceStats.js'
 import { useTrendingById } from '../../trending/useTrending.js'
+import { ContentTab } from '../../types/index.js'
 import { CoinMarketPanel } from './CoinMarketPanel.js'
+import { TrendingViewContext } from './context.js'
+import { FailedTrendingView } from './FailedTrendingView.js'
+import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { PriceChart } from './PriceChart.js'
 import { DEFAULT_RANGE_OPTIONS, PriceChartDaysControl } from './PriceChartDaysControl.js'
 import { TickersTable } from './TickersTable.js'
 import { TrendingViewDeck } from './TrendingViewDeck.js'
-import { NonFungibleTickersTable } from './NonFungibleTickersTable.js'
 import { TrendingViewSkeleton } from './TrendingViewSkeleton.js'
-import { ContentTab } from '../../types/index.js'
-import { FailedTrendingView } from './FailedTrendingView.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean
@@ -58,12 +58,7 @@ const useStyles = makeStyles<{
             props.isCollectionProjectPopper ?
                 {
                     minHeight: 374,
-                    maxHeight:
-                        props.isCollectionProjectPopper ?
-                            props.currentTab === ContentTab.Price ?
-                                450
-                            :   374
-                        :   'unset',
+                    maxHeight: props.currentTab === ContentTab.Price ? 450 : 374,
                     overflow: 'hidden',
                     display: 'flex',
                     flexDirection: 'column',
@@ -347,7 +342,7 @@ export function TrendingView(props: TrendingViewProps) {
                 {currentTab === ContentTab.Price ?
                     <Box className={classes.priceChartWrapper}>
                         <PriceChart
-                            classes={{ root: classes.priceChartRoot }}
+                            className={classes.priceChartRoot}
                             coin={coin}
                             amount={currentPriceChange ?? trending.market?.price_change_percentage_24h_in_currency ?? 0}
                             currency={trending.currency}

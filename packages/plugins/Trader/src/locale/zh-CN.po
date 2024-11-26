@@ -356,7 +356,6 @@ msgid "NFTs"
 msgstr ""
 
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-#: src/SiteAdaptor/trending/PriceChart.tsx
 #: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "No Data"
