@@ -285,7 +285,6 @@ export function TrendingView(props: TrendingViewProps) {
                 cardHeader: classes.cardHeader,
             }}
             currentTab={currentTab}
-            stats={stats}
             identity={identity}
             setActive={setActive}
             setResult={setResult}

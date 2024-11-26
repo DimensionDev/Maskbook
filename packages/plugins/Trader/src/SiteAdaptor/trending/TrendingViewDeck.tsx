@@ -43,7 +43,7 @@ import {
 } from '@mui/material'
 import { first } from 'lodash-es'
 import { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { ContentTab, type Currency, type Stat } from '../../types/index.js'
+import { ContentTab, type Currency } from '../../types/index.js'
 import { CoinIcon } from './CoinIcon.js'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
@@ -156,7 +156,6 @@ const useStyles = makeStyles<{
 })
 
 interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer' | 'content' | 'cardHeader'> {
-    stats: Stat[]
     currency: Currency
     currentTab: ContentTab
     trending: TrendingAPI.Trending
@@ -173,7 +172,6 @@ interface TrendingViewDeckProps extends withClasses<'header' | 'body' | 'footer'
 export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const {
         trending,
-        stats,
         children,
         TrendingCardProps,
         resultList = EMPTY_LIST,
