@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 09:12\n"
+"PO-Revision-Date: 2024-11-26 10:58\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -45,15 +45,17 @@ msgstr ""
 #~ msgid "NFTs"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/EventList.tsx
 #: src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
 msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
-msgid "No events"
-msgstr ""
+#~ msgid "No events"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No more data available."
 msgstr ""
 
@@ -68,3 +70,4 @@ msgstr ""
 #: src/SiteAdaptor/components/NFTList.tsx
 #~ msgid "Total"
 #~ msgstr ""
+
