@@ -47,3 +47,4 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile Card"
 msgstr ""
+
