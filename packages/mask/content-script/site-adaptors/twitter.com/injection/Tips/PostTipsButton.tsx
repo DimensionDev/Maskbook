@@ -12,7 +12,9 @@ import { querySelectorAll } from '../../utils/selector.js'
 import { useUserIdentity } from './hooks.js'
 
 function postShareButtonSelector() {
-    return querySelectorAll('article[data-testid="tweet"] [role="group"] > div:has([aria-haspopup="menu"]):last-child')
+    return querySelectorAll(
+        'article[data-testid="tweet"] [role="group"] > div:has([aria-haspopup="menu"]):last-of-type',
+    )
 }
 
 function getUserId(ele: HTMLElement) {

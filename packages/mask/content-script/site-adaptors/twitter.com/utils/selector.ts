@@ -60,12 +60,6 @@ export function searchAvatarMetaSelector() {
     return querySelector<E>('head meta[property="og:image"]')
 }
 
-export function profileFollowButtonSelector() {
-    return querySelector<E>(
-        '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
-    )
-}
-
 export function normalFollowButtonSelector() {
     return querySelectorAll(
         '[data-testid="primaryColumn"] [role="button"][data-testid="UserCell"] [data-testid$="follow"]',

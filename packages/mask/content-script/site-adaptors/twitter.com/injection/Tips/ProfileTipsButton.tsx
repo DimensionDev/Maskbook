@@ -6,10 +6,16 @@ import { useCurrentVisitingIdentity, useThemeSettings } from '../../../../compon
 import { startWatch } from '../../../../utils/startWatch.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root/renderInShadowRoot.js'
 import { ButtonStyle } from '../../constant.js'
-import { profileFollowButtonSelector as selector } from '../../utils/selector.js'
+import { querySelector } from '../../utils/selector.js'
+
+export function profileFollowButtonSelector() {
+    return querySelector<HTMLElement>(
+        '[data-testid="primaryColumn"] [aria-haspopup="menu"][data-testid="userActions"] ~ [data-testid="placementTracking"]',
+    )
+}
 
 export function injectOpenTipsButtonOnProfile(signal: AbortSignal) {
-    const watcher = new MutationObserverWatcher(selector())
+    const watcher = new MutationObserverWatcher(profileFollowButtonSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.beforeShadow, { signal }).render(<ProfileTipsSlot />)
 }
