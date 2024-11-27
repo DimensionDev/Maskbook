@@ -59,12 +59,13 @@ function fixEvent(event: Event): ParsedEvent {
     }
 }
 
+const SIZE = 200
 export class Calendar {
     static async getNewsList(startDate: number, endDate?: number, indicator?: PageIndicator) {
         const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, {
                 provider_type: 'coincarp',
-                size: 100,
+                size: SIZE,
                 start_date: Math.floor(startDate / 1000),
                 end_date: endDate ? Math.floor(endDate / 1000) : 0,
                 cursor: indicator?.id,
@@ -72,7 +73,7 @@ export class Calendar {
         )
         if (!res.data?.events.length) return createPageable([], createIndicator(indicator))
         const events = res.data.events.map(fixEventDate)
-        const next = res.data.page.next
+        const next = events.length < SIZE ? undefined : res.data.page.next
         return createPageable(
             events,
             indicator,
@@ -83,7 +84,7 @@ export class Calendar {
         const res = await fetchCachedJSON<EventResponse>(
             urlcat(BASE_URL, {
                 provider_type: 'luma',
-                size: 100,
+                size: SIZE,
                 cursor: indicator?.id,
                 start_date: start_date / 1000,
                 end_date: end_date / 1000,
@@ -92,7 +93,7 @@ export class Calendar {
         if (!res.data?.events.length) return createPageable([], createIndicator(indicator))
 
         const events = res.data.events.map(fixEvent)
-        const next = res.data.page.next
+        const next = events.length < SIZE ? undefined : res.data.page.next
         return createPageable(
             events,
             indicator,

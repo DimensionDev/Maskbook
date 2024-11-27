@@ -54,8 +54,8 @@ export function CalendarContent(props: Props) {
 
     const [allowedDates, setAllowedDates] = useState<string[]>(EMPTY_LIST)
 
-    const { data: newsList = EMPTY_LIST } = useNewsList(pickerDate, currentTab === tabs.news)
-    const { data: eventList = EMPTY_LIST } = useLumaEvents(pickerDate, currentTab === tabs.events)
+    const { data: newsList = EMPTY_LIST } = useNewsList(pickerDate, currentTab === tabs.news && open)
+    const { data: eventList = EMPTY_LIST } = useLumaEvents(pickerDate, currentTab === tabs.events && open)
 
     const allAllowedDates = useMemo(() => {
         const list = currentTab === tabs.news ? newsList : eventList
