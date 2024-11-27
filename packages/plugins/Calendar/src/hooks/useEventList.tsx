@@ -1,14 +1,13 @@
 import { Calendar } from '@masknet/web3-providers'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { addDays, startOfMonth } from 'date-fns'
+import { addDays, startOfDay } from 'date-fns'
 import { uniqBy } from 'lodash-es'
-import { useEffect } from 'react'
 
 export function useNewsList(date: Date, enabled = true) {
-    const startTime = startOfMonth(date).getTime()
-    const endTime = addDays(startTime, 45).getTime()
+    const startTime = startOfDay(date).getTime()
+    const endTime = addDays(startTime, 14).getTime()
 
-    const query = useInfiniteQuery({
+    return useInfiniteQuery({
         enabled,
         queryKey: ['newsList', startTime, endTime],
         queryFn: async ({ pageParam }) => Calendar.getNewsList(startTime, endTime, pageParam),
@@ -21,13 +20,4 @@ export function useNewsList(date: Date, enabled = true) {
             )
         },
     })
-
-    const { hasNextPage, isFetchingNextPage, fetchNextPage } = query
-    useEffect(() => {
-        if (hasNextPage && !isFetchingNextPage) {
-            fetchNextPage()
-        }
-    }, [hasNextPage, isFetchingNextPage, fetchNextPage])
-
-    return query
 }
