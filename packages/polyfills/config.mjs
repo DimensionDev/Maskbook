@@ -26,8 +26,7 @@ export default defineConfig([
             file: 'dist/ecmascript.js',
             format: 'es',
             generatedCode: 'es2015',
-            banner: `
-/**
+            banner: `/**
  * @license
  * This file includes the following runtime/polyfills.
  * core-js:
@@ -36,13 +35,12 @@ ${list.map((x) => ` *     ${x}`).join('\n')}
  * tslib
  * reflect-metadata
  */
-if (!globalThis[Symbol.for('mask_init_polyfill')]) {
+if (!globalThis[Symbol.for('mask_init_polyfill')]) return;
 globalThis[Symbol.for('mask_init_polyfill')] = true;
 `.trim(),
-            footer: `}`,
         },
         plugins: [
-            virtual({
+            (virtual.default || virtual)({
                 entry: ecmascriptPolyfill,
             }),
             ...plugins(),
@@ -70,13 +68,13 @@ globalThis[Symbol.for('mask_init_polyfill')] = true;
 function plugins() {
     return [
         nodeResolve(),
-        commonjs(),
-        json(),
+        (commonjs.default || commonjs)(),
+        (json.default || json)(),
         swc({
             tsconfig: './tsconfig.json',
             jsc: { target: 'es2022' },
         }),
-        minify({ mangle: false, compress: false }),
+        minify({ compress: false, mangle: false }),
         wrapperPlugin(),
     ]
 }

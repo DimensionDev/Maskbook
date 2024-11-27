@@ -9,6 +9,7 @@
   "include": ["./"],
   "references": [
     { "path": "../utils-pure/tsconfig.json" },
+    { "path": "../shared-ui/tsconfig.json" },
     { "path": "../../mask-sdk/server/tsconfig.json" },
     { "path": "../../web3-shared/evm/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },

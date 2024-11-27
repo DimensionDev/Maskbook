@@ -11,7 +11,7 @@ class TrustedTypesRuntimeModule extends RuntimeModule {
             return Template.asString('/* TrustedTypesRuntimeModule skipped because compilation is undefined. */')
         return Template.asString([
             'if (typeof trustedTypes !== "undefined" && location.protocol.includes("extension") && !trustedTypes.defaultPolicy) {',
-            Template.indent([`trustedTypes.createPolicy('default', { createScriptURL: (string) => string });`]),
+            Template.indent(`trustedTypes.createPolicy('default', { createScriptURL: String });`),
             '}',
         ])
     }
@@ -21,7 +21,7 @@ export class TrustedTypesPlugin {
         compiler.hooks.compilation.tap('TrustedTypes', (compilation) => {
             compilation.hooks.afterChunks.tap('TrustedTypes', (chunks) => {
                 for (const c of chunks) {
-                    if (!c.hasEntryModule()) continue
+                    if (!compilation.chunkGraph.getNumberOfEntryModules(c)) continue
                     compilation.addRuntimeModule(c, new TrustedTypesRuntimeModule(), compilation.chunkGraph)
                 }
             })

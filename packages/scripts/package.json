@@ -26,10 +26,10 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/gulp": "^4.0.17",
-    "@types/node": "20.14.9",
+    "@types/node": "22.10.0",
     "@types/proper-lockfile": "^4.1.4",
-    "@types/yargs": "^17.0.32",
+    "@types/yargs": "^17.0.33",
     "gulp-cli": "^3.0.0",
-    "web-ext": "^8.2.0"
+    "web-ext": "^8.3.0"
   }
 }

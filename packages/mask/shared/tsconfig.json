@@ -8,7 +8,9 @@
   "include": ["./**/*"],
   "exclude": ["./plugin-infra/register.js"],
   "references": [
+    { "path": "../../backup-format/tsconfig.json" },
     { "path": "../../shared-base/tsconfig.json" },
+    { "path": "../../web3-providers/tsconfig.json" },
     { "path": "../../plugin-infra/tsconfig.json" },
     { "path": "../../sandboxed-plugin-runtime/src/runtime/tsconfig.json" }
   ]

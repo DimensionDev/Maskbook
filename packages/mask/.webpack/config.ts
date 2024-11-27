@@ -350,17 +350,11 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 ),
         },
         output: {
-            environment: {
-                module: false,
-                dynamicImport: true,
-            },
             path: flags.outputPath,
             filename: 'entry/[name].js',
             chunkFilename: productionLike ? 'bundled/[id].js' : 'bundled/chunk-[name].js',
             assetModuleFilename: productionLike ? 'assets/[hash][ext][query]' : 'assets/[name]-[hash][ext][query]',
             webassemblyModuleFilename: 'assets/[hash].wasm',
-            hotUpdateMainFilename: 'hot/[runtime].[fullhash].json',
-            hotUpdateChunkFilename: 'hot/[id].[fullhash].js',
             devtoolModuleFilenameTemplate:
                 productionLike ?
                     'webpack://[namespace]/[resource-path]'

@@ -48,6 +48,7 @@ export function useTransactions() {
 
     const allLocaleTxes = useMemo(() => {
         return queries.flatMap((x) => x.data ?? []) as Array<RecentTransaction<ChainId, EvmTransaction>>
+        // eslint-disable-next-line @tanstack/query/no-unstable-deps
     }, [queries])
 
     // Some are already in debank history

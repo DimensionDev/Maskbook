@@ -117,6 +117,7 @@ export const Component = memo(function AddDeriveWallet() {
             .flatMap((x) => x.data)
             .filter((x) => typeof x === 'number') as number[]
         return sortBy(uniq([...pathIndexes, ...existedSiblingsIndexes]))
+        // eslint-disable-next-line @tanstack/query/no-unstable-deps
     }, [pathIndexes, existedSiblingQueries, isReset])
 
     const [page, setPage] = useState(0)

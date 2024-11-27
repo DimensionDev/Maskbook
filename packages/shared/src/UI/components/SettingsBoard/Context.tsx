@@ -66,6 +66,7 @@ function useSettingsContext(initial?: {
     } = useGasOptions(pluginID, { chainId })
 
     const onClearInMemoryCache = useCallback(() => {
+        // eslint-disable-next-line react-compiler/react-compiler
         delete IN_MEMORY_CACHE.lastNetworkSignature
         delete IN_MEMORY_CACHE.lastTransactionSignature
         IN_MEMORY_CACHE.lastSelectedGasOptionType = GasOptionType.NORMAL
