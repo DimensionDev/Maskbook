@@ -109,7 +109,7 @@ export const PluginProviderRender = memo(function PluginProviderRender({
 
             const connection = getConnection(provider.providerAdaptorPluginID, { providerType: provider.type })
             const chainId =
-                expectedChainId ?? provider.type === ProviderType.WalletConnect ?
+                (expectedChainId ?? provider.type === ProviderType.WalletConnect) ?
                     ChainId.Mainnet
                 :   await connection?.getChainId()
 

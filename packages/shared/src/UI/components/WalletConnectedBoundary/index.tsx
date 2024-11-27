@@ -86,7 +86,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
                 {...props.ActionButtonProps}>
                 {nativeTokenBalance.loading ?
                     <Trans>Updating Gas Fee…</Trans>
-                :   noGasText ?? <Trans>No Enough Gas Fee</Trans>}
+                :   (noGasText ?? <Trans>No Enough Gas Fee</Trans>)}
             </ActionButton>
         )
 

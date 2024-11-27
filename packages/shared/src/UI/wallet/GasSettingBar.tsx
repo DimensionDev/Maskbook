@@ -71,7 +71,7 @@ export function GasSettingBar(props: GasSettingBarProps) {
             gasLimit,
             EVMChainResolver.isFeatureSupported(chainId, 'EIP1559') && maxFee ?
                 new BigNumber(maxFee)
-            :   gasPrice ?? gasPriceDefault,
+            :   (gasPrice ?? gasPriceDefault),
         )
     }, [chainId, gasLimit, gasPrice, maxFee, gasPriceDefault])
 

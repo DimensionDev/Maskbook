@@ -54,10 +54,10 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const chainId = result.chainId ?? trending.coin.chainId
     const { data: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)
     const { data: highestPrice_ } = useHighestFloorPrice(
-        overview?.highest_price ?? trending.market?.highest_price ? '' : trending.coin.id,
+        (overview?.highest_price ?? trending.market?.highest_price) ? '' : trending.coin.id,
     )
     const { data: salesOneDay_ } = useOneDaySaleAmounts(
-        overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h ? '' : trending.coin.id,
+        (overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h) ? '' : trending.coin.id,
     )
     const salesOneDay = salesOneDay_ ?? overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h
     const highestPrice = highestPrice_ ?? overview?.highest_price ?? trending.market?.highest_price
@@ -137,7 +137,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         <Trans>24H Average Price</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.average_price_24h ?? overview?.average_price ? PaymentIcon : null}
+                        {(overview?.average_price_24h ?? overview?.average_price) ? PaymentIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"
@@ -152,7 +152,7 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
                         <Trans>24H Traded Volume</Trans>
                     </Typography>
                     <div className={classes.amountWrapper}>
-                        {overview?.volume_24h ?? overview?.volume ? PaymentIcon : null}
+                        {(overview?.volume_24h ?? overview?.volume) ? PaymentIcon : null}
                         <Typography
                             color="textPrimary"
                             variant="body2"

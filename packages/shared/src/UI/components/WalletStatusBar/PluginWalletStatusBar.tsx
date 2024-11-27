@@ -121,7 +121,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                     name={walletName}
                     formattedAddress={Utils.formatAddress(account, 4)}
                     addressLink={Utils.explorerResolver.addressLink(chainId, account)}
-                    onClick={readonlyMode || disableSwitchAccount ? undefined : onClick ?? openSelectProviderDialog}
+                    onClick={readonlyMode || disableSwitchAccount ? undefined : (onClick ?? openSelectProviderDialog)}
                     onPendingClick={readonlyMode || disableSwitchAccount ? undefined : () => WalletStatusModal.open()}
                 />
                 {!readonlyMode ?

@@ -88,7 +88,7 @@ async function getNonFungibleAssets(
     })
 
     const allSettled = await Promise.allSettled(promises)
-    return allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value ?? [] : []))
+    return allSettled.flatMap((x) => (x.status === 'fulfilled' ? (x.value ?? []) : []))
 }
 
 class SolanaNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {

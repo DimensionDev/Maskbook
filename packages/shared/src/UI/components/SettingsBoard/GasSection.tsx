@@ -81,7 +81,7 @@ export function GasSection(props: GasSectionProps) {
         :   formatWeiToGwei(
                 isEIP1559 ?
                     plus(baseFeePerGas, priorityFee ?? suggestedMaxPriorityFeePerGas ?? 0)
-                :   gasPrice ?? suggestedMaxFeePerGas ?? 0,
+                :   (gasPrice ?? suggestedMaxFeePerGas ?? 0),
             ),
         '',
     )

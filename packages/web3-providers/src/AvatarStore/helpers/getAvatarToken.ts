@@ -44,7 +44,7 @@ export async function getAvatarToken<T extends NetworkPluginID>(
         amount:
             asset?.priceInToken ?
                 formatBalance(asset.priceInToken.amount, asset.priceInToken.token.decimals)
-            :   asset?.price?.[CurrencyType.USD] ?? '0',
+            :   (asset?.price?.[CurrencyType.USD] ?? '0'),
         name: metadata?.name ?? '',
         symbol: asset?.priceInToken ? asset.priceInToken.token.symbol : 'USD',
         image: metadata?.imageURL,

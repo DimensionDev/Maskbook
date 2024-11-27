@@ -124,7 +124,7 @@ export function createNonFungibleAsset(
                     // FIXME: cannot get payment token
                     token:
                         asset.latest_trade_symbol === 'ETH' ?
-                            EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                            (EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId])
                         :   WNATIVE[chainId],
                 }
             :   undefined,

@@ -193,10 +193,10 @@ export class OKX {
         const isNativeToken = isNativeTokenAddress(fromOkxNativeAddress(address))
         const fromToken =
             isNativeToken ?
-                tokens.find((x) => {
+                (tokens.find((x) => {
                     const symbol = x.symbol.toLowerCase()
                     return symbol.includes('usdc') || symbol.includes('usdt')
-                }) ?? tokens[0]
+                }) ?? tokens[0])
             :   null
 
         const options = {

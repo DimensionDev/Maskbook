@@ -82,7 +82,7 @@ export function useOpenShareTxDialog() {
                     hash={hash}
                 />
             ),
-            confirmLabel: onShare ? buttonLabel ?? <Trans>Share</Trans> : <Trans>Dismiss</Trans>,
+            confirmLabel: onShare ? (buttonLabel ?? <Trans>Share</Trans>) : <Trans>Dismiss</Trans>,
         })
         if (confirmed) onShare?.()
     }, [])

@@ -72,7 +72,7 @@ export const FeedList = memo(function FeedList({ address, tags, listProps }: Fee
         return {
             address,
             name,
-            ownerDisplay: name ? Utils.formatDomainName(name) : Utils.formatAddress(address, 4) ?? address,
+            ownerDisplay: name ? Utils.formatDomainName(name) : (Utils.formatAddress(address, 4) ?? address),
         }
     }, [address, name, Utils.formatDomainName, Utils.formatAddress])
 

@@ -73,7 +73,7 @@ export function useMenuConfig(
 
             // when the essential content of currentTarget would be closed over,
             //  we can set the anchorEl with currentTarget's bottom sibling to avoid it.
-            const finalAnchor = anchorSibling ? (element.nextElementSibling as HTMLElement) ?? undefined : element
+            const finalAnchor = anchorSibling ? ((element.nextElementSibling as HTMLElement) ?? undefined) : element
             setAnchorEl(finalAnchor)
             setOpen(true)
             // HACK: it seems like anchor doesn't work correctly

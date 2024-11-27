@@ -131,7 +131,9 @@ export function formatCurrency(
     let result: string = ''
 
     if (
-        bn.lt(customDecimalConfig?.boundary ?? onlyRemainTwoOrZeroDecimal ? assetValueBoundary : sixDecimalBoundary) ||
+        bn.lt(
+            (customDecimalConfig?.boundary ?? onlyRemainTwoOrZeroDecimal) ? assetValueBoundary : sixDecimalBoundary,
+        ) ||
         bn.isZero()
     ) {
         const isLessThanAssetValueDecimalBoundary = bn.lt(assetValueBoundary)

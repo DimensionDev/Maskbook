@@ -70,7 +70,7 @@ export function assetsReducer(state: AssetsReducerState, action: AssetsAction): 
                 draft.assetsMap[storeId].assets =
                     assets.length ?
                         uniqBy([...draft.assetsMap[storeId].assets, ...assets], (x) => `${x.id}.${x.tokenId}`)
-                    :   draft.assetsMap[storeId].assets ?? EMPTY_LIST
+                    :   (draft.assetsMap[storeId].assets ?? EMPTY_LIST)
             })
         case 'SET_VERIFIED':
             return produce(state, (draft) => {

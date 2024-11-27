@@ -25,7 +25,7 @@ export function useCurrentVisitingUser() {
     const identity = useCurrentVisitingIdentity()
     return useAsyncRetry(async () => {
         const userId =
-            location.href.endsWith(identity?.identifier?.userId ?? '') ? identity?.identifier?.userId ?? '' : ''
+            location.href.endsWith(identity?.identifier?.userId ?? '') ? (identity?.identifier?.userId ?? '') : ''
         try {
             if (!userId || userId === '$unknown') return DEFAULT_USER
             const storage = Web3Storage.createKVStorage(PetsPluginID)

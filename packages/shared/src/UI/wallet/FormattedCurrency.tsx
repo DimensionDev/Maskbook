@@ -19,7 +19,7 @@ export function FormattedCurrency({ value = 0, sign, options, formatter = defaul
 
     return (
         <>
-            {formatter(value, rate === 1 ? CurrencyType.USD : sign ?? currentSign, {
+            {formatter(value, rate === 1 ? CurrencyType.USD : (sign ?? currentSign), {
                 ...options,
                 fiatCurrencyRate: rate,
             })}

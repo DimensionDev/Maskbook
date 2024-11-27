@@ -19,7 +19,7 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     const Utils = useWeb3Utils(pluginID)
 
     const showDomain = !!domain && Utils.isValidDomain(domain)
-    const uiLabel = showDomain ? Utils.formatDomainName(domain) : Utils.formatAddress(address, size) ?? address
+    const uiLabel = showDomain ? Utils.formatDomainName(domain) : (Utils.formatAddress(address, size) ?? address)
     const hasEllipsis = showDomain ? uiLabel !== domain : !isSameAddress(uiLabel, address)
     const node = (
         <Typography fontWeight={700} {...rest}>

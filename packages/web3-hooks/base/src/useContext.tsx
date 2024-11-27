@@ -80,13 +80,15 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const location = useLocation()
     const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes(PopupRoutes.Wallet)
     const account =
-        controlled ? props.account : _account ?? props.account ?? (is_popup_wallet_page ? maskAccount : globalAccount)
+        controlled ? props.account : (_account ?? props.account ?? (is_popup_wallet_page ? maskAccount : globalAccount))
     const chainId =
-        controlled ? props.chainId : _chainId ?? props.chainId ?? (is_popup_wallet_page ? maskChainId : globalChainId)
+        controlled ? props.chainId : (_chainId ?? props.chainId ?? (is_popup_wallet_page ? maskChainId : globalChainId))
     const providerType =
         controlled ?
             props.providerType
-        :   _providerType ?? props.providerType ?? (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType)
+        :   (_providerType ??
+            props.providerType ??
+            (is_popup_wallet_page ? ProviderType.MaskWallet : globalProviderType))
 
     const context = useMemo(
         () => ({

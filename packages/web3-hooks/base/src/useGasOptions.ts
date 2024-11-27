@@ -20,6 +20,6 @@ export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
             if (!Utils.isValidChainId(chainId)) return null
             return Hub.getGasOptions!(chainId, options)
         },
-        refetchInterval: live ? Utils.getAverageBlockDelay?.(chainId) ?? 10 : false,
+        refetchInterval: live ? (Utils.getAverageBlockDelay?.(chainId) ?? 10) : false,
     })
 }

@@ -112,7 +112,7 @@ export function GasForm(props: GasFormProps) {
     const [maxFeePerGasByUser, setMaxFeePerGasByUser] = useState<string>()
 
     const errorCenter = useMemo(() => {
-        return isEIP1559 ? errors.gasLimit?.message ?? '' : ''
+        return isEIP1559 ? (errors.gasLimit?.message ?? '') : ''
     }, [isEIP1559, errors.gasLimit?.message])
     const errorBottom = useMemo(() => {
         return (

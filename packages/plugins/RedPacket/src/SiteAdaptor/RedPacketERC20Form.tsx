@@ -178,8 +178,8 @@ export function RedPacketERC20Form(props: RedPacketFormProps) {
         [rawAmount, isRandom, shares],
     )
 
-    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : shares ?? '0'), [amount, shares, isRandom])
-    const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : shares ?? 0), [shares, isRandom])
+    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : (shares ?? '0')), [amount, shares, isRandom])
+    const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : (shares ?? 0)), [shares, isRandom])
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
     useUpdateEffect(() => {

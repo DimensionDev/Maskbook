@@ -20,7 +20,7 @@ function parseNameArea(nameArea: HTMLAnchorElement) {
 
 function postIdParser(node: HTMLElement) {
     const idNode = node.querySelector<HTMLAnchorElement>('m-activity__permalink .m-activityPermalink__wrapper--link')
-    return idNode ? idNode.getAttribute('href')?.split('/')[2] ?? undefined : undefined
+    return idNode ? (idNode.getAttribute('href')?.split('/')[2] ?? undefined) : undefined
 }
 
 function postNameParser(node: HTMLElement) {

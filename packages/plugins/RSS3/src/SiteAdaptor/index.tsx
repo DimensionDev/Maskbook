@@ -124,7 +124,7 @@ const SocialTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
         TabContent({ result }) {
             const socialAccount = {
                 pluginID: NetworkPluginID.PLUGIN_EVM,
-                address: result.type === SearchResultType.Domain ? result.address ?? '' : result.keyword,
+                address: result.type === SearchResultType.Domain ? (result.address ?? '') : result.keyword,
                 label: result.type === SearchResultType.Domain ? result.keyword : '',
                 supportedAddressTypes: [SocialAddressType.ENS],
             }

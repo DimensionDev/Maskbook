@@ -80,7 +80,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
     const { classes } = useStyles()
     const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
     const suffix = domain ? domain.split('.').pop()! : undefined
-    const ChainIcon = suffix ? SuffixToChainIconMap[suffix] ?? Icons.ETH : null
+    const ChainIcon = suffix ? (SuffixToChainIconMap[suffix] ?? Icons.ETH) : null
 
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {

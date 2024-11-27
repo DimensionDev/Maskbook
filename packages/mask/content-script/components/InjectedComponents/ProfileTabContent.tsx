@@ -297,7 +297,7 @@ function Content(props: ProfileTabContentProps) {
         useCollectionByTwitterHandle(profileTabType === ProfileTabs.WEB3 ? currentVisitingUserId : '') ?? EMPTY_LIST
 
     const { data: spaces } = useSnapshotSpacesByTwitterHandle(
-        profileTabType === ProfileTabs.DAO ? currentVisitingUserId ?? '' : '',
+        profileTabType === ProfileTabs.DAO ? (currentVisitingUserId ?? '') : '',
     )
 
     const [currentTrendingIndex, setCurrentTrendingIndex] = useState(0)

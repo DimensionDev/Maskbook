@@ -147,7 +147,7 @@ function normalizeAddEventListenerArgs(
     options?: boolean | AddEventListenerOptions | undefined,
 ): EventListenerDescriptor {
     // https://dom.spec.whatwg.org/#event-flatten-more
-    const capture = $.Boolean(typeof options === 'boolean' ? options : options?.capture ?? false)
+    const capture = $.Boolean(typeof options === 'boolean' ? options : (options?.capture ?? false))
     let once = false
     let passive: boolean | null = null
     let signal: AbortSignal | null = null

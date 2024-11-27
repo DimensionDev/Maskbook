@@ -138,7 +138,7 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
 
         const title =
             progress.status === TransactionStatusType.SUCCEED ?
-                computed.snackbar?.successfulTitle ?? formattedTitle
+                (computed.snackbar?.successfulTitle ?? formattedTitle)
             :   formattedTitle
         showSingletonSnackbar(title, {
             ...resolveSnackbarConfig(progress.status),
@@ -154,7 +154,7 @@ export function useTransactionSnackbar(pluginID: NetworkPluginID) {
                         rel="noopener noreferrer">
                         {format(
                             progress.status === TransactionStatusType.SUCCEED ?
-                                computed.snackbar?.successfulDescription ?? computed.description
+                                (computed.snackbar?.successfulDescription ?? computed.description)
                             :   computed.description,
                         )}{' '}
                         <Icons.LinkOut size={16} sx={{ ml: 0.5 }} />

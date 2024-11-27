@@ -346,7 +346,7 @@ function getMediaObjects(
         | VideoMetadataV3Fragment,
 ) {
     return metadata.__typename !== 'StoryMetadataV3' && metadata.__typename !== 'TextOnlyMetadataV3' ?
-            metadata.attachments?.map((attachment) => {
+            (metadata.attachments?.map((attachment) => {
                 const type = attachment.__typename
                 switch (type) {
                     case 'PublicationMetadataMediaAudio':
@@ -371,7 +371,7 @@ function getMediaObjects(
                             mimeType: '',
                         }
                 }
-            }) ?? undefined
+            }) ?? undefined)
         :   undefined
 }
 

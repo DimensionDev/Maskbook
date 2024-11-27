@@ -3,7 +3,8 @@ import { injectPostReplacer } from '../../../site-adaptor-infra/defaults/inject/
 
 function resolveLangNode(node: HTMLElement) {
     return node.hasAttribute('lang') ? node : (
-            node.querySelector<HTMLDivElement>('[lang]') ?? node.parentElement?.querySelector<HTMLDivElement>('[lang]')
+            (node.querySelector<HTMLDivElement>('[lang]') ??
+                node.parentElement?.querySelector<HTMLDivElement>('[lang]'))
         )
 }
 

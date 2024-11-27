@@ -504,11 +504,11 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
                             address:
                                 x.sale_details.payment_token.payment_token_id.includes('native') ?
                                     ZERO_ADDRESS
-                                :   x.sale_details.payment_token.address ?? '',
+                                :   (x.sale_details.payment_token.address ?? ''),
                             id:
                                 x.sale_details.payment_token.payment_token_id.includes('native') ?
                                     ZERO_ADDRESS
-                                :   x.sale_details.payment_token.address ?? '',
+                                :   (x.sale_details.payment_token.address ?? ''),
                             chainId,
                             schema: SchemaType.ERC20,
                         }

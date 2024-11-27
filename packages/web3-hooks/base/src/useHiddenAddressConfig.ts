@@ -111,5 +111,5 @@ export function hiddenAddressesAdapter(list: string[], accounts: string[]): Reco
 export function getHiddenAddressesOf(config?: AddressData, socialId?: string) {
     if (!config) return EMPTY_LIST
     if (Array.isArray(config)) return config
-    return socialId ? config[socialId] ?? EMPTY_LIST : EMPTY_LIST
+    return socialId ? (config[socialId] ?? EMPTY_LIST) : EMPTY_LIST
 }

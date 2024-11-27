@@ -54,7 +54,7 @@ export function FeedDetailsDialog({ feed, onClose, actionIndex, ...rest }: FeedD
         return {
             address,
             name,
-            ownerDisplay: name ? EVMUtils.formatDomainName(name) : EVMUtils.formatAddress(feed.owner, 4) ?? address,
+            ownerDisplay: name ? EVMUtils.formatDomainName(name) : (EVMUtils.formatAddress(feed.owner, 4) ?? address),
         }
     }, [address, name, EVMUtils.formatDomainName, EVMUtils.formatAddress, feed.owner])
 

@@ -65,7 +65,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
                     // FIXME: cannot get payment token
                     token:
                         asset.last_sale.payment_token?.symbol === 'ETH' ?
-                            EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId]
+                            (EVMChainResolver.nativeCurrency(chainId) ?? WNATIVE[chainId])
                         :   WNATIVE[chainId],
                 }
             :   undefined,

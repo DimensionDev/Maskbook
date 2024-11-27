@@ -67,8 +67,8 @@ export const NFTImage = memo((props: NFTImageProps) => {
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
     const name = token.collection?.name || token.contract?.name
-    const uiTokenId = token.tokenId ? Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}` : name
-    const title = name ? `${name} ${uiTokenId}` : token.metadata?.name ?? ''
+    const uiTokenId = token.tokenId ? (Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`) : name
+    const title = name ? `${name} ${uiTokenId}` : (token.metadata?.name ?? '')
 
     return (
         <Tooltip

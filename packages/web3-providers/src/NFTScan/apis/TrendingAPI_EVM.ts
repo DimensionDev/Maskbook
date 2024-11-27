@@ -229,7 +229,7 @@ class NFTScanTrendingAPI_EVM implements TrendingAPI.Provider<ChainId> {
                 current_price:
                     collection.floor_price ?
                         collection.floor_price.toString()
-                    :   openseaStats?.floorPrice.toString() ?? '',
+                    :   (openseaStats?.floorPrice.toString() ?? ''),
                 floor_price: collection.floor_price?.toString(),
                 owners_count: collection.owners_total,
                 price_symbol: collection.price_symbol || 'ETH',

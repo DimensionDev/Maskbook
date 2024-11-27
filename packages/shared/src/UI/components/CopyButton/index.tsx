@@ -71,7 +71,7 @@ export const CopyButton = memo(function CopyButton({
         [text, scoped],
     )
 
-    const tooltipTitle = copied ? successText ?? <Trans>Copied!</Trans> : title ?? <Trans>Copy</Trans>
+    const tooltipTitle = copied ? (successText ?? <Trans>Copied!</Trans>) : (title ?? <Trans>Copy</Trans>)
     const iconProps = { size, color }
 
     useImperativeHandle(
