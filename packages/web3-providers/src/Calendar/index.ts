@@ -77,7 +77,7 @@ export class Calendar {
         return createPageable(
             events,
             indicator,
-            createNextIndicator(indicator, next && next !== '0' ? next : undefined),
+            next && next !== '0' ? createNextIndicator(indicator, next) : undefined,
         )
     }
     static async getEventList(start_date: number, end_date: number, indicator?: PageIndicator) {
@@ -97,7 +97,7 @@ export class Calendar {
         return createPageable(
             events,
             indicator,
-            createNextIndicator(indicator, next && next !== '0' ? next : undefined),
+            next && next !== '0' ? createNextIndicator(indicator, next) : undefined,
         )
     }
     static async getAvailableDates(type: EventProvider, start_date: number, end_date: number) {

@@ -23,9 +23,12 @@ const useStyles = makeStyles()((theme) => ({
     },
     iconContainer: {
         position: 'absolute',
-        top: 'calc(50% - 10px)',
-        left: 'calc(50% - 10px)',
-        color: theme.palette.maskColor.main,
+        inset: '0',
+        margin: 'auto',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        pointerEvents: 'none',
     },
 }))
 
