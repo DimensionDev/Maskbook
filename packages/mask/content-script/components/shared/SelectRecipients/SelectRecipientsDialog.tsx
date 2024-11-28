@@ -17,7 +17,7 @@ import {
     Typography,
     alpha,
 } from '@mui/material'
-import { attachNextIDToProfile } from '../../../../shared/index.js'
+import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
 import { ProfileInList } from './ProfileInList.js'
 import { Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'

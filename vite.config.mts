@@ -1,6 +1,7 @@
 import { defineConfig } from 'vitest/config'
+import { fileURLToPath } from 'url'
 
-const resolve = (spec: string) => new URL(import.meta.resolve(spec)).pathname
+const resolve = (spec: string) => fileURLToPath(new URL(import.meta.resolve(spec)))
 export default defineConfig({
     test: {
         include: ['./packages/**/tests/**/*.ts'],

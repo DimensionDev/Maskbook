@@ -483,6 +483,11 @@ const moduleSystemRules = {
                     message: 'Background cannot import Ui specific code.',
                 },
                 {
+                    target: './packages/mask/shared/**',
+                    from: './packages/mask/shared-ui/',
+                    message: 'packages/mask/shared cannot import services. Move it to packages/mask/shared-ui instead.',
+                },
+                {
                     target: './packages/mask/!(background)/**',
                     from: './packages/mask/background/',
                     message: 'Use Services.* instead.',
@@ -623,6 +628,23 @@ export default tseslint.config(
         files: ['packages/**/tests/**/*.ts'],
         rules: {
             'unicorn/consistent-function-scoping': 'off',
+        },
+    },
+    {
+        files: ['packages/mask/shared/**/*.ts', 'packages/mask/shared/**/*.tsx'],
+        rules: {
+            '@typescript-eslint/no-restricted-imports': [
+                'error',
+                {
+                    paths: [
+                        {
+                            name: '#services',
+                            message:
+                                'packages/mask/shared cannot import services. Move it to packages/mask/shared-ui instead.',
+                        },
+                    ],
+                },
+            ],
         },
     },
     {

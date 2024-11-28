@@ -15,7 +15,7 @@ import {
 import { CopyButton, PersonaContext } from '@masknet/shared'
 import Services from '#services'
 import { ConnectedAccounts } from './ConnectedAccounts/index.js'
-import { attachNextIDToProfile } from '../../../../shared/index.js'
+import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
 import { type Profile } from '../common.js'
 import { Trans } from '@lingui/macro'

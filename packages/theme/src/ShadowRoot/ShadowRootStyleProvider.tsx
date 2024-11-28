@@ -47,6 +47,8 @@ function getShadowRootEmotionCache(shadow: ShadowRoot) {
 
     const muiEmotionCache = createEmotionCache({ key })
     const muiStyleSheet = new StyleSheet({ key, container: shadow })
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     muiEmotionCache.sheet = muiStyleSheet
 
     styleSheetMap.set(shadow, [muiEmotionCache, muiStyleSheet])

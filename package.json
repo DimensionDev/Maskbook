@@ -24,7 +24,7 @@
     "lint:ci-report": "pnpm run lint:ci --format=junit --output-file=reports/junit/eslint-results.xml --max-warnings=0",
     "prepare": "husky",
     "svgo": "svgo packages/icons/*/*.svg",
-    "test": "vitest --pool=forks",
+    "test": "vitest",
     "spellcheck": "cspell lint --no-must-find-files",
     "clean": "npx gulp clean",
     "lingui:compile": "npx gulp lingui-compile",
@@ -92,7 +92,7 @@
     "svgo": "^3.3.2",
     "typescript": "5.7.2",
     "typescript-eslint": "^8.16.0",
-    "vite": "^6.0.1",
+    "vite": "^5.1.8",
     "vitest": "^2.1.6"
   },
   "pnpm": {
