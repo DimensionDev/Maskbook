@@ -13,7 +13,14 @@ export function useNftRedPacketHistory(address: string, chainId: ChainId) {
     const { NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT, RED_PACKET_NFT_ADDRESS } = getNftRedPacketConstants(chainId)
     const isOwner = !!wallet?.owner
     return useQuery({
-        queryKey: ['nft-redpacket-histories', chainId, RED_PACKET_NFT_ADDRESS, address, isOwner],
+        queryKey: [
+            'nft-redpacket-histories',
+            chainId,
+            RED_PACKET_NFT_ADDRESS,
+            address,
+            isOwner,
+            NFT_RED_PACKET_ADDRESS_BLOCK_HEIGHT,
+        ],
         queryFn: async () => {
             if (!RED_PACKET_NFT_ADDRESS) return EMPTY_LIST as NftRedPacketJSONPayload[]
             if (isOwner) {

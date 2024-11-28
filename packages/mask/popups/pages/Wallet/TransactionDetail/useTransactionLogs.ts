@@ -2,7 +2,7 @@ import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { useMemo } from 'react'
 import { format } from 'date-fns'
 import type { TransactionState } from './types.js'
-import { useQuery } from '@tanstack/react-query'
+import { skipToken, useQuery } from '@tanstack/react-query'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
@@ -18,15 +18,13 @@ export function useTransactionLogs(transactionState: TransactionState) {
     const { _ } = useLingui()
     const account = useAccount(NetworkPluginID.PLUGIN_EVM)
     const { Transaction } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
+    const chainId = transactionState?.chainId
     const { data: txes } = useQuery({
         enabled: transactionState && !('candidates' in transactionState),
         // Could already be cached through ActivityList page.
-        queryKey: ['transactions', transactionState?.chainId, account],
+        queryKey: ['transactions', chainId, account],
         networkMode: 'always',
-        queryFn: async () => {
-            if (!transactionState?.chainId) return
-            return Transaction?.getTransactions?.(transactionState.chainId, account) ?? EMPTY_LIST
-        },
+        queryFn: chainId ? async () => Transaction?.getTransactions?.(chainId, account) ?? EMPTY_LIST : skipToken,
     })
     const logs = useMemo(() => {
         if (!transactionState) return EMPTY_LIST

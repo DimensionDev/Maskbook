@@ -29,6 +29,7 @@ export function useNonFungibleAssets<T extends NetworkPluginID = NetworkPluginID
         return blockedTokens.filter((x) => availableChainIds.includes(x.chainId)).map((x) => x.id)
     }, [blockedTokens, availableChainIds])
     return useInfiniteQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['non-fungible-assets', account, availableChainIds, blockedTokenIds],
         initialPageParam: undefined as
             | {

@@ -29,6 +29,7 @@ export function useCreateRedPacketReceipt(txHash: string, chainId: ChainId) {
     const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
 
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['redpacket', 'creation-success-params', chainId, txHash],
         queryFn: async () => {
             if (!txHash || !Web3) return null

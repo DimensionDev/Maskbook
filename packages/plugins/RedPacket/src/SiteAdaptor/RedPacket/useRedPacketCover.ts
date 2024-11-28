@@ -10,6 +10,7 @@ export function useRedPacketCover(payload: RedPacketJSONPayload, availability: A
     const token = payload.token
     const { data } = useQuery({
         enabled: !!availability && !!payload.rpid && !!token?.symbol,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['red-packet', 'theme-id', payload.rpid, availability?.balance, availability?.claimed],
         queryFn: async () => {
             if (!token || !availability) return null

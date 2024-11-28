@@ -10,6 +10,7 @@ export function useApr(protocol: SavingsProtocol, enabled: boolean) {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: ChainId.Mainnet })
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['savings', 'apr', chainId, isAAve ? protocol.bareToken.address : 'lido'],
         enabled: enabled && !!web3,
         queryFn: () => protocol.getApr(chainId, web3!),
@@ -20,6 +21,7 @@ export function useBalance(protocol: SavingsProtocol, enabled: boolean) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const web3 = useWeb3(NetworkPluginID.PLUGIN_EVM, { chainId })
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['savings', 'balance', chainId, protocol.bareToken.address, account],
         enabled: enabled && !!web3,
         queryFn: () => protocol.getBalance(chainId, web3!, account),

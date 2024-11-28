@@ -16,6 +16,7 @@ export function useRedpacketToken(chainId: ChainId, hash: string, enabled?: bool
     const inputs = HappyRedPacketV4ABI!.find((x) => x.name === 'CreationSuccess' && x.type === 'event')?.inputs
     return useQuery({
         enabled,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['redpacket', 'token', chainId, hash],
         queryFn: async () => {
             const receipt = await web3Conn.getTransactionReceipt(hash)

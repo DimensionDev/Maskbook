@@ -37,8 +37,7 @@ const deferPackages = [
 
 const avoidMistakeRules = {
     // Libraries
-    // https://github.com/TanStack/query/issues/8357
-    // '@tanstack/query/exhaustive-deps': 'error', // avoid unstable results from the hook being deps
+    '@tanstack/query/exhaustive-deps': 'error', // avoid unstable results from the hook being deps
     '@tanstack/query/stable-query-client': 'error',
     '@tanstack/query/infinite-query-property-order': 'warn', // help TypeScript to infer type correctly
     '@tanstack/query/no-rest-destructuring': 'error',

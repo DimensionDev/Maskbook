@@ -12,7 +12,7 @@ interface Balance {
 export function useUserTokenBalances(chainId: ChainId, account: string, enabled = true) {
     return useQuery({
         enabled,
-        queryKey: ['token-balances', account],
+        queryKey: ['token-balances', account, chainId],
         queryFn: async () => {
             const assets = await OKX.getUserTokenBalances(chainId, account)
             if (!assets.length) return null

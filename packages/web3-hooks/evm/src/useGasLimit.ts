@@ -22,7 +22,7 @@ export function useGasLimit(
     }
 
     return useQuery({
-        queryKey: ['gas-limit', chainId, schemaType, account, recipient, tokenId, amount],
+        queryKey: ['gas-limit', chainId, schemaType, account, recipient, tokenId, amount, contractAddress],
         queryFn: async () => {
             if (!recipient || schemaType === undefined) return 0
             if ((schemaType === SchemaType.ERC20 && !amount) || !contractAddress) return 0

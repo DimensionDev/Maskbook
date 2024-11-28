@@ -68,12 +68,13 @@ export function CheckSecurityDialog({ open, onClose, searchHidden, chainId, toke
     )
 
     const { data: tokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, value?.contract, { chainId })
+    const contract = value?.contract
     const { data: tokenMarketCap } = useQuery({
-        queryKey: ['coingecko', 'market-info', value?.contract, value?.token_symbol],
+        queryKey: ['coingecko', 'market-info', contract, value?.token_symbol],
         queryFn:
-            value?.contract && value.token_symbol && !searching ?
+            contract && value.token_symbol && !searching ?
                 async () => {
-                    const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(value.contract)
+                    const marketInfo = await CoinGeckoTrending.getCoinMarketInfo(contract)
                     return marketInfo?.market_cap ? toNumber(marketInfo.market_cap) : null
                 }
             :   skipToken,

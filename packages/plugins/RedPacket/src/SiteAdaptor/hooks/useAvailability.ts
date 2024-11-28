@@ -17,6 +17,7 @@ export function useAvailability(
     })
     const redPacketContract = useRedPacketContract(chainId, version) as HappyRedPacketV4
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['red-packet', 'check-availability', chainId, version, id, account],
         queryFn: async () => {
             if (!id || !redPacketContract) return null

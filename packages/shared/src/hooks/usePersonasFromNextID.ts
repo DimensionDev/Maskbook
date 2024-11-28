@@ -13,7 +13,7 @@ export function usePersonasFromNextID(
     exact?: boolean,
 ): UseQueryResult<NextIDPersonaBindings[]> {
     const result = useQuery({
-        queryKey: ['next-id', 'personas', userId],
+        queryKey: ['next-id', 'personas', userId, platform, exact],
         queryFn: async () => {
             if (!platform || !userId) return EMPTY_LIST
             return NextIDProof.queryAllExistedBindingsByPlatform(platform, userId, exact)

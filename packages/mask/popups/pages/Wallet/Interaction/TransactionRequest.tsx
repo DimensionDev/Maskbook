@@ -92,6 +92,7 @@ export function TransactionRequest(props: InteractionItemProps) {
         const client = useQueryClient()
         const queryKey = ['popup', 'wallet', 'interaction', request.ID, chainId]
         ;({ data: transaction } = useSuspenseQuery({
+            // eslint-disable-next-line @tanstack/query/exhaustive-deps
             queryKey,
             networkMode: 'always',
             queryFn: async (): Promise<TransactionDetail> => {

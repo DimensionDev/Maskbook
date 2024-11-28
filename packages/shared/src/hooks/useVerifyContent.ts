@@ -17,14 +17,15 @@ import { useBaseUIRuntime } from '../UI/contexts/index.js'
 export function useVerifyContent(personaIdentifier: PersonaIdentifier | undefined, userId: string) {
     const { networkIdentifier } = useBaseUIRuntime()
 
+    const publicKeyAsHex = personaIdentifier?.publicKeyAsHex
     return useQuery({
-        queryKey: ['create-persona-payload', personaIdentifier?.publicKeyAsHex, userId, networkIdentifier],
+        queryKey: ['create-persona-payload', publicKeyAsHex, userId, networkIdentifier, personaIdentifier],
         networkMode: 'always',
         queryFn: async () => {
             const platform = resolveNetworkToNextIDPlatform(networkIdentifier)
-            if (!personaIdentifier?.publicKeyAsHex || !platform) return null
+            if (!publicKeyAsHex || !platform) return null
             const payload = await NextIDProof.createPersonaPayload(
-                personaIdentifier.publicKeyAsHex,
+                publicKeyAsHex,
                 NextIDAction.Create,
                 userId,
                 platform,

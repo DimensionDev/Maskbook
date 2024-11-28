@@ -11,7 +11,7 @@ export function useCoinGeckoCoinId(chainId: ChainId, address?: string) {
     const isNativeToken = isNativeTokenAddress(address)
     const erc20CoinId = useQuery({
         enabled: !isNativeToken && !!address,
-        queryKey: ['coin-gecko', 'coin-id', 'by-address', address],
+        queryKey: ['coin-gecko', 'coin-id', 'by-address', address, chainId],
         queryFn: async () => {
             const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address!, chainId)
             return coinInfo?.id

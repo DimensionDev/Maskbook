@@ -11,6 +11,7 @@ export function usePersistSubscription<T>(
     predicate?: (data: T) => boolean,
 ): T {
     const { data, refetch } = useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [persistKey],
         networkMode: 'always',
         queryFn: () => {

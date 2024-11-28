@@ -19,6 +19,7 @@ export function useCreateNFTRedpacketGas(
 
     const { account: publicKey } = useMemo(() => EVMWeb3.createAccount(), [])
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [
             'create-nft-red-packet',
             'gas',

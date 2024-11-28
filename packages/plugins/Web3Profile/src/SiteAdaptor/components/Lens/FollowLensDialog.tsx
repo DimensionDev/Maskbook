@@ -154,8 +154,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { isPending, data: isFollowing } = useQuery({
         queryKey: ['lens', 'following-status', currentProfileId, handle, targetProfileId],
         queryFn: async () => {
-            if (!targetProfileId || !currentProfile) return false
-            const result = await Lens.queryFollowStatus(currentProfile.id, targetProfileId)
+            if (!targetProfileId || !currentProfileId) return false
+            const result = await Lens.queryFollowStatus(currentProfileId, targetProfileId)
             return result
         },
         refetchOnWindowFocus: false,

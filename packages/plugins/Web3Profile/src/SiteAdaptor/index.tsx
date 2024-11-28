@@ -73,7 +73,7 @@ const site: Plugin.SiteAdaptor.Definition = {
 
                 const handle = accounts[0]?.handle
                 const { data: nextIdLens = EMPTY_LIST } = useQuery({
-                    queryKey: ['next-id', 'all-lens', userId],
+                    queryKey: ['next-id', 'all-lens', userId, handle],
                     enabled: isProfile && !!handle && !!accounts.length,
                     queryFn: async () => {
                         const lensAccounts = await NextIDProof.queryAllLens(handle)

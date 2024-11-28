@@ -25,6 +25,7 @@ export function useHiddenAddressConfig(
     signWithPersona: WalletAPI.SignWithPersona,
 ) {
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['next-id', 'hidden-address', pluginID, personaPubkey],
         enabled: Boolean(personaPubkey && pluginID),
         queryFn: async () => {

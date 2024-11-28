@@ -49,6 +49,7 @@ function usePersonaContext(initialState?: {
 
     const { data: avatar, refetch: refetchAvatar } = useQuery({
         enabled: !!currentPersona,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['@@persona', 'avatar', currentPersona?.identifier.rawPublicKey],
         queryFn: async (): Promise<string | null> => {
             if (!initialState?.queryPersonaAvatarLastUpdateTime || !initialState.queryPersonaAvatar)

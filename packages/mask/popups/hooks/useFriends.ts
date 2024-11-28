@@ -16,10 +16,12 @@ export interface Friend {
 export function useFriendsPaged() {
     const currentPersona = useCurrentPersona()
 
+    const rawPublicKey = currentPersona?.identifier.rawPublicKey
     const relationQuery = useQuery({
-        queryKey: ['relation-records', currentPersona?.identifier.rawPublicKey],
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
+        queryKey: ['relation-records', rawPublicKey],
         queryFn: async () => {
-            if (!currentPersona) return EMPTY_LIST
+            if (!rawPublicKey) return EMPTY_LIST
             return Services.Identity.queryRelationPaged(
                 currentPersona?.identifier,
                 {

@@ -79,6 +79,7 @@ export function useTrendingById(
         data: coinTrending,
         error,
     } = useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['get-coin-trending', result, currency?.id],
         queryFn: async () => {
             if (!currency || !result.source) return null

@@ -6,6 +6,7 @@ import { useQuery } from '@tanstack/react-query'
 export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: ChainId) {
     const nftRedPacketContract = useNftRedPacketContract(chainId)
     return useQuery({
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['nft-redpacket', 'availability', chainId, from, id],
         enabled: !!nftRedPacketContract,
         queryFn: async () => {

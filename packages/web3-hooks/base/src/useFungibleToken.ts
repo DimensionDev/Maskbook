@@ -23,6 +23,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
 
     return useQuery({
         enabled: !!address,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['fungible-token', pluginID, address, chainId, options],
         queryFn: async () => {
             return attemptUntil(

@@ -21,6 +21,7 @@ export function useSocialAddressesAll(
 
     return useQuery({
         enabled: !!identity && userId !== '$unknown',
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['all-social-addresses', userId, identity, includes],
         queryFn: async () => {
             const allSettled = await Promise.allSettled<AddressList>(

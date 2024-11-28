@@ -7,7 +7,7 @@ import {
     type PersonaIdentifier,
 } from '@masknet/shared-base'
 import { useValueRef, createContainer } from '@masknet/shared-base-ui'
-import { useQuery } from '@tanstack/react-query'
+import { skipToken, useQuery } from '@tanstack/react-query'
 import { useEffect, useMemo, useState } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
@@ -31,11 +31,9 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
         refetch,
     } = useQuery({
         enabled: !!persona?.publicKeyAsHex,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['query-persona-info', persona?.publicKeyAsHex],
-        queryFn: async () => {
-            if (!persona?.publicKeyAsHex) return null
-            return Services.Identity.queryPersona(persona)
-        },
+        queryFn: persona ? async () => Services.Identity.queryPersona(persona) : skipToken,
     })
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
     const { data: currentTabId } = useQuery({
