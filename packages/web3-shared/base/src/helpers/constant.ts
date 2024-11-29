@@ -58,10 +58,10 @@ export function transformAllHook<ChainId extends number, T>(getConstants: (chain
     }
 }
 
-export function transformHook<ChainId extends number, T, K extends keyof T>(
+export function transformHook<ChainId extends number, const T, const K extends keyof T>(
     getConstant: (chainId: ChainId) => Partial<T>,
 ) {
-    return function useConstant(chainId: ChainId = 1 as ChainId, key?: K, fallback?: T[K]) {
+    return function useConstant<F extends K>(chainId: ChainId = 1 as ChainId, key?: F, fallback?: T[F]) {
         return useMemo(() => {
             if (!key) return fallback
             return getConstant(chainId)[key] ?? fallback
