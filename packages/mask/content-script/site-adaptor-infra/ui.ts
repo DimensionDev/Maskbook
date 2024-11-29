@@ -54,8 +54,14 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
         sharedUIComponentOverwrite.value = ui.customization.sharedComponentOverwrite
     }
 
-    console.log('[Mask] Provider activated. globalThis.ui =', ui)
+    console.log(
+        '[Mask] Provider activated. globalThis.ui =',
+        ui,
+        'globalThis.currentPosts =',
+        ui.collecting.postsProvider?.posts,
+    )
     setDebugObject('ui', ui)
+    setDebugObject('currentPosts', ui.collecting.postsProvider?.posts)
 
     const abort = new AbortController()
     const { signal } = abort
