@@ -1,7 +1,5 @@
 import {
     NetworkPluginID,
-    NextIDPlatform,
-    PluginID,
     SocialAddressType,
     createLookupTableResolver,
     type SocialAddress,
@@ -14,7 +12,6 @@ import { BaseMaskX } from '../../../entry-types.js'
 import * as Firefly from /* webpackDefer: true */ '../../../Firefly/index.js'
 import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
 import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
-import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
@@ -71,22 +68,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             }
         }
         return
-    }
-
-    /** Read a social address from avatar NextID storage. */
-    private async getSocialAddressFromAvatarNextID({ identifier, publicKey }: SocialIdentity) {
-        const userId = identifier?.userId
-        if (!userId || !publicKey) return
-
-        const response = await NextIDStorageProvider.NextIDStorageProvider.getByIdentity<{ ownerAddress?: string }>(
-            publicKey,
-            NextIDPlatform.Twitter,
-            userId.toLowerCase(),
-            PluginID.Avatar,
-        )
-
-        if (!response.isOk() || !response.value.ownerAddress) return
-        return this.createSocialAddress(SocialAddressType.Mask, response.value.ownerAddress)
     }
 
     /** Read a social address from nickname, bio if them contain a ENS. */
@@ -160,7 +141,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromENS(identity),
-            this.getSocialAddressFromAvatarNextID(identity),
             socialAddressFromMaskX,
             this.getSocialAddressFromLens(identity),
         ])
