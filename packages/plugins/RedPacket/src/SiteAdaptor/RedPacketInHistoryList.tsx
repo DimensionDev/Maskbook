@@ -50,7 +50,7 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         contentItem: {
             width: '100%',
             borderRadius: 8,
-            position: 'static !important' as any,
+            position: 'relative',
             height: 'auto !important',
             padding: theme.spacing(1.5),
             background: listItemBackground || DEFAULT_BACKGROUND,
@@ -58,9 +58,10 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 padding: theme.spacing(2, 1.5),
             },
             '&:before': {
+                pointerEvents: 'none',
                 position: 'absolute',
                 content: '""',
-                top: 45,
+                bottom: 0,
                 left: 400,
                 zIndex: 0,
                 width: 114,
