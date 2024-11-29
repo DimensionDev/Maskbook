@@ -11,7 +11,7 @@ import {
     isNativeTokenAddress,
     NETWORK_DESCRIPTORS,
     SchemaType,
-    useRedPacketConstants,
+    useRedPacketConstant,
 } from '@masknet/web3-shared-evm'
 import { Box, ListItem, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -186,10 +186,10 @@ export const RedPacketInHistoryList = memo(function RedPacketInHistoryList(props
     const { data: tokenAddress } = useRedpacketToken(chainId, history.trans_hash, seen && token_symbol === 'MATIC')
     const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress, undefined, { chainId })
     const tokenSymbol = token?.symbol ?? token_symbol
-    const contractAddress = useRedPacketConstants(chainId).HAPPY_RED_PACKET_ADDRESS_V4
+    const contractAddress = useRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
     const { data: redpacketRecord } = useQuery({
         queryKey: ['redpacket', 'by-tx-hash', history.trans_hash],
-        queryFn: async () => RedPacketRPC.getRedPacketRecord(history.trans_hash),
+        queryFn: () => RedPacketRPC.getRedPacketRecord(history.trans_hash),
     })
     const { data: createSuccessResult } = useCreateRedPacketReceipt(history.trans_hash, chainId)
     const isViewStatus = redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View
