@@ -15,6 +15,7 @@ import {
     type TypedMessageImage,
 } from '@masknet/typed-message'
 import { collectNodeText, collectTwitterEmoji } from '../../../utils/index.js'
+import { IMAGE_RENDER_IGNORE } from '../customization/render-fragments.js'
 
 /**
  * Get post id from dom, including normal tweet, quoted tweet and retweet one
@@ -175,16 +176,24 @@ function getElementStyle(element: Element | null): Meta | undefined {
     return undefined
 }
 
-export async function postImagesParser(node: HTMLElement): Promise<string[]> {
+export async function postImagesParser(node: HTMLElement): Promise<TypedMessageImage[]> {
     const isQuotedTweet = !!node.closest('div[role="link"]')
     const imgNodes = node.querySelectorAll<HTMLImageElement>('img[src*="twimg.com/media"]')
     if (!imgNodes.length) return []
-    const imgUrls = Array.from(imgNodes)
+    const tms = Array.from(imgNodes)
         .filter((node) => isQuotedTweet || !node.closest('div[role="link"]'))
-        .flatMap((node) => normalizeImageURL(node.getAttribute('src') ?? ''))
-        .filter(Boolean)
-    if (!imgUrls.length) return []
-    return imgUrls
+        .flatMap((node) => {
+            let src = normalizeImageURL(node.getAttribute('src') ?? '')
+            if (Array.isArray(src)) src = src.filter(Boolean)
+            if (!src.length) return []
+            // TODO: the parser may return 2 different URLs for png and jpeg
+            return makeTypedMessageImage(
+                Array.isArray(src) ? src[0] : src,
+                { width: node.width, height: node.height },
+                new Map([[IMAGE_RENDER_IGNORE, true]]),
+            )
+        })
+    return tms
 }
 
 export function postParser(node: HTMLElement) {

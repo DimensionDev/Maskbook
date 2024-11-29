@@ -26,7 +26,13 @@ export const TypedMessageImageRender = memo(function TypedMessageImageRender(pro
 
     return (
         <>
-            <Image style={Object(props.meta?.get(unstable_STYLE_META))} src={finalSrc} width={width} height={height} />
+            <Image
+                style={Object(props.meta?.get(unstable_STYLE_META))}
+                src={finalSrc}
+                width={width}
+                height={height}
+                meta={props.meta}
+            />
             {meta}
         </>
     )

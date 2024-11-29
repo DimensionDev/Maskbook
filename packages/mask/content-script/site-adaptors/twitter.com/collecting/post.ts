@@ -7,7 +7,6 @@ import {
     FlattenTypedMessage,
     extractTextFromTypedMessage,
     makeTypedMessageEmpty,
-    makeTypedMessageImage,
     makeTypedMessagePromise,
     makeTypedMessageTuple,
     makeTypedMessageTupleFromList,
@@ -191,9 +190,12 @@ function collectPostInfo(
     // don't add await on this
     const images = untilElementAvailable(postsImageSelector(tweetNode), 10000)
         .then(() => postImagesParser(tweetNode))
-        .then((urls) => {
-            for (const url of urls) info.postMetadataImages.add(url)
-            if (urls.length) return makeTypedMessageTupleFromList(...urls.map((x) => makeTypedMessageImage(x)))
+        .then((images) => {
+            for (const image of images) {
+                if (typeof image.image === 'string') info.postMetadataImages.add(image.image)
+            }
+            if (images.length === 1) return images[0]
+            if (images.length) return makeTypedMessageTupleFromList(...images)
             return makeTypedMessageEmpty()
         })
         .catch(() => makeTypedMessageEmpty())

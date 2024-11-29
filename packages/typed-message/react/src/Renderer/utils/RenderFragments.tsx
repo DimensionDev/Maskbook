@@ -1,5 +1,6 @@
 import { createContext, memo } from 'react'
 import type { MetadataRenderProps } from '../MetadataRender.js'
+import type { Meta } from '@masknet/typed-message'
 
 export const DefaultRenderFragments = {
     Text: memo(function TextFragment(props: RenderFragmentsContextType.TextProps) {
@@ -72,6 +73,7 @@ export declare namespace RenderFragmentsContextType {
         width?: number
         height?: number
         aspectRatio?: number
+        meta?: Meta
     }
 }
 export const RenderFragmentsContext = createContext<RenderFragmentsContextType>(DefaultRenderFragments)
