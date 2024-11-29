@@ -33,23 +33,22 @@ export function MentionLink({ platform, profileId, handle }: MentionLinkProps) {
     const { data: twitterHandle, isLoading } = useQuery({
         enabled: isTwitter && !handle,
         queryKey: ['twitter-user-info', profileId],
-        queryFn: async () => {
-            return FireflyTwitter.getUserInfoById(profileId)
-        },
+        queryFn: () => FireflyTwitter.getUserInfoById(profileId),
         select(data) {
             return data?.username
         },
     })
 
+    const screenName = isTwitter ? twitterHandle || handle : handle
     if (isLoading) return <LoadingBase size={12} />
 
-    if (!handle) return <span>the creator</span>
+    if (!screenName) return <span>the creator</span>
 
     return (
         <Link
             href={resolveProfileUrl(
                 platform,
-                platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : handle,
+                platform === FireflyRedPacketAPI.PlatformType.farcaster ? profileId : screenName,
             )}
             target="_blank"
             className={classes.textLink}>
