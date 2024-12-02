@@ -1,4 +1,3 @@
-import { Environment, isEnvironment } from '@dimensiondev/holoflows-kit'
 import { defer } from '@masknet/kit'
 
 export interface BuildInfoFile {
@@ -13,19 +12,8 @@ export interface BuildInfoFile {
 }
 
 export async function getBuildInfo(): Promise<BuildInfoFile> {
-    try {
-        const hasBrowserAPI = isEnvironment(Environment.HasBrowserAPI)
-        const b = (globalThis as any).browser
-        const manifestVersion = hasBrowserAPI ? b.runtime.getManifest().version : undefined
-        const response = await fetch(hasBrowserAPI ? b.runtime.getURL('/build-info.json') : '/build-info.json')
-        const env: BuildInfoFile = await response.json()
-        if (manifestVersion) Object.assign(env, { VERSION: manifestVersion })
-        Object.freeze(env)
-        return env
-    } catch {
-        return {
-            channel: 'stable',
-        }
+    return {
+        channel: 'stable',
     }
 }
 export let env: BuildInfoFile = {
