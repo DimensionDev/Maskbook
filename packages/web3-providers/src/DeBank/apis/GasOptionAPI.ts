@@ -1,14 +1,15 @@
 import urlcat from 'urlcat'
 import { GasOptionType, toFixed } from '@masknet/web3-shared-base'
-import { type ChainId, getDeBankConstants, type GasOption } from '@masknet/web3-shared-evm'
+import { type ChainId, type GasOption } from '@masknet/web3-shared-evm'
 import type { GasPriceResponse } from '../types.js'
 import { DEBANK_OPEN_API } from '../constants.js'
 import { fetchSquashedJSON } from '../../helpers/fetchJSON.js'
 import type { BaseGasOptions } from '../../entry-types.js'
+import { getDebankChain } from '../helpers.js'
 
 class DeBankGasOptionAPI implements BaseGasOptions.Provider<ChainId, GasOption> {
     async getGasOptions(chainId: ChainId): Promise<Record<GasOptionType, GasOption>> {
-        const { CHAIN_ID } = getDeBankConstants(chainId)
+        const CHAIN_ID = getDebankChain(chainId)
         if (!CHAIN_ID) throw new Error('Failed to get gas price.')
 
         const result = await fetchSquashedJSON<GasPriceResponse>(

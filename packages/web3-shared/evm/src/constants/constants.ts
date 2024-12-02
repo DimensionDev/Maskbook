@@ -4,7 +4,6 @@ import Arb from '@masknet/web3-constants/evm/arb.json' with { type: 'json' }
 import ArtBlocks from '@masknet/web3-constants/evm/artblocks.json' with { type: 'json' }
 import CoinGecko from '@masknet/web3-constants/evm/coingecko.json' with { type: 'json' }
 import CryptoPunks from '@masknet/web3-constants/evm/cryptopunks.json' with { type: 'json' }
-import DeBank from '@masknet/web3-constants/evm/debank.json' with { type: 'json' }
 import ENS from '@masknet/web3-constants/evm/ens.json' with { type: 'json' }
 import Ethereum from '@masknet/web3-constants/evm/ethereum.json' with { type: 'json' }
 import Etherscan from '@masknet/web3-constants/evm/etherscan.json' with { type: 'json' }
@@ -45,11 +44,6 @@ export const getEthereumConstant = transform(ChainId, Ethereum)
 export const getEthereumConstants = transformAll(ChainId, Ethereum)
 export const useEthereumConstant = transformHook(getEthereumConstants)
 export const useEthereumConstants = transformAllHook(getEthereumConstants)
-
-export const getDeBankConstant = transform(ChainId, DeBank)
-export const getDeBankConstants = transformAll(ChainId, DeBank)
-export const useDeBankConstant = transformHook(getDeBankConstants)
-export const useDeBankConstants = transformAllHook(getDeBankConstants)
 
 export const getCoinGeckoConstant = transform(ChainId, CoinGecko)
 export const getCoinGeckoConstants = transformAll(ChainId, CoinGecko)

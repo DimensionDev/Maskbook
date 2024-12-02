@@ -1,21 +1,21 @@
+import { Trans } from '@lingui/macro'
 import { FormattedCurrency, NetworkIcon, ProgressiveText, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useFungibleTokenBalance, useNetworks, useWallet } from '@masknet/web3-hooks-base'
+import { getDebankChain } from '@masknet/web3-providers'
 import { formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
 import { range } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { formatTokenBalance } from '../../../../../shared/index.js'
+import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
 import { useAssetExpand, useWalletAssets } from '../../hooks/index.js'
 import { MoreBar } from './MoreBar.js'
-import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
-import { CHAIN_ID_TO_DEBANK_CHAIN_MAP } from '@masknet/web3-providers'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -100,7 +100,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    const tryRpc = network?.chainId ? !CHAIN_ID_TO_DEBANK_CHAIN_MAP[network.chainId] && seen : false
+    const tryRpc = network?.chainId ? !getDebankChain(network.chainId) && seen : false
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,

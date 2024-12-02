@@ -21,11 +21,28 @@ import {
 import { EVMChainResolver } from '../Web3/EVM/apis/ResolverAPI.js'
 import {
     DebankTransactionDirection,
+    type DebankChains,
     type HistoryResponse,
     type TransferringAsset,
     type WalletTokenRecord,
 } from './types.js'
-import { DEBANK_CHAIN_TO_CHAIN_ID_MAP } from './constants.js'
+import { CHAIN_ID_TO_DEBANK_CHAIN_MAP, DEBANK_CHAIN_TO_CHAIN_ID_MAP } from './constants.js'
+
+export function getChainIdByDebankChain(chain: DebankChains) {
+    const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[chain]
+    if (process.env.NODE_ENV === 'development' && !chainId) {
+        console.warn('[Debank] no matching chainId for chain', chain)
+    }
+    return chainId
+}
+
+export function getDebankChain(chainId: number) {
+    const chain = CHAIN_ID_TO_DEBANK_CHAIN_MAP[chainId]
+    if (process.env.NODE_ENV === 'development' && !chain) {
+        console.warn('[Debank] no matching chainId', chainId)
+    }
+    return chain
+}
 
 export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<ChainId, SchemaType>> {
     const resolveNativeAddress = memoize((chainId: ChainId) => {
@@ -38,9 +55,9 @@ export function formatAssets(data: WalletTokenRecord[]): Array<FungibleAsset<Cha
     })
 
     return data
-        .filter((x) => DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain])
+        .filter((x) => getChainIdByDebankChain(x.chain))
         .map((x) => {
-            const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[x.chain]
+            const chainId = getChainIdByDebankChain(x.chain)
             const address = x.id in DEBANK_CHAIN_TO_CHAIN_ID_MAP ? resolveNativeAddress(chainId) : x.id
 
             return {
@@ -123,7 +140,7 @@ export function formatTransactions(
             txType = 'contract interaction'
         }
 
-        const chainId = DEBANK_CHAIN_TO_CHAIN_ID_MAP[transaction.chain]
+        const chainId = getChainIdByDebankChain(transaction.chain)
         if (!chainId) return
 
         if (isSameAddress(transaction.sends[0]?.to_addr, ZERO_ADDRESS)) {
