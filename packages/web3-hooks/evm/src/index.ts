@@ -1,7 +1,5 @@
 export * from './useContract.js'
 export * from './useERC20TokenAllowance.js'
 export * from './useERC20TokenApproveCallback.js'
-export * from './useERC721ContractIsApproveForAll.js'
-export * from './useERC721ContractSetApproveForAllCallback.js'
 export * from './useGasConfig.js'
 export * from './useTransactionValue.js'
