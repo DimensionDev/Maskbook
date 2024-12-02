@@ -1,9 +1,11 @@
-import { memo } from 'react'
-import { Box, Link } from '@mui/material'
-import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 import { Icons } from '@masknet/icons'
+import { EnhanceableSite, twitterDomainMigrate } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { twitterDomainMigrate, type EnhanceableSite } from '@masknet/shared-base'
+import { FireflyTwitter } from '@masknet/web3-providers'
+import { Box, Link } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { memo } from 'react'
+import { AccountAvatar } from '../../../Personas/components/AccountAvatar/index.js'
 
 interface SocialAccountProps {
     avatar?: string
@@ -39,11 +41,21 @@ export const formatUserId = (userId: string) => {
 }
 
 export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ avatar, userId, site }) {
+    const isOnTwitter = site === EnhanceableSite.Twitter
+    const { data: twitterAvatar = avatar } = useQuery({
+        enabled: isOnTwitter && !avatar,
+        queryKey: ['social-account-avatar', site, avatar],
+        queryFn: async () => {
+            const userInfo = await FireflyTwitter.getUserInfo(userId)
+            return userInfo?.legacy.profile_image_url_https
+        },
+    })
+    const userAvatar = isOnTwitter ? twitterAvatar : avatar
     const { classes } = useStyles()
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
             <AccountAvatar
-                avatar={avatar}
+                avatar={userAvatar}
                 network={site}
                 isValid
                 classes={{ avatar: classes.avatar, container: classes.avatar }}
