@@ -18,7 +18,6 @@ export default defineConfig({
             '@masknet/public-api': import.meta.resolve('./packages/public-api/src/index.ts'),
             '@masknet/typed-message': import.meta.resolve('./packages/typed-message/base/src/index.ts'),
             '@masknet/encryption': import.meta.resolve('./packages/encryption/src/index.ts'),
-            '@masknet/injected-script': import.meta.resolve('./packages/injected-script/sdk/index.ts'),
             '@masknet/plugin-infra/dom': import.meta.resolve('./packages/plugin-infra/src/dom/index.ts'),
             '@masknet/plugin-infra': import.meta.resolve('./packages/plugin-infra/src/entry.ts'),
             '@masknet/theme': import.meta.resolve('./packages/theme/src/index.ts'),

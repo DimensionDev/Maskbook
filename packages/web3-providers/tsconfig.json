@@ -8,7 +8,6 @@
   "include": ["./src", "./src/**/*.json"],
   "references": [
     { "path": "../flags/tsconfig.json" },
-    { "path": "../injected-script/sdk/tsconfig.json" },
     { "path": "../public-api/tsconfig.json" },
     { "path": "../shared-base/tsconfig.json" },
     { "path": "../shared-base-ui/tsconfig.json" },
