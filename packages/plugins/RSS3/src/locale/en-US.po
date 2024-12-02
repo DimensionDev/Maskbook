@@ -204,6 +204,11 @@ msgstr ""
 msgid "Related"
 msgstr ""
 
+#: src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
+#: src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
+msgid "Request timed out"
+msgstr ""
+
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Status"

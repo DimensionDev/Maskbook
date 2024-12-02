@@ -1499,6 +1499,10 @@ msgstr "加载失败"
 msgid "Loading"
 msgstr "加载中"
 
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx
+msgid "Loading account information..."
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Local Backup"

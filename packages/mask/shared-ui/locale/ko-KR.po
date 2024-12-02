@@ -1499,6 +1499,10 @@ msgstr "로딩 실패"
 msgid "Loading"
 msgstr "로딩 중"
 
+#: content-script/components/InjectedComponents/ProfileTabContent.tsx
+msgid "Loading account information..."
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Local Backup"

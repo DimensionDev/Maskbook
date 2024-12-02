@@ -1044,6 +1044,10 @@ msgstr "NFT 사기 컨트랙트 신고"
 msgid "Report Spam"
 msgstr "스팸 신고"
 
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+msgid "Request timeout."
+msgstr ""
+
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
 msgstr ""
