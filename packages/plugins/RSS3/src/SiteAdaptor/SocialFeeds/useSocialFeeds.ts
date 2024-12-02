@@ -1,7 +1,9 @@
+import { t } from '@lingui/macro'
+import { timeout } from '@masknet/kit'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 import { FireflyConfig, FireflyFarcaster, Lens } from '@masknet/web3-providers'
-import { useQuery, useInfiniteQuery, skipToken } from '@tanstack/react-query'
+import { skipToken, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { sortBy, uniq } from 'lodash-es'
 import { useCallback } from 'react'
 
@@ -65,7 +67,7 @@ export function useSocialFeeds({ userId, address }: Options) {
     } = useInfiniteQuery({
         queryKey: ['social-feeds', 'lens', lensIds],
         queryFn: async ({ pageParam }) => {
-            return Lens.getPostsByProfileId(lensIds, pageParam)
+            return timeout(Lens.getPostsByProfileId(lensIds, pageParam), 30_000, t`Request timed out`)
         },
         initialPageParam: undefined as any,
         getNextPageParam: (lastPage) => lastPage?.nextIndicator,

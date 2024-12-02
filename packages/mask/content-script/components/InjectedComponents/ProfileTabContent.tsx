@@ -26,6 +26,7 @@ import {
     useCollectionByTwitterHandle,
     addressSorter,
     WalletSettingsEntry,
+    LoadingStatus,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -135,7 +136,7 @@ function openWeb3ProfileSettingDialog() {
 }
 
 function Content(props: ProfileTabContentProps) {
-    const { classes } = useStyles(undefined, { props })
+    const { classes, theme } = useStyles(undefined, { props })
     const translate = usePluginTransField()
 
     const [hidden, setHidden] = useState(true)
@@ -353,7 +354,11 @@ function Content(props: ProfileTabContentProps) {
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>
-                    <PluginCardFrameMini />
+                    <PluginCardFrameMini>
+                        <LoadingStatus iconSize={24} color={theme.palette.maskColor.main}>
+                            <Trans>Loading account information...</Trans>
+                        </LoadingStatus>
+                    </PluginCardFrameMini>
                 </div>
             </ThemeProvider>
         )

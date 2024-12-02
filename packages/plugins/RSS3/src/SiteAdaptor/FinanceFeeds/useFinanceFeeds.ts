@@ -1,3 +1,5 @@
+import { t } from '@lingui/macro'
+import { timeout } from '@masknet/kit'
 import { Zerion } from '@masknet/web3-providers'
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 
@@ -12,7 +14,11 @@ export function useFinanceFeeds({ address }: Options) {
         queryFn:
             address ?
                 async ({ pageParam }) => {
-                    return Zerion.getTransactions(address, { indicator: pageParam })
+                    return timeout(
+                        Zerion.getTransactions(address, { indicator: pageParam }),
+                        30_000,
+                        t`Request timed out`,
+                    )
                 }
             :   skipToken,
         getNextPageParam: (lp) => lp.nextIndicator,

@@ -13,8 +13,9 @@ import {
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
 import type { PersonaConnectStatus } from '../types.js'
-import { msg } from '@lingui/macro'
+import { msg, t } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { timeout } from '@masknet/kit'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
     action: undefined,
@@ -94,7 +95,11 @@ export function useCurrentPersonaConnectStatus(
 
         // handle had persona and connected current site, then check the nextID
         try {
-            const nextIDInfo = await NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex)
+            const nextIDInfo = await timeout(
+                NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex),
+                30_000,
+                t`Request timeout.`,
+            )
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
                     isSameProfile(resolveNextIDIdentityToProfile(x.identity, x.platform), currentProfile.identifier) &&
