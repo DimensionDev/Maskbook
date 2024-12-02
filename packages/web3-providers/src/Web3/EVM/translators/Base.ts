@@ -1,7 +1,7 @@
 import { BigNumber } from 'bignumber.js'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { GasOptionType, isLessThan, toFixed } from '@masknet/web3-shared-base'
-import { ChainId, formatWeiToGwei, PayloadEditor, ProviderType, type Translator } from '@masknet/web3-shared-evm'
+import { ChainId, formatWeiToGwei, PayloadEditor, type Translator } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { EVMHub } from '../apis/HubAPI.js'
 import { EVMChainResolver } from '../apis/ResolverAPI.js'

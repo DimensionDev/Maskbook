@@ -4,16 +4,16 @@ import { abiCoder } from '@masknet/web3-shared-evm'
 import type { TransactionMethodABI } from './types.js'
 
 // built-in abis
-import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json'
-import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json'
-import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json'
-import ERC20 from '@masknet/web3-contracts/abis/ERC20.json'
-import ERC721 from '@masknet/web3-contracts/abis/ERC721.json'
-import WETH from '@masknet/web3-contracts/abis/WETH.json'
-import WalletContract from '@masknet/web3-contracts/abis/Wallet.json'
-import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json'
-import LensHub from '@masknet/web3-contracts/abis/LensHub.json'
-import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json'
+import BulkCheckout from '@masknet/web3-contracts/abis/BulkCheckout.json' assert { type: 'json' }
+import NftRedPacket from '@masknet/web3-contracts/abis/NftRedPacket.json' assert { type: 'json' }
+import HappyRedPacketV4 from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' assert { type: 'json' }
+import ERC20 from '@masknet/web3-contracts/abis/ERC20.json' assert { type: 'json' }
+import ERC721 from '@masknet/web3-contracts/abis/ERC721.json' assert { type: 'json' }
+import WETH from '@masknet/web3-contracts/abis/WETH.json' assert { type: 'json' }
+import WalletContract from '@masknet/web3-contracts/abis/Wallet.json' assert { type: 'json' }
+import Create2Factory from '@masknet/web3-contracts/abis/Create2Factory.json' assert { type: 'json' }
+import LensHub from '@masknet/web3-contracts/abis/LensHub.json' assert { type: 'json' }
+import LensFollowNFT from '@masknet/web3-contracts/abis/LensFollowNFT.json' assert { type: 'json' }
 
 class ABI {
     private abis: Map<string, TransactionMethodABI[]> = new Map()
