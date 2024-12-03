@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:11\n"
+"PO-Revision-Date: 2024-12-03 03:30\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -203,6 +203,7 @@ msgid "By confirming means that you agree to bear the possible risks above."
 msgstr "crwdns32494:0crwdne32494:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "crwdns30796:0crwdne30796:0"
@@ -293,6 +294,7 @@ msgstr "crwdns30824:0crwdne30824:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -1041,6 +1043,14 @@ msgstr "crwdns31092:0crwdne31092:0"
 #: src/hooks/useReportSpam.tsx
 msgid "Report Spam"
 msgstr "crwdns31094:0crwdne31094:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+msgid "Request timed out."
+msgstr "crwdns35852:0crwdne35852:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+#~ msgid "Request timeout."
+#~ msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
