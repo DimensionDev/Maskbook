@@ -8,7 +8,11 @@
     "build": "./src/bin/build.mjs",
     "dev": "./src/bin/dev.mjs",
     "__build": "./src/bin/build.ts",
-    "__dev": "./src/bin/dev.ts"
+    "__dev": "./src/bin/dev.ts",
+    "build-rspack": "./src/bin/build-rspack.mjs",
+    "dev-rspack": "./src/bin/dev-rspack.mjs",
+    "__build_rspack": "./src/bin/build-rspack.ts",
+    "__dev_rspack": "./src/bin/dev-rspack.ts"
   },
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.6.0",
@@ -24,6 +28,8 @@
     "yargs": "^17.7.2"
   },
   "devDependencies": {
+    "@rspack/cli": "^1.1.4",
+    "@rspack/core": "^1.1.4",
     "@types/fs-extra": "^11.0.4",
     "@types/gulp": "^4.0.17",
     "@types/node": "22.10.0",

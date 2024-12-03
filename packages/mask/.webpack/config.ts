@@ -1,14 +1,10 @@
 /* spell-checker: disable */
-import webpack from 'webpack'
+import type webpack from 'webpack'
+import type rspack from '@rspack/core'
 import type { Configuration as DevServerConfiguration } from 'webpack-dev-server'
-const { ProvidePlugin, DefinePlugin, EnvironmentPlugin } = webpack
 
 import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
-import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin'
-import CopyPlugin from 'copy-webpack-plugin'
 import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
-import HTMLPlugin from 'html-webpack-plugin'
-import TerserPlugin from 'terser-webpack-plugin'
 import WebExtensionPlugin from 'webpack-target-webextension'
 import ReactCompiler from 'react-compiler-webpack'
 import { getGitInfo } from './git-info.js'
@@ -30,7 +26,12 @@ import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
 const require = createRequire(import.meta.url)
 const patchesDir = join(import.meta.dirname, '../../../patches')
 
-export async function createConfiguration(_inputFlags: BuildFlags): Promise<webpack.Configuration> {
+export async function createConfiguration(
+    isRspack: boolean,
+    _inputFlags: BuildFlags,
+): Promise<webpack.Configuration | rspack.Configuration> {
+    const webpack = isRspack ? undefined! : await import('webpack')
+    const rspack = isRspack ? await import('@rspack/core') : undefined
     const VERSION = JSON.parse(await readFile(new URL('../../../package.json', import.meta.url), 'utf-8')).version
     const flags = normalizeBuildFlags(_inputFlags)
     const computedFlags = computedBuildFlags(flags)
@@ -56,7 +57,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         // to set a correct base path for source map
         context: join(import.meta.dirname, '../../../'),
         mode: flags.mode,
-        devtool: computedFlags.sourceMapKind,
+        devtool: computedFlags.sourceMapKind as any,
         target: ['web', 'es2022'],
         entry: {},
         node: {
@@ -64,11 +65,15 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             __dirname: false,
             __filename: false,
         },
-        experiments: {
-            futureDefaults: true,
-            syncImportAssertion: true,
-            deferImport: { asyncModule: 'error' },
-        },
+        experiments:
+            rspack ?
+                { futureDefaults: true }
+            :   {
+                    futureDefaults: true,
+                    syncImportAssertion: true,
+                    deferImport: { asyncModule: 'error' },
+                },
+        // @ts-expect-error
         cache: {
             type: 'filesystem',
             buildDependencies: {
@@ -116,7 +121,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             },
             rules: [
                 // Source map for libraries
-                computedFlags.sourceMapKind ?
+                !rspack && computedFlags.sourceMapKind ?
                     { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
                 :   null,
                 // TypeScript
@@ -126,7 +131,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                     include: join(import.meta.dirname, '../../'),
                     use: [
                         {
-                            loader: require.resolve('swc-loader'),
+                            loader: rspack ? 'builtin:swc-loader' : require.resolve('swc-loader'),
                             options: {
                                 // https://swc.rs/docs/configuring-swc/
                                 jsc: {
@@ -196,22 +201,24 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 })
             :   undefined,
             new WebExtensionPlugin({ background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' } }),
-            flags.sourceMapHideFrameworks !== false &&
+            // this slow down performance for rspack
+            !rspack &&
+                flags.sourceMapHideFrameworks !== false &&
                 new DevtoolsIgnorePlugin({
                     shouldIgnorePath: (path) => {
                         if (path.includes('masknet') || path.includes('dimensiondev')) return false
                         return path.includes('/node_modules/') || path.includes('/webpack/')
                     },
                 }),
-            new ProvidePlugin({
+            new (rspack?.ProvidePlugin || webpack.default.ProvidePlugin)({
                 // Widely used Node.js global variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
                 // same as https://github.com/MetaMask/extension-provider/issues/48
                 'process.nextTick': [require.resolve('./package-overrides/process.nextTick.mjs'), 'default'],
             }),
-            new EnvironmentPlugin({
+            new (rspack?.EnvironmentPlugin || webpack.default.EnvironmentPlugin)({
                 NODE_ENV: productionLike ? 'production' : flags.mode,
-                NODE_DEBUG: false,
+                NODE_DEBUG: 'false',
                 /** JSON.stringify twice */
                 WEB3_CONSTANTS_RPC: WEB3_CONSTANTS_RPC,
                 MASK_SENTRY_DSN: process.env.MASK_SENTRY_DSN || '',
@@ -219,7 +226,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 MASK_MIXPANEL: process.env.MASK_MIXPANEL || JSON.stringify('disabled'),
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
             }),
-            new DefinePlugin({
+            new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',
                 'process.version': JSON.stringify('v20.0.0'),
                 // https://github.com/MetaMask/extension-provider/issues/48
@@ -227,11 +234,17 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                 'process.stdout': '/* stdout */ null',
                 'process.stderr': '/* stdin */ null',
             }),
-            flags.reactRefresh && new ReactRefreshWebpackPlugin({ overlay: false, esModule: true }),
+            flags.reactRefresh &&
+                new (
+                    await (rspack ?
+                        import('@rspack/plugin-react-refresh')
+                    :   import('@pmmmwh/react-refresh-webpack-plugin'))
+                ).default({ overlay: false, esModule: true }),
             flags.profiling && new ProfilingPlugin(),
-            new TrustedTypesPlugin(),
+            // TODO: crashes rspack
+            !rspack && new TrustedTypesPlugin(),
             ...emitManifestFile(flags, computedFlags),
-            new CopyPlugin({
+            new (rspack?.CopyRspackPlugin || (await import('copy-webpack-plugin')).default)({
                 patterns: [
                     { from: join(import.meta.dirname, '../public/'), to: flags.outputPath },
                     {
@@ -286,34 +299,43 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         // Focus on performance optimization. Not for download size/cache stability optimization.
         optimization: {
             // we don't need deterministic, and we also don't have chunk request at init we don't need "size"
-            chunkIds: productionLike ? 'total-size' : 'named',
+            // @ts-expect-error
+            chunkIds:
+                productionLike ?
+                    rspack ? 'deterministic'
+                    :   'total-size'
+                :   'named',
             concatenateModules: productionLike,
             flagIncludedChunks: productionLike,
             mangleExports: false,
             minimize: productionLike,
-            minimizer: [
-                new TerserPlugin({
-                    minify: TerserPlugin.swcMinify,
-                    exclude: /polyfill/,
-                    // https://swc.rs/docs/config-js-minify
-                    terserOptions: {
-                        compress: {
-                            drop_debugger: false,
-                            ecma: 2020,
-                            keep_classnames: true,
-                            keep_fnames: true,
-                            keep_infinity: true,
-                            passes: 3,
-                            pure_getters: false,
-                            sequences: false,
-                        },
-                        output: {
-                            ascii_only: true,
-                        },
-                        mangle: false,
-                    },
-                }),
-            ],
+            minimizer:
+                // TODO: minimizer
+                rspack ? undefined : (
+                    [
+                        new (await import('terser-webpack-plugin')).default({
+                            minify: (await import('terser-webpack-plugin')).swcMinify,
+                            exclude: /polyfill/,
+                            // https://swc.rs/docs/config-js-minify
+                            terserOptions: {
+                                compress: {
+                                    drop_debugger: false,
+                                    ecma: 2020,
+                                    keep_classnames: true,
+                                    keep_fnames: true,
+                                    keep_infinity: true,
+                                    passes: 3,
+                                    pure_getters: false,
+                                    sequences: false,
+                                },
+                                output: {
+                                    ascii_only: true,
+                                },
+                                mangle: false,
+                            },
+                        }),
+                    ]
+                ),
             moduleIds: flags.channel === 'stable' && flags.mode === 'production' ? 'deterministic' : 'named',
             nodeEnv: false, // provided in EnvironmentPlugin
             realContentHash: false,
@@ -322,12 +344,20 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             // cannot use false, in some cases there are more than 1 runtime in the single page and cause bug.
             runtimeChunk: {
                 name: (entry: { name: string }) => {
-                    return entry.name === 'backgroundWorker' ? false : 'runtime'
+                    return (
+                        entry.name === 'backgroundWorker' ?
+                            rspack ? 'runtime_' + entry.name
+                            :   (false as any as string)
+                        :   'runtime'
+                    )
                 },
             },
             splitChunks:
-                productionLike ? undefined : (
-                    {
+                // TODO: chunk splitting should be disabled by WebExtensionPlugin
+                // why do we need to disable it manually?
+                rspack ? false
+                : productionLike ? undefined
+                : {
                         maxInitialRequests: Infinity,
                         chunks: 'all',
                         cacheGroups: {
@@ -346,8 +376,7 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
                                 },
                             },
                         },
-                    }
-                ),
+                    },
         },
         output: {
             path: flags.outputPath,
@@ -379,7 +408,14 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
             client: flags.hmr ? undefined : false,
         } as DevServerConfiguration,
         stats: flags.mode === 'production' ? 'errors-only' : undefined,
-    } satisfies webpack.Configuration
+    } satisfies webpack.Configuration & rspack.Configuration
+
+    if (rspack) {
+        // @ts-expect-error
+        delete baseConfig.optimization.flagIncludedChunks
+        // @ts-expect-error
+        delete baseConfig.cache
+    }
 
     const entries = (baseConfig.entry = {
         dashboard: withReactDevTools(join(import.meta.dirname, '../dashboard/initialization/index.ts')),
@@ -413,6 +449,37 @@ export async function createConfiguration(_inputFlags: BuildFlags): Promise<webp
         entry.import = joinEntryItem(join(import.meta.dirname, '../devtools/content-script/index.ts'), entry.import)
         return entry
     }
+
+    async function addHTMLEntry(
+        chunks: string[],
+        filename: string,
+        template: TemplateType,
+        perf: boolean,
+        options?: import('html-webpack-plugin').Options,
+    ) {
+        let content
+        if (template === TemplateType.Background) {
+            content = await pages.noLoading
+            content = content.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
+        } else if (template === TemplateType.NoLoading) {
+            content = await pages.noLoading
+        } else if (template === TemplateType.Loading) {
+            content = await pages.loading
+        } else throw new Error()
+        if (perf) content = content.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
+        return new (rspack?.HtmlRspackPlugin || (await import('html-webpack-plugin')).default)({
+            // @ts-expect-error // TODO
+            chunks,
+            filename,
+            // @ts-expect-error // TODO
+            templateContent: content,
+            inject: 'body',
+            scriptLoading: 'defer',
+            // @ts-expect-error // TODO
+            minify: false,
+            ...options,
+        })
+    }
 }
 
 enum TemplateType {
@@ -423,32 +490,4 @@ enum TemplateType {
 const pages = {
     loading: readFile(join(import.meta.dirname, './with-loading.html'), 'utf8'),
     noLoading: readFile(join(import.meta.dirname, './with-no-loading.html'), 'utf8'),
-}
-
-async function addHTMLEntry(
-    chunks: string[],
-    filename: string,
-    template: TemplateType,
-    perf: boolean,
-    options?: HTMLPlugin.Options,
-) {
-    let content
-    if (template === TemplateType.Background) {
-        content = await pages.noLoading
-        content = content.replace(`<!-- Gun -->`, '<script src="/js/gun.js"></script>')
-    } else if (template === TemplateType.NoLoading) {
-        content = await pages.noLoading
-    } else if (template === TemplateType.Loading) {
-        content = await pages.loading
-    } else throw new Error()
-    if (perf) content = content.replace(`<!-- Profiling -->`, '<script src="/js/perf-measure.js"></script>')
-    return new HTMLPlugin({
-        chunks,
-        filename,
-        templateContent: content,
-        inject: 'body',
-        scriptLoading: 'defer',
-        minify: false,
-        ...options,
-    })
 }

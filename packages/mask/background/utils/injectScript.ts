@@ -38,7 +38,11 @@ async function fetchInjectContentScriptList_raw() {
         contentScripts.push(new URL(script[1], browser.runtime.getURL('')).pathname),
     )
 
-    const body = html.match(/<body>(.+)<\/body>/)![1]
+    const bodyIndex = html.indexOf('<body>')
+    if (bodyIndex === -1) throw new Error('Compiler error. Cannot parse contentScript.html')
+    const bodyEndIndex = html.indexOf('</body>', bodyIndex)
+    if (bodyEndIndex === -1) throw new Error('Compiler error. Cannot parse contentScript.html')
+    const body = html.slice(bodyIndex + '<body>'.length, bodyEndIndex).trim()
     body.replaceAll('<script defer src="', '')
         .replaceAll('></script>', '')
         .split('"')
