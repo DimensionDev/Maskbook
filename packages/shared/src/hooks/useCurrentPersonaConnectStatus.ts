@@ -98,7 +98,7 @@ export function useCurrentPersonaConnectStatus(
             const nextIDInfo = await timeout(
                 NextIDProof.queryExistedBindingByPersona(currentPersona.identifier.publicKeyAsHex),
                 30_000,
-                t`Request timeout.`,
+                t`Request timed out.`,
             )
             const verifiedProfile = nextIDInfo?.proofs.find(
                 (x) =>
