@@ -4,7 +4,6 @@
     { "path": "./tsconfig.npm.json" },
     // Only list top-level projects here
     { "path": "./packages/polyfills/tsconfig.json" },
-    { "path": "./packages/injected-script/main/tsconfig.json" },
     // Tests
     // @masknet/scripts: insert-here 1
     { "path": "./packages/base/tsconfig.tests.json" },
@@ -63,7 +62,6 @@
       "@masknet/encryption": ["./packages/encryption/src/index.ts"],
       "@masknet/flags": ["./packages/flags/src/index.ts"],
       "@masknet/flags/build-info": ["./packages/flags/src/flags/buildInfo.ts"],
-      "@masknet/injected-script": ["./packages/injected-script/sdk/index.ts"],
       "@masknet/sdk": ["./packages/mask-sdk/server/index.ts"],
       "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],
       "@masknet/plugin-infra/dom/context": ["./packages/plugin-infra/src/dom/context.ts"],
