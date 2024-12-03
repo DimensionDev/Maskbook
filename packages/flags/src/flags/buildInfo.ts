@@ -10,19 +10,15 @@ export interface BuildInfoFile {
     readonly REACT_DEVTOOLS_EDITOR_URL?: string
     readonly channel: 'stable' | 'beta' | 'insider'
 }
-
-export async function getBuildInfo(): Promise<BuildInfoFile> {
-    return {
-        channel: 'stable',
-    }
-}
 export let env: BuildInfoFile = {
     channel: 'stable',
 }
 const [_promise, resolve] = defer<void>()
 export const buildInfoReadyPromise = _promise
 export async function setupBuildInfo(): Promise<void> {
-    return setupBuildInfoManually(await getBuildInfo())
+    return setupBuildInfoManually({
+        channel: 'stable',
+    })
 }
 export function setupBuildInfoManually(_env: BuildInfoFile) {
     resolve()
