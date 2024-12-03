@@ -4,7 +4,7 @@ import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { useFungibleTokenBalance, useNetworks, useWallet } from '@masknet/web3-hooks-base'
-import { getDebankChain } from '@masknet/web3-providers'
+import { debank } from '@masknet/web3-providers/helpers'
 import { formatCurrency, isGte, isLessThan, type FungibleAsset } from '@masknet/web3-shared-base'
 import { ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-evm'
 import { Box, List, ListItem, ListItemText, Skeleton, Typography, type ListItemProps } from '@mui/material'
@@ -100,7 +100,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    const tryRpc = network?.chainId ? !getDebankChain(network.chainId) && seen : false
+    const tryRpc = network?.chainId ? !debank.getDebankChain(network.chainId) && seen : false
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
         asset.address,
