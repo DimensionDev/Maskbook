@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:56\n"
+"PO-Revision-Date: 2024-12-03 03:30\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -3043,3 +3043,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
+
