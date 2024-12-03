@@ -1045,8 +1045,12 @@ msgid "Report Spam"
 msgstr "举报垃圾"
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts
-msgid "Request timeout."
+msgid "Request timed out."
 msgstr ""
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+#~ msgid "Request timeout."
+#~ msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
