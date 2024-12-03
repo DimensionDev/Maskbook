@@ -6,7 +6,7 @@ import { useEverSeen } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useFungibleTokenBalance, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { getDebankChain } from '@masknet/web3-providers'
+import { debank } from '@masknet/web3-providers/helpers'
 import { type ReasonableNetwork } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import {
@@ -104,7 +104,7 @@ export const TokenItem = memo(function TokenItem({
     const providerURL = network?.isCustomized ? network.rpcUrl : undefined
     const [seen, ref] = useEverSeen<HTMLLIElement>()
     // Debank might not provide asset from current custom network
-    const supportedByDebank = getDebankChain(asset.chainId)
+    const supportedByDebank = debank.getDebankChain(asset.chainId)
     const tryRpc = (!supportedByDebank || !('balance' in asset)) && seen
     const { data: rpcBalance, isPending } = useFungibleTokenBalance(
         NetworkPluginID.PLUGIN_EVM,
