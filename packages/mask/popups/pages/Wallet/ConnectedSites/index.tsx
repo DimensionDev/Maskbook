@@ -6,6 +6,7 @@ import OriginCard from '../components/OriginCard/index.js'
 import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { useWallet } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -35,11 +36,14 @@ export const Component = memo(function ConnectedSites() {
     const { classes } = useStyles()
     useTitle(_(msg`Connected sites`))
     const { data: origins } = useConnectedOrigins()
+    const wallet = useWallet()
 
     return (
         <Box className={classes.container}>
             <Typography className={classes.desc}>
-                <Trans>Wallet name is connected to these sites, they can view your account address.</Trans>
+                <Trans>
+                    {wallet?.name || 'Your wallet'} is connected to these sites, they can view your account address.
+                </Trans>
             </Typography>
             <Box className={classes.cardList}>
                 {origins?.map((origin) => <OriginCard key={origin} origin={origin} />)}

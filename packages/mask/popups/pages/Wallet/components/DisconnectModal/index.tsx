@@ -100,7 +100,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
         }, []),
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
-            showSnackbar(<Trans>Disconnected.</Trans>, { variant: 'success' })
+            showSnackbar(<Trans>Disconnected successfully.</Trans>, { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
@@ -114,7 +114,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
         }, [wallet?.address]),
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
-            showSnackbar(<Trans>Disconnected.</Trans>, { variant: 'success' })
+            showSnackbar(<Trans>Disconnected successfully.</Trans>, { variant: 'success' })
             setOpen(false)
         },
         onSettled: () => {
