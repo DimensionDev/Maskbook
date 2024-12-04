@@ -62,24 +62,21 @@ const domainNameMap: Record<string, string> = {
     'mirror.xyz': 'Mirror',
 }
 
-function getDomain(url: string) {
-    if (!URL.canParse(url)) return null
-    const host = new URL(url).host
-    return host.split('.').slice(-2).join('.')
-}
-
 const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
-    const domain = getDomain(origin) || ''
+    const url = URL.canParse(origin) ? new URL(origin) : null
+    const domain = url?.host.split('.').slice(-2).join('.')
+
     const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[origin] || domainIconMap[domain || ''] || Icons.MaskPlaceholder
-    const siteName = domainNameMap[domain || ''] || t`Website`
+    const siteName =
+        url?.protocol === 'extension:' ? t`Chrome - external extension` : domainNameMap[domain || ''] || t`Website`
     return (
         <Box className={classes.container}>
             <Icon size={24} />
             <Box className={classes.site}>
                 <Typography className={classes.siteName}>{siteName}</Typography>
-                <Typography className={classes.siteUrl}>{origin}</Typography>
+                <Typography className={classes.siteUrl}>{url?.host || origin}</Typography>
             </Box>
             <button className={classes.button} onClick={() => setOpen(true)} type="button">
                 <Icons.Disconnect />
