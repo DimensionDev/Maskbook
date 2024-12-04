@@ -85,7 +85,7 @@ export const Component = memo(function WalletSettings() {
                 <Rename />
                 <Contacts />
                 <HidingScamTx />
-                <ConnectedOrigins />
+                {wallet.owner ? null : <ConnectedOrigins />}
                 <AutoLock />
                 <ChangeCurrency />
                 <ChangePaymentPassword />
