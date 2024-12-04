@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-03 03:30\n"
+"PO-Revision-Date: 2024-12-04 09:09\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -27,6 +27,10 @@ msgstr ""
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
 msgstr "{0} 이용가능"
+
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+msgid "{0} is connected to these sites, they can view your account address."
+msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
@@ -491,6 +495,10 @@ msgstr "다른 월렛을 선택하세요"
 msgid "Choose Token"
 msgstr "토큰 선택"
 
+#: popups/pages/Wallet/components/OriginCard/index.tsx
+msgid "Chrome - external extension"
+msgstr ""
+
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Click here to have a quick start."
 msgstr "퀵 스타트"
@@ -861,10 +869,13 @@ msgstr "소셜 계정 연결 해제"
 msgid "Disconnect Wallet?"
 msgstr "월렛 연결을 해제하시겠습니까?"
 
-#: popups/pages/Personas/AccountDetail/index.tsx
-#: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
+msgid "Disconnected successfully."
+msgstr ""
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnected."
 msgstr ""
 
@@ -1805,6 +1816,10 @@ msgstr "결과 없음."
 #: popups/pages/Friends/SearchList/index.tsx
 msgid "No search results"
 msgstr "검색 결과가 없습니다."
+
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+msgid "No websites connected to this wallet"
+msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
@@ -2946,8 +2961,8 @@ msgid "Wallet Group #{0}"
 msgstr "월렛 그룹 #{0}"
 
 #: popups/pages/Wallet/ConnectedSites/index.tsx
-msgid "Wallet name is connected to these sites, they can view your account address."
-msgstr "월렛 이름은 이미 웹사이트에 연결됩니다. 연결된 웹사이트는 회원님의 계정 주소를 확인할 수 있습니다."
+#~ msgid "Wallet name is connected to these sites, they can view your account address."
+#~ msgstr ""
 
 #: popups/modals/WalletRenameModal/index.tsx
 #: popups/modals/WalletRenameModal/index.tsx
@@ -2976,6 +2991,7 @@ msgid "Web3 Profile Card"
 msgstr "웹3 프로필 카드"
 
 #: popups/pages/Settings/index.tsx
+#: popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Website"
 msgstr "웹사이트"
 
@@ -3043,3 +3059,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
+
