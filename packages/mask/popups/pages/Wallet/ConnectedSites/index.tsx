@@ -7,6 +7,7 @@ import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
 import { msg, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useWallet } from '@masknet/web3-hooks-base'
+import { EmptyStatus } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -37,6 +38,15 @@ export const Component = memo(function ConnectedSites() {
     useTitle(_(msg`Connected sites`))
     const { data: origins } = useConnectedOrigins()
     const wallet = useWallet()
+
+    if (!origins?.length)
+        return (
+            <Box className={classes.container} height="100%" justifyContent="center">
+                <EmptyStatus>
+                    <Trans>No websites connected to this wallet</Trans>
+                </EmptyStatus>
+            </Box>
+        )
 
     return (
         <Box className={classes.container}>
