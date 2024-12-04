@@ -10,5 +10,8 @@ export function useConnectedOrigins() {
         queryFn: address ? async () => Services.Wallet.getAllConnectedOrigins(address, 'any') : skipToken,
         enabled: !!address,
         networkMode: 'always',
+        select(data) {
+            return [...data].sort((a, b) => a.localeCompare(b, 'en-US'))
+        },
     })
 }

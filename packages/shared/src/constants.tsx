@@ -8,7 +8,7 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, G
     [EnhanceableSite.Instagram]: Icons.InstagramRoundColored,
     [EnhanceableSite.OpenSea]: Icons.OpenSeaColored,
     [EnhanceableSite.Mirror]: Icons.Mirror,
-    [EnhanceableSite.Localhost]: null,
+    [EnhanceableSite.Localhost]: Icons.WebBlack,
 }
 
 export enum RSS3_NFT_SITE_KEY {

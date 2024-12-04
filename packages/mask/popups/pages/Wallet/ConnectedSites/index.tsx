@@ -34,8 +34,7 @@ export const Component = memo(function ConnectedSites() {
     const { _ } = useLingui()
     const { classes } = useStyles()
     useTitle(_(msg`Connected sites`))
-    const _2 = useConnectedOrigins()
-    const origins = _2.data ? [..._2.data].sort((a, b) => a.localeCompare(b, 'en-US')) : undefined
+    const { data: origins } = useConnectedOrigins()
 
     return (
         <Box className={classes.container}>

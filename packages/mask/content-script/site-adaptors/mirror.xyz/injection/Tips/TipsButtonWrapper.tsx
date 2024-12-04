@@ -57,13 +57,13 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
     }, [visitingIdentity, Utils.formatAddress])
 
     const component = useMemo(() => {
-        const Component = createInjectHooksRenderer(
+        const TipsRealm = createInjectHooksRenderer(
             useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
             (plugin) => plugin.TipsRealm?.UI?.Content,
         )
 
         return (
-            <Component
+            <TipsRealm
                 identity={visitingIdentity.identifier}
                 slot={slot}
                 accounts={accounts}

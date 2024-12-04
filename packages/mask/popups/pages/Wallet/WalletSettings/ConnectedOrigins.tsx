@@ -1,10 +1,10 @@
-import { Icons } from '@masknet/icons'
-import { Box, ListItem, Typography, useTheme } from '@mui/material'
-import { useStyles } from './useStyles.js'
-import { useNavigate } from 'react-router-dom'
-import { PopupRoutes } from '@masknet/shared-base'
-import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
 import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { PopupRoutes } from '@masknet/shared-base'
+import { Box, ListItem, Typography, useTheme } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
+import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
+import { useStyles } from './useStyles.js'
 
 export function ConnectedOrigins() {
     const theme = useTheme()
@@ -21,7 +21,7 @@ export function ConnectedOrigins() {
                 </Typography>
             </Box>
             <Box className={classes.itemBox}>
-                <Typography className={classes.itemText}>{origins ? origins.size : 0}</Typography>
+                <Typography className={classes.itemText}>{origins ? origins.length : 0}</Typography>
                 <Icons.ArrowRight color={theme.palette.maskColor.second} size={24} />
             </Box>
         </ListItem>

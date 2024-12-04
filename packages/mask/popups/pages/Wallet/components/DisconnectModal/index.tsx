@@ -44,39 +44,32 @@ const useStyles = makeStyles()((theme) => ({
         marginBottom: '36px',
         textAlign: 'center',
     },
-    confirmButton: {
-        background: theme.palette.maskColor.warn,
+    buttons: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        gap: theme.spacing(2),
+        marginBottom: theme.spacing(3),
+        width: '100%',
+    },
+    button: {
         borderRadius: '99px',
+        width: '100%',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        color: theme.palette.maskColor.white,
-        fontSize: '14px',
-        fontWeight: 700,
-        lineHeight: '18px',
-        width: '100%',
         outline: 'none',
+        height: theme.spacing(5),
         border: 'none',
-        padding: '11px',
-        marginBottom: '16px',
-        cursor: 'pointer',
+        fontWeight: 700,
+        flexGrow: 1,
+    },
+    confirmButton: {
+        background: theme.palette.maskColor.warn,
+        color: theme.palette.maskColor.white,
     },
     cancelButton: {
         background: theme.palette.maskColor.thirdMain,
-        borderRadius: '99px',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         color: theme.palette.maskColor.main,
-        fontSize: '14px',
-        fontWeight: 700,
-        lineHeight: '18px',
-        width: '100%',
-        outline: 'none',
-        border: 'none',
-        padding: '11px',
-        marginBottom: '24px',
-        cursor: 'pointer',
     },
     disconnectAll: {
         color: theme.palette.maskColor.highlight,
@@ -97,7 +90,7 @@ interface DisconnectModalProps {
 
 const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: DisconnectModalProps) {
     const queryClient = useQueryClient()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
     const wallet = useWallet()
     const { mutate: onDisconnect } = useMutation({
@@ -139,16 +132,21 @@ const DisconnectModal = memo(function DisconnectModal({ origin, setOpen }: Disco
                         Are your sure you want to disconnect? You may lose part of functionalities of this website.
                     </Trans>
                 </Typography>
-                <button
-                    type="button"
-                    className={classes.confirmButton}
-                    disabled={!wallet}
-                    onClick={() => onDisconnect()}>
-                    <Trans>Confirm</Trans>
-                </button>
-                <button type="button" className={classes.cancelButton} onClick={() => setOpen(false)}>
-                    <Trans>Cancel</Trans>
-                </button>
+                <Box className={classes.buttons}>
+                    <button
+                        type="button"
+                        className={cx(classes.button, classes.confirmButton)}
+                        disabled={!wallet}
+                        onClick={() => onDisconnect()}>
+                        <Trans>Confirm</Trans>
+                    </button>
+                    <button
+                        type="button"
+                        className={cx(classes.button, classes.cancelButton)}
+                        onClick={() => setOpen(false)}>
+                        <Trans>Cancel</Trans>
+                    </button>
+                </Box>
                 <button
                     type="button"
                     className={classes.disconnectAll}

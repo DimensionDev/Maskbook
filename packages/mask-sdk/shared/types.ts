@@ -6,6 +6,8 @@ export interface EIP2255Permission {
     invoker: string
     parentCapability: string
     caveats: EIP2255Caveat[]
+    /** unix timestamp */
+    createdAt?: number
 }
 export interface EIP2255RequestedPermission {
     parentCapability: string

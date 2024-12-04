@@ -25,6 +25,8 @@ export interface WalletGrantedPermission {
     type: 'granted_permission'
     id: string
     origins: ReadonlyMap<string, ReadonlySet<EIP2255Permission>>
+    /** unix timestamp */
+    createdAt: number
 }
 
 export interface InternalWalletConnectRecord {

@@ -1,10 +1,10 @@
-import { memo, useState, useMemo } from 'react'
+import { memo, useState } from 'react'
 import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
+import { Icons, type GeneratedIcon } from '@masknet/icons'
 import DisconnectModal from '../DisconnectModal/index.js'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
+import { t } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -44,17 +44,41 @@ interface OriginCardProps {
     origin: string
 }
 
+const domainIconMap: Record<string, GeneratedIcon> = {
+    'x.com': Icons.TwitterXRound,
+    'facebook.com': Icons.FacebookRound,
+    'minds.com': Icons.MindsRound,
+    'instagram.com': Icons.InstagramRoundColored,
+    'opensea.io': Icons.OpenSeaColored,
+    'mirror.xyz': Icons.Mirror,
+}
+
+const domainNameMap: Record<string, string> = {
+    'x.com': 'X',
+    'facebook.com': 'Facebook',
+    'minds.com': 'Minds',
+    'instagram.com': 'Instagram',
+    'opensea.io': 'OpenSea',
+    'mirror.xyz': 'Mirror',
+}
+
+function getDomain(url: string) {
+    if (!URL.canParse(url)) return null
+    const host = new URL(url).host
+    return host.split('.').slice(-2).join('.')
+}
+
 const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {
     const { classes } = useStyles()
     const [open, setOpen] = useState(false)
-    const Icon = useMemo(() => SOCIAL_MEDIA_ROUND_ICON_MAPPING[origin], [origin])
+    const domain = getDomain(origin) || ''
+    const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[origin] || domainIconMap[domain || ''] || Icons.MaskPlaceholder
+    const siteName = domainNameMap[domain || ''] || t`Website`
     return (
         <Box className={classes.container}>
-            {Icon ?
-                <Icon size={24} />
-            :   null}
+            <Icon size={24} />
             <Box className={classes.site}>
-                <Typography className={classes.siteName}>{SOCIAL_MEDIA_NAME[origin]}</Typography>
+                <Typography className={classes.siteName}>{siteName}</Typography>
                 <Typography className={classes.siteUrl}>{origin}</Typography>
             </Box>
             <button className={classes.button} onClick={() => setOpen(true)} type="button">

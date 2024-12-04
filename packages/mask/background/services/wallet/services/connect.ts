@@ -1,6 +1,7 @@
 import { type EIP2255Permission } from '@masknet/sdk'
+import { enableMapSet, produce } from 'immer'
+import { sortBy } from 'lodash-es'
 import { walletDatabase } from '../database/Plugin.db.js'
-import { produce, enableMapSet } from 'immer'
 import type { WalletGrantedPermission } from '../database/types.js'
 
 // https://eips.ethereum.org/EIPS/eip-2255
@@ -19,6 +20,7 @@ export async function sdk_grantEIP2255Permission(origin: string, grantedWalletAd
                 type: 'granted_permission',
                 id: wallet,
                 origins: new Map(),
+                createdAt: Date.now(),
             },
             (draft) => {
                 if (!draft.origins.has(origin)) draft.origins.set(origin, new Set())
@@ -28,6 +30,7 @@ export async function sdk_grantEIP2255Permission(origin: string, grantedWalletAd
                     invoker: origin,
                     parentCapability: 'eth_accounts',
                     caveats: [],
+                    createdAt: Date.now(),
                 })
             },
         )
@@ -42,7 +45,8 @@ export async function disconnectWalletFromOrigin(wallet: string, origin: string,
         const origins = new Map((await walletDatabase.get('granted_permission', wallet))?.origins)
         if (origins.has(origin)) {
             origins.delete(origin)
-            if (origins.size) await walletDatabase.add({ type: 'granted_permission', id: wallet, origins })
+            if (origins.size)
+                await walletDatabase.add({ type: 'granted_permission', id: wallet, origins, createdAt: Date.now() })
             else await walletDatabase.remove('granted_permission', wallet)
         }
     }
@@ -158,17 +162,14 @@ export async function getAllConnectedWallets(
     }
     return wallets
 }
-export async function getAllConnectedOrigins(
-    wallet: string,
-    type: 'any' | 'sdk' | 'internal',
-): Promise<ReadonlySet<string>> {
-    const connectedOrigins = new Set<string>()
+export async function getAllConnectedOrigins(wallet: string, type: 'any' | 'sdk' | 'internal'): Promise<string[]> {
+    const connectedOrigins: Array<{ origin: string; createdAt?: number }> = []
     if (type === 'any' || type === 'sdk') {
         const origins = (await walletDatabase.get('granted_permission', wallet))?.origins || []
         out: for (const permissions of origins.values()) {
             for (const permission of permissions) {
                 if (hasEthAccountsPermission(permission.invoker, permission)) {
-                    connectedOrigins.add(permission.invoker)
+                    connectedOrigins.push({ origin: permission.invoker, createdAt: permission.createdAt })
                     continue out
                 }
             }
@@ -177,10 +178,10 @@ export async function getAllConnectedOrigins(
     if (type === 'any' || type === 'internal') {
         const origins = (await walletDatabase.get('internal_connected', wallet))?.origins || []
         for (const origin of origins) {
-            connectedOrigins.add(origin)
+            connectedOrigins.push({ origin, createdAt: 0 })
         }
     }
-    return connectedOrigins
+    return sortBy(connectedOrigins, (x) => -(x.createdAt || 0)).map((data) => data.origin)
 }
 
 function assertOrigin(origin: string) {

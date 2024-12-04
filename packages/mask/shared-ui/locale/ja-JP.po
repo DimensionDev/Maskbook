@@ -2976,6 +2976,7 @@ msgid "Web3 Profile Card"
 msgstr "Web3 プロフィールカード"
 
 #: popups/pages/Settings/index.tsx
+#: popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Website"
 msgstr "ウェブサイト"
 
