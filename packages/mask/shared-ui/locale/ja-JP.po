@@ -28,6 +28,10 @@ msgstr ""
 msgid "{0} available"
 msgstr "{0} 利用可能です"
 
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+msgid "{0} is connected to these sites, they can view your account address."
+msgstr ""
+
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
 msgstr "{0} 分"
@@ -491,6 +495,10 @@ msgstr "他のウォレットを選択してください"
 msgid "Choose Token"
 msgstr "トークンを選択"
 
+#: popups/pages/Wallet/components/OriginCard/index.tsx
+msgid "Chrome - external extension"
+msgstr ""
+
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Click here to have a quick start."
 msgstr "ここをクリックしてクイックスタートを切りましょう。"
@@ -861,10 +869,13 @@ msgstr "ソーシャルアカウントに接続解除しますか?"
 msgid "Disconnect Wallet?"
 msgstr "ウォレットを接続解除してもよろしいですか？"
 
-#: popups/pages/Personas/AccountDetail/index.tsx
-#: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
+msgid "Disconnected successfully."
+msgstr ""
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnected."
 msgstr ""
 
@@ -1805,6 +1816,10 @@ msgstr "該当結果なし"
 #: popups/pages/Friends/SearchList/index.tsx
 msgid "No search results"
 msgstr "検索結果なし"
+
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+msgid "No websites connected to this wallet"
+msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
@@ -2946,8 +2961,8 @@ msgid "Wallet Group #{0}"
 msgstr "ウォレットグループ{0}"
 
 #: popups/pages/Wallet/ConnectedSites/index.tsx
-msgid "Wallet name is connected to these sites, they can view your account address."
-msgstr "ウォレット名はこれらのサイトに接続されています。あなたのアカウントアドレスを表示できます。"
+#~ msgid "Wallet name is connected to these sites, they can view your account address."
+#~ msgstr "ウォレット名はこれらのサイトに接続されています。あなたのアカウントアドレスを表示できます。"
 
 #: popups/modals/WalletRenameModal/index.tsx
 #: popups/modals/WalletRenameModal/index.tsx

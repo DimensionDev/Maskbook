@@ -28,6 +28,10 @@ msgstr ""
 msgid "{0} available"
 msgstr "{0} 可用"
 
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+msgid "{0} is connected to these sites, they can view your account address."
+msgstr ""
+
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
 msgstr "{0} 分钟"
@@ -491,6 +495,10 @@ msgstr "切换钱包"
 msgid "Choose Token"
 msgstr "选择代币"
 
+#: popups/pages/Wallet/components/OriginCard/index.tsx
+msgid "Chrome - external extension"
+msgstr ""
+
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Click here to have a quick start."
 msgstr "点击这里快速开始。"
@@ -861,10 +869,13 @@ msgstr "断开社交账户?"
 msgid "Disconnect Wallet?"
 msgstr "断开钱包?"
 
-#: popups/pages/Personas/AccountDetail/index.tsx
-#: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
+msgid "Disconnected successfully."
+msgstr ""
+
+#: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Disconnected."
 msgstr ""
 
@@ -1805,6 +1816,10 @@ msgstr "没有任何结果。"
 #: popups/pages/Friends/SearchList/index.tsx
 msgid "No search results"
 msgstr "找不到搜索结果。"
+
+#: popups/pages/Wallet/ConnectedSites/index.tsx
+msgid "No websites connected to this wallet"
+msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
@@ -2946,8 +2961,8 @@ msgid "Wallet Group #{0}"
 msgstr "钱包组 #{0}"
 
 #: popups/pages/Wallet/ConnectedSites/index.tsx
-msgid "Wallet name is connected to these sites, they can view your account address."
-msgstr "钱包已连接到这些站点，它们可以查看您的帐户地址。"
+#~ msgid "Wallet name is connected to these sites, they can view your account address."
+#~ msgstr "钱包已连接到这些站点，它们可以查看您的帐户地址。"
 
 #: popups/modals/WalletRenameModal/index.tsx
 #: popups/modals/WalletRenameModal/index.tsx
