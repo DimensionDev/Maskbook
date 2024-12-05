@@ -370,7 +370,7 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         const pluginId = NetworkPluginID.PLUGIN_EVM
         const isERC712Only = schemaType === SchemaType.ERC721
         const chain = allChains || !chainId ? getAllChainNames(pluginId) : resolveChain(pluginId, chainId)
-        if (!chain || !account || !isValidChainId(chainId)) {
+        if (!chain || !account) {
             return createPageable(EMPTY_LIST, createIndicator(indicator))
         }
 

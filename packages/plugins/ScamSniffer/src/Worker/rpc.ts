@@ -8,12 +8,13 @@ const storage = Web3Storage.createKVStorage(PLUGIN_ID)
 
 let detector: Detector | null = null
 
-function initDetector() {
+function getDetector() {
     if (detector === null) {
         detector = new Detector({
             onlyBuiltIn: false,
         })
     }
+    return detector
 }
 
 export async function enableAutoReport(enabled: boolean) {
@@ -33,8 +34,10 @@ export async function sendReportScam(result: ScamResult) {
 }
 
 export async function detectScam(post: PostDetail) {
-    initDetector()
-    await detector?.update()
-    const result = await detector?.detectScam(post)
+    const detector = getDetector()
+    await detector.update()
+    const result = await detector.detectScam(post)
+    const mainType = result?.matchType.split('')[0]
+    if (mainType === 'match_by_domain_sim_days') return null
     return result
 }
