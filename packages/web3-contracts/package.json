@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "start": "npx gulp build-contracts"
+    "build": "node --experimental-strip-types ../scripts/projects/build-contracts.ts"
   },
   "dependencies": {
     "@typechain/web3-v1": "^6.0.7",
@@ -12,6 +12,7 @@
     "web3-eth-contract": "1.10.2"
   },
   "devDependencies": {
+    "@masknet/cli": "workspace:*",
     "bn.js": "^4.12.0"
   }
 }

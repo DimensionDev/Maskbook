@@ -13,7 +13,7 @@
     "rollup": "^4.34.9"
   },
   "scripts": {
-    "start": "rollup -c -w",
+    "dev": "rollup -c -w",
     "build": "rollup -c"
   }
 }

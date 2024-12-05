@@ -1,13 +1,21 @@
 import type { Configuration } from 'webpack'
 import { join, isAbsolute } from 'node:path'
 
-export enum ManifestFile {
+export declare enum ManifestFile {
     ChromiumMV2 = 'chromium-mv2',
     ChromiumMV3 = 'chromium-mv3',
     ChromiumBetaMV3 = 'chromium-beta-mv3',
     FirefoxMV2 = 'firefox-mv2',
     FirefoxMV3 = 'firefox-mv3',
     SafariMV3 = 'safari-mv3',
+}
+export const ManifestFile: typeof ManifestFile = {
+    ChromiumMV2: 'chromium-mv2',
+    ChromiumMV3: 'chromium-mv3',
+    ChromiumBetaMV3: 'chromium-beta-mv3',
+    FirefoxMV2: 'firefox-mv2',
+    FirefoxMV3: 'firefox-mv3',
+    SafariMV3: 'safari-mv3',
 }
 export interface BuildFlags {
     /** If this field is set, manifest.json will copy the content of manifest-*.json */

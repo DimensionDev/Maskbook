@@ -4,8 +4,11 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "start": "npx gulp build-constants"
+    "build": "node --experimental-strip-types ../scripts/projects/build-constants.ts"
   },
   "dependencies": {
+  },
+  "devDependencies": {
+    "@masknet/cli": "workspace:*"
   }
 }

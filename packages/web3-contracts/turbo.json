@@ -1,0 +1,11 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "build": {
+            "inputs": ["./abis"],
+            "cache": true,
+            "outputs": ["./types"]
+        }
+    }
+}

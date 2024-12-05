@@ -29,7 +29,7 @@ jobs:
       - run: pnpm install
       - uses: changesets/action@v1
         with:
-          publish: npx gulp changeset-release
+          publish: node --experimental-strip-types packages/scripts/commands/changeset-release.ts
           commit: "chore: changeset release"
           title: "chore: changeset release"
         env:

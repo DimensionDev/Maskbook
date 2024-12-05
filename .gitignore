@@ -19,7 +19,7 @@ i18n_generated*
 # Cache
 *.tsbuildinfo
 .type-coverage
-.snowpack
+.turbo
 
 # Build out
 dist

@@ -1,7 +1,7 @@
 // This file is auto generated. DO NOT EDIT
-// Run `npx gulp sync-languages` to regenerate.
+// Run `pnpm run sync-languages` to regenerate.
 // Default fallback language in a family of languages are chosen by the alphabet order
-// To overwrite this, please overwrite packages/scripts/src/locale-kit-next/index.ts
+// To overwrite this, please edit it in packages/scripts/locale-kit/getLanguageFamilyName
 import en_US from './en-US.json' with { type: 'json' }
 import ja_JP from './ja-JP.json' with { type: 'json' }
 import ko_KR from './ko-KR.json' with { type: 'json' }

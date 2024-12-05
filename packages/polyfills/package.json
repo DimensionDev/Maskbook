@@ -7,11 +7,10 @@
   ],
   "type": "module",
   "scripts": {
-    "start": "rollup -w -c ./config.js",
+    "dev": "rollup -w -c ./config.js",
     "build": "rollup -c"
   },
   "dependencies": {
-    "@types/webextension-polyfill": "^0.10.7",
     "core-js": "3.41.0",
     "tslib": "^2.6.3"
   },
@@ -21,6 +20,7 @@
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-virtual": "^3.0.2",
     "@types/node": "22.13.9",
+    "@types/webextension-polyfill": "^0.10.7",
     "core-js-compat": "3.41.0",
     "regenerator-runtime": "^0.14.1",
     "rollup": "^4.34.9",

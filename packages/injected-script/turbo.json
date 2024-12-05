@@ -1,0 +1,13 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "build": {
+            "cache": true,
+            "outputs": ["./dist/injected-script.js"]
+        },
+        "dev": {
+            "persistent": true
+        }
+    }
+}

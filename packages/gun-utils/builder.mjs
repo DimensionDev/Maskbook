@@ -1,5 +1,6 @@
 import { createRequire } from 'module'
 import { readFile, writeFile } from 'fs/promises'
+import { minify } from '@swc/core'
 const require = createRequire(import.meta.url)
 const files = await Promise.all(
     [
@@ -69,12 +70,15 @@ const patchedSource = files
     // patch instanceof Object to instanceof globalThis.Object
     .replace(/instanceof\s+Object/g, 'instanceof globalThis.Object')
 
-const result = `(() => {
+const result = await minify(
+    `(() => {
 ${init.toString().replace('// Source Code Here', patchedSource)};
 if (!globalThis.Gun) {
     globalThis.Gun = ${init.name}().Gun;
 }
 })();
 undefined;
-`
-writeFile(new URL('./gun.js', import.meta.url), result)
+`,
+    { mangle: false, compress: false },
+)
+await writeFile(new URL('./gun.js', import.meta.url), result.code)

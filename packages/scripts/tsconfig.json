@@ -3,7 +3,18 @@
   "compilerOptions": {
     "lib": ["ESNext"],
     "composite": false,
-    "incremental": false
+    "incremental": false,
+    "allowImportingTsExtensions": true
   },
-  "include": ["./src"]
+  "include": [
+    "./bin",
+    "./cloudflare/",
+    "./codegen/",
+    "./commands/",
+    "./extension/",
+    "./linter/",
+    "./locale-kit/",
+    "./projects/",
+    "./utils/"
+  ]
 }

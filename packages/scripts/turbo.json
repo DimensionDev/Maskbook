@@ -1,0 +1,10 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "extension": {
+            "cache": false,
+            "dependsOn": ["//#build-dependent-codegen"]
+        }
+    }
+}

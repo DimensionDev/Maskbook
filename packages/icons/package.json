@@ -3,6 +3,12 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
+  "scripts": {
+    "build": "node --experimental-strip-types ../scripts/codegen/icon-codegen.ts"
+  },
+  "devDependencies": {
+    "@masknet/cli": "workspace:*"
+  },
   "exports": {
     ".": {
       "types": "./index.d.ts",

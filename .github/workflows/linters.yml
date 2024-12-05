@@ -37,21 +37,16 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp lint-package-json
+      - run: pnpm run lint:package-json
+      # - run: pnpm run lint:bulk-file // TODO:
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: package.json'
-      - run: npx gulp codegen
-      - run: pnpm run lingui:extract
-      - run: pnpm run lingui:compile
+      - run: npx turbo codegen
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: run codegen'
-      - run: npx gulp sync-languages
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: run sync-languages'
-      - run: npx gulp fix-plugins-tsconfig
+      - run: pnpm run lint:plugin-tsconfig
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: packages/plugins/tsconfig.json'
@@ -102,8 +97,7 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp codegen
-      - run: npx gulp typescript
+      - run: npx turbo tsc
   test:
     runs-on: ubuntu-latest
     steps:
@@ -119,9 +113,7 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp codegen
-      - run: npx gulp polyfill
-      - run: pnpm run test
+      - run: npx turbo test
   eslint:
     runs-on: ubuntu-latest
     permissions:
@@ -152,7 +144,6 @@ jobs:
           restore-keys: linter-v2-
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp codegen
       - name: Run Eslint
         run: |
           export NODE_OPTIONS="--max-old-space-size=8192"

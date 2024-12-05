@@ -4,15 +4,11 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "bin": {
-    "build": "./src/bin/build.mjs",
-    "dev": "./src/bin/dev.mjs",
-    "__build": "./src/bin/build.ts",
-    "__dev": "./src/bin/dev.ts",
-    "build-rspack": "./src/bin/build-rspack.mjs",
-    "dev-rspack": "./src/bin/dev-rspack.mjs",
-    "__build_rspack": "./src/bin/build-rspack.ts",
-    "__dev_rspack": "./src/bin/dev-rspack.ts"
+  "scripts": {
+    "extension": "node --experimental-strip-types ./src/bin/build.ts",
+    "extension-rspack": "node --experimental-strip-types ./src/bin/build-rspack.ts",
+    "dev": "node --experimental-strip-types ./src/bin/dev.ts",
+    "dev-rspack": "node --experimental-strip-types ./src/bin/dev-rspack.ts"
   },
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.6.0",

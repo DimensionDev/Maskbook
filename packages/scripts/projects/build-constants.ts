@@ -1,0 +1,152 @@
+import { promises as fs } from 'node:fs'
+import { resolve, join } from 'node:path'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { shell } from '../utils/run.ts'
+import { ROOT_PATH } from '../utils/paths.ts'
+import { fileURLToPath } from 'node:url'
+
+type Primitive = string | number | boolean
+
+interface ConstantsConfig {
+    [key: string]: Record<string, Primitive | Primitive[]>
+}
+
+// Function to read the constants from a file
+async function readConstantsFile(filePath: string): Promise<ConstantsConfig> {
+    const data = await fs.readFile(filePath, 'utf-8')
+    return JSON.parse(data)
+}
+
+// Function to write constants to a file
+async function writeConstantsFile(filePath: string, constants: ConstantsConfig): Promise<void> {
+    await fs.writeFile(filePath, JSON.stringify(constants, null, 4), 'utf-8')
+}
+
+// Function to get the default value for a given value type
+function getDefaultPrimitiveValue(value: Primitive | Primitive[]): Primitive | Primitive[] {
+    if (typeof value === 'string') {
+        return ''
+    } else if (typeof value === 'number') {
+        return 0
+    } else if (typeof value === 'boolean') {
+        return false
+    } else if (Array.isArray(value)) {
+        return []
+    }
+    return ''
+}
+
+// Function to filter out non-blank pairs from the constants
+function filterNonBlankPairs(
+    values: Record<string, Primitive | Primitive[]>,
+    names: string[],
+): Array<[string, Primitive | Primitive[]]> {
+    return Object.entries(values).filter(([key, value]) => value !== '' || !names.includes(key) || key === 'Mainnet')
+}
+
+// Function to process constants based on the provided action
+async function processConstants(
+    folderPath: string,
+    keys: string[],
+    action: (constants: ConstantsConfig, names: string[]) => ConstantsConfig,
+): Promise<void> {
+    for (const file of await fs.readdir(folderPath)) {
+        const filePath = resolve(folderPath, file)
+        const constants = await readConstantsFile(filePath)
+        const updatedConstants = action(constants, keys)
+        await writeConstantsFile(filePath, updatedConstants)
+    }
+
+    // Run the prettier tool after processing
+    await awaitChildProcess(shell`npx prettier --write ${folderPath}`)
+}
+
+// Action to compress constants
+function compressAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
+    const updatedConstants: ConstantsConfig = {}
+    for (const name of Object.keys(constants)) {
+        const values = constants[name]
+        const nonBlankPairs = filterNonBlankPairs(values, names)
+        updatedConstants[name] = Object.fromEntries(nonBlankPairs)
+    }
+    return updatedConstants
+}
+
+// Action to complete constants
+function completeAction(constants: ConstantsConfig, names: string[]): ConstantsConfig {
+    const updatedConstants: ConstantsConfig = {}
+    for (const name of Object.keys(constants)) {
+        const values = constants[name]
+        const updatedValues: Record<string, Primitive | Primitive[]> = {}
+
+        for (const key of names) {
+            if (key in values) {
+                updatedValues[key] = values[key]
+            } else {
+                updatedValues[key] = getDefaultPrimitiveValue(values[Object.keys(values)[0]])
+            }
+        }
+
+        for (const key of Object.keys(values)) {
+            if (!names.includes(key)) {
+                updatedValues[key] = values[key]
+            }
+        }
+
+        updatedConstants[name] = updatedValues
+    }
+    return updatedConstants
+}
+
+const EVM_KEYS = [
+    'Mainnet',
+    'Ropsten',
+    'Rinkeby',
+    'Kovan',
+    'Gorli',
+    'BSC',
+    'BSCT',
+    'Base',
+    'Base_Goerli',
+    'Polygon',
+    'Mumbai',
+    'Arbitrum',
+    'Arbitrum_Rinkeby',
+    'xDai',
+    'Optimism',
+    'Optimism_Kovan',
+    'Optimism_Goerli',
+    'Avalanche',
+    'Avalanche_Fuji',
+    'Celo',
+    'Fantom',
+    'Aurora',
+    'Aurora_Testnet',
+    'Conflux',
+    'Astar',
+]
+
+const SOLANA_KEYS = ['Mainnet', 'Testnet', 'Devnet']
+
+const FLOW_KEYS = ['Mainnet', 'Testnet']
+
+// Main function to parse command line arguments and perform actions
+await buildConstants()
+async function buildConstants() {
+    const args = process.argv.slice(2)
+    const evm = join(fileURLToPath(ROOT_PATH), './packages/web3-constants/evm/')
+    const solana = join(fileURLToPath(ROOT_PATH), './packages/web3-constants/solana')
+    const flow = join(fileURLToPath(ROOT_PATH), './packages/web3-constants/flow')
+
+    if (args.includes('--compress')) {
+        await processConstants(evm, EVM_KEYS, compressAction)
+        await processConstants(solana, SOLANA_KEYS, compressAction)
+        await processConstants(flow, FLOW_KEYS, compressAction)
+    }
+
+    if (args.includes('--complete')) {
+        await processConstants(evm, EVM_KEYS, completeAction)
+        await processConstants(solana, SOLANA_KEYS, completeAction)
+        await processConstants(flow, FLOW_KEYS, completeAction)
+    }
+}

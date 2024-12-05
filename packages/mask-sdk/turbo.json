@@ -1,0 +1,20 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "extends": ["//"],
+    "tasks": {
+        "build": {
+            "cache": true,
+            "dependsOn": ["extract-message"],
+            "outputs": ["./dist/mask-sdk.js"]
+        },
+        "dev": {
+            "persistent": true,
+            "dependsOn": ["extract-message"]
+        },
+        "extract-message": {
+            "cache": true,
+            "inputs": ["./shared/messages.txt", "./gen-message.mjs"],
+            "outputs": ["./shared/error-generated.ts"]
+        }
+    }
+}

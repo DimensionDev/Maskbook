@@ -22,7 +22,7 @@
   "types": "./dist/sdk/index.d.ts",
   "scripts": {
     "build": "rollup -c",
-    "start": "rollup -c -w"
+    "dev": "rollup -c -w"
   },
   "devDependencies": {
     "rollup": "^4.34.9",

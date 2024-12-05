@@ -1,0 +1,58 @@
+{
+    "$schema": "https://turbo.build/schema.json",
+    "ui": "tui",
+    "tasks": {
+        "//#test": {
+            "dependsOn": ["@masknet/polyfill#build"],
+            "interactive": true,
+            "cache": false
+        },
+        "//#tsc": {
+            // tsc will handle the cache
+            "cache": false,
+            "dependsOn": ["@masknet/icons#build"]
+        },
+        "//#build-dependent-codegen": {
+            "dependsOn": [
+                "@masknet/icons#build",
+                "sync-languages",
+                "@masknet/polyfill#build",
+                "@masknet/injected-script#build",
+                "@masknet/gun-utils#build",
+                "@masknet/sdk#build",
+                "@masknet/sentry-wrapper#build"
+            ]
+        },
+        "//#codegen": {
+            "dependsOn": ["@masknet/icons#build", "lingui:compile", "sync-languages"]
+        },
+        "//#lingui:extract": {
+            "inputs": [
+                "./packages/shared/**/*.ts",
+                "./packages/shared/**/*.tsx",
+                "./packages/shared-base-ui/**/*.ts",
+                "./packages/shared-base-ui/**/*.tsx",
+                "./packages/mask/**/*.ts",
+                "./packages/mask/**/*.tsx",
+                "./packages/theme/**/*.ts",
+                "./packages/theme/**/*.tsx",
+                "./packages/plugins/**/*.ts",
+                "./packages/plugins/**/*.tsx"
+            ],
+            "outputs": ["./packages/**/*.po"]
+        },
+        "//#lingui:compile": {
+            "inputs": ["./packages/**/*.po"],
+            "outputs": [
+                "./packages/**/locale/en-US.json",
+                "./packages/**/locale/ja-JP.json",
+                "./packages/**/locale/ko-KR.json",
+                "./packages/**/locale/zh-CN.json",
+                "./packages/**/locale/zh-TW.json"
+            ],
+            "dependsOn": ["lingui:extract"]
+        },
+        "//#sync-languages": {}
+    },
+    "globalDependencies": ["./.env/dev-preference"]
+}
