@@ -21,13 +21,12 @@ export function getConnection<const T extends NetworkPluginID>(
         >,
     ) => Connection<T>
 
-    const creator = (
-        pluginID === NetworkPluginID.PLUGIN_EVM ? createConnection
-        : pluginID === NetworkPluginID.PLUGIN_SOLANA ?
-            () => {
-                throw new Error('Not implemented')
-            }
-        :   unreachable(pluginID)) as Creator
-
-    return creator(initial)
+    switch (pluginID) {
+        case NetworkPluginID.PLUGIN_EVM:
+            return (createConnection as Creator)(initial)
+        case NetworkPluginID.PLUGIN_SOLANA:
+            throw new Error('Not implemented')
+        default:
+            unreachable(pluginID)
+    }
 }

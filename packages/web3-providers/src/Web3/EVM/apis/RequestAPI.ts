@@ -25,8 +25,15 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                         if (!context.writable) return
                         try {
                             if (!PayloadEditor.fromPayload(context.request).readonly) {
+                                const result = await evm.state?.Wallet?.request?.(context.requestArguments)
+
+                                console.log('DEBUG: result')
+                                console.log({
+                                    result,
+                                })
+
                                 // send request and set result in the context
-                                context.write((await evm.state?.Wallet?.request?.(context.requestArguments)) as T)
+                                context.write(result as T)
                             } else {
                                 context.write(
                                     await this.Request.request(context.requestArguments, {
