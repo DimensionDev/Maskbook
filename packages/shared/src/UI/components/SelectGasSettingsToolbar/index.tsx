@@ -1,11 +1,5 @@
 import { Icons } from '@masknet/icons'
-import {
-    ApproveMaskDialog,
-    FormattedBalance,
-    SelectGasSettingsModal,
-    useMenuConfig,
-    useSharedTrans,
-} from '@masknet/shared'
+import { ApproveMaskDialog, FormattedBalance, useMenuConfig, useSharedTrans } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -17,15 +11,8 @@ import {
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import { formatBalance, formatCurrency, GasOptionType, isSameAddress, isZero, ZERO } from '@masknet/web3-shared-base'
-import {
-    type ChainId,
-    formatGas,
-    formatWeiToEther,
-    type GasConfig,
-    GasEditor,
-    type Transaction,
-} from '@masknet/web3-shared-evm'
-import { Box, Grid, MenuItem, type MenuProps, Typography } from '@mui/material'
+import { type ChainId, formatGas, formatWeiToEther, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
+import { Box, MenuItem, type MenuProps, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
@@ -41,7 +28,6 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     gasConfig?: GasConfig
     supportMultiCurrency?: boolean
     estimateGasFee?: string
-    editMode?: boolean
     /** No effects on editMode */
     className?: string
 
@@ -141,13 +127,10 @@ export function SelectGasSettingsToolbarUI({
     gasLimit,
     nativeToken,
     nativeTokenPrice,
-    estimateGasFee,
     supportMultiCurrency,
-    editMode,
     className,
     classes: externalClasses,
     onChange,
-    onOpenCustomSetting,
     MenuProps = {},
 }: SelectGasSettingsToolbarProps) {
     const t = useSharedTrans()
@@ -187,28 +170,6 @@ export function SelectGasSettingsToolbarUI({
         [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit, currentGasOptionType, isCustomGas],
     )
 
-    const openCustomGasSettingsDialog = useCallback(async () => {
-        setIsCustomGas(true)
-        if (typeof onOpenCustomSetting === 'function') {
-            onOpenCustomSetting()
-            return
-        }
-
-        const { settings } = await SelectGasSettingsModal.openAndWaitForClose({
-            chainId,
-            disableGasLimit: true,
-            disableSlippageTolerance: true,
-            transaction: gasOption,
-        })
-        if (!settings?.transaction) return
-
-        setGasConfigCallback(
-            (settings.transaction as Transaction).maxFeePerGas!,
-            (settings.transaction as Transaction).maxPriorityFeePerGas!,
-            (settings.transaction as Transaction).gasPrice!,
-        )
-    }, [chainId, gasOption, setGasConfigCallback, onOpenCustomSetting])
-
     const currentGasOption = gasOptions?.[currentGasOptionType]
     useEffect(() => {
         if (!currentGasOption || isCustomGas) return
@@ -237,12 +198,7 @@ export function SelectGasSettingsToolbarUI({
                         <Typography className={classes.estimateGas}>{gas}</Typography>
                     </MenuItem>
                 )
-            })
-            .concat(
-                <MenuItem key="setting" className={cx(classes.menuItem)} onClick={openCustomGasSettingsDialog}>
-                    <Typography className={classes.title}>{t.gas_settings_custom()}</Typography>
-                </MenuItem>,
-            ),
+            }),
         {
             ...MenuProps,
             anchorSibling: false,
@@ -313,32 +269,6 @@ export function SelectGasSettingsToolbarUI({
     ])
 
     if (!gasOptions || isZero(gasFee)) return null
-
-    if (editMode)
-        return (
-            <>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textSecondary">
-                        {t.gas_settings_label_transaction_cost()}
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textPrimary" align="right">
-                        <Typography component="span" className={classes.edit} onClick={openCustomGasSettingsDialog}>
-                            {t.edit()}
-                        </Typography>
-                        <FormattedBalance
-                            value={gasFee ?? estimateGasFee}
-                            decimals={nativeToken?.decimals}
-                            symbol={nativeToken?.symbol}
-                            formatter={formatBalance}
-                            significant={3}
-                        />
-                        ({gasFeeUSD})
-                    </Typography>
-                </Grid>
-            </>
-        )
 
     return (
         <Box className={cx(classes.section, className)}>

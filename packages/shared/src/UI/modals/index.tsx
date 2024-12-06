@@ -7,7 +7,6 @@ import { WalletRiskWarningModal } from './WalletRiskWarningModal/index.js'
 import { ConnectWalletModal } from './ConnectWalletModal/index.js'
 import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
 import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
-import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
 import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
 
 import * as modals from './modals.js'
@@ -25,7 +24,6 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
             <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={modals.TransactionSnackbar.register} />
             <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
-            <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
             <SelectNonFungibleContractModal ref={modals.SelectNonFungibleContractModal.register} />
         </RootWeb3ContextProvider>
     )
