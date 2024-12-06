@@ -7,11 +7,8 @@ export function useConnectedOrigins() {
     const address = wallet?.address
     return useQuery({
         queryKey: ['wallet-granted-origins', address],
-        queryFn: address ? async () => Services.Wallet.getAllConnectedOrigins(address, 'any') : skipToken,
+        queryFn: address ? () => Services.Wallet.getAllConnectedOrigins(address, 'any') : skipToken,
         enabled: !!address,
         networkMode: 'always',
-        select(data) {
-            return [...data].sort((a, b) => a.localeCompare(b, 'en-US'))
-        },
     })
 }

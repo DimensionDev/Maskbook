@@ -5,7 +5,7 @@ import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, Typography } from '@mui/material'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { memo, useCallback } from 'react'
+import { memo } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -93,13 +93,12 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
     const queryClient = useQueryClient()
     const { classes, cx } = useStyles()
     const { showSnackbar } = usePopupCustomSnackbar()
-    const wallet = useWallet()
-    const address = wallet?.address
+    const address = useWallet()?.address
     const { mutate: onDisconnect } = useMutation({
-        mutationFn: useCallback(async (): Promise<void> => {
+        mutationFn: async (): Promise<void> => {
             if (!address) return
             await Services.Wallet.disconnectWalletFromOrigin(address, origin, 'any')
-        }, [address]),
+        },
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
             showSnackbar(
@@ -116,10 +115,10 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
         },
     })
     const { mutate: onDisconnectAll } = useMutation({
-        mutationFn: useCallback(async (): Promise<void> => {
-            if (!wallet) return
+        mutationFn: async () => {
+            if (!address) return
             await Services.Wallet.disconnectAllOriginsConnectedFromWallet(address!, 'any')
-        }, [wallet?.address]),
+        },
         onMutate: async () => {
             await queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address!] })
             showSnackbar(
@@ -132,7 +131,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
             onClose()
         },
         onSettled: () => {
-            queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', wallet?.address] })
+            queryClient.invalidateQueries({ queryKey: ['wallet-granted-origins', address] })
         },
     })
     return (
@@ -150,7 +149,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
                     <button
                         type="button"
                         className={cx(classes.button, classes.confirmButton)}
-                        disabled={!wallet}
+                        disabled={!address}
                         onClick={() => onDisconnect()}>
                         <Trans>Confirm</Trans>
                     </button>
@@ -161,7 +160,7 @@ const DisconnectModal = memo(function DisconnectModal({ origin, onClose }: Disco
                 <button
                     type="button"
                     className={classes.disconnectAll}
-                    disabled={!wallet}
+                    disabled={!address}
                     onClick={() => onDisconnectAll()}>
                     <Trans>Disconnect all accounts</Trans>
                 </button>

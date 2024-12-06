@@ -187,6 +187,6 @@ export async function getAllConnectedOrigins(wallet: string, type: 'any' | 'sdk'
 function assertOrigin(origin: string) {
     if (!URL.canParse(origin) || new URL(origin).origin !== origin)
         throw new TypeError(
-            'origin is not a valid origin. See https://developer.mozilla.org/en-US/docs/Glossary/Origin',
+            `origin ${origin} is not a valid origin. See https://developer.mozilla.org/en-US/docs/Glossary/Origin`,
         )
 }
