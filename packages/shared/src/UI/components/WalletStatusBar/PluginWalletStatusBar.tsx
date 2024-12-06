@@ -49,7 +49,6 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     requiredSupportChainIds?: Array<Web3Helper.Definition[T]['ChainId']>
     requiredSupportPluginID?: NetworkPluginID
     readonlyMode?: boolean
-    disableSwitchAccount?: boolean
 }
 
 const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(({ className }) => {
