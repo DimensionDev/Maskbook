@@ -14,6 +14,7 @@ import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
 import { networkStorage, providerStorage } from '../../Base/storage.js'
+
 export async function createSolanaState(context: WalletAPI.IOContext): Promise<Web3State> {
     const { value: transaction } = PersistentStorages.Web3.createSubScope(
         `${NetworkPluginID.PLUGIN_SOLANA}_Transaction`,

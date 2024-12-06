@@ -35,6 +35,7 @@ export declare namespace Web3Helper {
 
     export type Web3Provider<T extends NetworkPluginID = never> =
         T extends never ? never : Definition[T]['Web3Provider']
+
     export type Web3State<T extends NetworkPluginID = never> =
         T extends never ? never
         :   Web3StateShared<

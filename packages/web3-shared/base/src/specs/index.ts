@@ -933,33 +933,6 @@ export interface NameServiceState {
 }
 
 export interface TokenState<ChainId, SchemaType> {
-    /** The user trusted fungible tokens. */
-    trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
-    /** The user trusted non-fungible tokens. */
-    trustedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** The user blocked fungible tokens. */
-    blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
-    /** The user blocked non-fungible tokens. */
-    blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** Credible fungible tokens */
-    credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
-    /** Credible non-fungible tokens */
-    credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-
-    /** Add a token */
-    addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
-    /** Remove a token */
-    removeToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
-    /** Unblock a token */
-    trustToken?: (
-        address: string,
-        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
-    ) => Promise<void>
-    /** Block a token */
-    blockToken?: (
-        address: string,
-        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
-    ) => Promise<void>
     /** Create a credible fungible token */
     createFungibleToken?: (
         chainId: ChainId,
@@ -972,25 +945,6 @@ export interface TokenState<ChainId, SchemaType> {
         address: string,
         token?: NonFungibleToken<ChainId, SchemaType>,
     ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-    nonFungibleCollectionMap?: Subscription<
-        Record<
-            string,
-            Array<{
-                contract: NonFungibleTokenContract<ChainId, SchemaType>
-                tokenIds: string[]
-            }>
-        >
-    >
-    addNonFungibleTokens?(
-        owner: string,
-        contract: NonFungibleTokenContract<ChainId, SchemaType>,
-        tokenIds: string[],
-    ): Promise<void>
-    removeNonFungibleTokens?(
-        owner: string,
-        contract: NonFungibleTokenContract<ChainId, SchemaType>,
-        tokenIds: string[],
-    ): Promise<void>
 }
 
 export interface MessageState<Request, Response> {

@@ -1,16 +1,14 @@
 import { Icons } from '@masknet/icons'
-import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useAllNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAllNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { DialogContent, List } from '@mui/material'
 import { Box } from '@mui/system'
 import Fuse from 'fuse.js'
-import { compact } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { useSubscription } from 'use-subscription'
 import { useSharedTrans } from '../../../locales/index.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
@@ -78,40 +76,11 @@ export const SelectNonFungibleContractDialog = memo(
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
 
-        const handleClear = () => {
-            setKeyword('')
-        }
         const { data: collections = EMPTY_LIST, isPending, isError, refetch } = useAllNonFungibleCollections(pluginID)
-
-        const { Token } = useWeb3State(pluginID)
-        const account = useAccount().toLowerCase()
-        const customizedCollectionMap = useSubscription(Token?.nonFungibleCollectionMap! ?? EMPTY_ENTRY)
-        // Convert StorageCollection to NonFungibleCollection
-        const customizedCollections = useMemo((): Array<
-            NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-        > => {
-            const list = customizedCollectionMap[account]
-            if (!list) return EMPTY_LIST
-            const addresses = compact(collections.map((x) => x.address?.toLowerCase()))
-            return list
-                .filter((x) => !addresses.includes(x.contract.address))
-                .map(({ contract, tokenIds }) => ({
-                    chainId: contract.chainId,
-                    name: contract.name,
-                    address: contract.address,
-                    slug: '' as string,
-                    symbol: contract.symbol,
-                    iconURL: contract.iconURL,
-                    balance: tokenIds.length,
-                    source: contract.source,
-                }))
-        }, [customizedCollectionMap[account], collections])
-
         const filteredCollections = useMemo(() => {
-            const allCollections = [...customizedCollections, ...collections]
             const result =
                 pluginID === NetworkPluginID.PLUGIN_EVM ?
-                    allCollections.filter((x) => {
+                    collections.filter((x) => {
                         return (
                             x.address &&
                             x.schema === SchemaType.ERC721 &&
@@ -120,10 +89,10 @@ export const SelectNonFungibleContractDialog = memo(
                             !isLensProfileAddress(x.address)
                         )
                     })
-                :   allCollections
+                :   collections
 
             return [...result, ...(initialCollections ?? [])]
-        }, [customizedCollections, collections, pluginID, initialCollections])
+        }, [collections, pluginID, initialCollections])
         const fuse = useMemo(() => {
             return new Fuse(filteredCollections, {
                 keys: [
@@ -163,7 +132,15 @@ export const SelectNonFungibleContractDialog = memo(
                                 style: { height: 40 },
                                 inputProps: { style: { paddingLeft: 4 } },
                                 startAdornment: <Icons.Search size={18} />,
-                                endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                                endAdornment:
+                                    keyword ?
+                                        <Icons.Close
+                                            size={18}
+                                            onClick={() => {
+                                                setKeyword('')
+                                            }}
+                                        />
+                                    :   null,
                             }}
                         />
                     </Box>

@@ -9,7 +9,6 @@ import {
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import * as RiskWarning from /* webpackDefer: true */ '../state/RiskWarning.js'
-import * as Token from /* webpackDefer: true */ '../state/Token.js'
 import * as Transaction from /* webpackDefer: true */ '../state/Transaction.js'
 import * as NameService from /* webpackDefer: true */ '../state/NameService.js'
 import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
@@ -61,7 +60,6 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),
         RiskWarning: () => new RiskWarning.EVMRiskWarning(state.Provider?.account, riskWarning),
-        Token: () => new Token.EVMToken({ account: state.Provider?.account, chainId: state.Provider?.chainId }, token),
         Transaction: () =>
             new Transaction.EVMTransaction(
                 { chainId: state.Provider?.chainId, account: state.Provider?.account },
