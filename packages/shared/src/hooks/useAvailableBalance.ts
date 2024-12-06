@@ -55,7 +55,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
             BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
         :   tokenBalance
 
-    const result = {
+    return {
         isAvailableBalance,
         isGasSufficient,
         isGasFeeGreaterThanOneETH,
@@ -63,8 +63,4 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         balance,
         isPending: isLoadingTokenBalance,
     }
-
-    console.log('DEBUG: useAvailableBalance', result)
-
-    return result
 }
