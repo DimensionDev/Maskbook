@@ -1,7 +1,7 @@
 import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { useSharedTrans } from '../../../locales/index.js'
 import { isZero } from '@masknet/web3-shared-base'
-import { useChainContext, useNetworkContext, useNativeTokenBalance } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenBalance } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()({
@@ -25,7 +25,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const t = useSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
 
-    const { pluginID } = useNetworkContext()
     const { account, chainId: chainIdValid } = useChainContext({ chainId: expectedChainId })
 
     const nativeTokenBalance = useNativeTokenBalance(undefined, {
