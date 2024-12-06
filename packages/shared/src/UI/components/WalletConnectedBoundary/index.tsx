@@ -9,7 +9,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { SelectProviderModal, WalletRiskWarningModal } from '../../modals/modals.js'
+import { WalletRiskWarningModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()({
     button: {
@@ -45,12 +45,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
 
     if (!account)
         return (
-            <ActionButton
-                startIcon={props.startIcon}
-                className={buttonClass}
-                fullWidth
-                onClick={() => SelectProviderModal.open()}
-                {...props.ActionButtonProps}>
+            <ActionButton startIcon={props.startIcon} className={buttonClass} fullWidth {...props.ActionButtonProps}>
                 {t.plugin_wallet_connect_a_wallet()}
             </ActionButton>
         )

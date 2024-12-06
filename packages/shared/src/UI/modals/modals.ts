@@ -1,12 +1,8 @@
 import { SingletonModal } from '@masknet/shared-base'
-import type { ConnectWalletModalCloseProps, ConnectWalletModalOpenProps } from './ConnectWalletModal/index.js'
 import type { SelectNonFungibleContractModalOpenProps } from './SelectNonFungibleContractModal/index.js'
-import type { SelectProviderModalCloseProps, SelectProviderModalOpenProps } from './SelectProviderModal/index.js'
 import type { WalletRiskWarningModalOpenProps } from './WalletRiskWarningModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 
-export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps, SelectProviderModalCloseProps>()
 export const WalletRiskWarningModal = new SingletonModal<WalletRiskWarningModalOpenProps>()
-export const ConnectWalletModal = new SingletonModal<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()

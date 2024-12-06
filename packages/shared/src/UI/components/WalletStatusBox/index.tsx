@@ -11,7 +11,7 @@ import {
     useChainIdValid,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { FormattedAddress, WalletIcon, SelectProviderModal, useSharedTrans, CopyButton } from '@masknet/shared'
+import { FormattedAddress, WalletIcon, useSharedTrans, CopyButton } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
@@ -122,12 +122,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     if (!Utils.isValidAddress(account)) {
         return (
             <section className={classes.connectButtonWrapper}>
-                <Button
-                    className={cx(classes.actionButton)}
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    onClick={() => SelectProviderModal.open()}>
+                <Button className={cx(classes.actionButton)} color="primary" variant="contained" size="small">
                     {t.plugin_wallet_on_connect()}
                 </Button>
             </section>
@@ -192,6 +187,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             size="small"
                             onClick={async () => {
                                 props.closeDialog?.()
+
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
                                 await Web3.disconnect()
@@ -203,7 +199,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={() => {
-                                SelectProviderModal.open()
                                 props.closeDialog?.()
                             }}>
                             {t.wallet_status_button_change()}
