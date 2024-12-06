@@ -82,12 +82,7 @@ const OriginCard = memo(function OriginCard({ origin }: OriginCardProps) {
                 <Icons.Disconnect />
             </button>
             {open ?
-                <DisconnectModal
-                    origin={origin}
-                    setOpen={(open: boolean) => {
-                        setOpen(open)
-                    }}
-                />
+                <DisconnectModal origin={origin} onClose={() => setOpen(false)} />
             :   null}
         </Box>
     )
