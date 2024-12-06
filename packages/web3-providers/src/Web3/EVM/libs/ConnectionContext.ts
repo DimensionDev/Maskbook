@@ -1,4 +1,4 @@
-import { omit, omitBy, isUndefined } from 'lodash-es'
+import { omitBy, isUndefined } from 'lodash-es'
 import type { ECKeyIdentifier } from '@masknet/shared-base'
 import {
     ChainId,

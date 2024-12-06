@@ -1,4 +1,4 @@
-import { PersistentStorages, NetworkPluginID, InMemoryStorages, getSiteType } from '@masknet/shared-base'
+import { PersistentStorages, type NetworkPluginID, InMemoryStorages, getSiteType } from '@masknet/shared-base'
 
 export function networkStorage(plugin: NetworkPluginID) {
     const { storage: network } = PersistentStorages.Web3.createSubScope(`${plugin}_Network`, {

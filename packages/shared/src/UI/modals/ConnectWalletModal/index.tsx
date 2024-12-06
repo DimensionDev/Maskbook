@@ -11,7 +11,6 @@ import { useAsyncFn } from 'react-use'
 import { InjectedDialog } from '../../contexts/index.js'
 import { Spinner } from './Spinner.js'
 import { Icons } from '@masknet/icons'
-import { ProviderType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

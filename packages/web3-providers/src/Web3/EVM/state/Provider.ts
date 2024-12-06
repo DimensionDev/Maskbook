@@ -10,7 +10,7 @@ import {
     type ChainId,
     isValidAddress,
     NetworkType,
-    ProviderType,
+    type ProviderType,
     isValidChainId,
     getInvalidChainId,
     getDefaultChainId,

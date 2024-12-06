@@ -1,4 +1,4 @@
-import { ProviderType, ChainId, type RequestArguments } from '@masknet/web3-shared-evm'
+import { type ProviderType, type RequestArguments } from '@masknet/web3-shared-evm'
 import { evm } from '../../../Manager/registry.js'
 import { ConnectionContext } from '../libs/ConnectionContext.js'
 import type { EVMConnectionOptions } from '../types/index.js'

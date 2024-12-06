@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, ShadowRootTooltip, ActionButton, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, ActionButton } from '@masknet/theme'
 import {
     useNetworkContext,
     useChainContext,

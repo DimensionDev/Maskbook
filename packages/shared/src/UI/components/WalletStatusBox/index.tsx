@@ -19,7 +19,6 @@ import {
     WalletStatusModal,
     CopyButton,
 } from '@masknet/shared'
-import { ProviderType } from '@masknet/web3-shared-evm'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'

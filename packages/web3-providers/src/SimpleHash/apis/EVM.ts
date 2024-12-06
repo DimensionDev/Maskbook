@@ -21,7 +21,7 @@ import {
 } from '../helpers.js'
 import type { BaseHubOptions, NonFungibleTokenAPI } from '../../entry-types.js'
 import { SPAM_SCORE } from '../constants.js'
-import { SimpleHash } from '../../types/SimpleHash.js'
+import { type SimpleHash } from '../../types/SimpleHash.js'
 
 class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getCollectionByContractAddress(
