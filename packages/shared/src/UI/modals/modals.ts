@@ -7,10 +7,6 @@ import type {
     SelectGasSettingsModalCloseProps,
     SelectGasSettingsModalOpenProps,
 } from './SelectAdvancedSettingsDialog/index.js'
-import type {
-    SelectFungibleTokenModalCloseProps,
-    SelectFungibleTokenModalOpenProps,
-} from './SelectFungibleTokenModal/index.js'
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps, SelectProviderModalCloseProps>()
@@ -22,9 +18,5 @@ export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModa
 export const SelectGasSettingsModal = new SingletonModal<
     SelectGasSettingsModalOpenProps,
     SelectGasSettingsModalCloseProps
->()
-export const SelectFungibleTokenModal = new SingletonModal<
-    SelectFungibleTokenModalOpenProps,
-    SelectFungibleTokenModalCloseProps
 >()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
