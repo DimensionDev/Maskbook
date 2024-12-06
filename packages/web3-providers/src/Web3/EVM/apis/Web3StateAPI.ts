@@ -7,7 +7,6 @@ import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
 
 import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
 import * as BalanceNotifier from /* webpackDefer: true */ '../state/BalanceNotifier.js'
-import * as BlockNumberNotifier from /* webpackDefer: true */ '../state/BlockNumberNotifier.js'
 import * as Network from /* webpackDefer: true */ '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { networkStorage, providerStorage } from '../../Base/storage.js'
@@ -36,7 +35,6 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
     const state: Web3State = lazyObject({
         Provider: () => new Provider.EVMProvider(context, provider),
         BalanceNotifier: () => new BalanceNotifier.EVMBalanceNotifier(),
-        BlockNumberNotifier: () => new BlockNumberNotifier.EVMBlockNumberNotifier(),
         Network: () => new Network.EVMNetwork(NetworkPluginID.PLUGIN_EVM, network.networkID, network.networks),
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),

@@ -70,14 +70,7 @@ export type TransactionDetailed = never
 export type TransactionSignature = never
 export type TransactionParameter = string
 
-export type Web3State = Web3StateShared<
-    ChainId,
-    SchemaType,
-    ProviderType,
-    NetworkType,
-    Transaction,
-    TransactionParameter
->
+export type Web3State = Web3StateShared<ChainId, SchemaType, ProviderType, NetworkType>
 
 export type Web3Definition = {
     ChainId: ChainId

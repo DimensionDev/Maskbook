@@ -42,9 +42,7 @@ export declare namespace Web3Helper {
                 Definition[T]['ChainId'],
                 Definition[T]['SchemaType'],
                 Definition[T]['ProviderType'],
-                Definition[T]['NetworkType'],
-                Definition[T]['Transaction'],
-                Definition[T]['TransactionParameter']
+                Definition[T]['NetworkType']
             >
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
@@ -147,9 +145,7 @@ export declare namespace Web3Helper {
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType'],
         Definition[NetworkPluginID]['ProviderType'],
-        Definition[NetworkPluginID]['NetworkType'],
-        Definition[NetworkPluginID]['Transaction'],
-        Definition[NetworkPluginID]['TransactionParameter']
+        Definition[NetworkPluginID]['NetworkType']
     >
     export type ChainIdScope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (
         'all'
@@ -244,9 +240,7 @@ export declare namespace Web3Helper {
             Definition[T]['ChainId'],
             Definition[T]['SchemaType'],
             Definition[T]['ProviderType'],
-            Definition[T]['NetworkType'],
-            Definition[T]['Transaction'],
-            Definition[T]['TransactionParameter']
+            Definition[T]['NetworkType']
         >
     export type Scope<S extends 'all' | void = void, T = unknown, F = unknown> = S extends 'all' ? T : F
 
