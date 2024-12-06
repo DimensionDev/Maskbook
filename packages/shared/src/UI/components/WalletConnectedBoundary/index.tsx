@@ -44,7 +44,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
         return (
             <ActionButton
                 className={buttonClass}
-                disabled={!nativeTokenBalance.error}
+                disabled
                 fullWidth
                 variant="contained"
                 onClick={nativeTokenBalance.retry}

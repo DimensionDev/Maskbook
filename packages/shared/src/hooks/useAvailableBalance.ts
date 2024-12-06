@@ -1,12 +1,7 @@
 import { useMemo } from 'react'
 import { BigNumber } from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    useChainContext,
-    useFungibleTokenBalance,
-    useMaskTokenAddress,
-    useNativeTokenBalance,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useFungibleTokenBalance, useNativeTokenBalance } from '@masknet/web3-hooks-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { isGreaterThan, isSameAddress, ZERO } from '@masknet/web3-shared-base'
 import {
@@ -25,11 +20,6 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
 ) {
     const { chainId } = useChainContext(options)
     const { value: nativeTokenBalance = '0' } = useNativeTokenBalance(pluginID, options)
-    const maskTokenAddress = useMaskTokenAddress(pluginID, options)
-    const { data: maskBalance = '0', isPending: isLoadingMaskBalance } = useFungibleTokenBalance(
-        undefined,
-        maskTokenAddress,
-    )
     const { data: tokenBalance = '0', isPending: isLoadingTokenBalance } = useFungibleTokenBalance(pluginID, address, {
         ...options,
         chainId,
@@ -49,22 +39,17 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
             .gte(formatEtherToWei(1))
     }, [gasOption, chainId, pluginID])
 
-    const isAvailableBalance = useMemo(
-        () =>
-            isSameAddress(address, gasOption?.gasCurrency) ||
-            isNativeTokenAddress(address) ||
-            pluginID !== NetworkPluginID.PLUGIN_EVM,
-        [address, gasOption?.gasCurrency, pluginID],
-    )
-
     const isGasSufficient = useMemo(() => {
         if (pluginID !== NetworkPluginID.PLUGIN_EVM) return true
         if (!gasOption?.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency))
             return isGreaterThan(nativeTokenBalance, gasFee)
+        return true
+    }, [gasOption?.gasCurrency, nativeTokenBalance, gasFee, pluginID])
 
-        return isGreaterThan(maskBalance, gasFee)
-    }, [gasOption?.gasCurrency, nativeTokenBalance, maskBalance, gasFee, pluginID])
-
+    const isAvailableBalance =
+        isSameAddress(address, gasOption?.gasCurrency) ||
+        isNativeTokenAddress(address) ||
+        pluginID !== NetworkPluginID.PLUGIN_EVM
     const balance =
         isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM ?
             BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
@@ -76,6 +61,6 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
         isGasFeeGreaterThanOneETH,
         gasFee,
         balance,
-        isPending: isLoadingMaskBalance || isLoadingTokenBalance,
+        isPending: isLoadingTokenBalance,
     }
 }

@@ -1,4 +1,4 @@
-import { memo, type PropsWithChildren, useMemo } from 'react'
+import { memo, type PropsWithChildren } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
@@ -11,7 +11,6 @@ import {
     NetworkContextProvider,
     RevokeChainContextProvider,
 } from '@masknet/web3-hooks-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { useSharedTrans } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
@@ -47,43 +46,40 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     onClick?: () => void
 }
 
-const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(({ className, children, onClick }) => {
-    const t = useSharedTrans()
-    const { classes, cx } = useStyles()
+const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
+    ({ className, children, onClick }) => {
+        const t = useSharedTrans()
+        const { classes, cx } = useStyles()
 
-    const { pluginID } = useNetworkContext()
-    const { account, chainId } = useChainContext()
-    const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
-    const { data: domain } = useReverseAddress(pluginID, account)
-    const Utils = useWeb3Utils()
+        const { pluginID } = useNetworkContext()
+        const { account, chainId } = useChainContext()
+        const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
+        const { data: domain } = useReverseAddress(pluginID, account)
+        const Utils = useWeb3Utils()
 
-    const walletName = useMemo(() => {
-        if (domain) return domain
-        return Utils.formatAddress(account, 4)
-    }, [account, domain, Utils.formatAddress])
+        if (!account) {
+            return (
+                <Box className={cx(classes.root, className)}>
+                    <Button fullWidth>
+                        <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
+                    </Button>
+                </Box>
+            )
+        }
 
-    if (!account) {
         return (
             <Box className={cx(classes.root, className)}>
-                <Button fullWidth>
-                    <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
-                </Button>
+                <WalletDescription
+                    networkIcon={networkDescriptor?.icon}
+                    name={domain ?? Utils.formatAddress(account, 4)}
+                    formattedAddress={Utils.formatAddress(account, 4)}
+                    addressLink={Utils.explorerResolver.addressLink(chainId, account)}
+                />
+                <Action onClick={onClick}>{children}</Action>
             </Box>
         )
-    }
-
-    return (
-        <Box className={cx(classes.root, className)}>
-            <WalletDescription
-                networkIcon={networkDescriptor?.icon}
-                name={walletName}
-                formattedAddress={Utils.formatAddress(account, 4)}
-                addressLink={Utils.explorerResolver.addressLink(chainId, account)}
-            />
-            <Action onClick={onClick}>{children}</Action>
-        </Box>
-    )
-})
+    },
+)
 
 PluginWalletStatusBarWithoutContext.displayName = 'PluginWalletStatusBarWithoutContext'
 

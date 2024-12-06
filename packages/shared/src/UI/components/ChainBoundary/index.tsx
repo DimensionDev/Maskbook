@@ -73,8 +73,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
     const expectedChainAllowed = expectedUtils.chainResolver.isValidChainId(expectedChainId, false)
 
-    const isPluginIDMatched = actualPluginID === expectedPluginID
-
     const renderBox = (children?: React.ReactNode, tips?: string) => {
         return (
             <ShadowRootTooltip
@@ -113,7 +111,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
         )
 
     // Network mismatch
-    if (!isPluginIDMatched) {
+    if (actualPluginID !== expectedPluginID) {
         return renderBox(
             <ActionButton
                 fullWidth
