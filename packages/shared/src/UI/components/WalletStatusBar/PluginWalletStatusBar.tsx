@@ -15,6 +15,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { useSharedTrans } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
+import { Action } from './Action.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -43,15 +44,10 @@ const useStyles = makeStyles()((theme) => ({
 export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
     className?: string
     actualPluginID?: T
-    expectedPluginID?: T
-    expectedChainId?: Web3Helper.Definition[T]['ChainId']
-    onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
-    requiredSupportChainIds?: Array<Web3Helper.Definition[T]['ChainId']>
-    requiredSupportPluginID?: NetworkPluginID
-    readonlyMode?: boolean
+    onClick?: () => void
 }
 
-const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(({ className }) => {
+const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(({ className, children, onClick }) => {
     const t = useSharedTrans()
     const { classes, cx } = useStyles()
 
@@ -84,6 +80,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
                 formattedAddress={Utils.formatAddress(account, 4)}
                 addressLink={Utils.explorerResolver.addressLink(chainId, account)}
             />
+            <Action onClick={onClick}>{children}</Action>
         </Box>
     )
 })
