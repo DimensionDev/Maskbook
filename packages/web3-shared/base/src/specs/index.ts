@@ -3,7 +3,6 @@ import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type {
-    ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
@@ -13,7 +12,6 @@ import type {
     SocialAddress,
     SocialIdentity,
     SocialAccount,
-    SignType,
 } from '@masknet/shared-base'
 
 export enum CurrencyType {
@@ -109,12 +107,6 @@ export enum ActivityType {
     Burn = 'Burn',
     List = 'List',
     CancelOffer = 'CancelOffer',
-}
-
-export enum MessageStateType {
-    NOT_DEPEND = 1,
-    APPROVED = 2,
-    DENIED = 3,
 }
 
 export enum TransactionStatusType {
@@ -217,22 +209,6 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     ChainDescriptor<ChainId, SchemaType, NetworkType>,
     'ID'
 >
-
-export interface MessageDescriptor<Request, Response> {
-    ID: string
-    state: MessageStateType
-    /** The origin of this request (if this request is from third party URL) */
-    origin: string | undefined
-    request: Request
-    response?: Response
-}
-
-export type ReasonableMessage<Request, Response> = MessageDescriptor<Request, Response> & {
-    createdAt: Date
-    updatedAt: Date
-}
-
-export type TransferableMessage<Request, Response> = Omit<MessageDescriptor<Request, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -883,6 +859,19 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
+export interface BalanceNotifierState<ChainId> {
+    emitter: Emitter<BalanceEvent<ChainId>>
+}
+
+export interface NameServiceState {
+    /** get address of domain name */
+    lookup?: (domain: string) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
+    /** safely get domain name of address */
+    safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
+}
+
 export interface NetworkState<ChainId, SchemaType, NetworkType> {
     /** The id of the used network. */
     networkID?: Subscription<string>
@@ -904,18 +893,6 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> {
     removeNetwork: (id: string) => Promise<void>
 }
 
-export interface RiskWarningState {
-    /** Is approved */
-    approved?: Subscription<boolean>
-
-    /** Detect if an account is approved the statement */
-    isApproved?: (address: string) => Promise<boolean>
-    /** Approve statement of designate account */
-    approve?: (address: string, pluginID?: string) => Promise<void>
-    /** Revoke statement of designate account */
-    revoke?: (address: string, pluginID?: string) => Promise<void>
-}
-
 export interface IdentityServiceState<ChainId> {
     /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
     mergeSocialAddressesAllDoNotOverride(socialAddresses: Array<SocialAddress<ChainId>>): Array<SocialAccount<ChainId>>
@@ -923,74 +900,16 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceState {
-    /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
-    /** safely get domain name of address */
-    safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
+export interface WalletState<ChainId> {
+    chainId: Subscription<ChainId>
+    account: Subscription<string>
+    request?: <T>(parameters: any) => Promise<T>
 }
 
-export interface MessageState<Request, Response> {
-    /** All unresolved requests. */
-    messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
-    /** Updates a request. */
-    updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void>
-    /** Applies a request. */
-    applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
-    /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
-    /** Approves a request. */
-    approveRequest(id: string, updates?: Request): Promise<Response | void>
-    /** Rejects a request. */
-    denyRequest(id: string): Promise<void>
-    /** Rejects all requests. */
-    denyAllRequests(): Promise<void>
-}
-
-export interface ProviderState<ChainId, ProviderType, NetworkType> {
-    /** The account of the currently visiting site. */
-    account?: Subscription<string>
-    /** The chain id of the currently visiting site. */
-    chainId?: Subscription<ChainId>
-    /** The network type of the currently visiting site. */
-    networkType?: Subscription<NetworkType>
-    /** The provider type of the currently visiting site. */
-    providerType?: Subscription<ProviderType>
-
-    /** Detect if a provider is ready */
-    isReady: (providerType: ProviderType) => boolean
-    /** Wait until a provider ready */
-    untilReady: (providerType: ProviderType) => undefined | Promise<void>
-
-    /** Connect with the provider and set chain id. */
-    connect: (
-        providerType: ProviderType,
-        chainId: ChainId,
-        account?: string,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
-        silent?: boolean,
-    ) => Promise<Account<ChainId>>
-    /** Disconnect with the provider. */
-    disconnect: (providerType: ProviderType) => Promise<void>
-    /** Sign a message with persona (w or w/o popups) */
-    // TODO: this is not the best place to put this signature, but to avoid IOContext leaked as a global variable, we'll put it here for now.
-    signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
-}
-
-export interface BalanceNotifierState<ChainId> {
-    emitter: Emitter<BalanceEvent<ChainId>>
-}
-
-export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType> {
-    Network?: NetworkState<ChainId, SchemaType, NetworkType>
+export interface Web3State<ChainId, SchemaType, NetworkType> {
+    Wallet?: WalletState<ChainId>
     BalanceNotifier?: BalanceNotifierState<ChainId>
-    IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
-    RiskWarning?: RiskWarningState
-    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
+    Network?: NetworkState<ChainId, SchemaType, NetworkType>
+    IdentityService?: IdentityServiceState<ChainId>
 }

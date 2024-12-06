@@ -4,7 +4,6 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import {
     useNetworkContext,
-    useProviderDescriptor,
     useNetworkDescriptor,
     useReverseAddress,
     useWeb3Utils,
@@ -58,16 +57,15 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
     const { classes, cx } = useStyles()
 
     const { pluginID } = useNetworkContext()
-    const { account, chainId, providerType } = useChainContext()
-    const providerDescriptor = useProviderDescriptor()
+    const { account, chainId } = useChainContext()
     const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
     const { data: domain } = useReverseAddress(pluginID, account)
     const Utils = useWeb3Utils()
 
     const walletName = useMemo(() => {
         if (domain) return domain
-        return providerDescriptor?.name || Utils.formatAddress(account, 4)
-    }, [account, domain, providerType, providerDescriptor?.name, Utils.formatAddress])
+        return Utils.formatAddress(account, 4)
+    }, [account, domain, Utils.formatAddress])
 
     if (!account) {
         return (
@@ -82,9 +80,7 @@ const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPlu
     return (
         <Box className={cx(classes.root, className)}>
             <WalletDescription
-                providerIcon={providerDescriptor?.icon}
                 networkIcon={networkDescriptor?.icon}
-                iconFilterColor={providerDescriptor?.iconFilterColor}
                 name={walletName}
                 formattedAddress={Utils.formatAddress(account, 4)}
                 addressLink={Utils.explorerResolver.addressLink(chainId, account)}

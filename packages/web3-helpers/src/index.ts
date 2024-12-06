@@ -38,12 +38,7 @@ export declare namespace Web3Helper {
 
     export type Web3State<T extends NetworkPluginID = never> =
         T extends never ? never
-        :   Web3StateShared<
-                Definition[T]['ChainId'],
-                Definition[T]['SchemaType'],
-                Definition[T]['ProviderType'],
-                Definition[T]['NetworkType']
-            >
+        :   Web3StateShared<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['NetworkType']>
 
     export type ChainIdAll = Definition[NetworkPluginID]['ChainId']
 
@@ -144,7 +139,6 @@ export declare namespace Web3Helper {
     export type Web3StateAll = Web3StateShared<
         Definition[NetworkPluginID]['ChainId'],
         Definition[NetworkPluginID]['SchemaType'],
-        Definition[NetworkPluginID]['ProviderType'],
         Definition[NetworkPluginID]['NetworkType']
     >
     export type ChainIdScope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (
@@ -236,12 +230,7 @@ export declare namespace Web3Helper {
         'all'
     ) ?
         Web3StateAll
-    :   Web3StateShared<
-            Definition[T]['ChainId'],
-            Definition[T]['SchemaType'],
-            Definition[T]['ProviderType'],
-            Definition[T]['NetworkType']
-        >
+    :   Web3StateShared<Definition[T]['ChainId'], Definition[T]['SchemaType'], Definition[T]['NetworkType']>
     export type Scope<S extends 'all' | void = void, T = unknown, F = unknown> = S extends 'all' ? T : F
 
     export type Web3Scope<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID> = S extends (

@@ -9,11 +9,11 @@ export class SolanaHubOptionsAPI extends HubOptionsProvider<ChainId> {
     protected override getNetworkPluginID = getNetworkPluginID
 
     protected override getAccount() {
-        return solana.state?.Provider?.account?.getCurrentValue()
+        return solana.state?.Wallet?.account?.getCurrentValue()
     }
 
     protected override getChainId() {
-        return solana.state?.Provider?.chainId?.getCurrentValue()
+        return solana.state?.Wallet?.chainId?.getCurrentValue()
     }
 
     protected override getCurrencyType() {

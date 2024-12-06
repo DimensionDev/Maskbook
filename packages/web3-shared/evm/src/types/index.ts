@@ -251,27 +251,6 @@ export enum EthereumMethodType {
     ETH_SUBSCRIBE = 'eth_subscribe',
     ETH_UNSUBSCRIBE = 'eth_unsubscribe',
 
-    // EIP-4337
-    ETH_SEND_USER_OPERATION = 'eth_sendUserOperation',
-    ETH_CALL_USER_OPERATION = 'eth_callUserOperation',
-    ETH_SUPPORTED_CHAIN_IDS = 'eth_supportedChainIds',
-    ETH_SUPPORTED_ENTRY_POINTS = 'eth_supportedEntryPoints',
-    MASK_DEPLOY = 'mask_deploy',
-    MASK_FUND = 'mask_fund',
-
-    // only for mask
-    MASK_LOGIN = 'MASK_LOGIN',
-    MASK_LOGOUT = 'MASK_LOGOUT',
-    MASK_WALLETS = 'MASK_WALLETS',
-    MASK_ADD_WALLET = 'MASK_ADD_WALLET',
-    MASK_UPDATE_WALLET = 'MASK_UPDATE_WALLET',
-    MASK_RENAME_WALLET = 'MASK_RENAME_WALLET',
-    MASK_REMOVE_WALLET = 'MASK_REMOVE_WALLET',
-    MASK_UPDATE_WALLETS = 'MASK_UPDATE_WALLETS',
-    MASK_REMOVE_WALLETS = 'MASK_REMOVE_WALLETS',
-    MASK_RESET_ALL_WALLETS = 'MASK_RESET_ALL_WALLETS',
-    MASK_REPLACE_TRANSACTION = 'mask_replaceTransaction',
-
     NET_VERSION = 'net_version',
 }
 
@@ -315,7 +294,6 @@ export enum NetworkType {
 
 export enum ProviderType {
     None = 'None',
-    CustomEvent = 'CustomEvent',
 }
 
 /**
@@ -396,20 +374,6 @@ export interface Transaction {
     gatewayFeeRecipient?: string // coinbase address of the full serving the light client's transactions
     gatewayFee?: string // value paid to the gateway fee recipient, denominated in the fee currency
 }
-export interface UserOperation {
-    sender: string
-    nonce?: number
-    initCode?: string
-    callData?: string
-    callGas?: string
-    verificationGas?: string
-    preVerificationGas?: string
-    maxFeePerGas?: string
-    maxPriorityFeePerGas?: string
-    paymaster?: string
-    paymasterData?: string
-    signature?: string
-}
 export type TransactionReceipt = Web3TransactionReceipt
 export type TransactionDetailed = Web3Transaction
 export type TransactionSignature = string
@@ -430,7 +394,7 @@ export interface TransactionOptions {
     silent?: boolean
 }
 
-export type Web3State = Web3StateShared<ChainId, SchemaType, ProviderType, NetworkType>
+export type Web3State = Web3StateShared<ChainId, SchemaType, NetworkType>
 
 export type Web3Definition = {
     ChainId: ChainId
@@ -443,13 +407,11 @@ export type Web3Definition = {
     Block: Block
     MessageRequest: MessageRequest
     MessageResponse: MessageResponse
-    Operation: UserOperation
     Transaction: Transaction
     TransactionReceipt: TransactionReceipt
     TransactionDetailed: TransactionDetailed
     TransactionSignature: TransactionSignature
     TransactionParameter: TransactionParameter
-    UserOperation: UserOperation
     Web3: Web3
     Web3Provider: Web3Provider
     Web3State: Web3State

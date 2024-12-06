@@ -1,6 +1,6 @@
 import { noop } from 'lodash-es'
 import { isSameURL } from '@masknet/web3-shared-base'
-import { ErrorEditor, isMaskOnlyMethodType, type Middleware } from '@masknet/web3-shared-evm'
+import { ErrorEditor, type Middleware } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { evm } from '../../../Manager/registry.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
@@ -19,7 +19,7 @@ class CustomNetworkAPI implements Middleware<ConnectionContext> {
 
     async fn(context: ConnectionContext, next: () => Promise<void>) {
         const customNetwork = this.networks?.find((x) => x.isCustomized && isSameURL(x.rpcUrl, context.providerURL))
-        if (!customNetwork || context.risky || !context.writable || isMaskOnlyMethodType(context.method)) {
+        if (!customNetwork || context.risky || !context.writable) {
             await next()
             return
         }

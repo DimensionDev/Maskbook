@@ -1,15 +1,8 @@
 import { makeStyles, ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { useSharedTrans } from '../../../locales/index.js'
 import { isZero } from '@masknet/web3-shared-base'
-import {
-    useChainContext,
-    useNetworkContext,
-    useNativeTokenBalance,
-    useRiskWarningApproved,
-} from '@masknet/web3-hooks-base'
+import { useChainContext, useNetworkContext, useNativeTokenBalance } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { WalletRiskWarningModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()({
     button: {
@@ -21,14 +14,13 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
     offChain?: boolean
     children?: React.ReactNode
     expectedChainId: Web3Helper.ChainIdAll
-    hideRiskWarningConfirmed?: boolean
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
     noGasText?: string
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, hideRiskWarningConfirmed = false, expectedChainId, noGasText } = props
+    const { children = null, offChain = false, expectedChainId, noGasText } = props
 
     const t = useSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
@@ -39,7 +31,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const nativeTokenBalance = useNativeTokenBalance(undefined, {
         chainId: chainIdValid,
     })
-    const approved = useRiskWarningApproved()
 
     const buttonClass = cx(classes.button, classes.connectWallet)
 
@@ -47,23 +38,6 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
         return (
             <ActionButton startIcon={props.startIcon} className={buttonClass} fullWidth {...props.ActionButtonProps}>
                 {t.plugin_wallet_connect_a_wallet()}
-            </ActionButton>
-        )
-
-    if (!approved && !hideRiskWarningConfirmed && pluginID === NetworkPluginID.PLUGIN_EVM)
-        return (
-            <ActionButton
-                className={buttonClass}
-                fullWidth
-                variant="contained"
-                onClick={() => {
-                    WalletRiskWarningModal.open({
-                        account,
-                        pluginID,
-                    })
-                }}
-                {...props.ActionButtonProps}>
-                {t.plugin_wallet_confirm_risk_warning()}
             </ActionButton>
         )
 

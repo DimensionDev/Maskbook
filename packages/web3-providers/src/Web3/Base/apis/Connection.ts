@@ -1,4 +1,4 @@
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account } from '@masknet/shared-base'
 import type {
     FungibleToken,
     NonFungibleCollection,
@@ -15,7 +15,6 @@ export interface BaseConnection<
     SchemaType,
     ProviderType,
     Signature,
-    Operation,
     Transaction,
     TransactionReceipt,
     TransactionDetailed,
@@ -179,19 +178,6 @@ export interface BaseConnection<
         initial?: Options,
     ): Promise<string>
 
-    /** Call a operation */
-    callUserOperation?: (owner: string, operation: Operation, initial?: Options) => Promise<string>
-    /** Send a operation */
-    sendUserOperation?: (owner: string, operation: Operation, initial?: Options) => Promise<TransactionSignature>
-    /** Transfer some native tokens from contract wallet */
-    transfer?: (recipient: string, amount: string, initial?: Options) => Promise<string>
-    /** Change owner of contract wallet */
-    changeOwner?: (recipient: string, initial?: Options) => Promise<string>
-    /** Fund contract wallet */
-    fund?: (proof: Proof, initial?: Options) => Promise<string>
-    /** Deploy contract wallet */
-    deploy?: (owner: string, identifier?: ECKeyIdentifier, initial?: Options) => Promise<string>
-
     /** Sign a transaction */
     signTransaction(transaction: Transaction, initial?: Options): Promise<TransactionSignature>
 
@@ -215,19 +201,6 @@ export interface BaseConnection<
 
     /** Break connection */
     disconnect(initial?: Options): Promise<void>
-
-    /** Get all wallets. */
-    getWallets?: (initial?: Options) => Promise<Wallet[]>
-    /** Add a new wallet. */
-    addWallet?: (wallet: UpdatableWallet, initial?: Options) => Promise<void>
-    /** Update a wallet. */
-    updateWallet?: (address: string, wallet: Partial<UpdatableWallet>, initial?: Options) => Promise<void>
-    /** Rename a wallet */
-    renameWallet?: (address: string, name: string, initial?: Options) => Promise<void>
-    /** Remove a wallet */
-    removeWallet?: (address: string, password?: string | undefined, initial?: Options) => Promise<void>
-    /** Reset all wallets */
-    resetAllWallets?: (initial?: Options) => Promise<void>
 
     /** Confirm transaction */
     confirmTransaction(hash: string, initial?: Options): Promise<TransactionReceipt>

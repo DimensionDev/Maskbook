@@ -1,5 +1,5 @@
 import { identity, pickBy } from 'lodash-es'
-import type { GasOptionType, ProviderState } from '@masknet/web3-shared-base'
+import type { GasOptionType } from '@masknet/web3-shared-base'
 import type { ECKeyIdentifier, PartialRequired } from '@masknet/shared-base'
 
 export interface BaseConnectionOptions<ChainId, ProviderType, Transaction> {
@@ -32,7 +32,6 @@ export interface BaseConnectionOptions<ChainId, ProviderType, Transaction> {
 export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkType, Transaction> {
     protected abstract getDefaultChainId(): ChainId
     protected abstract getDefaultProviderType(): ProviderType
-    protected abstract getProvider?(): undefined | ProviderState<ChainId, ProviderType, NetworkType>
 
     constructor(private options?: BaseConnectionOptions<ChainId, ProviderType, Transaction>) {}
 
@@ -45,12 +44,10 @@ export abstract class ConnectionOptionsProvider<ChainId, ProviderType, NetworkTy
     }
 
     protected get refs(): BaseConnectionOptions<ChainId, ProviderType, Transaction> {
-        const provider = this.getProvider?.()
-        if (!provider) return {}
         return {
-            account: provider.account?.getCurrentValue(),
-            chainId: provider.chainId?.getCurrentValue(),
-            providerType: provider.providerType?.getCurrentValue(),
+            account: '',
+            chainId: this.getDefaultChainId(),
+            providerType: this.getDefaultProviderType(),
         }
     }
 

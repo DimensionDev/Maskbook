@@ -9,7 +9,7 @@
     { "path": "./packages/base/tsconfig.tests.json" },
     { "path": "./packages/encryption/tsconfig.tests.json" },
     { "path": "./packages/typed-message/tests/tsconfig.json" },
-    { "path": "./packages/plugin-infra/tsconfig.json"},
+    { "path": "./packages/plugin-infra/tsconfig.json" },
     { "path": "./packages/shared/tsconfig.json" },
     { "path": "./packages/shared-base/tsconfig.tests.json" },
     { "path": "./packages/web3-hooks/base/tsconfig.tests.json" },

@@ -8,7 +8,6 @@ export class ConnectionOptionsReadonlyAPI extends ConnectionOptionsProvider<
     NetworkType,
     Transaction
 > {
-    protected override getProvider = undefined
     protected override getDefaultChainId = getDefaultChainId
     protected override getDefaultProviderType = getDefaultProviderType
 }

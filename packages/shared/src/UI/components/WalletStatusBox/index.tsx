@@ -3,7 +3,6 @@ import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
     useNetworkDescriptor,
-    useProviderDescriptor,
     useReverseAddress,
     useNativeToken,
     useWeb3Connection,
@@ -20,11 +19,10 @@ const useStyles = makeStyles<{
     contentBackground?: string
     textColor?: string
     disableChange?: boolean
-    withinRiskWarningDialog?: boolean
-}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
+}>()((theme, { contentBackground, disableChange }) => ({
     currentAccount: {
         padding: theme.spacing(0, 1.5),
-        marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
+        marginBottom: theme.spacing(2),
         display: 'flex',
         background: contentBackground ?? theme.palette.background.default,
         borderRadius: 8,
@@ -93,19 +91,16 @@ const useStyles = makeStyles<{
 
 export interface WalletStatusBox {
     disableChange?: boolean
-    withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
     closeDialog?: () => void
 }
 
 export function WalletStatusBox(props: WalletStatusBox) {
     const t = useSharedTrans()
-    const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
+        contentBackground: theme.palette.maskColor.publicBg,
         disableChange: props.disableChange,
-        withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor: theme.palette.text.primary,
     })
 
@@ -132,12 +127,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     return (
         <>
             <section className={cx(classes.statusBox, classes.currentAccount)}>
-                <WalletIcon
-                    size={30}
-                    badgeSize={12}
-                    mainIcon={providerDescriptor?.icon}
-                    badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
-                />
+                <WalletIcon size={30} badgeSize={12} badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined} />
                 <div className={classes.accountInfo}>
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
@@ -165,18 +155,16 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         :   null}
                     </div>
 
-                    {props.withinRiskWarningDialog ? null : (
-                        <div className={classes.infoRow}>
-                            <Typography className={classes.balance}>
-                                {loadingNativeToken || loadingBalance ?
-                                    '-'
-                                :   `${formatBalance(balance, nativeToken?.decimals, {
-                                        significant: 3,
-                                    })} ${nativeToken?.symbol}`
-                                }
-                            </Typography>
-                        </div>
-                    )}
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.balance}>
+                            {loadingNativeToken || loadingBalance ?
+                                '-'
+                            :   `${formatBalance(balance, nativeToken?.decimals, {
+                                    significant: 3,
+                                })} ${nativeToken?.symbol}`
+                            }
+                        </Typography>
+                    </div>
                 </div>
 
                 {!props.disableChange && (

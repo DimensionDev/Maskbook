@@ -4,10 +4,10 @@ import {
     type ProviderDescriptor,
     TokenType,
 } from '@masknet/web3-shared-base'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import CHAINS from './chains.json'
-import { ChainId, NetworkType, ProviderType, SchemaType } from '../types/index.js'
-import { ChainIdList, getTokenConstant } from './constants.js'
+import { ChainId, NetworkType, type ProviderType, SchemaType } from '../types/index.js'
+import { getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
 
 const PLUGIN_ID = NetworkPluginID.PLUGIN_EVM
@@ -393,23 +393,4 @@ export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaTyp
     }
 })
 
-export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [
-    {
-        ID: `${PLUGIN_ID}_customEvent`,
-        providerAdaptorPluginID: PLUGIN_ID,
-        type: ProviderType.CustomEvent,
-        name: 'Custom Event Wallet',
-        icon: new URL('../assets/metamask.svg', import.meta.url).href,
-        enableRequirements: {
-            supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: [EnhanceableSite.Firefly],
-            supportedExtensionSites: [],
-        },
-        homeLink: '',
-        shortenLink: '',
-        downloadLink: '',
-        iconFilterColor: 'rgba(216, 124, 48, 0.3)',
-        backgroundGradient:
-            'linear-gradient(90deg, rgba(248, 156, 53, 0.2) 0%, rgba(98, 126, 234, 0.2) 100%), linear-gradient(0deg, #FFFFFF, #FFFFFF)',
-    },
-]
+export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = []

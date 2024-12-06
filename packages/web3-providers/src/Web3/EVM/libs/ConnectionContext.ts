@@ -5,7 +5,6 @@ import {
     ErrorEditor,
     EthereumMethodType,
     PayloadEditor,
-    ProviderType,
     createJsonRpcPayload,
     createJsonRpcResponse,
     parseChainId,
@@ -23,26 +22,23 @@ export class ConnectionContext {
     private _result: unknown
     private _account = ''
     private _chainId = ChainId.Mainnet
-    private _providerType = ProviderType.CustomEvent
 
     constructor(
         private _requestArguments: RequestArguments,
         private _options?: EVMConnectionOptions,
         private _init?: {
-            getDefaultAccount?: (providerType: ProviderType) => string | undefined
-            getDefaultChainId?: (providerType: ProviderType) => ChainId | undefined
-            getDefaultProviderType: () => ProviderType | undefined
-            getDefaultOwner?: (providerType: ProviderType) => string | undefined
-            getDefaultIdentifier?: (providerType: ProviderType) => ECKeyIdentifier | undefined
+            getDefaultAccount?: () => string | undefined
+            getDefaultChainId?: () => ChainId | undefined
+            getDefaultOwner?: () => string | undefined
+            getDefaultIdentifier?: () => ECKeyIdentifier | undefined
         },
     ) {
         // increase pid
         pid += 1
         this.id = pid
 
-        this._account = this._init?.getDefaultAccount?.(this.providerType) ?? ''
-        this._chainId = this._init?.getDefaultChainId?.(this.providerType) ?? ChainId.Mainnet
-        this._providerType = this._init?.getDefaultProviderType() ?? ProviderType.CustomEvent
+        this._account = this._init?.getDefaultAccount?.() ?? ''
+        this._chainId = this._init?.getDefaultChainId?.() ?? ChainId.Mainnet
     }
 
     private get errorEditor() {
@@ -72,7 +68,7 @@ export class ConnectionContext {
     }
 
     get providerType() {
-        return this.requestOptions.providerType ?? this._options?.providerType ?? this._providerType
+        return this.requestOptions.providerType ?? this._options?.providerType
     }
 
     get providerURL() {
@@ -108,12 +104,6 @@ export class ConnectionContext {
         const method = this._requestArguments.method
 
         switch (method) {
-            case EthereumMethodType.MASK_REPLACE_TRANSACTION:
-                this._requestArguments = {
-                    method: this.method,
-                    params: [this._requestArguments.params[0], config],
-                }
-                break
             case EthereumMethodType.ETH_SEND_TRANSACTION:
                 this._requestArguments = {
                     method: this.method,
@@ -125,18 +115,6 @@ export class ConnectionContext {
         }
     }
 
-    get wallet() {
-        return this.payloadEditor.wallet
-    }
-
-    get userOperation() {
-        return this.payloadEditor.userOperation
-    }
-
-    get proof() {
-        return this.payloadEditor.proof
-    }
-
     get requestId() {
         return this.id
     }
@@ -145,18 +123,14 @@ export class ConnectionContext {
      * Abstract account owner address
      */
     get owner() {
-        return this.payloadEditor.owner || this._options?.owner || this._init?.getDefaultOwner?.(this.providerType)
+        return this._options?.owner || this._init?.getDefaultOwner?.()
     }
 
     /**
      * Abstract account owner persona public key
      */
     get identifier() {
-        return (
-            this.payloadEditor.identifier ||
-            this._options?.identifier ||
-            this._init?.getDefaultIdentifier?.(this.providerType)
-        )
+        return this._options?.identifier || this._init?.getDefaultIdentifier?.()
     }
 
     get paymentToken() {

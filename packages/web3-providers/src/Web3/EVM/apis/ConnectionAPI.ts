@@ -1,7 +1,6 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { delay } from '@masknet/kit'
 import { NetworkPluginID } from '@masknet/shared-base'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
 import {
     type AddressType,
     type ChainId,
@@ -13,7 +12,6 @@ import {
     type TransactionSignature,
     type ProviderType,
     type Signature,
-    type UserOperation,
     type Web3,
     EthereumMethodType,
     AccountTransaction,
@@ -22,14 +20,11 @@ import {
     ContractTransaction,
     isValidChainId,
 } from '@masknet/web3-shared-evm'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
-import { evm } from '../../../Manager/registry.js'
 import { EVMRequestAPI } from './RequestAPI.js'
 import { EVMContractAPI } from './ContractAPI.js'
 import { EVMConnectionReadonlyAPI } from './ConnectionReadonlyAPI.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
-import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createConnectionCreator } from '../../Base/apis/ConnectionCreator.js'
 
@@ -42,7 +37,6 @@ export class ConnectionAPI
             SchemaType,
             ProviderType,
             Signature,
-            UserOperation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -54,84 +48,6 @@ export class ConnectionAPI
     protected override Request = new EVMRequestAPI(this.options)
     protected override Contract = new EVMContractAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
-
-    override async addWallet(wallet: UpdatableWallet, initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_ADD_WALLET,
-                params: [wallet],
-            },
-            initial,
-        )
-    }
-
-    override async updateWallet(
-        address: string,
-        wallet: Partial<UpdatableWallet>,
-        initial?: EVMConnectionOptions,
-    ): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_UPDATE_WALLET,
-                params: [address, wallet],
-            },
-            initial,
-        )
-    }
-
-    override async renameWallet(address: string, name: string, initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_RENAME_WALLET,
-                params: [address, name],
-            },
-            initial,
-        )
-    }
-
-    override async removeWallet(
-        address: string,
-        password?: string | undefined,
-        initial?: EVMConnectionOptions,
-    ): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_REMOVE_WALLET,
-                params: [address, password],
-            },
-            initial,
-        )
-    }
-
-    override async resetAllWallets(initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_RESET_ALL_WALLETS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    override async updateWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_UPDATE_WALLETS,
-                params: wallets,
-            },
-            initial,
-        )
-    }
-
-    override async removeWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_REMOVE_WALLETS,
-                params: wallets,
-            },
-            initial,
-        )
-    }
 
     override async approveFungibleToken(
         address: string,
@@ -273,143 +189,19 @@ export class ConnectionAPI
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 
-    override supportedChainIds(initial?: EVMConnectionOptions) {
-        return this.Request.request<ChainId[]>(
-            {
-                method: EthereumMethodType.ETH_SUPPORTED_CHAIN_IDS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    override async callUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.ETH_CALL_USER_OPERATION,
-                params: [
-                    owner,
-                    {
-                        ...operation,
-                        sender: options.account,
-                    },
-                ],
-            },
-            options,
-        )
-    }
-
-    override async sendUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.ETH_SEND_USER_OPERATION,
-                params: [
-                    owner,
-                    {
-                        ...operation,
-                        sender: operation.sender || options.account,
-                    },
-                ],
-            },
-            options,
-        )
-    }
-
-    override async transfer(recipient: string, amount: string, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const contract = this.Contract.getWalletContract(options.account, options)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        const tx = {
-            from: options.account,
-            to: options.account,
-            data: contract.methods.transfer(recipient, amount).encodeABI(),
-        }
-
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [
-                    {
-                        ...tx,
-                        gas: await this.estimateTransaction(tx, 50000, options),
-                    },
-                ],
-            },
-            options,
-        )
-    }
-
-    override async changeOwner(recipient: string, initial?: EVMConnectionOptions) {
-        const options = this.ConnectionOptions.fill(initial)
-        const contract = this.Contract.getWalletContract(options.account, options)
-        if (!contract) throw new Error('Failed to create contract.')
-
-        const tx = {
-            from: options.account,
-            to: options.account,
-            data: contract.methods.changeOwner(recipient).encodeABI(),
-        }
-
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.ETH_SEND_TRANSACTION,
-                params: [
-                    {
-                        ...tx,
-                        gas: await this.estimateTransaction(tx, 50000, options),
-                    },
-                ],
-            },
-            options,
-        )
-    }
-
-    override async fund(proof: Proof, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.MASK_FUND,
-                params: [proof],
-            },
-            initial,
-        )
-    }
-
-    override async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions) {
-        return this.Request.request<string>(
-            {
-                method: EthereumMethodType.MASK_DEPLOY,
-                params: [owner, identifier],
-            },
-            initial,
-        )
-    }
-
-    override async connect(initial?: EVMConnectionOptions): Promise<Account<ChainId>> {
-        return this.Request.request<Account<ChainId>>(
-            {
-                method: EthereumMethodType.MASK_LOGIN,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    override async disconnect(initial?: EVMConnectionOptions): Promise<void> {
-        await this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_LOGOUT,
-                params: [],
-            },
-            initial,
-        )
-    }
-
     override async switchChain(chainId: ChainId, initial?: EVMConnectionOptions): Promise<void> {
         const options = this.ConnectionOptions.fill(initial)
-        await EVMWalletProviders[options.providerType].switchChain(chainId)
+        return this.Request.request<void>(
+            {
+                method: EthereumMethodType.WALLET_SWITCH_ETHEREUM_CHAIN,
+                params: [
+                    {
+                        chainId: web3_utils.toHex(chainId),
+                    },
+                ],
+            },
+            options,
+        )
     }
 
     override async sendTransaction(transaction: Transaction, initial?: EVMConnectionOptions) {
@@ -447,34 +239,6 @@ export class ConnectionAPI
 
         // insufficient try times
         throw new Error('Not confirm yet')
-    }
-
-    override replaceTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
-        return this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
-                params: [hash, transaction],
-            },
-            initial,
-        )
-    }
-
-    override cancelTransaction(hash: string, transaction: Transaction, initial?: EVMConnectionOptions) {
-        return this.Request.request<void>(
-            {
-                method: EthereumMethodType.MASK_REPLACE_TRANSACTION,
-                params: [
-                    hash,
-                    {
-                        ...transaction,
-                        to: transaction.from,
-                        data: '0x0',
-                        value: '0x0',
-                    },
-                ],
-            },
-            initial,
-        )
     }
 }
 
