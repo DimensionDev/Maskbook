@@ -1,4 +1,4 @@
-import { makeStyles, LoadingBase } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { alpha, Box, Link, Typography } from '@mui/material'
 import { CopyButton, WalletIcon } from '@masknet/shared'
@@ -52,8 +52,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface WalletDescriptionProps {
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
-    pending?: boolean
-    onPendingClick?: () => void
     providerIcon?: string
     networkIcon?: string
     iconFilterColor?: string
@@ -74,8 +72,6 @@ export const WalletDescription = memo<WalletDescriptionProps>(
         address,
         formattedAddress,
         addressLink,
-        onPendingClick,
-        pending,
         verified,
     }) => {
         const { classes } = useStyles()
@@ -96,9 +92,6 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                         {verified ?
                             <Icons.Verification size={18} />
                         :   null}
-                        {onPendingClick ?
-                            <Icons.ArrowDrop />
-                        :   null}
                     </Typography>
                     <Typography className={classes.address}>
                         <span>{formattedAddress}</span>
@@ -116,17 +109,6 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                             className={classes.linkIcon}>
                             <Icons.LinkOut size={14} className={classes.linkIcon} />
                         </Link>
-                        {pending ?
-                            <span
-                                className={classes.pending}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onPendingClick?.()
-                                }}>
-                                {t.recent_transaction_pending()}
-                                <LoadingBase size={12} className={classes.progress} />
-                            </span>
-                        :   null}
                     </Typography>
                 </Box>
             </Box>

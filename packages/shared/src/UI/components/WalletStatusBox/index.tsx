@@ -11,18 +11,10 @@ import {
     useChainIdValid,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import {
-    FormattedAddress,
-    WalletIcon,
-    SelectProviderModal,
-    useSharedTrans,
-    WalletStatusModal,
-    CopyButton,
-} from '@masknet/shared'
+import { FormattedAddress, WalletIcon, SelectProviderModal, useSharedTrans, CopyButton } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
-import { usePendingTransactions } from './usePendingTransactions.js'
 
 const useStyles = makeStyles<{
     contentBackground?: string
@@ -126,7 +118,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { data: nativeToken, isPending: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { data: domain } = useReverseAddress(undefined, account)
-    const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
     if (!Utils.isValidAddress(account)) {
         return (
@@ -203,7 +194,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                                 props.closeDialog?.()
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
-                                WalletStatusModal.close()
                                 await Web3.disconnect()
                             }}>
                             {t.plugin_wallet_disconnect()}
@@ -221,12 +211,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </section>
                 )}
             </section>
-            {props.showPendingTransaction ?
-                <div>
-                    {pendingSummary}
-                    {transactionList}
-                </div>
-            :   null}
         </>
     )
 }

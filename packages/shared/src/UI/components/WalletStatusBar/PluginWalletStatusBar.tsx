@@ -1,11 +1,10 @@
-import { memo, type PropsWithChildren, useCallback, useMemo } from 'react'
+import { memo, type PropsWithChildren, useMemo } from 'react'
 import { alpha, Box, Button } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import {
     useNetworkContext,
     useProviderDescriptor,
-    useRecentTransactions,
     useNetworkDescriptor,
     useReverseAddress,
     useWeb3Utils,
@@ -15,11 +14,8 @@ import {
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
-import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { useSharedTrans } from '../../../locales/index.js'
 import { WalletDescription } from './WalletDescription.js'
-import { Action } from './Action.js'
-import { SelectProviderModal, WalletStatusModal } from '../../../index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,73 +53,45 @@ export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWi
     disableSwitchAccount?: boolean
 }
 
-const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(
-    ({
-        className,
-        onClick,
-        expectedPluginID,
-        expectedChainId,
-        children,
-        requiredSupportChainIds,
-        requiredSupportPluginID,
-        readonlyMode,
-        disableSwitchAccount,
-    }) => {
-        const t = useSharedTrans()
-        const { classes, cx } = useStyles()
+const PluginWalletStatusBarWithoutContext = memo<WalletStatusBarProps<NetworkPluginID>>(({ className }) => {
+    const t = useSharedTrans()
+    const { classes, cx } = useStyles()
 
-        const { pluginID } = useNetworkContext()
-        const { account, chainId, providerType } = useChainContext()
-        const providerDescriptor = useProviderDescriptor()
-        const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
-        const expectedNetworkDescriptor = useNetworkDescriptor(expectedPluginID, expectedChainId)
-        const { data: domain } = useReverseAddress(pluginID, account)
-        const Utils = useWeb3Utils()
+    const { pluginID } = useNetworkContext()
+    const { account, chainId, providerType } = useChainContext()
+    const providerDescriptor = useProviderDescriptor()
+    const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
+    const { data: domain } = useReverseAddress(pluginID, account)
+    const Utils = useWeb3Utils()
 
-        const openSelectProviderDialog = useCallback(() => {
-            SelectProviderModal.open({
-                requiredSupportChainIds,
-                requiredSupportPluginID,
-            })
-        }, [expectedNetworkDescriptor, requiredSupportChainIds, requiredSupportPluginID])
+    const walletName = useMemo(() => {
+        if (domain) return domain
+        return providerDescriptor?.name || Utils.formatAddress(account, 4)
+    }, [account, domain, providerType, providerDescriptor?.name, Utils.formatAddress])
 
-        const pendingTransactions = useRecentTransactions(pluginID, TransactionStatusType.NOT_DEPEND)
-
-        const walletName = useMemo(() => {
-            if (domain) return domain
-            return providerDescriptor?.name || Utils.formatAddress(account, 4)
-        }, [account, domain, providerType, providerDescriptor?.name, Utils.formatAddress])
-
-        if (!account) {
-            return (
-                <Box className={cx(classes.root, className)}>
-                    <Button fullWidth onClick={openSelectProviderDialog}>
-                        <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
-                    </Button>
-                </Box>
-            )
-        }
-
+    if (!account) {
         return (
             <Box className={cx(classes.root, className)}>
-                <WalletDescription
-                    pending={!!pendingTransactions.length}
-                    providerIcon={providerDescriptor?.icon}
-                    networkIcon={networkDescriptor?.icon}
-                    iconFilterColor={providerDescriptor?.iconFilterColor}
-                    name={walletName}
-                    formattedAddress={Utils.formatAddress(account, 4)}
-                    addressLink={Utils.explorerResolver.addressLink(chainId, account)}
-                    onClick={readonlyMode || disableSwitchAccount ? undefined : onClick ?? openSelectProviderDialog}
-                    onPendingClick={readonlyMode || disableSwitchAccount ? undefined : () => WalletStatusModal.open()}
-                />
-                {!readonlyMode ?
-                    <Action openSelectWalletDialog={openSelectProviderDialog}>{children}</Action>
-                :   null}
+                <Button fullWidth>
+                    <Icons.Wallet className={classes.connection} /> {t.plugin_wallet_connect_a_wallet()}
+                </Button>
             </Box>
         )
-    },
-)
+    }
+
+    return (
+        <Box className={cx(classes.root, className)}>
+            <WalletDescription
+                providerIcon={providerDescriptor?.icon}
+                networkIcon={networkDescriptor?.icon}
+                iconFilterColor={providerDescriptor?.iconFilterColor}
+                name={walletName}
+                formattedAddress={Utils.formatAddress(account, 4)}
+                addressLink={Utils.explorerResolver.addressLink(chainId, account)}
+            />
+        </Box>
+    )
+})
 
 PluginWalletStatusBarWithoutContext.displayName = 'PluginWalletStatusBarWithoutContext'
 

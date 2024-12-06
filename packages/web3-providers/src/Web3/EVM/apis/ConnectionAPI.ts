@@ -416,42 +416,13 @@ export class ConnectionAPI
         const options = this.ConnectionOptions.fill(initial)
 
         // send a transaction which will add into the internal transaction list and start to watch it for confirmation
-        const hash = await this.Request.request<string>(
+        return this.Request.request<string>(
             {
                 method: EthereumMethodType.ETH_SEND_TRANSACTION,
                 params: [new AccountTransaction(transaction).fill(options.overrides)],
             },
             options,
         )
-
-        return new Promise<string>((resolve, reject) => {
-            const { Transaction, TransactionWatcher } = evm.state!
-            if (!Transaction || !TransactionWatcher) {
-                reject(
-                    new Error(
-                        'No context found. Do you forget to setup Transaction and TransactionWatcher in evm state?',
-                    ),
-                )
-                return
-            }
-
-            const onProgress = async (
-                chainId: ChainId,
-                id: string,
-                status: TransactionStatusType,
-                transaction?: Transaction,
-            ) => {
-                if (status === TransactionStatusType.NOT_DEPEND) return
-                if (!transaction?.from) return
-                const transactions = await Transaction.getTransactions?.(chainId, transaction.from)
-                const currentTransaction = transactions?.find((x) => {
-                    const hashes = Object.keys(x.candidates)
-                    return hashes.includes(hash) && hashes.includes(id)
-                })
-                if (currentTransaction) resolve(currentTransaction.indexId)
-            }
-            TransactionWatcher.emitter.on('progress', onProgress)
-        })
     }
 
     override async confirmTransaction(hash: string, initial?: EVMConnectionOptions): Promise<TransactionReceipt> {

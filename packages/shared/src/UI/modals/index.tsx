@@ -1,11 +1,8 @@
 import { memo } from 'react'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { WalletStatusModal } from './WalletStatusModal/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
 import { WalletRiskWarningModal } from './WalletRiskWarningModal/index.js'
 import { ConnectWalletModal } from './ConnectWalletModal/index.js'
-import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
 import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
 import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
 
@@ -20,9 +17,7 @@ export const Modals = memo(function Modals(props: ModalProps) {
         <RootWeb3ContextProvider>
             <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <SelectProviderModal createWallet={props.createWallet} ref={modals.SelectProviderModal.register} />
-            <WalletStatusModal ref={modals.WalletStatusModal.register} />
             <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
-            <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={modals.TransactionSnackbar.register} />
             <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
             <SelectNonFungibleContractModal ref={modals.SelectNonFungibleContractModal.register} />
         </RootWeb3ContextProvider>

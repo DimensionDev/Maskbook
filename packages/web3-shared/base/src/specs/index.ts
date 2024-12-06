@@ -949,71 +949,6 @@ export interface MessageState<Request, Response> {
     denyAllRequests(): Promise<void>
 }
 
-export interface TransactionState<ChainId, Transaction> {
-    /** The tracked transactions of currently chosen sub-network */
-    transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
-
-    /** Get a transaction record. */
-    getTransaction?: (chainId: ChainId, address: string, id: string) => Promise<Transaction | undefined>
-    /** Add a transaction record. */
-    addTransaction?: (
-        chainId: ChainId,
-        address: string,
-        id: string,
-        transaction: Transaction & { draftedAt: Date },
-    ) => Promise<void>
-    /** Replace a transaction with new record. */
-    replaceTransaction?: (
-        chainId: ChainId,
-        address: string,
-        id: string,
-        newId: string,
-        transaction: Transaction,
-    ) => Promise<void>
-    /** Update transaction status. */
-    updateTransaction?: (
-        chainId: ChainId,
-        address: string,
-        id: string,
-        status: Exclude<TransactionStatusType, TransactionStatusType.NOT_DEPEND>,
-    ) => Promise<void>
-    /** Remove a transaction record. */
-    removeTransaction?: (chainId: ChainId, address: string, id: string) => Promise<void>
-    /** Get all transaction records. */
-    getTransactions?: (chainId: ChainId, address: string) => Promise<Array<RecentTransaction<ChainId, Transaction>>>
-    /** Clear all transactions of the account under given chain */
-    clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
-}
-export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
-    /** Step 1: Create a transaction formatting context. */
-    createContext: (chainId: ChainId, transaction: Transaction) => Promise<TransactionContext<ChainId, Parameters>>
-    /** Step 2: Create a transaction descriptor */
-    createDescriptor: (
-        chainId: ChainId,
-        transaction: Transaction,
-        context: TransactionContext<ChainId, Parameters>,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
-    /** Elaborate a transaction in a human-readable format. */
-    formatTransaction: (
-        chainId: ChainId,
-        transaction: Transaction,
-        txHash?: string,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
-}
-export interface TransactionWatcherState<ChainId, Transaction> {
-    emitter: Emitter<WatchEvents<ChainId, Transaction>>
-
-    /** Notify error */
-    notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
-    /** Notify transaction status */
-    notifyTransaction: (
-        chainId: ChainId,
-        id: string,
-        transaction: Transaction,
-        status: TransactionStatusType,
-    ) => Promise<void>
-}
-
 export interface ProviderState<ChainId, ProviderType, NetworkType> {
     /** The account of the currently visiting site. */
     account?: Subscription<string>
@@ -1062,8 +997,5 @@ export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Trans
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Transaction?: TransactionState<ChainId, Transaction>
-    TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
-    TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
     Provider?: ProviderState<ChainId, ProviderType, NetworkType>
 }

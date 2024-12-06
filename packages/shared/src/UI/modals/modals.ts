@@ -6,9 +6,7 @@ import type { WalletRiskWarningModalOpenProps } from './WalletRiskWarningModal/i
 import type { TransactionConfirmModalOpenProps } from './TokenTransactionConfirmModal/index.js'
 
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps, SelectProviderModalCloseProps>()
-export const WalletStatusModal = new SingletonModal()
 export const WalletRiskWarningModal = new SingletonModal<WalletRiskWarningModalOpenProps>()
 export const ConnectWalletModal = new SingletonModal<ConnectWalletModalOpenProps, ConnectWalletModalCloseProps>()
-export const TransactionSnackbar = new SingletonModal()
 export const TransactionConfirmModal = new SingletonModal<TransactionConfirmModalOpenProps>()
 export const SelectNonFungibleContractModal = new SingletonModal<SelectNonFungibleContractModalOpenProps>()
