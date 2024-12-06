@@ -932,21 +932,6 @@ export interface NameServiceState {
     safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
 }
 
-export interface TokenState<ChainId, SchemaType> {
-    /** Create a credible fungible token */
-    createFungibleToken?: (
-        chainId: ChainId,
-        address: string,
-        token?: FungibleToken<ChainId, SchemaType>,
-    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
-    /** Create a credible non-fungible token */
-    createNonFungibleToken?: (
-        chainId: ChainId,
-        address: string,
-        token?: NonFungibleToken<ChainId, SchemaType>,
-    ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-}
-
 export interface MessageState<Request, Response> {
     /** All unresolved requests. */
     messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
@@ -1077,7 +1062,6 @@ export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Trans
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
     RiskWarning?: RiskWarningState
-    Token?: TokenState<ChainId, SchemaType>
     Transaction?: TransactionState<ChainId, Transaction>
     TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
     TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
