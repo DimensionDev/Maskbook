@@ -37,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
         background: 'none',
         border: 'none',
         cursor: 'pointer',
+        color: theme.palette.maskColor.main,
     },
 }))
 
