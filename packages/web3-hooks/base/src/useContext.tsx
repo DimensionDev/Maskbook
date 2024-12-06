@@ -5,7 +5,6 @@ import { isUndefined, omitBy } from 'lodash-es'
 import { createContext, memo, useContext, useMemo, useState, type PropsWithChildren } from 'react'
 import { useAccount } from './useAccount.js'
 import { useChainId } from './useChainId.js'
-import { useProviderType } from './useProviderType.js'
 
 interface NetworkContext<T extends NetworkPluginID = NetworkPluginID> {
     pluginID: T
@@ -16,7 +15,6 @@ interface ChainContextGetter<T extends NetworkPluginID = NetworkPluginID> {
     account?: string
     chainId?: Web3Helper.Definition[T]['ChainId']
     networkType?: Web3Helper.Definition[T]['NetworkType']
-    providerType?: Web3Helper.Definition[T]['ProviderType']
     // If it's controlled, we prefer passed value over state inside
     controlled?: boolean
 }
@@ -63,29 +61,24 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
 
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
-    const globalProviderType = useProviderType(pluginID)
     const [networkType, setNetworkType] = useState<Web3Helper.NetworkTypeAll>()
 
     const [_account, setAccount] = useState<string>()
     const [_chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-    const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
     const account = controlled ? props.account : _account ?? props.account ?? globalAccount
     const chainId = controlled ? props.chainId : _chainId ?? props.chainId ?? globalChainId
-    const providerType = controlled ? props.providerType : _providerType ?? props.providerType ?? globalProviderType
 
     const context = useMemo(
         () => ({
             account,
             chainId,
             networkType,
-            providerType,
             setAccount,
             setChainId,
-            setProviderType,
             setNetworkType,
         }),
-        [account, chainId, providerType, networkType],
+        [account, chainId, networkType],
     )
 
     return <ChainContext.Provider value={context}>{props.children}</ChainContext.Provider>
@@ -116,14 +109,12 @@ export function Web3ContextProvider<T extends NetworkPluginID = NetworkPluginID>
 export function RevokeChainContextProvider({ children }: PropsWithChildren<{}>) {
     const account = useAccount()
     const chainId = useChainId()
-    const providerType = useProviderType()
     const value = useMemo(
         () => ({
             account,
             chainId,
-            providerType,
         }),
-        [account, chainId, providerType],
+        [account, chainId],
     )
     return <ChainContext.Provider value={value} children={children} />
 }

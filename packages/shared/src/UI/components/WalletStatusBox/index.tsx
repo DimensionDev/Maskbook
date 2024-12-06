@@ -3,7 +3,6 @@ import { MaskColors, MaskLightTheme, makeStyles } from '@masknet/theme'
 import {
     useChainContext,
     useNetworkDescriptor,
-    useProviderDescriptor,
     useReverseAddress,
     useNativeToken,
     useWeb3Connection,
@@ -11,29 +10,19 @@ import {
     useChainIdValid,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import {
-    FormattedAddress,
-    WalletIcon,
-    SelectProviderModal,
-    useSharedTrans,
-    WalletStatusModal,
-    CopyButton,
-} from '@masknet/shared'
-import { ProviderType } from '@masknet/web3-shared-evm'
+import { FormattedAddress, WalletIcon, useSharedTrans, CopyButton } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
 import { delay } from '@masknet/kit'
 import { Icons } from '@masknet/icons'
-import { usePendingTransactions } from './usePendingTransactions.js'
 
 const useStyles = makeStyles<{
     contentBackground?: string
     textColor?: string
     disableChange?: boolean
-    withinRiskWarningDialog?: boolean
-}>()((theme, { contentBackground, disableChange, withinRiskWarningDialog, textColor }) => ({
+}>()((theme, { contentBackground, disableChange }) => ({
     currentAccount: {
         padding: theme.spacing(0, 1.5),
-        marginBottom: withinRiskWarningDialog ? '7px' : theme.spacing(2),
+        marginBottom: theme.spacing(2),
         display: 'flex',
         background: contentBackground ?? theme.palette.background.default,
         borderRadius: 8,
@@ -102,19 +91,16 @@ const useStyles = makeStyles<{
 
 export interface WalletStatusBox {
     disableChange?: boolean
-    withinRiskWarningDialog?: boolean
     showPendingTransaction?: boolean
     closeDialog?: () => void
 }
 
 export function WalletStatusBox(props: WalletStatusBox) {
     const t = useSharedTrans()
-    const providerDescriptor = useProviderDescriptor<'all'>()
     const theme = useTheme()
     const { classes, cx } = useStyles({
-        contentBackground: providerDescriptor?.backgroundGradient ?? theme.palette.maskColor.publicBg,
+        contentBackground: theme.palette.maskColor.publicBg,
         disableChange: props.disableChange,
-        withinRiskWarningDialog: props.withinRiskWarningDialog,
         textColor: theme.palette.text.primary,
     })
 
@@ -127,17 +113,11 @@ export function WalletStatusBox(props: WalletStatusBox) {
     const { data: nativeToken, isPending: loadingNativeToken } = useNativeToken()
     const networkDescriptor = useNetworkDescriptor()
     const { data: domain } = useReverseAddress(undefined, account)
-    const { summary: pendingSummary, transactionList } = usePendingTransactions()
 
     if (!Utils.isValidAddress(account)) {
         return (
             <section className={classes.connectButtonWrapper}>
-                <Button
-                    className={cx(classes.actionButton)}
-                    color="primary"
-                    variant="contained"
-                    size="small"
-                    onClick={() => SelectProviderModal.open()}>
+                <Button className={cx(classes.actionButton)} color="primary" variant="contained" size="small">
                     {t.plugin_wallet_on_connect()}
                 </Button>
             </section>
@@ -147,12 +127,7 @@ export function WalletStatusBox(props: WalletStatusBox) {
     return (
         <>
             <section className={cx(classes.statusBox, classes.currentAccount)}>
-                <WalletIcon
-                    size={30}
-                    badgeSize={12}
-                    mainIcon={providerDescriptor?.icon}
-                    badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined}
-                />
+                <WalletIcon size={30} badgeSize={12} badgeIcon={chainIdValid ? networkDescriptor?.icon : undefined} />
                 <div className={classes.accountInfo}>
                     <div className={classes.infoRow}>
                         <Typography className={classes.accountName}>
@@ -180,18 +155,16 @@ export function WalletStatusBox(props: WalletStatusBox) {
                         :   null}
                     </div>
 
-                    {props.withinRiskWarningDialog ? null : (
-                        <div className={classes.infoRow}>
-                            <Typography className={classes.balance}>
-                                {loadingNativeToken || loadingBalance ?
-                                    '-'
-                                :   `${formatBalance(balance, nativeToken?.decimals, {
-                                        significant: 3,
-                                    })} ${nativeToken?.symbol}`
-                                }
-                            </Typography>
-                        </div>
-                    )}
+                    <div className={classes.infoRow}>
+                        <Typography className={classes.balance}>
+                            {loadingNativeToken || loadingBalance ?
+                                '-'
+                            :   `${formatBalance(balance, nativeToken?.decimals, {
+                                    significant: 3,
+                                })} ${nativeToken?.symbol}`
+                            }
+                        </Typography>
+                    </div>
                 </div>
 
                 {!props.disableChange && (
@@ -202,9 +175,9 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             size="small"
                             onClick={async () => {
                                 props.closeDialog?.()
+
                                 // TODO: remove this after global dialog be implement
                                 await delay(500)
-                                WalletStatusModal.close()
                                 await Web3.disconnect()
                             }}>
                             {t.plugin_wallet_disconnect()}
@@ -214,7 +187,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                             variant="contained"
                             size="small"
                             onClick={() => {
-                                SelectProviderModal.open()
                                 props.closeDialog?.()
                             }}>
                             {t.wallet_status_button_change()}
@@ -222,12 +194,6 @@ export function WalletStatusBox(props: WalletStatusBox) {
                     </section>
                 )}
             </section>
-            {props.showPendingTransaction ?
-                <div>
-                    {pendingSummary}
-                    {transactionList}
-                </div>
-            :   null}
         </>
     )
 }

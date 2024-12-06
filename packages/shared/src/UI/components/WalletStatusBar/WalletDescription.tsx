@@ -1,9 +1,8 @@
-import { makeStyles, LoadingBase } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import { memo } from 'react'
 import { alpha, Box, Link, Typography } from '@mui/material'
 import { CopyButton, WalletIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { useSharedTrans } from '../../../locales/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -52,11 +51,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface WalletDescriptionProps {
     onClick?: (ev: React.MouseEvent<HTMLDivElement>) => void
-    pending?: boolean
-    onPendingClick?: () => void
-    providerIcon?: string
     networkIcon?: string
-    iconFilterColor?: string
     name?: string
     address?: string
     formattedAddress?: string
@@ -65,39 +60,17 @@ export interface WalletDescriptionProps {
 }
 
 export const WalletDescription = memo<WalletDescriptionProps>(
-    ({
-        onClick,
-        providerIcon,
-        networkIcon,
-        iconFilterColor,
-        name,
-        address,
-        formattedAddress,
-        addressLink,
-        onPendingClick,
-        pending,
-        verified,
-    }) => {
+    ({ onClick, networkIcon, name, address, formattedAddress, addressLink, verified }) => {
         const { classes } = useStyles()
-        const t = useSharedTrans()
 
         return (
             <Box onClick={onClick} className={classes.root}>
-                <WalletIcon
-                    size={30}
-                    badgeSize={12}
-                    mainIcon={providerIcon ?? networkIcon}
-                    badgeIcon={providerIcon ? networkIcon : undefined}
-                    iconFilterColor={iconFilterColor}
-                />
+                <WalletIcon size={30} badgeSize={12} mainIcon={networkIcon} badgeIcon={networkIcon} />
                 <Box className={classes.description}>
                     <Typography className={classes.walletName}>
                         <span>{name}</span>
                         {verified ?
                             <Icons.Verification size={18} />
-                        :   null}
-                        {onPendingClick ?
-                            <Icons.ArrowDrop />
                         :   null}
                     </Typography>
                     <Typography className={classes.address}>
@@ -116,17 +89,6 @@ export const WalletDescription = memo<WalletDescriptionProps>(
                             className={classes.linkIcon}>
                             <Icons.LinkOut size={14} className={classes.linkIcon} />
                         </Link>
-                        {pending ?
-                            <span
-                                className={classes.pending}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onPendingClick?.()
-                                }}>
-                                {t.recent_transaction_pending()}
-                                <LoadingBase size={12} className={classes.progress} />
-                            </span>
-                        :   null}
                     </Typography>
                 </Box>
             </Box>

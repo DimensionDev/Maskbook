@@ -9,11 +9,10 @@ export function useWeb3<S extends 'all' | void = void, T extends NetworkPluginID
     pluginID?: T,
     options?: ConnectionOptions<T>,
 ): Web3Helper.Web3Scope<S, T> | null {
-    const { account, chainId, providerType } = useChainContext()
+    const { account, chainId } = useChainContext()
     const Web3 = useWeb3Connection(pluginID, {
         account,
         chainId,
-        providerType,
         ...options,
     } as ConnectionOptions<T>)
 

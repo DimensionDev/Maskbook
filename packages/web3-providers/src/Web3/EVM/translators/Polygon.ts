@@ -1,4 +1,4 @@
-import { EthereumMethodType, PayloadEditor, ProviderType } from '@masknet/web3-shared-evm'
+import { EthereumMethodType, PayloadEditor } from '@masknet/web3-shared-evm'
 import { BaseTranslator } from './Base.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'

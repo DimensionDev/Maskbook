@@ -1,10 +1,9 @@
-import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
+import { PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
 import { Composer } from './ComposerAPI.js'
 import { evm } from '../../../Manager/registry.js'
 import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
-import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
 import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
 import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
@@ -14,11 +13,6 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
     private Request = new EVMRequestReadonlyAPI(this.options)
     protected override ConnectionOptions = new ConnectionOptionsAPI(this.options)
 
-    private get Provider() {
-        if (!evm.state?.Provider) throw new Error('The web3 state does not load yet.')
-        return evm.state.Provider
-    }
-
     // Hijack RPC requests and process them with koa like middleware
     override get request() {
         return <T>(requestArguments: RequestArguments, initial?: EVMConnectionOptions) => {
@@ -27,51 +21,19 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                 const context = createContext(requestArguments, options)
 
                 try {
-                    await Composer.compose(this.Provider.signWithPersona).dispatch(context, async () => {
+                    await Composer.compose().dispatch(context, async () => {
                         if (!context.writable) return
                         try {
-                            switch (context.method) {
-                                case EthereumMethodType.MASK_LOGIN:
-                                    context.write(
-                                        await this.Provider?.connect(
-                                            options.providerType,
-                                            options.chainId,
-                                            options.account,
-                                            options.owner ?
-                                                {
-                                                    account: options.owner,
-                                                    identifier: options.identifier,
-                                                }
-                                            :   undefined,
-                                            options.silent,
-                                        ),
-                                    )
-                                    break
-                                case EthereumMethodType.MASK_LOGOUT:
-                                    context.write(await this.Provider?.disconnect(options.providerType))
-                                    break
-                                default: {
-                                    if (!PayloadEditor.fromPayload(context.request).readonly) {
-                                        const web3Provider = EVMWalletProviders[
-                                            options.providerType
-                                        ].createWeb3Provider({
-                                            account: options.account,
-                                            chainId: options.chainId,
-                                        })
-
-                                        // send request and set result in the context
-                                        context.write((await web3Provider.request(context.requestArguments)) as T)
-                                    } else {
-                                        context.write(
-                                            await this.Request.request(context.requestArguments, {
-                                                account: options.account,
-                                                chainId: options.chainId,
-                                            }),
-                                        )
-                                    }
-
-                                    break
-                                }
+                            if (!PayloadEditor.fromPayload(context.request).readonly) {
+                                // send request and set result in the context
+                                context.write((await evm.state?.Wallet?.request?.(context.requestArguments)) as T)
+                            } else {
+                                context.write(
+                                    await this.Request.request(context.requestArguments, {
+                                        account: options.account,
+                                        chainId: options.chainId,
+                                    }),
+                                )
                             }
                         } catch (error) {
                             context.abort(error)

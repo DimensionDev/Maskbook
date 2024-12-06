@@ -3,7 +3,6 @@ import type { Subscription } from 'use-subscription'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import type { Emitter } from '@servie/events'
 import type {
-    ECKeyIdentifier,
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
@@ -13,7 +12,6 @@ import type {
     SocialAddress,
     SocialIdentity,
     SocialAccount,
-    SignType,
 } from '@masknet/shared-base'
 
 export enum CurrencyType {
@@ -109,12 +107,6 @@ export enum ActivityType {
     Burn = 'Burn',
     List = 'List',
     CancelOffer = 'CancelOffer',
-}
-
-export enum MessageStateType {
-    NOT_DEPEND = 1,
-    APPROVED = 2,
-    DENIED = 3,
 }
 
 export enum TransactionStatusType {
@@ -217,22 +209,6 @@ export type TransferableNetwork<ChainId, SchemaType, NetworkType> = Omit<
     ChainDescriptor<ChainId, SchemaType, NetworkType>,
     'ID'
 >
-
-export interface MessageDescriptor<Request, Response> {
-    ID: string
-    state: MessageStateType
-    /** The origin of this request (if this request is from third party URL) */
-    origin: string | undefined
-    request: Request
-    response?: Response
-}
-
-export type ReasonableMessage<Request, Response> = MessageDescriptor<Request, Response> & {
-    createdAt: Date
-    updatedAt: Date
-}
-
-export type TransferableMessage<Request, Response> = Omit<MessageDescriptor<Request, Response>, 'ID'>
 
 export interface NetworkDescriptor<ChainId, NetworkType> {
     /** An unique ID for each network */
@@ -883,6 +859,19 @@ export interface TransactionChecker<ChainId, Transaction> {
     getStatus(chainId: ChainId, id: string, transaction: Transaction): Promise<TransactionStatusType>
 }
 
+export interface BalanceNotifierState<ChainId> {
+    emitter: Emitter<BalanceEvent<ChainId>>
+}
+
+export interface NameServiceState {
+    /** get address of domain name */
+    lookup?: (domain: string) => Promise<string | undefined>
+    /** get domain name of address */
+    reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
+    /** safely get domain name of address */
+    safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
+}
+
 export interface NetworkState<ChainId, SchemaType, NetworkType> {
     /** The id of the used network. */
     networkID?: Subscription<string>
@@ -904,18 +893,6 @@ export interface NetworkState<ChainId, SchemaType, NetworkType> {
     removeNetwork: (id: string) => Promise<void>
 }
 
-export interface RiskWarningState {
-    /** Is approved */
-    approved?: Subscription<boolean>
-
-    /** Detect if an account is approved the statement */
-    isApproved?: (address: string) => Promise<boolean>
-    /** Approve statement of designate account */
-    approve?: (address: string, pluginID?: string) => Promise<void>
-    /** Revoke statement of designate account */
-    revoke?: (address: string, pluginID?: string) => Promise<void>
-}
-
 export interface IdentityServiceState<ChainId> {
     /** Merge many social addresses into a social account. Don't overwrite it in sub-classes. */
     mergeSocialAddressesAllDoNotOverride(socialAddresses: Array<SocialAddress<ChainId>>): Array<SocialAccount<ChainId>>
@@ -923,209 +900,16 @@ export interface IdentityServiceState<ChainId> {
     lookup(identity: SocialIdentity): Promise<Array<SocialAddress<ChainId>>>
 }
 
-export interface NameServiceState {
-    /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
-    /** safely get domain name of address */
-    safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
+export interface WalletState<ChainId> {
+    chainId: Subscription<ChainId>
+    account: Subscription<string>
+    request?: <T>(parameters: any) => Promise<T>
 }
 
-export interface TokenState<ChainId, SchemaType> {
-    /** The user trusted fungible tokens. */
-    trustedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
-    /** The user trusted non-fungible tokens. */
-    trustedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** The user blocked fungible tokens. */
-    blockedFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
-    /** The user blocked non-fungible tokens. */
-    blockedNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-    /** Credible fungible tokens */
-    credibleFungibleTokens?: Subscription<Array<FungibleToken<ChainId, SchemaType>>>
-    /** Credible non-fungible tokens */
-    credibleNonFungibleTokens?: Subscription<Array<NonFungibleToken<ChainId, SchemaType>>>
-
-    /** Add a token */
-    addToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
-    /** Remove a token */
-    removeToken?: (address: string, token: Token<ChainId, SchemaType>) => Promise<void>
-    /** Unblock a token */
-    trustToken?: (
-        address: string,
-        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
-    ) => Promise<void>
-    /** Block a token */
-    blockToken?: (
-        address: string,
-        token: Token<ChainId, SchemaType> | NonFungibleToken<ChainId, SchemaType>,
-    ) => Promise<void>
-    /** Create a credible fungible token */
-    createFungibleToken?: (
-        chainId: ChainId,
-        address: string,
-        token?: FungibleToken<ChainId, SchemaType>,
-    ) => Promise<FungibleToken<ChainId, SchemaType> | undefined>
-    /** Create a credible non-fungible token */
-    createNonFungibleToken?: (
-        chainId: ChainId,
-        address: string,
-        token?: NonFungibleToken<ChainId, SchemaType>,
-    ) => Promise<NonFungibleToken<ChainId, SchemaType> | undefined>
-    nonFungibleCollectionMap?: Subscription<
-        Record<
-            string,
-            Array<{
-                contract: NonFungibleTokenContract<ChainId, SchemaType>
-                tokenIds: string[]
-            }>
-        >
-    >
-    addNonFungibleTokens?(
-        owner: string,
-        contract: NonFungibleTokenContract<ChainId, SchemaType>,
-        tokenIds: string[],
-    ): Promise<void>
-    removeNonFungibleTokens?(
-        owner: string,
-        contract: NonFungibleTokenContract<ChainId, SchemaType>,
-        tokenIds: string[],
-    ): Promise<void>
-}
-
-export interface MessageState<Request, Response> {
-    /** All unresolved requests. */
-    messages?: Subscription<Array<ReasonableMessage<Request, Response>>>
-    /** Updates a request. */
-    updateMessage(id: string, updates: Partial<TransferableMessage<Request, Response>>): Promise<void>
-    /** Applies a request. */
-    applyRequest(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
-    /** Applies a request and waits for confirmation from the user. */
-    applyAndWaitResponse(message: TransferableMessage<Request, Response>): Promise<ReasonableMessage<Request, Response>>
-    /** Approves a request. */
-    approveRequest(id: string, updates?: Request): Promise<Response | void>
-    /** Rejects a request. */
-    denyRequest(id: string): Promise<void>
-    /** Rejects all requests. */
-    denyAllRequests(): Promise<void>
-}
-
-export interface TransactionState<ChainId, Transaction> {
-    /** The tracked transactions of currently chosen sub-network */
-    transactions?: Subscription<Array<RecentTransaction<ChainId, Transaction>>>
-
-    /** Get a transaction record. */
-    getTransaction?: (chainId: ChainId, address: string, id: string) => Promise<Transaction | undefined>
-    /** Add a transaction record. */
-    addTransaction?: (
-        chainId: ChainId,
-        address: string,
-        id: string,
-        transaction: Transaction & { draftedAt: Date },
-    ) => Promise<void>
-    /** Replace a transaction with new record. */
-    replaceTransaction?: (
-        chainId: ChainId,
-        address: string,
-        id: string,
-        newId: string,
-        transaction: Transaction,
-    ) => Promise<void>
-    /** Update transaction status. */
-    updateTransaction?: (
-        chainId: ChainId,
-        address: string,
-        id: string,
-        status: Exclude<TransactionStatusType, TransactionStatusType.NOT_DEPEND>,
-    ) => Promise<void>
-    /** Remove a transaction record. */
-    removeTransaction?: (chainId: ChainId, address: string, id: string) => Promise<void>
-    /** Get all transaction records. */
-    getTransactions?: (chainId: ChainId, address: string) => Promise<Array<RecentTransaction<ChainId, Transaction>>>
-    /** Clear all transactions of the account under given chain */
-    clearTransactions?: (chainId: ChainId, address: string) => Promise<void>
-}
-export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
-    /** Step 1: Create a transaction formatting context. */
-    createContext: (chainId: ChainId, transaction: Transaction) => Promise<TransactionContext<ChainId, Parameters>>
-    /** Step 2: Create a transaction descriptor */
-    createDescriptor: (
-        chainId: ChainId,
-        transaction: Transaction,
-        context: TransactionContext<ChainId, Parameters>,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
-    /** Elaborate a transaction in a human-readable format. */
-    formatTransaction: (
-        chainId: ChainId,
-        transaction: Transaction,
-        txHash?: string,
-    ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
-}
-export interface TransactionWatcherState<ChainId, Transaction> {
-    emitter: Emitter<WatchEvents<ChainId, Transaction>>
-
-    /** Notify error */
-    notifyError: (error: Error, request: JsonRpcPayload) => Promise<void>
-    /** Notify transaction status */
-    notifyTransaction: (
-        chainId: ChainId,
-        id: string,
-        transaction: Transaction,
-        status: TransactionStatusType,
-    ) => Promise<void>
-}
-
-export interface ProviderState<ChainId, ProviderType, NetworkType> {
-    /** The account of the currently visiting site. */
-    account?: Subscription<string>
-    /** The chain id of the currently visiting site. */
-    chainId?: Subscription<ChainId>
-    /** The network type of the currently visiting site. */
-    networkType?: Subscription<NetworkType>
-    /** The provider type of the currently visiting site. */
-    providerType?: Subscription<ProviderType>
-
-    /** Detect if a provider is ready */
-    isReady: (providerType: ProviderType) => boolean
-    /** Wait until a provider ready */
-    untilReady: (providerType: ProviderType) => undefined | Promise<void>
-
-    /** Connect with the provider and set chain id. */
-    connect: (
-        providerType: ProviderType,
-        chainId: ChainId,
-        account?: string,
-        owner?: {
-            account: string
-            identifier?: ECKeyIdentifier
-        },
-        silent?: boolean,
-    ) => Promise<Account<ChainId>>
-    /** Disconnect with the provider. */
-    disconnect: (providerType: ProviderType) => Promise<void>
-    /** Sign a message with persona (w or w/o popups) */
-    // TODO: this is not the best place to put this signature, but to avoid IOContext leaked as a global variable, we'll put it here for now.
-    signWithPersona(type: SignType, message: unknown, identifier?: ECKeyIdentifier, silent?: boolean): Promise<string>
-}
-
-export interface BalanceNotifierState<ChainId> {
-    emitter: Emitter<BalanceEvent<ChainId>>
-}
-
-export interface BlockNumberNotifierState<ChainId> {
-    emitter: Emitter<BlockNumberEvent<ChainId>>
-}
-
-export interface Web3State<ChainId, SchemaType, ProviderType, NetworkType, Transaction, TransactionParameter> {
-    Network?: NetworkState<ChainId, SchemaType, NetworkType>
+export interface Web3State<ChainId, SchemaType, NetworkType> {
+    Wallet?: WalletState<ChainId>
     BalanceNotifier?: BalanceNotifierState<ChainId>
-    BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
-    IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
-    RiskWarning?: RiskWarningState
-    Token?: TokenState<ChainId, SchemaType>
-    Transaction?: TransactionState<ChainId, Transaction>
-    TransactionFormatter?: TransactionFormatterState<ChainId, TransactionParameter, Transaction>
-    TransactionWatcher?: TransactionWatcherState<ChainId, Transaction>
-    Provider?: ProviderState<ChainId, ProviderType, NetworkType>
+    Network?: NetworkState<ChainId, SchemaType, NetworkType>
+    IdentityService?: IdentityServiceState<ChainId>
 }

@@ -1,12 +1,10 @@
 // Providers
 export * from './types/Authorization.js'
-export * from './types/Bundler.js'
 export * from './types/DSearch.js'
 export * from './types/Domain.js'
 export * from './types/Explorer.js'
 export * from './types/Firefly.js'
 export * from './types/FungibleToken.js'
-export * from './types/Funder.js'
 export * from './types/GasOption.js'
 export * from './types/History.js'
 export * from './types/MaskX.js'

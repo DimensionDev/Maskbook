@@ -1,5 +1,5 @@
-import { SourceType, attemptUntil } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { SourceType } from '@masknet/web3-shared-base'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { EVMWeb3Readonly } from './ConnectionReadonlyAPI.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
@@ -55,16 +55,9 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
             initial?.chainId ?
                 networks?.find((x) => x.chainId === initial.chainId)
             :   evm.state?.Network?.network?.getCurrentValue()
-        return attemptUntil(
-            [
-                () => evm.state?.Token?.createFungibleToken?.(initial?.chainId ?? ChainId.Mainnet, address),
-                () =>
-                    EVMWeb3Readonly.getFungibleToken(address, {
-                        ...initial,
-                        providerURL: currentNetwork?.isCustomized ? currentNetwork?.rpcUrl : undefined,
-                    }),
-            ],
-            undefined,
-        )
+        return EVMWeb3Readonly.getFungibleToken(address, {
+            ...initial,
+            providerURL: currentNetwork?.isCustomized ? currentNetwork?.rpcUrl : undefined,
+        })
     }
 }

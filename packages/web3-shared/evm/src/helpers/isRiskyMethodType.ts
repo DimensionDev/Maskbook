@@ -11,6 +11,5 @@ export function isRiskyMethodType(type: EthereumMethodType) {
         EthereumMethodType.ETH_GET_ENCRYPTION_PUBLIC_KEY,
         EthereumMethodType.ETH_SEND_TRANSACTION,
         EthereumMethodType.ETH_SIGN_TRANSACTION,
-        EthereumMethodType.MASK_REPLACE_TRANSACTION,
     ].includes(type as EthereumMethodType)
 }

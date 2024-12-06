@@ -1,6 +1,6 @@
 import { first, omit, toNumber } from 'lodash-es'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import type { Account } from '@masknet/shared-base'
 import {
     AddressType,
     SchemaType,
@@ -15,7 +15,6 @@ import {
     type TransactionSignature,
     type ProviderType,
     type Signature,
-    type UserOperation,
     type Web3,
     isValidAddress,
     isEmptyHex,
@@ -78,7 +77,6 @@ export class EVMConnectionReadonlyAPI
             SchemaType,
             ProviderType,
             Signature,
-            UserOperation,
             Transaction,
             TransactionReceipt,
             TransactionDetailed,
@@ -112,48 +110,6 @@ export class EVMConnectionReadonlyAPI
     }
 
     async disconnect(initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    getWallets(initial?: EVMConnectionOptions): Promise<Wallet[]> {
-        return this.Request.request<Wallet[]>(
-            {
-                method: EthereumMethodType.MASK_WALLETS,
-                params: [],
-            },
-            initial,
-        )
-    }
-
-    async addWallet(wallet: UpdatableWallet, initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async updateWallet(
-        address: string,
-        wallet: Partial<UpdatableWallet>,
-        initial?: EVMConnectionOptions,
-    ): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async renameWallet(address: string, name: string, initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async removeWallet(address: string, password?: string | undefined, initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async resetAllWallets(initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async updateWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
-        throw new Error('Method not implemented.')
-    }
-
-    async removeWallets(wallets: Wallet[], initial?: EVMConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -758,34 +714,6 @@ export class EVMConnectionReadonlyAPI
     }
 
     signTransactions(transactions: Transaction[], initial?: EVMConnectionOptions): Promise<string[]> {
-        throw new Error('Method not implemented.')
-    }
-
-    supportedChainIds(initial?: EVMConnectionOptions): Promise<ChainId[]> {
-        throw new Error('Method not implemented.')
-    }
-
-    async callUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async sendUserOperation(owner: string, operation: UserOperation, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async transfer(recipient: string, amount: string, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async changeOwner(recipient: string, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async fund(proof: Proof, initial?: EVMConnectionOptions): Promise<string> {
-        throw new Error('Method not implemented.')
-    }
-
-    async deploy(owner: string, identifier?: ECKeyIdentifier, initial?: EVMConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 

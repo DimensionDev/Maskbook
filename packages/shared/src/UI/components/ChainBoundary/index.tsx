@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import { Box } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { makeStyles, ShadowRootTooltip, ActionButton, useCustomSnackbar } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, ActionButton } from '@masknet/theme'
 import {
     useNetworkContext,
     useChainContext,
@@ -15,7 +15,6 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { WalletIcon } from '../WalletIcon/index.js'
 import { type ActionButtonPromiseProps } from '../ActionButton/index.js'
 import { useSharedTrans } from '../../../locales/index.js'
-import { SelectProviderModal } from '../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     tooltip: {
@@ -93,11 +92,7 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
     if (!chainIdValid && !expectedChainAllowed && forceShowingWrongNetworkButton)
         return renderBox(
             !props.hiddenConnectButton ?
-                <ActionButton
-                    fullWidth
-                    startIcon={<Icons.Wallet size={18} />}
-                    onClick={() => SelectProviderModal.open()}
-                    {...props.ActionButtonPromiseProps}>
+                <ActionButton fullWidth startIcon={<Icons.Wallet size={18} />} {...props.ActionButtonPromiseProps}>
                     {t.plugin_wallet_wrong_network()}
                 </ActionButton>
             :   null,
@@ -111,7 +106,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     className={classes.connectWallet}
                     fullWidth
                     startIcon={<Icons.Wallet size={18} />}
-                    onClick={() => SelectProviderModal.open()}
                     {...props.ActionButtonPromiseProps}>
                     {t.plugin_wallet_connect_a_wallet()}
                 </ActionButton>
@@ -126,7 +120,6 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 className={classes.switchButton}
                 startIcon={<WalletIcon mainIcon={expectedNetworkDescriptor?.icon} size={18} />}
                 sx={props.ActionButtonPromiseProps?.sx}
-                onClick={() => SelectProviderModal.open()}
                 {...props.ActionButtonPromiseProps}>
                 {t.plugin_wallet_change_wallet()}
             </ActionButton>,

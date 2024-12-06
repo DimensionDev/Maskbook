@@ -5,7 +5,7 @@ import { useWeb3Utils } from './useWeb3Utils.js'
 
 export function useAccount<T extends NetworkPluginID>(pluginID?: T, expectedAccount?: string) {
     const Utils = useWeb3Utils(pluginID)
-    const { Provider } = useWeb3State(pluginID)
-    const defaultAccount = useSubscription(Provider?.account ?? UNDEFINED)
+    const { Wallet } = useWeb3State(pluginID)
+    const defaultAccount = useSubscription(Wallet?.account ?? UNDEFINED)
     return Utils.formatAddress(expectedAccount ?? defaultAccount ?? '')
 }

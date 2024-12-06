@@ -1,5 +1,5 @@
 import { SourceType } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType } from '@masknet/web3-shared-evm'
+import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { EVMHubOptions } from '../types/index.js'
