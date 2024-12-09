@@ -1,7 +1,4 @@
 export * from './useBuildInfo.js'
-export * from './useEverSeen.js'
-export * from './useMatchXS.js'
 export * from './useObservableMapSet.js'
-export * from './useRowSize.js'
 export * from './useSingletonModal.js'
 export * from './useValueRef.js'

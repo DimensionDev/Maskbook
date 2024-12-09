@@ -1,5 +1,4 @@
-import { compose, getSiteType, NetworkPluginID, pluginIDsSettings } from '@masknet/shared-base'
-import { useValueRef } from '@masknet/shared-base-ui'
+import { compose, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { isUndefined, omitBy } from 'lodash-es'
 import { createContext, memo, useContext, useMemo, useState, type PropsWithChildren } from 'react'
@@ -133,20 +132,10 @@ export function EVMWeb3ContextProvider(props: PropsWithChildren<{}> & ChainConte
  * @param props
  * @returns
  */
-export function RootWeb3ContextProvider({ enforceEVM, children }: PropsWithChildren<{ enforceEVM?: boolean }>) {
-    const pluginIDs = useValueRef(pluginIDsSettings)
-    const contextValue = useMemo(() => {
-        const site = getSiteType()
-        return (
-            enforceEVM ? NetworkPluginID.PLUGIN_EVM
-            : site ? pluginIDs[site]
-            : NetworkPluginID.PLUGIN_EVM
-        )
-    }, [pluginIDs, enforceEVM])
-
+export function RootWeb3ContextProvider({ children }: PropsWithChildren<{}>) {
     return (
-        <ReadonlyNetworkContext.Provider value={contextValue}>
-            <Web3ContextProvider network={contextValue}>{children}</Web3ContextProvider>
+        <ReadonlyNetworkContext.Provider value={NetworkPluginID.PLUGIN_EVM}>
+            <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM}>{children}</Web3ContextProvider>
         </ReadonlyNetworkContext.Provider>
     )
 }
