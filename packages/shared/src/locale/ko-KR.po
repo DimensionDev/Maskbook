@@ -204,6 +204,7 @@ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "취소"
@@ -504,6 +505,7 @@ msgid "DSearch"
 msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr "편집"
 
@@ -1081,6 +1083,10 @@ msgstr ""
 msgid "Risk Warning"
 msgstr "리스크 경고"
 
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+msgid "Save"
+msgstr ""
+
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
@@ -1233,8 +1239,8 @@ msgid "Transaction Confirmed"
 msgstr "거래 확인 완료"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
-msgid "Transaction cost"
-msgstr "거래 수수료"
+#~ msgid "Transaction cost"
+#~ msgstr "거래 수수료"
 
 #: src/UI/translate.ts
 msgid "Transaction failed"

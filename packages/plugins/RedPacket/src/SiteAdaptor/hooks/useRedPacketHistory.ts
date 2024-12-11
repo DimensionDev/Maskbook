@@ -1,19 +1,14 @@
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { useSuspenseInfiniteQuery, type UseSuspenseInfiniteQueryResult, type InfiniteData } from '@tanstack/react-query'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { createIndicator } from '@masknet/shared-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
-import type { Pageable, PageIndicator } from '@masknet/shared-base'
 
 export function useRedPacketHistory(
     address: string,
     historyType: FireflyRedPacketAPI.ActionType,
     platform?: FireflyRedPacketAPI.SourceType,
-): UseSuspenseInfiniteQueryResult<
-    InfiniteData<
-        Pageable<FireflyRedPacketAPI.RedPacketClaimedInfo | FireflyRedPacketAPI.RedPacketSentInfo, PageIndicator>
-    >
-> {
-    return useSuspenseInfiniteQuery({
+) {
+    return useInfiniteQuery({
         queryKey: ['redpacket', 'history', address, historyType, platform],
         initialPageParam: createIndicator(undefined, ''),
         queryFn: async ({ pageParam }) => {
@@ -26,5 +21,8 @@ export function useRedPacketHistory(
             return res
         },
         getNextPageParam: (lastPage) => lastPage.nextIndicator,
+        select(data) {
+            return data.pages.flatMap((x) => x.data)
+        },
     })
 }

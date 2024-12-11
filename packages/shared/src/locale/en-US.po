@@ -199,6 +199,7 @@ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr ""
@@ -499,6 +500,7 @@ msgid "DSearch"
 msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr ""
 
@@ -1076,6 +1078,10 @@ msgstr ""
 msgid "Risk Warning"
 msgstr ""
 
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+msgid "Save"
+msgstr ""
+
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
@@ -1228,8 +1234,8 @@ msgid "Transaction Confirmed"
 msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
-msgid "Transaction cost"
-msgstr ""
+#~ msgid "Transaction cost"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transaction failed"

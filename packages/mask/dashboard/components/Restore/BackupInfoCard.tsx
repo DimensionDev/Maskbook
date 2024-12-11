@@ -1,10 +1,9 @@
-import { memo } from 'react'
+import { FileFrame, formatFileSize } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
+import { memo } from 'react'
 import type { BackupFileInfo } from '../../utils/type.js'
-import { formatFileSize } from '@masknet/kit'
-import { FileFrame } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
 
 const useStyles = makeStyles()((theme) => ({
     file: {
@@ -32,7 +31,7 @@ export const BackupInfoCard = memo(function BackupInfoCard({ info }: BackupInfoP
         <FileFrame
             fileName={getFileName(info.downloadURL)}
             className={classes.file}
-            operations={<Typography className={classes.desc}>{formatFileSize(info.size, true)}</Typography>}>
+            operations={<Typography className={classes.desc}>{formatFileSize(info.size)}</Typography>}>
             {Number.isNaN(info.uploadedAt) ? null : (
                 <Typography fontSize={12} color="second">
                     {formatDateTime(fromUnixTime(info.uploadedAt), 'yyyy-MM-dd HH:mm')}

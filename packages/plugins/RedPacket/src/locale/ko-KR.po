@@ -41,6 +41,7 @@ msgid "@{sender} is sending an NFT lucky drop on {networkName} network. {account
 msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
 msgstr ""
 
@@ -66,10 +67,12 @@ msgid "1 NFT claimed."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL ({0} NFT)"
 msgstr "모든 ({0} NFT)"
 
@@ -78,22 +81,27 @@ msgid "Amount"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Amount Each"
 msgstr "하나의 금액"
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Amount per Share"
 msgstr "한 지분 금액"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "At most 255 recipients"
 msgstr "최대 255명까지 받을 수 있습니다"
 
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Attached Message"
 msgstr "첨부 메시지"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Best Wishes"
 msgstr "덕담"
 
@@ -103,11 +111,20 @@ msgstr "덕담"
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx
 #: src/SiteAdaptor/RedpacketMessagePanel.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Best Wishes!"
 msgstr "행운을 빌어요!"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 msgid "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
+msgstr ""
+
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Cancel"
+msgstr ""
+
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+msgid "Choose a Cover"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketDialog.tsx
@@ -169,6 +186,7 @@ msgid "Clear all requirements"
 msgstr ""
 
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Collections"
 msgstr "수집품"
 
@@ -185,15 +203,22 @@ msgstr "완료됨"
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "Confirm"
 msgstr "확인"
 
+#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "Confirm the Lucky Drop"
 msgstr "행운 드랍 디테일"
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Confirming"
 msgstr "확인 중"
 
@@ -207,12 +232,16 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Connect Wallet"
 msgstr "월렛 연결"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Create the Lucky Drop"
 msgstr "다음"
 
@@ -234,6 +263,10 @@ msgstr ""
 msgid "Drop Type"
 msgstr ""
 
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Edit"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
@@ -244,6 +277,7 @@ msgid "Enclose a Message"
 msgstr "메시지 동봉"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Amount Each"
 msgstr "하나의 금액 입력"
 
@@ -252,19 +286,23 @@ msgid "Enter number of winners"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Number of Winners"
 msgstr "공유 수량 입력"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter the amount that each winner can claim"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Total Amount"
 msgstr "총금액 입력"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Equal Amount"
 msgstr "동일한 금액"
 
@@ -301,6 +339,7 @@ msgid "Gift crypto or NFTs to any users, first come, first served."
 msgstr "크립토나 NFT를 다른 이용자에게 보낼 수 있습니다."
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have to do this once per token."
 msgstr ""
 
@@ -325,6 +364,7 @@ msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network.
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Identical"
 msgstr "평균"
 
@@ -333,18 +373,24 @@ msgid "Image Preview"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Insufficient {0} Balance"
 msgstr "{0} 잔액 부족"
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Insufficient Balance"
 msgstr "잔액 부족"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr "가스비 부족"
 
@@ -366,9 +412,12 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "Loading token..."
 msgstr "토큰 로딩..."
 
+#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
@@ -378,6 +427,7 @@ msgid "Lucky Drop"
 msgstr "행운 드랍"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Message"
 msgstr ""
 
@@ -400,6 +450,7 @@ msgstr ""
 msgid "NFT Holder of <0/>"
 msgstr ""
 
+#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "NFTs"
 msgstr ""
@@ -423,10 +474,13 @@ msgstr ""
 #: src/SiteAdaptor/RedPacketHistoryList.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "No results"
 msgstr "결과 없음"
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
 msgstr ""
 
@@ -439,11 +493,13 @@ msgid "Post on"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Random"
 msgstr "렌덤"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Random Amount"
 msgstr "랜덤 금액"
 
@@ -476,17 +532,30 @@ msgstr ""
 msgid "Requirements"
 msgstr ""
 
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Reset"
+msgstr ""
+
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Save"
+msgstr ""
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "Search"
 msgstr "검색"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Select a Token"
 msgstr "토큰 선택"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "Select All"
 msgstr "전체 선택"
 
@@ -495,6 +564,7 @@ msgid "Select NFT collection to gate access"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Select partially"
 msgstr "일부 선택"
 
@@ -515,6 +585,7 @@ msgstr ""
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Share"
 msgstr "공유"
 
@@ -527,6 +598,7 @@ msgid "Something went wrong."
 msgstr "오류가 발생합니다."
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Split Mode"
 msgstr "스플릿 모드"
 
@@ -552,10 +624,13 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "The minimum amount for each share is {0} {1}"
 msgstr ""
 
@@ -563,32 +638,46 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
 msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
 msgstr "토큰 ID는 쉽표로 분리됩니다. 예시: 1224, 7873, 8948"
 
+#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "Tokens"
 msgstr "토큰"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Total amount"
 msgstr ""
 
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Total Amount"
 msgstr "총액"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Total amount shared among all winners"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Total cost"
 msgstr "총 비용"
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Transaction cost"
+msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
@@ -611,18 +700,22 @@ msgid "View"
 msgstr ""
 
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Wallet account"
 msgstr "월렛 계정"
 
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Winners"
 msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 msgid "You can also use <0>Shift</0> to select multiple NFTs."
 msgstr ""
 
@@ -632,6 +725,10 @@ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
+msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "You can withdraw the remaining balance 24 hours after sending the lucky drop."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx

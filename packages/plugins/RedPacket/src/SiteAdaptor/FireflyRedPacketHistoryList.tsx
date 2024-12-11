@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
-import { memo, useMemo } from 'react'
+import { memo } from 'react'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
 import { Trans } from '@lingui/macro'
@@ -51,8 +51,7 @@ export const FireflyRedPacketHistoryList = memo(function RedPacketHistoryList({
 }: RedPacketHistoryListProps) {
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: historiesData, fetchNextPage } = useRedPacketHistory(account, historyType)
-    const histories = useMemo(() => historiesData.pages.flatMap((page) => page.data), [historiesData])
+    const { data: histories, fetchNextPage } = useRedPacketHistory(account, historyType)
 
     if (!histories?.length)
         return (

@@ -24,6 +24,7 @@ import type {
 import type { AddCollectiblesModalCloseProps, AddCollectiblesModalOpenProps } from './AddCollectiblesModal/index.js'
 import type { PersonaSelectPanelModalOpenProps } from './PersonaSelectPanelModal/index.js'
 import type { VerifyNextIDDialogCloseProps, VerifyNextIDDialogProps } from '../components/VerifyNextIDDialog/index.js'
+import type { ImageEditorModalCloseProps, ImageEditorModalOpenProps } from './ImageEditor/index.js'
 
 export const WalletConnectQRCodeModal = new SingletonModal<WalletConnectQRCodeOpenProps>()
 export const SelectProviderModal = new SingletonModal<SelectProviderModalOpenProps, SelectProviderModalCloseProps>()
@@ -51,5 +52,6 @@ export const SelectFungibleTokenModal = new SingletonModal<
 export const VerifyNextIDModal = new SingletonModal<VerifyNextIDDialogProps, VerifyNextIDDialogCloseProps>()
 
 export const PersonaSelectPanelModal = new SingletonModal<PersonaSelectPanelModalOpenProps>()
+export const ImageEditorModal = new SingletonModal<ImageEditorModalOpenProps, ImageEditorModalCloseProps>()
 
 export { ApplicationSettingTabs } from './ApplicationBoardModal/ApplicationBoardDialog.js'

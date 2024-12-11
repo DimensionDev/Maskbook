@@ -44,10 +44,9 @@ import { compact, first, isEmpty, last } from 'lodash-es'
 import urlcat from 'urlcat'
 import { URL_REGEX } from '../Firefly/constants.js'
 import { getEmbedUrls } from '../Firefly/helpers.js'
-import { FIREFLY_SITE_URL } from '../helpers/constant.js'
 import { composePollFrameUrl, getPollFrameUrl, isValidPollFrameUrl } from '../helpers/social.js'
 import { parseUrl, sanitizeDStorageUrl } from '../helpers/url.js'
-import { LENS_MEDIA_SNAPSHOT_URL } from './constants.js'
+import { LENS_MEDIA_SNAPSHOT_URL, FIREFLY_SITE_URL } from './constants.js'
 
 const PLACEHOLDER_IMAGE = 'https://static-assets.hey.xyz/images/placeholder.webp'
 const allowedTypes = ['SimpleCollectOpenActionModule', 'MultirecipientFeeCollectOpenActionModule']

@@ -1,17 +1,17 @@
-import { isNativeTokenAddress, type GasConfig, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { useCreateParams, type RedPacketSettings, useCreateCallback } from './useCreateCallback.js'
-import { useBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { useBalance, useChainContext } from '@masknet/web3-hooks-base'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
-import { BigNumber } from 'bignumber.js'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import type { RedPacketRecord, RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { useCallback, useRef, useEffect } from 'react'
-import { RedPacketRPC } from '../../messages.js'
+import type { RedPacketJSONPayload, RedPacketRecord } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress, useRedPacketConstants, type GasConfig } from '@masknet/web3-shared-evm'
+import { BigNumber } from 'bignumber.js'
+import { useCallback, useEffect, useRef } from 'react'
+import { RedPacketRPC } from '../../messages.js'
+import { useCreateCallback, useCreateParams, type RedPacketSettings } from './useCreateCallback.js'
 
 export function useCreateFTRedpacketCallback(
-    publicKey: string,
+    redpacketPubkey: string,
     privateKey: string,
     settings: RedPacketSettings,
     gasOption?: GasConfig,
@@ -24,7 +24,7 @@ export function useCreateFTRedpacketCallback(
     const contract_version = 4
 
     const { chainId, networkType, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { value: createParams } = useCreateParams(chainId, settings, contract_version, publicKey)
+    const { value: createParams } = useCreateParams(chainId, settings, contract_version, redpacketPubkey)
     const isNativeToken = isNativeTokenAddress(settings.token?.address)
     const { transactionValue, estimateGasFee } = useTransactionValue(
         settings.total,
@@ -54,9 +54,9 @@ export function useCreateFTRedpacketCallback(
 
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         chainId,
-        { ...settings!, total, name: currentAccount || settings.name },
+        { ...settings, total, name: currentAccount || settings.name },
         contract_version,
-        publicKey,
+        redpacketPubkey,
         gasOption,
     )
 

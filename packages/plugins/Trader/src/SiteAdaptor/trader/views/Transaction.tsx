@@ -1,6 +1,6 @@
 import { msg, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner } from '@masknet/shared'
+import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner, useUnmountedRef } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { useAccount, useNetwork, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -24,7 +24,6 @@ import { useTrade } from '../contexts/index.js'
 import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
-import { useLeave } from '../hooks/useLeave.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
 import { useLingui } from '@lingui/react'
 
@@ -279,7 +278,7 @@ export const Transaction = memo(function Transaction() {
     const txPending = status === TransactionStatusType.NOT_DEPEND
     const [expand = bridgeStatus?.status === 'PENDING', setExpand] = useState<boolean>()
 
-    const leaveRef = useLeave()
+    const unmountedRef = useUnmountedRef()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const waitForTransaction = useWaitForTransaction()
     const getReceived = useGetTransferReceived()
@@ -306,7 +305,7 @@ export const Transaction = memo(function Transaction() {
         } else {
             const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
 
-            if (received && !leaveRef.current) {
+            if (received && !unmountedRef.current) {
                 showSnackbar(_(msg`Bridge`), {
                     message: (
                         <MuiLink

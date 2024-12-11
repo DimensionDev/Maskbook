@@ -21,6 +21,7 @@ import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
 import * as modals from './modals.js'
 import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
 import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
+import { ImageEditorModal } from './ImageEditor/index.js'
 export * from './modals.js'
 
 export interface ModalProps {
@@ -48,6 +49,7 @@ export const Modals = memo(function Modals(props: ModalProps) {
             <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
             <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
             <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />
+            <ImageEditorModal ref={modals.ImageEditorModal.register} />
         </RootWeb3ContextProvider>
     )
 })

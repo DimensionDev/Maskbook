@@ -3,12 +3,18 @@ import type { AsyncFnReturn } from 'react-use/lib/useAsync.js'
 import type { EventLog, TransactionReceipt } from 'web3-core'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { decodeEvents, ContractTransaction, type GasConfig, isValidAddress } from '@masknet/web3-shared-evm'
+import {
+    decodeEvents,
+    ContractTransaction,
+    type GasConfig,
+    isValidAddress,
+    addGasMargin,
+} from '@masknet/web3-shared-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { toFixed } from '@masknet/web3-shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useNftRedPacketContract } from './useNftRedPacketContract.js'
+import { BigNumber } from 'bignumber.js'
 
 export function useCreateNftRedpacketCallback(
     duration: number,
@@ -62,15 +68,16 @@ export function useCreateNftRedpacketCallback(
                 tokenIdList,
             ]
 
+            const estimateGas = await nftRedPacketContract.methods
+                .create_red_packet(...params)
+                .estimateGas({ from: account })
             const tx = await new ContractTransaction(nftRedPacketContract).fillAll(
                 nftRedPacketContract.methods.create_red_packet(...params),
                 {
                     from: account,
-                    gas: toFixed(
-                        await nftRedPacketContract.methods.create_red_packet(...params).estimateGas({ from: account }),
-                    ),
                     chainId,
                     ...gasOption,
+                    gas: addGasMargin(BigNumber.max(estimateGas, gasOption?.gas ?? 0), 0.3),
                 },
             )
 

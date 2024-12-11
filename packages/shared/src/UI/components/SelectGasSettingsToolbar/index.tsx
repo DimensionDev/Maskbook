@@ -1,43 +1,43 @@
-import { useEffect, useState, useMemo, useCallback, memo } from 'react'
-import { useAsync } from 'react-use'
-import { BigNumber } from 'bignumber.js'
-import { useMenuConfig, FormattedBalance, ApproveMaskDialog, SelectGasSettingsModal } from '@masknet/shared'
-import { makeStyles } from '@masknet/theme'
-import {
-    GasOptionType,
-    isZero,
-    formatBalance,
-    formatCurrency,
-    isSameAddress,
-    ZERO,
-    toFixed,
-} from '@masknet/web3-shared-base'
+import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { ApproveMaskDialog, FormattedBalance, SelectGasSettingsModal, useMenuConfig } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import {
-    type ChainId,
-    formatWeiToEther,
-    type GasConfig,
-    GasEditor,
-    formatGas,
-    type Transaction,
-} from '@masknet/web3-shared-evm'
-import { Typography, MenuItem, Box, Grid, type MenuProps } from '@mui/material'
+import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useChainContext,
-    useNetworkContext,
     useFungibleToken,
     useFungibleTokenPrice,
+    useNetworkContext,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import { Icons } from '@masknet/icons'
 import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
-import { SettingsContext } from '../SettingsBoard/Context.js'
+import {
+    formatBalance,
+    formatCurrency,
+    GasOptionType,
+    isSameAddress,
+    isZero,
+    toFixed,
+    ZERO,
+} from '@masknet/web3-shared-base'
+import {
+    type ChainId,
+    formatGas,
+    formatWeiToEther,
+    type GasConfig,
+    GasEditor,
+    type Transaction,
+} from '@masknet/web3-shared-evm'
+import { Box, MenuItem, type MenuProps, Typography } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
-import { Trans } from '@lingui/macro'
+import { SettingsContext } from '../SettingsBoard/Context.js'
+import { useQuery } from '@tanstack/react-query'
 
 export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
-    extends withClasses<'label'> {
+    extends withClasses<'label' | 'root'> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
     nativeToken: Web3Helper.FungibleTokenAll
@@ -49,18 +49,15 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     editMode?: boolean
     /** No effects on editMode */
     className?: string
-
     onChange?(gasConfig: GasConfig): void
-
     /** Will open internal setting dialog instead if not provided */
     onOpenCustomSetting?(): void
-
     MenuProps?: Partial<MenuProps>
 }
 
 const useStyles = makeStyles()((theme) => {
     return {
-        root: {
+        button: {
             display: 'flex',
             alignItems: 'center',
             border: `1px solid ${theme.palette.divider}`,
@@ -71,7 +68,7 @@ const useStyles = makeStyles()((theme) => {
             justifyContent: 'center',
             marginLeft: 6,
         },
-        section: {
+        root: {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
@@ -224,13 +221,16 @@ export function SelectGasSettingsToolbarUI({
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
 
-    const { value: currencyRatio } = useAsync(async () => {
-        const chainId = await SmartPayBundler.getSupportedChainId()
-        const depositPaymaster = new DepositPaymaster(chainId)
-        const ratio = await depositPaymaster.getRatio()
+    const { data: currencyRatio } = useQuery({
+        queryKey: ['currency-ratio', chainId],
+        queryFn: async () => {
+            const chainId = await SmartPayBundler.getSupportedChainId()
+            const depositPaymaster = new DepositPaymaster(chainId)
+            const ratio = await depositPaymaster.getRatio()
 
-        return ratio
-    }, [])
+            return ratio
+        },
+    })
 
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
@@ -331,32 +331,23 @@ export function SelectGasSettingsToolbarUI({
 
     if (editMode)
         return (
-            <>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textSecondary">
-                        <Trans>Transaction cost</Trans>
-                    </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                    <Typography variant="body1" color="textPrimary" align="right">
-                        <Typography component="span" className={classes.edit} onClick={openCustomGasSettingsDialog}>
-                            <Trans>Edit</Trans>
-                        </Typography>
-                        <FormattedBalance
-                            value={gasFee ?? estimateGasFee}
-                            decimals={nativeToken?.decimals}
-                            symbol={nativeToken?.symbol}
-                            formatter={formatBalance}
-                            significant={3}
-                        />
-                        ({gasFeeUSD})
-                    </Typography>
-                </Grid>
-            </>
+            <Typography variant="body1" color="textPrimary" align="right" className={className}>
+                <Typography component="span" className={classes.edit} onClick={openCustomGasSettingsDialog}>
+                    <Trans>Edit</Trans>
+                </Typography>
+                <FormattedBalance
+                    value={gasFee ?? estimateGasFee}
+                    decimals={nativeToken?.decimals}
+                    symbol={nativeToken?.symbol}
+                    formatter={formatBalance}
+                    significant={3}
+                />
+                ({gasFeeUSD})
+            </Typography>
         )
 
     return (
-        <Box className={cx(classes.section, className)}>
+        <Box className={cx(classes.root, className)}>
             <Typography className={cx(classes.label, classes.label)}>
                 <Trans>Gas Fee</Trans>
             </Typography>
@@ -369,7 +360,7 @@ export function SelectGasSettingsToolbarUI({
                     formatter={formatBalance}
                 />
                 <Typography className={classes.gasUSDPrice}>≈ {gasFeeUSD}</Typography>
-                <div className={classes.root} onClick={gasOptions ? openMenu : undefined}>
+                <div className={classes.button} onClick={gasOptions ? openMenu : undefined}>
                     <Typography className={classes.text}>
                         {isCustomGas ?
                             <Trans>Custom</Trans>

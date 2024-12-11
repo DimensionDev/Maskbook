@@ -1,25 +1,24 @@
-import { truncate } from 'lodash-es'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { formatFileSize } from '@masknet/kit'
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
-import { ApplicationEntry } from '@masknet/shared'
+import { ApplicationEntry, formatFileSize } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { ThemeProvider } from '@mui/material'
+import { truncate } from 'lodash-es'
 import { base } from '../base.js'
 import { META_KEY_1, META_KEY_2, META_KEY_3 } from '../constants.js'
 import { getFileInfoMetadata } from '../helpers.js'
 import type { FileInfo } from '../types.js'
 import { MultipleFileChip, SingleFileChip } from './components/index.js'
-import { FileViewer } from './FileViewer.js'
-import { setupStorage, type StorageOptions } from './storage.js'
 import { openBrowser, openPicker } from './emitter.js'
 import { FileServiceInjection } from './FileServiceInjection.js'
+import { FileViewer } from './FileViewer.js'
 import { Modals } from './modals/index.js'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Trans } from '@lingui/macro'
+import { setupStorage, type StorageOptions } from './storage.js'
 
 type BadgeRenderer<T> = (f: T) => Plugin.SiteAdaptor.BadgeDescriptor
 
@@ -117,7 +116,7 @@ export default definition
 
 function onAttachedFile(file: FileInfo): Plugin.SiteAdaptor.BadgeDescriptor {
     const name = truncate(file.name, { length: 10 })
-    const size = formatFileSize(file.size, true)
+    const size = formatFileSize(file.size)
 
     return {
         text: (

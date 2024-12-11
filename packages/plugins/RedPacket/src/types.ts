@@ -1,3 +1,6 @@
+import type { NonFungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+
 export enum NFTSelectOption {
     All = 'All',
     Partial = 'Partial',
@@ -37,4 +40,18 @@ export enum FireflyAccountSource {
     Lens = 'Lens',
     Farcaster = 'Farcaster',
     Wallet = 'Wallet',
+}
+
+export enum RedPacketTabs {
+    tokens = 'tokens',
+    collectibles = 'collectibles',
+}
+export enum HistoryTabs {
+    Sent = 'sent',
+    Claimed = 'claimed',
+}
+
+// TODO Get rid of index which is from legacy code
+export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & {
+    index: number
 }

@@ -1,7 +1,14 @@
 import { msg, Select, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
-import { CopyButton, LoadingStatus, NetworkIcon, PluginWalletStatusBar, ProgressiveText } from '@masknet/shared'
+import {
+    CopyButton,
+    LoadingStatus,
+    NetworkIcon,
+    PluginWalletStatusBar,
+    ProgressiveText,
+    useUnmountedRef,
+} from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
@@ -39,7 +46,6 @@ import { getBridgeLeftSideToken, getBridgeRightSideToken } from '../helpers.js'
 import { useApprove } from '../hooks/useApprove.js'
 import { useBridgable } from '../hooks/useBridgable.js'
 import { useBridgeData } from '../hooks/useBridgeData.js'
-import { useLeave } from '../hooks/useLeave.js'
 import { useToken } from '../hooks/useToken.js'
 import { useTokenPrice } from '../hooks/useTokenPrice.js'
 
@@ -298,7 +304,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const showStale = isQuoteStale && !isSending && !isApproving
 
-    const leaveRef = useLeave()
+    const unmountedRef = useUnmountedRef()
     const queryClient = useQueryClient()
 
     const [{ loading: submitting }, submit] = useAsyncFn(async () => {
@@ -379,7 +385,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
                 bridgeId: router?.bridgeId,
                 bridgeName: router?.bridgeName,
             })
-            if (leaveRef.current) return
+            if (unmountedRef.current) return
             const url = urlcat(basePath, RoutePaths.Transaction, {
                 hash,
                 chainId: fromChainId,

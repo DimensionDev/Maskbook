@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { Icons } from '@masknet/icons'
 import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
@@ -73,7 +73,7 @@ export function RedPacketConfirmDialog(props: ConfirmRedPacketFormProps) {
         if (settings?.token?.chainId !== chainId) onClose()
     }, [chainId, onClose])
 
-    const { account: publicKey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])
+    const [{ account: publicKey, privateKey = '' }] = useState(() => EVMWeb3.createAccount())
 
     const {
         isBalanceInsufficient,

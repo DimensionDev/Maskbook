@@ -131,6 +131,7 @@ export function useCreateParams(
     publicKey: string,
 ) {
     const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
+    // TODO get rid of JSON.stringify
     return useAsync(() => getCreateParams(), [JSON.stringify(redPacketSettings), version, publicKey])
 }
 

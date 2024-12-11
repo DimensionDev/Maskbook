@@ -1,23 +1,22 @@
-import { InjectedDialog } from '@masknet/shared'
-import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
-import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useAsync, useAsyncFn } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
+import Services from '#services'
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
+import { decryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
-import { last } from 'lodash-es'
-import { formatFileSize } from '@masknet/kit'
+import { formatFileSize, InjectedDialog } from '@masknet/shared'
+import type { BackupAccountType } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { decode, encode } from '@msgpack/msgpack'
+import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
+import { last } from 'lodash-es'
+import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
 import PasswordField from '../../components/PasswordField/index.js'
 import { passwordRegexp } from '../../utils/regexp.js'
-import { decryptBackup } from '@masknet/backup-format'
-import { decode, encode } from '@msgpack/msgpack'
-import Services from '#services'
 import { BackupPreviewModal } from '../modals.js'
-import type { BackupAccountType } from '@masknet/shared-base'
-import { Trans, msg } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     account: {
@@ -217,7 +216,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                                 <Trans>Downloading</Trans>
                             :   <>
                                     <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
-                                        {formatFileSize(Number(size), false)}
+                                        {formatFileSize(Number(size))}
                                     </Typography>
                                     <Typography
                                         component="span"

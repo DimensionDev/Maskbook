@@ -32,6 +32,8 @@
     }
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.658.1",
+    "@aws-sdk/lib-storage": "^3.658.1",
     "@bonfida/spl-name-service": "^0.1.50",
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@lens-protocol/client": "^2.3.1",

@@ -21,6 +21,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     label: {
         position: 'absolute',
+        pointerEvents: 'none',
         width: 48,
         height: 48,
         top: 0,
@@ -130,13 +131,13 @@ interface Props extends HTMLProps<HTMLDivElement> {
     cover: string
     message: string
     token: FungibleToken<ChainId, SchemaType>
-    shares: number
+    shares?: number
     /** claimed entities */
     claimedCount: number
     totalClaimed: string
     total: string
     /** claimed amount by current user */
-    claimedAmount: string
+    claimedAmount?: string
     isClaimed?: boolean
     isEmpty?: boolean
     isExpired?: boolean
@@ -147,11 +148,11 @@ export function RedPacketEnvelope({
     cover,
     message,
     token,
-    shares,
+    shares = 1,
     claimedCount: claimed,
     total,
     totalClaimed,
-    claimedAmount,
+    claimedAmount = '0',
     isClaimed,
     isExpired,
     isRefunded,

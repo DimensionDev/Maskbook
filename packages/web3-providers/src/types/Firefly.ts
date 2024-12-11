@@ -123,6 +123,14 @@ export namespace FireflyConfigAPI {
         code: number
         data: UnionProfile
     }
+    export type UploadMediaTokenResponse = FireflyResponse<{
+        bucket: string
+        cdnHost: string
+        region: string
+        accessKeyId: string
+        secretAccessKey: string
+        sessionToken: string
+    }>
 }
 
 export namespace FireflyRedPacketAPI {
@@ -213,39 +221,32 @@ export namespace FireflyRedPacketAPI {
         platformId: string
     }
 
-    export interface RedPacketSentInfoItem {
-        create_time: number
-        total_numbers: string
-        total_amounts: string
+    export interface RedPacketBaseInfo {
         rp_msg: string
-        claim_numbers: string
-        claim_amounts: string
         token_symbol: string
         token_decimal: number
         token_logo: string
+        chain_id: string
         redpacket_id: HexString
         trans_hash: HexString
-        log_idx: number
-        chain_id: string
+        log_idx: string
         redpacket_status: RedPacketStatus
+    }
+    export interface RedPacketSentInfoItem extends RedPacketBaseInfo {
+        create_time: number
+        total_numbers: string
+        total_amounts: string
+        claim_numbers: string
+        claim_amounts: string
         claim_strategy: StrategyPayload[]
         theme_id: string
         share_from: string
     }
 
-    export interface RedPacketClaimedInfoItem {
-        redpacket_id: HexString
+    export interface RedPacketClaimedInfoItem extends RedPacketBaseInfo {
         received_time: string
-        rp_msg: string
         token_amounts: string
-        token_symbol: string
-        token_decimal: number
-        token_logo: string
-        trans_hash: HexString
-        log_idx: string
         creator: HexString
-        chain_id: string
-        redpacket_status: RedPacketStatus
         ens_name: string
     }
 
@@ -253,9 +254,11 @@ export namespace FireflyRedPacketAPI {
     export interface RedPacketSentInfo extends WithNumberChainId<RedPacketSentInfoItem> {}
     export interface RedPacketClaimListInfo extends WithNumberChainId<RedPacketClaimListInfoItem> {}
 
-    export interface ClaimList {
+    export interface ClaimInfo {
+        /** claim user's address */
         creator: string
         claim_platform: Platform[]
+        ens_name: string
         token_amounts: string
         token_symbol: string
         token_decimal: number
@@ -268,7 +271,7 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface RedPacketClaimListInfoItem {
-        list: ClaimList[]
+        list: ClaimInfo[]
         creator: string
         create_time: number
         rp_msg: string
@@ -293,11 +296,11 @@ export namespace FireflyRedPacketAPI {
 
     export type ThemeSettings = {
         [key in 'title1' | 'title2' | 'title3' | 'title4' | 'title_symbol']: {
-            color: '#F1D590'
-            font_size: 55
-            font_family: 'Helvetica'
-            font_weight: 700
-            line_height: 63.25
+            color: string
+            font_size: number
+            font_family: string
+            font_weight: number
+            line_height: number
         }
     } & {
         bg_color: string
@@ -434,6 +437,13 @@ export namespace FireflyRedPacketAPI {
     }>
 
     export type ThemeByIdResponse = FireflyResponse<ThemeGroupSettings>
+
+    export type CreateThemeOptions = {
+        font_color: string
+        /** image url */
+        image: string
+    }
+    export type CreateThemeResponse = FireflyResponse<{ tid: string }>
 }
 
 export namespace FireflyTwitterAPI {
