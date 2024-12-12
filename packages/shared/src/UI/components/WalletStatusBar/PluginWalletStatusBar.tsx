@@ -40,7 +40,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
+interface WalletStatusBarProps<T extends NetworkPluginID> extends PropsWithChildren<{}> {
     className?: string
     actualPluginID?: T
     onClick?: () => void

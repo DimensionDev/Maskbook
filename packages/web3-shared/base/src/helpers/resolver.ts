@@ -1,7 +1,6 @@
 import urlcat from 'urlcat'
-import { NetworkPluginID, createLookupTableResolver, NextIDPlatform, SocialAddressType } from '@masknet/shared-base'
+import { NetworkPluginID, createLookupTableResolver, SocialAddressType } from '@masknet/shared-base'
 import { CurrencyType, SourceType } from '../specs/index.js'
-import { memoize } from 'lodash-es'
 
 export const resolveSocialAddressLink = createLookupTableResolver<SocialAddressType, string>(
     {
@@ -102,99 +101,6 @@ export const resolveNetworkWalletName = createLookupTableResolver<NetworkPluginI
         throw new Error(`Unknown network plugin-id: ${network}`)
     },
 )
-
-export const resolveNextIDPlatformWalletName: (platform: NextIDPlatform) => string = memoize(function (
-    platform: NextIDPlatform,
-) {
-    const pluginId = resolveNextID_NetworkPluginID(platform)
-    if (!pluginId) return `${platform} wallet`
-    return resolveNetworkWalletName(pluginId)
-})
-
-export const resolveNextID_NetworkPluginID = createLookupTableResolver<NextIDPlatform, NetworkPluginID | undefined>(
-    {
-        [NextIDPlatform.Ethereum]: NetworkPluginID.PLUGIN_EVM,
-        [NextIDPlatform.NextID]: undefined,
-        [NextIDPlatform.GitHub]: undefined,
-        [NextIDPlatform.Keybase]: undefined,
-        [NextIDPlatform.Twitter]: undefined,
-        [NextIDPlatform.ENS]: undefined,
-        [NextIDPlatform.RSS3]: undefined,
-        [NextIDPlatform.LENS]: undefined,
-        [NextIDPlatform.REDDIT]: undefined,
-        [NextIDPlatform.SYBIL]: undefined,
-        [NextIDPlatform.EthLeaderboard]: undefined,
-        [NextIDPlatform.SpaceId]: NetworkPluginID.PLUGIN_EVM,
-        [NextIDPlatform.Farcaster]: undefined,
-        [NextIDPlatform.Bit]: undefined,
-        [NextIDPlatform.Unstoppable]: undefined,
-        [NextIDPlatform.CyberConnect]: undefined,
-    },
-    () => {
-        return undefined
-    },
-)
-
-export const resolveNextIDPlatformName = createLookupTableResolver<NextIDPlatform, string>(
-    {
-        [NextIDPlatform.Ethereum]: 'Ethereum',
-        [NextIDPlatform.NextID]: 'NEXT.ID',
-        [NextIDPlatform.GitHub]: 'Github',
-        [NextIDPlatform.Keybase]: 'Keybase',
-        [NextIDPlatform.Twitter]: 'Twitter',
-        [NextIDPlatform.ENS]: 'ENS',
-        [NextIDPlatform.RSS3]: 'RSS3',
-        [NextIDPlatform.LENS]: 'Lens',
-        [NextIDPlatform.REDDIT]: 'Reddit',
-        [NextIDPlatform.SYBIL]: 'Sybil',
-        [NextIDPlatform.EthLeaderboard]: 'EthLeaderboard',
-        [NextIDPlatform.SpaceId]: 'Space ID',
-        [NextIDPlatform.Farcaster]: 'Farcaster',
-        [NextIDPlatform.Bit]: '.bit',
-        [NextIDPlatform.Unstoppable]: 'Unstoppable Domains',
-        [NextIDPlatform.CyberConnect]: 'CyberConnect',
-    },
-    () => {
-        return ''
-    },
-)
-
-export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, identifier: string, name: string) => {
-    switch (networkPlatform) {
-        case NextIDPlatform.Ethereum:
-            return `https://etherscan.io/address/${identifier}`
-        case NextIDPlatform.NextID:
-            return 'https://next.id/'
-        case NextIDPlatform.GitHub:
-            return `https://github.com/${identifier}`
-        case NextIDPlatform.Keybase:
-            return `https://keybase.io/${name}`
-        case NextIDPlatform.Twitter:
-            return `https://twitter.com/${identifier}`
-        case NextIDPlatform.ENS:
-            return `https://app.ens.domains/name/${identifier}`
-        case NextIDPlatform.RSS3:
-            return `https://rss3.io/result?search=${identifier}`
-        case NextIDPlatform.LENS:
-            return urlcat('https://firefly.mask.social/profile/:handle?source=lens', { handle: identifier })
-        case NextIDPlatform.REDDIT:
-            return `https://www.reddit.com/user/${identifier}`
-        case NextIDPlatform.SYBIL:
-            return 'https://sybil.org/'
-        case NextIDPlatform.EthLeaderboard:
-            return 'https://ethleaderboard.xyz/'
-        case NextIDPlatform.SpaceId:
-            return `https://bscscan.com/address/${identifier}`
-        case NextIDPlatform.Farcaster:
-            return `https://firefly.mask.social/profile/farcaster/${identifier}`
-        case NextIDPlatform.Bit:
-            return `https://bit.cc/${name}`
-        case NextIDPlatform.Unstoppable:
-            return `https://ud.me/${name}`
-        default:
-            return ''
-    }
-}
 
 // https://stackoverflow.com/a/67176726
 const MATCH_IPFS_CID_RAW =
