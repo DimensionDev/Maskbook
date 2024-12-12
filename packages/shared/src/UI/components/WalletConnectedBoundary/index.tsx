@@ -17,10 +17,11 @@ export interface WalletConnectedBoundaryProps extends withClasses<'connectWallet
     ActionButtonProps?: ActionButtonProps
     startIcon?: React.ReactNode
     noGasText?: string
+    isIgnoreGasCheck?: boolean
 }
 
 export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
-    const { children = null, offChain = false, expectedChainId, noGasText } = props
+    const { children = null, offChain = false, expectedChainId, noGasText, isIgnoreGasCheck = false } = props
 
     const t = useSharedTrans()
     const { classes, cx } = useStyles(undefined, { props })
@@ -40,7 +41,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
             </ActionButton>
         )
 
-    if (isZero(nativeTokenBalance.value ?? '0') && !offChain)
+    if (!isIgnoreGasCheck && isZero(nativeTokenBalance.value ?? '0') && !offChain)
         return (
             <ActionButton
                 className={buttonClass}
