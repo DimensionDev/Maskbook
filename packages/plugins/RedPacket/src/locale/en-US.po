@@ -192,6 +192,10 @@ msgstr ""
 msgid "Confirming"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+msgid "Congratulations!"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx
 msgid "Connect to {source}"
 msgstr ""
@@ -225,6 +229,7 @@ msgstr ""
 msgid "Drop Type"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr ""
@@ -258,6 +263,7 @@ msgstr ""
 msgid "Equal Amount"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -448,6 +454,10 @@ msgstr ""
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Refund"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+msgid "Refunded"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
