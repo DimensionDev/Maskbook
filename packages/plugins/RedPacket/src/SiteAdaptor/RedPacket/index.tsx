@@ -5,12 +5,12 @@ import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@mas
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { makeStyles, parseColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow, Stack, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -22,12 +22,12 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { RedPacketEnvelop } from './RedPacketEnvelop.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
         root: {
             borderRadius: theme.spacing(2),
-            padding: theme.spacing(1.5, 2),
             position: 'relative',
             display: 'flex',
             backgroundColor: 'transparent',
@@ -46,7 +46,8 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             },
         },
         fireflyRoot: {
-            aspectRatio: '10 / 7',
+            padding: 0,
+            aspectRatio: '480 / 336',
         },
         maskRoot: {
             marginTop: 'auto',
@@ -54,15 +55,11 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
+            padding: theme.spacing(1.5, 2),
         },
-        cover: {
-            position: 'absolute',
-            width: '100%',
+        envelop: {
             height: '100%',
-            objectFit: 'contain',
-            inset: 0,
-            margin: 'auto',
-            zIndex: 0,
+            width: '100%',
         },
         requirements: {
             width: 407,
@@ -75,11 +72,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             [`@media (max-width: ${theme.breakpoints.values.md}px)`]: {
                 width: 'auto',
             },
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
         },
 
         content: {
@@ -116,20 +108,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
                 bottom: 8,
             },
         },
-        label: {
-            width: 76,
-            height: 27,
-            display: 'flex',
-            justifyContent: 'center',
-            fontSize: 12,
-            alignItems: 'center',
-            borderRadius: theme.spacing(1),
-            backgroundColor: parseColor(theme.palette.common.black).setAlpha(0.5).toString(),
-            textTransform: 'capitalize',
-            position: 'absolute',
-            right: 12,
-            top: 12,
-        },
         words: {
             display: '-webkit-box',
             WebkitLineClamp: 3,
@@ -146,13 +124,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
         },
         messageBox: {
             width: '100%',
-        },
-        tokenLabel: {
-            width: 48,
-            height: 48,
-            position: 'absolute',
-            top: 0,
-            left: 0,
         },
     }
 })
@@ -183,7 +154,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // #endregion
 
-    const { canClaim, canRefund, listOfStatus } = availabilityComputed
+    const { canClaim, canRefund, listOfStatus, isClaimed, isEmpty, isExpired, isRefunded } = availabilityComputed
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
@@ -373,16 +344,15 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (shareText) share?.(shareText, source ? source : undefined)
     }, [shareText, source])
 
-    const isEmpty = listOfStatus.includes(RedPacketStatus.empty)
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
     const { classes, cx } = useStyles({ outdated })
 
     // RedPacket created from Mask has no cover settings
-    const cover = useRedPacketCover(payload, availability)
+    const { data: cover, isLoading: isLoadingCover } = useRedPacketCover(payload, availability)
 
     // the red packet can fetch without account
-    if (!availability || !token) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
 
     const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
@@ -391,38 +361,23 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             <Card
                 className={cx(classes.root, cover ? classes.fireflyRoot : classes.maskRoot)}
                 component="article"
-                elevation={0}
-                style={
-                    cover ?
-                        {
-                            backgroundSize: 'contain',
-                            backgroundImage: `url(${cover.backgroundImageUrl})`,
-                            backgroundColor: cover.backgroundColor,
-                        }
-                    :   undefined
-                }>
-                {cover ?
-                    <img className={classes.cover} src={cover.url!} />
-                :   null}
-                <img
-                    aria-label="Token"
-                    src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
-                    className={classes.tokenLabel}
+                elevation={0}>
+                <RedPacketEnvelop
+                    className={classes.envelop}
+                    cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
+                    message={payload.sender.message}
+                    token={token}
+                    shares={payload.shares}
+                    isClaimed={isClaimed}
+                    isEmpty={isEmpty}
+                    isExpired={isExpired}
+                    isRefunded={isRefunded}
+                    claimedCount={+availability.claimed}
+                    total={payload.total}
+                    totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
+                    claimedAmount={availability.claimed_amount}
+                    creator={payload.sender.name}
                 />
-                <div className={classes.header}>
-                    {/* it might be fontSize: 12 on twitter based on theme? */}
-                    {listOfStatus.length ?
-                        <Typography
-                            className={classes.label}
-                            variant="body2"
-                            style={{ cursor: claimedOrEmpty ? 'pointer' : undefined }}
-                            onClick={() => {
-                                if (claimedOrEmpty) setShowRequirements((v) => !v)
-                            }}>
-                            {resolveRedPacketStatus(listOfStatus)}
-                        </Typography>
-                    :   null}
-                </div>
                 {cover ?
                     <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
                         <Requirements
@@ -476,11 +431,3 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         </>
     )
 })
-
-function resolveRedPacketStatus(listOfStatus: RedPacketStatus[]) {
-    if (listOfStatus.includes(RedPacketStatus.claimed)) return 'Claimed'
-    if (listOfStatus.includes(RedPacketStatus.refunded)) return 'Refunded'
-    if (listOfStatus.includes(RedPacketStatus.expired)) return 'Expired'
-    if (listOfStatus.includes(RedPacketStatus.empty)) return 'Empty'
-    return ''
-}
