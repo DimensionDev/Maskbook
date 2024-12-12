@@ -27,7 +27,7 @@ const libV1AlgrDefaults: Omit<EncodeOptions, 'text'> = {
     version: AlgorithmVersion.V1,
 }
 
-const libV2AlgrDefaults: Omit<EncodeOptions, 'text'> = {
+export const libV2AlgrDefaults: Omit<EncodeOptions, 'text'> = {
     size: 8,
     narrow: 0,
     copies: 3,
@@ -76,7 +76,17 @@ const Preset2023_Firefly: Preset = {
     options: libV2AlgrDefaults,
 }
 
+const Preset2024_Firefly: Preset = {
+    type: 'raw',
+    description: 'the preset we used for firefly PC',
+    width: 480,
+    height: 336,
+    mask: null,
+    options: libV2AlgrDefaults,
+}
+
 const dimensionPreset: readonly Preset[] = [
+    Preset2024_Firefly,
     Preset2023_Firefly,
     Preset2023,
     Preset2022,

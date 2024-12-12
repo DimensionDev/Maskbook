@@ -146,6 +146,7 @@ export const usePostInfoDetails: {
                     if (isSubscription(k)) return useSubscription<any>(k)
                     return k
                 }
+                usePostInfoDetails.displayName = key
                 Object.defineProperty(usePostInfoDetails, key, { value: usePostInfoDetails, configurable: true })
                 return usePostInfoDetails
             },

@@ -41,6 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     DecryptedInspector: memo(function RedPacketInspector(props) {
         const meta = props.message.meta
+        debugger
         if (RedPacketMetadataReader(meta).isOk())
             return (
                 <Render name="Lucky Drop">

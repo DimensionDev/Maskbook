@@ -83,6 +83,7 @@ export async function* decryptWithDecoding(
             password: context.authorHint.toText(),
             downloadImage,
         })
+        debugger
         if (typeof result === 'string') {
             decoded = decodeByNetwork(context.encryptPayloadNetwork, result)[0]
         } else if (result === null) {

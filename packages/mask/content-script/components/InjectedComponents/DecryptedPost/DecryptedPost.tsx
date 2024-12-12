@@ -70,6 +70,7 @@ export function DecryptPost(props: DecryptPostProps) {
     const postMetadataImages = usePostInfoDetails.postMetadataImages()
     const mentionedLinks = usePostInfoDetails.mentionedLinks()
     const postInfo = useContext(PostInfoContext)!
+    console.log({ postMetadataImages })
 
     const [progress, dispatch] = useReducer(progressReducer, [])
 
@@ -220,6 +221,7 @@ async function makeProgress(
     }
     let iv: Uint8Array | undefined
     for await (const progress of GeneratorServices.decrypt(payload, context)) {
+        debugger
         if (signal.aborted) return
         if (progress.type === DecryptProgressKind.Success) {
             done(progress.content, iv || new Uint8Array())
