@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import { Plural, Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
@@ -12,7 +12,7 @@ import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Card, Grow, Stack, Typography } from '@mui/material'
+import { Card, Grow } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Requirements } from '../Requirements/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
@@ -20,9 +20,9 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { RedPacketEnvelop } from './RedPacketEnvelop.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { RedPacketEnvelop } from './RedPacketEnvelop.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -44,18 +44,8 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
                 padding: theme.spacing(1, 1.5),
                 width: 'calc(100% - 20px)',
             },
-        },
-        fireflyRoot: {
             padding: 0,
             aspectRatio: '480 / 336',
-        },
-        maskRoot: {
-            marginTop: 'auto',
-            height: 335,
-            backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-            padding: theme.spacing(1.5, 2),
         },
         envelop: {
             height: '100%',
@@ -302,44 +292,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         myHandle,
     ])
 
-    const myStatus = useMemo(() => {
-        if (!availability) return ''
-        if (token && listOfStatus.includes(RedPacketStatus.claimed))
-            return (
-                <Trans>
-                    You got{' '}
-                    {availability.claimed_amount ?
-                        formatBalance(availability.claimed_amount, token.decimals, { significant: 2 })
-                    :   '-'}{' '}
-                    {availability.claimed_amount ? token.symbol : '-'}
-                </Trans>
-            )
-        return ''
-    }, [listOfStatus, token, availability?.claimed_amount])
-
-    const subtitle = useMemo(() => {
-        if (!availability || !token) return
-
-        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return (
-                <Trans>
-                    You could refund {formatBalance(availability.balance, token.decimals, { significant: 2 })}{' '}
-                    {token.symbol ?? '-'}.
-                </Trans>
-            )
-        if (listOfStatus.includes(RedPacketStatus.refunded)) return <Trans>The Lucky Drop has been refunded.</Trans>
-        if (listOfStatus.includes(RedPacketStatus.expired)) return <Trans>The Lucky Drop is expired.</Trans>
-        if (listOfStatus.includes(RedPacketStatus.empty)) return <Trans>The Lucky Drop is empty.</Trans>
-        if (!payload.password) return <Trans>The Lucky Drop is broken.</Trans>
-        const total = formatBalance(payload.total, token.decimals, { significant: 2 })
-        const symbol = token.symbol ?? '-'
-        return (
-            <Trans>
-                {payload.shares} <Plural value={payload.shares} one="share" other="shares" /> / {total} ${symbol}
-            </Trans>
-        )
-    }, [availability, canRefund, token, payload, listOfStatus, _])
-
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
     }, [shareText, source])
@@ -358,10 +310,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     return (
         <>
-            <Card
-                className={cx(classes.root, cover ? classes.fireflyRoot : classes.maskRoot)}
-                component="article"
-                elevation={0}>
+            <Card className={classes.root} component="article" elevation={0}>
                 <RedPacketEnvelop
                     className={classes.envelop}
                     cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
@@ -387,28 +336,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                             onClose={() => setShowRequirements(false)}
                         />
                     </Grow>
-                :   <div className={classes.content}>
-                        <Stack />
-                        <div className={classes.messageBox}>
-                            <Typography className={classes.words} variant="h6">
-                                {payload.sender.message}
-                            </Typography>
-                        </div>
-                        <div className={classes.bottomContent}>
-                            <div>
-                                <Typography variant="body2" className={classes.myStatus}>
-                                    {subtitle}
-                                </Typography>
-                                <Typography className={classes.myStatus} variant="body1">
-                                    {myStatus}
-                                </Typography>
-                            </div>
-                            <Typography className={classes.from} variant="body1">
-                                <Trans>From: @{payload.sender.name || '-'}</Trans>
-                            </Typography>
-                        </div>
-                    </div>
-                }
+                :   null}
             </Card>
             {outdated ?
                 null

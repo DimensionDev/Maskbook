@@ -172,6 +172,7 @@ export function RedPacketEnvelop({
                             pluginID={NetworkPluginID.PLUGIN_EVM}
                             address={token.address}
                             symbol={token.symbol}
+                            chainId={token.chainId}
                         />
                         <NetworkIcon
                             size={16}
@@ -223,7 +224,7 @@ export function RedPacketEnvelop({
                         }
                     </div>
                 </div>
-                <Typography className={classes.creator}>From: @{creator}</Typography>
+                <Typography className={classes.creator}>From: @{creator.replace(/^@/, '')}</Typography>
             </div>
             <img src={new URL('../assets/token-label.png', import.meta.url).href} className={classes.label} />
         </div>
