@@ -298,7 +298,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes, cx } = useStyles({ outdated })
+    const { classes } = useStyles({ outdated })
 
     // RedPacket created from Mask has no cover settings
     const { data: cover, isLoading: isLoadingCover } = useRedPacketCover(payload, availability)
