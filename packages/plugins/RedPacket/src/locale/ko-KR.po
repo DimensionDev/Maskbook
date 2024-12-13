@@ -197,7 +197,7 @@ msgstr "행운 드랍 디테일"
 msgid "Confirming"
 msgstr "확인 중"
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 msgid "Congratulations!"
 msgstr ""
 
@@ -234,7 +234,7 @@ msgstr ""
 msgid "Drop Type"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr "비어 있음"
@@ -268,7 +268,7 @@ msgstr "총금액 입력"
 msgid "Equal Amount"
 msgstr "동일한 금액"
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -460,7 +460,7 @@ msgstr ""
 msgid "Refund"
 msgstr "리펀"
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 msgid "Refunded"
 msgstr ""
 
