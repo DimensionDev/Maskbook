@@ -197,7 +197,7 @@ msgstr "红包详情"
 msgid "Confirming"
 msgstr "确认中"
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 msgid "Congratulations!"
 msgstr ""
 
@@ -234,7 +234,7 @@ msgstr ""
 msgid "Drop Type"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr "空的"
@@ -268,7 +268,7 @@ msgstr "输入总数"
 msgid "Equal Amount"
 msgstr "均分金额"
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -460,7 +460,7 @@ msgstr ""
 msgid "Refund"
 msgstr "退款"
 
-#: src/SiteAdaptor/RedPacket/RedPacketEnvelop.tsx
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 msgid "Refunded"
 msgstr ""
 

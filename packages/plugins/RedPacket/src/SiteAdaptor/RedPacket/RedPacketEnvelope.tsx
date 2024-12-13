@@ -143,7 +143,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     isRefunded?: boolean
     creator: string
 }
-export function RedPacketEnvelop({
+export function RedPacketEnvelope({
     cover,
     message,
     token,

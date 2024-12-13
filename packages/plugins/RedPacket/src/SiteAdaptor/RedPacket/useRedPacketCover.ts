@@ -8,17 +8,27 @@ import type { useAvailability } from '../hooks/useAvailability.js'
 type Availability = ReturnType<typeof useAvailability>['data']
 export function useRedPacketCover(payload: RedPacketJSONPayload, availability: Availability) {
     const token = payload.token
+    const symbol = token?.symbol
+    const decimals = token?.decimals
     return useQuery({
-        enabled: !!availability && !!payload.rpid && !!token?.symbol,
-        queryKey: ['red-packet', 'theme-id', payload.rpid, availability?.balance, availability?.claimed],
+        enabled: !!availability && !!payload.rpid && !!symbol,
+        queryKey: [
+            'red-packet',
+            'theme-id',
+            payload.rpid,
+            symbol,
+            decimals,
+            availability?.balance,
+            availability?.claimed,
+        ],
         queryFn: async () => {
-            if (!token || !availability) return null
+            if (!symbol || !decimals || !availability) return null
             const name = payload.sender.name
 
             return FireflyRedPacket.getCoverUrlByRpid(
                 payload.rpid,
-                token.symbol,
-                token.decimals,
+                symbol,
+                decimals,
                 payload.shares,
                 payload.total,
                 [isValidAddress, isValidDomain, (n: string) => n.startsWith('@')].some((f) => f(name)) ? name : (

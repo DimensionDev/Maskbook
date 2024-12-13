@@ -20,7 +20,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { RedPacketEnvelop } from './RedPacketEnvelop.js'
+import { RedPacketEnvelope } from './RedPacketEnvelope.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
 
@@ -311,7 +311,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     return (
         <>
             <Card className={classes.root} component="article" elevation={0}>
-                <RedPacketEnvelop
+                <RedPacketEnvelope
                     className={classes.envelop}
                     cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
                     message={payload.sender.message}
