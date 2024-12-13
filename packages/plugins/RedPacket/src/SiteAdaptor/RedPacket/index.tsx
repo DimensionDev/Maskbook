@@ -163,7 +163,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
-            const sender = handle ?? ''
+            const sender = (handle ?? '').replace(/^@/, '')
             const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
             const farcaster_lens_claimed =
                 _(msg`🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @${sender} !`) +
@@ -190,7 +190,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             const isOnTwitter = Sniffings.is_twitter_page
             const isOnFacebook = Sniffings.is_facebook_page
             const shareTextOption = {
-                sender: payload.sender.name,
+                sender: payload.sender.name.replace(/^@/, ''),
                 payload: link!,
                 network: network?.name ?? 'Mainnet',
                 account: isOnTwitter ? 'realMaskNetwork' : 'masknetwork',
