@@ -333,6 +333,14 @@ export namespace FireflyRedPacketAPI {
 
     export type ClaimHistoryResponse = FireflyResponse<RedPacketClaimListInfo>
 
+    export type ThemeOptions =
+        | {
+              rpid: string
+          }
+        | {
+              themeId: string
+          }
+
     export interface ParseOptions {
         text?: string
         image?: {

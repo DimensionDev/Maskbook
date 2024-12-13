@@ -78,12 +78,17 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             canRefund: isExpired && !isEmpty && isCreator,
             canSend: !isEmpty && !isExpired && !isRefunded && isCreator,
             isPasswordValid,
+            isEmpty,
+            isClaimed,
+            isExpired,
+            isRefunded,
             listOfStatus: compact([
                 isClaimed ? RedPacketStatus.claimed : undefined,
                 isEmpty ? RedPacketStatus.empty : undefined,
                 isRefunded ? RedPacketStatus.refunded : undefined,
                 isExpired ? RedPacketStatus.expired : undefined,
             ]),
+            myClaimedAmount: parsed?.redpacket.claimedAmount,
         },
     }
 }

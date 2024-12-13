@@ -24,8 +24,8 @@ msgid "{0} (UTC+8)"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
-msgstr ""
+#~ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
@@ -197,6 +197,10 @@ msgstr "红包详情"
 msgid "Confirming"
 msgstr "确认中"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "Congratulations!"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx
 msgid "Connect to {source}"
 msgstr ""
@@ -230,6 +234,7 @@ msgstr ""
 msgid "Drop Type"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr "空的"
@@ -263,6 +268,7 @@ msgstr "输入总数"
 msgid "Equal Amount"
 msgstr "均分金额"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -286,7 +292,6 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "From: @{0}"
 msgstr ""
@@ -455,6 +460,10 @@ msgstr ""
 msgid "Refund"
 msgstr "退款"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "Refunded"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refunding"
 msgstr "退款中"
@@ -526,20 +535,20 @@ msgid "The Lucky Drop can't be sent due to data damage."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop has been refunded."
-msgstr "此红包已退款。"
+#~ msgid "The Lucky Drop has been refunded."
+#~ msgstr "此红包已退款。"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is broken."
-msgstr "此红包已被损坏。"
+#~ msgid "The Lucky Drop is broken."
+#~ msgstr "此红包已被损坏。"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is empty."
-msgstr "此红包是空的。"
+#~ msgid "The Lucky Drop is empty."
+#~ msgstr "此红包是空的。"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is expired."
-msgstr "此红包已过期。"
+#~ msgid "The Lucky Drop is expired."
+#~ msgstr "此红包已过期。"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -638,12 +647,12 @@ msgid "You claimed 1."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "You could refund {0} {1}."
-msgstr "您可以退款 {0} {1}。"
+#~ msgid "You could refund {0} {1}."
+#~ msgstr "您可以退款 {0} {1}。"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "You got {0} {1}"
-msgstr ""
+#~ msgid "You got {0} {1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "You got 1 {0}"

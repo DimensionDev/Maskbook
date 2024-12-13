@@ -54,6 +54,12 @@ export class FireflyRedPacket {
         }))
     }
 
+    static async getTheme(options: FireflyRedPacketAPI.ThemeOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', options)
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
+        return data
+    }
+
     static async getPayloadUrlByThemeId(
         themeId: string,
         from: string,
@@ -62,11 +68,7 @@ export class FireflyRedPacket {
         symbol?: string,
         decimals?: number,
     ) {
-        const url = urlcat(FIREFLY_ROOT_URL, 'v1/redpacket/themeById', {
-            themeId,
-        })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
-
+        const data = await FireflyRedPacket.getTheme({ themeId })
         return {
             themeId,
             url: urlcat(SITE_URL, '/api/rp', {
@@ -98,8 +100,6 @@ export class FireflyRedPacket {
             rpid,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ThemeByIdResponse>(url)
-        // Just discard default theme, and this RedPacket will be treated as created from Mask
-        if (data.is_default) return null
 
         return {
             themeId: data.tid,

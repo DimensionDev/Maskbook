@@ -24,8 +24,8 @@ msgid "{0} (UTC+8)"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
-msgstr ""
+#~ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
@@ -197,6 +197,10 @@ msgstr "행운 드랍 디테일"
 msgid "Confirming"
 msgstr "확인 중"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "Congratulations!"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx
 msgid "Connect to {source}"
 msgstr ""
@@ -230,6 +234,7 @@ msgstr ""
 msgid "Drop Type"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr "비어 있음"
@@ -263,6 +268,7 @@ msgstr "총금액 입력"
 msgid "Equal Amount"
 msgstr "동일한 금액"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -286,7 +292,6 @@ msgstr ""
 msgid "Follow me"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "From: @{0}"
 msgstr ""
@@ -455,6 +460,10 @@ msgstr ""
 msgid "Refund"
 msgstr "리펀"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "Refunded"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refunding"
 msgstr "환급 중"
@@ -526,20 +535,20 @@ msgid "The Lucky Drop can't be sent due to data damage."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop has been refunded."
-msgstr "행운 드랍은 이미 리펀됩니다."
+#~ msgid "The Lucky Drop has been refunded."
+#~ msgstr "행운 드랍은 이미 리펀됩니다."
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is broken."
-msgstr "훼손된 행운 드랍"
+#~ msgid "The Lucky Drop is broken."
+#~ msgstr "훼손된 행운 드랍"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is empty."
-msgstr "비어 있는 행운 드랍"
+#~ msgid "The Lucky Drop is empty."
+#~ msgstr "비어 있는 행운 드랍"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is expired."
-msgstr "만료된 행운 드랍"
+#~ msgid "The Lucky Drop is expired."
+#~ msgstr "만료된 행운 드랍"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -638,12 +647,12 @@ msgid "You claimed 1."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "You could refund {0} {1}."
-msgstr "{0} {1} 리펀 가능합니다."
+#~ msgid "You could refund {0} {1}."
+#~ msgstr "{0} {1} 리펀 가능합니다."
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "You got {0} {1}"
-msgstr ""
+#~ msgid "You got {0} {1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "You got 1 {0}"

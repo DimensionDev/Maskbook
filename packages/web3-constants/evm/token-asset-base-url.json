@@ -37,7 +37,7 @@
         "Gorli": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/gorli/assets"],
         "BSC": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/bnb/assets"],
         "BSCT": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/chapel/assets"],
-        "Base": [],
+        "Base": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/base/assets"],
         "Base_Goerli": [],
         "Polygon": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/polygon/assets"],
         "Mumbai": ["https://imagedelivery.net/PCnTHRkdRhGodr0AWBAvMA/Assets/blockchains/mumbai/assets"],

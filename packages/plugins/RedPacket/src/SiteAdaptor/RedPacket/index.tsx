@@ -1,18 +1,18 @@
 /* eslint-disable no-irregular-whitespace */
-import { Plural, Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { makeStyles, parseColor } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Card, Grow, Stack, Typography } from '@mui/material'
+import { Card, Grow } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Requirements } from '../Requirements/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
@@ -20,6 +20,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { RedPacketEnvelope } from './RedPacketEnvelope.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
 
@@ -27,7 +28,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
         root: {
             borderRadius: theme.spacing(2),
-            padding: theme.spacing(1.5, 2),
             position: 'relative',
             display: 'flex',
             backgroundColor: 'transparent',
@@ -44,25 +44,12 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
                 padding: theme.spacing(1, 1.5),
                 width: 'calc(100% - 20px)',
             },
+            padding: 0,
+            aspectRatio: '480 / 336',
         },
-        fireflyRoot: {
-            aspectRatio: '10 / 7',
-        },
-        maskRoot: {
-            marginTop: 'auto',
-            height: 335,
-            backgroundImage: `url(${new URL('../assets/cover.png', import.meta.url)})`,
-            backgroundSize: 'cover',
-            backgroundRepeat: 'no-repeat',
-        },
-        cover: {
-            position: 'absolute',
-            width: '100%',
+        envelop: {
             height: '100%',
-            objectFit: 'contain',
-            inset: 0,
-            margin: 'auto',
-            zIndex: 0,
+            width: '100%',
         },
         requirements: {
             width: 407,
@@ -75,84 +62,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             [`@media (max-width: ${theme.breakpoints.values.md}px)`]: {
                 width: 'auto',
             },
-        },
-        header: {
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-        },
-
-        content: {
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-        },
-        bottomContent: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-        },
-        myStatus: {
-            fontSize: 12,
-            fontWeight: 600,
-            lineHeight: 1.8,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-                left: 12,
-                bottom: 8,
-            },
-        },
-        from: {
-            fontSize: '14px',
-            color: theme.palette.common.white,
-            alignSelf: 'end',
-            fontWeight: 500,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-                right: 12,
-                bottom: 8,
-            },
-        },
-        label: {
-            width: 76,
-            height: 27,
-            display: 'flex',
-            justifyContent: 'center',
-            fontSize: 12,
-            alignItems: 'center',
-            borderRadius: theme.spacing(1),
-            backgroundColor: parseColor(theme.palette.common.black).setAlpha(0.5).toString(),
-            textTransform: 'capitalize',
-            position: 'absolute',
-            right: 12,
-            top: 12,
-        },
-        words: {
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            color: theme.palette.common.white,
-            fontSize: 24,
-            fontWeight: 700,
-            wordBreak: 'break-all',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-            },
-        },
-        messageBox: {
-            width: '100%',
-        },
-        tokenLabel: {
-            width: 48,
-            height: 48,
-            position: 'absolute',
-            top: 0,
-            left: 0,
         },
     }
 })
@@ -183,7 +92,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     // #endregion
 
-    const { canClaim, canRefund, listOfStatus } = availabilityComputed
+    const { canClaim, canRefund, listOfStatus, isClaimed, isEmpty, isExpired, isRefunded } = availabilityComputed
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
@@ -202,7 +111,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
-            const sender = handle ?? ''
+            const sender = (handle ?? '').replace(/^@/, '')
             const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
             const farcaster_lens_claimed =
                 _(msg`🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @${sender} !`) +
@@ -229,7 +138,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             const isOnTwitter = Sniffings.is_twitter_page
             const isOnFacebook = Sniffings.is_facebook_page
             const shareTextOption = {
-                sender: payload.sender.name,
+                sender: payload.sender.name.replace(/^@/, ''),
                 payload: link!,
                 network: network?.name ?? 'Mainnet',
                 account: isOnTwitter ? 'realMaskNetwork' : 'masknetwork',
@@ -331,98 +240,41 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         myHandle,
     ])
 
-    const myStatus = useMemo(() => {
-        if (!availability) return ''
-        if (token && listOfStatus.includes(RedPacketStatus.claimed))
-            return (
-                <Trans>
-                    You got{' '}
-                    {availability.claimed_amount ?
-                        formatBalance(availability.claimed_amount, token.decimals, { significant: 2 })
-                    :   '-'}{' '}
-                    {availability.claimed_amount ? token.symbol : '-'}
-                </Trans>
-            )
-        return ''
-    }, [listOfStatus, token, availability?.claimed_amount])
-
-    const subtitle = useMemo(() => {
-        if (!availability || !token) return
-
-        if (listOfStatus.includes(RedPacketStatus.expired) && canRefund)
-            return (
-                <Trans>
-                    You could refund {formatBalance(availability.balance, token.decimals, { significant: 2 })}{' '}
-                    {token.symbol ?? '-'}.
-                </Trans>
-            )
-        if (listOfStatus.includes(RedPacketStatus.refunded)) return <Trans>The Lucky Drop has been refunded.</Trans>
-        if (listOfStatus.includes(RedPacketStatus.expired)) return <Trans>The Lucky Drop is expired.</Trans>
-        if (listOfStatus.includes(RedPacketStatus.empty)) return <Trans>The Lucky Drop is empty.</Trans>
-        if (!payload.password) return <Trans>The Lucky Drop is broken.</Trans>
-        const total = formatBalance(payload.total, token.decimals, { significant: 2 })
-        const symbol = token.symbol ?? '-'
-        return (
-            <Trans>
-                {payload.shares} <Plural value={payload.shares} one="share" other="shares" /> / {total} ${symbol}
-            </Trans>
-        )
-    }, [availability, canRefund, token, payload, listOfStatus, _])
-
     const handleShare = useCallback(() => {
         if (shareText) share?.(shareText, source ? source : undefined)
     }, [shareText, source])
 
-    const isEmpty = listOfStatus.includes(RedPacketStatus.empty)
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes, cx } = useStyles({ outdated })
+    const { classes } = useStyles({ outdated })
 
     // RedPacket created from Mask has no cover settings
-    const cover = useRedPacketCover(payload, availability)
+    const { data: cover, isLoading: isLoadingCover } = useRedPacketCover(payload, availability)
 
     // the red packet can fetch without account
-    if (!availability || !token) return <LoadingStatus minHeight={148} />
+    if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
 
     const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
     return (
         <>
-            <Card
-                className={cx(classes.root, cover ? classes.fireflyRoot : classes.maskRoot)}
-                component="article"
-                elevation={0}
-                style={
-                    cover ?
-                        {
-                            backgroundSize: 'contain',
-                            backgroundImage: `url(${cover.backgroundImageUrl})`,
-                            backgroundColor: cover.backgroundColor,
-                        }
-                    :   undefined
-                }>
-                {cover ?
-                    <img className={classes.cover} src={cover.url!} />
-                :   null}
-                <img
-                    aria-label="Token"
-                    src={new URL('../assets/tokenLabel.png', import.meta.url).toString()}
-                    className={classes.tokenLabel}
+            <Card className={classes.root} component="article" elevation={0}>
+                <RedPacketEnvelope
+                    className={classes.envelop}
+                    cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
+                    message={payload.sender.message}
+                    token={token}
+                    shares={payload.shares}
+                    isClaimed={isClaimed}
+                    isEmpty={isEmpty}
+                    isExpired={isExpired}
+                    isRefunded={isRefunded}
+                    claimedCount={+availability.claimed}
+                    total={payload.total}
+                    totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
+                    claimedAmount={availability.claimed_amount}
+                    creator={payload.sender.name}
                 />
-                <div className={classes.header}>
-                    {/* it might be fontSize: 12 on twitter based on theme? */}
-                    {listOfStatus.length ?
-                        <Typography
-                            className={classes.label}
-                            variant="body2"
-                            style={{ cursor: claimedOrEmpty ? 'pointer' : undefined }}
-                            onClick={() => {
-                                if (claimedOrEmpty) setShowRequirements((v) => !v)
-                            }}>
-                            {resolveRedPacketStatus(listOfStatus)}
-                        </Typography>
-                    :   null}
-                </div>
                 {cover ?
                     <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
                         <Requirements
@@ -432,28 +284,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                             onClose={() => setShowRequirements(false)}
                         />
                     </Grow>
-                :   <div className={classes.content}>
-                        <Stack />
-                        <div className={classes.messageBox}>
-                            <Typography className={classes.words} variant="h6">
-                                {payload.sender.message}
-                            </Typography>
-                        </div>
-                        <div className={classes.bottomContent}>
-                            <div>
-                                <Typography variant="body2" className={classes.myStatus}>
-                                    {subtitle}
-                                </Typography>
-                                <Typography className={classes.myStatus} variant="body1">
-                                    {myStatus}
-                                </Typography>
-                            </div>
-                            <Typography className={classes.from} variant="body1">
-                                <Trans>From: @{payload.sender.name || '-'}</Trans>
-                            </Typography>
-                        </div>
-                    </div>
-                }
+                :   null}
             </Card>
             {outdated ?
                 null
@@ -476,11 +307,3 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         </>
     )
 })
-
-function resolveRedPacketStatus(listOfStatus: RedPacketStatus[]) {
-    if (listOfStatus.includes(RedPacketStatus.claimed)) return 'Claimed'
-    if (listOfStatus.includes(RedPacketStatus.refunded)) return 'Refunded'
-    if (listOfStatus.includes(RedPacketStatus.expired)) return 'Expired'
-    if (listOfStatus.includes(RedPacketStatus.empty)) return 'Empty'
-    return ''
-}
