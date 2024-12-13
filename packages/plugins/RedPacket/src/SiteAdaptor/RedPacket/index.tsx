@@ -63,58 +63,6 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
                 width: 'auto',
             },
         },
-
-        content: {
-            display: 'flex',
-            flex: 1,
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-        },
-        bottomContent: {
-            width: '100%',
-            display: 'flex',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-        },
-        myStatus: {
-            fontSize: 12,
-            fontWeight: 600,
-            lineHeight: 1.8,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-                left: 12,
-                bottom: 8,
-            },
-        },
-        from: {
-            fontSize: '14px',
-            color: theme.palette.common.white,
-            alignSelf: 'end',
-            fontWeight: 500,
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-                right: 12,
-                bottom: 8,
-            },
-        },
-        words: {
-            display: '-webkit-box',
-            WebkitLineClamp: 3,
-            WebkitBoxOrient: 'vertical',
-            color: theme.palette.common.white,
-            fontSize: 24,
-            fontWeight: 700,
-            wordBreak: 'break-all',
-            textOverflow: 'ellipsis',
-            overflow: 'hidden',
-            [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
-                fontSize: 14,
-            },
-        },
-        messageBox: {
-            width: '100%',
-        },
     }
 })
 
