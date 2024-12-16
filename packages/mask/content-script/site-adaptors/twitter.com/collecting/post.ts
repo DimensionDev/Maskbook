@@ -93,6 +93,7 @@ function registerPostCollectorInner(
                 isFocusing: isDetailTweet(tweetNode),
                 suggestedInjectionPoint: tweetNode,
                 ...refs.subscriptions,
+                source: 'Twitter',
             })
             function run() {
                 collectPostInfo(tweetNode, refs, cancel)
