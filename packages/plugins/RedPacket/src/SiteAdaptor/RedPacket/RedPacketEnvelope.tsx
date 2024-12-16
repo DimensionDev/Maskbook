@@ -2,7 +2,7 @@ import { Trans } from '@lingui/macro'
 import { NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
+import { formatBalance, isZero, type FungibleToken } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
@@ -160,6 +160,7 @@ export function RedPacketEnvelope({
     ...props
 }: Props) {
     const { classes, cx } = useStyles()
+    const claimedZero = isZero(claimedAmount)
     return (
         <div {...props} className={cx(classes.container, props.className)}>
             <img src={cover} className={classes.cover} />
@@ -181,18 +182,25 @@ export function RedPacketEnvelope({
                             chainId={token.chainId}
                         />
                     </div>
-                    <Typography className={classes.amount}>
-                        {isClaimed ?
-                            formatBalance(claimedAmount, token.decimals)
-                        :   `${formatBalance(totalClaimed, token.decimals)} / ${formatBalance(total, token.decimals)}`
-                        }{' '}
-                        {token.symbol}
-                    </Typography>
+                    {isClaimed ?
+                        <Typography className={classes.amount}>
+                            {claimedZero ?
+                                <Trans>You have already claimed this lucky drop.</Trans>
+                            :   `${formatBalance(claimedAmount, token.decimals)} ${token.symbol}`}
+                        </Typography>
+                    :   <Typography className={classes.amount}>
+                            {`${formatBalance(totalClaimed, token.decimals)} / ${formatBalance(total, token.decimals)} `}
+                            {token.symbol}
+                        </Typography>
+                    }
                     <div className={classes.status}>
                         {isClaimed ?
-                            <Typography className={classes.statusText}>
-                                <Trans>Congratulations!</Trans>
-                            </Typography>
+                            claimedZero ?
+                                null
+                            :   <Typography className={classes.statusText}>
+                                    <Trans>Congratulations!</Trans>
+                                </Typography>
+
                         : isEmpty ?
                             <>
                                 <div className={classes.bar}>
