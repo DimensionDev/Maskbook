@@ -1,10 +1,9 @@
 import {
     useLastRecognizedIdentity,
     usePostInfoPostMetadataImages,
-    usePostInfoSite,
     usePostInfoSource,
 } from '@masknet/plugin-infra/content-script'
-import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
@@ -25,12 +24,10 @@ export function useParseRedPacket(chainId: ChainId) {
     const source = usePostInfoSource()
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
-    const site = usePostInfoSite()
-    const isOnFirefly = site === EnhanceableSite.Firefly
 
     const query = useQuery({
-        enabled: images.length > 0 && isOnFirefly,
-        queryKey: ['red-packet', 'parse', source, images[0], account],
+        enabled: images.length > 0,
+        queryKey: ['red-packet', 'parse', source?.toLowerCase(), images[0], account],
         queryFn: async () => {
             const platform = source?.toLowerCase() as FireflyRedPacketAPI.PlatformType
             return FireflyRedPacket.parse({
