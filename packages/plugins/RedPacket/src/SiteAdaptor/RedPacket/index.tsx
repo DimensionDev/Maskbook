@@ -100,7 +100,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
     const site = usePostInfoDetails.site()
     const source = usePostInfoDetails.source()
-    const platform = source?.toLowerCase() as 'lens' | 'farcaster'
+    const platform = source?.toLowerCase()
     const isOnFirefly = site === EnhanceableSite.Firefly
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()

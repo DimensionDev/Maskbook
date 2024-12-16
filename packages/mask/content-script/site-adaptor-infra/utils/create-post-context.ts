@@ -78,12 +78,12 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
         const version = new ValueRef<SupportedPayloadVersions | undefined>(undefined)
         return {
             author: author.author,
-            source: null,
             handle: NULL,
             coAuthors: opt.coAuthors,
             avatarURL: author.avatarURL,
             nickname: author.nickname,
             site,
+            source: opt.source,
             postID: author.postID,
 
             get rootNode() {
