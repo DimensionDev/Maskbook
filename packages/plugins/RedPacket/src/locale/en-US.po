@@ -653,6 +653,10 @@ msgstr ""
 msgid "You got 1 {0}"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "You have already claimed this lucky drop."
+msgstr ""
+
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""

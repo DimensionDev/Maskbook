@@ -201,6 +201,7 @@
         "nJMj1z": ["您可以退款 ", ["0"], " ", ["1"], "。"],
         "cBEQ5v": ["You got ", ["0"], " ", ["1"]],
         "0UMPI1": ["You got 1 ", ["0"]],
+        "MCw2oc": "You have already claimed this lucky drop.",
         "zEZe86": "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
     }
 }
