@@ -339,6 +339,18 @@ export interface NonFungibleTokenMetadata<ChainId> {
     source?: SourceType
     /** Poap Event Id */
     eventId?: number
+    video?: {
+        properties: {
+            audio_coding: string
+            duration: number
+            height: number
+            mime_type: string
+            size: number
+            video_coding: string | null
+            width: number
+        }
+        url: string
+    }
 }
 
 export interface SocialLinks {
