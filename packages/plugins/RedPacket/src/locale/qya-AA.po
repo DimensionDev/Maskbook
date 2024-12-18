@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-25 13:32\n"
+"PO-Revision-Date: 2024-12-18 02:57\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -24,8 +24,8 @@ msgid "{0} (UTC+8)"
 msgstr "crwdns28928:0{0}crwdne28928:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
-msgstr "crwdns32276:00={0}crwdnd32276:01={1}crwdnd32276:0total={total}crwdnd32276:0symbol={symbol}crwdne32276:0"
+#~ msgid "{0} {1, plural, one {share} other {shares}} / {total} ${symbol}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
@@ -197,6 +197,10 @@ msgstr "crwdns28974:0crwdne28974:0"
 msgid "Confirming"
 msgstr "crwdns28976:0crwdne28976:0"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "Congratulations!"
+msgstr "crwdns36064:0crwdne36064:0"
+
 #: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx
 msgid "Connect to {source}"
 msgstr "crwdns32302:0{source}crwdne32302:0"
@@ -230,6 +234,7 @@ msgstr "crwdns28988:0crwdne28988:0"
 msgid "Drop Type"
 msgstr "crwdns28990:0crwdne28990:0"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr "crwdns28992:0crwdne28992:0"
@@ -263,6 +268,7 @@ msgstr "crwdns29004:0crwdne29004:0"
 msgid "Equal Amount"
 msgstr "crwdns29006:0crwdne29006:0"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -286,7 +292,6 @@ msgstr "crwdns31732:0{platform}crwdne31732:0"
 msgid "Follow me"
 msgstr "crwdns29010:0crwdne29010:0"
 
-#: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "From: @{0}"
 msgstr "crwdns29012:0{0}crwdne29012:0"
@@ -455,6 +460,10 @@ msgstr "crwdns29074:0crwdne29074:0"
 msgid "Refund"
 msgstr "crwdns29076:0crwdne29076:0"
 
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "Refunded"
+msgstr "crwdns36066:0crwdne36066:0"
+
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refunding"
 msgstr "crwdns29078:0crwdne29078:0"
@@ -526,20 +535,20 @@ msgid "The Lucky Drop can't be sent due to data damage."
 msgstr "crwdns32310:0crwdne32310:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop has been refunded."
-msgstr "crwdns29110:0crwdne29110:0"
+#~ msgid "The Lucky Drop has been refunded."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is broken."
-msgstr "crwdns29112:0crwdne29112:0"
+#~ msgid "The Lucky Drop is broken."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is empty."
-msgstr "crwdns29114:0crwdne29114:0"
+#~ msgid "The Lucky Drop is empty."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "The Lucky Drop is expired."
-msgstr "crwdns29116:0crwdne29116:0"
+#~ msgid "The Lucky Drop is expired."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -638,16 +647,20 @@ msgid "You claimed 1."
 msgstr "crwdns31756:0crwdne31756:0"
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "You could refund {0} {1}."
-msgstr "crwdns29158:0{0}crwdnd29158:0{1}crwdne29158:0"
+#~ msgid "You could refund {0} {1}."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "You got {0} {1}"
-msgstr "crwdns31758:0{0}crwdnd31758:0{1}crwdne31758:0"
+#~ msgid "You got {0} {1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "You got 1 {0}"
 msgstr "crwdns29160:0{0}crwdne29160:0"
+
+#: src/SiteAdaptor/RedPacket/RedPacketEnvelope.tsx
+msgid "You have already claimed this lucky drop."
+msgstr "crwdns36068:0crwdne36068:0"
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
