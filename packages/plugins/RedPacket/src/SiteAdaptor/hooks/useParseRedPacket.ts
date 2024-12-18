@@ -12,7 +12,6 @@ import { useQuery } from '@tanstack/react-query'
 
 /**
  * Parse RedPacket with post info.
- * Firefly only.
  */
 export function useParseRedPacket(chainId: ChainId) {
     const images = usePostInfoPostMetadataImages()
