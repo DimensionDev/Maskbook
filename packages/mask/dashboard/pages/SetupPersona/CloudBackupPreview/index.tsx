@@ -1,17 +1,16 @@
-import { memo, useCallback, useMemo } from 'react'
-import { useAsyncFn } from 'react-use'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { format as formatDateTime, fromUnixTime } from 'date-fns'
+import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { EmptyStatus, formatFileSize } from '@masknet/shared'
+import type { BackupAccountType } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/kit'
-import { EmptyStatus } from '@masknet/shared'
-import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
-import type { BackupAccountType } from '@masknet/shared-base'
+import { format as formatDateTime, fromUnixTime } from 'date-fns'
+import { memo, useCallback, useMemo } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { Trans } from '@lingui/macro'
+import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -159,7 +158,7 @@ export const Component = memo(function CloudBackupPreview() {
 
                                 <Typography display="flex" columnGap="4px">
                                     <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
-                                        {formatFileSize(Number(previewInfo.size), false)}
+                                        {formatFileSize(Number(previewInfo.size))}
                                     </Typography>
                                     <Typography
                                         component="span"

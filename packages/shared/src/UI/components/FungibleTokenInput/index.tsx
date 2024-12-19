@@ -51,9 +51,9 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
         )
         const onChange = useCallback(
             (ev: ChangeEvent<HTMLInputElement>) => {
-                const amount_ = ev.currentTarget.value.replaceAll(',', '.')
-                if (RE_MATCH_FRACTION_AMOUNT.test(amount_)) onAmountChange(`0${amount_}`)
-                else if (amount_ === '' || RE_MATCH_WHOLE_AMOUNT.test(amount_)) onAmountChange(amount_)
+                const raw = ev.currentTarget.value.replaceAll(',', '.')
+                if (RE_MATCH_FRACTION_AMOUNT.test(raw)) onAmountChange(`0${raw}`)
+                else if (raw === '' || RE_MATCH_WHOLE_AMOUNT.test(raw)) onAmountChange(raw)
             },
             [onAmountChange, RE_MATCH_WHOLE_AMOUNT, RE_MATCH_FRACTION_AMOUNT],
         )

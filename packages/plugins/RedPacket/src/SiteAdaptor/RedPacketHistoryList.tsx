@@ -1,10 +1,10 @@
 import { EmptyStatus, LoadingStatus, ElementAnchor } from '@masknet/shared'
-import { type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { List } from '@mui/material'
-import { memo, useMemo, type HTMLProps } from 'react'
+import { memo, type HTMLProps } from 'react'
 import { RedPacketInHistoryList } from './RedPacketInHistoryList.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
 import { Trans } from '@lingui/macro'
@@ -44,13 +44,12 @@ export const RedPacketHistoryList = memo(function RedPacketHistoryList({
     ...rest
 }: RedPacketHistoryListProps) {
     const { classes, cx } = useStyles()
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
-        data: historyData,
+        data: histories = EMPTY_LIST,
         isLoading,
         fetchNextPage,
     } = useRedPacketHistory(account, FireflyRedPacketAPI.ActionType.Send, FireflyRedPacketAPI.SourceType.MaskNetwork)
-    const histories = useMemo(() => historyData.pages.flatMap((page) => page.data), [historyData, chainId])
 
     if (isLoading) return <LoadingStatus className={classes.placeholder} iconSize={30} />
 

@@ -5,28 +5,17 @@ import {
     useLastRecognizedIdentity,
     useSiteThemeMode,
 } from '@masknet/plugin-infra/content-script'
-import {
-    ApplicationBoardModal,
-    InjectedDialog,
-    LoadingStatus,
-    NetworkTab,
-    useCurrentLinkedPersona,
-} from '@masknet/shared'
+import { InjectedDialog, LoadingStatus, NetworkTab, useCurrentLinkedPersona } from '@masknet/shared'
 import { CrossIsolationMessages, NetworkPluginID, PluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
 import { useChainContext, useGasPrice } from '@masknet/web3-hooks-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
 import { type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { ChainId, type GasConfig, GasEditor } from '@masknet/web3-shared-evm'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab, useTheme } from '@mui/material'
-import { Suspense, useCallback, useContext, useState } from 'react'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import { Suspense, useCallback, useState } from 'react'
 import { base } from '../base.js'
-import { RedPacketMetaKey } from '../constants.js'
 import type { FireflyContext, FireflyRedpacketSettings } from '../types.js'
 import { ClaimRequirementsDialog } from './ClaimRequirementsDialog.js'
 import { ClaimRequirementsRuleDialog } from './ClaimRequirementsRuleDialog.js'
@@ -34,13 +23,11 @@ import { FireflyRedpacketConfirmDialog } from './FireflyRedpacketConfirmDialog.j
 import { FireflyRedPacketHistoryDetails } from './FireflyRedPacketHistoryDetails.js'
 import { FireflyRedPacketPast } from './FireflyRedPacketPast.js'
 import type { RedPacketSettings } from './hooks/useCreateCallback.js'
-import { openComposition } from './openComposition.js'
+import { useHandleCreateOrSelect } from './hooks/useHandleCreateOrSelect.js'
 import { RedPacketConfirmDialog } from './RedPacketConfirmDialog.js'
 import { RedPacketERC20Form } from './RedPacketERC20Form.js'
 import { RedPacketERC721Form } from './RedPacketERC721Form.js'
-import { CompositionTypeContext } from './RedPacketInjection.js'
 import { RedPacketPast } from './RedPacketPast.js'
-import { reduceUselessPayloadInfo } from './utils/reduceUselessPayloadInfo.js'
 
 const useStyles = makeStyles<{ scrollY: boolean; isDim: boolean }>()((theme, { isDim, scrollY }) => {
     // it's hard to set dynamic color, since the background color of the button is blended transparent
@@ -100,7 +87,7 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const [step, setStep] = useState(CreateRedPacketPageStep.NewRedPacketPage)
 
     const [isNFTRedPacketLoaded, setIsNFTRedPacketLoaded] = useState(false)
-    const { account, chainId: contextChainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId: contextChainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [currentTab, onChange, tabs] = useTabs('tokens', 'collectibles')
     const [currentHistoryTab, onChangeHistoryTab, historyTabs] = useTabs('claimed', 'sent')
     const theme = useTheme()
@@ -144,48 +131,11 @@ export default function RedPacketDialog(props: RedPacketDialogProps) {
     const senderName =
         lastRecognized?.identifier?.userId ?? currentIdentity?.identifier?.userId ?? linkedPersona?.nickname
 
-    const compositionType = useContext(CompositionTypeContext)
-    const onCreateOrSelect = useCallback(
-        async (
-            payload: RedPacketJSONPayload,
-            payloadImage?: string,
-            claimRequirements?: FireflyRedPacketAPI.StrategyPayload[],
-            publicKey?: string,
-        ) => {
-            if (payload.password === '') {
-                if (payload.contract_version === 1) {
-                    // eslint-disable-next-line no-alert
-                    alert('Unable to share a lucky drop without a password. But you can still withdraw the lucky drop.')
-                    // eslint-disable-next-line no-alert
-                    payload.password = prompt('Please enter the password of the lucky drop:', '') ?? ''
-                } else if (payload.contract_version > 1 && payload.contract_version < 4) {
-                    // just sign out the password if it is lost.
-                    payload.password = await EVMWeb3.signMessage(
-                        'message',
-                        web3_utils.sha3(payload.sender.message) ?? '',
-                        {
-                            account,
-                        },
-                    )
-                    payload.password = payload.password.slice(2)
-                }
-            }
-
-            if (!isFirefly && senderName) {
-                payload.sender.name === senderName
-            }
-
-            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
-                payloadImage,
-                claimRequirements,
-                publicKey,
-            })
-            Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
-            ApplicationBoardModal.close()
-            handleClose()
-        },
-        [senderName, handleClose, compositionType],
-    )
+    const onCreateOrSelect = useHandleCreateOrSelect({
+        isFirefly,
+        senderName,
+        onClose: handleClose,
+    })
 
     const isSmartPay = props.source === PluginID.SmartPay
     const onBack = useCallback(() => {

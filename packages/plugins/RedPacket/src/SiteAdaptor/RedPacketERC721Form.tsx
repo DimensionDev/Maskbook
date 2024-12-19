@@ -1,47 +1,47 @@
-import { useState, useCallback, useEffect } from 'react'
-import { Box, Typography, List, ListItem, Skeleton } from '@mui/material'
-import { makeStyles, ActionButton, ShadowRootTooltip } from '@masknet/theme'
-import { Check as CheckIcon, Close as CloseIcon, AddCircleOutline as AddCircleOutlineIcon } from '@mui/icons-material'
+import { Trans } from '@lingui/macro'
+import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import {
-    WalletConnectedBoundary,
     AssetPreviewer,
-    PluginWalletStatusBar,
-    ERC721ContractSelectPanel,
     ChainBoundary,
+    ERC721ContractSelectPanel,
     EthereumERC721TokenApprovedBoundary,
+    PluginWalletStatusBar,
     SelectGasSettingsToolbar,
     useAvailableBalance,
     useCurrentLinkedPersona,
+    WalletConnectedBoundary,
 } from '@masknet/shared'
-import {
-    type ChainId,
-    type SchemaType,
-    useNftRedPacketConstants,
-    formatTokenId,
-    type GasConfig,
-} from '@masknet/web3-shared-evm'
-import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
-import { SelectNftTokenDialog, type OrderedERC721Token } from './SelectNftTokenDialog.js'
-import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
-import { NFTSelectOption } from '../types.js'
-import { RED_PACKET_MAX_SHARES } from '../constants.js'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { ActionButton, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import {
     useChainContext,
+    useEnvironmentContext,
     useNativeToken,
     useNativeTokenPrice,
-    useWallet,
     useNonFungibleAssetsByCollectionAndOwner,
-    useEnvironmentContext,
+    useWallet,
 } from '@masknet/web3-hooks-base'
-import { NetworkPluginID, EMPTY_LIST } from '@masknet/shared-base'
-import { SourceType } from '@masknet/web3-shared-base'
-import type { NonFungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SmartPayBundler } from '@masknet/web3-providers'
+import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
+import { SourceType } from '@masknet/web3-shared-base'
+import {
+    type ChainId,
+    formatTokenId,
+    type GasConfig,
+    type SchemaType,
+    useNftRedPacketConstants,
+} from '@masknet/web3-shared-evm'
+import { AddCircleOutline as AddCircleOutlineIcon, Check as CheckIcon, Close as CloseIcon } from '@mui/icons-material'
+import { Box, List, ListItem, Skeleton, Typography } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import { useAsync } from 'react-use'
+import { RED_PACKET_MAX_SHARES } from '../constants.js'
+import { NFTSelectOption, type OrderedERC721Token } from '../types.js'
 import { useCreateNFTRedpacketGas } from './hooks/useCreateNftRedpacketGas.js'
-import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { RedpacketMessagePanel } from './RedpacketMessagePanel.js'
+import { RedpacketNftConfirmDialog } from './RedpacketNftConfirmDialog.js'
+import { SelectNftTokenDialog } from './SelectNftTokenDialog.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -281,24 +281,21 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
         { chainId },
     )
 
-    const {
-        value: assets_ = EMPTY_LIST,
-        next,
-        done,
-    } = useNonFungibleAssetsByCollectionAndOwner(
+    const collectionId =
         collection?.assets?.length ? ''
         : collection?.source === SourceType.SimpleHash ? collection.id
-        : collection?.address,
-        account,
-        NetworkPluginID.PLUGIN_EVM,
-        {
-            chainId,
-            size: 50,
-        },
-    )
+        : collection?.address
+    const {
+        data: assets_ = EMPTY_LIST,
+        hasNextPage,
+        fetchPreviousPage,
+    } = useNonFungibleAssetsByCollectionAndOwner(collectionId, account, NetworkPluginID.PLUGIN_EVM, {
+        chainId,
+        size: 50,
+    })
     useEffect(() => {
-        next()
-    }, [assets_.length])
+        fetchPreviousPage()
+    }, [hasNextPage])
 
     const assets = collection?.assets?.length ? collection.assets : assets_
 
@@ -399,7 +396,7 @@ export function RedPacketERC721Form(props: RedPacketERC721FormProps) {
                     />
                 </Box>
                 {collection && balance ?
-                    done ?
+                    !hasNextPage ?
                         <>
                             <Box className={classes.selectWrapper}>
                                 <div

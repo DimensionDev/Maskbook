@@ -1,19 +1,20 @@
-import { useCallback, useState } from 'react'
-import { findLastIndex, uniq } from 'lodash-es'
-import { AssetPreviewer } from '@masknet/shared'
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import type { NonFungibleCollection, NonFungibleToken } from '@masknet/web3-shared-base'
-import { SchemaType, formatTokenId, type ChainId } from '@masknet/web3-shared-evm'
-import { DialogContent, Box, InputBase, Button, Typography, ListItem, useTheme } from '@mui/material'
-import { QuestionMark as QuestionMarkIcon, Check as CheckIcon } from '@mui/icons-material'
-import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { EVMWeb3 } from '@masknet/web3-providers'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { RED_PACKET_MAX_SHARES } from '../constants.js'
-import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { Plural, Trans, msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { Icons } from '@masknet/icons'
+import { AssetPreviewer } from '@masknet/shared'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { SchemaType, formatTokenId, type ChainId } from '@masknet/web3-shared-evm'
+import { Check as CheckIcon, QuestionMark as QuestionMarkIcon } from '@mui/icons-material'
+import { Box, Button, DialogContent, InputBase, ListItem, Typography, useTheme } from '@mui/material'
+import { findLastIndex, uniq } from 'lodash-es'
+import { useCallback, useState } from 'react'
+import { RED_PACKET_MAX_SHARES } from '../constants.js'
+import type { OrderedERC721Token } from '../types.js'
 
 interface StyleProps {
     isSelectSharesExceed: boolean
@@ -221,10 +222,6 @@ const useStyles = makeStyles<StyleProps>()((theme, props) => ({
         overflow: 'hidden',
     },
 }))
-
-export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & {
-    index: number
-}
 
 interface SelectNftTokenDialogProps {
     onClose: () => void

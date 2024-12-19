@@ -1,7 +1,7 @@
 import { msg, Select, Trans } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
-import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon } from '@masknet/shared'
+import { LoadingStatus, PluginWalletStatusBar, ProgressiveText, TokenIcon, useUnmountedRef } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { ActionButton, LoadingBase, makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { useAccount, useNetwork, useNetworkDescriptor, useWeb3Connection, useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -28,7 +28,6 @@ import { useGasManagement, useTrade } from '../contexts/index.js'
 import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { useApprove } from '../hooks/useApprove.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
-import { useLeave } from '../hooks/useLeave.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
 import { useSwapData } from '../hooks/useSwapData.js'
 import { useSwappable } from '../hooks/useSwappable.js'
@@ -270,7 +269,7 @@ export const Confirm = memo(function Confirm() {
     const isApproving = approveMutation.isPending
     const isCheckingApprove = isLoadingApproveInfo || isLoadingSpender || isLoadingAllowance
 
-    const leaveRef = useLeave()
+    const unmountedRef = useUnmountedRef()
     const queryClient = useQueryClient()
     const Utils = useWeb3Utils(NetworkPluginID.PLUGIN_EVM)
     const waitForTransaction = useWaitForTransaction()
@@ -298,7 +297,7 @@ export const Confirm = memo(function Confirm() {
             try {
                 await waitForTransaction({ chainId, hash })
                 const received = await getReceived({ hash, account, chainId })
-                if (received && !leaveRef.current) {
+                if (received && !unmountedRef.current) {
                     showSnackbar(_(msg`Swap`), {
                         message: (
                             <MuiLink
@@ -357,7 +356,7 @@ export const Confirm = memo(function Confirm() {
                 gasLimit: gas!,
                 gasPrice: gasConfig.gasPrice || '0',
             })
-            if (leaveRef.current) return
+            if (unmountedRef.current) return
             const url = urlcat(basePath, RoutePaths.Transaction, { hash, chainId, mode })
             navigate(url, { replace: true })
         } catch (err) {

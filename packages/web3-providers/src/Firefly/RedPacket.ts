@@ -13,7 +13,7 @@ import { FireflyRedPacketAPI, type FireflyResponse } from '../entry-types.js'
 
 const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
-const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api.firefly.land'
+const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api-dev.firefly.land'
 
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
     return fetchJSON<T>(url, {
@@ -26,6 +26,19 @@ function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 export class FireflyRedPacket {
+    static async getThemes() {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/themeList')
+        const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ThemeListResponse>(url)
+        return data.list
+    }
+    static async createTheme(options: FireflyRedPacketAPI.CreateThemeOptions) {
+        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createTheme')
+        const res = await fetchFireflyJSON<FireflyRedPacketAPI.CreateThemeResponse>(url, {
+            method: 'POST',
+            body: JSON.stringify(options),
+        })
+        return res.data.tid
+    }
     static async parse(options: FireflyRedPacketAPI.ParseOptions) {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/misc/redpacket/parse')
         const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ParseResponse>(url, {
@@ -85,6 +98,9 @@ export class FireflyRedPacket {
         }
     }
 
+    /**
+     * @deprecated
+     */
     static async getCoverUrlByRpid(
         rpid: string,
         symbol?: string,
@@ -198,17 +214,19 @@ export class FireflyRedPacket {
 
     static async getClaimHistory(
         redpacket_id: string,
+        chainId?: number,
         indicator?: PageIndicator,
     ): Promise<FireflyRedPacketAPI.RedPacketClaimListInfo> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/claimHistory', {
             redpacketId: redpacket_id,
+            chain_id: chainId,
             cursor: indicator?.id,
             size: 20,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistoryResponse>(url, {
             method: 'GET',
         })
-        return { ...data, chain_id: Number(data.chain_id) }
+        return { ...data, chain_id: Number(data.chain_id) } as FireflyRedPacketAPI.RedPacketClaimListInfo
     }
 
     static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {

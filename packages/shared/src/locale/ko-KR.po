@@ -21,6 +21,10 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "{0, select, other {<0>Size limit: {fileSize}</0>} omit {}}"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
@@ -86,8 +90,8 @@ msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
-msgstr ""
+#~ msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
+#~ msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
@@ -198,12 +202,17 @@ msgstr "기본"
 msgid "Blocto only supports the Flow chain."
 msgstr "Blocto는 Flow에만 지원합니다."
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Browse File"
+msgstr ""
+
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "취소"
@@ -499,11 +508,16 @@ msgstr "완료"
 msgid "Download the {name} Wallet here"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Drag & Drop your file here"
+msgstr ""
+
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
 msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr "편집"
 
@@ -553,8 +567,12 @@ msgid "Enter an amount"
 msgstr "금액 입력"
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "Exceeded the maximum file size of 10MB."
+msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Exceeded the maximum file size of 10MB."
+#~ msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
@@ -928,6 +946,10 @@ msgstr "진행"
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr "토큰 이름, NFT 컬렉션, ENS 도메인 또는 월렛 주소를 사용하여 검색 결과를 최적화합니다."
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "or"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "Owner changed."
 msgstr ""
@@ -1081,6 +1103,10 @@ msgstr ""
 msgid "Risk Warning"
 msgstr "리스크 경고"
 
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+msgid "Save"
+msgstr ""
+
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
@@ -1233,8 +1259,8 @@ msgid "Transaction Confirmed"
 msgstr "거래 확인 완료"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
-msgid "Transaction cost"
-msgstr "거래 수수료"
+#~ msgid "Transaction cost"
+#~ msgstr "거래 수수료"
 
 #: src/UI/translate.ts
 msgid "Transaction failed"
@@ -1266,6 +1292,10 @@ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transfer Token"
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "unlimited"
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx

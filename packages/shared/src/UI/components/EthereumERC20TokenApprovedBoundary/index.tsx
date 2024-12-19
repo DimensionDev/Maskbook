@@ -162,7 +162,17 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 }
                 onClick={onApprove}
                 {...props.ActionButtonProps}>
-                {infiniteUnlockContent ?? <Trans>Unlock {token.symbol}</Trans>}
+                {infiniteUnlockContent ?? (
+                    <>
+                        <TokenIcon
+                            size={18}
+                            style={{ marginRight: 8 }}
+                            chainId={token.chainId}
+                            address={token.address}
+                        />
+                        <Trans>Unlock {token.symbol}</Trans>
+                    </>
+                )}
             </ActionButton>
         )
     if (approved) return <>{typeof children === 'function' ? children(allowance) : children}</>

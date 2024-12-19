@@ -1,0 +1,204 @@
+import { t } from '@lingui/macro'
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { useCurrentLinkedPersona } from '@masknet/shared'
+import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { EVMChainResolver } from '@masknet/web3-providers'
+import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { multipliedBy, rightShift, type FungibleToken, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import type { ChainId, GasConfig, SchemaType } from '@masknet/web3-shared-evm'
+import { noop, omit } from 'lodash-es'
+import {
+    createContext,
+    memo,
+    useContext,
+    useMemo,
+    useState,
+    type Dispatch,
+    type PropsWithChildren,
+    type SetStateAction,
+} from 'react'
+import { DURATION, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
+import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
+import { useRedPacketThemes } from '../hooks/useRedPacketThemes.js'
+import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
+
+interface RedPacketContextOptions {
+    gasOption: GasConfig | undefined
+    setGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
+    theme: FireflyRedPacketAPI.ThemeGroupSettings | undefined
+    themes: FireflyRedPacketAPI.ThemeGroupSettings[]
+    setTheme: Dispatch<SetStateAction<FireflyRedPacketAPI.ThemeGroupSettings | undefined>>
+    customThemes: FireflyRedPacketAPI.ThemeGroupSettings[]
+    setCustomThemes: Dispatch<SetStateAction<FireflyRedPacketAPI.ThemeGroupSettings[]>>
+    message: string
+    setMessage: Dispatch<SetStateAction<string>>
+    creator: string
+    // Token
+    token: FungibleToken<ChainId, SchemaType> | undefined
+    setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | undefined>>
+    nativeToken: FungibleToken<ChainId, SchemaType>
+    rawAmount: string
+    setRawAmount: Dispatch<SetStateAction<string>>
+    settings: RedPacketSettings
+    isRandom: 0 | 1
+    setIsRandom: Dispatch<SetStateAction<0 | 1>>
+    shares: number
+    setShares: Dispatch<SetStateAction<number>>
+    // NFT
+    nftGasOption: GasConfig | undefined
+    setNftGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
+    selectedNfts: OrderedERC721Token[]
+    setSelectedNfts: Dispatch<SetStateAction<OrderedERC721Token[]>>
+    myNfts: OrderedERC721Token[]
+    setMyNfts: Dispatch<SetStateAction<OrderedERC721Token[]>>
+    selectOption: NFTSelectOption | undefined
+    setSelectOption: Dispatch<SetStateAction<NFTSelectOption>>
+    collection: NonFungibleCollection<ChainId, SchemaType> | undefined
+    setCollection: Dispatch<SetStateAction<NonFungibleCollection<ChainId, SchemaType> | undefined>>
+}
+export const RedPacketContext = createContext<RedPacketContextOptions>({
+    gasOption: undefined,
+    setGasOption: noop,
+    theme: undefined,
+    themes: EMPTY_LIST,
+    setTheme: noop,
+    customThemes: EMPTY_LIST,
+    setCustomThemes: noop,
+    message: '',
+    setMessage: noop,
+    creator: '',
+    // Token
+    token: undefined,
+    setToken: noop,
+    nativeToken: null!,
+    rawAmount: '',
+    setRawAmount: noop,
+    settings: null!,
+    isRandom: 0,
+    setIsRandom: noop,
+    shares: 0,
+    setShares: noop,
+    // NFT
+    nftGasOption: undefined,
+    setNftGasOption: noop,
+    selectedNfts: EMPTY_LIST,
+    setSelectedNfts: noop,
+    myNfts: EMPTY_LIST,
+    setMyNfts: noop,
+    selectOption: NFTSelectOption.Partial,
+    setSelectOption: noop,
+    collection: undefined,
+    setCollection: noop,
+})
+
+interface Props extends PropsWithChildren {}
+
+export const RedPacketProvider = memo(function RedPacketProvider({ children }: Props) {
+    const [gasOption, setGasOption] = useState<GasConfig>()
+    const { data: themes = EMPTY_LIST } = useRedPacketThemes()
+    const [theme = themes[0], setTheme] = useState<FireflyRedPacketAPI.ThemeGroupSettings>()
+    const [customThemes, setCustomThemes] = useState<FireflyRedPacketAPI.ThemeGroupSettings[]>([])
+    const [message, setMessage] = useState('')
+
+    const allThemes = useMemo(() => (customThemes ? [...themes, ...customThemes] : themes), [themes, customThemes])
+
+    // Token
+    const [rawAmount, setRawAmount] = useState('')
+    const [isRandom, setIsRandom] = useState<0 | 1>(1)
+    const [shares, setShares] = useState<number>(RED_PACKET_DEFAULT_SHARES)
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const nativeToken = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
+    const [token = nativeToken, setToken] = useState<FungibleToken<ChainId, SchemaType>>()
+
+    const myIdentity = useLastRecognizedIdentity()
+    const linkedPersona = useCurrentLinkedPersona()
+
+    const creator = myIdentity?.identifier?.userId || linkedPersona?.nickname || 'Unknown User'
+
+    const amount = rightShift(rawAmount || '0', token?.decimals)
+    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : (shares ?? '0')), [amount, shares, isRandom])
+    const settings: RedPacketSettings = useMemo(
+        () => ({
+            duration: DURATION,
+            isRandom: !!isRandom,
+            name: creator,
+            message: message || t`Best Wishes!`,
+            shares: shares || 0,
+            token:
+                token ?
+                    (omit(token, ['logoURI']) as FungibleToken<ChainId, SchemaType.ERC20 | SchemaType.Native>)
+                :   undefined,
+            total: totalAmount.toFixed(),
+        }),
+        [isRandom, creator, message, shares, token, totalAmount],
+    )
+
+    // NFT
+    const [nftGasOption, setNftGasOption] = useState<GasConfig>()
+    const [selectedNfts, setSelectedNfts] = useState<OrderedERC721Token[]>([])
+    const [myNfts, setMyNfts] = useState<OrderedERC721Token[]>([])
+    const [selectOption, setSelectOption] = useState<NFTSelectOption>(NFTSelectOption.Partial)
+    const [collection, setCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
+
+    const contextValue = useMemo(() => {
+        return {
+            gasOption,
+            setGasOption,
+            themes: allThemes,
+            theme,
+            setTheme,
+            customThemes,
+            setCustomThemes,
+            message,
+            setMessage,
+            creator,
+            // Token
+            token,
+            setToken,
+            nativeToken,
+            rawAmount,
+            setRawAmount,
+            settings,
+            isRandom,
+            setIsRandom,
+            shares,
+            setShares,
+            // NFT
+            nftGasOption,
+            setNftGasOption,
+            selectedNfts,
+            setSelectedNfts,
+            myNfts,
+            setMyNfts,
+            selectOption,
+            setSelectOption,
+            collection,
+            setCollection,
+        }
+    }, [
+        selectedNfts,
+        myNfts,
+        gasOption,
+        theme,
+        allThemes,
+        customThemes,
+        settings,
+        message,
+        token,
+        nativeToken,
+        rawAmount,
+        creator,
+        isRandom,
+        shares,
+        selectOption,
+        collection,
+        nftGasOption,
+    ])
+
+    return <RedPacketContext.Provider value={contextValue}>{children}</RedPacketContext.Provider>
+})
+
+export function useRedPacket() {
+    return useContext(RedPacketContext)
+}

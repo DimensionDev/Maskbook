@@ -1,11 +1,10 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/kit'
-import { FileFrame } from '@masknet/shared'
+import { FileFrame, formatFileSize } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Typography } from '@mui/material'
 import { memo } from 'react'
 import type { FileBaseProps, FileInfo } from '../../../types.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     desc: {
@@ -48,7 +47,7 @@ export const SelectableFile = memo(({ file, selected, onChange, disabled, ...res
                     }}
                 />
             }>
-            <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
+            <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
             {file.key ?
                 <Typography className={classes.meta}>
                     <Trans>

@@ -16,6 +16,10 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "{0, select, other {<0>Size limit: {fileSize}</0>} omit {}}"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
@@ -81,8 +85,8 @@ msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
-msgstr ""
+#~ msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
+#~ msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
@@ -193,12 +197,17 @@ msgstr ""
 msgid "Blocto only supports the Flow chain."
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Browse File"
+msgstr ""
+
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr ""
@@ -494,11 +503,16 @@ msgstr ""
 msgid "Download the {name} Wallet here"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Drag & Drop your file here"
+msgstr ""
+
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
 msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr ""
 
@@ -548,8 +562,12 @@ msgid "Enter an amount"
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "Exceeded the maximum file size of 10MB."
+msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Exceeded the maximum file size of 10MB."
+#~ msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
@@ -923,6 +941,10 @@ msgstr ""
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "or"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "Owner changed."
 msgstr ""
@@ -1074,6 +1096,10 @@ msgstr ""
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
+msgstr ""
+
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+msgid "Save"
 msgstr ""
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
@@ -1228,8 +1254,8 @@ msgid "Transaction Confirmed"
 msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
-msgid "Transaction cost"
-msgstr ""
+#~ msgid "Transaction cost"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transaction failed"
@@ -1261,6 +1287,10 @@ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transfer Token"
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "unlimited"
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx

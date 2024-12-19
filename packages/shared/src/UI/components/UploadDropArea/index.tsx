@@ -1,16 +1,18 @@
+import { Select, t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { useCustomSnackbar, makeStyles } from '@masknet/theme'
+import { formatFileSize } from '@masknet/shared'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { alpha, Button, Typography } from '@mui/material'
-import { type HTMLProps, memo, useCallback, useRef } from 'react'
+import { type HTMLProps, memo, type ReactNode, useCallback, useRef } from 'react'
 import { useDropArea } from 'react-use'
-import { Select, Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dropArea: {
         display: 'flex',
-        height: 230,
+        // height: 230,
         flexDirection: 'column',
         justifyContent: 'center',
+        gap: 10,
         alignItems: 'center',
         position: 'relative',
         boxSizing: 'border-box',
@@ -27,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
     uploadIcon: {
         height: 54,
         width: 54,
+        flexShrink: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -38,9 +41,8 @@ const useStyles = makeStyles()((theme) => ({
     tips: {
         lineHeight: '18px',
         fontSize: 14,
-        color: theme.palette.maskColor.second,
+        color: theme.palette.maskColor.main,
         fontWeight: 700,
-        marginTop: 10,
     },
     limit: {
         lineHeight: '18px',
@@ -48,90 +50,108 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
     },
     or: {
-        marginTop: 10,
         color: theme.palette.maskColor.second,
+        fontWeight: 700,
     },
     button: {
         width: 164,
-        marginTop: 10,
+        marginBottom: 4,
         boxShadow: theme.palette.mode === 'dark' ? 'none' : '0px 8px 25px rgba(0, 0, 0, 0.2)',
         backgroundColor: theme.palette.maskColor.main,
         color: theme.palette.mode === 'dark' ? theme.palette.maskColor.bottom : theme.palette.maskColor.white,
     },
 }))
 
-interface Props extends HTMLProps<HTMLDivElement> {
+interface Props extends HTMLProps<HTMLDivElement>, withClasses<'button'> {
     maxFileSize?: number
     omitSizeLimit?: boolean
     accept?: string
     onSelectFile(file: File): void
+    subtitle?: ReactNode
 }
 
-export const UploadDropArea = memo(
-    ({ maxFileSize = Number.POSITIVE_INFINITY, omitSizeLimit, onSelectFile, className, accept, ...rest }: Props) => {
-        const { classes, cx } = useStyles()
-        const { showSnackbar } = useCustomSnackbar()
-        const handleFiles = (files: File[] | FileList | null) => {
-            if (!files || files.length !== 1) {
-                showMessage(101)
-            } else if (!omitSizeLimit && files[0].size > maxFileSize) {
-                showMessage(102)
-            } else {
-                onSelectFile(files[0])
-            }
+export const UploadDropArea = memo(function UploadDropArea(props: Props) {
+    const {
+        maxFileSize = Number.POSITIVE_INFINITY,
+        omitSizeLimit,
+        onSelectFile,
+        className,
+        accept,
+        subtitle,
+        ...rest
+    } = props
+    const { classes, cx } = useStyles(undefined, { props })
+    const { showSnackbar } = useCustomSnackbar()
+    const handleFiles = (files: File[] | FileList | null) => {
+        if (!files || files.length !== 1) {
+            showMessage(101)
+        } else if (!omitSizeLimit && files[0].size > maxFileSize) {
+            showMessage(102)
+        } else {
+            onSelectFile(files[0])
         }
-        const handleFilesRef = useRef<(file: File[] | FileList | null) => void>(undefined)
-        handleFilesRef.current = handleFiles
+    }
+    const fileSize = maxFileSize === Number.POSITIVE_INFINITY ? t`unlimited` : formatFileSize(maxFileSize)
+    const handleFilesRef = useRef<(file: File[] | FileList | null) => void>(undefined)
+    handleFilesRef.current = handleFiles
 
-        const selectFile = useCallback(() => {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.hidden = true
-            if (accept) input.accept = accept
-            input.addEventListener('input', function onInput(event) {
-                handleFilesRef.current?.((event.currentTarget as any).files as FileList)
-                input.removeEventListener('input', onInput)
-                document.body.removeChild(input)
-            })
-            input.click()
-            document.body.append(input)
-        }, [accept])
-        const [bond, { over }] = useDropArea({
-            onFiles: handleFiles,
-            onText: () => showMessage(101),
-            onUri: () => showMessage(101),
+    const selectFile = useCallback(() => {
+        const input = document.createElement('input')
+        input.type = 'file'
+        input.hidden = true
+        if (accept) input.accept = accept
+        input.addEventListener('input', function onInput(event) {
+            handleFilesRef.current?.((event.currentTarget as any).files as FileList)
+            input.removeEventListener('input', onInput)
+            document.body.removeChild(input)
         })
-        const showMessage = (code: 101 | 102) => {
-            switch (code) {
-                case 101:
-                    showSnackbar(<Trans>The input is not a single file.</Trans>, { variant: 'error' })
-                    break
-                case 102:
-                    showSnackbar(<Trans>Failed to upload file</Trans>, {
-                        variant: 'error',
-                        message: <Trans>Exceeded the maximum file size of 10MB.</Trans>,
-                    })
-            }
+        input.click()
+        document.body.append(input)
+    }, [accept])
+    const [bond, { over }] = useDropArea({
+        onFiles: handleFiles,
+        onText: () => showMessage(101),
+        onUri: () => showMessage(101),
+    })
+    const showMessage = (code: 101 | 102) => {
+        switch (code) {
+            case 101:
+                showSnackbar(<Trans>The input is not a single file.</Trans>, { variant: 'error' })
+                break
+            case 102:
+                showSnackbar(<Trans>Failed to upload file</Trans>, {
+                    variant: 'error',
+                    message: <Trans>Exceeded the maximum file size of {fileSize}.</Trans>,
+                })
         }
-        return (
-            <div className={cx(classes.dropArea, { [classes.dragOver]: over }, className)} {...rest} {...bond}>
-                <div className={classes.uploadIcon}>
-                    <Icons.Upload size={30} />
-                </div>
-                <Trans>
-                    <Typography className={classes.tips}>Drag & Drop your file here </Typography>
+    }
+    return (
+        <div className={cx(classes.dropArea, { [classes.dragOver]: over }, className)} {...rest} {...bond}>
+            <div className={classes.uploadIcon}>
+                <Icons.Upload size={30} />
+            </div>
+            <div>
+                <Typography className={classes.tips}>
+                    <Trans>Drag & Drop your file here</Trans>
+                </Typography>
+                {subtitle ?? (
                     <Select
                         value={omitSizeLimit ? 'omit' : ''}
-                        other={<Typography className={classes.limit}>Size limit: 10 MB </Typography>}
+                        other={
+                            <Typography className={classes.limit}>
+                                <Trans>Size limit: {fileSize}</Trans>
+                            </Typography>
+                        }
                         _omit=""
                     />
-                    <Typography className={classes.or}>or </Typography>
-                    <Button className={classes.button} variant="contained" onClick={selectFile}>
-                        Browse File
-                    </Button>
-                </Trans>
+                )}
             </div>
-        )
-    },
-)
-UploadDropArea.displayName = 'UploadDropArea'
+            <Typography className={classes.or}>
+                <Trans>or</Trans>
+            </Typography>
+            <Button className={classes.button} variant="roundedContained" onClick={selectFile}>
+                <Trans>Browse File</Trans>
+            </Button>
+        </div>
+    )
+})

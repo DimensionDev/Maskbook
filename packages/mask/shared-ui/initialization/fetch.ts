@@ -59,6 +59,8 @@ function canAccessAsContent(url: string) {
     // The content-length needs to be used in the client request in order to realize the progress of the download.
     if (target.origin.includes('maskbook-backup')) return true
     if (isHostName(location, 'mirror.xyz') && isHostName(target, 'mirror-api.com')) return true
+    // aws s3
+    if (isDomainOrSubdomainOf(url, 'amazonaws.com') && url.includes('x-id=PutObject')) return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin
 }

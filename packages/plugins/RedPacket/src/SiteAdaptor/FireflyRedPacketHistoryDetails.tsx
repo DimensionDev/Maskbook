@@ -1,15 +1,15 @@
-import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import { memo, useMemo } from 'react'
-import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
-import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
-import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
+import { Trans } from '@lingui/macro'
 import { ElementAnchor } from '@masknet/shared'
 import { createIndicator } from '@masknet/shared-base'
-import { first } from 'lodash-es'
+import { makeStyles } from '@masknet/theme'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { Box, Typography } from '@mui/material'
+import { useSuspenseInfiniteQuery } from '@tanstack/react-query'
+import { first } from 'lodash-es'
+import { memo, useMemo } from 'react'
+import { FireflyRedPacket } from '../../../../web3-providers/src/Firefly/RedPacket.js'
 import { FireflyRedPacketAccountItem } from './FireflyRedPacketAccountItem.js'
-import { Trans } from '@lingui/macro'
+import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -59,7 +59,11 @@ export const FireflyRedPacketHistoryDetails = memo(function FireflyRedPacketHist
         queryKey: ['fireflyClaimHistory', rpid],
         initialPageParam: '',
         queryFn: async ({ pageParam }) => {
-            const res = await FireflyRedPacket.getClaimHistory(rpid, createIndicator(undefined, pageParam as string))
+            const res = await FireflyRedPacket.getClaimHistory(
+                rpid,
+                undefined,
+                createIndicator(undefined, pageParam as string),
+            )
             return res
         },
         getNextPageParam: (lastPage) => lastPage?.cursor,

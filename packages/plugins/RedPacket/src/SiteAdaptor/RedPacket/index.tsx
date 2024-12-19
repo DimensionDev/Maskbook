@@ -20,9 +20,9 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { RedPacketEnvelope } from './RedPacketEnvelope.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -47,7 +47,7 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             padding: 0,
             aspectRatio: '480 / 336',
         },
-        envelop: {
+        envelope: {
             height: '100%',
             width: '100%',
         },
@@ -249,7 +249,14 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const { classes } = useStyles({ outdated })
 
     // RedPacket created from Mask has no cover settings
-    const { data: cover, isLoading: isLoadingCover } = useRedPacketCover(payload, availability)
+    const { data: cover, isLoading: isLoadingCover } = useRedPacketCover({
+        ...payload,
+        token,
+        sender: payload.sender.name,
+        message: payload.sender.message,
+        claimedAmount: availability?.claimed_amount,
+        claimed: availability?.claimed,
+    })
 
     // the red packet can fetch without account
     if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
@@ -260,7 +267,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         <>
             <Card className={classes.root} component="article" elevation={0}>
                 <RedPacketEnvelope
-                    className={classes.envelop}
+                    className={classes.envelope}
                     cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
                     message={payload.sender.message}
                     token={token}

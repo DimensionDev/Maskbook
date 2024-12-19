@@ -1,5 +1,4 @@
-import { formatFileSize } from '@masknet/kit'
-import { FileFrame } from '@masknet/shared'
+import { FileFrame, formatFileSize } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { LinearProgress, linearProgressClasses, Typography } from '@mui/material'
 import { memo } from 'react'
@@ -41,7 +40,7 @@ export const UploadingFile = memo(({ file, progress, ...rest }: UploadingFilePro
                 variant={progress === 0 ? 'indeterminate' : 'determinate'}
                 value={progress}
             />
-            <Typography className={classes.desc}>{formatFileSize(file.size, true)}</Typography>
+            <Typography className={classes.desc}>{formatFileSize(file.size)}</Typography>
         </FileFrame>
     )
 })

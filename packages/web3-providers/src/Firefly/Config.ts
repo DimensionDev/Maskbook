@@ -1,4 +1,7 @@
 import { EMPTY_LIST } from '@masknet/shared-base'
+import { v4 as uuid } from 'uuid'
+import { type PutObjectCommandInput, S3 } from '@aws-sdk/client-s3'
+import { Upload } from '@aws-sdk/lib-storage'
 import urlcat from 'urlcat'
 import type { FireflyConfigAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
@@ -43,5 +46,37 @@ export class FireflyConfig {
         const url = urlcat(FIREFLY_BASE_URL, 'v2/wallet/profile', profileOptions)
         const response = await fetchJSON<FireflyConfigAPI.UnionProfileResponse>(url)
         return response.data
+    }
+
+    static async uploadToS3(file: File) {
+        const url = urlcat(FIREFLY_BASE_URL, '/v2/farcaster-hub/uploadMediaToken')
+        const res = await fetchJSON<FireflyConfigAPI.UploadMediaTokenResponse>(url)
+        const mediaToken = res.data
+        const client = new S3({
+            credentials: {
+                accessKeyId: mediaToken.accessKeyId,
+                secretAccessKey: mediaToken.secretAccessKey,
+                sessionToken: mediaToken.sessionToken,
+            },
+            region: mediaToken.region || 'us-west-2',
+            maxAttempts: 5,
+        })
+
+        const params: PutObjectCommandInput = {
+            Bucket: mediaToken.bucket,
+            Key: `maskbook/${uuid()}/${file.name}`,
+            Body: file,
+            ContentType: file.type,
+        }
+        const task = new Upload({
+            client,
+            params,
+            partSize: 1024 * 1024 * 5, // part upload
+            queueSize: 3,
+        })
+
+        await task.done()
+
+        return `https://${mediaToken.cdnHost}/${params.Key}`
     }
 }

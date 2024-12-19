@@ -1,5 +1,5 @@
 import { memo, useCallback, useContext } from 'react'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { useRefundCallback } from './hooks/useRefundCallback.js'
@@ -45,7 +45,8 @@ interface TokenInfo {
     amount?: string
 }
 const RedPacketStatus = FireflyRedPacketAPI.RedPacketStatus
-interface Props {
+
+interface Props extends ActionButtonProps {
     rpid: string
     account: string
     redpacketStatus: FireflyRedPacketAPI.RedPacketStatus
@@ -62,23 +63,23 @@ interface Props {
     onResend?(): void
 }
 
-export const RedPacketActionButton = memo(function RedPacketActionButton(props: Props) {
-    const {
-        redpacketStatus: _redpacketStatus,
-        rpid,
-        account,
-        claim_strategy,
-        shareFrom,
-        themeId,
-        tokenInfo,
-        redpacketMsg,
-        chainId,
-        totalAmount,
-        createdAt,
-        canResend,
-        onResend,
-    } = props
-    const { classes } = useStyles()
+export const RedPacketActionButton = memo(function RedPacketActionButton({
+    redpacketStatus: propRedpacketStatus,
+    rpid,
+    account,
+    claim_strategy,
+    shareFrom,
+    themeId,
+    tokenInfo,
+    redpacketMsg,
+    chainId,
+    totalAmount,
+    createdAt,
+    canResend,
+    onResend,
+    ...rest
+}: Props) {
+    const { classes, cx } = useStyles()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const compositionType = useContext(CompositionTypeContext)
 
@@ -128,7 +129,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
         )
     }, [])
 
-    const redpacketStatus = refunded ? RedPacketStatus.Refund : _redpacketStatus
+    const redpacketStatus = refunded ? RedPacketStatus.Refund : propRedpacketStatus
 
     const handleClick = useCallback(async () => {
         if (canResend) onResend?.()
@@ -139,12 +140,11 @@ export const RedPacketActionButton = memo(function RedPacketActionButton(props: 
 
     return (
         <ActionButton
+            {...rest}
             loading={isRefunding || isSharing}
             fullWidth={isSmall}
-            onClick={() => {
-                handleClick()
-            }}
-            className={classes.actionButton}
+            onClick={handleClick}
+            className={cx(classes.actionButton, rest.className)}
             disabled={
                 redpacketStatus === RedPacketStatus.Empty ||
                 redpacketStatus === RedPacketStatus.Expired ||

@@ -469,6 +469,11 @@ const moduleSystemRules = {
                     message:
                         "If you're in the chrome-extension:// pages, localStorage is discouraged. If you're in the content scripts, we can only use localStorage to read websites' data and MUST NOT store our own data.",
                 },
+                {
+                    name: '@masknet/kit',
+                    importNames: ['formatFileSize'],
+                    message: 'Please use formatFileSize in @masknet/shared instead.',
+                },
             ],
         },
     ],

@@ -1,11 +1,10 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { formatFileSize } from '@masknet/kit'
-import { FileFrame } from '@masknet/shared'
+import { FileFrame, formatFileSize } from '@masknet/shared'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { MenuItem, Typography } from '@mui/material'
 import { memo, useRef, useState } from 'react'
 import type { FileBaseProps, FileInfo } from '../../../types.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     meta: {
@@ -136,9 +135,7 @@ export const ManageableFile = memo(({ file, onDownload, onRename, onDelete, onSe
                 <Typography className={classes.meta}>
                     <Trans>size</Trans>:
                 </Typography>
-                <Typography className={cx(classes.metaValue, classes.rightGap)}>
-                    {formatFileSize(file.size, true)}
-                </Typography>
+                <Typography className={cx(classes.metaValue, classes.rightGap)}>{formatFileSize(file.size)}</Typography>
                 {file.key ?
                     <Typography className={classes.meta}>
                         <Trans>
