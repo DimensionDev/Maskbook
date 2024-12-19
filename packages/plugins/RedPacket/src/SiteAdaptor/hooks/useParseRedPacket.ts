@@ -27,7 +27,7 @@ export function useParseRedPacket(chainId: ChainId) {
 
     const query = useQuery({
         enabled: images.length > 0,
-        queryKey: ['red-packet', 'parse', source?.toLowerCase(), images[0], account],
+        queryKey: ['red-packet', 'parse', source?.toLowerCase(), images[0], account, myProfileId],
         queryFn: async () => {
             const platform = source?.toLowerCase() as FireflyRedPacketAPI.PlatformType
             return FireflyRedPacket.parse({

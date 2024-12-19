@@ -43,22 +43,19 @@ export function HistoryDetail() {
     const { data, isLoading } = useInfiniteQuery({
         enabled: !!rpid,
         queryKey: ['redpacket', 'claim-history', rpid, chainId],
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as string | undefined,
         queryFn:
             rpid ?
                 async ({ pageParam }) => {
                     const res = await FireflyRedPacket.getClaimHistory(
                         rpid,
                         chainId,
-                        createIndicator(undefined, pageParam as string),
+                        createIndicator(undefined, pageParam),
                     )
                     return res
                 }
             :   skipToken,
         getNextPageParam: (lastPage) => lastPage.cursor,
-        // select(data) {
-        //     return data.pages.flatMap((x) => x.list)
-        // },
     })
 
     const claims = useMemo(() => data?.pages.flatMap((x) => x.list) ?? EMPTY_LIST, [data?.pages])

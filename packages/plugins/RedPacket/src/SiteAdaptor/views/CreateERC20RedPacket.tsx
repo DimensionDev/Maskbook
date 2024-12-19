@@ -229,8 +229,8 @@ export function CreateERC20RedPacket() {
         () => (isRandom || !rawAmount ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
         [rawAmount, isRandom, shares],
     )
-    const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : (shares ?? '0')), [amount, shares, isRandom])
-    const minTotalAmount = useMemo(() => new BigNumber(isRandom ? 1 : (shares ?? 0)), [shares, isRandom])
+    const totalAmount = multipliedBy(amount, isRandom ? 1 : (shares ?? '0'))
+    const minTotalAmount = new BigNumber(isRandom ? 1 : (shares ?? 0))
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
     // #region gas
@@ -278,14 +278,14 @@ export function CreateERC20RedPacket() {
     })()
 
     const gasValidationMessage = (() => {
-        if (!token) return ''
+        if (!token) return
         if (!isGasSufficient) {
             return <Trans>Insufficient Balance for Gas Fee</Trans>
         }
         if (!loadingTransactionValue && new BigNumber(transactionValue).isLessThanOrEqualTo(0))
             return <Trans>Insufficient Balance</Trans>
 
-        return undefined
+        return
     })()
 
     if (!token) return null

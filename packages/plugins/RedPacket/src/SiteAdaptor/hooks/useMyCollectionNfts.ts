@@ -24,8 +24,8 @@ export function useMyCollectionNfts() {
     const nfts = useMemo(() => assets.map((v, index) => ({ ...v, index }) as OrderedERC721Token), [assets])
 
     useEffect(() => {
-        fetchNextPage()
-    }, [hasNextPage])
+        if (hasNextPage) fetchNextPage()
+    }, [hasNextPage, fetchNextPage])
 
     return { ...result, data: nfts }
 }
