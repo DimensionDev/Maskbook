@@ -1,3 +1,4 @@
+import type { PageIndicator } from '@masknet/shared-base'
 import { Calendar } from '@masknet/web3-providers'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { addDays, startOfDay } from 'date-fns'
@@ -10,7 +11,7 @@ export function useNewsList(date: Date) {
     return useInfiniteQuery({
         queryKey: ['newsList', startTime, endTime],
         queryFn: async ({ pageParam }) => Calendar.getNewsList(startTime, endTime, pageParam),
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as PageIndicator | undefined,
         getNextPageParam: (page) => page.nextIndicator,
         select(data) {
             return uniqBy(

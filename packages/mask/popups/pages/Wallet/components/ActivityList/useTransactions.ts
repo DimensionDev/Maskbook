@@ -1,4 +1,4 @@
-import { EMPTY_LIST, hidingScamSettings } from '@masknet/shared-base'
+import { EMPTY_LIST, hidingScamSettings, type PageIndicator } from '@masknet/shared-base'
 import { useChainContext, useNetworks, useWeb3State } from '@masknet/web3-hooks-base'
 import { DeBankHistory } from '@masknet/web3-providers'
 import { type RecentTransaction } from '@masknet/web3-shared-base'
@@ -15,11 +15,11 @@ export function useTransactions() {
     const { account } = useChainContext()
     const response = useInfiniteQuery({
         queryKey: ['debank', 'all-history', account],
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
             return DeBankHistory.getAllTransactions(account, { indicator: pageParam })
         },
-        getNextPageParam: (lastPage) => lastPage.nextIndicator,
+        getNextPageParam: (lastPage) => lastPage.nextIndicator as PageIndicator | undefined,
         select: (data) =>
             data.pages.flatMap((page) => page.data).filter((t) => !hidingScamSettings.value || !t.isScam) || EMPTY_LIST,
     })

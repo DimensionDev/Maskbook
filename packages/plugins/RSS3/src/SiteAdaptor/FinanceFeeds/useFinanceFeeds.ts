@@ -1,5 +1,6 @@
 import { t } from '@lingui/macro'
 import { timeout } from '@masknet/kit'
+import type { PageIndicator } from '@masknet/shared-base'
 import { Zerion } from '@masknet/web3-providers'
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 
@@ -9,7 +10,7 @@ interface Options {
 
 export function useFinanceFeeds({ address }: Options) {
     return useInfiniteQuery({
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as PageIndicator | undefined,
         queryKey: ['zerion', 'history-list', address],
         queryFn:
             address ?
@@ -21,7 +22,7 @@ export function useFinanceFeeds({ address }: Options) {
                     )
                 }
             :   skipToken,
-        getNextPageParam: (lp) => lp.nextIndicator,
+        getNextPageParam: (lp) => lp.nextIndicator as PageIndicator | undefined,
         select(data) {
             return data.pages.flatMap((page) => page.data)
         },

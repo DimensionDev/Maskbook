@@ -199,7 +199,7 @@ export function NFTList({
     const Hub = useWeb3Hub(pluginID, { chainId })
     const { data, isFetching, fetchNextPage, hasNextPage, error } = useInfiniteQuery({
         queryKey: ['non-fungible-assets', 'by-collection', collectionId, chainId],
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
             if (!collectionId) return
             return Hub.getNonFungibleAssetsByCollection(collectionId, {

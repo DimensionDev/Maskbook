@@ -1,4 +1,4 @@
-import { type NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { useWeb3Hub } from './useWeb3Hub.js'
@@ -14,14 +14,14 @@ export function useNonFungibleAssetsByCollectionAndOwner<T extends NetworkPlugin
     return useInfiniteQuery({
         enabled: !!collectionId && !!owner,
         queryKey: ['non-fungible-asset', pluginID, collectionId, owner, options],
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
             return Hub.getNonFungibleAssetsByCollectionAndOwner(collectionId ?? '', owner ?? '', {
                 indicator: pageParam,
                 size: 50,
             })
         },
-        getNextPageParam: (page) => page.nextIndicator,
+        getNextPageParam: (page) => page.nextIndicator as PageIndicator | undefined,
         select(data) {
             const assets = data.pages.flatMap((x) => x.data)
             if (options?.chainId) {

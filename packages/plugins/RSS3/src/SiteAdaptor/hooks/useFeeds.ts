@@ -1,6 +1,6 @@
 import { skipToken, useInfiniteQuery } from '@tanstack/react-query'
 import { RSS3 } from '@masknet/web3-providers'
-import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, createPageable, EMPTY_LIST, type PageIndicator } from '@masknet/shared-base'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 
 interface Options {
@@ -11,8 +11,8 @@ interface Options {
 
 export function useFeeds(address: string | undefined, options?: Partial<Options>) {
     return useInfiniteQuery({
-        initialPageParam: undefined as any,
         queryKey: ['rss3-feeds', address, options],
+        initialPageParam: undefined as PageIndicator | undefined,
         queryFn:
             address ?
                 async ({ pageParam }) => {

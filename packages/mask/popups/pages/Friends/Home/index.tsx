@@ -1,19 +1,19 @@
-import { memo, useState, useMemo } from 'react'
-import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
-import { resolveNextIDPlatform } from '@masknet/shared'
-import { useInfiniteQuery } from '@tanstack/react-query'
-import { NextIDProof } from '@masknet/web3-providers'
-import { FriendsHomeUI } from './UI.js'
-import {
-    useFriendsPaged,
-    useTitle,
-    useSearchValue,
-    useFriendsFromSearch,
-    useFriendFromList,
-} from '../../../hooks/index.js'
-import Fuse from 'fuse.js'
 import { msg } from '@lingui/macro'
 import { useLingui } from '@lingui/react'
+import { resolveNextIDPlatform } from '@masknet/shared'
+import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import { useInfiniteQuery } from '@tanstack/react-query'
+import Fuse from 'fuse.js'
+import { memo, useMemo, useState } from 'react'
+import {
+    useFriendFromList,
+    useFriendsFromSearch,
+    useFriendsPaged,
+    useSearchValue,
+    useTitle,
+} from '../../../hooks/index.js'
+import { FriendsHomeUI } from './UI.js'
 
 export const Component = memo(function FriendsHome() {
     const { _ } = useLingui()
@@ -45,7 +45,7 @@ export const Component = memo(function FriendsHome() {
         fetchNextPage: fetchNextSearchPage,
     } = useInfiniteQuery({
         queryKey: ['search-personas', keyword, type],
-        initialPageParam: undefined as any,
+        initialPageParam: undefined as number | undefined,
         queryFn: async ({ pageParam }) => {
             if (!type) return EMPTY_LIST
             return NextIDProof.queryExistedBindingByPlatform(type, keyword, pageParam ?? 1, false)
