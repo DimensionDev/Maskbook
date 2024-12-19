@@ -104,7 +104,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const allThemes = useMemo(() => (customThemes ? [...themes, ...customThemes] : themes), [themes, customThemes])
 
     // Token
-    const [rawAmount, setRawAmount] = useState('1')
+    const [rawAmount, setRawAmount] = useState('')
     const [isRandom, setIsRandom] = useState<0 | 1>(1)
     const [shares, setShares] = useState<number>(RED_PACKET_DEFAULT_SHARES)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()

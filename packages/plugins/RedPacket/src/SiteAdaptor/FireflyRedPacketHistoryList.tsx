@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/macro'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -7,7 +8,6 @@ import { List } from '@mui/material'
 import { memo } from 'react'
 import { FireflyRedPacketDetailsItem } from './FireflyRedPacketDetailsItem.js'
 import { useRedPacketHistory } from './hooks/useRedPacketHistory.js'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

@@ -1,16 +1,17 @@
+import { t } from '@lingui/macro'
+import { RedPacketMetaKey } from '@masknet/plugin-redpacket'
+import { ApplicationBoardModal } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI, RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { useCallback, useContext } from 'react'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { CompositionTypeContext } from '../RedPacketInjection.js'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { openComposition } from '../openComposition.js'
-import { RedPacketMetaKey } from '@masknet/plugin-redpacket'
-import { reduceUselessPayloadInfo } from '../utils/reduceUselessPayloadInfo.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { ApplicationBoardModal } from '@masknet/shared'
+import { useCallback, useContext } from 'react'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import { openComposition } from '../openComposition.js'
+import { CompositionTypeContext } from '../RedPacketInjection.js'
+import { reduceUselessPayloadInfo } from '../utils/reduceUselessPayloadInfo.js'
 
 interface Options {
     isFirefly?: boolean
@@ -51,11 +52,20 @@ export function useHandleCreateOrSelect({ isFirefly, senderName, onClose }: Opti
                 payload.sender.name === senderName
             }
 
-            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
-                payloadImage,
-                claimRequirements,
-                publicKey,
-            })
+            const post = t`Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.
+
+🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io.`
+            openComposition(
+                RedPacketMetaKey,
+                reduceUselessPayloadInfo(payload),
+                compositionType,
+                {
+                    payloadImage,
+                    claimRequirements,
+                    publicKey,
+                },
+                post,
+            )
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
             onClose?.()

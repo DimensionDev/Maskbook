@@ -23,7 +23,7 @@ function contentFetch(input: RequestInfo | URL, init?: RequestInit) {
     const signal = init?.signal
     if (init) delete init.signal
 
-    return Services.Helper.fetchGlobal(request.clone(), init).then((response) => {
+    return Services.Helper.fetchGlobal(request, init).then((response) => {
         signal?.throwIfAborted()
         return response
     })
@@ -60,7 +60,7 @@ function canAccessAsContent(url: string) {
     if (target.origin.includes('maskbook-backup')) return true
     if (isHostName(location, 'mirror.xyz') && isHostName(target, 'mirror-api.com')) return true
     // aws s3
-    if (target.origin.includes('amazonaws.com') && url.includes('x-id=PutObject')) return true
+    if (isDomainOrSubdomainOf(url, 'amazonaws.com') && url.includes('x-id=PutObject')) return true
     if (extensionOrigin === target.origin) return true
     return target.origin === location.origin
 }

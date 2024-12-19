@@ -21,6 +21,10 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "{0, select, other {<0>Size limit: {fileSize}</0>} omit {}}"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
@@ -86,8 +90,8 @@ msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
-msgstr ""
+#~ msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
+#~ msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
@@ -197,6 +201,10 @@ msgstr "기본"
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 msgid "Blocto only supports the Flow chain."
 msgstr "Blocto는 Flow에만 지원합니다."
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Browse File"
+msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
@@ -500,6 +508,10 @@ msgstr "완료"
 msgid "Download the {name} Wallet here"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Drag & Drop your file here"
+msgstr ""
+
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
 msgstr ""
@@ -555,8 +567,12 @@ msgid "Enter an amount"
 msgstr "금액 입력"
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "Exceeded the maximum file size of 10MB."
+msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Exceeded the maximum file size of 10MB."
+#~ msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
@@ -930,6 +946,10 @@ msgstr "진행"
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr "토큰 이름, NFT 컬렉션, ENS 도메인 또는 월렛 주소를 사용하여 검색 결과를 최적화합니다."
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "or"
+msgstr ""
+
 #: src/UI/translate.ts
 msgid "Owner changed."
 msgstr ""
@@ -1272,6 +1292,10 @@ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transfer Token"
+msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "unlimited"
 msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
