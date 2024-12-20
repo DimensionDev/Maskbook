@@ -419,10 +419,12 @@ export namespace FireflyRedPacketAPI {
                       ]
                   >
               }
-              result: {
-                  conditions: Array<{ key: PostReactionKind; value: boolean }>
-                  hasPassed: boolean
-              }
+              result:
+                  | {
+                        conditions: Array<{ key: PostReactionKind; value: boolean }>
+                        hasPassed: boolean
+                    }
+                  | boolean
           }
     export type CheckClaimStrategyStatusResponse = Response<{
         claimStrategyStatus: ClaimStrategyStatus[]
