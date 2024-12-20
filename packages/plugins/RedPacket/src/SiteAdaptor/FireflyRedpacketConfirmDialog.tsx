@@ -288,7 +288,6 @@ export function FireflyRedpacketConfirmDialog({
         gasOption,
         (payload: RedPacketJSONPayload) => onCreated(payload, state?.url, value?.claimRequirements, value?.publicKey),
         onClose,
-        currentAccount,
     )
 
     const popover = usePortalShadowRoot((container) => (

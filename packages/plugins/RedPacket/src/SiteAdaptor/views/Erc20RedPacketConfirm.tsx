@@ -135,6 +135,8 @@ export function Erc20RedPacketConfirm() {
     const wallet = useWallet()
     const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
+    const loading = creatingPubkey || isCreating || isWaitGasBeMinus
+    const disabled = isBalanceInsufficient || loading
     return (
         <>
             <div className={classes.settings}>
@@ -236,11 +238,7 @@ export function Erc20RedPacketConfirm() {
             </div>
             <PluginWalletStatusBar className={classes.controller}>
                 <ChainBoundary expectedPluginID={NetworkPluginID.PLUGIN_EVM} expectedChainId={chainId}>
-                    <ActionButton
-                        loading={creatingPubkey || isCreating || isWaitGasBeMinus}
-                        fullWidth
-                        onClick={createRedpacket}
-                        disabled={isBalanceInsufficient || isWaitGasBeMinus || isCreating}>
+                    <ActionButton loading={loading} fullWidth onClick={createRedpacket} disabled={disabled}>
                         {isCreating ?
                             <Trans>Confirming</Trans>
                         :   <Trans>Confirm</Trans>}

@@ -6,7 +6,7 @@ import type { RedPacketJSONPayload, RedPacketRecord } from '@masknet/web3-provid
 import { formatBalance } from '@masknet/web3-shared-base'
 import { isNativeTokenAddress, useRedPacketConstants, type GasConfig } from '@masknet/web3-shared-evm'
 import { BigNumber } from 'bignumber.js'
-import { useCallback, useEffect, useRef } from 'react'
+import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { RedPacketRPC } from '../../messages.js'
 import { useCreateCallback, useCreateParams, type RedPacketSettings } from './useCreateCallback.js'
 
@@ -17,7 +17,6 @@ export function useCreateFTRedpacketCallback(
     gasOption?: GasConfig,
     onCreated?: (payload: RedPacketJSONPayload) => void,
     onClose?: () => void,
-    currentAccount?: string,
 ) {
     // password should remain the same rather than change each time when createState change,
     //  otherwise password in database would be different from creating red-packet.
@@ -52,9 +51,10 @@ export function useCreateFTRedpacketCallback(
         { significant: isNativeToken ? 3 : 0 },
     )
 
+    const settingsWithTotal = useMemo(() => ({ ...settings, total }), [settings, total])
     const [{ loading: isCreating }, createCallback] = useCreateCallback(
         chainId,
-        { ...settings, total, name: currentAccount || settings.name },
+        settingsWithTotal,
         contract_version,
         redpacketPubkey,
         gasOption,
@@ -82,7 +82,7 @@ export function useCreateFTRedpacketCallback(
         const redpacketPayload = {
             sender: {
                 address: account,
-                name: currentAccount || settings.name,
+                name: settings.name,
                 message: settings.message,
             },
             is_random: settings.isRandom,
@@ -107,7 +107,7 @@ export function useCreateFTRedpacketCallback(
 
         // output the redpacket as JSON payload
         onCreated?.(payload.current)
-    }, [createCallback, settings, onCreated, currentAccount])
+    }, [createCallback, settings, onCreated])
 
     const payload = useRef<RedPacketJSONPayload>({
         network: EVMChainResolver.chainName(chainId),
