@@ -18,9 +18,8 @@ import {
     type PropsWithChildren,
     type SetStateAction,
 } from 'react'
-import { DURATION, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
+import { DURATION, PRESET_THEMES, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
 import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
-import { useRedPacketThemes } from '../hooks/useRedPacketThemes.js'
 import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 
 interface RedPacketContextOptions {
@@ -96,12 +95,14 @@ interface Props extends PropsWithChildren {}
 
 export const RedPacketProvider = memo(function RedPacketProvider({ children }: Props) {
     const [gasOption, setGasOption] = useState<GasConfig>()
-    const { data: themes = EMPTY_LIST } = useRedPacketThemes()
-    const [theme = themes[0], setTheme] = useState<FireflyRedPacketAPI.ThemeGroupSettings>()
+    const [theme = PRESET_THEMES[0], setTheme] = useState<FireflyRedPacketAPI.ThemeGroupSettings>()
     const [customThemes, setCustomThemes] = useState<FireflyRedPacketAPI.ThemeGroupSettings[]>([])
     const [message, setMessage] = useState('')
 
-    const allThemes = useMemo(() => (customThemes ? [...themes, ...customThemes] : themes), [themes, customThemes])
+    const allThemes = useMemo(
+        () => (customThemes ? [...PRESET_THEMES, ...customThemes] : PRESET_THEMES),
+        [customThemes],
+    )
 
     // Token
     const [rawAmount, setRawAmount] = useState('')

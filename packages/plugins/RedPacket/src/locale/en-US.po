@@ -671,12 +671,16 @@ msgid "Split Mode"
 msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
-msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: {0}"
-msgstr ""
+#~ msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 #~ msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: 1MB"
 #~ msgstr ""
+
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Supported formats: JPEG, PNG<0/> Size limit: {0}"
+msgstr ""
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx

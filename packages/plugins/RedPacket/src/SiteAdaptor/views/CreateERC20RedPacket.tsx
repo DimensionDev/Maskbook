@@ -27,12 +27,12 @@ import {
     ZERO,
 } from '@masknet/web3-shared-base'
 import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
-import { Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
+import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES, RoutePaths } from '../../constants.js'
+import { MAX_CUSTOM_THEMES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES, RoutePaths } from '../../constants.js'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateParams } from '../hooks/useCreateCallback.js'
@@ -124,14 +124,35 @@ const useStyles = makeStyles()((theme) => ({
     gasSettings: {
         margin: 0,
     },
+    deleteButton: {
+        cursor: 'pointer',
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        opacity: 0,
+        width: 20,
+        height: 20,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: theme.palette.maskColor.bottom,
+        backgroundColor: alpha(theme.palette.maskColor.main, 0.8),
+        borderRadius: 4,
+        padding: 0,
+        border: 0,
+    },
     cover: {
+        position: 'relative',
         width: 60,
         height: 40,
         cursor: 'pointer',
         border: 'none',
-        borderRadius: 12,
+        borderRadius: 4,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
+        '&:hover *': {
+            opacity: 1,
+        },
     },
     addButton: {
         width: 44,
@@ -173,6 +194,8 @@ export function CreateERC20RedPacket() {
         nativeToken,
         theme: selectedTheme,
         themes: redpacketThemes,
+        customThemes,
+        setCustomThemes,
         setTheme,
         settings,
         message,
@@ -400,30 +423,42 @@ export function CreateERC20RedPacket() {
                     </Typography>
                     <Box display="flex" flexDirection="row" gap={1} ml="auto">
                         {redpacketThemes.map((theme) => (
-                            <button
+                            <div
                                 key={theme.tid}
-                                type="button"
+                                role="button"
                                 className={cx(
                                     classes.cover,
                                     theme.tid === selectedTheme?.tid ? classes.selectedCover : '',
                                 )}
                                 style={{
-                                    backgroundImage: `url(${theme.cover.bg_image})`,
+                                    backgroundImage: `url("${encodeURI(theme.cover.bg_image)}")`,
                                     backgroundColor: theme.cover.bg_color,
                                 }}
                                 onClick={() => {
                                     setTheme(theme)
-                                }}
-                            />
+                                }}>
+                                {customThemes.includes(theme) ?
+                                    <button
+                                        type="button"
+                                        className={classes.deleteButton}
+                                        onClick={() => {
+                                            setCustomThemes((origins) => origins.filter((x) => x !== theme))
+                                        }}>
+                                        <Icons.Delete size={16} />
+                                    </button>
+                                :   null}
+                            </div>
                         ))}
-                        <button
-                            type="button"
-                            className={cx(classes.cover, classes.addButton)}
-                            onClick={() => {
-                                navigate(RoutePaths.CustomCover)
-                            }}>
-                            <Icons.Plus size={20} />
-                        </button>
+                        {customThemes.length < MAX_CUSTOM_THEMES ?
+                            <button
+                                type="button"
+                                className={cx(classes.cover, classes.addButton)}
+                                onClick={() => {
+                                    navigate(RoutePaths.CustomCover)
+                                }}>
+                                <Icons.Plus size={20} />
+                            </button>
+                        :   null}
                     </Box>
                 </Box>
                 <div>

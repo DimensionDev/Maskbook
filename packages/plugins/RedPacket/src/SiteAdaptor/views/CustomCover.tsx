@@ -136,12 +136,12 @@ export function CustomCover() {
                 :   <UploadDropArea
                         maxFileSize={MAX_FILE_SIZE}
                         onSelectFile={setBlob}
-                        accept="image/png, image/jpeg, image/gif, image/bmp, image/webp"
+                        accept="image/png, image/jpeg"
                         subtitle={
                             <>
                                 <Typography className={classes.tips}>
                                     <Trans>
-                                        Supported formats: JPEG, PNG, GIF
+                                        Supported formats: JPEG, PNG
                                         <br /> Size limit: {formatFileSize(MAX_FILE_SIZE)}
                                     </Trans>
                                 </Typography>

@@ -758,6 +758,10 @@ msgstr "输入合约地址"
 msgid "Instant"
 msgstr "即时"
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Invalid file type"
+msgstr ""
+
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
 msgstr "网络无效"

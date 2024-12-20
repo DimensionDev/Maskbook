@@ -9,7 +9,6 @@ import { useDropArea } from 'react-use'
 const useStyles = makeStyles()((theme) => ({
     dropArea: {
         display: 'flex',
-        // height: 230,
         flexDirection: 'column',
         justifyContent: 'center',
         gap: 10,
@@ -87,6 +86,8 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
             showMessage(101)
         } else if (!omitSizeLimit && files[0].size > maxFileSize) {
             showMessage(102)
+        } else if (accept && !accept.includes(files[0].type)) {
+            showMessage(103)
         } else {
             onSelectFile(files[0])
         }
@@ -113,7 +114,7 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
         onText: () => showMessage(101),
         onUri: () => showMessage(101),
     })
-    const showMessage = (code: 101 | 102) => {
+    const showMessage = (code: 101 | 102 | 103) => {
         switch (code) {
             case 101:
                 showSnackbar(<Trans>The input is not a single file.</Trans>, { variant: 'error' })
@@ -123,6 +124,12 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
                     variant: 'error',
                     message: <Trans>Exceeded the maximum file size of {fileSize}.</Trans>,
                 })
+                break
+            case 103:
+                showSnackbar(<Trans>Invalid file type</Trans>, {
+                    variant: 'error',
+                })
+                break
         }
     }
     return (

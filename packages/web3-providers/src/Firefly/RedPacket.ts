@@ -13,7 +13,9 @@ import { FireflyRedPacketAPI, type FireflyResponse } from '../entry-types.js'
 
 const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
-const FIREFLY_ROOT_URL = process.env.NEXT_PUBLIC_FIREFLY_API_URL || 'https://api-dev.firefly.land'
+const FIREFLY_ROOT_URL =
+    process.env.NEXT_PUBLIC_FIREFLY_API_URL ||
+    (process.env.NODE_ENV === 'development' ? 'https://api.firefly.land' : 'https://api.firefly.land')
 
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
     return fetchJSON<T>(url, {
