@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:57\n"
+"PO-Revision-Date: 2024-12-20 06:15\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -389,8 +389,7 @@ msgid "Grow your followers and engagement with Lucky Drop on Firefly mobile app 
 msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
@@ -690,19 +689,19 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop has been refunded."
-#~ msgstr "ラッキードロップは返金されました。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is broken."
-#~ msgstr "ラッキードロップが壊れています。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is empty."
-#~ msgstr "ラッキードロップは空です。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "The Lucky Drop is expired."
-#~ msgstr "ラッキードロップの有効期限が切れています。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -828,7 +827,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You could refund {0} {1}."
-#~ msgstr "{0} {1} を返金することができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "You got {0} {1}"
@@ -846,3 +845,4 @@ msgstr ""
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""
+
