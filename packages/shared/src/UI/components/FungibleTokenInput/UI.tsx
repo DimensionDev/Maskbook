@@ -90,7 +90,6 @@ const useStyles = makeStyles()((theme) => ({
         },
     },
     maxChip: {
-        color: theme.palette.maskColor.white,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -103,6 +102,7 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         cursor: 'pointer',
         boxSizing: 'border-box',
+        color: theme.palette.maskColor.bottom,
         background: theme.palette.maskColor.main,
         '&:hover': {
             background: alpha(theme.palette.maskColor.main, 0.8),
