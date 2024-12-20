@@ -758,6 +758,10 @@ msgstr ""
 msgid "Instant"
 msgstr ""
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Invalid file type"
+msgstr ""
+
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
 msgstr ""

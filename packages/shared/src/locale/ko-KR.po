@@ -758,6 +758,10 @@ msgstr "컨트랙트 주소 입력"
 msgid "Instant"
 msgstr "즉시"
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Invalid file type"
+msgstr ""
+
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
 msgstr "무효한 네트워크"

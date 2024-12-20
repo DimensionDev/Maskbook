@@ -21,7 +21,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         padding: '24px',
-        background: theme.palette.maskColor.white,
+        background: theme.palette.maskColor.bg,
         borderRadius: '14px',
         width: '320px',
         alignItems: 'center',
