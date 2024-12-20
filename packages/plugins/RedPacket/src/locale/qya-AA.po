@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-20 06:15\n"
+"PO-Revision-Date: 2024-12-20 11:07\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -675,12 +675,16 @@ msgid "Split Mode"
 msgstr "crwdns29106:0crwdne29106:0"
 
 #: src/SiteAdaptor/views/CustomCover.tsx
-msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: {0}"
-msgstr "crwdns36152:0{0}crwdne36152:0"
+#~ msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 #~ msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: 1MB"
 #~ msgstr ""
+
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Supported formats: JPEG, PNG<0/> Size limit: {0}"
+msgstr "crwdns36170:0{0}crwdne36170:0"
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
