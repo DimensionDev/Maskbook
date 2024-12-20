@@ -100,21 +100,29 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
     },
     bar: {
-        width: 78,
-        height: 7,
+        width: 80,
+        height: 9,
+        borderRadius: 999,
+        position: 'relative',
+        overflow: 'hidden',
+    },
+    outline: {
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
         borderRadius: 999,
         border: '1px solid  rgba(255, 255, 255, 0.28)',
-        position: 'relative',
     },
     progress: {
         position: 'absolute',
+        left: 0,
+        right: 0,
+        top: 0,
+        bottom: 0,
         backgroundColor: 'rgba(255, 255, 255, 0.78)',
-        borderRadius: '999px 0 0 999px',
-        left: -1,
-        top: -1,
-        bottom: -1,
         '&[data-fulfilled]': {
-            right: -1,
             borderRadius: '999px',
         },
     },
@@ -223,6 +231,7 @@ export function RedPacketEnvelope({
                             </Typography>
                         :   <>
                                 <div className={classes.bar}>
+                                    <div className={classes.outline}></div>
                                     <div
                                         className={classes.progress}
                                         style={{ width: `${Math.min(1, claimed / shares) * 100}%` }}
