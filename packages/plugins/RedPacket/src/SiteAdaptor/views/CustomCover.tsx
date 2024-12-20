@@ -1,14 +1,14 @@
+import { t, Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
 import { ImageEditorModal, UploadDropArea, useUnmountedRef } from '@masknet/shared'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { FireflyConfig, FireflyRedPacket } from '@masknet/web3-providers'
 import { Box, Button, DialogActions, Typography } from '@mui/material'
 import { useEffect, useMemo, useState } from 'react'
-import { MAX_FILE_SIZE } from '../../constants.js'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { t, Trans } from '@lingui/macro'
 import { useNavigate } from 'react-router-dom'
-import { FireflyConfig, FireflyRedPacket } from '@masknet/web3-providers'
-import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useAsyncFn } from 'react-use'
+import { MAX_FILE_SIZE } from '../../constants.js'
+import { useRedPacket } from '../contexts/RedPacketContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -139,9 +139,14 @@ export function CustomCover() {
                         subtitle={
                             <>
                                 <Typography className={classes.tips}>
-                                    Supported formats: JPEG, PNG, GIF Size limit: 1MB
+                                    <Trans>
+                                        Supported formats: JPEG, PNG, GIF
+                                        <br /> Size limit: 1MB
+                                    </Trans>
                                 </Typography>
-                                <Typography className={classes.tips}>Recommended dimensions: 1016 × 672 px</Typography>
+                                <Typography className={classes.tips}>
+                                    <Trans>Recommended dimensions: 1016 × 672 px</Trans>
+                                </Typography>
                             </>
                         }
                     />
@@ -154,7 +159,7 @@ export function CustomCover() {
                 <Button variant="contained" disabled={!blob || saving} fullWidth onClick={save}>
                     {saving ?
                         <Trans>Saving</Trans>
-                    :   <Trans>Save</Trans>}
+                    :   <Trans>Confirm</Trans>}
                 </Button>
             </DialogActions>
         </>

@@ -80,7 +80,7 @@ function usePersonaContext(initialState?: {
             identity: profile.identifier.userId,
         }))
 
-        if (!proofs) return localProfiles
+        if (!proofs?.length) return localProfiles
 
         const remoteProfiles = proofs
             .filter((x) => !!NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP[x.platform] && x.is_valid)

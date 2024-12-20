@@ -198,7 +198,11 @@ msgid "Blocto only supports the Flow chain."
 msgstr ""
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "Browse File"
+#~ msgid "Browse File"
+#~ msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Browse Files"
 msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx

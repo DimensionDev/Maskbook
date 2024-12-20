@@ -71,6 +71,10 @@ msgstr ""
 msgid "1 NFT claimed."
 msgstr ""
 
+#: src/SiteAdaptor/components/RouterDialog.tsx
+msgid "Add a Custom Cover"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL"
@@ -122,6 +126,10 @@ msgstr ""
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx
 #: src/SiteAdaptor/RedpacketMessagePanel.tsx
 msgid "Best Wishes!"
+msgstr ""
+
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Browse File"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
@@ -226,6 +234,7 @@ msgstr "已完成"
 #: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/CustomCover.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
@@ -565,6 +574,10 @@ msgstr ""
 msgid "Received time:"
 msgstr ""
 
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Recommended dimensions: 1016 × 672 px"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Refund"
@@ -591,8 +604,8 @@ msgid "Reset"
 msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
-msgid "Save"
-msgstr ""
+#~ msgid "Save"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Saving"
@@ -660,6 +673,10 @@ msgstr ""
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Split Mode"
+msgstr ""
+
+#: src/SiteAdaptor/views/CustomCover.tsx
+msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: 1MB"
 msgstr ""
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx

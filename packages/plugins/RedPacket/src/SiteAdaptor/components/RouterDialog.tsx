@@ -87,6 +87,7 @@ export function RouterDialog(props: InjectedDialogProps) {
         [RoutePaths.History]: <Trans>History</Trans>,
         [RoutePaths.HistoryDetail]: <Trans>Claim Details</Trans>,
         [RoutePaths.NftHistory]: <Trans>History</Trans>,
+        [RoutePaths.CustomCover]: <Trans>Add a Custom Cover</Trans>,
     }
     const titleTailMap: Record<string, ReactNode> = {
         [RoutePaths.CreateErc20RedPacket]: (

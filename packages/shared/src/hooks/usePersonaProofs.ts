@@ -5,12 +5,15 @@ import { EMPTY_LIST, type BindingProof, MaskMessages, Sniffings } from '@masknet
 import type { UseQueryResult } from '@tanstack/react-query'
 
 export function usePersonaProofs(publicKey?: string): UseQueryResult<BindingProof[]> {
-    const result = useQuery<BindingProof[]>({
+    const result = useQuery({
         queryKey: ['@@next-id', 'bindings-by-persona', publicKey],
         queryFn: async () => {
             if (Sniffings.is_popup_page) await NextIDProof.clearPersonaQueryCache(publicKey!)
             const binding = await NextIDProof.queryExistedBindingByPersona(publicKey!)
-            return Array.isArray(binding?.proofs) ? binding.proofs : EMPTY_LIST
+            return binding?.proofs
+        },
+        select(data) {
+            return Array.isArray(data) ? data : EMPTY_LIST
         },
     })
     const { refetch } = result

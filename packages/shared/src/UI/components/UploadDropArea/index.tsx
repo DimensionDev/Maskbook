@@ -66,18 +66,18 @@ interface Props extends HTMLProps<HTMLDivElement>, withClasses<'button'> {
     maxFileSize?: number
     omitSizeLimit?: boolean
     accept?: string
-    onSelectFile(file: File): void
     subtitle?: ReactNode
+    onSelectFile(file: File): void
 }
 
 export const UploadDropArea = memo(function UploadDropArea(props: Props) {
     const {
         maxFileSize = Number.POSITIVE_INFINITY,
         omitSizeLimit,
-        onSelectFile,
         className,
         accept,
         subtitle,
+        onSelectFile,
         ...rest
     } = props
     const { classes, cx } = useStyles(undefined, { props })
@@ -150,7 +150,7 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
                 <Trans>or</Trans>
             </Typography>
             <Button className={classes.button} variant="roundedContained" onClick={selectFile}>
-                <Trans>Browse File</Trans>
+                <Trans>Browse Files</Trans>
             </Button>
         </div>
     )
