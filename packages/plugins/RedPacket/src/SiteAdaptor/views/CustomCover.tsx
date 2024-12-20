@@ -1,6 +1,6 @@
 import { t, Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
-import { ImageEditorModal, UploadDropArea, useUnmountedRef } from '@masknet/shared'
+import { formatFileSize, ImageEditorModal, UploadDropArea, useUnmountedRef } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { FireflyConfig, FireflyRedPacket } from '@masknet/web3-providers'
 import { Box, Button, DialogActions, Typography } from '@mui/material'
@@ -142,7 +142,7 @@ export function CustomCover() {
                                 <Typography className={classes.tips}>
                                     <Trans>
                                         Supported formats: JPEG, PNG, GIF
-                                        <br /> Size limit: 1MB
+                                        <br /> Size limit: {formatFileSize(MAX_FILE_SIZE)}
                                     </Trans>
                                 </Typography>
                                 <Typography className={classes.tips}>

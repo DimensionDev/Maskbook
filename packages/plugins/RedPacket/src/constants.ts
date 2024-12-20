@@ -38,7 +38,7 @@ export const enum RoutePaths {
     Terms = '/terms',
 }
 
-export const MAX_FILE_SIZE = 1 * 1024 * 1024
+export const MAX_FILE_SIZE = 1.5 * 1024 * 1024
 export const DURATION = 60 * 60 * 24
 
 export const nftDefaultChains = [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon]
