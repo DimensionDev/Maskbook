@@ -147,7 +147,7 @@ export function useCreateCallback(
     const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
 
     return useAsyncFn(async () => {
-        const { token } = redPacketSettings
+        const token = redPacketSettings.token
         const createParams = await getCreateParams()
         if (!token || !redPacketContract || !createParams) return
 
@@ -188,5 +188,5 @@ export function useCreateCallback(
             }
         }
         return { hash, receipt }
-    }, [account, redPacketContract, redPacketSettings, gasOption, chainId])
+    }, [account, redPacketContract, redPacketSettings.token, gasOption, chainId])
 }
