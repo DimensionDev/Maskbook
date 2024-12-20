@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:58\n"
+"PO-Revision-Date: 2024-12-20 06:15\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -1264,7 +1264,7 @@ msgstr "거래 확인 완료"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #~ msgid "Transaction cost"
-#~ msgstr "거래 수수료"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transaction failed"
@@ -1440,3 +1440,4 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
+
