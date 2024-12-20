@@ -129,8 +129,8 @@ msgid "Best Wishes!"
 msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
-msgid "Browse File"
-msgstr ""
+#~ msgid "Browse File"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 msgid "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
