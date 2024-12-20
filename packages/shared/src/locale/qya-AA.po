@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-14 10:11\n"
+"PO-Revision-Date: 2024-12-20 06:15\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -20,6 +20,10 @@ msgstr ""
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "(beta)"
 msgstr "crwdns31476:0crwdne31476:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "{0, select, other {<0>Size limit: {fileSize}</0>} omit {}}"
+msgstr "crwdns36106:00={0}crwdnd36106:0fileSize={fileSize}crwdne36106:0"
 
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
@@ -86,8 +90,8 @@ msgid "{riskyFactors, plural, one {# Risky item} other {# Risky items}}"
 msgstr "crwdns30750:0riskyFactors={riskyFactors}crwdne30750:0"
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
-msgstr "crwdns35448:00={0}crwdne35448:0"
+#~ msgid "<0>Drag & Drop your file here </0>{0, select, other {<1>Size limit: 10 MB </1>} omit {}}<2>or </2><3>Browse File</3>"
+#~ msgstr ""
 
 #: src/UI/components/MaskPluginWrapper/index.tsx
 msgid "<0>Powered by </0>{publisherNode}"
@@ -198,11 +202,21 @@ msgstr "crwdns30790:0crwdne30790:0"
 msgid "Blocto only supports the Flow chain."
 msgstr "crwdns30792:0crwdne30792:0"
 
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Browse File"
+#~ msgstr ""
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Browse Files"
+msgstr "crwdns36154:0crwdne36154:0"
+
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr "crwdns32494:0crwdne32494:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "crwdns30796:0crwdne30796:0"
@@ -293,6 +307,7 @@ msgstr "crwdns30824:0crwdne30824:0"
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
@@ -497,11 +512,16 @@ msgstr "crwdns30880:0crwdne30880:0"
 msgid "Download the {name} Wallet here"
 msgstr "crwdns32506:0{name}crwdne32506:0"
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Drag & Drop your file here"
+msgstr "crwdns36110:0crwdne36110:0"
+
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "DSearch"
 msgstr "crwdns30886:0crwdne30886:0"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr "crwdns30888:0crwdne30888:0"
 
@@ -551,8 +571,12 @@ msgid "Enter an amount"
 msgstr "crwdns30908:0crwdne30908:0"
 
 #: src/UI/components/UploadDropArea/index.tsx
-msgid "Exceeded the maximum file size of 10MB."
-msgstr "crwdns32908:0crwdne32908:0"
+msgid "Exceeded the maximum file size of {fileSize}."
+msgstr "crwdns36112:0{fileSize}crwdne36112:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+#~ msgid "Exceeded the maximum file size of 10MB."
+#~ msgstr ""
 
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Failed"
@@ -926,6 +950,10 @@ msgstr "crwdns31044:0crwdne31044:0"
 msgid "Optimize search results with token names, NFT collections, ENS domains or wallet addresses."
 msgstr "crwdns31046:0crwdne31046:0"
 
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "or"
+msgstr "crwdns36114:0crwdne36114:0"
+
 #: src/UI/translate.ts
 msgid "Owner changed."
 msgstr "crwdns32536:0crwdne32536:0"
@@ -1042,6 +1070,14 @@ msgstr "crwdns31092:0crwdne31092:0"
 msgid "Report Spam"
 msgstr "crwdns31094:0crwdne31094:0"
 
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+msgid "Request timed out."
+msgstr "crwdns35852:0crwdne35852:0"
+
+#: src/hooks/useCurrentPersonaConnectStatus.ts
+#~ msgid "Request timeout."
+#~ msgstr ""
+
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
 msgstr "crwdns31096:0crwdne31096:0"
@@ -1070,6 +1106,10 @@ msgstr "crwdns31626:0crwdne31626:0"
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Risk Warning"
 msgstr "crwdns31102:0crwdne31102:0"
+
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+msgid "Save"
+msgstr "crwdns36116:0crwdne36116:0"
 
 #: src/UI/modals/WalletConnectQRCodeModal/QRCodeDialog.tsx
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
@@ -1223,8 +1263,8 @@ msgid "Transaction Confirmed"
 msgstr "crwdns31164:0crwdne31164:0"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
-msgid "Transaction cost"
-msgstr "crwdns31166:0crwdne31166:0"
+#~ msgid "Transaction cost"
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Transaction failed"
@@ -1257,6 +1297,10 @@ msgstr "crwdns31642:0crwdne31642:0"
 #: src/UI/translate.ts
 msgid "Transfer Token"
 msgstr "crwdns31644:0crwdne31644:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "unlimited"
+msgstr "crwdns36118:0crwdne36118:0"
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginList.tsx
 msgid "Unlisted"
