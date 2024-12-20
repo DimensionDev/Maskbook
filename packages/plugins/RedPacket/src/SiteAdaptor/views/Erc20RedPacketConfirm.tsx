@@ -25,6 +25,14 @@ import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallb
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
 
 const useStyles = makeStyles()((theme) => ({
+    message: {
+        fontSize: 24,
+        fontWeight: 700,
+        overflow: 'hidden',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 2,
+    },
     link: {
         display: 'inline-flex',
         marginLeft: theme.spacing(0.5),
@@ -66,13 +74,6 @@ const useStyles = makeStyles()((theme) => ({
         backgroundColor: theme.palette.maskColor.bg,
         color: theme.palette.text.primary,
         padding: 12,
-    },
-    ellipsis: {
-        fontSize: 24,
-        fontWeight: 700,
-        textOverflow: 'ellipsis',
-        overflow: 'hidden',
-        whiteSpace: 'nowrap',
     },
     controller: {
         position: 'sticky',
@@ -137,7 +138,7 @@ export function Erc20RedPacketConfirm() {
     return (
         <>
             <div className={classes.settings}>
-                <Typography variant="h4" color="textPrimary" align="center" className={classes.ellipsis}>
+                <Typography variant="h4" color="textPrimary" align="center" className={classes.message}>
                     {settings?.message}
                 </Typography>
                 <div className={classes.field}>

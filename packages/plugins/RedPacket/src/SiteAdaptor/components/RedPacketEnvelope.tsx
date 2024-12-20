@@ -51,6 +51,7 @@ const useStyles = makeStyles()((theme) => ({
         background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(102, 102, 102, 0.10) 100%)',
         backdropFilter: 'blur(5px)',
         wordBreak: 'break-all',
+        whiteSpace: 'normal',
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
