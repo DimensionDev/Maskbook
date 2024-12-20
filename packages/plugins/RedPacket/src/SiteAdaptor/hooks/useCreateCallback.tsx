@@ -119,7 +119,7 @@ function useCreateParamsCallback(
             })
 
         return { gas: gas ? toFixed(gas) : undefined, params, paramsObj, gasError }
-    }, [redPacketSettings, account, redPacketContract])
+    }, [redPacketSettings, account, redPacketContract, publicKey])
 
     return getCreateParams
 }
@@ -188,5 +188,5 @@ export function useCreateCallback(
             }
         }
         return { hash, receipt }
-    }, [account, redPacketContract, redPacketSettings.token, gasOption, chainId])
+    }, [account, redPacketContract, redPacketSettings.token, gasOption, chainId, getCreateParams])
 }
