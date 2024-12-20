@@ -86,8 +86,6 @@ export const UploadDropArea = memo(function UploadDropArea(props: Props) {
             showMessage(101)
         } else if (!omitSizeLimit && files[0].size > maxFileSize) {
             showMessage(102)
-        } else if (accept && !accept.includes(files[0].type)) {
-            showMessage(103)
         } else {
             onSelectFile(files[0])
         }
