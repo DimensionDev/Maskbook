@@ -1,7 +1,7 @@
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
-import { EnhanceableSite, getEnhanceableSiteType } from '@masknet/shared-base'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -19,7 +19,6 @@ import {
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
 } from './helpers.js'
-import { Trans } from '@lingui/macro'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -34,8 +33,7 @@ const containerStyle = {
     alignItems: 'center',
 }
 
-const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
-const PluginIcon = isFirefly ? Icons.Gift : Icons.RedPacket
+const PluginIcon = Icons.RedPacket
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

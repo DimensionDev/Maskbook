@@ -29,7 +29,7 @@ interface RedpacketMessagePanelProps {
     message: string
     onChange: (val: string) => void
 }
-export function RedpacketMessagePanel(props: RedpacketMessagePanelProps) {
+export function MessagePanel(props: RedpacketMessagePanelProps) {
     const { _ } = useLingui()
     const { onChange, message } = props
     const { classes, cx } = useStyles()

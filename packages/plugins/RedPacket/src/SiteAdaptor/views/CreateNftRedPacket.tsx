@@ -31,8 +31,8 @@ import { RED_PACKET_MAX_SHARES, RoutePaths } from '../../constants.js'
 import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNFTRedpacketGas } from '../hooks/useCreateNftRedpacketGas.js'
-import { RedpacketMessagePanel } from '../RedpacketMessagePanel.js'
 import { useMyCollectionNfts } from '../hooks/useMyCollectionNfts.js'
+import { MessagePanel } from '../components/MessagePanel.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -387,7 +387,7 @@ export function CreateNftRedPacket() {
                 :   null}
 
                 <div className={classes.line}>
-                    <RedpacketMessagePanel onChange={setMessage} message={message} />
+                    <MessagePanel onChange={setMessage} message={message} />
                 </div>
                 {collection && balance ?
                     <Typography className={classes.approveAllTip}>

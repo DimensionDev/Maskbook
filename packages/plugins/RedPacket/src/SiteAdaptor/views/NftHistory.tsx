@@ -15,7 +15,7 @@ import { NftRedPacketRecord } from '../components/NftRedPacketRecord.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useNftRedPacketHistory } from '../hooks/useNftRedPacketHistory.js'
 import { openComposition } from '../openComposition.js'
-import { CompositionTypeContext } from '../RedPacketInjection.js'
+import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

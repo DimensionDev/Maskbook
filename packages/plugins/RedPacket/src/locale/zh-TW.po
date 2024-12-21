@@ -18,10 +18,6 @@ msgstr ""
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
-#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx
 msgid "{0} (UTC+8)"
 msgstr ""
 
@@ -75,56 +71,44 @@ msgstr ""
 msgid "Add a Custom Cover"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL ({0} NFT)"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "Amount"
-msgstr ""
+#~ msgid "Amount"
+#~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Amount Each"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Amount per Share"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "At most 255 recipients"
 msgstr ""
 
-#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Attached Message"
 msgstr "附加的訊息"
 
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Best Wishes"
 msgstr ""
 
+#: src/SiteAdaptor/components/MessagePanel.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/contexts/RedPacketContext.tsx
-#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx
-#: src/SiteAdaptor/RedpacketMessagePanel.tsx
 msgid "Best Wishes!"
 msgstr ""
 
@@ -133,8 +117,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
-msgstr ""
+#~ msgid "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Cancel"
@@ -145,8 +129,8 @@ msgid "Choose a Cover"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketDialog.tsx
-msgid "Choose your collection"
-msgstr ""
+#~ msgid "Choose your collection"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -171,13 +155,10 @@ msgid "Claim on: {link}"
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "Claim Requirements"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Claimed"
 msgstr ""
@@ -191,17 +172,16 @@ msgid "Claimed Details"
 msgstr ""
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
 msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketInHistoryList.tsx
-msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{tokenSymbol}</1>"
-msgstr ""
+#~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> {0}/{1} <1>{tokenSymbol}</1>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
-msgstr ""
+#~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
@@ -216,7 +196,6 @@ msgstr "認領中..."
 msgid "Clear all requirements"
 msgstr ""
 
-#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Collections"
 msgstr ""
@@ -229,9 +208,6 @@ msgstr ""
 msgid "Completed"
 msgstr "已完成"
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
-#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/CustomCover.tsx
@@ -243,12 +219,9 @@ msgid "Confirm"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "Confirm the Lucky Drop"
 msgstr "紅包詳情"
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
-#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Confirming"
@@ -263,7 +236,6 @@ msgid "Connect to {source}"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Connect Wallet"
 msgstr ""
@@ -272,9 +244,6 @@ msgstr ""
 msgid "Cover"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -282,70 +251,61 @@ msgid "Create the Lucky Drop"
 msgstr "下一步"
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
-#: src/SiteAdaptor/RedPacketInHistoryList.tsx
 msgid "Create time:"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-msgid "Creator:"
-msgstr ""
+#~ msgid "Creator:"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
-msgstr ""
+#~ msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "Drop Type"
-msgstr ""
+#~ msgid "Drop Type"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Edit"
 msgstr ""
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
-#: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr "空的"
 
-#: src/SiteAdaptor/RedpacketMessagePanel.tsx
+#: src/SiteAdaptor/components/MessagePanel.tsx
 msgid "Enclose a Message"
 msgstr "標題"
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Amount Each"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
-msgid "Enter number of winners"
-msgstr ""
+#~ msgid "Enter number of winners"
+#~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Number of Winners"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter the amount that each winner can claim"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Total Amount"
 msgstr ""
 
-#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Equal Amount"
 msgstr ""
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
-#: src/SiteAdaptor/RedPacketActionButton.tsx
-#: src/SiteAdaptor/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Expired"
 msgstr "已過期"
@@ -379,7 +339,6 @@ msgstr ""
 msgid "Gift crypto or NFTs to any users, first come, first served."
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have to do this once per token."
 msgstr ""
@@ -400,7 +359,6 @@ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "History"
 msgstr ""
 
@@ -412,31 +370,24 @@ msgstr ""
 msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network."
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Identical"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "Image Preview"
-msgstr ""
+#~ msgid "Image Preview"
+#~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Insufficient {0} Balance"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Insufficient Balance"
 msgstr "餘額不足"
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -460,8 +411,8 @@ msgid "Like / Repost / Comment"
 msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
-msgid "Loading"
-msgstr ""
+#~ msgid "Loading"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -474,27 +425,24 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Lucky Drop"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Message"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #: src/SiteAdaptor/RedPacketDialog.tsx
-msgid "More details"
-msgstr ""
+#~ msgid "More details"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ClaimRecord.tsx
 msgid "My wallet"
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 msgid "Next"
 msgstr ""
 
@@ -508,24 +456,21 @@ msgid "NFT Holder of <0/>"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "NFTs"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "No"
-msgstr ""
+#~ msgid "No"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketHistoryDetails.tsx
-msgid "No claims yet for this Lucky Drop"
-msgstr ""
+#~ msgid "No claims yet for this Lucky Drop"
+#~ msgstr ""
 
-#: src/SiteAdaptor/FireflyRedPacketHistoryList.tsx
 #: src/SiteAdaptor/views/History.tsx
 msgid "No Lucky Drops claimed"
 msgstr ""
 
-#: src/SiteAdaptor/FireflyRedPacketHistoryList.tsx
 #: src/SiteAdaptor/views/History.tsx
 msgid "No Lucky Drops created. Select 🎁 when you compose a post to start your first drop."
 msgstr ""
@@ -534,7 +479,6 @@ msgstr ""
 msgid "No more data available."
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketHistoryList.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
@@ -542,44 +486,40 @@ msgstr ""
 msgid "No results"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "Number of Winners"
-msgstr ""
+#~ msgid "Number of Winners"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-msgid "Post on"
-msgstr ""
+#~ msgid "Post on"
+#~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Random"
 msgstr ""
 
-#: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Random Amount"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-msgid "Received"
-msgstr ""
+#~ msgid "Received"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
-msgid "Received time:"
-msgstr ""
+#~ msgid "Received time:"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Recommended dimensions: 1016 × 672 px"
 msgstr ""
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
-#: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "Refund"
 msgstr "退款"
 
@@ -618,8 +558,6 @@ msgstr ""
 msgid "Search"
 msgstr "搜尋"
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Select a Token"
@@ -634,12 +572,11 @@ msgstr ""
 msgid "Select NFT collection to gate access"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Select partially"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketActionButton.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "Send"
 msgstr ""
 
@@ -648,29 +585,25 @@ msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are s
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "Sent"
 msgstr ""
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
-#: src/SiteAdaptor/RedPacketActionButton.tsx
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Share"
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "Share From"
-msgstr ""
+#~ msgid "Share From"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Something went wrong."
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Split Mode"
 msgstr ""
@@ -688,7 +621,6 @@ msgid "Supported formats: JPEG, PNG<0/> Size limit: {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/NftRedPacketHistoryItem.tsx
 msgid "The Lucky Drop can't be sent due to data damage."
 msgstr ""
 
@@ -715,7 +647,6 @@ msgstr ""
 msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "The minimum amount for each share is {0} {1}"
 msgstr ""
@@ -737,26 +668,21 @@ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketDialog.tsx
 msgid "Tokens"
 msgstr "代幣"
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Total amount"
 msgstr ""
 
-#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Total Amount"
 msgstr "總額"
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Total amount shared among all winners"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Total cost"
 msgstr ""
@@ -781,22 +707,19 @@ msgstr ""
 msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
 msgstr ""
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
-#: src/SiteAdaptor/RedPacketActionButton.tsx
 msgid "View"
 msgstr ""
 
-#: src/SiteAdaptor/RedpacketNftConfirmDialog.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Wallet account"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC721Form.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
 msgstr ""
 
-#: src/SiteAdaptor/RedPacketERC20Form.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Winners"
 msgstr ""
@@ -811,16 +734,16 @@ msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
-msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
-msgstr ""
+#~ msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "You can withdraw the remaining balance 24 hours after sending the lucky drop."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
-msgid "You can withdraw the rest of your balances back 24h later after sending them out."
-msgstr ""
+#~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "You claimed {0} ${1}."
@@ -846,7 +769,6 @@ msgstr ""
 msgid "You have already claimed this lucky drop."
 msgstr ""
 
-#: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""

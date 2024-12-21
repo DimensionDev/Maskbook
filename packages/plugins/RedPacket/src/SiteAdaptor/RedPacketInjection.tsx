@@ -1,11 +1,10 @@
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { createContext, useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 import type { CompositionType } from '@masknet/plugin-infra/content-script'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RedPacketMainDialog } from './MainDialog.js'
-
-export const CompositionTypeContext = createContext<CompositionType>('timeline')
+import { CompositionTypeContext } from './contexts/CompositionTypeContext.js'
 
 export function RedPacketInjection() {
     const [open, setOpen] = useState(false)

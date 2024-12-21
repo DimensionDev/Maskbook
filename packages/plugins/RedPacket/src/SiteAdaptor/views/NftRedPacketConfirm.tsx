@@ -26,8 +26,8 @@ import { RedPacketNftMetaKey, RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
 import { useCreateNftRedpacketCallback } from '../hooks/useCreateNftRedpacketCallback.js'
 import { openComposition } from '../openComposition.js'
-import { CompositionTypeContext } from '../RedPacketInjection.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
+import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
