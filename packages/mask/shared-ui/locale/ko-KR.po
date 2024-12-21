@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:56\n"
+"PO-Revision-Date: 2024-12-21 04:13\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -2962,7 +2962,7 @@ msgstr "월렛 그룹 #{0}"
 
 #: popups/pages/Wallet/ConnectedSites/index.tsx
 #~ msgid "Wallet name is connected to these sites, they can view your account address."
-#~ msgstr "월렛 이름은 이미 웹사이트에 연결됩니다. 연결된 웹사이트는 회원님의 계정 주소를 확인할 수 있습니다."
+#~ msgstr ""
 
 #: popups/modals/WalletRenameModal/index.tsx
 #: popups/modals/WalletRenameModal/index.tsx
@@ -3059,3 +3059,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
+
