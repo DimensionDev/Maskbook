@@ -55,13 +55,14 @@ const useStyles = makeStyles()((theme) => ({
         height: 70,
         position: 'relative',
         padding: theme.spacing(1.25, 1.5),
+        fontWeight: 700,
         [`& > .${inputBaseClasses.input}`]: {
             paddingTop: `${theme.spacing(2.75)}!important`,
             paddingBottom: '0px !important',
             flex: 2,
             paddingLeft: '0px !important',
             fontSize: 14,
-            fontWeight: 400,
+            fontWeight: 700,
         },
     },
     iconInput: {
@@ -357,7 +358,7 @@ export function CreateERC20RedPacket() {
                             {message.length}/{messageMaxLength}
                         </Typography>
                     }
-                    placeholder={_(msg`Best Wishes`)}
+                    placeholder={_(msg`Best Wishes!`)}
                     inputProps={{
                         maxLength: messageMaxLength,
                     }}
@@ -388,11 +389,7 @@ export function CreateERC20RedPacket() {
                         className={classes.input}
                         label={isRandom ? _(msg`Total amount`) : _(msg`Amount Each`)}
                         token={token}
-                        placeholder={
-                            isRandom ?
-                                _(msg`Total amount shared among all winners`)
-                            :   _(msg`Enter the amount that each winner can claim`)
-                        }
+                        placeholder="0"
                         onSelectToken={onSelectTokenChipClick}
                         onAmountChange={setRawAmount}
                         amount={rawAmount}

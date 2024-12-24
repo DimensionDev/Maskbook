@@ -15,7 +15,7 @@ const siteType = getSiteType()
 const SITE_URL = siteType === EnhanceableSite.Firefly ? location.origin : 'https://firefly.mask.social'
 const FIREFLY_ROOT_URL =
     process.env.NEXT_PUBLIC_FIREFLY_API_URL ||
-    (process.env.NODE_ENV === 'development' ? 'https://api.firefly.land' : 'https://api.firefly.land')
+    (process.env.NODE_ENV === 'development' ? 'https://api-dev.firefly.land' : 'https://api.firefly.land')
 
 function fetchFireflyJSON<T>(url: string, init?: RequestInit): Promise<T> {
     return fetchJSON<T>(url, {
@@ -191,22 +191,14 @@ export class FireflyRedPacket {
         T extends FireflyRedPacketAPI.ActionType,
         R = T extends FireflyRedPacketAPI.ActionType.Claim ? FireflyRedPacketAPI.RedPacketClaimedInfo
         :   FireflyRedPacketAPI.RedPacketSentInfo,
-    >(
-        actionType: T,
-        from: HexString,
-        platform: FireflyRedPacketAPI.SourceType,
-        indicator?: PageIndicator,
-    ): Promise<Pageable<R, PageIndicator>> {
+    >(actionType: T, from: HexString, indicator?: PageIndicator): Promise<Pageable<R, PageIndicator>> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/history', {
             address: from,
             redpacketType: actionType,
-            claimFrom: platform,
             cursor: indicator?.id,
             size: 20,
         })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.HistoryResponse>(url, {
-            method: 'GET',
-        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.HistoryResponse>(url)
         return createPageable(
             data.list.map((v) => ({ ...v, chain_id: Number(v.chain_id) })) as R[],
             createIndicator(indicator),
@@ -225,9 +217,7 @@ export class FireflyRedPacket {
             cursor: indicator?.id,
             size: 20,
         })
-        const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistoryResponse>(url, {
-            method: 'GET',
-        })
+        const { data } = await fetchJSON<FireflyRedPacketAPI.ClaimHistoryResponse>(url)
         return { ...data, chain_id: Number(data.chain_id) } as FireflyRedPacketAPI.RedPacketClaimListInfo
     }
 

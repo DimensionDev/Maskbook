@@ -101,14 +101,16 @@ msgstr "첨부 메시지"
 
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-msgid "Best Wishes"
-msgstr "덕담"
+#~ msgid "Best Wishes"
+#~ msgstr "덕담"
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
+#: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/contexts/RedPacketContext.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Best Wishes!"
 msgstr "행운을 빌어요!"
 
@@ -292,8 +294,8 @@ msgid "Enter Number of Winners"
 msgstr "공유 수량 입력"
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-msgid "Enter the amount that each winner can claim"
-msgstr ""
+#~ msgid "Enter the amount that each winner can claim"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Total Amount"
@@ -680,8 +682,8 @@ msgid "Total Amount"
 msgstr "총액"
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-msgid "Total amount shared among all winners"
-msgstr ""
+#~ msgid "Total amount shared among all winners"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Total cost"

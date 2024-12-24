@@ -6,7 +6,6 @@ import { nftDefaultChains, RoutePaths } from '../../constants.js'
 import { makeStyles, MaskTabList } from '@masknet/theme'
 import { Tab, useTheme } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { base } from '../../base.js'
 import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { TabContext } from '@mui/lab'
 import { Icons } from '@masknet/icons'
@@ -44,10 +43,6 @@ export function RouterDialog(props: InjectedDialogProps) {
 
     const { classes } = useStyles({ isDim: mode === 'dim' })
     const [currentTab, onChange] = usePageTab<RedPacketTabs>(pageMap)
-    const chainIds =
-        currentTab === RedPacketTabs.tokens ?
-            base.enableRequirement.web3[NetworkPluginID.PLUGIN_EVM].supportedChainIds
-        :   nftDefaultChains
 
     const createTabs = (
         <TabContext value={currentTab}>
@@ -72,10 +67,10 @@ export function RouterDialog(props: InjectedDialogProps) {
         : matchPath(RoutePaths.History, pathname) ? historyTabs
         : null
     const networkTabs =
-        isCreate ?
+        isCreate && currentTab === RedPacketTabs.collectibles ?
             <div className={classes.tabWrapper}>
                 <NetworkTab
-                    chains={chainIds}
+                    chains={nftDefaultChains}
                     hideArrowButton={currentTab === RedPacketTabs.collectibles}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                     classes={{ arrowButton: classes.arrowButton }}

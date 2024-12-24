@@ -96,7 +96,7 @@ function useSettingsContext(initial?: {
             [GasOptionType.FAST]: _(msg`Instant`),
             [GasOptionType.NORMAL]: _(msg`High`),
             [GasOptionType.SLOW]: _(msg`Medium`),
-            [GasOptionType.CUSTOM]: '',
+            [GasOptionType.CUSTOM]: _(msg`Custom`),
         },
 
         pluginID,

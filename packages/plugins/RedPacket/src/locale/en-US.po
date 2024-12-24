@@ -96,14 +96,16 @@ msgstr ""
 
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-msgid "Best Wishes"
-msgstr ""
+#~ msgid "Best Wishes"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
+#: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/contexts/RedPacketContext.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Best Wishes!"
 msgstr ""
 
@@ -287,8 +289,8 @@ msgid "Enter Number of Winners"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-msgid "Enter the amount that each winner can claim"
-msgstr ""
+#~ msgid "Enter the amount that each winner can claim"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Total Amount"
@@ -675,8 +677,8 @@ msgid "Total Amount"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-msgid "Total amount shared among all winners"
-msgstr ""
+#~ msgid "Total amount shared among all winners"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Total cost"

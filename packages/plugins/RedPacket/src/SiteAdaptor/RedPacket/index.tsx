@@ -5,16 +5,18 @@ import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@mas
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { RedPacketStatus, type FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI, RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { Requirements } from '../Requirements/index.js'
+import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
@@ -22,7 +24,6 @@ import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 
 const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
     return {
@@ -211,16 +212,19 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 return
             }
             hash = await claimCallback()
-            if (platform && myProfileId && myHandle && hash) {
+            if (myProfileId && myHandle && hash) {
                 await FireflyRedPacket.finishClaiming(
                     payload.rpid,
-                    platform as FireflyRedPacketAPI.PlatformType,
+                    FireflyRedPacketAPI.PlatformType.twitter,
                     myProfileId,
                     myHandle,
                     hash,
                 )
             }
-            checkResult()
+            await checkResult()
+            queryClient.invalidateQueries({
+                queryKey: ['redpacket', 'history'],
+            })
         } else if (canRefund) {
             hash = await refundCallback()
         }
@@ -230,7 +234,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     }, [
         canClaim,
         canRefund,
-        platform,
         claimCallback,
         checkResult,
         recheckClaimStatus,

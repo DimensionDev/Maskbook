@@ -435,6 +435,7 @@ msgstr "현재 기초 기스비는 {0} Gwei"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"

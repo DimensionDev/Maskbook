@@ -22,6 +22,9 @@ const useStyles = makeStyles()((theme) => ({
     interactions: {
         flexGrow: 1,
         minHeight: 0,
+        display: 'flex',
+        flexDirection: 'column',
+        gap: 10,
     },
     status: {
         display: 'flex',

@@ -16,6 +16,7 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         gap: theme.spacing(1),
+        padding: theme.spacing(0.5),
     },
     user: {
         display: 'flex',

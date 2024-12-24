@@ -16,7 +16,7 @@ export function PreviewRedPacket(props: Props) {
         <RedPacketEnvelope
             {...props}
             cover={theme.cover.bg_image}
-            message={message || t`Best Wishes`}
+            message={message || t`Best Wishes!`}
             token={token}
             creator={creator}
             shares={shares}

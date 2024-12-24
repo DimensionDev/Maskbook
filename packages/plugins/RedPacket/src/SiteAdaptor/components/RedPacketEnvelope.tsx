@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/macro'
 import { NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { formatBalance, isZero, type FungibleToken } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
@@ -44,17 +44,23 @@ const useStyles = makeStyles()((theme) => ({
         height: 72,
         borderRadius: theme.spacing(2, 2, 0, 0),
         padding: theme.spacing(1.5, 1.5, 1.5, 6),
-        fontSize: 20,
-        fontWeight: 700,
-        lineHeight: '24px',
         color: theme.palette.maskColor.white,
         background: 'linear-gradient(180deg, rgba(0, 0, 0, 0.10) 0%, rgba(102, 102, 102, 0.10) 100%)',
         backdropFilter: 'blur(5px)',
-        wordBreak: 'break-all',
-        whiteSpace: 'normal',
         display: 'flex',
         alignItems: 'center',
+    },
+    text: {
+        fontSize: 20,
+        fontWeight: 700,
+        lineHeight: '24px',
+        wordBreak: 'break-all',
+        whiteSpace: 'normal',
+        alignItems: 'center',
         overflow: 'hidden',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 3,
     },
     asset: {
         display: 'flex',
@@ -176,7 +182,11 @@ export function RedPacketEnvelope({
         <div {...props} className={cx(classes.container, props.className)}>
             <img src={cover} className={classes.cover} />
             <div className={classes.content}>
-                <Typography className={classes.message}>{message}</Typography>
+                <div className={classes.message}>
+                    <TextOverflowTooltip as={ShadowRootTooltip} title={message} placement="top">
+                        <Typography className={classes.text}>{message}</Typography>
+                    </TextOverflowTooltip>
+                </div>
                 <div className={classes.asset}>
                     <div className={classes.icon}>
                         <TokenIcon

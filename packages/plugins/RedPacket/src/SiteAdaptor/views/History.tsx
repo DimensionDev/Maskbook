@@ -47,7 +47,7 @@ export function History() {
         fetchNextPage,
         isFetching,
         hasNextPage,
-    } = useRedPacketHistory(account, actionType, FireflyRedPacketAPI.SourceType.MaskNetwork)
+    } = useRedPacketHistory(account, actionType)
 
     const { creator } = useRedPacket()
     const navigate = useNavigate()

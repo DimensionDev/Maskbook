@@ -430,6 +430,7 @@ msgstr ""
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
