@@ -34,11 +34,3 @@ export function openPopup(options: OpenPopupOptions) {
 export function closePopup(options: ClosePopupOptions) {
     emitter.emit('close', options)
 }
-
-export function openFarcasterPopup(options: OpenFarcasterPopupOptions) {
-    emitter.emit('open-farcaster', options)
-}
-
-export function closeFarcasterPopup(options: CloseFarcasterPopupOptions) {
-    emitter.emit('close-farcaster', options)
-}

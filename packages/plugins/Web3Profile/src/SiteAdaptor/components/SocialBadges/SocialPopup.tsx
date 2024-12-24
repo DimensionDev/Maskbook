@@ -5,10 +5,10 @@ import { NextIDProof } from '@masknet/web3-providers'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { Fade, List } from '@mui/material'
 import { emitter } from '../../emitter.js'
-import { useControlLensPopup } from '../../hooks/Lens/useControlLensPopup.js'
 import { LensList } from './LensList.js'
 import { FarcasterList } from './FarcasterList.js'
 import { NextIdLensToFireflyLens } from '../../../utils.js'
+import { useControlSocialPopup } from '../../hooks/useControlSocialPopup.js'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -44,7 +44,7 @@ export const SocialPopup = memo(function SocialPopup() {
     const holderRef = useRef<HTMLDivElement>(null)
     const [lensAccounts, setLensAccounts] = useState<FireflyConfigAPI.LensAccount[]>([])
     const [farcasterAccounts, setFarcasterAccounts] = useState<FireflyConfigAPI.FarcasterProfile[]>([])
-    const active = useControlLensPopup(holderRef)
+    const active = useControlSocialPopup(holderRef)
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
     const anchorElRef = useRef<HTMLElement | null>(undefined)
 
