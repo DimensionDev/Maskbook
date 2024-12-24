@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-20 06:15\n"
+"PO-Revision-Date: 2024-12-24 04:49\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -81,7 +81,7 @@ msgstr "すべて（{0} NFT）"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Amount"
-#~ msgstr "量"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Amount Each"
@@ -102,7 +102,7 @@ msgstr "添付メッセージ"
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Best Wishes"
-#~ msgstr "祝福語"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -132,7 +132,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketDialog.tsx
 #~ msgid "Choose your collection"
-#~ msgstr "コレクションを選択してください"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -258,15 +258,15 @@ msgstr "作成時間:"
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Creator:"
-#~ msgstr "作成者"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
-#~ msgstr "Lucky Drop送信者をカスタマイズします。レンズまたはForecasterユーザー名を選択するか、現在接続されているウォレットを使用してください。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Drop Type"
-#~ msgstr "ドロップ種別"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Edit"
@@ -287,7 +287,7 @@ msgstr "各金額を入力"
 
 #: src/SiteAdaptor/RedPacketERC20Form.tsx
 #~ msgid "Enter number of winners"
-#~ msgstr "入賞者数を入力してください"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Number of Winners"
@@ -295,7 +295,7 @@ msgstr "共有を入力"
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Enter the amount that each winner can claim"
-#~ msgstr "各勝者が受け取れる金額を入力してください"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Enter Total Amount"
@@ -350,8 +350,7 @@ msgid "Grow your followers and engagement with Lucky Drop on Firefly mobile app 
 msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
@@ -378,7 +377,7 @@ msgstr "同じ"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Image Preview"
-#~ msgstr "画像プレビュー"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Insufficient {0} Balance"
@@ -438,7 +437,7 @@ msgstr "メッセージ"
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #: src/SiteAdaptor/RedPacketDialog.tsx
 #~ msgid "More details"
-#~ msgstr "詳細"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ClaimRecord.tsx
 msgid "My wallet"
@@ -463,11 +462,11 @@ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "No"
-#~ msgstr "いいえ"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketHistoryDetails.tsx
 #~ msgid "No claims yet for this Lucky Drop"
-#~ msgstr "このラッキードロップの請求はまだありません。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/History.tsx
 msgid "No Lucky Drops claimed"
@@ -494,11 +493,11 @@ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Number of Winners"
-#~ msgstr "当選者数"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Post on"
-#~ msgstr "投稿先:"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Random"
@@ -510,11 +509,11 @@ msgstr "ランダム金額"
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Received"
-#~ msgstr "獲得済み"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Received time:"
-#~ msgstr "受け取り時刻"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Recommended dimensions: 1016 × 672 px"
@@ -600,7 +599,7 @@ msgstr "共有"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Share From"
-#~ msgstr "共有先"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Something went wrong."
@@ -683,7 +682,7 @@ msgstr "合計金額"
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Total amount shared among all winners"
-#~ msgstr "受賞者の合計金額"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Total cost"
@@ -737,7 +736,7 @@ msgstr "1つまたは複数のルールを設定して、Lucky Dropを獲得す�
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
-#~ msgstr "このラッキードロップを送信すると、請求されていない金額を24時間後に引き出すことができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "You can withdraw the remaining balance 24 hours after sending the lucky drop."
@@ -745,7 +744,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
-#~ msgstr "残りの残高は、送金後24時間後に引き出すことができます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "You claimed {0} ${1}."
@@ -774,3 +773,4 @@ msgstr ""
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""
+
