@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:57\n"
+"PO-Revision-Date: 2024-12-24 04:49\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -165,3 +165,4 @@ msgstr "あなたのプロフィールをFireflyで見る"
 #: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"
+
