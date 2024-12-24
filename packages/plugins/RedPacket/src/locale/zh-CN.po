@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-20 06:15\n"
+"PO-Revision-Date: 2024-12-24 04:49\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -102,7 +102,7 @@ msgstr "附加信息"
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Best Wishes"
-#~ msgstr "祝福语"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -132,7 +132,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketDialog.tsx
 #~ msgid "Choose your collection"
-#~ msgstr "选择您的 NFT 系列"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -350,8 +350,7 @@ msgid "Grow your followers and engagement with Lucky Drop on Firefly mobile app 
 msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
@@ -745,7 +744,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketConfirmDialog.tsx
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
-#~ msgstr "您可以在发送红包24小时后提取红包余额。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "You claimed {0} ${1}."
@@ -774,3 +773,4 @@ msgstr ""
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr ""
+
