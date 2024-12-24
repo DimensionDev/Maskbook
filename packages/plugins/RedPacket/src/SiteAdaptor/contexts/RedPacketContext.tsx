@@ -33,6 +33,12 @@ interface RedPacketContextOptions {
     message: string
     setMessage: Dispatch<SetStateAction<string>>
     creator: string
+    conditions: string[]
+    setConditions: Dispatch<SetStateAction<string[]>>
+    tokenQuantity: string
+    setTokenQuantity: Dispatch<SetStateAction<string>>
+    nftQuantity: number
+    setNftQuantity: Dispatch<SetStateAction<number>>
     // Token
     token: FungibleToken<ChainId, SchemaType> | undefined
     setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | undefined>>
@@ -67,6 +73,12 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     message: '',
     setMessage: noop,
     creator: '',
+    conditions: EMPTY_LIST,
+    setConditions: noop,
+    nftQuantity: 0,
+    setNftQuantity: noop,
+    tokenQuantity: '',
+    setTokenQuantity: noop,
     // Token
     token: undefined,
     setToken: noop,
@@ -103,6 +115,9 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         () => (customThemes ? [...PRESET_THEMES, ...customThemes] : PRESET_THEMES),
         [customThemes],
     )
+    const [conditions, setConditions] = useState<string[]>([])
+    const [tokenQuantity, setTokenQuantity] = useState('')
+    const [nftQuantity, setNftQuantity] = useState(0)
 
     // Token
     const [rawAmount, setRawAmount] = useState('')
@@ -154,6 +169,13 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             message,
             setMessage,
             creator,
+            conditions,
+            setConditions,
+            tokenQuantity,
+            setTokenQuantity,
+            nftQuantity,
+            setNftQuantity,
+
             // Token
             token,
             setToken,
@@ -178,8 +200,6 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             setCollection,
         }
     }, [
-        selectedNfts,
-        myNfts,
         gasOption,
         theme,
         allThemes,
@@ -190,11 +210,16 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         nativeToken,
         rawAmount,
         creator,
+        conditions,
+        tokenQuantity,
+        nftQuantity,
         isRandom,
         shares,
         selectOption,
         collection,
         nftGasOption,
+        myNfts,
+        selectedNfts,
     ])
 
     return <RedPacketContext.Provider value={contextValue}>{children}</RedPacketContext.Provider>

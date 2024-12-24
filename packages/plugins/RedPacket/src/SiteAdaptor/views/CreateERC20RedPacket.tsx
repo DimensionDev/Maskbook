@@ -36,6 +36,7 @@ import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateParams } from '../hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from '../hooks/useDefaultCreateGas.js'
+import { ConditionSettings } from '../components/ConditionSettings.js'
 
 const useStyles = makeStyles()((theme) => ({
     fields: {
@@ -120,6 +121,9 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
         color: theme.palette.maskColor.second,
+    },
+    fieldValue: {
+        marginLeft: 'auto',
     },
     gasSettings: {
         margin: 0,
@@ -402,6 +406,12 @@ export function CreateERC20RedPacket() {
                         maxAmountShares={isRandom || !shares ? 1 : shares}
                     />
                 </div>
+                <Box className={classes.field}>
+                    <Typography className={classes.label}>
+                        <Trans>Claim Conditions</Trans>
+                    </Typography>
+                    <ConditionSettings className={classes.fieldValue} />
+                </Box>
                 {pluginID === NetworkPluginID.PLUGIN_EVM ?
                     <SelectGasSettingsToolbar
                         classes={{ label: classes.label, root: classes.gasSettings }}
