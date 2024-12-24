@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-20 06:15\n"
+"PO-Revision-Date: 2024-12-24 04:49\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -435,6 +435,7 @@ msgstr "crwdns30862:0{0}crwdne30862:0"
 
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/Context.tsx
 #: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
@@ -757,6 +758,10 @@ msgstr "crwdns30960:0crwdne30960:0"
 #: src/UI/components/SettingsBoard/Context.tsx
 msgid "Instant"
 msgstr "crwdns30962:0crwdne30962:0"
+
+#: src/UI/components/UploadDropArea/index.tsx
+msgid "Invalid file type"
+msgstr "crwdns36172:0crwdne36172:0"
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
 msgid "Invalid Network"
