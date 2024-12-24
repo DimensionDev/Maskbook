@@ -139,4 +139,3 @@ msgstr "提取"
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
 msgstr "提取 {0}"
-

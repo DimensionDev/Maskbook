@@ -92,4 +92,3 @@ msgstr "ウォレットのサインに失敗しました。"
 #: src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
 msgstr "ウォレットのサインは成功しました。"
-
