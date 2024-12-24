@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:57\n"
+"PO-Revision-Date: 2024-12-24 04:50\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -268,3 +268,4 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx
 msgid "You need to know before using SmartPay:"
 msgstr "在使用 Smart Pay 前需要知道的事："
+
