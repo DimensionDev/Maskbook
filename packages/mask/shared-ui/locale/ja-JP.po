@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:56\n"
+"PO-Revision-Date: 2024-12-24 04:49\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -2962,7 +2962,7 @@ msgstr "ウォレットグループ{0}"
 
 #: popups/pages/Wallet/ConnectedSites/index.tsx
 #~ msgid "Wallet name is connected to these sites, they can view your account address."
-#~ msgstr "ウォレット名はこれらのサイトに接続されています。あなたのアカウントアドレスを表示できます。"
+#~ msgstr ""
 
 #: popups/modals/WalletRenameModal/index.tsx
 #: popups/modals/WalletRenameModal/index.tsx
@@ -3059,3 +3059,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on"
 msgstr ""
+
