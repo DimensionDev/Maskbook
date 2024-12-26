@@ -1,10 +1,13 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { CheckBoxIndicator, makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
 import { ClickAwayListener, InputBase, Typography } from '@mui/material'
 import { useState, type HTMLProps } from 'react'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
+import { SelectFungibleTokenModal } from '@masknet/shared'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -88,7 +91,8 @@ const useStyles = makeStyles()((theme) => {
 
 export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx } = useStyles()
-    const { conditions, setConditions, tokenQuantity, setTokenQuantity } = useRedPacket()
+    const { conditions, setConditions, tokenQuantity, setTokenQuantity, requiredTokens, setRequiredTokens } =
+        useRedPacket()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
 
     return (
@@ -110,6 +114,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                     anchorEl={anchorEl}
                     placement="bottom-end"
                     popperOptions={{
+                        strategy: 'absolute',
                         modifiers: [
                             {
                                 name: 'offset',
@@ -188,12 +193,21 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                             <Icons.Questions sx={{ ml: 0.5 }} />
                                         </ShadowRootTooltip>
                                     </Typography>
-                                    {conditions.includes('nft') ?
-                                        <Typography className={classes.selectButton}>
-                                            <Trans>Select a token</Trans>
-                                            <Icons.Plus size={16} />
-                                        </Typography>
-                                    :   null}
+                                    <Typography
+                                        className={classes.selectButton}
+                                        onClick={async () => {
+                                            setAnchorEl(null)
+                                            const picked = await SelectFungibleTokenModal.openAndWaitForClose({
+                                                disableNativeToken: false,
+                                                selectedTokens: requiredTokens,
+                                                pluginID: NetworkPluginID.PLUGIN_EVM,
+                                                multiple: true,
+                                            })
+                                            setRequiredTokens(picked as Array<FungibleToken<ChainId, SchemaType>>)
+                                        }}>
+                                        <Trans>Select a token</Trans>
+                                        <Icons.Plus size={16} />
+                                    </Typography>
                                 </div>
                             :   null}
                         </div>

@@ -221,11 +221,11 @@ export function CreateERC20RedPacket() {
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
-            selectedTokens: token ? [token.address] : [],
+            selectedTokens: token ? [token] : [],
             chainId,
             pluginID: NetworkPluginID.PLUGIN_EVM,
         })
-        if (!picked) return
+        if (!picked || Array.isArray(picked)) return
         if (chainId !== picked.chainId) {
             setChainId(picked.chainId as ChainId)
         }

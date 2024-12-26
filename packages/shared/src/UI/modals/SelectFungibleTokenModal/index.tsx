@@ -11,13 +11,12 @@ export interface SelectFungibleTokenModalOpenProps
     okxOnly?: boolean
 }
 
-export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | null
+export type SelectFungibleTokenModalCloseProps = Web3Helper.FungibleTokenAll | Web3Helper.FungibleTokenAll[] | null
 
 export function SelectFungibleTokenModal({
     ref,
 }: SingletonModalProps<SelectFungibleTokenModalOpenProps, SelectFungibleTokenModalCloseProps>) {
     const [okxOnly, setOKXOnly] = useState<boolean>()
-    const [enableManage, setEnableManage] = useState<boolean>()
     const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [keyword, setKeyword] = useState<string>()
@@ -26,14 +25,14 @@ export function SelectFungibleTokenModal({
     const [blacklist, setBlacklist] = useState<string[]>()
     const [disableSearchBar, setDisableSearchBar] = useState<boolean>()
     const [selectedChainId, setSelectedChainId] = useState<Web3Helper.ChainIdAll>()
-    const [selectedTokens, setSelectedTokens] = useState<string[]>()
+    const [selectedTokens, setSelectedTokens] = useState<Web3Helper.FungibleTokenAll[]>()
     const [chains, setChains] = useState<ChainId[]>()
     const [lockChainId, setLockChainId] = useState<boolean>()
+    const [multiple, setMultiple] = useState<boolean>()
     const { data: tokens, isPending } = useOKXTokenList(chainId as ChainId, okxOnly)
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
-            setEnableManage(props.enableManage)
             setOKXOnly(props.okxOnly)
             setPluginID(props.pluginID)
             setChainId(props.chainId)
@@ -46,6 +45,7 @@ export function SelectFungibleTokenModal({
             setSelectedTokens(props.selectedTokens)
             setChains(props.chains)
             setLockChainId(props.lockChainId)
+            setMultiple(props.multiple)
         },
     })
 
@@ -53,10 +53,10 @@ export function SelectFungibleTokenModal({
     return (
         <SelectFungibleTokenDialog
             open
-            enableManage={enableManage}
             pluginID={pluginID}
             chainId={chainId}
             lockChainId={lockChainId}
+            multiple={multiple}
             keyword={keyword}
             whitelist={whitelist}
             title={title}

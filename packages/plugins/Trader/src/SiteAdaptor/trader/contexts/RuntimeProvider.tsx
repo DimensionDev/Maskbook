@@ -12,7 +12,7 @@ export interface RuntimeOptions {
     pickToken(
         currentToken: Web3Helper.FungibleTokenAll | null | undefined,
         side: 'from' | 'to',
-        excludes: string[],
+        excludes: Web3Helper.FungibleTokenAll[],
     ): Promise<Web3Helper.FungibleTokenAll | null>
     showToolTip(options: ShowTooltipOptions): void
     showSnackbar(text: SnackbarMessage, options?: ShowSnackbarOptions): SnackbarKey

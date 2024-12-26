@@ -1,9 +1,7 @@
-import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
-import { uniqBy } from 'lodash-es'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { EMPTY_LIST, EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
 import { SearchableList, makeStyles, type MaskSearchableListProps, type MaskTextFieldProps } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { AddressType } from '@masknet/web3-shared-evm'
 import {
     useAccount,
     useAddressType,
@@ -16,8 +14,8 @@ import {
     useFungibleTokensFromTokenList,
     useNetworkContext,
     useTrustedFungibleTokens,
-    useWeb3Utils,
     useWeb3State,
+    useWeb3Utils,
 } from '@masknet/web3-hooks-base'
 import {
     CurrencyType,
@@ -28,51 +26,43 @@ import {
     toZero,
     type FungibleToken,
 } from '@masknet/web3-shared-base'
-import { Box, Stack } from '@mui/material'
+import { AddressType } from '@masknet/web3-shared-evm'
+import { Stack } from '@mui/material'
+import { uniqBy } from 'lodash-es'
+import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
-import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 export * from './type.js'
 
 const SEARCH_KEYS = ['address', 'symbol', 'name']
 
 export interface FungibleTokenListProps<T extends NetworkPluginID>
-    extends withClasses<'channel' | 'bar' | 'listBox' | 'searchInput'>,
+    extends withClasses<'channel' | 'listBox' | 'searchInput'>,
         Pick<MaskSearchableListProps<never>, 'disableSearch' | 'loading' | 'FixedSizeListProps'> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
     blacklist?: string[]
-    tokens?: Array<FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    tokens?: Web3Helper.FungibleTokenAll[]
     /** Extend tokens inside by adding trusted tokens and so on */
     extendTokens?: boolean
     selectedChainId?: Web3Helper.ChainIdAll
-    selectedTokens?: string[]
+    selectedTokens?: Web3Helper.FungibleTokenAll[]
 
-    onSelect?(token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null): void
+    onSelect?(token: Web3Helper.FungibleTokenAll | null): void
 
     onSearchError?(error: boolean): void
 
     SearchTextFieldProps?: MaskTextFieldProps
-    enableManage?: boolean
     isHiddenChainIcon?: boolean
 
-    setMode?(mode: TokenListMode): void
     mode?: TokenListMode
 }
 
 const useStyles = makeStyles()({
     channel: {
         width: '100%',
-    },
-    bar: {
-        position: 'absolute',
-        flexShrink: 0,
-        bottom: 0,
-        left: 0,
-        right: 0,
     },
 })
 
@@ -88,9 +78,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         FixedSizeListProps,
         selectedChainId,
         selectedTokens = EMPTY_LIST,
-        enableManage = false,
         isHiddenChainIcon = true,
-        setMode,
         mode = TokenListMode.List,
     } = props
     const { classes } = useStyles()
@@ -250,22 +238,18 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #region add token by address
     const [keyword, setKeyword] = useState('')
 
-    const { value: addressType } = useAddressType(pluginID, !Utils.isValidAddress?.(keyword ?? '') ? '' : keyword, {
+    const { value: addressType } = useAddressType(pluginID, !Utils.isValidAddress(keyword ?? '') ? '' : keyword, {
         chainId,
     })
 
     const isAddressNotContract = addressType !== AddressType.Contract && Utils.isValidAddress(keyword)
 
     const searchedTokenAddress = useMemo(() => {
-        if (!keyword) return
-
-        return (
-                Utils.isValidAddress(keyword) &&
-                    !sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))
-            ) ?
-                keyword
-            :   ''
+        if (!keyword || !Utils.isValidAddress(keyword)) return
+        if (sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))) return keyword
+        return ''
     }, [keyword, sortedFungibleTokensForList])
+
     const searchError =
         keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
     useEffect(() => {
@@ -276,13 +260,12 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         chainId,
     })
 
-    const isCustomToken = useMemo(
-        () =>
-            !sortedFungibleTokensForManage.find(
-                (x) => isSameAddress(x.address, searchedToken?.address) && searchedToken?.chainId === x.chainId,
-            ) && Boolean(searchedToken),
-        [sortedFungibleTokensForManage, searchedToken],
-    )
+    const isCustomToken = useMemo(() => {
+        if (!searchedToken) return false
+        return sortedFungibleTokensForManage.some(
+            (x) => isSameAddress(x.address, searchedToken.address) && searchedToken.chainId === x.chainId,
+        )
+    }, [sortedFungibleTokensForManage, searchedToken])
 
     const { data: tokenBalance = '' } = useFungibleTokenBalance(pluginID, searchedToken?.address, {
         chainId,
@@ -305,7 +288,9 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             },
             (address, tokenChainId) => {
                 if (tokenChainId !== selectedChainId) return false
-                return selectedTokens.some((x) => isSameAddress(x, address))
+                return selectedTokens.some((x) =>
+                    typeof x === 'string' ? isSameAddress(x, address) : isSameAddress(x.address, address),
+                )
             },
             mode,
             async (
@@ -392,11 +377,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 FixedSizeListProps={FixedSizeListProps}
                 SearchFieldProps={SearchFieldProps}
             />
-            {mode === TokenListMode.List && enableManage && !props.loading ?
-                <Box className={classes.bar}>
-                    <ManageTokenListBar onEdit={() => setMode?.(TokenListMode.Manage)} />
-                </Box>
-            :   null}
         </Stack>
     )
 }

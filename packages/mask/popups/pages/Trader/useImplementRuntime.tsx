@@ -19,7 +19,7 @@ export function useImplementRuntime() {
         async (
             currentToken: Web3Helper.FungibleTokenAll | null | undefined,
             side: 'from' | 'to',
-            excludes: string[],
+            excludes: Web3Helper.FungibleTokenAll[],
         ): Promise<Web3Helper.FungibleTokenAll | null> => {
             const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
 
@@ -32,7 +32,7 @@ export function useImplementRuntime() {
                 lockChainId: isSwap && side === 'to' && !!fromChainId,
                 assetSource: AssetSource.Okx,
             })
-            if (!picked) return null
+            if (!picked || Array.isArray(picked)) return null
             return {
                 id: picked.address,
                 chainId: picked.chainId,

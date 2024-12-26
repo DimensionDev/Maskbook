@@ -18,10 +18,10 @@ export function useImplementRuntime(): RuntimeOptions {
         async (
             currentToken: Web3Helper.FungibleTokenAll | null | undefined,
             side: 'from' | 'to',
-            excludes: string[],
+            excludes: Web3Helper.FungibleTokenAll[],
         ): Promise<Web3Helper.FungibleTokenAll | null> => {
             const supportedChains = chainQuery.data ?? (await chainQuery.refetch()).data
-            return SelectFungibleTokenModal.openAndWaitForClose({
+            const picked = await SelectFungibleTokenModal.openAndWaitForClose({
                 disableNativeToken: false,
                 selectedTokens: excludes,
                 // Only from token can decide the chain
@@ -31,6 +31,8 @@ export function useImplementRuntime(): RuntimeOptions {
                 okxOnly: true,
                 lockChainId: isSwap && side === 'to' && !!fromChainId,
             })
+            if (!picked || Array.isArray(picked)) return null
+            return picked
         },
         [isSwap, chainQuery.data, fromChainId],
     )

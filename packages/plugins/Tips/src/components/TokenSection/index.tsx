@@ -29,9 +29,9 @@ export function TokenSection(props: HTMLProps<HTMLDivElement>) {
             pluginID,
             chainId,
             disableNativeToken: false,
-            selectedTokens: token ? [token.address] : [],
+            selectedTokens: token ? [token] : [],
         })
-        if (!picked) return
+        if (!picked || Array.isArray(picked)) return
         if (chainId !== picked.chainId) {
             setTargetChainId(picked.chainId)
         }

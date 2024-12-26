@@ -242,7 +242,7 @@ export function TradeView() {
                                     const picked = await pickToken(
                                         fromToken,
                                         'from',
-                                        isSwap && toToken?.address ? [toToken.address] : [],
+                                        isSwap && toToken?.address ? [toToken] : [],
                                     )
                                     if (picked) {
                                         setInputAmount('')
@@ -343,7 +343,7 @@ export function TradeView() {
                                     const picked = await pickToken(
                                         toToken,
                                         'to',
-                                        isSwap && fromToken ? [fromToken.address] : [],
+                                        isSwap && fromToken ? [fromToken] : [],
                                     )
                                     if (picked) setToToken(picked)
                                 }}>

@@ -1,3 +1,5 @@
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, EnhanceableSite, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useRowSize } from '@masknet/shared-base-ui'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
@@ -10,7 +12,6 @@ import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { Trans } from '@lingui/react/macro'
 
 interface StyleProps {
     compact: boolean
@@ -56,7 +57,7 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
 export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID>
     extends Pick<
         FungibleTokenListProps<T>,
-        'extendTokens' | 'pluginID' | 'enableManage' | 'selectedTokens' | 'blacklist' | 'whitelist' | 'loading'
+        'extendTokens' | 'pluginID' | 'selectedTokens' | 'blacklist' | 'whitelist' | 'loading'
     > {
     open: boolean
     chainId?: Web3Helper.Definition[T]['ChainId']
@@ -72,6 +73,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     selectedChainId?: Web3Helper.Definition[T]['ChainId']
     onClose(token: Web3Helper.FungibleTokenAll | null): void
     onChainChange?(chainId: Web3Helper.Definition[T]['ChainId']): void
+    multiple?: boolean
 }
 
 export function SelectFungibleTokenDialog({
@@ -79,6 +81,7 @@ export function SelectFungibleTokenDialog({
     pluginID,
     chainId,
     lockChainId = false,
+    multiple,
     disableSearchBar,
     loading,
     disableNativeToken,
@@ -90,12 +93,11 @@ export function SelectFungibleTokenDialog({
     selectedChainId,
     selectedTokens = EMPTY_LIST,
     title,
-    enableManage = true,
     onClose,
     onChainChange,
 }: SelectFungibleTokenDialogProps) {
     const { networkIdentifier } = useBaseUIRuntime()
-    const [mode, setMode] = useState(TokenListMode.List)
+    const [mode, setMode] = useState(multiple ? TokenListMode.Select : TokenListMode.List)
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const { classes } = useStyles({ compact, isList: mode === TokenListMode.List })
@@ -119,14 +121,20 @@ export function SelectFungibleTokenDialog({
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
             open={open}
             onClose={() => {
-                mode === TokenListMode.List ? onClose(null) : setMode(TokenListMode.List)
+                if (mode === TokenListMode.Select || mode === TokenListMode.List) {
+                    onClose(null)
+                } else {
+                    // Reset to list
+                    setMode(TokenListMode.List)
+                }
             }}
             title={
                 title ? title
                 : mode === TokenListMode.Manage ?
                     <Trans>Manage Token List</Trans>
                 :   <Trans>Select</Trans>
-            }>
+            }
+            titleTail={<Icons.Plus size={24} onClick={() => setMode(TokenListMode.Manage)} />}>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={classes.container}>
                     {!lockChainId && currentPluginID === NetworkPluginID.PLUGIN_EVM ?
@@ -141,13 +149,11 @@ export function SelectFungibleTokenDialog({
                     :   null}
                     <FungibleTokenList
                         mode={mode}
-                        setMode={setMode}
                         pluginID={currentPluginID}
                         chainId={chainId}
                         tokens={tokens ?? EMPTY_LIST}
                         extendTokens={extendTokens}
                         whitelist={whitelist}
-                        enableManage={enableManage}
                         blacklist={
                             disableNativeToken && nativeTokenAddress ? [nativeTokenAddress, ...blacklist] : blacklist
                         }

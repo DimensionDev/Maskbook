@@ -37,6 +37,8 @@ interface RedPacketContextOptions {
     setConditions: Dispatch<SetStateAction<string[]>>
     tokenQuantity: string
     setTokenQuantity: Dispatch<SetStateAction<string>>
+    requiredTokens: Array<FungibleToken<ChainId, SchemaType>>
+    setRequiredTokens: Dispatch<SetStateAction<Array<FungibleToken<ChainId, SchemaType>>>>
     nftQuantity: number
     setNftQuantity: Dispatch<SetStateAction<number>>
     // Token
@@ -75,10 +77,12 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     creator: '',
     conditions: EMPTY_LIST,
     setConditions: noop,
-    nftQuantity: 0,
-    setNftQuantity: noop,
+    requiredTokens: EMPTY_LIST,
+    setRequiredTokens: noop,
     tokenQuantity: '',
     setTokenQuantity: noop,
+    nftQuantity: 0,
+    setNftQuantity: noop,
     // Token
     token: undefined,
     setToken: noop,
@@ -117,6 +121,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     )
     const [conditions, setConditions] = useState<string[]>([])
     const [tokenQuantity, setTokenQuantity] = useState('')
+    const [requiredTokens, setRequiredTokens] = useState<Array<FungibleToken<ChainId, SchemaType>>>([])
     const [nftQuantity, setNftQuantity] = useState(0)
 
     // Token
@@ -173,6 +178,8 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             setConditions,
             tokenQuantity,
             setTokenQuantity,
+            requiredTokens,
+            setRequiredTokens,
             nftQuantity,
             setNftQuantity,
 
@@ -212,6 +219,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         creator,
         conditions,
         tokenQuantity,
+        requiredTokens,
         nftQuantity,
         isRandom,
         shares,

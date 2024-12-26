@@ -1,19 +1,19 @@
-import { memo, useMemo } from 'react'
-import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
-import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { TokenIcon } from '../TokenIcon/index.js'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, CheckBoxIndicator, LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { makeStyles, LoadingBase, ActionButton } from '@masknet/theme'
-import { TokenListMode } from './type.js'
-import { SettingSwitch } from '../SettingSwitch/index.js'
-import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
+import { useFungibleTokenBalance, useNetwork, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { formatBalance, type FungibleToken } from '@masknet/web3-shared-base'
+import { Box, Link, ListItem, ListItemIcon, ListItemText, Typography } from '@mui/material'
+import { memo, useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { FormattedBalance } from '../../wallet/index.js'
 import { DotLoading, NetworkIcon } from '../index.js'
-import { useAsyncFn } from 'react-use'
-import { Trans } from '@lingui/react/macro'
+import { SettingSwitch } from '../SettingSwitch/index.js'
+import { TokenIcon } from '../TokenIcon/index.js'
+import { TokenListMode } from './type.js'
+import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {
@@ -109,7 +109,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
     isCustomToken?: boolean,
 ) => {
     return memo(({ data, index, style }: any) => {
-        const { classes } = useStyles()
+        const { classes, theme } = useStyles()
         const Utils = useWeb3Utils()
 
         const token = data.dataSet[index]
@@ -178,6 +178,9 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                         }
                     </>
                 )
+            }
+            if (mode === TokenListMode.Select) {
+                return <CheckBoxIndicator color={theme.palette.maskColor.primary} checked={selected} />
             }
             return (
                 <Typography className={classes.balance}>
