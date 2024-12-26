@@ -48,7 +48,7 @@ export const CoinIcon = memo<CoinIconProps>(function CoinIcon({
     })
     return (
         <Box className={cx(classes.icon, rest.className)}>
-            <TokenIcon chainId={chainId} address={address || ''} size={tokenIconSize} logoURL={logoURL} />
+            <TokenIcon chainId={chainId} address={address || ''} size={tokenIconSize} logoURL={logoURL} disableBadge />
             {chainId && !disableBadge ?
                 <NetworkIcon
                     pluginID={NetworkPluginID.PLUGIN_EVM}

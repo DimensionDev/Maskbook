@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNativeTokenAddress, useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { DialogContent, inputClasses, useMediaQuery, type Theme } from '@mui/material'
+import { Button, DialogActions, DialogContent, inputClasses, useMediaQuery, type Theme } from '@mui/material'
 import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
@@ -52,6 +52,14 @@ const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
     wrapper: {
         paddingBottom: theme.spacing(6),
     },
+    dialogActions: {
+        padding: 16,
+        boxSizing: 'border-box',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+    },
 }))
 
 export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = NetworkPluginID>
@@ -71,7 +79,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     disableSearchBar?: boolean
     disableNativeToken?: boolean
     selectedChainId?: Web3Helper.Definition[T]['ChainId']
-    onClose(token: Web3Helper.FungibleTokenAll | null): void
+    onClose(token: Web3Helper.FungibleTokenAll | Web3Helper.FungibleTokenAll[] | null): void
     onChainChange?(chainId: Web3Helper.Definition[T]['ChainId']): void
     multiple?: boolean
 }
@@ -116,6 +124,7 @@ export function SelectFungibleTokenDialog({
         () => ({ itemSize: rowSize + 18.5, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
         [rowSize, isMdScreen],
     )
+    const [pendingSelectedTokens, setPendingSelectedTokens] = useState(selectedTokens)
     return (
         <InjectedDialog
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
@@ -160,7 +169,8 @@ export function SelectFungibleTokenDialog({
                         disableSearch={disableSearchBar}
                         loading={loading}
                         selectedChainId={selectedChainId}
-                        selectedTokens={selectedTokens}
+                        selectedTokens={pendingSelectedTokens}
+                        onSelectedChange={setPendingSelectedTokens}
                         onSelect={onClose}
                         FixedSizeListProps={FixedSizeListProps}
                         SearchTextFieldProps={{
@@ -170,6 +180,17 @@ export function SelectFungibleTokenDialog({
                     />
                 </div>
             </DialogContent>
+            <DialogActions className={classes.dialogActions}>
+                <Button
+                    variant="contained"
+                    disabled={selectedTokens?.length > 0}
+                    fullWidth
+                    onClick={() => {
+                        onClose(pendingSelectedTokens)
+                    }}>
+                    <Trans>Confirm</Trans>
+                </Button>
+            </DialogActions>
         </InjectedDialog>
     )
 }

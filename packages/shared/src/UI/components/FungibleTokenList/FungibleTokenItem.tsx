@@ -99,7 +99,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
     mode: TokenListMode,
     addOrRemoveTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-        strategy: 'add' | 'remove',
+        strategy?: 'add' | 'remove',
     ) => Promise<void>,
     trustOrBlockTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
@@ -214,7 +214,13 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                     key={address}
                     button
                     className={`${classes.list} dashboard token-list`}
-                    onClick={mode === TokenListMode.List ? () => onSelect(token) : undefined}
+                    onClick={() => {
+                        if (mode === TokenListMode.List) {
+                            onSelect(token)
+                        } else if (mode === TokenListMode.Select) {
+                            addOrRemoveTokenToLocal(token)
+                        }
+                    }}
                     disabled={!!(selected && mode === TokenListMode.List)}>
                     <ListItemIcon>
                         <Box position="relative">

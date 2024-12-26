@@ -49,7 +49,8 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
     extendTokens?: boolean
     selectedChainId?: Web3Helper.ChainIdAll
     selectedTokens?: Web3Helper.FungibleTokenAll[]
-
+    /** Callback when selected tokens changed */
+    onSelectedChange?: (tokens: Web3Helper.FungibleTokenAll[]) => void
     onSelect?(token: Web3Helper.FungibleTokenAll | null): void
 
     onSearchError?(error: boolean): void
@@ -78,6 +79,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         FixedSizeListProps,
         selectedChainId,
         selectedTokens = EMPTY_LIST,
+        onSelectedChange,
         isHiddenChainIcon = true,
         mode = TokenListMode.List,
     } = props
@@ -287,18 +289,28 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 return 'external'
             },
             (address, tokenChainId) => {
-                if (tokenChainId !== selectedChainId) return false
+                if (selectedChainId && tokenChainId !== selectedChainId) return false
                 return selectedTokens.some((x) =>
-                    typeof x === 'string' ? isSameAddress(x, address) : isSameAddress(x.address, address),
+                    typeof x === 'string' ?
+                        isSameAddress(x, address)
+                    :   isSameAddress(x.address, address) && x.chainId === tokenChainId,
                 )
             },
             mode,
             async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-                strategy: 'add' | 'remove',
+                strategy?: 'add' | 'remove',
             ) => {
-                if (strategy === 'add') await Token?.addToken?.(account, token)
-                if (strategy === 'remove') await Token?.removeToken?.(account, token)
+                if (mode === TokenListMode.Manage) {
+                    if (strategy === 'add') await Token?.addToken?.(account, token)
+                    if (strategy === 'remove') await Token?.removeToken?.(account, token)
+                } else if (mode === TokenListMode.Select) {
+                    const selected = selectedTokens.find(
+                        (x) => isSameAddress(x.address, token.address) && x.chainId === token.chainId,
+                    )
+                    const result = selected ? selectedTokens.filter((x) => x !== selected) : [...selectedTokens, token]
+                    onSelectedChange?.(result)
+                }
             },
             async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,

@@ -3,17 +3,17 @@ import { Icons, type GeneratedIconProps } from '@masknet/icons'
 
 interface Props extends GeneratedIconProps {
     checked?: boolean
-    unCheckedButtonColor?: string
-    checkedButtonColor?: string
+    uncheckedColor?: string
+    checkedColor?: string
 }
 
 export const CheckBoxIndicator = memo<Props>(function CheckBoxIndicator({
     checked,
-    unCheckedButtonColor,
-    checkedButtonColor,
+    uncheckedColor,
+    checkedColor,
     ...rest
 }) {
     return checked ?
-            <Icons.Checkbox {...rest} color={checkedButtonColor} />
-        :   <Icons.CheckboxBlank {...rest} color={unCheckedButtonColor} />
+            <Icons.Checkbox {...rest} color={checkedColor || rest.color} />
+        :   <Icons.CheckboxBlank {...rest} color={uncheckedColor || rest.color} />
 })

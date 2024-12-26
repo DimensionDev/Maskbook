@@ -107,8 +107,8 @@ export const CollectibleCard = memo(
                         size={20}
                         checked={isSelected}
                         className={classes.indicator}
-                        checkedButtonColor={theme.palette.maskColor.primary}
-                        unCheckedButtonColor={theme.palette.maskColor.secondaryLine}
+                        checkedColor={theme.palette.maskColor.primary}
+                        uncheckedColor={theme.palette.maskColor.secondaryLine}
                     />
                 :   null}
             </div>

@@ -48,6 +48,7 @@ export function SelectFungibleTokenModal({
             setMultiple(props.multiple)
         },
     })
+    console.log({ selectedTokens, tokens })
 
     if (!open) return null
     return (

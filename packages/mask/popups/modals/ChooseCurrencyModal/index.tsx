@@ -63,7 +63,7 @@ const CurrencyItem = memo(function CurrencyItem({ fiatCurrencyType }: CurrencyIt
                 <FiatCurrencyIcon type={fiatCurrencyType} size={24} />
                 <Typography className={classes.text}>{resolveCurrencyFullName(fiatCurrencyType)}</Typography>
             </Box>
-            <RadioIndicator size={20} checked={checked} unCheckedButtonColor={theme.palette.maskColor.secondaryLine} />
+            <RadioIndicator size={20} checked={checked} uncheckedColor={theme.palette.maskColor.secondaryLine} />
         </li>
     )
 })

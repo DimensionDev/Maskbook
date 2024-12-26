@@ -3,17 +3,12 @@ import { Icons, type GeneratedIconProps } from '@masknet/icons'
 
 interface Props extends GeneratedIconProps {
     checked?: boolean
-    unCheckedButtonColor?: string
-    checkedButtonColor?: string
+    uncheckedColor?: string
+    checkedColor?: string
 }
 
-export const RadioIndicator = memo<Props>(function RadioIndicator({
-    checked,
-    unCheckedButtonColor,
-    checkedButtonColor,
-    ...rest
-}) {
+export const RadioIndicator = memo<Props>(function RadioIndicator({ checked, uncheckedColor, checkedColor, ...rest }) {
     return checked ?
-            <Icons.RadioButtonChecked {...rest} color={checkedButtonColor} />
-        :   <Icons.RadioButtonUnChecked {...rest} color={unCheckedButtonColor} />
+            <Icons.RadioButtonChecked {...rest} color={checkedColor || rest.color} />
+        :   <Icons.RadioButtonUnChecked {...rest} color={uncheckedColor || rest.color} />
 })

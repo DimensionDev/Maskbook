@@ -1,13 +1,13 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { CheckBoxIndicator, makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
+import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { ClickAwayListener, InputBase, Typography } from '@mui/material'
 import { useState, type HTMLProps } from 'react'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
-import { SelectFungibleTokenModal } from '@masknet/shared'
-import type { FungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -85,6 +85,15 @@ const useStyles = makeStyles()((theme) => {
             fontSize: 12,
             fontWeight: 700,
             alignSelf: 'flex-start',
+        },
+        assets: {
+            display: 'flex',
+            flexFlow: 'row wrap',
+        },
+        tokenIcon: {
+            width: 20,
+            height: 20,
+            marginRight: '0px !important',
         },
     }
 })
@@ -193,6 +202,22 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                             <Icons.Questions sx={{ ml: 0.5 }} />
                                         </ShadowRootTooltip>
                                     </Typography>
+                                    {requiredTokens.length ?
+                                        <div className={classes.assets}>
+                                            {requiredTokens.map((token) => {
+                                                return (
+                                                    <TokenIcon
+                                                        key={token.address}
+                                                        className={classes.tokenIcon}
+                                                        address={token.address}
+                                                        name={token.name}
+                                                        chainId={token.chainId}
+                                                        logoURL={token.logoURL}
+                                                    />
+                                                )
+                                            })}
+                                        </div>
+                                    :   null}
                                     <Typography
                                         className={classes.selectButton}
                                         onClick={async () => {
@@ -203,10 +228,20 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                                 pluginID: NetworkPluginID.PLUGIN_EVM,
                                                 multiple: true,
                                             })
-                                            setRequiredTokens(picked as Array<FungibleToken<ChainId, SchemaType>>)
+                                            if (picked) {
+                                                setRequiredTokens(picked as Array<FungibleToken<ChainId, SchemaType>>)
+                                            }
                                         }}>
-                                        <Trans>Select a token</Trans>
-                                        <Icons.Plus size={16} />
+                                        {requiredTokens.length ?
+                                            <>
+                                                <Trans>Adjust Selection</Trans>
+                                                <Icons.Filter size={16} />
+                                            </>
+                                        :   <>
+                                                <Trans>Select a token</Trans>
+                                                <Icons.Plus size={16} />
+                                            </>
+                                        }
                                     </Typography>
                                 </div>
                             :   null}
