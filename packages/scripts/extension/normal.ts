@@ -1,8 +1,10 @@
 import { compact } from 'lodash-es'
-import { awaitChildProcess, PKG_PATH, shell } from '../utils/index.ts'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { PKG_PATH } from '../utils/paths.ts'
+import { shell } from '../utils/run.ts'
 import type { BuildFlagsExtended } from './flags.ts'
-import { fileURLToPath } from 'url'
-import { createRequire } from 'module'
+import { fileURLToPath } from 'node:url'
+import { createRequire } from 'node:module'
 
 export async function extensionWatch(f: BuildFlagsExtended) {
     return runBundler('webpack', f)

@@ -113,7 +113,7 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx turbo test
+      - run: npx turbo --ui=tui test
   eslint:
     runs-on: ubuntu-latest
     permissions:

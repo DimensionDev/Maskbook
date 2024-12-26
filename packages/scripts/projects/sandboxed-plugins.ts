@@ -4,11 +4,9 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { isAbsolute, join, relative } from 'node:path'
 import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
-import { awaitTask } from '../utils/task.js'
 import { PKG_PATH, ROOT_PATH } from '../utils/paths.js'
 import { parseJSONc } from '../utils/jsonc.js'
 import { transform } from '@swc/core'
-import { dest, lastRun, parallel, src, type TaskFunction } from 'gulp'
 import { parseArgs } from 'node:util'
 import { getLanguageFamilyName } from '../locale-kit/getLanguageFamilyName.ts'
 
@@ -37,7 +35,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     if (isProduction) local.length = 0
 
     const mv3PreloadList = new Set<string>()
-    const builders = new Map<string, TaskFunction>()
+    const builders = new Map<string, any>()
     const id = new Set<string>()
     const localID = new Set<string>()
 
@@ -103,7 +101,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         internalList[id]!.locales = locales
     }
 
-    const tasks = builders.size && awaitTask(parallel(...builders.values()))
+    const tasks = builders.size && (await Promise.all([...builders.values()]))
     const writeInternalList = writeFile(join(distPath, './plugins.json'), JSON.stringify(internalList, null, 4))
     await Promise.all([tasks, writeInternalList])
     await writeFile(
@@ -142,12 +140,13 @@ interface BuilderOptions {
 function createBuilder({ id, manifestRoot, distPath, onJS, origin }: BuilderOptions) {
     if (id.includes('..') || id.includes('/')) throw new TypeError(`Invalid plugin: ${id}`)
     function compile() {
-        return src(['./**/*'], {
-            since: lastRun(compile),
-            cwd: manifestRoot,
-        })
-            .pipe(new TransformStream(origin, onJS))
-            .pipe(dest(origin, { cwd: distPath }))
+        throw new Error('TODO')
+        // return src(['./**/*'], {
+        //     since: lastRun(compile),
+        //     cwd: manifestRoot,
+        // })
+        //     .pipe(new TransformStream(origin, onJS))
+        // .pipe(dest(origin, { cwd: distPath }))
     }
     return compile
 }

@@ -1,7 +1,7 @@
-import { readdir, readFile } from 'fs/promises'
-import { join, relative } from 'path'
-import { ROOT_PATH } from '../utils/index.ts'
-import { fileURLToPath } from 'url'
+import { readdir, readFile } from 'node:fs/promises'
+import { join, relative } from 'node:path'
+import { ROOT_PATH } from '../utils/paths.ts'
+import { fileURLToPath } from 'node:url'
 
 export async function getLinguiEnabledPackages() {
     const folders: string[] = []

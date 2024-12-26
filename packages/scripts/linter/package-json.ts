@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { ROOT_PATH } from '../utils/paths.ts'
 import { glob } from 'glob'
 

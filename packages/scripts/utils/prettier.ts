@@ -3,7 +3,7 @@ import { ROOT_PATH } from './paths.ts'
 
 export async function prettier(code: string, parser: Options['parser'] = 'typescript', tabWidth = 4) {
     const {
-        default: { format, resolveConfig, resolveConfigFile },
+        default: { format, resolveConfig },
     } = await (import('prettier') as Promise<{ default: typeof import('prettier') }>)
     // https://github.com/prettier/prettier/issues/16344
     // const configPath = await resolveConfigFile(ROOT_PATH)

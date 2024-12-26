@@ -1,14 +1,14 @@
-import { readFileSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { readdir, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { readdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { exists } from 'fs-extra'
 import { prettier } from '../utils/prettier.ts'
 
 await fixPluginsTSConfig()
 async function fixPluginsTSConfig() {
-    const folder = new URL('../../../plugins', import.meta.url)
-    const file = new URL('../../../plugins/tsconfig.json', import.meta.url)
+    const folder = new URL('../../plugins/', import.meta.url)
+    const file = new URL('../../plugins/tsconfig.json', import.meta.url)
     const {
         default: { readConfigFile, formatDiagnostic },
     } = await import('typescript')

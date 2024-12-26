@@ -26,11 +26,10 @@
     "@rspack/cli": "^1.2.7",
     "@rspack/core": "^1.2.7",
     "@types/fs-extra": "^11.0.4",
-    "@types/gulp": "^4.0.17",
     "@types/node": "22.13.9",
     "@types/proper-lockfile": "^4.1.4",
     "@types/yargs": "^17.0.33",
     "gulp-cli": "^3.0.0",
-    "web-ext": "^8.4.0"
+    "web-ext": "^8.3.0"
   }
 }

@@ -1,6 +1,7 @@
-import { readdir, writeFile } from 'fs/promises'
-import { dirname } from 'path'
-import { ROOT_PATH, prettier } from '../utils/index.ts'
+import { readdir, writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
+import { ROOT_PATH } from '../utils/paths.ts'
+import { prettier } from '../utils/prettier.ts'
 import { getLanguageFamilyName } from './getLanguageFamilyName.ts'
 import { glob } from 'glob'
 

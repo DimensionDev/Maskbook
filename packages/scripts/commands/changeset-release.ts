@@ -4,6 +4,7 @@ import { PKG_PATH, ROOT_PATH } from '../utils/paths.ts'
 import { shell } from '../utils/run.ts'
 import { fileURLToPath } from 'node:url'
 
+// TODO: use turbo
 const packages = [
     new URL('./base/', PKG_PATH),
     new URL('./encryption/', PKG_PATH),

@@ -1,7 +1,8 @@
 import { readFile, writeFile } from 'fs/promises'
 import { camelCase, snakeCase, upperFirst } from 'lodash-es'
 import { join, parse as parsePath } from 'path'
-import { PKG_PATH, ROOT_PATH, prettier } from '../utils/index.ts'
+import { PKG_PATH, ROOT_PATH } from '../utils/paths.ts'
+import { prettier } from '../utils/prettier.ts'
 import type { Position } from 'source-map'
 import { fileURLToPath } from 'url'
 

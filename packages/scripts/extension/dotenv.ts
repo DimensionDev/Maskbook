@@ -1,7 +1,7 @@
 import { config } from 'dotenv'
 import { ROOT_PATH } from '../utils/paths.ts'
 import type { BuildFlags } from './flags.ts'
-import { ManifestFile } from '../../../mask/.webpack/flags.ts'
+import { ManifestFile } from '../../mask/.webpack/flags.ts'
 
 export function applyDotEnv(flags: BuildFlags) {
     if (flags.mode === 'production') return

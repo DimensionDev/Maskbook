@@ -1,4 +1,6 @@
-import { awaitChildProcess, printShell, ROOT_PATH, shell } from '../utils/index.ts'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { printShell, shell } from '../utils/run.ts'
+import { ROOT_PATH } from '../utils/paths.ts'
 import { rimraf as rm } from 'rimraf'
 
 await clean()

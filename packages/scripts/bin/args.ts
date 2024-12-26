@@ -2,7 +2,7 @@ import yargs from 'yargs'
 import type { BuildFlagsExtended } from '../extension/flags.ts'
 import { hideBin } from 'yargs/helpers'
 import { applyDotEnv, parseManifest } from '../extension/dotenv.ts'
-import { ManifestFile } from '../../../mask/.webpack/flags.ts'
+import { ManifestFile } from '../../mask/.webpack/flags.ts'
 
 const manifestFiles = Object.values(ManifestFile)
 export function extensionArgsParser(mode: 'development' | 'production') {

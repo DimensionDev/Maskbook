@@ -1,9 +1,8 @@
-import { spawn } from 'child_process'
+import { spawn } from 'node:child_process'
 import { ROOT_PATH } from './paths.ts'
-import { relative } from 'path'
+import { relative } from 'node:path'
 import chalk from 'chalk'
-import { fileURLToPath } from 'url'
-import { markChildProcess } from './exit.ts'
+import { fileURLToPath } from 'node:url'
 
 function logShell(e: string, args: string[], url: URL | string) {
     if (typeof url === 'object') url = fileURLToPath(url)
@@ -21,7 +20,6 @@ function cwdShell(e: string, args: string[], cwd: URL | string) {
         shell: true,
     })
     Object.assign(process, { cwd })
-    markChildProcess(process)
     return process
 }
 export function shell(command: TemplateStringsArray, ...rest: string[]) {
