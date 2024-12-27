@@ -19,12 +19,15 @@ const AllButton = styled(Button)(({ theme }) => ({
     },
 }))
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     sidebar: {
         flexShrink: 0,
         boxSizing: 'border-box',
         overflow: 'auto',
         scrollbarWidth: 'none',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1.5),
         '&::-webkit-scrollbar': {
             display: 'none',
         },
@@ -34,7 +37,6 @@ const useStyles = makeStyles()({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: '12px',
         width: 24,
         minWidth: 24,
         height: 24,
@@ -46,7 +48,7 @@ const useStyles = makeStyles()({
         right: -3,
         bottom: -1,
     },
-})
+}))
 
 interface SelectNetworkSidebarProps extends HTMLProps<HTMLDivElement> {
     networks: Array<ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>>

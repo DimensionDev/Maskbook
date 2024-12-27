@@ -15,21 +15,36 @@ import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
 
 interface StyleProps {
     compact: boolean
-    isList: boolean
 }
 
-const useStyles = makeStyles<StyleProps>()((theme, { compact, isList }) => ({
+const useStyles = makeStyles<StyleProps, 'container' | 'sidebar' | 'tokenList'>()((theme, { compact }, refs) => ({
+    paddedContainer: {
+        [`& .${refs.sidebar}`]: {
+            paddingBottom: 72,
+            overflow: 'auto',
+            height: '100%',
+            boxSizing: 'border-box',
+        },
+        [`& .${refs.tokenList}`]: {
+            paddingBottom: 72,
+            overflow: 'auto',
+            height: '100%',
+            boxSizing: 'border-box',
+        },
+    },
     container: {
         display: 'flex',
         flex: 1,
         width: '100%',
         gap: '16px',
         position: 'relative',
+        minHeight: 0,
     },
-    sidebarContainer: {
+    sidebar: {
         width: 27,
-        height: isList ? 486 : undefined,
+        minHeight: 0,
     },
+    tokenList: {},
     content: {
         ...(compact ? { minWidth: 552 } : {}),
         padding: theme.spacing(2),
@@ -108,7 +123,7 @@ export function SelectFungibleTokenDialog({
     const [mode, setMode] = useState(multiple ? TokenListMode.Select : TokenListMode.List)
     const compact = networkIdentifier === EnhanceableSite.Minds
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
-    const { classes } = useStyles({ compact, isList: mode === TokenListMode.List })
+    const { classes, cx } = useStyles({ compact })
     const isMdScreen = useMediaQuery<Theme>((theme) => theme.breakpoints.down('md'))
     const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
     const networks = useMemo(() => {
@@ -121,8 +136,8 @@ export function SelectFungibleTokenDialog({
     const nativeTokenAddress = useNativeTokenAddress(currentPluginID)
 
     const FixedSizeListProps = useMemo(
-        () => ({ itemSize: rowSize + 18.5, height: isMdScreen ? 300 : 428, className: classes.wrapper }),
-        [rowSize, isMdScreen],
+        () => ({ itemSize: rowSize + 18.5, height: 428, className: classes.wrapper }),
+        [rowSize, isMdScreen, classes.wrapper],
     )
     const [pendingSelectedTokens, setPendingSelectedTokens] = useState(selectedTokens)
     return (
@@ -132,10 +147,9 @@ export function SelectFungibleTokenDialog({
             onClose={() => {
                 if (mode === TokenListMode.Select || mode === TokenListMode.List) {
                     onClose(null)
-                } else {
-                    // Reset to list
-                    setMode(TokenListMode.List)
                 }
+                // reset
+                setMode(TokenListMode.List)
             }}
             title={
                 title ? title
@@ -145,10 +159,10 @@ export function SelectFungibleTokenDialog({
             }
             titleTail={<Icons.Plus size={24} onClick={() => setMode(TokenListMode.Manage)} />}>
             <DialogContent classes={{ root: classes.content }}>
-                <div className={classes.container}>
+                <div className={cx(classes.container, mode === TokenListMode.Select ? classes.paddedContainer : null)}>
                     {!lockChainId && currentPluginID === NetworkPluginID.PLUGIN_EVM ?
                         <SelectNetworkSidebar
-                            className={classes.sidebarContainer}
+                            className={classes.sidebar}
                             hideAllButton
                             chainId={chainId}
                             onChainChange={(chainId) => onChainChange?.(chainId ?? ChainId.Mainnet)}
@@ -157,6 +171,7 @@ export function SelectFungibleTokenDialog({
                         />
                     :   null}
                     <FungibleTokenList
+                        className={classes.tokenList}
                         mode={mode}
                         pluginID={currentPluginID}
                         chainId={chainId}
@@ -180,17 +195,19 @@ export function SelectFungibleTokenDialog({
                     />
                 </div>
             </DialogContent>
-            <DialogActions className={classes.dialogActions}>
-                <Button
-                    variant="contained"
-                    disabled={selectedTokens?.length > 0}
-                    fullWidth
-                    onClick={() => {
-                        onClose(pendingSelectedTokens)
-                    }}>
-                    <Trans>Confirm</Trans>
-                </Button>
-            </DialogActions>
+            {mode === TokenListMode.Select ?
+                <DialogActions className={classes.dialogActions}>
+                    <Button
+                        variant="contained"
+                        disabled={selectedTokens?.length > 0}
+                        fullWidth
+                        onClick={() => {
+                            onClose(pendingSelectedTokens)
+                        }}>
+                        <Trans>Confirm</Trans>
+                    </Button>
+                </DialogActions>
+            :   null}
         </InjectedDialog>
     )
 }

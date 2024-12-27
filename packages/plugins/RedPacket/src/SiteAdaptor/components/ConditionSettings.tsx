@@ -3,6 +3,7 @@ import { Icons } from '@masknet/icons'
 import { SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { CheckBoxIndicator, makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { ClickAwayListener, InputBase, Typography } from '@mui/material'
@@ -90,9 +91,21 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             flexFlow: 'row wrap',
         },
+        asset: {
+            display: 'flex',
+            alignItems: 'center',
+            padding: 2,
+            gap: theme.spacing(1),
+        },
+        assetName: {
+            fontSize: 16,
+            fontWeight: 400,
+            lineHeight: '20px',
+            color: theme.palette.maskColor.main,
+        },
         tokenIcon: {
-            width: 20,
-            height: 20,
+            width: 24,
+            height: 24,
             marginRight: '0px !important',
         },
     }
@@ -103,6 +116,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
     const { conditions, setConditions, tokenQuantity, setTokenQuantity, requiredTokens, setRequiredTokens } =
         useRedPacket()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     return (
         <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
@@ -206,14 +220,19 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                         <div className={classes.assets}>
                                             {requiredTokens.map((token) => {
                                                 return (
-                                                    <TokenIcon
-                                                        key={token.address}
-                                                        className={classes.tokenIcon}
-                                                        address={token.address}
-                                                        name={token.name}
-                                                        chainId={token.chainId}
-                                                        logoURL={token.logoURL}
-                                                    />
+                                                    <div className={classes.asset} key={token.address}>
+                                                        <TokenIcon
+                                                            className={classes.tokenIcon}
+                                                            address={token.address}
+                                                            name={token.name}
+                                                            size={24}
+                                                            chainId={token.chainId}
+                                                            logoURL={token.logoURL}
+                                                        />
+                                                        <Typography className={classes.assetName}>
+                                                            {token.symbol}
+                                                        </Typography>
+                                                    </div>
                                                 )
                                             })}
                                         </div>
@@ -226,6 +245,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                                 disableNativeToken: false,
                                                 selectedTokens: requiredTokens,
                                                 pluginID: NetworkPluginID.PLUGIN_EVM,
+                                                chainId,
                                                 multiple: true,
                                             })
                                             if (picked) {

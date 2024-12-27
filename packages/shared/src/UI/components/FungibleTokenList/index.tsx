@@ -27,7 +27,6 @@ import {
     type FungibleToken,
 } from '@masknet/web3-shared-base'
 import { AddressType } from '@masknet/web3-shared-evm'
-import { Stack } from '@mui/material'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
@@ -39,7 +38,7 @@ const SEARCH_KEYS = ['address', 'symbol', 'name']
 
 export interface FungibleTokenListProps<T extends NetworkPluginID>
     extends withClasses<'channel' | 'listBox' | 'searchInput'>,
-        Pick<MaskSearchableListProps<never>, 'disableSearch' | 'loading' | 'FixedSizeListProps'> {
+        Pick<MaskSearchableListProps<never>, 'disableSearch' | 'loading' | 'FixedSizeListProps' | 'className'> {
     pluginID?: T
     chainId?: Web3Helper.ChainIdAll
     whitelist?: string[]
@@ -83,7 +82,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         isHiddenChainIcon = true,
         mode = TokenListMode.List,
     } = props
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
 
     const { pluginID } = useNetworkContext<T>(props.pluginID)
     const account = useAccount(pluginID)
@@ -371,25 +370,24 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     ])
 
     return (
-        <Stack className={classes.channel}>
-            <SearchableList<
-                FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> & {
-                    balance?: string
-                    isCustomToken?: boolean
-                }
-            >
-                onSelect={handleSelect}
-                onSearch={setKeyword}
-                data={data}
-                searchKey={SEARCH_KEYS}
-                disableSearch={props.disableSearch}
-                loading={props.loading}
-                itemKey="address"
-                itemRender={itemRender}
-                FixedSizeListProps={FixedSizeListProps}
-                SearchFieldProps={SearchFieldProps}
-            />
-        </Stack>
+        <SearchableList<
+            FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> & {
+                balance?: string
+                isCustomToken?: boolean
+            }
+        >
+            className={cx(classes.channel, props.className)}
+            onSelect={handleSelect}
+            onSearch={setKeyword}
+            data={data}
+            searchKey={SEARCH_KEYS}
+            disableSearch={props.disableSearch}
+            loading={props.loading}
+            itemKey="address"
+            itemRender={itemRender}
+            FixedSizeListProps={FixedSizeListProps}
+            SearchFieldProps={SearchFieldProps}
+        />
     )
 }
 
