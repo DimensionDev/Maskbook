@@ -56,6 +56,7 @@ export interface FungibleTokenListProps<T extends NetworkPluginID>
 
     SearchTextFieldProps?: MaskTextFieldProps
     isHiddenChainIcon?: boolean
+    enabled?: boolean
 
     mode?: TokenListMode
 }
@@ -81,6 +82,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         onSelectedChange,
         isHiddenChainIcon = true,
         mode = TokenListMode.List,
+        enabled,
     } = props
     const { classes, cx } = useStyles()
 
@@ -275,8 +277,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     // #endregion
 
     const itemRender = useMemo(() => {
-        return getFungibleTokenItem<T>(
-            (address) => {
+        return getFungibleTokenItem<T>({
+            getSource: (address) => {
                 if (isSameAddress(nativeToken?.address, address)) return 'official-native'
 
                 const inOfficialList = fungibleTokens.some((x) => isSameAddress(x.address, address))
@@ -287,16 +289,15 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
                 return 'external'
             },
-            (address, tokenChainId) => {
-                if (selectedChainId && tokenChainId !== selectedChainId) return false
+            isSelected(address, tokenChainId) {
                 return selectedTokens.some((x) =>
                     typeof x === 'string' ?
-                        isSameAddress(x, address)
+                        isSameAddress(x, address) && tokenChainId === selectedChainId
                     :   isSameAddress(x.address, address) && x.chainId === tokenChainId,
                 )
             },
             mode,
-            async (
+            addOrRemoveTokenToLocal: async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy?: 'add' | 'remove',
             ) => {
@@ -307,11 +308,12 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                     const selected = selectedTokens.find(
                         (x) => isSameAddress(x.address, token.address) && x.chainId === token.chainId,
                     )
+                    if (!enabled && !selected) return
                     const result = selected ? selectedTokens.filter((x) => x !== selected) : [...selectedTokens, token]
                     onSelectedChange?.(result)
                 }
             },
-            async (
+            trustOrBlockTokenToLocal: async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy: 'trust' | 'block',
             ) => {
@@ -320,7 +322,8 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
             },
             isHiddenChainIcon,
             isCustomToken,
-        )
+            enabled,
+        })
     }, [
         chainId,
         nativeToken?.address,
@@ -330,6 +333,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
         fungibleTokens,
         isCustomToken,
         isHiddenChainIcon,
+        enabled,
     ])
     const SearchFieldProps = useMemo(
         () => ({

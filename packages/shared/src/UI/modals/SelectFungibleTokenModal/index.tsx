@@ -29,6 +29,7 @@ export function SelectFungibleTokenModal({
     const [chains, setChains] = useState<ChainId[]>()
     const [lockChainId, setLockChainId] = useState<boolean>()
     const [multiple, setMultiple] = useState<boolean>()
+    const [maxTokens, setMaxTokens] = useState<number>()
     const { data: tokens, isPending } = useOKXTokenList(chainId as ChainId, okxOnly)
 
     const [open, dispatch] = useSingletonModal(ref, {
@@ -46,6 +47,7 @@ export function SelectFungibleTokenModal({
             setChains(props.chains)
             setLockChainId(props.lockChainId)
             setMultiple(props.multiple)
+            setMaxTokens(props.maxTokens)
         },
     })
     console.log({ selectedTokens, tokens })
@@ -58,6 +60,7 @@ export function SelectFungibleTokenModal({
             chainId={chainId}
             lockChainId={lockChainId}
             multiple={multiple}
+            maxTokens={maxTokens}
             keyword={keyword}
             whitelist={whitelist}
             title={title}

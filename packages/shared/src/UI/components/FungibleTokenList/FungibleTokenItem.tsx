@@ -91,23 +91,38 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column-reverse',
         height: 15,
     },
+    disabled: {
+        cursor: 'not-allowed',
+    },
 }))
 
-export const getFungibleTokenItem = <T extends NetworkPluginID>(
-    getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native',
-    isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean,
-    mode: TokenListMode,
+type GetItemOptions<T extends NetworkPluginID> = {
+    getSource: (address: string) => 'personal' | 'official' | 'external' | 'official-native'
+    isSelected: (address: string, chainId: Web3Helper.ChainIdAll) => boolean
+    mode: TokenListMode
     addOrRemoveTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
         strategy?: 'add' | 'remove',
-    ) => Promise<void>,
+    ) => Promise<void>
     trustOrBlockTokenToLocal: (
         token: FungibleToken<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
         strategy: 'trust' | 'block',
-    ) => Promise<void>,
-    isHiddenChainIcon?: boolean,
-    isCustomToken?: boolean,
-) => {
+    ) => Promise<void>
+    isHiddenChainIcon?: boolean
+    isCustomToken?: boolean
+    enabled?: boolean
+}
+
+export const getFungibleTokenItem = <T extends NetworkPluginID>({
+    getSource,
+    isSelected,
+    mode,
+    addOrRemoveTokenToLocal,
+    trustOrBlockTokenToLocal,
+    isHiddenChainIcon,
+    isCustomToken,
+    enabled,
+}: GetItemOptions<T>) => {
     return memo(({ data, index, style }: any) => {
         const { classes, theme } = useStyles()
         const Utils = useWeb3Utils()
@@ -180,7 +195,14 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>(
                 )
             }
             if (mode === TokenListMode.Select) {
-                return <CheckBoxIndicator color={theme.palette.maskColor.primary} checked={selected} />
+                return (
+                    <CheckBoxIndicator
+                        className={enabled || selected ? undefined : classes.disabled}
+                        color={theme.palette.maskColor.primary}
+                        checked={selected}
+                        uncheckedColor={theme.palette.maskColor.secondaryLine}
+                    />
+                )
             }
             return (
                 <Typography className={classes.balance}>

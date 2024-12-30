@@ -97,6 +97,7 @@ export interface SelectFungibleTokenDialogProps<T extends NetworkPluginID = Netw
     onClose(token: Web3Helper.FungibleTokenAll | Web3Helper.FungibleTokenAll[] | null): void
     onChainChange?(chainId: Web3Helper.Definition[T]['ChainId']): void
     multiple?: boolean
+    maxTokens?: number
 }
 
 export function SelectFungibleTokenDialog({
@@ -105,6 +106,7 @@ export function SelectFungibleTokenDialog({
     chainId,
     lockChainId = false,
     multiple,
+    maxTokens,
     disableSearchBar,
     loading,
     disableNativeToken,
@@ -140,6 +142,12 @@ export function SelectFungibleTokenDialog({
         [rowSize, isMdScreen, classes.wrapper],
     )
     const [pendingSelectedTokens, setPendingSelectedTokens] = useState(selectedTokens)
+    const enabled = multiple && maxTokens ? pendingSelectedTokens.length < maxTokens : true
+    const noChanges = useMemo(() => {
+        const selectedSet = new Set(selectedTokens.map((x) => [x.chainId, x.address].join(':').toLowerCase()))
+        const pendingSet = new Set(pendingSelectedTokens.map((x) => [x.chainId, x.address].join(':').toLowerCase()))
+        return pendingSet.difference(selectedSet).size === 0
+    }, [selectedTokens, pendingSelectedTokens])
     return (
         <InjectedDialog
             titleBarIconStyle={Sniffings.is_dashboard_page ? 'close' : 'back'}
@@ -192,6 +200,7 @@ export function SelectFungibleTokenDialog({
                             InputProps: { classes: { root: classes.search } },
                         }}
                         isHiddenChainIcon={false}
+                        enabled={enabled}
                     />
                 </div>
             </DialogContent>
@@ -199,7 +208,7 @@ export function SelectFungibleTokenDialog({
                 <DialogActions className={classes.dialogActions}>
                     <Button
                         variant="contained"
-                        disabled={selectedTokens?.length > 0}
+                        disabled={noChanges}
                         fullWidth
                         onClick={() => {
                             onClose(pendingSelectedTokens)

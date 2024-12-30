@@ -22,6 +22,11 @@ import { DURATION, PRESET_THEMES, RED_PACKET_DEFAULT_SHARES } from '../../consta
 import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
 import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 
+export enum ConditionType {
+    Crypto = 'Crypto',
+    NFT = 'NFT',
+}
+
 interface RedPacketContextOptions {
     gasOption: GasConfig | undefined
     setGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
@@ -33,7 +38,7 @@ interface RedPacketContextOptions {
     message: string
     setMessage: Dispatch<SetStateAction<string>>
     creator: string
-    conditions: string[]
+    conditions: ConditionType[]
     setConditions: Dispatch<SetStateAction<string[]>>
     tokenQuantity: string
     setTokenQuantity: Dispatch<SetStateAction<string>>

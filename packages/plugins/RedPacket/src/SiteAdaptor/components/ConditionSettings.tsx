@@ -8,7 +8,7 @@ import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { ClickAwayListener, InputBase, Typography } from '@mui/material'
 import { useState, type HTMLProps } from 'react'
-import { useRedPacket } from '../contexts/RedPacketContext.js'
+import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -28,6 +28,8 @@ const useStyles = makeStyles()((theme) => {
             marginLeft: 6,
             padding: theme.spacing(0.5, 1.5),
             boxSizing: 'border-box',
+            fontSize: 14,
+            fontWeight: 700,
         },
         conditions: {
             display: 'flex',
@@ -54,7 +56,7 @@ const useStyles = makeStyles()((theme) => {
             isolate: 'isolate',
             borderRadius: 16,
             padding: theme.spacing(1.5),
-            width: 278,
+            width: 400,
             backgroundColor: theme.palette.background.paper,
             boxShadow:
                 theme.palette.mode === 'light' ?
@@ -89,6 +91,7 @@ const useStyles = makeStyles()((theme) => {
         },
         assets: {
             display: 'flex',
+            gap: '4px',
             flexFlow: 'row wrap',
         },
         asset: {
@@ -108,11 +111,15 @@ const useStyles = makeStyles()((theme) => {
             height: 24,
             marginRight: '0px !important',
         },
+        note: {
+            fontWeight: 700,
+            fontSize: 16,
+        },
     }
 })
 
 export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const { conditions, setConditions, tokenQuantity, setTokenQuantity, requiredTokens, setRequiredTokens } =
         useRedPacket()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
@@ -155,7 +162,10 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 onClick={() => {
                                     setConditions(EMPTY_LIST)
                                 }}>
-                                <RadioIndicator checked={conditions.length === 0} />
+                                <RadioIndicator
+                                    checked={conditions.length === 0}
+                                    uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                />
                                 <Typography className={classes.rowLabel}>
                                     <Trans>Everyone</Trans>
                                 </Typography>
@@ -166,17 +176,21 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 className={classes.option}
                                 onClick={() => {
                                     setConditions(
-                                        conditions.includes('token') ?
-                                            conditions.filter((c) => c !== 'token')
-                                        :   [...conditions, 'token'],
+                                        conditions.includes(ConditionType.Crypto) ?
+                                            conditions.filter((c) => c !== ConditionType.Crypto)
+                                        :   [...conditions, ConditionType.Crypto],
                                     )
                                 }}>
-                                <CheckBoxIndicator checked={conditions.includes('token')} />
+                                <CheckBoxIndicator
+                                    checked={conditions.includes(ConditionType.Crypto)}
+                                    color={theme.palette.maskColor.primary}
+                                    uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                />
                                 <Typography className={classes.rowLabel}>
                                     <Trans>Crypto Holder</Trans>
                                 </Typography>
                             </label>
-                            {conditions.includes('token') ?
+                            {conditions.includes(ConditionType.Crypto) ?
                                 <div className={classes.section}>
                                     <Typography className={classes.sectionTitle}>
                                         <Trans>Token quantity greater than</Trans>
@@ -247,6 +261,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                                 pluginID: NetworkPluginID.PLUGIN_EVM,
                                                 chainId,
                                                 multiple: true,
+                                                maxTokens: 4,
                                             })
                                             if (picked) {
                                                 setRequiredTokens(picked as Array<FungibleToken<ChainId, SchemaType>>)
@@ -271,17 +286,21 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 className={classes.option}
                                 onClick={() => {
                                     setConditions(
-                                        conditions.includes('nft') ?
-                                            conditions.filter((c) => c !== 'nft')
-                                        :   [...conditions, 'nft'],
+                                        conditions.includes(ConditionType.NFT) ?
+                                            conditions.filter((c) => c !== ConditionType.NFT)
+                                        :   [...conditions, ConditionType.NFT],
                                     )
                                 }}>
-                                <CheckBoxIndicator checked={conditions.includes('nft')} />
+                                <CheckBoxIndicator
+                                    checked={conditions.includes(ConditionType.NFT)}
+                                    color={theme.palette.maskColor.primary}
+                                    uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                />
                                 <Typography className={classes.rowLabel}>
                                     <Trans>NFT Holder</Trans>
                                 </Typography>
                             </label>
-                            {conditions.includes('nft') ?
+                            {conditions.includes(ConditionType.NFT) ?
                                 <div className={classes.section}>
                                     <Typography className={classes.sectionTitle}>
                                         <Trans>Supported contracts</Trans>
@@ -301,6 +320,9 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 </div>
                             :   null}
                         </div>
+                        <Typography className={classes.note}>
+                            Eligibility requires either being a Crypto Holder or an NFT Holder.
+                        </Typography>
                     </div>
                 </ShadowRootPopper>
             </div>
