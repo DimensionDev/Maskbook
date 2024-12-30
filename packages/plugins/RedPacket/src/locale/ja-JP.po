@@ -592,7 +592,6 @@ msgstr "送信"
 
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
-#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Share"

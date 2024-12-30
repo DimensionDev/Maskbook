@@ -25,7 +25,7 @@ import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
 
-const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
+const useStyles = makeStyles()((theme) => {
     return {
         root: {
             borderRadius: theme.spacing(2),
@@ -35,10 +35,9 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             backgroundRepeat: 'no-repeat',
             color: theme.palette.common.white,
             flexDirection: 'column',
+            gap: theme.spacing(2),
             justifyContent: 'space-between',
-            marginBottom: outdated ? '12px' : 'auto',
-            marginLeft: 'auto',
-            marginRight: 'auto',
+            margin: theme.spacing(0, 'auto', 2),
             boxSizing: 'border-box',
             width: 'calc(100% - 32px)',
             [`@media (max-width: ${theme.breakpoints.values.sm}px)`]: {
@@ -47,6 +46,9 @@ const useStyles = makeStyles<{ outdated: boolean }>()((theme, { outdated }) => {
             },
             padding: 0,
             aspectRatio: '480 / 336',
+        },
+        footer: {
+            margin: theme.spacing(2),
         },
         envelope: {
             height: '100%',
@@ -166,10 +168,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         [payload, link, claimTxHash, network?.name, platform, isOnFirefly, handle, _],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
-    const shareText = useMemo(() => {
-        const hasClaimed = listOfStatus.includes(RedPacketStatus.claimed) || claimTxHash
-        return getShareText(!!hasClaimed)
-    }, [getShareText, listOfStatus, claimTxHash])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
@@ -243,13 +241,9 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         myHandle,
     ])
 
-    const handleShare = useCallback(() => {
-        if (shareText) share?.(shareText, source ? source : undefined)
-    }, [shareText, source])
-
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes } = useStyles({ outdated })
+    const { classes } = useStyles()
 
     // RedPacket created from Mask has no cover settings
     const { data: cover, isLoading: isLoadingCover } = useRedPacketCover({
@@ -267,53 +261,52 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
     return (
-        <>
-            <Card className={classes.root} component="article" elevation={0}>
-                <RedPacketEnvelope
-                    className={classes.envelope}
-                    cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
-                    message={payload.sender.message}
-                    token={token}
-                    shares={payload.shares}
-                    isClaimed={isClaimed}
-                    isEmpty={isEmpty}
-                    isExpired={isExpired}
-                    isRefunded={isRefunded}
-                    claimedCount={+availability.claimed}
-                    total={payload.total}
-                    totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
-                    claimedAmount={availability.claimed_amount}
-                    creator={payload.sender.name}
-                />
-                {cover ?
-                    <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
-                        <Requirements
-                            showResults={!claimedOrEmpty}
-                            statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
-                            className={classes.requirements}
-                            onClose={() => setShowRequirements(false)}
-                        />
-                    </Grow>
-                :   null}
-            </Card>
+        <Card className={classes.root} component="article" elevation={0}>
+            <RedPacketEnvelope
+                className={classes.envelope}
+                cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
+                message={payload.sender.message}
+                token={token}
+                shares={payload.shares}
+                isClaimed={isClaimed}
+                isEmpty={isEmpty}
+                isExpired={isExpired}
+                isRefunded={isRefunded}
+                claimedCount={+availability.claimed}
+                total={payload.total}
+                totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
+                claimedAmount={availability.claimed_amount}
+                creator={payload.sender.name}
+            />
+            {cover ?
+                <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
+                    <Requirements
+                        showResults={!claimedOrEmpty}
+                        statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
+                        className={classes.requirements}
+                        onClose={() => setShowRequirements(false)}
+                    />
+                </Grow>
+            :   null}
             {outdated ?
                 null
             : myHandle ?
                 <OperationFooter
+                    className={classes.footer}
                     chainId={payloadChainId}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     isClaiming={isClaiming || checkingClaimStatus}
                     isRefunding={isRefunding}
-                    onShare={handleShare}
                     onClaimOrRefund={onClaimOrRefund}
                 />
             :   <RequestLoginFooter
+                    className={classes.footer}
                     onRequest={() => {
                         requestLogin?.(source)
                     }}
                 />
             }
-        </>
+        </Card>
     )
 })

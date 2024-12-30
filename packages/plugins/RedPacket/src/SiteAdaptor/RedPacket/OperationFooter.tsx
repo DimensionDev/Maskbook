@@ -3,7 +3,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Box, useTheme } from '@mui/material'
+import { Box, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
 import { Trans, msg } from '@lingui/macro'
@@ -12,7 +12,6 @@ import { useLingui } from '@lingui/react'
 const useStyles = makeStyles()((theme) => {
     return {
         footer: {
-            width: '100%',
             display: 'flex',
             gap: theme.spacing(2),
             justifyContent: 'center',
@@ -27,14 +26,13 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface OperationFooterProps {
+interface OperationFooterProps extends BoxProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
     /** Is claiming or checking claim status */
     isClaiming: boolean
     isRefunding: boolean
-    onShare?(): void
     onClaimOrRefund: () => void | Promise<void>
 }
 export function OperationFooter({
@@ -43,13 +41,15 @@ export function OperationFooter({
     canRefund,
     isClaiming,
     isRefunding,
-    onShare,
     onClaimOrRefund,
+    ...rest
 }: OperationFooterProps) {
     const { _ } = useLingui()
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
+
+    if (!canClaim && !canRefund && account) return null
 
     function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {
         if (!account) {
@@ -96,34 +96,20 @@ export function OperationFooter({
     }
 
     return (
-        <Box style={{ flex: 1, padding: 12 }}>
-            <Box className={classes.footer}>
-                {canRefund ? null : (
-                    <ActionButton
-                        fullWidth
-                        variant="roundedDark"
-                        startIcon={<Icons.Shared size={18} />}
-                        onClick={onShare}>
-                        <Trans>Share</Trans>
-                    </ActionButton>
-                )}
-
-                {canClaim || canRefund || !account ?
-                    <ChainBoundary
-                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                        expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
-                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
-                        <WalletConnectedBoundary
-                            noGasText={_(msg`Insufficient Balance`)}
-                            hideRiskWarningConfirmed
-                            expectedChainId={chainId ?? ChainId.Mainnet}
-                            startIcon={<Icons.Wallet size={18} />}
-                            ActionButtonProps={{ variant: 'roundedDark' }}>
-                            {getObtainButton(onClaimOrRefund)}
-                        </WalletConnectedBoundary>
-                    </ChainBoundary>
-                :   null}
-            </Box>
+        <Box {...rest} className={cx(classes.footer, rest.className)}>
+            <ChainBoundary
+                expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
+                ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                <WalletConnectedBoundary
+                    noGasText={_(msg`Insufficient Balance`)}
+                    hideRiskWarningConfirmed
+                    expectedChainId={chainId ?? ChainId.Mainnet}
+                    startIcon={<Icons.Wallet size={18} />}
+                    ActionButtonProps={{ variant: 'roundedDark' }}>
+                    {getObtainButton(onClaimOrRefund)}
+                </WalletConnectedBoundary>
+            </ChainBoundary>
         </Box>
     )
 }
