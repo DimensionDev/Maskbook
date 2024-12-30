@@ -1,37 +1,33 @@
+import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import {
     ApplicationBoardModal,
-    AssetPreviewer,
     ChainBoundary,
     PluginWalletStatusBar,
+    SelectGasSettingsToolbar,
     WalletConnectedBoundary,
 } from '@masknet/shared'
 import { NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import {
-    formatEthereumAddress,
-    formatTokenId,
-    isNativeTokenAddress,
-    type ChainId,
-    type SchemaType,
-} from '@masknet/web3-shared-evm'
-import { Launch as LaunchIcon } from '@mui/icons-material'
-import { Box, Link, ListItem, Typography } from '@mui/material'
-import { memo, useCallback, useContext, useMemo, useState } from 'react'
+import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
+import { EVMChainResolver, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
+import { Box, Link, Typography } from '@mui/material'
+import { useCallback, useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
+import { NFTCard } from '../components/NFTCard.js'
+import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
+import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNftRedpacketCallback } from '../hooks/useCreateNftRedpacketCallback.js'
 import { openComposition } from '../openComposition.js'
-import { useRedPacket } from '../contexts/RedPacketContext.js'
-import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
+import { PreviewNftRedPacket } from '../components/PreviewNftRedPacket.js'
+import { isZero } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
-        padding: theme.spacing(2),
+        paddingBottom: 70,
     },
     settings: {
         display: 'flex',
@@ -39,6 +35,14 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(2),
         padding: theme.spacing(2),
         flexGrow: 1,
+    },
+    message: {
+        fontSize: 24,
+        fontWeight: 700,
+        overflow: 'hidden',
+        display: '-webkit-box',
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 2,
     },
     field: {
         display: 'flex',
@@ -59,135 +63,73 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         marginLeft: theme.spacing(0.5),
     },
-    account: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-    },
-    text: {
-        fontSize: 16,
-    },
-    bold: {
-        fontWeight: 500,
-    },
-    icon: {
-        marginRight: 8,
-        height: 24,
-        width: 24,
-    },
-    tokenSelector: {
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: theme.spacing(1),
-        width: '100%',
-        maxHeight: 420,
-        overflowY: 'auto',
-        background: theme.palette.background.default,
-        borderRadius: 12,
-        padding: theme.spacing(1),
-        boxSizing: 'border-box',
-        '&::-webkit-scrollbar': {
-            display: 'none',
-        },
-    },
-    tokenSelectorWrapper: {
-        position: 'relative',
-        display: 'flex',
-        flexDirection: 'column',
-        borderRadius: 8,
-        padding: 0,
-        background: theme.palette.mode === 'light' ? '#fff' : '#2F3336',
-        height: 150,
+    envelope: {
+        width: 484,
+        height: 336,
+        borderRadius: theme.spacing(2),
         overflow: 'hidden',
-    },
-    nftNameWrapper: {
-        position: 'absolute',
-        bottom: 0,
-        width: '100%',
-        background: theme.palette.background.paper,
-        borderBottomRightRadius: 8,
-        borderBottomLeftRadius: 8,
-        paddingTop: 2,
-        paddingBottom: 1,
-    },
-    nftName: {
-        minHeight: 30,
-        marginLeft: 8,
-        whiteSpace: 'nowrap',
-        overflow: 'hidden',
-        textOverflow: 'ellipsis',
     },
     button: {
         minHeight: 36,
         height: 36,
     },
     sendButton: {},
-    fallbackImage: {
-        minHeight: '0 !important',
-        maxWidth: 'none',
-        width: 64,
-        height: 64,
+    assets: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(86px, 1fr))',
+        gap: 10,
     },
-    ellipsis: {
+    card: {
+        position: 'relative',
+        borderRadius: 8,
         overflow: 'hidden',
-        textOverflow: 'ellipsis',
-        whiteSpace: 'nowrap',
-    },
-    assetImgWrapper: {
-        maxHeight: 120,
-        overflow: 'hidden',
+        backgroundColor: theme.palette.maskColor.input,
     },
 }))
 
-interface NFTCardProps {
-    token: NonFungibleToken<ChainId, SchemaType>
-}
-
-const NFTCard = memo(function NFTCard(props: NFTCardProps) {
-    const { token } = props
-    const { classes } = useStyles()
-    return (
-        <ListItem className={classes.tokenSelectorWrapper}>
-            <AssetPreviewer
-                url={token.metadata?.mediaURL || token.metadata?.imageURL}
-                classes={{
-                    fallbackImage: classes.fallbackImage,
-                    root: classes.assetImgWrapper,
-                }}
-            />
-            <div className={classes.nftNameWrapper}>
-                <Typography className={classes.nftName} color="textSecondary">
-                    {formatTokenId(token.tokenId, 2)}
-                </Typography>
-            </div>
-        </ListItem>
-    )
-})
 export function NftRedPacketConfirm() {
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
-    const { nftGasOption: gasOption, creator, message, collection, selectedNfts: tokenList } = useRedPacket()
-    const wallet = useWallet()
-    const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const {
+        nftGasOption: gasOption,
+        creator,
+        settings,
+        message,
+        collection,
+        selectedNfts,
+        theme,
+        setGasOption,
+    } = useRedPacket()
+    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
+    const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const wallet = useWallet()
     const { account: redpacketPubkey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])!
+    const smartPayChainId = useSmartPayChainId()
 
     const duration = 60 * 60 * 24
 
-    const tokenIdList = useMemo(() => tokenList.map((value) => value.tokenId), [tokenList])
-    const [{ loading: isSending }, createCallback] = useCreateNftRedpacketCallback(
+    const tokenIds = useMemo(() => selectedNfts.map((value) => value.tokenId), [selectedNfts])
+    const {
+        loading: isSending,
+        gasLimit,
+        estimateGasFee,
+        createCallback,
+    } = useCreateNftRedpacketCallback({
+        publicKey: redpacketPubkey,
         duration,
         message,
         creator,
-        collection?.address ?? '',
-        tokenIdList,
+        contractAddress: collection?.address ?? '',
+        tokenIds,
         gasOption,
-    )
+    })
 
     const [transactionId, setTransactionId] = useState('')
 
     const onSendTx = useCallback(async () => {
-        const result = await createCallback(redpacketPubkey)
+        const result = await createCallback()
 
         const { hash, receipt, events } = result ?? {}
         if (typeof hash !== 'string') return
@@ -203,6 +145,11 @@ export function NftRedPacketConfirm() {
     }, [redpacketPubkey, createCallback, privateKey])
 
     const compositionType = useContext(CompositionTypeContext)
+    const themeId = theme?.tid
+
+    const post = t`Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.
+
+🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`
     const onSendPost = useCallback(
         (id: string) => {
             openComposition(
@@ -219,87 +166,87 @@ export function NftRedPacketConfirm() {
                     contractVersion: 1,
                     privateKey,
                     chainId: collection?.chainId,
+                    themeId,
                 },
                 compositionType,
+                undefined,
+                post,
             )
             ApplicationBoardModal.close()
         },
-        [duration, message, creator, collection, privateKey, transactionId, compositionType],
+        [duration, message, creator, collection, privateKey, transactionId, compositionType, themeId, post],
     )
 
     return (
         <div className={classes.container}>
             <div className={classes.settings}>
+                <Typography variant="h4" color="textPrimary" align="center" className={classes.message}>
+                    {settings.message}
+                </Typography>
                 <div className={classes.field}>
-                    <Typography color="textPrimary" variant="body1" className={classes.fieldName}>
-                        <Trans>Wallet account</Trans>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Collection</Trans>
                     </Typography>
-                    <div className={classes.fieldValue}>
-                        <Typography
-                            color="textPrimary"
-                            variant="body1"
-                            align="right"
-                            className={cx(classes.account, classes.bold, classes.text)}>
-                            {formatEthereumAddress(account, 4)}
-                            {isNativeTokenAddress(wallet?.address) ? null : (
-                                <Link
-                                    color="textPrimary"
-                                    className={classes.link}
-                                    href={EVMExplorerResolver.addressLink(chainId, account)}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    onClick={stop}>
-                                    <LaunchIcon fontSize="small" />
-                                </Link>
-                            )}
-                        </Typography>
-                    </div>
-                </div>
-                <div className={classes.field}>
-                    <Typography variant="body1" color="textPrimary" className={classes.fieldName}>
-                        <Trans>Attached Message</Trans>
-                    </Typography>
-                    <Typography
-                        variant="body1"
-                        color="textPrimary"
-                        align="right"
-                        className={cx(classes.text, classes.bold, classes.ellipsis, classes.fieldValue)}>
-                        {message}
-                    </Typography>
-                </div>
-                <div className={classes.field}>
-                    <Typography variant="body1" color="textPrimary" className={classes.fieldName}>
-                        <Trans>Collections</Trans>
-                    </Typography>
-                    <div className={classes.fieldValue}>
-                        {collection?.iconURL ?
-                            <img className={classes.icon} src={collection.iconURL} />
+                    <Typography variant="body1" className={classes.fieldValue}>
+                        {collection?.name}
+                        {collection?.address ?
+                            <Link
+                                color="textPrimary"
+                                className={classes.link}
+                                href={EVMExplorerResolver.addressLink(chainId, collection.address)}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={stop}>
+                                <Icons.LinkOut size={20} />
+                            </Link>
                         :   null}
-                        <Typography
-                            variant="body1"
-                            color="textPrimary"
-                            align="right"
-                            className={cx(classes.text, classes.bold)}>
-                            {collection?.name}
-                        </Typography>
-                    </div>
+                    </Typography>
                 </div>
-                <div className={classes.tokenSelector}>
-                    {tokenList.map((value, i) => (
-                        <NFTCard key={i} token={value} />
+                <div className={classes.field}>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Total NFTs</Trans>
+                    </Typography>
+                    <Typography variant="body1" className={classes.fieldValue}>
+                        {selectedNfts.length}
+                    </Typography>
+                </div>
+                <div className={classes.assets}>
+                    {selectedNfts.map((nft) => (
+                        <NFTCard key={nft.tokenId} token={nft} className={classes.card} />
                     ))}
                 </div>
-
+                {estimateGasFee && !isZero(estimateGasFee) ?
+                    <div className={classes.field}>
+                        <Typography className={classes.fieldName}>
+                            <Trans>Transaction cost</Trans>
+                        </Typography>
+                        <SelectGasSettingsToolbar
+                            className={classes.fieldValue}
+                            nativeToken={nativeTokenDetailed}
+                            nativeTokenPrice={nativeTokenPrice}
+                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                            gasConfig={gasOption}
+                            gasLimit={gasLimit ?? 0}
+                            onChange={setGasOption}
+                            estimateGasFee={estimateGasFee}
+                            editMode
+                        />
+                    </div>
+                :   null}
                 <div className={classes.field}>
-                    <Typography color="textPrimary" variant="body1" className={classes.fieldName}>
-                        <Trans>Total Amount</Trans>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Cover</Trans>
                     </Typography>
-                    <Typography
-                        color="textPrimary"
-                        align="right"
-                        className={cx(classes.text, classes.bold, classes.fieldValue)}>
-                        {tokenList.length}
-                    </Typography>
+                    <div className={classes.fieldValue}>
+                        <PreviewNftRedPacket
+                            className={classes.envelope}
+                            message={message}
+                            creator={creator}
+                            totalShares={selectedNfts.length}
+                            asset={selectedNfts[0]}
+                            theme={theme}
+                        />
+                    </div>
                 </div>
             </div>
             <Box style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>

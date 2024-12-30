@@ -92,6 +92,8 @@ export interface RedPacketNftJSONPayload {
     contractTokenURI: string
     privateKey: string
     chainId: ChainId
+    /** @since 2.32.0 */
+    themeId: string
 }
 
 export interface NftRedPacketJSONPayload extends Omit<RedPacketBasic, 'is_random' | 'total'> {

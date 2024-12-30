@@ -1,23 +1,23 @@
-import { compact, range } from 'lodash-es'
-import { memo, useCallback, useRef, type ReactNode, useMemo, type Ref } from 'react'
-import { ElementAnchor, EmptyStatus, RetryHint, isSameNFT } from '@masknet/shared'
+import { Trans } from '@lingui/react/macro'
+import { ElementAnchor, EmptyStatus, ReloadStatus, isSameNFT } from '@masknet/shared'
 import { EMPTY_LIST, EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Box, useForkRef } from '@mui/material'
-import type { BoxProps } from '@mui/system'
-import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
-import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
-import { LoadingSkeleton } from './LoadingSkeleton.js'
-import { useUserAssets } from './AssetsProvider.js'
-import type { CollectibleGridProps } from './types.js'
-import { SelectNetworkSidebar } from '../SelectNetworkSidebar/index.js'
-import { CollectionsContext } from './CollectionsProvider.js'
-import { useChainRuntime } from './ChainRuntimeProvider.js'
-import { CollectionHeader } from './CollectionHeader.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Trans } from '@lingui/react/macro'
+import { Box, useForkRef } from '@mui/material'
+import type { BoxProps } from '@mui/system'
+import { compact, range } from 'lodash-es'
+import { memo, useCallback, useMemo, useRef, type ReactNode, type Ref } from 'react'
+import { SelectNetworkSidebar } from '../SelectNetworkSidebar/index.js'
+import { useUserAssets } from './AssetsProvider.js'
+import { useChainRuntime } from './ChainRuntimeProvider.js'
+import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
+import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
+import { CollectionHeader } from './CollectionHeader.js'
+import { CollectionsContext } from './CollectionsProvider.js'
+import { LoadingSkeleton } from './LoadingSkeleton.js'
+import type { CollectibleGridProps } from './types.js'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -64,6 +64,14 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             flexDirection: 'column',
             alignSelf: 'center',
         },
+        expanded: {
+            flexGrow: 1,
+            minHeight: 0,
+            overflow: 'auto',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
         grid: {
             width: '100%',
             display: 'grid',
@@ -88,14 +96,14 @@ function getTopOffset() {
     // TODO Other sites
     return 0
 }
+
 export interface CollectionListProps
     extends BoxProps,
-        Pick<CollectionProps, 'disableAction' | 'onActionClick' | 'onItemClick'>,
+        Pick<CollectionProps, 'disableAction' | 'onActionClick'>,
         withClasses<'sidebar' | 'grid'> {
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
     disableWindowScroll?: boolean
-    selectedAsset?: Web3Helper.NonFungibleAssetAll
     /** User customized assets, will be rendered as flatten */
     additionalAssets?: Web3Helper.NonFungibleAssetAll[]
     /** Pending user customized assets, used to render loading skeletons */
@@ -112,14 +120,12 @@ export const CollectionList = memo(function CollectionList({
     gridProps = EMPTY_OBJECT,
     disableSidebar,
     disableAction,
-    selectedAsset,
     additionalAssets,
     pendingAdditionalAssetCount = 0,
     disableWindowScroll,
     scrollElementRef,
     emptyText,
     onActionClick,
-    onItemClick,
     onChainChange,
     onCollectionChange,
     from,
@@ -130,6 +136,7 @@ export const CollectionList = memo(function CollectionList({
     const { pluginID, account, chainId, setChainId, networks } = useChainRuntime()
     const { collections, currentCollection, setCurrentCollectionId, loading, error, retry } =
         CollectionsContext.useContainer()
+    const { selectedAsset, selectedAssets, selectMode, multiple, searchKeyword } = useUserAssets()
 
     const handleChainChange = useCallback(
         (chainId: Web3Helper.ChainIdAll | undefined) => {
@@ -211,6 +218,16 @@ export const CollectionList = memo(function CollectionList({
             />
         )
 
+    const filteredAssets = useMemo(() => {
+        if (!currentCollection) return EMPTY_LIST
+        const assets = getAssets(currentCollection).assets
+        if (!searchKeyword) return assets
+        const kw = searchKeyword.toLowerCase()
+        return assets.filter((x) => {
+            return x.metadata?.name.includes(kw) || x.metadata?.tokenId?.includes(kw.replace(/^#/, ''))
+        })
+    }, [getAssets, currentCollection, searchKeyword])
+
     if (!collections.length && loading && !error && account)
         return (
             <Box className={cx(classes.container, className)} {...rest}>
@@ -227,7 +244,7 @@ export const CollectionList = memo(function CollectionList({
         return (
             <Box className={cx(classes.container, className)} {...rest}>
                 <Box mt="200px" color={(theme) => theme.palette.maskColor.main}>
-                    <RetryHint retry={retry} />
+                    <ReloadStatus onRetry={retry} />
                 </Box>
             </Box>
         )
@@ -252,22 +269,22 @@ export const CollectionList = memo(function CollectionList({
                 <div className={classes.main} ref={forkedMainColumnRef}>
                     <CollectionHeader className={classes.collectionHeader} onResetCollection={handleCollectionChange} />
                     {currentCollection ?
-                        <ExpandedCollection
-                            gridProps={gridProps}
-                            pluginID={pluginID}
-                            collection={currentCollection}
-                            key={currentCollection.id}
-                            assets={getAssets(currentCollection).assets}
-                            verifiedBy={getVerifiedBy(currentCollection.id!)}
-                            loading={getAssets(currentCollection).loading}
-                            finished={getAssets(currentCollection).finished}
-                            emptyText={emptyText}
-                            onInitialRender={handleInitialRender}
-                            disableAction={disableAction}
-                            onActionClick={onActionClick}
-                            selectedAsset={selectedAsset}
-                            onItemClick={onItemClick}
-                        />
+                        <Box className={classes.expanded} display={!selectMode || !multiple ? 'contents' : undefined}>
+                            <ExpandedCollection
+                                gridProps={gridProps}
+                                pluginID={pluginID}
+                                collection={currentCollection}
+                                key={currentCollection.id}
+                                assets={filteredAssets}
+                                verifiedBy={getVerifiedBy(currentCollection.id!)}
+                                loading={getAssets(currentCollection).loading}
+                                finished={getAssets(currentCollection).finished}
+                                emptyText={emptyText}
+                                disableAction={disableAction}
+                                onActionClick={onActionClick}
+                                onInitialRender={handleInitialRender}
+                            />
+                        </Box>
                     :   <Box className={classes.grid}>
                             {pendingAdditionalAssetCount > 0 ?
                                 <CollectionSkeleton
@@ -285,9 +302,12 @@ export const CollectionList = memo(function CollectionList({
                                     disableName
                                     actionLabel={<Trans>Send</Trans>}
                                     disableAction={disableAction}
-                                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
+                                    isSelected={
+                                        multiple ?
+                                            selectedAssets?.some((a) => isSameNFT(pluginID, asset, a))
+                                        :   isSameNFT(pluginID, asset, selectedAsset)
+                                    }
                                     onActionClick={onActionClick}
-                                    onItemClick={onItemClick}
                                 />
                             ))}
                             {collections.map((collection) => {
@@ -302,19 +322,17 @@ export const CollectionList = memo(function CollectionList({
                                         loading={assetsState.loading}
                                         finished={assetsState.finished}
                                         blockedTokenIds={getBLockedTokenIds(collection)}
-                                        selectedAsset={selectedAsset}
                                         onExpand={handleCollectionChange}
                                         onInitialRender={handleInitialRender}
                                         disableAction={disableAction}
                                         onActionClick={onActionClick}
-                                        onItemClick={onItemClick}
                                     />
                                 )
                             })}
                         </Box>
                     }
                     {error ?
-                        <RetryHint hint={false} retry={retry} />
+                        <ReloadStatus onRetry={retry} />
                     :   null}
                 </div>
             </div>

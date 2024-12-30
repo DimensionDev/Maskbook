@@ -24,7 +24,7 @@ export const enum RoutePaths {
     ConfirmNftRedPacket = '/confirm/nft',
     CustomCover = '/custom-cover',
     Requirements = '/requirements',
-    SelectNft = '/select-nft',
+    SelectCollectibles = '/select-collectibles',
 
     History = '/history',
     HistoryDetail = '/history/detail',

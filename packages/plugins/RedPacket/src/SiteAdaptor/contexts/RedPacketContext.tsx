@@ -20,6 +20,7 @@ import {
 import { DURATION, PRESET_THEMES, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
 import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 export enum ConditionType {
     Crypto = 'Crypto',
@@ -59,14 +60,14 @@ interface RedPacketContextOptions {
     // NFT
     nftGasOption: GasConfig | undefined
     setNftGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
-    selectedNfts: OrderedERC721Token[]
-    setSelectedNfts: Dispatch<SetStateAction<OrderedERC721Token[]>>
+    selectedNfts: Web3Helper.NonFungibleAssetAll[]
+    setSelectedNfts: Dispatch<SetStateAction<Web3Helper.NonFungibleAssetAll[]>>
     myNfts: OrderedERC721Token[]
     setMyNfts: Dispatch<SetStateAction<OrderedERC721Token[]>>
     selectOption: NFTSelectOption | undefined
     setSelectOption: Dispatch<SetStateAction<NFTSelectOption>>
-    collection: NonFungibleCollection<ChainId, SchemaType> | undefined
-    setCollection: Dispatch<SetStateAction<NonFungibleCollection<ChainId, SchemaType> | undefined>>
+    collection: Web3Helper.NonFungibleCollectionAll | undefined
+    setCollection: Dispatch<SetStateAction<Web3Helper.NonFungibleCollectionAll | undefined>>
 }
 export const RedPacketContext = createContext<RedPacketContextOptions>({
     gasOption: undefined,
@@ -161,10 +162,10 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
 
     // NFT
     const [nftGasOption, setNftGasOption] = useState<GasConfig>()
-    const [selectedNfts, setSelectedNfts] = useState<OrderedERC721Token[]>([])
+    const [selectedNfts, setSelectedNfts] = useState<Web3Helper.NonFungibleAssetAll[]>([])
     const [myNfts, setMyNfts] = useState<OrderedERC721Token[]>([])
     const [selectOption, setSelectOption] = useState<NFTSelectOption>(NFTSelectOption.Partial)
-    const [collection, setCollection] = useState<NonFungibleCollection<ChainId, SchemaType>>()
+    const [collection, setCollection] = useState<Web3Helper.NonFungibleCollectionAll>()
 
     const contextValue = useMemo(() => {
         return {

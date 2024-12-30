@@ -1,4 +1,4 @@
-import { chunk, sum, take } from 'lodash-es'
+import { chunk, noop, sum, take } from 'lodash-es'
 import {
     createContext,
     memo,
@@ -10,6 +10,8 @@ import {
     useRef,
     type PropsWithChildren,
     type MutableRefObject,
+    useState,
+    type JSX,
 } from 'react'
 import { createIndicator, EMPTY_LIST, EMPTY_OBJECT, type PageIndicator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -24,6 +26,7 @@ import {
 import { useChainRuntime } from './ChainRuntimeProvider.js'
 import { CollectionsContext } from './CollectionsProvider.js'
 
+const MAX_SELECTION = 255
 interface AssetsContextOptions {
     assetsMapRef: MutableRefObject<Record<string, AssetsState>>
     getAssets(collection: Web3Helper.NonFungibleCollectionAll): AssetsState
@@ -32,6 +35,22 @@ interface AssetsContextOptions {
     getVerifiedBy(id: string): string[]
     loadAssets(collection: Web3Helper.NonFungibleCollectionAll): Promise<void>
     loadVerifiedBy(id: string): Promise<void>
+    // select mode
+    selectMode?: boolean
+    multiple?: boolean
+    selectedAsset?: Web3Helper.NonFungibleAssetAll
+    selectedAssets?: Web3Helper.NonFungibleAssetAll[]
+    onItemClick?(asset: Web3Helper.NonFungibleAssetAll): void
+    /**
+     * For example, NFT redpacket allows 255 at most.
+     * Since only NFT redpacket has such limit, we set it as default
+     */
+    maxSelection?: number
+    /** Would be shown as tooltip */
+    maxSelectionDescription?: string | JSX.Element
+    searchKeyword: string
+    setSearchKeyword(keyword: string): void
+
     /** All collectibles get hidden */
     isAllHidden: boolean
     isEmpty: boolean
@@ -44,6 +63,15 @@ const AssetsContext = createContext<AssetsContextOptions>({
     getVerifiedBy: () => EMPTY_LIST,
     loadAssets: () => Promise.resolve(),
     loadVerifiedBy: () => Promise.resolve(),
+    // select mode
+    selectMode: false,
+    multiple: false,
+    selectedAsset: undefined,
+    selectedAssets: [],
+    maxSelection: MAX_SELECTION,
+    searchKeyword: '',
+    setSearchKeyword: noop,
+
     isAllHidden: false,
     isEmpty: false,
 })
@@ -54,11 +82,32 @@ const CHUNK_SIZE = 8
 type LoaderIteratorMap = Map<string, AsyncGenerator<Web3Helper.NonFungibleAssetAll[] | undefined, void>>
 const getAssetsTotal = (map: Record<string, AssetsState>) => sum(Object.values(map).map((x) => x.assets.length))
 
-interface Props extends PropsWithChildren {
+export interface AssetsProviderProps
+    extends PropsWithChildren,
+        Pick<
+            AssetsContextOptions,
+            | 'selectMode'
+            | 'multiple'
+            | 'selectedAsset'
+            | 'selectedAssets'
+            | 'maxSelection'
+            | 'maxSelectionDescription'
+            | 'onItemClick'
+        > {
     /** blocked ids in format of `${chainid}.${address}.${tokenId}` */
     blockedIds?: string[]
 }
-export const AssetsProvider = memo<Props>(function AssetsProvider({ children, blockedIds = EMPTY_LIST }) {
+export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider({
+    children,
+    blockedIds = EMPTY_LIST,
+    selectMode,
+    multiple,
+    maxSelection = MAX_SELECTION,
+    maxSelectionDescription,
+    selectedAsset,
+    selectedAssets,
+    onItemClick,
+}) {
     const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
     const indicatorMapRef = useRef<Map<string, PageIndicator | undefined>>(new Map())
     const { pluginID, account } = useChainRuntime()
@@ -232,6 +281,10 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
         [blockedTokenIdsMap, blockedIds],
     )
     const getVerifiedBy = useCallback((id: string) => verifiedMap[id] ?? EMPTY_LIST, [verifiedMap])
+
+    // Search mode
+    const [searchKeyword, setSearchKeyword] = useState('')
+
     const contextValue = useMemo((): AssetsContextOptions => {
         return {
             isAllHidden,
@@ -242,8 +295,35 @@ export const AssetsProvider = memo<Props>(function AssetsProvider({ children, bl
             loadAssets,
             loadVerifiedBy,
             assetsMapRef: listingAssetsMapRef,
+            // select mode
+            selectMode,
+            multiple,
+            selectedAssets,
+            selectedAsset,
+            maxSelection,
+            maxSelectionDescription,
+            searchKeyword,
+            setSearchKeyword,
+            onItemClick,
         }
-    }, [getAssets, getBLockedTokenIds, getVerifiedBy, loadAssets, loadVerifiedBy, isAllHidden, isEmpty])
+    }, [
+        getAssets,
+        getBLockedTokenIds,
+        getVerifiedBy,
+        loadAssets,
+        loadVerifiedBy,
+        isAllHidden,
+        isEmpty,
+        selectMode,
+        searchKeyword,
+        multiple,
+        maxSelection,
+        maxSelectionDescription,
+        selectedAssets,
+        selectedAsset,
+        onItemClick,
+    ])
+
     return <AssetsContext value={contextValue}>{children}</AssetsContext>
 })
 

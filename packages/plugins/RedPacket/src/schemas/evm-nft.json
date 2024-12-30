@@ -41,6 +41,10 @@
         "contractTokenURI": {
             "type": "string",
             "title": "contractTokenURI"
+        },
+        "themeId": {
+            "type": "string",
+            "title": "themeId"
         }
     },
     "required": [

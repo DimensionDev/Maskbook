@@ -8,10 +8,10 @@ export function isSameNFT(
     b?: Web3Helper.NonFungibleAssetAll,
 ) {
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) return a.tokenId === b?.tokenId && a.id === b.id
-    if (!a.contract) return false
+    if (!a.contract || !b?.contract) return false
     return (
-        isSameAddress(a.contract.address, b?.contract?.address) &&
-        a.contract.chainId === b?.contract?.chainId &&
+        isSameAddress(a.contract.address, b.contract.address) &&
+        a.contract.chainId === b.contract.chainId &&
         a.tokenId === b.tokenId
     )
 }

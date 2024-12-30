@@ -385,6 +385,7 @@ export interface SocialLinks {
 export interface NonFungibleCollection<ChainId, SchemaType> {
     /** some providers define id, while others don't. For those don't, we will fallback to contract address */
     id?: string
+    runtime?: NetworkPluginID
     chainId: ChainId
     name: string
     slug: string

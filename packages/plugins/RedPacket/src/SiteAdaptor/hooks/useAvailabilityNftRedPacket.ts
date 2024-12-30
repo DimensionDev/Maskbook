@@ -1,15 +1,13 @@
-import { BigNumber } from 'bignumber.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useNftRedPacketContract } from './useNftRedPacketContract.js'
 import { useQuery } from '@tanstack/react-query'
+import { BigNumber } from 'bignumber.js'
+import { createNftRedpacketContract } from './useNftRedPacketContract.js'
 
 export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: ChainId) {
-    const nftRedPacketContract = useNftRedPacketContract(chainId)
     return useQuery({
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: ['nft-redpacket', 'availability', chainId, from, id],
-        enabled: !!nftRedPacketContract,
         queryFn: async () => {
+            const nftRedPacketContract = createNftRedpacketContract(chainId)
             if (!id || !nftRedPacketContract) return null
             const availability = await nftRedPacketContract.methods.check_availability(id).call({
                 // check availability is ok w/o account
@@ -33,10 +31,12 @@ export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: 
 
             return {
                 isClaimed,
+                canClaim: !isClaimed && !isEnd,
                 totalAmount,
                 claimedAmount,
                 remaining: totalAmount - claimedAmount,
                 isClaimedAll,
+                isEmpty: isClaimedAll,
                 isCompleted,
                 isEnd,
                 bitStatusList,

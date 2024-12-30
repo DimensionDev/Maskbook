@@ -2,11 +2,23 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { useAccount, useBlockedNonFungibleTokens } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { memo, useMemo, type PropsWithChildren } from 'react'
-import { AssetsProvider } from './AssetsProvider.js'
+import { AssetsProvider, type AssetsProviderProps } from './AssetsProvider.js'
 import { ChainRuntimeProvider, type ChainRuntimeProviderProps } from './ChainRuntimeProvider.js'
 import { CollectionsProvider, type CollectionsProviderProps } from './CollectionsProvider.js'
 
-interface UserAssetsProviderProps extends ChainRuntimeProviderProps, CollectionsProviderProps {}
+interface UserAssetsProviderProps
+    extends ChainRuntimeProviderProps,
+        CollectionsProviderProps,
+        Pick<
+            AssetsProviderProps,
+            | 'multiple'
+            | 'selectMode'
+            | 'selectedAsset'
+            | 'selectedAssets'
+            | 'maxSelection'
+            | 'maxSelectionDescription'
+            | 'onItemClick'
+        > {}
 
 export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps>>(function UserAssetsProvider({
     pluginID,
@@ -14,6 +26,15 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
     defaultChainId,
     defaultCollectionId,
     children,
+
+    // select mode
+    multiple,
+    selectMode,
+    selectedAsset,
+    selectedAssets,
+    maxSelection,
+    maxSelectionDescription,
+    onItemClick,
 }) {
     const systemAccount = useAccount()
 
@@ -26,7 +47,17 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
     return (
         <ChainRuntimeProvider pluginID={pluginID} defaultChainId={defaultChainId} account={account}>
             <CollectionsProvider defaultCollectionId={defaultCollectionId}>
-                <AssetsProvider blockedIds={blockedIds}>{children}</AssetsProvider>
+                <AssetsProvider
+                    blockedIds={blockedIds}
+                    multiple={multiple}
+                    selectMode={selectMode}
+                    selectedAsset={selectedAsset}
+                    selectedAssets={selectedAssets}
+                    maxSelection={maxSelection}
+                    maxSelectionDescription={maxSelectionDescription}
+                    onItemClick={onItemClick}>
+                    {children}
+                </AssetsProvider>
             </CollectionsProvider>
         </ChainRuntimeProvider>
     )

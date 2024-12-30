@@ -207,10 +207,9 @@ msgstr ""
 msgid "Balance"
 msgstr "잔액"
 
-#. placeholder {0}: balance ? balance : '0'
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
-msgid "Balance: {0}"
-msgstr ""
+#~ msgid "Balance: {0}"
+#~ msgstr ""
 
 #: src/UI/components/TokenAmountPanel/index.tsx
 msgid "Balance: <0/>"
@@ -244,6 +243,7 @@ msgstr ""
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Cancel"
 msgstr "취소"
 
@@ -1093,6 +1093,10 @@ msgstr ""
 msgid "Please create a persona for accessing Dapps."
 msgstr "디앱을 연결하기 위해 페르소나를 맏드세요."
 
+#: src/UI/components/AssetsManagement/SelectionSection.tsx
+msgid "Please enter token contract address."
+msgstr ""
+
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
 msgstr "설정 저장 후 이 기능을 활성화하는 데 사용할 월렛을 선택하세요."
@@ -1205,6 +1209,11 @@ msgstr ""
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
 
+#: src/UI/components/AssetsManagement/SelectionSection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Search"
+msgstr ""
+
 #: src/UI/components/CountryCodePicker/index.tsx
 msgid "Search Area"
 msgstr "지역 찾기"
@@ -1226,9 +1235,13 @@ msgstr "토큰 선택"
 msgid "Select a token"
 msgstr "토큰 선택"
 
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Select All"
+msgstr ""
+
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
-msgid "Select an NFT"
-msgstr "NFT 선택"
+#~ msgid "Select an NFT"
+#~ msgstr "NFT 선택"
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
@@ -1336,6 +1349,10 @@ msgstr "Polygon 네트워크와 상호작용하기 위해서는 MATIC 토큰을 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
 msgstr "토큰"
+
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Token ID separated by comma, e.g. 1223,1224,"
+msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
 msgid "Token ID should be separated by comma, e.g. 1223,1224,"

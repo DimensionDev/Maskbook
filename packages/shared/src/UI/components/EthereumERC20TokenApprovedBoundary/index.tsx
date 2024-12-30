@@ -1,29 +1,18 @@
-import React, { useCallback, useMemo } from 'react'
+import { Icons } from '@masknet/icons'
 import { unreachable } from '@masknet/kit'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, ShadowRootTooltip, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { useChainContext, useFungibleTokenBalance, useFungibleTokenSpenders } from '@masknet/web3-hooks-base'
 import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-hooks-evm'
-import { isGte, isSameAddress, type FungibleToken, rightShift } from '@masknet/web3-shared-base'
+import { isGte, isSameAddress, rightShift, type FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { HelpOutline } from '@mui/icons-material'
 import { Trans } from '@lingui/react/macro'
+import { useCallback, useMemo } from 'react'
 
-const useStyles = makeStyles<void, 'icon'>()((theme, _, refs) => ({
-    icon: {},
+const useStyles = makeStyles()(() => ({
     button: {
         whiteSpace: 'nowrap',
-        // increase selector priority over button's
-        [`.${refs.icon}`]: {
-            width: 18,
-            height: 18,
-            fontSize: 10,
-        },
-    },
-    helpIcon: {
-        width: 18,
-        height: 18,
     },
 }))
 
@@ -132,8 +121,8 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                 variant="contained"
                 startIcon={
                     <TokenIcon
-                        className={classes.icon}
                         address={token.address}
+                        size={18}
                         chainId={token.chainId}
                         name={token.name}
                         disableDefaultIcon
@@ -157,7 +146,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                             disableInteractive
                             disableFocusListener
                             disableTouchListener>
-                            <HelpOutline className={classes.helpIcon} />
+                            <Icons.Questions size={18} />
                         </ShadowRootTooltip>
                     :   null
                 }

@@ -207,10 +207,9 @@ msgstr ""
 msgid "Balance"
 msgstr "余额"
 
-#. placeholder {0}: balance ? balance : '0'
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
-msgid "Balance: {0}"
-msgstr ""
+#~ msgid "Balance: {0}"
+#~ msgstr ""
 
 #: src/UI/components/TokenAmountPanel/index.tsx
 msgid "Balance: <0/>"
@@ -244,6 +243,7 @@ msgstr ""
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Cancel"
 msgstr "取消"
 
@@ -1093,6 +1093,10 @@ msgstr ""
 msgid "Please create a persona for accessing Dapps."
 msgstr "请创建一个身份访问 Dapps。"
 
+#: src/UI/components/AssetsManagement/SelectionSection.tsx
+msgid "Please enter token contract address."
+msgstr ""
+
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
 msgstr "请选择钱包以在保存设置后激活功能。"
@@ -1205,6 +1209,11 @@ msgstr ""
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
 
+#: src/UI/components/AssetsManagement/SelectionSection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Search"
+msgstr ""
+
 #: src/UI/components/CountryCodePicker/index.tsx
 msgid "Search Area"
 msgstr "探索范围"
@@ -1226,9 +1235,13 @@ msgstr "选择代币"
 msgid "Select a token"
 msgstr "选择代币"
 
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Select All"
+msgstr ""
+
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
-msgid "Select an NFT"
-msgstr "请选择一个 NFT"
+#~ msgid "Select an NFT"
+#~ msgstr "请选择一个 NFT"
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
@@ -1335,6 +1348,10 @@ msgstr "MATIC 代币用于支付与 Polygon Network 交互时支付的网络费�
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
+msgstr ""
+
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Token ID separated by comma, e.g. 1223,1224,"
 msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx

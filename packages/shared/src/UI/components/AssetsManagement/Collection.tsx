@@ -11,6 +11,7 @@ import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
 import { Trans } from '@lingui/react/macro'
+import { useUserAssets } from './AssetsProvider.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -76,7 +77,7 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
 
 export interface CollectionProps
     extends HTMLProps<HTMLDivElement>,
-        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'onItemClick' | 'verifiedBy'> {
+        Pick<CollectibleItemProps, 'disableAction' | 'onActionClick' | 'verifiedBy'> {
     pluginID: NetworkPluginID
     collection: Web3Helper.NonFungibleCollectionAll
     assets: Web3Helper.NonFungibleAssetScope[]
@@ -88,7 +89,6 @@ export interface CollectionProps
     onExpand?(id: string): void
     /** Invoke when component first renders */
     onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
-    selectedAsset?: Web3Helper.NonFungibleAssetScope
 }
 
 /**
@@ -105,17 +105,16 @@ export const Collection = memo(
         finished,
         verifiedBy,
         expanded,
-        onExpand,
-        onInitialRender,
         disableAction,
         onActionClick,
-        onItemClick,
-        selectedAsset,
+        onExpand,
+        onInitialRender,
         ...rest
     }: CollectionProps) => {
         const { compact, containerRef } = useCompactDetection()
         const popperProps = useBoundedPopperProps()
         const { classes, cx } = useStyles({ compact })
+        const { multiple, selectedAsset, selectedAssets } = useUserAssets()
 
         useLayoutEffect(() => {
             onInitialRender?.(collection)
@@ -147,9 +146,12 @@ export const Collection = memo(
                     actionLabel={<Trans>Send</Trans>}
                     disableAction={disableAction}
                     onActionClick={onActionClick}
-                    onItemClick={onItemClick}
                     verifiedBy={verifiedBy}
-                    isSelected={isSameNFT(pluginID, asset, selectedAsset)}
+                    isSelected={
+                        multiple ?
+                            selectedAssets?.some((a) => isSameNFT(pluginID, asset, a))
+                        :   isSameNFT(pluginID, asset, selectedAsset)
+                    }
                 />
             ))
             return <>{renderAssets}</>
@@ -162,6 +164,12 @@ export const Collection = memo(
                 pluginID={pluginID}
                 key={`${collection.id}.${asset.address}.${asset.tokenId}`}
                 disableNetworkIcon
+                hideIndicator={!expanded}
+                isSelected={
+                    multiple ?
+                        selectedAssets?.some((a) => isSameNFT(pluginID, a, asset))
+                    :   isSameNFT(pluginID, asset, selectedAsset)
+                }
             />
         ))
         return (

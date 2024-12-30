@@ -1424,10 +1424,68 @@ export const Clear = /*#__PURE__*/ __createIcon('Clear', [
     {
         c: ['dark'],
         u: () => new URL('./general/Clear.dark.svg', import.meta.url).href,
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        d: 'M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10',
+                        style: {
+                            '--default-fill': '#f5f5f5',
+                            fill: 'var(--icon-color, var(--default-fill, currentColor))',
+                        },
+                    }),
+                    /*#__PURE__*/ _jsxs('g', {
+                        fill: '#030303',
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M7.757 7.757c.352-.351.985-.287 1.416.143l6.927 6.927c.43.43.494 1.064.142 1.416-.351.351-.985.287-1.415-.143L7.9 9.173c-.43-.43-.494-1.064-.143-1.416',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M16.242 7.757c.352.352.288.985-.142 1.416L9.173 16.1c-.43.43-1.064.494-1.416.142-.351-.351-.287-.985.143-1.415L14.827 7.9c.43-.43 1.064-.494 1.415-.143',
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        s: true,
     },
     {
         c: ['light'],
         u: () => new URL('./general/Clear.light.svg', import.meta.url).href,
+        j: () =>
+            /*#__PURE__*/ _jsxs('svg', {
+                xmlns: 'http://www.w3.org/2000/svg',
+                fill: 'none',
+                viewBox: '0 0 24 24',
+                children: [
+                    /*#__PURE__*/ _jsx('path', {
+                        d: 'M22 12c0 5.523-4.477 10-10 10S2 17.523 2 12 6.477 2 12 2s10 4.477 10 10',
+                        style: {
+                            '--default-fill': '#07101b',
+                            fill: 'var(--icon-color, var(--default-color, currentColor))',
+                        },
+                    }),
+                    /*#__PURE__*/ _jsxs('g', {
+                        fill: '#fff',
+                        fillRule: 'evenodd',
+                        clipRule: 'evenodd',
+                        children: [
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M7.757 7.757c.352-.351.985-.287 1.416.143l6.927 6.927c.43.43.494 1.064.142 1.416-.351.351-.985.287-1.415-.143L7.9 9.173c-.43-.43-.494-1.064-.143-1.416',
+                            }),
+                            /*#__PURE__*/ _jsx('path', {
+                                d: 'M16.242 7.757c.352.352.288.985-.142 1.416L9.173 16.1c-.43.43-1.064.494-1.416.142-.351-.351-.287-.985.143-1.415L14.827 7.9c.43-.43 1.064-.494 1.415-.143',
+                            }),
+                        ],
+                    }),
+                ],
+            }),
+        s: true,
     },
 ])
 export const Close = /*#__PURE__*/ __createIcon('Close', [

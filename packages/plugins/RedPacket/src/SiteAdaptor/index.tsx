@@ -11,7 +11,7 @@ import { memo } from 'react'
 import { base } from '../base.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketInjection } from './RedPacketInjection.js'
-import { RedPacketNftInPost } from './RedPacketNftInPost.js'
+import { NftRedPacketInPost } from './NftRedPacketInPost.js'
 import { openDialog } from './emitter.js'
 import {
     RedPacketMetadataReader,
@@ -55,7 +55,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             return (
                 <Render name="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
-                        <RedPacketNftInPost payload={r} />
+                        <NftRedPacketInPost payload={r} />
                     ))}
                 </Render>
             )

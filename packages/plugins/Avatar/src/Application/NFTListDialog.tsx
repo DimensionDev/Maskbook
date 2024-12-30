@@ -192,15 +192,18 @@ export function NFTListDialog() {
         <>
             <DialogContent className={classes.content}>
                 {account || proofs.length ?
-                    <UserAssetsProvider pluginID={selectedPluginId} account={targetAccount}>
+                    <UserAssetsProvider
+                        pluginID={selectedPluginId}
+                        account={targetAccount}
+                        selectMode
+                        selectedAsset={selectedToken}
+                        onItemClick={setSelectedToken}>
                         <CollectionList
                             height={479}
                             gridProps={gridProps}
                             disableWindowScroll
-                            selectedAsset={selectedToken}
                             additionalAssets={tokens}
                             pendingAdditionalAssetCount={pendingTokenCount}
-                            onItemClick={setSelectedToken}
                             onChainChange={setAssetChainId as (chainId?: Web3Helper.ChainIdAll) => void}
                         />
                     </UserAssetsProvider>

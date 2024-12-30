@@ -1,10 +1,11 @@
 import { memo, type HTMLProps } from 'react'
 import { Card, useTheme } from '@mui/material'
-import { CheckBoxIndicator, RadioIndicator, makeStyles } from '@masknet/theme'
+import { CheckBoxIndicator, makeStyles, RadioIndicator } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { AssetPreviewer, NetworkIcon } from '@masknet/shared'
 import { resolveImageURL } from '@masknet/web3-shared-evm'
+import { useUserAssets } from './AssetsProvider.js'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -57,8 +58,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     /** disable inspect NFT details */
     disableInspect?: boolean
     isSelected?: boolean
-    useRadio?: boolean
-    showUnCheckedIndicator?: boolean
+    hideIndicator?: boolean
 }
 
 export const CollectibleCard = memo(
@@ -69,12 +69,13 @@ export const CollectibleCard = memo(
         disableNetworkIcon,
         disableInspect,
         isSelected,
-        useRadio,
-        showUnCheckedIndicator,
+        hideIndicator,
         ...rest
     }: CollectibleCardProps) => {
         const { classes, cx } = useStyles()
         const theme = useTheme()
+        const { selectMode, multiple } = useUserAssets()
+        const showIndicator = selectMode && (multiple ? !hideIndicator : isSelected)
 
         const icon =
             pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null
@@ -87,7 +88,7 @@ export const CollectibleCard = memo(
             asset.contract?.address,
         )
 
-        const Indicator = useRadio ? RadioIndicator : CheckBoxIndicator
+        const Indicator = multiple ? CheckBoxIndicator : RadioIndicator
 
         return (
             <div className={cx(classes.root, className)} {...rest}>
@@ -102,7 +103,7 @@ export const CollectibleCard = memo(
                         fallbackImage={fallbackImage}
                     />
                 </Card>
-                {isSelected || showUnCheckedIndicator ?
+                {showIndicator ?
                     <Indicator
                         size={20}
                         checked={isSelected}

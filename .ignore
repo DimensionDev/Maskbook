@@ -1,3 +1,5 @@
 # Ignores for rg or ag
 patches/
 packages/mask/dashboard/assets/images/SetupTutorial.svg
+
+**/locale/*.{po,json}

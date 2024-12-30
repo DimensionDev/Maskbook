@@ -47,6 +47,7 @@
         "W+lPUh": ["At most 255 recipients"],
         "AbR6G1": ["添付メッセージ"],
         "oG67vO": ["Available to Everyone"],
+        "nvV/Td": ["Balance: <0>", ["0"], "</0>"],
         "dTgELI": ["Best Wishes"],
         "Mh3RsB": ["幸運を祈ります！"],
         "H+bGaz": ["Browse File"],
@@ -122,6 +123,8 @@
         ],
         "N0tcou": ["受け取り中.."],
         "s/KkfL": ["すべての要件をクリアする"],
+        "QowPFh": ["Collectibles"],
+        "q+hNag": ["Collection"],
         "DoJzLz": ["コレクション"],
         "NBdIgR": ["コメント"],
         "qqWcBV": ["完了しました"],
@@ -173,6 +176,9 @@
         ],
         "5opzVG": [
             "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
+        ],
+        "y3juHh": [
+            "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
         ],
         "bPNJ+3": ["Hi friends, I just found a lucky drop sent by @", ["0"], " on ", ["1"], " network."],
         "UnE9Qj": ["Hi friends, I just found a lucky drop sent by @", ["sender"], " on Solana."],
@@ -266,6 +272,7 @@
             ["RED_PACKET_MAX_SHARES"],
             "."
         ],
+        "2Lr4ie": ["The maximum number of NFTs to be sold in one collection lucky drop contract is 255."],
         "51cT/A": ["The minimum amount for each share is ", ["0"], " ", ["1"]],
         "25/Bbu": ["The NFT lucky drop supports up to ", ["NFT_RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "uQLq0T": ["The NFT lucky drop supports up to ", ["RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
@@ -276,6 +283,7 @@
         "NrYZ3H": ["合計金額"],
         "MsYkNH": ["Total amount shared among all winners"],
         "hg5QeV": ["合計額"],
+        "6U+PWG": ["Total NFTs"],
         "vLXevL": ["Transaction cost"],
         "p7luEI": [
             "ラッキードロップクエストを使用してフォロワーとエンゲージメントを成長させましょう。各要件をクリアすると、要求を受けることができます。"

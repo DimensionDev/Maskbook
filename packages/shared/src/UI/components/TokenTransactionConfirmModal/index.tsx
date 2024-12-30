@@ -1,13 +1,14 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { AssetPreviewer, InjectedDialog, type InjectedDialogProps, TokenIcon } from '@masknet/shared'
+import { AssetPreviewer, InjectedDialog, type InjectedDialogProps, NetworkIcon, TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
-import type { PropsWithChildren } from 'react'
-import { Trans } from '@lingui/react/macro'
 import type React from 'react'
+import type { PropsWithChildren } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     confirmDialog: {
@@ -39,6 +40,9 @@ const useStyles = makeStyles()((theme) => ({
     nftContainer: {
         height: 126,
         width: 126,
+        borderRadius: 8,
+        position: 'relative',
+        overflow: 'hidden',
     },
     nftName: {
         display: 'flex',
@@ -142,6 +146,12 @@ export function TokenTransactionConfirmModal({
                                 <div className={classes.nftContainer}>
                                     <AssetPreviewer
                                         url={nonFungibleToken.metadata?.mediaURL || nonFungibleToken.metadata?.imageURL}
+                                        icon={
+                                            <NetworkIcon
+                                                pluginID={nonFungibleToken.runtime ?? NetworkPluginID.PLUGIN_EVM}
+                                                chainId={nonFungibleToken.chainId}
+                                            />
+                                        }
                                     />
                                 </div>
                                 <div className={classes.nftName}>

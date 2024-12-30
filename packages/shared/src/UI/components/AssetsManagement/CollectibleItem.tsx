@@ -1,3 +1,6 @@
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { ShadowRootTooltip, makeStyles, useBoundedPopperProps, useDetectOverflow } from '@masknet/theme'
 import {
     isENSContractAddress,
@@ -9,10 +12,8 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, type HTMLProps, type ReactNode } from 'react'
+import { useUserAssets } from './AssetsProvider.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
-import { Icons } from '@masknet/icons'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
     card: {
@@ -127,12 +128,12 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
         actionLabel,
         verifiedBy = EMPTY_LIST,
         onActionClick,
-        onItemClick,
         isSelected,
-        showUnCheckedIndicator,
+        hideIndicator,
         ...rest
     } = props
     const { classes, cx } = useStyles()
+    const { onItemClick } = useUserAssets()
     const name = asset.collection?.name ?? ''
     const popperProps = useBoundedPopperProps()
     const handleClick = useCallback(() => {
@@ -173,7 +174,7 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
                     disableNetworkIcon={disableNetworkIcon}
                     onClick={handleClick}
                     isSelected={isSelected}
-                    showUnCheckedIndicator={showUnCheckedIndicator}
+                    hideIndicator={hideIndicator}
                 />
                 <div className={cx(classes.info, classes.ease)}>
                     {disableName ? null : (

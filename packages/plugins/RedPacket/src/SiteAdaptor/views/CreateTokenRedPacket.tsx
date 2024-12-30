@@ -13,9 +13,15 @@ import {
 } from '@masknet/shared'
 import { EnhanceableSite, getEnhanceableSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
-import { useChainContext, useEnvironmentContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useEnvironmentContext,
+    useNativeTokenPrice,
+    useSmartPayChainId,
+    useWallet,
+} from '@masknet/web3-hooks-base'
 import { useTransactionValue } from '@masknet/web3-hooks-evm'
-import { EVMWeb3, SmartPayBundler } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import {
     formatBalance,
     type FungibleToken,
@@ -30,13 +36,13 @@ import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
 import { MAX_CUSTOM_THEMES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES, RoutePaths } from '../../constants.js'
+import { ConditionSettings } from '../components/ConditionSettings.js'
+import { MessageInput } from '../components/MessageInput.js'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateParams } from '../hooks/useCreateCallback.js'
 import { useDefaultCreateGas } from '../hooks/useDefaultCreateGas.js'
-import { ConditionSettings } from '../components/ConditionSettings.js'
 
 const useStyles = makeStyles()((theme) => ({
     fields: {
@@ -213,7 +219,7 @@ export function CreateTokenRedPacket() {
     const wallet = useWallet()
     const { pluginID } = useEnvironmentContext()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const smartPayChainId = useSmartPayChainId()
 
     // #region select token
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -315,8 +321,6 @@ export function CreateTokenRedPacket() {
 
     if (!token) return null
 
-    const messageMaxLength = isFirefly ? 40 : 100
-
     return (
         <>
             <div className={classes.fields}>
@@ -344,26 +348,7 @@ export function CreateTokenRedPacket() {
                         </Typography>
                     </label>
                 </div>
-                <InputBase
-                    className={classes.input}
-                    fullWidth
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
-                    startAdornment={
-                        <Typography className={classes.inputLabel}>
-                            <Trans>Message</Trans>
-                        </Typography>
-                    }
-                    endAdornment={
-                        <Typography className={classes.inputLabel} style={{ right: 12, left: 'auto' }}>
-                            {message.length}/{messageMaxLength}
-                        </Typography>
-                    }
-                    placeholder={t`Best Wishes!`}
-                    inputProps={{
-                        maxLength: messageMaxLength,
-                    }}
-                />
+                <MessageInput message={message} onChange={setMessage} />
                 <div className={classes.field}>
                     <Box width={180}>
                         <InputBase

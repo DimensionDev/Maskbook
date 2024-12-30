@@ -3,9 +3,9 @@ import { EVMWeb3ContextProvider, useNetworkContext } from '@masknet/web3-hooks-b
 import { ThemeProvider } from '@mui/material'
 import { useEffect } from 'react'
 import { RedPacketRPC } from '../messages.js'
-import { RedPacketNft, type RedPacketNftProps } from './RedPacketNft.js'
+import { NftRedPacket, type NftRedPacketProps } from './NftRedPacket/index.js'
 
-export function RedPacketNftInPost({ payload }: Omit<RedPacketNftProps, 'currentPluginID'>) {
+export function NftRedPacketInPost({ payload }: Omit<NftRedPacketProps, 'currentPluginID'>) {
     const { pluginID } = useNetworkContext()
     useEffect(() => {
         RedPacketRPC.updateRedPacketNft({
@@ -19,7 +19,7 @@ export function RedPacketNftInPost({ payload }: Omit<RedPacketNftProps, 'current
     return (
         <ThemeProvider theme={MaskLightTheme}>
             <EVMWeb3ContextProvider>
-                <RedPacketNft payload={payload} currentPluginID={pluginID} />
+                <NftRedPacket payload={payload} currentPluginID={pluginID} />
             </EVMWeb3ContextProvider>
         </ThemeProvider>
     )

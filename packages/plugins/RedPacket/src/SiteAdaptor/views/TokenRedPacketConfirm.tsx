@@ -11,8 +11,8 @@ import {
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
-import { EVMChainResolver, EVMExplorerResolver, FireflyRedPacket, SmartPayBundler } from '@masknet/web3-providers'
+import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
+import { EVMChainResolver, EVMExplorerResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
@@ -20,7 +20,6 @@ import { Link, Paper, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAsync } from 'react-use'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallback.js'
@@ -228,7 +227,7 @@ export function TokenRedPacketConfirm() {
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const wallet = useWallet()
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const smartPayChainId = useSmartPayChainId()
 
     const loading = creatingPubkey || isCreating || isWaitGasBeMinus
     const disabled = isBalanceInsufficient || loading

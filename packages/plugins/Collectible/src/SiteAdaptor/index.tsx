@@ -52,15 +52,20 @@ const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
     UI: {
         TabContent({ socialAccount }) {
             const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
+            const handleItemClick = useCallback(
+                (asset: Web3Helper.NonFungibleAssetAll) => {
+                    inspectCollectible(asset, 'profileCard')
+                },
+                [inspectCollectible],
+            )
             if (!socialAccount) return null
             return (
                 <Web3ContextProvider network={socialAccount.pluginID}>
-                    <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
-                        <CollectionList
-                            gridProps={gridProps}
-                            from="web3Profile"
-                            onItemClick={(asset) => inspectCollectible(asset, 'web3Profile')}
-                        />
+                    <UserAssetsProvider
+                        pluginID={socialAccount.pluginID}
+                        account={socialAccount.address}
+                        onItemClick={handleItemClick}>
+                        <CollectionList gridProps={gridProps} from="web3Profile" />
                     </UserAssetsProvider>
                 </Web3ContextProvider>
             )
@@ -108,19 +113,27 @@ const site: Plugin.SiteAdaptor.Definition = {
                 TabContent({ socialAccount }) {
                     const inspectCollectible = useInspectCollectible(socialAccount?.pluginID)
                     const { classes } = usePopupCollectionStyles()
+                    const handleItemClick = useCallback(
+                        (asset: Web3Helper.NonFungibleAssetAll) => {
+                            inspectCollectible(asset, 'profileCard')
+                        },
+                        [inspectCollectible],
+                    )
 
                     if (!socialAccount) return null
 
                     return (
                         <Web3ContextProvider network={socialAccount.pluginID}>
-                            <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
+                            <UserAssetsProvider
+                                pluginID={socialAccount.pluginID}
+                                account={socialAccount.address}
+                                onItemClick={handleItemClick}>
                                 <CollectionList
                                     height={392}
                                     gridProps={gridProps}
                                     classes={{ sidebar: classes.sidebar }}
                                     disableWindowScroll
                                     from="profileCard"
-                                    onItemClick={(asset) => inspectCollectible(asset, 'profileCard')}
                                 />
                             </UserAssetsProvider>
                         </Web3ContextProvider>
@@ -155,13 +168,11 @@ const site: Plugin.SiteAdaptor.Definition = {
                     return (
                         <Box style={{ minHeight: 300 }}>
                             <Web3ContextProvider network={result.pluginID}>
-                                <UserAssetsProvider pluginID={result.pluginID} account={socialAccount.address}>
-                                    <CollectionList
-                                        height={478}
-                                        gridProps={gridProps}
-                                        disableWindowScroll
-                                        onItemClick={inspectCollectible}
-                                    />
+                                <UserAssetsProvider
+                                    pluginID={result.pluginID}
+                                    account={socialAccount.address}
+                                    onItemClick={inspectCollectible}>
+                                    <CollectionList height={478} gridProps={gridProps} disableWindowScroll />
                                 </UserAssetsProvider>
                             </Web3ContextProvider>
                         </Box>
