@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { type NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { CheckBoxIndicator, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { type NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -48,15 +48,20 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '20px',
     },
-    balance: {
+    tail: {
         marginLeft: 'auto',
+    },
+    disabled: {
+        cursor: 'not-allowed',
     },
 }))
 
 interface ContractItemProps extends Omit<ListItemProps, 'onSelect'> {
     pluginID: NetworkPluginID
     collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-
+    enabledSelect?: boolean
+    selected?: boolean
+    disabled?: boolean
     onSelect?(collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>): void
 }
 
@@ -64,10 +69,13 @@ export const ContractItem = memo(function ContractItem({
     pluginID,
     className,
     collection,
+    enabledSelect,
+    selected,
+    disabled,
     onSelect,
     ...rest
 }: ContractItemProps) {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     const Utils = useWeb3Utils(pluginID)
 
     return (
@@ -92,8 +100,17 @@ export const ContractItem = memo(function ContractItem({
                     </Link>
                 </Typography>
             </div>
-            {collection.balance ?
-                <Typography className={classes.balance}>{collection.balance}</Typography>
+            {enabledSelect ?
+                <div className={classes.tail}>
+                    <CheckBoxIndicator
+                        className={disabled ? classes.disabled : undefined}
+                        color={theme.palette.maskColor.primary}
+                        checked={selected}
+                        uncheckedColor={theme.palette.maskColor.secondaryLine}
+                    />
+                </div>
+            : collection.balance ?
+                <Typography className={classes.tail}>{collection.balance}</Typography>
             :   null}
         </ListItem>
     )

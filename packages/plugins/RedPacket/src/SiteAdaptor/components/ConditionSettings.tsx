@@ -1,11 +1,12 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { SelectFungibleTokenModal, TokenIcon } from '@masknet/shared'
+import { SelectFungibleTokenModal, SelectNonFungibleContractModal, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { CheckBoxIndicator, makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import type { FungibleToken } from '@masknet/web3-shared-base'
+import type { FungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
+import type { PopperOwnProps } from '@mui/base'
 import { ClickAwayListener, InputBase, Typography } from '@mui/material'
 import { useState, type HTMLProps } from 'react'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
@@ -118,10 +119,30 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+const popperOptions: PopperOwnProps['popperOptions'] = {
+    strategy: 'absolute',
+    modifiers: [
+        {
+            name: 'offset',
+            options: {
+                offset: [0, 10],
+            },
+        },
+    ],
+} as const
+
 export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
     const { classes, cx, theme } = useStyles()
-    const { conditions, setConditions, tokenQuantity, setTokenQuantity, requiredTokens, setRequiredTokens } =
-        useRedPacket()
+    const {
+        conditions,
+        setConditions,
+        tokenQuantity,
+        setTokenQuantity,
+        requiredTokens,
+        setRequiredTokens,
+        requiredCollections,
+        setRequiredCollections,
+    } = useRedPacket()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -143,17 +164,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                     open={!!anchorEl}
                     anchorEl={anchorEl}
                     placement="bottom-end"
-                    popperOptions={{
-                        strategy: 'absolute',
-                        modifiers: [
-                            {
-                                name: 'offset',
-                                options: {
-                                    offset: [0, 10],
-                                },
-                            },
-                        ],
-                    }}
+                    popperOptions={popperOptions}
                     keepMounted>
                     <div className={classes.conditions}>
                         <div className={classes.condition}>
@@ -232,23 +243,21 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                     </Typography>
                                     {requiredTokens.length ?
                                         <div className={classes.assets}>
-                                            {requiredTokens.map((token) => {
-                                                return (
-                                                    <div className={classes.asset} key={token.address}>
-                                                        <TokenIcon
-                                                            className={classes.tokenIcon}
-                                                            address={token.address}
-                                                            name={token.name}
-                                                            size={24}
-                                                            chainId={token.chainId}
-                                                            logoURL={token.logoURL}
-                                                        />
-                                                        <Typography className={classes.assetName}>
-                                                            {token.symbol}
-                                                        </Typography>
-                                                    </div>
-                                                )
-                                            })}
+                                            {requiredTokens.map((token) => (
+                                                <div className={classes.asset} key={token.address}>
+                                                    <TokenIcon
+                                                        className={classes.tokenIcon}
+                                                        address={token.address}
+                                                        name={token.name}
+                                                        size={24}
+                                                        chainId={token.chainId}
+                                                        logoURL={token.logoURL}
+                                                    />
+                                                    <Typography className={classes.assetName}>
+                                                        {token.symbol}
+                                                    </Typography>
+                                                </div>
+                                            ))}
                                         </div>
                                     :   null}
                                     <Typography
@@ -314,8 +323,60 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                             <Icons.Questions sx={{ ml: 0.5 }} />
                                         </ShadowRootTooltip>
                                     </Typography>
-                                    <Typography className={classes.selectButton}>
-                                        <Trans>Select a token</Trans>
+                                    {requiredCollections.length ?
+                                        <div className={classes.assets}>
+                                            {requiredCollections.map((collection) => (
+                                                <div className={classes.asset} key={collection.address}>
+                                                    <TokenIcon
+                                                        className={classes.tokenIcon}
+                                                        address={collection.address}
+                                                        name={collection.name}
+                                                        size={24}
+                                                        chainId={collection.chainId}
+                                                        logoURL={collection.iconURL!}
+                                                    />
+                                                    <Typography className={classes.assetName}>
+                                                        {collection.name}
+                                                    </Typography>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    :   null}
+                                    <Typography
+                                        className={classes.selectButton}
+                                        onClick={async () => {
+                                            setAnchorEl(null)
+                                            const picked = await new Promise<
+                                                Array<NonFungibleCollection<ChainId, SchemaType>>
+                                            >((resolve) => {
+                                                SelectNonFungibleContractModal.open({
+                                                    pluginID: NetworkPluginID.PLUGIN_EVM,
+                                                    multiple: true,
+                                                    maxCollections: 4,
+                                                    selectedCollections: requiredCollections,
+                                                    onSubmit(collection) {
+                                                        resolve(
+                                                            collection as Array<
+                                                                NonFungibleCollection<ChainId, SchemaType>
+                                                            >,
+                                                        )
+                                                    },
+                                                })
+                                            })
+                                            if (picked) {
+                                                setRequiredCollections(picked)
+                                            }
+                                        }}>
+                                        {requiredCollections.length ?
+                                            <>
+                                                <Trans>Adjust Selection</Trans>
+                                                <Icons.Filter size={16} />
+                                            </>
+                                        :   <>
+                                                <Trans>Select NFTs</Trans>
+                                                <Icons.Plus size={16} />
+                                            </>
+                                        }
                                     </Typography>
                                 </div>
                             :   null}

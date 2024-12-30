@@ -11,10 +11,15 @@ export interface SelectNonFungibleContractModalOpenProps<T extends NetworkPlugin
     chainId?: Web3Helper.Definition[T]['ChainId']
     schemaType?: SchemaType
     title?: string
-    onSubmit?(
-        collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
-    ): void
     collections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    selectedCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    multiple?: boolean
+    maxCollections?: number
+    onSubmit?(
+        collection:
+            | NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+            | Array<NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>,
+    ): void
 }
 
 export function SelectNonFungibleContractModal({ ref }: SingletonModalProps<SelectNonFungibleContractModalOpenProps>) {
@@ -26,6 +31,10 @@ export function SelectNonFungibleContractModal({ ref }: SingletonModalProps<Sele
         useState<Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
     const [onSubmit, setOnSubmit] =
         useState<(collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => void>()
+    const [multiple, setMultiple] = useState<boolean>()
+    const [maxCollections, setMaxCollections] = useState<number>()
+    const [selectedCollections, setSelectedCollections] =
+        useState<Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>>()
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
@@ -35,6 +44,9 @@ export function SelectNonFungibleContractModal({ ref }: SingletonModalProps<Sele
             setTitle(props.title)
             setOnSubmit(() => props.onSubmit)
             setCollections(props.collections)
+            setMultiple(props.multiple)
+            setMaxCollections(props.maxCollections)
+            setSelectedCollections(props.selectedCollections)
         },
     })
 
@@ -47,8 +59,11 @@ export function SelectNonFungibleContractModal({ ref }: SingletonModalProps<Sele
             schemaType={schemaType}
             chainId={chainId}
             pluginID={pluginID}
-            onSubmit={onSubmit}
+            multiple={multiple}
+            maxCollections={maxCollections}
+            selectedCollections={selectedCollections}
             initialCollections={collections}
+            onSubmit={onSubmit}
         />
     )
 }

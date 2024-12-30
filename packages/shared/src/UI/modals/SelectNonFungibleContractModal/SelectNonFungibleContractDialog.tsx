@@ -2,14 +2,14 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { compact } from 'lodash-es'
 import Fuse from 'fuse.js'
 import { useSubscription } from 'use-subscription'
-import { DialogContent, List, Stack, Typography } from '@mui/material'
+import { Button, DialogActions, DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import { Icons } from '@masknet/icons'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
-import { type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { ContractItem } from './ContractItem.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
@@ -45,6 +45,14 @@ const useStyles = makeStyles()((theme) => ({
     contractItem: {
         marginBottom: theme.spacing(2),
     },
+    dialogActions: {
+        padding: 16,
+        boxSizing: 'border-box',
+        boxShadow: '0px 0px 20px rgba(0, 0, 0, 0.05)',
+        position: 'absolute',
+        bottom: 0,
+        width: '100%',
+    },
     toolbar: {
         position: 'absolute',
         bottom: 0,
@@ -66,11 +74,16 @@ interface SelectNonFungibleContractDialogProps<T extends NetworkPluginID = Netwo
     chainId?: Web3Helper.Definition[T]['ChainId']
     schemaType?: SchemaType
     title?: string
+    initialCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    selectedCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
+    multiple?: boolean
+    maxCollections?: number
     onClose?(): void
     onSubmit?(
-        collection: NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>,
+        collection:
+            | NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>
+            | Array<NonFungibleCollection<Web3Helper.Definition[T]['ChainId'], Web3Helper.Definition[T]['SchemaType']>>,
     ): void
-    initialCollections?: Array<NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>>
 }
 
 export const SelectNonFungibleContractDialog = memo(
@@ -78,10 +91,13 @@ export const SelectNonFungibleContractDialog = memo(
         open,
         pluginID,
         chainId,
-        onClose,
-        onSubmit,
         schemaType,
         initialCollections,
+        selectedCollections = EMPTY_LIST,
+        multiple,
+        maxCollections,
+        onClose,
+        onSubmit,
     }: SelectNonFungibleContractDialogProps) => {
         const { t } = useLingui()
         const { classes } = useStyles()
@@ -168,12 +184,33 @@ export const SelectNonFungibleContractDialog = memo(
             await Token?.addNonFungibleTokens?.(account, contract, tokenIds)
         }, [account, pluginID, chainId])
 
+        const [pendingSelectedCollections, setPendingSelectedCollections] = useState(selectedCollections ?? EMPTY_LIST)
+        const noChanges = useMemo(() => {
+            const selectedSet = new Set(selectedCollections.map((x) => [x.chainId, x.address].join(':').toLowerCase()))
+            const pendingSet = new Set(
+                pendingSelectedCollections.map((x) => [x.chainId, x.address].join(':').toLowerCase()),
+            )
+            return pendingSet.difference(selectedSet).size === 0
+        }, [pendingSelectedCollections, selectedCollections])
         const handleSelectCollection = useCallback(
             (collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => {
-                onSubmit?.(collection)
-                onClose?.()
+                // onSubmit?.(collection)
+                if (multiple) {
+                    setPendingSelectedCollections((collections) => {
+                        const selected = collections.find(
+                            (x) => isSameAddress(x.address, collection.address) && x.chainId === collection.chainId,
+                        )
+                        if (selected) return collections.filter((x) => x !== selected)
+                        return maxCollections && collections.length >= maxCollections ?
+                                collections
+                            :   [...collections, collection]
+                    })
+                } else {
+                    onSubmit?.(collection)
+                    onClose?.()
+                }
             },
-            [onClose],
+            [onClose, multiple, maxCollections],
         )
 
         return (
@@ -207,28 +244,53 @@ export const SelectNonFungibleContractDialog = memo(
                             <Trans>No results</Trans>
                         </EmptyStatus>
                     :   <List className={classes.contractList}>
-                            {searchResults.map((collection) => (
-                                <ContractItem
-                                    key={collection.address}
-                                    className={classes.contractItem}
-                                    pluginID={pluginID}
-                                    collection={collection}
-                                    onSelect={handleSelectCollection}
-                                />
-                            ))}
+                            {searchResults.map((collection) => {
+                                const selected = pendingSelectedCollections.some(
+                                    (x) =>
+                                        isSameAddress(x.address, collection.address) &&
+                                        x.chainId === collection.chainId,
+                                )
+                                return (
+                                    <ContractItem
+                                        key={collection.address}
+                                        className={classes.contractItem}
+                                        pluginID={pluginID}
+                                        selected={selected}
+                                        enabledSelect={multiple}
+                                        disabled={
+                                            !!maxCollections && pendingSelectedCollections.length >= maxCollections
+                                        }
+                                        collection={collection}
+                                        onSelect={handleSelectCollection}
+                                    />
+                                )
+                            })}
                         </List>
                     }
-
-                    <Stack
-                        className={classes.toolbar}
-                        direction="row"
-                        justifyContent="center"
-                        onClick={handleAddCollectibles}>
-                        <Icons.Avatar size={24} />
-                        <Typography ml={2} fontWeight={700}>
-                            <Trans>Add NFTs</Trans>
-                        </Typography>
-                    </Stack>
+                    {multiple ?
+                        <DialogActions className={classes.dialogActions}>
+                            <Button
+                                variant="contained"
+                                disabled={noChanges}
+                                fullWidth
+                                onClick={() => {
+                                    onSubmit?.(pendingSelectedCollections)
+                                    onClose?.()
+                                }}>
+                                <Trans>Confirm</Trans>
+                            </Button>
+                        </DialogActions>
+                    :   <Stack
+                            className={classes.toolbar}
+                            direction="row"
+                            justifyContent="center"
+                            onClick={handleAddCollectibles}>
+                            <Icons.Avatar size={24} />
+                            <Typography ml={2} fontWeight={700}>
+                                <Trans>Add NFTs</Trans>
+                            </Typography>
+                        </Stack>
+                    }
                 </DialogContent>
             </InjectedDialog>
         )

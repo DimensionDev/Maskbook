@@ -119,11 +119,10 @@ export function TokenTransactionConfirmModal({
                         {token ?
                             <TokenIcon
                                 className={classes.tokenIcon}
-                                address={token?.address || ''}
-                                logoURL={token?.logoURL}
-                                name={token?.symbol ?? token?.name}
-                                chainId={token?.chainId}
-                                sx={{ fontSize: '2.75em' }}
+                                address={token.address}
+                                logoURL={token.logoURL}
+                                name={token.symbol ?? token.name}
+                                chainId={token.chainId}
                                 size={90}
                             />
                         :   <Icons.FillSuccess className={classes.icon} size={90} />}

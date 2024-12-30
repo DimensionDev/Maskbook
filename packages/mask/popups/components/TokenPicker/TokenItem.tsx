@@ -9,15 +9,7 @@ import { useFungibleTokenBalance, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { debank } from '@masknet/web3-providers/helpers'
 import { type ReasonableNetwork } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import {
-    Link,
-    ListItem,
-    ListItemIcon,
-    ListItemText,
-    Typography,
-    useForkRef,
-    type ListItemProps,
-} from '@mui/material'
+import { Link, ListItem, ListItemIcon, ListItemText, Typography, useForkRef, type ListItemProps } from '@mui/material'
 import { memo, useMemo, useRef } from 'react'
 import { formatTokenBalance } from '../../../shared/index.js'
 
