@@ -24,6 +24,7 @@ import { RedPacketRPC } from '../../messages.js'
 import { useCreateRedPacketReceipt } from '../hooks/useCreateRedPacketReceipt.js'
 import { useRedpacketToken } from '../hooks/useRedpacketToken.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
+import { formatTokenAmount } from '../helper/formatTokenAmount.js'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()((
@@ -91,6 +92,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
         progress: {
             color: theme.palette.maskColor.second,
             display: 'flex',
+            whiteSpace: 'nowrap',
             gap: theme.spacing(1),
             '&>b': {
                 color: theme.palette.maskColor.main,
@@ -117,6 +119,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             fontWeight: 700,
             color: theme.palette.maskColor.main,
             cursor: 'pointer',
+            whiteSpace: 'nowrap',
         },
         actionButton: {
             marginTop: theme.spacing(4),
@@ -269,15 +272,8 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                                         {claim_numbers}/{total_numbers}
                                     </b>{' '}
                                     <b>
-                                        {formatBalance(claim_amounts, token_decimal, {
-                                            significant: 2,
-                                            isPrecise: true,
-                                        })}
-                                        /
-                                        {formatBalance(total_amounts, token_decimal ?? 18, {
-                                            significant: 2,
-                                            isPrecise: true,
-                                        })}
+                                        {formatTokenAmount(claim_amounts || 0, token_decimal)}/
+                                        {formatTokenAmount(total_amounts || 0, token_decimal)}
                                     </b>
                                     <span>{tokenSymbol}</span>
                                 </Trans>
