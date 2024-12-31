@@ -31,6 +31,7 @@ const useStyles = makeStyles()({
         },
     },
     networkButton: {
+        flexShrink: 0,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
