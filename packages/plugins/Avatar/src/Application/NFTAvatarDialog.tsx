@@ -1,9 +1,9 @@
+import type { InjectedDialogProps } from '@masknet/shared'
 import { useMemo } from 'react'
 import { MemoryRouter } from 'react-router-dom'
-import { RoutePaths } from './Routes.js'
 import { AvatarManagementProvider } from '../contexts/AvatarManagement.js'
 import { RouterDialog } from './RouterDialog.js'
-import type { InjectedDialogProps } from '@masknet/shared'
+import { RoutePaths } from './Routes.js'
 
 interface NFTAvatarDialogProps extends InjectedDialogProps {
     startPicking?: boolean

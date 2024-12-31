@@ -1,3 +1,19 @@
+import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
+import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
+import { queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
+import {
+    type BindingProof,
+    EMPTY_LIST,
+    MaskMessages,
+    type NextIDPersonaBindings,
+    NextIDPlatform,
+    type SocialIdentity,
+} from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import { NextIDProof } from '@masknet/web3-providers'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import { useQuery } from '@tanstack/react-query'
 import { first, noop } from 'lodash-es'
 import {
     createContext,
@@ -6,27 +22,11 @@ import {
     type PropsWithChildren,
     type SetStateAction,
     useContext,
+    useEffect,
     useMemo,
     useState,
-    useEffect,
 } from 'react'
-import {
-    type BindingProof,
-    EMPTY_LIST,
-    type SocialIdentity,
-    NextIDPlatform,
-    MaskMessages,
-    type NextIDPersonaBindings,
-} from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext } from '@masknet/web3-hooks-base'
 import { PFP_TYPE, type SelectTokenInfo } from '../types.js'
-import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { currentNextIDPlatform } from '@masknet/plugin-infra/content-script/context'
-import { queryPersonaByProfile } from '@masknet/plugin-infra/dom/context'
-import { useQuery } from '@tanstack/react-query'
-import { NextIDProof } from '@masknet/web3-providers'
-import { isValidAddress } from '@masknet/web3-shared-evm'
 
 interface AvatarManagementContextOptions {
     isPending: boolean

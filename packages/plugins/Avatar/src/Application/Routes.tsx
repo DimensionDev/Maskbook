@@ -1,8 +1,7 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
-import { NFTListDialog, type NFTListDialogRef } from './NFTListDialog.js'
+import { NFTListDialog } from './NFTListDialog.js'
 import { PersonaPage } from './PersonaPage.js'
 import { UploadAvatarDialog } from './UploadAvatarDialog.js'
-import { type RefAttributes } from 'react'
 
 export enum RoutePaths {
     Personas = '/personas',
@@ -11,11 +10,11 @@ export enum RoutePaths {
     Exit = '/exit',
 }
 
-export function AvatarRoutes({ ref }: RefAttributes<NFTListDialogRef | undefined>) {
+export function AvatarRoutes() {
     return (
         <Routes>
             <Route path={RoutePaths.Personas} element={<PersonaPage />} />
-            <Route path={RoutePaths.NFTPicker} element={<NFTListDialog ref={ref} />} />
+            <Route path={RoutePaths.NFTPicker} element={<NFTListDialog />} />
             <Route path={RoutePaths.Upload} element={<UploadAvatarDialog />} />
             {/* If router is embedded inside a dialog, */}
             {/* which should know it's time to close itself once we enter Exit */}

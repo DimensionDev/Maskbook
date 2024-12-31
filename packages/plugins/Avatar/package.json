@@ -28,6 +28,7 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
+    "@servie/events": "^3.0.0",
     "@types/react-avatar-editor": "^13.0.2",
     "@types/use-subscription": "^1.0.2",
     "bignumber.js": "9.1.2",

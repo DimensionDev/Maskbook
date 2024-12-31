@@ -1,18 +1,16 @@
-import { compact, uniqBy } from 'lodash-es'
-import { useCallback, useImperativeHandle, useState, type RefAttributes } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { useNavigate } from 'react-router-dom'
-import { Icons } from '@masknet/icons'
+import { Trans } from '@lingui/macro'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import {
     AddCollectiblesModal,
     ChainBoundary,
     CollectionList,
+    EmptyStatus,
     PluginVerifiedWalletStatusBar,
     PopupHomeTabType,
     UserAssetsProvider,
 } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
@@ -25,16 +23,19 @@ import {
 } from '@masknet/web3-hooks-base'
 import { isGreaterThan, isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
-import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { Button, DialogActions, DialogContent } from '@mui/material'
+import { compact, uniqBy } from 'lodash-es'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useUpdateEffect } from 'react-use'
 import { supportPluginIds } from '../constants.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
-import { type AllChainsNonFungibleToken, PFP_TYPE } from '../types.js'
+import { emitter } from '../emitter.js'
+import { PFP_TYPE, type AllChainsNonFungibleToken } from '../types.js'
 import { toPNG } from '../utils/index.js'
 import { RoutePaths } from './Routes.js'
-import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {
@@ -61,24 +62,13 @@ const useStyles = makeStyles()((theme) => ({
         overflow: 'hidden',
         display: 'flex',
     },
-    noWallet: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexDirection: 'column',
-        flex: 1,
-    },
 }))
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',
 }
 
-export interface NFTListDialogRef {
-    handleAddCollectibles: () => void
-}
-
-export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefined>) {
+export function NFTListDialog() {
     const { classes } = useStyles()
     const { pfpType, proofs, tokenInfo, targetAccount, setTargetAccount, setSelectedTokenInfo, proof } =
         useAvatarManagement()
@@ -173,13 +163,13 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
         })
     }, [pluginID, assetChainId, targetAccount])
 
-    useImperativeHandle(
-        ref,
-        () => ({
-            handleAddCollectibles,
-        }),
-        [handleAddCollectibles],
-    )
+    useEffect(() => {
+        const unsubscribe = emitter.on('add', handleAddCollectibles)
+        return () => {
+            unsubscribe()
+        }
+    }, [handleAddCollectibles])
+
     useRenderPhraseCallbackOnDepsChange(() => setSelectedPluginId(pluginID), [pluginID])
 
     useUpdateEffect(() => {
@@ -191,9 +181,11 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
     }, [originAccount])
 
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))
-    const walletItems = proofs.sort((a, z) => {
-        return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
-    })
+    const walletItems = useMemo(() => {
+        return [...proofs].sort((a, z) => {
+            return isGreaterThan(a.last_checked_at, z.last_checked_at) ? -1 : 1
+        })
+    }, [proofs])
 
     return (
         <>
@@ -211,12 +203,9 @@ export function NFTListDialog({ ref }: RefAttributes<NFTListDialogRef | undefine
                             onChainChange={setAssetChainId as (chainId?: Web3Helper.ChainIdAll) => void}
                         />
                     </UserAssetsProvider>
-                :   <Box className={classes.noWallet} height={479}>
-                        <Icons.EmptySimple variant="light" size={36} />
-                        <Typography fontSize={14} color={(theme) => theme.palette.maskColor.second} mt="12px">
-                            <Trans>No valid wallet detected. Please connect wallet or verify wallet firstly.</Trans>
-                        </Typography>
-                    </Box>
+                :   <EmptyStatus height={479}>
+                        <Trans>No valid wallet detected. Please connect wallet or verify wallet firstly.</Trans>
+                    </EmptyStatus>
                 }
             </DialogContent>
 
