@@ -184,7 +184,9 @@ export function RedPacketEnvelope({
             <div className={classes.content}>
                 <div className={classes.message}>
                     <TextOverflowTooltip as={ShadowRootTooltip} title={message} placement="top">
-                        <Typography className={classes.text}>{message}</Typography>
+                        <Typography key={message} className={classes.text}>
+                            {message}
+                        </Typography>
                     </TextOverflowTooltip>
                 </div>
                 <div className={classes.asset}>
