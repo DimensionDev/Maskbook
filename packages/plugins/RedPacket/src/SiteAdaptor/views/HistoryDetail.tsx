@@ -42,6 +42,7 @@ export function HistoryDetail() {
     const rpid = params.get('id')
     const rawChainId = params.get('chain-id')
     const chainId = rawChainId ? +rawChainId : undefined
+    const isClaimed = params.get('claimed')
 
     const { data, isLoading } = useInfiniteQuery({
         enabled: !!rpid,
@@ -67,7 +68,7 @@ export function HistoryDetail() {
     return (
         <div className={classes.container}>
             {history ?
-                <RedPacketRecord history={history} showDetailLink={false} />
+                <RedPacketRecord onlyView={!!isClaimed} history={history} showDetailLink={false} />
             :   null}
             {isLoading ?
                 <div className={cx(classes.interactions, classes.status)}>

@@ -233,6 +233,9 @@ export const RedPacketRecord = memo(function RedPacketRecord({
 
     const timestamp = create_time || (received_time ? +received_time : undefined)
 
+    // Claimed amount or total amount of the red packet
+    const amount = onlyView ? history.token_amounts : history.total_amounts
+
     return (
         <section className={classes.container} ref={redpacketRef}>
             <div className={classes.content}>
@@ -255,13 +258,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     </div>
                     <div className={classes.status}>
                         <Typography className={classes.total}>
-                            {onlyView ?
-                                formatBalance(history.token_amounts, token_decimal)
-                            :   formatBalance(total_amounts, token_decimal ?? 18, {
-                                    significant: 2,
-                                    isPrecise: true,
-                                })
-                            }{' '}
+                            {formatBalance(amount, token_decimal, { significant: 2, isPrecise: true })}{' '}
                             {tokenSymbol ?? token?.symbol ?? '--'}
                         </Typography>
                         <Typography className={classes.progress} component="div">
@@ -286,7 +283,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                                         navigate(
                                             {
                                                 pathname: RoutePaths.HistoryDetail,
-                                                search: `?id=${redpacket_id}&chain-id=${chainId}`,
+                                                search: `?id=${redpacket_id}&chain-id=${chainId}&claimed=${onlyView ? true : ''}`,
                                             },
                                             { state: { history } },
                                         )
