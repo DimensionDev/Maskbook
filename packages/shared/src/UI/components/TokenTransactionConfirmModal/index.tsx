@@ -68,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     icon: {
         filter: 'drop-shadow(0px 6px 12px rgba(61, 194, 51, 0.20))',
-        backdropFilter: "blur(8px)",
+        backdropFilter: 'blur(8px)',
     },
 }))
 
