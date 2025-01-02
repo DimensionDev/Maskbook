@@ -37,7 +37,7 @@ export async function detectScam(post: PostDetail) {
     const detector = getDetector()
     await detector.update()
     const result = await detector.detectScam(post)
-    const mainType = result?.matchType.split('')[0]
+    const mainType = result?.matchType.split(':')[0]
     if (mainType === 'match_by_domain_sim_days') return null
     return result
 }
