@@ -1,12 +1,12 @@
-import { Trans } from '@lingui/macro'
+import { t, Trans } from '@lingui/macro'
 import { delay } from '@masknet/kit'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { currentVisitingProfile } from '@masknet/plugin-infra/content-script/context'
-import { usePersonaConnectStatus } from '@masknet/shared'
+import { currentVisitingProfile, share } from '@masknet/plugin-infra/content-script/context'
+import { TransactionConfirmModal, usePersonaConnectStatus } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { Twitter } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress, TokenType } from '@masknet/web3-shared-base'
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import { useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
@@ -98,7 +98,13 @@ export function UploadAvatarDialog() {
             navigate(RoutePaths.Exit)
             setDisabled(false)
             await delay(500)
-            location.reload()
+            TransactionConfirmModal.open({
+                title: t`NFTs Profile`,
+                message: t`You have set NFT PFP successfully.`,
+                shareText: t`I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io.`,
+                tokenType: TokenType.Fungible,
+                share,
+            })
         }, 'image/png')
     }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar, identity])
 

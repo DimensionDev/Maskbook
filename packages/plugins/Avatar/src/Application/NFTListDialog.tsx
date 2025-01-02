@@ -54,6 +54,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     content: {
         padding: 0,
+        width: '100%',
         backgroundColor: theme.palette.maskColor.bottom,
         scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
@@ -203,7 +204,7 @@ export function NFTListDialog() {
                             onChainChange={setAssetChainId as (chainId?: Web3Helper.ChainIdAll) => void}
                         />
                     </UserAssetsProvider>
-                :   <EmptyStatus height={479}>
+                :   <EmptyStatus width="100%" height={479}>
                         <Trans>No valid wallet detected. Please connect wallet or verify wallet firstly.</Trans>
                     </EmptyStatus>
                 }

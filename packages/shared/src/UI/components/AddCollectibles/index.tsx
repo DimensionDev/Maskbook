@@ -1,6 +1,8 @@
+import { msg, Trans } from '@lingui/macro'
+import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, MaskTextField, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, MaskTextField } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import {
     useAccount,
@@ -16,14 +18,12 @@ import { Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { useQueries, useQuery } from '@tanstack/react-query'
 import { compact, uniq } from 'lodash-es'
-import { memo, useCallback, useMemo, useState, type FormEvent } from 'react'
+import { memo, useCallback, useMemo, useState, type FormEvent, type HTMLProps } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { CollectibleItem, CollectibleItemSkeleton } from '../AssetsManagement/CollectibleItem.js'
 import { EmptyStatus } from '../EmptyStatus/index.js'
 import { LoadingStatus } from '../LoadingStatus/index.js'
 import { ReloadStatus } from '../ReloadStatus/index.js'
-import { msg, Trans } from '@lingui/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     form: {
@@ -100,8 +100,9 @@ type AddingNFTs<T extends NetworkPluginID = NetworkPluginID> = [
 ]
 
 export interface AddCollectiblesProps<T extends NetworkPluginID = NetworkPluginID>
-    extends withClasses<'grid' | 'form' | 'main'> {
-    pluginID?: T
+    extends withClasses<'grid' | 'form' | 'main'>,
+        HTMLProps<HTMLFormElement> {
+    pluginID: T
     chainId?: Web3Helper.Definition[T]['ChainId']
     /**
      * Specified account.
@@ -125,13 +126,13 @@ function isValidTokenIds(rawIds: string) {
 }
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
+    const { pluginID, chainId: defaultChainId, account: defaultAccount, onAdd, className, ...rest } = props
     const { _ } = useLingui()
-    const { pluginID, chainId: defaultChainId, account: defaultAccount, onAdd } = props
     const { chainId } = useChainContext({ chainId: defaultChainId })
     const theme = useTheme()
     const walletAccount = useAccount()
     const account = defaultAccount || walletAccount
-    const { classes } = useStyles(undefined, { props })
+    const { classes, cx } = useStyles(undefined, { props })
     const Utils = useWeb3Utils(pluginID)
 
     const {
@@ -233,7 +234,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
     const disabled = !selectedTokenIds.length || isLoadingContract || isValidating || props.disabled
 
     return (
-        <form className={classes.form} onSubmit={handleFormSubmit}>
+        <form className={cx(classes.form, className)} {...rest} onSubmit={handleFormSubmit}>
             <Controller
                 control={control}
                 name="address"

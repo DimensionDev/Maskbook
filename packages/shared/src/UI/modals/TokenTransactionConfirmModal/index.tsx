@@ -10,11 +10,11 @@ export interface TransactionConfirmModalOpenProps extends Omit<TransactionConfir
 export function TransactionConfirmModal({ ref }: SingletonModalProps<TransactionConfirmModalOpenProps>) {
     const [shareText, setShareText] = useState('')
     const [share, setShare] = useState<(text: string) => void>()
-    const [amount, setAmount] = useState<string | null>(null)
     const [token, setToken] = useState<Web3Helper.FungibleTokenAll | null>()
     const [tokenType, setTokenType] = useState<TokenType>(TokenType.Fungible)
     const [messageTextForNFT, setMessageTextForNFT] = useState<string>()
     const [messageTextForFT, setMessageTextForFT] = useState<string>()
+    const [message, setMessage] = useState<string>()
     const [title, setTitle] = useState<string>()
     const [nonFungibleTokenId, setNonFungibleTokenId] = useState<string>()
     const [nonFungibleTokenAddress, setNonFungibleTokenAddress] = useState<string>()
@@ -23,12 +23,12 @@ export function TransactionConfirmModal({ ref }: SingletonModalProps<Transaction
         onOpen(props) {
             setShareText(props.shareText)
             setShare(() => props.share)
-            setAmount(props.amount)
             setToken(props.token)
             setTokenType(props.tokenType)
             setTitle(props.title)
             setMessageTextForFT(props.messageTextForFT)
             setMessageTextForNFT(props.messageTextForNFT)
+            setMessage(props.message)
             setNonFungibleTokenId(props.nonFungibleTokenId ?? undefined)
             setNonFungibleTokenAddress(props.nonFungibleTokenAddress ?? undefined)
         },
@@ -40,7 +40,6 @@ export function TransactionConfirmModal({ ref }: SingletonModalProps<Transaction
             shareText={shareText}
             open
             onClose={() => dispatch?.close()}
-            amount={amount}
             tokenType={tokenType}
             nonFungibleTokenId={nonFungibleTokenId}
             nonFungibleTokenAddress={nonFungibleTokenAddress}
@@ -50,6 +49,7 @@ export function TransactionConfirmModal({ ref }: SingletonModalProps<Transaction
             title={title}
             messageTextForFT={messageTextForFT}
             messageTextForNFT={messageTextForNFT}
+            message={message}
         />
     )
 }

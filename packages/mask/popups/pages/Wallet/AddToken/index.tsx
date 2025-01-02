@@ -193,7 +193,8 @@ export const Component = memo(function AddToken() {
                             chainId={chainId}
                             onAdd={addCustomNFTs}
                             disabled={loadingAddCustomNFTs}
-                            classes={{ grid: classes.grid, form: classes.form, main: classes.nftContent }}
+                            className={classes.form}
+                            classes={{ grid: classes.grid, main: classes.nftContent }}
                         />
                     </TabPanel>
                 </div>

@@ -66,10 +66,13 @@ const useStyles = makeStyles()((theme) => ({
         margin: 'auto',
         border: `1px ${theme.palette.maskColor.secondaryLine} solid`,
     },
+    icon: {
+        filter: 'drop-shadow(0px 6px 12px rgba(61, 194, 51, 0.20))',
+        backdropFilter: "blur(8px)",
+    },
 }))
 
 export interface TokenTransactionConfirmModalProps extends PropsWithChildren<InjectedDialogProps> {
-    amount: string | null
     token?: Web3Helper.FungibleTokenAll | null
     nonFungibleTokenId?: string | null
     nonFungibleTokenAddress?: string
@@ -87,7 +90,6 @@ export function TokenTransactionConfirmModal({
     children,
     messageTextForNFT,
     messageTextForFT,
-    amount,
     tokenType,
     token,
     nonFungibleTokenAddress,
@@ -114,15 +116,17 @@ export function TokenTransactionConfirmModal({
             <DialogContent className={classes.content}>
                 {isToken ?
                     <Box>
-                        <TokenIcon
-                            className={classes.tokenIcon}
-                            address={token?.address || ''}
-                            logoURL={token?.logoURL}
-                            name={token?.symbol ?? token?.name}
-                            chainId={token?.chainId}
-                            sx={{ fontSize: '2.75em' }}
-                            size={90}
-                        />
+                        {token ?
+                            <TokenIcon
+                                className={classes.tokenIcon}
+                                address={token?.address || ''}
+                                logoURL={token?.logoURL}
+                                name={token?.symbol ?? token?.name}
+                                chainId={token?.chainId}
+                                sx={{ fontSize: '2.75em' }}
+                                size={90}
+                            />
+                        :   <Icons.FillSuccess className={classes.icon} size={90} />}
                         <Typography className={classes.congratulation} mt="19.5px">
                             <Trans>Congratulations!</Trans>
                         </Typography>

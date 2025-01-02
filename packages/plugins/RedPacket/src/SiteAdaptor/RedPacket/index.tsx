@@ -185,7 +185,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
         if (isZero(data.claimed_amount)) return
         TransactionConfirmModal.open({
             shareText: claimedShareText,
-            amount: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 }),
             token,
             tokenType: TokenType.Fungible,
             messageTextForNFT: _(msg`1 NFT claimed.`),

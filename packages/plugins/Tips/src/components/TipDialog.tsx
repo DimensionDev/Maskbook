@@ -144,7 +144,6 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
         await TransactionConfirmModal.openAndWaitForClose({
             shareText,
-            amount,
             tokenType: tipType,
             token,
             nonFungibleTokenId,

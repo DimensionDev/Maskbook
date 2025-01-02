@@ -1,17 +1,26 @@
+import { Trans } from '@lingui/macro'
 import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
+import { useNetworks } from '@masknet/web3-hooks-base'
 import { DialogContent } from '@mui/material'
-import { memo } from 'react'
+import { memo, useState } from 'react'
+import { AddCollectibles, SelectNetworkSidebar, type AddCollectiblesProps } from '../../components/index.js'
 import { InjectedDialog } from '../../contexts/components/index.js'
-import { AddCollectibles, type AddCollectiblesProps } from '../../components/index.js'
-import { Trans } from '@lingui/macro'
 
-const useStyles = makeStyles()(() => ({
+const useStyles = makeStyles()((theme) => ({
     content: {
         padding: 0,
+        display: 'flex',
+        gap: theme.spacing(1),
     },
     grid: {
         gridTemplateColumns: 'repeat(auto-fill, minmax(20%, 1fr))',
+    },
+    sidebar: {
+        marginLeft: theme.spacing(1),
+    },
+    form: {
+        flexGrow: 1,
     },
 }))
 
@@ -22,16 +31,27 @@ interface AddCollectiblesDialogProps<T extends NetworkPluginID = NetworkPluginID
 export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
     open,
     pluginID,
-    chainId,
+    chainId: defaultChainId,
     account,
     onAdd,
 }: AddCollectiblesDialogProps) {
     const { classes } = useStyles()
 
+    const [chainId, setChainId] = useState(defaultChainId)
+    const allNetworks = useNetworks(pluginID, true)
+
     return (
         <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={() => onAdd()} title={<Trans>Add NFTs</Trans>}>
             <DialogContent classes={{ root: classes.content }}>
+                <SelectNetworkSidebar
+                    className={classes.sidebar}
+                    chainId={chainId}
+                    onChainChange={setChainId}
+                    pluginID={pluginID}
+                    networks={allNetworks}
+                />
                 <AddCollectibles
+                    className={classes.form}
                     pluginID={pluginID}
                     chainId={chainId}
                     account={account}

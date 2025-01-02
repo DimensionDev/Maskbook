@@ -294,7 +294,6 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
 
         TransactionConfirmModal.open({
             shareText,
-            amount: '1',
             nonFungibleTokenId: availability.claimed_id,
             nonFungibleTokenAddress: payload.contractAddress,
             tokenType: TokenType.NonFungible,

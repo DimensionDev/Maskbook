@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
-import { TokenTransactionConfirmModal, type TokenTransactionConfirmModalProps } from '../../../index.js'
 import { Trans } from '@lingui/macro'
+import { TokenTransactionConfirmModal, type TokenTransactionConfirmModalProps } from '../../components/index.js'
 
 export interface TransactionConfirmProps extends TokenTransactionConfirmModalProps {
     shareText: string
@@ -9,10 +9,11 @@ export interface TransactionConfirmProps extends TokenTransactionConfirmModalPro
     title?: string
     messageTextForNFT?: string
     messageTextForFT?: string
+    message?: string
     open: boolean
     onClose: () => void
 }
-export function TransactionConfirm({ onSubmit, shareText, share, ...rest }: TransactionConfirmProps) {
+export function TransactionConfirm({ onSubmit, shareText, share, message, ...rest }: TransactionConfirmProps) {
     const handleConfirm = useCallback(() => {
         share?.(shareText)
         onSubmit?.()
@@ -20,8 +21,8 @@ export function TransactionConfirm({ onSubmit, shareText, share, ...rest }: Tran
     return (
         <TokenTransactionConfirmModal
             {...rest}
-            messageTextForNFT={rest.messageTextForNFT}
-            messageTextForFT={rest.messageTextForFT}
+            messageTextForNFT={rest.messageTextForNFT ?? message}
+            messageTextForFT={rest.messageTextForFT ?? message}
             title={rest.title}
             confirmText={share ? <Trans>Share</Trans> : <Trans>OK</Trans>}
             onConfirm={handleConfirm}

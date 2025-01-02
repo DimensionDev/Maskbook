@@ -23,7 +23,6 @@ const useStyles = makeStyles()({
     sidebar: {
         flexShrink: 0,
         boxSizing: 'border-box',
-        height: '100%',
         overflow: 'auto',
         scrollbarWidth: 'none',
         '&::-webkit-scrollbar': {
