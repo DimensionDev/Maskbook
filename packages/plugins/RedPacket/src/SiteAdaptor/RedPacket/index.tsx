@@ -153,7 +153,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                 )
                 return isOnTwitter || isOnFacebook ?
                         _(msg`${claimed} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.`) +
-                            `\npromote_short\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
+                            `\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
                     :   `${claimed}\n${promote_short}\n${shareTextOption.payload}`
             }
             const head = _(
