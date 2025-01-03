@@ -1,5 +1,5 @@
 import { ObservableMap } from '@masknet/shared-base'
-import { StrictMode, useEffect, useState, type JSX } from 'react'
+import { StrictMode, useEffect, useRef, useState, type JSX } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
 
@@ -37,6 +37,13 @@ export function setupReactShadowRootEnvironment(
 }
 function MountingPoint(props: { wrapJSX: WrapJSX; preventPropagationList: Array<keyof HTMLElementEventMap> }) {
     const [children, setChildren] = useState<JSX.Element[]>([])
+    const init = useRef(true)
+    // eslint-disable-next-line react-compiler/react-compiler
+    if (init.current) {
+        setChildren(Array.from(shadowEnvironmentMountingRoots.values()))
+        // eslint-disable-next-line react-compiler/react-compiler
+        init.current = false
+    }
     useEffect(() => {
         shadowEnvironmentMountingRoots.event.on(shadowEnvironmentMountingRoots.ALL_EVENTS, () => {
             setChildren(Array.from(shadowEnvironmentMountingRoots.values()))
