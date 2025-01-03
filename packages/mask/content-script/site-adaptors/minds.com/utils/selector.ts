@@ -25,7 +25,7 @@ export function postEditorInTimelineSelector() {
 }
 
 export function toolboxInSidebarSelector() {
-    return querySelector<E>('.m-sidebarNavigation__list li:nth-child(7)')
+    return querySelector<E>('.m-sidebarNavigation__list li:has([data-ref="sidenav-wallet"])')
 }
 
 export function postEditorDraftContentSelector() {

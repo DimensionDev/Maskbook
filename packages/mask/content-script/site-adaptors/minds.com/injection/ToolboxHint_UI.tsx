@@ -6,15 +6,20 @@ const mindsBreakPoint = 1221 /** px */
 const Container = styled('div')`
     height: 45px;
     margin-bottom: 10px;
+    padding-left: 10px;
 `
 const Item = styled(ListItemButton)`
     border-radius: 8px;
     height: 45px;
     padding: 4px 12px 4px 0;
-    color: ${({ theme }) => theme.palette.primary.main};
+    color: #43434d !important;
     &:hover {
         background: unset;
-        color: rgb(48, 153, 242);
+        color: #43434d;
+    }
+    [data-icon] {
+        color: #43434d;
+        --icon-color: #43434d;
     }
     @media screen and (max-width: ${mindsBreakPoint}px) {
         padding: 12px 0;
@@ -28,12 +33,12 @@ const Text = styled(Typography)`
     /* Minds font */
     font-family: Roboto, Helvetica, sans-serif;
     font-weight: 700;
-    font-size: 17px;
+    font-size: 19px;
     line-height: 44px;
 `
 const Icon = styled(ListItemIcon)`
     color: inherit;
-    min-width: 48px;
+    min-width: 45px;
     margin-left: 6px;
     @media screen and (max-width: ${mindsBreakPoint}px) {
         min-width: 0;
