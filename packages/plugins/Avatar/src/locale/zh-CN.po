@@ -44,6 +44,10 @@ msgstr "编辑个人资料"
 msgid "Failed to download image"
 msgstr ""
 
+#: src/Application/UploadAvatarDialog.tsx
+msgid "I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."
+msgstr ""
+
 #: src/SiteAdaptor/NFTBadge.tsx
 msgid "Loading..."
 msgstr "加载中..."
@@ -56,6 +60,10 @@ msgstr "头像设置"
 #: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
 msgstr "NFT 头像"
+
+#: src/Application/UploadAvatarDialog.tsx
+msgid "NFTs Profile"
+msgstr ""
 
 #: src/SiteAdaptor/NFTAvatar.tsx
 msgid "No collectible found."
@@ -116,3 +124,7 @@ msgstr "更新 NFT 头像成功！"
 #: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr "钱包"
+
+#: src/Application/UploadAvatarDialog.tsx
+msgid "You have set NFT PFP successfully."
+msgstr ""

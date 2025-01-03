@@ -44,6 +44,10 @@ msgstr "プロフィールを編集する"
 msgid "Failed to download image"
 msgstr ""
 
+#: src/Application/UploadAvatarDialog.tsx
+msgid "I just set my NFT PFP using Mask Extension for free! To browse other's unique NFT collections and web3 activities on Twitter. Download the most powerful tool Mask.io."
+msgstr ""
+
 #: src/SiteAdaptor/NFTBadge.tsx
 msgid "Loading..."
 msgstr "読み込み中..."
@@ -55,6 +59,10 @@ msgstr "NFT のアバター設定"
 #: src/Application/RouterDialog.tsx
 #: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
+msgstr ""
+
+#: src/Application/UploadAvatarDialog.tsx
+msgid "NFTs Profile"
 msgstr ""
 
 #: src/SiteAdaptor/NFTAvatar.tsx
@@ -116,3 +124,7 @@ msgstr "NFTアバターを更新しました！"
 #: src/SiteAdaptor/NFTAvatar.tsx
 msgid "Wallet"
 msgstr "ウォレット"
+
+#: src/Application/UploadAvatarDialog.tsx
+msgid "You have set NFT PFP successfully."
+msgstr ""
