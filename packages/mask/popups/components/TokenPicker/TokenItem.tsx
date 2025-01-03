@@ -29,14 +29,6 @@ const useStyles = makeStyles()((theme) => {
             width: 36,
             height: 36,
         },
-        badgeIcon: {
-            position: 'absolute',
-            right: -6,
-            bottom: -4,
-            border: `1px solid ${theme.palette.common.white}`,
-            borderRadius: '50%',
-            fontSize: 10,
-        },
         listText: {
             margin: 0,
         },

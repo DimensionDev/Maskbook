@@ -260,33 +260,35 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
     return (
-        <Card className={classes.root} component="article" elevation={0}>
-            <RedPacketEnvelope
-                className={classes.envelope}
-                cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
-                message={payload.sender.message}
-                token={token}
-                shares={payload.shares}
-                isClaimed={isClaimed}
-                isEmpty={isEmpty}
-                isExpired={isExpired}
-                isRefunded={isRefunded}
-                claimedCount={+availability.claimed}
-                total={payload.total}
-                totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
-                claimedAmount={availability.claimed_amount}
-                creator={payload.sender.name}
-            />
-            {cover ?
-                <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
-                    <Requirements
-                        showResults={!claimedOrEmpty}
-                        statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
-                        className={classes.requirements}
-                        onClose={() => setShowRequirements(false)}
-                    />
-                </Grow>
-            :   null}
+        <>
+            <Card className={classes.root} component="article" elevation={0}>
+                <RedPacketEnvelope
+                    className={classes.envelope}
+                    cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
+                    message={payload.sender.message}
+                    token={token}
+                    shares={payload.shares}
+                    isClaimed={isClaimed}
+                    isEmpty={isEmpty}
+                    isExpired={isExpired}
+                    isRefunded={isRefunded}
+                    claimedCount={+availability.claimed}
+                    total={payload.total}
+                    totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
+                    claimedAmount={availability.claimed_amount}
+                    creator={payload.sender.name}
+                />
+                {cover ?
+                    <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
+                        <Requirements
+                            showResults={!claimedOrEmpty}
+                            statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
+                            className={classes.requirements}
+                            onClose={() => setShowRequirements(false)}
+                        />
+                    </Grow>
+                :   null}
+            </Card>
             {outdated ?
                 null
             : myHandle ?
@@ -306,6 +308,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     }}
                 />
             }
-        </Card>
+        </>
     )
 })
