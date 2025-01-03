@@ -1,6 +1,6 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { NetworkIcon, TokenIcon } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useEverSeen } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
@@ -75,16 +75,6 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             gap: 10,
         },
         status: {},
-        assetIcon: {
-            position: 'relative',
-            width: 36,
-            height: 36,
-        },
-        networkIcon: {
-            position: 'absolute',
-            bottom: 0,
-            right: -3,
-        },
         total: {
             fontSize: 20,
             fontWeight: 700,
@@ -241,22 +231,15 @@ export const RedPacketRecord = memo(function RedPacketRecord({
         <section className={classes.container} ref={redpacketRef}>
             <div className={classes.content}>
                 <div className={classes.header}>
-                    <div className={classes.assetIcon}>
-                        <TokenIcon
-                            size={36}
-                            chainId={chainId}
-                            address={token?.address ?? tokenAddress!}
-                            logoURL={token_logo}
-                            symbol={token?.symbol}
-                            name={token?.name}
-                        />
-                        <NetworkIcon
-                            size={16}
-                            className={classes.networkIcon}
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                            chainId={chainId}
-                        />
-                    </div>
+                    <TokenIcon
+                        size={36}
+                        badgeSize={16}
+                        chainId={chainId}
+                        address={token?.address ?? tokenAddress!}
+                        logoURL={token_logo}
+                        symbol={token?.symbol}
+                        name={token?.name}
+                    />
                     <div className={classes.status}>
                         <Typography className={classes.total}>
                             {formatBalance(amount, token_decimal, { significant: 2, isPrecise: true })}{' '}

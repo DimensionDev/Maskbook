@@ -15,8 +15,6 @@ const useStyles = makeStyles()((theme) => ({
         position: 'relative',
     },
     badgeIcon: {
-        width: 10,
-        height: 10,
         position: 'absolute',
         right: -3,
         bottom: -3,
@@ -37,7 +35,7 @@ export interface TokenIconProps extends IconProps {
 }
 
 export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const {
         pluginID = NetworkPluginID.PLUGIN_EVM,
         chainId: propChainId,
@@ -49,6 +47,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
         badgeSize = 16,
         disableDefaultIcon,
         disableBadge,
+        className,
         ...rest
     } = props
     const { data: token } = useFungibleToken(pluginID, address, undefined, { chainId: propChainId })
@@ -77,7 +76,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
 
     if (disableBadge) return icon
     return (
-        <div className={classes.container}>
+        <div className={cx(classes.container, className)} style={{ height: rest.size, width: rest.size }}>
             {icon}
             <NetworkIcon
                 pluginID={pluginID}

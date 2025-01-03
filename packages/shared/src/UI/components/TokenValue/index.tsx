@@ -60,6 +60,7 @@ export function TokenValue({ className, token, amount, ...rest }: Props) {
                     </Typography>
                     <TokenIcon
                         size={24}
+                        badgeSize={12}
                         className={classes.tokenIcon}
                         pluginID={pluginID}
                         chainId={chainId}
