@@ -85,7 +85,7 @@ export function Erc20RedPacketConfirm() {
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const navigate = useNavigate()
-    const { settings, theme, creator, gasOption, setGasOption } = useRedPacket()
+    const { settings, shares, isRandom, token, theme, creator, gasOption, setGasOption } = useRedPacket()
 
     const currentIdentity = useCurrentVisitingIdentity()
     const me = useLastRecognizedIdentity()
@@ -124,7 +124,7 @@ export function Erc20RedPacketConfirm() {
         publicKey ?? '',
         // TODO get rid of privateKey since we don't need it anymore
         '',
-        settings!,
+        settings,
         gasOption,
         handleCreated,
         onClose,
@@ -141,14 +141,14 @@ export function Erc20RedPacketConfirm() {
         <>
             <div className={classes.settings}>
                 <Typography variant="h4" color="textPrimary" align="center" className={classes.message}>
-                    {settings?.message}
+                    {settings.message}
                 </Typography>
                 <div className={classes.field}>
                     <Typography className={classes.fieldName}>
                         <Trans>Split Mode</Trans>
                     </Typography>
                     <Typography variant="body1" className={classes.fieldValue}>
-                        {settings?.isRandom ?
+                        {isRandom ?
                             <Trans>Random</Trans>
                         :   <Trans>Identical</Trans>}
                     </Typography>
@@ -158,23 +158,22 @@ export function Erc20RedPacketConfirm() {
                         <Trans>Share</Trans>
                     </Typography>
                     <Typography variant="body1" className={classes.fieldValue}>
-                        {settings?.shares}
+                        {shares}
                     </Typography>
                 </div>
-                {settings?.isRandom ? null : (
+                {isRandom ? null : (
                     <div className={classes.field}>
                         <Typography className={classes.fieldName}>
                             <Trans>Amount per Share</Trans>
                         </Typography>
                         <Typography variant="body1" className={classes.fieldValue}>
-                            {isBalanceInsufficient ? '0' : formatAvg} {settings?.token?.symbol}
+                            {isBalanceInsufficient ? '0' : formatAvg} {token?.symbol}
                             <Link
                                 color="textPrimary"
                                 className={classes.link}
-                                href={EVMExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                                href={EVMExplorerResolver.fungibleTokenLink(chainId, token?.address ?? '')}
                                 target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={stop}>
+                                rel="noopener noreferrer">
                                 <LaunchIcon fontSize="small" />
                             </Link>
                         </Typography>
@@ -185,14 +184,13 @@ export function Erc20RedPacketConfirm() {
                         <Trans>Total cost</Trans>
                     </Typography>
                     <Typography variant="body1" className={classes.fieldValue}>
-                        {formatTotal} {settings?.token?.symbol}
+                        {formatTotal} {token?.symbol}
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={EVMExplorerResolver.fungibleTokenLink(chainId, settings?.token?.address ?? '')}
+                            href={EVMExplorerResolver.fungibleTokenLink(chainId, token?.address ?? '')}
                             target="_blank"
-                            rel="noopener noreferrer"
-                            onClick={stop}>
+                            rel="noopener noreferrer">
                             <LaunchIcon fontSize="small" />
                         </Link>
                     </Typography>

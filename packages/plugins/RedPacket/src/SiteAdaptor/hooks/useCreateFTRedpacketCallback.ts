@@ -42,12 +42,12 @@ export function useCreateFTRedpacketCallback(
         isNativeToken ?
             isBalanceInsufficient ? '0'
             :   transactionValue
-        :   (settings?.total as string)
+        :   (settings.total as string)
 
-    const formatTotal = formatBalance(total, settings?.token?.decimals ?? 18, { significant: isNativeToken ? 3 : 0 })
+    const formatTotal = formatBalance(total, settings.token?.decimals ?? 18, { significant: isNativeToken ? 3 : 0 })
     const formatAvg = formatBalance(
-        new BigNumber(total).div(settings?.shares ?? 1).toFixed(0, 1),
-        settings?.token?.decimals ?? 18,
+        new BigNumber(total).div(settings.shares ?? 1).toFixed(0, 1),
+        settings.token?.decimals ?? 18,
         { significant: isNativeToken ? 3 : 0 },
     )
 
@@ -66,8 +66,7 @@ export function useCreateFTRedpacketCallback(
         if (typeof hash !== 'string') return
         if (typeof receipt?.transactionHash !== 'string') return
 
-        // the settings is not available
-        if (!settings?.token) return
+        if (!settings.token) return
 
         const CreationSuccess = (events?.CreationSuccess?.returnValues ?? {}) as {
             creation_time: string
