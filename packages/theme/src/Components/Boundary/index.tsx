@@ -20,16 +20,16 @@ const BoundaryContext = createContext<Options>({
 interface BoundaryProps {
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement
+    children: ReactElement<any>
 }
 
 export const Boundary = memo(({ children }: BoundaryProps) => {
     const boundaryRef = useRef<HTMLElement>(null)
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (
-        <BoundaryContext.Provider value={contextValue}>
+        <BoundaryContext value={contextValue}>
             {cloneElement(children, { ...children.props, ref: boundaryRef })}
-        </BoundaryContext.Provider>
+        </BoundaryContext>
     )
 })
 

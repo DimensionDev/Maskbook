@@ -28,9 +28,9 @@ export function ShadowRootStyleProvider(props: ShadowRootStyleProviderProps) {
     }, [props.preventPropagation, preventEventPropagationList, shadow])
 
     return (
-        <StyleSheetsContext.Provider value={sheets}>
+        <StyleSheetsContext value={sheets}>
             <EmotionCacheProvider value={cache}>{children}</EmotionCacheProvider>
-        </StyleSheetsContext.Provider>
+        </StyleSheetsContext>
     )
 }
 

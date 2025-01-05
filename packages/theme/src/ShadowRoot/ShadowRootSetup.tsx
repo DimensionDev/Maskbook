@@ -43,9 +43,9 @@ function MountingPoint(props: { wrapJSX: WrapJSX; preventPropagationList: Array<
         })
     }, [])
     return (
-        <PreventShadowRootEventPropagationListContext.Provider value={props.preventPropagationList}>
+        <PreventShadowRootEventPropagationListContext value={props.preventPropagationList}>
             {props.wrapJSX ? props.wrapJSX(children) : children}
-        </PreventShadowRootEventPropagationListContext.Provider>
+        </PreventShadowRootEventPropagationListContext>
     )
 }
 

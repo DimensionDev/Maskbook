@@ -101,13 +101,6 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
             margin: '0px 4px',
         },
-        edit: {
-            lineHeight: '18px',
-            color: theme.palette.maskColor.primary,
-            marginRight: 4,
-            fontWeight: 700,
-            cursor: 'pointer',
-        },
     }
 })
 
