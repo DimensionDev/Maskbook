@@ -7,7 +7,7 @@ interface TextOverflowTooltipProps extends TooltipProps {
     as?: typeof MuiTooltip | typeof ShadowRootTooltip
     // cloneElement is used.
     // eslint-disable-next-line @typescript-eslint/ban-types
-    children: ReactElement
+    children: ReactElement<any>
 }
 
 export const TextOverflowTooltip = memo(({ children, as, ...rest }: TextOverflowTooltipProps) => {

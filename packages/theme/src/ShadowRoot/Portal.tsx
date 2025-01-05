@@ -82,7 +82,7 @@ export function createShadowRootForwardedComponent<
         container?: Element | (() => Element | null) | null | undefined
         open: boolean
     },
->(Component: React.ComponentType<T>) {
+>(Component: React.ComponentType<T>): React.ComponentType<T> {
     return (props: T) => {
         return usePortalShadowRoot((container) => <Component container={container} {...props} />)
     }
@@ -92,7 +92,7 @@ export function createShadowRootForwardedPopperComponent<
     T extends {
         PopperProps?: Partial<PopperProps>
     },
->(Component: React.ComponentType<T>) {
+>(Component: React.ComponentType<T>): React.ComponentType<T> {
     return (props: T) => {
         return usePortalShadowRoot((container) => {
             return <Component {...props} PopperProps={{ container, ...props.PopperProps }} />

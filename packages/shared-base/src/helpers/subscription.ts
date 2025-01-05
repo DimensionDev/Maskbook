@@ -1,8 +1,11 @@
 import { noop } from 'lodash-es'
-import type { Subscription } from 'use-subscription'
 import { None, type Option, Some } from 'ts-results-es'
 import type { ValueRef } from '@masknet/shared-base'
 
+export interface Subscription<T> {
+    getCurrentValue(): T
+    subscribe(callback: () => void): () => void
+}
 export async function getSubscriptionCurrentValue<T>(
     getSubscription: () => Subscription<T> | undefined,
     retries = 3,

@@ -53,7 +53,7 @@ export const BaseTab = forwardRef<HTMLButtonElement, ButtonTabProps>((props, ref
             disableElevation
             variant="contained"
             aria-selected={activated}
-            onClick={(e) => handleClick(e)}
+            onClick={(e: any) => handleClick(e)}
             onChange={undefined}
         />
     )
