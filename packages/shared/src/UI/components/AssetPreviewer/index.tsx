@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Image } from '../Image/index.js'
 

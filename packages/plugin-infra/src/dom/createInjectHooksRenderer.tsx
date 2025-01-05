@@ -1,4 +1,4 @@
-import { memo, useEffect, useRef, useState } from 'react'
+import { memo, useEffect, useRef, useState, type JSX } from 'react'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { ShadowRootIsolation } from '@masknet/theme'
 import {
@@ -29,9 +29,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
                         if (methods) setRef(methods)
                     }}>
                     {ref ?
-                        <PluginWrapperMethodsContext.Provider value={ref}>
-                            {element}
-                        </PluginWrapperMethodsContext.Provider>
+                        <PluginWrapperMethodsContext value={ref}>{element}</PluginWrapperMethodsContext>
                     :   null}
                 </PluginWrapperComponent>
             )
@@ -79,7 +77,7 @@ function Main<T>(props: { data: T; UI: Inject<any> }) {
 function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
     const [ref, setRef] = useState<HTMLDivElement | null>()
     const [f, setF] = useState<(props: T) => void>()
-    const cancel = useRef<AbortController>()
+    const cancel = useRef<AbortController>(undefined)
 
     useEffect(() => {
         if (!ref) return

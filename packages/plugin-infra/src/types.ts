@@ -1,3 +1,4 @@
+import type { JSX } from 'react'
 import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
 import type { Emitter } from '@servie/events'

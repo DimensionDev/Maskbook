@@ -1,5 +1,5 @@
 import { ObservableMap } from '@masknet/shared-base'
-import { StrictMode, useEffect, useState } from 'react'
+import { type JSX, StrictMode, useEffect, useState } from 'react'
 import { createRoot } from 'react-dom/client'
 import { PreventShadowRootEventPropagationListContext } from './Contexts.js'
 
@@ -43,9 +43,9 @@ function MountingPoint(props: { wrapJSX: WrapJSX; preventPropagationList: Array<
         })
     }, [])
     return (
-        <PreventShadowRootEventPropagationListContext.Provider value={props.preventPropagationList}>
+        <PreventShadowRootEventPropagationListContext value={props.preventPropagationList}>
             {props.wrapJSX ? props.wrapJSX(children) : children}
-        </PreventShadowRootEventPropagationListContext.Provider>
+        </PreventShadowRootEventPropagationListContext>
     )
 }
 

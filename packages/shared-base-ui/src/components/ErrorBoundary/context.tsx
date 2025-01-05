@@ -17,7 +17,7 @@ const BuildInfo = createContext<() => BuildInfoFile>(useBuildInfo_raw)
 BuildInfo.displayName = 'BuildInfo'
 
 export function BuildInfoProvider(props: React.PropsWithChildren<{ value: () => BuildInfoFile }>) {
-    return <BuildInfo.Provider {...props} />
+    return <BuildInfo {...props} />
 }
 export function useBuildInfo() {
     return useRef(useContext(BuildInfo)).current()

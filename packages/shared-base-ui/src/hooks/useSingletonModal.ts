@@ -12,8 +12,8 @@ export function useSingletonModal<OpenProps, CloseProps>(
     type T = SingletonModalRefCreator<OpenProps, CloseProps>
 
     const [open, setOpen] = useState(false)
-    const dispatchRef = useRef<ReturnType<T>>()
-    const optionsRef = useRef<typeof options>()
+    const dispatchRef = useRef<ReturnType<T>>(undefined)
+    const optionsRef = useRef<typeof options>(undefined)
     const openRef = useRef(open)
     optionsRef.current = options
     openRef.current = open

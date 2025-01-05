@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react'
-import type { Subscription } from 'use-subscription'
-import type { JsonRpcPayload } from 'web3-core-helpers'
-import type { Emitter } from '@servie/events'
 import type {
+    Subscription,
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
@@ -13,6 +11,8 @@ import type {
     SocialIdentity,
     SocialAccount,
 } from '@masknet/shared-base'
+import type { JsonRpcPayload } from 'web3-core-helpers'
+import type { Emitter } from '@servie/events'
 
 export enum CurrencyType {
     NATIVE = 'native',

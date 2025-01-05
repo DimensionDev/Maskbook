@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { useRef, forwardRef, useContext } from 'react'
+import { useRef, useContext } from 'react'
 import { Flags } from '@masknet/flags'
 import type { PopperProps } from '@mui/material'
 import {
@@ -82,22 +82,22 @@ export function createShadowRootForwardedComponent<
         container?: Element | (() => Element | null) | null | undefined
         open: boolean
     },
->(Component: React.ComponentType<T>) {
-    return forwardRef((props: T, ref) => {
-        return usePortalShadowRoot((container) => <Component container={container} {...props} ref={ref} />)
-    }) as any as typeof Component
+>(Component: React.ComponentType<T>): React.ComponentType<T> {
+    return (props: T) => {
+        return usePortalShadowRoot((container) => <Component container={container} {...props} />)
+    }
 }
 
 export function createShadowRootForwardedPopperComponent<
     T extends {
         PopperProps?: Partial<PopperProps>
     },
->(Component: React.ComponentType<T>) {
-    return forwardRef((props: T, ref) => {
+>(Component: React.ComponentType<T>): React.ComponentType<T> {
+    return (props: T) => {
         return usePortalShadowRoot((container) => {
-            return <Component {...props} PopperProps={{ container, ...props.PopperProps }} ref={ref} />
+            return <Component {...props} PopperProps={{ container, ...props.PopperProps }} />
         })
-    }) as any as typeof Component
+    }
 }
 
 function useRefInit<T>(f: () => T): T {

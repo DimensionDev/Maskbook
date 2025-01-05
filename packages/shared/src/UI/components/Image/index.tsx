@@ -1,4 +1,4 @@
-import { type HTMLProps, type ImgHTMLAttributes, useState } from 'react'
+import { type HTMLProps, type JSX, type ImgHTMLAttributes, useState } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { useTheme } from '@mui/material'
 

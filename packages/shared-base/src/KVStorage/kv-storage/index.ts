@@ -1,6 +1,6 @@
 import { combineAbortSignal } from '@masknet/kit'
-import type { Subscription } from 'use-subscription'
 import type { KVStorageBackend } from './types.js'
+import type { Subscription } from '../../helpers/subscription.js'
 
 export { createInMemoryKVStorageBackend } from './in-memory.js'
 export { createIndexedDB_KVStorageBackend } from './idb.js'
