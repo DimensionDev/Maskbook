@@ -39,7 +39,7 @@ export const CopyButton = memo(
         const [, copyToClipboard] = useCopyToClipboard()
         const [copied, setCopied] = useState(false)
         const [active, setActive] = useState(false)
-        const timerRef = useRef<ReturnType<typeof setTimeout>>()
+        const timerRef = useRef<ReturnType<typeof setTimeout>>(undefined)
 
         const handleCopy = useCallback(
             async (ev: MouseEvent) => {

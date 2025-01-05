@@ -10,7 +10,7 @@ import {
 } from 'react'
 
 interface Options {
-    boundaryRef: RefObject<HTMLElement>
+    boundaryRef: RefObject<HTMLElement | null>
 }
 
 const BoundaryContext = createContext<Options>({

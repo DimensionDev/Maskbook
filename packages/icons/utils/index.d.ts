@@ -1,4 +1,5 @@
-import { SvgIcon, Theme, SvgIconProps } from '@mui/material'
+import type { JSX } from 'react'
+import { Theme, SvgIconProps } from '@mui/material'
 
 export type Size = [width: number | undefined, height: number | undefined]
 export type SvgIconRaw = JSX.Element | ((theme: Theme) => JSX.Element)
