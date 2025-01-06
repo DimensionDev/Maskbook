@@ -2,27 +2,31 @@ import { memo } from 'react'
 import type { DOMProxy } from '@dimensiondev/holoflows-kit'
 import { type PostInfo, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
-import { PostInspector, type PostInspectorProps } from '../../../components/InjectedComponents/PostInspector.js'
+import {
+    PostInspector,
+    type PostInspectorProps,
+    type PostPayloadContext,
+} from '../../../components/InjectedComponents/PostInspector.js'
 import { noop } from 'lodash-es'
 
 export function injectPostInspectorDefault(
     config: InjectPostInspectorDefaultConfig = {},
     props?: Pick<PostInspectorProps, 'slotPosition'>,
 ) {
-    const PostInspectorDefault = memo(function PostInspectorDefault(props: { zipPost(): void }) {
+    const PostInspectorDefault = memo(function PostInspectorDefault(props: Pick<PostInspectorProps, 'zipPost'>) {
         return <PostInspector slotPosition="after" {...props} />
     })
 
     const { zipPost, injectionPoint } = config
     const zipPostF = zipPost || noop
 
-    return function injectPostInspector(current: PostInfo, signal: AbortSignal) {
+    return function injectPostInspector(postInfo: PostInfo, signal: AbortSignal) {
         const jsx = (
-            <PostInfoContext value={current}>
-                <PostInspectorDefault {...props} zipPost={() => zipPostF(current.rootElement)} />
+            <PostInfoContext value={postInfo}>
+                <PostInspectorDefault {...props} zipPost={(context) => zipPostF(postInfo.rootElement, context)} />
             </PostInfoContext>
         )
-        const root = attachReactTreeWithContainer(injectionPoint?.(current) ?? current.rootElement.afterShadow, {
+        const root = attachReactTreeWithContainer(injectionPoint?.(postInfo) ?? postInfo.rootElement.afterShadow, {
             key: 'post-inspector',
             untilVisible: true,
             signal,
@@ -33,6 +37,6 @@ export function injectPostInspectorDefault(
 }
 
 interface InjectPostInspectorDefaultConfig {
-    zipPost?(node: DOMProxy): void
+    zipPost?(node: DOMProxy, postPayloadContext?: PostPayloadContext): void
     injectionPoint?: (postInfo: PostInfo) => ShadowRoot
 }

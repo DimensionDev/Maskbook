@@ -1,7 +1,5 @@
-import { type ReactNode, useCallback } from 'react'
-import { useAsync } from 'react-use'
-import type { Option } from 'ts-results-es'
-import { useSubscription } from 'use-subscription'
+import Services from '#services'
+import { Trans } from '@lingui/macro'
 import { Icons } from '@masknet/icons'
 import {
     type Plugin,
@@ -16,8 +14,10 @@ import { BooleanPreference, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, MaskLightTheme } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Box, type BoxProps, Button, Skeleton, Typography, useTheme } from '@mui/material'
-import Services from '#services'
-import { Trans } from '@lingui/macro'
+import { useQuery } from '@tanstack/react-query'
+import { type ReactNode, useCallback } from 'react'
+import type { Option } from 'ts-results-es'
+import { useSubscription } from 'use-subscription'
 
 function useDisabledPlugins() {
     const activated = new Set<string>(useActivatedPluginsSiteAdaptor('any').map((x) => x.ID))
@@ -95,10 +95,13 @@ export function PossiblePluginSuggestionUISingle(props: {
         }
     }, [lackHostPermission, define])
 
-    const { value: disabled } = useAsync(async () => {
-        const status = await Services.Settings.getPluginMinimalModeEnabled(define.ID)
-        return status === BooleanPreference.True
-    }, [define.ID])
+    const { data: disabled } = useQuery({
+        queryKey: ['system', 'plugin-disabled', define.ID],
+        queryFn: async () => {
+            const status = await Services.Settings.getPluginMinimalModeEnabled(define.ID)
+            return status === BooleanPreference.True
+        },
+    })
 
     const ButtonIcon = lackHostPermission ? Icons.Approve : Icons.Plugin
     const wrapperContent = content ?? <FallbackContent disabled={disabled} height={74} />

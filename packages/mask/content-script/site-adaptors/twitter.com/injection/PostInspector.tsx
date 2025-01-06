@@ -1,11 +1,12 @@
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import { TwitterDecoder } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
-import { injectPostInspectorDefault } from '../../../site-adaptor-infra/defaults/inject/PostInspector.js'
 import { getOrAttachShadowRoot } from '@masknet/shared-base-ui'
+import { isEmpty } from 'lodash-es'
+import { injectPostInspectorDefault } from '../../../site-adaptor-infra/defaults/inject/PostInspector.js'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
-    return injectPostInspectorDefault({
+    const inject = injectPostInspectorDefault({
         injectionPoint(postInfo) {
             if (postInfo.rootElement.realCurrent!.dataset.testid === 'tweetPhoto') {
                 const root = postInfo.rootElement.realCurrent!.closest('div[aria-labelledby]') as HTMLDivElement
@@ -13,7 +14,7 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
             }
             return postInfo.rootElement.afterShadow
         },
-        zipPost(node) {
+        zipPost(node, payloadContext) {
             if (node.destroyed) return
             const contentContainer = node.current.parentElement
             if (!contentContainer) return
@@ -34,6 +35,20 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 // match (any space) (*/) (any space)
                 if (span.innerText.match(/^ +\*\/ ?$/)) hideDOM(span)
             }
+            const article = contentContainer.closest('article')
+            if (article && !isEmpty(payloadContext?.imageDecryptedResults)) {
+                for (const img of article.querySelectorAll('img')) {
+                    if (!payloadContext.imageDecryptedResults[img.src]) continue
+                    const a = img.closest<HTMLElement>('a[href*="/photo/"][role=link]')
+                    if (!a) continue
+                    hideDOM(a)
+                    const wrapper = a.closest<HTMLElement>('div[aria-labelledby]')
+                    if (wrapper?.textContent === '') {
+                        wrapper.style.display = 'none'
+                        wrapper.setAttribute('aria-hidden', 'true')
+                    }
+                }
+            }
 
             const parent = content.parentElement?.nextElementSibling as HTMLElement
             if (parent && matches(parent.innerText)) {
@@ -48,7 +63,8 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 cardWrapper.setAttribute('aria-hidden', 'true')
             }
         },
-    })(current, signal)
+    })
+    return inject(current, signal)
 }
 function matches(input: string) {
     input = input.toLowerCase()

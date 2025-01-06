@@ -50,6 +50,8 @@ function progressReducer(
 
 interface DecryptPostProps {
     whoAmI: ProfileIdentifier | null
+    imageDecryptedResults: Record<string, boolean>
+    onImageDecrypted: (decryptedResults: Record<string, boolean>) => void
 }
 function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     if (a.type !== b.type) return false
@@ -60,8 +62,7 @@ function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     safeUnreachable(a)
     return false
 }
-export function DecryptPost(props: DecryptPostProps) {
-    const { whoAmI } = props
+export function DecryptPost({ whoAmI, imageDecryptedResults, onImageDecrypted }: DecryptPostProps) {
     const deconstructedPayload = usePostInfoDetails.hasMaskPayload()
     const currentPostBy = usePostInfoDetails.author()
     // TODO: we should read this from the payload.
@@ -148,6 +149,11 @@ export function DecryptPost(props: DecryptPostProps) {
                             iv: encodeArrayBuffer(iv),
                         },
                     })
+                    onImageDecrypted({
+                        ...imageDecryptedResults,
+                        // For now, we only want to know if an image has been decrypted.
+                        [url]: true,
+                    })
                 },
                 postInfo.decryptedReport,
                 report(url),
@@ -168,7 +174,7 @@ export function DecryptPost(props: DecryptPostProps) {
             {uniqWith(progress, (a, b) => isProgressEqual(a.progress, b.progress))
                 // the internal progress should not display to the end-user
                 .filter(({ progress }) => !progress.internal)
-                .map(({ progress, key }, index) => (
+                .map(({ progress, key }) => (
                     <Fragment key={key}>{renderProgress(progress)}</Fragment>
                 ))}
         </>

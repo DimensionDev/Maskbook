@@ -1,10 +1,8 @@
-import { memo, useContext, useEffect, useState } from 'react'
-import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
-import { AdditionalContent } from '../AdditionalPostContent.js'
-import { SelectProfileDialog } from '../SelectPeopleDialog.js'
-import { makeStyles } from '@masknet/theme'
-import { Typography, useTheme } from '@mui/material'
-import type { TypedMessage } from '@masknet/typed-message'
+import Services from '#services'
+import { Trans } from '@lingui/macro'
+import { Icons } from '@masknet/icons'
+import { delay } from '@masknet/kit'
+import { PostInfoContext, usePostInfoDetails, usePostInfoPostIVIdentifier } from '@masknet/plugin-infra/content-script'
 import {
     EMPTY_LIST,
     MaskMessages,
@@ -12,18 +10,20 @@ import {
     type ProfileInformation,
     type ProfileInformationFromNextID,
 } from '@masknet/shared-base'
-import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
-import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
-import { PostInfoContext, usePostInfoDetails, usePostInfoPostIVIdentifier } from '@masknet/plugin-infra/content-script'
+import { makeStyles } from '@masknet/theme'
+import type { TypedMessage } from '@masknet/typed-message'
+import { Typography, useTheme } from '@mui/material'
+import { memo, useContext, useEffect, useState } from 'react'
+import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
+import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
+import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
 import { useRecipientsList } from '../../CompositionDialog/useRecipientsList.js'
 import { useSelectedRecipientsList } from '../../CompositionDialog/useSelectedRecipientsList.js'
-import Services from '#services'
-import type { LazyRecipients } from '../../CompositionDialog/CompositionUI.js'
-import { delay } from '@masknet/kit'
-import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/index.js'
+import { AdditionalContent } from '../AdditionalPostContent.js'
+import { DecryptedUIPluginRendererWithSuggestion } from '../DecryptedPostMetadataRender.js'
+import { SelectProfileDialog } from '../SelectPeopleDialog.js'
+import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
 import { RecipientsToolTip } from './RecipientsToolTip.js'
-import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
 
 interface DecryptPostSuccessProps {
     message: TypedMessage

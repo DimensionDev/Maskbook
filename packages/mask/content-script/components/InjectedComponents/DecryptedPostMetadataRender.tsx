@@ -1,6 +1,7 @@
 import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import type { MetadataRenderProps } from '@masknet/typed-message-react'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import type { MetadataRenderProps } from '@masknet/typed-message-react'
+import { useMemo } from 'react'
 import {
     PossiblePluginSuggestionUI,
     useDisabledPluginSuggestionFromMeta,
@@ -17,7 +18,7 @@ const Decrypted = createInjectHooksRenderer(
 export function DecryptedUIPluginRendererWithSuggestion(props: MetadataRenderProps) {
     const a = useDisabledPluginSuggestionFromMeta(props.metadata)
     const b = useDisabledPluginSuggestionFromPost(extractTextFromTypedMessage(props.message), [])
-    const suggest = Array.from(new Set(a.concat(b)))
+    const suggest = useMemo(() => Array.from(new Set(a.concat(b))), [a, b])
 
     return (
         <>

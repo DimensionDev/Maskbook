@@ -1,15 +1,15 @@
-import { useSubscription } from 'use-subscription'
 import {
-    usePostInfoDetails,
     createInjectHooksRenderer,
     useActivatedPluginsSiteAdaptor,
+    usePostInfoDetails,
 } from '@masknet/plugin-infra/content-script'
-import { DecryptPost } from './DecryptedPost/DecryptedPost.js'
+import { PersistentStorages } from '@masknet/shared-base'
+import { useState, type JSX } from 'react'
+import { useSubscription } from 'use-subscription'
 import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
+import { DecryptPost } from './DecryptedPost/DecryptedPost.js'
 import { PossiblePluginSuggestionPostInspector } from './DisabledPluginSuggestion.js'
 import { MaskPostExtraPluginWrapperWithPermission } from './PermissionBoundary.js'
-import { PersistentStorages } from '@masknet/shared-base'
-import type { JSX } from 'react'
 
 const PluginHooksRenderer = createInjectHooksRenderer(
     useActivatedPluginsSiteAdaptor.visibility.useNotMinimalMode,
@@ -17,8 +17,12 @@ const PluginHooksRenderer = createInjectHooksRenderer(
     MaskPostExtraPluginWrapperWithPermission,
 )
 
+export interface PostPayloadContext {
+    imageDecryptedResults: Record<string, boolean>
+}
+
 export interface PostInspectorProps {
-    zipPost(): void
+    zipPost(payloadContext: PostPayloadContext): void
     /** @default 'before' */
     slotPosition?: 'before' | 'after'
 }
@@ -29,9 +33,17 @@ export function PostInspector(props: PostInspectorProps) {
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     const whoAmI = useCurrentIdentity()
 
+    const [imageDecryptedResults, setImageDecryptedResults] = useState<Record<string, boolean>>({})
+
     if (hasEncryptedPost || postImages.length) {
-        if (!isDebugging) props.zipPost()
-        return withAdditionalContent(<DecryptPost whoAmI={whoAmI?.identifier || null} />)
+        if (!isDebugging) props.zipPost({ imageDecryptedResults })
+        return withAdditionalContent(
+            <DecryptPost
+                whoAmI={whoAmI?.identifier || null}
+                imageDecryptedResults={imageDecryptedResults}
+                onImageDecrypted={setImageDecryptedResults}
+            />,
+        )
     }
     return withAdditionalContent(null)
     function withAdditionalContent(x: JSX.Element | null) {
