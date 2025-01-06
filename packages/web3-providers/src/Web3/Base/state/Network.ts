@@ -1,8 +1,13 @@
 import { v4 as uuid } from 'uuid'
 import { omit } from 'lodash-es'
-import type { Subscription } from 'use-subscription'
 import { getRegisteredWeb3Chains, getRegisteredWeb3Networks } from '../../../Manager/index.js'
-import { mapSubscription, type NetworkPluginID, mergeSubscription, type StorageItem } from '@masknet/shared-base'
+import {
+    mapSubscription,
+    type NetworkPluginID,
+    mergeSubscription,
+    type StorageItem,
+    type Subscription,
+} from '@masknet/shared-base'
 import type {
     ReasonableNetwork,
     TransferableNetwork,
