@@ -118,8 +118,11 @@ msgstr ""
 msgid "24 Hour Trading Vol"
 msgstr "24h 交易总额"
 
-#: src/UI/components/AddCollectibles/index.tsx
 #: src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx
+msgid "Add Collectibles"
+msgstr ""
+
+#: src/UI/components/AddCollectibles/index.tsx
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
 msgstr "添加 NFT"

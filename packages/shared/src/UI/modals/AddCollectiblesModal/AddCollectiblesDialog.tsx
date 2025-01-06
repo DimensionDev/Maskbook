@@ -17,7 +17,9 @@ const useStyles = makeStyles()((theme) => ({
         gridTemplateColumns: 'repeat(auto-fill, minmax(20%, 1fr))',
     },
     sidebar: {
-        marginLeft: theme.spacing(1),
+        paddingLeft: 12,
+        paddingTop: 12,
+        paddingRight: 4,
     },
     form: {
         flexGrow: 1,
@@ -41,7 +43,11 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
     const allNetworks = useNetworks(pluginID, true)
 
     return (
-        <InjectedDialog titleBarIconStyle={'back'} open={open} onClose={() => onAdd()} title={<Trans>Add NFTs</Trans>}>
+        <InjectedDialog
+            titleBarIconStyle={'back'}
+            open={open}
+            onClose={() => onAdd()}
+            title={<Trans>Add Collectibles</Trans>}>
             <DialogContent classes={{ root: classes.content }}>
                 <SelectNetworkSidebar
                     className={classes.sidebar}
@@ -49,6 +55,7 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
                     onChainChange={setChainId}
                     pluginID={pluginID}
                     networks={allNetworks}
+                    hideAllButton
                 />
                 <AddCollectibles
                     className={classes.form}

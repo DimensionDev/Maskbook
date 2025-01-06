@@ -128,7 +128,7 @@ export function NFTListDialog() {
     const handleAddCollectibles = useCallback(async () => {
         const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
-            chainId: assetChainId,
+            chainId: assetChainId || chainId,
             account: targetAccount,
         })
         if (!results || !assetChainId) return
@@ -162,7 +162,7 @@ export function NFTListDialog() {
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [pluginID, assetChainId, targetAccount])
+    }, [pluginID, assetChainId, chainId, targetAccount])
 
     useEffect(() => {
         const unsubscribe = emitter.on('add', handleAddCollectibles)
