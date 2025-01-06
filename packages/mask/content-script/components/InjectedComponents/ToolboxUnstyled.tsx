@@ -1,4 +1,4 @@
-import { useCallback } from 'react'
+import { useCallback, type HTMLProps } from 'react'
 import {
     CircularProgress,
     type ListItemButtonProps,
@@ -44,7 +44,7 @@ const useStyles = makeStyles()(() => ({
     },
 }))
 
-interface ToolboxHintProps {
+interface ToolboxHintProps extends HTMLProps<HTMLDivElement> {
     Container?: React.ComponentType<React.PropsWithChildren>
     ListItemButton?: React.ComponentType<Pick<ListItemButtonProps, 'onClick' | 'children'>>
     ListItemText?: React.ComponentType<Pick<ListItemTextProps, 'primary'>>
@@ -69,6 +69,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
         iconSize = 24,
         mini,
         ListItemText = MuiListItemText,
+        ...rest
     } = props
     const { classes } = useStyles()
 
@@ -76,7 +77,7 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
 
     return (
         <GuideStep step={1} total={4} tip={<Trans>Explore multi-chain dApps.</Trans>}>
-            <Container>
+            <Container {...rest}>
                 <ListItemButton onClick={openApplicationBoardDialog}>
                     <ListItemIcon>
                         <Icons.MaskBlue size={iconSize} />
@@ -113,6 +114,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
         iconSize = 24,
         badgeSize = 12,
         mini,
+        ...rest
     } = props
     const { classes } = useStyles()
     const { onClickToolbox, title, chainColor, shouldDisplayChainIndicator, account, provider } = useToolbox()
@@ -121,7 +123,7 @@ function ToolboxHintForWallet(props: ToolboxHintProps) {
 
     return (
         <GuideStep step={2} total={4} tip={<Trans>Connect and switch between your wallets.</Trans>}>
-            <Container>
+            <Container {...rest}>
                 <ListItemButton onClick={onClickToolbox}>
                     <ListItemIcon>
                         {account && provider && provider.type !== ProviderType.MaskWallet ?
