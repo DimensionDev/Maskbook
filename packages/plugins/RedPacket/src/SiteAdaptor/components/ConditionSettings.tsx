@@ -152,7 +152,7 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                 <div className={classes.button}>
                     {conditions.length === 0 ?
                         <Trans>Everyone</Trans>
-                    :   <Trans>{conditions.join('/')} holder</Trans>}
+                    :   <Trans>{conditions.join('/')} Holder</Trans>}
                 </div>
                 <Icons.ArrowDrop
                     onClick={(event) => {

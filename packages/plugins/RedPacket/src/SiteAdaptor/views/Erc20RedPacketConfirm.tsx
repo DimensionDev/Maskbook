@@ -6,6 +6,7 @@ import {
     ChainBoundary,
     PluginWalletStatusBar,
     SelectGasSettingsToolbar,
+    TokenIcon,
     useCurrentLinkedPersona,
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
@@ -20,7 +21,7 @@ import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
-import { useRedPacket } from '../contexts/RedPacketContext.js'
+import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallback.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
 
@@ -59,6 +60,21 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
     },
+    value: {
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
+    },
+    conditions: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(0.5),
+        marginTop: theme.spacing(-1.5),
+    },
+    conditionGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1),
+    },
     envelope: {
         width: 484,
         height: 336,
@@ -79,13 +95,55 @@ const useStyles = makeStyles()((theme) => ({
         position: 'sticky',
         bottom: 0,
     },
+    assets: {
+        display: 'flex',
+        gap: theme.spacing(0.5),
+        flexFlow: 'row wrap',
+    },
+    asset: {
+        display: 'flex',
+        alignItems: 'center',
+        padding: 2,
+        gap: theme.spacing(1),
+    },
+    assetName: {
+        fontSize: 16,
+        fontWeight: 400,
+        lineHeight: '20px',
+        color: theme.palette.maskColor.main,
+    },
+    collectionName: {
+        maxWidth: 80,
+        WebkitBoxOrient: 'vertical',
+        WebkitLineClamp: 2,
+        overflow: 'hidden',
+        whiteSpace: 'normal',
+    },
+    tokenIcon: {
+        width: 24,
+        height: 24,
+        marginRight: '0px !important',
+    },
 }))
 
 export function Erc20RedPacketConfirm() {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const navigate = useNavigate()
-    const { settings, shares, isRandom, token, theme, creator, gasOption, setGasOption } = useRedPacket()
+    const {
+        settings,
+        shares,
+        isRandom,
+        token,
+        theme,
+        creator,
+        gasOption,
+        setGasOption,
+        conditions,
+        tokenQuantity,
+        requiredTokens,
+        requiredCollections,
+    } = useRedPacket()
 
     const currentIdentity = useCurrentVisitingIdentity()
     const me = useLastRecognizedIdentity()
@@ -137,6 +195,9 @@ export function Erc20RedPacketConfirm() {
 
     const loading = creatingPubkey || isCreating || isWaitGasBeMinus
     const disabled = isBalanceInsufficient || loading
+
+    const needHoldingTokens = conditions.includes(ConditionType.Crypto) && requiredTokens.length > 0
+    const needHoldingCollections = conditions.includes(ConditionType.NFT) && requiredCollections.length > 0
     return (
         <>
             <div className={classes.settings}>
@@ -147,7 +208,7 @@ export function Erc20RedPacketConfirm() {
                     <Typography className={classes.fieldName}>
                         <Trans>Split Mode</Trans>
                     </Typography>
-                    <Typography variant="body1" className={classes.fieldValue}>
+                    <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
                         {isRandom ?
                             <Trans>Random</Trans>
                         :   <Trans>Identical</Trans>}
@@ -157,7 +218,7 @@ export function Erc20RedPacketConfirm() {
                     <Typography className={classes.fieldName}>
                         <Trans>Share</Trans>
                     </Typography>
-                    <Typography variant="body1" className={classes.fieldValue}>
+                    <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
                         {shares}
                     </Typography>
                 </div>
@@ -183,7 +244,7 @@ export function Erc20RedPacketConfirm() {
                     <Typography className={classes.fieldName}>
                         <Trans>Total cost</Trans>
                     </Typography>
-                    <Typography variant="body1" className={classes.fieldValue}>
+                    <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
                         {formatTotal} {token?.symbol}
                         <Link
                             color="textPrimary"
@@ -213,6 +274,82 @@ export function Erc20RedPacketConfirm() {
                         />
                     </div>
                 :   null}
+                <div className={classes.field}>
+                    <Typography className={classes.fieldName}>
+                        <Trans>Claim Conditions</Trans>
+                    </Typography>
+                    {!needHoldingTokens && !needHoldingCollections ?
+                        <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
+                            <Trans>Available to Everyone</Trans>
+                        </Typography>
+                    :   null}
+                </div>
+                <div className={classes.conditions}>
+                    {needHoldingTokens ?
+                        <div className={classes.conditionGroup}>
+                            <div className={classes.field}>
+                                <Typography component="span" className={classes.value}>
+                                    <Trans>Holding {tokenQuantity ? `${tokenQuantity}+` : 'any'}</Trans>
+                                </Typography>
+                            </div>
+                            <div className={classes.field}>
+                                <div className={classes.fieldValue}>
+                                    <div className={classes.assets}>
+                                        {requiredTokens.map((token, index) => (
+                                            <div className={classes.asset} key={token.address}>
+                                                {index === 0 ? '' : '/'}
+                                                <TokenIcon
+                                                    className={classes.tokenIcon}
+                                                    address={token.address}
+                                                    name={token.name}
+                                                    size={24}
+                                                    badgeSize={12}
+                                                    chainId={token.chainId}
+                                                    logoURL={token.logoURL}
+                                                />
+                                                <Typography className={classes.assetName}>{token.symbol}</Typography>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    :   null}
+                    {needHoldingCollections ?
+                        <div className={classes.conditionGroup}>
+                            <div className={classes.field}>
+                                <Typography component="span" className={classes.value}>
+                                    {needHoldingTokens ?
+                                        <Trans>or Holding NFT</Trans>
+                                    :   <Trans>Holding NFT</Trans>}
+                                </Typography>
+                            </div>
+                            <div className={classes.field}>
+                                <div className={classes.fieldValue}>
+                                    <div className={classes.assets}>
+                                        {requiredCollections.map((collection, index) => (
+                                            <div className={classes.asset} key={collection.address}>
+                                                {index === 0 ? '' : '/'}
+                                                <TokenIcon
+                                                    className={classes.tokenIcon}
+                                                    address={collection.address}
+                                                    name={collection.name}
+                                                    size={24}
+                                                    badgeSize={12}
+                                                    chainId={collection.chainId}
+                                                    logoURL={collection.iconURL!}
+                                                />
+                                                <Typography className={cx(classes.assetName, classes.collectionName)}>
+                                                    {collection.name}
+                                                </Typography>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    :   null}
+                </div>
                 <div className={classes.field}>
                     <Typography className={classes.fieldName}>
                         <Trans>Cover</Trans>
