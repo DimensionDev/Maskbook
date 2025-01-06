@@ -1,4 +1,4 @@
-import type { Subscription } from 'use-subscription'
+import type { Subscription } from '@masknet/shared-base'
 import type { ChainId as EVMChainId, RequestArguments } from '@masknet/web3-shared-evm'
 import type { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 
