@@ -56,10 +56,10 @@ export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
             height="58px"
             className={classes.connectedAccounts}
             width="100%">
-            {profiles?.slice(0, 2).map((profile, index) => {
+            {profiles?.slice(0, 2).map((profile) => {
                 return (
                     <AccountRender
-                        key={index}
+                        key={profile.identity}
                         profile={profile}
                         avatar={localProfile?.userId === (profile.name ?? profile.identity) ? avatar : ''}
                     />
