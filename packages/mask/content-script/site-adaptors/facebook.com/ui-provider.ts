@@ -32,7 +32,6 @@ import {
     injectOpenNFTAvatarEditProfileButton,
     openNFTAvatarSettingDialog,
 } from './injection/NFT/NFTAvatarEditProfile.js'
-import { injectProfileTabAtFacebook } from './injection/ProfileTab.js'
 import { injectPostReplacerAtFacebook } from './injection/PostReplacer.js'
 import { injectProfileTabContentAtFacebook } from './injection/ProfileContent.js'
 import { FacebookRenderFragments } from './customization/render-fragments.js'
@@ -188,7 +187,6 @@ const facebookUI: SiteAdaptorUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),
         toolbox: injectToolboxAtFacebook,
-        profileTab: injectProfileTabAtFacebook,
         profileTabContent: injectProfileTabContentAtFacebook,
         avatar: injectAvatar,
     },
