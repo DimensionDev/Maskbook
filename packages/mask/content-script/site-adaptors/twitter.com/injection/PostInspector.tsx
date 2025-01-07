@@ -2,8 +2,8 @@
 import { TwitterDecoder } from '@masknet/encryption'
 import type { PostInfo } from '@masknet/plugin-infra/content-script'
 import { getOrAttachShadowRoot } from '@masknet/shared-base-ui'
-import { isEmpty } from 'lodash-es'
 import { injectPostInspectorDefault } from '../../../site-adaptor-infra/defaults/inject/PostInspector.js'
+import { removeUrlParam } from '../utils/url.js'
 
 export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostInfo) {
     const inject = injectPostInspectorDefault({
@@ -36,9 +36,12 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
                 if (span.innerText.match(/^ +\*\/ ?$/)) hideDOM(span)
             }
             const article = contentContainer.closest('article')
-            if (article && !isEmpty(payloadContext?.imageDecryptedResults)) {
+            if (article && payloadContext?.imageDecryptedResults?.length) {
+                const encryptedImages = payloadContext.imageDecryptedResults.map((url) => removeUrlParam(url, 'name'))
                 for (const img of article.querySelectorAll('img')) {
-                    if (!payloadContext.imageDecryptedResults[img.src]) continue
+                    // ?name=orig is added or modified to during post collection, see ../utils/fetch.ts
+                    const originUrl = removeUrlParam(img.src, 'name')
+                    if (!encryptedImages.includes(originUrl)) continue
                     const a = img.closest<HTMLElement>('a[href*="/photo/"][role=link]')
                     if (!a) continue
                     hideDOM(a)

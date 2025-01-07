@@ -18,7 +18,7 @@ const PluginHooksRenderer = createInjectHooksRenderer(
 )
 
 export interface PostPayloadContext {
-    imageDecryptedResults: Record<string, boolean>
+    imageDecryptedResults: string[]
 }
 
 export interface PostInspectorProps {
@@ -33,7 +33,7 @@ export function PostInspector(props: PostInspectorProps) {
     const isDebugging = useSubscription(PersistentStorages.Settings.storage.debugging.subscription)
     const whoAmI = useCurrentIdentity()
 
-    const [imageDecryptedResults, setImageDecryptedResults] = useState<Record<string, boolean>>({})
+    const [imageDecryptedResults, setImageDecryptedResults] = useState<string[]>([])
 
     if (hasEncryptedPost || postImages.length) {
         if (!isDebugging) props.zipPost({ imageDecryptedResults })

@@ -13,7 +13,7 @@ import type { DecryptionContext, EncodedPayload } from '../../../../background/s
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
-import { uniqWith } from 'lodash-es'
+import { uniq, uniqWith } from 'lodash-es'
 
 type PossibleProgress = SuccessDecryption | FailureDecryption | DecryptionProgress
 
@@ -50,8 +50,8 @@ function progressReducer(
 
 interface DecryptPostProps {
     whoAmI: ProfileIdentifier | null
-    imageDecryptedResults: Record<string, boolean>
-    onImageDecrypted: (decryptedResults: Record<string, boolean>) => void
+    imageDecryptedResults: string[]
+    onImageDecrypted: (decryptedResults: string[]) => void
 }
 function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     if (a.type !== b.type) return false
@@ -149,11 +149,7 @@ export function DecryptPost({ whoAmI, imageDecryptedResults, onImageDecrypted }:
                             iv: encodeArrayBuffer(iv),
                         },
                     })
-                    onImageDecrypted({
-                        ...imageDecryptedResults,
-                        // For now, we only want to know if an image has been decrypted.
-                        [url]: true,
-                    })
+                    onImageDecrypted(uniq([...imageDecryptedResults, url]))
                 },
                 postInfo.decryptedReport,
                 report(url),

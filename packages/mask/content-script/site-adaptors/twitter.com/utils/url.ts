@@ -21,3 +21,9 @@ export function normalizeImageURL(url: string) {
 export function parseId(t: string) {
     return regexMatch(t, /status\/(\d+)/, 1)!
 }
+
+export function removeUrlParam(url: string, param: string) {
+    const parsed = new URL(url)
+    parsed.searchParams.delete(param)
+    return parsed.href
+}
