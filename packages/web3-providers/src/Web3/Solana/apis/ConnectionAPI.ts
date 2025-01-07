@@ -3,7 +3,6 @@ import {
     ChainId,
     SchemaType,
     type Signature,
-    type Transaction,
     type TransactionDetailed,
     type TransactionReceipt,
     type Block,
@@ -47,7 +46,7 @@ export class SolanaConnectionAPI
             ProviderType,
             Signature,
             Operation,
-            Transaction,
+            SolanaWeb3.VersionedTransaction,
             TransactionReceipt,
             TransactionDetailed,
             TransactionSignature,
@@ -347,7 +346,7 @@ export class SolanaConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    callTransaction(transaction: Transaction, initial?: SolanaConnectionOptions): Promise<string> {
+    callTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
@@ -356,27 +355,41 @@ export class SolanaConnectionAPI
     }
 
     estimateTransaction(
-        transaction: Transaction,
+        transaction: SolanaWeb3.VersionedTransaction,
         fallback?: number,
         initial?: SolanaConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
+    async sendTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), signedTransaction.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(
+            this.Web3.getConnection(initial),
+            signedTransaction.message.serialize() as Buffer,
+        )
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), signature.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(
+            this.Web3.getConnection(initial),
+            signature.message.serialize() as Buffer,
+        )
     }
 
-    replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
+    replaceTransaction(
+        hash: string,
+        config: SolanaWeb3.VersionedTransaction,
+        options?: SolanaConnectionOptions,
+    ): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    cancelTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
+    cancelTransaction(
+        hash: string,
+        config: SolanaWeb3.VersionedTransaction,
+        options?: SolanaConnectionOptions,
+    ): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -384,11 +397,11 @@ export class SolanaConnectionAPI
         return this.Web3.getProviderInstance(initial).signMessage(message)
     }
 
-    async signTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
+    async signTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
-    signTransactions(transactions: Transaction[], initial?: SolanaConnectionOptions) {
+    signTransactions(transactions: SolanaWeb3.VersionedTransaction[], initial?: SolanaConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 }

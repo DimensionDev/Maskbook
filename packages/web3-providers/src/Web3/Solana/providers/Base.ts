@@ -1,4 +1,4 @@
-import type { Transaction } from '@solana/web3.js'
+import type { VersionedTransaction } from '@solana/web3.js'
 import { Emitter } from '@servie/events'
 import { type Account, type Wallet, EMPTY_LIST, createConstantSubscription } from '@masknet/shared-base'
 import { ChainId, type ProviderType, type Web3, type Web3Provider } from '@masknet/web3-shared-solana'
@@ -32,8 +32,8 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
         throw new Error('Method not implemented.')
     }
     abstract signMessage(message: string): Promise<string>
-    abstract signTransaction(transaction: Transaction): Promise<Transaction>
-    signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
+    abstract signTransaction(transaction: VersionedTransaction): Promise<VersionedTransaction>
+    signTransactions(transactions: VersionedTransaction[]): Promise<VersionedTransaction[]> {
         return Promise.all(transactions.map((x) => this.signTransaction(x)))
     }
     connect(chainId: ChainId): Promise<Account<ChainId>> {

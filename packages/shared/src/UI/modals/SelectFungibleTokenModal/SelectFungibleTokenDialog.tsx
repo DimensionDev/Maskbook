@@ -129,7 +129,7 @@ export function SelectFungibleTokenDialog({
             }>
             <DialogContent classes={{ root: classes.content }}>
                 <div className={classes.container}>
-                    {!lockChainId ?
+                    {!lockChainId && currentPluginID === NetworkPluginID.PLUGIN_EVM ?
                         <SelectNetworkSidebar
                             className={classes.sidebarContainer}
                             hideAllButton

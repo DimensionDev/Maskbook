@@ -17,7 +17,7 @@ import { useTipsAccounts } from './useTipsAccounts.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
     // This is workaround solution, link issue mf-2536 and pr #7576.
-    // Should refactor social account to support multi-account for one post.
+    // Should refactor social account to support post by multiple authors.
     accounts?: Array<SocialAccount<Web3Helper.ChainIdAll>>
     recipient?: string
     receiver?: ProfileIdentifier
@@ -26,7 +26,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onStatusUpdate?(disabled: boolean): void
 }
 
-const useStyles = makeStyles<{ iconSize: number }>()((theme, props) => ({
+const useStyles = makeStyles()({
     tipButton: {
         cursor: 'pointer',
         display: 'flex',
@@ -34,11 +34,7 @@ const useStyles = makeStyles<{ iconSize: number }>()((theme, props) => ({
         alignItems: 'center',
         fontFamily: '-apple-system, system-ui, sans-serif',
     },
-    icon: {
-        width: props.iconSize,
-        height: props.iconSize,
-    },
-}))
+})
 
 export function TipButton(props: Props) {
     const {
@@ -51,7 +47,7 @@ export function TipButton(props: Props) {
         onStatusUpdate,
         ...rest
     } = props
-    const { classes, cx } = useStyles({ iconSize })
+    const { classes, cx } = useStyles()
 
     const { data: personaPubkey, isPending: loadingPersona } = useProfilePublicKey(receiver?.userId)
     const receiverUserId = receiver?.userId
@@ -124,7 +120,7 @@ export function TipButton(props: Props) {
 
     return (
         <div className={cx(className, classes.tipButton)} {...rest} role="button" onClick={createTipTask}>
-            <Icons.TipCoin className={classes.icon} />
+            <Icons.TipCoin size={iconSize} />
             {children}
         </div>
     )

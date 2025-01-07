@@ -15,7 +15,7 @@ export function useFungibleTokensFromTokenList<T extends NetworkPluginID = Netwo
     } as HubOptions<T>)
 
     return useQuery({
-        queryKey: ['get-fungible-tokens', 'from-token-list', chainId],
+        queryKey: ['get-fungible-tokens', 'from-token-list', chainId, options],
         queryFn: async () => {
             return Hub.getFungibleTokensFromTokenList(chainId, { chainId })
         },

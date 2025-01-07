@@ -1,8 +1,7 @@
-import bs58 from 'bs58'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
-import type { Transaction } from '@solana/web3.js'
 import { injectedPhantomProvider } from '@masknet/injected-script'
 import { PhantomMethodType, ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import bs58 from 'bs58'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
 export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
@@ -34,29 +33,32 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         return signature
     }
 
-    override async signTransaction(transaction: Transaction) {
+    override async signTransaction(transaction: SolanaWeb3.VersionedTransaction) {
         await this.validateSession()
-        const { publicKey, signature } = await this.bridge.request<{
-            publicKey: string
-            signature: string
+        const result = await this.bridge.request<{
+            message: SolanaWeb3.MessageV0
+            signatures: Uint8Array[]
         }>({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
-                message: bs58.encode(transaction.serializeMessage()),
+                message: bs58.encode(transaction.serialize()),
             },
         })
-
-        transaction.addSignature(new SolanaWeb3.PublicKey(publicKey), Buffer.from(bs58.decode(signature)))
-        return transaction
+        const msg = new SolanaWeb3.MessageV0({
+            ...result.message,
+            staticAccountKeys: result.message.staticAccountKeys.map((x) => new SolanaWeb3.PublicKey(x)),
+        })
+        const message = SolanaWeb3.VersionedMessage.deserialize(msg.serialize())
+        return new SolanaWeb3.VersionedTransaction(message, result.signatures)
     }
 
-    override async signTransactions(transactions: Transaction[]) {
+    override async signTransactions(transactions: SolanaWeb3.VersionedTransaction[]) {
         await this.validateSession()
-        return this.bridge.request<Transaction[]>({
+        return this.bridge.request<SolanaWeb3.VersionedTransaction[]>({
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
-                    return bs58.encode(transaction.serializeMessage())
+                    return bs58.encode(transaction.message.serialize())
                 }),
             },
         })

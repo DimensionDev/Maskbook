@@ -1,5 +1,5 @@
 // cspell:ignore metaplex
-import { Connection } from '@metaplex/js'
+import * as _solana_web3_js from /* webpackDefer: true */ '@solana/web3.js';
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
 import { type NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'
@@ -54,7 +54,7 @@ async function getNonFungibleAssets(
         ],
     })
     if (!data.result?.length) return EMPTY_LIST
-    const connection = new Connection('mainnet-beta')
+    const connection = new _solana_web3_js.Connection('mainnet-beta')
     const nftTokens = data.result.filter((x) => x.account.data.parsed.info.tokenAmount.decimals === 0)
     const promises = nftTokens.map(async (x): Promise<NonFungibleAsset<ChainId, SchemaType> | null> => {
         const pda = await Metadata.getPDA(x.account.data.parsed.info.mint)

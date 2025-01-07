@@ -10,7 +10,7 @@ export async function getOrCreateAssociatedTokenAccount(
     payer: PublicKey,
     mint: PublicKey,
     owner: PublicKey,
-    signTransaction: (tx: SolanaWeb3.Transaction) => Promise<SolanaWeb3.Transaction>,
+    signTransaction: (tx: SolanaWeb3.VersionedTransaction) => Promise<SolanaWeb3.VersionedTransaction>,
     allowOwnerOffCurve = false,
     commitment: Commitment = 'single',
     programId = TOKEN_PROGRAM_ID,
@@ -36,21 +36,26 @@ export async function getOrCreateAssociatedTokenAccount(
         if (error.message === 'TokenAccountNotFoundError' || error.message === 'TokenInvalidAccountOwnerError') {
             // As this isn't atomic, it's possible others can create associated accounts meanwhile.
             try {
-                const transaction = new SolanaWeb3.Transaction().add(
-                    createAssociatedTokenAccountInstruction(
-                        payer,
-                        associatedToken,
-                        owner,
-                        mint,
-                        programId,
-                        associatedTokenProgramId,
-                    ),
+                const instruction = createAssociatedTokenAccountInstruction(
+                    payer,
+                    associatedToken,
+                    owner,
+                    mint,
+                    programId,
+                    associatedTokenProgramId,
                 )
-
                 const blockHash = await connection.getLatestBlockhash()
+                const transaction = new SolanaWeb3.Transaction().add(instruction)
+                const message = new SolanaWeb3.TransactionMessage({
+                    payerKey: payer,
+                    recentBlockhash: blockHash.blockhash,
+                    instructions: [instruction],
+                }).compileToV0Message()
+                const tx = new SolanaWeb3.VersionedTransaction(message)
+
                 transaction.feePayer = payer
                 transaction.recentBlockhash = blockHash.blockhash
-                const signed = await signTransaction(transaction)
+                const signed = await signTransaction(tx)
 
                 const signature = await connection.sendRawTransaction(signed.serialize())
 

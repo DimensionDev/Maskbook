@@ -52,8 +52,8 @@ export const GeneratorServices: AsyncGeneratorVersionOf<GeneratorServicesType> =
 function add<T extends object>(key: string, generator = false): AsyncVersionOf<T> {
     const channel = message.events[key].bind(Environment.ManifestBackground)
 
-    const RPC = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
-    const service = RPC<T>(null, {
+    const asyncCall = (generator ? AsyncGeneratorCall : AsyncCall) as any as typeof AsyncCall
+    const service = asyncCall<T>(null, {
         key,
         encoder,
         log,

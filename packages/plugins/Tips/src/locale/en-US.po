@@ -32,16 +32,24 @@ msgid "Gift crypto or NFTs tips to any <0>Next.ID</0> verified users on social m
 msgstr ""
 
 #: src/components/TipDialog.tsx
-msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}"
+#~ msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx
+msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\nInstall https://mask.io/download-links to send your first tip."
 msgstr ""
 
 #: src/components/TipDialog.tsx
-msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}"
+#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}"
+#~ msgstr ""
+
+#: src/components/TipDialog.tsx
+msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\nInstall https://mask.io/download-links to send your first tip."
 msgstr ""
 
 #: src/components/TipDialog.tsx
-msgid "Install https://mask.io/download-links to send your first tip."
-msgstr ""
+#~ msgid "Install https://mask.io/download-links to send your first tip."
+#~ msgstr ""
 
 #: src/contexts/Tip/useTipValidate.ts
 msgid "Insufficient balance"

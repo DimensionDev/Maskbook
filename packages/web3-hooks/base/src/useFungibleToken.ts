@@ -1,11 +1,11 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { getHub } from '@masknet/web3-providers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { attemptUntil } from '@masknet/web3-shared-base'
-import { useQuery } from '@tanstack/react-query'
-import { useWeb3Hub } from './useWeb3Hub.js'
-import { useChainContext } from './useContext.js'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { useQuery } from '@tanstack/react-query'
+import { useChainContext, useNetworkContext } from './useContext.js'
 import { useNetworks } from './useNetworks.js'
 
 export function useFungibleToken<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
@@ -15,26 +15,28 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     options?: HubOptions<T>,
 ) {
     const { chainId } = useChainContext({ chainId: options?.chainId })
-    const Hub = useWeb3Hub(pluginID, {
-        chainId,
-        ...options,
-    } as HubOptions<T>)
-    const networks = useNetworks(pluginID)
+    const { pluginID: contextPluginID } = useNetworkContext(pluginID)
+    const networks = useNetworks(contextPluginID)
 
     return useQuery({
         enabled: !!address,
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ['fungible-token', pluginID, address, chainId, options],
+        queryKey: ['fungible-token', contextPluginID, address, chainId, options],
         queryFn: async () => {
             return attemptUntil(
                 [
                     async () => {
-                        if (pluginID !== NetworkPluginID.PLUGIN_EVM || !isNativeTokenAddress(address!) || !chainId)
+                        if (
+                            contextPluginID !== NetworkPluginID.PLUGIN_EVM ||
+                            !isNativeTokenAddress(address!) ||
+                            !chainId
+                        )
                             return
                         const network = networks.find((x) => x.chainId === chainId)
                         return network?.nativeCurrency
                     },
                     async () => {
+                        if (!contextPluginID) return
+                        const Hub = getHub(contextPluginID, options)
                         const token = await Hub.getFungibleToken(address!, { chainId })
                         if (!token) return
                         const logoURL = token.logoURL ?? fallbackToken?.logoURL
@@ -43,8 +45,11 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
                         return { ...token, symbol, logoURL } as Web3Helper.FungibleTokenScope<S, T>
                     },
                 ],
-                fallbackToken,
+                undefined,
             )
+        },
+        select(data) {
+            return data || fallbackToken
         },
     })
 }

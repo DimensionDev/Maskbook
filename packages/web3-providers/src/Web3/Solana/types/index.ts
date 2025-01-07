@@ -1,8 +1,9 @@
-import type { ChainId, ProviderType, Transaction } from '@masknet/web3-shared-solana'
+import type { ChainId, ProviderType } from '@masknet/web3-shared-solana'
+import type { VersionedTransaction } from '@solana/web3.js'
 import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 
-export type SolanaConnectionOptions = BaseConnectionOptions<ChainId, ProviderType, Transaction>
+export type SolanaConnectionOptions = BaseConnectionOptions<ChainId, ProviderType, VersionedTransaction>
 export type SolanaHubOptions = BaseHubOptions<ChainId>
 
 export interface RpcOptions {
@@ -53,18 +54,6 @@ interface SplToken {
     mint: string
     decimals: 3
     icon: string
-}
-
-export interface RaydiumTokenList {
-    name: string
-    timestamp: string
-    version: {
-        major: number
-        minor: number
-        patch: number
-    }
-    official: SplToken[]
-    unOfficial: SplToken[]
 }
 
 export interface MaskToken {

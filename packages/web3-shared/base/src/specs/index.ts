@@ -300,6 +300,8 @@ export interface Token<ChainId, SchemaType> {
     type: TokenType
     schema: SchemaType
     address: string
+    /** It's newly added, keep it optional */
+    runtime?: NetworkPluginID
     /** NFT has tokenId */
     tokenId?: string
     /** Added by user */

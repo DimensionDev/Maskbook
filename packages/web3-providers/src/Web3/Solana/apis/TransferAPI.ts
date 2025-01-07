@@ -12,20 +12,17 @@ export class SolanaTransferAPI {
     }
     private Web3
     private ConnectionOptions
-    private async attachRecentBlockHash(transaction: SolanaWeb3.Transaction, initial?: SolanaConnectionOptions) {
-        const connection = this.Web3.getConnection(initial)
-        const blockHash = await connection.getRecentBlockhash()
-        transaction.recentBlockhash = blockHash.blockhash
-        return transaction
-    }
 
-    private async signTransaction(transaction: SolanaWeb3.Transaction, initial?: SolanaConnectionOptions) {
+    private async signTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
-    private async sendTransaction(transaction: SolanaWeb3.Transaction, initial?: SolanaConnectionOptions) {
+    private async sendTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), signedTransaction.serialize())
+        return SolanaWeb3.sendAndConfirmRawTransaction(
+            this.Web3.getConnection(initial),
+            signedTransaction.serialize() as Buffer,
+        )
     }
 
     async transferSol(recipient: string, amount: string, initial?: SolanaConnectionOptions) {
@@ -33,15 +30,19 @@ export class SolanaTransferAPI {
         if (!options.account) throw new Error('No payer provides.')
         const payerPubkey = new SolanaWeb3.PublicKey(options.account)
         const recipientPubkey = new SolanaWeb3.PublicKey(recipient)
-        const transaction = new SolanaWeb3.Transaction().add(
-            SolanaWeb3.SystemProgram.transfer({
-                fromPubkey: payerPubkey,
-                toPubkey: recipientPubkey,
-                lamports: Number.parseInt(amount, 10),
-            }),
-        )
-        transaction.feePayer = payerPubkey
-        await this.attachRecentBlockHash(transaction)
+        const blockHash = await this.Web3.getConnection(initial).getLatestBlockhash()
+        const message = new SolanaWeb3.TransactionMessage({
+            payerKey: payerPubkey,
+            recentBlockhash: blockHash.blockhash,
+            instructions: [
+                SolanaWeb3.SystemProgram.transfer({
+                    fromPubkey: payerPubkey,
+                    toPubkey: recipientPubkey,
+                    lamports: Number.parseInt(amount, 10),
+                }),
+            ],
+        }).compileToV0Message()
+        const transaction = new SolanaWeb3.VersionedTransaction(message)
         return this.sendTransaction(transaction)
     }
 
@@ -73,17 +74,20 @@ export class SolanaTransferAPI {
             recipientPubkey,
             signTransaction,
         )
-        const transaction = new SolanaWeb3.Transaction().add(
-            createTransferInstruction(
-                formatTokenAccount.address,
-                toTokenAccount.address,
-                payerPubkey,
-                Number.parseInt(amount, 10),
-            ),
+        const instruction = createTransferInstruction(
+            formatTokenAccount.address,
+            toTokenAccount.address,
+            payerPubkey,
+            Number.parseInt(amount, 10),
         )
-        const blockHash = await connection.getLatestBlockhash()
-        transaction.feePayer = payerPubkey
-        transaction.recentBlockhash = blockHash.blockhash
-        return this.sendTransaction(transaction)
+
+        const blockHash = await this.Web3.getConnection(initial).getLatestBlockhash()
+        const message = new SolanaWeb3.TransactionMessage({
+            payerKey: payerPubkey,
+            recentBlockhash: blockHash.blockhash,
+            instructions: [instruction],
+        }).compileToV0Message()
+        const tx = new SolanaWeb3.VersionedTransaction(message)
+        return this.sendTransaction(tx)
     }
 }

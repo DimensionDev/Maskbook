@@ -1,6 +1,13 @@
 import { memoize, uniqBy } from 'lodash-es'
 import { memoizePromise } from '@masknet/kit'
-import { type PageIndicator, type Pageable, createPageable, createIndicator, EMPTY_LIST } from '@masknet/shared-base'
+import {
+    type PageIndicator,
+    type Pageable,
+    createPageable,
+    createIndicator,
+    EMPTY_LIST,
+    NetworkPluginID,
+} from '@masknet/shared-base'
 import {
     type FungibleAsset,
     TokenType,
@@ -19,40 +26,46 @@ import {
 } from '@masknet/web3-shared-solana'
 import { SolanaChainResolver } from './ResolverAPI.js'
 import * as CoinGeckoPriceSolana from /* webpackDefer: true */ '../../../CoinGecko/index.js'
-import { RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
+import { JUP_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers/index.js'
-import type {
-    GetBalanceResponse,
-    GetProgramAccountsResponse,
-    RaydiumTokenList,
-    MaskToken,
-    SolanaHubOptions,
-} from '../types/index.js'
+import type { GetBalanceResponse, GetProgramAccountsResponse, MaskToken, SolanaHubOptions } from '../types/index.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
-const fetchRaydiumTokenList = memoizePromise(
+interface JupToken {
+    address: string
+    name: string
+    symbol: string
+    decimals: number
+    logoURI: string
+    tags: string[]
+    daily_volume: number
+    /** @example '2024-04-26T10:56:58.893768Z' */
+    created_at: string
+    freeze_authority: null
+    mint_authority: null
+    permanent_delegate: null
+    minted_at: null
+}
+
+const fetchJupTokenList = memoizePromise(
     memoize,
     async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
-        const tokenList = await fetchJSON<RaydiumTokenList>(url, { cache: 'force-cache' })
-        const tokens: Array<FungibleToken<ChainId, SchemaType>> = [...tokenList.official, ...tokenList.unOfficial].map(
-            (token) => {
-                if (isSameAddress(token.mint, '11111111111111111111111111111111'))
-                    return SolanaChainResolver.nativeCurrency(ChainId.Mainnet)
-                return {
-                    id: token.mint,
-                    chainId: ChainId.Mainnet,
-                    type: TokenType.Fungible,
-                    schema: SchemaType.Fungible,
-                    address: token.mint,
-                    name: token.name,
-                    symbol: token.symbol,
-                    decimals: token.decimals,
-                    logoURL: token.icon,
-                }
-            },
-        )
-        return tokens
+        const tokens = await fetchJSON<JupToken[]>(url, {
+            cache: 'force-cache',
+        })
+        return tokens.map((token) => ({
+            id: token.address,
+            runtime: NetworkPluginID.PLUGIN_SOLANA,
+            chainId: ChainId.Mainnet,
+            type: TokenType.Fungible,
+            schema: SchemaType.Fungible,
+            address: token.address,
+            name: token.name,
+            symbol: token.symbol,
+            decimals: token.decimals,
+            logoURL: token.logoURI,
+        }))
     },
     (url) => url,
 )
@@ -167,10 +180,12 @@ class SolanaFungibleTokenAPI
     async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
-        const maskTokenList = await fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0])
-        const raydiumTokenList = await fetchRaydiumTokenList(RAYDIUM_TOKEN_LIST)
+        const [maskTokenList, jupTokenList] = await Promise.all([
+            fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0]),
+            fetchJupTokenList(JUP_TOKEN_LIST),
+        ])
 
-        return uniqBy([...maskTokenList, ...raydiumTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
+        return uniqBy([...jupTokenList, ...maskTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
     }
 
     async getNonFungibleTokenList(

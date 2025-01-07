@@ -1,7 +1,7 @@
-import { useAsyncRetry } from 'react-use'
 import { EMPTY_OBJECT, type NetworkPluginID } from '@masknet/shared-base'
+import { useWeb3Connection } from '@masknet/web3-hooks-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
-import { useWeb3Connection } from './useWeb3Connection.js'
+import { useAsyncRetry } from 'react-use'
 
 export function useFungibleTokensBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,

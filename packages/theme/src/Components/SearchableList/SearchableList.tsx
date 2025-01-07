@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState, type HTMLProps } from 'react'
 import { FixedSizeList, type FixedSizeListProps, type ListChildComponentProps } from 'react-window'
 import Fuse from 'fuse.js'
 import { uniqBy } from 'lodash-es'
@@ -9,7 +9,49 @@ import { Icons } from '@masknet/icons'
 import { EmptyResult } from './EmptyResult.js'
 import { LoadingBase } from '../LoadingBase/index.js'
 
-export interface MaskSearchableListProps<T> extends withClasses<'listBox' | 'searchInput'> {
+const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        overflow: 'visible',
+        gap: theme.spacing(2),
+    },
+    listBox: {
+        flexGrow: 1,
+        minHeight: 0,
+        overflow: 'auto',
+        '& > div': {
+            scrollbarWidth: 'none',
+        },
+        '& > div::-webkit-scrollbar': {
+            backgroundColor: 'transparent',
+            width: 0,
+        },
+        '& > div::-webkit-scrollbar-thumb': {
+            borderRadius: '20px',
+            width: 5,
+            border: '7px solid rgba(0, 0, 0, 0)',
+            backgroundColor: theme.palette.maskColor.secondaryLine,
+            backgroundClip: 'padding-box',
+        },
+        '& > div > div': {
+            position: 'relative',
+            margin: 'auto',
+        },
+    },
+    list: {
+        scrollbarWidth: 'none',
+    },
+    error: {
+        backgroundColor: theme.palette.maskColor.bottom,
+        fontSize: 14,
+        color: theme.palette.maskColor.danger,
+    },
+}))
+
+export interface MaskSearchableListProps<T>
+    extends withClasses<'listBox' | 'searchInput'>,
+        Omit<HTMLProps<HTMLDivElement>, 'data' | 'onSelect'> {
     /** The list data should be render */
     data: T[]
     /** The identity of list data item for remove duplicates item */
@@ -65,7 +107,7 @@ export function SearchableList<T extends object>({
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const theme = useTheme()
-    const { classes, cx } = useStyles(undefined, { props })
+    const { classes } = useStyles(undefined, { props })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps || {}
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
@@ -118,7 +160,7 @@ export function SearchableList<T extends object>({
     return (
         <div className={classes.container}>
             {!disableSearch && (
-                <Box className={cx(classes.searchInput, classes.input)}>
+                <Box className={classes.searchInput}>
                     <MaskTextField
                         value={keyword}
                         placeholder="Search"
@@ -189,42 +231,5 @@ export function SearchableList<T extends object>({
         </div>
     )
 }
-
-const useStyles = makeStyles()((theme) => ({
-    container: {
-        overflow: 'visible',
-    },
-    listBox: {
-        '& > div': {
-            scrollbarWidth: 'none',
-        },
-        '& > div::-webkit-scrollbar': {
-            backgroundColor: 'transparent',
-            width: 0,
-        },
-        '& > div::-webkit-scrollbar-thumb': {
-            borderRadius: '20px',
-            width: 5,
-            border: '7px solid rgba(0, 0, 0, 0)',
-            backgroundColor: theme.palette.maskColor.secondaryLine,
-            backgroundClip: 'padding-box',
-        },
-        '& > div > div': {
-            position: 'relative',
-            margin: 'auto',
-        },
-    },
-    input: {
-        paddingBottom: '16px',
-    },
-    list: {
-        scrollbarWidth: 'none',
-    },
-    error: {
-        backgroundColor: theme.palette.maskColor.bottom,
-        fontSize: 14,
-        color: theme.palette.maskColor.danger,
-    },
-}))
 
 export interface MaskFixedSizeListProps extends FixedSizeListProps {}

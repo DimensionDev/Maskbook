@@ -1,4 +1,9 @@
-import type { PublicKey, BlockResponse, Transaction as SolanaTransaction, TransactionResponse } from '@solana/web3.js'
+import type {
+    PublicKey,
+    BlockResponse,
+    VersionedTransaction as SolanaTransaction,
+    TransactionResponse,
+} from '@solana/web3.js'
 import type { Web3State as Web3StateShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
@@ -28,7 +33,7 @@ export enum ProviderType {
     None = 'None',
     Phantom = 'Phantom',
     Solflare = 'Solflare',
-    Sollet = 'Sollet',
+    // Sollet = 'Sollet',
     Coin98 = 'Coin98',
 }
 

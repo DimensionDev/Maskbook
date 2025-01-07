@@ -17,6 +17,19 @@
             " ",
             ["3"]
         ],
+        "Wam87B": [
+            "I just tipped ",
+            ["amount"],
+            " ",
+            ["0", "select", { "namedToken": [["1"]], "other": "token" }],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["2", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["3"],
+            "\\n\\nInstall https://mask.io/download-links to send your first tip."
+        ],
         "x5tVFy": [
             "I just tipped a ",
             ["NFT_Name"],
@@ -26,6 +39,17 @@
             ["0", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
             " ",
             ["recipientAddress"]
+        ],
+        "7e+2an": [
+            "I just tipped a ",
+            ["NFT_Name"],
+            " to @",
+            ["recipientUserId"],
+            "'s ",
+            ["0", "select", { "name": "wallet", "address": "wallet address", "other": "wallet" }],
+            " ",
+            ["recipientAddress"],
+            "\\n\\nInstall https://mask.io/download-links to send your first tip."
         ],
         "2Wwd56": "Install https://mask.io/download-links to send your first tip.",
         "znqB4T": "余额不足",
