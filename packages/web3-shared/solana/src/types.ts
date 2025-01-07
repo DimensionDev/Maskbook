@@ -2,6 +2,8 @@ import type { Web3State as Web3StateShared } from '@masknet/web3-shared-base'
 
 export enum ChainId {
     Mainnet = 101,
+    Testnet = 102,
+    Devnet = 103,
     // For any chains not supported yet.
     Invalid = 0,
 }
