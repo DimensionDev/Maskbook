@@ -55,6 +55,7 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
                             value={word}
                             autoFocus={i === 0}
                             autoComplete="off"
+                            type="password"
                             InputProps={{
                                 disableUnderline: true,
                                 className: classes.input,
