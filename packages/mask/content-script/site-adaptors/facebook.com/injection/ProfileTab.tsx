@@ -41,7 +41,8 @@ const useStyles = makeStyles()((theme) => {
                 cursor: 'pointer',
             },
             height: props.height,
-            display: 'flex',
+            display: 'inline-flex',
+            width: 80,
             flexDirection: 'column',
             alignContent: 'center',
             justifyContent: 'center',
@@ -54,6 +55,7 @@ const useStyles = makeStyles()((theme) => {
             position: 'relative',
             display: 'flex',
             minWidth: 56,
+            height: 52,
             justifyContent: 'center',
             alignItems: 'center',
             textAlign: 'center',
@@ -144,10 +146,12 @@ export function injectProfileTabAtFacebook(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchProfileTabSelector())
     startWatch(watcher, signal)
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(<ProfileTabAtFacebook />)
-
     const assign = () => {
         const web3Tab = web3TabSelector().evaluate()
-        if (web3Tab) web3Tab.style.float = 'left'
+        if (web3Tab) {
+            web3Tab.style.float = 'right'
+            web3Tab.style.marginRight = '15px'
+        }
     }
 
     new MutationObserverWatcher(web3TabSelector())

@@ -392,6 +392,7 @@ function Content(props: ProfileTabContentProps) {
 
     // Maybe should merge in NextIdPage
     if (socialAccounts.length === 0 && !showNextID && !isOnTwitter) {
+        if (Sniffings.is_facebook_page) return null
         return (
             <ThemeProvider theme={MaskLightTheme}>
                 <div className={classes.root}>

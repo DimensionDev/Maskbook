@@ -38,6 +38,7 @@ import { FacebookRenderFragments } from './customization/render-fragments.js'
 import { enableFbStyleTextPayloadReplace } from '../../../shared-ui/TypedMessageRender/transformer.js'
 import { injectFacebookProfileCover } from './injection/ProfileCover.js'
 import { injectAvatar } from './injection/Avatar/index.js'
+import { injectProfileTabAtFacebook } from './injection/ProfileTab.js'
 
 const useInjectedDialogClassesOverwriteFacebook = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -187,6 +188,7 @@ const facebookUI: SiteAdaptorUI.Definition = {
         pageInspector: injectPageInspectorDefault(),
         setupWizard: createTaskStartSetupGuideDefault(),
         toolbox: injectToolboxAtFacebook,
+        profileTab: injectProfileTabAtFacebook,
         profileTabContent: injectProfileTabContentAtFacebook,
         avatar: injectAvatar,
     },

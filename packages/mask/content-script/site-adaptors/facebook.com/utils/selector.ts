@@ -115,7 +115,7 @@ export function profileTabSelectedSelector() {
 
 // for inserting web3 tab
 export function searchProfileTabSelector() {
-    return querySelector<E>('[role="tablist"] > div > div > :last-child')
+    return querySelector<E>('[role="tablist"] > div > div > [role="tab"]:last-of-type')
 }
 
 // for getting the inserted web3 tab
