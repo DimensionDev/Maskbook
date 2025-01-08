@@ -2,13 +2,6 @@ import { PluginID } from '@masknet/shared-base'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 
-// Note: if the latest version has been changed, please update packages/mask/content-script/components/CompositionDialog/useSubmit.ts
-/**
- * !! Change this key cause a breaking change in the red packet plugin.
- * !! Please make sure it also be able to recognize the old key.
- */
-export const RedPacketMetaKey = `${PluginID.RedPacket}:1`
-export const RedPacketNftMetaKey = `${PluginID.RedPacket}_nft:1`
 /**
  * !! This ID is used to identify the stored plugin data. Change it will cause data lost.
  */

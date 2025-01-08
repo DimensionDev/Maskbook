@@ -1,7 +1,6 @@
 import { t } from '@lingui/macro'
-import { RedPacketMetaKey } from '@masknet/plugin-redpacket'
 import { ApplicationBoardModal } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { RedPacketMetaKey, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI, RedPacketJSONPayload } from '@masknet/web3-providers/types'

@@ -1,4 +1,5 @@
 import { Trans } from '@lingui/macro'
+import { RedPacketMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
@@ -6,10 +7,9 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { memo, useCallback, useContext } from 'react'
 import { useAsyncFn } from 'react-use'
-import { RedPacketMetaKey } from '../../constants.js'
+import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { openComposition } from '../openComposition.js'
-import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`

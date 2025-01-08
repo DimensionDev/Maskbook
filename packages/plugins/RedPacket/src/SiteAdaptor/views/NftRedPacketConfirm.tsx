@@ -6,7 +6,7 @@ import {
     PluginWalletStatusBar,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
@@ -22,7 +22,7 @@ import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Box, Link, ListItem, Typography } from '@mui/material'
 import { memo, useCallback, useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { RedPacketNftMetaKey, RoutePaths } from '../../constants.js'
+import { RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
 import { useCreateNftRedpacketCallback } from '../hooks/useCreateNftRedpacketCallback.js'
 import { openComposition } from '../openComposition.js'

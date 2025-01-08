@@ -38,11 +38,7 @@ export function PostInspector(props: PostInspectorProps) {
     if (hasEncryptedPost || postImages.length) {
         if (!isDebugging) props.zipPost({ imageDecryptedResults })
         return withAdditionalContent(
-            <DecryptPost
-                whoAmI={whoAmI?.identifier || null}
-                imageDecryptedResults={imageDecryptedResults}
-                onImageDecrypted={setImageDecryptedResults}
-            />,
+            <DecryptPost whoAmI={whoAmI?.identifier || null} onImageDecrypted={setImageDecryptedResults} />,
         )
     }
     return withAdditionalContent(null)

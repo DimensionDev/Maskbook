@@ -1,9 +1,9 @@
+import { RedPacketMetaKey, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { EVMChainResolver } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Ok, type Result } from 'ts-results-es'
-import { RedPacketMetaKey, RedPacketNftMetaKey } from '../constants.js'
 import schemaNtf from '../schema-nft.json' with { type: 'json' }
 import schema from '../schema.json' with { type: 'json' }
 

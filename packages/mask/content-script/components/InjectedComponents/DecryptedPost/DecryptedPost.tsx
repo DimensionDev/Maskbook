@@ -1,4 +1,4 @@
-import { Fragment, useContext, useEffect, useReducer } from 'react'
+import { Fragment, useContext, useEffect, useReducer, type Dispatch, type SetStateAction } from 'react'
 import { extractTextFromTypedMessage, isTypedMessageEqual, type TypedMessage } from '@masknet/typed-message'
 import { RedPacketMetaKey, RedPacketNftMetaKey, type ProfileIdentifier } from '@masknet/shared-base'
 
@@ -13,7 +13,7 @@ import type { DecryptionContext, EncodedPayload } from '../../../../background/s
 import { DecryptIntermediateProgressKind, DecryptProgressKind } from '@masknet/encryption'
 import { type PostContext, usePostInfoDetails, PostInfoContext } from '@masknet/plugin-infra/content-script'
 import { Some } from 'ts-results-es'
-import { uniq, uniqWith } from 'lodash-es'
+import { uniqWith } from 'lodash-es'
 
 type PossibleProgress = SuccessDecryption | FailureDecryption | DecryptionProgress
 
@@ -50,8 +50,7 @@ function progressReducer(
 
 interface DecryptPostProps {
     whoAmI: ProfileIdentifier | null
-    imageDecryptedResults: string[]
-    onImageDecrypted: (decryptedResults: string[]) => void
+    onImageDecrypted: Dispatch<SetStateAction<string[]>>
 }
 function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     if (a.type !== b.type) return false
@@ -62,7 +61,7 @@ function isProgressEqual(a: PossibleProgress, b: PossibleProgress) {
     safeUnreachable(a)
     return false
 }
-export function DecryptPost({ whoAmI, imageDecryptedResults, onImageDecrypted }: DecryptPostProps) {
+export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
     const deconstructedPayload = usePostInfoDetails.hasMaskPayload()
     const currentPostBy = usePostInfoDetails.author()
     // TODO: we should read this from the payload.
@@ -149,9 +148,10 @@ export function DecryptPost({ whoAmI, imageDecryptedResults, onImageDecrypted }:
                             iv: encodeArrayBuffer(iv),
                         },
                     })
-                    if (!message.meta || imageDecryptedResults.includes(url)) return
+                    if (!message.meta) return
+                    // For now, we only care about RedPacket payload
                     if (message.meta.has(RedPacketMetaKey) || message.meta.has(RedPacketNftMetaKey)) {
-                        onImageDecrypted(uniq([...imageDecryptedResults, url]))
+                        onImageDecrypted((images) => (images.includes(url) ? images : [...images, url]))
                     }
                 },
                 postInfo.decryptedReport,
