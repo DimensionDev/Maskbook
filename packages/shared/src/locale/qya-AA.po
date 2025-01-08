@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-24 04:49\n"
+"PO-Revision-Date: 2025-01-08 06:53\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -118,8 +118,11 @@ msgstr "crwdns32482:0{name}crwdne32482:0"
 msgid "24 Hour Trading Vol"
 msgstr "crwdns30760:0crwdne30760:0"
 
-#: src/UI/components/AddCollectibles/index.tsx
 #: src/UI/modals/AddCollectiblesModal/AddCollectiblesDialog.tsx
+msgid "Add Collectibles"
+msgstr "crwdns36332:0crwdne36332:0"
+
+#: src/UI/components/AddCollectibles/index.tsx
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
 msgstr "crwdns30762:0crwdne30762:0"
