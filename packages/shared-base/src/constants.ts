@@ -1,5 +1,6 @@
 import { NextIDPlatform } from './NextID/types.js'
 import { EnhanceableSite } from './Site/types.js'
+import { PluginID } from './types/PluginID.js'
 
 export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.Twitter]: 'X',
@@ -31,3 +32,6 @@ export const EMPTY_LIST = Object.freeze([]) as never[]
 export const EMPTY_OBJECT = Object.freeze({}) as Record<string, never>
 
 export const DEFAULT_PLUGIN_PUBLISHER = { name: { fallback: 'Mask Network' }, link: 'https://mask.io/' }
+
+export const RedPacketMetaKey = `${PluginID.RedPacket}:1`
+export const RedPacketNftMetaKey = `${PluginID.RedPacket}_nft:1`

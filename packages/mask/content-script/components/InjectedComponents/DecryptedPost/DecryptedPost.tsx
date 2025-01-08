@@ -1,6 +1,6 @@
 import { Fragment, useContext, useEffect, useReducer } from 'react'
 import { extractTextFromTypedMessage, isTypedMessageEqual, type TypedMessage } from '@masknet/typed-message'
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import { RedPacketMetaKey, RedPacketNftMetaKey, type ProfileIdentifier } from '@masknet/shared-base'
 
 import Services, { GeneratorServices } from '#services'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types.js'
@@ -149,7 +149,10 @@ export function DecryptPost({ whoAmI, imageDecryptedResults, onImageDecrypted }:
                             iv: encodeArrayBuffer(iv),
                         },
                     })
-                    onImageDecrypted(uniq([...imageDecryptedResults, url]))
+                    if (!message.meta || imageDecryptedResults.includes(url)) return
+                    if (message.meta.has(RedPacketMetaKey) || message.meta.has(RedPacketNftMetaKey)) {
+                        onImageDecrypted(uniq([...imageDecryptedResults, url]))
+                    }
                 },
                 postInfo.decryptedReport,
                 report(url),
