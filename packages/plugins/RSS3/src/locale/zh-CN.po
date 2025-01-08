@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-24 04:50\n"
+"PO-Revision-Date: 2025-01-08 06:55\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -252,3 +252,4 @@ msgstr ""
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Tx Fee"
 msgstr ""
+
