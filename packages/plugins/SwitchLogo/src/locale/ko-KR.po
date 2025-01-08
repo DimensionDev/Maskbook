@@ -55,4 +55,3 @@ msgstr "트위터 로고 전환"
 #: src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
 msgstr "트위터 로고 전환"
-

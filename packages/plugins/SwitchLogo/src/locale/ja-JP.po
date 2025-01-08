@@ -55,4 +55,3 @@ msgstr "Twitterロゴを切り替える"
 #: src/SiteAdaptor/index.tsx
 msgid "Switch X Logo"
 msgstr "X ロゴの切り替え"
-

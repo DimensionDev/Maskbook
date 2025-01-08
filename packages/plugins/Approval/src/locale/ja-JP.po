@@ -65,4 +65,3 @@ msgstr "取り消し"
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr "トークン"
-

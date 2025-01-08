@@ -32,4 +32,3 @@ msgstr "実行"
 #: src/SiteAdaptor/index.tsx
 msgid "Valuables"
 msgstr "貴重な"
-
