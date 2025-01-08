@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:53\n"
+"PO-Revision-Date: 2025-01-08 06:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -208,6 +208,11 @@ msgstr "crwdns28912:0crwdne28912:0"
 #: src/SiteAdaptor/FeedFilters.tsx
 msgid "Related"
 msgstr "crwdns28914:0crwdne28914:0"
+
+#: src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
+#: src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
+msgid "Request timed out"
+msgstr "crwdns35850:0crwdne35850:0"
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
