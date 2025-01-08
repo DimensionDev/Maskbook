@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import { NetworkIcon, TokenIcon } from '@masknet/shared'
+import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { formatBalance, isZero, type FungibleToken } from '@masknet/web3-shared-base'
@@ -68,16 +68,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(1),
         marginTop: 'auto',
-    },
-    icon: {
-        width: theme.spacing(4.5),
-        height: theme.spacing(4.5),
-        position: 'relative',
-    },
-    networkIcon: {
-        position: 'absolute',
-        bottom: 0,
-        right: -3,
     },
     amount: {
         color: theme.palette.maskColor.white,
@@ -190,21 +180,14 @@ export function RedPacketEnvelope({
                     </TextOverflowTooltip>
                 </div>
                 <div className={classes.asset}>
-                    <div className={classes.icon}>
-                        <TokenIcon
-                            size={36}
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                            address={token.address}
-                            symbol={token.symbol}
-                            chainId={token.chainId}
-                        />
-                        <NetworkIcon
-                            size={16}
-                            className={classes.networkIcon}
-                            pluginID={NetworkPluginID.PLUGIN_EVM}
-                            chainId={token.chainId}
-                        />
-                    </div>
+                    <TokenIcon
+                        size={36}
+                        badgeSize={16}
+                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        address={token.address}
+                        symbol={token.symbol}
+                        chainId={token.chainId}
+                    />
                     {isClaimed ?
                         <Typography className={classes.amount}>
                             {claimedZero ?
