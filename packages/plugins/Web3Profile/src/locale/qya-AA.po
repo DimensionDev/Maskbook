@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2025-01-08 06:56\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -54,7 +54,7 @@ msgid "Firefly"
 msgstr "crwdns31420:0crwdne31420:0"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Follow"
 msgstr "crwdns31422:0crwdne31422:0"
 
@@ -67,7 +67,7 @@ msgid "Follow Lens handle"
 msgstr "crwdns31426:0crwdne31426:0"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "crwdns31428:0crwdne31428:0"
 
@@ -153,7 +153,7 @@ msgstr "crwdns31466:0crwdne31466:0"
 msgid "Unlock {0} {1} and follow"
 msgstr "crwdns31468:0{0}crwdnd31468:0{1}crwdne31468:0"
 
-#: src/SiteAdaptor/components/Lens/LensList.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
 msgstr "crwdns31470:0crwdne31470:0"
 
