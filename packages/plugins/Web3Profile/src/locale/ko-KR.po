@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-24 04:50\n"
+"PO-Revision-Date: 2025-01-08 06:56\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -165,3 +165,4 @@ msgstr ""
 #: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
+
