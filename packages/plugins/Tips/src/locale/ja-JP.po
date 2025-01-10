@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-01-10 13:54\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -108,3 +108,4 @@ msgstr "トークン"
 #: src/components/RecipientSection/RecipientSelect.tsx
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
+
