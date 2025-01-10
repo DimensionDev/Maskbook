@@ -74,17 +74,18 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const url = logoURL || token?.logoURL || data
     const icon = <Icon {...rest} logoURL={url} name={text} />
 
-    if (disableBadge) return icon
     return (
         <div className={cx(classes.container, className)} style={{ height: rest.size, width: rest.size }}>
             {icon}
-            <NetworkIcon
-                pluginID={pluginID}
-                className={classes.badgeIcon}
-                chainId={chainId}
-                size={badgeSize}
-                network={network}
-            />
+            {disableBadge ? null : (
+                <NetworkIcon
+                    pluginID={pluginID}
+                    className={classes.badgeIcon}
+                    chainId={chainId}
+                    size={badgeSize}
+                    network={network}
+                />
+            )}
         </div>
     )
 })

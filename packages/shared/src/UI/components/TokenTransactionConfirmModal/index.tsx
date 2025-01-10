@@ -65,6 +65,7 @@ const useStyles = makeStyles()((theme) => ({
     tokenIcon: {
         margin: 'auto',
         border: `1px ${theme.palette.maskColor.secondaryLine} solid`,
+        borderRadius: '50%',
     },
     icon: {
         filter: 'drop-shadow(0px 6px 12px rgba(61, 194, 51, 0.20))',
@@ -124,6 +125,7 @@ export function TokenTransactionConfirmModal({
                                 name={token.symbol ?? token.name}
                                 chainId={token.chainId}
                                 size={90}
+                                disableBadge
                             />
                         :   <Icons.FillSuccess className={classes.icon} size={90} />}
                         <Typography className={classes.congratulation} mt="19.5px">
