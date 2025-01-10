@@ -1,6 +1,5 @@
-import type { VersionedTransaction } from '@solana/web3.js'
 import { injectedSolflareProvider } from '@masknet/injected-script'
-import { PhantomMethodType, ProviderType } from '@masknet/web3-shared-solana'
+import { PhantomMethodType, ProviderType, type Transaction } from '@masknet/web3-shared-solana'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
 export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
@@ -14,7 +13,7 @@ export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
         return signature
     }
 
-    override async signTransaction(transaction: VersionedTransaction): Promise<VersionedTransaction> {
+    override async signTransaction(transaction: Transaction): Promise<Transaction> {
         const { signature, publicKey } = (await this.bridge.request({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: [transaction],

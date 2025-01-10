@@ -1,9 +1,8 @@
-import type { ChainId, ProviderType } from '@masknet/web3-shared-solana'
-import type { VersionedTransaction } from '@solana/web3.js'
+import type { ChainId, ProviderType, Transaction } from '@masknet/web3-shared-solana'
 import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 
-export type SolanaConnectionOptions = BaseConnectionOptions<ChainId, ProviderType, VersionedTransaction>
+export type SolanaConnectionOptions = BaseConnectionOptions<ChainId, ProviderType, Transaction>
 export type SolanaHubOptions = BaseHubOptions<ChainId>
 
 export interface RpcOptions {

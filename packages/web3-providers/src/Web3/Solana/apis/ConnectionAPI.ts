@@ -13,6 +13,7 @@ import {
     type TransactionSignature,
     type ProviderType,
     type Operation,
+    type Transaction,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
@@ -46,7 +47,7 @@ export class SolanaConnectionAPI
             ProviderType,
             Signature,
             Operation,
-            SolanaWeb3.VersionedTransaction,
+            Transaction,
             TransactionReceipt,
             TransactionDetailed,
             TransactionSignature,
@@ -346,7 +347,7 @@ export class SolanaConnectionAPI
         throw new Error('Method not implemented.')
     }
 
-    callTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions): Promise<string> {
+    callTransaction(transaction: Transaction, initial?: SolanaConnectionOptions): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
@@ -355,14 +356,14 @@ export class SolanaConnectionAPI
     }
 
     estimateTransaction(
-        transaction: SolanaWeb3.VersionedTransaction,
+        transaction: Transaction,
         fallback?: number,
         initial?: SolanaConnectionOptions,
     ): Promise<string> {
         throw new Error('Method not implemented.')
     }
 
-    async sendTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
+    async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
         return SolanaWeb3.sendAndConfirmRawTransaction(
             this.Web3.getConnection(initial),
@@ -377,19 +378,11 @@ export class SolanaConnectionAPI
         )
     }
 
-    replaceTransaction(
-        hash: string,
-        config: SolanaWeb3.VersionedTransaction,
-        options?: SolanaConnectionOptions,
-    ): Promise<void> {
+    replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
-    cancelTransaction(
-        hash: string,
-        config: SolanaWeb3.VersionedTransaction,
-        options?: SolanaConnectionOptions,
-    ): Promise<void> {
+    cancelTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {
         throw new Error('Method not implemented.')
     }
 
@@ -397,11 +390,11 @@ export class SolanaConnectionAPI
         return this.Web3.getProviderInstance(initial).signMessage(message)
     }
 
-    async signTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
+    async signTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
-    signTransactions(transactions: SolanaWeb3.VersionedTransaction[], initial?: SolanaConnectionOptions) {
+    signTransactions(transactions: Transaction, initial?: SolanaConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 }

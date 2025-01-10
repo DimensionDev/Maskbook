@@ -1,5 +1,5 @@
 import { injectedPhantomProvider } from '@masknet/injected-script'
-import { PhantomMethodType, ProviderType, type Web3Provider } from '@masknet/web3-shared-solana'
+import { PhantomMethodType, ProviderType, type Transaction, type Web3Provider } from '@masknet/web3-shared-solana'
 import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import bs58 from 'bs58'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
@@ -33,7 +33,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         return signature
     }
 
-    override async signTransaction(transaction: SolanaWeb3.VersionedTransaction) {
+    override async signTransaction(transaction: Transaction) {
         await this.validateSession()
         const result = await this.bridge.request<{
             message: SolanaWeb3.MessageV0
@@ -52,9 +52,9 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         return new SolanaWeb3.VersionedTransaction(message, result.signatures)
     }
 
-    override async signTransactions(transactions: SolanaWeb3.VersionedTransaction[]) {
+    override async signTransactions(transactions: Transaction[]) {
         await this.validateSession()
-        return this.bridge.request<SolanaWeb3.VersionedTransaction[]>({
+        return this.bridge.request<Transaction[]>({
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {

@@ -4,6 +4,7 @@ import { createTransferInstruction } from './spl-token/createTransferInstruction
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
 import type { SolanaConnectionOptions } from '../types/index.js'
+import type { Transaction } from '@masknet/web3-shared-solana'
 
 export class SolanaTransferAPI {
     constructor(private options?: SolanaConnectionOptions) {
@@ -13,11 +14,11 @@ export class SolanaTransferAPI {
     private Web3
     private ConnectionOptions
 
-    private async signTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
+    private async signTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
-    private async sendTransaction(transaction: SolanaWeb3.VersionedTransaction, initial?: SolanaConnectionOptions) {
+    private async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
         return SolanaWeb3.sendAndConfirmRawTransaction(
             this.Web3.getConnection(initial),
