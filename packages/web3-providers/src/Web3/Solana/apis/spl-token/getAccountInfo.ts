@@ -1,5 +1,6 @@
 import { TOKEN_PROGRAM_ID, AccountLayout } from '@solana/spl-token'
-import type { Connection, PublicKey, Commitment } from '@solana/web3.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type { Connection, Commitment } from '@solana/web3.js'
 
 enum AccountState {
     Uninitialized = 0,
@@ -9,7 +10,7 @@ enum AccountState {
 
 export async function getAccountInfo(
     connection: Connection,
-    address: PublicKey,
+    address: SolanaWeb3.PublicKey,
     commitment?: Commitment,
     programId = TOKEN_PROGRAM_ID,
 ) {
@@ -22,8 +23,8 @@ export async function getAccountInfo(
 
     return {
         address,
-        mint: rawAccount.mint,
-        owner: rawAccount.owner,
+        mint: new SolanaWeb3.PublicKey(rawAccount.mint),
+        owner: new SolanaWeb3.PublicKey(rawAccount.owner),
         amount: rawAccount.amount,
         delegate: rawAccount.delegateOption ? rawAccount.delegate : null,
         delegatedAmount: rawAccount.delegatedAmount,

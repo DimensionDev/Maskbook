@@ -20,7 +20,6 @@ export function createSolanaWalletProviders(): Record<ProviderType, SolanaWallet
         [ProviderType.None]: new NoneProvider(),
         [ProviderType.Phantom]: new SolanaPhantomProvider(),
         [ProviderType.Solflare]: new SolanaSolflareProvider(),
-        // [ProviderType.Sollet]: new SolanaSolletProvider(),
         [ProviderType.Coin98]: new SolanaCoin98Provider(),
     }
 }

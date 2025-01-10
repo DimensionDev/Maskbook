@@ -26,9 +26,15 @@ import {
 } from '@masknet/web3-shared-solana'
 import { SolanaChainResolver } from './ResolverAPI.js'
 import * as CoinGeckoPriceSolana from /* webpackDefer: true */ '../../../CoinGecko/index.js'
-import { JUP_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
+import { JUP_TOKEN_LIST, RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers/index.js'
-import type { GetBalanceResponse, GetProgramAccountsResponse, MaskToken, SolanaHubOptions } from '../types/index.js'
+import type {
+    GetBalanceResponse,
+    GetProgramAccountsResponse,
+    MaskToken,
+    RaydiumTokenList,
+    SolanaHubOptions,
+} from '../types/index.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 
@@ -47,6 +53,30 @@ interface JupToken {
     permanent_delegate: null
     minted_at: null
 }
+
+const fetchRaydiumTokenList = memoizePromise(
+    memoize,
+    async (url: string): Promise<Array<FungibleToken<ChainId, SchemaType>>> => {
+        const tokenList = await fetchJSON<RaydiumTokenList>(url, { cache: 'force-cache' })
+        const tokens: Array<FungibleToken<ChainId, SchemaType>> = tokenList.data.mintList.map((token) => {
+            if (isSameAddress(token.address, '11111111111111111111111111111111'))
+                return SolanaChainResolver.nativeCurrency(ChainId.Mainnet)
+            return {
+                id: token.address,
+                chainId: ChainId.Mainnet,
+                type: TokenType.Fungible,
+                schema: SchemaType.Fungible,
+                address: token.address,
+                name: token.name,
+                symbol: token.symbol,
+                decimals: token.decimals,
+                logoURL: token.logoURI,
+            }
+        })
+        return tokens
+    },
+    (url) => url,
+)
 
 const fetchJupTokenList = memoizePromise(
     memoize,
@@ -180,12 +210,15 @@ class SolanaFungibleTokenAPI
     async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
-        const [maskTokenList, jupTokenList] = await Promise.all([
+        const [maskTokenList, jupTokenList, raydiumTokenList] = await Promise.all([
             fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0]),
             fetchJupTokenList(JUP_TOKEN_LIST),
+            fetchRaydiumTokenList(RAYDIUM_TOKEN_LIST),
         ])
 
-        return uniqBy([...jupTokenList, ...maskTokenList], (x) => x.address).filter((x) => x.name && x.symbol)
+        return uniqBy([...jupTokenList, ...maskTokenList, ...raydiumTokenList], (x) => x.address).filter(
+            (x) => x.name && x.symbol,
+        )
     }
 
     async getNonFungibleTokenList(

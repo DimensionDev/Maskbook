@@ -107,7 +107,7 @@ export function SearchableList<T extends object>({
 }: MaskSearchableListProps<T>) {
     const [keyword, setKeyword] = useState('')
     const theme = useTheme()
-    const { classes } = useStyles(undefined, { props })
+    const { classes, cx } = useStyles(undefined, { props })
     const { height = 300, itemSize, ...rest } = FixedSizeListProps || {}
     const { InputProps, ...textFieldPropsRest } = SearchFieldProps ?? {}
 
@@ -158,7 +158,7 @@ export function SearchableList<T extends object>({
     const windowHeight = !!textFieldPropsRest.error && typeof height === 'number' ? height - 28 : height
 
     return (
-        <div className={classes.container}>
+        <div className={cx(classes.container, props.className)}>
             {!disableSearch && (
                 <Box className={classes.searchInput}>
                     <MaskTextField

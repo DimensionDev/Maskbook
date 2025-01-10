@@ -394,7 +394,7 @@ export class SolanaConnectionAPI
         return this.Web3.getProviderInstance(initial).signTransaction(transaction)
     }
 
-    signTransactions(transactions: Transaction, initial?: SolanaConnectionOptions) {
+    signTransactions(transactions: Transaction[], initial?: SolanaConnectionOptions) {
         return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
     }
 }
