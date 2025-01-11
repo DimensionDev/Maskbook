@@ -20,22 +20,27 @@ msgstr ""
 msgid "(the name is set by the web site)"
 msgstr "(名前はウェブサイトによって設定されます)"
 
+#. placeholder {0}: millisecondsToHours(value)
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0, plural, one {# Hour} other {# Hours}}"
 msgstr ""
 
+#. placeholder {0}: formatTokenBalance(tokenBalance, token?.decimals)
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
 msgstr "{0} 利用可能です"
 
+#. placeholder {0}: wallet?.name || 'Your wallet'
 #: popups/pages/Wallet/ConnectedSites/index.tsx
 msgid "{0} is connected to these sites, they can view your account address."
 msgstr ""
 
+#. placeholder {0}: millisecondsToMinutes(value)
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "{0} Mins"
 msgstr "{0} 分"
 
+#. placeholder {0}: pendingTransactions.length
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "{0} Pending"
 msgstr ""
@@ -64,6 +69,7 @@ msgstr ""
 msgid "<0>@{currentUserId}</0> connected already."
 msgstr ""
 
+#. placeholder {0}: formatEthereumAddress(transaction.formattedTransaction.popup.spender, 4)
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "<0>Granted to </0><1>{0}</1>"
 msgstr ""
@@ -116,8 +122,8 @@ msgstr ""
 msgid "Account successfully connected to persona"
 msgstr "ソーシャルメディアで Web3 dApps の機能を探索してみてください。"
 
-#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "accounts"
 msgstr "アカウント"
 
@@ -129,9 +135,9 @@ msgstr "アクティビティ"
 msgid "Activity Log"
 msgstr "行動記録"
 
-#: popups/modals/SwitchPersonaModal/index.tsx
-#: popups/pages/Friends/ContactCard/index.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Friends/ContactCard/index.tsx
+#: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Add"
 msgstr "追加"
 
@@ -143,13 +149,13 @@ msgstr ""
 msgid "Add Assets"
 msgstr "資産を追加"
 
-#: popups/components/AddContactInputPanel/index.tsx
 #: popups/pages/Wallet/ContactList/index.tsx
+#: popups/components/AddContactInputPanel/index.tsx
 msgid "Add Contact"
 msgstr "連絡先を追加する"
 
-#: popups/pages/Wallet/EditNetwork/index.tsx
 #: popups/pages/Wallet/NetworkManagement/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Add Network"
 msgstr "ネットワークを追加"
 
@@ -162,14 +168,14 @@ msgid "Add Suggested Token"
 msgstr "提案されたトークンを追加"
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-#: popups/pages/Wallet/CreateWallet/Derive.tsx
-#: popups/pages/Wallet/CreateWallet/index.tsx
 #: popups/pages/Wallet/SwitchWallet/index.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add Wallet"
 msgstr "ウォレットを追加"
 
-#: popups/components/TokenPicker/TokenItem.tsx
 #: popups/pages/Wallet/components/AssetsList/index.tsx
+#: popups/components/TokenPicker/TokenItem.tsx
 msgid "Added by user"
 msgstr "ユーザーが追加しました"
 
@@ -197,8 +203,8 @@ msgstr "あなたのペルソナを接続し、確認した後、あなたのweb
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
 msgid "Agree"
 msgstr "同意"
 
@@ -219,8 +225,8 @@ msgstr "このサイトがネットワークを切り替えることを許可し
 msgid "Allow us to collect your usage information to help us improve Mask."
 msgstr ""
 
-#: popups/pages/Wallet/TransactionDetail/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Amount"
 msgstr "金額"
 
@@ -228,14 +234,14 @@ msgstr "金額"
 msgid "an NFT"
 msgstr "NFT"
 
-#: popups/modals/SelectAppearanceModal/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/modals/SelectAppearanceModal/index.tsx
 msgid "Appearance"
 msgstr "外観"
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
-#: popups/modals/UpdatePermissionModal/index.tsx
 #: popups/pages/RequestPermission/RequestPermission.tsx
+#: popups/modals/UpdatePermissionModal/index.tsx
 msgid "Approve"
 msgstr "承認"
 
@@ -247,6 +253,7 @@ msgstr "承認金額"
 msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
 msgstr ""
 
+#. placeholder {0}: formatEthereumAddress(wallet.identity, 4)
 #: popups/components/ConnectedWallet/index.tsx
 msgid "Are you sure to remove the connected wallet <0>{0}</0>?"
 msgstr ""
@@ -272,8 +279,8 @@ msgid "Associated Accounts"
 msgstr "関連アカウント"
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: popups/modals/ChangePaymentPasswordModal/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "At least 6 characters"
 msgstr "6 文字以上"
 
@@ -291,14 +298,14 @@ msgstr "アバターを設定しました"
 
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-#: popups/pages/Personas/AccountDetail/UI.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Back"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: popups/modals/SwitchPersonaModal/index.tsx
 #: popups/pages/Personas/Logout/index.tsx
+#: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Backup"
 msgstr "バックアップ"
 
@@ -318,36 +325,38 @@ msgstr "バックアップ失敗"
 msgid "Backup is saved to Mask Cloud Service."
 msgstr ""
 
+#. placeholder {0}: user.localBackupAt
+#. placeholder {0}: user.cloudBackupAt
 #: popups/pages/Settings/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
 msgstr ""
 
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Backup password"
 msgstr "バックアップパスワード"
 
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup Password"
 msgstr "バックアップパスワード"
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Backup password must be 8-20 characters, including uppercase, lowercase, special characters and numbers."
 msgstr "バックアップパスワードは、大文字、小文字、特殊文字および数字を含む8-20文字でなければなりません。"
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Backup password set successfully"
 msgstr "バックアップパスワードの設定が完了しました"
 
-#: popups/modals/PersonaSettingModal/index.tsx
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Backup Persona"
 msgstr "ペルソナをバックアップする"
 
@@ -396,8 +405,8 @@ msgstr ""
 msgid "Browser File"
 msgstr "ブラウザファイル"
 
-#: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
 msgid "By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>."
 msgstr ""
 
@@ -418,30 +427,30 @@ msgid "Can't find a valid user address data source."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
-#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: dashboard/modals/ConfirmModal/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
-#: popups/modals/AddContactModal/index.tsx
-#: popups/modals/DeleteContactModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
-#: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: popups/pages/Personas/PersonaSignRequest/index.tsx
-#: popups/pages/RequestPermission/RequestPermission.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
-#: popups/pages/Wallet/EditNetwork/index.tsx
-#: popups/pages/Wallet/Interaction/interaction.tsx
-#: popups/pages/Wallet/ResetWallet/index.tsx
-#: popups/pages/Wallet/SelectWallet/index.tsx
-#: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/DeleteContactModal/index.tsx
+#: popups/modals/AddContactModal/index.tsx
 msgid "Cancel"
 msgstr ""
 
@@ -449,18 +458,20 @@ msgstr ""
 msgid "Cannot switch to a unknown network."
 msgstr "不明なネットワークに切り替えることはできません。"
 
-#: popups/components/SignRequestInfo/index.tsx
 #: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Chain ID"
 msgstr "チェーン ID"
 
+#. placeholder {0}: currentNetwork?.chainId ?? currentChainId
+#. placeholder {0}: nextNetwork?.chainId ?? nextChainId
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Chain ID: {0}"
 msgstr ""
 
-#: popups/pages/Personas/ConnectWallet/index.tsx
 #: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Change"
 msgstr "変更"
 
@@ -468,8 +479,8 @@ msgstr "変更"
 msgid "Change another account and try again."
 msgstr ""
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Change Backup Password"
 msgstr "バックアップパスワードの変更"
 
@@ -477,8 +488,8 @@ msgstr "バックアップパスワードの変更"
 msgid "Change Network"
 msgstr "ネットワークを変更"
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Change Owner"
 msgstr "所有者変更"
 
@@ -515,8 +526,8 @@ msgstr ""
 msgid "Close"
 msgstr "閉じる"
 
-#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Cloud Backup"
 msgstr "クラウドバックアップ"
@@ -529,36 +540,36 @@ msgstr "コレクティブ"
 msgid "Coming soon"
 msgstr "近日公開"
 
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Completed"
 msgstr "完了しました"
 
-#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-#: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: popups/components/NFTAvatarPicker/index.tsx
-#: popups/modals/AddContactModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangePaymentPasswordModal/index.tsx
-#: popups/modals/ConfirmModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: popups/modals/PersonaRenameModal/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
-#: popups/modals/ShowPrivateKeyModal/index.tsx
-#: popups/modals/WalletAutoLockSettingModal/index.tsx
-#: popups/modals/WalletRenameModal/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
+#: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
-#: popups/pages/Wallet/EditNetwork/index.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/Interaction/interaction.tsx
-#: popups/pages/Wallet/ResetWallet/index.tsx
-#: popups/pages/Wallet/SelectWallet/index.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
+#: popups/modals/WalletAutoLockSettingModal/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/PersonaRenameModal/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/ConfirmModal/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/AddContactModal/index.tsx
+#: popups/components/NFTAvatarPicker/index.tsx
 msgid "Confirm"
 msgstr "確認"
 
@@ -566,8 +577,8 @@ msgstr "確認"
 msgid "Confirm Bridge"
 msgstr ""
 
-#: popups/modals/ChangePaymentPasswordModal/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "Confirm Password"
 msgstr "パスワードの確認"
 
@@ -579,6 +590,7 @@ msgstr "支払いパスワードを再入力"
 msgid "Confirm Swap"
 msgstr ""
 
+#. placeholder {0}: asset.symbol
 #: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Confirm to hide {0}? You can redisplay it by re-adding this token at any time."
 msgstr ""
@@ -587,16 +599,16 @@ msgstr ""
 msgid "Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time."
 msgstr ""
 
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Congratulations"
 msgstr "おめでとうございます！"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: popups/components/ConnectedWallet/index.tsx
-#: popups/components/SocialAccounts/index.tsx
 #: popups/modals/SelectProviderModal/index.tsx
+#: popups/components/SocialAccounts/index.tsx
+#: popups/components/ConnectedWallet/index.tsx
 msgid "Connect"
 msgstr "接続"
 
@@ -621,10 +633,10 @@ msgstr "ソーシャルアカウントに接続"
 msgid "Connect Wallet"
 msgstr "ウォレットと接続"
 
-#: popups/pages/Wallet/Interaction/AddChainRequest.tsx
-#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
-#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/AddChainRequest.tsx
 msgid "Connect with Mask Wallet"
 msgstr "マスクウォレットと接続"
 
@@ -641,12 +653,13 @@ msgstr "ウォレットを接続します"
 msgid "Connected"
 msgstr ""
 
+#. placeholder {0}: currentPersona?.nickname
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Connected {0} with {walletName}."
 msgstr ""
 
-#: popups/pages/Wallet/ConnectedSites/index.tsx
 #: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
+#: popups/pages/Wallet/ConnectedSites/index.tsx
 msgid "Connected sites"
 msgstr "接続されたサイト"
 
@@ -675,30 +688,30 @@ msgid "Contact edited."
 msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx
-#: popups/pages/Friends/Home/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/pages/Wallet/WalletSettings/Contacts.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Friends/Home/index.tsx
 msgid "Contacts"
 msgstr "コンタクト"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
-#: dashboard/components/Restore/RestoreFromMnemonic.tsx
-#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
-#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/SetupPersona/SignUp/index.tsx
 #: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
+#: dashboard/components/Restore/RestoreFromMnemonic.tsx
+#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Continue"
 msgstr "続行"
 
-#: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "Contract"
 msgstr "コントラクト"
 
@@ -706,8 +719,8 @@ msgstr "コントラクト"
 msgid "Contract Interaction"
 msgstr "コントラクトの相互作用"
 
-#: popups/components/PrivateKeyDisplay/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: popups/components/PrivateKeyDisplay/index.tsx
 msgid "Copied"
 msgstr "コピーしました"
 
@@ -732,8 +745,8 @@ msgid "Could not fetch chain ID. Is your RPC URL correct?"
 msgstr "チェーンIDを取得できませんでした。RPCのURLは正しいですか？"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Create"
 msgstr "作成"
 
@@ -759,11 +772,16 @@ msgstr "あなたのペルソナを作成して始めましょう"
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Creating your"
+#~ msgid "Creating your"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Creating your "
 msgstr ""
 
-#: popups/modals/ChooseCurrencyModal/index.tsx
 #: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
+#: popups/modals/ChooseCurrencyModal/index.tsx
 msgid "Currency"
 msgstr "通貨"
 
@@ -775,6 +793,7 @@ msgstr "通貨記号（オプション）"
 msgid "Current account is not the verifying account."
 msgstr ""
 
+#. placeholder {0}: formatWeiToGwei(gasOptions.normal.baseFeePerGas).toFixed(2, BigNumber.ROUND_UP)
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Current base fee is {0} Gwei"
 msgstr "現在の基本手数料は {0} Gweiです"
@@ -787,18 +806,18 @@ msgstr "現在の管理アカウント"
 msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
 msgstr ""
 
-#: popups/components/GasSettingMenu/index.tsx
 #: popups/hooks/useGasOptionsMenu.tsx
+#: popups/components/GasSettingMenu/index.tsx
 msgid "Custom"
 msgstr "カスタム"
 
-#: popups/modals/SelectAppearanceModal/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/modals/SelectAppearanceModal/index.tsx
 msgid "Dark"
 msgstr "ダーク"
 
-#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "data"
 msgstr "データ"
 
@@ -831,8 +850,8 @@ msgstr "Mask で暗号化されています:"
 msgid "Delete"
 msgstr "削除"
 
-#: popups/modals/DeleteContactModal/index.tsx
 #: popups/pages/Wallet/ContactList/index.tsx
+#: popups/modals/DeleteContactModal/index.tsx
 msgid "Delete Contact"
 msgstr "連絡先を削除"
 
@@ -887,6 +906,8 @@ msgstr "Web3プロフィールページに以下のアドレスを表示し、�
 msgid "Do you need to paste encrypted content manually?"
 msgstr "Mask が自動で投稿を作成できませんでした。手動でペーストしてください。"
 
+#. placeholder {0}: selectedAccount?.identifier.userId
+#. placeholder {1}: currentPersona.nickname
 #: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Do you want to remove the verified association between the X account @<0>{0}</0> and {1}?"
 msgstr ""
@@ -903,11 +924,11 @@ msgstr ""
 msgid "Don't see your NFT?"
 msgstr "NFTが見つかりませんか？"
 
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Done"
@@ -945,18 +966,18 @@ msgstr "編集"
 msgid "Edit Contact"
 msgstr "連絡先を編集"
 
-#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Email"
 msgstr "メールアドレス"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Email verification code"
 msgstr "電子メール検証コード"
 
@@ -982,7 +1003,12 @@ msgstr "Mask: 作成"
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Encrypting your"
+#~ msgid "Encrypting your"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Encrypting your "
 msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
@@ -993,8 +1019,8 @@ msgstr "暗号化方法"
 msgid "Ens or Address(0x)"
 msgstr "Ens または Address(0x)"
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Enter a gas limit"
 msgstr "ガスの制限を入力してください"
 
@@ -1022,6 +1048,7 @@ msgstr "支払いパスワードを入力する"
 msgid "Entered passwords are inconsistent."
 msgstr ""
 
+#. placeholder {0}: rejection.message
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 msgid "Error: {0}"
 msgstr ""
@@ -1043,8 +1070,8 @@ msgstr "例: アリス(Alice)"
 msgid "Exchange"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Experience in X"
 msgstr "Twitter での経験"
 
@@ -1052,8 +1079,8 @@ msgstr "Twitter での経験"
 msgid "Explore multi-chain dApps."
 msgstr "複数チェーンのdAppを探索します。"
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Export"
 msgstr "エクスポート"
 
@@ -1120,10 +1147,10 @@ msgstr ""
 msgid "Follow @realMaskNetwork to explore Web3."
 msgstr ""
 
-#: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectLanguageModal/index.tsx
-#: popups/pages/Settings/index.tsx
-#: popups/pages/Settings/index.tsx
+#: popups/modals/SelectAppearanceModal/index.tsx
 msgid "Follow System"
 msgstr "システムに従う"
 
@@ -1139,16 +1166,17 @@ msgstr "から"
 msgid "from <0>{fromAddress}</0>"
 msgstr ""
 
+#. placeholder {0}: transaction.formattedTransaction.popup.method
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Function: {0}"
 msgstr "機能: {0}"
 
-#: popups/components/TransactionPreview/index.tsx
-#: popups/components/UnlockERC20Token/index.tsx
-#: popups/components/UnlockERC721Token/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/TransactionPreview/index.tsx
 msgid "Gas Fee"
 msgstr "ガス料金"
 
@@ -1161,9 +1189,9 @@ msgstr "ガス料金の設定"
 msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
 msgstr ""
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas Limit"
 msgstr "ガス制限"
 
@@ -1171,8 +1199,9 @@ msgstr "ガス制限"
 msgid "Gas Limit (Units)"
 msgstr "ガス制限 (単位)"
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#. placeholder {0}: String(minGasLimit)
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
@@ -1184,8 +1213,8 @@ msgstr ""
 msgid "Gas limit must be smaller than {maxGas}."
 msgstr ""
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Gas Price"
 msgstr "ガス価格"
 
@@ -1219,11 +1248,18 @@ msgstr "新しいウォレットアドレスを生成する"
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Generating your"
+#~ msgid "Generating your"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Generating your "
 msgstr ""
 
-#: popups/components/UnlockERC20Token/index.tsx
+#. placeholder {0}: contract?.symbol || ''
+#. placeholder {0}: token?.symbol || ''
 #: popups/components/UnlockERC721Token/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
 msgstr ""
 
@@ -1255,6 +1291,7 @@ msgstr ""
 msgid "Hi friends, I just created {token} Lucky Drop. Download Mask.io to claim."
 msgstr ""
 
+#. placeholder {0}: asset.symbol
 #: popups/pages/Wallet/TokenDetail/index.tsx
 msgid "Hide {0}"
 msgstr ""
@@ -1275,10 +1312,10 @@ msgstr "$1 未満のトークンを非表示にする"
 msgid "Hiding Scam Transactions"
 msgstr "詐欺トランザクションを非表示にする"
 
-#: popups/components/GasSettingMenu/index.tsx
-#: popups/hooks/useGasOptionsMenu.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/components/GasSettingMenu/index.tsx
 msgid "High"
 msgstr "高い"
 
@@ -1336,8 +1373,8 @@ msgstr "インポートされました"
 msgid "Imported Wallets"
 msgstr "インポートされたウォレット"
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Incorrect backup password."
 msgstr "バックアップパスワードが正しくありません。"
 
@@ -1358,21 +1395,21 @@ msgstr "キーストアのパスワードが正しくありません。"
 msgid "Incorrect Mnemonic Words."
 msgstr ""
 
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 #: popups/pages/Wallet/Unlock/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Incorrect password"
 msgstr "パスワードが間違っています"
 
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
 msgid "Incorrect Password"
 msgstr "パスワードが間違っています"
 
@@ -1380,13 +1417,13 @@ msgstr "パスワードが間違っています"
 msgid "Incorrect payment password."
 msgstr "パスワードが正しくありません。"
 
-#: popups/modals/ShowPrivateKeyModal/index.tsx
 #: popups/modals/WalletRemoveModal/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
 msgid "Incorrect Payment Password."
 msgstr "現在のパスワードが正しくありません。"
 
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Private Key"
 msgstr "IDコードが間違っています"
 
@@ -1394,8 +1431,8 @@ msgstr "IDコードが間違っています"
 msgid "Incorrect recovery phrase."
 msgstr "アイデンティティニーモニックが正しくありません。"
 
-#: popups/hooks/useContactsContext.ts
 #: popups/modals/AddContactModal/index.tsx
+#: popups/hooks/useContactsContext.ts
 msgid "Incorrect wallet address."
 msgstr "ウォレットアドレスが正しくありません。"
 
@@ -1407,8 +1444,8 @@ msgstr ""
 msgid "Input your Private Key"
 msgstr "秘密鍵を入力してください"
 
-#: popups/components/GasSettingMenu/index.tsx
 #: popups/hooks/useGasOptionsMenu.tsx
+#: popups/components/GasSettingMenu/index.tsx
 msgid "Instant"
 msgstr "インスタント"
 
@@ -1420,8 +1457,8 @@ msgstr "手数料付けるには残高が足りません"
 msgid "Invalid Block Explorer URL."
 msgstr "無効なブロックエクスプローラのURLです。"
 
-#: dashboard/contexts/CloudBackupFormContext.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
+#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr "メールアドレスが正しくありません。"
 
@@ -1441,8 +1478,8 @@ msgstr "電話番号が無効です。確認してもう一度お試しくださ
 msgid "Invalid RPC URL."
 msgstr "RPCのURLが無効です。"
 
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
+#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid verification code."
 msgstr "認証コードが無効です。"
 
@@ -1476,10 +1513,10 @@ msgstr "キーストア："
 msgid "Keystore password"
 msgstr "キーストアのパスワード"
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
 msgstr "数字、文字、または特殊文字がない。"
 
@@ -1487,8 +1524,8 @@ msgstr "数字、文字、または特殊文字がない。"
 msgid "Language"
 msgstr "言語"
 
-#: popups/modals/SelectAppearanceModal/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/modals/SelectAppearanceModal/index.tsx
 msgid "Light"
 msgstr "ライト"
 
@@ -1505,8 +1542,8 @@ msgid "Load failed"
 msgstr "読み込み失敗"
 
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: popups/components/WalletSettingList/index.tsx
 #: popups/pages/Friends/Home/UI.tsx
+#: popups/components/WalletSettingList/index.tsx
 msgid "Loading"
 msgstr "読み込み中..."
 
@@ -1527,9 +1564,9 @@ msgstr "ローカルペルソナまたはウォレットのみ"
 msgid "Lock Wallet"
 msgstr "ウォレットをロックする"
 
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
 msgstr "ログアウト"
 
@@ -1545,13 +1582,13 @@ msgstr "ログアウトに失敗しました。"
 msgid "Logout successfully"
 msgstr "ログアウト完了"
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Low"
 msgstr "低い"
 
-#: popups/modals/ChooseNetworkModal/index.tsx
 #: popups/pages/Wallet/NetworkManagement/index.tsx
+#: popups/modals/ChooseNetworkModal/index.tsx
 msgid "Manage Network"
 msgstr "ネットワークを管理する"
 
@@ -1563,8 +1600,8 @@ msgstr ""
 msgid "Mask needs the following permissions"
 msgstr "マスクには次の権限が必要です"
 
-#: content-script/components/InjectedComponents/PostDialogHint.tsx
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
+#: content-script/components/InjectedComponents/PostDialogHint.tsx
 msgid "Mask Network"
 msgstr ""
 
@@ -1576,13 +1613,13 @@ msgstr ""
 msgid "masknetwork"
 msgstr ""
 
-#: popups/components/UnlockERC20Token/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "Max"
 msgstr "最大"
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max Fee"
 msgstr "最大料金"
 
@@ -1602,12 +1639,13 @@ msgstr "最大手数料が必要以上です"
 msgid "Max fee is too low for network conditions."
 msgstr "最大手数料がネットワーク状況に対して低すぎます。"
 
+#. placeholder {0}: formatWeiToGwei(miniumMaxFeePerGas).toFixed(2, BigNumber.ROUND_UP)
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max fee should be greater than base fee of {0} Gwei."
 msgstr ""
 
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 msgid "Max Priority Fee"
 msgstr "最大優先料金"
 
@@ -1631,16 +1669,16 @@ msgstr "最大優先料金がネットワーク状況に対して低すぎます
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr "最大優先手数料は0GWEIより大きくなければなりません"
 
-#: popups/components/GasSettingMenu/index.tsx
-#: popups/hooks/useGasOptionsMenu.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/components/GasSettingMenu/index.tsx
 msgid "Medium"
 msgstr "中間"
 
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr "ローカルデータベースにデータを統合"
 
@@ -1673,6 +1711,8 @@ msgstr "携帯番号"
 msgid "Mobile verification code"
 msgstr "モバイル認証コード"
 
+#. placeholder {0}: String(currentMessageIndex + 1)
+#. placeholder {1}: String(totalMessages)
 #: popups/pages/Wallet/Interaction/interaction.tsx
 msgid "Multiple transaction requests {0} / {1}"
 msgstr "複数のトランザクションリクエスト {0} / {1}"
@@ -1687,9 +1727,9 @@ msgstr "私のウォレット"
 msgid "N/A"
 msgstr "なし"
 
-#: popups/modals/AddContactModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/AddContactModal/index.tsx
 msgid "Name"
 msgstr "名前"
 
@@ -1747,8 +1787,8 @@ msgstr "新しい決済パスワード"
 
 #: content-script/components/GuideStep/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Next"
 msgstr ""
 
@@ -1756,10 +1796,10 @@ msgstr ""
 msgid "Next.ID"
 msgstr ""
 
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: popups/pages/Wallet/AddToken/index.tsx
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
+#: popups/pages/Wallet/AddToken/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "NFTs"
 msgstr ""
 
@@ -1792,8 +1832,8 @@ msgstr ""
 msgid "No Data"
 msgstr "データなし"
 
-#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 msgid "No friends are stored locally, please try search one."
 msgstr ""
 
@@ -1821,9 +1861,9 @@ msgstr "検索結果なし"
 msgid "No websites connected to this wallet"
 msgstr ""
 
-#: popups/components/SignRequestInfo/index.tsx
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Nonce"
 msgstr "ノンス"
 
@@ -1879,6 +1919,7 @@ msgstr "または"
 msgid "Or create a new wallet group"
 msgstr "または新しいウォレットグループを作成"
 
+#. placeholder {0}: author.userId
 #: content-script/components/InjectedComponents/DecryptedPost/authorDifferentMessage.tsx
 msgid "Originally posted by {0}"
 msgstr "最初の作者は {0}"
@@ -1887,8 +1928,8 @@ msgstr "最初の作者は {0}"
 msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
 msgstr ""
 
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Overwrite Backup"
 msgstr "バックアップを上書き"
 
@@ -1896,9 +1937,9 @@ msgstr "バックアップを上書き"
 msgid "Overwrite current backup"
 msgstr "既存のバックアップを上書き"
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Password"
 msgstr "パスワード"
 
@@ -1906,11 +1947,11 @@ msgstr "パスワード"
 msgid "Paste manually"
 msgstr "手動でペーストする"
 
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
-#: popups/modals/ShowPrivateKeyModal/index.tsx
-#: popups/modals/WalletRemoveModal/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
 msgid "Payment Password"
 msgstr "支払いパスワードの設定"
 
@@ -1920,9 +1961,9 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Payment password must be 6 to 20 characters."
 msgstr ""
 
@@ -1962,8 +2003,8 @@ msgstr "ペルソナは既に存在します。"
 msgid "Persona created."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx
 #: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Persona Name"
 msgstr "ペルソナ名"
 
@@ -1991,9 +2032,9 @@ msgstr "ペルソナ"
 msgid "Phone verification code"
 msgstr "モバイル認証コード"
 
-#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "Mask Networkをツールバーにピン留めすると、アクセスしやすくなります。"
 
@@ -2001,8 +2042,8 @@ msgstr "Mask Networkをツールバーにピン留めすると、アクセスし
 msgid "Pinned successfully."
 msgstr "ピン留めが完了しました"
 
-#: content-script/components/InjectedComponents/SetupGuide/index.tsx
 #: content-script/site-adaptors/facebook.com/injection/Composition.tsx
+#: content-script/components/InjectedComponents/SetupGuide/index.tsx
 msgid "Please click the \"Post\" button to open the compose dialog."
 msgstr ""
 
@@ -2035,13 +2076,15 @@ msgstr "支払いパスワードを入力してください。"
 msgid "Please install your metamask wallet and set up your first wallet."
 msgstr "メタマスクウォレットをインストールし、最初のウォレットをセットアップしてください。"
 
+#. placeholder {0}: currentPersona.nickname
+#. placeholder {1}: manageWallets.length
 #: popups/pages/Personas/Logout/index.tsx
 msgid "Please note: This Persona {0} is the management account of above listed SmartPay {1, plural, one {wallet} other {wallets}}. You cannot use SmartPay wallet to interact with blockchain after logging out persona."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
 msgstr "12単語の復元フレーズは、ペルソナデータを回復するために使用されます。"
 
@@ -2116,16 +2159,16 @@ msgstr "プライバシー・ポリシー（個人情報に関する方針）"
 msgid "Private"
 msgstr "プライベート"
 
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
 msgstr "秘密鍵"
 
-#: popups/modals/PersonaSettingModal/index.tsx
 #: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Profile Photo"
 msgstr "プロフィール写真"
 
@@ -2143,13 +2186,13 @@ msgstr ""
 msgid "Quote Route"
 msgstr ""
 
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Re-enter"
 msgstr "再入力"
 
-#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "ready 🚀"
 msgstr "準備完了🚀"
 
@@ -2170,8 +2213,8 @@ msgstr "データを復元する"
 msgid "Recover your wallet"
 msgstr "ウォレットを復元する"
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Recovery"
 msgstr "復旧"
@@ -2180,8 +2223,8 @@ msgstr "復旧"
 msgid "Recovery Phrase"
 msgstr "復元フレーズ"
 
-#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Refresh"
 msgstr "更新"
 
@@ -2193,8 +2236,8 @@ msgstr ""
 msgid "Reload"
 msgstr "再度読み込み"
 
-#: popups/modals/WalletRemoveModal/index.tsx
 #: popups/pages/Wallet/WalletSettings/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
 msgid "Remove"
 msgstr "削除"
 
@@ -2206,10 +2249,10 @@ msgstr "ウォレットを削除"
 msgid "Remove Wallet?"
 msgstr "ウォレットを削除しますか?"
 
-#: popups/modals/PersonaRenameModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx
-#: popups/pages/Wallet/WalletSettings/Rename.tsx
-#: popups/pages/Wallet/WalletSettings/Rename.tsx
+#: popups/modals/PersonaRenameModal/index.tsx
 msgid "Rename"
 msgstr "名前変更"
 
@@ -2233,8 +2276,8 @@ msgstr "リクエストソース"
 msgid "Reselect"
 msgstr "選びなおす"
 
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Resend"
 msgstr "再送信"
 
@@ -2246,9 +2289,9 @@ msgstr "ウォレットをリセットする"
 msgid "Resource"
 msgstr "リソース"
 
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
-#: dashboard/components/Restore/RestoreFromCloud/index.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
+#: dashboard/components/Restore/RestoreFromCloud/index.tsx
+#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Restore"
 msgstr "復元"
 
@@ -2280,8 +2323,8 @@ msgstr "再試行"
 msgid "RPC URL"
 msgstr ""
 
-#: popups/components/AddContactInputPanel/index.tsx
 #: popups/pages/Personas/AccountDetail/UI.tsx
+#: popups/components/AddContactInputPanel/index.tsx
 msgid "Save"
 msgstr "保存"
 
@@ -2317,8 +2360,8 @@ msgstr ""
 msgid "Select Address"
 msgstr "アドレスを選択する"
 
-#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
 msgid "Select All"
 msgstr "全て選ぶ"
 
@@ -2347,14 +2390,14 @@ msgid "Select Wallet"
 msgstr "ウォレットを選択"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: popups/components/TransactionPreview/index.tsx
-#: popups/pages/Wallet/CollectibleDetail/index.tsx
-#: popups/pages/Wallet/components/ActionGroup/index.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/components/TransactionPreview/index.tsx
 msgid "Send"
 msgstr "送信"
 
@@ -2397,9 +2440,9 @@ msgstr "あなたのペルソナ名を24文字以内で設定してください"
 msgid "Settings"
 msgstr "設定"
 
-#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
+#: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "Share with"
 msgstr "と共有"
 
@@ -2411,9 +2454,9 @@ msgstr "方法を確認"
 msgid "Show tokens with value less than $1"
 msgstr "$1未満のトークンを表示"
 
-#: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/pages/Personas/PersonaSignRequest/index.tsx
 #: popups/pages/Wallet/Interaction/WalletSignRequest.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Sign"
 msgstr "サイン"
 
@@ -2462,8 +2505,8 @@ msgstr "スキップ"
 msgid "Slippage"
 msgstr ""
 
-#: popups/pages/Personas/AccountDetail/index.tsx
 #: popups/pages/Personas/Home/UI.tsx
+#: popups/pages/Personas/AccountDetail/index.tsx
 msgid "Social Account"
 msgstr "ソーシャルアカウント"
 
@@ -2471,14 +2514,14 @@ msgstr "ソーシャルアカウント"
 msgid "Sorry, signature failed! Please try signing again."
 msgstr "申し訳ありませんが、署名に失敗しました。もう一度署名してください。"
 
-#: popups/modals/GasSettingModal/index.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
 msgid "Speed Up"
 msgstr "速度アップ"
 
-#: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
 msgid "Spend limit requested by"
 msgstr "リクエストされた使用限度額"
 
@@ -2510,8 +2553,8 @@ msgstr ""
 msgid "Step 1/3"
 msgstr ""
 
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 msgid "Step 2/2"
 msgstr ""
 
@@ -2536,13 +2579,13 @@ msgstr "個人データにアクセスするために、IDコード、秘密鍵�
 msgid "Support mnemonic phrase, private key or keystore file."
 msgstr ""
 
-#: popups/modals/SupportedSitesModal/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/modals/SupportedSitesModal/index.tsx
 msgid "Supported Sites"
 msgstr "サポートされるサイト"
 
-#: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
+#: popups/pages/Trader/Header.tsx
 msgid "Swap"
 msgstr ""
 
@@ -2584,9 +2627,9 @@ msgstr ""
 msgid "The chainID is not equal to the currently connected one."
 msgstr "chainIDは現在接続されているものと等しくありません。"
 
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
+#: dashboard/contexts/CloudBackupFormContext.tsx
+#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr "このコードは正しくありません"
 
@@ -2603,13 +2646,19 @@ msgid "The mnemonic words has been copied, please keep it in a safe place."
 msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/useWarnings.ts
-msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
+#~ msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
+#~ msgstr ""
+
+#. placeholder {1}: match.nativeCurrency.symbol
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts
+msgid "The network with chain ID {formChainId} may use a different currency symbol ({1}) than the one you have entered. Please check."
 msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
 msgstr "新しいパスワードが一致しません"
 
+#. placeholder {0}: profile.identifier.userId
 #: content-script/components/shared/SelectRecipients/ProfileInList.tsx
 msgid "The Persona is connected to the account @${0}."
 msgstr ""
@@ -2634,10 +2683,12 @@ msgstr "電話番号が間違っています。"
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
 msgstr ""
 
+#. placeholder {0}: format(localTransaction.updatedAt, "HH:mm 'on' M/dd/yyyy")
 #: popups/pages/Wallet/TransactionDetail/useTransactionLogs.ts
 msgid "The transaction was complete and has been recorded on blockchain at {0}"
 msgstr ""
 
+#. placeholder {0}: format(localTransaction.createdAt, "HH:mm 'on' M/dd/yyyy")
 #: popups/pages/Wallet/TransactionDetail/useTransactionLogs.ts
 msgid "The transaction was confirmed at {0}"
 msgstr ""
@@ -2650,9 +2701,9 @@ msgstr ""
 msgid "The wallet address already exists."
 msgstr "このウォレットアドレスは既に存在します。"
 
-#: popups/modals/AddContactModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
 #: popups/modals/WalletRenameModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/AddContactModal/index.tsx
 msgid "The wallet name already exists."
 msgstr "すでに同じ名前が存在します。"
 
@@ -2660,6 +2711,7 @@ msgstr "すでに同じ名前が存在します。"
 msgid "The web site can"
 msgstr "ウェブサイトはできます。"
 
+#. placeholder {0}: message.domain
 #: popups/components/SignRequestInfo/index.tsx
 msgid "The website ({messageOrigin}) is asking you to sign in to another domain ({0}). This may be a phishing attack."
 msgstr ""
@@ -2676,6 +2728,7 @@ msgstr "このアドレスはコントラクトアドレスです。"
 msgid "This address may be a scam address."
 msgstr "このアドレスは詐欺の可能性があります。"
 
+#. placeholder {0}: String(token?.symbol)
 #: popups/components/UnlockERC20Token/index.tsx
 msgid "This allows the third party to spend {value} {0} from your current balance."
 msgstr ""
@@ -2685,7 +2738,12 @@ msgid "This allows the third party to spend all your token balance until it reac
 msgstr "これにより、サードパーティは、あなたのトークン残高が上限に達するまで、またはあなたが支出上限を取り消すまで、あなたのトークン残高をすべて使用することができます。これが意図的でない場合は、より低い支出上限を設定することを検討してください。"
 
 #: popups/pages/Wallet/EditNetwork/useWarnings.ts
-msgid "This Chain ID is currently used by the {0} network."
+#~ msgid "This Chain ID is currently used by the {0} network."
+#~ msgstr ""
+
+#. placeholder {0}: duplicated.name
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts
+msgid "This Chain ID is currently used by the {0} network. "
 msgstr ""
 
 #: popups/hooks/useContactsContext.ts
@@ -2693,8 +2751,12 @@ msgid "This ENS does not exist or not be resolved."
 msgstr "この ENS は存在しないか利用できない。"
 
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
-msgid "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0>Global Backup </0>"
+msgid "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0> Global Backup </0>"
 msgstr ""
+
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
+#~ msgid "This export is only for exporting private key. We do not export any other data. If you need more data, please go to Settings: <0>Global Backup </0>"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "This JSON file is encrypted with your current payment password. The same password is required for decryption when importing this wallet."
@@ -2728,6 +2790,7 @@ msgstr "このリクエストはフィッシングの添付かもしれません
 msgid "This request should only be sign in the future."
 msgstr "このリクエストは、将来的にのみ署名する必要があります。"
 
+#. placeholder {0}: network.name
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This RPC URL is currently used by the {0} network"
@@ -2737,6 +2800,7 @@ msgstr "この RPC URL は現在 {0} ネットワークによって使用され�
 msgid "This tweet is encrypted with #mask_io (@realMaskNetwork). 📪🔑"
 msgstr ""
 
+#. placeholder {0}: String(currentPersona?.nickname)
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "This wallet is connected to current persona {0}."
 msgstr "このウォレットは現在のペルソナ {0}に接続されています。"
@@ -2745,11 +2809,13 @@ msgstr "このウォレットは現在のペルソナ {0}に接続されてい�
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
 msgstr ""
 
-#: popups/components/AddContactInputPanel/index.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/components/AddContactInputPanel/index.tsx
 msgid "To"
 msgstr "宛先："
 
+#. placeholder {0}: formatDomainName(domain)
+#. placeholder {0}: formatEthereumAddress(toAddress, 4)
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "to {0}"
@@ -2784,9 +2850,9 @@ msgstr ""
 msgid "Token Value"
 msgstr "トークンの価値"
 
-#: popups/pages/Wallet/AddToken/index.tsx
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
+#: popups/pages/Wallet/AddToken/index.tsx
 msgid "Tokens"
 msgstr "トークン"
 
@@ -2814,8 +2880,8 @@ msgstr "試してみる"
 msgid "Two entered passwords are different."
 msgstr ""
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/pages/Wallet/hooks/usePasswordForm.ts
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Two entered passwords are not the same."
 msgstr ""
 
@@ -2827,8 +2893,8 @@ msgstr "不明なEIP-4361メッセージバージョンです。"
 msgid "Unlock"
 msgstr "ロック解除"
 
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unpacking"
 msgstr ""
 
@@ -2889,8 +2955,8 @@ msgstr ""
 msgid "Verification code has been sent to your phone."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
+#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Verification code sent"
 msgstr "認証コードを送信しました"
 
@@ -2904,8 +2970,8 @@ msgstr "認証"
 msgid "Verify Account"
 msgstr "接続と検証が完了しました。"
 
-#: popups/components/SignRequestInfo/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/components/SignRequestInfo/index.tsx
 msgid "Version"
 msgstr "バージョン"
 
@@ -2915,10 +2981,10 @@ msgstr "取引の詳細を表示する"
 
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
-#: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "View on Explorer"
 msgstr "エクスプローラーで表示"
 
@@ -2946,8 +3012,8 @@ msgstr ""
 msgid "wallet"
 msgstr "ウォレット"
 
-#: popups/modals/WalletGroupModal/index.tsx
 #: popups/pages/Wallet/SwitchWallet/index.tsx
+#: popups/modals/WalletGroupModal/index.tsx
 msgid "Wallet Account"
 msgstr "ウォレットアカウント"
 
@@ -2955,8 +3021,9 @@ msgstr "ウォレットアカウント"
 msgid "Wallet disconnected"
 msgstr ""
 
-#: popups/modals/WalletGroupModal/index.tsx
+#. placeholder {0}: String(index + 1)
 #: popups/pages/Wallet/CreateWallet/index.tsx
+#: popups/modals/WalletGroupModal/index.tsx
 msgid "Wallet Group #{0}"
 msgstr "ウォレットグループ{0}"
 
@@ -2973,8 +3040,8 @@ msgstr "ウォレット名は3文字以上18文字以内で入力してくださ
 msgid "Wallet request timed out"
 msgstr "ウォレットへのリクエストがタイムアウトしました"
 
-#: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/pages/Wallet/WalletSettings/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Wallet Settings"
 msgstr "ウォレットの設定"
 
@@ -2990,8 +3057,8 @@ msgstr ""
 msgid "Web3 Profile Card"
 msgstr "Web3 プロフィールカード"
 
-#: popups/pages/Settings/index.tsx
 #: popups/pages/Wallet/components/OriginCard/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Website"
 msgstr "ウェブサイト"
 
@@ -3024,7 +3091,11 @@ msgid "You have backed up your data."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "You have recovered"
+#~ msgid "You have recovered"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "You have recovered "
 msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx
@@ -3039,6 +3110,7 @@ msgstr ""
 msgid "You need to open the dApp to view the specific content."
 msgstr ""
 
+#. placeholder {0}: user.email
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 msgid "You used <0>{0}</0> for the last cloud backup."
@@ -3053,9 +3125,17 @@ msgid "Your payment password encrypts wallet data and is needed to unlocking the
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Your Persona is on"
+#~ msgid "Your Persona is on"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "Your Persona is on "
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Your Wallet is on"
+#~ msgid "Your Wallet is on"
+#~ msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Your Wallet is on "
 msgstr ""

@@ -40,8 +40,8 @@ msgstr "粉丝"
 msgid "Followings"
 msgstr "正在关注"
 
-#: src/SiteAdaptor/FollowersPage.tsx
 #: src/SiteAdaptor/Profile.tsx
+#: src/SiteAdaptor/FollowersPage.tsx
 msgid "Load failed"
 msgstr "加载失败"
 

@@ -16,6 +16,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FileService/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 964\n"
 
+#. placeholder {0}: count.toString()
 #: src/SiteAdaptor/components/FileChip.tsx
 msgid "{0} files selected"
 msgstr "{0} 파일 선택됨"
@@ -32,14 +33,14 @@ msgstr ""
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
 msgstr ""
 
-#: src/SiteAdaptor/components/FileBrowser.tsx
 #: src/SiteAdaptor/components/Terms.tsx
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "Cancel"
 msgstr "취소"
 
-#: src/SiteAdaptor/components/FileBrowser.tsx
-#: src/SiteAdaptor/components/Terms.tsx
 #: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
+#: src/SiteAdaptor/components/Terms.tsx
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "Confirm"
 msgstr "확인"
 
@@ -56,6 +57,7 @@ msgstr "삭제"
 msgid "Delete File"
 msgstr "파일 삭제"
 
+#. placeholder {0}: file.name
 #: src/SiteAdaptor/components/FileList.tsx
 msgid "Do you want to delete file <0>{0}</0>"
 msgstr ""
@@ -76,6 +78,7 @@ msgstr ""
 msgid "Failed to save the file. Please try again."
 msgstr ""
 
+#. placeholder {0}: file.name
 #: src/SiteAdaptor/components/FileList.tsx
 msgid "File {0} deleted."
 msgstr ""
@@ -88,9 +91,10 @@ msgstr ""
 msgid "File delete failed"
 msgstr ""
 
-#: src/SiteAdaptor/components/Files/DisplayingFile.tsx
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#. placeholder {0}: file.key
 #: src/SiteAdaptor/components/Files/SelectableFile.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#: src/SiteAdaptor/components/Files/DisplayingFile.tsx
 msgid "File Key: <0>{0}</0>"
 msgstr ""
 
@@ -122,8 +126,8 @@ msgstr "검색 결과가 없습니다."
 msgid "Please click Browse Files button to select files to upload."
 msgstr "파일 브러우저 버튼을 클릭하여 업로드할 파일을 선택하세요."
 
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Rename"
 msgstr "이름 변경"
 
@@ -131,8 +135,8 @@ msgstr "이름 변경"
 msgid "size"
 msgstr ""
 
-#: src/SiteAdaptor/components/FileBrowser.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "Upload File"
 msgstr "파일 업로드"
 
@@ -148,8 +152,8 @@ msgstr "Meson CDN를 이용하기"
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
 msgstr "사용자는 이러한 파일의 로컬 링크만 삭제할 수 있습니다. 탈중앙화 스토리지 프로토콜의 파일은 삭제할 수 없습니다."
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Web3 File Service"
 msgstr "웹3 파일 서비스"
 
@@ -165,6 +169,7 @@ msgstr "웹2 파일 서비스가 무엇입니까?"
 msgid "You haven't uploaded any files yet."
 msgstr "업로드된 파일이 없습니다."
 
+#. placeholder {0}: file.name
 #: src/SiteAdaptor/FileViewer.tsx
 msgid "You've saved {0} to Web3 file service."
 msgstr ""

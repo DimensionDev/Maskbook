@@ -16,6 +16,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/FileService/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 964\n"
 
+#. placeholder {0}: count.toString()
 #: src/SiteAdaptor/components/FileChip.tsx
 msgid "{0} files selected"
 msgstr "已选择 {0} 个文件"
@@ -32,14 +33,14 @@ msgstr ""
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
 msgstr ""
 
-#: src/SiteAdaptor/components/FileBrowser.tsx
 #: src/SiteAdaptor/components/Terms.tsx
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "Cancel"
 msgstr "取消"
 
-#: src/SiteAdaptor/components/FileBrowser.tsx
-#: src/SiteAdaptor/components/Terms.tsx
 #: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
+#: src/SiteAdaptor/components/Terms.tsx
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "Confirm"
 msgstr "确定"
 
@@ -56,6 +57,7 @@ msgstr "删除"
 msgid "Delete File"
 msgstr "删除文件"
 
+#. placeholder {0}: file.name
 #: src/SiteAdaptor/components/FileList.tsx
 msgid "Do you want to delete file <0>{0}</0>"
 msgstr ""
@@ -76,6 +78,7 @@ msgstr ""
 msgid "Failed to save the file. Please try again."
 msgstr ""
 
+#. placeholder {0}: file.name
 #: src/SiteAdaptor/components/FileList.tsx
 msgid "File {0} deleted."
 msgstr ""
@@ -88,9 +91,10 @@ msgstr ""
 msgid "File delete failed"
 msgstr ""
 
-#: src/SiteAdaptor/components/Files/DisplayingFile.tsx
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#. placeholder {0}: file.key
 #: src/SiteAdaptor/components/Files/SelectableFile.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#: src/SiteAdaptor/components/Files/DisplayingFile.tsx
 msgid "File Key: <0>{0}</0>"
 msgstr ""
 
@@ -122,8 +126,8 @@ msgstr "未找到结果"
 msgid "Please click Browse Files button to select files to upload."
 msgstr "请点击浏览文件按钮选择要上传的文件。"
 
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 msgid "Rename"
 msgstr "重命名"
 
@@ -131,8 +135,8 @@ msgstr "重命名"
 msgid "size"
 msgstr "大小"
 
-#: src/SiteAdaptor/components/FileBrowser.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/components/FileBrowser.tsx
 msgid "Upload File"
 msgstr "上传文件"
 
@@ -148,8 +152,8 @@ msgstr "使用Meson CDN"
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
 msgstr "用户只能删除这些文件的本地链接。去中心化存储协议中的文件不能被删除。"
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Web3 File Service"
 msgstr "文件服务"
 
@@ -165,6 +169,7 @@ msgstr "什么是 Web3 文件服务？"
 msgid "You haven't uploaded any files yet."
 msgstr "您尚未上传任何文件。"
 
+#. placeholder {0}: file.name
 #: src/SiteAdaptor/FileViewer.tsx
 msgid "You've saved {0} to Web3 file service."
 msgstr ""

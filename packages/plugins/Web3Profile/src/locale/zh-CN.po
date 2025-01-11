@@ -16,6 +16,8 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
 
+#. placeholder {0}: profile?.stats.followers ?? '0'
+#. placeholder {1}: profile?.stats.following ?? '0'
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "<0>{0}</0> Followers <1>{1}</1> Following"
 msgstr ""
@@ -24,8 +26,8 @@ msgstr ""
 msgid "Add Wallet"
 msgstr "添加钱包"
 
-#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 #: src/SiteAdaptor/components/ProfilePopup.tsx
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 msgid "Change"
 msgstr "切换"
 
@@ -53,11 +55,13 @@ msgstr "无法设置 Web3 个人资料钱包。请重试。"
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "关注"
 
+#. placeholder {0}: profile.followModule.amount.value
+#. placeholder {1}: profile.followModule.amount.asset.symbol
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow for {0} {1}"
 msgstr "关注 {0} {1}"
@@ -66,8 +70,8 @@ msgstr "关注 {0} {1}"
 msgid "Follow Lens handle"
 msgstr "关注Lens handle"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Following"
 msgstr "已关注"
 
@@ -83,8 +87,8 @@ msgstr "Lens 关注"
 msgid "Lens Unfollow"
 msgstr "Lens 取消关注"
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
 #: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
+#: src/SiteAdaptor/hooks/Lens/useFollow.ts
 msgid "Network error, try again"
 msgstr "网络错误，请重试"
 
@@ -148,6 +152,8 @@ msgstr "取消关注"
 msgid "Unfollow lens handle"
 msgstr "取消关注Lens Handle"
 
+#. placeholder {0}: value?.profile.followModule?.amount?.value ?? ZERO.toFixed()
+#. placeholder {1}: approved.token?.symbol ?? ''
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unlock {0} {1} and follow"
@@ -161,7 +167,7 @@ msgstr "查看"
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "Web3 名片"

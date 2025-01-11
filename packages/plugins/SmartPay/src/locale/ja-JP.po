@@ -36,13 +36,14 @@ msgstr "所有者変更"
 msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form."
 msgstr ""
 
+#. placeholder {0}: formatEthereumAddress(address, 4)
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx
 msgid "Congratulation! You've deployed SmartPay Wallet {0}."
 msgstr ""
 
+#: src/SiteAdaptor/components/ManagePopover.tsx
+#: src/SiteAdaptor/components/ManagePopover.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
-#: src/SiteAdaptor/components/ManagePopover.tsx
-#: src/SiteAdaptor/components/ManagePopover.tsx
 msgid "Create"
 msgstr "作成"
 
@@ -66,8 +67,8 @@ msgstr "新しいウォレットを作成する"
 msgid "Create a SmartPay Wallet with your X account."
 msgstr ""
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 #: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 msgid "Create persona"
 msgstr ""
 
@@ -125,8 +126,8 @@ msgstr "マルチシグと社会回復"
 msgid "Network error."
 msgstr "ネットワークエラー"
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 #: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 msgid "Persona"
 msgstr ""
 
@@ -134,8 +135,8 @@ msgstr ""
 msgid "Personas"
 msgstr "ペルソナ"
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 #: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 msgid "Please create a Persona and verify your account to use this feature."
 msgstr ""
 
@@ -167,9 +168,9 @@ msgstr "Polygon Networkとやり取りする際にガス料金を支払うよう
 msgid "Set up the Management Account for SmartPay Wallet"
 msgstr "SmartPayウォレットの管理アカウントを設定する"
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Smart Pay"
 msgstr "スマートペイ"
 

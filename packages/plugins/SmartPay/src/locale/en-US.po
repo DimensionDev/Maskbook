@@ -31,13 +31,14 @@ msgstr ""
 msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form."
 msgstr ""
 
+#. placeholder {0}: formatEthereumAddress(address, 4)
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx
 msgid "Congratulation! You've deployed SmartPay Wallet {0}."
 msgstr ""
 
+#: src/SiteAdaptor/components/ManagePopover.tsx
+#: src/SiteAdaptor/components/ManagePopover.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
-#: src/SiteAdaptor/components/ManagePopover.tsx
-#: src/SiteAdaptor/components/ManagePopover.tsx
 msgid "Create"
 msgstr ""
 
@@ -61,8 +62,8 @@ msgstr ""
 msgid "Create a SmartPay Wallet with your X account."
 msgstr ""
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 #: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 msgid "Create persona"
 msgstr ""
 
@@ -120,8 +121,8 @@ msgstr ""
 msgid "Network error."
 msgstr ""
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 #: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 msgid "Persona"
 msgstr ""
 
@@ -129,8 +130,8 @@ msgstr ""
 msgid "Personas"
 msgstr ""
 
-#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 #: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/AddSmartPayPopover.tsx
 msgid "Please create a Persona and verify your account to use this feature."
 msgstr ""
 
@@ -162,9 +163,9 @@ msgstr ""
 msgid "Set up the Management Account for SmartPay Wallet"
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Smart Pay"
 msgstr ""
 

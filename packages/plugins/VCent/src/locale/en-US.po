@@ -11,6 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: tweet.amount_usd
 #: src/SiteAdaptor/TweetDialog.tsx
 msgid "<0>Latest offer at </0><1>${0}</1>"
 msgstr ""

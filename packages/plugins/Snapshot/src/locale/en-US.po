@@ -11,10 +11,12 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: strategies.length
 #: src/SiteAdaptor/InformationCard.tsx
 msgid "{0, plural, one {Strategy} other {Strategies}}"
 msgstr ""
 
+#. placeholder {0}: formatCount(currentSpace.followersCount, 1)
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "{0} members"
 msgstr ""
@@ -127,10 +129,10 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/InformationCard.tsx
-#: src/SiteAdaptor/PluginDescriptor.tsx
-#: src/SiteAdaptor/ProfileView.tsx
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/InformationCard.tsx
 msgid "Snapshot"
 msgstr ""
 
@@ -150,9 +152,9 @@ msgstr ""
 msgid "View"
 msgstr ""
 
+#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingCard.tsx
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
-#: src/SiteAdaptor/VotingCard.tsx
-#: src/SiteAdaptor/VotingCard.tsx
 msgid "Vote"
 msgstr ""
 

@@ -11,6 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: value.length
 #: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
 msgstr ""

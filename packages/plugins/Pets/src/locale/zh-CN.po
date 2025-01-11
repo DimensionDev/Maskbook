@@ -17,8 +17,12 @@ msgstr ""
 "X-Crowdin-File-ID: 978\n"
 
 #: src/SiteAdaptor/PetSetDialog.tsx
-msgid "(unverified)"
+msgid " (unverified)"
 msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx
+#~ msgid "(unverified)"
+#~ msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx
 msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
@@ -95,7 +99,7 @@ msgstr "成功"
 msgid "Token ID"
 msgstr ""
 
-#: src/SiteAdaptor/PetSetDialog.tsx
 #: src/SiteAdaptor/PetShareDialog.tsx
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr "你的 Non-Fungible Friend 已经成功设置。"

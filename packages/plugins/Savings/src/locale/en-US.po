@@ -11,6 +11,7 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
+#. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "{0} days"
 msgstr ""
@@ -28,15 +29,25 @@ msgstr ""
 msgid "Asset"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsDialog.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsDialog.tsx
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
 msgid "Deposit"
 msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
-msgid "Deposit {0}"
+#~ msgid "Deposit {0}"
+#~ msgstr ""
+
+#. placeholder {8}: protocol.bareToken.symbol
+#: src/SiteAdaptor/SavingsForm.tsx
+msgid "Deposit {8}"
+msgstr ""
+
+#. placeholder {9}: protocol.bareToken.symbol
+#: src/SiteAdaptor/SavingsForm.tsx
+msgid "Deposit {9}"
 msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx
@@ -55,19 +66,35 @@ msgstr ""
 msgid "Failed"
 msgstr ""
 
+#. placeholder {0}: promote.amount
+#. placeholder {1}: promote.symbol
+#. placeholder {2}: promote.chain
+#. placeholder {3}: promote.account
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Hi friends, I just deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx
+#. placeholder {0}: promote.amount
+#. placeholder {1}: promote.symbol
+#. placeholder {2}: promote.chain
+#. placeholder {3}: promote.account
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
+msgstr ""
+
+#. placeholder {4}: promote.amount
+#. placeholder {5}: promote.symbol
+#. placeholder {6}: promote.chain
+#. placeholder {7}: promote.account
+#: src/SiteAdaptor/SavingsForm.tsx
+msgid "Hi friends, I just withdrew my deposit {4} {5} on {6}. Follow @{7} to find more staking projects."
 msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
 msgstr ""
 
+#. placeholder {0}: isDeposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Insufficient ${0} balance"
 msgstr ""
@@ -80,6 +107,7 @@ msgstr ""
 msgid "Loading"
 msgstr ""
 
+#. placeholder {0}: token.symbol
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr ""
@@ -106,10 +134,12 @@ msgstr ""
 msgid "Savings"
 msgstr ""
 
+#. placeholder {0}: protocol.bareToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Swap {0}"
 msgstr ""
 
+#. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
 msgstr ""
@@ -122,15 +152,17 @@ msgstr ""
 msgid "Wallet"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/SavingsDialog.tsx
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
-#: src/SiteAdaptor/WithdrawForm.tsx
-#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
 msgstr ""
 
-#: src/SiteAdaptor/SavingsForm.tsx
+#. placeholder {0}: protocol.bareToken.symbol ?? ''
+#. placeholder {0}: protocol.stakeToken.symbol
 #: src/SiteAdaptor/WithdrawForm.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Withdraw {0}"
 msgstr ""

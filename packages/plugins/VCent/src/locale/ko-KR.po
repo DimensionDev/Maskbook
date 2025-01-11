@@ -16,6 +16,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/VCent/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1004\n"
 
+#. placeholder {0}: tweet.amount_usd
 #: src/SiteAdaptor/TweetDialog.tsx
 msgid "<0>Latest offer at </0><1>${0}</1>"
 msgstr ""

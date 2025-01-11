@@ -11,8 +11,8 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/CrossChainBridgeDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/CrossChainBridgeDialog.tsx
 msgid "Cross-chain"
 msgstr ""
 

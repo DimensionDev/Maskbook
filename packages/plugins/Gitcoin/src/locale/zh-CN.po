@@ -24,6 +24,7 @@ msgstr ""
 msgid "contributions"
 msgstr ""
 
+#. placeholder {0}: format(project.metadata.createdAt, 'MMMM do, yyyy')
 #: src/SiteAdaptor/PreviewCard.tsx
 msgid "Created on: {0}"
 msgstr ""

@@ -21,62 +21,80 @@ msgstr ""
 msgid "(beta)"
 msgstr ""
 
+#. placeholder {0}: omitSizeLimit ? 'omit' : ''
 #: src/UI/components/UploadDropArea/index.tsx
 msgid "{0, select, other {<0>Size limit: {fileSize}</0>} omit {}}"
 msgstr ""
 
+#. placeholder {0}: message.action
+#. placeholder {1}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} {1} approval successfully."
 msgstr ""
 
+#. placeholder {0}: message.action
+#. placeholder {1}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} {1} NFT contract successfully."
 msgstr ""
 
+#. placeholder {0}: message.action
+#. placeholder {1}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} {1} NFT contract."
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "{0} deposited."
 msgstr ""
 
+#. placeholder {0}: expectedChainName ?? ''
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "{0} network is not added to the wallet. Please add it and try again."
 msgstr ""
 
+#. placeholder {0}: message.action
 #: src/UI/translate.ts
 msgid "{0} NFT contract"
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} NFT contract unlocked."
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} NFT Lucky Drop created."
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} NFT transferred."
 msgstr ""
 
+#. placeholder {0}: pendingTransactions.length
 #: src/UI/components/WalletStatusBox/usePendingTransactions.tsx
 msgid "{0} Pending"
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "{0} sent."
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "{0} unlocked"
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "{0} were claimed"
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "{0} withdrawn."
 msgstr ""
@@ -97,10 +115,12 @@ msgstr ""
 msgid "<0>Powered by </0>{publisherNode}"
 msgstr ""
 
+#. placeholder {0}: provider ?? 'Mask Network'
 #: src/UI/components/PluginCardFrame/index.tsx
 msgid "<0>Powered by </0><1>{0}</1>"
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "1 {0} NFT Lucky Drop claimed."
 msgstr ""
@@ -122,8 +142,8 @@ msgstr "24時間取引Vol"
 msgid "Add Collectibles"
 msgstr ""
 
-#: src/UI/components/AddCollectibles/index.tsx
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "Add NFTs"
 msgstr "コレクティブルを追加"
 
@@ -131,8 +151,8 @@ msgstr "コレクティブルを追加"
 msgid "Added by user"
 msgstr "ユーザーによって追加"
 
-#: src/UI/components/TokenWithSocialGroupMenu/index.tsx
 #: src/UI/wallet/DeriveWalletTable.tsx
+#: src/UI/components/TokenWithSocialGroupMenu/index.tsx
 msgid "Address"
 msgstr "アドレス"
 
@@ -152,8 +172,8 @@ msgstr ""
 msgid "APP list"
 msgstr "アプリ一覧"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "App Settings"
 msgstr ""
 
@@ -169,6 +189,8 @@ msgstr "承認します"
 msgid "Approve MASK?"
 msgstr "MASKを承認しますか？"
 
+#. placeholder {0}: collection?.name ? 'hasName' : 'noName'
+#. placeholder {1}: collection?.name
 #: src/hooks/useReportSpam.tsx
 msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr ""
@@ -185,6 +207,7 @@ msgstr ""
 msgid "Balance"
 msgstr "残高"
 
+#. placeholder {0}: balance ? balance : '0'
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
 msgid "Balance: {0}"
 msgstr ""
@@ -217,10 +240,10 @@ msgstr ""
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Cancel"
 msgstr "キャンセル"
 
@@ -228,9 +251,9 @@ msgstr "キャンセル"
 msgid "Cancel Transaction"
 msgstr ""
 
-#: src/UI/components/WalletStatusBar/Action.tsx
-#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: src/UI/components/WalletStatusBox/index.tsx
+#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
+#: src/UI/components/WalletStatusBar/Action.tsx
 msgid "Change"
 msgstr "変更"
 
@@ -259,6 +282,7 @@ msgstr "流通供給量"
 msgid "Claim Lucky Drop"
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Claim Lucky Drop with {0} claimed."
 msgstr ""
@@ -308,14 +332,14 @@ msgstr "クリックして再試行"
 msgid "Community"
 msgstr "コミュニティー"
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "Confirm"
 msgstr "確認"
 
@@ -336,11 +360,13 @@ msgstr "確認中"
 msgid "Congratulations!"
 msgstr "おめでとうございます！"
 
+#. placeholder {0}: persona.nickname ?? ''
 #: src/UI/components/PersonaSelectPanel/index.tsx
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Connect {0}"
 msgstr ""
 
+#. placeholder {0}: persona.nickname ?? ''
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Connect and Verify {0}"
 msgstr ""
@@ -349,12 +375,12 @@ msgstr ""
 msgid "Connect Persona"
 msgstr "ペルソナを接続"
 
-#: src/UI/components/ChainBoundary/index.tsx
-#: src/UI/components/WalletConnectedBoundary/index.tsx
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
-#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
-#: src/UI/components/WalletStatusBox/index.tsx
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
+#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
+#: src/UI/components/WalletConnectedBoundary/index.tsx
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Connect Wallet"
 msgstr "ウォレットを接続"
 
@@ -383,6 +409,7 @@ msgstr "コントラクト"
 msgid "Contract Deployment"
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Contract Deployment {0}"
 msgstr ""
@@ -432,24 +459,32 @@ msgstr ""
 msgid "Created a SmartPay wallet on Polygon network."
 msgstr ""
 
+#. placeholder {0}: formatCurrency(formatWeiToGwei(baseFeePerGas), '')
 #: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Current base fee is {0} Gwei"
 msgstr "現在の基本手数料は {0} Gweiです"
 
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
-#: src/UI/components/SettingsBoard/Context.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Custom"
 msgstr "カスタム"
 
+#. placeholder {0}: fromTwitter ? AddressPlatform.Twitter : fromNextId ? AddressPlatform.NextId : 'normal'
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
+msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and } next_id {NEXT.ID and }}{sources}."
 msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
+#~ msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
+#~ msgstr ""
+
+#. placeholder {0}: resolveNextIDPlatformName(platform) || platform
+#. placeholder {0}: type?.replace('_', ' ') ?? ''
 #: src/UI/components/SocialAccountList/SocialTooltip.tsx
+#: src/UI/components/AccountIcons/index.tsx
 msgid "Data source is retrieved from {0}."
 msgstr "データソースは {0} から取得されます。"
 
@@ -473,6 +508,7 @@ msgstr ""
 msgid "Deploy Smarty Pay wallet"
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Deposit {0} for savings."
 msgstr ""
@@ -524,8 +560,8 @@ msgstr ""
 msgid "DSearch"
 msgstr ""
 
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 msgid "Edit"
 msgstr "編集"
 
@@ -549,24 +585,24 @@ msgstr "暗号化"
 msgid "ENS or Wallet Address"
 msgstr "ENSまたはウォレットアドレス"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Enter a gas limit"
 msgstr "ガスの制限を入力してください"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Enter a gas price"
 msgstr "ガス価格を入力"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Enter a max fee"
 msgstr "最大手数料を入力してください"
 
-#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
 msgid "Enter a max priority fee"
 msgstr "最大優先料金を入力してください"
 
@@ -586,6 +622,7 @@ msgstr ""
 msgid "Failed"
 msgstr "失敗しました"
 
+#. placeholder {0}: message.action
 #: src/UI/translate.ts
 msgid "Failed to {0} NFT contract."
 msgstr ""
@@ -602,6 +639,7 @@ msgstr ""
 msgid "Failed to create Lucky Drop."
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "Failed to deposit {0}."
 msgstr ""
@@ -610,6 +648,7 @@ msgstr ""
 msgid "Failed to deposit token."
 msgstr ""
 
+#. placeholder {0}: token.symbol ?? token.name ?? 'Token'
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Failed to load {0}. Click to retry."
 msgstr "{0}の読み込みに失敗しました。クリックして再試行してください。"
@@ -654,6 +693,7 @@ msgstr ""
 msgid "Failed to upload file"
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "Failed to withdraw {0}."
 msgstr ""
@@ -678,14 +718,15 @@ msgstr "ガス料金"
 msgid "Gas fee settings"
 msgstr "ガス料金の設定"
 
-#: src/UI/components/SettingsBoard/GasForm.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Gas Limit"
 msgstr "ガス制限"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#. placeholder {0}: minGasLimit.toFixed()
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
@@ -693,9 +734,9 @@ msgstr ""
 msgid "Gas limit too low will cause the transaction to fail."
 msgstr "ガス制限が低すぎると、トランザクションが失敗する原因になります"
 
-#: src/UI/components/SettingsBoard/GasForm.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SettingsBoard/GasForm.tsx
 msgid "Gas Price"
 msgstr "ガス価格"
 
@@ -730,12 +771,13 @@ msgstr "Gwei（グワイ）"
 msgid "GWEI"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/Context.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/components/SettingsBoard/Context.tsx
 msgid "High"
 msgstr "高"
 
+#. placeholder {0}: provider.name
 #: src/UI/modals/SelectProviderModal/GuideDialog.tsx
 msgid "How to use {0} Wallet?"
 msgstr "{0} ウォレットの使用方法は？"
@@ -744,8 +786,8 @@ msgstr "{0} ウォレットの使用方法は？"
 msgid "Import"
 msgstr "インポート"
 
-#: src/UI/components/AddCollectibles/index.tsx
 #: src/UI/components/FungibleTokenList/index.tsx
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "Incorrect contract address."
 msgstr "有効なトークンアドレスを入力してください"
 
@@ -778,8 +820,8 @@ msgstr "無効なスリッページの許容範囲です。"
 msgid "Listed"
 msgstr "リストされました"
 
-#: src/UI/components/LoadRetry/index.tsx
 #: src/UI/components/ReloadStatus/index.tsx
+#: src/UI/components/LoadRetry/index.tsx
 msgid "Load failed"
 msgstr "読み込みに失敗しました"
 
@@ -791,8 +833,8 @@ msgstr "読み込み中"
 msgid "Loading...."
 msgstr "読み込み中..."
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Low"
 msgstr "低い"
 
@@ -804,10 +846,12 @@ msgstr ""
 msgid "Lucky Drop refunded."
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Lucky drop with {0} created."
 msgstr ""
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Lucky Drop with {0} refunded."
 msgstr ""
@@ -877,9 +921,9 @@ msgstr "最大優先手数料は0GWEIより大きくなければなりません"
 msgid "Max priority fee must be greater than 0 Gwei."
 msgstr "最大優先料金は0Gweiより大きくなければなりません。"
 
-#: src/UI/components/SettingsBoard/Context.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/components/SettingsBoard/Context.tsx
 msgid "Medium"
 msgstr "中"
 
@@ -928,9 +972,9 @@ msgstr "ガス代なし"
 msgid "No NFTs found."
 msgstr "NFTが見つかりません。"
 
-#: src/UI/components/AddCollectibles/index.tsx
-#: src/UI/components/CountryCodePicker/index.tsx
 #: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#: src/UI/components/CountryCodePicker/index.tsx
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "No results"
 msgstr "該当なし"
 
@@ -966,14 +1010,14 @@ msgstr ""
 msgid "Owner changed."
 msgstr ""
 
-#: src/UI/components/WalletStatusBar/WalletDescription.tsx
 #: src/UI/components/WalletStatusBox/TransactionList.tsx
+#: src/UI/components/WalletStatusBar/WalletDescription.tsx
 msgid "Pending"
 msgstr "保留中"
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts
-#: src/UI/components/PersonaSelectPanel/index.tsx
 #: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
+#: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Persona"
 msgstr "ペルソナ"
 
@@ -985,10 +1029,12 @@ msgstr "Phantom は Solana チェーンのみを対応します。"
 msgid "Phone Number"
 msgstr ""
 
+#. placeholder {0}: persona.nickname ?? ''
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} and send a proof post before using dApps."
 msgstr ""
 
+#. placeholder {0}: persona.nickname ?? ''
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Please connect {0} before using dApps."
 msgstr "dAppsを使用する前に、 {0} に接続してください。"
@@ -1030,8 +1076,8 @@ msgstr ""
 msgid "Please verify your social account"
 msgstr "ソーシャルアカウントを確認してください"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
 msgid "Plugin switch"
 msgstr ""
 
@@ -1049,6 +1095,7 @@ msgstr "投稿内容"
 msgid "Price Statistic"
 msgstr "価格統計"
 
+#. placeholder {0}: i18n(plugin.ID, plugin.name)
 #: src/UI/components/CompositionDialog/BadgeRenderer.tsx
 msgid "Provided by plugin \"{0}\""
 msgstr ""
@@ -1061,8 +1108,8 @@ msgstr ""
 msgid "Refund your expired Lucky Drop."
 msgstr ""
 
-#: src/UI/components/LoadRetry/index.tsx
 #: src/UI/components/ReloadStatus/index.tsx
+#: src/UI/components/LoadRetry/index.tsx
 msgid "Reload"
 msgstr "再読み込み"
 
@@ -1098,6 +1145,7 @@ msgstr "リセット"
 msgid "Retry"
 msgstr "再試行"
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "Revoke the approval for {0}."
 msgstr ""
@@ -1135,8 +1183,8 @@ msgstr "ENSドメインまたはウォレットアドレスで検索すると、
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
 msgstr "NFT コレクションまたはそのシンボルの名前で検索し、最適化された結果を得ます。"
 
-#: src/UI/components/SelectTokenChip/index.tsx
 #: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
+#: src/UI/components/SelectTokenChip/index.tsx
 msgid "Select"
 msgstr "選択"
 
@@ -1164,13 +1212,14 @@ msgstr "NFT コントラクト所有者を選択"
 msgid "Select Collection"
 msgstr "コレクションを選択"
 
-#: src/UI/components/AddCollectibles/index.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
-#: src/UI/components/AssetsManagement/CollectionList.tsx
 #: src/UI/components/VerifyNextIDDialog/index.tsx
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AddCollectibles/index.tsx
 msgid "Send"
 msgstr "送信"
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Send {0}"
 msgstr ""
@@ -1209,6 +1258,7 @@ msgstr ""
 msgid "Switch Network"
 msgstr "ネットワークを切り替え"
 
+#. placeholder {0}: expectedChainName ?? ''
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Switch to {0}"
 msgstr ""
@@ -1294,6 +1344,7 @@ msgstr ""
 msgid "Transaction with extremely low slippage tolerance might be reverted because of very small market movement."
 msgstr "スリッページの許容範囲が極端に小さい取引は、ごくわずかな相場の動きで元に戻ってしまうことがあります。"
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "Transfer {0} NFT."
 msgstr ""
@@ -1318,14 +1369,17 @@ msgstr "未掲載"
 msgid "Unlock"
 msgstr "ロック解除"
 
+#. placeholder {0}: token.symbol
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "Unlock {0}"
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "Unlock {0} NFT contract."
 msgstr ""
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "Unlock {0}."
 msgstr ""
@@ -1352,6 +1406,7 @@ msgstr ""
 msgid "Unlocking ALL..."
 msgstr ""
 
+#. placeholder {0}: formatCurrency(formatWeiToGwei(option.suggestedMaxFeePerGas), '')
 #: src/UI/components/SettingsBoard/GasOption.tsx
 msgid "up to {0} Gwei"
 msgstr "最大 {0} Gweiまで"
@@ -1364,12 +1419,15 @@ msgstr "ガス代を更新中…"
 msgid "Verification post sent.<0/><1/>You could check the verification result on Mask Pop-up after few minutes. If it failed, please try again later."
 msgstr ""
 
-#: src/UI/components/AssetsManagement/CollectibleItem.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
+#. placeholder {0}: currentVerifiedBy.join(', ')
+#. placeholder {0}: verifiedBy.join(', ')
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectibleItem.tsx
 msgid "Verified by {0}"
 msgstr ""
 
+#. placeholder {0}: persona.nickname ?? ''
 #: src/UI/components/PersonaSelectPanel/index.tsx
 msgid "Verify {0}"
 msgstr ""
@@ -1409,6 +1467,7 @@ msgstr "Web3 プロフィール"
 msgid "Website"
 msgstr "ウェブサイト"
 
+#. placeholder {0}: message.token
 #: src/UI/translate.ts
 msgid "Withdraw {0} for savings."
 msgstr ""
@@ -1425,22 +1484,30 @@ msgstr "ネットワークが間違っています"
 msgid "You canceled the request."
 msgstr "リクエストを取り消しました。"
 
+#. placeholder {0}: message.symbol
 #: src/UI/translate.ts
 msgid "You didn't approve {0}. Please do not set spending cap to 0 and try it again."
 msgstr ""
 
+#. placeholder {0}: message.amount
+#. placeholder {1}: message.symbol
 #: src/UI/translate.ts
 msgid "You have donated {0} {1}"
 msgstr ""
 
+#. placeholder {0}: tolerance.toString()
 #: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "You may have {0}% less received with this level of slippage tolerance."
 msgstr "このスリッページ許容範囲で受領率が {0}% 低くなる可能性があります。"
 
+#. placeholder {0}: contractName ?? ''
+#. placeholder {1}: token.symbol
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
 msgid "You must give the {0} smart contract permission to use your {1}. You only have to do this once per token."
 msgstr "{0} スマートコントラクトに自分の{1}を使用する許可を与える必要があります。これは1つのトークンにつき1回だけ行う必要があります。"
 
+#. placeholder {0}: message.token
+#. placeholder {1}: message.spender
 #: src/UI/translate.ts
 msgid "You've approved {0} for {1}. If you want to revoke this token, please set spending cap amount to 0."
 msgstr ""

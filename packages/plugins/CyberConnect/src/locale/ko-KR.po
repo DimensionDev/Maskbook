@@ -40,8 +40,8 @@ msgstr "팔로워"
 msgid "Followings"
 msgstr "팔로잉"
 
-#: src/SiteAdaptor/FollowersPage.tsx
 #: src/SiteAdaptor/Profile.tsx
+#: src/SiteAdaptor/FollowersPage.tsx
 msgid "Load failed"
 msgstr "로딩 실패"
 

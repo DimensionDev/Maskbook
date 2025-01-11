@@ -11,8 +11,8 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/Footer.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/Footer.tsx
 msgid "Calendar"
 msgstr ""
 
@@ -40,8 +40,8 @@ msgstr ""
 #~ msgid "NFTs"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/EventList.tsx
 #: src/SiteAdaptor/components/NewsList.tsx
+#: src/SiteAdaptor/components/EventList.tsx
 msgid "No content for the last two weeks."
 msgstr ""
 
@@ -49,11 +49,12 @@ msgstr ""
 #~ msgid "No events"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/EventList.tsx
 #: src/SiteAdaptor/components/NewsList.tsx
+#: src/SiteAdaptor/components/EventList.tsx
 msgid "No more data available."
 msgstr ""
 
+#. placeholder {0}: providerMap[tab]
 #: src/SiteAdaptor/components/Footer.tsx
 msgid "Powered By {0}"
 msgstr ""

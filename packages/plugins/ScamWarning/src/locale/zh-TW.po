@@ -16,6 +16,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/ScamWarning/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 990\n"
 
+#. placeholder {0}: value.length
 #: src/SiteAdaptor/components/PreviewCard.tsx
 msgid "{0, plural, one {This domain is} other {These domains are}} currently on the Mask Network warning list which may include malicious entries, phishing or scams."
 msgstr ""

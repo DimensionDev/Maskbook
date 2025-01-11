@@ -1,6 +1,6 @@
 {
     "messages": {
-        "Yckw2R": "法币入金",
-        "UUfXpm": "Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."
+        "Yckw2R": ["法币入金"],
+        "UUfXpm": ["Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support."]
     }
 }

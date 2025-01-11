@@ -16,21 +16,23 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 956\n"
 
+#. placeholder {0}: sourceType ?? SourceType.NFTScan
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
 msgstr "{0} のプラットフォームコスト"
 
+#. placeholder {0}: formatDistanceToNow(Math.ceil(offer.expiredAt!), { addSuffix: true, })
 #: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "<0>Expires in </0>{0}"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx
 #: src/SiteAdaptor/CardDialog/CardDialog.tsx
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "About"
 msgstr "詳細"
 
-#: src/SiteAdaptor/Card/Collectible.tsx
 #: src/SiteAdaptor/CardDialog/CardDialog.tsx
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Activities"
 msgstr "アクティビティ"
 
@@ -62,8 +64,8 @@ msgstr "詳細"
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr "OpenSeaとRaribleのコレクションの具体的な情報を表示し、ソーシャルメディアで直接オファーします。"
 
-#: src/SiteAdaptor/Shared/ActivityCard.tsx
 #: src/SiteAdaptor/Shared/OfferCard.tsx
+#: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "From"
 msgstr "から"
 
@@ -79,6 +81,7 @@ msgstr "さらに読み込む"
 msgid "Mint Address"
 msgstr "ミントアドレス"
 
+#. placeholder {0}: asset.data.source === SourceType.NFTScan ? resolveSourceTypeName(asset.data.source) : 'platform'
 #: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
 msgstr "{0}"
@@ -103,6 +106,7 @@ msgstr "オファー"
 msgid "Properties"
 msgstr "資産"
 
+#. placeholder {0}: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')
 #: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
 msgstr "セールは {0}"
@@ -115,6 +119,7 @@ msgstr "このNFTにはアクティビティがありませんでした。"
 msgid "This NFT didn't have any offers."
 msgstr "このNFTにはオファーはありませんでした。"
 
+#. placeholder {0}: type === ActivityType.Mint ? Utils.formatAddress(activity.from?.address, 4) : activity.receive.nickname || (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
 #: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "To <0>{0}</0>"
 msgstr ""

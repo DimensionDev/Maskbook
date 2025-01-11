@@ -16,10 +16,12 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Tips/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 998\n"
 
+#. placeholder {0}: `$${token?.symbol}`
 #: src/components/TipDialog.tsx
 msgid "{amount} {0} tips sent."
 msgstr ""
 
+#. placeholder {0}: nonFungibleToken?.contract?.name || 'NFT'
 #: src/components/TipDialog.tsx
 msgid "1 {0} tips sent."
 msgstr ""
@@ -40,17 +42,36 @@ msgstr ""
 #~ msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}"
 #~ msgstr ""
 
+#. placeholder {0}: token?.symbol ? 'namedToken' : 'token'
+#. placeholder {1}: token?.symbol || ''
+#. placeholder {2}: recipientName ? 'name' : 'address'
+#. placeholder {3}: recipientName || recipientAddress
 #: src/components/TipDialog.tsx
-msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\nInstall https://mask.io/download-links to send your first tip."
+msgid ""
+"I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\n"
+"\n"
+"Install https://mask.io/download-links to send your first tip."
 msgstr ""
+
+#: src/components/TipDialog.tsx
+#~ msgid "I just tipped {amount} {0, select, namedToken {{1}} other {token}} to @{recipientUserId}'s {2, select, name {wallet} address {wallet address} other {wallet}} {3}\\n\\nInstall https://mask.io/download-links to send your first tip."
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx
 #~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}"
 #~ msgstr ""
 
+#. placeholder {0}: recipientName ? 'name' : 'address'
 #: src/components/TipDialog.tsx
-msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\nInstall https://mask.io/download-links to send your first tip."
+msgid ""
+"I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\n"
+"\n"
+"Install https://mask.io/download-links to send your first tip."
 msgstr ""
+
+#: src/components/TipDialog.tsx
+#~ msgid "I just tipped a {NFT_Name} to @{recipientUserId}'s {0, select, name {wallet} address {wallet address} other {wallet}} {recipientAddress}\\n\\nInstall https://mask.io/download-links to send your first tip."
+#~ msgstr ""
 
 #: src/components/TipDialog.tsx
 #~ msgid "Install https://mask.io/download-links to send your first tip."

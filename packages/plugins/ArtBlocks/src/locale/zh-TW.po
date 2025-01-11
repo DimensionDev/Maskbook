@@ -48,20 +48,35 @@ msgstr ""
 msgid "Contract:"
 msgstr ""
 
+#. placeholder {0}: project.artistName
 #: src/SiteAdaptor/DetailsView.tsx
-msgid "Created by <0>{0}</0>• <1>Website</1>"
+msgid "Created by <0>{0}</0> • <1>Website</1>"
 msgstr ""
+
+#: src/SiteAdaptor/DetailsView.tsx
+#~ msgid "Created by <0>{0}</0>• <1>Website</1>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Collectible.tsx
 msgid "Details"
 msgstr ""
 
+#. placeholder {0}: project.name
+#. placeholder {1}: price.toFixed()
+#. placeholder {2}: token?.symbol || ''
 #: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
 msgstr ""
 
 #: src/SiteAdaptor/PurchaseDialog.tsx
-msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
+#~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
+#~ msgstr ""
+
+#. placeholder {3}: project.name
+#. placeholder {4}: price.toFixed()
+#. placeholder {5}: token?.symbol || ''
+#: src/SiteAdaptor/PurchaseDialog.tsx
+msgid "I just purchased a beautiful piece of art from '{3}' collection for {4} {5}. Welcome to join."
 msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx
@@ -100,9 +115,9 @@ msgstr ""
 msgid "Price:"
 msgstr ""
 
+#: src/SiteAdaptor/PurchaseDialog.tsx
+#: src/SiteAdaptor/PurchaseDialog.tsx
 #: src/SiteAdaptor/ActionBar.tsx
-#: src/SiteAdaptor/PurchaseDialog.tsx
-#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "Purchase"
 msgstr ""
 

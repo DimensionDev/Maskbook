@@ -1,8 +1,8 @@
 {
     "messages": {
         "bLqb2p": ["<0>Latest offer at </0><1>$", ["0"], "</1>"],
-        "muQqQY": "Buy & sell tweets autographed by their original creators.",
-        "4pSxwB": "Go",
-        "N0YrmD": "Valuables"
+        "muQqQY": ["Buy & sell tweets autographed by their original creators."],
+        "4pSxwB": ["Go"],
+        "N0YrmD": ["Valuables"]
     }
 }

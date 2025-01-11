@@ -16,9 +16,9 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 946\n"
 
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/ApprovalDialog.tsx
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/index.tsx
 msgid "Approval"
 msgstr ""
 
@@ -34,31 +34,31 @@ msgstr ""
 msgid "Collection Approval"
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Contract"
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "No approved contract records."
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Revoke"
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Revoking"
 msgstr ""
 

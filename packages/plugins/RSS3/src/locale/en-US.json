@@ -1,6 +1,6 @@
 {
     "messages": {
-        "Koz2Rg": [["0", "plural", { "one": "Action", "other": "Actions" }]],
+        "Koz2Rg": [["0", "plural", { "one": ["Action"], "other": ["Actions"] }]],
         "hh6gKU": [
             [
                 "0",
@@ -116,12 +116,12 @@
                 "txType",
                 "select",
                 {
-                    "burn": "burned",
-                    "deposit": "deposited",
-                    "mint": "minted",
-                    "receive": "received",
-                    "send": "sent",
-                    "withdraw": "withdrawn"
+                    "burn": ["burned"],
+                    "deposit": ["deposited"],
+                    "mint": ["minted"],
+                    "receive": ["received"],
+                    "send": ["sent"],
+                    "withdraw": ["withdrawn"]
                 }
             ],
             " <1>",
@@ -130,9 +130,29 @@
             ["1"],
             "</1>"
         ],
+        "LKkOLF": [
+            "<0/> ",
+            [
+                "txType",
+                "select",
+                {
+                    "burn": ["burned"],
+                    "deposit": ["deposited"],
+                    "mint": ["minted"],
+                    "receive": ["received"],
+                    "send": ["sent"],
+                    "withdraw": ["withdrawn"]
+                }
+            ],
+            " <1>",
+            ["0"],
+            " ",
+            ["1"],
+            "</1> "
+        ],
         "REeHKm": [
             "<0/> ",
-            ["txType", "select", { "trade": "traded", "mint": "minted", "other": "traded" }],
+            ["txType", "select", { "trade": ["traded"], "mint": ["minted"], "other": ["traded"] }],
             " <1>",
             ["0"],
             " ",
@@ -144,17 +164,17 @@
             "</2>"
         ],
         "msszNj": ["<0/> approved <1>", ["0"], " ", ["1"], "</1>"],
-        "dCpOJ5": "<0/> approved with <1/>",
-        "ZdnQsW": "<0/> interacted with <1/>",
-        "f54thq": ["<0/> minted", ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }]],
+        "dCpOJ5": ["<0/> approved with <1/>"],
+        "ZdnQsW": ["<0/> interacted with <1/>"],
+        "f54thq": ["<0/> minted", ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": ["<2>an NFT </2>"] }]],
         "CTSEx8": ["<0/> publish a post on ", ["0"]],
         "NTnXx/": ["<0/> unapproved <1>", ["0"], "</1>"],
-        "xPHFvT": ["<0/>", ["txType", "select", { "deploy": "deployed", "execute": "executed" }], "<1/>"],
+        "xPHFvT": ["<0/>", ["txType", "select", { "deploy": ["deployed"], "execute": ["executed"] }], "<1/>"],
         "Vh2I2e": [
             "<0>",
             ["formattedUser"],
             "</0> ",
-            ["0", "select", { "follow": "followed", "unfollow": "un-followed" }],
+            ["0", "select", { "follow": ["followed"], "unfollow": ["un-followed"] }],
             " <1>",
             ["other"],
             "</1> on <2>",
@@ -169,13 +189,13 @@
                 "0",
                 "select",
                 {
-                    "supply": "supplied",
-                    "add": "added",
-                    "repay": "repaid",
-                    "withdraw": "withdrew",
-                    "collect": "collected",
-                    "remove": "removed",
-                    "borrow": "borrowed"
+                    "supply": ["supplied"],
+                    "add": ["added"],
+                    "repay": ["repaid"],
+                    "withdraw": ["withdrew"],
+                    "collect": ["collected"],
+                    "remove": ["removed"],
+                    "borrow": ["borrowed"]
                 }
             ],
             " liquidity on <1>",
@@ -196,7 +216,7 @@
             ["target"],
             "</3>"
         ],
-        "6mHGOS": ["<0>", ["user"], "</0> burned <1>", ["1", "select", { "nft": "an NFT", "name": [["0"]] }], "</1>"],
+        "6mHGOS": ["<0>", ["user"], "</0> burned <1>", ["1", "select", { "nft": ["an NFT"], "name": [["0"]] }], "</1>"],
         "TppkTk": [
             "<0>",
             ["user"],
@@ -206,15 +226,25 @@
             ["platform"],
             "</2>"
         ],
+        "0m34CB": [
+            "<0>",
+            ["user"],
+            "</0> claimed ",
+            ["0", "select", { "verbose": ["<1>", ["1"], " </1>"], "simple": ["<2>an NFT </2>"] }],
+            "from <3>",
+            ["formattedAddress"],
+            "</3>",
+            ["2", "select", { "cost": [" for ", ["3"], " ", ["4"]], "free": [] }]
+        ],
         "L5kJP9": [
             "<0>",
             ["user"],
             "</0> claimed ",
-            ["0", "select", { "verbose": ["<1>", ["1"], " </1>"], "simple": "<2>an NFT </2>" }],
+            ["0", "select", { "verbose": ["<1>", ["1"], " </1>"], "simple": ["<2>an NFT </2>"] }],
             "from <3>",
             ["formattedAddress"],
             "</3>",
-            ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": "" }]
+            ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": [] }]
         ],
         "V6YDUB": ["<0>", ["user"], "</0> donated <1>", ["costValue"], " ", ["costSymbol"], "</1>"],
         "WqzYn1": [
@@ -233,7 +263,7 @@
             "<0>",
             ["user"],
             "</0> minted ",
-            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }],
+            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": ["<2>an NFT </2>"] }],
             "for <3>",
             ["value"],
             " ",
@@ -245,7 +275,7 @@
             "<0>",
             ["user"],
             "</0> registered ",
-            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an ENS </2>" }],
+            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": ["<2>an ENS </2>"] }],
             "for <3>",
             ["costValue"],
             " ",
@@ -256,7 +286,7 @@
             "<0>",
             ["user"],
             "</0> sold ",
-            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }],
+            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": ["<2>an NFT </2>"] }],
             " to <3>",
             ["recipient"],
             "</3> for <4>",
@@ -269,7 +299,7 @@
             "<0>",
             ["user"],
             "</0> sold ",
-            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": "<2>an NFT </2>" }],
+            ["0", "select", { "name": ["<1>", ["1"], " </1>"], "nft": ["<2>an NFT </2>"] }],
             " to <3>",
             ["recipient"],
             "</3> for <4>",
@@ -296,34 +326,44 @@
             "</3>"
         ],
         "EfAke+": ["<0>", ["user"], "</0> voted for <1>", ["option"], "</1> on <2>", ["platform"], "</2>"],
+        "URdCZQ": [
+            "<0>",
+            ["user"],
+            "</0>sent",
+            ["0", "select", { "verbose": ["<1>", ["1"], " </1>"], "simple": ["<2>an NFT </2>"] }],
+            "to <3>",
+            ["formattedAddress"],
+            "</3>",
+            ["2", "select", { "cost": [" for ", ["3"], " ", ["4"]], "free": [] }]
+        ],
         "HNF104": [
             "<0>",
             ["user"],
             "</0>sent",
-            ["0", "select", { "verbose": ["<1>", ["1"], " </1>"], "simple": "<2>an NFT </2>" }],
+            ["0", "select", { "verbose": ["<1>", ["1"], " </1>"], "simple": ["<2>an NFT </2>"] }],
             "to <3>",
             ["formattedAddress"],
             "</3>",
-            ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": "" }]
+            ["2", "select", { "cost": ["for ", ["3"], " ", ["4"]], "free": [] }]
         ],
-        "K7tIrx": "Category",
-        "URmyfc": "Details",
-        "fYUNRJ": "Direct",
-        "7Bj3x9": "Failed",
-        "ejVYRQ": "From",
-        "OAfk3i": "Hash",
-        "OR475H": "Network",
-        "8IN0ph": "No more data available.",
-        "F3bW6y": "Platform",
-        "8Ug9jB": "Related",
-        "wbDTs9": "Request timed out",
-        "uAQUqI": "Status",
-        "olEUh2": "Successful",
-        "UvJiVZ": "There's no feed associated with this address.",
+        "K7tIrx": ["Category"],
+        "URmyfc": ["Details"],
+        "fYUNRJ": ["Direct"],
+        "7Bj3x9": ["Failed"],
+        "ejVYRQ": ["From"],
+        "OAfk3i": ["Hash"],
+        "OR475H": ["Network"],
+        "8IN0ph": ["No more data available."],
+        "F3bW6y": ["Platform"],
+        "8Ug9jB": ["Related"],
+        "wbDTs9": ["Request timed out"],
+        "uAQUqI": ["Status"],
+        "olEUh2": ["Successful"],
+        "UvJiVZ": ["There's no feed associated with this address."],
         "qyaPGX": ["There's no feed associated with this address.<0>", ["0"], "</0>"],
-        "8TMaZI": "Timestamp",
-        "/jQctM": "To",
-        "5HVoyc": "Transaction Details",
-        "mNUsxu": "Tx Fee"
+        "8TMaZI": ["Timestamp"],
+        "/jQctM": ["To"],
+        "5HVoyc": ["Transaction Details"],
+        "mNUsxu": ["Tx Fee"]
     }
 }

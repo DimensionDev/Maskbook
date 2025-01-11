@@ -40,8 +40,8 @@ msgstr "フォロワー"
 msgid "Followings"
 msgstr "フォロー"
 
-#: src/SiteAdaptor/FollowersPage.tsx
 #: src/SiteAdaptor/Profile.tsx
+#: src/SiteAdaptor/FollowersPage.tsx
 msgid "Load failed"
 msgstr "読み込みに失敗しました"
 

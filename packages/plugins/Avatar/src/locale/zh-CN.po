@@ -56,8 +56,8 @@ msgstr "加载中..."
 msgid "NFT Avatar Setting"
 msgstr "头像设置"
 
-#: src/Application/RouterDialog.tsx
 #: src/SiteAdaptor/NFTAvatarButton.tsx
+#: src/Application/RouterDialog.tsx
 msgid "NFT PFP"
 msgstr "NFT 头像"
 

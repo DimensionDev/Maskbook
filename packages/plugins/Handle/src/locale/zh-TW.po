@@ -16,6 +16,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Handle/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 972\n"
 
+#. placeholder {0}: totalBalance.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2, })
 #: src/SiteAdaptor/SearchResultInspector.tsx
 msgid "<0>USD Value</0><1>${0}</1>"
 msgstr ""

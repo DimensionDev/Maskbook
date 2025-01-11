@@ -11,11 +11,11 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-#: src/SiteAdaptor/components/ClaimDialog/index.tsx
-#: src/SiteAdaptor/components/ClaimEntry/index.tsx
-#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#: src/SiteAdaptor/components/ClaimEntry/index.tsx
+#: src/SiteAdaptor/components/ClaimDialog/index.tsx
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Claim"
 msgstr ""
 
@@ -27,13 +27,20 @@ msgstr ""
 msgid "Claimable"
 msgstr ""
 
+#. placeholder {0}: tokenDetail.symbol
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Claimed {amount} ${0} successfully."
 msgstr ""
 
+#. placeholder {0}: duration.hours ?? ''
+#. placeholder {1}: duration.minutes ?? ''
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
-msgid "Claiming will be live until: <0>{days} d {0} h {1} m</0>"
+msgid "Claiming will be live until: <0> {days} d {0} h {1} m</0>"
 msgstr ""
+
+#: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
+#~ msgid "Claiming will be live until: <0>{days} d {0} h {1} m</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid "Congratulations!"
@@ -43,6 +50,7 @@ msgstr ""
 msgid "Eligible to claim"
 msgstr ""
 
+#. placeholder {0}: format(endTime, 'MM-dd-yyyy HH:mm')
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Ended on <0>{0}</0>"
 msgstr ""
@@ -51,11 +59,18 @@ msgstr ""
 msgid "Expired"
 msgstr ""
 
+#. placeholder {0}: tokenDetail.symbol
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
 msgid ""
-"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
-"Install https://mask.io to explore more airdrop activities."
+"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.\n"
+" Install https://mask.io to explore more airdrop activities."
 msgstr ""
+
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#~ msgid ""
+#~ "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. \n"
+#~ "Install https://mask.io to explore more airdrop activities."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Mask Community $ARB Giveaway"
@@ -81,6 +96,7 @@ msgstr ""
 msgid "Sorry, you are not eligible to claim $ARB in this campaign."
 msgstr ""
 
+#. placeholder {0}: format(startTime, 'MM-dd-yyyy HH:mm')
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "Start Time: <0>{0}</0>"
 msgstr ""
@@ -89,6 +105,7 @@ msgstr ""
 msgid "To participate in airdrops, it is necessary to have enough native tokens in your wallet on the specified network to cover the transaction costs."
 msgstr ""
 
+#. placeholder {0}: amount ?? ''
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
 msgid "You have claimed {0} $ARB."
 msgstr ""

@@ -16,21 +16,23 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 956\n"
 
+#. placeholder {0}: sourceType ?? SourceType.NFTScan
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
 msgstr "{0} 平台成本"
 
+#. placeholder {0}: formatDistanceToNow(Math.ceil(offer.expiredAt!), { addSuffix: true, })
 #: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "<0>Expires in </0>{0}"
 msgstr ""
 
-#: src/SiteAdaptor/Card/Collectible.tsx
 #: src/SiteAdaptor/CardDialog/CardDialog.tsx
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "About"
 msgstr "关于"
 
-#: src/SiteAdaptor/Card/Collectible.tsx
 #: src/SiteAdaptor/CardDialog/CardDialog.tsx
+#: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Activities"
 msgstr "活动"
 
@@ -62,8 +64,8 @@ msgstr "详情"
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。"
 
-#: src/SiteAdaptor/Shared/ActivityCard.tsx
 #: src/SiteAdaptor/Shared/OfferCard.tsx
+#: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "From"
 msgstr "从"
 
@@ -79,6 +81,7 @@ msgstr "加载更多"
 msgid "Mint Address"
 msgstr "铸造地址"
 
+#. placeholder {0}: asset.data.source === SourceType.NFTScan ? resolveSourceTypeName(asset.data.source) : 'platform'
 #: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
 msgstr "更多关于 {0}"
@@ -103,6 +106,7 @@ msgstr "报价"
 msgid "Properties"
 msgstr "属性"
 
+#. placeholder {0}: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')
 #: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
 msgstr "出售结束于 {0}"
@@ -115,6 +119,7 @@ msgstr "此 NFT 没有任何交易动态。"
 msgid "This NFT didn't have any offers."
 msgstr "此 NFT 没有任何报价。"
 
+#. placeholder {0}: type === ActivityType.Mint ? Utils.formatAddress(activity.from?.address, 4) : activity.receive.nickname || (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
 #: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "To <0>{0}</0>"
 msgstr ""

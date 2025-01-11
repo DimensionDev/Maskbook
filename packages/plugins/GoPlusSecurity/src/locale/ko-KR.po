@@ -16,18 +16,22 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/GoPlusSecurity/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 970\n"
 
+#. placeholder {0}: attentionFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
 msgstr "{0} 주의 인자"
 
+#. placeholder {0}: attentionFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
 msgstr "{0} 주의 인자"
 
+#. placeholder {0}: riskyFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
 msgstr "{0} 리스크 인자"
 
+#. placeholder {0}: riskyFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
 msgstr "{0} 리스크 인자"
@@ -44,13 +48,13 @@ msgstr ""
 msgid "<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"
 msgstr ""
 
-#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx
+#: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "Cancel"
 msgstr "취소"
 
-#: src/SiteAdaptor/CheckSecurityDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/CheckSecurityDialog.tsx
 msgid "Check Security"
 msgstr "보안 확인"
 
@@ -62,8 +66,8 @@ msgstr "[Check Security] 닫기"
 msgid "Confirm"
 msgstr "확인"
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: src/UI/TokenSecurityBoundary.tsx
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Confirm swap risk"
 msgstr "스왑 리스크 확인"
 
@@ -83,8 +87,8 @@ msgstr "컨트랙트 소유자"
 msgid "Copy Address"
 msgstr "주소 복사"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx
 #: src/SiteAdaptor/constants.tsx
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "High Risk"
 msgstr "높은 리스크"
 
@@ -100,8 +104,8 @@ msgstr ""
 msgid "Market Cap"
 msgstr "시가 총액"
 
-#: src/SiteAdaptor/components/SecurityPanel.tsx
 #: src/SiteAdaptor/constants.tsx
+#: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "Medium Risk"
 msgstr "중간 리스크"
 
