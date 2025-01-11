@@ -15,7 +15,7 @@ import {
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { makeStyles } from '@masknet/theme'
 import { WalletDescription, type WalletDescriptionProps } from './WalletDescription.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

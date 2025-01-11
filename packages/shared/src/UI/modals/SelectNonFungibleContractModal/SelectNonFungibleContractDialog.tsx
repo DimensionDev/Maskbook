@@ -16,7 +16,8 @@ import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
 import { AddCollectiblesModal } from '../modals.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

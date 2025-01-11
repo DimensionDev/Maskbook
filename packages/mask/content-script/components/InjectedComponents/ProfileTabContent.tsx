@@ -53,7 +53,7 @@ import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import Services from '#services'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

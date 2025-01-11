@@ -8,7 +8,7 @@ import { Box, IconButton, Link, List, ListItem, Typography, type BoxProps } from
 import { useQueries } from '@tanstack/react-query'
 import { sortBy } from 'lodash-es'
 import { Fragment, useMemo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { usePlatformType } from '../hooks/usePlatformType.js'
 import { MentionLink } from './MentionLink.js'
 

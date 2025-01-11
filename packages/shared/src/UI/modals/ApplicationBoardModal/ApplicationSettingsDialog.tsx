@@ -7,7 +7,7 @@ import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingTabs } from './ApplicationBoardDialog.js'
 import { InjectedDialog } from '../../../index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ApplicationBoardSettingsProps {
     open: boolean

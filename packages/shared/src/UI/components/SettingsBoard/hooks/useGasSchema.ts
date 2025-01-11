@@ -9,7 +9,7 @@ import {
     isPositive,
     multipliedBy,
 } from '@masknet/web3-shared-base'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5

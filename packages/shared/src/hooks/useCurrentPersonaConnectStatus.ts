@@ -13,7 +13,7 @@ import {
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
 import type { PersonaConnectStatus } from '../types.js'
-import { msg, t } from '@lingui/macro'
+import { msg, t } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { timeout } from '@masknet/kit'
 

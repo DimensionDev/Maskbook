@@ -19,7 +19,8 @@ import { PersonaAvatar } from '../../../components/PersonaAvatar/index.js'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useModalNavigate } from '../../../components/index.js'
-import { Plural, Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

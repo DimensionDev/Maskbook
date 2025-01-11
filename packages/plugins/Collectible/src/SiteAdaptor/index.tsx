@@ -16,7 +16,7 @@ import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
 import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 function useInspectCollectible(pluginID?: NetworkPluginID) {
     return useCallback(

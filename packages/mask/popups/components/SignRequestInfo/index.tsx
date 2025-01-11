@@ -7,7 +7,7 @@ import { TypedMessageTextRender } from '../../../../typed-message/react/src/Rend
 import { Alert } from '@masknet/shared'
 import { RenderFragmentsContext, type RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { RenderEIP712 } from './eip712.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

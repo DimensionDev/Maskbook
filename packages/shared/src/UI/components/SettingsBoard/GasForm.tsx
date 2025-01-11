@@ -18,7 +18,7 @@ import {
 import { formatCurrency, GasOptionType, isPositive, isZero } from '@masknet/web3-shared-base'
 import { EVMUtils } from '@masknet/web3-providers'
 import { useGasSchema } from './hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 function getDefaultValues(transaction: Transaction, gasOptions: Record<GasOptionType, GasOption>) {
     return {

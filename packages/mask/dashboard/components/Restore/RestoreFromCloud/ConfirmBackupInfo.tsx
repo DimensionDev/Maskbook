@@ -11,7 +11,8 @@ import { AccountStatusBar } from '../AccountStatusBar.js'
 import { BackupInfoCard } from '../BackupInfoCard.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {

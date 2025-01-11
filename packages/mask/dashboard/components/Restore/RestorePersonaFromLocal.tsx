@@ -13,7 +13,8 @@ import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { AccountStatusBar } from './AccountStatusBar.js'
 import { BackupPreview } from '../BackupPreview/index.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 enum RestoreStatus {

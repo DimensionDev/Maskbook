@@ -15,7 +15,7 @@ import { useProposalList } from './hooks/useProposalList.js'
 import { useSpace } from './hooks/useSpace.js'
 import { ProfileCard, type ProfileCardProps } from './ProfileCard.js'
 import { ProfileProposalList } from './ProfileProposalList.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

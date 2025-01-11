@@ -17,7 +17,7 @@ import { useChainRuntime } from './ChainRuntimeProvider.js'
 import { CollectionHeader } from './CollectionHeader.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap = 1.5 }) => {
     const gapIsNumber = typeof gap === 'number'

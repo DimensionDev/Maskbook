@@ -1,5 +1,5 @@
 import { useCallback } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { TokenTransactionConfirmModal, type TokenTransactionConfirmModalProps } from '../../components/index.js'
 
 export interface TransactionConfirmProps extends TokenTransactionConfirmModalProps {

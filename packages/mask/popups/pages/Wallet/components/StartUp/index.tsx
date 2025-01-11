@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Sniffings } from '@masknet/shared-base'
 import Services from '#services'
 import { ImportCreateWallet } from '../ImportCreateWallet/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

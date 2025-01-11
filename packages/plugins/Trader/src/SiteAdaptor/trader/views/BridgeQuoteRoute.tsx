@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'

@@ -6,7 +6,7 @@ import { skipToken, useQuery } from '@tanstack/react-query'
 import { useAccount, useWeb3State } from '@masknet/web3-hooks-base'
 import type { RecentTransaction } from '@masknet/web3-shared-base'
 import type { ChainId, Transaction as EvmTransaction } from '@masknet/web3-shared-evm'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 /**

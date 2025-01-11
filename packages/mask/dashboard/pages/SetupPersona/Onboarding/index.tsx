@@ -16,7 +16,8 @@ import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { msg, plural, Trans } from '@lingui/macro'
+import { msg, plural } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

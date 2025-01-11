@@ -5,7 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
 import { useAsyncFn } from 'react-use'
 import { ConfirmDialog } from '../UI/modals/modals.js'
-import { Select, Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/react/macro'
 
 interface Options {
     address?: string

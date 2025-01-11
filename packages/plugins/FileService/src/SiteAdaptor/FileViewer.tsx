@@ -6,7 +6,7 @@ import { DisplayingFileList } from './components/FileList.js'
 import { useCallback } from 'react'
 import { PluginFileServiceRPC } from './rpc.js'
 import { downloadFile } from '../helpers.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     file: {

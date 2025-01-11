@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import type { ReactNode } from 'react'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import type { MessageDescriptor } from '@lingui/core'
 
 export enum SecurityMessageLevel {

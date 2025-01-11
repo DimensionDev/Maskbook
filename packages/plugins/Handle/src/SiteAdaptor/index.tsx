@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { type EOAResult, SearchResultType } from '@masknet/web3-shared-base'
 import { SearchResultInspector } from './SearchResultInspector.js'
 import { base } from '../base.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

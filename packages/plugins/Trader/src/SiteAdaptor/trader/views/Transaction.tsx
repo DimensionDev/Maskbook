@@ -1,4 +1,5 @@
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner, useUnmountedRef } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'

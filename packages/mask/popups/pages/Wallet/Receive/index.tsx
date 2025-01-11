@@ -8,7 +8,8 @@ import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {

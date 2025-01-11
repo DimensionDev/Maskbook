@@ -7,7 +7,7 @@ import { FriendsDetailUI } from './UI.js'
 import { useQueryClient, useMutation, type InfiniteData } from '@tanstack/react-query'
 import { usePopupCustomSnackbar } from '@masknet/theme'
 import { type Friend } from '../../../hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const Component = memo(function FriendsDetail() {
     const location = useLocation()

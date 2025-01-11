@@ -25,7 +25,8 @@ import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { msg, select, Trans } from '@lingui/macro'
+import { msg, select } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

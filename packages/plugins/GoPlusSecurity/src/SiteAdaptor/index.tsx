@@ -8,7 +8,7 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { GoPlusGlobalInjection } from './GoPlusGlobalInjection.js'
 import { onConfirm } from './components/CheckSecurityConfirmDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

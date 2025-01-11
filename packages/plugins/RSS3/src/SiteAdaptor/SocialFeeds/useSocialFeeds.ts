@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { timeout } from '@masknet/kit'
 import { EMPTY_LIST, type PageIndicator } from '@masknet/shared-base'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'

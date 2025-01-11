@@ -21,7 +21,7 @@ import { useMatchXS } from '@masknet/shared-base-ui'
 import { DraggableDiv } from '../shared/DraggableDiv.js'
 import { Close as CloseIcon, Download, OpenInBrowser } from '@mui/icons-material'
 import { saveFileFromUrl } from '../../../shared/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface AutoPasteFailedDialogProps {
     data: AutoPasteFailedEvent

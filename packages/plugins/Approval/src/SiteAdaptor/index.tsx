@@ -8,7 +8,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
 import { ApprovalDialog } from './ApprovalDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

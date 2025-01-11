@@ -6,7 +6,7 @@ import { TabContext } from '@mui/lab'
 import { Tab } from '@mui/material'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { NormalHeader } from '../../components/index.js'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 export function Header() {
     const { mode } = useTrade()

@@ -18,7 +18,7 @@ import { ConnectedAccounts } from './ConnectedAccounts/index.js'
 import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
 import { type Friend, useFriendProfiles } from '../../../hooks/index.js'
 import { type Profile } from '../common.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

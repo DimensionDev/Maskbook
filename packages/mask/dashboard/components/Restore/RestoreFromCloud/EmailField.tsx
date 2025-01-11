@@ -10,7 +10,8 @@ import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { useLanguage } from '../../../../shared-ui/index.js'
 import { RestoreContext } from './RestoreProvider.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 export const EmailField = memo(function EmailField() {

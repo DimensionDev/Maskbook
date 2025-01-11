@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { InjectedDialog, NetworkTab, usePageTab, useParamTab, type InjectedDialogProps } from '@masknet/shared'
 import { useLayoutEffect, type ReactNode } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'

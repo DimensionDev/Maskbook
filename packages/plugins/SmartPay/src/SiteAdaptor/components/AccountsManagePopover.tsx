@@ -7,7 +7,7 @@ import { formatPersonaFingerprint, NetworkPluginID, PopupRoutes } from '@masknet
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import { useManagers } from '../../hooks/useManagers.js'
 import { useAccount, useChainContext, useNetwork, useWeb3Connection, useWeb3State } from '@masknet/web3-hooks-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

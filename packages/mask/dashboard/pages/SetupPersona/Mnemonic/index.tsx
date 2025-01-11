@@ -15,7 +15,7 @@ import { useMnemonicWordsPuzzle } from '../../../hooks/useMnemonicWordsPuzzle.js
 import { ComponentToPrint } from './ComponentToPrint.js'
 import { Words } from './Words.js'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {

@@ -6,7 +6,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { Collectible } from './Collectible.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

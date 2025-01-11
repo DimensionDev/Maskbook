@@ -2,7 +2,7 @@ import { DialogContent, dialogClasses, Grid, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { QRCode } from 'react-qrcode-logo'
 import { InjectedDialog } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

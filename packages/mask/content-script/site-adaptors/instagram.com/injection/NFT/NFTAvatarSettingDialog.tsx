@@ -11,7 +11,7 @@ import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AvatarNextID } from '@masknet/web3-providers/types'
 import { useCurrentVisitingIdentity } from '../../../../components/DataSource/useActivatedUI.js'
 import { getAvatarId } from '../../utils/user.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()(() => ({
     root: {},

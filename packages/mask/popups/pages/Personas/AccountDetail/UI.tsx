@@ -7,7 +7,7 @@ import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
 
 import { WalletList } from '../../../components/WalletSettingList/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     avatar: {

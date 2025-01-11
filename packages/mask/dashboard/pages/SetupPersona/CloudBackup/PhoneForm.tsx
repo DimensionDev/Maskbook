@@ -8,7 +8,8 @@ import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext
 import { BackupAccountType } from '@masknet/shared-base'
 import { Scenario, Locale } from '../../../utils/type.js'
 import { sendCode } from '../../../utils/api.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

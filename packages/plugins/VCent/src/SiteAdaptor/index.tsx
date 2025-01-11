@@ -4,7 +4,7 @@ import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { VCentDialog } from './TweetDialog.js'
 import { base } from '../base.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { usePostInfoPostID } from '../../../../plugin-infra/src/site-adaptor/PostContext.js'
 
 const site: Plugin.SiteAdaptor.Definition = {

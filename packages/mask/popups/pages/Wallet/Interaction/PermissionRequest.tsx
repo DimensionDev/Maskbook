@@ -8,7 +8,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { EIP2255RequestedPermission } from '@masknet/sdk'
 import Services from '#services'
 import { useTitle } from 'react-use'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyle = makeStyles()({

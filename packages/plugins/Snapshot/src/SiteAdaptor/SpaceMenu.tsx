@@ -4,7 +4,7 @@ import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { Avatar, MenuItem, Stack, Typography, Divider, type MenuProps } from '@mui/material'
 import type { DAOResult } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     menu: {

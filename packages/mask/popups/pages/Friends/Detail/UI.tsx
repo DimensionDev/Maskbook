@@ -8,7 +8,7 @@ import { useTheme } from '@mui/system'
 import { CopyButton, EmptyStatus } from '@masknet/shared'
 import { ConnectedAccounts } from './ConnectAccounts/index.js'
 import type { Profile } from '../common.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

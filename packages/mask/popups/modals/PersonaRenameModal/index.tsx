@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const PersonaRenameModal = memo<ActionModalBaseProps>(function PersonaRenameModal() {
     const theme = useTheme()

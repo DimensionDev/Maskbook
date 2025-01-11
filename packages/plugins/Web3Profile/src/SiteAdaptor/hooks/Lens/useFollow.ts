@@ -12,7 +12,7 @@ import { BroadcastType, type FollowModuleTypedData } from '@masknet/web3-provide
 import { type SnackbarKey, useCustomSnackbar, type SnackbarMessage, type ShowSnackbarOptions } from '@masknet/theme'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
 import { fetchJSON } from '@masknet/plugin-infra/dom/context'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export function useFollow(

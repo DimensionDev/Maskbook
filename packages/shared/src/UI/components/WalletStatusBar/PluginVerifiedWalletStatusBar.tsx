@@ -26,7 +26,7 @@ import { useWalletName } from './hooks/useWalletName.js'
 import { WalletDescription } from './WalletDescription.js'
 import { WalletMenuItem } from './WalletMenuItem.js'
 import { SelectProviderModal, WalletStatusModal, useMenuConfig } from '../../../index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

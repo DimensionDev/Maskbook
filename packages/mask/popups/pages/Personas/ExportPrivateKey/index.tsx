@@ -9,7 +9,7 @@ import { BottomController } from '../../../components/BottomController/index.js'
 import { useNavigate, Link as RouterLink } from 'react-router-dom'
 import { PopupRoutes } from '@masknet/shared-base'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const Component = memo(function ExportPrivateKey() {
     const theme = useTheme()

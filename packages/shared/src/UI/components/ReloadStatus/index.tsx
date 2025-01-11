@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps, Button } from '@mui/material'
 import { memo } from 'react'
 import type { ReactNode } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     statusBox: {

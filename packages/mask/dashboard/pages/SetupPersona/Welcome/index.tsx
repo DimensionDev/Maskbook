@@ -12,7 +12,7 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { Article } from './Article.js'
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

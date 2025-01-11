@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, formatFileSize } from '@masknet/shared'
 import type { BackupAccountType } from '@masknet/shared-base'

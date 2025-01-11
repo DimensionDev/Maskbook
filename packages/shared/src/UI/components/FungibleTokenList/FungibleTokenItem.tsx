@@ -13,7 +13,7 @@ import { useTokenBlocked, useTokenTrusted } from './useTokenBlocked.js'
 import { FormattedBalance } from '../../wallet/index.js'
 import { DotLoading, NetworkIcon } from '../index.js'
 import { useAsyncFn } from 'react-use'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     icon: {

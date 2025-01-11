@@ -10,7 +10,7 @@ import { isSameNFT } from '../../../utils/index.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {

@@ -6,7 +6,7 @@ import GuideStep from '../../../components/GuideStep/index.js'
 import { useThemeSettings } from '../../../components/DataSource/useActivatedUI.js'
 import { searchHomeLinkName } from '../utils/selector.js'
 import { ButtonStyle } from '../constant.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const HORIZONTAL_BREAKPOINT = 1265
 const VERTICAL_BREAKPOINT = 855

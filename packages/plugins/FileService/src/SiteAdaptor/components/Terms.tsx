@@ -4,7 +4,7 @@ import { useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { useTermsConfirmed } from '../storage.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     terms: {

@@ -6,7 +6,7 @@ import { type NonFungibleTokenOrder, formatBalance, formatCurrency, isZero } fro
 import { SourceProviderSwitcher } from '@masknet/shared'
 import { Context } from '../Context/index.js'
 import { Stack } from '@mui/system'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

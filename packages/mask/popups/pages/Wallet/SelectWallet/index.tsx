@@ -16,7 +16,8 @@ import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
 import { ProfilePhotoType } from '../type.js'
 import urlcat from 'urlcat'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

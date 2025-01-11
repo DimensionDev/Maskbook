@@ -4,7 +4,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { forwardRef, memo } from 'react'
 import { NetworkOptions, Networks } from '../constants.js'
 import { useFilters } from './filters.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {

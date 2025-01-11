@@ -6,7 +6,8 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {

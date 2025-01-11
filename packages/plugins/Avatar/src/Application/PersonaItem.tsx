@@ -9,7 +9,7 @@ import { Icons } from '@masknet/icons'
 import { NFTAvatar } from './NFTAvatar.js'
 import { NFTInfo } from './NFTInfo.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

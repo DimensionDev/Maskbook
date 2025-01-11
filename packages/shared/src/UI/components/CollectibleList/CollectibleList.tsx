@@ -9,7 +9,7 @@ import { ReloadStatus } from '../index.js'
 import { CollectibleItem, type ChangeEventOptions, type SelectableProps } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './type.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'

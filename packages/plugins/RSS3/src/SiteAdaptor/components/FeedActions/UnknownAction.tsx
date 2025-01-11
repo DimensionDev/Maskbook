@@ -4,7 +4,7 @@ import { Typography } from '@mui/material'
 import { type FeedCardProps } from '../base.js'
 import { useAddressLabel } from '../../hooks/index.js'
 import { Label } from '../common.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {

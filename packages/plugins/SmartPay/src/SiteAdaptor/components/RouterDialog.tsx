@@ -18,7 +18,7 @@ import { PluginSmartPayMessages } from '../../message.js'
 import { Deploy } from './Deploy.js'
 import { InEligibilityTips } from './InEligibilityTips.js'
 import { SmartPayContent } from './SmartPayContent.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ isDeployPage: boolean }>()((theme, { isDeployPage }) => ({
     dialogContent: {

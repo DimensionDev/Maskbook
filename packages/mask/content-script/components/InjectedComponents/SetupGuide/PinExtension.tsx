@@ -4,7 +4,7 @@ import { MaskColorVar, makeStyles } from '@masknet/theme'
 import { Extension as ExtensionIcon } from '@mui/icons-material'
 import { Box, Button, Typography } from '@mui/material'
 import { WizardDialog } from './WizardDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface PinExtensionProps {
     onDone?: () => void

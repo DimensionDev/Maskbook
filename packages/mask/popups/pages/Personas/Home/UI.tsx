@@ -13,7 +13,7 @@ import { SelectProvider } from '../../../components/SelectProvider/index.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { useModalNavigate } from '../../../components/index.js'
 import type { ConnectedWalletInfo } from '../type.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

@@ -11,7 +11,7 @@ import ConnectButton from './ConnectButton.js'
 import { FollowersPage } from './FollowersPage.js'
 import { ProfileTab } from '../constants.js'
 import { PluginCyberConnectRPC } from '../messages.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

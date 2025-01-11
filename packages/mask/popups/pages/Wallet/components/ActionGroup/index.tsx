@@ -7,7 +7,7 @@ import { Box, Typography, type BoxProps } from '@mui/material'
 import { memo } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useSupportedChains } from '@masknet/plugin-trader'
 
 const useStyles = makeStyles()((theme) => {

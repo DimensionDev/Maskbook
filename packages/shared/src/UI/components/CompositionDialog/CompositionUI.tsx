@@ -9,7 +9,7 @@ import { CharLimitIndicator } from './CharLimitIndicator.js'
 import { PluginEntryRender, type PluginEntryRenderRef } from './PluginEntryRender.js'
 import { TypedMessageEditor, type TypedMessageEditorRef } from './TypedMessageEditor.js'
 import { CrossIsolationMessages, EMPTY_OBJECT } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

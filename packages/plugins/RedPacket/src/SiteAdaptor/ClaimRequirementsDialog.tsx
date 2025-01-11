@@ -19,7 +19,7 @@ import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { getEnumAsArray } from '@masknet/kit'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) => ({
     container: {

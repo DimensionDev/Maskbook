@@ -3,7 +3,7 @@ import { makeStyles } from '@masknet/theme'
 import { Button, Stack, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { PersonaSelectPanel } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

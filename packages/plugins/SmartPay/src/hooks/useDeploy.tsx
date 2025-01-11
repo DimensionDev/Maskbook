@@ -20,7 +20,7 @@ import { EVMWeb3 } from '@masknet/web3-providers'
 import type { ManagerAccount } from '../type.js'
 import { PluginSmartPayMessages } from '../message.js'
 import { openPopupWindow, signWithPersona, hasPaymentPassword } from '@masknet/plugin-infra/dom/context'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function useDeploy(
     signPersona?: PersonaInformation,

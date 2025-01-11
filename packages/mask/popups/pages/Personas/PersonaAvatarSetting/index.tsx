@@ -20,7 +20,8 @@ import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useQueryClient } from '@tanstack/react-query'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

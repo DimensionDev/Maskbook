@@ -3,7 +3,7 @@ import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import { resolveNextIDPlatformName } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useRef, cloneElement, useEffect, useState, type ReactElement, type RefObject } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     title: {

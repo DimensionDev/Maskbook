@@ -11,7 +11,7 @@ import { openPopupWindow, queryPersonaAvatar, signWithPersona } from '@masknet/p
 import { useAllPersonas, useCurrentPersona, useLastRecognizedProfile } from '../hooks/index.js'
 import { ProfileCard, ProfileCardSkeleton } from './ProfileCard.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

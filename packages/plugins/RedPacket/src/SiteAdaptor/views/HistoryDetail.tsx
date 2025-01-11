@@ -9,7 +9,7 @@ import { useLocation, useSearchParams } from 'react-router-dom'
 import { ClaimRecord } from '../components/ClaimRecord.js'
 import { RedPacketRecord } from '../components/RedPacketRecord.js'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

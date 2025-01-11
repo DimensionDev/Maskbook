@@ -8,7 +8,7 @@ import { DashboardRoutes, PopupRoutes, type PersonaInformation } from '@masknet/
 import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

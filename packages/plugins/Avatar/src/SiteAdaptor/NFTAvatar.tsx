@@ -22,7 +22,7 @@ import type { ChainId } from '@masknet/web3-shared-evm'
 import { Box, Button, List, ListItem, Skeleton, Typography } from '@mui/material'
 import type { AllChainsNonFungibleToken, SelectTokenInfo } from '../types.js'
 import { NFTImage } from './NFTImage.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {},

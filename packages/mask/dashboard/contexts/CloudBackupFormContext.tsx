@@ -5,7 +5,7 @@ import { z } from 'zod'
 import { useTabs } from '@masknet/theme'
 import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
 import guessCallingCode from 'guess-calling-code'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export interface CloudBackupFormInputs {

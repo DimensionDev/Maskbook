@@ -9,7 +9,7 @@ import { ApproveStateType, useERC20TokenApproveCallback } from '@masknet/web3-ho
 import { toFixed } from '@masknet/web3-shared-base'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { Button, Dialog, DialogActions, DialogContent, DialogTitle, InputBase, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

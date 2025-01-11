@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Dialog, DialogActions, DialogContent, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

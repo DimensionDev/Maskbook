@@ -6,7 +6,7 @@ import { CurrencyType, resolveCurrencyFullName } from '@masknet/web3-shared-base
 import { Box, Typography, useTheme } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     networkList: {

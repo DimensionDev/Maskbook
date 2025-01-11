@@ -5,7 +5,7 @@ import { useMemo } from 'react'
 import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { AccountLabel, Label } from '../common.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {

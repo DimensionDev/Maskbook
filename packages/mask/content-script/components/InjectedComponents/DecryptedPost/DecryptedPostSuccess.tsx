@@ -1,5 +1,5 @@
 import Services from '#services'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { PostInfoContext, usePostInfoDetails, usePostInfoPostIVIdentifier } from '@masknet/plugin-infra/content-script'

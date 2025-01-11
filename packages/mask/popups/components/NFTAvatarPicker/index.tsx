@@ -10,7 +10,7 @@ import { CollectionList } from './CollectionList.js'
 import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes, type BindingProof } from '@masknet/shared-base'
 import { useModalNavigate } from '../index.js'
 import { Flags } from '@masknet/flags'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     picker: {

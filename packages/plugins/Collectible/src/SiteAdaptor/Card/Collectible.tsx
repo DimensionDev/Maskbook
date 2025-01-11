@@ -21,7 +21,7 @@ import { AboutTab } from './tabs/AboutTab.js'
 import { ActivitiesTab } from './tabs/ActivitiesTab.js'
 import { DetailsTab } from './tabs/DetailsTab.js'
 import { OffersTab } from './tabs/OffersTab.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ currentTab: string }>()((theme, { currentTab }) => {
     return {

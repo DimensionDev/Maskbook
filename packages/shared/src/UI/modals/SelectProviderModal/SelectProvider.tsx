@@ -9,7 +9,7 @@ import { DialogContent } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { GuideDialog } from './GuideDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

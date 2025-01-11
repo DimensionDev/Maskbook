@@ -7,7 +7,7 @@ import { formatMarketCap, formatSupply } from '@masknet/web3-shared-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import type { RefAttributes } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

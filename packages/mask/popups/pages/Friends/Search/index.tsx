@@ -3,7 +3,7 @@ import { InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useCurrentLinkedPersona } from '@masknet/shared'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

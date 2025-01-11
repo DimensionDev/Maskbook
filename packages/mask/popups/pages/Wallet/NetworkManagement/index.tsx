@@ -7,7 +7,8 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hooks/index.js'
 import { useNetworks } from '@masknet/web3-hooks-base'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

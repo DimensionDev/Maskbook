@@ -12,7 +12,7 @@ import {
     type ReactNode,
 } from 'react'
 import { useCopyToClipboard } from 'react-use'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     copy: {

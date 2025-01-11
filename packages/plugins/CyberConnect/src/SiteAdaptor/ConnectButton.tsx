@@ -7,7 +7,7 @@ import { useChainContext, useWallet } from '@masknet/web3-hooks-base'
 import CyberConnect, { Env } from '@cyberlab/cyberconnect'
 import { PluginCyberConnectRPC } from '../messages.js'
 import { WalletConnectedBoundary } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

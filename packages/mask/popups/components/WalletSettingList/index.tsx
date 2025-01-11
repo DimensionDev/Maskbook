@@ -27,7 +27,7 @@ import { useMemo, useCallback, memo } from 'react'
 import { LoadingBase } from '@masknet/theme'
 import { Link as RouterLink } from 'react-router-dom'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface WalletItemProps {
     proof: BindingProof

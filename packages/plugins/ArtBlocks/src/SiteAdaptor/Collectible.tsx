@@ -11,7 +11,7 @@ import { ActionBar } from './ActionBar.js'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import { ArtBlocksLogoUrl } from '../constants.js'
 import { ChainBoundary } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -1,5 +1,5 @@
 import Services from '#services'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useWallet } from '@masknet/web3-hooks-base'

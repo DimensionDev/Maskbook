@@ -11,7 +11,7 @@ import { SettingsContext } from './Context.js'
 import { Section } from './Section.js'
 import { GasForm } from './GasForm.js'
 import { GasSettingsType } from './types/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

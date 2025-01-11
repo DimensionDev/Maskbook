@@ -7,7 +7,7 @@ import { SelectRecipientsDialogUI } from './SelectRecipientsDialog.js'
 import { useTwitterIdByWalletSearch } from './useTwitterIdByWalletSearch.js'
 import { resolveNextIDPlatform, resolveValueToSearch, usePersonasFromNextID } from '@masknet/shared'
 import { useContacts } from './useContacts.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface SelectRecipientsUIProps {
     items: LazyRecipients

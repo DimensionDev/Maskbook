@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { PopoverListTrigger } from './PopoverListTrigger.js'
 import { PopoverListItem } from './PopoverListItem.js'
 import { type PropsWithChildren, useState } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {

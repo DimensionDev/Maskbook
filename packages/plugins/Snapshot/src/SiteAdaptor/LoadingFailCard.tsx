@@ -1,7 +1,7 @@
 import { Component, type PropsWithChildren, type ReactNode } from 'react'
 import { SnapshotCard } from './SnapshotCard.js'
 import { Typography, Button, Box } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export class LoadingFailCard extends Component<
     PropsWithChildren<{

@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { ApplicationBoardModal } from '@masknet/shared'
 import { RedPacketMetaKey, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'

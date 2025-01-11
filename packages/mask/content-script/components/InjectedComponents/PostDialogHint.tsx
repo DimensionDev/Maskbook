@@ -3,7 +3,7 @@ import { MaskColors, ShadowRootTooltip, makeStyles } from '@masknet/theme'
 import { IconButton } from '@mui/material'
 import { memo, type JSX } from 'react'
 import GuideStep from '../GuideStep/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface TooltipConfigProps {
     placement?: 'bottom' | 'top'

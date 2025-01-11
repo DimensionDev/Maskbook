@@ -5,7 +5,7 @@ import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { base } from '../base.js'
 import { useState } from 'react'
 import { CrossChainBridgeDialog } from './CrossChainBridgeDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

@@ -19,7 +19,8 @@ import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/we
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {

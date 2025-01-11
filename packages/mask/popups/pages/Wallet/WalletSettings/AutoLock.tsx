@@ -5,7 +5,7 @@ import { millisecondsToMinutes, millisecondsToHours } from 'date-fns'
 import { useStyles } from './useStyles.js'
 import { WalletAutoLockSettingModal } from '../../../modals/modal-controls.js'
 import { useWalletAutoLockTime } from '../hooks/useWalletAutoLockTime.js'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 export function AutoLock() {
     const { classes, theme } = useStyles()

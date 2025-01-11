@@ -9,7 +9,7 @@ import { delay } from '@masknet/kit'
 import { useAsync, useAsyncFn } from 'react-use'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function Component() {
     const navigate = useNavigate()

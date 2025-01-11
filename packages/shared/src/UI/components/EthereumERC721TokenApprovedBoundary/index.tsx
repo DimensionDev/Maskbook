@@ -4,7 +4,7 @@ import { makeStyles, type ActionButtonProps, ActionButton } from '@masknet/theme
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
 import { useERC721ContractIsApproveForAll, useERC721ContractSetApproveForAllCallback } from '@masknet/web3-hooks-evm'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()(() => ({}))
 

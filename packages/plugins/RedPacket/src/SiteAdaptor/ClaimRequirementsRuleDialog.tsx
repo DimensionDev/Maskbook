@@ -3,7 +3,7 @@ import { Box, Dialog, DialogContent, DialogTitle, Typography } from '@mui/materi
 import { memo } from 'react'
 import { Alert } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

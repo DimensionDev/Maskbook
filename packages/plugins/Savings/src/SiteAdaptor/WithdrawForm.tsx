@@ -27,7 +27,8 @@ import { useAsyncFn } from 'react-use'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

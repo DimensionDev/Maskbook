@@ -1,4 +1,4 @@
-import { Select, Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/react/macro'
 import { makeStyles } from '@masknet/theme'
 import { formatCompact, isSameAddress, trimZero, type Transaction } from '@masknet/web3-shared-base'
 import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'

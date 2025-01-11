@@ -4,7 +4,7 @@ import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { Link, Stack, Typography, useTheme } from '@mui/material'
 import { Box } from '@mui/system'
 import { useActivatedPluginSiteAdaptor } from '@masknet/plugin-infra/content-script'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     provider: {

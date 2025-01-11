@@ -5,7 +5,7 @@ import Services from '#services'
 import { Box, Typography } from '@mui/material'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     text: {

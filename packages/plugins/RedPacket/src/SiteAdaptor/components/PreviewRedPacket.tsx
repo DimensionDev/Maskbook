@@ -1,7 +1,7 @@
 import { useMemo, type HTMLProps } from 'react'
 import { RedPacketEnvelope } from './RedPacketEnvelope.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { multipliedBy, rightShift } from '@masknet/web3-shared-base'
 
 interface Props extends HTMLProps<HTMLDivElement> {}

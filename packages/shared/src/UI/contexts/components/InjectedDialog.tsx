@@ -20,7 +20,7 @@ import {
 } from '@mui/material'
 import { sharedUIComponentOverwrite, sharedUINetworkIdentifier } from '../base/index.js'
 import { DialogDismissIcon } from './DialogDismissIcon.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 interface StyleProps {

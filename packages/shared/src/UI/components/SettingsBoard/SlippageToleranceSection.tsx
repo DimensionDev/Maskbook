@@ -4,7 +4,7 @@ import { formatBalance, multipliedBy } from '@masknet/web3-shared-base'
 import { Section } from './Section.js'
 import { SlippageToleranceForm } from './SlippageToleranceForm.js'
 import { SettingsContext } from './Context.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -17,7 +17,7 @@ import { BindPanelUI } from './BindPanelUI.js'
 import { useBindPayload } from '../hooks/useBindPayload.js'
 import { usePersonaSign } from '../hooks/usePersonaSign.js'
 import { useWalletSign } from '../hooks/useWalletSign.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface BindDialogProps {
     open: boolean

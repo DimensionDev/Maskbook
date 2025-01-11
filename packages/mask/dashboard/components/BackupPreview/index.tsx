@@ -19,7 +19,7 @@ import {
 } from '@mui/material'
 import { Box, type BoxProps } from '@mui/system'
 import { memo } from 'react'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

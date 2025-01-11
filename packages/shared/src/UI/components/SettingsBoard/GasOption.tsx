@@ -8,7 +8,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatWeiToGwei } from '@masknet/web3-shared-evm'
 import type { SupportedLanguages } from '@masknet/public-api'
 import { SettingsContext } from './Context.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

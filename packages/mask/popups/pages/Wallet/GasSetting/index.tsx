@@ -7,7 +7,8 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from '../../../hooks/index.js'
 import { GasSetting1559 } from './GasSetting1559.js'
 import { Prior1559GasSetting } from './Prior1559GasSetting.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()(() => ({

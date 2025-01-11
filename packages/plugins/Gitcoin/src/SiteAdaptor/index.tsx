@@ -8,7 +8,7 @@ import { PLUGIN_META_KEY, PLUGIN_NAME } from '../constants.js'
 import { PreviewCard } from './PreviewCard.js'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import { useMemo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const isGitcoin = (x: string): boolean => {
     return /^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/.test(x)

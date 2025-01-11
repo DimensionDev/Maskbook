@@ -10,7 +10,7 @@ import { memo, type MouseEvent } from 'react'
 import { useConnectedWallets } from '../../hooks/useConnected.js'
 import { ActionGroup } from '../ActionGroup/index.js'
 import { WalletAssetsValue } from './WalletAssetsValue.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ disabled: boolean }>()((theme, { disabled }) => {
     const isDark = theme.palette.mode === 'dark'

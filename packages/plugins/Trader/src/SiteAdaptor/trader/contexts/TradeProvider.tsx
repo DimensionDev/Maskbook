@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type {

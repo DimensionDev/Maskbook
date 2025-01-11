@@ -12,7 +12,7 @@ import Services from '#services'
 import { PopupContext } from '../../../hooks/index.js'
 import { ActionModal, useActionModal } from '../../../components/index.js'
 import { WalletItem } from '../../../components/WalletItem/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

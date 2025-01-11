@@ -2,7 +2,7 @@ import { useActivatedPluginsSiteAdaptor, type Plugin, usePluginTransField } from
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
 import type { TypedMessage } from '@masknet/typed-message'
 import { Box, Chip } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {

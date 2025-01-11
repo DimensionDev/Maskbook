@@ -12,7 +12,7 @@ import { useAsyncFn } from 'react-use'
 import { Spinner } from '../../components/Spinner.js'
 import { WalletIcon } from '../../components/WalletIcon/index.js'
 import { InjectedDialog } from '../../contexts/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

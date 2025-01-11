@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -40,7 +40,8 @@ import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme, props) => ({

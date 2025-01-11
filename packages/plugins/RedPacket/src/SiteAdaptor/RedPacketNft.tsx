@@ -35,7 +35,8 @@ import { Stack } from '@mui/system'
 import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({

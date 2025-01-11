@@ -1,5 +1,5 @@
 /* eslint-disable no-irregular-whitespace */
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'

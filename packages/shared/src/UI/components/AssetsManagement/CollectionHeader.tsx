@@ -5,7 +5,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
 import { useUserAssets } from './AssetsProvider.js'
 import { CollectionsContext } from './CollectionsProvider.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

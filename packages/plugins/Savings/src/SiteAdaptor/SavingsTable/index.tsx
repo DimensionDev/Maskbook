@@ -5,7 +5,7 @@ import { useCallback } from 'react'
 import { TabType, type SavingsProtocol } from '../../types.js'
 import { SavingsRow } from './SavingsRow.js'
 import { LidoProtocol } from '../../protocols/LDOProtocol.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {

@@ -15,7 +15,7 @@ import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { TrendingView } from './trending/TrendingView.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({

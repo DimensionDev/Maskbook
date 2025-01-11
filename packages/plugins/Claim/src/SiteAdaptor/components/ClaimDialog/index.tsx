@@ -5,7 +5,7 @@ import { DialogActions, DialogContent } from '@mui/material'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { AirDropActivities } from '../AirDropActivities/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     actions: {

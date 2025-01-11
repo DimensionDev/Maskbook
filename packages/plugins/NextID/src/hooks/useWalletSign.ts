@@ -1,7 +1,7 @@
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { useCustomSnackbar } from '@masknet/theme'
 import { EVMWeb3 } from '@masknet/web3-providers'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export const useWalletSign = (message?: string, address?: string) => {

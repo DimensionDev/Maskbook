@@ -8,7 +8,7 @@ import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { getCost, getLastAction } from '../share.js'
 import { AccountLabel, formatValue, Label, isRegisteringENS } from '../common.js'
-import { Select, Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {

@@ -4,7 +4,7 @@ import { Link } from '@mui/material'
 import { formatPrice, formatText } from '../utils/index.js'
 import { NFTAvatarRing } from './NFTAvatarRing.js'
 import type { AvatarToken } from '@masknet/web3-providers/types'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

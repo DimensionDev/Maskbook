@@ -5,7 +5,7 @@ import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { Close } from '@mui/icons-material'
 import { alpha, Dialog, DialogContent, DialogTitle, IconButton, Typography } from '@mui/material'
 import { PluginSmartPayMessages } from '../../message.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

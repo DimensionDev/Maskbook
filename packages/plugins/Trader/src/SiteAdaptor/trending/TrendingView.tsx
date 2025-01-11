@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { NFTList, PluginCardFrameMini, PluginEnableBoundary } from '@masknet/shared'
 import { Days, EMPTY_LIST, NetworkPluginID, PluginID, type SocialIdentity } from '@masknet/shared-base'

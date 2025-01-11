@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { makeStyles } from '@masknet/theme'
 import { type RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'

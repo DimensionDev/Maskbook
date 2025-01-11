@@ -11,7 +11,7 @@ import { useAsync } from 'react-use'
 import urlcat from 'urlcat'
 import { VALUABLES_VCENT_URL } from '../constants.js'
 import { PluginVCentRPC } from '../messages.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyle = makeStyles()((theme) => ({
     root: {

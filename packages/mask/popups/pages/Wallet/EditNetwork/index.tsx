@@ -16,7 +16,8 @@ import { type ZodCustomIssue, type z } from 'zod'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { createSchema } from './network-schema.js'
 import { useWarnings } from './useWarnings.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

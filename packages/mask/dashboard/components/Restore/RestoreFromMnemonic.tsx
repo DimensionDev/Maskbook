@@ -6,7 +6,7 @@ import { useList } from 'react-use'
 import { usePersonaRecovery } from '../../contexts/index.js'
 import { DesktopMnemonicConfirm } from '../Mnemonic/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     error: {

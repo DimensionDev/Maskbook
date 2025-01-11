@@ -2,7 +2,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { PersonaSelectPanel, type PositionOption } from '../../components/PersonaSelectPanel/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 type PositionStyle = {
     top?: number

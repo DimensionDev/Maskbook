@@ -27,7 +27,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { ResetWalletContext } from '../context.js'
 import Services from '#services'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {

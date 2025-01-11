@@ -10,7 +10,7 @@ import { downloadFile } from '../../helpers.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList, SelectableFileList } from './FileList.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const Tabs: typeof MuiTabs = styled(MuiTabs)(({ theme }) => ({
     display: 'flex',

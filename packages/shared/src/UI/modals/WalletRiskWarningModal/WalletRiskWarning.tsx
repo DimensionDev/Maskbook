@@ -6,7 +6,7 @@ import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/s
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useWeb3State } from '@masknet/web3-hooks-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

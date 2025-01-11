@@ -16,7 +16,7 @@ import { TransactionStatusType, type RecognizableError } from '@masknet/web3-sha
 import { useWeb3State, useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useFormatMessage } from '../../translate.js'
 
 const useStyles = makeStyles()({

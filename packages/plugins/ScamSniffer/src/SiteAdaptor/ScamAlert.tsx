@@ -8,7 +8,7 @@ import { openWindow } from '@masknet/shared-base-ui'
 import type { ScamResult } from '@scamsniffer/detector'
 import { PluginScamRPC } from '../messages.js'
 import { twitterDomainMigrate } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

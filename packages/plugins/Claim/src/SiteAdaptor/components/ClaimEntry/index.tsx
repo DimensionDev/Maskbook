@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { ApplicationEntry } from '@masknet/shared'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { PluginClaimMessage } from '../../../message.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ClaimEntryProps {
     disabled: boolean

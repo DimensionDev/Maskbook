@@ -34,7 +34,7 @@ import { memo, useCallback, useMemo, useState } from 'react'
 import { ReplaceType, type GasSetting } from '../../pages/Wallet/type.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

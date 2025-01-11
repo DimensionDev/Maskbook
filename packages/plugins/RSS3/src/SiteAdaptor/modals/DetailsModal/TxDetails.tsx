@@ -8,7 +8,7 @@ import { format as formatDateTime } from 'date-fns'
 import { useMemo } from 'react'
 import { FeedActions } from '../../components/FeedActions/index.js'
 import { formatTimestamp, ONE_WEEK } from '../../components/share.js'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     group: {

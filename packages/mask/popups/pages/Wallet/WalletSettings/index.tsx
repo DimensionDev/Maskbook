@@ -22,7 +22,8 @@ import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
 import { HidingScamTx } from './HidingScamTx.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 function getPathIndex(path?: string) {

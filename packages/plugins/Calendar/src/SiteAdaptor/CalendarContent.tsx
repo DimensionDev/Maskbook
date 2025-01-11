@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
 import { EventProvider } from '@masknet/web3-providers/types'

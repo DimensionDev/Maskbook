@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import type { OwnerERC721TokenInfo } from '../types.js'
 import { ImageLoader } from './ImageLoader.js'
 import ModelView from './ModelView.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const useStyles = makeStyles()((theme) => ({
     box: {

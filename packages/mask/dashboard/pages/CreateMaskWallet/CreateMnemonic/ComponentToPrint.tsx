@@ -7,7 +7,7 @@ import { NetworkType } from '@masknet/web3-shared-evm'
 import { EVMNetworkResolver } from '@masknet/web3-providers'
 import { PrintBackground } from '../../../assets/index.js'
 import { MnemonicReveal } from '../../../components/Mnemonic/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ComponentToPrintProps extends RefAttributes<unknown> {
     words: string[]

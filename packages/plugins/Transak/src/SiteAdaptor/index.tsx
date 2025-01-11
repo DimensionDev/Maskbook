@@ -5,7 +5,7 @@ import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { base } from '../base.js'
 import { PluginTransakMessages } from '../messages.js'
 import { BuyTokenGlobalInjection } from './BuyTokenGlobalInjection.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

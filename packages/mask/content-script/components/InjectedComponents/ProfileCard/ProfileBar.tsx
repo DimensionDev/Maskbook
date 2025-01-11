@@ -13,7 +13,7 @@ import { Box, Link, Skeleton, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { AvatarDecoration } from './AvatarDecoration.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({

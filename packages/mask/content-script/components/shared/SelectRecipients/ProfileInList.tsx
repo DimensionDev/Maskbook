@@ -7,7 +7,7 @@ import { truncate } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import Highlighter from 'react-highlight-words'
 import { Avatar } from '../../../../shared-ui/components/Avatar.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

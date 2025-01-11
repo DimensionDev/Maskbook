@@ -16,7 +16,7 @@ import {
 import { memo } from 'react'
 import { FormattedCurrency } from '../../wallet/FormattedCurrency.js'
 import { ProgressiveText } from '../ProgressiveText/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     container: {

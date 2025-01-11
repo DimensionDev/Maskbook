@@ -14,7 +14,7 @@ import { PersonaItem } from './PersonaItem.js'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { RoutePaths } from './Routes.js'
 import { useAvatarManagement } from '../contexts/AvatarManagement.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function PersonaPage() {
     const navigate = useNavigate()

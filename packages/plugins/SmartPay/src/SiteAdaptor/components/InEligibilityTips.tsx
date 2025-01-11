@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { DialogContent, Link, Typography } from '@mui/material'
 import { memo } from 'react'
 import { SmartPayBanner } from './SmartPayBanner.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogContent: {

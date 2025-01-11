@@ -1,7 +1,7 @@
 import { usePostInfoSource } from '@masknet/plugin-infra/content-script'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import type { BoxProps } from '@mui/system'
 
 const useStyles = makeStyles()((theme) => {

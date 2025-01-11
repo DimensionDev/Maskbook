@@ -49,7 +49,7 @@ import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { TrendingViewDescriptor } from './TrendingViewDescriptor.js'
 import { TrendingViewContext } from './context.js'
 import { useActivatedPluginSiteAdaptor, useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean

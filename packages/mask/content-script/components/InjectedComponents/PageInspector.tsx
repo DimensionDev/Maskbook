@@ -5,7 +5,7 @@ import { createInjectHooksRenderer, useActivatedPluginsSiteAdaptor } from '@mask
 import { MaskMessages } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
 import { useAutoPasteFailedDialog } from './AutoPasteFailedDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const GlobalInjection = createInjectHooksRenderer(
     useActivatedPluginsSiteAdaptor.visibility.useAnyMode,

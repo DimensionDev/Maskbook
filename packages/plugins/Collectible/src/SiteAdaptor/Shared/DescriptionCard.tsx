@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { Markdown } from '@masknet/shared'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

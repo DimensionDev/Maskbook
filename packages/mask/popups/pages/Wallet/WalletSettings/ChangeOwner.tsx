@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useStyles } from './useStyles.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function ChangeOwner() {
     const { classes, cx, theme } = useStyles()

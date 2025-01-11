@@ -23,7 +23,7 @@ import { formatCurrency } from '@masknet/web3-shared-base'
 import { resolveActivityTypeBackgroundColor } from '@masknet/web3-providers/helpers'
 import { useNonFungibleTokenActivities } from '../../trending/useTrending.js'
 import { TrendingViewContext } from './context.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ isPopper: boolean; themeMode?: 'dim' | 'dark' | 'light' }>()(
     (theme, { isPopper, themeMode }) => ({

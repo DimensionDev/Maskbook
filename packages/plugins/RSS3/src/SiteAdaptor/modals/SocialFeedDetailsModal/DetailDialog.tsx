@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'

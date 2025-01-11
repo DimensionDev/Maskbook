@@ -6,7 +6,7 @@ import { useAddressLabel } from '../../hooks/index.js'
 import { type FeedCardProps } from '../base.js'
 import { Label, AccountLabel } from '../common.js'
 import { TokenOperationAction } from './TokenOperationAction.js'
-import { Select, Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summary: {

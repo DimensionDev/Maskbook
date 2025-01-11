@@ -1,5 +1,5 @@
 import type { ProfileIdentifier } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function useAuthorDifferentMessage(
     author: ProfileIdentifier | null,

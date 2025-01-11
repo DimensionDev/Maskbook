@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ElementAnchor, EmptyStatus, ReloadStatus } from '@masknet/shared'
 import { LoadingBase, makeStyles } from '@masknet/theme'

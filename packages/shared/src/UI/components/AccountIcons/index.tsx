@@ -1,4 +1,4 @@
-import { Select, Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { SocialAddressType, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'

@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupModalRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'

@@ -19,7 +19,7 @@ import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } 
 import { type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useGasOptionsMenu } from '../../hooks/index.js'
 import { useGasRatio } from '../../hooks/useGasRatio.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface GasSettingMenuProps {
     defaultGasLimit: string | undefined

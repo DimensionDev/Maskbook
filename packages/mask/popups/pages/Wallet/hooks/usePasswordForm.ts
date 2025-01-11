@@ -2,7 +2,7 @@ import { useMemo } from 'react'
 import { z as zod } from 'zod'
 import { useForm, type UseFormReturn } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui, type I18nContext } from '@lingui/react'
 
 function defineSchema(refine: boolean, _: I18nContext['_']) {

@@ -8,7 +8,7 @@ import { useAllPersonas } from '@masknet/plugin-infra/content-script'
 import { PluginSmartPayMessages } from '../../message.js'
 import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface SmartPayEntryProps {
     disabled: boolean

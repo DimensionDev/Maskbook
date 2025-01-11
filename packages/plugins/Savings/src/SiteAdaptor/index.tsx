@@ -4,7 +4,7 @@ import { ApplicationEntry } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { SavingsDialog } from './SavingsDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

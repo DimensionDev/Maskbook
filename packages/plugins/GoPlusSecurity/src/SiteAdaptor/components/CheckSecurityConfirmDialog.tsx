@@ -1,7 +1,7 @@
 import { Button, DialogContent, Stack, Typography } from '@mui/material'
 import { InjectedDialog } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

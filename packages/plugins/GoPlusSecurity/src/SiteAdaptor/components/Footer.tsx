@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Box, Link, Stack, Typography } from '@mui/material'
 import { PLUGIN_OFFICIAL_WEBSITE } from '../../constants.js'
 import { GoPlusLabLogo } from '../icons/Logo.js'

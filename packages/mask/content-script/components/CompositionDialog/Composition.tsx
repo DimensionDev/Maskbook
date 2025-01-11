@@ -17,7 +17,7 @@ import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
 import { usePersonasFromDB, useCurrentPersona } from '../../../shared-ui/hooks/index.js'
 import { EncryptionMethodType } from './EncryptionMethodSelector.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {

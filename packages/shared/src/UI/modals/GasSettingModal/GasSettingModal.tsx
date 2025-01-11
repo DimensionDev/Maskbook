@@ -4,7 +4,7 @@ import { GasOptionType } from '@masknet/web3-shared-base'
 import { GasSettingModal, InjectedDialog } from '@masknet/shared'
 import { GasSettingSupported } from './GasSettingSupported.js'
 import type { BigNumber } from 'bignumber.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

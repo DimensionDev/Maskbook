@@ -18,7 +18,7 @@ import { useVerifyContent } from '../../../hooks/index.js'
 import { useBaseUIRuntime } from '../../contexts/index.js'
 import { BindingDialog, type BindingDialogProps } from '../BindingDialog/index.js'
 import { EmojiAvatar } from '../EmojiAvatar/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {

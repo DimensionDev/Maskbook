@@ -11,7 +11,7 @@ import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { twitterBase } from '../base.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

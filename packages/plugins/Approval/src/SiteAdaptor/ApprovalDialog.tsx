@@ -10,7 +10,7 @@ import { useActivatedPluginSiteAdaptorAny } from '@masknet/plugin-infra/content-
 import { ApprovalTokenContent } from './ApprovalTokenContent.js'
 import { ApprovalNFTContent } from './ApprovalNFTContent.js'
 import { useMemo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme, props) => ({
     dialogRoot: {

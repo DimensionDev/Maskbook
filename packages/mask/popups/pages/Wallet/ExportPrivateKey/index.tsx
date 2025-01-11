@@ -17,7 +17,7 @@ import { saveFileFromBuffer } from '../../../../shared/index.js'
 import { MnemonicDisplay } from '../../../components/MnemonicDisplay/index.js'
 import { PrivateKeyDisplay } from '../../../components/PrivateKeyDisplay/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 enum TabType {
     Mnemonic = 'Mnemonic',

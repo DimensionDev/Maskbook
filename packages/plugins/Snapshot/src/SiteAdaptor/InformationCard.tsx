@@ -12,7 +12,7 @@ import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { SNAPSHOT_IPFS } from '../constants.js'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 interface InfoFieldProps extends withClasses<'field'>, PropsWithChildren {
     title: ReactNode

@@ -9,7 +9,8 @@ import { PopupRoutes } from '@masknet/shared-base'
 
 import Services from '#services'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

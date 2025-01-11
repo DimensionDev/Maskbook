@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 interface StyleProps {

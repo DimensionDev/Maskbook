@@ -35,7 +35,7 @@ import { useQuery } from '@tanstack/react-query'
 import { memo, useMemo, type JSX } from 'react'
 import { formatTokenBalance } from '../../../../../shared/index.js'
 import { parseAmountFromERC20ApproveInput, parseReceiverFromERC20TransferInput } from '../../utils.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ cateType?: string }>()((theme, { cateType = '' }, __) => {
     const colorMap: Record<string, string> = {

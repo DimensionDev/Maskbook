@@ -6,7 +6,7 @@ import { z } from 'zod'
 import { UserContext } from '../../shared-ui/index.js'
 import Services from '#services'
 import { passwordRegexp } from '../utils/regexp.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export type BackupFormInputs = {

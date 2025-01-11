@@ -10,7 +10,7 @@ import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
 import { WalletAssetTabs } from '../../type.js'
 import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',

@@ -10,7 +10,7 @@ import { SmartPayEntry } from './components/SmartPayEntry.js'
 import { SmartPayDialog } from './components/SmartPayDialog.js'
 import { InjectReceiveDialog } from './components/ReceiveDialog.js'
 import { InjectSmartPayDescriptionDialog } from './components/SmartPayDescriptionDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

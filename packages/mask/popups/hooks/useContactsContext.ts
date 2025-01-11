@@ -6,7 +6,7 @@ import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@maskn
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from '@masknet/shared-base-ui'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 interface ContextOptions {

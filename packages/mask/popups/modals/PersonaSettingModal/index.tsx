@@ -9,7 +9,7 @@ import { PersonaAvatar } from '../../components/PersonaAvatar/index.js'
 import { ActionModal, useModalNavigate, type ActionModalBaseProps } from '../../components/index.js'
 import { UserContext } from '../../../shared-ui/index.js'
 import { PersonaPublicKey } from '../../components/PersonaPublicKey/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     avatarItem: {

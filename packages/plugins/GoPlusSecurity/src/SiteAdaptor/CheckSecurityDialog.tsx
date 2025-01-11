@@ -1,4 +1,5 @@
-import { Trans, t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'

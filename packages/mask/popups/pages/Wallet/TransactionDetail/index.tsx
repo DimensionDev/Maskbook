@@ -31,7 +31,7 @@ import { ReplaceType, WalletAssetTabs } from '../type.js'
 import { modifyTransaction, parseReceiverFromERC20TransferInput } from '../utils.js'
 import type { TransactionState } from './types.js'
 import { useTransactionLogs } from './useTransactionLogs.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     statusTitle: {

@@ -16,7 +16,7 @@ import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { BackupPreview } from '../../BackupPreview/index.js'
 import { PersonaContext } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface RestoreProps {
     onRestore: () => Promise<void>

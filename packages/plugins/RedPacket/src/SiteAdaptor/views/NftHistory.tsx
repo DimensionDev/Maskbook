@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { RoutePaths } from '@masknet/plugin-redpacket'
 import { ApplicationBoardModal, EmptyStatus, LoadingStatus, NetworkTab } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'

@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { timeout } from '@masknet/kit'
 import type { PageIndicator } from '@masknet/shared-base'
 import { Zerion } from '@masknet/web3-providers'

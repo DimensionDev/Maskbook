@@ -22,7 +22,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { useBalance } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {

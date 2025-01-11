@@ -10,7 +10,7 @@ import { parseURLs, PluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ProfileView } from './ProfileView.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

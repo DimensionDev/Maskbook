@@ -8,7 +8,7 @@ import {
 import { PersistentStorages, type PluginID } from '@masknet/shared-base'
 import { Boundary, ShadowRootTooltip, getMaskColor, makeStyles, useBoundedPopperProps } from '@masknet/theme'
 import { List, ListItemButton, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export interface Application {
     entry: Plugin.SiteAdaptor.ApplicationEntry

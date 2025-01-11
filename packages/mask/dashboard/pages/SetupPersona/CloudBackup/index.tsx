@@ -13,7 +13,8 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { fetchDownloadLink } from '../../../utils/api.js'
 import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
 import { PhoneForm } from './PhoneForm.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

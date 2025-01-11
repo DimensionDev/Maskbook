@@ -18,7 +18,7 @@ import { toFixed } from '@masknet/web3-shared-base'
 import { useRemoteControlledDialog } from '@masknet/shared-base-ui'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { PluginClaimMessage } from '../message.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function useClaimAirdrop(
     chainId: ChainId,

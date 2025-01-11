@@ -9,7 +9,7 @@ import { Box, Button, Popover, Radio, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useManagers } from '../../hooks/useManagers.js'
 import { type ManagerAccount, ManagerAccountType } from '../../type.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ManagePopoverProps {
     open: boolean

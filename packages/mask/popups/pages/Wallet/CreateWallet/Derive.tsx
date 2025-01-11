@@ -17,7 +17,8 @@ import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { WalletRenameModal } from '../../../modals/modal-controls.js'
 import { DeriveStateContext } from './context.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

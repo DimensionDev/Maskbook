@@ -4,7 +4,7 @@ import { Stack, ThemeProvider, Typography } from '@mui/material'
 import { CryptoScamDB } from '@masknet/web3-providers'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 interface PreviewCardProps {
     links: readonly string[]

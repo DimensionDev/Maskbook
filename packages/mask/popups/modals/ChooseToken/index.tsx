@@ -3,7 +3,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { memo, useState, type ReactNode } from 'react'
 import { BottomDrawer, TokenPicker, type BottomDrawerProps, type TokenPickerProps } from '../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ChooseTokenModalProps extends Omit<BottomDrawerProps, 'title'>, Omit<TokenPickerProps, 'title' | 'classes'> {
     title?: ReactNode

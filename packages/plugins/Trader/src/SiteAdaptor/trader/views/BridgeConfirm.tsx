@@ -1,4 +1,5 @@
-import { msg, Select, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Select, Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import {

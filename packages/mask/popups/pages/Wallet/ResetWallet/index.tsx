@@ -5,7 +5,7 @@ import { memo, useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import { DashboardRoutes } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

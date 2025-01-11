@@ -2,7 +2,7 @@ import { InjectedDialog, type InjectedDialogProps } from '@masknet/shared'
 import { useLayoutEffect } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function RouterDialog(props: InjectedDialogProps) {
     const { pathname } = useLocation()

@@ -29,7 +29,8 @@ import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 export const Component = memo(() => {

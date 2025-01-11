@@ -18,7 +18,7 @@ import { PermissionRequest } from './PermissionRequest.js'
 import { SwitchChainRequest } from './SwitchChainRequest.js'
 import { AddChainRequest } from './AddChainRequest.js'
 import { delay } from '@masknet/kit'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     left: {

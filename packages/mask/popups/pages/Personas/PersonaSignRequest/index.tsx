@@ -11,7 +11,7 @@ import { usePersonasFromDB } from '../../../../shared-ui/index.js'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { BottomController } from '../../../components/BottomController/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const Component = memo(function PersonaSignRequest() {
     const navigate = useNavigate()

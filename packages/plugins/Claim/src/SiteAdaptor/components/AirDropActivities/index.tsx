@@ -7,7 +7,7 @@ import { useAirDropActivity } from '../../../hooks/useAirDropActivity.js'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { EmptyStatus } from '@masknet/shared'
 import { useToggle } from 'react-use'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

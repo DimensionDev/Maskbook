@@ -6,7 +6,8 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -80,7 +81,7 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
         if (!amount || !tokenDetail) return
 
         share?.(
-            _(msg`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim. 
+            _(msg`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.
  Install https://mask.io to explore more airdrop activities.`),
         )
     }, [amount, tokenDetail?.symbol])

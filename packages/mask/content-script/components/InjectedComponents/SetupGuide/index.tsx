@@ -16,7 +16,7 @@ import { PinExtension } from './PinExtension.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { VerifyNextID } from './VerifyNextID.js'
 import { CheckConnection } from './CheckConnection.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 // #region setup guide ui

@@ -3,7 +3,7 @@ import { useWallet } from '@masknet/web3-hooks-base'
 import { Box, ListItem, Typography } from '@mui/material'
 import { useStyles } from './useStyles.js'
 import { WalletRenameModal } from '../../../modals/modal-controls.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function Rename() {
     const wallet = useWallet()

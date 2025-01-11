@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, refs) => {

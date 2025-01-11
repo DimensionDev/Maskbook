@@ -1,4 +1,5 @@
-import { Select, t, Trans } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
+import { Select, Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { formatFileSize } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'

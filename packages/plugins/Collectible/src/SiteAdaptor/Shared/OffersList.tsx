@@ -6,7 +6,7 @@ import { Box, Button, Stack } from '@mui/material'
 import { useMemo } from 'react'
 import { Context } from '../Context/index.js'
 import { OfferCard } from './OfferCard.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

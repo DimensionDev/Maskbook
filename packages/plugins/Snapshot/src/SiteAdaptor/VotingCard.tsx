@@ -15,7 +15,7 @@ import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
 import { getSnapshotVoteType } from '../utils.js'
 import { PluginSnapshotRPC } from '../messages.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

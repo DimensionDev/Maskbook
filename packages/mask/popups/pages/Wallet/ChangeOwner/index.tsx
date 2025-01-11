@@ -23,7 +23,8 @@ import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

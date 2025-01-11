@@ -9,7 +9,7 @@ import Services from '#services'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { useWalletAutoLockTime } from '../../pages/Wallet/hooks/useWalletAutoLockTime.js'
 import { isUndefined } from 'lodash-es'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     list: {

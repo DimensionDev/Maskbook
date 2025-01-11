@@ -13,7 +13,8 @@ import { DefineMapping, SecurityMessageLevel } from '../constants.js'
 import { TokenPanel } from './TokenPanel.js'
 import { RiskCard, RiskCardUI } from './RiskCard.js'
 import { resolveGoLabLink } from '../../utils/helper.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 interface TokenCardProps {

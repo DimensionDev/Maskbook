@@ -2,7 +2,7 @@ import { DialogContent } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog } from '@masknet/shared'
 import { BridgeStack } from './components/BridgeStack.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

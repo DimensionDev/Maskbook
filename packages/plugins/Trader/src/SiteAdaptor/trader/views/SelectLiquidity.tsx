@@ -9,7 +9,7 @@ import { memo, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTrade } from '../contexts/index.js'
 import { useLiquidityResources } from '../hooks/useLiquidityResources.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

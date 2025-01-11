@@ -3,7 +3,7 @@ import { Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { type CompositionType, useCompositionContext } from '@masknet/plugin-infra/content-script'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     chip: {

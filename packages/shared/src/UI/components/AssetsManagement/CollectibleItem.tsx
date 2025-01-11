@@ -12,7 +12,7 @@ import { memo, useCallback, useMemo, type HTMLProps, type ReactNode } from 'reac
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
     card: {

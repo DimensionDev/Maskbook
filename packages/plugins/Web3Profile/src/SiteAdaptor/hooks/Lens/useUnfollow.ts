@@ -12,7 +12,7 @@ import { cloneDeep } from 'lodash-es'
 import { useCallback, useRef, useState, type MouseEvent } from 'react'
 import type { AbiItem } from 'web3-utils'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export function useUnfollow(

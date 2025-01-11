@@ -27,7 +27,7 @@ import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
 import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
 import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

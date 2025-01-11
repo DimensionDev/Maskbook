@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { openPopupWindow } from '@masknet/plugin-infra/dom/context'
 import {
     AddCollectiblesModal,

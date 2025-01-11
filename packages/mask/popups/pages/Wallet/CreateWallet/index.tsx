@@ -9,7 +9,8 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

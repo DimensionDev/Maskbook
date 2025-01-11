@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'

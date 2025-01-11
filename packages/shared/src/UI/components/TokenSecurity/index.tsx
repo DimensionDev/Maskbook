@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import type { SecurityAPI } from '@masknet/web3-providers/types'
 import { CrossIsolationMessages } from '@masknet/shared-base'
 import { DefineMapping, SecurityMessageLevel } from './Common.js'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType

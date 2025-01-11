@@ -28,7 +28,7 @@ import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface Props extends withClasses<'text' | 'button' | 'root'> {
     identity?: SocialIdentity

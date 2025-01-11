@@ -4,7 +4,7 @@ import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../index.js'
 import { Icons } from '@masknet/icons'
 import { CountryCodePicker } from '../CountryCodePicker/index.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'variant'> {

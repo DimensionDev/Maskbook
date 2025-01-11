@@ -10,7 +10,8 @@ import Services from '#services'
 import { useNavigate } from 'react-router-dom'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { noop } from 'lodash-es'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 interface ShowPrivateKeyDrawerProps extends BottomDrawerProps {

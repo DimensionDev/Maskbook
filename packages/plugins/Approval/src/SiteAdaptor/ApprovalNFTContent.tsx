@@ -21,7 +21,7 @@ import {
     type NonFungibleCollection,
 } from '@masknet/web3-shared-base'
 import { useQuery } from '@tanstack/react-query'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({

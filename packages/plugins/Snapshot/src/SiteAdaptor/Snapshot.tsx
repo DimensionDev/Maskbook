@@ -18,7 +18,7 @@ import { SnapshotContext } from '../context.js'
 import { ProgressTab } from './ProgressTab.js'
 import { ProposalTab } from './ProposalTab.js'
 import { useProposal } from './hooks/useProposal.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

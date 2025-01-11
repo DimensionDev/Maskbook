@@ -6,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
 import { useTipsUserGuide } from '../../../storage/index.js'
 import { TipButton } from '../../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     postButtonWrapper: {

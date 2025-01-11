@@ -15,7 +15,7 @@ import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
 import { isArray } from 'lodash-es'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

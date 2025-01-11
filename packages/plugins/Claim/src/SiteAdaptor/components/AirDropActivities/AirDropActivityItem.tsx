@@ -10,7 +10,7 @@ import { ProviderType, type ChainId } from '@masknet/web3-shared-evm'
 import { ImageIcon } from '@masknet/shared'
 import { Icons } from '@masknet/icons'
 import { useClaimAirdrop } from '../../../hooks/useClaimAirdrop.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     badge: {

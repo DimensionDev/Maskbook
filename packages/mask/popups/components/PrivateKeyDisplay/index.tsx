@@ -8,7 +8,7 @@ import { Box, Typography, alpha } from '@mui/material'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { WalletBalance } from '../index.js'
 import { useToggle } from '@react-hookz/web'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

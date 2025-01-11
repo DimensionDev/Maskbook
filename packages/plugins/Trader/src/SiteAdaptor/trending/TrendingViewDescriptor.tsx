@@ -7,7 +7,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Stack, Typography } from '@mui/material'
 import { TrendingViewContext } from './context.js'
 import { PluginDescriptor } from './PluginDescriptor.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     isTokenTagPopper: boolean

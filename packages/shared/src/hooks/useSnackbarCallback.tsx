@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useCustomSnackbar, usePopupCustomSnackbar } from '@masknet/theme'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function useSnackbarCallback<P extends (...args: any[]) => Promise<T>, T>(options: SnackbarCallback<P, T>): P
 /** Prefer the first overload. */

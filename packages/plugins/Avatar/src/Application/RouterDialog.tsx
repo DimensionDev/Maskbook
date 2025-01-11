@@ -5,7 +5,7 @@ import { DialogContent } from '@mui/material'
 import { useLayoutEffect } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { AvatarRoutes, RoutePaths } from './Routes.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { addCollectibles } from '../emitter.js'
 
 const useStyles = makeStyles()({

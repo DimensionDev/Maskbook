@@ -17,7 +17,7 @@ import type { TransactionDetail } from '../../pages/Wallet/type.js'
 import type { GasConfig } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { TokenType, isSameAddress } from '@masknet/web3-shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

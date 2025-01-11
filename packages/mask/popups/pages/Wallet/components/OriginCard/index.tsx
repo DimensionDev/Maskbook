@@ -4,7 +4,7 @@ import { makeStyles } from '@masknet/theme'
 import { Icons, type GeneratedIcon } from '@masknet/icons'
 import DisconnectModal from '../DisconnectModal/index.js'
 import { SOCIAL_MEDIA_ROUND_ICON_MAPPING } from '@masknet/shared'
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

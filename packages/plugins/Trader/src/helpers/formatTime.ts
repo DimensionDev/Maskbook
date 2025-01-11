@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 
 export function formatTime(seconds: number) {
     if (seconds < 60) return t`${seconds}s`

@@ -5,7 +5,7 @@ import { Icons } from '@masknet/icons'
 import { DashboardRoutes, type PersonaIdentifier, type PersonaInformation, type PluginID } from '@masknet/shared-base'
 import { type PersonaConnectStatus, useCurrentPersonaConnectStatus } from '../../../index.js'
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

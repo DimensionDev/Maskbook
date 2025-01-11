@@ -4,7 +4,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { ExpandMore as ExpandMoreIcon, Error as ErrorIcon } from '@mui/icons-material'
 import { TokenIcon } from '../TokenIcon/index.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

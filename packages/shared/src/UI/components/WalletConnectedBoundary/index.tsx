@@ -12,7 +12,7 @@ import { useAsync } from 'react-use'
 import { SmartPayBundler } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectProviderModal, WalletRiskWarningModal } from '../../modals/modals.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     button: {

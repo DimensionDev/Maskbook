@@ -12,7 +12,7 @@ import { CollectibleDetailUI } from '../CollectibleDetail/index.js'
 import { useAsync } from 'react-use'
 import type { InteractionItemProps } from './interaction.js'
 import { TokenType } from '@masknet/web3-shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     title: { fontSize: 28 },

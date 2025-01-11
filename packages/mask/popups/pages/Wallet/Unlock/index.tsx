@@ -9,7 +9,7 @@ import { makeStyles } from '@masknet/theme'
 import Services from '#services'
 import { PasswordField } from '../../../components/PasswordField/index.js'
 import { PopupHomeTabType } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

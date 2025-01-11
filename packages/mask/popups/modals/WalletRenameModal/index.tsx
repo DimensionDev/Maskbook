@@ -9,7 +9,7 @@ import { useSingletonModal } from '@masknet/shared-base-ui'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useContacts } from '@masknet/web3-hooks-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface WalletRenameDrawerProps extends BottomDrawerProps {
     wallet?: Wallet

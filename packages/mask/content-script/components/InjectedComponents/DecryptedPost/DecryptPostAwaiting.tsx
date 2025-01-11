@@ -3,7 +3,7 @@ import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { DecryptionProgress } from './types.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
-import { Select } from '@lingui/macro'
+import { Select } from '@lingui/react/macro'
 interface DecryptPostAwaitingProps {
     type?: DecryptionProgress
     /** The author in the payload */

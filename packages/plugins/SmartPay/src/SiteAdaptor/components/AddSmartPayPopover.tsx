@@ -13,7 +13,7 @@ import { useQueryQualifications } from '../../hooks/useQueryQualifications.js'
 import { SmartPayContext } from '../../hooks/useSmartPayContext.js'
 import { PluginSmartPayMessages } from '../../message.js'
 import { openDashboard } from '@masknet/plugin-infra/dom/context'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

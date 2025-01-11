@@ -6,7 +6,7 @@ import { base } from '../base.js'
 import { TipTaskManager } from '../contexts/index.js'
 import { guideStorageDefaultValue, setupStorage, storageDefaultValue } from '../storage/index.js'
 import { TipsRealmContent } from './components/TipsRealmContent/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

@@ -6,7 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { CardDialogContent } from './CardDialogContent.js'
 import { TabType } from '../../types.js'
 import { Context } from '../Context/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {

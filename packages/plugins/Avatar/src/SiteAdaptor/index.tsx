@@ -8,7 +8,7 @@ import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { NFTAvatarDialog } from '../Application/NFTAvatarDialog.js'
 import { base } from '../base.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 function clickHandler() {
     CrossIsolationMessages.events.avatarSettingsDialogEvent.sendToLocal({

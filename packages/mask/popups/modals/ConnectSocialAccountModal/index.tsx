@@ -9,7 +9,7 @@ import { ConnectSocialAccounts } from '../../components/ConnectSocialAccounts/in
 import { useSupportSocialNetworks } from '../../hooks/index.js'
 import Services from '#services'
 import { EventMap } from '../../../shared/definitions/event.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function ConnectSocialAccountModal(props) {
     const { data: definedSocialNetworks = EMPTY_LIST } = useSupportSocialNetworks()

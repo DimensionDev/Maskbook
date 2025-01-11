@@ -9,7 +9,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { EVMChainResolver, EVMExplorerResolver } from '@masknet/web3-providers'
 import { resolveProjectLinkOnArtBlocks, resolveUserLinkOnArtBlocks } from '../pipes/index.js'
 import type { Project } from '../types.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

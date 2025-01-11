@@ -7,7 +7,7 @@ import { isSameAddress, type SearchResultType } from '@masknet/web3-shared-base'
 import { Divider, Menu, MenuItem, Typography, type MenuProps } from '@mui/material'
 import { groupBy, toPairs } from 'lodash-es'
 import { memo, useCallback, type PropsWithChildren } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const MENU_ITEM_HEIGHT = 40
 

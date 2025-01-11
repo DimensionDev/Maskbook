@@ -15,7 +15,7 @@ import {
 import { ApplicationBoardContent } from './ApplicationBoard.js'
 import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     openSettings: boolean

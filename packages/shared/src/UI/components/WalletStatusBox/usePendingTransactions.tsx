@@ -8,7 +8,7 @@ import { TransactionStatusType } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { useState } from 'react'
 import { TransactionList } from './TransactionList.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     summaryWrapper: {

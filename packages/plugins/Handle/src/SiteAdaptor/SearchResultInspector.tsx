@@ -10,7 +10,7 @@ import { EVMUtils } from '@masknet/web3-providers'
 import { PluginHeader } from './PluginHeader.js'
 import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

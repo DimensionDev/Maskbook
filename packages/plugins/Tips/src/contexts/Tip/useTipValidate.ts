@@ -5,7 +5,7 @@ import { useChainContext, useFungibleTokenBalance } from '@masknet/web3-hooks-ba
 import { isGreaterThan, isLessThanOrEqualTo, rightShift, TokenType } from '@masknet/web3-shared-base'
 import type { ValidationTuple } from '../../types/index.js'
 import type { TipContextOptions } from './TipContext.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 type TipValidateOptions = Pick<

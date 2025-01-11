@@ -6,7 +6,7 @@ import { memo } from 'react'
 import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import urlcat from 'urlcat'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

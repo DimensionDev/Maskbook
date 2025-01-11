@@ -8,7 +8,7 @@ import { downloadFile } from '../../helpers.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
 import { FileList } from './FileList.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ProviderConfig {
     name: ReactNode

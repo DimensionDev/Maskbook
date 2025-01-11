@@ -4,7 +4,7 @@ import { Button, IconButton, Typography, Alert, AlertTitle, styled } from '@mui/
 import { ExpandLess, ExpandMore } from '@mui/icons-material'
 import { useBuildInfoMarkdown, type ErrorBoundaryError } from './context.js'
 import { makeStyles } from '@masknet/theme'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     message: { flex: 1 },

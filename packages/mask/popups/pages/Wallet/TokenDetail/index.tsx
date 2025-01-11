@@ -29,7 +29,7 @@ import { DIMENSION, TrendingChart } from './TrendingChart.js'
 import { useCoinTrendingStats } from './useCoinTrendingStats.js'
 import { useTokenPrice } from './useTokenPrice.js'
 import { useTrending } from './useTrending.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ valueAlign: 'left' | 'center' }>()((theme, { valueAlign }) => {
     return {

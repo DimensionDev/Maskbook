@@ -30,7 +30,7 @@ import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()(() => ({
     title: {

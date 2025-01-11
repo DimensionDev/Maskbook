@@ -8,7 +8,7 @@ import { usePetConstants } from '@masknet/web3-shared-evm'
 import { PetShareDialog } from './PetShareDialog.js'
 import { PetSetDialog } from './PetSetDialog.js'
 import type { ConfigRSSNode } from '../types.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 enum PetFriendNFTStep {
     SetFriendNFT = 'set',

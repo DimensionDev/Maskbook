@@ -3,7 +3,7 @@ import { DialogContent, dialogClasses } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { InjectedDialog, WalletStatusBox } from '@masknet/shared'
 import { CrossIsolationMessages } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

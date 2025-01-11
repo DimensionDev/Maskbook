@@ -9,7 +9,7 @@ import { uniqWith } from 'lodash-es'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { useNonFungibleTokenParams } from '../../../hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

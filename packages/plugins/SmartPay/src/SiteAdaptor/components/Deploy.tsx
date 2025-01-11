@@ -23,7 +23,7 @@ import { ManagerAccountType, type ManagerAccount } from '../../type.js'
 import { CreateSuccessDialog } from './CreateSuccessDialog.js'
 import { ManagePopover } from './ManagePopover.js'
 import { SmartPayBanner } from './SmartPayBanner.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     walletDescription: {

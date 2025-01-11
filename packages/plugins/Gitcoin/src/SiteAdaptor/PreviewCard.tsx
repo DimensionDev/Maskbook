@@ -10,7 +10,7 @@ import { TabContext, TabPanel } from '@mui/lab'
 import type { Round } from '../apis/index.js'
 import { openWindow } from '@masknet/shared-base-ui'
 import { DEFAULT_PROJECT_BANNER } from '../constants.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     card: {
         padding: theme.spacing(0, 1.5, 1.5),

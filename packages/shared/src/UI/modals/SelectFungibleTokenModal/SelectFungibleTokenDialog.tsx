@@ -10,7 +10,7 @@ import { useMemo, useState } from 'react'
 import { TokenListMode } from '../../components/FungibleTokenList/type.js'
 import { FungibleTokenList, SelectNetworkSidebar, type FungibleTokenListProps } from '../../components/index.js'
 import { InjectedDialog, useBaseUIRuntime } from '../../contexts/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface StyleProps {
     compact: boolean

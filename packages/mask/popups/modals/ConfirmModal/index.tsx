@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import type { SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles } from '@masknet/theme'

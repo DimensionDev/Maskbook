@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { Icons } from '@masknet/icons'
 import { getMaskColor, MaskDialog } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, Stack, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ConfirmSynchronizePasswordDialogProps {
     open: boolean

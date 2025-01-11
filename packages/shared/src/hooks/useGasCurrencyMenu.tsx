@@ -9,7 +9,7 @@ import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { useSmartPayConstants } from '@masknet/web3-shared-evm'
 import { useMenuConfig } from './useMenu.js'
 import { TokenIcon } from '../index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {

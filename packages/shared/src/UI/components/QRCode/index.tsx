@@ -3,7 +3,7 @@ import qr from 'qrcode'
 import { useEffect, useRef, useState } from 'react'
 import { Typography } from '@mui/material'
 import { blue } from '@mui/material/colors'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface QRProps {
     text: string

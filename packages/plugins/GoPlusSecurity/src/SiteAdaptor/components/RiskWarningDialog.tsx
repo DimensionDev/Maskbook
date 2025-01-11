@@ -7,7 +7,8 @@ import { makeStyles } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

@@ -20,7 +20,8 @@ import urlcat from 'urlcat'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { TransferTabType } from '../type.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

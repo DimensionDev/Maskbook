@@ -11,7 +11,7 @@ import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {

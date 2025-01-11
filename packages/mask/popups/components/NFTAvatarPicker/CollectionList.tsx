@@ -5,7 +5,7 @@ import { useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, Skeleton, type BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface CollectionListProps extends BoxProps {
     loading: boolean

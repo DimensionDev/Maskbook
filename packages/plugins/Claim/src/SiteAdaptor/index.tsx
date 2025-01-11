@@ -9,7 +9,7 @@ import { PluginClaimMessage } from '../message.js'
 import { ClaimDialog } from './components/ClaimDialog/index.js'
 import { ClaimEntry } from './components/ClaimEntry/index.js'
 import { ClaimSuccessDialog } from './components/ClaimSuccessDialog/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,

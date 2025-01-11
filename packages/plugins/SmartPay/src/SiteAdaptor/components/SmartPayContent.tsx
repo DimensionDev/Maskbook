@@ -49,7 +49,7 @@ import { PluginSmartPayMessages } from '../../message.js'
 import { useERC20TokenAllowance } from '@masknet/web3-hooks-evm'
 import { AddSmartPayPopover } from './AddSmartPayPopover.js'
 import { AccountsManagerPopover } from './AccountsManagePopover.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

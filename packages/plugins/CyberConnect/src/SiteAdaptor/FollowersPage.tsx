@@ -6,7 +6,7 @@ import type { IFollowIdentity } from '../Worker/apis/index.js'
 import type { ProfileTab } from '../constants.js'
 import { useFollowers } from '../hooks/useFollowers.js'
 import { FollowRow } from './FollowTab.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface FollowersPageProps {
     address?: string

@@ -6,7 +6,7 @@ import { Box, Button, Typography } from '@mui/material'
 import { memo } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -9,7 +9,7 @@ import {
     DialogContent,
 } from '@mui/material'
 import type { Permissions } from 'webextension-polyfill'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface RequestPermissionProps extends Permissions.AnyPermissions {
     onRequestApprove(): void

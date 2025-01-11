@@ -1,6 +1,6 @@
 import { MaskColorVar } from '@masknet/theme'
 import { Stack, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function NotFound() {
     return (

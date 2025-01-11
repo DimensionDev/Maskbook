@@ -6,7 +6,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { Typography, useTheme } from '@mui/material'
 import { useCheckPermissions, useGrantPermissions } from '../DataSource/usePluginHostPermission.js'
 import { PossiblePluginSuggestionUISingle } from './DisabledPluginSuggestion.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface PermissionBoundaryProps extends PropsWithChildren {
     permissions: string[]

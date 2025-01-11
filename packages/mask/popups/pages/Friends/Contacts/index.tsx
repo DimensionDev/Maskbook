@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { ContactCard } from '../ContactCard/index.js'
 import { type Friend } from '../../../hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {

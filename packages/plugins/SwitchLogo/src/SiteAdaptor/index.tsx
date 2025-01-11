@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PLUGIN_ID } from '../constants.js'
 import { SwitchLogoDialog } from './SwitchLogoDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const recommendFeature = {
     description: <Trans>Switch between the classic Twitter logo and the new one.</Trans>,

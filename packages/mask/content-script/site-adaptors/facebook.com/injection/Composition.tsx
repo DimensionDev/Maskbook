@@ -7,7 +7,7 @@ import { Composition } from '../../../components/CompositionDialog/Composition.j
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { taskOpenComposeBoxFacebook, taskCloseNativeComposeBoxFacebook } from '../automation/openComposeBox.js'
 import { startWatch } from '../../../utils/startWatch.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()(() => ({

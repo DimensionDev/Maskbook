@@ -1,5 +1,5 @@
 import type { SiteAdaptorUI } from '@masknet/types'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { i18n } from '@lingui/core'
 
 export const i18NOverwriteTwitter: SiteAdaptorUI.Customization.I18NOverwrite = {

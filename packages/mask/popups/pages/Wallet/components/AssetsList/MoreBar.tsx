@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { ActionButton, type ActionButtonProps } from '@masknet/theme'
 import { memo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface MoreBarProps extends ActionButtonProps {
     isExpand: boolean

@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     description: {

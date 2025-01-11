@@ -3,7 +3,7 @@ import { Box, ListItem, Typography, Switch } from '@mui/material'
 import { useStyles } from './useStyles.js'
 import { hidingScamSettings } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function HidingScamTx() {
     const { classes } = useStyles()

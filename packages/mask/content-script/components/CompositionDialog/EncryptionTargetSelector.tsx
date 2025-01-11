@@ -12,7 +12,7 @@ import { E2EUnavailableReason } from './CompositionUI.js'
 import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import Services from '#services'
-import { Plural, Trans } from '@lingui/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     optionTitle: {

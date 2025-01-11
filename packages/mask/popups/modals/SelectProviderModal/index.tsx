@@ -3,7 +3,7 @@ import { Box, Typography, useTheme } from '@mui/material'
 import { type ActionModalBaseProps, ActionModal } from '../../components/index.js'
 import { SelectProvider } from '../../components/SelectProvider/index.js'
 import { useSearchParams } from 'react-router-dom'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export const SelectProviderModal = memo<ActionModalBaseProps>(function SelectProviderModal(props) {
     const theme = useTheme()

@@ -10,7 +10,7 @@ import { PopupContext } from '../../hooks/usePopupContext.js'
 import { ECKeyIdentifier, NetworkPluginID, type Wallet } from '@masknet/shared-base'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

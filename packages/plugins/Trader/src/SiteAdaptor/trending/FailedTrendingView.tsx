@@ -3,7 +3,7 @@ import { ThemeProvider } from '@mui/material'
 import { TrendingCard, type TrendingCardProps } from './TrendingCard.js'
 import { EmptyStatus } from '@masknet/shared'
 import { TrendingViewDescriptor, type TrendingViewDescriptorProps } from './TrendingViewDescriptor.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {

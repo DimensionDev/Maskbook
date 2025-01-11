@@ -7,7 +7,8 @@ import { ActionModal, type ActionModalBaseProps } from '../../components/index.j
 import { UserContext } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {

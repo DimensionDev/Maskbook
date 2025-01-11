@@ -13,7 +13,8 @@ import { useTitle, ContactsContext, PageTitleContext } from '../../../hooks/inde
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modal-controls.js'
 import { ContactType } from '../type.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; hasError?: boolean }>()(

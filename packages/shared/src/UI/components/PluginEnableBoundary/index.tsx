@@ -6,7 +6,7 @@ import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
 import { Stack, Typography } from '@mui/material'
 import { makeStyles, ActionButton } from '@masknet/theme'
 import { setPluginMinimalModeEnabled } from '@masknet/plugin-infra/dom/context'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

@@ -6,7 +6,7 @@ import type { User, ShowMeta, EssayRSSNode } from '../types.js'
 import { MASK_TWITTER, PunkIcon, Punk3D } from '../constants.js'
 import { useUser } from './useUser.js'
 import { useLingui } from '@lingui/react'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 
 export function useEssay(user: User) {
     return useAsyncRetry(async () => {

@@ -7,7 +7,7 @@ import { getMaskColor, makeStyles, MaskColorVar, LoadingBase } from '@masknet/th
 import { InjectedDialog, WalletStatusBox } from '@masknet/shared'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { formatPersonaFingerprint, NetworkPluginID, type PersonaInformation } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     persona: {

@@ -16,7 +16,7 @@ import { LoadingBase, makeStyles } from '@masknet/theme'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { useTip } from '../../contexts/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

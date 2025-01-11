@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'

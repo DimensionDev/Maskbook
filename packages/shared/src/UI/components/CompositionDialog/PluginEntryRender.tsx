@@ -13,7 +13,7 @@ import { ClickableChip, GrantPermissions, InjectedDialog, usePluginHostPermissio
 import { EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { requestHostPermission } from '@masknet/plugin-infra/dom/context'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     sup: {

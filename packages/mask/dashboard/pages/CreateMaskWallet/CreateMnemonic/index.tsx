@@ -23,7 +23,7 @@ import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useMnemonicWordsPuzzle, type PuzzleWord } from '../../../hooks/useMnemonicWordsPuzzle.js'
 import { ResetWalletContext } from '../context.js'
 import { ComponentToPrint } from './ComponentToPrint.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

@@ -18,7 +18,7 @@ import {
     leftShift,
 } from '@masknet/web3-shared-base'
 import { ChainBoundary, EmptyStatus, LoadingStatus, TokenIcon } from '@masknet/shared'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIcon?: string } | void>()(
     (theme, props) => ({

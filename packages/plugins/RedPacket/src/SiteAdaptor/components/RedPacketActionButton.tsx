@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { RedPacketMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
 import { FireflyRedPacket } from '@masknet/web3-providers'

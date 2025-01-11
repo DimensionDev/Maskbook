@@ -10,7 +10,7 @@ import {
     type PluginWrapperComponentProps,
 } from '@masknet/plugin-infra/content-script'
 import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface PluginWrapperProps extends React.PropsWithChildren {
     open?: boolean

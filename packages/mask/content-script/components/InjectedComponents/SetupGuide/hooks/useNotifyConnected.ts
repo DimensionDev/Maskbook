@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useCustomSnackbar } from '@masknet/theme'
 import { activatedSiteAdaptorUI } from '../../../../site-adaptor-infra/ui.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export function useNotifyConnected() {

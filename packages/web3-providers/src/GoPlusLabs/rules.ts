@@ -1,6 +1,6 @@
 import type { SecurityAPI } from '../entry-types.js'
 import { type SecurityMessage, SecurityMessageLevel, SecurityType } from './types.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 
 function percentageToNumber(value?: string) {
     const result =

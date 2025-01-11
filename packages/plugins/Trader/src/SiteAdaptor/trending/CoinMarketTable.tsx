@@ -7,7 +7,7 @@ import { TokenIcon, WalletIcon, FungibleCoinMarketTable } from '@masknet/shared'
 import { CurrencyType, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
 import type { Trending } from '../../types/index.js'
 import { useHighestFloorPrice, useNFT_TrendingOverview, useOneDaySaleAmounts } from '../../trending/useTrending.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     gridContainer: {

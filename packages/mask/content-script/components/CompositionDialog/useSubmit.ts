@@ -9,7 +9,7 @@ import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import type { SubmitComposition } from './CompositionUI.js'
 import { SteganographyPayload } from './SteganographyPayload.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui, type I18nContext } from '@lingui/react'
 
 export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {

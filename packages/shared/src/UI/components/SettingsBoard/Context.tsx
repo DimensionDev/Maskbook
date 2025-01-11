@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { GasOptionType } from '@masknet/web3-shared-base'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { GasSettingsType } from './types/index.js'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const DEFAULT_SLIPPAGE_TOLERANCE = 0.5

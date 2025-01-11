@@ -27,7 +27,7 @@ import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     body: {

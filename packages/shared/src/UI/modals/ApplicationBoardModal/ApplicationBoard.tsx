@@ -21,7 +21,7 @@ import { useValueRef } from '@masknet/shared-base-ui'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean

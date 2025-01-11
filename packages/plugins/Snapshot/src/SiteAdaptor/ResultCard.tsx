@@ -14,7 +14,7 @@ import { formatCount } from '@masknet/web3-shared-base'
 import { LoadingCard } from './LoadingCard.js'
 import { isArray } from 'lodash-es'
 import { EMPTY_LIST } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const choiceMaxWidth = 240
 

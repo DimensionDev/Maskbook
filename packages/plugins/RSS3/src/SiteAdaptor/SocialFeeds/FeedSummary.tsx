@@ -1,4 +1,4 @@
-import { Select, Trans } from '@lingui/macro'
+import { Select, Trans } from '@lingui/react/macro'
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Social } from '@masknet/web3-providers/types'

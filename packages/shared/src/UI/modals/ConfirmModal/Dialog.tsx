@@ -1,7 +1,7 @@
 import { makeStyles } from '@masknet/theme'
 import { Button, DialogActions, DialogContent, dialogClasses } from '@mui/material'
 import { InjectedDialog, type InjectedDialogProps } from '../../contexts/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<number | undefined>()((theme, maxWidth) => ({
     dialog: {

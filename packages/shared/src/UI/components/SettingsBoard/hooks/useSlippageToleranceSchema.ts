@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { isGreaterThan, isLessThanOrEqualTo } from '@masknet/web3-shared-base'
 import { z as zod } from 'zod'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export function useSlippageToleranceSchema() {

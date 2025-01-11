@@ -4,7 +4,7 @@ import { useControlledDialog } from '@masknet/shared-base-ui'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { PurchaseDialog } from './PurchaseDialog.js'
 import type { Project } from '../types.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

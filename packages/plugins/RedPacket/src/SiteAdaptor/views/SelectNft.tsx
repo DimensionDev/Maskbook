@@ -1,4 +1,5 @@
-import { Plural, Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Plural, Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
 import { AssetPreviewer } from '@masknet/shared'

@@ -29,7 +29,7 @@ import { SelectRecipientsUI } from '../shared/SelectRecipients/SelectRecipients.
 import { EncryptionMethodSelector, EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { EncryptionTargetSelector } from './EncryptionTargetSelector.js'
 import type { EncryptTargetE2EFromProfileIdentifier } from '../../../background/services/crypto/encryption.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

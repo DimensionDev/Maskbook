@@ -7,7 +7,7 @@ import { DialogContent } from '@mui/material'
 import { SettingsBoard } from '../../components/SettingsBoard/index.js'
 import { SettingsContext } from '../../components/SettingsBoard/Context.js'
 import { InjectedDialog } from '../../contexts/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface StyleProps {
     compact: boolean

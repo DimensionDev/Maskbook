@@ -15,7 +15,8 @@ import {
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/modals.js'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

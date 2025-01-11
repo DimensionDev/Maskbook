@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { Icons } from '@masknet/icons'
 import { makeStyles, MaskTabList } from '@masknet/theme'
 import { isNativeTokenAddress } from '@masknet/web3-shared-evm'

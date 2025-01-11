@@ -5,7 +5,7 @@ import { QRCode } from 'react-qrcode-logo'
 import { MaskWallet, PrintBackground } from '../../../assets/index.js'
 import { Words } from './Words.js'
 import { Icons } from '@masknet/icons'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ComponentToPrintProps extends RefAttributes<unknown> {
     personaName: string

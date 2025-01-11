@@ -28,7 +28,7 @@ import { isString } from 'lodash-es'
 import { FormattedCurrency, ImageIcon, TokenIcon } from '@masknet/shared'
 import { GasSettingMenu } from '../GasSettingMenu/index.js'
 import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useFormatMessage } from '../../../../shared/src/UI/translate.js'
 
 const useStyles = makeStyles()((theme) => ({

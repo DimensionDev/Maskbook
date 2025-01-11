@@ -16,7 +16,7 @@ import { formatBalance } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
 import { FormattedBalance, NetworkIcon, TokenIcon } from '../../../index.js'
 import { useNetworkContext, useNetworks } from '@masknet/web3-hooks-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

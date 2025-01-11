@@ -10,7 +10,7 @@ import { EmojiAvatar } from '@masknet/shared'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { evm } from '@masknet/web3-providers'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

@@ -10,7 +10,7 @@ import { formatBalance, type ReasonableNetwork } from '@masknet/web3-shared-base
 import { ProviderType, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { ActionModal, useActionModal, type ActionModalBaseProps } from '../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     networkList: {

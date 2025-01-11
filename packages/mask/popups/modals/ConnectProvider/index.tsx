@@ -9,7 +9,7 @@ import { PopupModalRoutes, type NetworkPluginID, PopupRoutes } from '@masknet/sh
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { type ProviderType } from '@masknet/web3-shared-evm'
 import { ActionModal, type ActionModalBaseProps, useModalNavigate } from '../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface StyleProps {
     loading: boolean

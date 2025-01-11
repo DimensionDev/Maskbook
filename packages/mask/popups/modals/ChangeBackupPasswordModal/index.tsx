@@ -9,7 +9,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
-import { msg, Trans } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 type FormInputs = {
     oldPassword: string

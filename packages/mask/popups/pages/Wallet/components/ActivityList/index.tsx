@@ -1,4 +1,4 @@
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { ElementAnchor, EmptyStatus } from '@masknet/shared'
 import { PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'

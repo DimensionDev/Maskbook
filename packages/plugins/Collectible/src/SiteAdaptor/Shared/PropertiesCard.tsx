@@ -3,7 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatTrait } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { Rank } from './Rank.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     wrapper: {

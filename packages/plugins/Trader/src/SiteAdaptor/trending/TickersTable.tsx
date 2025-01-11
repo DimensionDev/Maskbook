@@ -20,7 +20,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { CurrencyType, formatCurrency } from '@masknet/web3-shared-base'
 import type { Ticker } from '../../types/index.js'
 import { TrendingViewContext } from './context.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { intlFormatDistance } from 'date-fns'
 import { useLingui } from '@lingui/react'
 

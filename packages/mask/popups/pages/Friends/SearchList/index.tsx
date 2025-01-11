@@ -4,7 +4,7 @@ import { ContactCard } from '../ContactCard/index.js'
 import { Box } from '@mui/material'
 import { EmptyStatus, RestorableScroll, ElementAnchor } from '@masknet/shared'
 import type { NextIDPersonaBindingsWithIdentifier } from '../../../hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {

@@ -19,7 +19,7 @@ import {
 import { memo, useEffect } from 'react'
 import { ContractItem } from './ContractItem.js'
 import { ContractSection } from './ContractSection.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

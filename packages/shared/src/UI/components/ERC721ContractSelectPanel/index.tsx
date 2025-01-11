@@ -7,7 +7,7 @@ import { type NonFungibleCollection, SourceType } from '@masknet/web3-shared-bas
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectNonFungibleContractModal } from '../../modals/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface StyleProps {
     hasIcon: boolean

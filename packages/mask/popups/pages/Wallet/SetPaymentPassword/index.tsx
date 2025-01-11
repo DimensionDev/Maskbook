@@ -23,7 +23,8 @@ import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useHasNavigator } from '../../../hooks/useHasNavigator.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({

@@ -10,7 +10,7 @@ import { memo } from 'react'
 import { ProtocolType, type SavingsProtocol } from '../../types.js'
 import { ProviderIconURLs } from '../IconURL.js'
 import { useApr, useBalance } from '../hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme, props) => ({
     tableRow: {

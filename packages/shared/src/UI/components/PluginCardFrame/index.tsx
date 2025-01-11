@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Link, Stack, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus } from '../index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

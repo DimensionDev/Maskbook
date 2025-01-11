@@ -13,7 +13,7 @@ import Services from '#services'
 import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
 import { useModalNavigate } from '../ActionModal/index.js'
 import { useVerifiedWallets } from '../../hooks/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     walletList: {

@@ -2,7 +2,7 @@ import { fetchChainId } from '@masknet/web3-providers/helpers'
 import { isSameURL, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import { getRPCConstant, type ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
 import { z } from 'zod'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { type I18nContext } from '@lingui/react'
 
 type NameValidator = (name: string) => boolean | Promise<boolean>

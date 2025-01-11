@@ -6,7 +6,7 @@ import { useNonFungibleAsset } from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Box, Button, DialogActions, DialogContent, Typography } from '@mui/material'
 import type { PropsWithChildren } from 'react'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import type React from 'react'
 
 const useStyles = makeStyles()((theme) => ({

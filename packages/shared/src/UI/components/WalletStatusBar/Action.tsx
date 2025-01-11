@@ -1,7 +1,7 @@
 import { memo, type PropsWithChildren, useRef } from 'react'
 import { Box, Button } from '@mui/material'
 import { Sniffings } from '@masknet/shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface ActionProps extends PropsWithChildren {
     openSelectWalletDialog: () => void

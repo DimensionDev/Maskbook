@@ -12,7 +12,8 @@ import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 interface WalletRemoveDrawerProps extends BottomDrawerProps {

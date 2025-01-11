@@ -1,4 +1,4 @@
-import { t } from '@lingui/macro'
+import { t } from '@lingui/core/macro'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useFungibleTokenBalance } from '@masknet/web3-hooks-base'
 import { isLessThan, rightShift } from '@masknet/web3-shared-base'

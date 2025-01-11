@@ -25,7 +25,7 @@ import { LDO_PAIRS } from '../constants.js'
 import { WithdrawFormDialog } from './WithdrawForm.js'
 import { SavingsFormDialog } from './SavingsForm.js'
 import { AAVEProtocol } from '../protocols/AAVEProtocol.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     abstractTabWrapper: {

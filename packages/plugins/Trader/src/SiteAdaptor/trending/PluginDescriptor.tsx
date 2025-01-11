@@ -2,7 +2,7 @@ import { Icons } from '@masknet/icons'
 import { Stack, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Box } from '@mui/system'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

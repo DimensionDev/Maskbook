@@ -4,7 +4,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography, alpha } from '@mui/material'
 import { useToggle } from '@react-hookz/web'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

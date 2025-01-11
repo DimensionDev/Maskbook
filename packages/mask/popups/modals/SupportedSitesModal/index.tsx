@@ -9,7 +9,7 @@ import { SOCIAL_MEDIA_ICON_FILTER_COLOR } from '../../constants.js'
 import { type EnhanceableSite, InjectSwitchSettings, SOCIAL_MEDIA_NAME, EMPTY_LIST } from '@masknet/shared-base'
 import Services from '#services'
 import { range } from 'lodash-es'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     description: {

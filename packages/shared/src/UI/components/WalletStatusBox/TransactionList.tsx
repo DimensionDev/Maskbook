@@ -14,7 +14,7 @@ import {
 } from '@masknet/web3-shared-base'
 import { getContractOwnerDomain } from '@masknet/web3-shared-evm'
 import { Grid, type GridProps, Link, List, ListItem, type ListProps, Stack, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 import { useFormatMessage } from '../../translate.js'
 
 const useStyles = makeStyles()((theme) => ({

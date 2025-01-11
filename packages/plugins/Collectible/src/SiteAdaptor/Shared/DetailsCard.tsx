@@ -5,7 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const PLATFORM_COSTS: {

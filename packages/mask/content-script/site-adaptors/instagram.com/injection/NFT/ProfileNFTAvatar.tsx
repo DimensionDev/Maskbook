@@ -7,7 +7,7 @@ import { startWatch } from '../../../../utils/startWatch.js'
 import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector.js'
 import { attachReactTreeWithContainer } from '../../../../utils/shadow-root.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarListSelector())

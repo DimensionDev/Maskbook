@@ -9,7 +9,8 @@ import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/
 import { memo, useCallback, useMemo } from 'react'
 import { ContactsContext } from '../../hooks/index.js'
 import { AddContactModal } from '../../modals/modal-controls.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({

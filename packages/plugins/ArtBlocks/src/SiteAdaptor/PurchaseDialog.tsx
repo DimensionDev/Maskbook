@@ -26,7 +26,8 @@ import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { Trans, msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => {

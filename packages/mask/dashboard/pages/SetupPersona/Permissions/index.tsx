@@ -13,7 +13,7 @@ import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { useNavigate } from 'react-router-dom'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

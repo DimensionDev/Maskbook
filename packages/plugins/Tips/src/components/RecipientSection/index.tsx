@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { FormControl, type FormControlProps, Typography } from '@mui/material'
 import { useTip } from '../../contexts/index.js'
 import { RecipientSelect } from './RecipientSelect.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

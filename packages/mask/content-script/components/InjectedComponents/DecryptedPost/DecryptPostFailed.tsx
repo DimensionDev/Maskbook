@@ -2,7 +2,7 @@ import { memo } from 'react'
 import { AdditionalContent } from '../AdditionalPostContent.js'
 import type { ProfileIdentifier } from '@masknet/shared-base'
 import { useAuthorDifferentMessage } from './authorDifferentMessage.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface DecryptPostFailedProps {
     error: Error

@@ -4,7 +4,7 @@ import { useStyles } from './useStyles.js'
 import { useCallback } from 'react'
 import { PopupModalRoutes } from '@masknet/shared-base'
 import { useModalNavigate } from '../../../components/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 export function ChangeNetwork() {
     const { classes, theme } = useStyles()

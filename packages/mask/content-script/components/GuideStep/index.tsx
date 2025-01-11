@@ -12,7 +12,7 @@ import { Box, Modal, styled, Typography } from '@mui/material'
 import { sayHelloShowed, userGuideFinished, userGuideStatus } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

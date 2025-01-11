@@ -6,7 +6,7 @@ import { Stack } from '@mui/material'
 import { useMemo } from 'react'
 import { Context } from '../Context/index.js'
 import { ActivityCard } from './ActivityCard.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()({
     wrapper: {

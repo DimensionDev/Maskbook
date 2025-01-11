@@ -12,7 +12,7 @@ import {
     isValidTimestamp,
     ActivityType,
 } from '@masknet/web3-shared-base'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {

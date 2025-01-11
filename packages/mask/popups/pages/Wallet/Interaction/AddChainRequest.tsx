@@ -2,7 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Typography } from '@mui/material'
 import { useTitle } from 'react-use'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 const useStyle = makeStyles()({

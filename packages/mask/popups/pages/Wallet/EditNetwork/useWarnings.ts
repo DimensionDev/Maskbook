@@ -3,7 +3,7 @@ import { useNetworks } from '@masknet/web3-hooks-base'
 import { fetchChains } from '@masknet/web3-providers/helpers'
 import { useQuery } from '@tanstack/react-query'
 import { useMemo } from 'react'
-import { msg } from '@lingui/macro'
+import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 
 export function useWarnings(formChainId: number, formSymbol?: string) {

@@ -5,7 +5,7 @@ import { Search } from '../Search/index.js'
 import type { NextIDPersonaBindingsWithIdentifier, Friend } from '../../../hooks/index.js'
 import { Contacts } from '../Contacts/index.js'
 import { SearchList } from '../SearchList/index.js'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

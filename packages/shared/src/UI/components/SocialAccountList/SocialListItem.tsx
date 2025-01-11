@@ -12,7 +12,7 @@ import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
 import { first } from 'lodash-es'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {

@@ -3,7 +3,7 @@ import { ApplicationSettingTabs, useOpenApplicationSettings } from '@masknet/sha
 import { PluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { IconButton, Typography } from '@mui/material'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

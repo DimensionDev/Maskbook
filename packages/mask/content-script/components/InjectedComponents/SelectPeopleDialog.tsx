@@ -10,7 +10,7 @@ import { useTwitterIdByWalletSearch } from '../shared/SelectRecipients/useTwitte
 import { SelectProfileUI } from '../shared/SelectProfileUI/index.js'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import { Trans } from '@lingui/macro'
+import { Trans } from '@lingui/react/macro'
 
 interface SelectProfileDialogProps {
     open: boolean
