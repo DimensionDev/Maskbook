@@ -9,16 +9,14 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
 import { ActionButton, usePopupCustomSnackbar } from '@masknet/theme'
 import { useNavigate } from 'react-router-dom'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 type FormInputs = {
     oldPassword: string
     newPassword: string
     repeatPassword: string
 }
 export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function ChangeBackupPasswordModal(props) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
 
     const navigate = useNavigate()
@@ -48,13 +46,10 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         .string()
                         .min(8)
                         .max(20)
-                        .refine(
-                            (oldPassword) => oldPassword === user.backupPassword,
-                            _(msg`Incorrect backup password.`),
-                        )
+                        .refine((oldPassword) => oldPassword === user.backupPassword, t`Incorrect backup password.`)
                         .refine(
                             (oldPassword) => MATCH_PASSWORD_RE.test(oldPassword),
-                            _(msg`Lack of number, letter or special character.`),
+                            t`Lack of number, letter or special character.`,
                         ),
                     newPassword: z
                         .string()
@@ -62,7 +57,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         .max(20)
                         .refine(
                             (newPassword) => MATCH_PASSWORD_RE.test(newPassword),
-                            _(msg`Lack of number, letter or special character.`),
+                            t`Lack of number, letter or special character.`,
                         ),
                     repeatPassword: z
                         .string()
@@ -70,15 +65,15 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         .max(20)
                         .refine(
                             (repeatPassword) => MATCH_PASSWORD_RE.test(repeatPassword),
-                            _(msg`Lack of number, letter or special character.`),
+                            t`Lack of number, letter or special character.`,
                         ),
                 })
                 .refine((data) => data.newPassword !== data.oldPassword, {
-                    message: _(msg`New password cannot be the same as your current password.`),
+                    message: t`New password cannot be the same as your current password.`,
                     path: ['newPassword'],
                 })
                 .refine((data) => data.newPassword === data.repeatPassword, {
-                    message: _(msg`Two entered passwords are different.`),
+                    message: t`Two entered passwords are different.`,
                     path: ['repeatPassword'],
                 }),
         ),
@@ -99,7 +94,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
 
     return (
         <ActionModal
-            header={_(msg`Change Backup Password`)}
+            header={t`Change Backup Password`}
             action={
                 <ActionButton
                     onClick={handleSubmit(handleFormSubmit)}
@@ -124,7 +119,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                         return (
                             <PasswordField
                                 {...field}
-                                placeholder={_(msg`Password`)}
+                                placeholder={t`Password`}
                                 autoFocus
                                 error={
                                     errors.oldPassword?.type !== 'too_small' && errors.oldPassword?.type !== 'too_big' ?
@@ -147,7 +142,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     render={({ field }) => (
                         <PasswordField
                             {...field}
-                            placeholder={_(msg`New password`)}
+                            placeholder={t`New password`}
                             error={
                                 errors.newPassword?.type !== 'too_small' && errors.newPassword?.type !== 'too_big' ?
                                     !!errors.newPassword?.message
@@ -167,7 +162,7 @@ export const ChangeBackupPasswordModal = memo<ActionModalBaseProps>(function Cha
                     render={({ field }) => (
                         <PasswordField
                             {...field}
-                            placeholder={_(msg`Re-enter`)}
+                            placeholder={t`Re-enter`}
                             error={
                                 (
                                     errors.repeatPassword?.type !== 'too_small' &&

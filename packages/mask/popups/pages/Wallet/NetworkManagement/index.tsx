@@ -7,9 +7,7 @@ import { memo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useTitle } from '../../../hooks/index.js'
 import { useNetworks } from '@masknet/web3-hooks-base'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     main: {
@@ -63,10 +61,10 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function NetworkManagement() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    useTitle(_(msg`Manage Network`))
+    useTitle(t`Manage Network`)
 
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
 

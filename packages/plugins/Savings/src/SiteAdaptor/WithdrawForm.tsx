@@ -27,9 +27,7 @@ import { useAsyncFn } from 'react-use'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     value: {
@@ -66,7 +64,7 @@ interface WithdrawFormDialogProps {
 const MINIMUM_AMOUNT = '0.000000000000000001'
 
 export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormDialogProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const [amount, setAmount] = useState('0')
 
@@ -122,9 +120,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
             hash,
             onShare() {
                 share?.(
-                    _(
-                        msg`Hi friends, I just withdrew my deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
-                    ),
+                    t`Hi friends, I just withdrew my deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
                 )
             },
         })

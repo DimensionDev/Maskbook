@@ -32,9 +32,7 @@ import { Box, Stack } from '@mui/material'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
 import { ManageTokenListBar } from './ManageTokenListBar.js'
 import { TokenListMode } from './type.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export * from './type.js'
 
@@ -79,7 +77,7 @@ const useStyles = makeStyles()({
 })
 
 export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleTokenListProps<T>) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const {
         tokens = EMPTY_LIST,
         extendTokens = true,
@@ -339,7 +337,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     ])
     const SearchFieldProps = useMemo(
         () => ({
-            placeholder: _(msg`Name or Contract address e.g. USDC or 0x234...`),
+            placeholder: t`Name or Contract address e.g. USDC or 0x234...`,
             helperText: searchError,
             error: !!searchError,
             ...props.SearchTextFieldProps,

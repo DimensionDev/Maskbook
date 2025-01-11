@@ -2,8 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, InputBase } from '@mui/material'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { EnhanceableSite } from '@masknet/shared-base'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 interface StyleProps {
     site: EnhanceableSite
@@ -38,14 +37,14 @@ export interface CommentBoxProps {
     inputProps?: Partial<PropsOf<typeof InputBase>>
 }
 export function CommentBox(props: CommentBoxProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles({ site: activatedSiteAdaptorUI!.networkIdentifier })
     return (
         <Box sx={{ display: 'flex', width: '100%' }}>
             <InputBase
                 className={classes.root}
                 inputProps={{ className: classes.input, 'data-testid': 'comment_input' }}
-                placeholder={_(msg`Add an encrypted comment...`)}
+                placeholder={t`Add an encrypted comment...`}
                 onKeyDown={(event) => {
                     const node = event.target as HTMLInputElement
                     if (!node.value) return

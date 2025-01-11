@@ -22,9 +22,7 @@ import { Rename } from './Rename.js'
 import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
 import { HidingScamTx } from './HidingScamTx.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
@@ -32,7 +30,7 @@ function getPathIndex(path?: string) {
     return Number.parseInt(rawIndex, 10)
 }
 export const Component = memo(function WalletSettings() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx, theme } = useStyles()
     const modalNavigate = useModalNavigate()
     const wallet = useWallet()
@@ -42,7 +40,7 @@ export const Component = memo(function WalletSettings() {
         modalNavigate(PopupModalRoutes.WalletAccount)
     }, [modalNavigate])
 
-    useTitle(_(msg`Wallet Settings`))
+    useTitle(t`Wallet Settings`)
     const siblingWallets = useMemo(() => {
         if (!wallet?.mnemonicId) return EMPTY_LIST
         return allWallets

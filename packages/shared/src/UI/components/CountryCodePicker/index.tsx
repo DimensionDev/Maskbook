@@ -7,9 +7,7 @@ import Fuse from 'fuse.js'
 import { EmptyStatus } from '../../../index.js'
 import { COUNTRIES, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -66,7 +64,7 @@ export interface CountryCodePickerProps {
 }
 
 export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl, onClose, code }) => {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const [query, setQuery] = useState<string>()
     const deferredQuery = useDeferredValue(query)
@@ -110,7 +108,7 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 value={query}
                 autoFocus
                 onChange={(event) => setQuery(event.target.value)}
-                placeholder={_(msg`Search Area`)}
+                placeholder={t`Search Area`}
                 InputProps={{ disableUnderline: true, startAdornment: <Icons.Search size={16} />, size: 'small' }}
                 sx={{ marginBottom: 0.5 }}
             />

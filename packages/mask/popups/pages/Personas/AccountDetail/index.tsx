@@ -29,12 +29,10 @@ import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.
 import { DisconnectEventMap } from '../../../../shared/definitions/event.js'
 import { PageTitleContext, useTitle } from '../../../hooks/index.js'
 import { AccountDetailUI } from './UI.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export const Component = memo(() => {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const navigate = useNavigate()
     const theme = useTheme()
     const { selectedAccount, currentPersona, walletProofs } = PersonaContext.useContainer()
@@ -184,7 +182,7 @@ export const Component = memo(() => {
         window.close()
     }, [selectedAccount, currentPersona])
 
-    useTitle(_(msg`Social Account`))
+    useTitle(t`Social Account`)
 
     useEffect(() => {
         if (!selectedAccount) navigate(PopupRoutes.Personas, { replace: true })

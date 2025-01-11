@@ -1,6 +1,4 @@
-import { msg } from '@lingui/core/macro'
-import { Plural, Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Plural, Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { AssetPreviewer } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
@@ -233,7 +231,7 @@ interface SelectNftTokenDialogProps {
 }
 
 export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { contract, existTokenDetailedList, tokenDetailedOwnerList, setExistTokenDetailedList, onClose } = props
     const theme = useTheme()
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -434,7 +432,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <InputBase
                         startAdornment={<Icons.Search className={classes.iconButton} />}
                         value={tokenDetailedOwnerList.length === 0 ? searchTokenListInput : tokenIdListInput}
-                        placeholder={_(msg`Token ID separated by comma, e.g. 1224, 7873, 8948`)}
+                        placeholder={t`Token ID separated by comma, e.g. 1224, 7873, 8948`}
                         className={classes.textField}
                         onChange={(e) => {
                             if (tokenDetailedOwnerList.length === 0) {

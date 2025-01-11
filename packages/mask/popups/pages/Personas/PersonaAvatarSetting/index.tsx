@@ -20,9 +20,7 @@ import { useVerifiedWallets, useTitle } from '../../../hooks/index.js'
 import Services from '#services'
 import { MAX_FILE_SIZE } from '../../../constants.js'
 import { useQueryClient } from '@tanstack/react-query'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     tabs: {
@@ -70,7 +68,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 const PersonaAvatarSetting = memo(function PersonaAvatar() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const editor = useRef<AvatarEditor | null>(null)
     const navigate = useNavigate()
     const modalNavigate = useModalNavigate()
@@ -180,7 +178,7 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
         }
     }, [file, currentPersona, account, bindingWallets, refreshAvatar, queryClient, JSON.stringify(wallets)])
 
-    useTitle(_(msg`Profile Photo`))
+    useTitle(t`Profile Photo`)
 
     // reset loaded state after file be changed
 

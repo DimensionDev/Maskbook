@@ -13,9 +13,7 @@ import { useTitle, ContactsContext, PageTitleContext } from '../../../hooks/inde
 import AddContactInputPanel from '../../../components/AddContactInputPanel/index.js'
 import { DeleteContactModal, EditContactModal, AddContactModal } from '../../../modals/modal-controls.js'
 import { ContactType } from '../type.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; hasError?: boolean }>()(
     (theme, { showDivideLine, isManage, hasError }) => ({
@@ -138,7 +136,7 @@ const useStyles = makeStyles<{ showDivideLine?: boolean; isManage?: boolean; has
 )
 
 const ContactListUI = memo(function ContactListUI() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
     const { setExtension } = useContext(PageTitleContext)
     const state = useLocation().state as
@@ -167,7 +165,7 @@ const ContactListUI = memo(function ContactListUI() {
         return () => setExtension(undefined)
     }, [isManage])
 
-    useTitle(isManage ? _(msg`Contacts`) : _(msg`Send`))
+    useTitle(isManage ? t`Contacts` : t`Send`)
 
     const navigate = useNavigate()
     const location = useLocation()

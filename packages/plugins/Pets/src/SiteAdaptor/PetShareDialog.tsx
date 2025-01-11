@@ -2,9 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -38,14 +36,14 @@ interface PetSetDialogProps {
 }
 
 export function PetShareDialog({ onClose }: PetSetDialogProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
 
     const onShareClick = useCallback(() => {
         share?.(
-            _(msg`I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.
+            t`I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.
 #mask_io #nonfungiblefriends
-⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731`),
+⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731`,
         )
         onClose()
     }, [onClose])

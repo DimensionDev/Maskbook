@@ -6,9 +6,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { Icons } from '@masknet/icons'
 import { ImageIcon } from '@masknet/shared'
 import { share } from '@masknet/plugin-infra/content-script/context'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -72,7 +70,7 @@ interface Props {
     tokenAddress?: string
 }
 export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Props) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
 
     const { data: tokenDetail } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress)
@@ -81,8 +79,8 @@ export function ClaimSuccessDialog({ open, onClose, amount, tokenAddress }: Prop
         if (!amount || !tokenDetail) return
 
         share?.(
-            _(msg`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.
- Install https://mask.io to explore more airdrop activities.`),
+            t`I just claimed airdrop with ${amount} ${tokenDetail.symbol} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.
+ Install https://mask.io to explore more airdrop activities.`,
         )
     }, [amount, tokenDetail?.symbol])
 

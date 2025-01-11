@@ -9,9 +9,7 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { useTitle } from '../../../hooks/index.js'
 import { useWalletGroup } from '../../../hooks/useWalletGroup.js'
 import { ImportCreateWallet } from '../components/ImportCreateWallet/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -70,14 +68,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CreateWallet() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
 
     const walletGroup = useWalletGroup()
     const groups = walletGroup?.groups ? Object.entries(walletGroup.groups) : []
 
-    useTitle(_(msg`Add Wallet`))
+    useTitle(t`Add Wallet`)
 
     return (
         <div className={classes.content}>

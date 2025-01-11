@@ -4,9 +4,7 @@ import { Box, Typography } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import OriginCard from '../components/OriginCard/index.js'
 import { useConnectedOrigins } from '../../../hooks/useConnectedOrigins.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useWallet } from '@masknet/web3-hooks-base'
 import { EmptyStatus } from '@masknet/shared'
 
@@ -34,9 +32,9 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function ConnectedSites() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
-    useTitle(_(msg`Connected sites`))
+    useTitle(t`Connected sites`)
     const { data: origins } = useConnectedOrigins()
     const wallet = useWallet()
 

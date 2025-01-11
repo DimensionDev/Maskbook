@@ -32,9 +32,7 @@ import { BottomController } from '../../../components/BottomController/index.js'
 import { LoadingMask } from '../../../components/LoadingMask/index.js'
 import Services from '#services'
 import { useModalNavigate } from '../../../components/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     provider: {
@@ -95,7 +93,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function ConnectWalletPage() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
 
     const { classes } = useStyles()
     const navigate = useNavigate()
@@ -234,7 +232,7 @@ export const Component = memo(function ConnectWalletPage() {
         })
     }, [])
 
-    useTitle(_(msg`Connect Wallet`), handleBack)
+    useTitle(t`Connect Wallet`, handleBack)
 
     return (
         <Box>
@@ -253,7 +251,7 @@ export const Component = memo(function ConnectWalletPage() {
                                         className={classes.link}
                                         href={account ? EVMExplorerResolver.addressLink(chainId, account) : '#'}
                                         target="_blank"
-                                        title={_(msg`View on Explorer`)}
+                                        title={t`View on Explorer`}
                                         rel="noopener noreferrer">
                                         <Icons.LinkOut size={12} />
                                     </Link>

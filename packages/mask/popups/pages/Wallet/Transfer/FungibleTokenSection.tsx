@@ -31,9 +31,7 @@ import { TokenPicker } from '../../../components/index.js'
 import { useTokenParams, PopupContext } from '../../../hooks/index.js'
 import { ChooseTokenModal } from '../../../modals/modal-controls.js'
 import { useDefaultGasConfig } from './useDefaultGasConfig.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     asset: {
@@ -92,7 +90,7 @@ const ERC20_GAS_LIMIT = '50000'
 // Change chain in SelectNetworkSidebar is pending status, but it should affect ContactsContext
 const PENDING_CHAIN_ID = 'pendingChainId'
 export const FungibleTokenSection = memo(function FungibleTokenSection() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { chainId, address, params, setParams } = useTokenParams()
     const { smartPayChainId } = PopupContext.useContainer()
@@ -281,7 +279,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                 <Input
                     fullWidth
                     disableUnderline
-                    placeholder={_(msg`Amount`)}
+                    placeholder={t`Amount`}
                     endAdornment={
                         <Typography
                             className={classes.maxButton}

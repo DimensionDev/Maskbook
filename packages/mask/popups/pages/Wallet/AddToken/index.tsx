@@ -14,9 +14,7 @@ import { Tab } from '@mui/material'
 import { NormalHeader } from '../../../components/index.js'
 import { useTitle } from '../../../hooks/index.js'
 import { WalletAssetTabs } from '../type.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ searchError: boolean }>()((theme, { searchError }) => ({
     content: {
@@ -99,7 +97,7 @@ enum TabType {
 }
 
 export const Component = memo(function AddToken() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
 
     const blackList = useBlockedFungibleTokens()
     const rowSize = useRowSize()
@@ -122,7 +120,7 @@ export const Component = memo(function AddToken() {
         :   ChainId.Mainnet,
     )
 
-    useTitle(_(msg`Add Assets`))
+    useTitle(t`Add Assets`)
 
     const { Token } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
 

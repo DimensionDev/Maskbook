@@ -11,9 +11,7 @@ import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -44,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function SignUp() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const navigate = useNavigate()
 
     const { classes } = useStyles()
@@ -109,7 +107,7 @@ export const Component = memo(function SignUp() {
                     setPersonaName(e.target.value)
                 }}
                 autoFocus
-                placeholder={_(msg`Example: Alice`)}
+                placeholder={t`Example: Alice`}
                 required
                 InputProps={{ disableUnderline: true, size: 'large' }}
                 inputProps={{ maxLength: 24 }}

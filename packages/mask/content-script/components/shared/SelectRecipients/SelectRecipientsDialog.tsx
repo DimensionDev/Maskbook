@@ -19,9 +19,7 @@ import {
 } from '@mui/material'
 import { attachNextIDToProfile } from '../../../../shared-ui/index.js'
 import { ProfileInList } from './ProfileInList.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -137,7 +135,7 @@ interface SelectRecipientsDialogUIProps {
     onSetSelected(selected: Profile[]): void
 }
 export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const { items, onSearch } = props
     const [searchInput, setSearchInput] = useState('')
@@ -224,7 +222,7 @@ export function SelectRecipientsDialogUI(props: SelectRecipientsDialogUIProps) {
                             <Icons.Search />
                         </InputAdornment>
                     }
-                    placeholder={_(msg`eg: X accounts, persona public keys, wallet addresses or ENS`)}
+                    placeholder={t`eg: X accounts, persona public keys, wallet addresses or ENS`}
                 />
                 {props.loading ?
                     <div className={cx(classes.empty, classes.mainText)}>

@@ -1,5 +1,4 @@
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { resolveNextIDPlatform } from '@masknet/shared'
 import { EMPTY_LIST, NextIDPlatform } from '@masknet/shared-base'
 import { NextIDProof } from '@masknet/web3-providers'
@@ -16,8 +15,8 @@ import {
 import { FriendsHomeUI } from './UI.js'
 
 export const Component = memo(function FriendsHome() {
-    const { _ } = useLingui()
-    useTitle(_(msg`Contacts`))
+    const { t } = useLingui()
+    useTitle(t`Contacts`)
 
     const [{ isPending, refetch, records }, , { data, fetchNextPage }] = useFriendsPaged()
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])

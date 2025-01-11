@@ -1,6 +1,4 @@
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, MaskTextField } from '@masknet/theme'
@@ -128,7 +126,7 @@ function isValidTokenIds(rawIds: string) {
 
 export const AddCollectibles = memo(function AddCollectibles(props: AddCollectiblesProps) {
     const { pluginID, chainId: defaultChainId, account: defaultAccount, onAdd, className, ...rest } = props
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { chainId } = useChainContext({ chainId: defaultChainId })
     const theme = useTheme()
     const walletAccount = useAccount()
@@ -245,7 +243,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                             <MaskTextField
                                 {...field}
                                 autoFocus
-                                placeholder={_(msg`Input contract address`)}
+                                placeholder={t`Input contract address`}
                                 error={!!(errors.address || validationMsgForAddress)}
                                 InputProps={{
                                     spellCheck: false,
@@ -279,7 +277,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                         <>
                             <MaskTextField
                                 {...field}
-                                placeholder={_(msg`Token ID should be separated by comma, e.g. 1223,1224,`)}
+                                placeholder={t`Token ID should be separated by comma, e.g. 1223,1224,`}
                                 error={!!errors.tokenIds}
                                 InputProps={{
                                     spellCheck: false,

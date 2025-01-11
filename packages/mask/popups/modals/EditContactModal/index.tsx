@@ -13,9 +13,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { ContactType } from '../../pages/Wallet/type.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -95,7 +93,7 @@ interface EditContactModalProps extends BottomDrawerProps {
 }
 
 function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }: EditContactModalProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
 
     const contacts = useContacts()
@@ -136,7 +134,7 @@ function EditContactDrawer({ onConfirm, address, name, setName, type, ...rest }:
                     inputProps={{ style: { textAlign: 'center' } }}
                     classes={{ root: classes.inputRoot }}
                     spellCheck={false}
-                    placeholder={_(msg`Name`)}
+                    placeholder={t`Name`}
                     className={classes.input}
                     value={name}
                     onChange={(ev) => {

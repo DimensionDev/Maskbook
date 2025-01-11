@@ -7,9 +7,7 @@ import { useAsyncFn } from 'react-use'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import Services from '#services'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -46,7 +44,7 @@ function ChangePaymentPasswordDrawer({
     setOriginalPasswordWrong,
     ...rest
 }: ChangePaymentPasswordDrawer) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
     const { classes } = useStyles()
 
@@ -91,7 +89,7 @@ function ChangePaymentPasswordDrawer({
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={_(msg`Old Payment Password`)}
+                    placeholder={t`Old Payment Password`}
                     error={!!originalPasswordWrong}
                     value={oldPassword}
                     onChange={(e) => {
@@ -104,7 +102,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    placeholder={_(msg`New Payment Password`)}
+                    placeholder={t`New Payment Password`}
                     error={false}
                     value={newPassword}
                     onChange={(e) => {
@@ -117,7 +115,7 @@ function ChangePaymentPasswordDrawer({
                 <PasswordField
                     sx={{ mt: 2 }}
                     fullWidth
-                    placeholder={_(msg`Confirm Password`)}
+                    placeholder={t`Confirm Password`}
                     error={false}
                     value={confirmNewPassword}
                     onChange={(e) => {

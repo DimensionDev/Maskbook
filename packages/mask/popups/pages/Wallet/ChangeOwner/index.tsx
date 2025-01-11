@@ -23,9 +23,7 @@ import { GasSettingMenu } from '../../../components/GasSettingMenu/index.js'
 import { useQuery } from '@tanstack/react-query'
 import Services from '#services'
 import { BottomController } from '../../../components/BottomController/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -174,7 +172,7 @@ const FALLBACK_GAS = 50000
 
 export { ChangeOwner as Component }
 export function ChangeOwner() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
@@ -250,7 +248,7 @@ export function ChangeOwner() {
     }, [manageAccount, smartPayChainId, wallet, gasConfig])
     const disabled = !manageAccount?.address || !wallet || loadingHandleConfirm
 
-    useTitle(_(msg`Change Owner`))
+    useTitle(t`Change Owner`)
 
     return (
         <>
@@ -270,7 +268,7 @@ export function ChangeOwner() {
                                         <Link
                                             href={EVMExplorerResolver.addressLink(chainId, wallet.address)}
                                             target="_blank"
-                                            title={_(msg`View on Explorer`)}
+                                            title={t`View on Explorer`}
                                             rel="noopener noreferrer"
                                             onClick={(event) => {
                                                 event.stopPropagation()
@@ -318,7 +316,7 @@ export function ChangeOwner() {
                                                 :   urlcat('https://web3.bio/', { s: managerAddress })
                                             }
                                             target="_blank"
-                                            title={_(msg`View on Explorer`)}
+                                            title={t`View on Explorer`}
                                             rel="noopener noreferrer"
                                             onClick={(event) => {
                                                 event.stopPropagation()
@@ -336,7 +334,7 @@ export function ChangeOwner() {
                     <Trans>Set a New Management Account</Trans>
                 </Typography>
                 <StyledInput
-                    placeholder={_(msg`Local persona or wallet only`)}
+                    placeholder={t`Local persona or wallet only`}
                     InputProps={{
                         endAdornment: <Icons.ArrowDownRound size={18} sx={{ cursor: 'pointer' }} />,
                         classes: { input: classes.input },

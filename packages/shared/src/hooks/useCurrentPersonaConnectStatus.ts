@@ -13,8 +13,7 @@ import {
 import { NextIDProof } from '@masknet/web3-providers'
 import { LeavePageConfirmModal, PersonaSelectPanelModal } from '../UI/modals/index.js'
 import type { PersonaConnectStatus } from '../types.js'
-import { msg, t } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 import { timeout } from '@masknet/kit'
 
 const DEFAULT_PERSONA_CONNECT_STATUS: PersonaConnectStatus = {
@@ -32,7 +31,7 @@ export function useCurrentPersonaConnectStatus(
     openDashboard?: (route: DashboardRoutes, search?: string) => void,
     identity?: IdentityResolved,
 ) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const create = useCallback((target?: string, position?: 'center' | 'top-right', _2?: boolean, direct = false) => {
         if (direct) {
             openDashboard?.(DashboardRoutes.SignUpPersona)
@@ -42,9 +41,9 @@ export function useCurrentPersonaConnectStatus(
                 info: {
                     target: 'dashboard',
                     url: target ?? DashboardRoutes.SignUpPersona,
-                    text: _(msg`Please create a Persona and verify your account to use this.`),
-                    title: _(msg`Persona`),
-                    actionHint: _(msg`Create persona`),
+                    text: t`Please create a Persona and verify your account to use this.`,
+                    title: t`Persona`,
+                    actionHint: t`Create persona`,
                     position,
                 },
             })

@@ -9,9 +9,7 @@ import { Box, Typography, useTheme, type BoxProps, type InputProps } from '@mui/
 import { memo, useCallback, useMemo } from 'react'
 import { ContactsContext } from '../../hooks/index.js'
 import { AddContactModal } from '../../modals/modal-controls.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -78,7 +76,7 @@ interface Props extends BoxProps {
 }
 
 const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, autoFocus, ...props }: Props) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const {
@@ -119,7 +117,7 @@ const AddContactInputPanel = memo(function AddContactInputPanel({ isManage, auto
             )}
             <div className={classes.fieldWrapper}>
                 <MaskTextField
-                    placeholder={_(msg`Ens or Address(0x)`)}
+                    placeholder={t`Ens or Address(0x)`}
                     value={userInput}
                     onChange={(ev) => setUserInput(ev.target.value)}
                     wrapperProps={{ className: classes.input }}

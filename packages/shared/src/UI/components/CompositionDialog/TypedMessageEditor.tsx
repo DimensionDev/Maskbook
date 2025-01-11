@@ -10,9 +10,7 @@ import { makeStyles } from '@masknet/theme'
 import { InputBase, Alert, Button, inputBaseClasses, alpha } from '@mui/material'
 import { useCallback, useImperativeHandle, useState, useRef, memo, useMemo, useEffect, type RefAttributes } from 'react'
 import { BadgeRenderer } from './BadgeRenderer.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { useLatest } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
@@ -84,7 +82,7 @@ export interface TypedMessageEditorRef {
 const emptyMessage = makeTypedMessageText('')
 // This is an **uncontrolled** component. (performance consideration, because it will be re-rendered very frequently).
 export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedMessageEditorProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { readonly, ref } = props
     const onChange = useLatest(props.onChange)
     const { classes, cx } = useStyles()
@@ -170,7 +168,7 @@ export const TypedMessageEditor = memo(function TypedMessageEditor(props: TypedM
             onChange={setAsText}
             fullWidth
             multiline
-            placeholder={_(msg`Tell friends what's happening...`)}
+            placeholder={t`Tell friends what's happening...`}
             rows={value.meta ? 11 : 13}
         />
     )

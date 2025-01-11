@@ -19,9 +19,7 @@ import { useChainContext, useGasOptions, useNativeTokenPrice } from '@masknet/we
 import { ActionButton, makeStyles, MaskColorVar } from '@masknet/theme'
 import { Typography } from '@mui/material'
 import type { GasSettingProps } from './types.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const minGasPriceOfChain: ChainIdOptionalRecord<BigNumber.Value> = {
     [ChainId.BSC]: pow10(9).multipliedBy(5),
@@ -89,7 +87,7 @@ const useStyles = makeStyles()((theme) => ({
 const emptyRender = () => <></>
 export const Prior1559GasSetting = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
-        const { _ } = useLingui()
+        const { t } = useLingui()
         const { classes } = useStyles()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const [selectedGasOption, setGasOptionType] = useState<GasOptionType>(gasOptionType)
@@ -105,17 +103,17 @@ export const Prior1559GasSetting = memo(
                 gasOptions ?
                     [
                         {
-                            title: _(msg`Low`),
+                            title: t`Low`,
                             gasOption: GasOptionType.SLOW,
                             gasPrice: gasOptions[GasOptionType.SLOW].suggestedMaxFeePerGas || '0',
                         },
                         {
-                            title: _(msg`Medium`),
+                            title: t`Medium`,
                             gasOption: GasOptionType.NORMAL,
                             gasPrice: gasOptions[GasOptionType.NORMAL].suggestedMaxFeePerGas || '0',
                         },
                         {
-                            title: _(msg`High`),
+                            title: t`High`,
                             gasOption: GasOptionType.FAST,
                             gasPrice: gasOptions[GasOptionType.FAST].suggestedMaxFeePerGas || 0,
                         },
@@ -129,12 +127,12 @@ export const Prior1559GasSetting = memo(
             return zod.object({
                 gasLimit: zod
                     .string()
-                    .min(1, _(msg`Enter a gas limit`))
+                    .min(1, t`Enter a gas limit`)
                     .refine(
                         (gasLimit) => new BigNumber(gasLimit).gte(minGasLimit),
-                        _(msg`Gas limit must be at least ${minGasLimit.toFixed()}`),
+                        t`Gas limit must be at least ${minGasLimit.toFixed()}`,
                     ),
-                gasPrice: zod.string().min(1, _(msg`Enter a gas price`)),
+                gasPrice: zod.string().min(1, t`Enter a gas price`),
             })
         }, [minGasLimit])
 

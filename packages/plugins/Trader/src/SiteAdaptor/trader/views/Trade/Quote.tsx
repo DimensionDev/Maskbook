@@ -1,6 +1,5 @@
 import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
@@ -105,9 +104,9 @@ export function Quote({ quote, ...props }: QuoteProps) {
         if (!bestRouter || !crossChainFeeTokenPrice) return gasCost
         return multipliedBy(bestRouter.router.crossChainFee, crossChainFeeTokenPrice).plus(gasCost).toFixed(2)
     }, [gasCost, bestRouter, crossChainFeeTokenPrice])
-    const { _ } = useLingui()
+    const { t } = useLingui()
 
-    const slippageTooltip = _(
+    const slippageTooltip = t(
         msg`Slippage refers to the difference in percentage between the expected price and the final price after a transaction. If the final price exceeds your slippage tolerance, the transaction will be canceled without a network fee refund.`,
     )
     return (
@@ -150,7 +149,7 @@ export function Quote({ quote, ...props }: QuoteProps) {
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: _(msg`Slippage`),
+                                            title: t`Slippage`,
                                             message: slippageTooltip,
                                         })
                                     }}

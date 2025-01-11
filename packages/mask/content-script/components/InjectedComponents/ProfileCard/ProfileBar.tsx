@@ -13,8 +13,7 @@ import { Box, Link, Skeleton, Typography } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { AvatarDecoration } from './AvatarDecoration.js'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<void, 'avatarDecoration'>()((theme, _, refs) => ({
     root: {
@@ -121,7 +120,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
     children,
     ...rest
 }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, theme, cx } = useStyles()
     const { anchorEl, anchorBounding } = useAnchor()
 
@@ -170,7 +169,7 @@ export const ProfileBar = memo<ProfileBarProps>(function ProfileBar({
                         <Link
                             href={Utils.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
-                            title={_(msg`View on Explorer`)}
+                            title={t`View on Explorer`}
                             rel="noopener noreferrer"
                             onClick={(event) => {
                                 event.stopPropagation()
@@ -236,7 +235,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
     children,
     ...rest
 }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
 
     const Utils = useWeb3Utils()
@@ -262,7 +261,7 @@ export const ProfileBarSkeleton = memo<ProfileBarSkeletonProps>(function Profile
                         <Link
                             href={Utils.explorerResolver.addressLink(chainId ?? ChainId.Mainnet, address)}
                             target="_blank"
-                            title={_(msg`View on Explorer`)}
+                            title={t`View on Explorer`}
                             rel="noopener noreferrer"
                             onClick={(event) => {
                                 event.stopPropagation()

@@ -7,9 +7,7 @@ import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 're
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     uploadedFile: {
@@ -33,7 +31,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
     setError,
     error,
 }: RestoreFromLocalProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, theme } = useStyles()
     const { fillSubmitOutlet } = usePersonaRecovery()
 
@@ -97,7 +95,7 @@ export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
                         <Box mt={4}>
                             <PasswordField
                                 fullWidth
-                                placeholder={_(msg`Keystore password`)}
+                                placeholder={t`Keystore password`}
                                 type="password"
                                 onChange={(e) => {
                                     setKeyStorePassword(e.target.value)

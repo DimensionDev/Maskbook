@@ -10,9 +10,7 @@ import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { delay } from '@masknet/kit'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -59,7 +57,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const SwitchLogoDialog = memo(() => {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const identity = useLastRecognizedIdentity()
     const defaultLogoType = useValueRef(switchLogoSettings[identity?.identifier?.userId || ''])
@@ -83,9 +81,9 @@ export const SwitchLogoDialog = memo(() => {
         if (needShare && logoType === SwitchLogoType.Classics) {
             share?.(
                 [
-                    _(msg`I just replaced Twitter X logo with the original blue bird one with Mask Network extension.`),
+                    t`I just replaced Twitter X logo with the original blue bird one with Mask Network extension.`,
                     '#TwitterLogo #TwitterX #SaveTheBird\n',
-                    _(msg`Download https://mask.io to try more powerful tools on Twitter.`),
+                    t`Download https://mask.io to try more powerful tools on Twitter.`,
                 ].join('\n'),
             )
         }

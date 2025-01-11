@@ -8,9 +8,7 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { EIP2255RequestedPermission } from '@masknet/sdk'
 import Services from '#services'
 import { useTitle } from 'react-use'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -26,7 +24,7 @@ const useStyle = makeStyles()({
     address: { fontFamily: 'monospace', fontSize: 12 },
 })
 export function PermissionRequest(props: InteractionItemProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
     const id = useId()
@@ -34,7 +32,7 @@ export function PermissionRequest(props: InteractionItemProps) {
     const allWallets = useWallets()
     const [selectedWallet, setSelectedWallet] = useState<string[]>([allWallets[0].address])
     const { Message } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
-    useTitle(_(msg`Connect with Mask Wallet`))
+    useTitle(t`Connect with Mask Wallet`)
 
     if (!origin) return null
 

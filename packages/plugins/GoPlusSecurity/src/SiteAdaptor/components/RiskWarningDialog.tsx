@@ -7,9 +7,7 @@ import { makeStyles } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress, ZERO_ADDRESS } from '@masknet/web3-shared-evm'
 import { type TokenRiskWarningDialogEvent } from '../../messages.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -73,7 +71,7 @@ interface Props {
     onSetDialog(event: TokenRiskWarningDialogEvent): void
 }
 export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
 
     const onClose = useCallback(async () => {
@@ -112,7 +110,7 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                     <Typography>{token?.name ?? '--'}</Typography>
                     <Stack direction="row">
                         <Typography>{token?.contract ? formatEthereumAddress(token?.contract, 4) : '--'}</Typography>
-                        <CopyButton size={14} title={_(msg`Copy Address`)} text={token?.contract ?? ''} />
+                        <CopyButton size={14} title={t`Copy Address`} text={token?.contract ?? ''} />
                         <Link
                             className={classes.link}
                             href={
@@ -122,7 +120,7 @@ export function RiskWarningDialog({ open, token, onSetDialog }: Props) {
                                 ) ?? ''
                             }
                             target="_blank"
-                            title={_(msg`View on Explorer`)}
+                            title={t`View on Explorer`}
                             rel="noopener noreferrer">
                             <ExternalLink size={14} />
                         </Link>

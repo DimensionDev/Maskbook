@@ -8,9 +8,7 @@ import { memo } from 'react'
 import { QRCode } from 'react-qrcode-logo'
 import { useTitle, useTokenParams } from '../../../hooks/index.js'
 import { useAsset } from '../hooks/useAsset.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     const isDark = theme.palette.mode === 'dark'
@@ -115,7 +113,7 @@ const avatarProps: AvatarProps = {
     sx: { fontSize: 26 },
 }
 export const Component = memo(function Receive() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { chainId, address, rawAddress } = useTokenParams()
@@ -126,7 +124,7 @@ export const Component = memo(function Receive() {
 
     const asset = useAsset(chainId, address ?? '', account)
 
-    useTitle(_(msg`Receive`))
+    useTitle(t`Receive`)
 
     const name = isChain ? currentNetwork?.name : asset?.symbol
     const MainIcon =

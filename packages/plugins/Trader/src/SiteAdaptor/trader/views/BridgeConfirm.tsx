@@ -1,6 +1,4 @@
-import { msg } from '@lingui/core/macro'
-import { Select, Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Select, Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import {
     CopyButton,
@@ -187,7 +185,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const BridgeConfirm = memo(function BridgeConfirm() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx, theme } = useStyles()
     const { basePath, showToolTip, showSnackbar } = useRuntime()
     const navigate = useNavigate()
@@ -320,7 +318,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
 
             if (!hash) {
-                showSnackbar(_(msg`Bridge`), {
+                showSnackbar(t`Bridge`, {
                     message: <Trans>Transaction rejected</Trans>,
                     variant: 'error',
                 })
@@ -329,11 +327,11 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             queryClient.invalidateQueries({ queryKey: ['fungible-token', 'balance'] })
             const receipt = await Web3.getTransactionReceipt(hash)
             if (!receipt?.status) {
-                showSnackbar(_(msg`Bridge`), {
+                showSnackbar(t`Bridge`, {
                     message: <Trans>Failed to bridge</Trans>,
                 })
             } else {
-                showSnackbar(_(msg`Bridge`), {
+                showSnackbar(t`Bridge`, {
                     message: (
                         <MuiLink
                             sx={{ wordBreak: 'break-word' }}
@@ -395,7 +393,7 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
             })
             navigate(url, { replace: true })
         } catch (err) {
-            showSnackbar(_(msg`Bridge`), {
+            showSnackbar(t`Bridge`, {
                 message: (err as Error).message,
                 variant: 'error',
             })
@@ -422,17 +420,13 @@ export const BridgeConfirm = memo(function BridgeConfirm() {
 
     const loading = isSending || isCheckingApprove || isApproving || submitting
     const disabled = !isBridgable || loading
-    const fromNetworkFeeTooltip = _(
-        msg`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`,
-    )
-    const toNetworkFeeTooltip =
-        _(msg`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
+    const fromNetworkFeeTooltip = t`This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account.`
+    const toNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
 The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`)
-    const bridgeNetworkFeeTooltip =
-        _(msg`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
+than estimated, and any unused funds will remain in the original address.`
+    const bridgeNetworkFeeTooltip = t`In cross-chain transactions, this fee includes the estimated network fee and the cross-chain bridge's network fee which is $0.00 (0 OP_ETH). The network fees are paid to the miners and aren't charged by our platform.
 The actual cost may be lower
-than estimated, and any unused funds will remain in the original address.`)
+than estimated, and any unused funds will remain in the original address.`
     return (
         <div className={classes.container}>
             <div className={classes.content}>
@@ -506,7 +500,7 @@ than estimated, and any unused funds will remain in the original address.`)
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: _(msg`Network fee`),
+                                            title: t`Network fee`,
                                             message: fromNetworkFeeTooltip,
                                         })
                                     }}
@@ -541,7 +535,7 @@ than estimated, and any unused funds will remain in the original address.`)
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: _(msg`Network fee`),
+                                            title: t`Network fee`,
                                             message: toNetworkFeeTooltip,
                                         })
                                     }}
@@ -567,7 +561,7 @@ than estimated, and any unused funds will remain in the original address.`)
                                     size={16}
                                     onClick={() => {
                                         showToolTip({
-                                            title: _(msg`Bridge Network fee`),
+                                            title: t`Bridge Network fee`,
                                             message: bridgeNetworkFeeTooltip,
                                         })
                                     }}
@@ -622,7 +616,7 @@ than estimated, and any unused funds will remain in the original address.`)
                         <Typography className={classes.data}>{transaction?.data}</Typography>
                     :   null}
                     {showStale ?
-                        <Warning description={_(msg`Quote expired. Update to receive a new quote.`)} />
+                        <Warning description={t`Quote expired. Update to receive a new quote.`} />
                     :   null}
                 </div>
             </div>

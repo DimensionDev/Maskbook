@@ -3,8 +3,7 @@ import { InputBase } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { useCurrentLinkedPersona } from '@masknet/shared'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     inputRoot: {
@@ -36,7 +35,7 @@ interface SearchProps {
 }
 
 export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const [value, setValue] = useState<string>('')
     const [timer, setTimer] = useState<ReturnType<typeof setTimeout> | null>(null)
@@ -82,7 +81,7 @@ export const Search = memo<SearchProps>(function Search({ setSearchValue }) {
                     </button>
                 :   null
             }
-            placeholder={_(msg`Search Next.ID, X, Lens, ENS or Address`)}
+            placeholder={t`Search Next.ID, X, Lens, ENS or Address`}
         />
     )
 })

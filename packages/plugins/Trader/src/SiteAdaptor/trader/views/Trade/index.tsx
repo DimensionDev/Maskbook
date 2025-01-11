@@ -1,6 +1,4 @@
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PluginWalletStatusBar } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -156,7 +154,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export function TradeView() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const navigate = useNavigate()
     const { classes, theme } = useStyles()
     const networks = useNetworks(NetworkPluginID.PLUGIN_EVM)
@@ -178,7 +176,7 @@ export function TradeView() {
     } = useTrade()
     const isSwap = mode === 'swap'
     const quote = isSwap ? swapQuote : bridgeQuote
-    const quoteErrorTitle = isSwap ? _(msg`This swap isn’t supported`) : undefined // `This bridge isn’t supported`
+    const quoteErrorTitle = isSwap ? t`This swap isn’t supported` : undefined // `This bridge isn’t supported`
     const quoteErrorMessage = isSwap ? swapQuoteErrorMessage : bridgeQuoteErrorMessage
 
     const fromChainId = fromToken?.chainId as ChainId

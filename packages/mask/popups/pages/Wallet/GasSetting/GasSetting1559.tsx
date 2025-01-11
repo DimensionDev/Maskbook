@@ -30,9 +30,7 @@ import { useUnconfirmedRequest } from '../hooks/useUnConfirmedRequest.js'
 import { StyledInput } from '../../../components/StyledInput/index.js'
 import Services from '#services'
 import { FormattedCurrency } from '@masknet/shared'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -108,7 +106,7 @@ const useStyles = makeStyles()((theme) => ({
 const HIGH_FEE_WARNING_MULTIPLIER = 1.5
 
 export const GasSetting1559 = memo(() => {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
@@ -186,19 +184,19 @@ export const GasSetting1559 = memo(() => {
             .object({
                 gasLimit: zod
                     .string()
-                    .min(1, _(msg`Enter a gas limit`))
+                    .min(1, t`Enter a gas limit`)
                     .refine(
                         (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit ?? 0),
-                        _(msg`Gas limit must be at least ${String(minGasLimit)}`),
+                        t`Gas limit must be at least ${String(minGasLimit)}`,
                     ),
                 maxPriorityFeePerGas: zod
                     .string()
-                    .min(1, _(msg`Enter a max priority fee`))
-                    .refine(isPositive, _(msg`Max priority fee must be greater than 0 GWEI`)),
-                maxFeePerGas: zod.string().min(1, _(msg`Enter a max fee`)),
+                    .min(1, t`Enter a max priority fee`)
+                    .refine(isPositive, t`Max priority fee must be greater than 0 GWEI`),
+                maxFeePerGas: zod.string().min(1, t`Enter a max fee`),
             })
             .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                message: _(msg`Max fee cannot be lower than max priority fee`),
+                message: t`Max fee cannot be lower than max priority fee`,
                 path: ['maxFeePerGas'],
             })
     }, [minGasLimit, gasOptions])

@@ -13,9 +13,7 @@ import { useContacts, useWallets } from '@masknet/web3-hooks-base'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { Icons } from '@masknet/icons'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     button: {
@@ -63,7 +61,7 @@ interface AddContactModalProps extends BottomDrawerProps {
 }
 
 function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...rest }: AddContactModalProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const theme = useTheme()
 
@@ -99,7 +97,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             <EmojiAvatar value={address} className={classes.emojiAvatar} sx={{ width: 60, height: 60 }} />
             <MaskTextField
                 spellCheck={false}
-                placeholder={_(msg`Name`)}
+                placeholder={t`Name`}
                 className={classes.input}
                 value={name}
                 onChange={(ev) => {
@@ -111,7 +109,7 @@ function AddContactDrawer({ onConfirm, address, name, setName, setAddress, ...re
             />
             <MaskTextField
                 spellCheck={false}
-                placeholder={_(msg`Address`)}
+                placeholder={t`Address`}
                 wrapperProps={{ className: classes.input }}
                 value={address}
                 onChange={(ev) => setAddress(ev.target.value)}

@@ -13,12 +13,10 @@ import { Locale, Scenario } from '../../../utils/type.js'
 import { PrimaryButton } from '../../PrimaryButton/index.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { PhoneNumberField } from '@masknet/shared'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export const PhoneField = memo(function PhoneField() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const language = useLanguage()
     const [invalidPhone, setInvalidPhone] = useState(false)
     const { showSnackbar } = useCustomSnackbar()
@@ -116,7 +114,7 @@ export const PhoneField = memo(function PhoneField() {
                     }}
                     errorMessage={sendCodeError?.message || codeError}
                     onSend={handleSendCode}
-                    placeholder={_(msg`Mobile verification code`)}
+                    placeholder={t`Mobile verification code`}
                     disabled={phoneNotReady}
                     inputProps={{
                         maxLength: 6,

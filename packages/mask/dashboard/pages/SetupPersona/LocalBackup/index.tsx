@@ -16,9 +16,7 @@ import { format as formatDateTime } from 'date-fns'
 import { MimeType } from '@masknet/shared-base'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { UserContext } from '../../../../shared-ui/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -35,7 +33,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function LocalBackup() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const {
@@ -58,7 +56,7 @@ export const Component = memo(function LocalBackup() {
             if (backupWallets && hasPassword) {
                 const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
                 if (!verified) {
-                    setError('paymentPassword', { type: 'custom', message: _(msg`Incorrect Password`) })
+                    setError('paymentPassword', { type: 'custom', message: t`Incorrect Password` })
                     return
                 }
             }
@@ -105,7 +103,7 @@ export const Component = memo(function LocalBackup() {
                                     {...field}
                                     onFocus={() => clearErrors()}
                                     sx={{ mb: 2 }}
-                                    placeholder={_(msg`Backup Password`)}
+                                    placeholder={t`Backup Password`}
                                     error={!!errors.backupPassword?.message}
                                     helperText={errors.backupPassword?.message}
                                 />
@@ -128,7 +126,7 @@ export const Component = memo(function LocalBackup() {
                                         {...field}
                                         onFocus={() => clearErrors()}
                                         sx={{ mb: 2 }}
-                                        placeholder={_(msg`Payment Password`)}
+                                        placeholder={t`Payment Password`}
                                         error={!!errors.paymentPassword?.message}
                                         helperText={errors.paymentPassword?.message}
                                     />

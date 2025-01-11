@@ -18,9 +18,7 @@ import {
     isPositive,
 } from '@masknet/web3-shared-base'
 import { useChainContext, useFungibleTokenPrice, useGasOptions } from '@masknet/web3-hooks-base'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     options: {
@@ -88,7 +86,7 @@ const useStyles = makeStyles()((theme) => ({
 const emptyRender = () => <></>
 export const GasSetting1559 = memo(
     ({ gasLimit, minGasLimit = 0, gasOptionType = GasOptionType.NORMAL, onConfirm = noop }: GasSettingProps) => {
-        const { _ } = useLingui()
+        const { t } = useLingui()
         const { classes } = useStyles()
         const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
         const { NATIVE_TOKEN_ADDRESS } = useTokenConstants(chainId)
@@ -106,17 +104,17 @@ export const GasSetting1559 = memo(
         const options = useMemo(
             () => [
                 {
-                    title: _(msg`Low`),
+                    title: t`Low`,
                     gasOption: GasOptionType.SLOW,
                     content: gasOptions?.[GasOptionType.SLOW],
                 },
                 {
-                    title: _(msg`Medium`),
+                    title: t`Medium`,
                     gasOption: GasOptionType.NORMAL,
                     content: gasOptions?.[GasOptionType.NORMAL],
                 },
                 {
-                    title: _(msg`High`),
+                    title: t`High`,
                     gasOption: GasOptionType.FAST,
                     content: gasOptions?.[GasOptionType.FAST],
                 },
@@ -132,19 +130,19 @@ export const GasSetting1559 = memo(
                 .object({
                     gasLimit: zod
                         .string()
-                        .min(1, _(msg`Enter a gas limit`))
+                        .min(1, t`Enter a gas limit`)
                         .refine(
                             (gasLimit) => isGreaterThanOrEqualTo(gasLimit, minGasLimit),
-                            _(msg`Gas limit must be at least ${minGasLimit.toFixed()}`),
+                            t`Gas limit must be at least ${minGasLimit.toFixed()}`,
                         ),
                     maxPriorityFeePerGas: zod
                         .string()
-                        .min(1, _(msg`Enter a max priority fee`))
-                        .refine(isPositive, _(msg`Max priority fee must be greater than 0 GWEI`)),
-                    maxFeePerGas: zod.string().min(1, _(msg`Enter a max fee`)),
+                        .min(1, t`Enter a max priority fee`)
+                        .refine(isPositive, t`Max priority fee must be greater than 0 GWEI`),
+                    maxFeePerGas: zod.string().min(1, t`Enter a max fee`),
                 })
                 .refine((data) => isLessThanOrEqualTo(data.maxPriorityFeePerGas, data.maxFeePerGas), {
-                    message: _(msg`Max fee cannot be lower than max priority fee`),
+                    message: t`Max fee cannot be lower than max priority fee`,
                     path: ['maxFeePerGas'],
                 })
         }, [minGasLimit, gasOptions])

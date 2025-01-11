@@ -28,9 +28,7 @@ import { petShowSettings } from '../settings.js'
 import { ImageType, type FilterContract, type OwnerERC721TokenInfo, type PetMetaDB } from '../types.js'
 import { ImageLoader } from './ImageLoader.js'
 import { PreviewBox } from './PreviewBox.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     desBox: {
@@ -117,7 +115,7 @@ interface PetSetDialogProps {
 }
 
 export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const theme = useTheme()
     const { showSnackbar } = useCustomSnackbar()
@@ -266,7 +264,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <InputBase
                     {...params.InputProps}
                     fullWidth
-                    placeholder={_(msg`NFT Contract`)}
+                    placeholder={t`NFT Contract`}
                     error={isCollectionsError}
                     className={classes.input}
                     inputProps={{ ...params.inputProps }}
@@ -313,7 +311,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                 <InputBase
                     {...params.InputProps}
                     fullWidth
-                    placeholder={_(msg`Token ID`)}
+                    placeholder={t`Token ID`}
                     error={isImageError}
                     className={classes.input}
                     inputProps={{ ...params.inputProps }}
@@ -344,9 +342,7 @@ export function PetSetDialog({ configNFTs, onClose }: PetSetDialogProps) {
                         {tokensRender}
                         <InputBase
                             className={classes.inputOption}
-                            placeholder={
-                                holderChange ? _(msg`Optional, 100 characters max.`) : _(msg`Greeting message`)
-                            }
+                            placeholder={holderChange ? t`Optional, 100 characters max.` : t`Greeting message`}
                             fullWidth
                             multiline
                             rows={3}

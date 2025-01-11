@@ -6,9 +6,7 @@ import { ActionButton, makeStyles } from '@masknet/theme'
 import { Box, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -45,7 +43,7 @@ export function OperationFooter({
     onClaimOrRefund,
     ...rest
 }: OperationFooterProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
     const theme = useTheme()
@@ -103,7 +101,7 @@ export function OperationFooter({
                 expectedChainId={(chainId as ChainId) ?? ChainId.Mainnet}
                 ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
                 <WalletConnectedBoundary
-                    noGasText={_(msg`Insufficient Balance`)}
+                    noGasText={t`Insufficient Balance`}
                     hideRiskWarningConfirmed
                     expectedChainId={chainId ?? ChainId.Mainnet}
                     startIcon={<Icons.Wallet size={18} />}

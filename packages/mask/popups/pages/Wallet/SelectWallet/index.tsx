@@ -16,9 +16,7 @@ import { BottomController } from '../../../components/BottomController/index.js'
 import Services from '#services'
 import { ProfilePhotoType } from '../type.js'
 import urlcat from 'urlcat'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     item: {
@@ -37,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function SelectWallet() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const navigate = useNavigate()
     const [params] = useSearchParams()
@@ -139,7 +137,7 @@ export const Component = memo(function SelectWallet() {
         Network,
     ])
 
-    useTitle(_(msg`Select Wallet`))
+    useTitle(t`Select Wallet`)
 
     if (!chainIdValid)
         return (

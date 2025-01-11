@@ -9,9 +9,7 @@ import { KeyboardArrowRightRounded } from '@mui/icons-material'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { useEffect } from 'react'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -29,7 +27,7 @@ const useStyle = makeStyles()({
     arrow: { flex: 1 },
 })
 export function SwitchChainRequest(props: InteractionItemProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
     const origin = props.currentRequest.origin
@@ -39,7 +37,7 @@ export function SwitchChainRequest(props: InteractionItemProps) {
     const nextChainId = Number.parseInt(props.currentRequest.request.arguments.params[0].chainId, 16)
     const nextNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, nextChainId)
 
-    useTitle(_(msg`Connect with Mask Wallet`))
+    useTitle(t`Connect with Mask Wallet`)
     useEffect(() => {
         props.setConfirmDisabled(!nextNetwork)
     }, [!nextNetwork])

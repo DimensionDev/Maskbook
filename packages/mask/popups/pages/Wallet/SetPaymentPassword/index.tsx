@@ -23,9 +23,7 @@ import { PasswordField } from '../../../components/PasswordField/index.js'
 import { usePasswordForm } from '../hooks/usePasswordForm.js'
 import { useQueryClient } from '@tanstack/react-query'
 import { useHasNavigator } from '../../../hooks/useHasNavigator.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ hasNav?: boolean }>()((theme, { hasNav }) => ({
     container: {
@@ -175,7 +173,7 @@ const WalletItem = memo(function WalletItem({ wallet }: WalletItemProps) {
 })
 
 export const Component = memo(function SetPaymentPassword() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const hasNavigator = useHasNavigator()
     const { classes } = useStyles({ hasNav: hasNavigator })
     const navigate = useNavigate()
@@ -258,7 +256,7 @@ export const Component = memo(function SetPaymentPassword() {
                                             autoFocus
                                             type="password"
                                             variant="filled"
-                                            placeholder={_(msg`Payment Password`)}
+                                            placeholder={t`Payment Password`}
                                             error={!isValid && !!errors.password?.message}
                                         />
                                     )}
@@ -273,7 +271,7 @@ export const Component = memo(function SetPaymentPassword() {
                                             error={!isValid && !!errors.confirm?.message}
                                             type="password"
                                             variant="filled"
-                                            placeholder={_(msg`Confirm Password`)}
+                                            placeholder={t`Confirm Password`}
                                         />
                                     )}
                                     name="confirm"

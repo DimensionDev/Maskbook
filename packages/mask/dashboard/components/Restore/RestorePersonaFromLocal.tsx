@@ -13,9 +13,7 @@ import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { AccountStatusBar } from './AccountStatusBar.js'
 import { BackupPreview } from '../BackupPreview/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -46,7 +44,7 @@ interface RestoreFromLocalProps {
 }
 
 export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ onRestore }: RestoreFromLocalProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, theme } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const { fillSubmitOutlet } = usePersonaRecovery()
@@ -182,7 +180,7 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                 <Box mt={4}>
                     <PasswordField
                         fullWidth
-                        placeholder={_(msg`Backup password`)}
+                        placeholder={t`Backup password`}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}
                         error={!!error}

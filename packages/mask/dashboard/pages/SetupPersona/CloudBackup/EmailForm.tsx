@@ -7,9 +7,7 @@ import { BackupAccountType } from '@masknet/shared-base'
 import { Locale, Scenario } from '../../../utils/type.js'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -19,7 +17,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const EmailForm = memo(function EmailForm() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const language = useLanguage()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
@@ -67,7 +65,7 @@ export const EmailForm = memo(function EmailForm() {
                         onFocus={() => clearErrors('email')}
                         onBlur={() => trigger('email')}
                         fullWidth
-                        placeholder={_(msg`Email`)}
+                        placeholder={t`Email`}
                         type="email"
                         error={!!errors.email?.message}
                         helperText={errors.email?.message}
@@ -82,7 +80,7 @@ export const EmailForm = memo(function EmailForm() {
                         {...field}
                         onFocus={() => clearErrors('code')}
                         fullWidth
-                        placeholder={_(msg`Email verification code`)}
+                        placeholder={t`Email verification code`}
                         error={!!errors.code?.message}
                         helperText={errors.code?.message}
                         InputProps={{

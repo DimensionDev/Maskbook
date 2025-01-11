@@ -2,8 +2,7 @@ import { makeStyles } from '@masknet/theme'
 import type { InteractionItemProps } from './interaction.js'
 import { Typography } from '@mui/material'
 import { useTitle } from 'react-use'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 const useStyle = makeStyles()({
     title: { fontSize: 28, marginTop: 16 },
@@ -17,12 +16,12 @@ const useStyle = makeStyles()({
     },
 })
 export function AddChainRequest(props: InteractionItemProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { setConfirmAction } = props
     const { classes } = useStyle()
     const origin = props.currentRequest.origin
 
-    useTitle(_(msg`Connect with Mask Wallet`))
+    useTitle(t`Connect with Mask Wallet`)
 
     if (!origin) return null
     setConfirmAction(async () => {

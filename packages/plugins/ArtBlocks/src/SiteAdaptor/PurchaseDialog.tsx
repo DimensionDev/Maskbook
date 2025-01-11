@@ -26,9 +26,7 @@ import { usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { usePurchaseCallback } from '../hooks/usePurchaseCallback.js'
 import type { Project } from '../types.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -50,7 +48,7 @@ interface ActionBarProps {
 }
 
 export function PurchaseDialog(props: ActionBarProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { project, open, onClose, chainId } = props
 
@@ -74,12 +72,8 @@ export function PurchaseDialog(props: ActionBarProps) {
 
     const shareText = [
         Sniffings.is_twitter_page || Sniffings.is_facebook_page ?
-            _(
-                msg`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Install @realMaskNetwork to get yours.`,
-            )
-        :   _(
-                msg`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Welcome to join.`,
-            ),
+            t`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Install @realMaskNetwork to get yours.`
+        :   t`I just purchased a beautiful piece of art from '${project.name}' collection for ${price.toFixed()} ${token?.symbol || ''}. Welcome to join.`,
         '#mask_io #artblocks_io #nft',
         postLink,
     ].join('\n')
@@ -133,7 +127,7 @@ export function PurchaseDialog(props: ActionBarProps) {
                 <Card elevation={0}>
                     <CardContent>
                         <FungibleTokenInput
-                            label={_(msg`Price per mint`)}
+                            label={t`Price per mint`}
                             amount={price.toString()}
                             balance={balance ?? '0'}
                             token={token as FungibleToken<ChainId, SchemaType>}

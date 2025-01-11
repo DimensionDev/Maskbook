@@ -5,8 +5,7 @@ import { z } from 'zod'
 import { useTabs } from '@masknet/theme'
 import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
 import guessCallingCode from 'guess-calling-code'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 export interface CloudBackupFormInputs {
     email: string
@@ -16,7 +15,7 @@ export interface CloudBackupFormInputs {
 }
 
 function useCloudBackupFormContext() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
 
     const [currentTab, onChange, tabs] = useTabs('email', 'mobile')
 
@@ -37,7 +36,7 @@ function useCloudBackupFormContext() {
                 .object({
                     email:
                         currentTab === tabs.email ?
-                            z.string().refine((email) => emailRegexp.test(email), _(msg`Invalid email address format.`))
+                            z.string().refine((email) => emailRegexp.test(email), t`Invalid email address format.`)
                         :   z.string().optional(),
                     countryCode: currentTab === tabs.mobile ? z.string() : z.string().optional(),
                     phone:
@@ -46,8 +45,8 @@ function useCloudBackupFormContext() {
                         :   z.string().optional(),
                     code: z
                         .string()
-                        .min(1, _(msg`The code is incorrect.`))
-                        .max(6, _(msg`The code is incorrect.`)),
+                        .min(1, t`The code is incorrect.`)
+                        .max(6, t`The code is incorrect.`),
                 })
                 .refine(
                     (data) => {
@@ -56,7 +55,7 @@ function useCloudBackupFormContext() {
                         return phoneRegexp.test(`+${data.countryCode} ${data.phone}`)
                     },
                     {
-                        message: _(msg`The phone number is incorrect.`),
+                        message: t`The phone number is incorrect.`,
                         path: ['phone'],
                     },
                 ),

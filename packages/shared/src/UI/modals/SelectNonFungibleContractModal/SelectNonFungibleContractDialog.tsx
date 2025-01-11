@@ -16,9 +16,7 @@ import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
 import { AddCollectiblesModal } from '../modals.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -85,7 +83,7 @@ export const SelectNonFungibleContractDialog = memo(
         schemaType,
         initialCollections,
     }: SelectNonFungibleContractDialogProps) => {
-        const { _ } = useLingui()
+        const { t } = useLingui()
         const { classes } = useStyles()
         const [keyword, setKeyword] = useState('')
 
@@ -189,7 +187,7 @@ export const SelectNonFungibleContractDialog = memo(
                         <MaskTextField
                             value={keyword}
                             onChange={(evt) => setKeyword(evt.target.value)}
-                            placeholder={_(msg`Name or contract address eg. PUNK or 0x234...`)}
+                            placeholder={t`Name or contract address eg. PUNK or 0x234...`}
                             autoFocus
                             fullWidth
                             InputProps={{

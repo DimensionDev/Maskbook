@@ -12,9 +12,7 @@ import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { BottomDrawer, type BottomDrawerProps } from '../../components/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 interface WalletRemoveDrawerProps extends BottomDrawerProps {
     error: ReactNode
@@ -25,7 +23,7 @@ interface WalletRemoveDrawerProps extends BottomDrawerProps {
 }
 
 function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ...rest }: WalletRemoveDrawerProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
     const navigate = useNavigate()
     const wallets = useWallets()
@@ -83,7 +81,7 @@ function WalletRemoveDrawer({ wallet, error, password, setPassword, setError, ..
                     sx={{ mt: 2 }}
                     fullWidth
                     autoFocus
-                    placeholder={_(msg`Payment Password`)}
+                    placeholder={t`Payment Password`}
                     error={!!error}
                     value={password}
                     onChange={(e) => {

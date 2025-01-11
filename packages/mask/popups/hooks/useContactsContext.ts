@@ -6,8 +6,7 @@ import { AddressType, type ChainId, isValidAddress, isValidDomain } from '@maskn
 import { useMemo, useState } from 'react'
 import { useAsync } from 'react-use'
 import { createContainer } from '@masknet/shared-base-ui'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 interface ContextOptions {
     defaultName: string
@@ -18,7 +17,7 @@ interface ContextOptions {
 function useContactsContext(
     { defaultName, defaultChainId, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' },
 ) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()
     const wallets = useWallets()
@@ -57,19 +56,19 @@ function useContactsContext(
     const isMaliciousAddress = security && Object.values(security).filter((x) => x === '1').length > 1
 
     const inputValidationMessage = useMemo(() => {
-        if (isMaliciousAddress) return _(msg`This address may be a scam address.`)
+        if (isMaliciousAddress) return t`This address may be a scam address.`
         if (!userInput || address) return ''
         if (!(isValidAddress(userInput) || isValidDomain(userInput))) {
-            return _(msg`Incorrect wallet address.`)
+            return t`Incorrect wallet address.`
         }
         if (isValidDomain(userInput) && (resolveDomainError || !registeredAddress)) {
-            return _(msg`This ENS does not exist or not be resolved.`)
+            return t`This ENS does not exist or not be resolved.`
         }
         return ''
     }, [userInput, resolveDomainError, registeredAddress, isMaliciousAddress])
 
     const inputWarningMessage = useMemo(() => {
-        if (addressType === AddressType.Contract) return _(msg`This address is a contract address.`)
+        if (addressType === AddressType.Contract) return t`This address is a contract address.`
         return ''
     }, [addressType])
 

@@ -20,9 +20,7 @@ import urlcat from 'urlcat'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { TransferTabType } from '../type.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     page: {
@@ -160,7 +158,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CollectibleDetail() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const navigate = useNavigate()
     const location = useLocation()
@@ -175,7 +173,7 @@ export const Component = memo(function CollectibleDetail() {
     useEffect(() => {
         if (!asset && !isPending) navigate(-1)
     }, [!asset && !isPending, navigate])
-    useTitle(asset?.metadata?.name || _(msg`Collectible`))
+    useTitle(asset?.metadata?.name || t`Collectible`)
 
     const availableAsset = asset || stateAsset
 

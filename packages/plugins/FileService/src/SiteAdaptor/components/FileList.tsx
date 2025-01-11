@@ -15,9 +15,7 @@ import {
 import { useFileManagement } from '../contexts/index.js'
 import { PluginFileServiceRPC } from '../rpc.js'
 import { ConfirmModal, RenameModal } from '../modals/modals.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -58,7 +56,7 @@ interface FileListProps extends FileListBaseProps, Pick<ManageableFileProps, 'on
 }
 
 export function FileList({ files, onLoadMore, className, onDownload, onSend, ...rest }: FileListProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const { uploadStateMap, refetchFiles } = useFileManagement()
 
@@ -86,7 +84,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
     const handleDelete = useCallback(
         async (file: FileInfo) => {
             const confirmed = await ConfirmModal.openAndWaitForClose({
-                title: _(msg`Delete File`),
+                title: t`Delete File`,
                 message: (
                     <Trans>
                         Do you want to delete file{' '}
@@ -101,7 +99,7 @@ export function FileList({ files, onLoadMore, className, onDownload, onSend, ...
                         cannot be deleted.
                     </Trans>
                 ),
-                confirmLabel: _(msg`Delete`),
+                confirmLabel: t`Delete`,
             })
             if (confirmed) await deleteFile(file)
         },

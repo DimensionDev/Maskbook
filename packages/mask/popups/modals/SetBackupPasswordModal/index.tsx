@@ -7,12 +7,10 @@ import { ActionModal, type ActionModalBaseProps } from '../../components/index.j
 import { UserContext } from '../../../shared-ui/index.js'
 import { PasswordField } from '../../components/PasswordField/index.js'
 import { MATCH_PASSWORD_RE } from '../../constants.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBackupPasswordModal() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const theme = useTheme()
     const [params] = useSearchParams()
 
@@ -79,7 +77,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
             }>
             <Box display="flex" justifyContent="center" flexDirection="column" alignItems="center" rowGap={2} m={0.5}>
                 <PasswordField
-                    placeholder={_(msg`Password`)}
+                    placeholder={t`Password`}
                     onChange={(e) => setNewPassword(e.target.value)}
                     autoFocus
                     onBlur={validPassword}
@@ -88,7 +86,7 @@ export const SetBackupPasswordModal = memo<ActionModalBaseProps>(function SetBac
                     helperText={passwordValidError}
                 />
                 <PasswordField
-                    placeholder={_(msg`Re-enter`)}
+                    placeholder={t`Re-enter`}
                     onChange={(e) => setRepeatPassword(e.target.value)}
                     value={repeatPassword}
                     onBlur={validRepeatPassword}

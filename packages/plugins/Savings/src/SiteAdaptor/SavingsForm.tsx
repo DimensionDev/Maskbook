@@ -40,9 +40,7 @@ import { SchemaType, getAaveConstant, isNativeTokenAddress } from '@masknet/web3
 import { DialogActions, DialogContent, Typography } from '@mui/material'
 import { ProtocolType, TabType, type SavingsProtocol } from '../types.js'
 import { useApr, useBalance } from './hooks/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme, props) => ({
     containerWrap: {
@@ -94,7 +92,7 @@ interface SavingsFormDialogProps {
 }
 
 export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFormDialogProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const isDeposit = tab === TabType.Deposit
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -195,12 +193,8 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
     }
     const shareText =
         isDeposit ?
-            _(
-                msg`Hi friends, I just deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
-            )
-        :   _(
-                msg`Hi friends, I just withdrew my deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`,
-            )
+            t`Hi friends, I just deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`
+        :   t`Hi friends, I just withdrew my deposit ${promote.amount} ${promote.symbol} on ${promote.chain}. Follow @${promote.account} to find more staking projects.`
     const queryClient = useQueryClient()
     const [, executor] = useAsyncFn(async () => {
         const methodName = isDeposit ? 'deposit' : 'withdraw'
@@ -235,7 +229,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                             spender={approvalData?.approveAddress}>
                             <ActionButtonPromise
                                 className={classes.button}
-                                init={validationMessage || _(msg`Deposit ${protocol.bareToken.symbol}`)}
+                                init={validationMessage || t`Deposit ${protocol.bareToken.symbol}`}
                                 waiting={<Trans>Processing Deposit</Trans>}
                                 failed={<Trans>Failed</Trans>}
                                 failedOnClick="use executor"
@@ -247,7 +241,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                         </EthereumERC20TokenApprovedBoundary>
                     :   <ActionButtonPromise
                             className={classes.button}
-                            init={validationMessage || _(msg`Deposit ${protocol.bareToken.symbol}`)}
+                            init={validationMessage || t`Deposit ${protocol.bareToken.symbol}`}
                             waiting={<Trans>Processing Deposit</Trans>}
                             failed={<Trans>Failed</Trans>}
                             failedOnClick="use executor"
@@ -287,7 +281,7 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                                     amount={inputAmount}
                                     maxAmount={balanceGasMinus.toString()}
                                     balance={balanceAsBN.toString()}
-                                    label={_(msg`Amount`)}
+                                    label={t`Amount`}
                                     token={protocol.bareToken}
                                     onAmountChange={setInputAmount}
                                 />

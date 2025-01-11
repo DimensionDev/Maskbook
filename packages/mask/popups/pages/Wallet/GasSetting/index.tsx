@@ -7,9 +7,7 @@ import type { NetworkPluginID } from '@masknet/shared-base'
 import { useTitle } from '../../../hooks/index.js'
 import { GasSetting1559 } from './GasSetting1559.js'
 import { Prior1559GasSetting } from './Prior1559GasSetting.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()(() => ({
     container: {
@@ -31,10 +29,10 @@ const useStyles = makeStyles()(() => ({
 }))
 
 export const Component = memo(function GasSetting() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    useTitle(_(msg`Gas fee settings`))
+    useTitle(t`Gas fee settings`)
     return (
         <main className={classes.container}>
             <Typography className={classes.title} style={{ marginTop: 0 }}>

@@ -11,8 +11,7 @@ import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { twitterBase } from '../base.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -81,7 +80,7 @@ function renderPostDialogHintTo<T extends HTMLElement>(
 }
 
 function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
 
     const onHintButtonClicked = useCallback(() => {
@@ -89,9 +88,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
             sayHelloShowed[twitterBase.networkIdentifier].value ?
                 undefined
             :   makeTypedMessageText(
-                    _(
-                        msg`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3.`,
-                    ),
+                    t`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3.`,
                 )
 
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

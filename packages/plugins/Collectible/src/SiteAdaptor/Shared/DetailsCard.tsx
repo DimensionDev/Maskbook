@@ -5,8 +5,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
 import { Link, Typography } from '@mui/material'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 const PLATFORM_COSTS: {
     [k in SourceType]?: number
@@ -70,7 +69,7 @@ interface DetailsCardProps {
 }
 
 export function DetailsCard(props: DetailsCardProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { asset, sourceType } = props
     const { classes } = useStyles()
     const Utils = useWeb3Utils()
@@ -79,21 +78,21 @@ export function DetailsCard(props: DetailsCardProps) {
     const infos: Array<{ title: string; value: string; link?: boolean; tooltip?: string }> = []
     if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
         infos.push({
-            title: _(msg`Mint Address`),
+            title: t`Mint Address`,
             value: Utils.formatAddress(asset.address, 4),
             link: true,
         })
     } else if (pluginID === NetworkPluginID.PLUGIN_EVM) {
-        if (asset.tokenId) infos.push({ title: _(msg`Token ID`), value: Utils.formatTokenId(asset.tokenId, 4) })
-        infos.push({ title: _(msg`Contract`), value: Utils.formatAddress(asset.address, 4) ?? '-', link: true })
+        if (asset.tokenId) infos.push({ title: t`Token ID`, value: Utils.formatTokenId(asset.tokenId, 4) })
+        infos.push({ title: t`Contract`, value: Utils.formatAddress(asset.address, 4) ?? '-', link: true })
     }
     infos.push(
-        { title: _(msg`Blockchain`), value: Utils.chainResolver.chainFullName(asset.chainId) },
-        { title: _(msg`Token Standard`), value: Utils.formatSchemaType(asset.schema || asset.contract?.schema) },
+        { title: t`Blockchain`, value: Utils.chainResolver.chainFullName(asset.chainId) },
+        { title: t`Token Standard`, value: Utils.formatSchemaType(asset.schema || asset.contract?.schema) },
     )
     if (sourceType && PLATFORM_COSTS[sourceType]) {
         infos.push({
-            title: _(msg`${sourceType ?? SourceType.NFTScan} Platform costs`),
+            title: t`${sourceType ?? SourceType.NFTScan} Platform costs`,
             value: `${PLATFORM_COSTS[sourceType]}%`,
         })
     }

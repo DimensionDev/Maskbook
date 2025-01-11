@@ -12,8 +12,7 @@ import { cloneDeep } from 'lodash-es'
 import { useCallback, useRef, useState, type MouseEvent } from 'react'
 import type { AbiItem } from 'web3-utils'
 import { useQueryAuthenticate } from './useQueryAuthenticate.js'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 export function useUnfollow(
     profileId?: string,
@@ -22,7 +21,7 @@ export function useUnfollow(
     onSuccess?: (event: MouseEvent<HTMLElement>) => void,
     onFailed?: () => void,
 ) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const [loading, setLoading] = useState(false)
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const handleQueryAuthenticate = useQueryAuthenticate(account, currentProfileId)
@@ -146,10 +145,10 @@ export function useUnfollow(
                     !error.message.includes('RPC Error')
                 ) {
                     onFailed?.()
-                    showSingletonSnackbar(_(msg`Unfollow lens handle`), {
+                    showSingletonSnackbar(t`Unfollow lens handle`, {
                         processing: false,
                         variant: 'error',
-                        message: _(msg`Network error, try again`),
+                        message: t`Network error, try again`,
                     })
                 }
             } finally {

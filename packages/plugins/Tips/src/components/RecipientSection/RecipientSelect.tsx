@@ -8,8 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
 import { useTip } from '../../contexts/index.js'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, refs) => {
     return {
@@ -115,7 +114,7 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
 }
 
 function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils(account.pluginID)
     const chainId = useDefaultChainId(account.pluginID)
@@ -126,7 +125,7 @@ function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAl
             onClick={(e) => e.stopPropagation()}
             href={Utils.explorerResolver.addressLink(chainId, account.address) ?? ''}
             target="_blank"
-            title={_(msg`View on Explorer`)}
+            title={t`View on Explorer`}
             rel="noopener noreferrer">
             <Icons.LinkOut size={20} />
         </Link>

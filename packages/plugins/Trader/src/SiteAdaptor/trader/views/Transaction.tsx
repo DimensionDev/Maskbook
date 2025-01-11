@@ -1,5 +1,4 @@
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { CopyButton, EmptyStatus, NetworkIcon, ProgressiveText, Spinner, useUnmountedRef } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
@@ -26,7 +25,6 @@ import { useRuntime } from '../contexts/RuntimeProvider.js'
 import { okxTokenToFungibleToken } from '../helpers.js'
 import { useGetTransferReceived } from '../hooks/useGetTransferReceived.js'
 import { useWaitForTransaction } from '../hooks/useWaitForTransaction.js'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme, _, refs) => ({
     container: {
@@ -236,7 +234,7 @@ const useStyles = makeStyles<void, 'leftSideToken' | 'rightSideToken'>()((theme,
 }))
 
 export const Transaction = memo(function Transaction() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { reset, setFromToken, mode, setToToken } = useTrade()
     const { classes, cx, theme } = useStyles()
     const { basePath, showSnackbar } = useRuntime()
@@ -300,14 +298,14 @@ export const Transaction = memo(function Transaction() {
         const receipt = await waitForTransaction({ chainId: toChainId, hash: toTxHash, confirmationCount: 1 })
 
         if (!receipt.status) {
-            showSnackbar(_(msg`Bridge`), {
+            showSnackbar(t`Bridge`, {
                 message: <Trans>Failed to bridge</Trans>,
             })
         } else {
             const received = await getReceived({ hash: toTxHash, account, chainId: toChainId })
 
             if (received && !unmountedRef.current) {
-                showSnackbar(_(msg`Bridge`), {
+                showSnackbar(t`Bridge`, {
                     message: (
                         <MuiLink
                             className={classes.toastLink}

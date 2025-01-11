@@ -8,9 +8,7 @@ import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext
 import { BackupAccountType } from '@masknet/shared-base'
 import { Scenario, Locale } from '../../../utils/type.js'
 import { sendCode } from '../../../utils/api.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -20,7 +18,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const PhoneForm = memo(function PhoneForm() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
     const { user } = UserContext.useContainer()
     const lang = useLanguage()
@@ -65,7 +63,7 @@ export const PhoneForm = memo(function PhoneForm() {
                         onCodeChange={(code) => setValue('countryCode', code)}
                         onFocus={() => clearErrors('phone')}
                         fullWidth
-                        placeholder={_(msg`Mobile number`)}
+                        placeholder={t`Mobile number`}
                         error={!!errors.phone?.message}
                         helperText={errors.phone?.message}
                     />
@@ -79,7 +77,7 @@ export const PhoneForm = memo(function PhoneForm() {
                         {...field}
                         onFocus={() => clearErrors('code')}
                         fullWidth
-                        placeholder={_(msg`Phone verification code`)}
+                        placeholder={t`Phone verification code`}
                         error={!!errors.code?.message}
                         helperText={errors.code?.message}
                         InputProps={{

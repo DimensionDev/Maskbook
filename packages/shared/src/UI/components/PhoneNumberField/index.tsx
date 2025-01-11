@@ -4,8 +4,7 @@ import { COUNTRIES } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../index.js'
 import { Icons } from '@masknet/icons'
 import { CountryCodePicker } from '../CountryCodePicker/index.js'
-import { msg } from '@lingui/core/macro'
-import { useLingui } from '@lingui/react'
+import { useLingui } from '@lingui/react/macro'
 
 export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'variant'> {
     code: string
@@ -13,7 +12,7 @@ export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'varia
 }
 
 export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFieldProps) {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
     const countryIcon = useMemo(() => {
@@ -26,7 +25,7 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
     return (
         <>
             <TextField
-                placeholder={_(msg`Phone Number`)}
+                placeholder={t`Phone Number`}
                 type="tel"
                 {...rest}
                 InputProps={{
