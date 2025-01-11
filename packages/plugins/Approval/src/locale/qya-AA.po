@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:45\n"
+"PO-Revision-Date: 2025-01-11 15:56\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -16,9 +16,9 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 946\n"
 
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/ApprovalDialog.tsx
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/index.tsx
 msgid "Approval"
 msgstr "crwdns28284:0crwdne28284:0"
 
@@ -34,31 +34,31 @@ msgstr "crwdns28288:0crwdne28288:0"
 msgid "Collection Approval"
 msgstr "crwdns28290:0crwdne28290:0"
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Contract"
 msgstr "crwdns28292:0crwdne28292:0"
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "No approved contract records."
 msgstr "crwdns28294:0crwdne28294:0"
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Revoke"
 msgstr "crwdns28296:0crwdne28296:0"
 
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
-#: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalNFTContent.tsx
 msgid "Revoking"
 msgstr "crwdns28298:0crwdne28298:0"
 
