@@ -25,7 +25,7 @@ import { RedPacketRPC } from '../../messages.js'
 import { useCreateRedPacketReceipt } from '../hooks/useCreateRedPacketReceipt.js'
 import { useRedpacketToken } from '../hooks/useRedpacketToken.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
-import { formatTokenAmount } from '../helper/formatTokenAmount.js'
+import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()((

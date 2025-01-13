@@ -28,6 +28,8 @@ export const enum RoutePaths {
     ClaimedHistory = '/history/claimed',
     NftHistory = '/nft-history',
 
+    CreateSolanaRedPacket = '/create/solana',
+
     Exit = '/exit',
     Terms = '/terms',
 }

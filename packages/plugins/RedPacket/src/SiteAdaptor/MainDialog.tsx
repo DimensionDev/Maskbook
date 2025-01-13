@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const initialEntries = [RoutePaths.Exit, RoutePaths.CreateErc20RedPacket]
+const initialEntries = [RoutePaths.Exit, RoutePaths.CreateSolanaRedPacket]
 export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
     const { classes } = useStyles()
 

@@ -1,0 +1,711 @@
+{
+    "address": "CXT16oAAbmgpPZsL2sGmfSUNrATk3AsFVU18thTUVNxx",
+    "metadata": {
+        "name": "redpacket",
+        "version": "0.1.0",
+        "spec": "0.1.0",
+        "description": "Created with Anchor"
+    },
+    "instructions": [
+        {
+            "name": "claim_with_native_token",
+            "discriminator": [223, 197, 45, 181, 137, 221, 247, 204],
+            "accounts": [
+                {
+                    "name": "signer",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "red_packet",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet.creator",
+                                "account": "RedPacket"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "red_packet.create_time",
+                                "account": "RedPacket"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "instructions",
+                    "docs": [
+                        "https://github.com/GuidoDipietro/solana-ed25519-secp256k1-sig-verification/blob/master/programs/solana-ed25519-sig-verification/src/lib.rs",
+                        "https://solana.stackexchange.com/questions/16487/about-verify-signature-with-ed25519-issue?rq=1"
+                    ],
+                    "address": "Sysvar1nstructions1111111111111111111111111"
+                },
+                {
+                    "name": "ed25519_program",
+                    "address": "Ed25519SigVerify111111111111111111111111111"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "claim_with_spl_token",
+            "discriminator": [171, 83, 166, 29, 54, 177, 129, 69],
+            "accounts": [
+                {
+                    "name": "signer",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "red_packet",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet.creator",
+                                "account": "RedPacket"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "red_packet.create_time",
+                                "account": "RedPacket"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "token_mint"
+                },
+                {
+                    "name": "token_account",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "signer"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_program"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_mint"
+                            }
+                        ],
+                        "program": {
+                            "kind": "const",
+                            "value": [
+                                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142, 13, 131, 11, 90, 19, 153,
+                                218, 255, 16, 132, 4, 142, 123, 216, 219, 233, 248, 89
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_program"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_mint"
+                            }
+                        ],
+                        "program": {
+                            "kind": "const",
+                            "value": [
+                                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142, 13, 131, 11, 90, 19, 153,
+                                218, 255, 16, 132, 4, 142, 123, 216, 219, 233, 248, 89
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "token_program"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "instructions",
+                    "docs": [
+                        "https://github.com/GuidoDipietro/solana-ed25519-secp256k1-sig-verification/blob/master/programs/solana-ed25519-sig-verification/src/lib.rs",
+                        "https://solana.stackexchange.com/questions/16487/about-verify-signature-with-ed25519-issue?rq=1"
+                    ],
+                    "address": "Sysvar1nstructions1111111111111111111111111"
+                },
+                {
+                    "name": "ed25519_program",
+                    "address": "Ed25519SigVerify111111111111111111111111111"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "create_red_packet_with_native_token",
+            "discriminator": [16, 157, 226, 236, 116, 123, 246, 111],
+            "accounts": [
+                {
+                    "name": "signer",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "red_packet",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "signer"
+                            },
+                            {
+                                "kind": "arg",
+                                "path": "create_time"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "total_number",
+                    "type": "u8"
+                },
+                {
+                    "name": "total_amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "create_time",
+                    "type": "u64"
+                },
+                {
+                    "name": "duration",
+                    "type": "u64"
+                },
+                {
+                    "name": "if_spilt_random",
+                    "type": "bool"
+                },
+                {
+                    "name": "pubkey_for_claim_signature",
+                    "type": "pubkey"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "message",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "create_red_packet_with_spl_token",
+            "discriminator": [109, 49, 79, 30, 198, 129, 172, 106],
+            "accounts": [
+                {
+                    "name": "signer",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "red_packet",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "signer"
+                            },
+                            {
+                                "kind": "arg",
+                                "path": "create_time"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "token_mint"
+                },
+                {
+                    "name": "token_account",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "signer"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_program"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_mint"
+                            }
+                        ],
+                        "program": {
+                            "kind": "const",
+                            "value": [
+                                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142, 13, 131, 11, 90, 19, 153,
+                                218, 255, 16, 132, 4, 142, 123, 216, 219, 233, 248, 89
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_program"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_mint"
+                            }
+                        ],
+                        "program": {
+                            "kind": "const",
+                            "value": [
+                                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142, 13, 131, 11, 90, 19, 153,
+                                218, 255, 16, 132, 4, 142, 123, 216, 219, 233, 248, 89
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "token_program"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                }
+            ],
+            "args": [
+                {
+                    "name": "total_number",
+                    "type": "u8"
+                },
+                {
+                    "name": "total_amount",
+                    "type": "u64"
+                },
+                {
+                    "name": "create_time",
+                    "type": "u64"
+                },
+                {
+                    "name": "duration",
+                    "type": "u64"
+                },
+                {
+                    "name": "if_spilt_random",
+                    "type": "bool"
+                },
+                {
+                    "name": "pubkey_for_claim_signature",
+                    "type": "pubkey"
+                },
+                {
+                    "name": "name",
+                    "type": "string"
+                },
+                {
+                    "name": "message",
+                    "type": "string"
+                }
+            ]
+        },
+        {
+            "name": "withdraw_with_native_token",
+            "discriminator": [211, 242, 128, 105, 170, 138, 67, 20],
+            "accounts": [
+                {
+                    "name": "signer",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "red_packet",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet.creator",
+                                "account": "RedPacket"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "red_packet.create_time",
+                                "account": "RedPacket"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "instructions",
+                    "docs": [
+                        "https://github.com/GuidoDipietro/solana-ed25519-secp256k1-sig-verification/blob/master/programs/solana-ed25519-sig-verification/src/lib.rs",
+                        "https://solana.stackexchange.com/questions/16487/about-verify-signature-with-ed25519-issue?rq=1"
+                    ],
+                    "address": "Sysvar1nstructions1111111111111111111111111"
+                },
+                {
+                    "name": "ed25519_program",
+                    "address": "Ed25519SigVerify111111111111111111111111111"
+                }
+            ],
+            "args": []
+        },
+        {
+            "name": "withdraw_with_spl_token",
+            "discriminator": [146, 55, 174, 205, 179, 107, 70, 124],
+            "accounts": [
+                {
+                    "name": "signer",
+                    "writable": true,
+                    "signer": true
+                },
+                {
+                    "name": "red_packet",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet.creator",
+                                "account": "RedPacket"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "red_packet.create_time",
+                                "account": "RedPacket"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "token_mint"
+                },
+                {
+                    "name": "token_account",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "signer"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_program"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_mint"
+                            }
+                        ],
+                        "program": {
+                            "kind": "const",
+                            "value": [
+                                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142, 13, 131, 11, 90, 19, 153,
+                                218, 255, 16, 132, 4, 142, 123, 216, 219, 233, 248, 89
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "vault",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "account",
+                                "path": "red_packet"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_program"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "token_mint"
+                            }
+                        ],
+                        "program": {
+                            "kind": "const",
+                            "value": [
+                                140, 151, 37, 143, 78, 36, 137, 241, 187, 61, 16, 41, 20, 142, 13, 131, 11, 90, 19, 153,
+                                218, 255, 16, 132, 4, 142, 123, 216, 219, 233, 248, 89
+                            ]
+                        }
+                    }
+                },
+                {
+                    "name": "token_program"
+                },
+                {
+                    "name": "associated_token_program",
+                    "address": "ATokenGPvbdGVxr1b2hvZbsiqW5xWH25efTNsLJA8knL"
+                },
+                {
+                    "name": "system_program",
+                    "address": "11111111111111111111111111111111"
+                },
+                {
+                    "name": "instructions",
+                    "docs": [
+                        "https://github.com/GuidoDipietro/solana-ed25519-secp256k1-sig-verification/blob/master/programs/solana-ed25519-sig-verification/src/lib.rs",
+                        "https://solana.stackexchange.com/questions/16487/about-verify-signature-with-ed25519-issue?rq=1"
+                    ],
+                    "address": "Sysvar1nstructions1111111111111111111111111"
+                },
+                {
+                    "name": "ed25519_program",
+                    "address": "Ed25519SigVerify111111111111111111111111111"
+                }
+            ],
+            "args": []
+        }
+    ],
+    "accounts": [
+        {
+            "name": "RedPacket",
+            "discriminator": [51, 197, 171, 232, 223, 81, 121, 248]
+        }
+    ],
+    "errors": [
+        {
+            "code": 6000,
+            "name": "InvalidRedPacketId",
+            "msg": "Invalid red packet id."
+        },
+        {
+            "code": 6001,
+            "name": "InvalidCreateTime",
+            "msg": "Invalid create time."
+        },
+        {
+            "code": 6002,
+            "name": "InvalidExpiryTime",
+            "msg": "Invalid expiry time."
+        },
+        {
+            "code": 6003,
+            "name": "InvalidTotalNumber",
+            "msg": "Invalid total number."
+        },
+        {
+            "code": 6004,
+            "name": "InvalidTotalAmount",
+            "msg": "Invalid total amount."
+        },
+        {
+            "code": 6005,
+            "name": "InsufficientTokenBalance",
+            "msg": "Insufficient token balance."
+        },
+        {
+            "code": 6006,
+            "name": "InvalidTokenType",
+            "msg": "Invalid token type."
+        },
+        {
+            "code": 6007,
+            "name": "InvalidAccountForNativeToken",
+            "msg": "Invalid account for native token."
+        },
+        {
+            "code": 6008,
+            "name": "InvalidInitialParamsForTokenAccount",
+            "msg": "Invalid initial params for token account."
+        },
+        {
+            "code": 6009,
+            "name": "RedPacketExpired",
+            "msg": "The red packet has expired."
+        },
+        {
+            "code": 6010,
+            "name": "InvalidSignature",
+            "msg": "Invalid signature."
+        },
+        {
+            "code": 6011,
+            "name": "InvalidClaimAmount",
+            "msg": "The claim amount is invalid."
+        },
+        {
+            "code": 6012,
+            "name": "RedPacketNotExpired",
+            "msg": "The red packet has not yet expired."
+        },
+        {
+            "code": 6013,
+            "name": "RedPacketClaimed",
+            "msg": "The red packet has been claimed."
+        },
+        {
+            "code": 6014,
+            "name": "RedPacketAllClaimed",
+            "msg": "All the red packet has been claimed."
+        },
+        {
+            "code": 6015,
+            "name": "Unauthorized",
+            "msg": "You are not authorized to perform this action."
+        }
+    ],
+    "types": [
+        {
+            "name": "RedPacket",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "creator",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "total_number",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "claimed_number",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "total_amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "claimed_amount",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "create_time",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "duration",
+                        "type": "u64"
+                    },
+                    {
+                        "name": "token_type",
+                        "type": "u8"
+                    },
+                    {
+                        "name": "token_address",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "if_spilt_random",
+                        "type": "bool"
+                    },
+                    {
+                        "name": "claimed_users",
+                        "type": {
+                            "vec": "pubkey"
+                        }
+                    },
+                    {
+                        "name": "claimed_amount_records",
+                        "type": {
+                            "vec": "u64"
+                        }
+                    },
+                    {
+                        "name": "pubkey_for_claim_signature",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "name",
+                        "type": "string"
+                    },
+                    {
+                        "name": "message",
+                        "type": "string"
+                    }
+                ]
+            }
+        }
+    ],
+    "constants": [
+        {
+            "name": "RED_PACKET_SPILT_EQUAL",
+            "type": "bool",
+            "value": "false"
+        },
+        {
+            "name": "RED_PACKET_SPILT_RANDOM",
+            "type": "bool",
+            "value": "true"
+        },
+        {
+            "name": "RED_PACKET_USE_CUSTOM_TOKEN",
+            "type": "u8",
+            "value": "1"
+        },
+        {
+            "name": "RED_PACKET_USE_NATIVE_TOKEN",
+            "type": "u8",
+            "value": "0"
+        },
+        {
+            "name": "RED_PACKET_WITHDRAW_STATUS_CLAIMED",
+            "type": "u8",
+            "value": "1"
+        },
+        {
+            "name": "RED_PACKET_WITHDRAW_STATUS_NOT_WITHDRAW",
+            "type": "u8",
+            "value": "0"
+        }
+    ]
+}

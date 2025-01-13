@@ -1,0 +1,582 @@
+import { Trans, useLingui } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import {
+    EthereumERC20TokenApprovedBoundary,
+    FungibleTokenInput,
+    PluginWalletStatusBar,
+    SelectFungibleTokenModal,
+    SelectGasSettingsToolbar,
+    TokenValue,
+    useAvailableBalance,
+} from '@masknet/shared'
+import { EnhanceableSite, getEnhanceableSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
+import {
+    useAccount,
+    useChainContext,
+    useEnvironmentContext,
+    useNativeTokenPrice,
+    useWallet,
+} from '@masknet/web3-hooks-base'
+import { useTransactionValue } from '@masknet/web3-hooks-evm'
+import { EVMWeb3, SmartPayBundler } from '@masknet/web3-providers'
+import {
+    formatBalance,
+    type FungibleToken,
+    isGreaterThan,
+    isZero,
+    multipliedBy,
+    rightShift,
+    ZERO,
+} from '@masknet/web3-shared-base'
+import { type ChainId, type GasConfig, SchemaType, useRedPacketConstants } from '@masknet/web3-shared-evm'
+import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
+import { BigNumber } from 'bignumber.js'
+import { type ChangeEvent, useCallback, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsync, useAsyncFn } from 'react-use'
+import { MAX_CUSTOM_THEMES, RED_PACKET_MAX_SHARES, RED_PACKET_MIN_SHARES, RoutePaths } from '../../constants.js'
+import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
+import { useRedPacket } from '../contexts/RedPacketContext.js'
+import { useCreateParams } from '../hooks/useCreateCallback.js'
+import { useDefaultCreateGas } from '../hooks/useDefaultCreateGas.js'
+import { ConditionSettings } from '../components/ConditionSettings.js'
+import { web3 } from '@coral-xyz/anchor'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import { createWithSplToken } from '../helpers/createWithSplToken.js'
+import { createWithNativeToken } from '../helpers/createWithNativeToken.js'
+import { setRpKeyPair } from '../helpers/getRpKeyPair.js'
+
+const useStyles = makeStyles()((theme) => ({
+    fields: {
+        display: 'flex',
+        flexDirection: 'column',
+        padding: theme.spacing(2),
+        gap: theme.spacing(2),
+        paddingBottom: 88,
+    },
+    field: {
+        display: 'flex',
+        gap: 16,
+        alignItems: 'center',
+    },
+    input: {
+        height: 70,
+        position: 'relative',
+        padding: theme.spacing(1.25, 1.5),
+        fontWeight: 700,
+        [`& > .${inputBaseClasses.input}`]: {
+            paddingTop: `${theme.spacing(2.75)}!important`,
+            paddingBottom: '0px !important',
+            flex: 2,
+            paddingLeft: '0px !important',
+            fontSize: 14,
+            fontWeight: 700,
+        },
+    },
+    iconInput: {
+        [`& > .${inputBaseClasses.input}`]: {
+            paddingLeft: '24px !important',
+        },
+    },
+    inputLabel: {
+        fontSize: 13,
+        lineHeight: '18px',
+        position: 'absolute',
+        top: 10,
+        left: 12,
+        color: theme.palette.maskColor.second,
+    },
+    inputIcon: {
+        position: 'absolute',
+        left: 10,
+        top: 32,
+    },
+    button: {
+        margin: 0,
+        padding: 0,
+        height: 40,
+        maxWidth: 286,
+    },
+    unlockContainer: {
+        margin: 0,
+        columnGap: 16,
+        flexFlow: 'unset',
+        ['& > div']: {
+            padding: '0px !important',
+        },
+    },
+    option: {
+        display: 'flex',
+        width: '50%',
+        alignItems: 'center',
+        color: theme.palette.maskColor.line,
+        cursor: 'pointer',
+    },
+    checkIconWrapper: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        cursor: 'pointer',
+        borderRadius: '50%',
+        marginRight: 5,
+        backgroundColor: 'transparent',
+    },
+    tokenValue: {
+        flexGrow: 1,
+    },
+    label: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.second,
+    },
+    fieldValue: {
+        marginLeft: 'auto',
+    },
+    gasSettings: {
+        margin: 0,
+    },
+    deleteButton: {
+        cursor: 'pointer',
+        position: 'absolute',
+        right: 0,
+        top: 0,
+        opacity: 0,
+        width: 20,
+        height: 20,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: theme.palette.maskColor.bottom,
+        backgroundColor: alpha(theme.palette.maskColor.main, 0.8),
+        borderRadius: 4,
+        padding: 0,
+        border: 0,
+    },
+    cover: {
+        position: 'relative',
+        width: 60,
+        height: 40,
+        cursor: 'pointer',
+        border: 'none',
+        borderRadius: 4,
+        backgroundRepeat: 'no-repeat',
+        backgroundSize: 'cover',
+        '&:hover *': {
+            opacity: 1,
+        },
+    },
+    addButton: {
+        width: 44,
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: theme.palette.maskColor.thirdMain,
+    },
+    selectedCover: {
+        boxShadow: `0 0 0 2px ${theme.palette.maskColor.main}`,
+    },
+    preview: {
+        width: 484,
+        height: 336,
+        margin: theme.spacing(0, 'auto'),
+    },
+    envelope: {
+        width: '100%',
+        height: '100%',
+        borderRadius: theme.spacing(2),
+        overflow: 'hidden',
+    },
+}))
+
+const claimer = web3.Keypair.generate()
+
+export function CreateSolanaRedPacket() {
+    const { t } = useLingui()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
+    const [gasOption, setGasOption] = useState<GasConfig>()
+    const { classes, cx } = useStyles()
+    const theme = useTheme()
+    const navigate = useNavigate()
+    const {
+        token,
+        setToken,
+        nativeToken,
+        theme: selectedTheme,
+        themes: redpacketThemes,
+        customThemes,
+        setCustomThemes,
+        setTheme,
+        settings,
+        message,
+        setMessage,
+    } = useRedPacket()
+    const [isRandom, setIsRandom] = useState<boolean>(false)
+    const [shares, setShares] = useState<number>(2)
+    const winnersCount = shares
+    const [ifSPL, setIfSPL] = useState<boolean>(false)
+    const [rawAmount, setRawAmount] = useState('0.0001')
+    const solanaAccount = useAccount(NetworkPluginID.PLUGIN_SOLANA)
+    const [tokenMint, setTokenMint] = useState(() => new web3.PublicKey('Gh9ZwEmdLJ8DscKNTkTqPbNwLNNBjuSzaG9Vp2KGtKJr'))
+    const [author, setAuthor] = useState('unclebill')
+
+    const [{ loading }, handleCreate] = useAsyncFn(async () => {
+        if (!winnersCount || !rawAmount) {
+            console.log('Please fill all fields correctly.')
+            return
+        }
+
+        const publicKey = new SolanaWeb3.PublicKey(solanaAccount)
+        const totalAmount = Number(rawAmount)
+
+        if (ifSPL) {
+            try {
+                const { accountId } = await createWithSplToken(
+                    publicKey,
+                    tokenMint,
+                    winnersCount,
+                    totalAmount * web3.LAMPORTS_PER_SOL,
+                    1000 * 60 * 60 * 24, // 24 hours
+                    isRandom,
+                    claimer.publicKey,
+                    message,
+                    author,
+                )
+
+                setRpKeyPair(accountId, claimer)
+            } catch (error) {
+                console.error('Error creating Red Pack:', error)
+                throw error
+            }
+        } else {
+            try {
+                const { accountId } = await createWithNativeToken(
+                    publicKey,
+                    winnersCount,
+                    totalAmount * web3.LAMPORTS_PER_SOL,
+                    1000 * 60 * 60 * 24, // 24 hours
+                    isRandom,
+                    claimer.publicKey,
+                    message,
+                    author,
+                )
+
+                setRpKeyPair(accountId, claimer)
+            } catch (error) {
+                console.error('Error creating Red Pack:', error)
+                throw error
+            }
+        }
+    }, [winnersCount, isRandom, ifSPL, tokenMint, message, author])
+
+    // context
+    const wallet = useWallet()
+    const { pluginID } = useEnvironmentContext()
+    const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
+    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+
+    // #region select token
+    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+
+    const onSelectTokenChipClick = useCallback(async () => {
+        const picked = await SelectFungibleTokenModal.openAndWaitForClose({
+            disableNativeToken: false,
+            selectedTokens: token ? [token] : [],
+            chainId,
+            pluginID: NetworkPluginID.PLUGIN_EVM,
+        })
+        if (!picked || Array.isArray(picked)) return
+        if (chainId !== picked.chainId) {
+            setChainId(picked.chainId as ChainId)
+        }
+        setToken(picked as FungibleToken<ChainId, SchemaType>)
+    }, [token?.address, chainId])
+    // #endregion
+
+    // shares
+    const onShareChange = useCallback(
+        (ev: ChangeEvent<HTMLInputElement>) => {
+            const inputShares = ev.currentTarget.value.replaceAll(/[,.]/g, '')
+            if (inputShares === '') setShares(0)
+            else if (/^[1-9]+\d*$/.test(inputShares)) {
+                const parsed = Number.parseInt(inputShares, 10)
+                if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES) {
+                    setShares(Number.parseInt(inputShares, 10))
+                } else if (parsed > RED_PACKET_MAX_SHARES) {
+                    setShares(RED_PACKET_MAX_SHARES)
+                }
+            }
+        },
+        [RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES],
+    )
+
+    // amount
+    const amount = rightShift(rawAmount || '0', token?.decimals)
+    const rawTotalAmount = useMemo(
+        () => (isRandom || !rawAmount ? rawAmount : multipliedBy(rawAmount, shares).toFixed()),
+        [rawAmount, isRandom, shares],
+    )
+    const totalAmount = multipliedBy(amount, isRandom ? 1 : (shares ?? '0'))
+    const minTotalAmount = new BigNumber(isRandom ? 1 : (shares ?? 0))
+    const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
+
+    // #region gas
+    const { account: publicKey } = useMemo(() => EVMWeb3.createAccount(), [])
+    const contract_version = 4
+    const { value: params } = useCreateParams(chainId, settings, contract_version, publicKey)
+    // #endregion
+
+    // balance
+    const { value: defaultGas = ZERO } = useDefaultCreateGas(settings, contract_version, publicKey)
+    const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
+        NetworkPluginID.PLUGIN_EVM,
+        token?.address,
+        gasOption ? { ...gasOption, gas: new BigNumber(defaultGas).toString() } : undefined,
+        {
+            chainId,
+        },
+    )
+
+    const { transactionValue, loading: loadingTransactionValue } = useTransactionValue(
+        settings?.total,
+        gasOption?.gas,
+        gasOption?.gasCurrency,
+    )
+    // #endregion
+
+    const validationMessage = (() => {
+        if (!token) return <Trans>Select a Token</Trans>
+        if (!account) return <Trans>Connect Wallet</Trans>
+        if (!shares) return <Trans>Enter Number of Winners</Trans>
+        if (isGreaterThan(shares, 255)) return <Trans>At most 255 recipients</Trans>
+        if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
+            return <Trans>Insufficient {token?.symbol} Balance</Trans>
+        if (isZero(amount)) {
+            return isRandom ? <Trans>Enter Total Amount</Trans> : <Trans>Enter Amount Each</Trans>
+        }
+
+        if (!isDivisible)
+            return (
+                <Trans>
+                    The minimum amount for each share is {formatBalance(1, token.decimals)} {token.symbol}
+                </Trans>
+            )
+        return undefined
+    })()
+
+    const gasValidationMessage = (() => {
+        if (!token) return
+        if (!isGasSufficient) {
+            return <Trans>Insufficient Balance for Gas Fee</Trans>
+        }
+        if (!loadingTransactionValue && new BigNumber(transactionValue).isLessThanOrEqualTo(0))
+            return <Trans>Insufficient Balance</Trans>
+
+        return
+    })()
+
+    if (!token) return null
+
+    const messageMaxLength = isFirefly ? 40 : 100
+
+    return (
+        <>
+            <div className={classes.fields}>
+                <div className={classes.field}>
+                    <label className={classes.option} onClick={() => setIsRandom(true)}>
+                        <div className={classes.checkIconWrapper}>
+                            <RadioIndicator checked={isRandom} size={20} />
+                        </div>
+                        <Typography
+                            color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                            fontSize={16}
+                            fontWeight={isRandom ? 700 : 400}>
+                            <Trans>Random Amount</Trans>
+                        </Typography>
+                    </label>
+                    <label className={classes.option} onClick={() => setIsRandom(false)}>
+                        <div className={classes.checkIconWrapper}>
+                            <RadioIndicator checked={!isRandom} size={20} />
+                        </div>
+                        <Typography
+                            color={!isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
+                            fontSize={16}
+                            fontWeight={!isRandom ? 700 : 400}>
+                            <Trans>Equal Amount</Trans>
+                        </Typography>
+                    </label>
+                </div>
+                <InputBase
+                    className={classes.input}
+                    fullWidth
+                    value={message}
+                    onChange={(e) => setMessage(e.target.value)}
+                    startAdornment={
+                        <Typography className={classes.inputLabel}>
+                            <Trans>Message</Trans>
+                        </Typography>
+                    }
+                    endAdornment={
+                        <Typography className={classes.inputLabel} style={{ right: 12, left: 'auto' }}>
+                            {message.length}/{messageMaxLength}
+                        </Typography>
+                    }
+                    placeholder={t`Best Wishes!`}
+                    inputProps={{
+                        maxLength: messageMaxLength,
+                    }}
+                />
+                <div className={classes.field}>
+                    <Box width={180}>
+                        <InputBase
+                            className={cx(classes.input, classes.iconInput)}
+                            fullWidth
+                            value={shares || ''}
+                            onChange={onShareChange}
+                            startAdornment={
+                                <Typography className={classes.inputLabel}>
+                                    <Trans>Winners</Trans>
+                                </Typography>
+                            }
+                            endAdornment={<Icons.RedPacket className={classes.inputIcon} size={24} />}
+                            inputProps={{
+                                autoComplete: 'off',
+                                autoCorrect: 'off',
+                                inputMode: 'decimal',
+                                spellCheck: false,
+                                pattern: '^[0-9]+$',
+                            }}
+                        />
+                    </Box>
+                    <FungibleTokenInput
+                        className={classes.input}
+                        label={isRandom ? t`Total amount` : t`Amount Each`}
+                        token={token}
+                        placeholder="0"
+                        onSelectToken={onSelectTokenChipClick}
+                        onAmountChange={setRawAmount}
+                        amount={rawAmount}
+                        maxAmount={
+                            minTotalAmount.isGreaterThan(balance) && !isZero(balance) ?
+                                minTotalAmount.toString()
+                            :   undefined
+                        }
+                        isAvailableBalance={isAvailableBalance}
+                        balance={balance}
+                        maxAmountShares={isRandom || !shares ? 1 : shares}
+                    />
+                </div>
+                <Box className={classes.field}>
+                    <Typography className={classes.label}>
+                        <Trans>Claim Conditions</Trans>
+                    </Typography>
+                    <ConditionSettings className={classes.fieldValue} />
+                </Box>
+                {pluginID === NetworkPluginID.PLUGIN_EVM ?
+                    <SelectGasSettingsToolbar
+                        classes={{ label: classes.label, root: classes.gasSettings }}
+                        nativeToken={nativeToken}
+                        nativeTokenPrice={nativeTokenPrice}
+                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
+                        gasConfig={gasOption}
+                        gasLimit={Number.parseInt(params?.gas ?? '0', 10)}
+                        onChange={setGasOption}
+                    />
+                :   null}
+                <Box className={classes.field}>
+                    <Typography className={classes.label}>
+                        <Trans>Choose a Cover</Trans>
+                    </Typography>
+                    <Box display="flex" flexDirection="row" gap={1} ml="auto">
+                        {redpacketThemes.map((theme) => (
+                            <div
+                                key={theme.tid}
+                                role="button"
+                                className={cx(
+                                    classes.cover,
+                                    theme.tid === selectedTheme?.tid ? classes.selectedCover : '',
+                                )}
+                                style={{
+                                    backgroundImage: `url("${encodeURI(theme.cover.bg_image)}")`,
+                                    backgroundColor: theme.cover.bg_color,
+                                }}
+                                onClick={() => {
+                                    setTheme(theme)
+                                }}>
+                                {customThemes.includes(theme) ?
+                                    <button
+                                        type="button"
+                                        className={classes.deleteButton}
+                                        onClick={(event) => {
+                                            event.stopPropagation()
+                                            setCustomThemes((origins) => origins.filter((x) => x !== theme))
+                                            if (theme === selectedTheme) setTheme(undefined)
+                                        }}>
+                                        <Icons.Delete size={16} />
+                                    </button>
+                                :   null}
+                            </div>
+                        ))}
+                        {customThemes.length < MAX_CUSTOM_THEMES ?
+                            <button
+                                type="button"
+                                className={cx(classes.cover, classes.addButton)}
+                                onClick={() => {
+                                    navigate(RoutePaths.CustomCover)
+                                }}>
+                                <Icons.Plus size={20} />
+                            </button>
+                        :   null}
+                    </Box>
+                </Box>
+                <div>
+                    {selectedTheme && shares ?
+                        <div className={classes.preview}>
+                            <PreviewRedPacket className={classes.envelope} />
+                        </div>
+                    :   null}
+                </div>
+            </div>
+
+            {rawTotalAmount && !isZero(rawTotalAmount) ?
+                <TokenValue className={classes.tokenValue} token={token} amount={rawTotalAmount} />
+            :   null}
+
+            <Box style={{ width: '100%', position: 'absolute', bottom: 0 }}>
+                <PluginWalletStatusBar
+                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                    expectedChainId={chainId}
+                    actualPluginID={pluginID}
+                    disableSwitchAccount={isFirefly}>
+                    <EthereumERC20TokenApprovedBoundary
+                        amount={totalAmount.toFixed()}
+                        balance={balance}
+                        classes={{ container: classes.unlockContainer }}
+                        ActionButtonProps={{
+                            size: 'medium',
+                        }}
+                        token={
+                            token?.schema === SchemaType.ERC20 && totalAmount.gt(0) && !validationMessage ?
+                                token
+                            :   undefined
+                        }
+                        tooltip={t`Grant access to your ${token.symbol} for the Lucky Drop Smart contract. You only have to do this once per token.`}
+                        spender={HAPPY_RED_PACKET_ADDRESS_V4}>
+                        <ActionButton
+                            size="medium"
+                            className={classes.button}
+                            fullWidth
+                            onClick={() => {
+                                handleCreate()
+                            }}>
+                            Create
+                        </ActionButton>
+                    </EthereumERC20TokenApprovedBoundary>
+                </PluginWalletStatusBar>
+            </Box>
+        </>
+    )
+}

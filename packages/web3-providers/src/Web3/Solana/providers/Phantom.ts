@@ -41,12 +41,14 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         }>({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
-                message: bs58.encode(transaction.serialize()),
+                message: bs58.encode(transaction.serialize({ verifySignatures: false })),
             },
         })
         const msg = new SolanaWeb3.MessageV0({
             ...result.message,
-            staticAccountKeys: result.message.staticAccountKeys.map((x) => new SolanaWeb3.PublicKey(x)),
+            staticAccountKeys: result.message.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)) || [],
+            compiledInstructions: result.message.compiledInstructions || [],
+            addressTableLookups: result.message.addressTableLookups || [],
         })
         const message = SolanaWeb3.VersionedMessage.deserialize(msg.serialize())
         return new SolanaWeb3.VersionedTransaction(message, result.signatures)
@@ -58,7 +60,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
-                    return bs58.encode(transaction.message.serialize())
+                    return bs58.encode(transaction.serialize({ verifySignatures: false }))
                 }),
             },
         })

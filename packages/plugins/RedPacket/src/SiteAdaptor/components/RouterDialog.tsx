@@ -28,6 +28,7 @@ const useStyles = makeStyles<{ isDim: boolean }>()((theme, { isDim }) => {
 const pageMap: Record<RedPacketTabs, RoutePaths> = {
     [RedPacketTabs.tokens]: RoutePaths.CreateErc20RedPacket,
     [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
+    [RedPacketTabs.solana]: RoutePaths.CreateSolanaRedPacket,
 }
 export function RouterDialog(props: InjectedDialogProps) {
     const { pathname } = useLocation()
@@ -49,6 +50,7 @@ export function RouterDialog(props: InjectedDialogProps) {
             <MaskTabList variant="base" onChange={onChange} aria-label="Redpacket">
                 <Tab label={<Trans>Tokens</Trans>} value={RedPacketTabs.tokens} />
                 <Tab label={<Trans>NFTs</Trans>} value={RedPacketTabs.collectibles} />
+                <Tab label={<Trans>Solana</Trans>} value={RedPacketTabs.solana} />
             </MaskTabList>
         </TabContext>
     )
@@ -62,12 +64,14 @@ export function RouterDialog(props: InjectedDialogProps) {
         </TabContext>
     )
     const isCreate = matchPath(`${RoutePaths.Create}/*`, pathname)
+    const isEvmCreate =
+        matchPath(RoutePaths.CreateErc20RedPacket, pathname) || matchPath(RoutePaths.CreateNftRedPacket, pathname)
     const titleTabs =
         isCreate ? createTabs
         : matchPath(RoutePaths.History, pathname) ? historyTabs
         : null
     const networkTabs =
-        isCreate && currentTab === RedPacketTabs.collectibles ?
+        isEvmCreate && currentTab === RedPacketTabs.collectibles ?
             <div className={classes.tabWrapper}>
                 <NetworkTab
                     chains={nftDefaultChains}

@@ -9,6 +9,7 @@ import { HistoryDetail } from './views/HistoryDetail.js'
 import { NftHistory } from './views/NftHistory.js'
 import { NftRedPacketConfirm } from './views/NftRedPacketConfirm.js'
 import { SelectNft } from './views/SelectNft.js'
+import { CreateSolanaRedPacket } from './views/CreateSolanaRedPacket.js'
 
 export function RedPacketRoutes() {
     return (
@@ -16,6 +17,7 @@ export function RedPacketRoutes() {
             <Route path={RoutePaths.Create}>
                 <Route index path={RoutePaths.CreateErc20RedPacket} element={<CreateERC20RedPacket />} />
                 <Route path={RoutePaths.CreateNftRedPacket} element={<CreateNftRedPacket />} />
+                <Route path={RoutePaths.CreateSolanaRedPacket} element={<CreateSolanaRedPacket />} />
             </Route>
             <Route path={RoutePaths.CustomCover} element={<CustomCover />} />
             <Route path={RoutePaths.SelectNft} element={<SelectNft />} />
