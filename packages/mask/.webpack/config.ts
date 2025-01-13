@@ -113,6 +113,7 @@ export async function createConfiguration(
                 stream: require.resolve('stream-browserify'),
                 crypto: require.resolve('crypto-browserify'),
                 zlib: require.resolve('zlib-browserify'),
+                buffer: false,
             },
             conditionNames: ['mask-src', '...'],
         },

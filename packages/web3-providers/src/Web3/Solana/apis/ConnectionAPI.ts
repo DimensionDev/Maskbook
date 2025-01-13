@@ -365,17 +365,16 @@ export class SolanaConnectionAPI
 
     async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        return SolanaWeb3.sendAndConfirmRawTransaction(
-            this.Web3.getConnection(initial),
-            signedTransaction.message.serialize() as Buffer,
-        )
+        const raw =
+            'serializeMessage' in signedTransaction ?
+                signedTransaction.serializeMessage()
+            :   signedTransaction.message.serialize()
+        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        return SolanaWeb3.sendAndConfirmRawTransaction(
-            this.Web3.getConnection(initial),
-            signature.message.serialize() as Buffer,
-        )
+        const raw = 'serializeMessage' in signature ? signature.serializeMessage() : signature.message.serialize()
+        return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
     }
 
     replaceTransaction(hash: string, config: Transaction, options?: SolanaConnectionOptions): Promise<void> {

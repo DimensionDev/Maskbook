@@ -1,6 +1,7 @@
 import type {
     PublicKey,
     BlockResponse,
+    Transaction as LegacyTransaction,
     VersionedTransaction as SolanaTransaction,
     TransactionResponse,
 } from '@solana/web3.js'
@@ -75,10 +76,10 @@ export type Block = BlockResponse
 export type MessageRequest = never
 export type MessageResponse = never
 export type Operation = never
-export type Transaction = SolanaTransaction
+export type Transaction = SolanaTransaction | LegacyTransaction
 export type TransactionReceipt = never
 export type TransactionDetailed = TransactionResponse
-export type TransactionSignature = SolanaTransaction
+export type TransactionSignature = SolanaTransaction | LegacyTransaction
 export type TransactionParameter = string
 
 export type Web3State = Web3StateShared<
