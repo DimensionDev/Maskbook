@@ -1,7 +1,7 @@
 import { ProviderType, type ChainId, type Transaction } from '@masknet/web3-shared-solana'
 import type { WalletAPI } from '../../../entry-types.js'
-import { SolanaCoin98Provider } from './Coin98.js'
 import { NoneProvider } from './None.js'
+import { SolanaCoin98Provider } from './Coin98.js'
 import { SolanaPhantomProvider } from './Phantom.js'
 import { SolanaSolflareProvider } from './SolflareProvider.js'
 
