@@ -6,7 +6,7 @@ export function recoverTransaction(
     messageArgs: SolanaWeb3.MessageArgs | SolanaWeb3.MessageV0Args,
     signatures: Uint8Array[],
 ): SolanaWeb3.Transaction | SolanaWeb3.VersionedTransaction {
-    if ('serializeMessage' in transaction && transaction.feePayer) {
+    if ('serializeMessage' in transaction) {
         const args = messageArgs as SolanaWeb3.MessageArgs
         const transaction = SolanaWeb3.Transaction.populate(
             new SolanaWeb3.Message(args),
