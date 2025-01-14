@@ -41,7 +41,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         }>({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
-                message: bs58.encode(transaction.serialize({ verifySignatures: false })),
+                message: bs58.encode(transaction.serialize()),
             },
         })
         const msg = new SolanaWeb3.MessageV0({
@@ -60,7 +60,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
-                    return bs58.encode(transaction.serialize({ verifySignatures: false }))
+                    return bs58.encode(transaction.serialize())
                 }),
             },
         })
