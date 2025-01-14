@@ -109,15 +109,18 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Amount Each"
 msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Amount per Share"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "At most 255 recipients"
 msgstr ""
 
@@ -136,12 +139,14 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/contexts/SolRedpacketContext.tsx
 #: src/SiteAdaptor/contexts/RedPacketContext.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/components/MessagePanel.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Best Wishes!"
 msgstr ""
 
@@ -159,6 +164,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Choose a Cover"
 msgstr ""
 
@@ -174,6 +180,7 @@ msgstr "認領"
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Claim Conditions"
 msgstr ""
 
@@ -287,17 +294,20 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Connect Wallet"
 msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Cover"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Create the Lucky Drop"
 msgstr "下一步"
 
@@ -336,6 +346,7 @@ msgstr "標題"
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Enter Amount Each"
 msgstr ""
 
@@ -345,6 +356,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Enter Number of Winners"
 msgstr ""
 
@@ -354,11 +366,13 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Enter Total Amount"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Equal Amount"
 msgstr ""
 
@@ -398,6 +412,10 @@ msgstr ""
 #. placeholder {0}: payload.senderName || '-'
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "From: @{0}"
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+msgid "Gas Fee"
 msgstr ""
 
 #: src/SiteAdaptor/index.tsx
@@ -458,6 +476,7 @@ msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network.
 msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Identical"
 msgstr ""
 
@@ -468,12 +487,14 @@ msgstr ""
 #. placeholder {0}: token?.symbol
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Insufficient {0} Balance"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Insufficient Balance"
 msgstr "餘額不足"
@@ -482,6 +503,8 @@ msgstr "餘額不足"
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr ""
 
@@ -526,6 +549,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Message"
 msgstr ""
 
@@ -603,11 +627,13 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Random"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Random Amount"
 msgstr ""
 
@@ -670,6 +696,7 @@ msgstr ""
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Select a Token"
 msgstr ""
 
@@ -706,6 +733,7 @@ msgstr ""
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Share"
 msgstr ""
 
@@ -714,14 +742,15 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-msgid "Solana"
-msgstr ""
+#~ msgid "Solana"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Something went wrong."
 msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Split Mode"
 msgstr ""
 
@@ -774,6 +803,7 @@ msgstr ""
 #. placeholder {1}: token.symbol
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "The minimum amount for each share is {0} {1}"
 msgstr ""
 
@@ -803,6 +833,7 @@ msgstr "代幣"
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Total amount"
 msgstr ""
 
@@ -815,6 +846,7 @@ msgstr "總額"
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Total cost"
 msgstr ""
 
@@ -854,6 +886,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Winners"
 msgstr ""
 
@@ -876,6 +909,7 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "You can withdraw the remaining balance 24 hours after sending the lucky drop."
 msgstr ""
 
