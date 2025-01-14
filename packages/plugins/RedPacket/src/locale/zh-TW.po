@@ -180,7 +180,6 @@ msgstr "認領"
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Claim Conditions"
 msgstr ""
 
@@ -272,6 +271,7 @@ msgstr "已完成"
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CustomCover.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Confirm"
 msgstr ""
 
@@ -851,6 +851,7 @@ msgid "Total cost"
 msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Transaction cost"
 msgstr ""
 
