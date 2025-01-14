@@ -8,11 +8,10 @@ export function recoverTransaction(
 ): SolanaWeb3.Transaction | SolanaWeb3.VersionedTransaction {
     if ('serializeMessage' in transaction) {
         const args = messageArgs as SolanaWeb3.MessageArgs
-        const transaction = SolanaWeb3.Transaction.populate(
+        return SolanaWeb3.Transaction.populate(
             new SolanaWeb3.Message(args),
             signatures.map((x) => encode(x)),
         )
-        return transaction
     } else {
         const args = messageArgs as SolanaWeb3.MessageV0Args
         const msg = new SolanaWeb3.MessageV0({
