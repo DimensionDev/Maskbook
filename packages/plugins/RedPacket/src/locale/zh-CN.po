@@ -107,7 +107,6 @@ msgstr "全部 ({0} NFT)"
 #~ msgid "Amount"
 #~ msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Amount Each"
@@ -118,7 +117,6 @@ msgstr "每个金额"
 msgid "Amount per Share"
 msgstr "单个红包数额"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "At most 255 recipients"
@@ -137,7 +135,6 @@ msgstr ""
 #~ msgid "Best Wishes"
 #~ msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/contexts/SolRedpacketContext.tsx
 #: src/SiteAdaptor/contexts/RedPacketContext.tsx
@@ -162,7 +159,6 @@ msgstr "最好的祝福！"
 msgid "Cancel"
 msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Choose a Cover"
@@ -178,7 +174,6 @@ msgid "Claim"
 msgstr "认领"
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Claim Conditions"
 msgstr ""
@@ -292,7 +287,6 @@ msgstr ""
 msgid "Connect to {source}"
 msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
@@ -344,7 +338,6 @@ msgstr "空的"
 msgid "Enclose a Message"
 msgstr "标题"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Enter Amount Each"
@@ -354,7 +347,6 @@ msgstr "输入每个金额"
 #~ msgid "Enter number of winners"
 #~ msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Enter Number of Winners"
@@ -364,13 +356,11 @@ msgstr "输入份数"
 #~ msgid "Enter the amount that each winner can claim"
 #~ msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Enter Total Amount"
 msgstr "输入总数"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Equal Amount"
@@ -423,7 +413,6 @@ msgid "Gift crypto or NFTs to any users, first come, first served."
 msgstr "给任意用户发送Token或者NFT，先到先得"
 
 #. placeholder {0}: token.symbol
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have to do this once per token."
 msgstr ""
@@ -485,13 +474,11 @@ msgstr "平分"
 #~ msgstr ""
 
 #. placeholder {0}: token?.symbol
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Insufficient {0} Balance"
 msgstr "{0} 余额不足"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -499,7 +486,6 @@ msgstr "{0} 余额不足"
 msgid "Insufficient Balance"
 msgstr "余额不足"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
@@ -547,7 +533,6 @@ msgstr "正在加载代币..."
 msgid "Lucky Drop"
 msgstr "红包"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Message"
@@ -631,7 +616,6 @@ msgstr ""
 msgid "Random"
 msgstr "随机"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Random Amount"
@@ -693,7 +677,6 @@ msgstr "搜索"
 msgid "Select a token"
 msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -801,7 +784,6 @@ msgstr ""
 
 #. placeholder {0}: formatBalance(1, token.decimals)
 #. placeholder {1}: token.symbol
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "The minimum amount for each share is {0} {1}"
@@ -831,7 +813,6 @@ msgstr ""
 msgid "Tokens"
 msgstr "代币"
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Total amount"
@@ -885,7 +866,6 @@ msgstr "钱包账户"
 msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
 msgstr ""
 
-#: src/SiteAdaptor/views/CreateSolanaRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Winners"
