@@ -42,8 +42,10 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
     override async signTransaction(transaction: Transaction) {
         await this.validateSession()
 
+        console.log('DEBUG: transaction', transaction)
+
         const result = await this.bridge.request<{
-            message: SolanaWeb3.MessageV0
+            message: SolanaWeb3.MessageArgs | SolanaWeb3.MessageV0Args
             signatures: Uint8Array[]
         }>({
             method: PhantomMethodType.SIGN_TRANSACTION,
@@ -52,14 +54,26 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
             },
         })
 
-        const msg = new SolanaWeb3.MessageV0({
-            ...result.message,
-            staticAccountKeys: result.message.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)) || [],
-            compiledInstructions: result.message.compiledInstructions || [],
-            addressTableLookups: result.message.addressTableLookups || [],
-        })
-        const message = SolanaWeb3.VersionedMessage.deserialize(msg.serialize())
-        return new SolanaWeb3.VersionedTransaction(message, result.signatures)
+        console.log('DEBUG: result', result)
+
+        if ('serializeMessage' in transaction && transaction.feePayer) {
+            const args = result.message as SolanaWeb3.MessageArgs
+            const transaction = SolanaWeb3.Transaction.populate(
+                new SolanaWeb3.Message(args),
+                result.signatures.map((x) => encode(x)),
+            )
+            return transaction
+        } else {
+            const args = result.message as SolanaWeb3.MessageV0Args
+            const msg = new SolanaWeb3.MessageV0({
+                ...args,
+                staticAccountKeys: args.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)) || [],
+                compiledInstructions: args.compiledInstructions || [],
+                addressTableLookups: args.addressTableLookups || [],
+            })
+            const message = SolanaWeb3.VersionedMessage.deserialize(msg.serialize())
+            return new SolanaWeb3.VersionedTransaction(message, result.signatures)
+        }
     }
 
     override async signTransactions(transactions: Transaction[]) {
