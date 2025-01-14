@@ -15,5 +15,5 @@ export async function getSolanaProvider() {
         signTransaction: cnt.signTransaction.bind(cnt),
         signAllTransactions: cnt.signTransactions.bind(cnt),
     }
-    return new AnchorProvider(connection, wallet as Wallet, {})
+    return new AnchorProvider(connection, wallet as Wallet, AnchorProvider.defaultOptions())
 }
