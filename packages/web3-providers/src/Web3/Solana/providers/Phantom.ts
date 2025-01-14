@@ -41,6 +41,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
 
     override async signTransaction(transaction: Transaction) {
         await this.validateSession()
+
         const result = await this.bridge.request<{
             message: SolanaWeb3.MessageV0
             signatures: Uint8Array[]
@@ -50,8 +51,6 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
                 message: encode(serializeTransaction(transaction)),
             },
         })
-
-        console.log('DEBUG: signTransaction result', result)
 
         const msg = new SolanaWeb3.MessageV0({
             ...result.message,
