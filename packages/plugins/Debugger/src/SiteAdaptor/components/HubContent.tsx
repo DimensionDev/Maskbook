@@ -7,7 +7,8 @@ import { getHub } from '@masknet/web3-providers'
 import { makeStyles, ShadowRootMenu } from '@masknet/theme'
 import { OrderSide, resolveSourceTypeName, SourceType } from '@masknet/web3-shared-base'
 import { Button, MenuItem, Table, TableBody, TableCell, TableRow, TextField, Typography } from '@mui/material'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { SelectFungibleTokenModal } from '@masknet/shared'
 
 interface HubContentProps {
     onClose?: () => void
@@ -176,6 +177,26 @@ export function HubContent(props: HubContentProps) {
                             </TableRow>
                         )
                     })}
+                    <TableRow>
+                        <TableCell>
+                            <Typography variant="body2" whiteSpace="nowrap">
+                                Open Select Token
+                            </Typography>
+                        </TableCell>
+                        <TableCell>
+                            <Button
+                                size="small"
+                                onClick={async () => {
+                                    SelectFungibleTokenModal.openAndWaitForClose({
+                                        pluginID: NetworkPluginID.PLUGIN_SOLANA,
+                                        lockChainId: true,
+                                        // chainId: ChainId.Mainnet
+                                    })
+                                }}>
+                                Query
+                            </Button>
+                        </TableCell>
+                    </TableRow>
                 </TableBody>
             </Table>
         </section>

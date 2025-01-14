@@ -1,14 +1,15 @@
 import { makeStyles } from '@masknet/theme'
 import { DialogContent } from '@mui/material'
 import { MemoryRouter } from 'react-router-dom'
-import { RoutePaths } from '../constants.js'
-import { RouterDialog } from './components/RouterDialog.js'
 
-import { RedPacketRoutes } from './Routes.js'
-import { RedPacketProvider } from './contexts/RedPacketContext.js'
 import { RestorableScrollContext } from '@masknet/shared'
-import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { RedPacketTabs } from '../types.js'
+import { SOLWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { RoutePaths } from '../../constants.js'
+import { RouterDialog } from '../components/RouterDialog.js'
+import { SolRedPacketRoutes } from './Routes.js'
+import { SOLRedPacketProvider } from '../contexts/SolRedpacketContext.js'
+import { RedPacketTabs } from '../../types.js'
+import { ChainId } from '@masknet/web3-shared-solana'
 
 interface RedPacketDialogProps {
     onClose: () => void
@@ -39,20 +40,19 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const initialEntries = [RoutePaths.Exit, RoutePaths.CreateErc20RedPacket]
-
-export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
+const initialEntries = [RoutePaths.Exit, RoutePaths.CreateSolanaRedPacket]
+export function SolRedPacketMainDialog({ onClose }: RedPacketDialogProps) {
     const { classes } = useStyles()
 
     const initialIndex = 1
 
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
-            <EVMWeb3ContextProvider>
-                <RedPacketProvider>
+            <SOLWeb3ContextProvider chainId={ChainId.Devnet}>
+                <SOLRedPacketProvider>
                     <RouterDialog
                         pageMap={{
-                            [RedPacketTabs.tokens]: RoutePaths.CreateErc20RedPacket,
+                            [RedPacketTabs.tokens]: RoutePaths.CreateSolanaRedPacket,
                             [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
                         }}
                         open
@@ -63,12 +63,12 @@ export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
                         independent>
                         <DialogContent className={classes.content}>
                             <RestorableScrollContext>
-                                <RedPacketRoutes />
+                                <SolRedPacketRoutes />
                             </RestorableScrollContext>
                         </DialogContent>
                     </RouterDialog>
-                </RedPacketProvider>
-            </EVMWeb3ContextProvider>
+                </SOLRedPacketProvider>
+            </SOLWeb3ContextProvider>
         </MemoryRouter>
     )
 }

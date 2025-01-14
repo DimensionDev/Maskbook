@@ -77,7 +77,13 @@ export class SolanaConnectionAPI
     }
 
     createAccount(initial?: SolanaConnectionOptions): Account<ChainId> {
-        throw new Error('Method not implemented.')
+        const { publicKey, secretKey } = SolanaWeb3.Keypair.generate()
+
+        return {
+            account: publicKey.toBase58(),
+            privateKey: Buffer.from(secretKey).toString('hex'),
+            chainId: ChainId.Mainnet,
+        }
     }
 
     async switchChain(chainId: ChainId, initial?: SolanaConnectionOptions) {

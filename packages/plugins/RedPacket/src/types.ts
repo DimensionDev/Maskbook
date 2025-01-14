@@ -47,7 +47,6 @@ export enum FireflyAccountSource {
 export enum RedPacketTabs {
     tokens = 'tokens',
     collectibles = 'collectibles',
-    solana = 'solana',
 }
 export enum HistoryTabs {
     Sent = 'sent',

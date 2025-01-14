@@ -2,8 +2,8 @@ import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { omit } from 'lodash-es'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { type FungibleToken, isLessThan, toFixed } from '@masknet/web3-shared-base'
 import {
@@ -130,9 +130,14 @@ export function useCreateParams(
     version: number,
     publicKey: string,
 ) {
+    const { pluginID } = useEnvironmentContext()
     const getCreateParams = useCreateParamsCallback(expectedChainId, redPacketSettings, version, publicKey)
     // TODO get rid of JSON.stringify
-    return useAsync(() => getCreateParams(), [JSON.stringify(redPacketSettings), version, publicKey])
+    return useAsync(async () => {
+        if (pluginID !== NetworkPluginID.PLUGIN_EVM) return null
+
+        return getCreateParams()
+    }, [JSON.stringify(redPacketSettings), version, publicKey])
 }
 
 export function useCreateCallback(

@@ -26,3 +26,5 @@ export const createSolanaConnection = createConnectionCreator(
     isValidChainId,
     new SolanaConnectionOptionsAPI(),
 )
+
+export const SOLWeb3 = createSolanaConnection()!

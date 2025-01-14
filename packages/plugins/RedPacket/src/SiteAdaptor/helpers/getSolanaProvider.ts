@@ -5,11 +5,15 @@ import { getConnection } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import type { Wallet } from '@coral-xyz/anchor/dist/cjs/provider.js'
 
+export async function getSolanaConnection() {
+    const network = 'devnet' // Change to 'mainnet-beta' for mainnet
+    return new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(network), 'confirmed')
+}
+
 export async function getSolanaProvider() {
     const cnt = getConnection(NetworkPluginID.PLUGIN_SOLANA)
 
-    const network = 'devnet' // Change to 'mainnet-beta' for mainnet
-    const connection = new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(network), 'confirmed')
+    const connection = await getSolanaConnection()
     const wallet = {
         publicKey: new SolanaWeb3.PublicKey(await cnt.getAccount()),
         signTransaction: cnt.signTransaction.bind(cnt),

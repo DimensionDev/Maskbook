@@ -1,4 +1,4 @@
-import { injectedPhantomProvider } from '@masknet/injected-script'
+import { injectedPhantomProvider, type InjectedWalletBridge } from '@masknet/injected-script'
 import {
     PhantomMethodType,
     ProviderType,
@@ -13,7 +13,7 @@ import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
 export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
     protected override providerType = ProviderType.Phantom
-    protected override bridge = injectedPhantomProvider
+    protected override bridge: InjectedWalletBridge = injectedPhantomProvider
     private async validateSession() {
         if (this.bridge.isConnected) return
         await (this.bridge as unknown as Web3Provider).connect()
@@ -43,8 +43,6 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
     override async signTransaction(transaction: Transaction) {
         await this.validateSession()
 
-        console.log('DEBUG: transaction', transaction)
-
         const result = await this.bridge.request<{
             message: SolanaWeb3.MessageArgs | SolanaWeb3.MessageV0Args
             signatures: Uint8Array[]
@@ -60,7 +58,9 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
 
     override async signTransactions(transactions: Transaction[]) {
         await this.validateSession()
-        return this.bridge.request<Transaction[]>({
+        const { signatures } = await this.bridge.request<{
+            signatures: string[]
+        }>({
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
@@ -68,5 +68,6 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
                 }),
             },
         })
+        return signatures
     }
 }

@@ -153,6 +153,10 @@ export function EVMWeb3ContextProvider(props: PropsWithChildren & ChainContextGe
     return <Web3ContextProvider network={NetworkPluginID.PLUGIN_EVM} {...props} />
 }
 
+export function SOLWeb3ContextProvider(props: PropsWithChildren & ChainContextGetter<NetworkPluginID.PLUGIN_SOLANA>) {
+    return <Web3ContextProvider network={NetworkPluginID.PLUGIN_SOLANA} {...props} />
+}
+
 /**
  * The root Web3 context provider that uses the plugin ID from global settings
  * @param props

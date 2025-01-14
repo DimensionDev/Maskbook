@@ -17,6 +17,7 @@ import {
 } from '@mui/material'
 import { memo } from 'react'
 import { FormattedBalance, TokenIcon } from '../../../index.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -194,6 +195,7 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                                                 logoURL={token.logoURL}
                                                 size={20}
                                                 badgeSize={10}
+                                                disableBadge={pluginID !== NetworkPluginID.PLUGIN_EVM}
                                             />
                                         }
                                         deleteIcon={<Icons.ArrowDrop className={classes.arrowIcon} size={24} />}

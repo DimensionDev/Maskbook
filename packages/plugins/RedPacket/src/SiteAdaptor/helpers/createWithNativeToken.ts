@@ -1,5 +1,8 @@
 import { BN, web3 } from '@coral-xyz/anchor'
 import { getRpProgram } from './getRpProgram.js'
+import { getSolanaConnection } from './getSolanaProvider.js'
+import { BigNumber } from 'bignumber.js'
+import { ZERO } from '@masknet/web3-shared-base'
 
 const MAX_NUM = 1000 // Maximum number of red packets (constant)
 const MAX_AMOUNT = 1000000000 // Maximum amount of red packets (constant)
@@ -57,12 +60,12 @@ export async function createWithNativeToken(
         )
         .accounts({
             signer: creator,
-            // @ts-expect-error missing type
-            redPacket: nativeTokenRedPacket,
-            systemProgram: web3.SystemProgram.programId,
         })
         .rpc({
             commitment: 'confirmed',
+            // @ts-expect-error missing type
+            redPacket: nativeTokenRedPacket,
+            systemProgram: web3.SystemProgram.programId,
         })
 
     console.log('The transaction signature is:', signature)
@@ -76,4 +79,42 @@ export async function createWithNativeToken(
         accountId: nativeTokenRedPacket,
         signature,
     }
+}
+
+export async function getEstimatedGasByCreateWithNativeToken(
+    creator: web3.PublicKey,
+    totalNumber: number,
+    totalAmount: number,
+    duration: number,
+    ifSpiltRandom: boolean,
+    pubkeyForClaimSignature: web3.PublicKey,
+    message: string,
+    author: string,
+): Promise<BigNumber> {
+    const program = await getRpProgram()
+    const createTime = Math.floor(Date.now() / 1000)
+    const connection = await getSolanaConnection()
+
+    const transaction = await program.methods
+        .createRedPacketWithNativeToken(
+            totalNumber,
+            new BN(totalAmount),
+            new BN(createTime),
+            new BN(duration),
+            ifSpiltRandom,
+            pubkeyForClaimSignature,
+            author,
+            message,
+        )
+        .accounts({
+            signer: creator,
+        })
+        .transaction()
+
+    transaction.recentBlockhash = (await connection.getRecentBlockhash('finalized')).blockhash
+    transaction.feePayer = creator
+
+    const fee = await transaction.getEstimatedFee(connection)
+
+    return fee ? new BigNumber(fee) : ZERO
 }

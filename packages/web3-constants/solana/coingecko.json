@@ -1,8 +1,10 @@
 {
     "PLATFORM_ID": {
-        "Mainnet": "solana"
+        "Mainnet": "solana",
+        "Devnet": "solana"
     },
     "COIN_ID": {
-        "Mainnet": "solana"
+        "Mainnet": "solana",
+        "Devnet": "solana"
     }
 }

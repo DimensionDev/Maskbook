@@ -50,7 +50,6 @@ export function SelectFungibleTokenModal({
             setMaxTokens(props.maxTokens)
         },
     })
-    console.log({ selectedTokens, tokens })
 
     if (!open) return null
     return (
