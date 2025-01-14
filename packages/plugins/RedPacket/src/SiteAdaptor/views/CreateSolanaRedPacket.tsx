@@ -230,7 +230,6 @@ export function CreateSolanaRedPacket() {
         }
 
         const publicKey = new SolanaWeb3.PublicKey(solanaAccount)
-        const creator = new web3.Keypair()
         const totalAmount = Number(rawAmount)
 
         if (ifSPL) {
@@ -255,12 +254,12 @@ export function CreateSolanaRedPacket() {
         } else {
             try {
                 const { accountId } = await createWithNativeToken(
-                    creator,
+                    publicKey,
                     winnersCount,
                     totalAmount * web3.LAMPORTS_PER_SOL,
                     1000 * 60 * 60 * 24, // 24 hours
                     isRandom,
-                    creator,
+                    claimer.publicKey,
                     message,
                     author,
                 )
