@@ -1,5 +1,4 @@
 import { BN, web3 } from '@coral-xyz/anchor'
-
 import { getRpProgram } from './getRpProgram.js'
 
 const MAX_NUM = 1000 // Maximum number of red packets (constant)
@@ -7,16 +6,15 @@ const MAX_AMOUNT = 1000000000 // Maximum amount of red packets (constant)
 
 // Function to create a red packet with native tokens
 export async function createWithNativeToken(
-    creator: web3.Keypair, // This would be the user sending the transaction
+    creator: web3.PublicKey, // This would be the user sending the transaction
     totalNumber: number, // Total number of red packets
     totalAmount: number, // Total amount in lamports (1 SOL = 10^9 lamports)
     duration: number, // in seconds
     ifSpiltRandom: boolean, // Whether to split randomly
-    claimer: web3.Keypair, // Public key to be used for claim signature
+    pubkeyForClaimSignature: web3.PublicKey, // Public key to be used for claim signature
     message: string, // Message to be included in the red packet
     author: string, // Author of the red packet
 ) {
-    const pubkeyForClaimSignature = creator.publicKey
     // Ensure the totalNumber and totalAmount are within the acceptable range
     if (totalNumber > MAX_NUM) {
         throw new Error(`Total number of red packets cannot exceed ${MAX_NUM}`)
@@ -29,7 +27,7 @@ export async function createWithNativeToken(
 
     const createTime = Math.floor(Date.now() / 1000)
     const nativeTokenRedPacket = web3.PublicKey.findProgramAddressSync(
-        [creator.publicKey.toBuffer(), Uint8Array.from(new BN(createTime).toArray('le', 8))],
+        [creator.toBuffer(), Uint8Array.from(new BN(createTime).toArray('le', 8))],
         program.programId,
     )[0]
 
@@ -58,12 +56,11 @@ export async function createWithNativeToken(
             message,
         )
         .accounts({
-            signer: creator.publicKey,
+            signer: creator,
             // @ts-expect-error missing type
             redPacket: nativeTokenRedPacket,
             systemProgram: web3.SystemProgram.programId,
         })
-        .signers([creator])
         .rpc({
             commitment: 'confirmed',
         })
