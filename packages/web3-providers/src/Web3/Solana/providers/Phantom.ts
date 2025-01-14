@@ -7,7 +7,7 @@ import {
     type Transaction,
     type Web3Provider,
 } from '@masknet/web3-shared-solana'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import { encode } from 'bs58'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
