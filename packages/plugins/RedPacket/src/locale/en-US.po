@@ -11,8 +11,10 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/components/NftRedPacketRecord.tsx
+#. placeholder {0}: format(fromUnixTime(timestamp), 'M/d/yyyy HH:mm')
+#. placeholder {0}: dateTimeFormat(locale, new Date(patchedHistory.creation_time))
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
+#: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 msgid "{0} (UTC+8)"
 msgstr ""
 
@@ -21,13 +23,20 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
-msgid "{0} holder"
+#~ msgid "{0} holder"
+#~ msgstr ""
+
+#. placeholder {0}: conditions.join('/')
+#: src/SiteAdaptor/components/ConditionSettings.tsx
+msgid "{0} Holder"
 msgstr ""
 
+#. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
 msgstr ""
 
+#. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{head} Follow @{0} (mask.io) to claim lucky drops."
 msgstr ""
@@ -37,10 +46,14 @@ msgstr ""
 msgid "@{sender} is sending an NFT lucky drop on {networkName} network. {account_promote} {promote_short} #mask_io #LuckyDrop {postLink}"
 msgstr ""
 
+#. placeholder {0}: tokenDetailedSelectedList.length
+#. placeholder {1}: tokenDetailedSelectedList.length
 #: src/SiteAdaptor/views/SelectNft.tsx
 msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}"
 msgstr ""
 
+#. placeholder {0}: tokenDetailedSelectedList.length
+#. placeholder {1}: tokenDetailedSelectedList.length
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
 msgstr ""
@@ -53,11 +66,12 @@ msgstr ""
 msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/RedPacket/index.tsx
 msgid "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
+#. placeholder {0}: token?.contract?.name || 'NFT'
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "1 {0} claimed."
 msgstr ""
@@ -79,6 +93,7 @@ msgstr ""
 msgid "ALL"
 msgstr ""
 
+#. placeholder {0}: Math.min(RED_PACKET_MAX_SHARES, balance)
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL ({0} NFT)"
 msgstr ""
@@ -103,18 +118,22 @@ msgstr ""
 msgid "Attached Message"
 msgstr ""
 
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Available to Everyone"
+msgstr ""
+
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Best Wishes"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/MessagePanel.tsx
-#: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/components/PreviewRedPacket.tsx
-#: src/SiteAdaptor/components/RedPacketRecord.tsx
-#: src/SiteAdaptor/components/RedPacketRecord.tsx
-#: src/SiteAdaptor/contexts/RedPacketContext.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/contexts/RedPacketContext.tsx
+#: src/SiteAdaptor/components/RedPacketRecord.tsx
+#: src/SiteAdaptor/components/RedPacketRecord.tsx
+#: src/SiteAdaptor/components/PreviewRedPacket.tsx
+#: src/SiteAdaptor/components/NftRedPacketRecord.tsx
+#: src/SiteAdaptor/components/MessagePanel.tsx
 msgid "Best Wishes!"
 msgstr ""
 
@@ -138,11 +157,12 @@ msgstr ""
 #~ msgid "Choose your collection"
 #~ msgstr ""
 
-#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Claim"
 msgstr ""
 
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Claim Conditions"
 msgstr ""
@@ -169,10 +189,15 @@ msgid "Claim Requirements"
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
-#: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Claimed"
 msgstr ""
 
+#: src/SiteAdaptor/RedPacketNft.tsx
+msgid "Claimed "
+msgstr ""
+
+#. placeholder {0}: availability.claimedAmount
+#. placeholder {1}: availability.totalAmount
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "Claimed {0}/{1}"
 msgstr ""
@@ -181,6 +206,9 @@ msgstr ""
 msgid "Claimed Details"
 msgstr ""
 
+#. placeholder {0}: rpid ? bitStatusList.filter(Boolean).length.toString() : '0'
+#. placeholder {1}: patchedHistory.shares
+#. placeholder {2}: collection?.name ?? ''
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 msgid "Claimed: <0>{0}/{1}</0> <1>{2}</1>"
 msgstr ""
@@ -193,12 +221,14 @@ msgstr ""
 #~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
 #~ msgstr ""
 
+#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal)
+#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal)
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Claiming..."
 msgstr ""
 
@@ -220,11 +250,11 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/CustomCover.tsx
-#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Confirm"
 msgstr ""
 
@@ -232,8 +262,8 @@ msgstr ""
 msgid "Confirm the Lucky Drop"
 msgstr ""
 
-#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Confirming"
 msgstr ""
 
@@ -245,8 +275,8 @@ msgstr ""
 msgid "Connect to {source}"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Connect Wallet"
 msgstr ""
 
@@ -254,9 +284,9 @@ msgstr ""
 msgid "Cover"
 msgstr ""
 
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
-#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Create the Lucky Drop"
 msgstr ""
 
@@ -284,8 +314,8 @@ msgstr ""
 msgid "Edit"
 msgstr ""
 
-#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "Empty"
 msgstr ""
 
@@ -322,10 +352,10 @@ msgstr ""
 msgid "Everyone"
 msgstr ""
 
-#: src/SiteAdaptor/components/RedPacketActionButton.tsx
-#: src/SiteAdaptor/components/RedPacketActionButton.tsx
-#: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/components/RedPacketEnvelope.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "Expired"
 msgstr ""
 
@@ -345,11 +375,12 @@ msgstr ""
 msgid "Follow <0/> on {platform}"
 msgstr ""
 
-#: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Follow me"
 msgstr ""
 
+#. placeholder {0}: payload.senderName || '-'
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "From: @{0}"
 msgstr ""
@@ -358,6 +389,7 @@ msgstr ""
 msgid "Gift crypto or NFTs to any users, first come, first served."
 msgstr ""
 
+#. placeholder {0}: token.symbol
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Grant access to your {0} for the Lucky Drop Smart contract. You only have to do this once per token."
 msgstr ""
@@ -369,9 +401,18 @@ msgstr ""
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
 msgid ""
 "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+"\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
+#: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
+#~ msgid ""
+#~ "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
+#~ msgstr ""
+
+#. placeholder {0}: shareTextOption.sender
+#. placeholder {1}: shareTextOption.network
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
 msgstr ""
@@ -381,6 +422,17 @@ msgstr ""
 msgid "History"
 msgstr ""
 
+#. placeholder {0}: tokenQuantity ? `${tokenQuantity}+` : 'any'
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Holding {0}"
+msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "Holding NFT"
+msgstr ""
+
+#. placeholder {0}: shareTextOption.sender
+#. placeholder {1}: shareTextOption.network
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "I just claimed a lucky drop from @{0} on {1} network."
 msgstr ""
@@ -397,19 +449,20 @@ msgstr ""
 #~ msgid "Image Preview"
 #~ msgstr ""
 
+#. placeholder {0}: token?.symbol
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Insufficient {0} Balance"
 msgstr ""
 
-#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
-#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Insufficient Balance"
 msgstr ""
 
-#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
-#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr ""
 
@@ -444,11 +497,11 @@ msgstr ""
 msgid "Loading token..."
 msgstr ""
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/RedPacket/index.tsx
 msgid "Lucky Drop"
 msgstr ""
 
@@ -469,8 +522,8 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
+#: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "NFT holder"
 msgstr ""
 
@@ -520,6 +573,10 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Number of Winners"
 #~ msgstr ""
+
+#: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+msgid "or Holding NFT"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedPacketDetailsItem.tsx
 #~ msgid "Post on"
@@ -589,8 +646,8 @@ msgstr ""
 msgid "Select a token"
 msgstr ""
 
-#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
+#: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "Select a Token"
 msgstr ""
 
@@ -623,10 +680,10 @@ msgstr ""
 msgid "Sent"
 msgstr ""
 
-#: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
+#: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 msgid "Share"
 msgstr ""
 
@@ -655,6 +712,7 @@ msgstr ""
 #~ msgid "Supported formats: JPEG, PNG, GIF<0/> Size limit: 1MB"
 #~ msgstr ""
 
+#. placeholder {0}: formatFileSize(MAX_FILE_SIZE)
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Supported formats: JPEG, PNG<0/> Size limit: {0}"
 msgstr ""
@@ -686,6 +744,8 @@ msgstr ""
 msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
 msgstr ""
 
+#. placeholder {0}: formatBalance(1, token.decimals)
+#. placeholder {1}: token.symbol
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 msgid "The minimum amount for each share is {0} {1}"
 msgstr ""
@@ -750,8 +810,8 @@ msgstr ""
 msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
 msgstr ""
 
-#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "View"
 msgstr ""
 
@@ -759,6 +819,7 @@ msgstr ""
 msgid "Wallet account"
 msgstr ""
 
+#. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
 msgstr ""
@@ -793,6 +854,8 @@ msgstr ""
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
 #~ msgstr ""
 
+#. placeholder {0}: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })
+#. placeholder {1}: token?.symbol
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "You claimed {0} ${1}."
 msgstr ""
@@ -809,6 +872,7 @@ msgstr ""
 #~ msgid "You got {0} {1}"
 #~ msgstr ""
 
+#. placeholder {0}: payload.contractName || 'NFT'
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "You got 1 {0}"
 msgstr ""
