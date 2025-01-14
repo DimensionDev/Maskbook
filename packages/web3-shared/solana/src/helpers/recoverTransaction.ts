@@ -1,0 +1,27 @@
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import { encode } from 'bs58'
+
+export function recoverTransaction(
+    transaction: SolanaWeb3.Transaction | SolanaWeb3.VersionedTransaction,
+    messageArgs: SolanaWeb3.MessageArgs | SolanaWeb3.MessageV0Args,
+    signatures: Uint8Array[],
+): SolanaWeb3.Transaction | SolanaWeb3.VersionedTransaction {
+    if ('serializeMessage' in transaction && transaction.feePayer) {
+        const args = messageArgs as SolanaWeb3.MessageArgs
+        const transaction = SolanaWeb3.Transaction.populate(
+            new SolanaWeb3.Message(args),
+            signatures.map((x) => encode(x)),
+        )
+        return transaction
+    } else {
+        const args = messageArgs as SolanaWeb3.MessageV0Args
+        const msg = new SolanaWeb3.MessageV0({
+            ...args,
+            staticAccountKeys: args.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)) || [],
+            compiledInstructions: args.compiledInstructions || [],
+            addressTableLookups: args.addressTableLookups || [],
+        })
+        const message = SolanaWeb3.VersionedMessage.deserialize(msg.serialize())
+        return new SolanaWeb3.VersionedTransaction(message, signatures)
+    }
+}
