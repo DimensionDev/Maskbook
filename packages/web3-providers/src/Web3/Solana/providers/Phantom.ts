@@ -1,7 +1,13 @@
 import { injectedPhantomProvider } from '@masknet/injected-script'
-import { PhantomMethodType, ProviderType, type Transaction, type Web3Provider } from '@masknet/web3-shared-solana'
+import {
+    PhantomMethodType,
+    ProviderType,
+    serializeTransaction,
+    type Transaction,
+    type Web3Provider,
+} from '@masknet/web3-shared-solana'
 import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
-import bs58 from 'bs58'
+import { encode } from 'bs58'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
 export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
@@ -41,9 +47,12 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
         }>({
             method: PhantomMethodType.SIGN_TRANSACTION,
             params: {
-                message: bs58.encode(transaction.serialize()),
+                message: encode(serializeTransaction(transaction)),
             },
         })
+
+        console.log('DEBUG: signTransaction result', result)
+
         const msg = new SolanaWeb3.MessageV0({
             ...result.message,
             staticAccountKeys: result.message.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)) || [],
@@ -60,7 +69,7 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
-                    return bs58.encode(transaction.serialize())
+                    return encode(serializeTransaction(transaction))
                 }),
             },
         })

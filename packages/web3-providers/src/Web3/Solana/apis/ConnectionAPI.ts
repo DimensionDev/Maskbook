@@ -14,6 +14,7 @@ import {
     type ProviderType,
     type Operation,
     type Transaction,
+    serializeTransaction,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
@@ -365,15 +366,12 @@ export class SolanaConnectionAPI
 
     async sendTransaction(transaction: Transaction, initial?: SolanaConnectionOptions) {
         const signedTransaction = await this.signTransaction(transaction)
-        const raw =
-            'serializeMessage' in signedTransaction ?
-                signedTransaction.serializeMessage()
-            :   signedTransaction.message.serialize()
+        const raw = serializeTransaction(signedTransaction)
         return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
     }
 
     sendSignedTransaction(signature: TransactionSignature, initial?: SolanaConnectionOptions): Promise<string> {
-        const raw = 'serializeMessage' in signature ? signature.serializeMessage() : signature.message.serialize()
+        const raw = serializeTransaction(signature)
         return SolanaWeb3.sendAndConfirmRawTransaction(this.Web3.getConnection(initial), raw as Buffer)
     }
 
@@ -394,6 +392,6 @@ export class SolanaConnectionAPI
     }
 
     signTransactions(transactions: Transaction[], initial?: SolanaConnectionOptions) {
-        return Promise.all(transactions.map((x) => this.signTransaction(x, initial)))
+        return this.Web3.getProviderInstance(initial).signTransactions(transactions)
     }
 }

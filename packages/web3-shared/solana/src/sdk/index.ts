@@ -13,5 +13,7 @@ export function createClientEndpoint(chainId = ChainId.Mainnet) {
 }
 
 export function createClient(chainId = ChainId.Mainnet) {
-    return new SolanaWeb3.Connection(createClientEndpoint(chainId))
+    return new SolanaWeb3.Connection(createClientEndpoint(chainId), {
+        commitment: 'confirmed',
+    })
 }
