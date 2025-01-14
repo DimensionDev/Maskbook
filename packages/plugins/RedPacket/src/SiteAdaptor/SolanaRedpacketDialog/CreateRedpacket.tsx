@@ -24,7 +24,7 @@ import {
     rightShift,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-solana'
+import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-solana'
 import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo } from 'react'
@@ -293,7 +293,7 @@ export function CreateSolRedPacket() {
 
     const messageMaxLength = isFirefly ? 40 : 100
 
-    const gasFee = defaultGasFee.multipliedBy(5)
+    const gasFee = defaultGasFee.multipliedBy(isNativeTokenAddress(token.address) ? 5 : 10)
     const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
 
     return (

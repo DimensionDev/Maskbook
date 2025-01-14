@@ -133,7 +133,7 @@ export function SolanaRedPacketConfirm() {
         token,
     )
 
-    const gasFee = defaultGasFee.multipliedBy(5)
+    const gasFee = defaultGasFee.multipliedBy(isNativeToken ? 5 : 10)
     const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
 
     const [{ loading: isCreating }, createRedpacket] = useAsyncFn(async () => {
@@ -193,39 +193,6 @@ export function SolanaRedPacketConfirm() {
 
         handleCreated(payload)
     }, [isNativeToken, settings, isRandom, publicKey, message, creator])
-
-    // const { isLoading: creatingPubkey, data: publicKey } = useQuery({
-    //     enabled: !!themeId,
-    //     queryKey: ['red-packet', 'create-pubkey', themeId, creator],
-    //     queryFn: async () => {
-    //         if (!themeId) return null
-    //         // TODO: StrategyPayload list
-    //         return FireflyRedPacket.createPublicKey(themeId, creator, EMPTY_LIST)
-    //     },
-    // })
-
-    // const {
-    //     isBalanceInsufficient,
-    //     formatTotal,
-    //     estimateGasFee,
-    //     formatAvg,
-    //     gas,
-    //     isCreating,
-    //     isWaitGasBeMinus,
-    //     createRedpacket,
-    // } = useCreateFTRedpacketCallback(
-    //     publicKey ?? '',
-    //     // TODO get rid of privateKey since we don't need it anymore
-    //     '',
-    //     settings,
-    //     gasOption,
-    //     handleCreated,
-    //     onClose,
-    // )
-
-    // const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
-    // const wallet = useWallet()
-    // const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
 
     return (
         <>
