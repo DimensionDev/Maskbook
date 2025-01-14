@@ -3,9 +3,9 @@ import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { SolanaChainResolver } from '@masknet/web3-providers'
+import { SolanaChainResolver, SOLWeb3 } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { multipliedBy, rightShift, type FungibleToken, type NonFungibleCollection } from '@masknet/web3-shared-base'
+import { multipliedBy, rightShift, type FungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-solana'
 import { noop, omit } from 'lodash-es'
 import {
@@ -34,15 +34,8 @@ interface RedPacketContextOptions {
     message: string
     setMessage: Dispatch<SetStateAction<string>>
     creator: string
-    // conditions: ConditionType[]
-    // setConditions: Dispatch<SetStateAction<ConditionType[]>>
     tokenQuantity: string
     setTokenQuantity: Dispatch<SetStateAction<string>>
-    // requiredTokens: Array<FungibleToken<ChainId, SchemaType>>
-    // setRequiredTokens: Dispatch<SetStateAction<Array<FungibleToken<ChainId, SchemaType>>>>
-    // requiredCollections: Array<NonFungibleCollection<ChainId, SchemaType>>
-    // setRequiredCollections: Dispatch<SetStateAction<Array<NonFungibleCollection<ChainId, SchemaType>>>>
-    // Token
     token: FungibleToken<ChainId, SchemaType> | undefined
     setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | undefined>>
     nativeToken: FungibleToken<ChainId, SchemaType>
@@ -62,6 +55,8 @@ interface RedPacketContextOptions {
     setIsRandom: Dispatch<SetStateAction<0 | 1>>
     shares: number
     setShares: Dispatch<SetStateAction<number>>
+    publicKey: string
+    password?: string
 }
 export const RedPacketContext = createContext<RedPacketContextOptions>({
     theme: undefined,
@@ -91,6 +86,8 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     setIsRandom: noop,
     shares: 0,
     setShares: noop,
+    publicKey: '',
+    password: '',
 })
 
 interface Props extends PropsWithChildren {}
@@ -104,12 +101,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
         () => (customThemes ? [...PRESET_THEMES, ...customThemes] : PRESET_THEMES),
         [customThemes],
     )
-    const [conditions, setConditions] = useState<ConditionType[]>([])
     const [tokenQuantity, setTokenQuantity] = useState('')
-    const [requiredTokens, setRequiredTokens] = useState<Array<FungibleToken<ChainId, SchemaType>>>([])
-    const [requiredCollections, setRequiredCollections] = useState<Array<NonFungibleCollection<ChainId, SchemaType>>>(
-        [],
-    )
 
     // Token
     const [rawAmount, setRawAmount] = useState('')
@@ -142,6 +134,8 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
         [isRandom, creator, message, shares, token, totalAmount],
     )
 
+    const { account: publicKey, privateKey } = useMemo(() => SOLWeb3.createAccount(), [])
+
     const contextValue = useMemo(() => {
         return {
             themes: allThemes,
@@ -152,16 +146,8 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
             message,
             setMessage,
             creator,
-            // conditions,
-            // setConditions,
             tokenQuantity,
             setTokenQuantity,
-            // requiredTokens,
-            // setRequiredTokens,
-            // requiredCollections,
-            // setRequiredCollections,
-
-            // Token
             token,
             setToken,
             nativeToken,
@@ -172,6 +158,8 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
             setIsRandom,
             shares,
             setShares,
+            publicKey,
+            password: privateKey,
         }
     }, [
         theme,
@@ -183,12 +171,11 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
         nativeToken,
         rawAmount,
         creator,
-        // conditions,
         tokenQuantity,
-        // requiredTokens,
-        // requiredCollections,
         isRandom,
         shares,
+        publicKey,
+        privateKey,
     ])
 
     return <RedPacketContext.Provider value={contextValue}>{children}</RedPacketContext.Provider>

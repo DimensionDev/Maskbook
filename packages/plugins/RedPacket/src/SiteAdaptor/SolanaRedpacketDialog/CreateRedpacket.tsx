@@ -2,7 +2,6 @@ import { Trans } from '@lingui/react/macro'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { Icons } from '@masknet/icons'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import {
     FormattedBalance,
     FungibleTokenInput,
@@ -14,8 +13,7 @@ import {
 } from '@masknet/shared'
 import { EnhanceableSite, getEnhanceableSiteType, NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
-import { useAccount, useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { SOLWeb3 } from '@masknet/web3-providers'
+import { useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import {
     formatBalance,
     formatCurrency,
@@ -31,18 +29,10 @@ import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import {
-    MAX_CUSTOM_THEMES,
-    SOL_REDPACKET_MAX_SHARES,
-    RED_PACKET_MIN_SHARES,
-    RoutePaths,
-    DEFAULT_DURATION,
-} from '../../constants.js'
+import { MAX_CUSTOM_THEMES, SOL_REDPACKET_MAX_SHARES, RED_PACKET_MIN_SHARES, RoutePaths } from '../../constants.js'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useSolRedpacket } from '../contexts/SolRedpacketContext.js'
-import { useAsync } from 'react-use'
-import { web3 } from '@coral-xyz/anchor'
-import { getEstimatedGasByCreateWithNativeToken } from '../helpers/createWithNativeToken.js'
+import { useEstimateGasWithCreateSolRedpacket } from '../hooks/useEstimateGasWithCreateSolRedpacket.js'
 
 const useStyles = makeStyles()((theme) => ({
     fields: {
@@ -201,10 +191,10 @@ export function CreateSolRedPacket() {
         isRandom,
         setIsRandom,
         creator,
+        publicKey,
     } = useSolRedpacket()
     // context
     const { pluginID } = useEnvironmentContext()
-    const solanaAccount = useAccount(NetworkPluginID.PLUGIN_SOLANA)
 
     const { data: nativeTokenPrice } = useNativeTokenPrice(pluginID)
     const onSelectTokenChipClick = useCallback(async () => {
@@ -249,25 +239,18 @@ export function CreateSolRedPacket() {
     const minTotalAmount = new BigNumber(isRandom ? 1 : (shares ?? 0))
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
 
-    // #region gas
-    const { account: publicKey } = useMemo(() => SOLWeb3.createAccount(), [])
-    // #endregion
-
     // balance
-    const { value: defaultGasFee = ZERO, loading: estimateGasLoading } = useAsync(
-        async () =>
-            getEstimatedGasByCreateWithNativeToken(
-                new SolanaWeb3.PublicKey(solanaAccount),
-                shares,
-                totalAmount.multipliedBy(web3.LAMPORTS_PER_SOL).toNumber(),
-                DEFAULT_DURATION,
-                !!isRandom,
-                new SolanaWeb3.PublicKey(solanaAccount),
-                message,
-                creator,
-            ),
-        [solanaAccount, shares, totalAmount, publicKey, message, creator, isRandom],
+    const { data: defaultGasFee = ZERO, isFetching: estimateGasLoading } = useEstimateGasWithCreateSolRedpacket(
+        shares,
+        //  Avoid causing rpc rate limit due to too fast requests.
+        new BigNumber('0.0001').toNumber(),
+        !!isRandom,
+        publicKey,
+        message,
+        creator,
+        token,
     )
+
     const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
         NetworkPluginID.PLUGIN_SOLANA,
         token?.address,
@@ -311,7 +294,7 @@ export function CreateSolRedPacket() {
     const messageMaxLength = isFirefly ? 40 : 100
 
     const gasFee = defaultGasFee.multipliedBy(5)
-    const gasPriceUSD = gasFee.shiftedBy(-web3.LAMPORTS_PER_SOL).multipliedBy(nativeTokenPrice ?? 0)
+    const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
 
     return (
         <>
@@ -407,8 +390,8 @@ export function CreateSolRedPacket() {
                         </Typography>
                         <Box style={{ display: 'flex', gap: 4, fontWeight: 700 }}>
                             <FormattedBalance
-                                value={defaultGasFee.multipliedBy(5)}
-                                decimals={web3.LAMPORTS_PER_SOL}
+                                value={gasFee}
+                                decimals={9}
                                 significant={4}
                                 symbol={nativeToken.symbol}
                                 formatter={formatBalance}

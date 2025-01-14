@@ -1,3 +1,4 @@
+import type { Web3Helper } from '@masknet/web3-helpers'
 import type { FungibleToken } from '@masknet/web3-shared-base'
 import type { SchemaType, ChainId } from '@masknet/web3-shared-evm'
 import type { BigNumber } from 'bignumber.js'
@@ -48,12 +49,16 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     }
     chainId?: ChainId
     network?: string
-    token?: FungibleToken<ChainId, SchemaType>
+    token?: Web3Helper.FungibleTokenAll
     /**
      * For contract_version === 1, payload has no token but token_type
      */
     token_type?: 0 | number
     total_remaining?: string
+
+    // For solana
+    accountId?: string
+    tokenProgram?: string
 }
 
 export interface RedPacketJSONPayloadFromChain extends Omit<RedPacketJSONPayload, 'token'> {

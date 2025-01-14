@@ -47,7 +47,7 @@ export { EVMRequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
 export { EVMHub } from './Web3/EVM/apis/HubAPI.js'
 export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 
-export { SolanaChainResolver } from './Web3/Solana/apis/ResolverAPI.js'
+export { SolanaChainResolver, SolanaExplorerResolver } from './Web3/Solana/apis/ResolverAPI.js'
 export { SOLWeb3 } from './Web3/Solana/apis/ConnectionOptionsAPI.js'
 // Smart Pay
 export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'

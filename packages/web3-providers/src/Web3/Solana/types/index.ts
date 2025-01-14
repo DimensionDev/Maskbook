@@ -54,6 +54,7 @@ export interface MaskToken {
     logoURI: string
     originLogoURI: string
     decimals: number
+    chainId?: number
 }
 
 interface RaydiumToken {

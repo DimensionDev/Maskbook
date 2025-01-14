@@ -110,7 +110,7 @@ const fetchMaskTokenList = memoizePromise(
 
             return {
                 id: token.address,
-                chainId: ChainId.Mainnet,
+                chainId: token.chainId ?? ChainId.Mainnet,
                 type: TokenType.Fungible,
                 schema: SchemaType.Fungible,
                 address: token.address,
@@ -208,7 +208,7 @@ class SolanaFungibleTokenAPI
     }
 
     async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        if (chainId !== ChainId.Mainnet) return EMPTY_LIST
+        // if (chainId !== ChainId.Mainnet) return EMPTY_LIST
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const [maskTokenList, jupTokenList, raydiumTokenList] = await Promise.all([
             fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0]),

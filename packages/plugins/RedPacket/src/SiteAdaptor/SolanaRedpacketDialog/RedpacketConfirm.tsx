@@ -1,21 +1,29 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import { useCurrentVisitingIdentity, useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { RoutePaths } from '@masknet/plugin-redpacket'
-import { PluginWalletStatusBar, useCurrentLinkedPersona } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
-import { FireflyRedPacket } from '@masknet/web3-providers'
+import { DEFAULT_DURATION, RoutePaths } from '@masknet/plugin-redpacket'
+import { FormattedBalance, PluginWalletStatusBar, useCurrentLinkedPersona } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { ActionButton, makeStyles } from '@masknet/theme'
+import { useAccount, useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
-import { Link, Paper, Typography } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
-import { useCallback } from 'react'
+import { Box, Link, Paper, Typography } from '@mui/material'
+import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
 import { useSolRedpacket } from '../contexts/SolRedpacketContext.js'
-import { SolanaExplorerResolver } from '../../../../../web3-providers/src/Web3/Solana/apis/ResolverAPI.js'
+import { SolanaChainResolver, SolanaExplorerResolver } from '@masknet/web3-providers'
+import { dividedBy, formatBalance, formatCurrency, ZERO } from '@masknet/web3-shared-base'
+import { isNativeTokenAddress } from '@masknet/web3-shared-solana'
+import { useEstimateGasWithCreateSolRedpacket } from '../hooks/useEstimateGasWithCreateSolRedpacket.js'
+import { BigNumber } from 'bignumber.js'
+import { useAsyncFn } from 'react-use'
+import { createWithNativeToken } from '../helpers/createWithNativeToken.js'
+import { createWithSplToken } from '../helpers/createWithSplToken.js'
+import idl from '../idl/rp.json' with { type: 'json' }
+import { getTokenProgram } from '../helpers/getTokenAccount.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -76,43 +84,19 @@ const useStyles = makeStyles()((theme) => ({
         position: 'sticky',
         bottom: 0,
     },
-    // assets: {
-    //     display: 'flex',
-    //     gap: theme.spacing(0.5),
-    //     flexFlow: 'row wrap',
-    // },
-    // asset: {
-    //     display: 'flex',
-    //     alignItems: 'center',
-    //     padding: 2,
-    //     gap: theme.spacing(1),
-    // },
-    // assetName: {
-    //     fontSize: 16,
-    //     fontWeight: 400,
-    //     lineHeight: '20px',
-    //     color: theme.palette.maskColor.main,
-    // },
-    // collectionName: {
-    //     maxWidth: 80,
-    //     WebkitBoxOrient: 'vertical',
-    //     WebkitLineClamp: 2,
-    //     overflow: 'hidden',
-    //     whiteSpace: 'normal',
-    // },
-    // tokenIcon: {
-    //     width: 24,
-    //     height: 24,
-    //     marginRight: '0px !important',
-    // },
 }))
 
 export function SolanaRedPacketConfirm() {
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
     const navigate = useNavigate()
-    const { settings, shares, isRandom, token, theme, creator, tokenQuantity, nativeToken } = useSolRedpacket()
+    const { settings, shares, isRandom, token, creator, publicKey, password, message, nativeToken, theme } =
+        useSolRedpacket()
 
+    const solanaAccount = useAccount(NetworkPluginID.PLUGIN_SOLANA)
+
+    const { pluginID } = useEnvironmentContext()
+    const { data: nativeTokenPrice } = useNativeTokenPrice(pluginID)
     const currentIdentity = useCurrentVisitingIdentity()
     const me = useLastRecognizedIdentity()
     const linkedPersona = useCurrentLinkedPersona()
@@ -126,16 +110,99 @@ export function SolanaRedPacketConfirm() {
         onClose,
     })
 
-    const themeId = theme?.tid
-    const { isLoading: creatingPubkey, data: publicKey } = useQuery({
-        enabled: !!themeId,
-        queryKey: ['red-packet', 'create-pubkey', themeId, creator],
-        queryFn: async () => {
-            if (!themeId) return null
-            // TODO: StrategyPayload list
-            return FireflyRedPacket.createPublicKey(themeId, creator, EMPTY_LIST)
-        },
-    })
+    const isNativeToken = isNativeTokenAddress(token?.address)
+
+    const formatTotal = useMemo(
+        () => formatBalance(settings.total, settings.token?.decimals, { significant: isNativeToken ? 3 : 0 }),
+        [settings, isNativeToken],
+    )
+
+    const formatAvg = useMemo(() => {
+        return formatBalance(dividedBy(settings.total, settings.shares).toFixed(0, 1), settings.token?.decimals ?? 9, {
+            significant: isNativeToken ? 3 : 0,
+        })
+    }, [settings, isNativeToken])
+
+    const { data: defaultGasFee = ZERO, isLoading: estimateLoading } = useEstimateGasWithCreateSolRedpacket(
+        shares,
+        new BigNumber(settings.total).toNumber(),
+        !!isRandom,
+        publicKey,
+        message,
+        creator,
+        token,
+    )
+
+    const gasFee = defaultGasFee.multipliedBy(5)
+    const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
+
+    const [{ loading: isCreating }, createRedpacket] = useAsyncFn(async () => {
+        const sender = new SolanaWeb3.PublicKey(solanaAccount)
+        const claimer = new SolanaWeb3.PublicKey(publicKey)
+        const total = new BigNumber(settings.total).toNumber()
+        const tokenMint = token?.address ? new SolanaWeb3.PublicKey(token?.address) : null
+        const tokenProgram = tokenMint ? await getTokenProgram(tokenMint) : undefined
+
+        const result = await (isNativeToken ?
+            createWithNativeToken(
+                sender,
+                settings.shares,
+                total,
+                DEFAULT_DURATION,
+                !!isRandom,
+                claimer,
+                message,
+                creator,
+            )
+        : tokenMint ?
+            createWithSplToken(
+                sender,
+                tokenMint,
+                settings.shares,
+                total,
+                DEFAULT_DURATION,
+                !!isRandom,
+                claimer,
+                message,
+                creator,
+            )
+        :   null)
+        if (!result) return
+
+        const payload = {
+            sender: {
+                address: solanaAccount,
+                name: creator,
+                message,
+            },
+            is_random: !!isRandom,
+            shares,
+            password,
+            rpid: `solana-${crypto.randomUUID()}`,
+            total: settings.total,
+            duration: DEFAULT_DURATION,
+            creation_time: Date.now(),
+            token,
+            network: SolanaChainResolver.chainName(chainId),
+            contract_address: idl.address,
+            contract_version: 4,
+            txid: result.signature,
+            accountId: result.accountId.toBase58(),
+            tokenProgram: tokenProgram?.toBase58(),
+        }
+
+        handleCreated(payload)
+    }, [isNativeToken, settings, isRandom, publicKey, message, creator])
+
+    // const { isLoading: creatingPubkey, data: publicKey } = useQuery({
+    //     enabled: !!themeId,
+    //     queryKey: ['red-packet', 'create-pubkey', themeId, creator],
+    //     queryFn: async () => {
+    //         if (!themeId) return null
+    //         // TODO: StrategyPayload list
+    //         return FireflyRedPacket.createPublicKey(themeId, creator, EMPTY_LIST)
+    //     },
+    // })
 
     // const {
     //     isBalanceInsufficient,
@@ -157,12 +224,8 @@ export function SolanaRedPacketConfirm() {
     // )
 
     // const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
-    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_SOLANA, { chainId })
     // const wallet = useWallet()
     // const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
-
-    // const loading = creatingPubkey || isCreating || isWaitGasBeMinus
-    // const disabled = isBalanceInsufficient || loading
 
     return (
         <>
@@ -193,13 +256,12 @@ export function SolanaRedPacketConfirm() {
                         <Typography className={classes.fieldName}>
                             <Trans>Amount per Share</Trans>
                         </Typography>
-                        <Typography variant="body1" className={classes.fieldValue}>
-                            {/* {isBalanceInsufficient ? '0' : formatAvg} {token?.symbol} */}
+                        <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
+                            {formatAvg} {token?.symbol}
                             <Link
                                 color="textPrimary"
                                 className={classes.link}
                                 href={SolanaExplorerResolver.fungibleTokenLink(chainId, token?.address ?? '')}
-                                // href={EVMExplorerResolver.fungibleTokenLink(chainId, token?.address ?? '')}
                                 target="_blank"
                                 rel="noopener noreferrer">
                                 <LaunchIcon fontSize="small" />
@@ -211,40 +273,37 @@ export function SolanaRedPacketConfirm() {
                     <Typography className={classes.fieldName}>
                         <Trans>Total cost</Trans>
                     </Typography>
-                    {/* <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
+                    <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
                         {formatTotal} {token?.symbol}
                         <Link
                             color="textPrimary"
                             className={classes.link}
-                            href={EVMExplorerResolver.fungibleTokenLink(chainId, token?.address ?? '')}
+                            href={SolanaExplorerResolver.fungibleTokenLink(chainId, token?.address ?? '')}
                             target="_blank"
                             rel="noopener noreferrer">
                             <LaunchIcon fontSize="small" />
                         </Link>
-                    </Typography> */}
+                    </Typography>
                 </div>
-                {/* {estimateGasFee && !isZero(estimateGasFee) ?
-                    <div className={classes.field}>
-                        <Typography className={classes.fieldName}>
-                            <Trans>Transaction cost</Trans>
-                        </Typography>
-                        <SelectGasSettingsToolbar
-                            className={classes.fieldValue}
-                            nativeToken={nativeTokenDetailed}
-                            nativeTokenPrice={nativeTokenPrice}
-                            supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
-                            gasConfig={gasOption}
-                            gasLimit={Number.parseInt(gas ?? '0', 10)}
-                            onChange={setGasOption}
-                            estimateGasFee={estimateGasFee}
-                            editMode
-                        />
-                    </div>
-                :   null} */}
+
                 <div className={classes.field}>
                     <Typography className={classes.fieldName}>
-                        <Trans>Claim Conditions</Trans>
+                        <Trans>Transaction cost</Trans>
                     </Typography>
+                    <Box
+                        className={cx(classes.fieldValue, classes.value)}
+                        style={{ display: 'flex', gap: 4, fontWeight: 700 }}>
+                        <FormattedBalance
+                            value={gasFee}
+                            decimals={9}
+                            significant={4}
+                            symbol={nativeToken.symbol}
+                            formatter={formatBalance}
+                        />
+                        <Typography style={{ fontWeight: 700 }}>
+                            ≈ {formatCurrency(gasPriceUSD, 'USD', { onlyRemainTwoOrZeroDecimal: true })}
+                        </Typography>
+                    </Box>
                 </div>
 
                 <div className={classes.field}>
@@ -269,6 +328,9 @@ export function SolanaRedPacketConfirm() {
                 </Paper>
             </div>
             <PluginWalletStatusBar className={classes.controller}>
+                <ActionButton fullWidth onClick={createRedpacket} loading={isCreating || estimateLoading}>
+                    <Trans>Confirm</Trans>
+                </ActionButton>
                 {/* <ActionButton loading={loading} fullWidth onClick={createRedpacket} disabled={disabled}>
                         {isCreating ?
                             <Trans>Confirming</Trans>

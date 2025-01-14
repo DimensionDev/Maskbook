@@ -7,11 +7,11 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import type * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
-import { ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
+import { type ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
 import type { RpcOptions } from '../types/index.js'
 
 export async function requestRPC<T = unknown>(chainId: ChainId, options: RpcOptions): Promise<T> {
-    const response = await globalThis.fetch(createClientEndpoint(ChainId.Mainnet), {
+    const response = await globalThis.fetch(createClientEndpoint(chainId), {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
