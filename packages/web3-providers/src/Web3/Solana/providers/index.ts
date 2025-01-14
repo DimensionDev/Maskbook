@@ -12,7 +12,7 @@ export interface SolanaWalletProvider extends WalletAPI.Provider<ChainId, Provid
     /** Sign a transaction */
     signTransaction(transaction: Transaction): Promise<Transaction>
     /** Sign multiple transactions */
-    signTransactions(transactions: Transaction[]): Promise<string[]>
+    signTransactions(transactions: Transaction[]): Promise<Transaction[]>
 }
 
 export function createSolanaWalletProviders(): Record<ProviderType, SolanaWalletProvider> {

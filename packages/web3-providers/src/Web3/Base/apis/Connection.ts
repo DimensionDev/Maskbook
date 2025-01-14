@@ -208,7 +208,7 @@ export interface BaseConnection<
     estimateTransaction?: (transaction: Transaction, fallback?: number, initial?: Options) => Promise<string>
 
     /** Send a signed transaction */
-    sendSignedTransaction(signature: TransactionSignature, initial?: Options): Promise<TransactionSignature>
+    sendSignedTransaction(signature: TransactionSignature, initial?: Options): Promise<string>
 
     /** Build connection */
     connect(initial?: Options): Promise<Account<ChainId>>

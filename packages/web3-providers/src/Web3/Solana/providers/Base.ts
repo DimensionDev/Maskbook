@@ -32,7 +32,7 @@ export abstract class BaseSolanaWalletProvider implements SolanaWalletProvider {
     }
     abstract signMessage(message: string): Promise<string>
     abstract signTransaction(transaction: Transaction): Promise<Transaction>
-    abstract signTransactions(transactions: Transaction[]): Promise<string[]>
+    abstract signTransactions(transactions: Transaction[]): Promise<Transaction[]>
     connect(chainId: ChainId): Promise<Account<ChainId>> {
         throw new Error('Method not implemented.')
     }

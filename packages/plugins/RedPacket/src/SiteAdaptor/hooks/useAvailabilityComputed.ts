@@ -17,7 +17,7 @@ import { useParseRedPacket } from './useParseRedPacket.js'
  */
 export function useAvailabilityComputed(account: string, payload: RedPacketJSONPayload) {
     const parsedChainId =
-        payload.token?.chainId ??
+        (payload.token?.chainId as ChainId) ??
         EVMNetworkResolver.networkChainId((payload.network ?? '') as NetworkType) ??
         ChainId.Mainnet
 

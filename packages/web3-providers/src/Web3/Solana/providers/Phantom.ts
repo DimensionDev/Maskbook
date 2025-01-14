@@ -58,9 +58,12 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
 
     override async signTransactions(transactions: Transaction[]) {
         await this.validateSession()
-        const { signatures } = await this.bridge.request<{
-            signatures: string[]
-        }>({
+        const results = await this.bridge.request<
+            Array<{
+                message: SolanaWeb3.MessageArgs | SolanaWeb3.MessageV0Args
+                signatures: Uint8Array[]
+            }>
+        >({
             method: 'signAllTransactions',
             params: {
                 message: transactions.map((transaction) => {
@@ -68,6 +71,9 @@ export class SolanaPhantomProvider extends SolanaInjectedWalletProvider {
                 }),
             },
         })
-        return signatures
+
+        return results.map((transaction, index) => {
+            return recoverTransaction(transactions[index], transaction.message, transaction.signatures)
+        })
     }
 }

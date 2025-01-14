@@ -9,7 +9,7 @@ export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
         throw new Error('method not implemented')
     }
 
-    override async signTransactions(transactions: Transaction[]): Promise<string[]> {
+    override async signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
         throw new Error('Method not implemented.')
     }
 
