@@ -3,13 +3,14 @@ import { useAccount } from '@masknet/web3-hooks-base'
 import { RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 import { getRpProgram } from '../../helpers/getRpProgram.js'
-import { isSameAddress, minus } from '@masknet/web3-shared-base'
+import { minus } from '@masknet/web3-shared-base'
+import { useClaimRecord } from './useClaimRecord.js'
 
 export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chainId: number) {
     const account = useAccount(NetworkPluginID.PLUGIN_SOLANA)
 
     const { data, refetch: checkAvailability } = useQuery({
-        queryKey: ['red-packet', 'solana-availability', payload.rpid, payload.accountId, payload.network],
+        queryKey: ['red-packet', 'solana-availability', payload.accountId, payload.network],
         queryFn: async () => {
             if (!payload.accountId) return null
             const program = await getRpProgram(payload.network)
@@ -25,6 +26,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             return 30_000
         },
     })
+    const { data: claimRecord } = useClaimRecord(account, payload.accountId, payload?.network ?? 'mainnet-beta')
     if (!data) {
         return {
             parsedChainId: chainId,
@@ -38,7 +40,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
     }
     const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
     const isEmpty = data.claimedAmount.gt(data.totalAmount)
-    const isClaimed = data.claimedUsers.some((claimedKey) => isSameAddress(claimedKey.toBase58(), account))
+    const isClaimed = !!claimRecord
 
     const availability = {
         token_address: data.tokenAddress.toBase58(),

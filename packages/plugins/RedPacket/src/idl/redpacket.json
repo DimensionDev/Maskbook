@@ -35,6 +35,26 @@
                     }
                 },
                 {
+                    "name": "claim_record",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [99, 108, 97, 105, 109, 95, 114, 101, 99, 111, 114, 100]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "red_packet"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "signer"
+                            }
+                        ]
+                    }
+                },
+                {
                     "name": "system_program",
                     "address": "11111111111111111111111111111111"
                 },
@@ -76,6 +96,26 @@
                                 "kind": "account",
                                 "path": "red_packet.create_time",
                                 "account": "RedPacket"
+                            }
+                        ]
+                    }
+                },
+                {
+                    "name": "claim_record",
+                    "writable": true,
+                    "pda": {
+                        "seeds": [
+                            {
+                                "kind": "const",
+                                "value": [99, 108, 97, 105, 109, 95, 114, 101, 99, 111, 114, 100]
+                            },
+                            {
+                                "kind": "account",
+                                "path": "red_packet"
+                            },
+                            {
+                                "kind": "account",
+                                "path": "signer"
                             }
                         ]
                     }
@@ -387,18 +427,6 @@
                 {
                     "name": "system_program",
                     "address": "11111111111111111111111111111111"
-                },
-                {
-                    "name": "instructions",
-                    "docs": [
-                        "https://github.com/GuidoDipietro/solana-ed25519-secp256k1-sig-verification/blob/master/programs/solana-ed25519-sig-verification/src/lib.rs",
-                        "https://solana.stackexchange.com/questions/16487/about-verify-signature-with-ed25519-issue?rq=1"
-                    ],
-                    "address": "Sysvar1nstructions1111111111111111111111111"
-                },
-                {
-                    "name": "ed25519_program",
-                    "address": "Ed25519SigVerify111111111111111111111111111"
                 }
             ],
             "args": []
@@ -497,24 +525,16 @@
                 {
                     "name": "system_program",
                     "address": "11111111111111111111111111111111"
-                },
-                {
-                    "name": "instructions",
-                    "docs": [
-                        "https://github.com/GuidoDipietro/solana-ed25519-secp256k1-sig-verification/blob/master/programs/solana-ed25519-sig-verification/src/lib.rs",
-                        "https://solana.stackexchange.com/questions/16487/about-verify-signature-with-ed25519-issue?rq=1"
-                    ],
-                    "address": "Sysvar1nstructions1111111111111111111111111"
-                },
-                {
-                    "name": "ed25519_program",
-                    "address": "Ed25519SigVerify111111111111111111111111111"
                 }
             ],
             "args": []
         }
     ],
     "accounts": [
+        {
+            "name": "ClaimRecord",
+            "discriminator": [57, 229, 0, 9, 65, 62, 96, 7]
+        },
         {
             "name": "RedPacket",
             "discriminator": [51, 197, 171, 232, 223, 81, 121, 248]
@@ -604,6 +624,22 @@
     ],
     "types": [
         {
+            "name": "ClaimRecord",
+            "type": {
+                "kind": "struct",
+                "fields": [
+                    {
+                        "name": "claimer",
+                        "type": "pubkey"
+                    },
+                    {
+                        "name": "amount",
+                        "type": "u64"
+                    }
+                ]
+            }
+        },
+        {
             "name": "RedPacket",
             "type": {
                 "kind": "struct",
@@ -647,18 +683,6 @@
                     {
                         "name": "if_spilt_random",
                         "type": "bool"
-                    },
-                    {
-                        "name": "claimed_users",
-                        "type": {
-                            "vec": "pubkey"
-                        }
-                    },
-                    {
-                        "name": "claimed_amount_records",
-                        "type": {
-                            "vec": "u64"
-                        }
                     },
                     {
                         "name": "pubkey_for_claim_signature",

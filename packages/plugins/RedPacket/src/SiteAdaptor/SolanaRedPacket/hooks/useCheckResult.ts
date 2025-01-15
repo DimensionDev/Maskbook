@@ -1,6 +1,8 @@
 import type { Cluster } from '@solana/web3.js'
 import { useCallback } from 'react'
 import { getRpProgram } from '../../helpers/getRpProgram.js'
+import { web3 } from '@coral-xyz/anchor'
+import { base58ToBuffer } from '../../helpers/base58ToBuffer.js'
 
 interface CheckResultOptions {
     cluster: Cluster
@@ -11,10 +13,11 @@ interface CheckResultOptions {
 export function useCheckResult() {
     return useCallback(async ({ cluster, accountId, account }: CheckResultOptions) => {
         const program = await getRpProgram(cluster)
-        const data = await program.account.redPacket.fetch(accountId, 'confirmed')
-        const userIndex = data.claimedUsers.findIndex((claimedKey) => claimedKey.toBase58() === account)
-        const records = data.claimedAmountRecords
-        const rawAmount = userIndex !== -1 && userIndex < records.length ? records[userIndex]?.toString() : ''
-        return rawAmount || '0'
+        const claimAccount = web3.PublicKey.findProgramAddressSync(
+            [Buffer.from('claim_record'), base58ToBuffer(accountId), base58ToBuffer(account)],
+            program.programId,
+        )[0]
+        const record = await program.account.claimRecord.fetch(claimAccount)
+        return record?.amount.toString() || '0'
     }, [])
 }

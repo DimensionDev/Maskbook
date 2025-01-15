@@ -1,7 +1,4 @@
-import {
-    type RedPacketRecord,
-    type NftRedPacketJSONPayload,
-} from '@masknet/web3-providers/types'
+import { type RedPacketRecord, type NftRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import * as database from './database.js'
 import * as nftDb from './databaseForNft.js'
 
