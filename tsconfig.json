@@ -73,7 +73,6 @@
       "@masknet/plugin-infra": ["./packages/plugin-infra/src/entry.ts"],
       "@masknet/global-types/*": ["./packages/polyfills/types/*"],
       "@masknet/public-api": ["./packages/public-api/src/index.ts"],
-      "@masknet/shared": ["./packages/shared/src/index.ts"],
       "@masknet/shared-base": ["./packages/shared-base/src/index.ts"],
       "@masknet/shared-base-ui": ["./packages/shared-base-ui/src/index.ts"],
       "@masknet/theme": ["./packages/theme/src/index.ts"],

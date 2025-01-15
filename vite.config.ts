@@ -7,7 +7,6 @@ export default defineConfig({
             '@masknet/sdk': import.meta.resolve('./packages/mask-sdk/server/index.ts'),
             '@masknet/base': import.meta.resolve('./packages/base/src/index.ts'),
             '@masknet/flags': import.meta.resolve('./packages/flags/src/index.ts'),
-            '@masknet/shared-base': import.meta.resolve('./packages/shared-base/src/index.ts'),
             '@masknet/shared-base-ui': import.meta.resolve('./packages/shared-base-ui/src/index.ts'),
             '@masknet/web3-helpers': import.meta.resolve('./packages/web3-helpers/src/index.ts'),
             '@masknet/web3-providers/helpers': import.meta.resolve('./packages/web3-providers/src/entry-helpers.ts'),

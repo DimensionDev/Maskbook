@@ -39,7 +39,6 @@ export {
     useLastRecognizedSocialIdentity,
     usePostLink,
     useSocialIdentity,
-    useSiteThemeMode,
     useSocialIdentityByUserId,
     type __SiteAdaptorContext__,
     __setSiteAdaptorContext__,

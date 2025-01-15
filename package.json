@@ -32,10 +32,6 @@
     "@emotion/react": "11.11.1",
     "@emotion/styled": "11.11.0",
     "@masknet/kit": "0.3.0",
-    "@mui/icons-material": "5.15.12",
-    "@mui/lab": "5.0.0-alpha.167",
-    "@mui/material": "5.15.12",
-    "@mui/system": "5.15.12",
     "@tanstack/react-query": "^5.29.2",
     "@types/masknet__global-types": "workspace:^",
     "@typescript/lib-dom": "npm:@types/web@^0.0.143",
@@ -105,7 +101,6 @@
         "@babel/core",
         "webextension-polyfill",
         "prop-types",
-        "@mui/material",
         "typescript"
       ],
       "allowedVersions": {
@@ -119,8 +114,6 @@
       "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
       "web3-core@1.10.2": "patches/web3-core@1.10.2.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
-      "@mui/material@5.15.12": "patches/@mui__material@5.15.12.patch",
-      "@mui/base@5.0.0-beta.38": "patches/@mui__base@5.0.0-beta.38.patch",
       "gulp@4.0.2": "patches/gulp@4.0.2.patch",
       "react-use@17.5.1": "patches/react-use@17.5.1.patch"
     }
