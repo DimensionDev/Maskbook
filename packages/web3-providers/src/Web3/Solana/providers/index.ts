@@ -4,6 +4,7 @@ import { NoneProvider } from './None.js'
 import { SolanaCoin98Provider } from './Coin98.js'
 import { SolanaPhantomProvider } from './Phantom.js'
 import { SolanaSolflareProvider } from './SolflareProvider.js'
+import { SolanaOKXProvider } from './OKX.js'
 
 export interface SolanaWalletProvider extends WalletAPI.Provider<ChainId, ProviderType> {
     /** Sign message */
@@ -21,5 +22,6 @@ export function createSolanaWalletProviders(): Record<ProviderType, SolanaWallet
         [ProviderType.Phantom]: new SolanaPhantomProvider(),
         [ProviderType.Solflare]: new SolanaSolflareProvider(),
         [ProviderType.Coin98]: new SolanaCoin98Provider(),
+        [ProviderType.OKX]: new SolanaOKXProvider(),
     }
 }

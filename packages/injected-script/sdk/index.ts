@@ -1,7 +1,7 @@
 import { BrowserProvider } from './Browser.js'
 import { Coin98Provider, Coin98ProviderType } from './Coin98.js'
 import { CoinbaseProvider } from './Coinbase.js'
-import { OKXProvider } from './OKX.js'
+import { OKXProvider, OKXSolanaProvider } from './OKX.js'
 import { CryptoProvider } from './Crypto.js'
 import { BitGetProvider } from './BitGet.js'
 import { RainbowProvider } from './Rainbow.js'
@@ -30,6 +30,7 @@ export const injectedMetaMaskProvider = new MetaMaskProvider()
 export const injectedCoinbaseProvider = new CoinbaseProvider()
 export const injectedOneKeyProvider = new OneKeyProvider()
 export const injectedOKXProvider = new OKXProvider()
+export const injectedOKXSolanaProvider = new OKXSolanaProvider()
 export const injectedCryptoProvider = new CryptoProvider()
 export const injectedBitGetProvider = new BitGetProvider()
 export const injectedRainbowProvider = new RainbowProvider()

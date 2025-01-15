@@ -35,6 +35,7 @@ export enum ProviderType {
     Phantom = 'Phantom',
     Solflare = 'Solflare',
     Coin98 = 'Coin98',
+    OKX = 'OKX',
 }
 
 // Learn more at https://docs.phantom.app/integrating/extension-and-mobile-browser/detecting-the-provider
@@ -58,6 +59,17 @@ export enum Coin98MethodType {
 export enum SolfareMethodType {
     SIGN_TRANSACTION = 'signTransactionV2',
     SIGN_TRANSACTIONS = 'signAllTransactionsV2',
+}
+
+export enum OKXMethodType {
+    SIGN_AND_SEND_TRANSACTION = 'signAndSendTransaction',
+    SIGN_TRANSACTION = 'signTransaction',
+    SIGN_ALL_TRANSACTIONS = 'signAllTransactions',
+    SIGN_MESSAGE = 'signMessage',
+    RPC_SIGN_AND_SEND_TRANSACTION = 'rpcSignAndSendTransaction',
+    RPC_SIGN_TRANSACTION = 'rpcSignTransaction',
+    RPC_SIGN_ALL_TRANSACTIONS = 'rpcSignAllTransactions',
+    RPC_SIGN_MESSAGE = 'rpcSignMessage',
 }
 
 export interface Payload {
