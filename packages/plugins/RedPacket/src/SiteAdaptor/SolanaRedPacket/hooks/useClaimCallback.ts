@@ -57,7 +57,6 @@ export function useClaimCallback(payload: SolanaRedPacketJSONPayload = {} as Sol
                     })
                     .preInstructions([ed25519Instruction])
                     .rpc()
-                console.log('signature', signature)
                 return signature
             }
 

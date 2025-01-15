@@ -5,9 +5,7 @@ import type { Cluster } from '@solana/web3.js'
 import { type Redpacket } from '../idl/rp.js'
 import idl from '../idl/rp.json' with { type: 'json' }
 
-export async function getRpProgram(cluster?: Cluster) {
+export async function getRpProgram(cluster?: Cluster | undefined) {
     const anchorProvider = await getSolanaProvider(cluster)
-    console.log('cluster', { cluster })
-    const program = new Program(idl as Redpacket, anchorProvider)
-    return program
+    return new Program(idl as Redpacket, anchorProvider)
 }

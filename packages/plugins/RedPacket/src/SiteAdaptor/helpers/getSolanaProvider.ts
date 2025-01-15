@@ -6,19 +6,14 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { getConnection } from '@masknet/web3-providers'
 import type { Cluster } from '@solana/web3.js'
 
-// temporarily alias to mainnet-beta
-export async function getSolanaConnection(cluster: Cluster | 'mainnet' | 'Solana') {
-    cluster =
-        cluster === 'mainnet' ? 'mainnet-beta'
-        : cluster === 'Solana' ? 'devnet'
-        : cluster
-    return new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(cluster ?? 'devnet'), 'confirmed')
+export async function getSolanaConnection(cluster?: Cluster) {
+    return new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(cluster ?? 'mainnet-beta'), 'confirmed')
 }
 
-export async function getSolanaProvider(cluster?: Cluster) {
+export async function getSolanaProvider(cluster?: Cluster | undefined) {
     const cnt = getConnection(NetworkPluginID.PLUGIN_SOLANA)
 
-    const connection = await getSolanaConnection(cluster ?? 'devnet')
+    const connection = await getSolanaConnection(cluster)
     const account = await cnt.getAccount()
 
     const wallet = {

@@ -12,7 +12,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
         queryKey: ['red-packet', 'solana-availability', payload.rpid, payload.accountId, payload.network],
         queryFn: async () => {
             if (!payload.accountId) return null
-            const program = await getRpProgram('devnet')
+            const program = await getRpProgram(payload.network)
             const result = await program.account.redPacket.fetch(payload.accountId)
             return result
         },
