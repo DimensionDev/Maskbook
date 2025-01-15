@@ -119,7 +119,7 @@ export async function getEstimatedGasByCreateWithSplToken(
 
     const program = await getRpProgram()
 
-    const connection = await getSolanaConnection()
+    const connection = await getSolanaConnection('devnet')
 
     const tokenAccount = await getTokenAccount(tokenMint)
     if (!tokenAccount) throw new Error('Token account not found')

@@ -17,6 +17,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const { chainId } = useChainContext({ chainId: options?.chainId })
     const { pluginID: contextPluginID } = useNetworkContext(pluginID)
     const networks = useNetworks(contextPluginID)
+    console.log('redpacket contextPluginID', { contextPluginID })
 
     return useQuery({
         enabled: !!address,

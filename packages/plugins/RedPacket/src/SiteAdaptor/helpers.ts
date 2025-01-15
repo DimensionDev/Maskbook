@@ -1,13 +1,18 @@
-import { RedPacketMetaKey, RedPacketNftMetaKey } from '@masknet/shared-base'
+import { RedPacketMetaKey, RedPacketNftMetaKey, SolanaRedPacketMetaKey } from '@masknet/shared-base'
 import { createRenderWithMetadata, createTypedMessageMetadataReader } from '@masknet/typed-message-react'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type {
+    RedPacketJSONPayload,
+    RedPacketNftJSONPayload,
+    SolanaRedPacketJSONPayload,
+} from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Ok, type Result } from 'ts-results-es'
-import schemaNtf from '../schema-nft.json' with { type: 'json' }
-import schema from '../schema.json' with { type: 'json' }
+import evmNftSchema from '../schemas/evm-nft.json' with { type: 'json' }
+import evmTokenSchema from '../schemas/evm-token.json' with { type: 'json' }
+import solanaTokenSchema from '../schemas/solana-token.json' with { type: 'json' }
 
-const reader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, schema)
+const reader = createTypedMessageMetadataReader<RedPacketJSONPayload>(RedPacketMetaKey, evmTokenSchema)
 export function RedPacketMetadataReader(
     metadata: ReadonlyMap<string, unknown> | undefined,
 ): Result<RedPacketJSONPayload, void> {
@@ -32,6 +37,13 @@ export const renderWithRedPacketMetadata = createRenderWithMetadata(RedPacketMet
 
 export const RedPacketNftMetadataReader = createTypedMessageMetadataReader<RedPacketNftJSONPayload>(
     RedPacketNftMetaKey,
-    schemaNtf,
+    evmNftSchema,
 )
 export const renderWithRedPacketNftMetadata = createRenderWithMetadata(RedPacketNftMetadataReader)
+
+export const SolanaRedPacketMetadataReader = createTypedMessageMetadataReader<SolanaRedPacketJSONPayload>(
+    SolanaRedPacketMetaKey,
+    solanaTokenSchema,
+)
+
+export const renderWithSolanaRedPacketMetadata = createRenderWithMetadata(SolanaRedPacketMetadataReader)

@@ -93,7 +93,7 @@ export async function getEstimatedGasByCreateWithNativeToken(
 ): Promise<BigNumber> {
     const program = await getRpProgram()
     const createTime = Math.floor(Date.now() / 1000)
-    const connection = await getSolanaConnection()
+    const connection = await getSolanaConnection('devnet')
 
     const transaction = await program.methods
         .createRedPacketWithNativeToken(

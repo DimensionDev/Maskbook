@@ -3,7 +3,11 @@ import { Icons } from '@masknet/icons'
 import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '@masknet/shared-base'
-import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
+import type {
+    RedPacketJSONPayload,
+    RedPacketNftJSONPayload,
+    SolanaRedPacketJSONPayload,
+} from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Typography } from '@mui/material'
@@ -18,7 +22,10 @@ import {
     RedPacketNftMetadataReader,
     renderWithRedPacketMetadata,
     renderWithRedPacketNftMetadata,
+    renderWithSolanaRedPacketMetadata,
+    SolanaRedPacketMetadataReader,
 } from './helpers.js'
+import { SolanaRedPacketFrame } from './SolanaRedPacket/SolanaRedPacketFrame.js'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -42,9 +49,11 @@ const site: Plugin.SiteAdaptor.Definition = {
         if (RedPacketMetadataReader(meta).isOk())
             return (
                 <Render name="Lucky Drop">
-                    {renderWithRedPacketMetadata(meta, (r) => (
-                        <RedPacketInPost payload={r} />
-                    ))}
+                    {renderWithRedPacketMetadata(meta, (r) => {
+                        if (r.rpid.startsWith('solana-'))
+                            return <SolanaRedPacketFrame payload={r as SolanaRedPacketJSONPayload} />
+                        return <RedPacketInPost payload={r} />
+                    })}
                 </Render>
             )
 
@@ -53,6 +62,14 @@ const site: Plugin.SiteAdaptor.Definition = {
                 <Render name="NFT Lucky Drop">
                     {renderWithRedPacketNftMetadata(props.message.meta, (r) => (
                         <RedPacketNftInPost payload={r} />
+                    ))}
+                </Render>
+            )
+        if (SolanaRedPacketMetadataReader(meta).isOk())
+            return (
+                <Render name="Solana Lucky Drop">
+                    {renderWithSolanaRedPacketMetadata(props.message.meta, (r) => (
+                        <SolanaRedPacketFrame payload={r} />
                     ))}
                 </Render>
             )

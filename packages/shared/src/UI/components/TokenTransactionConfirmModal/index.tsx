@@ -123,6 +123,7 @@ export function TokenTransactionConfirmModal({
                                 address={token.address}
                                 logoURL={token.logoURL}
                                 name={token.symbol ?? token.name}
+                                pluginID={token.runtime}
                                 chainId={token.chainId}
                                 size={90}
                                 disableBadge

@@ -29,7 +29,6 @@ export enum SchemaType {
 export enum NetworkType {
     Solana = 'Solana',
 }
-
 export enum ProviderType {
     None = 'None',
     Phantom = 'Phantom',

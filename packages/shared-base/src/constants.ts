@@ -39,3 +39,4 @@ export const DEFAULT_PLUGIN_PUBLISHER = { name: { fallback: 'Mask Network' }, li
  */
 export const RedPacketMetaKey = `${PluginID.RedPacket}:1`
 export const RedPacketNftMetaKey = `${PluginID.RedPacket}_nft:1`
+export const SolanaRedPacketMetaKey = `${PluginID.RedPacket}_solana:1`

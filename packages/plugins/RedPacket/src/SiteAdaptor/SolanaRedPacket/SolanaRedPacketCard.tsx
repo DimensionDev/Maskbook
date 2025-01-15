@@ -3,26 +3,24 @@ import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
-import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { FireflyRedPacketAPI, RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
-import { Card, Grow } from '@mui/material'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { Requirements } from '../Requirements/index.js'
+import { FireflyRedPacket, SolanaChainResolver } from '@masknet/web3-providers'
+import { FireflyRedPacketAPI, RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-solana'
+import { Card } from '@mui/material'
+import { memo, useCallback, useMemo } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
-import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
-import { useClaimCallback } from '../hooks/useClaimCallback.js'
-import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
-import { useRefundCallback } from '../hooks/useRefundCallback.js'
+import { useSolanaAvailability } from './hooks/useAvailability.js'
+import { useCheckResult } from './hooks/useCheckResult.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { useClaimCallback } from './hooks/useClaimCallback.js'
+import { web3 } from '@coral-xyz/anchor'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -53,54 +51,36 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             width: '100%',
         },
-        requirements: {
-            width: 407,
-            height: 'fit-content',
-            boxSizing: 'border-box',
-            position: 'absolute',
-            zIndex: 9,
-            inset: 0,
-            margin: 'auto',
-            [`@media (max-width: ${theme.breakpoints.values.md}px)`]: {
-                width: 'auto',
-            },
-        },
     }
 })
 
-export interface RedPacketProps {
-    payload: RedPacketJSONPayload
+export interface SolanaRedPacketCardProps {
+    payload: SolanaRedPacketJSONPayload
 }
 
-export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
+export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }: SolanaRedPacketCardProps) {
     const { _ } = useLingui()
     const token = payload.token
     const { pluginID } = useNetworkContext()
-    const payloadChainId: ChainId =
-        (token?.chainId as ChainId) ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: payloadChainId,
-        account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
-    })
+
+    const payloadChainId = token?.chainId ?? SolanaChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
 
     // #region token detailed
     const {
         availability,
         computed: availabilityComputed,
         checkAvailability,
-        claimStrategyStatus,
-        recheckClaimStatus,
-        checkingClaimStatus,
-    } = useAvailabilityComputed(account, payload)
+    } = useSolanaAvailability(payload, payloadChainId)
 
     // #endregion
 
-    const { canClaim, canRefund, listOfStatus, isClaimed, isEmpty, isExpired, isRefunded } = availabilityComputed
+    const { canClaim, canRefund, listOfStatus } = availabilityComputed
 
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
-    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
+    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(payload)
     const source = usePostInfoDetails.source()
     const platform = source?.toLowerCase()
     const postUrl = usePostInfoDetails.url()
@@ -144,46 +124,21 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
 
-    const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
-        payload.contract_version,
-        account,
-        payload.rpid,
-        payloadChainId,
-    )
+    const checkResult = useCheckResult()
 
-    const redPacketContract = useRedPacketContract(payloadChainId, payload.contract_version) as HappyRedPacketV4
-    const checkResult = useCallback(async () => {
-        const data = await redPacketContract.methods.check_availability(payload.rpid).call({
-            // check availability is ok w/o account
-            from: account,
-        })
-        if (isZero(data.claimed_amount)) return
-        TransactionConfirmModal.open({
-            shareText: claimedShareText,
-            token,
-            tokenType: TokenType.Fungible,
-            messageTextForNFT: _(msg`1 NFT claimed.`),
-            messageTextForFT: _(
-                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol}.`,
-            ),
-            title: _(msg`Lucky Drop`),
-            share: (text) => share?.(text, source ? source : undefined),
-        })
-    }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
-
-    const [showRequirements, setShowRequirements] = useState(false)
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
     const myHandle = me?.identifier?.userId
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
-            const result = await recheckClaimStatus()
-            if (result === false) {
-                setShowRequirements(true)
-                return
-            }
-            hash = await claimCallback()
+            hash = await claimCallback({
+                cluster: payload.network,
+                accountId: payload.accountId,
+                password: payload.password ?? '',
+                tokenAddress: payload.token!.address,
+                tokenProgram: new web3.PublicKey(payload.tokenProgram || ''),
+            })
             if (myProfileId && myHandle && hash) {
                 await FireflyRedPacket.finishClaiming(
                     payload.rpid,
@@ -193,34 +148,39 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     hash,
                 )
             }
-            await checkResult()
+            const amount = await checkResult({
+                cluster: payload.network ?? 'mainnet-beta',
+                accountId: payload.accountId,
+                account,
+            })
+            if (isZero(amount)) return
+
+            TransactionConfirmModal.open({
+                shareText: claimedShareText,
+                token,
+                tokenType: TokenType.Fungible,
+                messageTextForNFT: _(msg`1 NFT claimed.`),
+                messageTextForFT: _(
+                    msg`You claimed ${formatBalance(amount, token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+                ),
+                title: _(msg`Lucky Drop`),
+                share: (text) => share?.(text, source ? source : undefined),
+            })
             queryClient.invalidateQueries({
                 queryKey: ['redpacket', 'history'],
             })
-        } else if (canRefund) {
-            hash = await refundCallback()
         }
         if (typeof hash === 'string') {
             checkAvailability()
         }
-    }, [
-        canClaim,
-        canRefund,
-        claimCallback,
-        checkResult,
-        recheckClaimStatus,
-        checkAvailability,
-        payload.rpid,
-        myProfileId,
-        myHandle,
-    ])
+    }, [canClaim, canRefund, claimCallback, checkResult, checkAvailability, payload.rpid, myProfileId, myHandle])
 
-    const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
+    const outdated = availability?.isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
     const { classes } = useStyles()
 
     // RedPacket created from Mask has no cover settings
-    const { data: cover, isLoading: isLoadingCover } = useRedPacketCover({
+    const { data: cover } = useRedPacketCover({
         ...payload,
         token,
         sender: payload.sender.name,
@@ -230,9 +190,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     })
 
     // the red packet can fetch without account
-    if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
-
-    const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
+    if (!availability || !token) return <LoadingStatus minHeight={148} />
 
     return (
         <>
@@ -243,26 +201,15 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     message={payload.sender.message}
                     token={token}
                     shares={payload.shares}
-                    isClaimed={isClaimed}
-                    isEmpty={isEmpty}
-                    isExpired={isExpired}
-                    isRefunded={isRefunded}
+                    isClaimed={availability.isClaimed}
+                    isEmpty={availability.isEmpty}
+                    isExpired={availability.expired}
                     claimedCount={+availability.claimed}
                     total={payload.total}
-                    totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
+                    totalClaimed={availability.claimed}
                     claimedAmount={availability.claimed_amount}
                     creator={payload.sender.name}
                 />
-                {cover ?
-                    <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
-                        <Requirements
-                            showResults={!claimedOrEmpty}
-                            statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
-                            className={classes.requirements}
-                            onClose={() => setShowRequirements(false)}
-                        />
-                    </Grow>
-                :   null}
             </Card>
             {outdated ?
                 null
@@ -272,8 +219,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
                     chainId={payloadChainId}
                     canClaim={canClaim}
                     canRefund={canRefund}
-                    isClaiming={isClaiming || checkingClaimStatus}
-                    isRefunding={isRefunding}
+                    isClaiming={isClaiming}
                     onClaimOrRefund={onClaimOrRefund}
                 />
             :   <RequestLoginFooter

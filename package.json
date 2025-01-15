@@ -51,6 +51,7 @@
     "@types/react": "npm:types-react@beta",
     "@types/react-dom": "npm:types-react-dom@beta",
     "@typescript/lib-dom": "npm:@types/web@^0.0.183",
+    "buffer": "^6.0.3",
     "knip": "^5.38.1",
     "lodash-es": "^4.17.21",
     "react": "0.0.0-experimental-58af67a8f8-20240628",

@@ -1,9 +1,8 @@
 import { Trans } from '@lingui/react/macro'
 import { TokenIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { formatBalance, isZero, type FungibleToken } from '@masknet/web3-shared-base'
-import { type ChainId, type SchemaType } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 
@@ -136,7 +135,7 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends HTMLProps<HTMLDivElement> {
     cover: string
     message: string
-    token: FungibleToken<ChainId, SchemaType>
+    token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     shares?: number
     /** claimed entities */
     claimedCount: number
@@ -183,7 +182,7 @@ export function RedPacketEnvelope({
                     <TokenIcon
                         size={36}
                         badgeSize={16}
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
+                        pluginID={token.runtime}
                         address={token.address}
                         symbol={token.symbol}
                         chainId={token.chainId}
