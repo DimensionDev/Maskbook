@@ -183,7 +183,7 @@ export function SolanaRedPacketConfirm() {
             duration: DEFAULT_DURATION,
             creation_time: Date.now(),
             token,
-            network: SolanaChainResolver.chainName(chainId),
+            network: SolanaChainResolver.network(chainId),
             contract_address: idl.address,
             contract_version: 4,
             txid: result.signature,

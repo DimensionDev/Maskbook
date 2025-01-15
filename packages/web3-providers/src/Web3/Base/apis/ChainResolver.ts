@@ -36,6 +36,9 @@ export class ChainResolver<ChainId, SchemaType, NetworkType> {
     networkType(chainId: ChainId) {
         return this.getDescriptorRequired(chainId).type
     }
+    network(chainId: ChainId) {
+        return this.getDescriptorRequired(chainId).network
+    }
     explorerUrl(chainId: ChainId) {
         return this.getDescriptorRequired(chainId).explorerUrl
     }
