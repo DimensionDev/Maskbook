@@ -2,6 +2,7 @@ import { first } from 'lodash-es'
 import { injectedCoin98SolanaProvider, type InjectedWalletBridge } from '@masknet/injected-script'
 import type { Account } from '@masknet/shared-base'
 import { type ChainId, Coin98MethodType, ProviderType, type Transaction } from '@masknet/web3-shared-solana'
+
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
 
 export class SolanaCoin98Provider extends SolanaInjectedWalletProvider {
@@ -16,7 +17,7 @@ export class SolanaCoin98Provider extends SolanaInjectedWalletProvider {
     }
 
     override async signTransaction(transaction: Transaction): Promise<Transaction> {
-        throw new Error('method not implemented')
+        throw new Error('Method not implemented.')
     }
 
     override async signTransactions(transactions: Transaction[]): Promise<Transaction[]> {

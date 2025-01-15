@@ -55,6 +55,11 @@ export enum Coin98MethodType {
     SOL_VERIFY = 'sol_verify',
 }
 
+export enum SolfareMethodType {
+    SIGN_TRANSACTION = 'signTransactionV2',
+    SIGN_TRANSACTIONS = 'signAllTransactionsV2',
+}
+
 export interface Payload {
     method: string
     params?: unknown

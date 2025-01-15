@@ -1,16 +1,52 @@
 import { injectedSolflareProvider, type InjectedWalletBridge } from '@masknet/injected-script'
-import { ProviderType, type Transaction } from '@masknet/web3-shared-solana'
+import {
+    ProviderType,
+    recoverTransactionFromUnit8Array,
+    serializeTransaction,
+    SolfareMethodType,
+    type Transaction,
+    type Web3Provider,
+} from '@masknet/web3-shared-solana'
+
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
+import { decode, encode } from 'bs58'
 
 export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
     protected override providerType = ProviderType.Solflare
     protected override bridge: InjectedWalletBridge = injectedSolflareProvider
+    private async validateSession() {
+        if (this.bridge.isConnected) return
+        await (this.bridge as unknown as Web3Provider).connect()
+    }
     override async signTransaction(transaction: Transaction): Promise<Transaction> {
-        throw new Error('method not implemented')
+        await this.validateSession()
+        const result = await this.bridge.request<{
+            transaction: string
+        }>({
+            method: SolfareMethodType.SIGN_TRANSACTION,
+            params: {
+                message: encode(serializeTransaction(transaction)),
+            },
+        })
+
+        const signedTransaction = decode(result.transaction)
+
+        return recoverTransactionFromUnit8Array(signedTransaction, transaction)
     }
 
     override async signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
-        throw new Error('Method not implemented.')
+        await this.validateSession()
+        const results = await this.bridge.request<{ transactions: string[] }>({
+            method: SolfareMethodType.SIGN_TRANSACTIONS,
+            params: {
+                message: transactions.map((transaction) => encode(serializeTransaction(transaction))),
+            },
+        })
+
+        return results.transactions.map((signedTransaction, index) => {
+            const transaction = transactions[index]
+            return recoverTransactionFromUnit8Array(decode(signedTransaction), transaction)
+        })
     }
 
     override signMessage(message: string): Promise<string> {

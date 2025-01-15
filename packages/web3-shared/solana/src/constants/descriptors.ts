@@ -22,7 +22,7 @@ export const CHAIN_DESCRIPTORS: ReadonlyArray<ChainDescriptor<ChainId, SchemaTyp
         color: '#17ac7c',
         fullName: 'Solana',
         shortName: 'Solana',
-        network: 'mainnet',
+        network: 'mainnet-beta',
         nativeCurrency: createFungibleToken(
             ChainId.Mainnet,
             SchemaType.Fungible,
@@ -157,7 +157,7 @@ export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, Pro
         downloadLink: 'https://solflare.com/download',
         enableRequirements: {
             supportedChainIds: ChainIdList,
-            supportedEnhanceableSites: [],
+            supportedEnhanceableSites: EnhanceableSiteList,
             supportedExtensionSites: [],
         },
     },

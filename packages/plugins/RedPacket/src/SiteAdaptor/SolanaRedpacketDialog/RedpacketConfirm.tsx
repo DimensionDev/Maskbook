@@ -170,6 +170,7 @@ export function SolanaRedPacketConfirm() {
         if (!result) return
 
         const payload = {
+            themeId: theme?.tid,
             sender: {
                 address: solanaAccount,
                 name: creator,
@@ -178,7 +179,7 @@ export function SolanaRedPacketConfirm() {
             is_random: !!isRandom,
             shares,
             password,
-            rpid: `solana-${crypto.randomUUID()}`,
+            rpid: `solana-${result.accountId.toBase58()}`,
             total: settings.total,
             duration: DEFAULT_DURATION,
             creation_time: Date.now(),
@@ -187,12 +188,11 @@ export function SolanaRedPacketConfirm() {
             contract_address: idl.address,
             contract_version: 4,
             txid: result.signature,
-            accountId: result.accountId.toBase58(),
             tokenProgram: tokenProgram?.toBase58(),
         }
 
         handleCreated(payload)
-    }, [isNativeToken, settings, isRandom, publicKey, message, creator])
+    }, [isNativeToken, settings, isRandom, publicKey, message, creator, theme])
 
     return (
         <>

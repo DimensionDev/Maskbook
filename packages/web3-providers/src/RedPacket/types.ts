@@ -50,6 +50,7 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     chainId?: ChainId
     network?: string
     token?: Web3Helper.FungibleTokenAll
+    themeId?: string
     /**
      * For contract_version === 1, payload has no token but token_type
      */
@@ -57,7 +58,6 @@ export interface RedPacketJSONPayload extends RedPacketBasic {
     total_remaining?: string
 
     // For solana
-    accountId?: string
     tokenProgram?: string
 }
 

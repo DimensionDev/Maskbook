@@ -24,3 +24,14 @@ export function recoverTransaction(
         return new SolanaWeb3.VersionedTransaction(message, signatures)
     }
 }
+
+export function recoverTransactionFromUnit8Array(
+    signedTransaction: Uint8Array,
+    transaction: SolanaWeb3.Transaction | SolanaWeb3.VersionedTransaction,
+) {
+    if ('serializeMessage' in transaction) {
+        return SolanaWeb3.Transaction.from(signedTransaction)
+    }
+
+    return SolanaWeb3.VersionedTransaction.deserialize(signedTransaction)
+}
