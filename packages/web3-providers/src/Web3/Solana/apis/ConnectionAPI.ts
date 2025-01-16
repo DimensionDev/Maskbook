@@ -277,7 +277,7 @@ export class SolanaConnectionAPI
     ): Promise<FungibleToken<ChainId, SchemaType>> {
         const options = this.ConnectionOptions.fill(initial)
         if (!address || isNativeTokenAddress(address)) return this.getNativeToken(options)
-        const tokens = await SolanaFungible.getFungibleTokenList(options.chainId, [])
+        const tokens = await SolanaFungible.getFungibleTokenList(options.chainId)
         const token = tokens.find((x) => isSameAddress(x.address, address))
         return (
             token ??

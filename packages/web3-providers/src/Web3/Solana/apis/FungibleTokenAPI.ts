@@ -151,7 +151,7 @@ class SolanaFungibleTokenAPI
             ],
         })
         if (!data.result?.length) return []
-        const tokenList = await this.getFungibleTokenList(chainId, [])
+        const tokenList = await this.getFungibleTokenList(chainId)
         const splTokens: Array<FungibleAsset<ChainId, SchemaType>> = []
         data.result.forEach((x) => {
             const info = x.account.data.parsed.info
@@ -207,8 +207,7 @@ class SolanaFungibleTokenAPI
         return createPageable(assets as Array<FungibleAsset<ChainId, SchemaType>>, createIndicator(indicator))
     }
 
-    async getFungibleTokenList(chainId: ChainId, urls?: string[]): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
-        // if (chainId !== ChainId.Mainnet) return EMPTY_LIST
+    async getFungibleTokenList(chainId: ChainId): Promise<Array<FungibleToken<ChainId, SchemaType>>> {
         const { FUNGIBLE_TOKEN_LISTS = EMPTY_LIST } = getTokenListConstants(chainId)
         const [maskTokenList, jupTokenList, raydiumTokenList] = await Promise.all([
             fetchMaskTokenList(FUNGIBLE_TOKEN_LISTS[0]),
