@@ -55,7 +55,7 @@ export enum Coin98MethodType {
     SOL_VERIFY = 'sol_verify',
 }
 
-export enum SolfareMethodType {
+export enum SolflareMethodType {
     SIGN_TRANSACTION = 'signTransactionV2',
     SIGN_TRANSACTIONS = 'signAllTransactionsV2',
 }

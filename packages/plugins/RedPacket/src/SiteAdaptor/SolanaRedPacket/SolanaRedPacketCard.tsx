@@ -21,6 +21,7 @@ import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { BN } from 'bn.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -151,7 +152,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
                 accountId: payload.accountId,
                 account,
             })
-            if (!claimRecord?.amount.gt(0)) return
+            if (!claimRecord?.amount.gt(new BN(0))) return
 
             TransactionConfirmModal.open({
                 shareText: claimedShareText,
@@ -159,7 +160,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
                 tokenType: TokenType.Fungible,
                 messageTextForNFT: _(msg`1 NFT claimed.`),
                 messageTextForFT: _(
-                    msg`You claimed ${formatBalance(amount, token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+                    msg`You claimed ${formatBalance(claimRecord.amount.toNumber(), token?.decimals, { significant: 2 })} $${token?.symbol}.`,
                 ),
                 title: _(msg`Lucky Drop`),
                 share: (text) => share?.(text, source ? source : undefined),

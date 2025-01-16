@@ -4,7 +4,7 @@ import { getClaimRecord } from '../../helpers/getClaimRecord.js'
 
 export function useClaimRecord(account: string, accountId: string, cluster: Cluster) {
     return useQuery({
-        queryKey: ['red-pacet', 'claim-record', account, accountId, cluster],
+        queryKey: ['red-packet', 'claim-record', account, accountId, cluster],
         queryFn: async () => getClaimRecord({ cluster, accountId, account }),
     })
 }

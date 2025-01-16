@@ -3,7 +3,7 @@ import {
     ProviderType,
     recoverTransactionFromUnit8Array,
     serializeTransaction,
-    SolfareMethodType,
+    SolflareMethodType,
     type Transaction,
     type Web3Provider,
 } from '@masknet/web3-shared-solana'
@@ -23,7 +23,7 @@ export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
         const result = await this.bridge.request<{
             transaction: string
         }>({
-            method: SolfareMethodType.SIGN_TRANSACTION,
+            method: SolflareMethodType.SIGN_TRANSACTION,
             params: {
                 message: encode(serializeTransaction(transaction)),
             },
@@ -37,7 +37,7 @@ export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
     override async signTransactions(transactions: Transaction[]): Promise<Transaction[]> {
         await this.validateSession()
         const results = await this.bridge.request<{ transactions: string[] }>({
-            method: SolfareMethodType.SIGN_TRANSACTIONS,
+            method: SolflareMethodType.SIGN_TRANSACTIONS,
             params: {
                 message: transactions.map((transaction) => encode(serializeTransaction(transaction))),
             },

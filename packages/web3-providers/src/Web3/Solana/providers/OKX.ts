@@ -7,12 +7,12 @@ import {
     type Web3Provider,
 } from '@masknet/web3-shared-solana'
 import { SolanaInjectedWalletProvider } from './BaseInjected.js'
-import { injectedOKXSolanaProvider } from '@masknet/injected-script'
+import { injectedOKXSolanaProvider, type InjectedWalletBridge } from '@masknet/injected-script'
 import { decode, encode } from 'bs58'
 
 export class SolanaOKXProvider extends SolanaInjectedWalletProvider {
     protected override providerType = ProviderType.OKX
-    protected override bridge = injectedOKXSolanaProvider
+    protected override bridge: InjectedWalletBridge = injectedOKXSolanaProvider
 
     private async validateSession() {
         if (this.bridge.isConnected) return
@@ -49,7 +49,7 @@ export class SolanaOKXProvider extends SolanaInjectedWalletProvider {
             method: OKXMethodType.SIGN_TRANSACTION,
             params: {
                 transaction: encode(serializeTransaction(transaction)),
-                type: 'seralizeMessage' in transaction ? 'transaction' : 'versionedTransaction',
+                type: 'serializeMessage' in transaction ? 'transaction' : 'versionedTransaction',
             },
         })
 
@@ -66,7 +66,7 @@ export class SolanaOKXProvider extends SolanaInjectedWalletProvider {
                 message: transactions.map((transaction) => {
                     return {
                         transaction: encode(serializeTransaction(transaction)),
-                        type: 'seralizeMessage' in transaction ? 'transaction' : 'versionedTransaction',
+                        type: 'serializeMessage' in transaction ? 'transaction' : 'versionedTransaction',
                     }
                 }),
             },
