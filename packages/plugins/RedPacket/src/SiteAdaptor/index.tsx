@@ -6,7 +6,6 @@ import { RedPacketMetaKey, RedPacketNftMetaKey } from '@masknet/shared-base'
 import type {
     RedPacketJSONPayload,
     RedPacketNftJSONPayload,
-    SolanaRedPacketJSONPayload,
 } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -49,11 +48,9 @@ const site: Plugin.SiteAdaptor.Definition = {
         if (RedPacketMetadataReader(meta).isOk())
             return (
                 <Render name="Lucky Drop">
-                    {renderWithRedPacketMetadata(meta, (r) => {
-                        if (r.rpid.startsWith('solana-'))
-                            return <SolanaRedPacketFrame payload={r as SolanaRedPacketJSONPayload} />
-                        return <RedPacketInPost payload={r} />
-                    })}
+                    {renderWithRedPacketMetadata(meta, (r) => (
+                        <RedPacketInPost payload={r} />
+                    ))}
                 </Render>
             )
 

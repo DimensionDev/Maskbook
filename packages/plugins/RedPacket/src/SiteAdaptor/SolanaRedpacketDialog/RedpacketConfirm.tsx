@@ -23,7 +23,7 @@ import { createWithNativeToken } from '../helpers/createWithNativeToken.js'
 import { createWithSplToken } from '../helpers/createWithSplToken.js'
 import { getTokenProgram } from '../helpers/getTokenAccount.js'
 import { useEstimateGasWithCreateSolRedpacket } from '../hooks/useEstimateGasWithCreateSolRedpacket.js'
-import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
+import { useHandleSolanaCreateOrSelect } from '../hooks/useHandleSolanaCreateOrSelect.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -105,7 +105,7 @@ export function SolanaRedPacketConfirm() {
     const onClose = useCallback(() => {
         navigate(RoutePaths.Exit)
     }, [])
-    const handleCreated = useHandleCreateOrSelect({
+    const handleCreated = useHandleSolanaCreateOrSelect({
         senderName,
         onClose,
     })
@@ -179,7 +179,7 @@ export function SolanaRedPacketConfirm() {
             is_random: !!isRandom,
             shares,
             password,
-            rpid: `solana-${result.accountId.toBase58()}`,
+            rpid: result.accountId.toBase58(),
             total: settings.total,
             duration: DEFAULT_DURATION,
             creation_time: Date.now(),
