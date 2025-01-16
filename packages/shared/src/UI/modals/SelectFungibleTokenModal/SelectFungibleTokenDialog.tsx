@@ -22,7 +22,6 @@ const useStyles = makeStyles<StyleProps, 'container' | 'sidebar' | 'tokenList'>(
         [`& .${refs.sidebar}`]: {
             paddingBottom: 72,
             overflow: 'auto',
-            height: '100%',
             boxSizing: 'border-box',
         },
         [`& .${refs.tokenList}`]: {
