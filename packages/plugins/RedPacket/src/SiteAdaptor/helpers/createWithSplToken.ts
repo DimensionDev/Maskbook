@@ -6,9 +6,7 @@ import { getRpProgram } from './getRpProgram.js'
 import { getSolanaConnection } from './getSolanaProvider.js'
 import { getTokenAccount, getTokenProgram } from './getTokenAccount.js'
 
-const MAX_NUM = 1000 // Maximum number of red packets (constant)
-const MAX_AMOUNT = 1000000000 // Maximum amount of red packets (constant)
-
+const MAX_NUM = 200 // Maximum number of red packets (constant)
 export async function createWithSplToken(
     creator: web3.PublicKey,
     tokenMint: web3.PublicKey,
@@ -24,40 +22,20 @@ export async function createWithSplToken(
     if (totalNumber > MAX_NUM) {
         throw new Error(`Total number of red packets cannot exceed ${MAX_NUM}`)
     }
-    if (totalAmount > MAX_AMOUNT) {
-        throw new Error(`Total amount of red packets cannot exceed ${MAX_AMOUNT}`)
-    }
 
     const program = await getRpProgram()
 
     const tokenAccount = await getTokenAccount(tokenMint)
     if (!tokenAccount) throw new Error('Token account not found')
-    console.log('DEBUG: tokenAccount', tokenAccount.toBase58())
 
     const tokenProgram = await getTokenProgram(tokenMint)
     if (!tokenProgram) throw new Error('Token program not found')
-    console.log('DEBUG: tokenProgram', tokenProgram.toBase58())
 
     const createTime = Math.floor(Date.now() / 1000)
     const [splTokenRedPacket] = web3.PublicKey.findProgramAddressSync(
         [creator.toBuffer(), Uint8Array.from(new BN(createTime).toArray('le', 8))],
         program.programId,
     )
-
-    console.log('DEBUG: createRedPacketWithNativeToken')
-    console.log({
-        totalNumber,
-        totalAmount,
-        createTime,
-        duration,
-        ifSpiltRandom,
-        tokenMint: tokenMint.toBase58(),
-        tokenAccount: tokenAccount.toBase58(),
-        pubkeyForClaimSignature: pubkeyForClaimSignature.toBase58(),
-        splTokenRedPacket: splTokenRedPacket.toBase58(),
-        programId: program.programId.toBase58(),
-        system: web3.SystemProgram.programId.toBase58(),
-    })
 
     const vault = getAssociatedTokenAddressSync(tokenMint, splTokenRedPacket, true, tokenProgram)
 
@@ -87,11 +65,6 @@ export async function createWithSplToken(
             commitment: 'confirmed',
         })
 
-    const rp = await program.account.redPacket.fetch(splTokenRedPacket)
-
-    console.log('DEBUG: rp')
-    console.log(rp)
-
     return {
         accountId: splTokenRedPacket,
         signature,
@@ -113,9 +86,6 @@ export async function getEstimatedGasByCreateWithSplToken(
     if (totalNumber > MAX_NUM) {
         throw new Error(`Total number of red packets cannot exceed ${MAX_NUM}`)
     }
-    if (totalAmount > MAX_AMOUNT) {
-        throw new Error(`Total amount of red packets cannot exceed ${MAX_AMOUNT}`)
-    }
 
     const program = await getRpProgram()
 
@@ -123,11 +93,9 @@ export async function getEstimatedGasByCreateWithSplToken(
 
     const tokenAccount = await getTokenAccount(tokenMint)
     if (!tokenAccount) throw new Error('Token account not found')
-    console.log('DEBUG: tokenAccount', tokenAccount.toBase58())
 
     const tokenProgram = await getTokenProgram(tokenMint)
     if (!tokenProgram) throw new Error('Token program not found')
-    console.log('DEBUG: tokenProgram', tokenProgram.toBase58())
 
     const createTime = Math.floor(Date.now() / 1000)
     const [splTokenRedPacket] = web3.PublicKey.findProgramAddressSync(

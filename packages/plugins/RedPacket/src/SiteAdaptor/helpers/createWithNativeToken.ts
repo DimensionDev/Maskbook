@@ -4,8 +4,7 @@ import { getSolanaConnection } from './getSolanaProvider.js'
 import { BigNumber } from 'bignumber.js'
 import { ZERO } from '@masknet/web3-shared-base'
 
-const MAX_NUM = 1000 // Maximum number of red packets (constant)
-const MAX_AMOUNT = 1000000000 // Maximum amount of red packets (constant)
+const MAX_NUM = 200 // Maximum number of red packets (constant)
 
 // Function to create a red packet with native tokens
 export async function createWithNativeToken(
@@ -21,9 +20,6 @@ export async function createWithNativeToken(
     // Ensure the totalNumber and totalAmount are within the acceptable range
     if (totalNumber > MAX_NUM) {
         throw new Error(`Total number of red packets cannot exceed ${MAX_NUM}`)
-    }
-    if (totalAmount > MAX_AMOUNT) {
-        throw new Error(`Total amount of red packets cannot exceed ${MAX_AMOUNT}`)
     }
 
     const program = await getRpProgram()
