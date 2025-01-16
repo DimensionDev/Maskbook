@@ -4,21 +4,9 @@ import { isUndefined, trimEnd } from 'lodash-es'
 export const ZERO = new BigNumber('0')
 export const ONE = new BigNumber('1')
 
-/** if abs(n) < m then return 0 */
-export function toZero(n?: BigNumber.Value, m = 1e-6) {
-    if (!n) return ZERO
-    const n_ = new BigNumber(n)
-    return n_.abs().isLessThanOrEqualTo(m) ? ZERO : n_
-}
-
 /** n === 0 */
 export function isZero(n: BigNumber.Value) {
     return n === 0 || n === '0' || n === '0x0' || new BigNumber(n).isZero()
-}
-
-/** n === 1 */
-export function isOne(n: BigNumber.Value) {
-    return n === 1 || n === '1' || new BigNumber(n).isEqualTo(ONE)
 }
 
 /** n === m */
@@ -40,17 +28,6 @@ export { isGreaterThanOrEqualTo, isGreaterThanOrEqualTo as isGte }
 /** a < b */
 export function isLessThan(a: BigNumber.Value, b: BigNumber.Value) {
     return new BigNumber(a).isLessThan(b)
-}
-
-/** a <= b */
-export function isLessThanOrEqualTo(a: BigNumber.Value, b: BigNumber.Value) {
-    return new BigNumber(a).isLessThanOrEqualTo(b)
-}
-export { isLessThanOrEqualTo as isLte }
-
-/** a >= 0 */
-export function isPositive(n: BigNumber.Value) {
-    return new BigNumber(n).isPositive()
 }
 
 /** a * b */
@@ -88,11 +65,6 @@ export function rightShift(n: BigNumber.Value, m: number | undefined | null) {
 /** n / (10 ** m) */
 export function leftShift(n: BigNumber.Value, m: number | undefined | null) {
     return new BigNumber(n).shiftedBy(-(m ?? 0))
-}
-
-/** a / b */
-export function dividedBy(a: BigNumber.Value, b: BigNumber.Value) {
-    return new BigNumber(a).dividedBy(b)
 }
 
 /** new BigNumber(n).toNumber() */

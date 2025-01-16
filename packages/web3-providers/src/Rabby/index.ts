@@ -35,7 +35,6 @@ class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
                         },
                         address: x.spender.id,
                         name: maskDappContractInfo.name,
-                        logo: maskDappContractInfo.logo,
                         isMaskDapp: true,
                     }
                 }
@@ -92,7 +91,6 @@ class RabbyAPI implements AuthorizationAPI.Provider<ChainId> {
                             return {
                                 ...spender,
                                 name: maskDappContractInfo.name,
-                                logo: maskDappContractInfo.logo,
                                 isMaskDapp: true,
                             }
                         }

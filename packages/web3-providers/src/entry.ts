@@ -2,7 +2,6 @@ export {
     getRegisteredWeb3Chains,
     getRegisteredWeb3Networks,
     getRegisteredWeb3Providers,
-    initWallet,
     getActivatedPluginWeb3State,
     getAllPluginsWeb3State,
 } from './Manager/index.js'
@@ -29,7 +28,6 @@ export { EVMWeb3 } from './Web3/EVM/apis/ConnectionAPI.js'
 export { EVMWeb3Readonly } from './Web3/EVM/apis/ConnectionReadonlyAPI.js'
 export { EVMRequest } from './Web3/EVM/apis/RequestAPI.js'
 export { EVMRequestReadonly } from './Web3/EVM/apis/RequestReadonlyAPI.js'
-export { EVMHub } from './Web3/EVM/apis/HubAPI.js'
 export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 
 // NextID

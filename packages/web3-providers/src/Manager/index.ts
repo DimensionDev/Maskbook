@@ -2,8 +2,6 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { evm, solana } from './registry.js'
 
-export { initWallet } from './io.js'
-
 function getRegistry(ID: NetworkPluginID) {
     switch (ID) {
         case NetworkPluginID.PLUGIN_EVM:

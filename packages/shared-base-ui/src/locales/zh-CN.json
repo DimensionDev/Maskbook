@@ -1,6 +1,0 @@
-{
-    "error_boundary_crash_title": "{{subject}} 发生错误",
-    "error_boundary_try_to_recover": "尝试恢复",
-    "error_boundary_report_github": "在 GitHub 上报告",
-    "error_boundary_report_email": "通过电子邮件报告"
-}

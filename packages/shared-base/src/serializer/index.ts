@@ -48,22 +48,6 @@ export const encoder: Encoder & IsomorphicEncoder = {
         return typeson!.revive(to)
     },
 }
-function registerEncodableClass(name: string, constructor: NewableFunction): void
-function registerEncodableClass<T, Q>(
-    name: string,
-    isT: (x: unknown) => boolean,
-    ser: (x: T) => Q | TypesonPromise<Q>,
-    de_ser: (x: Q) => T,
-): void
-function registerEncodableClass(name: string, a: any, b?: any, c?: any): void {
-    if (typeson) {
-        if (b) typeson.register({ [name]: [a, b, c] })
-        else addClass(name, a)
-    } else {
-        if (b) pendingRegister.add(() => typeson!.register({ [name]: [a, b, c] }))
-        else pendingRegister.add(() => addClass(name, a))
-    }
-}
 
 function addClass(name: string, constructor: any) {
     Object.defineProperty(constructor, 'name', {
