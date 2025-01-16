@@ -1,1 +1,0 @@
-export function claimWithNativeToken() {}

@@ -1,10 +1,10 @@
+import { BN, web3 } from '@coral-xyz/anchor'
+import { ZERO } from '@masknet/web3-shared-base'
+import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token'
 import { BigNumber } from 'bignumber.js'
 import { getRpProgram } from './getRpProgram.js'
 import { getSolanaConnection } from './getSolanaProvider.js'
 import { getTokenAccount, getTokenProgram } from './getTokenAccount.js'
-import { BN, web3 } from '@coral-xyz/anchor'
-import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token'
-import { ZERO } from '@masknet/web3-shared-base'
 
 const MAX_NUM = 1000 // Maximum number of red packets (constant)
 const MAX_AMOUNT = 1000000000 // Maximum amount of red packets (constant)
