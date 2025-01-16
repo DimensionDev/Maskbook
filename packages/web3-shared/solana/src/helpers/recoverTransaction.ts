@@ -16,9 +16,7 @@ export function recoverTransaction(
         const args = messageArgs as SolanaWeb3.MessageV0Args
         const msg = new SolanaWeb3.MessageV0({
             ...args,
-            staticAccountKeys: args.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)) || [],
-            compiledInstructions: args.compiledInstructions || [],
-            addressTableLookups: args.addressTableLookups || [],
+            staticAccountKeys: args.staticAccountKeys?.map((x) => new SolanaWeb3.PublicKey(x)),
         })
         const message = SolanaWeb3.VersionedMessage.deserialize(msg.serialize())
         return new SolanaWeb3.VersionedTransaction(message, signatures)
