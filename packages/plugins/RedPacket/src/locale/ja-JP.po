@@ -399,8 +399,8 @@ msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/Requirements/index.tsx
-msgid "Follow <0/> on {platform}"
-msgstr ""
+#~ msgid "Follow <0/> on {platform}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
@@ -575,8 +575,8 @@ msgid "NFT Holder"
 msgstr ""
 
 #: src/SiteAdaptor/Requirements/index.tsx
-msgid "NFT Holder of <0/>"
-msgstr ""
+#~ msgid "NFT Holder of <0/>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "NFTs"
@@ -616,6 +616,10 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Number of Winners"
 #~ msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "or"
+msgstr ""
 
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "or Holding NFT"
@@ -665,8 +669,8 @@ msgid "Repost"
 msgstr "リポスト"
 
 #: src/SiteAdaptor/Requirements/index.tsx
-msgid "Requirements"
-msgstr "必要条件"
+#~ msgid "Requirements"
+#~ msgstr "必要条件"
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Reset"
@@ -880,6 +884,14 @@ msgstr "ウォレットアカウント"
 msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask limit of {0}. Please reduce the number of NFTs selected."
 msgstr ""
 
+#: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Who can claim"
+msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "Who can claim?"
+msgstr ""
+
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Winners"
@@ -943,4 +955,12 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
+msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to hold at least {quantity} of any of the following tokens."
+msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to own at least one of the following NFTs."
 msgstr ""

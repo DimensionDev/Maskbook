@@ -193,6 +193,7 @@
             "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
         ],
         "rl4E61": ["Number of Winners"],
+        "BzEFor": ["or"],
         "NERSN2": ["or Holding NFT"],
         "dJAg3j": ["Post on"],
         "ofUcbc": ["Random"],
@@ -262,6 +263,8 @@
             ["0"],
             ". Please reduce the number of NFTs selected."
         ],
+        "jeLXsu": ["Who can claim"],
+        "XrlvqN": ["Who can claim?"],
         "GRLMKx": ["Winners"],
         "No0akY": ["You can also use <0>Shift</0> to select multiple NFTs."],
         "mfwfMR": ["You can claim the lucky drop by holding the required amount of any selected token."],
@@ -275,6 +278,10 @@
         "cBEQ5v": ["You got ", ["0"], " ", ["1"]],
         "0UMPI1": ["You got 1 ", ["0"]],
         "MCw2oc": ["You have already claimed this lucky drop."],
-        "zEZe86": ["You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."]
+        "zEZe86": [
+            "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
+        ],
+        "WKG5E8": ["You need to hold at least ", ["quantity"], " of any of the following tokens."],
+        "LLsMIY": ["You need to own at least one of the following NFTs."]
     }
 }
