@@ -7,7 +7,7 @@ import { getConnection } from '@masknet/web3-providers'
 import type { Cluster } from '@solana/web3.js'
 
 export async function getSolanaConnection(cluster?: Cluster) {
-    return new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(cluster ?? 'mainnet-beta'), 'confirmed')
+    return new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(cluster ?? 'devnet'), 'confirmed')
 }
 
 export async function getSolanaProvider(cluster?: Cluster | undefined) {
