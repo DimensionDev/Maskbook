@@ -136,6 +136,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
 
     const { account: publicKey, privateKey } = useMemo(() => SOLWeb3.createAccount(), [])
 
+    console.log(theme)
     const contextValue = useMemo(() => {
         return {
             themes: allThemes,

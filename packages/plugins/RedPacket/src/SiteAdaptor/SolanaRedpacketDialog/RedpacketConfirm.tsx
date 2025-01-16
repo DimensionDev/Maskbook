@@ -90,7 +90,7 @@ export function SolanaRedPacketConfirm() {
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
     const navigate = useNavigate()
-    const { settings, shares, isRandom, token, creator, publicKey, password, message, nativeToken, theme } =
+    const { settings, shares, isRandom, token, creator, publicKey, password, message, nativeToken, theme, rawAmount } =
         useSolRedpacket()
 
     const solanaAccount = useAccount(NetworkPluginID.PLUGIN_SOLANA)
@@ -278,7 +278,16 @@ export function SolanaRedPacketConfirm() {
                         <Trans>Cover</Trans>
                     </Typography>
                     <div className={classes.fieldValue}>
-                        <PreviewRedPacket className={classes.envelope} />
+                        <PreviewRedPacket
+                            className={classes.envelope}
+                            theme={theme}
+                            message={message}
+                            token={token}
+                            creator={creator}
+                            shares={shares}
+                            isRandom={isRandom}
+                            rawAmount={rawAmount}
+                        />
                     </div>
                 </div>
                 <Paper className={classes.hit}>
@@ -298,11 +307,6 @@ export function SolanaRedPacketConfirm() {
                 <ActionButton fullWidth onClick={createRedpacket} loading={isCreating || estimateLoading}>
                     <Trans>Confirm</Trans>
                 </ActionButton>
-                {/* <ActionButton loading={loading} fullWidth onClick={createRedpacket} disabled={disabled}>
-                        {isCreating ?
-                            <Trans>Confirming</Trans>
-                        :   <Trans>Confirm</Trans>}
-                    </ActionButton> */}
             </PluginWalletStatusBar>
         </>
     )

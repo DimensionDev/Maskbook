@@ -1,6 +1,12 @@
-import { NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useChainContext, useFungibleToken, useNetworks, useWeb3Hub } from '@masknet/web3-hooks-base'
+import {
+    useChainContext,
+    useEnvironmentContext,
+    useFungibleToken,
+    useNetworks,
+    useWeb3Hub,
+} from '@masknet/web3-hooks-base'
 import { TokenType } from '@masknet/web3-shared-base'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
@@ -37,7 +43,7 @@ export interface TokenIconProps extends IconProps {
 export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const { classes, cx } = useStyles()
     const {
-        pluginID = NetworkPluginID.PLUGIN_EVM,
+        pluginID,
         chainId: propChainId,
         address,
         logoURL,
@@ -50,6 +56,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
         className,
         ...rest
     } = props
+    const { pluginID: defaultPluginId } = useEnvironmentContext()
     const { data: token } = useFungibleToken(pluginID, address, undefined, { chainId: propChainId })
     const networks = useNetworks(pluginID)
     const network = networks.find((x) => x.chainId === token?.chainId)
@@ -79,7 +86,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
             {icon}
             {disableBadge ? null : (
                 <NetworkIcon
-                    pluginID={pluginID}
+                    pluginID={pluginID ?? defaultPluginId}
                     className={classes.badgeIcon}
                     chainId={chainId}
                     size={badgeSize}

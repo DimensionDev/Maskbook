@@ -451,7 +451,16 @@ export function CreateSolRedPacket() {
                 <div>
                     {selectedTheme && shares ?
                         <div className={classes.preview}>
-                            <PreviewRedPacket className={classes.envelope} />
+                            <PreviewRedPacket
+                                className={classes.envelope}
+                                theme={selectedTheme}
+                                message={message}
+                                token={token}
+                                creator={creator}
+                                shares={shares}
+                                isRandom={isRandom}
+                                rawAmount={rawAmount}
+                            />
                         </div>
                     :   null}
                 </div>

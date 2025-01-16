@@ -167,6 +167,7 @@ export function RedPacketEnvelope({
 }: Props) {
     const { classes, cx } = useStyles()
     const claimedZero = isZero(claimedAmount)
+    console.log(token)
     return (
         <div {...props} className={cx(classes.container, props.className)}>
             <img src={cover} className={classes.cover} />

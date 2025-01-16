@@ -143,6 +143,8 @@ export function Erc20RedPacketConfirm() {
         tokenQuantity,
         requiredTokens,
         requiredCollections,
+        message,
+        rawAmount,
     } = useRedPacket()
 
     const currentIdentity = useCurrentVisitingIdentity()
@@ -355,7 +357,16 @@ export function Erc20RedPacketConfirm() {
                         <Trans>Cover</Trans>
                     </Typography>
                     <div className={classes.fieldValue}>
-                        <PreviewRedPacket className={classes.envelope} />
+                        <PreviewRedPacket
+                            className={classes.envelope}
+                            theme={theme}
+                            message={message}
+                            token={token}
+                            creator={creator}
+                            shares={shares}
+                            isRandom={isRandom}
+                            rawAmount={rawAmount}
+                        />
                     </div>
                 </div>
                 <Paper className={classes.hit}>
