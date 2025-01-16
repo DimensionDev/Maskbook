@@ -67,15 +67,8 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     message: '',
     setMessage: noop,
     creator: '',
-    // conditions: EMPTY_LIST,
-    // setConditions: noop,
-    // requiredTokens: EMPTY_LIST,
-    // setRequiredTokens: noop,
     tokenQuantity: '',
     setTokenQuantity: noop,
-    // requiredCollections: EMPTY_LIST,
-    // setRequiredCollections: noop,
-    // Token
     token: undefined,
     setToken: noop,
     nativeToken: null!,
@@ -136,7 +129,6 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
 
     const { account: publicKey, privateKey } = useMemo(() => SOLWeb3.createAccount(), [])
 
-    console.log(theme)
     const contextValue = useMemo(() => {
         return {
             themes: allThemes,
