@@ -13,12 +13,11 @@ import { reduceUselessPayloadInfo } from '../utils/reduceUselessPayloadInfo.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 
 interface Options {
-    isFirefly?: boolean
     senderName?: string
     onClose?: () => void
 }
 
-export function useHandleCreateOrSelect({ isFirefly, senderName, onClose }: Options) {
+export function useHandleCreateOrSelect({ senderName, onClose }: Options) {
     const compositionType = useContext(CompositionTypeContext)
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     return useCallback(
@@ -47,7 +46,7 @@ export function useHandleCreateOrSelect({ isFirefly, senderName, onClose }: Opti
                 }
             }
 
-            if (!isFirefly && senderName) {
+            if (senderName) {
                 payload.sender.name === senderName
             }
 

@@ -141,7 +141,7 @@ export class FireflyRedPacket {
     static async createPublicKey(
         themeId: string,
         shareFrom: string,
-        payloads: FireflyRedPacketAPI.StrategyPayload[],
+        strategies: FireflyRedPacketAPI.StrategyPayload[],
     ): Promise<HexString> {
         const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/createPublicKey')
         const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.PublicKeyResponse>(url, {
@@ -150,7 +150,7 @@ export class FireflyRedPacket {
                 themeId,
                 shareFrom,
                 claimFrom: FireflyRedPacketAPI.SourceType.FireflyPC,
-                claimStrategy: JSON.stringify(payloads),
+                claimStrategy: JSON.stringify(strategies),
             }),
         })
         return data.publicKey
