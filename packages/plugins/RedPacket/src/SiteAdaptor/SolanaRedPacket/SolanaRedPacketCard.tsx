@@ -1,4 +1,4 @@
-import { web3 } from '@coral-xyz/anchor'
+import { BN, web3 } from '@coral-xyz/anchor'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
@@ -21,7 +21,6 @@ import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { BN } from 'bn.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
