@@ -473,7 +473,7 @@ export function CreateERC20RedPacket() {
                     </Box>
                 </Box>
                 <div>
-                    {selectedTheme && shares ?
+                    {selectedTheme ?
                         <div className={classes.preview}>
                             <PreviewRedPacket
                                 className={classes.envelope}
