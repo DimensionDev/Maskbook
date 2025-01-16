@@ -249,9 +249,10 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                                         className={classes.tokenIcon}
                                                         address={token.address}
                                                         name={token.name}
-                                                        size={24}
                                                         chainId={token.chainId}
                                                         logoURL={token.logoURL}
+                                                        size={24}
+                                                        badgeSize={12}
                                                     />
                                                     <Typography className={classes.assetName}>
                                                         {token.symbol}
@@ -331,9 +332,10 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                                         className={classes.tokenIcon}
                                                         address={collection.address}
                                                         name={collection.name}
-                                                        size={24}
                                                         chainId={collection.chainId}
                                                         logoURL={collection.iconURL!}
+                                                        size={24}
+                                                        badgeSize={12}
                                                     />
                                                     <Typography className={classes.assetName}>
                                                         {collection.name}

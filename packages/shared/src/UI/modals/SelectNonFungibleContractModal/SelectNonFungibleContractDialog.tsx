@@ -1,9 +1,4 @@
-import { memo, useCallback, useMemo, useState } from 'react'
-import { compact } from 'lodash-es'
-import Fuse from 'fuse.js'
-import { useSubscription } from 'use-subscription'
-import { Button, DialogActions, DialogContent, List, Stack, Typography } from '@mui/material'
-import { Box } from '@mui/system'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
@@ -11,12 +6,17 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
-import { ContractItem } from './ContractItem.js'
-import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
+import { Button, DialogActions, DialogContent, List, Stack, Typography } from '@mui/material'
+import { Box } from '@mui/system'
+import Fuse from 'fuse.js'
+import { compact } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useSubscription } from 'use-subscription'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
 import { EmptyStatus, LoadingStatus } from '../../components/index.js'
+import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { AddCollectiblesModal } from '../modals.js'
-import { Trans, useLingui } from '@lingui/react/macro'
+import { ContractItem } from './ContractItem.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -190,7 +190,7 @@ export const SelectNonFungibleContractDialog = memo(
             const pendingSet = new Set(
                 pendingSelectedCollections.map((x) => [x.chainId, x.address].join(':').toLowerCase()),
             )
-            return pendingSet.difference(selectedSet).size === 0
+            return pendingSet.size === selectedSet.size && pendingSet.difference(selectedSet).size === 0
         }, [pendingSelectedCollections, selectedCollections])
         const handleSelectCollection = useCallback(
             (collection: NonFungibleCollection<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>) => {
