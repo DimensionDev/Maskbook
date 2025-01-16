@@ -1,6 +1,11 @@
 import { Fragment, useContext, useEffect, useReducer, type Dispatch, type SetStateAction } from 'react'
 import { extractTextFromTypedMessage, isTypedMessageEqual, type TypedMessage } from '@masknet/typed-message'
-import { RedPacketMetaKey, RedPacketNftMetaKey, type ProfileIdentifier } from '@masknet/shared-base'
+import {
+    RedPacketMetaKey,
+    RedPacketNftMetaKey,
+    SolanaRedPacketMetaKey,
+    type ProfileIdentifier,
+} from '@masknet/shared-base'
 
 import Services, { GeneratorServices } from '#services'
 import type { DecryptionProgress, FailureDecryption, SuccessDecryption } from './types.js'
@@ -150,7 +155,11 @@ export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
                     })
                     if (!message.meta) return
                     // For now, we only care about RedPacket payload
-                    if (message.meta.has(RedPacketMetaKey) || message.meta.has(RedPacketNftMetaKey)) {
+                    if (
+                        message.meta.has(RedPacketMetaKey) ||
+                        message.meta.has(RedPacketNftMetaKey) ||
+                        message.meta.has(SolanaRedPacketMetaKey)
+                    ) {
                         onImageDecrypted((images) => (images.includes(url) ? images : [...images, url]))
                     }
                 },

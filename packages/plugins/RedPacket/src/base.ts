@@ -5,6 +5,7 @@ import {
     NetworkPluginID,
     RedPacketMetaKey,
     RedPacketNftMetaKey,
+    SolanaRedPacketMetaKey,
     getSiteType,
 } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
@@ -54,7 +55,7 @@ export const base = {
         },
     },
     contribution: {
-        metadataKeys: new Set([RedPacketMetaKey, RedPacketNftMetaKey]),
+        metadataKeys: new Set([RedPacketMetaKey, SolanaRedPacketMetaKey, RedPacketNftMetaKey]),
     },
     i18n: languages,
 } satisfies Plugin.Shared.Definition
