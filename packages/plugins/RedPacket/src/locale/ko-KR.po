@@ -912,7 +912,7 @@ msgstr ""
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
 #~ msgstr ""
 
-#. placeholder {0}: formatBalance(amount, token?.decimals, { significant: 2 })
+#. placeholder {0}: formatBalance(claimRecord.amount.toNumber(), token?.decimals, { significant: 2 })
 #. placeholder {0}: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })
 #. placeholder {1}: token?.symbol
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
