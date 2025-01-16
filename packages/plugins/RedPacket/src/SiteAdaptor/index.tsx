@@ -3,10 +3,7 @@ import { Icons } from '@masknet/icons'
 import { usePluginWrapper, type Plugin } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { RedPacketMetaKey, RedPacketNftMetaKey } from '@masknet/shared-base'
-import type {
-    RedPacketJSONPayload,
-    RedPacketNftJSONPayload,
-} from '@masknet/web3-providers/types'
+import type { RedPacketJSONPayload, RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Typography } from '@mui/material'
