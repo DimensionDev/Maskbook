@@ -1,6 +1,6 @@
 {
   "name": "@masknet/typed-message-react",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "sideEffects": false,
   "description": "TypedMessage React render used in Mask Network.",
   "publishConfig": {
