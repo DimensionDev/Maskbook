@@ -16,7 +16,7 @@ interface ClaimParams {
     accountId: string
     password: string
     tokenAddress: string
-    tokenProgram: web3.PublicKey
+    tokenProgram?: web3.PublicKey
 }
 
 /**
@@ -59,6 +59,8 @@ export function useClaimCallback(payload: SolanaRedPacketJSONPayload = {} as Sol
                     .rpc()
                 return signature
             }
+
+            if (!tokenProgram) return
 
             const receiverTokenAccount = getAssociatedTokenAddressSync(tokenMint, receiver, true, tokenProgram)
             const vault = getAssociatedTokenAddressSync(tokenMint, redPacket, true, tokenProgram)

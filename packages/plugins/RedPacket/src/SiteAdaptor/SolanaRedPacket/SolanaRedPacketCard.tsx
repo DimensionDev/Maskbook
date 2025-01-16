@@ -135,7 +135,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
                 accountId: payload.accountId,
                 password: payload.password ?? '',
                 tokenAddress: payload.token!.address,
-                tokenProgram: new web3.PublicKey(payload.tokenProgram || ''),
+                tokenProgram: payload.tokenProgram ? new web3.PublicKey(payload.tokenProgram) : undefined,
             })
             if (myProfileId && myHandle && hash) {
                 await FireflyRedPacket.finishClaiming(
