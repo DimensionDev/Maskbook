@@ -222,7 +222,7 @@ export class FireflyRedPacket {
     }
 
     static async checkClaimStrategyStatus(options: FireflyRedPacketAPI.CheckClaimStrategyStatusOptions) {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/redpacket/checkClaimStrategyStatus')
+        const url = urlcat(FIREFLY_ROOT_URL, '/v2/redpacket/checkClaimStrategyStatus')
         return fetchFireflyJSON<FireflyRedPacketAPI.CheckClaimStrategyStatusResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),

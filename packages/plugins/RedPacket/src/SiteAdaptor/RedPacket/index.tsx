@@ -1,21 +1,23 @@
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Card, Grow } from '@mui/material'
+import { Box, Card, Grow } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
-import { Requirements } from '../Requirements/index.js'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
+import { Conditions } from '../Conditions/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
@@ -53,16 +55,21 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             width: '100%',
         },
-        requirements: {
-            width: 407,
-            height: 'fit-content',
-            boxSizing: 'border-box',
+        conditions: {
             position: 'absolute',
             zIndex: 9,
-            inset: 0,
+            inset: 24,
             margin: 'auto',
-            [`@media (max-width: ${theme.breakpoints.values.md}px)`]: {
-                width: 'auto',
+        },
+        actionButton: {
+            display: 'flex',
+            gap: theme.spacing(0.5),
+            lineHeight: '18px',
+            backgroundColor: theme.palette.maskColor.dark,
+            width: '100%',
+            color: 'white',
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
             },
         },
     }
@@ -217,7 +224,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes } = useStyles()
+    const { classes, theme } = useStyles()
 
     // RedPacket created from Mask has no cover settings
     const { data: cover, isLoading: isLoadingCover } = useRedPacketCover({
@@ -234,55 +241,83 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
 
-    return (
-        <>
-            <Card className={classes.root} component="article" elevation={0}>
-                <RedPacketEnvelope
-                    className={classes.envelope}
-                    cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
-                    message={payload.sender.message}
-                    token={token}
-                    shares={payload.shares}
-                    isClaimed={isClaimed}
-                    isEmpty={isEmpty}
-                    isExpired={isExpired}
-                    isRefunded={isRefunded}
-                    claimedCount={+availability.claimed}
-                    total={payload.total}
-                    totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
-                    claimedAmount={availability.claimed_amount}
-                    creator={payload.sender.name}
-                />
-                {cover ?
-                    <Grow in={showRequirements ? !checkingClaimStatus : false} timeout={250}>
-                        <Requirements
-                            showResults={!claimedOrEmpty}
-                            statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
-                            className={classes.requirements}
-                            onClose={() => setShowRequirements(false)}
-                        />
-                    </Grow>
-                :   null}
-            </Card>
-            {outdated ?
-                null
-            : myHandle ?
-                <OperationFooter
-                    className={classes.footer}
-                    chainId={payloadChainId}
-                    canClaim={canClaim}
-                    canRefund={canRefund}
-                    isClaiming={isClaiming || checkingClaimStatus}
-                    isRefunding={isRefunding}
-                    onClaimOrRefund={onClaimOrRefund}
-                />
-            :   <RequestLoginFooter
+    const card = (
+        <Card className={classes.root} component="article" elevation={0}>
+            <RedPacketEnvelope
+                className={classes.envelope}
+                cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
+                message={payload.sender.message}
+                token={token}
+                shares={payload.shares}
+                isClaimed={isClaimed}
+                isEmpty={isEmpty}
+                isExpired={isExpired}
+                isRefunded={isRefunded}
+                claimedCount={+availability.claimed}
+                total={payload.total}
+                totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}
+                claimedAmount={availability.claimed_amount}
+                creator={payload.sender.name}
+                showConditionButton={!!claimStrategyStatus?.claimStrategyStatus.length}
+                onClickCondition={() => setShowRequirements(true)}
+            />
+            {cover ?
+                <Grow in={showRequirements} timeout={250}>
+                    <Conditions
+                        showResults={!claimedOrEmpty}
+                        statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
+                        className={classes.conditions}
+                        onClose={() => setShowRequirements(false)}
+                    />
+                </Grow>
+            :   null}
+        </Card>
+    )
+
+    if (outdated) return card
+    if (!myHandle)
+        return (
+            <>
+                {card}
+                <RequestLoginFooter
                     className={classes.footer}
                     onRequest={() => {
                         requestLogin?.(source)
                     }}
                 />
-            }
+            </>
+        )
+
+    if (claimStrategyStatus?.canClaim === false) {
+        return (
+            <>
+                {card}
+                <Box className={classes.footer}>
+                    <ActionButton
+                        className={classes.actionButton}
+                        variant="roundedDark"
+                        fullWidth
+                        onClick={() => setShowRequirements(true)}>
+                        <Trans>Who can claim</Trans>
+                        <Icons.Questions size={18} />
+                    </ActionButton>
+                </Box>
+            </>
+        )
+    }
+
+    return (
+        <>
+            {card}
+            <OperationFooter
+                className={classes.footer}
+                chainId={payloadChainId}
+                canClaim={canClaim}
+                canRefund={canRefund}
+                isClaiming={isClaiming || checkingClaimStatus}
+                isRefunding={isRefunding}
+                onClaimOrRefund={onClaimOrRefund}
+            />
         </>
     )
 })

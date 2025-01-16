@@ -18,6 +18,7 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
     const signedMessage = 'privateKey' in payload ? payload.privateKey : payload.password
     const me = useLastRecognizedIdentity()
     return useQuery({
+        // decentralized wallet can be claimed directly.
         enabled: !signedMessage && !!platform,
         queryKey: ['red-packet', 'claim-strategy', rpid, platform, account, me],
         queryFn: async () => {
@@ -28,10 +29,6 @@ export function useClaimStrategyStatus(payload: RedPacketJSONPayload | RedPacket
                     needLensAndFarcasterHandle: true,
                     platform,
                     profileId: me?.profileId,
-                    lensToken: me?.lensToken,
-                    farcasterMessage: me?.farcasterMessage as HexString,
-                    farcasterSigner: me?.farcasterSigner as HexString,
-                    farcasterSignature: me?.farcasterSignature as HexString,
                 },
                 wallet: {
                     address: account,
