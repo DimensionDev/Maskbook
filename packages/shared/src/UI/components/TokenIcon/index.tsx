@@ -54,6 +54,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
         disableDefaultIcon,
         disableBadge,
         className,
+        style,
         ...rest
     } = props
     const { pluginID: defaultPluginId } = useEnvironmentContext()
@@ -82,7 +83,7 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     const icon = <Icon {...rest} logoURL={url} name={text} />
 
     return (
-        <div className={cx(classes.container, className)} style={{ height: rest.size, width: rest.size }}>
+        <div className={cx(classes.container, className)} style={{ ...style, height: rest.size, width: rest.size }}>
             {icon}
             {disableBadge ? null : (
                 <NetworkIcon

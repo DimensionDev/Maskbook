@@ -137,6 +137,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                         chainId={token.chainId}
                         name={token.name}
                         disableDefaultIcon
+                        disableBadge
                     />
                 }
                 endIcon={
@@ -169,6 +170,7 @@ export function EthereumERC20TokenApprovedBoundary(props: EthereumERC20TokenAppr
                             style={{ marginRight: 8 }}
                             chainId={token.chainId}
                             address={token.address}
+                            disableBadge
                         />
                         <Trans>Unlock {token.symbol}</Trans>
                     </>

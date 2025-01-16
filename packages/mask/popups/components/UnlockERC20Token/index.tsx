@@ -34,11 +34,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         borderRadius: 99,
     },
-    tokenIcon: {
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
-    },
     name: {
         fontSize: 12,
         fontWeight: 700,
@@ -186,12 +181,7 @@ export const UnlockERC20Token = memo<UnlockERC20TokenProps>(function UnlockERC20
                 </Trans>
             </Typography>
             <Box className={classes.tokenInfo}>
-                <TokenIcon
-                    address={token?.address ?? ''}
-                    chainId={chainId}
-                    name={token?.name}
-                    className={classes.tokenIcon}
-                />
+                <TokenIcon address={token?.address ?? ''} chainId={chainId} name={token?.name} size={24} disableBadge />
                 <Box width="262px" mr="18px" ml={1}>
                     <Typography className={classes.name}>{token?.symbol}</Typography>
                     <Typography className={classes.address}>{token?.address}</Typography>

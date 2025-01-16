@@ -1,7 +1,8 @@
-import { memo, useMemo } from 'react'
-import { Box, Link, Typography, useTheme } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { CopyButton, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
 import {
     useChainContext,
     useChainIdSupport,
@@ -10,14 +11,13 @@ import {
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
-import { CopyButton, TokenIcon } from '@masknet/shared'
-import { Icons } from '@masknet/icons'
-import { GasSettingMenu } from '../GasSettingMenu/index.js'
-import type { TransactionDetail } from '../../pages/Wallet/type.js'
-import type { GasConfig } from '@masknet/web3-shared-evm'
-import { useQuery } from '@tanstack/react-query'
 import { TokenType, isSameAddress } from '@masknet/web3-shared-base'
-import { Trans } from '@lingui/react/macro'
+import type { GasConfig } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography, useTheme } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { memo, useMemo } from 'react'
+import type { TransactionDetail } from '../../pages/Wallet/type.js'
+import { GasSettingMenu } from '../GasSettingMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -40,11 +40,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         alignItems: 'center',
         borderRadius: 99,
-    },
-    tokenIcon: {
-        width: 24,
-        height: 24,
-        borderRadius: '50%',
     },
     name: {
         fontSize: 12,
@@ -175,8 +170,9 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
                         name={contract.name}
                         label=""
                         logoURL={collection?.iconURL ?? ''}
-                        className={classes.tokenIcon}
                         tokenType={TokenType.NonFungible}
+                        size={24}
+                        disableBadge
                     />
                 :   null}
                 <Box width="262px" mr="18px" ml={1}>
