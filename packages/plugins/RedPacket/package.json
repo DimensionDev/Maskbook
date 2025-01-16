@@ -37,7 +37,6 @@
     "@solana/web3.js": "^1.75.0",
     "@tanstack/react-query": "^5.49.2",
     "bignumber.js": "9.1.2",
-    "bn.js": "^4.12.0",
     "date-fns": "^3.6.0",
     "immer": "^10.1.1",
     "react-router-dom": "^6.24.0",
@@ -73,8 +72,5 @@
         ]
       }
     ]
-  },
-  "devDependencies": {
-    "@types/bn.js": "^5.1.5"
   }
 }
