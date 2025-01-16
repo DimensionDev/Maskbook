@@ -48,6 +48,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     // #endregion
 
     const gasFee = useMemo(() => {
+        if (pluginID === NetworkPluginID.PLUGIN_SOLANA && gasOption?.gas) return new BigNumber(gasOption.gas)
         if (!gasOption?.gas || pluginID !== NetworkPluginID.PLUGIN_EVM) return ZERO
         const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasOption.gas)
         if (!gasOption.gasCurrency || isNativeTokenAddress(gasOption.gasCurrency)) return result
@@ -63,10 +64,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     }, [gasOption, chainId, pluginID])
 
     const isAvailableBalance = useMemo(
-        () =>
-            isSameAddress(address, gasOption?.gasCurrency) ||
-            isNativeTokenAddress(address) ||
-            pluginID !== NetworkPluginID.PLUGIN_EVM,
+        () => isSameAddress(address, gasOption?.gasCurrency) || isNativeTokenAddress(address),
         [address, gasOption?.gasCurrency, pluginID],
     )
 
@@ -79,9 +77,7 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     }, [gasOption?.gasCurrency, nativeTokenBalance, maskBalance, gasFee, pluginID])
 
     const balance =
-        isAvailableBalance && pluginID === NetworkPluginID.PLUGIN_EVM ?
-            BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString()
-        :   tokenBalance
+        isAvailableBalance ? BigNumber.max(new BigNumber(tokenBalance).minus(gasFee), 0).toString() : tokenBalance
 
     return {
         isAvailableBalance,

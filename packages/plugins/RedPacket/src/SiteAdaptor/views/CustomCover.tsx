@@ -10,6 +10,9 @@ import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { MAX_FILE_SIZE } from '../../constants.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
+import { useSolRedpacket } from '../contexts/SolRedpacketContext.js'
+import { useEnvironmentContext } from '@masknet/web3-hooks-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -63,7 +66,13 @@ export function CustomCover() {
     const navigate = useNavigate()
     const [blob, setBlob] = useState<Blob | File>()
     const url = useMemo(() => (blob ? URL.createObjectURL(blob) : null), [blob])
-    const { setCustomThemes, setTheme } = useRedPacket()
+    const { setCustomThemes: setEVMCustomThemes, setTheme: setEVMTheme } = useRedPacket()
+    const { setCustomThemes: setSolCustomThemes, setTheme: setSolTheme } = useSolRedpacket()
+
+    const { pluginID } = useEnvironmentContext()
+
+    const setCustomThemes = pluginID === NetworkPluginID.PLUGIN_SOLANA ? setSolCustomThemes : setEVMCustomThemes
+    const setTheme = pluginID === NetworkPluginID.PLUGIN_SOLANA ? setSolTheme : setEVMTheme
 
     useEffect(() => {
         return () => {

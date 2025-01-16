@@ -2,6 +2,7 @@ import { Route, Routes, Navigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { CreateSolRedPacket } from './CreateRedpacket.js'
 import { SolanaRedPacketConfirm } from './RedpacketConfirm.js'
+import { CustomCover } from '../views/CustomCover.js'
 export function SolRedPacketRoutes() {
     return (
         <Routes>
@@ -9,6 +10,7 @@ export function SolRedPacketRoutes() {
                 <Route index path={RoutePaths.CreateSolanaRedPacket} element={<CreateSolRedPacket />} />
             </Route>
 
+            <Route path={RoutePaths.CustomCover} element={<CustomCover />} />
             <Route path={RoutePaths.Confirm}>
                 <Route path={RoutePaths.ConfirmSolanaRedPacket} element={<SolanaRedPacketConfirm />} />
             </Route>

@@ -29,7 +29,13 @@ import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { MAX_CUSTOM_THEMES, SOL_REDPACKET_MAX_SHARES, RED_PACKET_MIN_SHARES, RoutePaths } from '../../constants.js'
+import {
+    MAX_CUSTOM_THEMES,
+    SOL_REDPACKET_MAX_SHARES,
+    RED_PACKET_MIN_SHARES,
+    RoutePaths,
+    SOL_REDPACKET_CREATE_DEFAULT_GAS,
+} from '../../constants.js'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useSolRedpacket } from '../contexts/SolRedpacketContext.js'
 import { useEstimateGasWithCreateSolRedpacket } from '../hooks/useEstimateGasWithCreateSolRedpacket.js'
@@ -251,9 +257,13 @@ export function CreateSolRedPacket() {
         token,
     )
 
+    const gasFee = defaultGasFee.multipliedBy(isNativeTokenAddress(token?.address) ? 5 : 10)
+    const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
+
     const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
         NetworkPluginID.PLUGIN_SOLANA,
         token?.address,
+        { gas: SOL_REDPACKET_CREATE_DEFAULT_GAS, gasPrice: '', gasCurrency: nativeToken.address },
     )
     // #endregion
 
@@ -292,9 +302,6 @@ export function CreateSolRedPacket() {
     if (!token) return null
 
     const messageMaxLength = isFirefly ? 40 : 100
-
-    const gasFee = defaultGasFee.multipliedBy(isNativeTokenAddress(token.address) ? 5 : 10)
-    const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
 
     return (
         <>
