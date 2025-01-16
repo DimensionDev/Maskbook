@@ -429,6 +429,7 @@ msgstr ""
 #~ msgid "Grow your followers and engagement with Lucky Drop on Firefly mobile app or https://firefly.mask.social !"
 #~ msgstr ""
 
+#: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
 msgid ""
 "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
