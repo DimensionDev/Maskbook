@@ -1,4 +1,5 @@
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { TokenIcon } from '@masknet/shared'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -76,6 +77,7 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '28px',
         display: 'flex',
+        alignItems: 'center',
         gap: theme.spacing(1),
     },
     status: {
@@ -148,6 +150,8 @@ interface Props extends HTMLProps<HTMLDivElement> {
     isExpired?: boolean
     isRefunded?: boolean
     creator: string
+    showConditionButton?: boolean
+    onClickCondition?(): void
 }
 export function RedPacketEnvelope({
     cover,
@@ -163,11 +167,12 @@ export function RedPacketEnvelope({
     isRefunded,
     isEmpty,
     creator,
+    showConditionButton,
+    onClickCondition,
     ...props
 }: Props) {
     const { classes, cx } = useStyles()
     const claimedZero = isZero(claimedAmount)
-
     return (
         <div {...props} className={cx(classes.container, props.className)}>
             <img src={cover} className={classes.cover} />
@@ -197,6 +202,9 @@ export function RedPacketEnvelope({
                     :   <Typography className={classes.amount}>
                             {`${formatBalance(totalClaimed, token.decimals)} / ${formatBalance(total, token.decimals)} `}
                             {token.symbol}
+                            {showConditionButton ?
+                                <Icons.Questions size={24} onClick={onClickCondition} />
+                            :   null}
                         </Typography>
                     }
                     <div className={classes.status}>

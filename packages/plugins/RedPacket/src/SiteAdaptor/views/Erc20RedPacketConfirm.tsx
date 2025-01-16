@@ -9,11 +9,11 @@ import {
     TokenIcon,
     useCurrentLinkedPersona,
 } from '@masknet/shared'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNativeTokenPrice, useWallet } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, FireflyRedPacket, SmartPayBundler } from '@masknet/web3-providers'
-import { isZero } from '@masknet/web3-shared-base'
+import { isZero, rightShift } from '@masknet/web3-shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Link, Paper, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -24,6 +24,7 @@ import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallback.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -146,6 +147,38 @@ export function Erc20RedPacketConfirm() {
         message,
         rawAmount,
     } = useRedPacket()
+    const needHoldingTokens = conditions.includes(ConditionType.Crypto) && requiredTokens.length > 0
+    const needHoldingCollections = conditions.includes(ConditionType.NFT) && requiredCollections.length > 0
+
+    const strategies = useMemo(() => {
+        const list: FireflyRedPacketAPI.StrategyPayload[] = []
+        if (needHoldingTokens) {
+            list.push({
+                type: FireflyRedPacketAPI.StrategyType.tokens,
+                payload: requiredTokens.map((token) => ({
+                    chainId: token.chainId.toString(),
+                    contractAddress: token.address,
+                    name: token.name,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
+                    amount: tokenQuantity ? rightShift(tokenQuantity, token.decimals).toString() : '0',
+                    icon: token.logoURL,
+                })) as FireflyRedPacketAPI.TokensStrategyPayload[],
+            })
+        }
+        if (needHoldingCollections) {
+            list.push({
+                type: FireflyRedPacketAPI.StrategyType.nftOwned,
+                payload: requiredCollections.map((collection) => ({
+                    chainId: collection.chainId.toString(),
+                    contractAddress: collection.address!,
+                    collectionName: collection.name || collection.symbol || '',
+                    icon: collection.iconURL!,
+                })),
+            })
+        }
+        return list
+    }, [needHoldingTokens, requiredTokens, tokenQuantity])
 
     const currentIdentity = useCurrentVisitingIdentity()
     const me = useLastRecognizedIdentity()
@@ -163,11 +196,10 @@ export function Erc20RedPacketConfirm() {
     const themeId = theme?.tid
     const { isLoading: creatingPubkey, data: publicKey } = useQuery({
         enabled: !!themeId,
-        queryKey: ['red-packet', 'create-pubkey', themeId, creator],
+        queryKey: ['red-packet', 'create-pubkey', themeId, creator, strategies],
         queryFn: async () => {
             if (!themeId) return null
-            // TODO: StrategyPayload list
-            return FireflyRedPacket.createPublicKey(themeId, creator, EMPTY_LIST)
+            return FireflyRedPacket.createPublicKey(themeId, creator, strategies)
         },
     })
 
@@ -198,8 +230,6 @@ export function Erc20RedPacketConfirm() {
     const loading = creatingPubkey || isCreating || isWaitGasBeMinus
     const disabled = isBalanceInsufficient || loading
 
-    const needHoldingTokens = conditions.includes(ConditionType.Crypto) && requiredTokens.length > 0
-    const needHoldingCollections = conditions.includes(ConditionType.NFT) && requiredCollections.length > 0
     return (
         <>
             <div className={classes.settings}>

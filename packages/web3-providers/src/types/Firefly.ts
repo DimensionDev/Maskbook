@@ -165,12 +165,26 @@ export namespace FireflyRedPacketAPI {
         profileFollow = 'profileFollow',
         postReaction = 'postReaction',
         nftOwned = 'nftOwned',
+        tokens = 'tokens',
     }
 
-    export interface StrategyPayload {
-        type: StrategyType
-        payload: Array<ProfileFollowStrategyPayload | NftOwnedStrategyPayload> | PostReactionStrategyPayload
-    }
+    export type StrategyPayload =
+        | {
+              type: StrategyType.profileFollow
+              payload: ProfileFollowStrategyPayload[]
+          }
+        | {
+              type: StrategyType.postReaction
+              payload: PostReactionStrategyPayload
+          }
+        | {
+              type: StrategyType.nftOwned
+              payload: NftOwnedStrategyPayload[]
+          }
+        | {
+              type: StrategyType.tokens
+              payload: TokensStrategyPayload[]
+          }
 
     export interface ProfileFollowStrategyPayload {
         platform: PlatformType
@@ -192,8 +206,21 @@ export namespace FireflyRedPacketAPI {
     }
 
     export interface NftOwnedStrategyPayload {
-        chainId: number
+        /** instead of number, it's string */
+        chainId: string
         contractAddress: string
+        collectionName: string
+        icon?: string
+    }
+    export interface TokensStrategyPayload {
+        /** instead of number, it's string */
+        chainId: string
+        contractAddress: string
+        name: string
+        symbol: string
+        decimals: number
+        amount: string
+        icon?: string
     }
 
     export interface PostReaction {
