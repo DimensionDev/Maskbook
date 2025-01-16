@@ -34,19 +34,6 @@ export async function createWithNativeToken(
         program.programId,
     )[0]
 
-    console.log('DEBUG: createRedPacketWithNativeToken')
-    console.log({
-        totalNumber,
-        totalAmount,
-        createTime,
-        duration,
-        ifSpiltRandom,
-        pubkeyForClaimSignature: pubkeyForClaimSignature.toBase58(),
-        nativeTokenRedPacket: nativeTokenRedPacket.toBase58(),
-        programId: program.programId.toBase58(),
-        system: web3.SystemProgram.programId.toBase58(),
-    })
-
     const signature = await program.methods
         .createRedPacketWithNativeToken(
             totalNumber,
@@ -67,13 +54,6 @@ export async function createWithNativeToken(
             redPacket: nativeTokenRedPacket,
             systemProgram: web3.SystemProgram.programId,
         })
-
-    console.log('The transaction signature is:', signature)
-
-    const rp = await program.account.redPacket.fetch(nativeTokenRedPacket)
-
-    console.log('DEBUG: rp')
-    console.log(rp)
 
     return {
         accountId: nativeTokenRedPacket,

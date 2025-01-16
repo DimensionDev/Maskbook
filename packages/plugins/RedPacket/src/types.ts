@@ -1,7 +1,6 @@
+import type { BN, web3 } from '@coral-xyz/anchor'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
-import { type web3 } from '@coral-xyz/anchor'
-import type BN from 'bn.js'
 
 export enum NFTSelectOption {
     All = 'All',

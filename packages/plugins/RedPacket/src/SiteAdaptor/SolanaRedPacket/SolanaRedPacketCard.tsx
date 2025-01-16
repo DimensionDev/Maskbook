@@ -1,3 +1,4 @@
+import { web3 } from '@coral-xyz/anchor'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
@@ -9,18 +10,17 @@ import { makeStyles } from '@masknet/theme'
 import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance, isZero } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { Card } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
+import { getClaimRecord } from '../helpers/getClaimRecord.js'
 import { useSolanaAvailability } from './hooks/useAvailability.js'
-import { useCheckResult } from './hooks/useCheckResult.js'
+import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { useClaimCallback } from './hooks/useClaimCallback.js'
-import { web3 } from '@coral-xyz/anchor'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -124,8 +124,6 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
 
-    const checkResult = useCheckResult()
-
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
     const myHandle = me?.identifier?.userId
@@ -148,12 +146,12 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
                     hash,
                 )
             }
-            const amount = await checkResult({
+            const claimRecord = await getClaimRecord({
                 cluster: payload.network ?? 'mainnet-beta',
                 accountId: payload.accountId,
                 account,
             })
-            if (isZero(amount)) return
+            if (!claimRecord?.amount.gt(0)) return
 
             TransactionConfirmModal.open({
                 shareText: claimedShareText,
@@ -173,7 +171,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
         if (typeof hash === 'string') {
             checkAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, checkAvailability, payload.rpid, myProfileId, myHandle])
+    }, [canClaim, canRefund, claimCallback, checkAvailability, payload.rpid, myProfileId, myHandle])
 
     const outdated = availability?.isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
