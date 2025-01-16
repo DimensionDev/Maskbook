@@ -93,7 +93,7 @@ function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Me
     if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
     const officialAccount = Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`)
-    const token = meta.has(RedPacketMetaKey) || meta.has(RedPacketMetaKey) ? _(msg`a token`) : _(msg`an NFT`)
+    const token = meta.has(RedPacketMetaKey) || meta.has(SolanaRedPacketMetaKey) ? _(msg`a token`) : _(msg`an NFT`)
     const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier]
 
     // Note: since this is in the composition stage, we can assume plugins don't insert old version of meta.

@@ -190,7 +190,6 @@ export function HubContent(props: HubContentProps) {
                                     SelectFungibleTokenModal.openAndWaitForClose({
                                         pluginID: NetworkPluginID.PLUGIN_SOLANA,
                                         lockChainId: true,
-                                        // chainId: ChainId.Mainnet
                                     })
                                 }}>
                                 Query
