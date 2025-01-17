@@ -112,6 +112,8 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         name: 'Solana',
         icon: new URL('../assets/solana.png', import.meta.url).href,
         iconColor: '#5d6fc0',
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(25, 251, 155, 0.15) 0%, rgba(25, 251, 155, 0.05) 100%), rgba(255, 255, 255, 1)',
         averageBlockDelay: 15,
         isMainnet: true,
     },
@@ -122,9 +124,24 @@ export const NETWORK_DESCRIPTORS: ReadonlyArray<NetworkDescriptor<ChainId, Netwo
         type: NetworkType.Solana,
         name: 'Solana Testnet',
         icon: new URL('../assets/solana.png', import.meta.url).href,
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(25, 251, 155, 0.15) 0%, rgba(25, 251, 155, 0.05) 100%), rgba(255, 255, 255, 1)',
         iconColor: '#5d6fc0',
         averageBlockDelay: 15,
         isMainnet: false,
+    },
+    {
+        ID: `${PLUGIN_ID}_solana`,
+        networkSupporterPluginID: PLUGIN_ID,
+        chainId: ChainId.Devnet,
+        type: NetworkType.Solana,
+        name: 'Solana',
+        icon: new URL('../assets/solana.png', import.meta.url).href,
+        iconColor: '#5d6fc0',
+        backgroundGradient:
+            'linear-gradient(180deg, rgba(25, 251, 155, 0.15) 0%, rgba(25, 251, 155, 0.05) 100%), rgba(255, 255, 255, 1)',
+        averageBlockDelay: 15,
+        isMainnet: true,
     },
 ]
 export const PROVIDER_DESCRIPTORS: ReadonlyArray<ProviderDescriptor<ChainId, ProviderType>> = [

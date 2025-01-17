@@ -1,4 +1,4 @@
-import { createIndicator, EMPTY_LIST } from '@masknet/shared-base'
+import { createIndicator, EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { FireflyRedPacket } from '@masknet/web3-providers'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
@@ -10,6 +10,9 @@ import { ClaimRecord } from '../components/ClaimRecord.js'
 import { RedPacketRecord } from '../components/RedPacketRecord.js'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
+import { useEnvironmentContext } from '@masknet/web3-hooks-base'
+import { getRpProgram } from '../helpers/getRpProgram.js'
+import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -36,6 +39,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function HistoryDetail() {
     const { classes, cx } = useStyles()
+    const { pluginID } = useEnvironmentContext()
     const location = useLocation()
     const history = location.state.history as FireflyRedPacketAPI.RedPacketSentInfo
     const [params] = useSearchParams()
@@ -46,21 +50,51 @@ export function HistoryDetail() {
 
     const { data, isLoading } = useInfiniteQuery({
         enabled: !!rpid,
-        queryKey: ['redpacket', 'claim-history', rpid, chainId],
+        queryKey: ['redpacket', 'claim-history', pluginID, rpid, chainId],
         initialPageParam: undefined as string | undefined,
         queryFn:
             rpid ?
                 async ({ pageParam }) => {
-                    const res = await FireflyRedPacket.getClaimHistory(
-                        rpid,
-                        chainId,
-                        createIndicator(undefined, pageParam),
-                    )
-                    return res
+                    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
+                        const program = await getRpProgram()
+                        const records = await program.account.claimRecord.all([
+                            {
+                                memcmp: {
+                                    offset: 8, // Adjust the offset based on your account structure
+                                    bytes: new SolanaWeb3.PublicKey(rpid).toBase58(),
+                                },
+                            },
+                        ])
+
+                        const results = records.map<FireflyRedPacketAPI.ClaimInfo>(({ account }) => ({
+                            creator: account.claimer.toBase58(),
+                            claim_platform: [],
+                            token_amounts: account.amount.toString(),
+                            token_symbol: history.token_symbol,
+                            token_decimal: history.token_decimal,
+                            ens_name: '',
+                        }))
+
+                        return {
+                            chain_id: chainId,
+                            cursor: '',
+                            list: results,
+                        }
+                    } else {
+                        const res = await FireflyRedPacket.getClaimHistory(
+                            rpid,
+                            chainId,
+                            createIndicator(undefined, pageParam),
+                        )
+
+                        return res
+                    }
                 }
             :   skipToken,
         getNextPageParam: (lastPage) => lastPage.cursor,
     })
+
+    console.log(rpid)
 
     const claims = useMemo(() => data?.pages.flatMap((x) => x.list) ?? EMPTY_LIST, [data?.pages])
     const info = first(data?.pages)

@@ -1,13 +1,10 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EmojiAvatar } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { useAccount } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver } from '@masknet/web3-providers'
+import { useAccount, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
 
@@ -68,7 +65,9 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export const ClaimRecord = memo(function ClaimRecord({ className, record, chainId, ...rest }: Props) {
     const { classes, theme } = useStyles()
-    const account = useAccount(NetworkPluginID.PLUGIN_EVM)
+    const account = useAccount()
+    const Utils = useWeb3Utils()
+
     return (
         <div className={classes.container} {...rest}>
             <EmojiAvatar value={record.creator} />
@@ -84,8 +83,8 @@ export const ClaimRecord = memo(function ClaimRecord({ className, record, chainI
                     </div>
                 :   null}
                 <Typography className={classes.address}>
-                    <Typography component="span">{formatEthereumAddress(record.creator, 4)}</Typography>
-                    <a href={EVMExplorerResolver.addressLink(chainId, record.creator)} target="_blank">
+                    <Typography component="span">{Utils.formatAddress(record.creator, 4)}</Typography>
+                    <a href={Utils.explorerResolver.addressLink(chainId, record.creator)} target="_blank">
                         <Icons.LinkOut size={20} color={theme.palette.maskColor.second} />
                     </a>
                 </Typography>

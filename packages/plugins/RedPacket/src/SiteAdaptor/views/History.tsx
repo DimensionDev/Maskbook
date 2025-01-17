@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/react/macro'
 import { RoutePaths } from '@masknet/plugin-redpacket'
 import { ElementAnchor, EmptyStatus, LoadingStatus, RestorableScroll, useParamTab } from '@masknet/shared'
-import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Typography } from '@mui/material'
 import { useCallback } from 'react'
@@ -13,6 +13,8 @@ import { RedPacketRecord } from '../components/RedPacketRecord.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
 import { useRedPacketHistory } from '../hooks/useRedPacketHistory.js'
+import { useSolRedpacket } from '../contexts/SolRedpacketContext.js'
+import { useHandleSolanaCreateOrSelect } from '../hooks/useHandleSolanaCreateOrSelect.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -38,8 +40,9 @@ const ActionType = FireflyRedPacketAPI.ActionType
 export function History() {
     const { classes } = useStyles()
     const [currentHistoryTab] = useParamTab<HistoryTabs>(HistoryTabs.Claimed)
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account } = useChainContext()
     const actionType = currentHistoryTab === HistoryTabs.Sent ? ActionType.Send : ActionType.Claim
+    const { pluginID } = useEnvironmentContext()
 
     const {
         data: histories = EMPTY_LIST,
@@ -49,13 +52,22 @@ export function History() {
         hasNextPage,
     } = useRedPacketHistory(account, actionType)
 
-    const { creator } = useRedPacket()
+    const { creator: evmCreator } = useRedPacket()
+    const { creator: solCreator } = useSolRedpacket()
+
+    const creator = pluginID === NetworkPluginID.PLUGIN_SOLANA ? solCreator : evmCreator
+
     const navigate = useNavigate()
     const onClose = useCallback(() => {
         navigate(RoutePaths.Exit)
     }, [])
 
     const selectRedPacket = useHandleCreateOrSelect({
+        senderName: creator,
+        onClose,
+    })
+
+    const solanaSelectRedpacket = useHandleSolanaCreateOrSelect({
         senderName: creator,
         onClose,
     })
@@ -86,7 +98,7 @@ export function History() {
                         key={history.redpacket_id}
                         history={history as FireflyRedPacketAPI.RedPacketSentInfo}
                         onlyView={currentHistoryTab === HistoryTabs.Claimed}
-                        onSelect={selectRedPacket}
+                        onSelect={pluginID === NetworkPluginID.PLUGIN_SOLANA ? solanaSelectRedpacket : selectRedPacket}
                     />
                 ))}
                 {hasNextPage ?

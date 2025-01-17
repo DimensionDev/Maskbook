@@ -88,6 +88,11 @@ export function RouterDialog(props: InjectedDialogProps & { pageMap: Record<RedP
                 onClick={() => navigate({ pathname: RoutePaths.History, search: `tab=${HistoryTabs.Sent}` })}
             />
         ),
+        [RoutePaths.CreateSolanaRedPacket]: (
+            <Icons.History
+                onClick={() => navigate({ pathname: RoutePaths.History, search: `tab=${HistoryTabs.Sent}` })}
+            />
+        ),
         [RoutePaths.CreateNftRedPacket]: (
             <Icons.History
                 onClick={() => {

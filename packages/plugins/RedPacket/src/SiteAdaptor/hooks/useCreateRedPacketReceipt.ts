@@ -1,10 +1,11 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import REDPACKET_ABI from '@masknet/web3-contracts/abis/HappyRedPacketV4.json' with { type: 'json' }
-import { useWeb3Connection } from '@masknet/web3-hooks-base'
+import { useEnvironmentContext, useWeb3Connection } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { type ChainId, decodeEvents, useRedPacketConstants } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import type { AbiItem } from 'web3-utils'
+import { getRedpacket } from '../helpers/getRedpacket.js'
 
 type CreationSuccessEventParams = {
     id: string
@@ -24,29 +25,48 @@ type CreationSuccessEventParams = {
     /** account in string*/
     total: string
 }
-export function useCreateRedPacketReceipt(txHash: string, chainId: ChainId) {
+export function useCreateRedPacketReceipt(txHashOrAccountId: string, chainId: ChainId, enabled?: boolean) {
+    const { pluginID } = useEnvironmentContext()
     const { HAPPY_RED_PACKET_ADDRESS_V4 } = useRedPacketConstants(chainId)
-    const Web3 = useWeb3Connection(NetworkPluginID.PLUGIN_EVM)
+    const Web3 = useWeb3Connection(pluginID)
 
     return useQuery({
+        enabled,
         // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: ['redpacket', 'creation-success-params', chainId, txHash],
+        queryKey: ['redpacket', 'creation-success-params', chainId, txHashOrAccountId],
         queryFn: async () => {
-            if (!txHash || !Web3) return null
+            if (!txHashOrAccountId || !Web3) return null
 
-            const receipt = await Web3.getTransactionReceipt(txHash, { chainId })
-            if (!receipt) return null
+            if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+                const receipt = await Web3.getTransactionReceipt(txHashOrAccountId, { chainId })
+                if (!receipt) return null
 
-            const log = receipt.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
-            if (!log) return null
+                const log = receipt.logs.find((log) => isSameAddress(log.address, HAPPY_RED_PACKET_ADDRESS_V4))
+                if (!log) return null
 
-            const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log]) as unknown as {
-                CreationSuccess: {
-                    returnValues: CreationSuccessEventParams
+                const eventParams = decodeEvents(REDPACKET_ABI as AbiItem[], [log]) as unknown as {
+                    CreationSuccess: {
+                        returnValues: CreationSuccessEventParams
+                    }
                 }
-            }
 
-            return eventParams.CreationSuccess.returnValues
+                return eventParams.CreationSuccess.returnValues
+            }
+            const result = await getRedpacket(txHashOrAccountId)
+
+            return {
+                // id: result.
+                id: txHashOrAccountId,
+                creation_time: result.createTime.toString(),
+                creator: result.creator.toBase58(),
+                duration: '86400',
+                ifrandom: result.ifSpiltRandom,
+                message: result.message,
+                name: result.name,
+                number: result.totalNumber.toString(),
+                token_address: result.tokenAddress.toBase58(),
+                total: result.totalAmount.toString(),
+            }
         },
     })
 }

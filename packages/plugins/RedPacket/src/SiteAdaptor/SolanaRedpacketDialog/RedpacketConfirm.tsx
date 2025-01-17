@@ -151,8 +151,8 @@ export function SolanaRedPacketConfirm() {
                 DEFAULT_DURATION,
                 !!isRandom,
                 claimer,
-                message,
                 creator,
+                message,
             )
         : tokenMint ?
             createWithSplToken(
@@ -163,8 +163,9 @@ export function SolanaRedPacketConfirm() {
                 DEFAULT_DURATION,
                 !!isRandom,
                 claimer,
-                message,
+
                 creator,
+                message,
             )
         :   null)
         if (!result) return

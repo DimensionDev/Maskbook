@@ -1,15 +1,15 @@
 import { Trans } from '@lingui/react/macro'
-import { RedPacketMetaKey } from '@masknet/shared-base'
+import { NetworkPluginID, RedPacketMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
-import { FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useMediaQuery, type Theme } from '@mui/material'
 import { memo, useCallback, useContext } from 'react'
 import { useAsyncFn } from 'react-use'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
-import { useRefundCallback } from '../hooks/useRefundCallback.js'
+import { useRefundCallback, useSolanaRefundCallback } from '../hooks/useRefundCallback.js'
 import { openComposition } from '../openComposition.js'
+import { useEnvironmentContext } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -80,10 +80,13 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
+    const { pluginID } = useEnvironmentContext()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const compositionType = useContext(CompositionTypeContext)
 
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
+    const [{ loading: isSolanaRefunding }, solanaRefunded, refundSolanaCallback] = useSolanaRefundCallback(rpid)
+
     const statusToTransMap = {
         [FireflyRedPacketAPI.RedPacketStatus.Send]: <Trans>Send</Trans>,
         [FireflyRedPacketAPI.RedPacketStatus.Expired]: <Trans>Expired</Trans>,
@@ -96,14 +99,6 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
     const [{ loading: isSharing }, shareCallback] = useAsyncFn(async () => {
         if (!shareFrom || !themeId || !createdAt) return
 
-        const payloadImage = await FireflyRedPacket.getPayloadUrlByThemeId(
-            themeId,
-            shareFrom,
-            tokenInfo.amount,
-            'fungible',
-            tokenInfo.symbol,
-            Number(tokenInfo.decimals),
-        )
         openComposition(
             RedPacketMetaKey,
             {
@@ -125,23 +120,24 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
                 total: tokenInfo.amount,
             },
             compositionType,
-            { claimRequirements: claim_strategy, payloadImage },
+            { claimRequirements: claim_strategy },
         )
     }, [])
 
-    const redpacketStatus = refunded ? RedPacketStatus.Refund : propRedpacketStatus
+    const redpacketStatus = refunded || solanaRefunded ? RedPacketStatus.Refund : propRedpacketStatus
 
     const handleClick = useCallback(async () => {
         if (canResend) onResend?.()
         else if (redpacketStatus === RedPacketStatus.Send || redpacketStatus === RedPacketStatus.View)
             await shareCallback()
-        else if (redpacketStatus === RedPacketStatus.Refunding) await refundCallback()
-    }, [redpacketStatus, shareCallback, refundCallback, canResend, onResend])
+        else if (redpacketStatus === RedPacketStatus.Refunding)
+            pluginID === NetworkPluginID.PLUGIN_SOLANA ? await refundSolanaCallback() : await refundCallback()
+    }, [redpacketStatus, shareCallback, refundCallback, canResend, onResend, refundSolanaCallback, pluginID])
 
     return (
         <ActionButton
             {...rest}
-            loading={isRefunding || isSharing}
+            loading={isRefunding || isSolanaRefunding || isSharing}
             fullWidth={isSmall}
             onClick={handleClick}
             className={cx(classes.actionButton, rest.className)}

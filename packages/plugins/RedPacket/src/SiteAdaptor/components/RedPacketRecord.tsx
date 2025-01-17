@@ -1,11 +1,15 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { TokenIcon } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useEverSeen } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import { useChainContext, useFungibleToken, useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver } from '@masknet/web3-providers'
+import {
+    useChainContext,
+    useEnvironmentContext,
+    useFungibleToken,
+    useNetworkDescriptor,
+} from '@masknet/web3-hooks-base'
+import { EVMExplorerResolver, SolanaExplorerResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { formatBalance, TokenType } from '@masknet/web3-shared-base'
 import {
@@ -23,9 +27,9 @@ import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
 import { useCreateRedPacketReceipt } from '../hooks/useCreateRedPacketReceipt.js'
-import { useRedpacketToken } from '../hooks/useRedpacketToken.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
 import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()((
@@ -197,28 +201,30 @@ export const RedPacketRecord = memo(function RedPacketRecord({
     const [seen, redpacketRef] = useEverSeen()
     const chainId = history.chain_id
 
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, chainId)
+    const { account } = useChainContext()
+    const { pluginID } = useEnvironmentContext()
+    const networkDescriptor = useNetworkDescriptor(pluginID, chainId)
 
     const { classes, cx } = useStyles({
         background: networkDescriptor?.backgroundGradient,
         backgroundIcon: networkDescriptor ? `url("${networkDescriptor.icon}")` : undefined,
     })
 
-    // Only concern about MATIC token which has been renamed to POL
-    const { data: tokenAddress } = useRedpacketToken(
-        chainId,
-        history.trans_hash ?? '',
-        seen && token_symbol === 'MATIC' && !!history.trans_hash,
-    )
-    const { data: token } = useFungibleToken(NetworkPluginID.PLUGIN_EVM, tokenAddress, undefined, { chainId })
-    const tokenSymbol = token?.symbol ?? token_symbol
+    const tokenSymbol = token_symbol
     const contractAddress = useRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
     const { data: redpacketRecord } = useQuery({
         queryKey: ['redpacket', 'by-tx-hash', history.trans_hash],
         queryFn: history.trans_hash ? () => RedPacketRPC.getRedPacketRecord(history.trans_hash!) : skipToken,
     })
-    const { data: createSuccessResult } = useCreateRedPacketReceipt(history.trans_hash ?? '', chainId)
+    const { data: createSuccessResult } = useCreateRedPacketReceipt(
+        pluginID === NetworkPluginID.PLUGIN_SOLANA ? history.redpacket_id : (history.trans_hash ?? ''),
+        chainId,
+        seen,
+    )
+
+    // Only concern about MATIC token which has been renamed to POL
+    const { data: token } = useFungibleToken(pluginID, createSuccessResult?.token_address, undefined, { chainId })
+
     const isViewStatus = redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View
     const canResend = isViewStatus && !!redpacketRecord && !!createSuccessResult
 
@@ -235,15 +241,16 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                         size={36}
                         badgeSize={16}
                         chainId={chainId}
-                        address={token?.address ?? tokenAddress!}
+                        address={token?.address ?? createSuccessResult?.token_address}
                         logoURL={token_logo}
-                        symbol={token?.symbol}
-                        name={token?.name}
+                        symbol={token_symbol}
+                        name={token_symbol}
+                        disableBadge={pluginID === NetworkPluginID.PLUGIN_SOLANA}
                     />
                     <div className={classes.status}>
                         <Typography className={classes.total}>
                             {formatBalance(amount, token_decimal, { significant: 2, isPrecise: true })}{' '}
-                            {tokenSymbol ?? token?.symbol ?? '--'}
+                            {tokenSymbol ?? token_symbol ?? '--'}
                         </Typography>
                         <Typography className={classes.progress} component="div">
                             {!onlyView ?
@@ -286,7 +293,11 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                 <ActionButton
                     className={cx(classes.viewButton, classes.actionButton)}
                     onClick={() => {
-                        openWindow(EVMExplorerResolver.transactionLink(chainId, history.trans_hash!), '_blank')
+                        const link =
+                            pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                                SolanaExplorerResolver.transactionLink(chainId, history.trans_hash)
+                            :   EVMExplorerResolver.transactionLink(chainId, history.trans_hash!)
+                        openWindow(link, '_blank')
                     }}>
                     {t`View`}
                 </ActionButton>
