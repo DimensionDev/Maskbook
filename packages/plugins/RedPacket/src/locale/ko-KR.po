@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-16 13:57\n"
+"PO-Revision-Date: 2025-01-17 09:35\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -431,9 +431,7 @@ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
-"\n"
+msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
@@ -655,6 +653,10 @@ msgstr ""
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 msgid "Refund"
 msgstr "리펀"
+
+#: src/SiteAdaptor/hooks/useRefundCallback.tsx
+msgid "Refund Successfully"
+msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
@@ -964,3 +966,4 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to own at least one of the following NFTs."
 msgstr ""
+
