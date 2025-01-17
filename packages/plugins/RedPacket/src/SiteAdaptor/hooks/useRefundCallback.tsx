@@ -68,6 +68,7 @@ export function useSolanaRefundCallback(rpid: string) {
             if (error instanceof Error) {
                 showSnackbar(error.message, { variant: 'error' })
             }
+            throw error
         }
     }, [rpid])
 

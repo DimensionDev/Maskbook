@@ -94,8 +94,6 @@ export function HistoryDetail() {
         getNextPageParam: (lastPage) => lastPage.cursor,
     })
 
-    console.log(rpid)
-
     const claims = useMemo(() => data?.pages.flatMap((x) => x.list) ?? EMPTY_LIST, [data?.pages])
     const info = first(data?.pages)
 
