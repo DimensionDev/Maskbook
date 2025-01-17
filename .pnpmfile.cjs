@@ -19,13 +19,6 @@ approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0
 // knip -> @pnpm/* -> ...
 approvedList.set('ramda', 'npm:@pnpm/ramda@0.28.1')
 
-// @magic-works/i18n-codegen -> i18next-translation-parser
-// https://github.com/i18next/i18next-translation-parser/issues/11
-approvedList.set('html-parse-stringify2', [
-    'github:locize/html-parse-stringify2',
-    'github:locize/html-parse-stringify2#d463109433b2c49c74a081044f54b2a6a1ccad7c',
-])
-
 /**
  * @param {string} parentPackage The current resolving parentPackage
  * @param {string} dependedPackage The package it depends on

@@ -1,84 +1,32 @@
 {
   "extends": "./packages/config/tsconfig.json",
   "references": [
-    { "path": "./tsconfig.npm.json" },
-    // Only list top-level projects here
+    { "path": "./packages/base/tsconfig.json" },
+    { "path": "./packages/flags/tsconfig.json" },
     { "path": "./packages/polyfills/tsconfig.json" },
-    // Tests
-    // @masknet/scripts: insert-here 1
-    { "path": "./packages/base/tsconfig.tests.json" },
-    { "path": "./packages/encryption/tsconfig.tests.json" },
-    { "path": "./packages/typed-message/tests/tsconfig.json" },
-    { "path": "./packages/plugin-infra/tsconfig.json" },
-    { "path": "./packages/shared/tsconfig.json" },
-    { "path": "./packages/shared-base/tsconfig.tests.json" },
-    { "path": "./packages/web3-hooks/base/tsconfig.tests.json" },
-    { "path": "./packages/web3-shared/base/tsconfig.tests.json" },
-    { "path": "./packages/web3-providers/tsconfig.tests.json" },
-    // All plugins should be type checked too
-    { "path": "./packages/plugins/tsconfig.json" }
+    { "path": "./packages/shared-base/tsconfig.json" },
+    { "path": "./packages/shared-base-ui/tsconfig.json" },
+    { "path": "./packages/web3-helpers/tsconfig.json" },
+    { "path": "./packages/web3-hooks/base/tsconfig.json" },
+    { "path": "./packages/web3-hooks/evm/tsconfig.json" },
+    { "path": "./packages/web3-providers/tsconfig.json" },
+    { "path": "./packages/web3-shared/base/tsconfig.json" },
+    { "path": "./packages/web3-shared/evm/tsconfig.json" },
+    { "path": "./packages/web3-shared/solana/tsconfig.json" },
+    { "path": "./packages/public-api/tsconfig.json" }
   ],
   "compilerOptions": {
-    // Exclude everything by default. Include them in each project on-demand
     "types": ["masknet__global-types"],
     "resolveJsonModule": true,
     "emitDeclarationOnly": true,
     "paths": {
-      // # Why?
-      // TypeScript project reference requires manually declaring all referenced projects.
-
-      // For example, we have 2 projects A and B under /projects/a and /projects/b and B depends on A,
-      // if we do not list A in the references, when we write
-
-      // > /packages/b/src/index.ts
-
-      // ```ts
-      // import { something } from '../../a'
-      // ```
-
-      // If there is no "reference": [{ "path": "../a/tsconfig.json" }] in /packages/b/tsconfig.json,
-      // TypeScript will complain TS6307: "File '/packages/b/src/index.ts' is not listed within the file list of the project '/packages/b/tsconfig.json'. Projects must list all files or use an 'include' pattern."
-
-      // This is error is GOOD because it means TypeScript _can_ automatically detect the missing references.
-
-      // # What about monorepo?
-      // But TypeScript cannot detect the missing references when we install them as monorepo packages.
-      // Still the project structure above, but A is installed as "@masknet/a" in /packages/b/node_modules/@masknet/a,
-      // TypeScript will accept the missing reference to the A project,
-      // because it will go through the "moduleResolution": "Node" resolution, if `.d.ts` file is found,
-      // the project will _accidentally_ compiles, but TypeScript does DON'T know those packages has dependencies in the project reference graph.
-      // This will cause the project to randomly fail to be type-checked.
-
-      // # Solution
-      // We use "paths" to map the Node-style import path back to the relative style,
-      // therefore TypeScript can check the missing dependencies again.
-
-      // This will not introduce problems like mapping "@src/" to "/packages/a/src/index.ts" which is problematic,
-      // because those projects (if they're correctly configured) is installed in the node_modules,
-      // so if any toolchain does not support the "paths" feature, it will still work.
-
-      // This will bring another problem: now we can reference a project without installing it as a monorepo dependency,
-      // which is unwanted. We need to take care of this.
-
       "@masknet/base": ["./packages/base/src/index.ts"],
-      "@masknet/encryption": ["./packages/encryption/src/index.ts"],
       "@masknet/flags": ["./packages/flags/src/index.ts"],
       "@masknet/flags/build-info": ["./packages/flags/src/flags/buildInfo.ts"],
-      "@masknet/sdk": ["./packages/mask-sdk/server/index.ts"],
-      "@masknet/plugin-infra/dom": ["./packages/plugin-infra/src/entry-dom.ts"],
-      "@masknet/plugin-infra/dom/context": ["./packages/plugin-infra/src/dom/context.ts"],
-      "@masknet/plugin-infra/background-worker": ["./packages/plugin-infra/src/entry-background-worker.ts"],
-      "@masknet/plugin-infra/content-script/context": ["./packages/plugin-infra/src/site-adaptor/context.ts"],
-      "@masknet/plugin-infra/content-script": ["./packages/plugin-infra/src/entry-content-script.ts"],
-      "@masknet/plugin-infra": ["./packages/plugin-infra/src/entry.ts"],
       "@masknet/global-types/*": ["./packages/polyfills/types/*"],
       "@masknet/public-api": ["./packages/public-api/src/index.ts"],
-      "@masknet/shared": ["./packages/shared/src/index.ts"],
       "@masknet/shared-base": ["./packages/shared-base/src/index.ts"],
       "@masknet/shared-base-ui": ["./packages/shared-base-ui/src/index.ts"],
-      "@masknet/theme": ["./packages/theme/src/index.ts"],
-      "@masknet/typed-message": ["./packages/typed-message/base/src/index.ts"],
-      "@masknet/typed-message-react": ["./packages/typed-message/react/src/index.ts"],
       "@masknet/types": ["./packages/types/src/index.ts"],
       "@masknet/web3-helpers": ["./packages/web3-helpers/src/index.ts"],
       "@masknet/web3-hooks-base": ["./packages/web3-hooks/base/src/index.ts"],

@@ -1,7 +1,5 @@
 packages:
   - 'packages/*'
-  - 'packages/typed-message/base'
-  - 'packages/typed-message/react'
   - 'packages/plugins/*'
   - 'packages/polyfills/types'
   - 'packages/web3-hooks/base'

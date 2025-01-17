@@ -1,6 +1,0 @@
-{
-    "error_boundary_crash_title": "{{subject}} 오류가 발생합니다.",
-    "error_boundary_try_to_recover": "복구하기",
-    "error_boundary_report_github": "GitHub에서 보고하기",
-    "error_boundary_report_email": "이메일로 보고하기"
-}

@@ -5,9 +5,6 @@
     "emitDeclarationOnly": false
   },
   "references": [
-    { "path": "./packages/base/tsconfig.json" },
-    { "path": "./packages/encryption/tsconfig.json" },
-    { "path": "./packages/typed-message/base/tsconfig.json" },
-    { "path": "./packages/typed-message/react/tsconfig.json" }
+    { "path": "./packages/base/tsconfig.json" }
   ]
 }

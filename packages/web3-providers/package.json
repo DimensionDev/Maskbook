@@ -33,7 +33,6 @@
   },
   "dependencies": {
     "@masknet/flags": "workspace:^",
-    "@masknet/icons": "workspace:^",
     "@masknet/shared-base": "workspace:^",
     "@masknet/shared-base-ui": "workspace:^",
     "@masknet/web3-constants": "workspace:^",

@@ -1,8 +1,6 @@
 import type { ReactNode } from 'react'
 import type {
     Subscription,
-    EnhanceableSite,
-    ExtensionSite,
     NetworkPluginID,
     BindingProof,
     Account,
@@ -250,12 +248,6 @@ export interface ProviderDescriptor<ChainId, ProviderType> {
     backgroundGradient?: string
     /** The provider icon filter color */
     iconFilterColor?: string
-    /** Enable requirements */
-    enableRequirements?: {
-        supportedChainIds?: ChainId[]
-        supportedEnhanceableSites?: EnhanceableSite[]
-        supportedExtensionSites?: ExtensionSite[]
-    }
     /** A link to provider's home website */
     homeLink: string
     /** A link only contains domain name */
@@ -608,8 +600,6 @@ export interface FungibleTokenSpender<ChainId, SchemaType> {
     address: string
     /** spender name */
     name: string | undefined
-    /** spender logo */
-    logo: ReactNode | undefined
     /** allowance token amount of this spender */
     amount?: number
     /** allowance token amount(not formatted by token decimals) of this spender */
@@ -624,7 +614,6 @@ export interface NonFungibleContractSpender<ChainId, SchemaType> {
     contract: Pick<NonFungibleTokenContract<ChainId, SchemaType>, 'name' | 'address'>
     address: string
     name: string | undefined
-    logo: ReactNode | undefined
 }
 
 export interface Result<ChainId> {
@@ -875,15 +864,6 @@ export interface BalanceNotifierState<ChainId> {
     emitter: Emitter<BalanceEvent<ChainId>>
 }
 
-export interface NameServiceState {
-    /** get address of domain name */
-    lookup?: (domain: string) => Promise<string | undefined>
-    /** get domain name of address */
-    reverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
-    /** safely get domain name of address */
-    safeReverse?: (address: string, domainOnly?: boolean) => Promise<string | undefined>
-}
-
 export interface NetworkState<ChainId, SchemaType, NetworkType> {
     /** The id of the used network. */
     networkID?: Subscription<string>
@@ -921,7 +901,6 @@ export interface WalletState<ChainId> {
 export interface Web3State<ChainId, SchemaType, NetworkType> {
     Wallet?: WalletState<ChainId>
     BalanceNotifier?: BalanceNotifierState<ChainId>
-    NameService?: NameServiceState
     Network?: NetworkState<ChainId, SchemaType, NetworkType>
     IdentityService?: IdentityServiceState<ChainId>
 }
