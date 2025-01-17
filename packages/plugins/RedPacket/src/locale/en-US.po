@@ -651,6 +651,10 @@ msgstr ""
 msgid "Refund"
 msgstr ""
 
+#: src/SiteAdaptor/hooks/useRefundCallback.tsx
+msgid "Refund Successfully"
+msgstr ""
+
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
 msgstr ""

@@ -656,6 +656,10 @@ msgstr ""
 msgid "Refund"
 msgstr "退款"
 
+#: src/SiteAdaptor/hooks/useRefundCallback.tsx
+msgid "Refund Successfully"
+msgstr ""
+
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
 msgstr ""
