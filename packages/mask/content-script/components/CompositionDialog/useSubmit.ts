@@ -38,7 +38,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 activatedSiteAdaptorUI!.encryptPayloadNetwork,
             )
             // Since we cannot directly send binary in the composition box, we need to encode it into a string.
-            const encrypted = encodeByNetwork(activatedSiteAdaptorUI!.encryptPayloadNetwork, rawEncrypted)
+            const encrypted = encodeByNetwork(activatedSiteAdaptorUI!.encryptPayloadNetwork, encode, rawEncrypted)
 
             const decoratedText =
                 encode === 'image' ?
