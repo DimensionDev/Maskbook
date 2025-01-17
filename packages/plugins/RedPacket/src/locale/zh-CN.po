@@ -431,7 +431,9 @@ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n\n"
+msgid ""
+"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+"\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
@@ -655,8 +657,8 @@ msgid "Refund"
 msgstr "退款"
 
 #: src/SiteAdaptor/hooks/useRefundCallback.tsx
-msgid "Refund Successfully"
-msgstr ""
+#~ msgid "Refund Successfully"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
@@ -966,4 +968,3 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to own at least one of the following NFTs."
 msgstr ""
-
