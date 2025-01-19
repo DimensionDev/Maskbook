@@ -224,7 +224,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
 
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
-    const { classes, theme } = useStyles()
+    const { classes } = useStyles()
 
     // RedPacket created from Mask has no cover settings
     const { data: cover, isLoading: isLoadingCover } = useRedPacketCover({
@@ -288,7 +288,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             </>
         )
 
-    if (claimStrategyStatus?.canClaim === false) {
+    if (claimStrategyStatus?.canClaim === false && account) {
         return (
             <>
                 {card}
