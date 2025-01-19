@@ -61,6 +61,11 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(1.5),
         flexFlow: 'row wrap',
     },
+    collections: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2,1fr)',
+        gap: theme.spacing(1.5),
+    },
     asset: {
         display: 'flex',
         alignItems: 'center',
@@ -72,21 +77,39 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '20px',
         color: theme.palette.common.white,
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+        display: '-webkit-box',
+        WebkitLineClamp: 2,
+        WebkitBoxOrient: 'vertical',
     },
     tokenIcon: {
         width: 24,
         height: 24,
         marginRight: '0px !important',
     },
+    unsatisfied: {
+        position: 'absolute',
+        left: 12,
+        bottom: 12,
+        right: 12,
+        backgroundColor: 'rgba(255, 53, 69, 0.2)',
+        borderRadius: 4,
+        padding: 6,
+        color: theme.palette.maskColor.white,
+        fontSize: 12,
+        fontWeight: 700,
+        lineHeight: '16px',
+    },
 }))
 
 interface Props extends BoxProps {
-    onClose?(): void
+    unsatisfied?: boolean
     statusList: FireflyRedPacketAPI.ClaimStrategyStatus[]
-    showResults?: boolean
+    onClose?(): void
 }
 
-export function Conditions({ onClose, statusList, showResults = true, ...props }: Props) {
+export function Conditions({ onClose, statusList, unsatisfied = true, ...props }: Props) {
     const { classes, cx } = useStyles()
     const tokenPayloads = statusList.find((x) => x.type === FireflyRedPacketAPI.StrategyType.tokens)?.payload
     const tokenPayload = tokenPayloads?.[0]
@@ -132,10 +155,10 @@ export function Conditions({ onClose, statusList, showResults = true, ...props }
                 {collectionPayloads?.length ?
                     <div className={classes.section}>
                         <Typography className={classes.sectionTitle}>
-                            <Trans>You need to own at least one of the following NFTs.</Trans>
+                            <Trans>You need to hold any of the following NFTs in your wallet.</Trans>
                         </Typography>
 
-                        <div className={classes.assets}>
+                        <div className={classes.collections}>
                             {collectionPayloads.map((collection) => (
                                 <div className={classes.asset} key={collection.contractAddress}>
                                     <TokenIcon
@@ -151,6 +174,11 @@ export function Conditions({ onClose, statusList, showResults = true, ...props }
                             ))}
                         </div>
                     </div>
+                :   null}
+                {unsatisfied ?
+                    <Typography className={classes.unsatisfied}>
+                        <Trans>Your wallet does not meet the eligibility criteria for claiming.</Trans>
+                    </Typography>
                 :   null}
             </div>
             <IconButton className={classes.closeButton} disableRipple onClick={() => onClose?.()} aria-label="Close">

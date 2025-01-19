@@ -264,7 +264,7 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             {cover ?
                 <Grow in={showRequirements} timeout={250}>
                     <Conditions
-                        showResults={!claimedOrEmpty}
+                        unsatisfied={!!account && claimStrategyStatus?.canClaim === false}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                         className={classes.conditions}
                         onClose={() => setShowRequirements(false)}
