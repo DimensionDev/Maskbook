@@ -115,6 +115,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     collectionName: {
         maxWidth: 80,
+        display: '-webkit-box',
         WebkitBoxOrient: 'vertical',
         WebkitLineClamp: 2,
         overflow: 'hidden',

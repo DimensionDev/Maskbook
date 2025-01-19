@@ -239,8 +239,6 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     // the red packet can fetch without account
     if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
 
-    const claimedOrEmpty = listOfStatus.includes(RedPacketStatus.claimed) || isEmpty
-
     const card = (
         <Card className={classes.root} component="article" elevation={0}>
             <RedPacketEnvelope
