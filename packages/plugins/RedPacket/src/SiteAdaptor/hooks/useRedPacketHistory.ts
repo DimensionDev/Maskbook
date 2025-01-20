@@ -15,5 +15,6 @@ export function useRedPacketHistory(address: string, historyType: FireflyRedPack
         select(data) {
             return data.pages.flatMap((x) => x.data)
         },
+        gcTime: 0,
     })
 }

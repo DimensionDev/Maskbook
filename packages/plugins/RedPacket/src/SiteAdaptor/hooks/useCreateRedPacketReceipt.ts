@@ -55,7 +55,6 @@ export function useCreateRedPacketReceipt(txHashOrAccountId: string, chainId: Ch
             const result = await getRedpacket(txHashOrAccountId)
 
             return {
-                // id: result.
                 id: txHashOrAccountId,
                 creation_time: result.createTime.toString(),
                 creator: result.creator.toBase58(),
