@@ -5,6 +5,7 @@ import { useQuery } from '@tanstack/react-query'
 import { getRpProgram } from '../../helpers/getRpProgram.js'
 import { minus } from '@masknet/web3-shared-base'
 import { useClaimRecord } from './useClaimRecord.js'
+import { useParseRedPacket } from '../../hooks/useParseRedPacket.js'
 
 export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chainId: number) {
     const account = useAccount(NetworkPluginID.PLUGIN_SOLANA)
@@ -26,6 +27,8 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             return 30_000
         },
     })
+    const parsed = useParseRedPacket()
+
     const { data: claimRecord } = useClaimRecord(account, payload.accountId, payload?.network ?? 'mainnet-beta')
     if (!data) {
         return {
@@ -40,7 +43,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
     }
     const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
     const isEmpty = data.claimedAmount.gt(data.totalAmount)
-    const isClaimed = !!claimRecord
+    const isClaimed = !!claimRecord || !!parsed?.redpacket.isClaimed
 
     const availability = {
         token_address: data.tokenAddress.toBase58(),

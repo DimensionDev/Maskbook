@@ -42,7 +42,7 @@ export class FireflyRedPacket {
         return res.data.tid
     }
     static async parse(options: FireflyRedPacketAPI.ParseOptions) {
-        const url = urlcat(FIREFLY_ROOT_URL, '/v1/misc/redpacket/parse')
+        const url = urlcat(FIREFLY_ROOT_URL, '/v2/misc/redpacket/parse')
         const { data } = await fetchFireflyJSON<FireflyRedPacketAPI.ParseResponse>(url, {
             method: 'POST',
             body: JSON.stringify(options),

@@ -29,7 +29,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             chainId: parsedChainId,
         },
     )
-    const parsed = useParseRedPacket(parsedChainId)
+    const parsed = useParseRedPacket()
     const checkAvailability = recheckAvailability as (
         options?: RefetchOptions,
     ) => Promise<QueryObserverResult<typeof availability>>

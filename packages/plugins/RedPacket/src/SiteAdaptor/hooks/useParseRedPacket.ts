@@ -1,40 +1,39 @@
 import {
     useLastRecognizedIdentity,
+    usePostInfoMentionedLinks,
     usePostInfoPostMetadataImages,
-    usePostInfoSource,
 } from '@masknet/plugin-infra/content-script'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket } from '@masknet/web3-providers'
-import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { useQuery } from '@tanstack/react-query'
 
 /**
  * Parse RedPacket with post info.
+ * Can parse both EVM and Solana RedPacket
  */
-export function useParseRedPacket(chainId: ChainId) {
+export function useParseRedPacket() {
     const images = usePostInfoPostMetadataImages()
-    const { pluginID } = useNetworkContext()
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId,
-        account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
-    })
-    const source = usePostInfoSource()
+    const links = usePostInfoMentionedLinks()
+    const { account } = useChainContext()
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
+    const linksWithPayload = links.filter((x) => /\bPostData_v\d=/.test(x))
 
     const query = useQuery({
-        enabled: images.length > 0,
-        queryKey: ['red-packet', 'parse', source?.toLowerCase(), images[0], account, myProfileId],
+        enabled: images.length > 0 || linksWithPayload.length > 0,
+        queryKey: ['red-packet', 'parse', images[0], linksWithPayload, account, myProfileId],
         queryFn: async () => {
-            const platform = source?.toLowerCase() as FireflyRedPacketAPI.PlatformType
             return FireflyRedPacket.parse({
-                image: {
-                    imageUrl: images[0],
-                },
+                text: linksWithPayload.join('\n'),
+                image:
+                    linksWithPayload.length ? undefined : (
+                        {
+                            imageUrl: images[0],
+                        }
+                    ),
                 walletAddress: account,
-                platform,
+                platform: FireflyRedPacketAPI.PlatformType.twitter,
                 profileId: myProfileId,
             })
         },
