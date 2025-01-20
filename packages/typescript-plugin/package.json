@@ -1,0 +1,9 @@
+{
+    "name": "@masknet/typescript-plugin",
+    "private": true,
+    "sideEffects": false,
+    "type": "commonjs",
+    "main": "./src/index.js",
+    "dependencies": {
+    }
+}

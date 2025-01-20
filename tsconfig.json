@@ -140,7 +140,8 @@
       // @masknet/scripts: insert-here 3
       "@masknet/plugin-switch-logo": ["./packages/plugins/SwitchLogo/src/index.ts"],
       "@masknet/plugin-calendar": ["./packages/plugins/Calendar/src/index.ts"]
-    }
+    },
+    "plugins": [{ "name": "@masknet/typescript-plugin" }]
   },
   "files": []
 }

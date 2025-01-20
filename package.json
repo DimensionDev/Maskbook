@@ -70,6 +70,7 @@
     "@masknet/cli": "workspace:^",
     "@masknet/config": "workspace:^",
     "@masknet/eslint-plugin": "^0.3.0",
+    "@masknet/typescript-plugin": "workspace:^",
     "@nice-labs/git-rev": "^3.5.1",
     "@swc-node/register": "^1.10.9",
     "@swc/core": "1.9.3",

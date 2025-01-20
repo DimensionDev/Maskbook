@@ -182,6 +182,9 @@ importers:
       '@masknet/eslint-plugin':
         specifier: ^0.3.0
         version: 0.3.0(eslint@9.15.0(jiti@2.4.0))
+      '@masknet/typescript-plugin':
+        specifier: workspace:^
+        version: link:packages/typescript-plugin
       '@nice-labs/git-rev':
         specifier: ^3.5.1
         version: 3.5.1
@@ -2645,6 +2648,8 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+
+  packages/typescript-plugin: {}
 
   packages/vitest-setup:
     dependencies:
