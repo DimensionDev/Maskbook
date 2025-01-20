@@ -15,8 +15,8 @@ export async function createWithSplToken(
     duration: number,
     ifSpiltRandom: boolean,
     pubkeyForClaimSignature: web3.PublicKey,
-    message: string,
     author: string,
+    message: string,
 ) {
     // Ensure the totalNumber and totalAmount are within the acceptable range
     if (totalNumber > MAX_NUM) {

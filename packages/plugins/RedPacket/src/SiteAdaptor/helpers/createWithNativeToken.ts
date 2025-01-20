@@ -14,8 +14,8 @@ export async function createWithNativeToken(
     duration: number, // in seconds
     ifSpiltRandom: boolean, // Whether to split randomly
     pubkeyForClaimSignature: web3.PublicKey, // Public key to be used for claim signature
-    message: string, // Message to be included in the red packet
     author: string, // Author of the red packet
+    message: string, // Message to be included in the red packet
 ) {
     // Ensure the totalNumber and totalAmount are within the acceptable range
     if (totalNumber > MAX_NUM) {

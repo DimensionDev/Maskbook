@@ -163,7 +163,6 @@ export function SolanaRedPacketConfirm() {
                 DEFAULT_DURATION,
                 !!isRandom,
                 claimer,
-
                 creator,
                 message,
             )
