@@ -11,8 +11,6 @@ import { RedPacketRecord } from '../components/RedPacketRecord.js'
 import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 import { useEnvironmentContext } from '@masknet/web3-hooks-base'
-import { getRpProgram } from '../helpers/getRpProgram.js'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -55,40 +53,11 @@ export function HistoryDetail() {
         queryFn:
             rpid ?
                 async ({ pageParam }) => {
-                    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
-                        const program = await getRpProgram()
-                        const records = await program.account.claimRecord.all([
-                            {
-                                memcmp: {
-                                    offset: 8, // Adjust the offset based on your account structure
-                                    bytes: new SolanaWeb3.PublicKey(rpid).toBase58(),
-                                },
-                            },
-                        ])
-
-                        const results = records.map<FireflyRedPacketAPI.ClaimInfo>(({ account }) => ({
-                            creator: account.claimer.toBase58(),
-                            claim_platform: [],
-                            token_amounts: account.amount.toString(),
-                            token_symbol: history.token_symbol,
-                            token_decimal: history.token_decimal,
-                            ens_name: '',
-                        }))
-
-                        return {
-                            chain_id: chainId,
-                            cursor: '',
-                            list: results,
-                        }
-                    } else {
-                        const res = await FireflyRedPacket.getClaimHistory(
-                            rpid,
-                            chainId,
-                            createIndicator(undefined, pageParam),
-                        )
-
-                        return res
-                    }
+                    return FireflyRedPacket.getClaimHistory(
+                        rpid,
+                        pluginID === NetworkPluginID.PLUGIN_EVM ? chainId : undefined,
+                        createIndicator(undefined, pageParam),
+                    )
                 }
             :   skipToken,
         getNextPageParam: (lastPage) => lastPage.cursor,
@@ -100,7 +69,11 @@ export function HistoryDetail() {
     return (
         <div className={classes.container}>
             {history ?
-                <RedPacketRecord onlyView={!!isClaimed} history={history} showDetailLink={false} />
+                <RedPacketRecord
+                    onlyView={!!isClaimed}
+                    history={{ ...history, claim_numbers: info?.claim_numbers, total_numbers: info?.total_numbers }}
+                    showDetailLink={false}
+                />
             :   null}
             {isLoading ?
                 <div className={cx(classes.interactions, classes.status)}>
