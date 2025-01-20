@@ -27,7 +27,7 @@
     "@masknet/kit": "0.3.0",
     "@tanstack/react-query": "^5.29.2",
     "@types/masknet__global-types": "workspace:^",
-    "@typescript/lib-dom": "npm:@types/web@^0.0.143",
+    "@typescript/lib-dom": "npm:@types/web@^0.0.197",
     "lodash-es": "^4.17.21",
     "react": "0.0.0-experimental-8039e6d0b-20231026",
     "react-dom": "0.0.0-experimental-8039e6d0b-20231026",
@@ -51,11 +51,11 @@
     "msw": "^1.2.1",
     "prettier": "^3.1.0",
     "svgo": "^3.0.2",
-    "typescript": "5.5.0-beta"
+    "typescript": "5.7.3"
   },
   "pnpm": {
     "overrides": {
-      "@types/node": "20.12.7",
+      "@types/node": "22.10.7",
       "@types/react": "19.0.2",
       "reflect-metadata": "0.1.13",
       "@tanstack/react-query": "^5.29.2"
