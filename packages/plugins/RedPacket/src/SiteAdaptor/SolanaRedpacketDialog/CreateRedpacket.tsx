@@ -189,7 +189,6 @@ export function CreateSolRedPacket() {
         customThemes,
         setCustomThemes,
         setTheme,
-        settings,
         message,
         setMessage,
         shares,
@@ -456,7 +455,7 @@ export function CreateSolRedPacket() {
                     </Box>
                 </Box>
                 <div>
-                    {selectedTheme && shares ?
+                    {selectedTheme ?
                         <div className={classes.preview}>
                             <PreviewRedPacket
                                 className={classes.envelope}
