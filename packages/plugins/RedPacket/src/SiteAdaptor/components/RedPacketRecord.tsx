@@ -93,6 +93,12 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
                 color: theme.palette.maskColor.main,
             },
         },
+        symbol: {
+            width: '6ch',
+            whiteSpace: 'nowrap',
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+        },
         message: {
             fontWeight: 700,
             lineHeight: '18px',
@@ -262,7 +268,9 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                                         {formatTokenAmount(claim_amounts || 0, token_decimal, false)}/
                                         {formatTokenAmount(total_amounts || 0, token_decimal, false)}
                                     </b>
-                                    <span>{tokenSymbol}</span>
+                                    <TextOverflowTooltip title={token_symbol} as={ShadowRootTooltip}>
+                                        <span className={classes.symbol}>{tokenSymbol}</span>
+                                    </TextOverflowTooltip>
                                 </Trans>
                             :   null}
                             {showDetailLink ?
@@ -278,13 +286,13 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                                             { state: { history } },
                                         )
                                     }}>
-                                    <Trans>Claimed Details</Trans>
+                                    <Trans>Details</Trans>
                                 </Typography>
                             :   null}
                         </Typography>
                     </div>
                 </div>
-                <TextOverflowTooltip title={rp_msg ? rp_msg : <Trans>Best Wishes!</Trans>} as={ShadowRootTooltip}>
+                <TextOverflowTooltip title={rp_msg || <Trans>Best Wishes!</Trans>} as={ShadowRootTooltip}>
                     <Typography className={classes.message}>{rp_msg ? rp_msg : <Trans>Best Wishes!</Trans>}</Typography>
                 </TextOverflowTooltip>
             </div>
