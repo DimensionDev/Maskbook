@@ -13,16 +13,16 @@ import type { BaseContract } from '@masknet/web3-contracts/types/types.js'
 import type { WETH } from '@masknet/web3-contracts/types/WETH.js'
 import type { PoolStateV3 } from '@masknet/web3-contracts/types/PoolStateV3.js'
 
-import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json'
-import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json'
-import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json'
-import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json'
-import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json'
-import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json'
-import WalletABI from '@masknet/web3-contracts/abis/Wallet.json'
-import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json'
-import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json'
-import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json'
+import BalanceCheckerABI from '@masknet/web3-contracts/abis/BalanceChecker.json' assert { type: 'json' }
+import ERC20ABI from '@masknet/web3-contracts/abis/ERC20.json' assert { type: 'json' }
+import ERC20Bytes32ABI from '@masknet/web3-contracts/abis/ERC20Bytes32.json' assert { type: 'json' }
+import ERC165ABI from '@masknet/web3-contracts/abis/ERC165.json' assert { type: 'json' }
+import ERC721ABI from '@masknet/web3-contracts/abis/ERC721.json' assert { type: 'json' }
+import ERC1155ABI from '@masknet/web3-contracts/abis/ERC1155.json' assert { type: 'json' }
+import WalletABI from '@masknet/web3-contracts/abis/Wallet.json' assert { type: 'json' }
+import MulticallABI from '@masknet/web3-contracts/abis/Multicall.json' assert { type: 'json' }
+import WETH_ABI from '@masknet/web3-contracts/abis/WETH.json' assert { type: 'json' }
+import PoolStateV3ABI from '@masknet/web3-contracts/abis/PoolStateV3.json' assert { type: 'json' }
 
 import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import type { EVMConnectionOptions } from '../types/index.js'
