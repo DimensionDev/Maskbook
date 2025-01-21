@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-01-21 10:20\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -70,7 +70,7 @@ msgstr "{0} {1} {2}のコレクションから美しいアート作品を購入�
 
 #: src/SiteAdaptor/PurchaseDialog.tsx
 #~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
-#~ msgstr "{0} {1} {2}のコレクションから、美しいアート作品を購入しました。ようこそ。"
+#~ msgstr ""
 
 #. placeholder {3}: project.name
 #. placeholder {4}: price.toFixed()
@@ -132,3 +132,4 @@ msgstr "問題が発生しました!"
 #: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
+
