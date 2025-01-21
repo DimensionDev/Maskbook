@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-01-21 10:20\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -70,7 +70,7 @@ msgstr "'{0}' 컬렉션에서 {1} {2} 가격로 아름다운 예술품을 구매
 
 #: src/SiteAdaptor/PurchaseDialog.tsx
 #~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
-#~ msgstr "'{0}' 컬렉션에서 {1} {2} 가격로 아름다운 예술품을 구매했습니다."
+#~ msgstr ""
 
 #. placeholder {3}: project.name
 #. placeholder {4}: price.toFixed()
@@ -132,3 +132,4 @@ msgstr "오류가 발생합니다."
 #: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
+
