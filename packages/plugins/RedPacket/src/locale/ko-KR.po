@@ -680,9 +680,14 @@ msgstr ""
 msgid "Refund"
 msgstr "리펀"
 
+#. placeholder {0}: formatBalance(remain.toString(), tokenDecimals, { significant: 2, isPrecise: true })
 #: src/SiteAdaptor/hooks/useRefundCallback.tsx
-msgid "Refund Successfully"
+msgid "Refund {0} {tokenSymbol} Successfully"
 msgstr ""
+
+#: src/SiteAdaptor/hooks/useRefundCallback.tsx
+#~ msgid "Refund Successfully"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
