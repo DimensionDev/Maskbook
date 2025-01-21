@@ -24,6 +24,7 @@ import { createWithSplToken } from '../helpers/createWithSplToken.js'
 import { getTokenProgram } from '../helpers/getTokenAccount.js'
 import { useEstimateGasWithCreateSolRedpacket } from '../hooks/useEstimateGasWithCreateSolRedpacket.js'
 import { useHandleSolanaCreateOrSelect } from '../hooks/useHandleSolanaCreateOrSelect.js'
+import { RedPacketRPC } from '../../messages.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -191,6 +192,14 @@ export function SolanaRedPacketConfirm() {
             tokenProgram: tokenProgram?.toBase58(),
         }
 
+        RedPacketRPC.addRedPacket({
+            chainId,
+            id: result.accountId.toBase58(),
+            from: '',
+            password,
+            contract_version: 4,
+            payload,
+        })
         handleCreated(payload)
     }, [isNativeToken, settings, isRandom, publicKey, message, creator, theme])
 

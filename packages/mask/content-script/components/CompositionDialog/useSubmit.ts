@@ -63,7 +63,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 // Don't await this, otherwise the dialog won't disappear
                 activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachImage?.(mediaObject, {
                     recover: true,
-                    relatedTextPayload: decoratedText || defaultText,
+                    relatedTextPayload: `${decoratedText || defaultText} #MaskLuckyDrop`,
                     reason,
                 })
             } else {

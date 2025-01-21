@@ -213,8 +213,14 @@ export const RedPacketRecord = memo(function RedPacketRecord({
     const tokenSymbol = token_symbol
     const contractAddress = useRedPacketConstant(chainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
     const { data: redpacketRecord } = useQuery({
-        queryKey: ['redpacket', 'by-tx-hash', history.trans_hash],
-        queryFn: history.trans_hash ? () => RedPacketRPC.getRedPacketRecord(history.trans_hash!) : skipToken,
+        queryKey: ['redpacket', 'by-tx-hash', pluginID, history.trans_hash],
+        queryFn:
+            history.trans_hash ?
+                () =>
+                    RedPacketRPC.getRedPacketRecord(
+                        pluginID === NetworkPluginID.PLUGIN_SOLANA ? history.redpacket_id : history.trans_hash!,
+                    )
+            :   skipToken,
     })
     const { data: createSuccessResult } = useCreateRedPacketReceipt(
         pluginID === NetworkPluginID.PLUGIN_SOLANA ? history.redpacket_id : (history.trans_hash ?? ''),
@@ -227,7 +233,8 @@ export const RedPacketRecord = memo(function RedPacketRecord({
 
     const isViewStatus = redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View
     const canResend = isViewStatus && !!redpacketRecord && !!createSuccessResult
-
+    // TODO: remove this after the Solana luckdrop is integrated into the backend.
+    const canSend = !!isViewStatus && pluginID === NetworkPluginID.PLUGIN_SOLANA && !!redpacketRecord
     const timestamp = create_time || (received_time ? +received_time : undefined)
 
     // Claimed amount or total amount of the red packet
@@ -320,38 +327,43 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     totalAmount={total_amounts}
                     createdAt={create_time}
                     canResend={canResend}
+                    canSend={canSend}
                     onResend={() => {
-                        if (!canResend) return
-                        onSelect?.({
-                            txid: history.trans_hash,
-                            contract_address: contractAddress!,
-                            rpid: history.redpacket_id,
-                            shares: history.total_numbers ? +history.total_numbers : 1,
-                            is_random: createSuccessResult.ifrandom,
-                            creation_time: history.create_time!,
-                            contract_version: 4,
-                            sender: {
-                                address: account,
-                                name: createSuccessResult.name,
-                                message: createSuccessResult.message,
-                            },
-                            total: history.total_amounts ?? '0',
-                            duration: +createSuccessResult.duration,
-                            token: {
-                                type: TokenType.Fungible,
-                                schema:
-                                    isNativeTokenAddress(createSuccessResult.token_address) ?
-                                        SchemaType.Native
-                                    :   SchemaType.ERC20,
-                                id: createSuccessResult.token_address,
-                                chainId: history.chain_id,
-                                address: createSuccessResult.token_address,
-                                symbol: history.token_symbol,
-                                decimals: history.token_decimal,
-                                name: history.token_symbol,
-                            },
-                            password: redpacketRecord.password,
-                        })
+                        if (canSend && redpacketRecord.payload) {
+                            onSelect?.(redpacketRecord.payload)
+                        } else {
+                            if (!canResend) return
+                            onSelect?.({
+                                txid: history.trans_hash,
+                                contract_address: contractAddress!,
+                                rpid: history.redpacket_id,
+                                shares: history.total_numbers ? +history.total_numbers : 1,
+                                is_random: createSuccessResult.ifrandom,
+                                creation_time: history.create_time!,
+                                contract_version: 4,
+                                sender: {
+                                    address: account,
+                                    name: createSuccessResult.name,
+                                    message: createSuccessResult.message,
+                                },
+                                total: history.total_amounts ?? '0',
+                                duration: +createSuccessResult.duration,
+                                token: {
+                                    type: TokenType.Fungible,
+                                    schema:
+                                        isNativeTokenAddress(createSuccessResult.token_address) ?
+                                            SchemaType.Native
+                                        :   SchemaType.ERC20,
+                                    id: createSuccessResult.token_address,
+                                    chainId: history.chain_id,
+                                    address: createSuccessResult.token_address,
+                                    symbol: history.token_symbol,
+                                    decimals: history.token_decimal,
+                                    name: history.token_symbol,
+                                },
+                                password: redpacketRecord.password,
+                            })
+                        }
                     }}
                 />
             :   null}

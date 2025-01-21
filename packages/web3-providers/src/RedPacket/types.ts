@@ -14,6 +14,7 @@ export interface RedPacketRecord {
     from: string
     password?: string
     contract_version: number
+    payload?: RedPacketJSONPayload
 }
 
 export interface RedPacketRecordInDatabase extends RedPacketRecord {

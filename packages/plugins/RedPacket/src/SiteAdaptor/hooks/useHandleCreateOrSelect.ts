@@ -1,4 +1,3 @@
-import { t } from '@lingui/core/macro'
 import { ApplicationBoardModal } from '@masknet/shared'
 import { RedPacketMetaKey, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -50,20 +49,11 @@ export function useHandleCreateOrSelect({ senderName, onClose }: Options) {
                 payload.sender.name === senderName
             }
 
-            const post = t`Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.
-
-🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io.`
-            openComposition(
-                RedPacketMetaKey,
-                reduceUselessPayloadInfo(payload),
-                compositionType,
-                {
-                    payloadImage,
-                    claimRequirements,
-                    publicKey,
-                },
-                post,
-            )
+            openComposition(RedPacketMetaKey, reduceUselessPayloadInfo(payload), compositionType, {
+                payloadImage,
+                claimRequirements,
+                publicKey,
+            })
             Telemetry.captureEvent(EventType.Access, EventID.EntryAppLuckCreate)
             ApplicationBoardModal.close()
             onClose?.()

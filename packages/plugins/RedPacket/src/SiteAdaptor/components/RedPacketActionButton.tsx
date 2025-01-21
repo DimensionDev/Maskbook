@@ -60,6 +60,8 @@ interface Props extends ActionButtonProps {
     /** timestamp in seconds */
     createdAt?: number
     canResend?: boolean
+
+    canSend?: boolean
     onResend?(): void
 }
 
@@ -77,6 +79,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
     createdAt,
     canResend,
     onResend,
+    canSend,
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
@@ -132,7 +135,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
             await shareCallback()
         else if (redpacketStatus === RedPacketStatus.Refunding)
             pluginID === NetworkPluginID.PLUGIN_SOLANA ? await refundSolanaCallback() : await refundCallback()
-    }, [redpacketStatus, shareCallback, refundCallback, canResend, onResend, refundSolanaCallback, pluginID])
+    }, [redpacketStatus, shareCallback, refundCallback, canResend, onResend, refundSolanaCallback, pluginID, canSend])
 
     return (
         <ActionButton
@@ -147,7 +150,11 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
                 redpacketStatus === RedPacketStatus.Refund
             }
             size="large">
-            <span>{statusToTransMap[redpacketStatus]}</span>
+            <span>
+                {canSend ?
+                    <Trans>Send</Trans>
+                :   statusToTransMap[redpacketStatus]}
+            </span>
         </ActionButton>
     )
 })
