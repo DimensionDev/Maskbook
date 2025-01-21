@@ -232,8 +232,8 @@ msgstr ""
 #~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
 #~ msgstr ""
 
-#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal)
-#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal)
+#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal, false)
+#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal, false)
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
 msgstr ""
@@ -927,7 +927,7 @@ msgstr ""
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
 #~ msgstr ""
 
-#. placeholder {0}: formatBalance(claimRecord.amount.toNumber(), token?.decimals, { significant: 2 })
+#. placeholder {0}: formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })
 #. placeholder {0}: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })
 #. placeholder {1}: token?.symbol
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
