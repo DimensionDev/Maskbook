@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-01-21 10:21\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -16,22 +16,18 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/GoPlusSecurity/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 970\n"
 
-#. placeholder {0}: attentionFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
 msgstr ""
 
-#. placeholder {0}: attentionFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
 msgstr ""
 
-#. placeholder {0}: riskyFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
 msgstr ""
 
-#. placeholder {0}: riskyFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
 msgstr ""
@@ -48,13 +44,13 @@ msgstr ""
 msgid "<0>Results not found now. it might be chain network error, on-chain data abnormal or the token address is not covered now. please check as followings:</0><1>1. Make sure network is working;</1><2>2. Make sure the chain network or token address is correct;</2><3>3. Token address is not covered now, it might take more than 60s to get contract information again. Please try it later.</3>"
 msgstr ""
 
-#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
+#: src/SiteAdaptor/components/RiskWarningDialog.tsx
 msgid "Cancel"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/CheckSecurityDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Check Security"
 msgstr ""
 
@@ -66,8 +62,8 @@ msgstr ""
 msgid "Confirm"
 msgstr ""
 
-#: src/UI/TokenSecurityBoundary.tsx
 #: src/SiteAdaptor/components/RiskWarningDialog.tsx
+#: src/UI/TokenSecurityBoundary.tsx
 msgid "Confirm swap risk"
 msgstr ""
 
@@ -87,8 +83,8 @@ msgstr ""
 msgid "Copy Address"
 msgstr ""
 
-#: src/SiteAdaptor/constants.tsx
 #: src/SiteAdaptor/components/SecurityPanel.tsx
+#: src/SiteAdaptor/constants.tsx
 msgid "High Risk"
 msgstr ""
 
@@ -104,8 +100,8 @@ msgstr ""
 msgid "Market Cap"
 msgstr ""
 
-#: src/SiteAdaptor/constants.tsx
 #: src/SiteAdaptor/components/SecurityPanel.tsx
+#: src/SiteAdaptor/constants.tsx
 msgid "Medium Risk"
 msgstr ""
 
@@ -176,3 +172,4 @@ msgstr ""
 #: src/SiteAdaptor/components/CheckSecurityConfirmDialog.tsx
 msgid "We recommend new Web3 users to keep [Check Security] open."
 msgstr ""
+
