@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-20 12:39\n"
+"PO-Revision-Date: 2025-01-21 04:33\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -265,6 +265,10 @@ msgstr ""
 msgid "Completed"
 msgstr "완료됨"
 
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
+msgid "Conditions not met"
+msgstr ""
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
@@ -431,9 +435,7 @@ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
-"\n"
+msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 msgstr ""
 
@@ -657,8 +659,8 @@ msgid "Refund"
 msgstr "리펀"
 
 #: src/SiteAdaptor/hooks/useRefundCallback.tsx
-#~ msgid "Refund Successfully"
-#~ msgstr ""
+msgid "Refund Successfully"
+msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
@@ -889,8 +891,8 @@ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask l
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "Who can claim"
-msgstr ""
+#~ msgid "Who can claim"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Who can claim?"
@@ -962,17 +964,18 @@ msgid "You haven't created any NFT lucky drop yet. Try to create one and share f
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
-#~ msgid "You need to hold any of the following NFTs in your wallet."
-#~ msgstr ""
+msgid "You need to hold any of the following NFTs in your wallet."
+msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold at least {quantity} of any of the following tokens."
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
-msgid "You need to own at least one of the following NFTs."
-msgstr ""
+#~ msgid "You need to own at least one of the following NFTs."
+#~ msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
-#~ msgid "Your wallet does not meet the eligibility criteria for claiming."
-#~ msgstr ""
+msgid "Your wallet does not meet the eligibility criteria for claiming."
+msgstr ""
+
