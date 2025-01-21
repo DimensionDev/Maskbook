@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-01-21 10:22\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -16,8 +16,6 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
 
-#. placeholder {0}: profile?.stats.followers ?? '0'
-#. placeholder {1}: profile?.stats.following ?? '0'
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "<0>{0}</0> Followers <1>{1}</1> Following"
 msgstr ""
@@ -26,8 +24,8 @@ msgstr ""
 msgid "Add Wallet"
 msgstr "ウォレットを追加"
 
-#: src/SiteAdaptor/components/ProfilePopup.tsx
 #: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/components/ProfilePopup.tsx
 msgid "Change"
 msgstr "変更"
 
@@ -55,13 +53,11 @@ msgstr "Web3 プロファイルウォレットのセットアップに失敗し�
 msgid "Firefly"
 msgstr ""
 
-#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Follow"
 msgstr "フォロー"
 
-#. placeholder {0}: profile.followModule.amount.value
-#. placeholder {1}: profile.followModule.amount.asset.symbol
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow for {0} {1}"
 msgstr ""
@@ -70,8 +66,8 @@ msgstr ""
 msgid "Follow Lens handle"
 msgstr "レンズの指示に従ってください"
 
-#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "フォロー中"
 
@@ -87,8 +83,8 @@ msgstr "レンズをフォロー"
 msgid "Lens Unfollow"
 msgstr "レンズのフォローを解除"
 
-#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 #: src/SiteAdaptor/hooks/Lens/useFollow.ts
+#: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Network error, try again"
 msgstr "ネットワークエラーが発生しました。もう一度やり直してください"
 
@@ -152,8 +148,6 @@ msgstr "フォロー解除"
 msgid "Unfollow lens handle"
 msgstr "レンズハンドルのフォローを解除"
 
-#. placeholder {0}: value?.profile.followModule?.amount?.value ?? ZERO.toFixed()
-#. placeholder {1}: approved.token?.symbol ?? ''
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unlock {0} {1} and follow"
@@ -167,7 +161,8 @@ msgstr "表示"
 msgid "View your profile in firefly"
 msgstr "あなたのプロフィールをFireflyで見る"
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"
+
