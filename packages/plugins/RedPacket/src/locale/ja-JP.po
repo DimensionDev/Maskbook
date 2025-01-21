@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-21 10:22\n"
+"PO-Revision-Date: 2025-01-21 12:12\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -37,15 +37,21 @@ msgid "{0} Holder"
 msgstr ""
 
 #. placeholder {0}: shareTextOption.account
-#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
 msgstr ""
 
-#. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "{claimed} Follow @{account} (mask.io) to claim lucky drops."
+msgstr ""
+
+#. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{head} Follow @{0} (mask.io) to claim lucky drops."
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "{head} Follow @{account} (mask.io) to claim lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -219,8 +225,8 @@ msgid "Claimed {0}/{1}"
 msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
-msgid "Claimed Details"
-msgstr ""
+#~ msgid "Claimed Details"
+#~ msgstr ""
 
 #. placeholder {0}: rpid ? bitStatusList.filter(Boolean).length.toString() : '0'
 #. placeholder {1}: patchedHistory.shares
@@ -237,10 +243,14 @@ msgstr ""
 #~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
 #~ msgstr ""
 
-#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal)
-#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal)
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
-msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
+#~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
+#~ msgstr ""
+
+#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal, false)
+#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal, false)
+#: src/SiteAdaptor/components/RedPacketRecord.tsx
+msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2><3>{tokenSymbol}</3></2>"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -266,8 +276,8 @@ msgid "Completed"
 msgstr "完了しました"
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
-#~ msgid "Conditions not met"
-#~ msgstr ""
+msgid "Conditions not met"
+msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -332,6 +342,10 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/RedPacketRecord.tsx
+msgid "Details"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Drop Type"
@@ -435,11 +449,11 @@ msgstr "{0} にラッキードロップスマートコントラクトへのア�
 
 #: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
-"\n"
-"🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
-msgstr ""
+#~ msgid ""
+#~ "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
+#~ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
 #~ msgid ""
@@ -449,9 +463,12 @@ msgstr ""
 
 #. placeholder {0}: shareTextOption.sender
 #. placeholder {1}: shareTextOption.network
-#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "Hi friends, I just found a lucky drop sent by @{sender} on Solana."
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
@@ -470,9 +487,12 @@ msgstr ""
 
 #. placeholder {0}: shareTextOption.sender
 #. placeholder {1}: shareTextOption.network
-#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "I just claimed a lucky drop from @{0} on {1} network."
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "I just claimed a lucky drop from @{sender} on Solana"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -661,8 +681,8 @@ msgid "Refund"
 msgstr "返金"
 
 #: src/SiteAdaptor/hooks/useRefundCallback.tsx
-#~ msgid "Refund Successfully"
-#~ msgstr ""
+msgid "Refund Successfully"
+msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 msgid "Refunded"
@@ -726,6 +746,7 @@ msgstr ""
 msgid "Select partially"
 msgstr "一部を選択"
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "Send"
 msgstr "送る"
@@ -893,8 +914,8 @@ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask l
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "Who can claim"
-msgstr ""
+#~ msgid "Who can claim"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Who can claim?"
@@ -932,7 +953,7 @@ msgstr ""
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
 #~ msgstr ""
 
-#. placeholder {0}: formatBalance(claimRecord.amount.toNumber(), token?.decimals, { significant: 2 })
+#. placeholder {0}: formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })
 #. placeholder {0}: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })
 #. placeholder {1}: token?.symbol
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
@@ -966,17 +987,18 @@ msgid "You haven't created any NFT lucky drop yet. Try to create one and share f
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
-#~ msgid "You need to hold any of the following NFTs in your wallet."
-#~ msgstr ""
+msgid "You need to hold any of the following NFTs in your wallet."
+msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold at least {quantity} of any of the following tokens."
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
-msgid "You need to own at least one of the following NFTs."
-msgstr ""
+#~ msgid "You need to own at least one of the following NFTs."
+#~ msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
-#~ msgid "Your wallet does not meet the eligibility criteria for claiming."
-#~ msgstr ""
+msgid "Your wallet does not meet the eligibility criteria for claiming."
+msgstr ""
+
