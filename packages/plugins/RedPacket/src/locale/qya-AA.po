@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-21 07:20\n"
+"PO-Revision-Date: 2025-01-21 10:20\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -435,9 +435,11 @@ msgstr "crwdns29016:0{0}crwdne29016:0"
 
 #: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n\n"
-"🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
-msgstr "crwdns36416:0crwdne36416:0"
+#~ msgid ""
+#~ "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
+#~ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
 #~ msgid ""
@@ -724,6 +726,7 @@ msgstr "crwdns36430:0crwdne36430:0"
 msgid "Select partially"
 msgstr "crwdns29092:0crwdne29092:0"
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "Send"
 msgstr "crwdns29094:0crwdne29094:0"
