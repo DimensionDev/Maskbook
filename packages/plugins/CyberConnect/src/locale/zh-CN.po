@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-01-21 10:21\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -40,8 +40,8 @@ msgstr "粉丝"
 msgid "Followings"
 msgstr "正在关注"
 
-#: src/SiteAdaptor/Profile.tsx
 #: src/SiteAdaptor/FollowersPage.tsx
+#: src/SiteAdaptor/Profile.tsx
 msgid "Load failed"
 msgstr "加载失败"
 
@@ -56,3 +56,4 @@ msgstr "没有关注任何人"
 #: src/SiteAdaptor/ConnectButton.tsx
 msgid "Unfollow"
 msgstr "取消关注"
+
