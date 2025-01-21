@@ -300,7 +300,7 @@ export function CreateSolRedPacket() {
 
     if (!token) return null
 
-    const messageMaxLength = isFirefly ? 40 : 100
+    const messageMaxLength = 200
 
     return (
         <>
