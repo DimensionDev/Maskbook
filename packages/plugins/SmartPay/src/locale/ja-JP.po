@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-01-21 10:22\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -36,14 +36,13 @@ msgstr "所有者変更"
 msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form."
 msgstr ""
 
-#. placeholder {0}: formatEthereumAddress(address, 4)
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx
 msgid "Congratulation! You've deployed SmartPay Wallet {0}."
 msgstr ""
 
-#: src/SiteAdaptor/components/ManagePopover.tsx
-#: src/SiteAdaptor/components/ManagePopover.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/ManagePopover.tsx
+#: src/SiteAdaptor/components/ManagePopover.tsx
 msgid "Create"
 msgstr "作成"
 
@@ -67,8 +66,8 @@ msgstr "新しいウォレットを作成する"
 msgid "Create a SmartPay Wallet with your X account."
 msgstr ""
 
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
 msgid "Create persona"
 msgstr ""
 
@@ -126,8 +125,8 @@ msgstr "マルチシグと社会回復"
 msgid "Network error."
 msgstr "ネットワークエラー"
 
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
 msgid "Persona"
 msgstr ""
 
@@ -135,8 +134,8 @@ msgstr ""
 msgid "Personas"
 msgstr "ペルソナ"
 
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
 msgid "Please create a Persona and verify your account to use this feature."
 msgstr ""
 
@@ -168,9 +167,9 @@ msgstr "Polygon Networkとやり取りする際にガス料金を支払うよう
 msgid "Set up the Management Account for SmartPay Wallet"
 msgstr "SmartPayウォレットの管理アカウントを設定する"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Smart Pay"
 msgstr "スマートペイ"
 
@@ -269,3 +268,4 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx
 msgid "You need to know before using SmartPay:"
 msgstr "SmartPayを使用する前に確認してください:"
+
