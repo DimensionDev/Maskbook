@@ -59,7 +59,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         }
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = parsed?.redpacket.isClaimed || availability.claimed_amount !== '0'
+    const isClaimed = parsed?.redpacket?.isClaimed || availability.claimed_amount !== '0'
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
@@ -88,7 +88,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
                 isRefunded ? RedPacketStatus.refunded : undefined,
                 isExpired ? RedPacketStatus.expired : undefined,
             ]),
-            myClaimedAmount: parsed?.redpacket.claimedAmount,
+            myClaimedAmount: parsed?.redpacket?.claimedAmount,
         },
     }
 }

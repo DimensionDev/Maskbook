@@ -43,7 +43,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
     }
     const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
     const isEmpty = data.claimedAmount.gt(data.totalAmount)
-    const isClaimed = !!claimRecord || !!parsed?.redpacket.isClaimed
+    const isClaimed = !!claimRecord || !!parsed?.redpacket?.isClaimed
 
     const availability = {
         token_address: data.tokenAddress.toBase58(),
