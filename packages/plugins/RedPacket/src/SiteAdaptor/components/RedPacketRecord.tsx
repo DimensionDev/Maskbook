@@ -233,7 +233,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
 
     const isViewStatus = redpacket_status === FireflyRedPacketAPI.RedPacketStatus.View
     const canResend = isViewStatus && !!redpacketRecord && !!createSuccessResult
-    // TODO: remove this after the Solana luckdrop is integrated into the backend.
+    // TODO: remove this after the Solana redpacket is integrated into the backend.
     const canSend = !!isViewStatus && pluginID === NetworkPluginID.PLUGIN_SOLANA && !!redpacketRecord
     const timestamp = create_time || (received_time ? +received_time : undefined)
 
