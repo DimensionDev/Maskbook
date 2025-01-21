@@ -265,6 +265,10 @@ msgstr ""
 msgid "Completed"
 msgstr "已完成"
 
+#: src/SiteAdaptor/RedPacket/OperationFooter.tsx
+msgid "Conditions not met"
+msgstr ""
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
@@ -889,8 +893,8 @@ msgid "When selecting too many NFTs, the total gas fee may exceed the MetaMask l
 msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
-msgid "Who can claim"
-msgstr ""
+#~ msgid "Who can claim"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Who can claim?"
