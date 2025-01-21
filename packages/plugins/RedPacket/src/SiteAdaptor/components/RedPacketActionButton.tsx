@@ -4,6 +4,7 @@ import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useMediaQuery, type Theme } from '@mui/material'
+import { type ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { memo, useCallback, useContext } from 'react'
 import { useAsyncFn } from 'react-use'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
@@ -55,7 +56,7 @@ interface Props extends ActionButtonProps {
     themeId?: string
     tokenInfo: TokenInfo
     redpacketMsg?: string
-    chainId: ChainId
+    chainId: ChainId | SolanaChainId
     totalAmount?: string
     /** timestamp in seconds */
     createdAt?: number
@@ -87,8 +88,13 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const compositionType = useContext(CompositionTypeContext)
 
-    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId)
-    const [{ loading: isSolanaRefunding }, solanaRefunded, refundSolanaCallback] = useSolanaRefundCallback(rpid)
+    const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId as ChainId)
+    const [{ loading: isSolanaRefunding }, solanaRefunded, refundSolanaCallback] = useSolanaRefundCallback({
+        rpid,
+        chainId: chainId as SolanaChainId,
+        tokenSymbol: tokenInfo.symbol,
+        tokenDecimals: tokenInfo.decimals,
+    })
 
     const statusToTransMap = {
         [FireflyRedPacketAPI.RedPacketStatus.Send]: <Trans>Send</Trans>,
