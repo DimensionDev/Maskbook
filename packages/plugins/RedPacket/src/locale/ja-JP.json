@@ -13,7 +13,9 @@
         "0cVLRh": [["0"], " holder"],
         "NZ7wlC": [["0"], " Holder"],
         "nMUHWK": [["claimed"], " Follow @", ["0"], " (mask.io) to claim lucky drops."],
+        "zGTAja": [["claimed"], " Follow @", ["account"], " (mask.io) to claim lucky drops."],
         "HvfPuG": [["head"], " Follow @", ["0"], " (mask.io) to claim lucky drops."],
+        "nbnhh8": [["head"], " Follow @", ["account"], " (mask.io) to claim lucky drops."],
         "8XJ5FY": [
             "@",
             ["sender"],
@@ -103,6 +105,19 @@
             ["tokenSymbol"],
             "</2>"
         ],
+        "Lzo8mb": [
+            "Claimed: <0>",
+            ["claim_numbers"],
+            "/",
+            ["total_numbers"],
+            "</0> <1>",
+            ["0"],
+            "/",
+            ["1"],
+            "</1><2><3>",
+            ["tokenSymbol"],
+            "</3></2>"
+        ],
         "N0tcou": ["受け取り中.."],
         "s/KkfL": ["すべての要件をクリアする"],
         "DoJzLz": ["コレクション"],
@@ -123,6 +138,7 @@
         "oLnk2n": [
             "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
         ],
+        "URmyfc": ["Details"],
         "Zg6RWT": ["Drop Type"],
         "ePK91l": ["Edit"],
         "N2S1rs": ["空です"],
@@ -157,10 +173,12 @@
             "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
         ],
         "bPNJ+3": ["Hi friends, I just found a lucky drop sent by @", ["0"], " on ", ["1"], " network."],
+        "UnE9Qj": ["Hi friends, I just found a lucky drop sent by @", ["sender"], " on Solana."],
         "0caMy7": ["履歴"],
         "lr8uE3": ["Holding ", ["0"]],
         "pLHDrO": ["Holding NFT"],
         "5Jczad": ["I just claimed a lucky drop from @", ["0"], " on ", ["1"], " network."],
+        "JI2YCW": ["I just claimed a lucky drop from @", ["sender"], " on Solana"],
         "jbu3VI": ["I just claimed an NFT lucky drop from @", ["sender"], " on ", ["networkName"], " network."],
         "9r9nwF": ["同じ"],
         "4UmwEM": ["Image Preview"],
