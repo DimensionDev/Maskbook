@@ -13,7 +13,7 @@ export const RED_PACKET_MAX_SHARES = 255
 
 export const SOL_REDPACKET_MAX_SHARES = 200
 export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '1000000'
-export const DEFAULT_DURATION = 60 * 5 // 24 hours
+export const DEFAULT_DURATION = 1000 * 60 * 60 * 24 // 24 hours
 export const enum RoutePaths {
     Create = '/create',
     CreateErc20RedPacket = '/create/erc20',

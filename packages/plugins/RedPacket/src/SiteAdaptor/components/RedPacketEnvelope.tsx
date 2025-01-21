@@ -141,6 +141,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     shares?: number
     /** claimed entities */
     claimedCount: number
+    /** Total claimed amount */
     totalClaimed: string
     total: string
     /** claimed amount by current user */

@@ -29,7 +29,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             chainId: parsedChainId,
         },
     )
-    const parsed = useParseRedPacket()
+    const { data: parsed, refetch: recheckParse } = useParseRedPacket()
     const checkAvailability = recheckAvailability as (
         options?: RefetchOptions,
     ) => Promise<QueryObserverResult<typeof availability>>
@@ -41,6 +41,12 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         const { data } = await refetch()
         return data?.data?.canClaim
     }, [refetch])
+
+    const refresh = useCallback(() => {
+        checkAvailability()
+        recheckClaimStatus()
+        recheckParse()
+    }, [checkAvailability, recheckClaimStatus, recheckParse])
 
     if (!availability || (!payload.password && !data))
         return {
@@ -66,9 +72,10 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
     // For a central RedPacket, we don't need to check about if the password is valid
     const canClaimByContract = !isExpired && !isEmpty && !isClaimed
     const canClaim = payload.password ? canClaimByContract && isPasswordValid : canClaimByContract
+
     return {
         availability,
-        checkAvailability,
+        checkAvailability: refresh,
         claimStrategyStatus: data?.data,
         recheckClaimStatus,
         checkingClaimStatus: isFetching,
