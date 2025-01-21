@@ -32,15 +32,21 @@ msgid "{0} Holder"
 msgstr ""
 
 #. placeholder {0}: shareTextOption.account
-#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{claimed} Follow @{0} (mask.io) to claim lucky drops."
 msgstr ""
 
-#. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "{claimed} Follow @{account} (mask.io) to claim lucky drops."
+msgstr ""
+
+#. placeholder {0}: shareTextOption.account
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "{head} Follow @{0} (mask.io) to claim lucky drops."
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "{head} Follow @{account} (mask.io) to claim lucky drops."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -444,9 +450,12 @@ msgstr ""
 
 #. placeholder {0}: shareTextOption.sender
 #. placeholder {1}: shareTextOption.network
-#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "Hi friends, I just found a lucky drop sent by @{sender} on Solana."
 msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
@@ -465,9 +474,12 @@ msgstr ""
 
 #. placeholder {0}: shareTextOption.sender
 #. placeholder {1}: shareTextOption.network
-#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 msgid "I just claimed a lucky drop from @{0} on {1} network."
+msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "I just claimed a lucky drop from @{sender} on Solana"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx

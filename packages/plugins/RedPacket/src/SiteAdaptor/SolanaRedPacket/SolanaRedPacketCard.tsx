@@ -94,7 +94,6 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     const source = usePostInfoDetails.source()
     const platform = source?.toLowerCase()
     const postUrl = usePostInfoDetails.url()
-    const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
@@ -105,32 +104,24 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
             const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
             const isOnTwitter = Sniffings.is_twitter_page
             const isOnFacebook = Sniffings.is_facebook_page
-            const shareTextOption = {
-                sender: payload.sender.name.replace(/^@/, ''),
-                payload: link!,
-                network: network?.name ?? 'Mainnet',
-                account: isOnTwitter ? 'realMaskNetwork' : 'masknetwork',
-                interpolation: { escapeValue: false },
-            }
+            const sender = payload.sender.name.replace(/^@/, '')
+            const account = isOnTwitter ? 'realMaskNetwork' : 'masknetwork'
+
             if (hasClaimed) {
-                const claimed = _(
-                    msg`I just claimed a lucky drop from @${shareTextOption.sender} on ${shareTextOption.network} network.`,
-                )
+                const claimed = _(msg`I just claimed a lucky drop from @${sender} on Solana`)
                 return isOnTwitter || isOnFacebook ?
-                        _(msg`${claimed} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.`) +
-                            `\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
-                    :   `${claimed}\n${promote_short}\n${shareTextOption.payload}`
+                        _(msg`${claimed} Follow @${account} (mask.io) to claim lucky drops.`) +
+                            `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`
+                    :   `${claimed}\n${promote_short}\n${link}`
             }
-            const head = _(
-                msg`Hi friends, I just found a lucky drop sent by @${shareTextOption.sender} on ${shareTextOption.network} network.`,
-            )
+            const head = _(msg`Hi friends, I just found a lucky drop sent by @${sender} on Solana.`)
 
             return isOnTwitter || isOnFacebook ?
-                    _(msg`${head} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.`) +
-                        `\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
-                :   `${head}\n${promote_short}\n${shareTextOption.payload}`
+                    _(msg`${head} Follow @${account} (mask.io) to claim lucky drops.`) +
+                        `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`
+                :   `${head}\n${promote_short}\n${link}`
         },
-        [payload, link, claimTxHash, network?.name, platform, handle, _],
+        [payload, link, claimTxHash, network?.name, platform, _],
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
 
