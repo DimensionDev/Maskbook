@@ -29,7 +29,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             chainId: parsedChainId,
         },
     )
-    const parsed = useParseRedPacket()
+    const { data: parsed, refetch: recheckParse } = useParseRedPacket()
     const checkAvailability = recheckAvailability as (
         options?: RefetchOptions,
     ) => Promise<QueryObserverResult<typeof availability>>
@@ -41,6 +41,12 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         const { data } = await refetch()
         return data?.data?.canClaim
     }, [refetch])
+
+    const refresh = useCallback(() => {
+        checkAvailability()
+        recheckClaimStatus()
+        recheckParse()
+    }, [checkAvailability, recheckClaimStatus, recheckParse])
 
     if (!availability || (!payload.password && !data))
         return {
@@ -59,16 +65,17 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         }
     const isEmpty = availability.balance === '0'
     const isExpired = availability.expired
-    const isClaimed = parsed?.redpacket.isClaimed || availability.claimed_amount !== '0'
+    const isClaimed = parsed?.redpacket?.isClaimed || availability.claimed_amount !== '0'
     const isRefunded = isEmpty && availability.claimed < availability.total
     const isCreator = isSameAddress(payload?.sender.address ?? '', account)
     const isPasswordValid = !!(password && password !== 'PASSWORD INVALID')
     // For a central RedPacket, we don't need to check about if the password is valid
     const canClaimByContract = !isExpired && !isEmpty && !isClaimed
     const canClaim = payload.password ? canClaimByContract && isPasswordValid : canClaimByContract
+
     return {
         availability,
-        checkAvailability,
+        checkAvailability: refresh,
         claimStrategyStatus: data?.data,
         recheckClaimStatus,
         checkingClaimStatus: isFetching,
@@ -88,7 +95,7 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
                 isRefunded ? RedPacketStatus.refunded : undefined,
                 isExpired ? RedPacketStatus.expired : undefined,
             ]),
-            myClaimedAmount: parsed?.redpacket.claimedAmount,
+            myClaimedAmount: parsed?.redpacket?.claimedAmount,
         },
     }
 }

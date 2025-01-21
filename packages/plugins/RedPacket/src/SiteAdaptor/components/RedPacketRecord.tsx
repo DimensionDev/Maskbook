@@ -11,7 +11,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, SolanaExplorerResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { formatBalance, TokenType } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import {
     ChainId,
     isNativeTokenAddress,
@@ -256,8 +256,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     />
                     <div className={classes.status}>
                         <Typography className={classes.total}>
-                            {formatBalance(amount, token_decimal, { significant: 2, isPrecise: true })}{' '}
-                            {tokenSymbol ?? token_symbol ?? '--'}
+                            {formatTokenAmount(amount || 0, token_decimal, false)} {tokenSymbol ?? token_symbol ?? '--'}
                         </Typography>
                         <Typography className={classes.progress} component="div">
                             {!onlyView ?
@@ -267,8 +266,8 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                                         {claim_numbers}/{total_numbers}
                                     </b>{' '}
                                     <b>
-                                        {formatTokenAmount(claim_amounts || 0, token_decimal)}/
-                                        {formatTokenAmount(total_amounts || 0, token_decimal)}
+                                        {formatTokenAmount(claim_amounts || 0, token_decimal, false)}/
+                                        {formatTokenAmount(total_amounts || 0, token_decimal, false)}
                                     </b>
                                     <span>{tokenSymbol}</span>
                                 </Trans>

@@ -408,7 +408,7 @@ export namespace FireflyRedPacketAPI {
             isRefunded: boolean
             claimedNumber: number
             claimedAmount: string
-        }
+        } | null
     }
     export type ParseResponse = FireflyResponse<ParseResult>
 

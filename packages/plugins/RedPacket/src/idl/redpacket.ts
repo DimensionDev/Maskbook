@@ -815,6 +815,10 @@ export type Redpacket = {
                 kind: 'struct'
                 fields: [
                     {
+                        name: 'redPacketKey'
+                        type: 'pubkey'
+                    },
+                    {
                         name: 'claimer'
                         type: 'pubkey'
                     },

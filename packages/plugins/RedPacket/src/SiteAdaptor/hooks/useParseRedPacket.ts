@@ -20,7 +20,7 @@ export function useParseRedPacket() {
     const myProfileId = me?.profileId
     const linksWithPayload = links.filter((x) => /\bPostData_v\d=/.test(x))
 
-    const query = useQuery({
+    return useQuery({
         enabled: images.length > 0 || linksWithPayload.length > 0,
         queryKey: ['red-packet', 'parse', images[0], linksWithPayload, account, myProfileId],
         queryFn: async () => {
@@ -38,5 +38,4 @@ export function useParseRedPacket() {
             })
         },
     })
-    return query.data
 }

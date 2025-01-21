@@ -16,7 +16,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { FireflyRedPacket, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType, formatBalance } from '@masknet/web3-shared-base'
+import { TokenType, formatBalance, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { Card } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
@@ -80,7 +80,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     const {
         availability,
         computed: availabilityComputed,
-        checkAvailability,
+        refresh: refreshRedPacket,
     } = useSolanaAvailability(payload, payloadChainId)
 
     // #endregion
@@ -169,7 +169,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                 tokenType: TokenType.Fungible,
                 messageTextForNFT: _(msg`1 NFT claimed.`),
                 messageTextForFT: _(
-                    msg`You claimed ${formatBalance(claimRecord.amount.toNumber(), token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+                    msg`You claimed ${formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })} $${token?.symbol}.`,
                 ),
                 title: _(msg`Lucky Drop`),
                 share: (text) => share?.(text, source ? source : undefined),
@@ -179,9 +179,9 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
             })
         }
         if (typeof hash === 'string') {
-            checkAvailability()
+            refreshRedPacket()
         }
-    }, [canClaim, canRefund, claimCallback, checkAvailability, payload.rpid, myProfileId, myHandle])
+    }, [canClaim, canRefund, claimCallback, refreshRedPacket, payload.rpid, myProfileId, myHandle, account])
 
     const outdated = availability?.isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
@@ -216,7 +216,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                         isExpired={availability.expired}
                         claimedCount={+availability.claimed}
                         total={payload.total}
-                        totalClaimed={availability.claimed}
+                        totalClaimed={minus(payload.total, availability.balance).toFixed()}
                         claimedAmount={availability.claimed_amount}
                         creator={payload.sender.name}
                     />

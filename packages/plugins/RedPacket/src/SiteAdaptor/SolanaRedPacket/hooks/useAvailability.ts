@@ -6,6 +6,7 @@ import { getRpProgram } from '../../helpers/getRpProgram.js'
 import { minus } from '@masknet/web3-shared-base'
 import { useClaimRecord } from './useClaimRecord.js'
 import { useParseRedPacket } from '../../hooks/useParseRedPacket.js'
+import { useCallback } from 'react'
 
 export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chainId: number) {
     const account = useAccount(NetworkPluginID.PLUGIN_SOLANA)
@@ -27,9 +28,19 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             return 30_000
         },
     })
-    const parsed = useParseRedPacket()
+    const { data: parsed, refetch: recheckParse } = useParseRedPacket()
 
-    const { data: claimRecord } = useClaimRecord(account, payload.accountId, payload?.network ?? 'mainnet-beta')
+    const { data: claimRecord, refetch: checkClaimRecord } = useClaimRecord(
+        account,
+        payload.accountId,
+        payload?.network ?? 'mainnet-beta',
+    )
+    const refresh = useCallback(() => {
+        checkAvailability()
+        recheckParse()
+        checkClaimRecord()
+    }, [checkAvailability, recheckParse, checkClaimRecord])
+
     if (!data) {
         return {
             parsedChainId: chainId,
@@ -38,12 +49,12 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             computed: { canClaim: false, canRefund: false, listOfStatus: [] as RedPacketStatus[] },
             isEmpty: true,
             isClaimed: false,
-            checkAvailability,
+            refresh,
         }
     }
     const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
     const isEmpty = data.claimedAmount.gt(data.totalAmount)
-    const isClaimed = !!claimRecord || !!parsed?.redpacket.isClaimed
+    const isClaimed = !!claimRecord || !!parsed?.redpacket?.isClaimed
 
     const availability = {
         token_address: data.tokenAddress.toBase58(),
@@ -70,6 +81,6 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
         computed: { canClaim, canRefund, listOfStatus },
         isEmpty: isEmpty || false,
         isClaimed,
-        checkAvailability,
+        refresh,
     }
 }

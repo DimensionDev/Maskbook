@@ -629,6 +629,10 @@
                 "kind": "struct",
                 "fields": [
                     {
+                        "name": "red_packet_key",
+                        "type": "pubkey"
+                    },
+                    {
                         "name": "claimer",
                         "type": "pubkey"
                     },
