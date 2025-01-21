@@ -5,6 +5,7 @@ import { Box, IconButton, Typography, type BoxProps } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
 import { TokenIcon } from '@masknet/shared'
 import { formatBalance } from '@masknet/web3-shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     box: {
@@ -136,6 +137,7 @@ export function Conditions({ onClose, statusList, unsatisfied = true, ...props }
                                         className={classes.tokenIcon}
                                         address={token.contractAddress}
                                         name={token.name}
+                                        pluginID={NetworkPluginID.PLUGIN_EVM}
                                         chainId={Number.parseInt(token.chainId, 10)}
                                         logoURL={token.icon}
                                         size={24}

@@ -3,7 +3,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { ActionButton, makeStyles } from '@masknet/theme'
-import { Box, useTheme, type BoxProps } from '@mui/material'
+import { Box, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
 import { Trans, useLingui } from '@lingui/react/macro'
@@ -22,6 +22,14 @@ const useStyles = makeStyles()((theme) => {
                 gap: theme.spacing(1),
             },
         },
+        actionButton: {
+            backgroundColor: theme.palette.maskColor.dark,
+            width: '100%',
+            color: 'white',
+            '&:hover': {
+                backgroundColor: theme.palette.maskColor.dark,
+            },
+        },
     }
 })
 
@@ -29,6 +37,8 @@ interface OperationFooterProps extends BoxProps {
     chainId?: ChainId
     canClaim: boolean
     canRefund: boolean
+    /** If the conditions are not satisfied */
+    unsatisfied?: boolean
     /** Is claiming or checking claim status */
     isClaiming: boolean
     isRefunding: boolean
@@ -38,6 +48,7 @@ export function OperationFooter({
     chainId,
     canClaim,
     canRefund,
+    unsatisfied,
     isClaiming,
     isRefunding,
     onClaimOrRefund,
@@ -46,7 +57,6 @@ export function OperationFooter({
     const { t } = useLingui()
     const { classes, cx } = useStyles()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
-    const theme = useTheme()
 
     if (!canClaim && !canRefund && account) return null
 
@@ -70,20 +80,15 @@ export function OperationFooter({
 
         return (
             <ActionButton
-                sx={{
-                    backgroundColor: theme.palette.maskColor.dark,
-                    width: '100%',
-                    color: 'white',
-                    '&:hover': {
-                        backgroundColor: theme.palette.maskColor.dark,
-                    },
-                }}
+                className={classes.actionButton}
                 variant="roundedDark"
                 fullWidth
                 loading={isLoading}
                 disabled={isLoading}
                 onClick={onClick}>
-                {canClaim ?
+                {unsatisfied ?
+                    <Trans>Conditions not met</Trans>
+                : canClaim ?
                     isClaiming ?
                         <Trans>Claiming...</Trans>
                     :   <Trans>Claim</Trans>

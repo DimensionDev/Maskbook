@@ -7,7 +7,13 @@ import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
+import {
+    NetworkContextProvider,
+    SOLWeb3ContextProvider,
+    useChainContext,
+    useNetwork,
+    useNetworkContext,
+} from '@masknet/web3-hooks-base'
 import { FireflyRedPacket, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance } from '@masknet/web3-shared-base'
@@ -56,9 +62,13 @@ const useStyles = makeStyles()((theme) => {
 
 export interface SolanaRedPacketCardProps {
     payload: SolanaRedPacketJSONPayload
+    currentPluginID: NetworkPluginID
 }
 
-export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }: SolanaRedPacketCardProps) {
+export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
+    payload,
+    currentPluginID,
+}: SolanaRedPacketCardProps) {
     const { _ } = useLingui()
     const token = payload.token
     const { pluginID } = useNetworkContext()
@@ -193,33 +203,39 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({ payload }
     return (
         <>
             <Card className={classes.root} component="article" elevation={0}>
-                <RedPacketEnvelope
-                    className={classes.envelope}
-                    cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
-                    message={payload.sender.message}
-                    token={token}
-                    shares={payload.shares}
-                    isClaimed={availability.isClaimed}
-                    isEmpty={availability.isEmpty}
-                    isExpired={availability.expired}
-                    claimedCount={+availability.claimed}
-                    total={payload.total}
-                    totalClaimed={availability.claimed}
-                    claimedAmount={availability.claimed_amount}
-                    creator={payload.sender.name}
-                />
+                {/* To ensure TokenIcon can get correct pluginID */}
+                <SOLWeb3ContextProvider>
+                    <RedPacketEnvelope
+                        className={classes.envelope}
+                        cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
+                        message={payload.sender.message}
+                        token={token}
+                        shares={payload.shares}
+                        isClaimed={availability.isClaimed}
+                        isEmpty={availability.isEmpty}
+                        isExpired={availability.expired}
+                        claimedCount={+availability.claimed}
+                        total={payload.total}
+                        totalClaimed={availability.claimed}
+                        claimedAmount={availability.claimed_amount}
+                        creator={payload.sender.name}
+                    />
+                </SOLWeb3ContextProvider>
             </Card>
             {outdated ?
                 null
             : myHandle ?
-                <OperationFooter
-                    className={classes.footer}
-                    chainId={payloadChainId}
-                    canClaim={canClaim}
-                    canRefund={canRefund}
-                    isClaiming={isClaiming}
-                    onClaimOrRefund={onClaimOrRefund}
-                />
+                <NetworkContextProvider initialNetwork={currentPluginID}>
+                    {/* ChainBoundary needs to know the current network */}
+                    <OperationFooter
+                        className={classes.footer}
+                        chainId={payloadChainId}
+                        canClaim={canClaim}
+                        canRefund={canRefund}
+                        isClaiming={isClaiming}
+                        onClaimOrRefund={onClaimOrRefund}
+                    />
+                </NetworkContextProvider>
             :   <RequestLoginFooter
                     className={classes.footer}
                     onRequest={() => {

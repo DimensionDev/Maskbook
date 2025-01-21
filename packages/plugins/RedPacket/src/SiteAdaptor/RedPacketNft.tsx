@@ -1,43 +1,43 @@
-import { useCallback, useEffect, useMemo } from 'react'
+import { msg } from '@lingui/core/macro'
+import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import {
-    makeStyles,
+    AssetPreviewer,
+    ChainBoundary,
+    LoadingStatus,
+    NFTFallbackImage,
+    ReloadStatus,
+    TransactionConfirmModal,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
+import { CrossIsolationMessages, NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import {
     ActionButton,
+    makeStyles,
     parseColor,
     ShadowRootTooltip,
-    useDetectOverflow,
     useCustomSnackbar,
+    useDetectOverflow,
 } from '@masknet/theme'
-import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
-import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { Card, Typography, Button, Box } from '@mui/material'
 import {
-    WalletConnectedBoundary,
-    ChainBoundary,
-    AssetPreviewer,
-    NFTFallbackImage,
-    TransactionConfirmModal,
-    LoadingStatus,
-    ReloadStatus,
-} from '@masknet/shared'
-import {
+    NetworkContextProvider,
     useChainContext,
     useNetwork,
-    useNetworkContext,
     useNonFungibleAsset,
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
+import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
-import { usePostLink } from '@masknet/plugin-infra/content-script'
-import { share } from '@masknet/plugin-infra/content-script/context'
-import { NetworkPluginID, CrossIsolationMessages, Sniffings } from '@masknet/shared-base'
-import { Icons } from '@masknet/icons'
+import { signMessage, type ChainId } from '@masknet/web3-shared-evm'
+import { Box, Button, Card, Typography } from '@mui/material'
 import { Stack } from '@mui/system'
-import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
+import { useCallback, useEffect, useMemo } from 'react'
 import { useAvailabilityNftRedPacket } from './hooks/useAvailabilityNftRedPacket.js'
+import { useClaimNftRedpacketCallback } from './hooks/useClaimNftRedpacketCallback.js'
 import { useNftRedPacketContract } from './hooks/useNftRedPacketContract.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, { claimed, outdated }) => ({
     root: {
@@ -193,13 +193,14 @@ const useStyles = makeStyles<{ claimed: boolean; outdated: boolean }>()((theme, 
         background: theme.palette.common.white,
     },
 }))
-interface RedPacketNftProps {
+export interface RedPacketNftProps {
     payload: RedPacketNftJSONPayload
+    currentPluginID: NetworkPluginID
 }
 
-export function RedPacketNft({ payload }: RedPacketNftProps) {
+export function RedPacketNft({ payload, currentPluginID }: RedPacketNftProps) {
     const { _ } = useLingui()
-    const { pluginID } = useNetworkContext()
+    const pluginID = NetworkPluginID.PLUGIN_EVM
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>(
         pluginID === NetworkPluginID.PLUGIN_EVM ? {} : { account: '' },
     )
@@ -420,13 +421,15 @@ export function RedPacketNft({ payload }: RedPacketNftProps) {
                 :   null}
             </Card>
             {outdated ? null : (
-                <OperationFooter
-                    chainId={payload.chainId}
-                    isClaiming={isClaiming}
-                    claimed={availability.isClaimed}
-                    onShare={onShare}
-                    onClaim={claim}
-                />
+                <NetworkContextProvider initialNetwork={currentPluginID}>
+                    <OperationFooter
+                        chainId={payload.chainId}
+                        isClaiming={isClaiming}
+                        claimed={availability.isClaimed}
+                        onShare={onShare}
+                        onClaim={claim}
+                    />
+                </NetworkContextProvider>
             )}
         </div>
     )

@@ -1,14 +1,15 @@
 import { usePostLink } from '@masknet/plugin-infra/content-script'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { MaskLightTheme } from '@masknet/theme'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { EVMWeb3ContextProvider, useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
 import type { RedPacketRecord } from '@masknet/web3-providers/types'
 import { ThemeProvider } from '@mui/material'
 import { useEffect } from 'react'
 import { RedPacketRPC } from '../messages.js'
 import { RedPacket, type RedPacketProps } from './RedPacket/index.js'
 
-export function RedPacketInPost({ payload }: RedPacketProps) {
+export function RedPacketInPost({ payload }: Omit<RedPacketProps, 'currentPluginID'>) {
+    const { pluginID } = useNetworkContext()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const fromUrl = usePostLink()
 
@@ -29,7 +30,9 @@ export function RedPacketInPost({ payload }: RedPacketProps) {
 
     return (
         <ThemeProvider theme={MaskLightTheme}>
-            <RedPacket payload={payload} />
+            <EVMWeb3ContextProvider>
+                <RedPacket payload={payload} currentPluginID={pluginID} />
+            </EVMWeb3ContextProvider>
         </ThemeProvider>
     )
 }

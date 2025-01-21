@@ -1,20 +1,18 @@
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
-import { Trans } from '@lingui/react/macro'
-import { Icons } from '@masknet/icons'
 import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
-import { useChainContext, useNetwork, useNetworkContext } from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, useChainContext, useNetwork } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI, RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Box, Card, Grow } from '@mui/material'
+import { Card, Grow } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 import { Conditions } from '../Conditions/index.js'
@@ -61,34 +59,20 @@ const useStyles = makeStyles()((theme) => {
             inset: 24,
             margin: 'auto',
         },
-        actionButton: {
-            display: 'flex',
-            gap: theme.spacing(0.5),
-            lineHeight: '18px',
-            backgroundColor: theme.palette.maskColor.dark,
-            width: '100%',
-            color: 'white',
-            '&:hover': {
-                backgroundColor: theme.palette.maskColor.dark,
-            },
-        },
     }
 })
 
 export interface RedPacketProps {
     payload: RedPacketJSONPayload
+    currentPluginID: NetworkPluginID
 }
 
-export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
+export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: RedPacketProps) {
     const { _ } = useLingui()
     const token = payload.token
-    const { pluginID } = useNetworkContext()
     const payloadChainId: ChainId =
         (token?.chainId as ChainId) ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>({
-        chainId: payloadChainId,
-        account: pluginID === NetworkPluginID.PLUGIN_EVM ? undefined : '',
-    })
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     // #region token detailed
     const {
@@ -115,7 +99,10 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
     const link = postLink.toString() || postUrl?.toString()
 
     // TODO payload.chainId is undefined on production mode
-    const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
+    const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(
+        NetworkPluginID.PLUGIN_EVM,
+        (payload.chainId as number) || payload.token?.chainId,
+    )
 
     const getShareText = useCallback(
         (hasClaimed: boolean) => {
@@ -286,36 +273,24 @@ export const RedPacket = memo(function RedPacket({ payload }: RedPacketProps) {
             </>
         )
 
-    if (claimStrategyStatus?.canClaim === false && account) {
-        return (
-            <>
-                {card}
-                <Box className={classes.footer}>
-                    <ActionButton
-                        className={classes.actionButton}
-                        variant="roundedDark"
-                        fullWidth
-                        onClick={() => setShowRequirements(true)}>
-                        <Trans>Who can claim</Trans>
-                        <Icons.Questions size={18} />
-                    </ActionButton>
-                </Box>
-            </>
-        )
-    }
+    const unsatisfied = claimStrategyStatus?.canClaim === false
 
     return (
         <>
             {card}
-            <OperationFooter
-                className={classes.footer}
-                chainId={payloadChainId}
-                canClaim={canClaim}
-                canRefund={canRefund}
-                isClaiming={isClaiming || checkingClaimStatus}
-                isRefunding={isRefunding}
-                onClaimOrRefund={onClaimOrRefund}
-            />
+            {/* ChainBoundary needs to know the current network */}
+            <NetworkContextProvider initialNetwork={currentPluginID}>
+                <OperationFooter
+                    className={classes.footer}
+                    chainId={payloadChainId}
+                    canClaim={canClaim}
+                    canRefund={canRefund}
+                    unsatisfied={unsatisfied}
+                    isClaiming={isClaiming || checkingClaimStatus}
+                    isRefunding={isRefunding}
+                    onClaimOrRefund={onClaimOrRefund}
+                />
+            </NetworkContextProvider>
         </>
     )
 })
