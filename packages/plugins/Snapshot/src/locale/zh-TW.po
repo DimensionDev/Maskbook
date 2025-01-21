@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-01-21 10:22\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -16,12 +16,10 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Snapshot/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 994\n"
 
-#. placeholder {0}: strategies.length
 #: src/SiteAdaptor/InformationCard.tsx
 msgid "{0, plural, one {Strategy} other {Strategies}}"
 msgstr ""
 
-#. placeholder {0}: formatCount(currentSpace.followersCount, 1)
 #: src/SiteAdaptor/ProfileSpaceHeader.tsx
 msgid "{0} members"
 msgstr ""
@@ -134,10 +132,10 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
-#: src/SiteAdaptor/ProfileView.tsx
-#: src/SiteAdaptor/PluginDescriptor.tsx
 #: src/SiteAdaptor/InformationCard.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Snapshot"
 msgstr ""
 
@@ -157,9 +155,9 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx
-#: src/SiteAdaptor/VotingCard.tsx
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingCard.tsx
 msgid "Vote"
 msgstr ""
 
@@ -184,3 +182,4 @@ msgstr ""
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
 msgid "Your voting power"
 msgstr ""
+
