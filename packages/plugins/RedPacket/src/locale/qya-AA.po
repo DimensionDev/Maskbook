@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-21 04:33\n"
+"PO-Revision-Date: 2025-01-21 07:20\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -237,8 +237,8 @@ msgstr "crwdns31722:0{0}crwdnd31722:0{1}crwdnd31722:0{2}crwdne31722:0"
 #~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
 #~ msgstr ""
 
-#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal)
-#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal)
+#. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal, false)
+#. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal, false)
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
 msgstr "crwdns36080:0{claim_numbers}crwdnd36080:0{total_numbers}crwdnd36080:0{0}crwdnd36080:0{1}crwdnd36080:0{tokenSymbol}crwdne36080:0"
@@ -930,7 +930,7 @@ msgstr "crwdns36104:0crwdne36104:0"
 #~ msgid "You can withdraw the rest of your balances back 24h later after sending them out."
 #~ msgstr ""
 
-#. placeholder {0}: formatBalance(claimRecord.amount.toNumber(), token?.decimals, { significant: 2 })
+#. placeholder {0}: formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })
 #. placeholder {0}: formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })
 #. placeholder {1}: token?.symbol
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
