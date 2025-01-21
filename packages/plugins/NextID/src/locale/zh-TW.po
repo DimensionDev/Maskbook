@@ -73,11 +73,11 @@ msgstr ""
 msgid "Wallet"
 msgstr "錢包"
 
-#: src/components/BindDialog.tsx
-#: src/components/BindDialog.tsx
+#: src/hooks/useWalletSign.ts
+#: src/hooks/useWalletSign.ts
 #: src/components/BindPanelUI.tsx
-#: src/hooks/useWalletSign.ts
-#: src/hooks/useWalletSign.ts
+#: src/components/BindDialog.tsx
+#: src/components/BindDialog.tsx
 msgid "Wallet Sign"
 msgstr ""
 
@@ -92,4 +92,3 @@ msgstr "簽署失敗"
 #: src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
 msgstr "簽署成功"
-

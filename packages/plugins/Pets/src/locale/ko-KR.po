@@ -17,8 +17,12 @@ msgstr ""
 "X-Crowdin-File-ID: 978\n"
 
 #: src/SiteAdaptor/PetSetDialog.tsx
-msgid "(unverified)"
+msgid " (unverified)"
 msgstr ""
+
+#: src/SiteAdaptor/PetSetDialog.tsx
+#~ msgid "(unverified)"
+#~ msgstr ""
 
 #: src/SiteAdaptor/PetSetDialog.tsx
 msgid "<0>Powered by</0><1>NFF</1><2/><3>&</3><4>RSS3</4><5/>"
@@ -45,7 +49,8 @@ msgid "Greeting message"
 msgstr "인사 메시지"
 
 #: src/SiteAdaptor/PetShareDialog.tsx
-msgid "I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
+msgid ""
+"I just set up NFT personal image with @realMaskNetwork chrome extension. Visit my profile to check it out. Install Mask Network extension from mask.io and set yours.\n"
 "#mask_io #nonfungiblefriends\n"
 "⚙ Setting steps: https://x.com/NonFFriend/status/1508791087149641731"
 msgstr ""
@@ -94,8 +99,7 @@ msgstr "성공"
 msgid "Token ID"
 msgstr "토큰 ID"
 
-#: src/SiteAdaptor/PetSetDialog.tsx
 #: src/SiteAdaptor/PetShareDialog.tsx
+#: src/SiteAdaptor/PetSetDialog.tsx
 msgid "Your Non-Fungible Friend has been set up successfully."
 msgstr "설치 성공"
-
