@@ -105,6 +105,19 @@
             ["tokenSymbol"],
             "</2>"
         ],
+        "Lzo8mb": [
+            "Claimed: <0>",
+            ["claim_numbers"],
+            "/",
+            ["total_numbers"],
+            "</0> <1>",
+            ["0"],
+            "/",
+            ["1"],
+            "</1><2><3>",
+            ["tokenSymbol"],
+            "</3></2>"
+        ],
         "N0tcou": ["수령 중..."],
         "s/KkfL": ["Clear all requirements"],
         "DoJzLz": ["수집품"],
@@ -125,6 +138,7 @@
         "oLnk2n": [
             "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
         ],
+        "URmyfc": ["Details"],
         "Zg6RWT": ["Drop Type"],
         "ePK91l": ["Edit"],
         "N2S1rs": ["비어 있음"],

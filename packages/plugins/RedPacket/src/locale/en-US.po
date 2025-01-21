@@ -220,8 +220,8 @@ msgid "Claimed {0}/{1}"
 msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
-msgid "Claimed Details"
-msgstr ""
+#~ msgid "Claimed Details"
+#~ msgstr ""
 
 #. placeholder {0}: rpid ? bitStatusList.filter(Boolean).length.toString() : '0'
 #. placeholder {1}: patchedHistory.shares
@@ -238,10 +238,14 @@ msgstr ""
 #~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1> <2>{token_symbol}</2>"
 #~ msgstr ""
 
+#: src/SiteAdaptor/components/RedPacketRecord.tsx
+#~ msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
+#~ msgstr ""
+
 #. placeholder {0}: formatTokenAmount(claim_amounts || 0, token_decimal, false)
 #. placeholder {1}: formatTokenAmount(total_amounts || 0, token_decimal, false)
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
-msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2>{tokenSymbol}</2>"
+msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2><3>{tokenSymbol}</3></2>"
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
@@ -333,6 +337,10 @@ msgstr ""
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/RedPacketRecord.tsx
+msgid "Details"
+msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Drop Type"
