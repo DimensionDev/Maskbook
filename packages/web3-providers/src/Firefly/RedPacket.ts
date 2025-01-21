@@ -149,7 +149,7 @@ export class FireflyRedPacket {
             body: JSON.stringify({
                 themeId,
                 shareFrom,
-                claimFrom: FireflyRedPacketAPI.SourceType.FireflyPC,
+                claimFrom: FireflyRedPacketAPI.SourceType.MaskNetwork,
                 claimStrategy: JSON.stringify(strategies),
             }),
         })
