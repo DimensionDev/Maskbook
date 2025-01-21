@@ -430,11 +430,11 @@ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleSolanaCreateOrSelect.ts
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
-msgid ""
-"Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
-"\n"
-"🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
-msgstr ""
+#~ msgid ""
+#~ "Hi friends, I just created a token Lucky Drop. Download mask.io to claim. Follow @realMaskNetwork for Web3 updates and insights.\n"
+#~ "\n"
+#~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
+#~ msgstr ""
 
 #: src/SiteAdaptor/hooks/useHandleCreateOrSelect.ts
 #~ msgid ""
@@ -721,6 +721,7 @@ msgstr ""
 msgid "Select partially"
 msgstr ""
 
+#: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 msgid "Send"
 msgstr ""
