@@ -1,17 +1,17 @@
-import CoinGecko from '@masknet/web3-constants/evm/coingecko.json'
-import DeBank from '@masknet/web3-constants/evm/debank.json'
-import ENS from '@masknet/web3-constants/evm/ens.json'
-import Ethereum from '@masknet/web3-constants/evm/ethereum.json'
-import Etherscan from '@masknet/web3-constants/evm/etherscan.json'
-import LensProfile from '@masknet/web3-constants/evm/lens-profile.json'
-import Lens from '@masknet/web3-constants/evm/lens.json'
-import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json'
-import RedPacket from '@masknet/web3-constants/evm/red-packet.json'
-import RPC from '@masknet/web3-constants/evm/rpc.json'
-import SpaceId from '@masknet/web3-constants/evm/space-id.json'
-import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json'
-import TokenList from '@masknet/web3-constants/evm/token-list.json'
-import Token from '@masknet/web3-constants/evm/token.json'
+import CoinGecko from '@masknet/web3-constants/evm/coingecko.json' assert { type: 'json' }
+import DeBank from '@masknet/web3-constants/evm/debank.json' assert { type: 'json' }
+import ENS from '@masknet/web3-constants/evm/ens.json' assert { type: 'json' }
+import Ethereum from '@masknet/web3-constants/evm/ethereum.json' assert { type: 'json' }
+import Etherscan from '@masknet/web3-constants/evm/etherscan.json' assert { type: 'json' }
+import LensProfile from '@masknet/web3-constants/evm/lens-profile.json' assert { type: 'json' }
+import Lens from '@masknet/web3-constants/evm/lens.json' assert { type: 'json' }
+import NftRedPacket from '@masknet/web3-constants/evm/nft-red-packet.json' assert { type: 'json' }
+import RedPacket from '@masknet/web3-constants/evm/red-packet.json' assert { type: 'json' }
+import RPC from '@masknet/web3-constants/evm/rpc.json' assert { type: 'json' }
+import SpaceId from '@masknet/web3-constants/evm/space-id.json' assert { type: 'json' }
+import TokenAssetBaseURL from '@masknet/web3-constants/evm/token-asset-base-url.json' assert { type: 'json' }
+import TokenList from '@masknet/web3-constants/evm/token-list.json' assert { type: 'json' }
+import Token from '@masknet/web3-constants/evm/token.json' assert { type: 'json' }
 
 import { getEnumAsArray } from '@masknet/kit'
 import {

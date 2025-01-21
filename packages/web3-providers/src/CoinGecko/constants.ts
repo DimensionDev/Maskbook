@@ -1,5 +1,5 @@
 import { ChainId } from '@masknet/web3-shared-evm'
-import Coingecko from '@masknet/web3-constants/evm/coingecko.json'
+import Coingecko from '@masknet/web3-constants/evm/coingecko.json' with { type: 'json' }
 
 export const COINGECKO_URL_BASE = 'https://coingecko-agent.r2d2.to/api/v3'
 export const COINGECKO_CHAIN_ID_LIST = [

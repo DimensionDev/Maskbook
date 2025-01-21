@@ -5,7 +5,7 @@ import {
     TokenType,
 } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
-import CHAINS from './chains.json'
+import CHAINS from './chains.json' assert { type: 'json' }
 import { ChainId, NetworkType, type ProviderType, SchemaType } from '../types/index.js'
 import { getTokenConstant } from './constants.js'
 import { ZERO_ADDRESS } from './primitives.js'
