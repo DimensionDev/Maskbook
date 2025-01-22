@@ -15,6 +15,7 @@ import {
     type Operation,
     type Transaction,
     serializeTransaction,
+    isValidChainId,
 } from '@masknet/web3-shared-solana'
 import {
     TransactionStatusType,
@@ -26,7 +27,7 @@ import {
     isSameAddress,
     createNonFungibleToken,
 } from '@masknet/web3-shared-base'
-import { EMPTY_OBJECT, type Account } from '@masknet/shared-base'
+import { EMPTY_OBJECT, NetworkPluginID, type Account } from '@masknet/shared-base'
 import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import type { BlockResponse } from '@solana/web3.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
@@ -38,6 +39,7 @@ import { SolanaChainResolver } from './ResolverAPI.js'
 import { SolanaFungible } from './FungibleTokenAPI.js'
 import type { SolanaConnectionOptions } from '../types/index.js'
 import { solana } from '../../../Manager/registry.js'
+import { createConnectionCreator } from '../../Base/apis/ConnectionCreator.js'
 
 export class SolanaConnectionAPI
     implements
@@ -401,3 +403,12 @@ export class SolanaConnectionAPI
         return this.Web3.getProviderInstance(initial).signTransactions(transactions)
     }
 }
+
+export const createSolanaConnection = createConnectionCreator(
+    NetworkPluginID.PLUGIN_SOLANA,
+    (initial) => new SolanaConnectionAPI(initial),
+    isValidChainId,
+    new SolanaConnectionOptionsAPI(),
+)
+
+export const SOLWeb3 = createSolanaConnection()!

@@ -3,9 +3,9 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { createConnection } from '../../EVM/apis/ConnectionAPI.js'
 import { createFlowConnection } from '../../Flow/apis/ConnectionOptionsAPI.js'
-import { createSolanaConnection } from '../../Solana/apis/ConnectionOptionsAPI.js'
 import type { BaseConnectionOptions } from '../../Base/apis/ConnectionOptions.js'
 import type { Connection } from '../types/index.js'
+import { createSolanaConnection } from '../../Solana/apis/ConnectionAPI.js'
 
 export function getConnection<const T extends NetworkPluginID>(
     pluginID: T,

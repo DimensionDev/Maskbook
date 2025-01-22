@@ -83,7 +83,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 
             onClose()
         },
-        [_, lastRecognizedIdentity, onClose, reason],
+        [_, lastRecognizedIdentity, onClose, reason, hasRedpacket],
     )
 }
 
