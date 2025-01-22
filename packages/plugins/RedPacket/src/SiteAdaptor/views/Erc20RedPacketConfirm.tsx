@@ -179,7 +179,7 @@ export function Erc20RedPacketConfirm() {
             })
         }
         return list
-    }, [needHoldingTokens, requiredTokens, tokenQuantity])
+    }, [needHoldingTokens, requiredTokens, requiredCollections, tokenQuantity])
 
     const currentIdentity = useCurrentVisitingIdentity()
     const me = useLastRecognizedIdentity()
