@@ -14,7 +14,7 @@ import {
     useWeb3Utils,
     useWeb3Connection,
 } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { WalletIcon } from '../WalletIcon/index.js'
@@ -183,11 +183,17 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 sx={props.ActionButtonPromiseProps?.sx}
                 onClick={() => SelectProviderModal.open()}
                 {...props.ActionButtonPromiseProps}>
-                <Trans>Change Wallet</Trans>
+                {expectedPluginID === NetworkPluginID.PLUGIN_EVM ?
+                    <Trans>Change to EVM Wallet</Trans>
+                : expectedPluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                    <Trans>Change to SOL Wallet</Trans>
+                : expectedPluginID === NetworkPluginID.PLUGIN_FLOW ?
+                    <Trans>Change to Flow Wallet</Trans>
+                :   <Trans>Change Wallet</Trans>}
             </ActionButton>,
             actualProviderType === ProviderType.WalletConnect ?
                 <Trans>Please switch to this network in the mobile application wallet you are connected to.</Trans>
-            :   <Trans>This network is not supported yet.</Trans>,
+            :   null,
         )
     }
 
