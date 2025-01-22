@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-22 03:18\n"
+"PO-Revision-Date: 2025-01-22 12:28\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -984,8 +984,8 @@ msgid "You got 1 {0}"
 msgstr "crwdns29160:0{0}crwdne29160:0"
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
-msgid "You have already claimed this lucky drop."
-msgstr "crwdns36068:0crwdne36068:0"
+#~ msgid "You have already claimed this lucky drop."
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
@@ -996,12 +996,20 @@ msgid "You need to hold any of the following NFTs in your wallet."
 msgstr "crwdns36538:0crwdne36538:0"
 
 #: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to hold any of the following tokens."
+msgstr "crwdns36598:0crwdne36598:0"
+
+#: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold at least {quantity} of any of the following tokens."
 msgstr "crwdns36478:0{quantity}crwdne36478:0"
 
 #: src/SiteAdaptor/Conditions/index.tsx
 #~ msgid "You need to own at least one of the following NFTs."
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/RedPacketEnvelope.tsx
+msgid "You've already claimed the lucky drop"
+msgstr "crwdns36600:0crwdne36600:0"
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
