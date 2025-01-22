@@ -15,10 +15,7 @@ export function SolanaRedPacketFrame({ payload }: Omit<SolanaRedPacketCardProps,
             if (draft.token) {
                 draft.token.runtime = NetworkPluginID.PLUGIN_SOLANA
             }
-            if (!draft.accountId) {
-                draft.accountId = draft.rpid.replace(/^solana-/, '')
-            }
-            draft.network = 'devnet'
+            draft.accountId = draft.rpid
         })
     }, [payload])
     const payloadChainId =

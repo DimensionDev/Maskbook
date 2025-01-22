@@ -12,11 +12,11 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
     const account = useAccount(NetworkPluginID.PLUGIN_SOLANA)
 
     const { data, refetch: checkAvailability } = useQuery({
-        queryKey: ['red-packet', 'solana-availability', payload.accountId, payload.network],
+        queryKey: ['red-packet', 'solana-availability', payload.rpid, payload.network],
         queryFn: async () => {
-            if (!payload.accountId) return null
+            if (!payload.rpid) return null
             const program = await getRpProgram(payload.network)
-            const result = await program.account.redPacket.fetch(payload.accountId)
+            const result = await program.account.redPacket.fetch(payload.rpid)
             return result
         },
         refetchInterval(query) {
@@ -32,7 +32,7 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
 
     const { data: claimRecord, refetch: checkClaimRecord } = useClaimRecord(
         account,
-        payload.accountId,
+        payload.rpid,
         payload?.network ?? 'mainnet-beta',
     )
     const refresh = useCallback(() => {

@@ -27,10 +27,10 @@ export async function createWithSplToken(
 
     const program = await getRpProgram(cluster)
 
-    const tokenAccount = await getTokenAccount(tokenMint)
+    const tokenAccount = await getTokenAccount(tokenMint, cluster)
     if (!tokenAccount) throw new Error('Token account not found')
 
-    const tokenProgram = await getTokenProgram(tokenMint)
+    const tokenProgram = await getTokenProgram(tokenMint, cluster)
     if (!tokenProgram) throw new Error('Token program not found')
 
     const createTime = Math.floor(Date.now() / 1000)
@@ -94,10 +94,10 @@ export async function getEstimatedGasByCreateWithSplToken(
 
     const connection = await getSolanaConnection('devnet')
 
-    const tokenAccount = await getTokenAccount(tokenMint)
+    const tokenAccount = await getTokenAccount(tokenMint, cluster)
     if (!tokenAccount) throw new Error('Token account not found')
 
-    const tokenProgram = await getTokenProgram(tokenMint)
+    const tokenProgram = await getTokenProgram(tokenMint, cluster)
     if (!tokenProgram) throw new Error('Token program not found')
 
     const createTime = Math.floor(Date.now() / 1000)

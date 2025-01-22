@@ -1,12 +1,16 @@
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { EVMWeb3 } from '@masknet/web3-providers'
+import { EVMWeb3, SolanaChainResolver } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { formatBalance } from '@masknet/web3-shared-base'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { type ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import { Link } from '@mui/material'
+import type { Cluster } from '@solana/web3.js'
 import { produce } from 'immer'
 import { useState } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -15,9 +19,6 @@ import { getTokenAccount, getTokenProgram } from '../helpers/getTokenAccount.js'
 import { refundNativeToken } from '../helpers/refundNativeToken.js'
 import { refundSplToken } from '../helpers/refundSplToken.js'
 import { useRedPacketContract } from './useRedPacketContract.js'
-import { Link } from '@mui/material'
-import { formatBalance } from '@masknet/web3-shared-base'
-import { Icons } from '@masknet/icons'
 
 const useStyles = makeStyles()({
     message: {
@@ -76,8 +77,9 @@ export function useSolanaRefundCallback({ rpid, chainId, tokenSymbol, tokenDecim
                 hash = await refundNativeToken(rpid, redpacket.creator)
             } else {
                 const tokenMint = redpacket.tokenAddress
-                const tokenProgram = await getTokenProgram(tokenMint)
-                const tokenAccount = await getTokenAccount(tokenMint)
+                const cluster = SolanaChainResolver.network(chainId) as Cluster
+                const tokenProgram = await getTokenProgram(tokenMint, cluster)
+                const tokenAccount = await getTokenAccount(tokenMint, cluster)
                 hash = await refundSplToken({
                     id: rpid,
                     tokenMint,

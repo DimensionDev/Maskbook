@@ -154,9 +154,3 @@ export const PRESET_THEMES =
         ]
 
 export const MAX_CUSTOM_THEMES = 3
-
-export const RED_PACKET_PROGRAM_ADDRESS_MAP = {
-    'mainnet-beta': 'yoAKw22kCCCStCP5uJ9mkMa8NGjYdtnGgNDxBrv8kfe',
-    devnet: 'CXT16oAAbmgpPZsL2sGmfSUNrATk3AsFVU18thTUVNxx',
-    testnet: '',
-} as const

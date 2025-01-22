@@ -174,8 +174,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function CreateSolRedPacket() {
     const { _ } = useLingui()
-    const { account } = useChainContext()
-    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
+    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const navigate = useNavigate()

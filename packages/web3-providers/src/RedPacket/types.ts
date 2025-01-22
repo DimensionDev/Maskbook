@@ -143,7 +143,11 @@ export type CreateNFTRedpacketParam = {
 }
 
 export interface SolanaRedPacketJSONPayload extends RedPacketBasic {
-    /** redpacket account id */
+    rpid: string
+    /**
+     * @deprecated use rpid instead
+     * redpacket account id
+     */
     accountId: string
     contract_version: number
     sender: {

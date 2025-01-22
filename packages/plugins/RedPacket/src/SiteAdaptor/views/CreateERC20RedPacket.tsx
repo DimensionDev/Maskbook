@@ -183,8 +183,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export function CreateERC20RedPacket() {
     const { t } = useLingui()
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
     const [gasOption, setGasOption] = useState<GasConfig>()
     const { classes, cx } = useStyles()

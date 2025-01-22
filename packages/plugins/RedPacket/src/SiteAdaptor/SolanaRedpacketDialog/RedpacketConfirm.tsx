@@ -144,7 +144,7 @@ export function SolanaRedPacketConfirm() {
         const claimer = new SolanaWeb3.PublicKey(publicKey)
         const total = new BigNumber(settings.total).toNumber()
         const tokenMint = token?.address ? new SolanaWeb3.PublicKey(token.address) : null
-        const tokenProgram = tokenMint ? await getTokenProgram(tokenMint) : undefined
+        const tokenProgram = tokenMint ? await getTokenProgram(tokenMint, cluster) : undefined
 
         const result = await (isNativeToken ?
             createWithNativeToken(

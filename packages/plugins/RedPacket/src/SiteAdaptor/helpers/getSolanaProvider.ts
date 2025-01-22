@@ -6,11 +6,15 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { getConnection } from '@masknet/web3-providers'
 import type { Cluster } from '@solana/web3.js'
 
-export async function getSolanaConnection(cluster?: Cluster) {
-    return new SolanaWeb3.Connection(SolanaWeb3.clusterApiUrl(cluster ?? 'devnet'), 'confirmed')
+export async function getSolanaConnection(cluster: Cluster | undefined) {
+    const url =
+        !cluster || cluster === 'mainnet-beta' ?
+            'https://long-intensive-shard.solana-mainnet.quiknode.pro/bc297481b248232bcd0dc95197d5b32a8981539c'
+        :   SolanaWeb3.clusterApiUrl(cluster)
+    return new SolanaWeb3.Connection(url, 'confirmed')
 }
 
-export async function getSolanaProvider(cluster?: Cluster | undefined) {
+export async function getSolanaProvider(cluster: Cluster | undefined) {
     const cnt = getConnection(NetworkPluginID.PLUGIN_SOLANA)
 
     const connection = await getSolanaConnection(cluster)

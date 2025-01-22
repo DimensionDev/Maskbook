@@ -5,7 +5,7 @@
  * IDL can be found at `target/idl/redpacket.json`.
  */
 export type Redpacket = {
-    address: 'CXT16oAAbmgpPZsL2sGmfSUNrATk3AsFVU18thTUVNxx'
+    address: 'yoAKw22kCCCStCP5uJ9mkMa8NGjYdtnGgNDxBrv8kfe'
     metadata: {
         name: 'redpacket'
         version: '0.1.0'

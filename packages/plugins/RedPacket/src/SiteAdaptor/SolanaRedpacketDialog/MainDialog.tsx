@@ -3,13 +3,11 @@ import { DialogContent } from '@mui/material'
 import { MemoryRouter } from 'react-router-dom'
 
 import { RestorableScrollContext } from '@masknet/shared'
-import { SOLWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { RoutePaths } from '../../constants.js'
 import { RouterDialog } from '../components/RouterDialog.js'
 import { SolRedPacketRoutes } from './Routes.js'
 import { SOLRedPacketProvider } from '../contexts/SolRedpacketContext.js'
 import { RedPacketTabs } from '../../types.js'
-import { ChainId } from '@masknet/web3-shared-solana'
 
 interface RedPacketDialogProps {
     onClose: () => void
@@ -48,27 +46,25 @@ export function SolRedPacketMainDialog({ onClose }: RedPacketDialogProps) {
 
     return (
         <MemoryRouter initialEntries={initialEntries} initialIndex={initialIndex}>
-            <SOLWeb3ContextProvider chainId={ChainId.Devnet}>
-                <SOLRedPacketProvider>
-                    <RouterDialog
-                        pageMap={{
-                            [RedPacketTabs.tokens]: RoutePaths.CreateSolanaRedPacket,
-                            [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
-                        }}
-                        open
-                        onClose={onClose}
-                        classes={{ paper: classes.paper }}
-                        maxWidth="xs"
-                        fullWidth
-                        independent>
-                        <DialogContent className={classes.content}>
-                            <RestorableScrollContext>
-                                <SolRedPacketRoutes />
-                            </RestorableScrollContext>
-                        </DialogContent>
-                    </RouterDialog>
-                </SOLRedPacketProvider>
-            </SOLWeb3ContextProvider>
+            <SOLRedPacketProvider>
+                <RouterDialog
+                    pageMap={{
+                        [RedPacketTabs.tokens]: RoutePaths.CreateSolanaRedPacket,
+                        [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
+                    }}
+                    open
+                    onClose={onClose}
+                    classes={{ paper: classes.paper }}
+                    maxWidth="xs"
+                    fullWidth
+                    independent>
+                    <DialogContent className={classes.content}>
+                        <RestorableScrollContext>
+                            <SolRedPacketRoutes />
+                        </RestorableScrollContext>
+                    </DialogContent>
+                </RouterDialog>
+            </SOLRedPacketProvider>
         </MemoryRouter>
     )
 }

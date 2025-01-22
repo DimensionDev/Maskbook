@@ -1,4 +1,5 @@
 import type { ChainDescriptor } from '@masknet/web3-shared-base'
+import { NetworkType } from '@masknet/web3-shared-solana'
 
 export class ChainResolver<ChainId, SchemaType, NetworkType> {
     constructor(private readonly descriptors: () => ReadonlyArray<ChainDescriptor<ChainId, SchemaType, NetworkType>>) {}
