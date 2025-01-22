@@ -19,7 +19,7 @@ import { SteganographyPayload } from './SteganographyPayload.js'
 import { msg } from '@lingui/core/macro'
 import { useLingui, type I18nContext } from '@lingui/react'
 
-export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply') {
+export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'reply', hasRedpacket?: boolean) {
     const { _ } = useLingui()
     const lastRecognizedIdentity = useLastRecognizedIdentity()
 
@@ -63,7 +63,7 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
                 // Don't await this, otherwise the dialog won't disappear
                 activatedSiteAdaptorUI?.automation.nativeCompositionDialog?.attachImage?.(mediaObject, {
                     recover: true,
-                    relatedTextPayload: `${decoratedText || defaultText} #MaskLuckyDrop`,
+                    relatedTextPayload: `${decoratedText || defaultText} ${hasRedpacket ? '#MaskLuckyDrop' : ''}`,
                     reason,
                 })
             } else {

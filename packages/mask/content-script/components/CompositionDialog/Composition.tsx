@@ -3,7 +3,14 @@ import { useAsync } from 'react-use'
 import { DialogContent, alpha } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { useCurrentPersonaConnectStatus, InjectedDialog, PersonaAction } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_OBJECT, MaskMessages, currentPersonaIdentifier } from '@masknet/shared-base'
+import {
+    CrossIsolationMessages,
+    EMPTY_OBJECT,
+    MaskMessages,
+    RedPacketMetaKey,
+    SolanaRedPacketMetaKey,
+    currentPersonaIdentifier,
+} from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -110,7 +117,8 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         })
     }, [open])
 
-    const onSubmit_ = useSubmit(onClose, reason)
+    const hasRedacket = Object.keys(initialMeta).some((x) => [RedPacketMetaKey, SolanaRedPacketMetaKey].includes(x))
+    const onSubmit_ = useSubmit(onClose, reason, hasRedacket)
 
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSiteAdaptorUI!.injection.newPostComposition?.supportedOutputTypes
