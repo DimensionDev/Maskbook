@@ -4,7 +4,7 @@ import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, Typography, type BoxProps } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
 import { TokenIcon } from '@masknet/shared'
-import { formatBalance } from '@masknet/web3-shared-base'
+import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
@@ -127,7 +127,9 @@ export function Conditions({ onClose, statusList, unsatisfied = true, ...props }
                 {tokenPayloads?.length ?
                     <div className={classes.section}>
                         <Typography className={classes.sectionTitle}>
-                            <Trans>You need to hold at least {quantity} of any of the following tokens.</Trans>
+                            {isZero(quantity || 0) ?
+                                <Trans>You need to hold any of the following tokens.</Trans>
+                            :   <Trans>You need to hold at least {quantity} of any of the following tokens.</Trans>}
                         </Typography>
 
                         <div className={classes.assets}>
