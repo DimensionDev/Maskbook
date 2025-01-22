@@ -984,8 +984,8 @@ msgid "You got 1 {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
-msgid "You have already claimed this lucky drop."
-msgstr ""
+#~ msgid "You have already claimed this lucky drop."
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
@@ -996,12 +996,20 @@ msgid "You need to hold any of the following NFTs in your wallet."
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to hold any of the following tokens."
+msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold at least {quantity} of any of the following tokens."
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 #~ msgid "You need to own at least one of the following NFTs."
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/RedPacketEnvelope.tsx
+msgid "You've already claimed the lucky drop"
+msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."

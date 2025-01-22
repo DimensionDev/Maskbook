@@ -257,6 +257,18 @@ msgid "Change Owner"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to EVM Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to Flow Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to SOL Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
 msgid "Change Wallet"
 msgstr ""
 
@@ -1285,8 +1297,8 @@ msgid "This function has been turned off in the App settings. Enable plugins to 
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
-msgid "This network is not supported yet."
-msgstr ""
+#~ msgid "This network is not supported yet."
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
