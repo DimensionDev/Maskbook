@@ -79,11 +79,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 display: 'flex',
             },
         },
-        logoIcon: {
-            borderRadius: 999,
-            width: 18,
-            height: 18,
-            marginRight: '4px !important',
+        tokenRow: {
+            display: 'flex',
+            gap: 4,
         },
         spenderLogoIcon: {
             width: 16,
@@ -114,18 +112,17 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         },
         contractInfo: {
             display: 'flex',
+            gap: 4,
             alignItems: 'center',
         },
         primaryText: {
             fontSize: 14,
             fontWeight: 700,
-            marginRight: 4,
             color: theme.palette.maskColor.dark,
         },
         secondaryText: {
             fontSize: 14,
             fontWeight: 400,
-            marginRight: 4,
             color: theme.palette.maskColor.secondaryDark,
         },
         button: {
@@ -229,14 +226,15 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
             <div className={classes.listItemWrapper}>
                 <ListItem className={classes.listItem}>
                     <div className={classes.listItemInfo}>
-                        <div>
+                        <div className={classes.tokenRow}>
                             <TokenIcon
                                 address={spender.contract.address}
                                 name={spender.contract.name}
                                 label=""
                                 logoURL={collection?.iconURL ?? ''}
-                                className={classes.logoIcon}
                                 tokenType={TokenType.NonFungible}
+                                size={18}
+                                disableBadge
                             />
 
                             {contractDetailed ?

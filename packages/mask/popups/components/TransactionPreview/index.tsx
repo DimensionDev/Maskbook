@@ -197,7 +197,7 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                 <Typography component="div" className={classes.amount}>
                     {tokenId && metadata?.collection?.iconURL ?
                         <>
-                            <ImageIcon icon={metadata.collection.iconURL} className={classes.tokenIcon} />
+                            <ImageIcon icon={metadata.collection.iconURL} size={24} className={classes.tokenIcon} />
                             {metadata.collection.name}#{tokenId}
                         </>
                     :   null}
@@ -207,7 +207,8 @@ export const TransactionPreview = memo<TransactionPreviewProps>(function Transac
                                 address={(tokenAddress || nativeToken?.address) ?? ''}
                                 chainId={chainId}
                                 name={token?.name}
-                                className={classes.tokenIcon}
+                                size={24}
+                                disableBadge
                             />
                             {amount ?
                                 formatBalance(amount, token?.decimals, {

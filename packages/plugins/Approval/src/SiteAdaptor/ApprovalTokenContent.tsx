@@ -76,11 +76,9 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
                 display: 'flex',
             },
         },
-        logoIcon: {
-            borderRadius: 999,
-            width: 18,
-            height: 18,
-            marginRight: '4px !important',
+        tokenRow: {
+            display: 'flex',
+            gap: 4,
         },
         spenderLogoIcon: {
             width: 16,
@@ -111,18 +109,17 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         },
         contractInfo: {
             display: 'flex',
+            gap: 4,
             alignItems: 'center',
         },
         primaryText: {
             fontSize: 14,
             fontWeight: 700,
-            marginRight: 4,
             color: theme.palette.maskColor.dark,
         },
         secondaryText: {
             fontSize: 14,
             fontWeight: 400,
-            marginRight: 4,
             color: theme.palette.maskColor.secondaryDark,
         },
         button: {
@@ -221,8 +218,8 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
         <div className={classes.listItemWrapper}>
             <ListItem className={classes.listItem}>
                 <div className={classes.listItemInfo}>
-                    <div>
-                        <TokenIcon address={spender.tokenInfo.address} chainId={chainId} className={classes.logoIcon} />
+                    <div className={classes.tokenRow}>
+                        <TokenIcon address={spender.tokenInfo.address} chainId={chainId} size={18} disableBadge />
                         <Typography className={classes.primaryText}>
                             {spender.tokenInfo.symbol || token?.symbol}
                         </Typography>
