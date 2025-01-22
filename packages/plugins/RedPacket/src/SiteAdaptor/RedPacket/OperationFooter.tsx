@@ -39,6 +39,7 @@ interface OperationFooterProps extends BoxProps {
     canRefund: boolean
     /** If the conditions are not satisfied */
     unsatisfied?: boolean
+    isClaimed?: boolean
     /** Is claiming or checking claim status */
     isClaiming: boolean
     isRefunding: boolean
@@ -49,6 +50,7 @@ export function OperationFooter({
     canClaim,
     canRefund,
     unsatisfied,
+    isClaimed,
     isClaiming,
     isRefunding,
     onClaimOrRefund,
@@ -58,6 +60,7 @@ export function OperationFooter({
     const { classes, cx } = useStyles()
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId })
 
+    if (isClaimed) return null
     if (!canClaim && !canRefund && account) return null
 
     function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {

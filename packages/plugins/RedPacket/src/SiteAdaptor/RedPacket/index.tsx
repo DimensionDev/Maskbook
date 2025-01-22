@@ -225,6 +225,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
 
     // the red packet can fetch without account
     if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
+    const unsatisfied = !!account && claimStrategyStatus?.canClaim === false && !isClaimed
 
     const card = (
         <Card className={classes.root} component="article" elevation={0}>
@@ -249,7 +250,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             {cover ?
                 <Grow in={showRequirements} timeout={250}>
                     <Conditions
-                        unsatisfied={!!account && claimStrategyStatus?.canClaim === false}
+                        unsatisfied={unsatisfied}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                         className={classes.conditions}
                         onClose={() => setShowRequirements(false)}
@@ -273,8 +274,6 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             </>
         )
 
-    const unsatisfied = claimStrategyStatus?.canClaim === false
-
     return (
         <>
             {card}
@@ -286,6 +285,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
                     canClaim={canClaim}
                     canRefund={canRefund}
                     unsatisfied={unsatisfied}
+                    isClaimed={isClaimed}
                     isClaiming={isClaiming || checkingClaimStatus}
                     isRefunding={isRefunding}
                     onClaimOrRefund={onClaimOrRefund}

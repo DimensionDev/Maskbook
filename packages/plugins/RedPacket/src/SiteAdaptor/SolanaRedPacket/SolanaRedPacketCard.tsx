@@ -27,6 +27,7 @@ import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { OperationFooter } from './OperationFooter.js'
 import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -128,7 +129,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
     const myHandle = me?.identifier?.userId
-    const onClaimOrRefund = useCallback(async () => {
+    const [{ loading: isClaimingAndChecking }, onClaimOrRefund] = useAsyncFn(async () => {
         let hash: string | undefined
         if (canClaim) {
             hash = await claimCallback({
@@ -223,7 +224,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                         chainId={payloadChainId}
                         canClaim={canClaim}
                         canRefund={canRefund}
-                        isClaiming={isClaiming}
+                        isClaiming={isClaiming || isClaimingAndChecking}
                         onClaimOrRefund={onClaimOrRefund}
                     />
                 </NetworkContextProvider>

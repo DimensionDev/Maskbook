@@ -196,9 +196,7 @@ export function RedPacketEnvelope({
                     />
                     {isClaimed ?
                         <Typography className={classes.amount}>
-                            {claimedZero ?
-                                <Trans>You have already claimed this lucky drop.</Trans>
-                            :   `${formatBalance(claimedAmount, token.decimals)} ${token.symbol}`}
+                            {claimedZero ? null : `${formatBalance(claimedAmount, token.decimals)} ${token.symbol}`}
                         </Typography>
                     :   <Typography className={classes.amount}>
                             {`${formatBalance(totalClaimed, token.decimals)} / ${formatBalance(total, token.decimals)} `}
@@ -210,12 +208,11 @@ export function RedPacketEnvelope({
                     }
                     <div className={classes.status}>
                         {isClaimed ?
-                            claimedZero ?
-                                null
-                            :   <Typography className={classes.statusText}>
-                                    <Trans>Congratulations!</Trans>
-                                </Typography>
-
+                            <Typography className={classes.statusText}>
+                                {claimedZero ?
+                                    <Trans>You've already claimed the lucky drop</Trans>
+                                :   <Trans>Congratulations!</Trans>}
+                            </Typography>
                         : isEmpty ?
                             <>
                                 <div className={classes.bar}>
