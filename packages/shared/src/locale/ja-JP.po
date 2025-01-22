@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-21 10:20\n"
+"PO-Revision-Date: 2025-01-22 12:28\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -259,6 +259,18 @@ msgstr "変更"
 
 #: src/UI/translate.ts
 msgid "Change Owner"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to EVM Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to Flow Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to SOL Wallet"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
@@ -1290,8 +1302,8 @@ msgid "This function has been turned off in the App settings. Enable plugins to 
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
-msgid "This network is not supported yet."
-msgstr "{network} はまだサポートされていません."
+#~ msgid "This network is not supported yet."
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
@@ -1517,3 +1529,4 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
+
