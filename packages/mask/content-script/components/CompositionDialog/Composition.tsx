@@ -117,8 +117,8 @@ export function Composition({ type = 'timeline', requireClipboardPermission }: P
         })
     }, [open])
 
-    const hasRedacket = Object.keys(initialMeta).some((x) => [RedPacketMetaKey, SolanaRedPacketMetaKey].includes(x))
-    const onSubmit_ = useSubmit(onClose, reason, hasRedacket)
+    const hasRedpacket = Object.keys(initialMeta).some((x) => [RedPacketMetaKey, SolanaRedPacketMetaKey].includes(x))
+    const onSubmit_ = useSubmit(onClose, reason, hasRedpacket)
 
     const UI = useRef<CompositionRef>(null)
     const networkSupport = activatedSiteAdaptorUI!.injection.newPostComposition?.supportedOutputTypes
