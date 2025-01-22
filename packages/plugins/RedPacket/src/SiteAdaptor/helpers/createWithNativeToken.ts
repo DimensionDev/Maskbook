@@ -1,8 +1,9 @@
 import { BN, web3 } from '@coral-xyz/anchor'
+import { ZERO } from '@masknet/web3-shared-base'
+import type { Cluster } from '@solana/web3.js'
+import { BigNumber } from 'bignumber.js'
 import { getRpProgram } from './getRpProgram.js'
 import { getSolanaConnection } from './getSolanaProvider.js'
-import { BigNumber } from 'bignumber.js'
-import { ZERO } from '@masknet/web3-shared-base'
 
 const MAX_NUM = 200 // Maximum number of red packets (constant)
 
@@ -16,13 +17,14 @@ export async function createWithNativeToken(
     pubkeyForClaimSignature: web3.PublicKey, // Public key to be used for claim signature
     author: string, // Author of the red packet
     message: string, // Message to be included in the red packet
+    cluster: Cluster | undefined,
 ) {
     // Ensure the totalNumber and totalAmount are within the acceptable range
     if (totalNumber > MAX_NUM) {
         throw new Error(`Total number of red packets cannot exceed ${MAX_NUM}`)
     }
 
-    const program = await getRpProgram()
+    const program = await getRpProgram(cluster)
 
     const createTime = Math.floor(Date.now() / 1000)
     const nativeTokenRedPacket = web3.PublicKey.findProgramAddressSync(
@@ -66,8 +68,9 @@ export async function getEstimatedGasByCreateWithNativeToken(
     pubkeyForClaimSignature: web3.PublicKey,
     message: string,
     author: string,
+    cluster: Cluster | undefined,
 ): Promise<BigNumber> {
-    const program = await getRpProgram()
+    const program = await getRpProgram(cluster)
     const createTime = Math.floor(Date.now() / 1000)
     const connection = await getSolanaConnection('devnet')
 

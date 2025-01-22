@@ -1,6 +1,6 @@
-import { Trans } from '@lingui/react/macro'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import {
     FormattedBalance,
@@ -11,9 +11,10 @@ import {
     useAvailableBalance,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { EnhanceableSite, getEnhanceableSiteType, NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, RadioIndicator } from '@masknet/theme'
 import { useChainContext, useEnvironmentContext, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { SolanaChainResolver } from '@masknet/web3-providers'
 import {
     formatBalance,
     formatCurrency,
@@ -24,17 +25,18 @@ import {
     rightShift,
     ZERO,
 } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress, type ChainId, type SchemaType } from '@masknet/web3-shared-solana'
+import { type ChainId, isNativeTokenAddress, type SchemaType } from '@masknet/web3-shared-solana'
 import { alpha, Box, InputBase, inputBaseClasses, Typography, useTheme } from '@mui/material'
+import type { Cluster } from '@solana/web3.js'
 import { BigNumber } from 'bignumber.js'
 import { type ChangeEvent, useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import {
     MAX_CUSTOM_THEMES,
-    SOL_REDPACKET_MAX_SHARES,
     RED_PACKET_MIN_SHARES,
     RoutePaths,
     SOL_REDPACKET_CREATE_DEFAULT_GAS,
+    SOL_REDPACKET_MAX_SHARES,
 } from '../../constants.js'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { useSolRedpacket } from '../contexts/SolRedpacketContext.js'
@@ -173,8 +175,7 @@ const useStyles = makeStyles()((theme) => ({
 export function CreateSolRedPacket() {
     const { _ } = useLingui()
     const { account } = useChainContext()
-    const { chainId, setChainId } = useChainContext()
-    const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
+    const { chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
     const { classes, cx } = useStyles()
     const theme = useTheme()
     const navigate = useNavigate()
@@ -243,6 +244,7 @@ export function CreateSolRedPacket() {
     const totalAmount = multipliedBy(amount, isRandom ? 1 : (shares ?? '0'))
     const minTotalAmount = new BigNumber(isRandom ? 1 : (shares ?? 0))
     const isDivisible = !totalAmount.dividedBy(shares).isLessThan(1)
+    const cluster = SolanaChainResolver.network(chainId) as Cluster
 
     // balance
     const { data: defaultGasFee = ZERO, isFetching: estimateGasLoading } = useEstimateGasWithCreateSolRedpacket(
@@ -254,6 +256,7 @@ export function CreateSolRedPacket() {
         message,
         creator,
         token,
+        cluster,
     )
 
     const gasFee = defaultGasFee.multipliedBy(isNativeTokenAddress(token?.address) ? 5 : 10)

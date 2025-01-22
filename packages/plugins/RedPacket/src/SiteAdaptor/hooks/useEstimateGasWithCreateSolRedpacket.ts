@@ -16,12 +16,13 @@ export function useEstimateGasWithCreateSolRedpacket(
     pubkeyForClaimSignature: string,
     message: string,
     creator: string,
-    token?: FungibleToken<ChainId, SchemaType>,
+    token: FungibleToken<ChainId, SchemaType> | undefined,
+    cluster: SolanaWeb3.Cluster | undefined,
 ) {
     const solanaAccount = useAccount(NetworkPluginID.PLUGIN_SOLANA)
 
     return useQuery({
-        queryKey: ['estimateGas', shares, amount, isRandom, pubkeyForClaimSignature, message, creator, token],
+        queryKey: ['estimateGas', shares, amount, isRandom, pubkeyForClaimSignature, message, creator, token, cluster],
         queryFn: async () => {
             const isNativeToken = isNativeTokenAddress(token?.address)
 
@@ -36,6 +37,7 @@ export function useEstimateGasWithCreateSolRedpacket(
                         new SolanaWeb3.PublicKey(pubkeyForClaimSignature),
                         message,
                         creator,
+                        cluster,
                     )
                 : token ?
                     getEstimatedGasByCreateWithSplToken(
@@ -48,6 +50,7 @@ export function useEstimateGasWithCreateSolRedpacket(
                         new SolanaWeb3.PublicKey(pubkeyForClaimSignature),
                         message,
                         creator,
+                        cluster,
                     )
                 :   undefined
             )

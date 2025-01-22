@@ -124,6 +124,7 @@ export function SolanaRedPacketConfirm() {
         })
     }, [settings, isNativeToken])
 
+    const cluster = SolanaChainResolver.network(chainId) as SolanaWeb3.Cluster
     const { data: defaultGasFee = ZERO, isLoading: estimateLoading } = useEstimateGasWithCreateSolRedpacket(
         shares,
         new BigNumber(settings.total).toNumber(),
@@ -132,6 +133,7 @@ export function SolanaRedPacketConfirm() {
         message,
         creator,
         token,
+        cluster,
     )
 
     const gasFee = defaultGasFee.multipliedBy(isNativeToken ? 5 : 10)
@@ -154,6 +156,7 @@ export function SolanaRedPacketConfirm() {
                 claimer,
                 creator,
                 message,
+                cluster,
             )
         : tokenMint ?
             createWithSplToken(
@@ -166,6 +169,7 @@ export function SolanaRedPacketConfirm() {
                 claimer,
                 creator,
                 message,
+                cluster,
             )
         :   null)
         if (!result) return
@@ -185,7 +189,7 @@ export function SolanaRedPacketConfirm() {
             duration: DEFAULT_DURATION,
             creation_time: Date.now(),
             token,
-            network: SolanaChainResolver.network(chainId),
+            network: cluster,
             contract_address: idl.address,
             contract_version: 4,
             txid: result.signature,
