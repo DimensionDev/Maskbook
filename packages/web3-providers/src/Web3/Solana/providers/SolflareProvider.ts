@@ -25,7 +25,7 @@ export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
         }>({
             method: SolflareMethodType.SIGN_TRANSACTION,
             params: {
-                message: encode(serializeTransaction(transaction)),
+                transaction: encode(serializeTransaction(transaction)),
             },
         })
 
@@ -39,7 +39,7 @@ export class SolanaSolflareProvider extends SolanaInjectedWalletProvider {
         const results = await this.bridge.request<{ transactions: string[] }>({
             method: SolflareMethodType.SIGN_TRANSACTIONS,
             params: {
-                message: transactions.map((transaction) => encode(serializeTransaction(transaction))),
+                transactions: transactions.map((transaction) => encode(serializeTransaction(transaction))),
             },
         })
 
