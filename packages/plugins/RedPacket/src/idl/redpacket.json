@@ -620,6 +620,11 @@
             "code": 6015,
             "name": "Unauthorized",
             "msg": "You are not authorized to perform this action."
+        },
+        {
+            "code": 6016,
+            "name": "ArithmeticOverflow",
+            "msg": "Arithmetic overflow"
         }
     ],
     "types": [
