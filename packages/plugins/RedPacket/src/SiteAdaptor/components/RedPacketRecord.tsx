@@ -49,6 +49,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             [smallQuery]: {
                 padding: theme.spacing(2, 1.5),
             },
+            backgroundColor: '#fff',
             '&:before': {
                 pointerEvents: 'none',
                 position: 'absolute',
@@ -80,6 +81,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
         },
         status: {},
         total: {
+            color: theme.palette.maskColor.main,
             fontSize: 20,
             fontWeight: 700,
             lineHeight: '24px',
@@ -100,6 +102,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             textOverflow: 'ellipsis',
         },
         message: {
+            color: theme.palette.maskColor.main,
             fontWeight: 700,
             lineHeight: '18px',
             whiteSpace: 'nowrap',
@@ -110,6 +113,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             },
         },
         datetime: {
+            color: theme.palette.maskColor.main,
             position: 'absolute',
             right: theme.spacing(1.5),
             top: theme.spacing(1.5),

@@ -9,10 +9,7 @@ import {
     NETWORK_DESCRIPTORS as FLOW_NETWORK_DESCRIPTORS,
     ProviderType as FlowProviderType,
 } from '@masknet/web3-shared-flow'
-import {
-    NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS,
-    ProviderType as SolProviderType,
-} from '@masknet/web3-shared-solana'
+import { NETWORK_DESCRIPTORS as SOL_NETWORK_DESCRIPTORS } from '@masknet/web3-shared-solana'
 import { Box, List, ListItem, Typography } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -123,13 +120,10 @@ export const PluginProviderRender = memo(function PluginProviderRender({
     )
 
     const getTips = useCallback((provider: Web3Helper.ProviderTypeAll) => {
-        if (provider === SolProviderType.Phantom) {
-            return <Trans>Phantom only supports the Solana chain.</Trans>
-        } else if (provider === FlowProviderType.Blocto) {
+        if (provider === FlowProviderType.Blocto) {
             return <Trans>Blocto only supports the Flow chain.</Trans>
         }
-
-        return <Trans>Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc.</Trans>
+        return
     }, [])
 
     const getDisabled = useCallback(

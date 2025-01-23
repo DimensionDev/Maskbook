@@ -2,10 +2,10 @@ import { Trans } from '@lingui/react/macro'
 import { RoutePaths } from '@masknet/plugin-redpacket'
 import { ElementAnchor, EmptyStatus, LoadingStatus, RestorableScroll, useParamTab } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, makeStyles } from '@masknet/theme'
+import { LoadingBase, makeStyles, MaskLightTheme } from '@masknet/theme'
 import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { Typography } from '@mui/material'
+import { ThemeProvider, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { HistoryTabs } from '../../types.js'
@@ -94,12 +94,15 @@ export function History() {
         <RestorableScroll key={currentHistoryTab} scrollKey={`redpacket-history-${currentHistoryTab}`}>
             <div className={classes.container}>
                 {histories.map((history) => (
-                    <RedPacketRecord
-                        key={history.redpacket_id}
-                        history={history as FireflyRedPacketAPI.RedPacketSentInfo}
-                        onlyView={currentHistoryTab === HistoryTabs.Claimed}
-                        onSelect={pluginID === NetworkPluginID.PLUGIN_SOLANA ? solanaSelectRedpacket : selectRedPacket}
-                    />
+                    <ThemeProvider key={history.redpacket_id} theme={MaskLightTheme}>
+                        <RedPacketRecord
+                            history={history as FireflyRedPacketAPI.RedPacketSentInfo}
+                            onlyView={currentHistoryTab === HistoryTabs.Claimed}
+                            onSelect={
+                                pluginID === NetworkPluginID.PLUGIN_SOLANA ? solanaSelectRedpacket : selectRedPacket
+                            }
+                        />
+                    </ThemeProvider>
                 ))}
                 {hasNextPage ?
                     <ElementAnchor height={30} callback={() => fetchNextPage()}>

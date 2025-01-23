@@ -1,15 +1,16 @@
-import { delay, getEnumAsArray } from '@masknet/kit'
+import { delay } from '@masknet/kit'
 import { getRegisteredWeb3Providers, MaskWalletProvider } from '@masknet/web3-providers'
 import { ConnectWalletModal, InjectedDialog } from '@masknet/shared'
 import { NetworkPluginID, Sniffings } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, MaskTabList } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { ProviderType } from '@masknet/web3-shared-evm'
-import { DialogContent } from '@mui/material'
+import { DialogContent, Tab } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { PluginProviderRender } from './PluginProviderRender.js'
 import { GuideDialog } from './GuideDialog.js'
 import { Trans } from '@lingui/react/macro'
+import { TabContext } from '@mui/lab'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -39,7 +40,7 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const { classes } = useStyles()
     // Guiding provider
     const [provider, setProvider] = useState<Web3Helper.ProviderDescriptorAll>()
-
+    const [currentPluginID, setCurrentPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
     const handleSelect = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             setProvider(undefined)
@@ -73,8 +74,8 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
     const providers = useMemo(() => {
         if (Sniffings.is_dashboard_page) return getRegisteredWeb3Providers(NetworkPluginID.PLUGIN_EVM)
         if (requiredSupportPluginID) return getRegisteredWeb3Providers(requiredSupportPluginID)
-        return getEnumAsArray(NetworkPluginID).flatMap((x) => getRegisteredWeb3Providers(x.value))
-    }, [requiredSupportPluginID])
+        return getRegisteredWeb3Providers(currentPluginID)
+    }, [requiredSupportPluginID, currentPluginID])
 
     if (provider) {
         return (
@@ -95,7 +96,18 @@ export const SelectProvider = memo(function SelectProvider(props: SelectProvider
             classes={{ paper: classes.dialog }}
             title={<Trans>Connect Wallet</Trans>}
             open={open}
-            onClose={onClose}>
+            onClose={onClose}
+            titleTabs={
+                <TabContext value={currentPluginID}>
+                    <MaskTabList
+                        variant="base"
+                        onChange={(e, value: NetworkPluginID) => setCurrentPluginID(value)}
+                        aria-label="Select Wallet">
+                        <Tab label={<Trans>EVM</Trans>} value={NetworkPluginID.PLUGIN_EVM} />
+                        <Tab label={<Trans>Solana</Trans>} value={NetworkPluginID.PLUGIN_SOLANA} />
+                    </MaskTabList>
+                </TabContext>
+            }>
             <DialogContent className={classes.content}>
                 <PluginProviderRender
                     providers={providers}
