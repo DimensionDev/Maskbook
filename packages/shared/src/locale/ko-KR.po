@@ -624,6 +624,10 @@ msgstr "최대 우선 가스비 입력"
 msgid "Enter an amount"
 msgstr "금액 입력"
 
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "EVM"
+msgstr ""
+
 #: src/UI/components/UploadDropArea/index.tsx
 msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
@@ -1001,8 +1005,8 @@ msgid "OK"
 msgstr "확인"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-msgstr "EVM 체인만 지원합니다. ETH, BNB chain, Polygon, Arb, Op 등."
+#~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
+#~ msgstr "EVM 체인만 지원합니다. ETH, BNB chain, Polygon, Arb, Op 등."
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
@@ -1036,8 +1040,8 @@ msgid "Persona"
 msgstr "페르소나"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Phantom only supports the Solana chain."
-msgstr "Phantom은 Solana에만 지원합니다."
+#~ msgid "Phantom only supports the Solana chain."
+#~ msgstr "Phantom은 Solana에만 지원합니다."
 
 #: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -1246,6 +1250,10 @@ msgstr "공유"
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
 msgstr "슬리피지 톨러런스"
+
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "Solana"
+msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "Spam"

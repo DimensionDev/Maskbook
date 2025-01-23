@@ -624,6 +624,10 @@ msgstr ""
 msgid "Enter an amount"
 msgstr ""
 
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "EVM"
+msgstr ""
+
 #: src/UI/components/UploadDropArea/index.tsx
 msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
@@ -1001,8 +1005,8 @@ msgid "OK"
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-msgstr ""
+#~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
@@ -1036,8 +1040,8 @@ msgid "Persona"
 msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Phantom only supports the Solana chain."
-msgstr ""
+#~ msgid "Phantom only supports the Solana chain."
+#~ msgstr ""
 
 #: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -1245,6 +1249,10 @@ msgstr ""
 
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
+msgstr ""
+
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "Solana"
 msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx

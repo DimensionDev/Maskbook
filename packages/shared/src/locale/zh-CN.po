@@ -624,6 +624,10 @@ msgstr "请输入最大优先级费用"
 msgid "Enter an amount"
 msgstr "输入金额"
 
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "EVM"
+msgstr ""
+
 #: src/UI/components/UploadDropArea/index.tsx
 msgid "Exceeded the maximum file size of {fileSize}."
 msgstr ""
@@ -1001,8 +1005,8 @@ msgid "OK"
 msgstr "确定"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-msgstr "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。"
+#~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
+#~ msgstr "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。"
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
@@ -1036,8 +1040,8 @@ msgid "Persona"
 msgstr "身份"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Phantom only supports the Solana chain."
-msgstr "Phantom 只支持Solana 链。"
+#~ msgid "Phantom only supports the Solana chain."
+#~ msgstr "Phantom 只支持Solana 链。"
 
 #: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -1246,6 +1250,10 @@ msgstr "分享"
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
 msgstr "滑点容许值"
+
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "Solana"
+msgstr ""
 
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "Spam"
