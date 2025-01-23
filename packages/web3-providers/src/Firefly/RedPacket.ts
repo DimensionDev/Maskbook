@@ -196,7 +196,7 @@ export class FireflyRedPacket {
             address: from,
             redpacketType: actionType,
             cursor: indicator?.id,
-            claimFrom: FireflyRedPacketAPI.SourceType.All,
+            claimFrom: FireflyRedPacketAPI.SourceType.MaskNetwork,
             size: 20,
         })
         const { data } = await fetchJSON<FireflyRedPacketAPI.HistoryResponse>(url)
