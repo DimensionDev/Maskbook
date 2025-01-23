@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-22 12:28\n"
+"PO-Revision-Date: 2025-01-23 10:01\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -624,6 +624,10 @@ msgstr "crwdns30906:0crwdne30906:0"
 msgid "Enter an amount"
 msgstr "crwdns30908:0crwdne30908:0"
 
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "EVM"
+msgstr "crwdns36626:0crwdne36626:0"
+
 #: src/UI/components/UploadDropArea/index.tsx
 msgid "Exceeded the maximum file size of {fileSize}."
 msgstr "crwdns36112:0{fileSize}crwdne36112:0"
@@ -1001,8 +1005,8 @@ msgid "OK"
 msgstr "crwdns31038:0crwdne31038:0"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-msgstr "crwdns31040:0crwdne31040:0"
+#~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
@@ -1036,8 +1040,8 @@ msgid "Persona"
 msgstr "crwdns31052:0crwdne31052:0"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
-msgid "Phantom only supports the Solana chain."
-msgstr "crwdns31054:0crwdne31054:0"
+#~ msgid "Phantom only supports the Solana chain."
+#~ msgstr ""
 
 #: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -1246,6 +1250,10 @@ msgstr "crwdns31128:0crwdne31128:0"
 #: src/UI/components/SettingsBoard/SlippageToleranceSection.tsx
 msgid "Slippage Tolerance"
 msgstr "crwdns31132:0crwdne31132:0"
+
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
+msgid "Solana"
+msgstr "crwdns36628:0crwdne36628:0"
 
 #: src/UI/components/TokenSecurity/index.tsx
 msgid "Spam"
