@@ -527,6 +527,7 @@ msgstr "잔액 부족"
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+#: src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr "가스비 부족"
 

@@ -527,6 +527,7 @@ msgstr "残高不足"
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+#: src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr "ガス料金が足りません"
 
