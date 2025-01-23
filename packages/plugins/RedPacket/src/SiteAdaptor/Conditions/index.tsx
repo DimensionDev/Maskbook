@@ -4,8 +4,9 @@ import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { Box, IconButton, Typography, type BoxProps } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
 import { TokenIcon } from '@masknet/shared'
-import { formatBalance, isZero } from '@masknet/web3-shared-base'
+import { formatCompact, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
 const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
     box: {
@@ -118,7 +119,7 @@ export function Conditions({ onClose, statusList, unsatisfied = true, ...props }
     const { classes, cx } = useStyles()
     const tokenPayloads = statusList.find((x) => x.type === FireflyRedPacketAPI.StrategyType.tokens)?.payload
     const tokenPayload = tokenPayloads?.[0]
-    const quantity = tokenPayload ? formatBalance(tokenPayload.amount, tokenPayload.decimals) : ''
+    const quantity = tokenPayload ? formatTokenAmount(tokenPayload.amount, tokenPayload.decimals) : ''
 
     const collectionPayloads = statusList.find((x) => x.type === FireflyRedPacketAPI.StrategyType.nftOwned)?.payload
 

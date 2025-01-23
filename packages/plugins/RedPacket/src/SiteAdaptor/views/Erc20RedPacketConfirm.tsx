@@ -25,6 +25,7 @@ import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallback.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
+import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -322,7 +323,9 @@ export function Erc20RedPacketConfirm() {
                         <div className={classes.conditionGroup}>
                             <div className={classes.field}>
                                 <Typography component="span" className={classes.value}>
-                                    <Trans>Holding {tokenQuantity ? `${tokenQuantity}+` : 'any'}</Trans>
+                                    <Trans>
+                                        Holding {tokenQuantity ? `${formatTokenAmount(tokenQuantity, 0)}+` : 'any'}
+                                    </Trans>
                                 </Typography>
                             </div>
                             <div className={classes.field}>
