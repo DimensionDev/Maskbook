@@ -12,7 +12,7 @@ export const RED_PACKET_MIN_SHARES = 1
 export const RED_PACKET_MAX_SHARES = 255
 
 export const SOL_REDPACKET_MAX_SHARES = 200
-export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '1000000'
+export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '10000000'
 export const DEFAULT_DURATION = 60 * 60 * 24 // 24 hours
 export const enum RoutePaths {
     Create = '/create',
