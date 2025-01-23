@@ -44,7 +44,7 @@ export class SolanaOKXProvider extends SolanaInjectedWalletProvider {
         await this.validateSession()
 
         const result = await this.bridge.request<{
-            transaction: string
+            serializedTransaction: string
         }>({
             method: OKXMethodType.SIGN_TRANSACTION,
             params: {
@@ -53,7 +53,7 @@ export class SolanaOKXProvider extends SolanaInjectedWalletProvider {
             },
         })
 
-        const signedTransaction = decode(result.transaction)
+        const signedTransaction = decode(result.serializedTransaction)
 
         return recoverTransactionFromUnit8Array(signedTransaction, transaction)
     }

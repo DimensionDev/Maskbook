@@ -10,10 +10,11 @@ import { useAsyncFn } from 'react-use'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRefundCallback, useSolanaRefundCallback } from '../hooks/useRefundCallback.js'
 import { openComposition } from '../openComposition.js'
-import { useEnvironmentContext } from '@masknet/web3-hooks-base'
+import { useEnvironmentContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '@masknet/plugin-redpacket'
 import { ApplicationBoardModal } from '@masknet/shared'
+import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -64,7 +65,7 @@ interface Props extends ActionButtonProps {
     /** timestamp in seconds */
     createdAt?: number
     canResend?: boolean
-
+    transactionHash?: string
     canSend?: boolean
     onResend?(): void
 }
@@ -84,13 +85,14 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
     canResend,
     onResend,
     canSend,
+    transactionHash,
     ...rest
 }: Props) {
     const { classes, cx } = useStyles()
     const { pluginID } = useEnvironmentContext()
     const isSmall = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'))
     const compositionType = useContext(CompositionTypeContext)
-
+    const Utils = useWeb3Utils()
     const [{ loading: isRefunding }, refunded, refundCallback] = useRefundCallback(4, account, rpid, chainId as ChainId)
     const [{ loading: isSolanaRefunding }, solanaRefunded, refundSolanaCallback] = useSolanaRefundCallback({
         rpid,
@@ -143,11 +145,23 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
 
     const handleClick = useCallback(async () => {
         if (canResend) onResend?.()
-        else if (redpacketStatus === RedPacketStatus.Send || redpacketStatus === RedPacketStatus.View)
-            await shareCallback()
+        else if (redpacketStatus === RedPacketStatus.View && transactionHash)
+            openWindow(Utils.explorerResolver.transactionLink(chainId, transactionHash))
+        else if (redpacketStatus === RedPacketStatus.Send) await shareCallback()
         else if (redpacketStatus === RedPacketStatus.Refunding)
             pluginID === NetworkPluginID.PLUGIN_SOLANA ? await refundSolanaCallback() : await refundCallback()
-    }, [redpacketStatus, shareCallback, refundCallback, canResend, onResend, refundSolanaCallback, pluginID, canSend])
+    }, [
+        redpacketStatus,
+        shareCallback,
+        refundCallback,
+        canResend,
+        onResend,
+        refundSolanaCallback,
+        pluginID,
+        canSend,
+        transactionHash,
+        Utils,
+    ])
 
     return (
         <ActionButton
