@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 07:48\n"
+"PO-Revision-Date: 2025-01-23 14:56\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -527,6 +527,7 @@ msgstr "crwdns29026:0crwdne29026:0"
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+#: src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 msgid "Insufficient Balance for Gas Fee"
 msgstr "crwdns29028:0crwdne29028:0"
 
