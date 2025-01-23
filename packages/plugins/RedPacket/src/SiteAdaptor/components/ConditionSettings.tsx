@@ -43,7 +43,6 @@ const useStyles = makeStyles()((theme) => {
         },
         option: {
             display: 'flex',
-            width: '100%',
             padding: theme.spacing(0.5),
             cursor: 'pointer',
         },
@@ -59,7 +58,7 @@ const useStyles = makeStyles()((theme) => {
             borderRadius: 16,
             padding: theme.spacing(1.5),
             width: 400,
-            backgroundColor: theme.palette.background.paper,
+            backgroundColor: theme.palette.maskColor.bottom,
             boxShadow:
                 theme.palette.mode === 'light' ?
                     '0px 4px 30px rgba(0, 0, 0, 0.1)'
