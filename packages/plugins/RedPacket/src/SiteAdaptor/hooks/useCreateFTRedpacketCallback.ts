@@ -9,6 +9,7 @@ import { isNativeTokenAddress, useRedPacketConstants, type GasConfig } from '@ma
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useCreateCallback, useCreateParams, type RedPacketSettings } from './useCreateCallback.js'
+import { getLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 export function useCreateFTRedpacketCallback(
     redpacketPubkey: string,
@@ -78,10 +79,11 @@ export function useCreateFTRedpacketCallback(
 
         // the events log is not available
         if (!events?.CreationSuccess?.returnValues.id) return
+        const senderName = settings.name || getLastRecognizedIdentity()?.identifier?.userId
         const redpacketPayload = {
             sender: {
                 address: account,
-                name: settings.name,
+                name: senderName,
                 message: settings.message,
             },
             is_random: settings.isRandom,

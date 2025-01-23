@@ -1,6 +1,5 @@
 import { t } from '@lingui/core/macro'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
-import { useCurrentLinkedPersona } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
@@ -141,9 +140,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const [token = nativeToken, setToken] = useState<FungibleToken<ChainId, SchemaType>>()
 
     const myIdentity = useLastRecognizedIdentity()
-    const linkedPersona = useCurrentLinkedPersona()
-
-    const creator = myIdentity?.identifier?.userId || linkedPersona?.nickname || 'Unknown User'
+    const creator = myIdentity?.identifier?.userId || 'Unknown User'
 
     const amount = rightShift(rawAmount || '0', token?.decimals)
     const totalAmount = useMemo(() => multipliedBy(amount, isRandom ? 1 : (shares ?? '0')), [amount, shares, isRandom])

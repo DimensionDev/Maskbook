@@ -52,6 +52,7 @@ export {
     useCurrentPersonaInformation,
     useCurrentVisitingIdentity,
     useCurrentVisitingSocialIdentity,
+    getLastRecognizedIdentity,
     useLastRecognizedIdentity,
     useLastRecognizedSocialIdentity,
     usePostLink,
