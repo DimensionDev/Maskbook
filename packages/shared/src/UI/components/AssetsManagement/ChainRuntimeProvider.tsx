@@ -16,6 +16,7 @@ import {
     useContext,
 } from 'react'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'
+import { SimpleHashSupportedChains } from '../../../constants.js'
 
 interface ChainRuntimeOptions {
     pluginID: NetworkPluginID
@@ -32,25 +33,6 @@ const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
     setChainId: noop,
     networks: EMPTY_LIST,
 })
-
-// https://docs.simplehash.com/reference/chains
-// sync `resolveChainId` and `ChainNameMap` in `web3-providers/src/SimpleHash/helpers.ts`
-const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
-    [NetworkPluginID.PLUGIN_EVM]: [
-        ChainId.Mainnet,
-        ChainId.BSC,
-        ChainId.Base,
-        ChainId.Polygon,
-        ChainId.Arbitrum,
-        ChainId.Optimism,
-        ChainId.Avalanche,
-        ChainId.xDai,
-        ChainId.Scroll,
-        ChainId.Zora,
-    ],
-    [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
-    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
-}
 
 export interface ChainRuntimeProviderProps
     extends Pick<ChainRuntimeOptions, 'pluginID' | 'defaultChainId' | 'account'> {}

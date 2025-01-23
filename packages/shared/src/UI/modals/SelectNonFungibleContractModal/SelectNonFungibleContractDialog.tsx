@@ -4,12 +4,20 @@ import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/sh
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNetworks, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
-import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { ChainId, SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
+import { isSameAddress, type NonFungibleCollection, type ReasonableNetwork } from '@masknet/web3-shared-base'
+import {
+    CHAIN_DESCRIPTORS,
+    ChainId,
+    NetworkType,
+    SchemaType,
+    isLensCollect,
+    isLensFollower,
+    isLensProfileAddress,
+} from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import Fuse from 'fuse.js'
-import { compact } from 'lodash-es'
+import { compact, sortBy } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
@@ -17,6 +25,7 @@ import { EmptyStatus, LoadingStatus, SelectNetworkSidebar } from '../../componen
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { AddCollectiblesModal } from '../modals.js'
 import { ContractItem } from './ContractItem.js'
+import { SimpleHashSupportedChains } from '../../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -232,7 +241,20 @@ export const SelectNonFungibleContractDialog = memo(
             },
             [onClose, multiple, maxCollections],
         )
-        const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+        const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
+
+        const networks = useMemo(() => {
+            const supported = SimpleHashSupportedChains[pluginID]
+            const networks = allNetworks.filter(
+                (x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId),
+            )
+            // hard-coded for Zora
+            if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+                const zora = CHAIN_DESCRIPTORS.find((x) => x.chainId === ChainId.Zora)
+                if (zora) networks.push(zora as ReasonableNetwork<ChainId, SchemaType, NetworkType>)
+            }
+            return sortBy(networks, (x) => supported.indexOf(x.chainId))
+        }, [allNetworks, pluginID])
 
         return (
             <InjectedDialog

@@ -1,5 +1,8 @@
 import { Icons, type GeneratedIcon } from '@masknet/icons'
-import { EnhanceableSite } from '@masknet/shared-base'
+import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 
 export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, GeneratedIcon | null> = {
     [EnhanceableSite.Twitter]: Icons.TwitterXRound,
@@ -28,4 +31,23 @@ export const PERSONA_AVATAR_DB_NAMESPACE = 'com.maskbook.persona.avatar.storage'
 export enum PopupHomeTabType {
     SocialAccounts = 'Social Accounts',
     ConnectedWallets = 'Connected Wallets',
+}
+
+// https://docs.simplehash.com/reference/chains
+// sync `resolveChainId` and `ChainNameMap` in `web3-providers/src/SimpleHash/helpers.ts`
+export const SimpleHashSupportedChains: Record<NetworkPluginID, number[]> = {
+    [NetworkPluginID.PLUGIN_EVM]: [
+        ChainId.Mainnet,
+        ChainId.BSC,
+        ChainId.Base,
+        ChainId.Polygon,
+        ChainId.Arbitrum,
+        ChainId.Optimism,
+        ChainId.Avalanche,
+        ChainId.xDai,
+        ChainId.Scroll,
+        ChainId.Zora,
+    ],
+    [NetworkPluginID.PLUGIN_SOLANA]: [SolanaChainId.Mainnet],
+    [NetworkPluginID.PLUGIN_FLOW]: [FlowChainId.Mainnet],
 }
