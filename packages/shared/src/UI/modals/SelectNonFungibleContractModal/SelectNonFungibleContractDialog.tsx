@@ -3,9 +3,9 @@ import { Icons } from '@masknet/icons'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAccount, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
+import { useAccount, useNetworks, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
 import { isSameAddress, type NonFungibleCollection } from '@masknet/web3-shared-base'
-import { SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isLensCollect, isLensFollower, isLensProfileAddress } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
 import Fuse from 'fuse.js'
@@ -13,7 +13,7 @@ import { compact } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useSubscription } from 'use-subscription'
 import { ReloadStatus } from '../../components/ReloadStatus/index.js'
-import { EmptyStatus, LoadingStatus } from '../../components/index.js'
+import { EmptyStatus, LoadingStatus, SelectNetworkSidebar } from '../../components/index.js'
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { AddCollectiblesModal } from '../modals.js'
 import { ContractItem } from './ContractItem.js'
@@ -26,6 +26,25 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(2, 0, 0),
         backgroundColor: theme.palette.maskColor.bottom,
         flexDirection: 'column',
+        overflow: 'auto',
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
+        '&::-webkit-scrollbar': {
+            display: 'none',
+        },
+    },
+    columns: {
+        display: 'flex',
+        minHeight: 0,
+    },
+    sidebar: {
+        paddingLeft: theme.spacing(1.5),
+        paddingBottom: theme.spacing(10),
+    },
+    main: {
+        display: 'flex',
+        flexDirection: 'column',
+        flexGrow: 1,
         overflow: 'auto',
         msOverflowStyle: 'none',
         scrollbarWidth: 'none',
@@ -90,7 +109,7 @@ export const SelectNonFungibleContractDialog = memo(
     ({
         open,
         pluginID,
-        chainId,
+        chainId: propChainId,
         schemaType,
         initialCollections,
         selectedCollections = EMPTY_LIST,
@@ -106,6 +125,7 @@ export const SelectNonFungibleContractDialog = memo(
         const handleClear = () => {
             setKeyword('')
         }
+        const [chainId = propChainId, setChainId] = useState<Web3Helper.Definition[NetworkPluginID]['ChainId']>()
         const {
             data: collections = EMPTY_LIST,
             isPending,
@@ -212,6 +232,7 @@ export const SelectNonFungibleContractDialog = memo(
             },
             [onClose, multiple, maxCollections],
         )
+        const networks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
         return (
             <InjectedDialog
@@ -220,53 +241,66 @@ export const SelectNonFungibleContractDialog = memo(
                 onClose={onClose}
                 title={<Trans>Select Collection</Trans>}>
                 <DialogContent classes={{ root: classes.content }}>
-                    <Box px={2}>
-                        <MaskTextField
-                            value={keyword}
-                            onChange={(evt) => setKeyword(evt.target.value)}
-                            placeholder={t`Name or contract address eg. PUNK or 0x234...`}
-                            autoFocus
-                            fullWidth
-                            InputProps={{
-                                style: { height: 40 },
-                                inputProps: { style: { paddingLeft: 4 } },
-                                startAdornment: <Icons.Search size={18} />,
-                                endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
-                            }}
+                    <div className={classes.columns}>
+                        <SelectNetworkSidebar
+                            className={classes.sidebar}
+                            hideAllButton
+                            chainId={chainId}
+                            onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
+                            networks={networks}
+                            pluginID={NetworkPluginID.PLUGIN_EVM}
                         />
-                    </Box>
-                    {isError ?
-                        <ReloadStatus height={500} onRetry={refetch} />
-                    : isPending && !collections.length ?
-                        <LoadingStatus height={500} />
-                    : !searchResults.length ?
-                        <EmptyStatus height={500}>
-                            <Trans>No results</Trans>
-                        </EmptyStatus>
-                    :   <List className={classes.contractList}>
-                            {searchResults.map((collection) => {
-                                const selected = pendingSelectedCollections.some(
-                                    (x) =>
-                                        isSameAddress(x.address, collection.address) &&
-                                        x.chainId === collection.chainId,
-                                )
-                                return (
-                                    <ContractItem
-                                        key={collection.address}
-                                        className={classes.contractItem}
-                                        pluginID={pluginID}
-                                        selected={selected}
-                                        enabledSelect={multiple}
-                                        disabled={
-                                            !!maxCollections && pendingSelectedCollections.length >= maxCollections
-                                        }
-                                        collection={collection}
-                                        onSelect={handleSelectCollection}
-                                    />
-                                )
-                            })}
-                        </List>
-                    }
+                        <div className={classes.main}>
+                            <Box px={2}>
+                                <MaskTextField
+                                    value={keyword}
+                                    onChange={(evt) => setKeyword(evt.target.value)}
+                                    placeholder={t`Name or contract address eg. PUNK or 0x234...`}
+                                    autoFocus
+                                    fullWidth
+                                    InputProps={{
+                                        style: { height: 40 },
+                                        inputProps: { style: { paddingLeft: 4 } },
+                                        startAdornment: <Icons.Search size={18} />,
+                                        endAdornment: keyword ? <Icons.Close size={18} onClick={handleClear} /> : null,
+                                    }}
+                                />
+                            </Box>
+                            {isError ?
+                                <ReloadStatus height={500} onRetry={refetch} />
+                            : isPending && !collections.length ?
+                                <LoadingStatus height={500} />
+                            : !searchResults.length ?
+                                <EmptyStatus height={500}>
+                                    <Trans>No results</Trans>
+                                </EmptyStatus>
+                            :   <List className={classes.contractList}>
+                                    {searchResults.map((collection) => {
+                                        const selected = pendingSelectedCollections.some(
+                                            (x) =>
+                                                isSameAddress(x.address, collection.address) &&
+                                                x.chainId === collection.chainId,
+                                        )
+                                        return (
+                                            <ContractItem
+                                                key={collection.address}
+                                                className={classes.contractItem}
+                                                pluginID={pluginID}
+                                                selected={selected}
+                                                enabledSelect={multiple}
+                                                disabled={
+                                                    !!maxCollections &&
+                                                    pendingSelectedCollections.length >= maxCollections
+                                                }
+                                                collection={collection}
+                                                onSelect={handleSelectCollection}
+                                            />
+                                        )
+                                    })}
+                                </List>
+                            }
+                        </div>
+                    </div>
                     {multiple ?
                         <DialogActions className={classes.dialogActions}>
                             <Button

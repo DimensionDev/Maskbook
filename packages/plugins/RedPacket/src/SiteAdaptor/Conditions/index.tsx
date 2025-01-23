@@ -7,7 +7,7 @@ import { TokenIcon } from '@masknet/shared'
 import { formatBalance, isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
     box: {
         backgroundColor: 'rgba(0, 0, 0, 0.1)',
         backdropFilter: 'blur(10px)',
@@ -66,6 +66,10 @@ const useStyles = makeStyles()((theme) => ({
         display: 'grid',
         gridTemplateColumns: 'repeat(2,1fr)',
         gap: theme.spacing(1.5),
+        [`& .${refs.assetName}`]: {
+            lineHeight: '18px',
+            height: 36,
+        },
     },
     asset: {
         display: 'flex',
