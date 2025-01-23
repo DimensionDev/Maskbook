@@ -167,6 +167,7 @@ export function Erc20RedPacketConfirm() {
                     icon: token.logoURL,
                 })) as FireflyRedPacketAPI.TokensStrategyPayload[],
             })
+            return list
         }
         if (needHoldingCollections) {
             list.push({
@@ -178,6 +179,7 @@ export function Erc20RedPacketConfirm() {
                     icon: collection.iconURL!,
                 })),
             })
+            return list
         }
         return list
     }, [needHoldingTokens, requiredTokens, requiredCollections, tokenQuantity])

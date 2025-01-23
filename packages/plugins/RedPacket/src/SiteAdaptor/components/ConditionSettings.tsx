@@ -2,7 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { SelectFungibleTokenModal, SelectNonFungibleContractModal, TokenIcon } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { CheckBoxIndicator, makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
+import { makeStyles, RadioIndicator, ShadowRootPopper, ShadowRootTooltip } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import type { FungibleToken, NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
@@ -195,15 +195,10 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                             <label
                                 className={classes.option}
                                 onClick={() => {
-                                    setConditions(
-                                        conditions.includes(ConditionType.Crypto) ?
-                                            conditions.filter((c) => c !== ConditionType.Crypto)
-                                        :   [...conditions, ConditionType.Crypto],
-                                    )
+                                    setConditions([ConditionType.Crypto])
                                 }}>
-                                <CheckBoxIndicator
+                                <RadioIndicator
                                     checked={conditions.includes(ConditionType.Crypto)}
-                                    color={theme.palette.maskColor.primary}
                                     uncheckedColor={theme.palette.maskColor.secondaryLine}
                                 />
                                 <Typography className={classes.rowLabel}>
@@ -306,15 +301,10 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                             <label
                                 className={classes.option}
                                 onClick={() => {
-                                    setConditions(
-                                        conditions.includes(ConditionType.NFT) ?
-                                            conditions.filter((c) => c !== ConditionType.NFT)
-                                        :   [...conditions, ConditionType.NFT],
-                                    )
+                                    setConditions([ConditionType.NFT])
                                 }}>
-                                <CheckBoxIndicator
+                                <RadioIndicator
                                     checked={conditions.includes(ConditionType.NFT)}
-                                    color={theme.palette.maskColor.primary}
                                     uncheckedColor={theme.palette.maskColor.secondaryLine}
                                 />
                                 <Typography className={classes.rowLabel}>
