@@ -11,6 +11,9 @@ import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRefundCallback, useSolanaRefundCallback } from '../hooks/useRefundCallback.js'
 import { openComposition } from '../openComposition.js'
 import { useEnvironmentContext } from '@masknet/web3-hooks-base'
+import { useNavigate } from 'react-router-dom'
+import { RoutePaths } from '@masknet/plugin-redpacket'
+import { ApplicationBoardModal } from '@masknet/shared'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -105,6 +108,7 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
         [FireflyRedPacketAPI.RedPacketStatus.Refunding]: <Trans>Refund</Trans>,
     }
 
+    const navigate = useNavigate()
     const [{ loading: isSharing }, shareCallback] = useAsyncFn(async () => {
         if (!shareFrom || !themeId || !createdAt) return
 
@@ -131,7 +135,9 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
             compositionType,
             { claimRequirements: claim_strategy },
         )
-    }, [])
+        ApplicationBoardModal.close()
+        navigate(RoutePaths.Exit)
+    }, [navigate])
 
     const redpacketStatus = refunded || solanaRefunded ? RedPacketStatus.Refund : propRedpacketStatus
 

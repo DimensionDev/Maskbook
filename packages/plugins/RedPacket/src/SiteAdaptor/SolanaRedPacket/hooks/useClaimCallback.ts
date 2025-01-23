@@ -1,15 +1,15 @@
 import { web3 } from '@coral-xyz/anchor'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { EVMChainResolver } from '@masknet/web3-providers'
+import { SolanaChainResolver } from '@masknet/web3-providers'
 import type { SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { isNativeTokenAddress } from '@masknet/web3-shared-solana'
+import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token'
 import type { Cluster } from '@solana/web3.js'
 import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
 import { useAsyncFn } from 'react-use'
 import { sign } from 'tweetnacl'
 import { getRpProgram } from '../../helpers/getRpProgram.js'
-import { ASSOCIATED_TOKEN_PROGRAM_ID, getAssociatedTokenAddressSync } from '@solana/spl-token'
 
 interface ClaimParams {
     cluster?: Cluster
@@ -27,7 +27,7 @@ export function useClaimCallback(payload: SolanaRedPacketJSONPayload = {} as Sol
     const version = payload.contract_version
     const rpid = payload.rpid
     const { chainId: contextChainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>({ chainId: payloadChainId })
-    const chainIdByName = EVMChainResolver.chainId('network' in payload ? payload.network! : '')
+    const chainIdByName = SolanaChainResolver.chainId('network' in payload ? payload.network! : '')
     const chainId = payloadChainId || chainIdByName || contextChainId
     return useAsyncFn(
         async ({ cluster, accountId, password, tokenAddress, tokenProgram }: ClaimParams) => {

@@ -22,7 +22,7 @@ import {
 import { Typography } from '@mui/material'
 import { skipToken, useQuery } from '@tanstack/react-query'
 import { format, fromUnixTime } from 'date-fns'
-import { memo } from 'react'
+import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
@@ -246,6 +246,42 @@ export const RedPacketRecord = memo(function RedPacketRecord({
     // Claimed amount or total amount of the red packet
     const amount = onlyView ? history.token_amounts : history.total_amounts
 
+    const handleResend = useCallback(() => {
+        if (canSend && redpacketRecord.payload) {
+            onSelect?.(redpacketRecord.payload)
+        } else {
+            if (!canResend) return
+            onSelect?.({
+                txid: history.trans_hash,
+                contract_address: contractAddress!,
+                rpid: history.redpacket_id,
+                shares: history.total_numbers ? +history.total_numbers : 1,
+                is_random: createSuccessResult.ifrandom,
+                creation_time: history.create_time!,
+                contract_version: 4,
+                sender: {
+                    address: account,
+                    name: createSuccessResult.name,
+                    message: createSuccessResult.message,
+                },
+                total: history.total_amounts ?? '0',
+                duration: +createSuccessResult.duration,
+                token: {
+                    type: TokenType.Fungible,
+                    schema:
+                        isNativeTokenAddress(createSuccessResult.token_address) ? SchemaType.Native : SchemaType.ERC20,
+                    id: createSuccessResult.token_address,
+                    chainId: history.chain_id,
+                    address: createSuccessResult.token_address,
+                    symbol: history.token_symbol,
+                    decimals: history.token_decimal,
+                    name: history.token_symbol,
+                },
+                password: redpacketRecord.password,
+            })
+        }
+    }, [canResend, redpacketRecord, onSelect, account, createSuccessResult, history, contractAddress])
+
     return (
         <section className={classes.container} ref={redpacketRef}>
             <div className={classes.content}>
@@ -335,43 +371,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     createdAt={create_time}
                     canResend={canResend}
                     canSend={canSend}
-                    onResend={() => {
-                        if (canSend && redpacketRecord.payload) {
-                            onSelect?.(redpacketRecord.payload)
-                        } else {
-                            if (!canResend) return
-                            onSelect?.({
-                                txid: history.trans_hash,
-                                contract_address: contractAddress!,
-                                rpid: history.redpacket_id,
-                                shares: history.total_numbers ? +history.total_numbers : 1,
-                                is_random: createSuccessResult.ifrandom,
-                                creation_time: history.create_time!,
-                                contract_version: 4,
-                                sender: {
-                                    address: account,
-                                    name: createSuccessResult.name,
-                                    message: createSuccessResult.message,
-                                },
-                                total: history.total_amounts ?? '0',
-                                duration: +createSuccessResult.duration,
-                                token: {
-                                    type: TokenType.Fungible,
-                                    schema:
-                                        isNativeTokenAddress(createSuccessResult.token_address) ?
-                                            SchemaType.Native
-                                        :   SchemaType.ERC20,
-                                    id: createSuccessResult.token_address,
-                                    chainId: history.chain_id,
-                                    address: createSuccessResult.token_address,
-                                    symbol: history.token_symbol,
-                                    decimals: history.token_decimal,
-                                    name: history.token_symbol,
-                                },
-                                password: redpacketRecord.password,
-                            })
-                        }
-                    }}
+                    onResend={handleResend}
                 />
             :   null}
             {timestamp ?
