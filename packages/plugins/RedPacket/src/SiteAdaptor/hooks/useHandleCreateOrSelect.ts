@@ -8,7 +8,7 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useCallback, useContext } from 'react'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { openComposition } from '../openComposition.js'
-import { reduceUselessPayloadInfo } from '../utils/reduceUselessPayloadInfo.js'
+import { reduceUselessPayloadInfo } from '../helpers/reduceUselessPayloadInfo.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 
 interface Options {
