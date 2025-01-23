@@ -1,5 +1,5 @@
 import type { MouseEventHandler } from 'react'
-import { useChainContext } from '@masknet/web3-hooks-base'
+import { useChainContext, useNativeTokenBalance } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { ActionButton, makeStyles } from '@masknet/theme'
@@ -7,6 +7,8 @@ import { Box, useTheme, type BoxProps } from '@mui/material'
 import { Icons } from '@masknet/icons'
 import { ChainBoundary, WalletConnectedBoundary, SelectProviderModal } from '@masknet/shared'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { isGreaterThan } from '@masknet/web3-shared-base'
+import { SOL_REDPACKET_CREATE_DEFAULT_GAS } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -46,6 +48,8 @@ export function OperationFooter({
     const { account, chainId: currentChainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>({ chainId })
     const theme = useTheme()
 
+    const { value: nativeTokenBalance } = useNativeTokenBalance()
+
     if (!canClaim && !canRefund && account) return null
 
     function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {
@@ -56,6 +60,12 @@ export function OperationFooter({
                 </ActionButton>
             )
         }
+        if (nativeTokenBalance && isGreaterThan(SOL_REDPACKET_CREATE_DEFAULT_GAS, nativeTokenBalance))
+            return (
+                <ActionButton fullWidth disabled variant="roundedDark">
+                    <Trans>Insufficient Balance for Gas Fee</Trans>
+                </ActionButton>
+            )
         if (!canClaim && !canRefund) return null
         if (!currentChainId) {
             return (
