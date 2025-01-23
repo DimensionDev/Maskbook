@@ -471,7 +471,7 @@ msgstr ""
 msgid "History"
 msgstr ""
 
-#. placeholder {0}: tokenQuantity ? `${tokenQuantity}+` : 'any'
+#. placeholder {0}: tokenQuantity ? `${formatTokenAmount(tokenQuantity, 0)}+` : 'any'
 #: src/SiteAdaptor/views/Erc20RedPacketConfirm.tsx
 msgid "Holding {0}"
 msgstr ""
