@@ -1,4 +1,5 @@
 import type { BN, web3 } from '@coral-xyz/anchor'
+import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import type { NonFungibleToken } from '@masknet/web3-shared-base'
 import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
@@ -83,4 +84,28 @@ export interface RedPacketAccount {
     tokenMint: web3.PublicKey | null // Token mint address if SPL token
     claimedUsers: web3.PublicKey[] // List of users who claimed
     claimedAmountRecords: BN[] // List of claimed amounts
+}
+
+export interface HistoryInfo {
+    rp_msg: string
+    redpacket_id: string
+    received_time?: string
+    token_decimal: number
+    total_amounts?: string
+    token_symbol: string
+    token_amounts?: string
+    token_logo: string
+    chain_id: number
+    creator?: string
+    claim_numbers?: string
+    total_numbers?: string
+    claim_amounts?: string
+    create_time?: number
+    redpacket_status?: FireflyRedPacketAPI.RedPacketStatus
+    ens_name?: string
+    claim_strategy?: FireflyRedPacketAPI.StrategyPayload[]
+    share_from?: string
+    theme_id?: string
+    trans_hash: string
+    duration: number
 }

@@ -1,9 +1,9 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { CHAIN_DESCRIPTORS, ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
-import { ChainId as FlowChainId } from '@masknet/web3-shared-flow'
+import { type ChainId as FlowChainId } from '@masknet/web3-shared-flow'
 import { noop, sortBy } from 'lodash-es'
-import { ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import { type ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
 import { useNetworks } from '@masknet/web3-hooks-base'
 import {
     createContext,

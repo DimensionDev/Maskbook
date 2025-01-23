@@ -12,6 +12,7 @@ import { EmptyStatus, LoadingStatus } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 import { useEnvironmentContext } from '@masknet/web3-hooks-base'
 import { ThemeProvider } from '@mui/material'
+import { DURATION } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -67,10 +68,16 @@ export function HistoryDetail() {
     const claims = useMemo(() => data?.pages.flatMap((x) => x.list) ?? EMPTY_LIST, [data?.pages])
     const info = first(data?.pages)
 
-    const patchedHistory = useMemo(
-        () => (history ? { ...history, claim_numbers: info?.claim_numbers, total_numbers: info?.total_numbers } : null),
-        [history],
-    )
+    const patchedHistory = useMemo(() => {
+        return history ?
+                {
+                    ...history,
+                    claim_numbers: info?.claim_numbers,
+                    total_numbers: info?.total_numbers,
+                    duration: DURATION,
+                }
+            :   null
+    }, [history])
     return (
         <div className={classes.container}>
             {patchedHistory ?

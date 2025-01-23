@@ -8,7 +8,7 @@ import { isSameAddress, type NonFungibleCollection, type ReasonableNetwork } fro
 import {
     CHAIN_DESCRIPTORS,
     ChainId,
-    NetworkType,
+    type NetworkType,
     SchemaType,
     isLensCollect,
     isLensFollower,

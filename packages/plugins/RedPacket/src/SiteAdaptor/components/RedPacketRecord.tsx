@@ -1,6 +1,7 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { TokenIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { openWindow, useEverSeen } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import {
@@ -26,10 +27,10 @@ import { memo, useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
+import type { HistoryInfo } from '../../types.js'
+import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 import { useCreateRedPacketReceipt } from '../hooks/useCreateRedPacketReceipt.js'
 import { RedPacketActionButton } from './RedPacketActionButton.js'
-import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
-import { NetworkPluginID } from '@masknet/shared-base'
 
 const DEFAULT_BACKGROUND = NETWORK_DESCRIPTORS.find((x) => x.chainId === ChainId.Mainnet)!.backgroundGradient!
 const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()((
@@ -153,29 +154,6 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
         },
     }
 })
-
-interface HistoryInfo {
-    rp_msg: string
-    redpacket_id: string
-    received_time?: string
-    token_decimal: number
-    total_amounts?: string
-    token_symbol: string
-    token_amounts?: string
-    token_logo: string
-    chain_id: number
-    creator?: string
-    claim_numbers?: string
-    total_numbers?: string
-    claim_amounts?: string
-    create_time?: number
-    redpacket_status?: FireflyRedPacketAPI.RedPacketStatus
-    ens_name?: string
-    claim_strategy?: FireflyRedPacketAPI.StrategyPayload[]
-    share_from?: string
-    theme_id?: string
-    trans_hash: string
-}
 
 interface RedPacketRecordProps {
     history: HistoryInfo
@@ -355,7 +333,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     }}>
                     {t`View`}
                 </ActionButton>
-            : redpacket_status ?
+            : redpacket_status && createSuccessResult ?
                 <RedPacketActionButton
                     className={classes.actionButton}
                     redpacketStatus={redpacket_status}
@@ -365,11 +343,14 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                     shareFrom={share_from}
                     themeId={theme_id}
                     redpacketMsg={rp_msg}
+                    isRandom={createSuccessResult.ifrandom}
                     tokenInfo={{
                         symbol: tokenSymbol,
                         decimals: token_decimal,
                         amount: total_amounts,
+                        address: createSuccessResult.token_address,
                     }}
+                    history={history}
                     chainId={chainId}
                     totalAmount={total_amounts}
                     createdAt={create_time}

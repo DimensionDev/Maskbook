@@ -1,20 +1,21 @@
 import { Trans } from '@lingui/react/macro'
+import { RoutePaths } from '@masknet/plugin-redpacket'
+import { ApplicationBoardModal } from '@masknet/shared'
 import { NetworkPluginID, RedPacketMetaKey } from '@masknet/shared-base'
+import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, makeStyles, type ActionButtonProps } from '@masknet/theme'
+import { useEnvironmentContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { useMediaQuery, type Theme } from '@mui/material'
 import { type ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
+import { useMediaQuery, type Theme } from '@mui/material'
 import { memo, useCallback, useContext } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
+import type { HistoryInfo } from '../../types.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRefundCallback, useSolanaRefundCallback } from '../hooks/useRefundCallback.js'
 import { openComposition } from '../openComposition.js'
-import { useEnvironmentContext, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { useNavigate } from 'react-router-dom'
-import { RoutePaths } from '@masknet/plugin-redpacket'
-import { ApplicationBoardModal } from '@masknet/shared'
-import { openWindow } from '@masknet/shared-base-ui'
 
 const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
@@ -48,6 +49,7 @@ interface TokenInfo {
     symbol: string
     decimals: number
     amount?: string
+    address: string
 }
 const RedPacketStatus = FireflyRedPacketAPI.RedPacketStatus
 
@@ -58,7 +60,9 @@ interface Props extends ActionButtonProps {
     claim_strategy?: FireflyRedPacketAPI.StrategyPayload[]
     shareFrom?: string
     themeId?: string
+    isRandom: boolean
     tokenInfo: TokenInfo
+    history: HistoryInfo
     redpacketMsg?: string
     chainId: ChainId | SolanaChainId
     totalAmount?: string
@@ -77,7 +81,9 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
     claim_strategy,
     shareFrom,
     themeId,
+    isRandom,
     tokenInfo,
+    history,
     redpacketMsg,
     chainId,
     totalAmount,
@@ -128,18 +134,36 @@ export const RedPacketActionButton = memo(function RedPacketActionButton({
                     chainId,
                     symbol: tokenInfo.symbol,
                     decimals: tokenInfo.decimals,
+                    address: tokenInfo.address,
                 },
                 contract_address: rpid,
                 rpid,
-                shares: totalAmount,
+                shares: history.total_numbers ? +history.total_numbers : 5,
                 total: tokenInfo.amount,
+                is_random: isRandom,
+                duration: history.duration,
             },
             compositionType,
             { claimRequirements: claim_strategy },
         )
         ApplicationBoardModal.close()
         navigate(RoutePaths.Exit)
-    }, [navigate])
+    }, [
+        navigate,
+        account,
+        shareFrom,
+        themeId,
+        createdAt,
+        tokenInfo.amount,
+        tokenInfo.address,
+        compositionType,
+        claim_strategy,
+        rpid,
+        totalAmount,
+        isRandom,
+        redpacketMsg,
+        chainId,
+    ])
 
     const redpacketStatus = refunded || solanaRefunded ? RedPacketStatus.Refund : propRedpacketStatus
 

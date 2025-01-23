@@ -270,6 +270,7 @@ export namespace FireflyRedPacketAPI {
         claim_strategy: StrategyPayload[]
         theme_id: string
         share_from: string
+        duration: number
     }
 
     export interface RedPacketClaimedInfoItem extends RedPacketBaseInfo {
