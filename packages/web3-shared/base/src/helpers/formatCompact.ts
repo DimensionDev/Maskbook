@@ -1,4 +1,4 @@
-export function formatCompact(value: number | bigint, options?: Intl.NumberFormatOptions) {
+export function formatCompact(value: number | bigint | `${number}`, options?: Intl.NumberFormatOptions) {
     const formatter = new Intl.NumberFormat('en-US', {
         style: 'decimal',
         notation: 'compact',
