@@ -21,7 +21,7 @@ export function useRedpacketToken(chainId: ChainId, hash: string, enabled?: bool
         queryFn: async () => {
             const receipt = await web3Conn.getTransactionReceipt(hash)
             if (!receipt || !inputs) return null
-            if (!web3) return
+            if (!web3) return null
             const log = receipt.logs.find((x) => x.topics[0] === CREATE_LUCKY_DROP_TOPIC)
             if (!log) return null
 

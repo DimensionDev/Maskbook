@@ -44,21 +44,14 @@ export function useCreateNftRedpacketCallback(
             }
 
             // #region check ownership
-            type CheckMethodParameters = Parameters<NftRedPacket['methods']['check_ownership']>
-
-            const checkParams: CheckMethodParameters = [tokenIdList, contractAddress]
+            const checkParams: Parameters<NftRedPacket['methods']['check_ownership']> = [tokenIdList, contractAddress]
 
             const isOwner = await nftRedPacketContract.methods.check_ownership(...checkParams).call({ from: account })
-
-            if (!isOwner) {
-                return
-            }
+            if (!isOwner) return
 
             // #endregion
 
-            type FillMethodParameters = Parameters<NftRedPacket['methods']['create_red_packet']>
-
-            const params: FillMethodParameters = [
+            const params: Parameters<NftRedPacket['methods']['create_red_packet']> = [
                 publicKey,
                 duration,
                 web3_utils.sha3(Math.random().toString())!,
@@ -87,11 +80,10 @@ export function useCreateNftRedpacketCallback(
             })
             const receipt = await EVMWeb3.getTransactionReceipt(hash)
             if (receipt) {
-                const events = decodeEvents(nftRedPacketContract.options.jsonInterface, receipt.logs)
                 return {
                     hash,
                     receipt,
-                    events,
+                    events: decodeEvents(nftRedPacketContract.options.jsonInterface, receipt.logs),
                 }
             }
             return { hash, receipt }
