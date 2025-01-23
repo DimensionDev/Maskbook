@@ -273,7 +273,7 @@ export const RedPacketRecord = memo(function RedPacketRecord({
                         badgeSize={16}
                         chainId={chainId}
                         address={token?.address ?? createSuccessResult?.token_address}
-                        logoURL={token_logo}
+                        logoURL={token_logo !== 'missing.png' ? token_logo : undefined}
                         symbol={token_symbol}
                         name={token_symbol}
                         disableBadge={pluginID === NetworkPluginID.PLUGIN_SOLANA}
