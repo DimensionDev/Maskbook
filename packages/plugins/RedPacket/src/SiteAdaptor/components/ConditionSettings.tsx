@@ -33,6 +33,7 @@ const useStyles = makeStyles()((theme) => {
             fontWeight: 700,
         },
         conditions: {
+            backgroundColor: theme.palette.maskColor.bottom,
             display: 'flex',
             flexDirection: 'column',
             gap: theme.spacing(1.5),
