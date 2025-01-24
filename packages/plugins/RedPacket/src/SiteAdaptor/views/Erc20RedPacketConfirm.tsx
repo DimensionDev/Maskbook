@@ -325,9 +325,7 @@ export function Erc20RedPacketConfirm() {
                         <div className={classes.conditionGroup}>
                             <div className={classes.field}>
                                 <Typography component="span" className={classes.value}>
-                                    <Trans>
-                                        Holding {tokenQuantity ? `${formatTokenAmount(tokenQuantity, 0)}+` : 'any'}
-                                    </Trans>
+                                    <Trans>Holding {tokenQuantity ? `${tokenQuantity}+` : 'any'}</Trans>
                                 </Typography>
                             </div>
                             <div className={classes.field}>
