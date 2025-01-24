@@ -239,6 +239,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
                 isEmpty={isEmpty}
                 isExpired={isExpired}
                 isRefunded={isRefunded}
+                hideContent={showRequirements}
                 claimedCount={+availability.claimed}
                 total={payload.total}
                 totalClaimed={minus(payload.total, payload.total_remaining || availability.balance).toFixed()}

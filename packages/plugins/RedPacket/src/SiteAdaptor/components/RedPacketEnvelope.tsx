@@ -150,6 +150,8 @@ interface Props extends HTMLProps<HTMLDivElement> {
     isEmpty?: boolean
     isExpired?: boolean
     isRefunded?: boolean
+    /** content would be hidden if the conditions overlay shows */
+    hideContent?: boolean
     creator: string
     showConditionButton?: boolean
     onClickCondition?(): void
@@ -166,6 +168,7 @@ export function RedPacketEnvelope({
     isClaimed,
     isExpired,
     isRefunded,
+    hideContent,
     isEmpty,
     creator,
     showConditionButton,
@@ -177,7 +180,7 @@ export function RedPacketEnvelope({
     return (
         <div {...props} className={cx(classes.container, props.className)}>
             <img src={cover} className={classes.cover} />
-            <div className={classes.content}>
+            <div className={classes.content} style={{ display: hideContent ? 'none' : undefined }}>
                 <div className={classes.message}>
                     <TextOverflowTooltip as={ShadowRootTooltip} title={message} placement="top">
                         <Typography key={message} className={classes.text}>

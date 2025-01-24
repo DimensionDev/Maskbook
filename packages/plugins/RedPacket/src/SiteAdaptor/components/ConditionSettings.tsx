@@ -122,10 +122,6 @@ const useStyles = makeStyles()((theme) => {
             height: 24,
             marginRight: '0px !important',
         },
-        note: {
-            fontWeight: 700,
-            fontSize: 16,
-        },
     }
 })
 
@@ -386,9 +382,6 @@ export function ConditionSettings(props: HTMLProps<HTMLDivElement>) {
                                 </div>
                             :   null}
                         </div>
-                        <Typography className={classes.note}>
-                            Eligibility requires either being a Crypto Holder or an NFT Holder.
-                        </Typography>
                     </div>
                 </ShadowRootPopper>
             </div>
