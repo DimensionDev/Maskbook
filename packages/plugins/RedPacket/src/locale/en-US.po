@@ -988,6 +988,14 @@ msgid "You haven't created any NFT lucky drop yet. Try to create one and share f
 msgstr ""
 
 #: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to follow <0>@{twitterHandle}</0>"
+msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to follow the creator of the lucky drop."
+msgstr ""
+
+#: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold any of the following NFTs in your wallet."
 msgstr ""
 

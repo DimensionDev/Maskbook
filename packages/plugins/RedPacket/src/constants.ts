@@ -1,5 +1,5 @@
 import { PluginID } from '@masknet/shared-base'
-import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { ChainId } from '@masknet/web3-shared-evm'
 
 /**
@@ -154,3 +154,5 @@ export const PRESET_THEMES =
         ]
 
 export const MAX_CUSTOM_THEMES = 3
+
+export const WalletRelatedTypes = [FireflyRedPacketAPI.StrategyType.nftOwned, FireflyRedPacketAPI.StrategyType.tokens]

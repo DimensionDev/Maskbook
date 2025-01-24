@@ -303,6 +303,8 @@
         "zEZe86": [
             "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
         ],
+        "Jnjbl3": ["You need to follow <0>@", ["twitterHandle"], "</0>"],
+        "ty2gt9": ["You need to follow the creator of the lucky drop."],
         "aFJrEy": ["You need to hold any of the following NFTs in your wallet."],
         "0lBTmP": ["You need to hold any of the following tokens."],
         "WKG5E8": ["You need to hold at least ", ["quantity"], " of any of the following tokens."],

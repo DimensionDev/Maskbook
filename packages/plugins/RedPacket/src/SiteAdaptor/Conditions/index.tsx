@@ -1,11 +1,15 @@
-import { Icons } from '@masknet/icons'
-import { MaskColors, makeStyles } from '@masknet/theme'
-import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { Box, IconButton, Typography, type BoxProps } from '@mui/material'
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { WalletRelatedTypes } from '@masknet/plugin-redpacket'
 import { TokenIcon } from '@masknet/shared'
-import { isZero } from '@masknet/web3-shared-base'
 import { NetworkPluginID } from '@masknet/shared-base'
+import { LoadingBase, MaskColors, makeStyles } from '@masknet/theme'
+import { FireflyTwitter } from '@masknet/web3-providers'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { isZero } from '@masknet/web3-shared-base'
+import { Box, IconButton, Link, Typography, type BoxProps } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { memo } from 'react'
 import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
 const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
@@ -68,7 +72,6 @@ const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
         gap: theme.spacing(1),
         [`& .${refs.assetName}`]: {
             lineHeight: '18px',
-            height: 36,
         },
     },
     asset: {
@@ -93,7 +96,7 @@ const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
         height: 24,
         marginRight: '0px !important',
     },
-    unsatisfied: {
+    results: {
         position: 'absolute',
         left: 12,
         bottom: 12,
@@ -101,6 +104,11 @@ const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
         backgroundColor: 'rgba(255, 53, 69, 0.2)',
         borderRadius: 4,
         padding: 6,
+        '&:empty': {
+            display: 'none',
+        },
+    },
+    unsatisfied: {
         color: theme.palette.maskColor.white,
         fontSize: 12,
         fontWeight: 700,
@@ -114,13 +122,28 @@ interface Props extends BoxProps {
     onClose?(): void
 }
 
-export function Conditions({ onClose, statusList, unsatisfied = true, ...props }: Props) {
+const StrategyType = FireflyRedPacketAPI.StrategyType
+const PlatformType = FireflyRedPacketAPI.PlatformType
+
+export const Conditions = memo(function Conditions({ onClose, statusList, unsatisfied = true, ...props }: Props) {
     const { classes, cx } = useStyles()
-    const tokenPayloads = statusList.find((x) => x.type === FireflyRedPacketAPI.StrategyType.tokens)?.payload
+    const tokenPayloads = statusList.find((x) => x.type === StrategyType.tokens)?.payload
     const tokenPayload = tokenPayloads?.[0]
     const quantity = tokenPayload ? formatTokenAmount(tokenPayload.amount, tokenPayload.decimals) : ''
 
-    const collectionPayloads = statusList.find((x) => x.type === FireflyRedPacketAPI.StrategyType.nftOwned)?.payload
+    const collectionPayloads = statusList.find((x) => x.type === StrategyType.nftOwned)?.payload
+    const walletUnsatisfied = statusList
+        .filter((x) => WalletRelatedTypes.includes(x.type))
+        .some((x) => (typeof x.result === 'boolean' ? !x.result : !x.result.hasPassed))
+    const followStatus = statusList.find((x) => x.type === StrategyType.profileFollow)
+    const followPayload = followStatus?.payload.find((x) => x.platform === PlatformType.twitter)
+    const followUnsatisfied = followStatus?.result === false
+
+    const { data: twitterHandle, isLoading } = useQuery({
+        queryKey: ['twitter-user', 'by-profile-id', followPayload?.profileId],
+        queryFn: () => (followPayload?.profileId ? FireflyTwitter.getUserInfoById(followPayload?.profileId) : null),
+        select: (data) => data?.legacy.screen_name,
+    })
 
     return (
         <Box {...props} className={cx(classes.box, props.className)}>
@@ -183,15 +206,38 @@ export function Conditions({ onClose, statusList, unsatisfied = true, ...props }
                         </div>
                     </div>
                 :   null}
-                {unsatisfied ?
-                    <Typography className={classes.unsatisfied}>
-                        <Trans>Your wallet does not meet the eligibility criteria for claiming.</Trans>
-                    </Typography>
-                :   null}
+                <div className={classes.results}>
+                    {followUnsatisfied ?
+                        isLoading ?
+                            <Typography className={classes.unsatisfied}>
+                                <LoadingBase size={16} />
+                            </Typography>
+                        : twitterHandle ?
+                            <Typography className={classes.unsatisfied}>
+                                {followPayload ?
+                                    <Trans>
+                                        You need to follow{' '}
+                                        <Link
+                                            href={`https://twitter.com/${twitterHandle}`}
+                                            target="_blank"
+                                            color="inherit">
+                                            @{twitterHandle}
+                                        </Link>
+                                    </Trans>
+                                :   <Trans>You need to follow the creator of the lucky drop.</Trans>}
+                            </Typography>
+                        :   null
+                    :   null}
+                    {walletUnsatisfied ?
+                        <Typography className={classes.unsatisfied}>
+                            <Trans>Your wallet does not meet the eligibility criteria for claiming.</Trans>
+                        </Typography>
+                    :   null}
+                </div>
             </div>
             <IconButton className={classes.closeButton} disableRipple onClick={() => onClose?.()} aria-label="Close">
                 <Icons.BaseClose size={30} />
             </IconButton>
         </Box>
     )
-}
+})
