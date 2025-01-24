@@ -15,7 +15,12 @@ export function SolanaRedPacketFrame({ payload }: Omit<SolanaRedPacketCardProps,
             if (draft.token) {
                 draft.token.runtime = NetworkPluginID.PLUGIN_SOLANA
             }
+            if (payload.rpid.startsWith('solana-')) {
+                draft.rpid = payload.rpid.slice(7)
+            }
+            // compatible to legacy payload
             draft.accountId = draft.rpid
+            if ((payload.network as string) === 'mainnet') draft.network = 'mainnet-beta'
         })
     }, [payload])
     const payloadChainId =
