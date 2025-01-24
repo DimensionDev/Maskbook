@@ -68,6 +68,7 @@ export function TokenMenuList({ options, currentOption, onSelect, fromSocialCard
                             address={x.address || ''}
                             symbol={x.symbol}
                             size={20}
+                            disableBadge
                         />
 
                         <Stack className={classes.itemText}>

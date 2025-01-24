@@ -176,6 +176,7 @@ export function HistoryView() {
                                         address={fromToken.contractAddress}
                                         logoURL={fromToken.logo}
                                         size={30}
+                                        disableBadge
                                     />
                                     <TokenIcon
                                         className={classes.toTokenIcon}
@@ -183,6 +184,7 @@ export function HistoryView() {
                                         address={toToken.contractAddress}
                                         logoURL={toToken.logo}
                                         size={30}
+                                        disableBadge
                                     />
                                 </div>
                                 <div>

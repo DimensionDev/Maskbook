@@ -312,7 +312,8 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
                                             symbol={coin.symbol}
                                             address={coinAddress ?? ''}
                                             logoURL={coin.image_url}
-                                            size={20}
+                                            size={24}
+                                            disableBadge
                                         />
                                     </Avatar>
                                 </Linking>

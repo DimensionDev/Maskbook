@@ -67,10 +67,6 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         fontWeight: 400,
     },
-    tokenIcon: {
-        height: 30,
-        width: 30,
-    },
     tokenInfo: {
         display: 'flex',
         gap: theme.spacing(1),
@@ -404,10 +400,11 @@ export const Confirm = memo(function Confirm() {
                             </Typography>
                             <div className={classes.tokenInfo}>
                                 <TokenIcon
-                                    className={classes.tokenIcon}
+                                    size={30}
                                     chainId={fromToken?.chainId}
                                     address={fromToken?.address || ''}
                                     logoURL={fromToken?.logoURL}
+                                    disableBadge
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText
@@ -426,10 +423,11 @@ export const Confirm = memo(function Confirm() {
                             </Typography>
                             <div className={classes.tokenInfo}>
                                 <TokenIcon
-                                    className={classes.tokenIcon}
+                                    size={30}
                                     chainId={toToken?.chainId}
                                     address={toToken?.address || ''}
                                     logoURL={toToken?.logoURL}
+                                    disableBadge
                                 />
                                 <div className={classes.tokenValue}>
                                     <ProgressiveText loading={!toToken_} className={cx(classes.toToken, classes.value)}>
