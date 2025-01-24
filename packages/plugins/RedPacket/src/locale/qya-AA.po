@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 14:56\n"
+"PO-Revision-Date: 2025-01-24 10:23\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -991,6 +991,14 @@ msgstr "crwdns29160:0{0}crwdne29160:0"
 #: src/SiteAdaptor/views/NftHistory.tsx
 msgid "You haven't created any NFT lucky drop yet. Try to create one and share fortune with your friends."
 msgstr "crwdns32316:0crwdne32316:0"
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to follow <0>@{twitterHandle}</0>"
+msgstr "crwdns36634:0{twitterHandle}crwdne36634:0"
+
+#: src/SiteAdaptor/Conditions/index.tsx
+msgid "You need to follow the creator of the lucky drop."
+msgstr "crwdns36636:0crwdne36636:0"
 
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "You need to hold any of the following NFTs in your wallet."
