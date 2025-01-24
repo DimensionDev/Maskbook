@@ -125,8 +125,8 @@ export function TokenTransactionConfirmModal({
                                 name={token.symbol ?? token.name}
                                 pluginID={token.runtime}
                                 chainId={token.chainId}
+                                badgeSize={20}
                                 size={90}
-                                disableBadge
                             />
                         :   <Icons.FillSuccess className={classes.icon} size={90} />}
                         <Typography className={classes.congratulation} mt="19.5px">

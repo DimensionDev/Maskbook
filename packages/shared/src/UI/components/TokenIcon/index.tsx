@@ -80,7 +80,14 @@ export const TokenIcon = memo(function TokenIcon(props: TokenIconProps) {
     if (data && disableDefaultIcon) return null
     const text = token?.name || token?.symbol || symbol || name || '?' // `?` prevent to fallback to avatar icon
     const url = logoURL || token?.logoURL || data
-    const icon = <Icon {...rest} logoURL={url} name={text} />
+    const icon = (
+        <Icon
+            {...rest}
+            logoURL={url}
+            name={text}
+            style={{ fontSize: typeof rest.size === 'number' ? rest.size / 2 : undefined }}
+        />
+    )
 
     return (
         <div className={cx(classes.container, className)} style={{ ...style, height: rest.size, width: rest.size }}>

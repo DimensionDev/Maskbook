@@ -11,6 +11,7 @@ const useStyles = makeStyles<Pick<IconProps, 'size'>>()((theme, { size }) => ({
         backgroundSize: 'cover',
         height: size,
         width: size,
+        fontWeight: 700,
     },
 }))
 
