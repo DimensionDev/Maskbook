@@ -250,7 +250,6 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             {cover ?
                 <Grow in={showRequirements} timeout={250}>
                     <Conditions
-                        unsatisfied={unsatisfied}
                         statusList={claimStrategyStatus?.claimStrategyStatus ?? EMPTY_LIST}
                         className={classes.conditions}
                         onClose={() => setShowRequirements(false)}

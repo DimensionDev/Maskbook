@@ -3,7 +3,7 @@ import { Icons } from '@masknet/icons'
 import { WalletRelatedTypes } from '@masknet/plugin-redpacket'
 import { TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
-import { LoadingBase, MaskColors, makeStyles } from '@masknet/theme'
+import { MaskColors, makeStyles } from '@masknet/theme'
 import { FireflyTwitter } from '@masknet/web3-providers'
 import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { isZero } from '@masknet/web3-shared-base'
@@ -117,7 +117,6 @@ const useStyles = makeStyles<void, 'assetName'>()((theme, _, refs) => ({
 }))
 
 interface Props extends BoxProps {
-    unsatisfied?: boolean
     statusList: FireflyRedPacketAPI.ClaimStrategyStatus[]
     onClose?(): void
 }
@@ -125,7 +124,7 @@ interface Props extends BoxProps {
 const StrategyType = FireflyRedPacketAPI.StrategyType
 const PlatformType = FireflyRedPacketAPI.PlatformType
 
-export const Conditions = memo(function Conditions({ onClose, statusList, unsatisfied = true, ...props }: Props) {
+export const Conditions = memo(function Conditions({ onClose, statusList, ...props }: Props) {
     const { classes, cx } = useStyles()
     const tokenPayloads = statusList.find((x) => x.type === StrategyType.tokens)?.payload
     const tokenPayload = tokenPayloads?.[0]
@@ -137,9 +136,8 @@ export const Conditions = memo(function Conditions({ onClose, statusList, unsati
         .some((x) => (typeof x.result === 'boolean' ? !x.result : !x.result.hasPassed))
     const followStatus = statusList.find((x) => x.type === StrategyType.profileFollow)
     const followPayload = followStatus?.payload.find((x) => x.platform === PlatformType.twitter)
-    const followUnsatisfied = followStatus?.result === false
 
-    const { data: twitterHandle, isLoading } = useQuery({
+    const { data: twitterHandle } = useQuery({
         queryKey: ['twitter-user', 'by-profile-id', followPayload?.profileId],
         queryFn: () => (followPayload?.profileId ? FireflyTwitter.getUserInfoById(followPayload?.profileId) : null),
         select: (data) => data?.legacy.screen_name,
@@ -151,6 +149,20 @@ export const Conditions = memo(function Conditions({ onClose, statusList, unsati
                 <Trans>Who can claim?</Trans>
             </Typography>
             <div className={classes.content}>
+                {followPayload ?
+                    <div className={classes.section}>
+                        <Typography className={classes.sectionTitle}>
+                            {twitterHandle ?
+                                <Trans>
+                                    You need to follow{' '}
+                                    <Link href={`https://twitter.com/${twitterHandle}`} target="_blank" color="inherit">
+                                        @{twitterHandle}
+                                    </Link>
+                                </Trans>
+                            :   <Trans>You need to follow the creator of the lucky drop.</Trans>}
+                        </Typography>
+                    </div>
+                :   null}
                 {tokenPayloads?.length ?
                     <div className={classes.section}>
                         <Typography className={classes.sectionTitle}>
@@ -207,27 +219,6 @@ export const Conditions = memo(function Conditions({ onClose, statusList, unsati
                     </div>
                 :   null}
                 <div className={classes.results}>
-                    {followUnsatisfied ?
-                        isLoading ?
-                            <Typography className={classes.unsatisfied}>
-                                <LoadingBase size={16} />
-                            </Typography>
-                        : twitterHandle ?
-                            <Typography className={classes.unsatisfied}>
-                                {followPayload ?
-                                    <Trans>
-                                        You need to follow{' '}
-                                        <Link
-                                            href={`https://twitter.com/${twitterHandle}`}
-                                            target="_blank"
-                                            color="inherit">
-                                            @{twitterHandle}
-                                        </Link>
-                                    </Trans>
-                                :   <Trans>You need to follow the creator of the lucky drop.</Trans>}
-                            </Typography>
-                        :   null
-                    :   null}
                     {walletUnsatisfied ?
                         <Typography className={classes.unsatisfied}>
                             <Trans>Your wallet does not meet the eligibility criteria for claiming.</Trans>
