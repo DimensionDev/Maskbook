@@ -39,7 +39,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const initialEntries = [RoutePaths.Exit, RoutePaths.CreateErc20RedPacket]
+const initialEntries = [RoutePaths.Exit, RoutePaths.CreateTokenRedPacket]
 
 export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
     const { classes } = useStyles()
@@ -52,7 +52,7 @@ export function RedPacketMainDialog({ onClose }: RedPacketDialogProps) {
                 <RedPacketProvider>
                     <RouterDialog
                         pageMap={{
-                            [RedPacketTabs.tokens]: RoutePaths.CreateErc20RedPacket,
+                            [RedPacketTabs.tokens]: RoutePaths.CreateTokenRedPacket,
                             [RedPacketTabs.collectibles]: RoutePaths.CreateNftRedPacket,
                         }}
                         open

@@ -16,10 +16,10 @@ export const SOL_REDPACKET_CREATE_DEFAULT_GAS = '10000000'
 export const DEFAULT_DURATION = 60 * 60 * 24 // 24 hours
 export const enum RoutePaths {
     Create = '/create',
-    CreateErc20RedPacket = '/create/erc20',
+    CreateTokenRedPacket = '/create/token',
     CreateNftRedPacket = '/create/nft',
     Confirm = '/confirm',
-    ConfirmErc20RedPacket = '/confirm/erc20',
+    ConfirmTokenRedPacket = '/confirm/token',
     ConfirmNftRedPacket = '/confirm/nft',
     CustomCover = '/custom-cover',
     Requirements = '/requirements',

@@ -1,14 +1,14 @@
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
 import { InjectedDialog, NetworkTab, usePageTab, useParamTab, type InjectedDialogProps } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, MaskTabList } from '@masknet/theme'
+import { TabContext } from '@mui/lab'
+import { Tab, useTheme } from '@mui/material'
 import { useLayoutEffect, type ReactNode } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { nftDefaultChains, RoutePaths } from '../../constants.js'
-import { makeStyles, MaskTabList } from '@masknet/theme'
-import { Tab, useTheme } from '@mui/material'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
-import { TabContext } from '@mui/lab'
-import { Icons } from '@masknet/icons'
 import { HistoryTabs, RedPacketTabs } from '../../types.js'
 
 const useStyles = makeStyles<{ isDim: boolean }>()((theme, { isDim }) => {
@@ -62,7 +62,7 @@ export function RouterDialog({
     )
     const isCreate = matchPath(`${RoutePaths.Create}/*`, pathname)
     const isEvmCreate =
-        matchPath(RoutePaths.CreateErc20RedPacket, pathname) || matchPath(RoutePaths.CreateNftRedPacket, pathname)
+        matchPath(RoutePaths.CreateTokenRedPacket, pathname) || matchPath(RoutePaths.CreateNftRedPacket, pathname)
     const titleTabs =
         isCreate ? createTabs
         : matchPath(RoutePaths.History, pathname) ? historyTabs
@@ -79,14 +79,14 @@ export function RouterDialog({
             </div>
         :   null
     const titleMap: Record<string, ReactNode> = {
-        [RoutePaths.ConfirmErc20RedPacket]: <Trans>Confirm the Lucky Drop</Trans>,
+        [RoutePaths.ConfirmTokenRedPacket]: <Trans>Confirm the Lucky Drop</Trans>,
         [RoutePaths.History]: <Trans>History</Trans>,
         [RoutePaths.HistoryDetail]: <Trans>Claim Details</Trans>,
         [RoutePaths.NftHistory]: <Trans>History</Trans>,
         [RoutePaths.CustomCover]: <Trans>Add a Custom Cover</Trans>,
     }
     const titleTailMap: Record<string, ReactNode> = {
-        [RoutePaths.CreateErc20RedPacket]: (
+        [RoutePaths.CreateTokenRedPacket]: (
             <Icons.History
                 onClick={() => navigate({ pathname: RoutePaths.History, search: `tab=${HistoryTabs.Sent}` })}
             />

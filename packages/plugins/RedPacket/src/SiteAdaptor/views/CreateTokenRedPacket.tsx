@@ -181,7 +181,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function CreateERC20RedPacket() {
+export function CreateTokenRedPacket() {
     const { t } = useLingui()
     const { account, chainId, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const isFirefly = getEnhanceableSiteType() === EnhanceableSite.Firefly
@@ -527,7 +527,7 @@ export function CreateERC20RedPacket() {
                                     fullWidth
                                     disabled={!!validationMessage || !!gasValidationMessage}
                                     onClick={() => {
-                                        navigate(RoutePaths.ConfirmErc20RedPacket)
+                                        navigate(RoutePaths.ConfirmTokenRedPacket)
                                     }}>
                                     {validationMessage || gasValidationMessage || <Trans>Create the Lucky Drop</Trans>}
                                 </ActionButton>

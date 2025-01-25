@@ -25,7 +25,6 @@ import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
 import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallback.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
-import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
 const useStyles = makeStyles()((theme) => ({
     message: {
@@ -129,7 +128,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export function Erc20RedPacketConfirm() {
+export function TokenRedPacketConfirm() {
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const navigate = useNavigate()

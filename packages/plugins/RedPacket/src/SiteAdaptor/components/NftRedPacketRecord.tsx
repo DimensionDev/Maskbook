@@ -161,10 +161,10 @@ interface NftRedPacketRecordProps {
     collections: Array<NonFungibleCollection<ChainId, SchemaType>>
     onSend: (history: NftRedPacketJSONPayload, contract: NonFungibleCollection<ChainId, SchemaType>) => void
 }
-export const NftRedPacketRecord = memo(function NftRedPacketHistoryItem({
+export const NftRedPacketRecord = memo(function NftRedPacketRecord({
     history,
-    onSend,
     collections,
+    onSend,
 }: NftRedPacketRecordProps) {
     const { account, chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const [seen, ref] = useEverSeen<HTMLLIElement>()
