@@ -90,7 +90,10 @@ export function OperationFooter({
                 disabled={isLoading}
                 onClick={onClick}>
                 {unsatisfied ?
-                    <Trans>Conditions not met</Trans>
+                    <>
+                        <Trans>Who can claim</Trans>
+                        <Icons.Questions size={18} />
+                    </>
                 : canClaim ?
                     isClaiming ?
                         <Trans>Claiming...</Trans>
