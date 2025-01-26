@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-21 10:20\n"
+"PO-Revision-Date: 2025-01-26 12:15\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -23,7 +23,12 @@ msgid "Approval"
 msgstr ""
 
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
-msgid "Approved Amount"
+#~ msgid "Approved Amount"
+#~ msgstr ""
+
+#. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+msgid "Approved Amount {0}"
 msgstr ""
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
@@ -65,3 +70,4 @@ msgstr ""
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr ""
+
