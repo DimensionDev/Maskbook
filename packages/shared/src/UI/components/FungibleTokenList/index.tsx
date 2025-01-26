@@ -19,6 +19,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import {
     CurrencyType,
+    TokenType,
     ZERO,
     currySameAddress,
     isSameAddress,
@@ -26,7 +27,7 @@ import {
     toZero,
     type FungibleToken,
 } from '@masknet/web3-shared-base'
-import { AddressType } from '@masknet/web3-shared-evm'
+import { AddressType, ChainId as EvmChainId, SchemaType } from '@masknet/web3-shared-evm'
 import { uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState, useTransition } from 'react'
 import { getFungibleTokenItem } from './FungibleTokenItem.js'
@@ -105,13 +106,24 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const nativeToken = useMemo(() => Utils.chainResolver.nativeCurrency(chainId), [chainId])
 
     const filteredFungibleTokens = useMemo(() => {
-        const allFungibleTokens =
-            extendTokens ?
-                uniqBy(
-                    [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens],
-                    (x) => x.address.toLowerCase(),
-                )
-            :   tokens
+        const merged = [...(nativeToken ? [nativeToken] : []), ...tokens, ...fungibleTokens, ...trustedFungibleTokens]
+        if (chainId === EvmChainId.Base) {
+            if (!merged.some((x) => x.symbol === 'VIRTUAL')) {
+                merged.push({
+                    id: '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b',
+                    type: TokenType.Fungible,
+                    schema: SchemaType.ERC20,
+                    chainId: 8453,
+                    address: '0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b',
+                    name: 'Virtual Protocol',
+                    symbol: 'VIRTUAL',
+                    decimals: 18,
+                    logoURL:
+                        'https://www.okx.com/cdn/web3/currency/token/8453-0x0b3e328455c4059eeb9e3f84b5543f74e24e7e1b-97.png/type=default_350_0?v=1732307157464',
+                })
+            }
+        }
+        const allFungibleTokens = extendTokens ? uniqBy(merged, (x) => x.address.toLowerCase()) : tokens
 
         const blockedTokenAddresses = new Map(blockedFungibleTokens.map((x) => [x.address.toLowerCase(), true]))
         const includeMap = includeTokens ? new Map(includeTokens.map((x) => [x.toLowerCase(), true])) : null
