@@ -12,7 +12,7 @@ import { ProviderIconURLs } from '../IconURL.js'
 import { useApr, useBalance } from '../hooks/index.js'
 import { Trans } from '@lingui/react/macro'
 
-const useStyles = makeStyles()((theme, props) => ({
+const useStyles = makeStyles()((theme) => ({
     tableRow: {
         display: 'flex',
         background: theme.palette.maskColor.bg,
@@ -32,10 +32,6 @@ const useStyles = makeStyles()((theme, props) => ({
     logoWrap: {
         position: 'relative',
         margin: '0 20px 0 0',
-    },
-    logo: {
-        width: '32px',
-        height: '32px',
     },
     logoMini: {
         height: '16px',
@@ -70,8 +66,9 @@ export const SavingsRow = memo(function SavingsRow({ protocol, isDeposit, onWith
                     <TokenIcon
                         name={protocol.bareToken.name}
                         address={protocol.bareToken.address}
-                        className={classes.logo}
+                        size={32}
                         chainId={chainId}
+                        disableBadge
                     />
                     <img src={ProviderIconURLs[protocol.type]} className={classes.logoMini} />
                 </div>

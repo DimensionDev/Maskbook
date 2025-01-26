@@ -69,8 +69,6 @@ const useStyles = makeStyles()((theme, props) => ({
         fontWeight: 'bold',
     },
     rowImage: {
-        width: '24px',
-        height: '24px',
         margin: '0 5px 0 0',
     },
     button: { width: '100%' },
@@ -304,11 +302,13 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
                     <div className={classes.infoRow}>
                         <Typography variant="body2" component="div" className={classes.infoRowLeft}>
                             <TokenIcon
+                                size={24}
                                 className={classes.rowImage}
                                 address={protocol.bareToken.address}
                                 logoURL={protocol.bareToken.logoURL}
                                 chainId={protocol.bareToken.chainId}
                                 name={protocol.bareToken.name}
+                                disableBadge
                             />
                             {protocol.bareToken.name} <Trans>APR</Trans>%
                         </Typography>

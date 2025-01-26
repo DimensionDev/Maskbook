@@ -72,7 +72,7 @@ export function useGasCurrencyMenu(
             nativeToken ?
                 <MenuItem className={classes.item} disableRipple onClick={() => handleChange(nativeToken.address)}>
                     <Typography className={classes.token} component="div">
-                        <TokenIcon {...pick(nativeToken, 'chainId', 'address', 'symbol')} size={30} />
+                        <TokenIcon {...pick(nativeToken, 'chainId', 'address', 'symbol')} size={30} disableBadge />
                         {nativeToken.symbol}
                     </Typography>
                     <RadioIndicator
@@ -88,7 +88,7 @@ export function useGasCurrencyMenu(
                     disableRipple
                     onClick={!availableBalanceTooLow ? () => handleChange(maskToken.address) : noop}>
                     <Typography className={classes.token} component="div">
-                        <TokenIcon {...pick(maskToken, 'chainId', 'address', 'symbol')} size={30} />
+                        <TokenIcon {...pick(maskToken, 'chainId', 'address', 'symbol')} size={30} disableBadge />
                         {maskToken.symbol}
                     </Typography>
                     {availableBalanceTooLow ?

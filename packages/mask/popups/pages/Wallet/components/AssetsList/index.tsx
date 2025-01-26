@@ -143,6 +143,7 @@ const AssetItem = memo(function AssetItem({ asset, onItemClick, ...rest }: Asset
                     name={asset.name}
                     logoURL={asset.logoURL}
                     size={36}
+                    disableBadge
                 />
                 <NetworkIcon
                     pluginID={NetworkPluginID.PLUGIN_EVM}

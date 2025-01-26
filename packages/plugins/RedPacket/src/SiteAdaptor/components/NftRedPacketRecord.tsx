@@ -81,8 +81,6 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             },
         },
         icon: {
-            width: 18,
-            height: 18,
             marginLeft: 6,
             zIndex: -1,
         },
@@ -257,6 +255,8 @@ export const NftRedPacketRecord = memo(function NftRedPacketRecord({
                             </Trans>
                         </Typography>
                         <TokenIcon
+                            size={18}
+                            disableBadge
                             className={classes.icon}
                             address={collection?.address ?? ''}
                             name={collection?.name ?? '-'}

@@ -11,10 +11,6 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(0.5),
     },
-    tokenIcon: {
-        height: 30,
-        width: 30,
-    },
     arrow: {
         transform: 'rotate(-90deg)',
         color: theme.palette.maskColor.second,
@@ -58,11 +54,7 @@ export const DexRouters = memo<Props>(function DexRouters({ chainId, percent, ro
     return (
         <div className={classes.route}>
             <Typography className={classes.token} component="div">
-                <TokenIcon
-                    className={classes.tokenIcon}
-                    chainId={chainId}
-                    address={startSubRoute!.fromToken.tokenContractAddress}
-                />
+                <TokenIcon size={30} chainId={chainId} address={startSubRoute!.fromToken.tokenContractAddress} />
                 {percent}%
             </Typography>
             {middleSubRoutes.map((subRouter) => {
@@ -75,11 +67,7 @@ export const DexRouters = memo<Props>(function DexRouters({ chainId, percent, ro
             })}
             <Icons.ArrowDrop className={classes.arrow} size={20} />
             <div className={classes.token}>
-                <TokenIcon
-                    className={classes.tokenIcon}
-                    chainId={chainId}
-                    address={endSubRoute!.toToken.tokenContractAddress}
-                />
+                <TokenIcon size={30} chainId={chainId} address={endSubRoute!.toToken.tokenContractAddress} />
             </div>
         </div>
     )

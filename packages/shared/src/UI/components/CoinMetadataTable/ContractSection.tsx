@@ -33,7 +33,7 @@ export function ContractSection({
             {chain ?
                 <WalletIcon mainIcon={chain.icon} size={14} />
             : iconURL ?
-                <TokenIcon logoURL={iconURL} address={address} name={name} symbol={symbol} size={16} />
+                <TokenIcon logoURL={iconURL} address={address} name={name} symbol={symbol} size={16} disableBadge />
             :   <Box width={16} />}
             <Typography
                 variant="body2"

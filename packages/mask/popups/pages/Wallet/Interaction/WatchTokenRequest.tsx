@@ -92,6 +92,7 @@ export const WatchTokenRequest = memo<InteractionItemProps>((props) => {
                     address={address}
                     name={symbol}
                     size={60}
+                    disableBadge
                 />
                 {isTrustedName ?
                     asset?.name

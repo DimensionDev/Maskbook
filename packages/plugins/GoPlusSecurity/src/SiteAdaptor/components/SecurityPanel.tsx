@@ -33,10 +33,6 @@ const useStyles = makeStyles()((theme) => ({
             display: 'none',
         },
     },
-    icon: {
-        width: '48px',
-        height: '48px',
-    },
     tokenName: {
         fontSize: '18px',
         fontWeight: 700,
@@ -94,11 +90,12 @@ export const SecurityPanel = memo<TokenCardProps>(({ tokenSecurity, tokenInfo, t
                 <Stack direction="row" spacing={0.8}>
                     {tokenSecurity?.token_name ?
                         <TokenIcon
-                            className={classes.icon}
+                            size={48}
                             address={tokenSecurity.contract ?? ''}
                             name={tokenSecurity.token_name}
                             logoURL={tokenInfo?.logoURL}
                             chainId={tokenSecurity.chainId}
+                            disableBadge
                         />
                     :   <Icons.DefaultToken size={48} />}
                     <Stack>

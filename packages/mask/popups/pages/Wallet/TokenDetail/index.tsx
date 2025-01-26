@@ -266,6 +266,7 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                                     chainId={asset.chainId}
                                     logoURL={asset.logoURL}
                                     size={16}
+                                    disableBadge
                                 />
                                 <FormattedBalance
                                     value={balance}

@@ -72,6 +72,7 @@ export const OfferCard = memo(function OfferCard({ offer, ...rest }: OfferCardPr
                     style={{
                         fontSize: 14,
                     }}
+                    disableBadge
                 />
             :   <Typography className={classes.fallbackSymbol}>
                     {offer.priceInToken?.token.symbol || offer.priceInToken?.token.name}

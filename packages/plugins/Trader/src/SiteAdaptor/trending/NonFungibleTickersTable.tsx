@@ -297,6 +297,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
                     symbol={activity.trade_symbol}
                     address={activity.contract_address}
                     className={classes.tokenIcon}
+                    disableBadge
                 />
             }
 

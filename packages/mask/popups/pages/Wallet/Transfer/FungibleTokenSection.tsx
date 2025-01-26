@@ -1,5 +1,5 @@
 import { Icons } from '@masknet/icons'
-import { NetworkIcon, ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
+import { ProgressiveText, TokenIcon, useAvailableBalance } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, MaskColors, makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -13,13 +13,7 @@ import {
 } from '@masknet/web3-hooks-base'
 import { useGasLimit } from '@masknet/web3-hooks-evm'
 import { isLessThan, isLte, isZero, leftShift, minus, rightShift } from '@masknet/web3-shared-base'
-import {
-    SchemaType,
-    isNativeTokenAddress,
-    type ChainId,
-    type GasConfig,
-    getNativeTokenAddress,
-} from '@masknet/web3-shared-evm'
+import { SchemaType, isNativeTokenAddress, type GasConfig, getNativeTokenAddress } from '@masknet/web3-shared-evm'
 import { Box, Input, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useMemo, useState } from 'react'
@@ -46,17 +40,6 @@ const useStyles = makeStyles()((theme) => ({
     },
     tokenPicker: {
         margin: theme.spacing(0, 2),
-    },
-    tokenIcon: {
-        width: 36,
-        height: 36,
-    },
-    badgeIcon: {
-        position: 'absolute',
-        right: -6,
-        bottom: -4,
-        border: `1px solid ${theme.palette.common.white}`,
-        borderRadius: '50%',
     },
     maxButton: {
         cursor: 'pointer',
@@ -248,21 +231,7 @@ export const FungibleTokenSection = memo(function FungibleTokenSection() {
                     })
                     if (picked) handleSelectAsset(picked as Web3Helper.FungibleAssetAll)
                 }}>
-                <Box position="relative" height={36} width={36}>
-                    <TokenIcon
-                        className={classes.tokenIcon}
-                        chainId={chainId}
-                        address={address}
-                        logoURL={selectedAsset?.logoURL}
-                    />
-                    <NetworkIcon
-                        pluginID={NetworkPluginID.PLUGIN_EVM}
-                        chainId={network?.chainId as ChainId}
-                        className={classes.badgeIcon}
-                        size={16}
-                        network={network}
-                    />
-                </Box>
+                <TokenIcon size={36} chainId={chainId} address={address} logoURL={selectedAsset?.logoURL} />
                 <Box mr="auto" ml={2}>
                     <ProgressiveText loading={isPending} skeletonWidth={36}>
                         {token?.symbol}

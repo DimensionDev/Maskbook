@@ -400,21 +400,14 @@ export const SmartPayContent = memo(() => {
                         .map((token, index) => (
                             <ListItem className={classes.listItem} key={index}>
                                 <Box display="flex" alignItems="center" columnGap="10px">
-                                    <Box position="relative" width={40} height={36}>
-                                        <TokenIcon
-                                            size={36}
-                                            address={token.address}
-                                            name={token.name}
-                                            chainId={token.chainId}
-                                            logoURL={token.logoURL}
-                                        />
-                                        <ImageIcon
-                                            className={classes.badge}
-                                            style={{ right: 0 }}
-                                            size={12}
-                                            icon={polygonDescriptor?.icon}
-                                        />
-                                    </Box>
+                                    <TokenIcon
+                                        size={36}
+                                        address={token.address}
+                                        name={token.name}
+                                        chainId={token.chainId}
+                                        logoURL={token.logoURL}
+                                        badgeSize={12}
+                                    />
                                     <Box>
                                         <Typography fontSize={16} lineHeight="20px" fontWeight={700}>
                                             {token.symbol}
