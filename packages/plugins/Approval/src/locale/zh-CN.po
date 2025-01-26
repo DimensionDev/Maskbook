@@ -23,8 +23,13 @@ msgid "Approval"
 msgstr "授权"
 
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
-msgid "Approved Amount"
-msgstr "授权数额"
+#~ msgid "Approved Amount"
+#~ msgstr "授权数额"
+
+#. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+msgid "Approved Amount {0}"
+msgstr ""
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Collectibles"

@@ -83,7 +83,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         spenderLogoIcon: {
             width: 16,
             height: 16,
-            marginRight: 4,
         },
         link: {
             width: 16,
@@ -95,7 +94,6 @@ const useStyles = makeStyles<{ listItemBackground?: string; listItemBackgroundIc
         },
         spenderMaskLogoIcon: {
             display: 'inline-block',
-            marginRight: 4,
             width: 16,
             height: 16,
             '& > svg': {
@@ -249,11 +247,15 @@ function ApprovalTokenItem(props: ApprovalTokenItemProps) {
                     </div>
                     <div>
                         <Typography className={classes.secondaryText}>
-                            <Trans>Approved Amount</Trans>
+                            <Trans>
+                                Approved Amount{' '}
+                                {amount ?
+                                    <Typography component="span" className={classes.primaryText}>
+                                        {formatSpendingCap(amount)}
+                                    </Typography>
+                                :   null}
+                            </Trans>
                         </Typography>
-                        {amount ?
-                            <Typography className={classes.primaryText}>{formatSpendingCap(amount)}</Typography>
-                        :   null}
                     </div>
                 </div>
                 <ChainBoundary

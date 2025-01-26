@@ -18,7 +18,12 @@ msgid "Approval"
 msgstr ""
 
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
-msgid "Approved Amount"
+#~ msgid "Approved Amount"
+#~ msgstr ""
+
+#. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+msgid "Approved Amount {0}"
 msgstr ""
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
