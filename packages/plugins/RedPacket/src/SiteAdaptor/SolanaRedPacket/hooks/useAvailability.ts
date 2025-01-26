@@ -1,12 +1,11 @@
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useAccount } from '@masknet/web3-hooks-base'
 import { RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
-import { useQuery } from '@tanstack/react-query'
-import { getRpProgram } from '../../helpers/getRpProgram.js'
 import { minus } from '@masknet/web3-shared-base'
-import { useClaimRecord } from './useClaimRecord.js'
-import { useParseRedPacket } from '../../hooks/useParseRedPacket.js'
+import { useQuery } from '@tanstack/react-query'
 import { useCallback } from 'react'
+import { getRpProgram } from '../../helpers/getRpProgram.js'
+import { useClaimRecord } from './useClaimRecord.js'
 
 export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chainId: number) {
     const account = useAccount(NetworkPluginID.PLUGIN_SOLANA)
@@ -28,7 +27,6 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             return 30_000
         },
     })
-    const { data: parsed, refetch: recheckParse } = useParseRedPacket()
 
     const { data: claimRecord, refetch: checkClaimRecord } = useClaimRecord(
         account,
@@ -37,9 +35,8 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
     )
     const refresh = useCallback(() => {
         checkAvailability()
-        recheckParse()
         checkClaimRecord()
-    }, [checkAvailability, recheckParse, checkClaimRecord])
+    }, [checkAvailability, checkClaimRecord])
 
     if (!data) {
         return {
@@ -53,8 +50,8 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
         }
     }
     const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
-    const isEmpty = data.claimedAmount.gt(data.totalAmount)
-    const isClaimed = !!claimRecord || !!parsed?.redpacket?.isClaimed
+    const isEmpty = data.claimedAmount.gte(data.totalAmount)
+    const isClaimed = !!claimRecord
 
     const availability = {
         token_address: data.tokenAddress.toBase58(),
