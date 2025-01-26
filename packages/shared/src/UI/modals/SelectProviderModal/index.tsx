@@ -7,6 +7,7 @@ import { SelectProvider } from './SelectProvider.js'
 export type SelectProviderModalOpenProps = {
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
+    pluginID?: NetworkPluginID
 } | void
 
 export type SelectProviderModalCloseProps = boolean
@@ -17,6 +18,7 @@ interface SelectProviderModalProps
 }
 
 export function SelectProviderModal({ createWallet, ref }: SelectProviderModalProps) {
+    const [pluginID, setPluginID] = useState<NetworkPluginID>()
     const [requiredSupportPluginID, setRequiredSupportPluginID] = useState<NetworkPluginID>()
     const [requiredSupportChainIds, setRequiredSupportChainIds] = useState<Web3Helper.ChainIdAll[]>()
 
@@ -24,10 +26,12 @@ export function SelectProviderModal({ createWallet, ref }: SelectProviderModalPr
         onOpen(props) {
             setRequiredSupportChainIds(props?.requiredSupportChainIds)
             setRequiredSupportPluginID(props?.requiredSupportPluginID)
+            setPluginID(props?.pluginID)
         },
         onClose(props) {
             setRequiredSupportChainIds(undefined)
             setRequiredSupportPluginID(undefined)
+            setPluginID(undefined)
         },
     })
 
@@ -36,6 +40,7 @@ export function SelectProviderModal({ createWallet, ref }: SelectProviderModalPr
         <SelectProvider
             open
             createWallet={createWallet}
+            pluginID={pluginID}
             requiredSupportPluginID={requiredSupportPluginID}
             requiredSupportChainIds={requiredSupportChainIds}
             onConnect={() => dispatch?.close(true)}

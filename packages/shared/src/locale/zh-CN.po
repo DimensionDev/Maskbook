@@ -270,7 +270,11 @@ msgid "Change to Flow Wallet"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
-msgid "Change to SOL Wallet"
+#~ msgid "Change to SOL Wallet"
+#~ msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to Solana Wallet"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
@@ -385,9 +389,21 @@ msgstr "连接到 {0}"
 msgid "Connect and Verify {0}"
 msgstr ""
 
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect EVM Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect Flow Wallet"
+msgstr ""
+
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Connect Persona"
 msgstr "连接身份"
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect Solana Wallet"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 #: src/UI/components/WalletStatusBox/index.tsx

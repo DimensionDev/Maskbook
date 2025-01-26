@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
 import { delay } from '@masknet/kit'
 import { Box } from '@mui/material'
@@ -59,6 +59,17 @@ export interface ChainBoundaryProps<T extends NetworkPluginID> extends withClass
     disableConnectWallet?: boolean
 }
 
+const ConnectWalletLabelMap: Record<NetworkPluginID, ReactNode> = {
+    [NetworkPluginID.PLUGIN_EVM]: <Trans>Connect EVM Wallet</Trans>,
+    [NetworkPluginID.PLUGIN_SOLANA]: <Trans>Connect Solana Wallet</Trans>,
+    [NetworkPluginID.PLUGIN_FLOW]: <Trans>Connect Flow Wallet</Trans>,
+}
+const ChangeWalletLabelMap: Record<NetworkPluginID, ReactNode> = {
+    [NetworkPluginID.PLUGIN_EVM]: <Trans>Change to EVM Wallet</Trans>,
+    [NetworkPluginID.PLUGIN_SOLANA]: <Trans>Change to Solana Wallet</Trans>,
+    [NetworkPluginID.PLUGIN_FLOW]: <Trans>Change to Flow Wallet</Trans>,
+}
+
 export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: ChainBoundaryProps<T>) {
     const {
         expectedPluginID,
@@ -95,6 +106,11 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
 
     const isPluginIDMatched = actualPluginID === expectedPluginID
     const isMatched = predicate(actualPluginID, actualChainId)
+
+    const connectWalletLabel =
+        actualNetworkPluginID ?
+            ChangeWalletLabelMap[expectedPluginID] || <Trans>Change Wallet</Trans>
+        :   ConnectWalletLabelMap[expectedPluginID] || <Trans>Connect Wallet</Trans>
 
     const [{ loading }, onSwitchChain] = useAsyncFn(async () => {
         try {
@@ -165,9 +181,9 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                     className={classes.connectWallet}
                     fullWidth
                     startIcon={<Icons.Wallet size={18} />}
-                    onClick={() => SelectProviderModal.open()}
+                    onClick={() => SelectProviderModal.open({ pluginID: expectedPluginID })}
                     {...props.ActionButtonPromiseProps}>
-                    <Trans>Connect Wallet</Trans>
+                    {connectWalletLabel}
                 </ActionButton>
             :   null,
         )
@@ -181,15 +197,9 @@ export function ChainBoundaryWithoutContext<T extends NetworkPluginID>(props: Ch
                 disabled={actualProviderType === ProviderType.WalletConnect}
                 startIcon={<WalletIcon mainIcon={expectedNetworkDescriptor?.icon} size={18} />}
                 sx={props.ActionButtonPromiseProps?.sx}
-                onClick={() => SelectProviderModal.open()}
+                onClick={() => SelectProviderModal.open({ pluginID: expectedPluginID })}
                 {...props.ActionButtonPromiseProps}>
-                {expectedPluginID === NetworkPluginID.PLUGIN_EVM ?
-                    <Trans>Change to EVM Wallet</Trans>
-                : expectedPluginID === NetworkPluginID.PLUGIN_SOLANA ?
-                    <Trans>Change to SOL Wallet</Trans>
-                : expectedPluginID === NetworkPluginID.PLUGIN_FLOW ?
-                    <Trans>Change to Flow Wallet</Trans>
-                :   <Trans>Change Wallet</Trans>}
+                {connectWalletLabel}
             </ActionButton>,
             actualProviderType === ProviderType.WalletConnect ?
                 <Trans>Please switch to this network in the mobile application wallet you are connected to.</Trans>

@@ -29,6 +29,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface SelectProviderProps {
     open: boolean
+    pluginID?: NetworkPluginID
     requiredSupportPluginID?: NetworkPluginID
     requiredSupportChainIds?: Web3Helper.ChainIdAll[]
     onConnect?: () => void
@@ -36,11 +37,11 @@ interface SelectProviderProps {
     createWallet(): void
 }
 export const SelectProvider = memo(function SelectProvider(props: SelectProviderProps) {
-    const { open, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
+    const { open, pluginID, requiredSupportPluginID, requiredSupportChainIds, onConnect, onClose, createWallet } = props
     const { classes } = useStyles()
     // Guiding provider
     const [provider, setProvider] = useState<Web3Helper.ProviderDescriptorAll>()
-    const [currentPluginID, setCurrentPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
+    const [currentPluginID, setCurrentPluginID] = useState<NetworkPluginID>(pluginID ?? NetworkPluginID.PLUGIN_EVM)
     const handleSelect = useCallback(
         async (network: Web3Helper.NetworkDescriptorAll, provider: Web3Helper.ProviderDescriptorAll) => {
             setProvider(undefined)
