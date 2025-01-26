@@ -33,6 +33,7 @@ interface OperationFooterProps extends BoxProps {
     canRefund: boolean
     /** Is claiming or checking claim status */
     isClaiming: boolean
+    isExpired: boolean
     onClaimOrRefund: () => void | Promise<void>
 }
 export function OperationFooter({
@@ -40,6 +41,7 @@ export function OperationFooter({
     canClaim,
     canRefund,
     isClaiming,
+    isExpired,
     onClaimOrRefund,
     ...rest
 }: OperationFooterProps) {
@@ -50,6 +52,7 @@ export function OperationFooter({
 
     const { value: nativeTokenBalance } = useNativeTokenBalance()
 
+    if (isExpired) return null
     if (!canClaim && !canRefund && account) return null
 
     function getObtainButton(onClick: MouseEventHandler<HTMLButtonElement>) {

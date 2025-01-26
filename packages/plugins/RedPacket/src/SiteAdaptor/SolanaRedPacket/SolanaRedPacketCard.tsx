@@ -225,6 +225,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                         canClaim={canClaim}
                         canRefund={canRefund}
                         isClaiming={isClaiming || isClaimingAndChecking}
+                        isExpired={availability.expired}
                         onClaimOrRefund={onClaimOrRefund}
                     />
                 </NetworkContextProvider>

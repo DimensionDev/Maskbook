@@ -49,7 +49,8 @@ export function useSolanaAvailability(payload: SolanaRedPacketJSONPayload, chain
             refresh,
         }
     }
-    const isExpired = data.duration.add(data.createTime).muln(1000).ltn(Date.now())
+    const ms = data.duration.add(data.createTime).muln(1000)
+    const isExpired = ms.toNumber() < Date.now()
     const isEmpty = data.claimedAmount.gte(data.totalAmount)
     const isClaimed = !!claimRecord
 
