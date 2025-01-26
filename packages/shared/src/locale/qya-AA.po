@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 10:01\n"
+"PO-Revision-Date: 2025-01-26 12:15\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -270,8 +270,12 @@ msgid "Change to Flow Wallet"
 msgstr "crwdns36604:0crwdne36604:0"
 
 #: src/UI/components/ChainBoundary/index.tsx
-msgid "Change to SOL Wallet"
-msgstr "crwdns36606:0crwdne36606:0"
+#~ msgid "Change to SOL Wallet"
+#~ msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to Solana Wallet"
+msgstr "crwdns36642:0crwdne36642:0"
 
 #: src/UI/components/ChainBoundary/index.tsx
 msgid "Change Wallet"
@@ -385,9 +389,21 @@ msgstr "crwdns30838:0{0}crwdne30838:0"
 msgid "Connect and Verify {0}"
 msgstr "crwdns30840:0{0}crwdne30840:0"
 
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect EVM Wallet"
+msgstr "crwdns36644:0crwdne36644:0"
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect Flow Wallet"
+msgstr "crwdns36646:0crwdne36646:0"
+
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Connect Persona"
 msgstr "crwdns30842:0crwdne30842:0"
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect Solana Wallet"
+msgstr "crwdns36648:0crwdne36648:0"
 
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 #: src/UI/components/WalletStatusBox/index.tsx
