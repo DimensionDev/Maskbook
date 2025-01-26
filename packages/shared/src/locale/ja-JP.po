@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-23 10:01\n"
+"PO-Revision-Date: 2025-01-26 12:15\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -270,7 +270,11 @@ msgid "Change to Flow Wallet"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
-msgid "Change to SOL Wallet"
+#~ msgid "Change to SOL Wallet"
+#~ msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Change to Solana Wallet"
 msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
@@ -385,9 +389,21 @@ msgstr ""
 msgid "Connect and Verify {0}"
 msgstr ""
 
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect EVM Wallet"
+msgstr ""
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect Flow Wallet"
+msgstr ""
+
 #: src/UI/components/ConnectPersonaBoundary/index.tsx
 msgid "Connect Persona"
 msgstr "ペルソナを接続"
+
+#: src/UI/components/ChainBoundary/index.tsx
+msgid "Connect Solana Wallet"
+msgstr ""
 
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 #: src/UI/components/WalletStatusBox/index.tsx
