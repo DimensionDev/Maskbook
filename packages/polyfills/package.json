@@ -12,7 +12,7 @@
   },
   "dependencies": {
     "@types/webextension-polyfill": "^0.10.7",
-    "core-js": "3.39.0",
+    "core-js": "3.40.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
