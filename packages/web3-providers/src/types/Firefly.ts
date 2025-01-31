@@ -396,20 +396,23 @@ export namespace FireflyRedPacketAPI {
             [RedPacketNftMetaKey]?: object
             [SolanaRedPacketMetaKey]?: object
         }
-        redpacket: {
-            /** the same as meta */
-            payload: object
-            canClaim: boolean
-            canRefund: boolean
-            canSend: boolean
-            isPasswordValid: boolean
-            isClaimed: boolean
-            isEmpty: boolean
-            isExpired: boolean
-            isRefunded: boolean
-            claimedNumber: number
-            claimedAmount: string
-        } | null
+        redpacket:
+            | {
+                  /** the same as meta */
+                  payload: object
+                  canClaim: boolean
+                  canRefund: boolean
+                  canSend: boolean
+                  isPasswordValid: boolean
+                  isClaimed: boolean
+                  isEmpty: boolean
+                  isExpired: boolean
+                  isRefunded: boolean
+                  claimedNumber: number
+                  claimedAmount: string
+              }
+            // In the backend service, it would be null during fetching the redpacket info.
+            | null
     }
     export type ParseResponse = FireflyResponse<ParseResult>
 
