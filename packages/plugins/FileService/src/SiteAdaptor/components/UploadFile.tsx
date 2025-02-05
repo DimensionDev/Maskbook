@@ -76,7 +76,6 @@ const useStyles = makeStyles()((theme) => ({
 export function UploadFile() {
     const { classes, theme } = useStyles()
     const [encrypted, setEncrypted] = useState(true)
-    const [useCDN, setUseCDN] = useState(false)
     const [provider, setProvider] = useState<Provider>(Provider.Arweave)
     const { recentFiles, uploadingFiles, uploadFile, attachToPost } = useFileManagement()
 
@@ -97,9 +96,9 @@ export function UploadFile() {
 
     const onSelectFile = useCallback(
         async (file: File) => {
-            await uploadFile(file, provider, useCDN, encrypted)
+            await uploadFile(file, provider, encrypted)
         },
-        [encrypted, useCDN, provider],
+        [encrypted, provider],
     )
 
     return (

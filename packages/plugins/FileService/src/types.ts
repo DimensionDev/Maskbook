@@ -11,7 +11,6 @@ export interface LandingPageMetadata {
     size: number
     type: string
     txId: string
-    useCDN: boolean
 }
 
 export interface AttachmentOptions {
@@ -32,7 +31,7 @@ export interface FileInfo {
     provider: Provider
     /**
      * Before v3, it's checksum of the file.
-     * Since v3, it's digest(file, [provider, useCDN, encrypted])
+     * Since v3, it's digest(file, [provider, encrypted])
      */
     id: string
 
