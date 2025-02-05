@@ -2,6 +2,7 @@
 export const TWITTER_RESERVED_SLUGS: readonly string[] = [
     '404',
     'account',
+    'jobs',
     'download',
     'explore',
     'follower_requests',
