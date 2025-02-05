@@ -32,7 +32,7 @@ interface FileManagementContextOptions {
     uploadStateMap: UploadStateMap
     setUploadProgress: (id: string, progress: number) => void
     setUploadingFiles: Dispatch<SetStateAction<FileInfo[]>>
-    uploadFile: (file: File, provider: Provider, useCDN: boolean, encrypted: boolean) => Promise<FileInfo>
+    uploadFile: (file: File, provider: Provider, encrypted: boolean) => Promise<FileInfo>
     attachToPost: (info: FileInfo | FileInfo[]) => void
 }
 
@@ -84,10 +84,10 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
     }, [])
 
     const uploadFile = useCallback(
-        async (file: File, provider: Provider, useCDN: boolean, encrypted: boolean) => {
+        async (file: File, provider: Provider, encrypted: boolean) => {
             const key = encrypted ? makeFileKey() : undefined
             const buffer = new Uint8Array(await file.arrayBuffer())
-            const id = await digest(file, [provider, useCDN, encrypted])
+            const id = await digest(file, [provider, encrypted])
             const createdAt = Date.now()
 
             const removeUnloadingFile = (id: string) => {
@@ -126,7 +126,6 @@ export const FileManagementProvider = memo(({ children, compositionType }: Props
                 txId: payloadTxID,
                 type: file.type,
                 key,
-                useCDN,
             })
 
             const fileInfo: FileInfo = {

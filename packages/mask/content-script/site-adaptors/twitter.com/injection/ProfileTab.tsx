@@ -1,5 +1,6 @@
 import Services from '#services'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
+import { TWITTER_RESERVED_SLUGS } from '@masknet/injected-script/shared'
 import { useCollectionByTwitterHandle } from '@masknet/shared'
 import { BooleanPreference, MaskMessages, PluginID, ProfileTabs } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -396,6 +397,9 @@ function InjectProfileTab() {
         })
         return () => ac.abort()
     }, [windowSize, tabList, web3TabRef, nextArrow])
+
+    const [, slug, category] = location.pathname.split('/')
+    if (slug && (TWITTER_RESERVED_SLUGS.includes(slug) || category === 'communities')) return null
 
     return (
         <div ref={setWeb3TabRef} className={classes.bar}>
