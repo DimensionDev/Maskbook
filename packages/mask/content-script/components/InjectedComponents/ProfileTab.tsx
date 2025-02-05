@@ -52,7 +52,7 @@ export function ProfileTab(props: ProfileTabProps) {
     }, [])
 
     return (
-        <div key="nfts" className={classes.root}>
+        <div key="web3" className={classes.root}>
             <Typography
                 className={classes.button + ' ' + (active ? classes.selected : '')}
                 onClick={onClick}
