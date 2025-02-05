@@ -14,7 +14,6 @@ import { useProposal } from './hooks/useProposal.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { isArray } from 'lodash-es'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
@@ -104,77 +103,74 @@ function Content() {
                 </Badge>
             }>
             <List className={classes.list}>
-                {isArray(votes) &&
-                    votes?.map(function voteItemIter(v) {
-                        const isAverageWeight = v.choices?.every((c) => c.weight === 1)
-                        const fullChoiceText =
-                            v.totalWeight && v.choices ?
-                                v.choices
-                                    .flatMap((choice, index) => [
-                                        index === 0 ? '' : ', ',
-                                        !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
-                                        choice.name,
-                                    ])
-                                    .join('')
-                            :   null
-                        return (
-                            <ListItem className={classes.listItem} key={v.address}>
-                                <Link
-                                    className={cx(classes.link, classes.ellipsisText)}
-                                    target="_blank"
-                                    rel="noopener"
-                                    href={EVMExplorerResolver.addressLink(chainId, v.address)}>
-                                    <Box className={classes.avatarWrapper}>
-                                        <EthereumBlockie address={v.address} />
-                                    </Box>
-                                    <Typography color={theme.palette.maskColor.dark}>
-                                        {isSameAddress(v.address, account) ?
-                                            <Trans>You</Trans>
-                                        :   formatEthereumAddress(v.address, 4)}
-                                    </Typography>
-                                </Link>
-                                {v.choice ?
-                                    <Typography className={classes.choice}>{v.choice}</Typography>
-                                : v.choices ?
-                                    <ShadowRootTooltip
-                                        PopperProps={{
-                                            disablePortal: false,
-                                        }}
-                                        title={
-                                            <Typography className={classes.shadowRootTooltip}>
-                                                {fullChoiceText}
-                                            </Typography>
-                                        }
-                                        placement="top"
-                                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                        arrow>
-                                        <Typography className={classes.choice}>{fullChoiceText}</Typography>
-                                    </ShadowRootTooltip>
-                                :   null}
-                                <TextOverflowTooltip
-                                    as={ShadowRootTooltip}
+                {votes.map(function voteItemIter(v) {
+                    const isAverageWeight = v.choices?.every((c) => c.weight === 1)
+                    const fullChoiceText =
+                        v.totalWeight && v.choices ?
+                            v.choices
+                                .flatMap((choice, index) => [
+                                    index === 0 ? '' : ', ',
+                                    !isAverageWeight ? formatPercentage(choice.weight / v.totalWeight!) + ' ' : '',
+                                    choice.name,
+                                ])
+                                .join('')
+                        :   null
+                    return (
+                        <ListItem className={classes.listItem} key={v.address}>
+                            <Link
+                                className={cx(classes.link, classes.ellipsisText)}
+                                target="_blank"
+                                rel="noopener"
+                                href={EVMExplorerResolver.addressLink(chainId, v.address)}>
+                                <Box className={classes.avatarWrapper}>
+                                    <EthereumBlockie address={v.address} />
+                                </Box>
+                                <Typography color={theme.palette.maskColor.dark}>
+                                    {isSameAddress(v.address, account) ?
+                                        <Trans>You</Trans>
+                                    :   formatEthereumAddress(v.address, 4)}
+                                </Typography>
+                            </Link>
+                            {v.choice ?
+                                <Typography className={classes.choice}>{v.choice}</Typography>
+                            : v.choices ?
+                                <ShadowRootTooltip
                                     PopperProps={{
-                                        disablePortal: true,
+                                        disablePortal: false,
                                     }}
-                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     title={
-                                        <Typography className={classes.shadowRootTooltip}>
-                                            {formatCount(v.balance, 2, true) +
-                                                ' ' +
-                                                (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
-                                        </Typography>
+                                        <Typography className={classes.shadowRootTooltip}>{fullChoiceText}</Typography>
                                     }
                                     placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                     arrow>
-                                    <Typography className={classes.power}>
+                                    <Typography className={classes.choice}>{fullChoiceText}</Typography>
+                                </ShadowRootTooltip>
+                            :   null}
+                            <TextOverflowTooltip
+                                as={ShadowRootTooltip}
+                                PopperProps={{
+                                    disablePortal: true,
+                                }}
+                                classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                title={
+                                    <Typography className={classes.shadowRootTooltip}>
                                         {formatCount(v.balance, 2, true) +
                                             ' ' +
                                             (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
                                     </Typography>
-                                </TextOverflowTooltip>
-                            </ListItem>
-                        )
-                    })}
+                                }
+                                placement="top"
+                                arrow>
+                                <Typography className={classes.power}>
+                                    {formatCount(v.balance, 2, true) +
+                                        ' ' +
+                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                </Typography>
+                            </TextOverflowTooltip>
+                        </ListItem>
+                    )
+                })}
             </List>
         </SnapshotCard>
     )

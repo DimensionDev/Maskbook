@@ -1,6 +1,7 @@
+import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { InjectedDialog, PluginWalletStatusBar, useSnackbarCallback, WalletConnectedBoundary } from '@masknet/shared'
-import type { NetworkPluginID } from '@masknet/shared-base'
+import { formatWithCommas, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
@@ -10,15 +11,18 @@ import { OpenInNew } from '@mui/icons-material'
 import { Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { unstable_useCacheRefresh, useContext, useState } from 'react'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
+import { SnapshotContext } from '../context.js'
 import { PluginSnapshotRPC } from '../messages.js'
 import { getSnapshotVoteType } from '../utils.js'
 import { InfoField } from './InformationCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { useProposal } from './hooks/useProposal.js'
-import { SnapshotContext } from '../context.js'
 import { usePower } from './hooks/usePower.js'
+import { useProposal } from './hooks/useProposal.js'
 
 const useStyles = makeStyles()((theme) => ({
+    card: {
+        margin: 0,
+    },
     link: {
         display: 'flex',
         color: 'inherit',
@@ -28,34 +32,46 @@ const useStyles = makeStyles()((theme) => ({
     },
     field: {
         color: theme.palette.maskColor.second,
+        margin: '0',
     },
     content: {
         padding: 16,
-        '& > :first-child': {
-            marginTop: 0,
-        },
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(2),
         height: 492,
+        alignItems: 'stretch',
     },
     button: {
-        margin: theme.spacing(2, 0),
+        margin: theme.spacing(2),
     },
-    choiceButton: {
+    options: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(2),
+    },
+    optionButton: {
         backgroundColor: theme.palette.maskColor.third,
         color: theme.palette.maskColor.main,
         '&:hover': {
             backgroundColor: 'transparent',
         },
     },
-    buttonActive: {
+    selectedOption: {
         backgroundColor: `${theme.palette.maskColor.publicMain} !important`,
         color: `${theme.palette.maskColor.white} !important`,
     },
-    buttons: {
-        '& > :first-child': {
-            marginTop: 0,
-        },
-        '& > :last-child': {
-            marginBottom: 0,
+    tip: {
+        padding: theme.spacing(2),
+        borderRadius: 16,
+        border: `1px solid ${theme.palette.maskColor.line}`,
+        color: theme.palette.maskColor.main,
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        '& a': {
+            color: theme.palette.maskColor.main,
+            textDecoration: 'underline',
         },
     },
 }))
@@ -150,24 +166,23 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
     return (
         <InjectedDialog open={open} onClose={onClose} title={<Trans>Cast your vote</Trans>}>
             <DialogContent className={classes.content}>
-                <SnapshotCard title={<Trans>Cast your vote</Trans>}>
-                    <Box className={classes.buttons}>
-                        {choices.map((choiceText, i) => (
+                <SnapshotCard title={<Trans>Cast your vote</Trans>} className={classes.card}>
+                    <Box className={classes.options}>
+                        {choices.map((option) => (
                             <Button
                                 variant="roundedContained"
                                 fullWidth
-                                key={i}
-                                onClick={() => onToggle(choiceText)}
-                                className={cx([
-                                    classes.button,
-                                    classes.choiceButton,
-                                    ...(selected.includes(choiceText) ? [classes.buttonActive] : []),
-                                ])}>
+                                key={option}
+                                onClick={() => onToggle(option)}
+                                className={cx(
+                                    classes.optionButton,
+                                    selected.includes(option) ? classes.selectedOption : null,
+                                )}>
                                 <Typography
                                     fontWeight={700}
                                     fontSize={16}
                                     sx={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-                                    {choiceText}
+                                    {option}
                                 </Typography>
                             </Button>
                         ))}
@@ -179,7 +194,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                         target="_blank"
                         rel="noopener"
                         href={EVMExplorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
-                        {snapshot}
+                        {formatWithCommas(snapshot)}
                         <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
@@ -188,6 +203,20 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                         {formatCount(power, 2, true)} {powerSymbol.toUpperCase()}
                     </Typography>
                 </InfoField>
+                {!power ?
+                    <Typography className={classes.tip}>
+                        <Trans>
+                            Oops, it seems you don't have any voting power at block {formatWithCommas(snapshot)}.{' '}
+                            <Link
+                                href="https://github.com/snapshot-labs/snapshot-v1/discussions/767"
+                                target="_blank"
+                                rel="noopener"
+                                title={t`Why I can't vote?`}>
+                                Learn more
+                            </Link>
+                        </Trans>
+                    </Typography>
+                :   null}
             </DialogContent>
             <DialogActions style={{ padding: 0 }}>
                 <WalletConnectedBoundary offChain classes={{ button: classes.button }} expectedChainId={chainId}>

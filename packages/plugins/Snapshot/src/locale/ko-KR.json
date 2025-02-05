@@ -20,6 +20,8 @@
         "hj39w+": ["Loading failed due to Snapshot API service breakdown."],
         "9oP21f": ["나의 투표"],
         "+ubcPw": ["파워없음"],
+        "W2es+t": ["Oops, it seems you don't have any voting power at block ", ["0"], ". <0>Learn more</0>"],
+        "rPgNr1": ["Oops, it seems you don't have any voting power at block ", ["0"], ".<0>Learn more</0>"],
         "ybuu1v": ["해당한 결과가 없습니다."],
         "rVBqRS": ["옵션"],
         "M9OYUo": ["투표가 실패하면 다시 시도하세요."],
@@ -37,6 +39,7 @@
         "przoUP": ["투표 개요"],
         "u7TofG": ["Voted."],
         "PByO0X": ["투표"],
+        "0wzWAN": ["Why I can't vote?"],
         "kWJmRL": ["You"],
         "9q+I38": ["투표 파워"]
     }

@@ -20,6 +20,8 @@
         "hj39w+": ["Loading failed due to Snapshot API service breakdown."],
         "9oP21f": ["My vote"],
         "+ubcPw": ["No power"],
+        "W2es+t": ["Oops, it seems you don't have any voting power at block ", ["0"], ". <0>Learn more</0>"],
+        "rPgNr1": ["Oops, it seems you don't have any voting power at block ", ["0"], ".<0>Learn more</0>"],
         "ybuu1v": ["Oops, we can't find any results."],
         "rVBqRS": ["Option(s)"],
         "M9OYUo": ["Please try again if you failed to vote."],
@@ -37,6 +39,7 @@
         "przoUP": ["Vote Overview"],
         "u7TofG": ["Voted."],
         "PByO0X": ["Votes"],
+        "0wzWAN": ["Why I can't vote?"],
         "kWJmRL": ["You"],
         "9q+I38": ["Your voting power"]
     }

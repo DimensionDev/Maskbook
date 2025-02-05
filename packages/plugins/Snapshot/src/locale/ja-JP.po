@@ -34,7 +34,8 @@ msgstr ""
 msgid "Author"
 msgstr "著者"
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Cast your vote"
 msgstr "投票してください"
 
@@ -96,19 +97,29 @@ msgstr ""
 msgid "My vote"
 msgstr "自分の投票"
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "No power"
 msgstr "パワーなし"
+
+#. placeholder {0}: formatWithCommas(snapshot)
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Oops, it seems you don't have any voting power at block {0}. <0>Learn more</0>"
+msgstr ""
+
+#: src/SiteAdaptor/VotingDialog.tsx
+#~ msgid "Oops, it seems you don't have any voting power at block {0}.<0>Learn more</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileView.tsx
 msgid "Oops, we can't find any results."
 msgstr "おっと、結果が見つかりません"
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
-msgid "Option(s)"
-msgstr "オプション"
+#~ msgid "Option(s)"
+#~ msgstr "オプション"
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Please try again if you failed to vote."
 msgstr "投票に失敗した場合はもう一度お試しください。"
 
@@ -134,7 +145,7 @@ msgstr "結果"
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/ProfileView.tsx
 #: src/SiteAdaptor/PluginDescriptor.tsx
 #: src/SiteAdaptor/InformationCard.tsx
@@ -157,17 +168,17 @@ msgstr ""
 msgid "View"
 msgstr "表示"
 
-#: src/SiteAdaptor/VotingCard.tsx
-#: src/SiteAdaptor/VotingCard.tsx
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "Vote"
 msgstr "投票"
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
-msgid "Vote Overview"
-msgstr "投票一覧"
+#~ msgid "Vote Overview"
+#~ msgstr "投票一覧"
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Voted."
 msgstr ""
 
@@ -177,10 +188,14 @@ msgstr ""
 msgid "Votes"
 msgstr "投票"
 
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Why I can't vote?"
+msgstr ""
+
 #: src/SiteAdaptor/VotesCard.tsx
 msgid "You"
 msgstr "あなた"
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
 msgstr "あなたの投票力"

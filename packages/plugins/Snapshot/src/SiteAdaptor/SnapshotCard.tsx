@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, Skeleton, Typography } from '@mui/material'
+import { Card, CardContent, CardHeader, Skeleton, Typography, type CardProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { memo, useEffect, useRef, useState, useTransition } from 'react'
 import { range } from 'lodash-es'
@@ -44,15 +44,19 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface SnapshotCardProps {
+interface SnapshotCardProps extends Omit<CardProps, 'title'> {
     title: React.ReactNode
-    children?: React.ReactNode
     lazy?: boolean
 }
 
-export const SnapshotCard = memo(function SnapshotCard(props: SnapshotCardProps) {
-    const { title, children, lazy } = props
-    const { classes } = useStyles()
+export const SnapshotCard = memo(function SnapshotCard({
+    title,
+    children,
+    lazy,
+    className,
+    ...rest
+}: SnapshotCardProps) {
+    const { classes, cx } = useStyles()
     const ref = useRef<HTMLElement>(null)
     const [seen, setSeen] = useState(!lazy)
     const [isPending, setTransition] = useTransition()
@@ -64,7 +68,7 @@ export const SnapshotCard = memo(function SnapshotCard(props: SnapshotCardProps)
     }, [ob?.isIntersecting])
 
     return (
-        <Card className={classes.root} variant="outlined" ref={ref as any}>
+        <Card className={cx(classes.root, className)} variant="outlined" ref={ref as any} {...rest}>
             <CardHeader className={classes.header} title={<Typography className={classes.title}>{title}</Typography>} />
             {isPending ? range(6).map((i) => <Skeleton key={i} animation="wave" height={30} sx={{ m: 1 }} />) : null}
             {seen ?

@@ -34,7 +34,8 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Cast your vote"
 msgstr ""
 
@@ -96,19 +97,29 @@ msgstr ""
 msgid "My vote"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "No power"
 msgstr ""
+
+#. placeholder {0}: formatWithCommas(snapshot)
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Oops, it seems you don't have any voting power at block {0}. <0>Learn more</0>"
+msgstr ""
+
+#: src/SiteAdaptor/VotingDialog.tsx
+#~ msgid "Oops, it seems you don't have any voting power at block {0}.<0>Learn more</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ProfileView.tsx
 msgid "Oops, we can't find any results."
 msgstr ""
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
-msgid "Option(s)"
-msgstr ""
+#~ msgid "Option(s)"
+#~ msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Please try again if you failed to vote."
 msgstr ""
 
@@ -134,7 +145,7 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/ProfileView.tsx
 #: src/SiteAdaptor/PluginDescriptor.tsx
 #: src/SiteAdaptor/InformationCard.tsx
@@ -157,17 +168,17 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx
-#: src/SiteAdaptor/VotingCard.tsx
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/Snapshot.tsx
 msgid "Vote"
 msgstr ""
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
-msgid "Vote Overview"
-msgstr ""
+#~ msgid "Vote Overview"
+#~ msgstr ""
 
-#: src/SiteAdaptor/VotingCard.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Voted."
 msgstr ""
 
@@ -177,10 +188,14 @@ msgstr ""
 msgid "Votes"
 msgstr ""
 
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Why I can't vote?"
+msgstr ""
+
 #: src/SiteAdaptor/VotesCard.tsx
 msgid "You"
 msgstr ""
 
-#: src/SiteAdaptor/VoteConfirmDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
 msgstr ""

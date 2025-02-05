@@ -20,6 +20,8 @@
         "hj39w+": ["Loading failed due to Snapshot API service breakdown."],
         "9oP21f": ["我的投票"],
         "+ubcPw": ["没有投票权"],
+        "W2es+t": ["Oops, it seems you don't have any voting power at block ", ["0"], ". <0>Learn more</0>"],
+        "rPgNr1": ["Oops, it seems you don't have any voting power at block ", ["0"], ".<0>Learn more</0>"],
         "ybuu1v": ["对不起，我们没有找到任何结果。"],
         "rVBqRS": ["选项"],
         "M9OYUo": ["如果您未投票，请再试一次。"],
@@ -37,6 +39,7 @@
         "przoUP": ["投票概览"],
         "u7TofG": ["Voted."],
         "PByO0X": ["投票"],
+        "0wzWAN": ["Why I can't vote?"],
         "kWJmRL": ["您"],
         "9q+I38": ["您的投票权"]
     }

@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
@@ -18,10 +19,9 @@ import { useContext, useState } from 'react'
 import { SnapshotContext } from '../context.js'
 import { ProgressTab } from './ProgressTab.js'
 import { ProposalTab } from './ProposalTab.js'
-import { useProposal } from './hooks/useProposal.js'
-import { Trans } from '@lingui/react/macro'
 import { VotingDialog } from './VotingDialog.js'
 import { usePower } from './hooks/usePower.js'
+import { useProposal } from './hooks/useProposal.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
