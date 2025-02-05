@@ -25,6 +25,7 @@ export function TagInspector() {
         ) => {
             return (
                 <TrendingViewWrapper
+                    key={name}
                     address={address}
                     currentResult={currentResult}
                     identity={identity}
