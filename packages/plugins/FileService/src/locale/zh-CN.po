@@ -145,8 +145,8 @@ msgid "Uploaded files"
 msgstr "已上传的文件"
 
 #: src/SiteAdaptor/components/UploadFile.tsx
-msgid "Use Meson CDN"
-msgstr "使用Meson CDN"
+#~ msgid "Use Meson CDN"
+#~ msgstr "使用Meson CDN"
 
 #: src/SiteAdaptor/components/FileList.tsx
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."

@@ -76,7 +76,6 @@ const useStyles = makeStyles()((theme) => ({
 export function UploadFile() {
     const { classes, theme } = useStyles()
     const [encrypted, setEncrypted] = useState(true)
-    const [useCDN, setUseCDN] = useState(false)
     const [provider, setProvider] = useState<Provider>(Provider.Arweave)
     const { recentFiles, uploadingFiles, uploadFile, attachToPost } = useFileManagement()
 
@@ -97,28 +96,10 @@ export function UploadFile() {
 
     const onSelectFile = useCallback(
         async (file: File) => {
-            await uploadFile(file, provider, useCDN, encrypted)
+            await uploadFile(file, provider, encrypted)
         },
-        [encrypted, useCDN, provider],
+        [encrypted, provider],
     )
-
-    const cdnButton =
-        provider === Provider.Arweave ?
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        classes={{ root: classes.control, checked: classes.checked }}
-                        color="primary"
-                        checked={useCDN}
-                        icon={<Icons.CheckboxBlank size={18} />}
-                        checkedIcon={<Icons.Checkbox color={theme.palette.maskColor.primary} size={18} />}
-                        onChange={(event) => setUseCDN(event.target.checked)}
-                    />
-                }
-                className={classes.label}
-                label={<Trans>Use Meson CDN</Trans>}
-            />
-        :   null
 
     return (
         <section className={classes.container}>
@@ -158,7 +139,6 @@ export function UploadFile() {
                     className={classes.label}
                     label={<Trans>Make It Encrypted</Trans>}
                 />
-                {cdnButton}
             </section>
             <Typography className={classes.heading}>
                 <Trans>Uploaded files</Trans>

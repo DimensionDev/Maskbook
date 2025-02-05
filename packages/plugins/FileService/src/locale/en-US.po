@@ -140,8 +140,8 @@ msgid "Uploaded files"
 msgstr ""
 
 #: src/SiteAdaptor/components/UploadFile.tsx
-msgid "Use Meson CDN"
-msgstr ""
+#~ msgid "Use Meson CDN"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FileList.tsx
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
