@@ -154,7 +154,6 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     const refItem = useMemo(
         (): CompositionRef => ({
             setMessage: (msg) => {
-                 
                 if (Editor) Editor.value = msg
             },
             setEncryptionKind,

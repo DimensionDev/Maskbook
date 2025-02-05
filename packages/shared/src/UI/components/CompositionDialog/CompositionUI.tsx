@@ -104,7 +104,6 @@ export function CompositionDialogUI(props: CompositionProps) {
         for (const [meta, data] of Object.entries(initialMeta)) {
             Editor.current.attachMetadata(meta, data)
         }
-         
     }, [initialMeta, Editor.current])
 
     const context = useMemo(

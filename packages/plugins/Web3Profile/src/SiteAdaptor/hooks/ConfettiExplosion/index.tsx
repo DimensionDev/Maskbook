@@ -116,7 +116,7 @@ export function useConfettiExplosion() {
         const ctx = canvas.getContext('2d')
         if (!ctx) return
         // TODO: ??? global state?
-         
+
         buttonOffsetWidth = width
         buttonOffsetHeight = height
         canvasWidth = canvas.width
