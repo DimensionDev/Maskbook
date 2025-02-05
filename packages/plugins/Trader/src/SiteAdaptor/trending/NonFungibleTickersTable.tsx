@@ -293,6 +293,7 @@ function TransactionValue({ result, chainId, activity }: TransactionValueProps) 
                 // eslint-disable-next-line react/naming-convention/component-name
                 <Icons.WETH size={16} className={classes.tokenIcon} />
             :   <TokenIcon
+                    size={16}
                     logoURL={token?.logoURL || activity.trade_token?.logoURL}
                     symbol={activity.trade_symbol}
                     address={activity.contract_address}

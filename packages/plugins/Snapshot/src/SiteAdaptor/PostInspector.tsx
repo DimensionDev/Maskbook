@@ -13,11 +13,11 @@ export function PostInspector(props: PostInspectorProps) {
 
     return (
         <SnapshotContext value={identifier}>
-            <Component />
+            <SnapshotCard />
         </SnapshotContext>
     )
 }
-function Component() {
+function SnapshotCard() {
     const refresh = unstable_useCacheRefresh()
     return (
         <LoadingFailCard title="" isFullPluginDown retry={refresh}>

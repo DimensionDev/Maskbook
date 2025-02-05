@@ -1,6 +1,7 @@
 import { ChainBoundary } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
+    ActionButton,
     MaskLightTheme,
     MaskTabList,
     ShadowRootTooltip,
@@ -13,12 +14,14 @@ import { resolveIPFS_URL } from '@masknet/web3-shared-base'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Avatar, Box, Chip, Tab, ThemeProvider, Typography } from '@mui/material'
 import Color from 'color'
-import { useContext } from 'react'
+import { useContext, useState } from 'react'
 import { SnapshotContext } from '../context.js'
 import { ProgressTab } from './ProgressTab.js'
 import { ProposalTab } from './ProposalTab.js'
 import { useProposal } from './hooks/useProposal.js'
 import { Trans } from '@lingui/react/macro'
+import { VotingDialog } from './VotingDialog.js'
+import { usePower } from './hooks/usePower.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -102,102 +105,132 @@ export function Snapshot() {
             label: <Trans>Progress</Trans>,
         },
     ]
+    const [openVotingDialog, setOpenVotingDialog] = useState(false)
+    const power = usePower(identifier)
+
+    const disabled = !power
 
     return (
-        <TabContext value={currentTab}>
-            <Box className={classes.header}>
-                <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
-                <ThemeProvider theme={MaskLightTheme}>
-                    <Box className={classes.title}>
-                        <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                            <TextOverflowTooltip
-                                as={ShadowRootTooltip}
+        <>
+            <TabContext value={currentTab}>
+                <Box className={classes.header}>
+                    <Avatar src={resolveIPFS_URL(proposal.space.avatar)} className={classes.avatar} />
+                    <ThemeProvider theme={MaskLightTheme}>
+                        <Box className={classes.title}>
+                            <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                <TextOverflowTooltip
+                                    as={ShadowRootTooltip}
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={
+                                        <Typography fontSize={18} fontWeight="bold">
+                                            {proposal.space.name}
+                                        </Typography>
+                                    }
+                                    placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                    arrow>
+                                    <Typography
+                                        fontSize={18}
+                                        fontWeight="bold"
+                                        color={theme.palette.maskColor.publicMain}
+                                        sx={{
+                                            width: 150,
+                                            whiteSpace: 'nowrap',
+                                            textOverflow: 'ellipsis',
+                                            overflow: 'hidden',
+                                        }}>
+                                        {proposal.space.name}
+                                    </Typography>
+                                </TextOverflowTooltip>
+                                <Box sx={{ display: 'flex' }} color={theme.palette.maskColor.publicSecond}>
+                                    <Typography fontSize={14} sx={{ paddingRight: 1 }}>
+                                        by
+                                    </Typography>
+                                    <Typography fontSize={14} fontWeight="700">
+                                        {proposal.space.id}
+                                    </Typography>
+                                </Box>
+                            </Box>
+
+                            <ShadowRootTooltip
                                 PopperProps={{
                                     disablePortal: true,
                                 }}
-                                title={
-                                    <Typography fontSize={18} fontWeight="bold">
-                                        {proposal.space.name}
-                                    </Typography>
-                                }
+                                title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
                                 placement="top"
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 arrow>
                                 <Typography
-                                    fontSize={18}
-                                    fontWeight="bold"
-                                    color={theme.palette.maskColor.publicMain}
+                                    fontSize={14}
+                                    fontWeight="700"
+                                    color={theme.palette.maskColor.publicSecond}
                                     sx={{
-                                        width: 150,
+                                        width: 300,
                                         whiteSpace: 'nowrap',
                                         textOverflow: 'ellipsis',
                                         overflow: 'hidden',
                                     }}>
-                                    {proposal.space.name}
+                                    {proposal.title}
                                 </Typography>
-                            </TextOverflowTooltip>
-                            <Box sx={{ display: 'flex' }} color={theme.palette.maskColor.publicSecond}>
-                                <Typography fontSize={14} sx={{ paddingRight: 1 }}>
-                                    by
-                                </Typography>
-                                <Typography fontSize={14} fontWeight="700">
-                                    {proposal.space.id}
-                                </Typography>
-                            </Box>
+                            </ShadowRootTooltip>
                         </Box>
-
-                        <ShadowRootTooltip
-                            PopperProps={{
-                                disablePortal: true,
-                            }}
-                            title={<Typography className={classes.shadowRootTooltip}>{proposal.title}</Typography>}
-                            placement="top"
-                            classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                            arrow>
-                            <Typography
-                                fontSize={14}
-                                fontWeight="700"
-                                color={theme.palette.maskColor.publicSecond}
-                                sx={{ width: 300, whiteSpace: 'nowrap', textOverflow: 'ellipsis', overflow: 'hidden' }}>
-                                {proposal.title}
-                            </Typography>
-                        </ShadowRootTooltip>
-                    </Box>
-                </ThemeProvider>
-                <Box>
-                    <Chip
-                        className={proposal.status === 'Active' ? classes.active : classes.default}
-                        label={proposal.status}
-                    />
-                </Box>
-            </Box>
-            <Box className={classes.body}>
-                <MaskTabList variant="base" aria-label="snapshot" onChange={onChange}>
-                    {Tabs.map((x, i) => (
-                        <Tab
-                            key={i}
-                            value={x.value}
-                            label={x.label}
-                            className={x.value === currentTab ? classes.tabActive : classes.tab}
+                    </ThemeProvider>
+                    <Box>
+                        <Chip
+                            className={proposal.status === 'Active' ? classes.active : classes.default}
+                            label={proposal.status}
                         />
-                    ))}
-                </MaskTabList>
-                <Box className={classes.content}>
-                    <TabPanel value={tabs.Proposal} key={tabs.Proposal} sx={{ padding: 0 }}>
-                        <ProposalTab />
-                    </TabPanel>
-                    <TabPanel value={tabs.Progress} key={tabs.Progress} sx={{ padding: 0 }}>
-                        <ProgressTab />
-                    </TabPanel>
+                    </Box>
                 </Box>
-            </Box>
-            <Box style={{ padding: 12 }}>
-                <ChainBoundary
-                    expectedPluginID={NetworkPluginID.PLUGIN_EVM}
-                    expectedChainId={chainId}
-                    ActionButtonPromiseProps={{ variant: 'roundedDark' }}
-                />
-            </Box>
-        </TabContext>
+                <Box className={classes.body}>
+                    <MaskTabList variant="base" aria-label="snapshot" onChange={onChange}>
+                        {Tabs.map((x, i) => (
+                            <Tab
+                                key={i}
+                                value={x.value}
+                                label={x.label}
+                                className={x.value === currentTab ? classes.tabActive : classes.tab}
+                            />
+                        ))}
+                    </MaskTabList>
+                    <Box className={classes.content}>
+                        <TabPanel value={tabs.Proposal} key={tabs.Proposal} sx={{ padding: 0 }}>
+                            <ProposalTab />
+                        </TabPanel>
+                        <TabPanel value={tabs.Progress} key={tabs.Progress} sx={{ padding: 0 }}>
+                            <ProgressTab />
+                        </TabPanel>
+                    </Box>
+                </Box>
+                <Box style={{ padding: 12 }}>
+                    <ChainBoundary
+                        expectedPluginID={NetworkPluginID.PLUGIN_EVM}
+                        expectedChainId={chainId}
+                        ActionButtonPromiseProps={{ variant: 'roundedDark' }}>
+                        {proposal.isEnd ? null : (
+                            <ActionButton
+                                fullWidth
+                                disabled={disabled}
+                                variant="roundedDark"
+                                onClick={() => {
+                                    setOpenVotingDialog(true)
+                                }}>
+                                {power ?
+                                    <Trans>Vote</Trans>
+                                :   <Trans>No power</Trans>}
+                            </ActionButton>
+                        )}
+                    </ChainBoundary>
+                </Box>
+            </TabContext>
+            <VotingDialog
+                open={openVotingDialog}
+                onClose={() => {
+                    setOpenVotingDialog(false)
+                }}
+            />
+        </>
     )
 }

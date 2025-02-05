@@ -11,6 +11,7 @@ import { Icons } from '@masknet/icons'
 import { ProfileView } from './ProfileView.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { Trans } from '@lingui/react/macro'
+import { range } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -24,23 +25,21 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const isSnapshotURL = (x: string): boolean =>
-    /^https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
+    /^https:\/\/(?:www.)?snapshot.(org|page|box)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
 
 export function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()
     usePluginWrapper(true)
-    const fallbackUI = Array.from({ length: 2 })
-        .fill(0)
-        .map((_, i) => (
-            <Skeleton
-                key={i}
-                className={classes.skeleton}
-                animation="wave"
-                variant="rectangular"
-                width={i === 0 ? '80%' : '60%'}
-                height={15}
-            />
-        ))
+    const fallbackUI = range(2).map((i) => (
+        <Skeleton
+            key={i}
+            className={classes.skeleton}
+            animation="wave"
+            variant="rectangular"
+            width={i === 0 ? '80%' : '60%'}
+            height={15}
+        />
+    ))
     return (
         <Suspense fallback={fallbackUI}>
             <PostInspector url={url} />

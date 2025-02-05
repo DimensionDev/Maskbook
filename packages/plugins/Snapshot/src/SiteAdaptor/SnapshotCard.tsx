@@ -9,7 +9,7 @@ const useStyles = makeStyles()((theme) => {
         root: {
             minHeight: 120,
             padding: 0,
-            border: `solid 1px ${theme.palette.maskColor.publicLine}`,
+            border: `solid 1px ${theme.palette.maskColor.line}`,
             margin: `${theme.spacing(2)} auto`,
             marginBottom: theme.spacing(2),
             '&:first-child': {
@@ -18,10 +18,10 @@ const useStyles = makeStyles()((theme) => {
             '&:last-child': {
                 marginBottom: 0,
             },
-            background: theme.palette.maskColor.white,
+            background: theme.palette.mode === 'dark' ? theme.palette.maskColor.bg : theme.palette.maskColor.white,
         },
         header: {
-            borderBottom: `solid 1px ${theme.palette.maskColor.publicLine}`,
+            borderBottom: `solid 1px ${theme.palette.maskColor.line}`,
         },
         content: {
             width: '100%',
@@ -37,7 +37,7 @@ const useStyles = makeStyles()((theme) => {
         title: {
             display: 'flex',
             alignItems: 'center',
-            color: theme.palette.maskColor.publicMain,
+            color: theme.palette.maskColor.main,
             fontWeight: 'bold',
             fontSize: 18,
         },
