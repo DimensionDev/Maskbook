@@ -39,6 +39,8 @@ import { useState } from 'react'
  * @param deps
  */
 export function useRenderPhraseCallbackOnDepsChange(callback: () => void, deps: unknown[]) {
+    // eslint-disable-next-line react-compiler/react-compiler
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [prev, setPrev] = useState(deps)
     let changed = deps.length !== prev.length
     for (let i = 0; i < deps.length; i += 1) {

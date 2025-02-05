@@ -61,6 +61,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
         priceInToken:
             asset.last_sale ?
                 {
+                    // eslint-disable-next-line @typescript-eslint/no-base-to-string
                     amount: asset.last_sale.total_price?.toString() || '',
                     // FIXME: cannot get payment token
                     token:

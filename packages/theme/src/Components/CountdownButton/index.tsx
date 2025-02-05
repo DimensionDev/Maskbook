@@ -25,7 +25,13 @@ export function CountdownButton(props: CountdownButtonProps) {
 
     const content = useMemo(() => {
         if (countdown) {
-            return `${children} (${countdown})`
+            if (typeof children === 'string') return `${children} (${countdown})`
+            else
+                return (
+                    <>
+                        {children} (${countdown})
+                    </>
+                )
         } else if (countdown === 0) {
             return repeatContent
         } else {
