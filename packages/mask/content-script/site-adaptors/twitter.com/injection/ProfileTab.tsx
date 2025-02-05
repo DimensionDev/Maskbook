@@ -398,8 +398,8 @@ function InjectProfileTab() {
         return () => ac.abort()
     }, [windowSize, tabList, web3TabRef, nextArrow])
 
-    const slug = location.pathname.split('/')[1]
-    if (slug && TWITTER_RESERVED_SLUGS.includes(slug)) return null
+    const [, slug, category] = location.pathname.split('/')
+    if (slug && (TWITTER_RESERVED_SLUGS.includes(slug) || category === 'communities')) return null
 
     return (
         <div ref={setWeb3TabRef} className={classes.bar}>
