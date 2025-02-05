@@ -120,7 +120,7 @@ interface TrendingViewProps {
 
 export function TrendingView(props: TrendingViewProps) {
     const { resultList, identity, setActive, currentResult } = props
-    const [result, setResult] = useState(currentResult ?? resultList[0])
+    const [result = resultList[0], setResult] = useState(currentResult)
     const { isTokenTagPopper, isCollectionProjectPopper, isProfilePage } = useContext(TrendingViewContext)
     const theme = useTheme()
     const isMinimalMode = useIsMinimalMode(PluginID.Trader)
