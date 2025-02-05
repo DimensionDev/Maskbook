@@ -102,24 +102,6 @@ export function UploadFile() {
         [encrypted, useCDN, provider],
     )
 
-    const cdnButton =
-        provider === Provider.Arweave ?
-            <FormControlLabel
-                control={
-                    <Checkbox
-                        classes={{ root: classes.control, checked: classes.checked }}
-                        color="primary"
-                        checked={useCDN}
-                        icon={<Icons.CheckboxBlank size={18} />}
-                        checkedIcon={<Icons.Checkbox color={theme.palette.maskColor.primary} size={18} />}
-                        onChange={(event) => setUseCDN(event.target.checked)}
-                    />
-                }
-                className={classes.label}
-                label={<Trans>Use Meson CDN</Trans>}
-            />
-        :   null
-
     return (
         <section className={classes.container}>
             <UploadDropArea className={classes.uploadArea} maxFileSize={MAX_FILE_SIZE} onSelectFile={onSelectFile} />
@@ -158,7 +140,6 @@ export function UploadFile() {
                     className={classes.label}
                     label={<Trans>Make It Encrypted</Trans>}
                 />
-                {cdnButton}
             </section>
             <Typography className={classes.heading}>
                 <Trans>Uploaded files</Trans>
