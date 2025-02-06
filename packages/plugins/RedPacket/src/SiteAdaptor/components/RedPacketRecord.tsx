@@ -97,7 +97,7 @@ const useStyles = makeStyles<{ background?: string; backgroundIcon?: string }>()
             },
         },
         symbol: {
-            width: '6ch',
+            maxWidth: '6ch',
             whiteSpace: 'nowrap',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
