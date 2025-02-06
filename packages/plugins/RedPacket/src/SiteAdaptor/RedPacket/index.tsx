@@ -1,15 +1,15 @@
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
-import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
-import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
+import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import type { HappyRedPacketV4 } from '@masknet/web3-contracts/types/HappyRedPacketV4.js'
 import { NetworkContextProvider, useChainContext, useNetwork } from '@masknet/web3-hooks-base'
-import { EVMChainResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { FireflyRedPacketAPI, RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { EVMChainResolver } from '@masknet/web3-providers'
+import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { Card, Grow } from '@mui/material'
@@ -21,7 +21,6 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -166,9 +165,6 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
 
     const [showRequirements, setShowRequirements] = useState(false)
-    const me = useLastRecognizedIdentity()
-    const myProfileId = me?.profileId
-    const myHandle = me?.identifier?.userId
     const onClaimOrRefund = useCallback(async () => {
         let hash: string | undefined
         if (canClaim) {
@@ -178,15 +174,6 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
                 return
             }
             hash = await claimCallback()
-            if (myProfileId && myHandle && hash) {
-                await FireflyRedPacket.finishClaiming(
-                    payload.rpid,
-                    FireflyRedPacketAPI.PlatformType.twitter,
-                    myProfileId,
-                    myHandle,
-                    hash,
-                )
-            }
             await checkResult()
             queryClient.invalidateQueries({
                 queryKey: ['redpacket', 'history'],
@@ -197,17 +184,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         if (typeof hash === 'string') {
             checkAvailability()
         }
-    }, [
-        canClaim,
-        canRefund,
-        claimCallback,
-        checkResult,
-        recheckClaimStatus,
-        checkAvailability,
-        payload.rpid,
-        myProfileId,
-        myHandle,
-    ])
+    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, checkAvailability])
 
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
@@ -261,18 +238,6 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     )
 
     if (outdated) return card
-    if (!myHandle)
-        return (
-            <>
-                {card}
-                <RequestLoginFooter
-                    className={classes.footer}
-                    onRequest={() => {
-                        requestLogin?.(source)
-                    }}
-                />
-            </>
-        )
 
     return (
         <>
