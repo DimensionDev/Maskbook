@@ -2,7 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { InjectedDialog, PluginWalletStatusBar, useSnackbarCallback, WalletConnectedBoundary } from '@masknet/shared'
 import { formatWithCommas, type NetworkPluginID } from '@masknet/shared-base'
-import { ActionButton, makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
 import { formatCount } from '@masknet/web3-shared-base'
@@ -115,6 +115,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
 
     const [loading, setLoading] = useState(false)
     const retry = unstable_useCacheRefresh()
+    const { showSnackbar } = useCustomSnackbar()
     const onVoteConfirm = useSnackbarCallback(
         async () => {
             setLoading(true)
@@ -133,6 +134,10 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                 domain,
                 types,
             }
+            showSnackbar(<Trans>Vote</Trans>, {
+                message: <Trans>Confirm this Signature in your wallet.</Trans>,
+                autoHideDuration: 3_000,
+            })
             const sig = await EVMWeb3.signMessage(
                 'typedData',
                 JSON.stringify({
@@ -160,7 +165,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
         },
         (_err: Error) => setLoading(false),
         void 0,
-        messageText(<Trans>Voted.</Trans>),
+        messageText(<Trans>Your vote has been successful.</Trans>),
         messageText(<Trans>Please try again if you failed to vote.</Trans>),
     )
     return (

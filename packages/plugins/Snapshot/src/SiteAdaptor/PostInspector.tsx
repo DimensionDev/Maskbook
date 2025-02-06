@@ -1,15 +1,15 @@
+import { unstable_useCacheRefresh, useMemo } from 'react'
 import { SnapshotContext } from '../context.js'
 import { getProposalIdentifier } from './helpers.js'
-import { Snapshot } from './Snapshot.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
-import { unstable_useCacheRefresh } from 'react'
+import { Snapshot } from './Snapshot.js'
 
 interface PostInspectorProps {
     url: string
 }
 
 export function PostInspector(props: PostInspectorProps) {
-    const identifier = getProposalIdentifier(props.url)
+    const identifier = useMemo(() => getProposalIdentifier(props.url), [props.url])
 
     return (
         <SnapshotContext value={identifier}>
