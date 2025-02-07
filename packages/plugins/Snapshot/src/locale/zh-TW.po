@@ -39,6 +39,10 @@ msgstr ""
 msgid "Cast your vote"
 msgstr ""
 
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Confirm this Signature in your wallet."
+msgstr ""
+
 #: src/SiteAdaptor/ResultCard.tsx
 #: src/SiteAdaptor/ResultCard.tsx
 #: src/SiteAdaptor/ResultCard.tsx
@@ -170,6 +174,7 @@ msgstr ""
 
 #: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
 msgid "Vote"
 msgstr ""
@@ -179,8 +184,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/VotingDialog.tsx
-msgid "Voted."
-msgstr ""
+#~ msgid "Voted."
+#~ msgstr ""
 
 #: src/SiteAdaptor/VotesCard.tsx
 #: src/SiteAdaptor/VotesCard.tsx
@@ -194,6 +199,10 @@ msgstr ""
 
 #: src/SiteAdaptor/VotesCard.tsx
 msgid "You"
+msgstr ""
+
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Your vote has been successful."
 msgstr ""
 
 #: src/SiteAdaptor/VotingDialog.tsx
