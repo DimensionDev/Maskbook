@@ -250,7 +250,7 @@ export function CreateSolRedPacket() {
         shares,
         //  Avoid causing rpc rate limit due to too fast requests.
         new BigNumber('0.0001').toNumber(),
-        !!isRandom,
+        isRandom,
         publicKey,
         inputMessage,
         creator,
@@ -310,7 +310,7 @@ export function CreateSolRedPacket() {
                 <div className={classes.field}>
                     <label className={classes.option} onClick={() => setIsRandom(true)}>
                         <div className={classes.checkIconWrapper}>
-                            <RadioIndicator checked={!!isRandom} size={20} />
+                            <RadioIndicator checked={isRandom} size={20} />
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
