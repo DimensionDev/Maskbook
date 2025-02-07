@@ -1,4 +1,3 @@
-import { t } from '@lingui/core/macro'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { useCurrentLinkedPersona } from '@masknet/shared'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
@@ -19,6 +18,7 @@ import {
     type SetStateAction,
 } from 'react'
 import { DURATION, PRESET_THEMES, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
+import { t } from '@lingui/core/macro'
 
 export enum ConditionType {
     Crypto = 'Crypto',
@@ -32,7 +32,8 @@ interface RedPacketContextOptions {
     customThemes: FireflyRedPacketAPI.ThemeGroupSettings[]
     setCustomThemes: Dispatch<SetStateAction<FireflyRedPacketAPI.ThemeGroupSettings[]>>
     message: string
-    setMessage: Dispatch<SetStateAction<string>>
+    inputMessage: string
+    setInputMessage: Dispatch<SetStateAction<string>>
     creator: string
     tokenQuantity: string
     setTokenQuantity: Dispatch<SetStateAction<string>>
@@ -43,16 +44,14 @@ interface RedPacketContextOptions {
     setRawAmount: Dispatch<SetStateAction<string>>
     settings: {
         duration: number
-        isRandom: boolean
         name: string
-        message: string
         shares: number
         token?: FungibleToken<ChainId, SchemaType.Native | SchemaType.Fungible>
         total: string
     }
     // TODO use boolean
-    isRandom: 0 | 1
-    setIsRandom: Dispatch<SetStateAction<0 | 1>>
+    isRandom: boolean
+    setIsRandom: Dispatch<SetStateAction<boolean>>
     shares: number
     setShares: Dispatch<SetStateAction<number>>
     publicKey: string
@@ -65,7 +64,8 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     customThemes: EMPTY_LIST,
     setCustomThemes: noop,
     message: '',
-    setMessage: noop,
+    inputMessage: '',
+    setInputMessage: noop,
     creator: '',
     tokenQuantity: '',
     setTokenQuantity: noop,
@@ -75,7 +75,7 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     rawAmount: '',
     setRawAmount: noop,
     settings: null!,
-    isRandom: 0,
+    isRandom: true,
     setIsRandom: noop,
     shares: 0,
     setShares: noop,
@@ -88,7 +88,7 @@ interface Props extends PropsWithChildren {}
 export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }: Props) {
     const [theme = PRESET_THEMES[0], setTheme] = useState<FireflyRedPacketAPI.ThemeGroupSettings>()
     const [customThemes, setCustomThemes] = useState<FireflyRedPacketAPI.ThemeGroupSettings[]>([])
-    const [message, setMessage] = useState('')
+    const [inputMessage, setInputMessage] = useState('')
 
     const allThemes = useMemo(
         () => (customThemes ? [...PRESET_THEMES, ...customThemes] : PRESET_THEMES),
@@ -98,7 +98,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
 
     // Token
     const [rawAmount, setRawAmount] = useState('')
-    const [isRandom, setIsRandom] = useState<0 | 1>(1)
+    const [isRandom, setIsRandom] = useState<boolean>(true)
     const [shares, setShares] = useState<number>(RED_PACKET_DEFAULT_SHARES)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
     const nativeToken = useMemo(() => SolanaChainResolver.nativeCurrency(chainId), [chainId])
@@ -114,9 +114,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
     const settings = useMemo(
         () => ({
             duration: DURATION,
-            isRandom: !!isRandom,
             name: creator,
-            message: message || t`Best Wishes!`,
             shares: shares || 0,
             token:
                 token ?
@@ -124,7 +122,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
                 :   undefined,
             total: totalAmount.toFixed(),
         }),
-        [isRandom, creator, message, shares, token, totalAmount],
+        [creator, shares, token, totalAmount],
     )
 
     const { account: publicKey, privateKey } = useMemo(() => SOLWeb3.createAccount(), [])
@@ -136,8 +134,9 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
             setTheme,
             customThemes,
             setCustomThemes,
-            message,
-            setMessage,
+            message: inputMessage || t`Best Wishes!`,
+            inputMessage,
+            setInputMessage,
             creator,
             tokenQuantity,
             setTokenQuantity,
@@ -159,7 +158,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
         allThemes,
         customThemes,
         settings,
-        message,
+        inputMessage,
         token,
         nativeToken,
         rawAmount,

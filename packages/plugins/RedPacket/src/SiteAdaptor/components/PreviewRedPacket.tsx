@@ -11,7 +11,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     token?: Web3Helper.FungibleTokenAll
     creator: string
     shares: number
-    isRandom: 0 | 1
+    isRandom: boolean
     rawAmount: string
 }
 export function PreviewRedPacket({ theme, message, token, creator, shares, isRandom, rawAmount, ...props }: Props) {

@@ -323,9 +323,9 @@ export function CreateTokenRedPacket() {
         <>
             <div className={classes.fields}>
                 <div className={classes.field}>
-                    <label className={classes.option} onClick={() => setIsRandom(1)}>
+                    <label className={classes.option} onClick={() => setIsRandom(true)}>
                         <div className={classes.checkIconWrapper}>
-                            <RadioIndicator checked={!!isRandom} size={20} />
+                            <RadioIndicator checked={isRandom} size={20} />
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
@@ -334,7 +334,7 @@ export function CreateTokenRedPacket() {
                             <Trans>Random Amount</Trans>
                         </Typography>
                     </label>
-                    <label className={classes.option} onClick={() => setIsRandom(0)}>
+                    <label className={classes.option} onClick={() => setIsRandom(false)}>
                         <div className={classes.checkIconWrapper}>
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
