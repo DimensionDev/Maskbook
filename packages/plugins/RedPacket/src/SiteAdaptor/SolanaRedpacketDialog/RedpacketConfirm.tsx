@@ -91,7 +91,7 @@ export function SolanaRedPacketConfirm() {
     const { classes, cx } = useStyles()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
     const navigate = useNavigate()
-    const { settings, shares, isRandom, token, creator, publicKey, password, message, nativeToken, theme, rawAmount } =
+    const { settings, isRandom, token, creator, publicKey, password, message, nativeToken, theme, rawAmount } =
         useSolRedpacket()
 
     const solanaAccount = useAccount(NetworkPluginID.PLUGIN_SOLANA)
@@ -126,7 +126,7 @@ export function SolanaRedPacketConfirm() {
 
     const cluster = SolanaChainResolver.network(chainId) as SolanaWeb3.Cluster
     const { data: defaultGasFee = ZERO, isLoading: estimateLoading } = useEstimateGasWithCreateSolRedpacket(
-        shares,
+        settings.shares,
         new BigNumber(settings.total).toNumber(),
         !!isRandom,
         publicKey,
@@ -182,7 +182,7 @@ export function SolanaRedPacketConfirm() {
                 message,
             },
             is_random: !!isRandom,
-            shares,
+            shares: settings.shares,
             password,
             rpid: result.accountId.toBase58(),
             total: settings.total,
@@ -211,7 +211,7 @@ export function SolanaRedPacketConfirm() {
         <>
             <div className={classes.settings}>
                 <Typography variant="h4" color="textPrimary" align="center" className={classes.message}>
-                    {settings.message}
+                    {message}
                 </Typography>
                 <div className={classes.field}>
                     <Typography className={classes.fieldName}>
@@ -228,7 +228,7 @@ export function SolanaRedPacketConfirm() {
                         <Trans>Share</Trans>
                     </Typography>
                     <Typography variant="body1" className={cx(classes.fieldValue, classes.value)}>
-                        {shares}
+                        {settings.shares}
                     </Typography>
                 </div>
                 {isRandom ? null : (
@@ -297,7 +297,7 @@ export function SolanaRedPacketConfirm() {
                             message={message}
                             token={token}
                             creator={creator}
-                            shares={shares}
+                            shares={settings.shares}
                             isRandom={isRandom}
                             rawAmount={rawAmount}
                         />
