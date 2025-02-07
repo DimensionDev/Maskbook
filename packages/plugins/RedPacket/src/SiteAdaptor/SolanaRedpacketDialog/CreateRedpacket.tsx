@@ -189,8 +189,8 @@ export function CreateSolRedPacket() {
         customThemes,
         setCustomThemes,
         setTheme,
-        message,
-        setMessage,
+        inputMessage,
+        setInputMessage,
         shares,
         setShares,
         isRandom,
@@ -250,9 +250,9 @@ export function CreateSolRedPacket() {
         shares,
         //  Avoid causing rpc rate limit due to too fast requests.
         new BigNumber('0.0001').toNumber(),
-        !!isRandom,
+        isRandom,
         publicKey,
-        message,
+        inputMessage,
         creator,
         token,
         cluster,
@@ -308,9 +308,9 @@ export function CreateSolRedPacket() {
         <>
             <div className={classes.fields}>
                 <div className={classes.field}>
-                    <label className={classes.option} onClick={() => setIsRandom(1)}>
+                    <label className={classes.option} onClick={() => setIsRandom(true)}>
                         <div className={classes.checkIconWrapper}>
-                            <RadioIndicator checked={!!isRandom} size={20} />
+                            <RadioIndicator checked={isRandom} size={20} />
                         </div>
                         <Typography
                             color={isRandom ? theme.palette.maskColor.main : theme.palette.maskColor.second}
@@ -319,7 +319,7 @@ export function CreateSolRedPacket() {
                             <Trans>Random Amount</Trans>
                         </Typography>
                     </label>
-                    <label className={classes.option} onClick={() => setIsRandom(0)}>
+                    <label className={classes.option} onClick={() => setIsRandom(false)}>
                         <div className={classes.checkIconWrapper}>
                             <RadioIndicator checked={!isRandom} size={20} />
                         </div>
@@ -334,8 +334,8 @@ export function CreateSolRedPacket() {
                 <InputBase
                     className={classes.input}
                     fullWidth
-                    value={message}
-                    onChange={(e) => setMessage(e.target.value)}
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
                     startAdornment={
                         <Typography className={classes.inputLabel}>
                             <Trans>Message</Trans>
@@ -343,7 +343,7 @@ export function CreateSolRedPacket() {
                     }
                     endAdornment={
                         <Typography className={classes.inputLabel} style={{ right: 12, left: 'auto' }}>
-                            {message.length}/{messageMaxLength}
+                            {inputMessage.length}/{messageMaxLength}
                         </Typography>
                     }
                     placeholder={_(msg`Best Wishes!`)}
@@ -462,7 +462,7 @@ export function CreateSolRedPacket() {
                             <PreviewRedPacket
                                 className={classes.envelope}
                                 theme={selectedTheme}
-                                message={message}
+                                message={inputMessage}
                                 token={token}
                                 creator={creator}
                                 shares={shares}

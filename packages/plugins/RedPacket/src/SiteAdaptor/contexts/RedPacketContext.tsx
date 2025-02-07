@@ -52,9 +52,8 @@ interface RedPacketContextOptions {
     rawAmount: string
     setRawAmount: Dispatch<SetStateAction<string>>
     settings: RedPacketSettings
-    // TODO use boolean
-    isRandom: 0 | 1
-    setIsRandom: Dispatch<SetStateAction<0 | 1>>
+    isRandom: boolean
+    setIsRandom: Dispatch<SetStateAction<boolean>>
     shares: number
     setShares: Dispatch<SetStateAction<number>>
     // NFT
@@ -95,7 +94,7 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     rawAmount: '',
     setRawAmount: noop,
     settings: null!,
-    isRandom: 0,
+    isRandom: true,
     setIsRandom: noop,
     shares: 0,
     setShares: noop,
@@ -133,7 +132,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
 
     // Token
     const [rawAmount, setRawAmount] = useState('')
-    const [isRandom, setIsRandom] = useState<0 | 1>(1)
+    const [isRandom, setIsRandom] = useState<boolean>(true)
     const [shares, setShares] = useState<number>(RED_PACKET_DEFAULT_SHARES)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const nativeToken = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
@@ -147,7 +146,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const settings: RedPacketSettings = useMemo(
         () => ({
             duration: DURATION,
-            isRandom: !!isRandom,
+            isRandom,
             name: creator,
             message: message || t`Best Wishes!`,
             shares: shares || 0,

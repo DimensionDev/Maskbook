@@ -1,8 +1,8 @@
 import { BN, web3 } from '@coral-xyz/anchor'
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
-import { useLastRecognizedIdentity, usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
-import { requestLogin, share } from '@masknet/plugin-infra/content-script/context'
+import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
+import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
@@ -14,20 +14,19 @@ import {
     useNetwork,
     useNetworkContext,
 } from '@masknet/web3-hooks-base'
-import { FireflyRedPacket, SolanaChainResolver } from '@masknet/web3-providers'
-import { FireflyRedPacketAPI, RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
+import { SolanaChainResolver } from '@masknet/web3-providers'
+import { RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { Card } from '@mui/material'
 import { memo, useCallback, useMemo } from 'react'
+import { useAsyncFn } from 'react-use'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 import { getClaimRecord } from '../helpers/getClaimRecord.js'
 import { useSolanaAvailability } from './hooks/useAvailability.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { RequestLoginFooter } from './RequestLoginFooter.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -126,9 +125,6 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     )
     const claimedShareText = useMemo(() => getShareText(true), [getShareText])
 
-    const me = useLastRecognizedIdentity()
-    const myProfileId = me?.profileId
-    const myHandle = me?.identifier?.userId
     const [{ loading: isClaimingAndChecking }, onClaimOrRefund] = useAsyncFn(async () => {
         let hash: string | undefined
         if (canClaim) {
@@ -139,15 +135,6 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                 tokenAddress: payload.token!.address,
                 tokenProgram: payload.tokenProgram ? new web3.PublicKey(payload.tokenProgram) : undefined,
             })
-            if (myProfileId && myHandle && hash) {
-                await FireflyRedPacket.finishClaiming(
-                    payload.rpid,
-                    FireflyRedPacketAPI.PlatformType.twitter,
-                    myProfileId,
-                    myHandle,
-                    hash,
-                )
-            }
             const claimRecord = await getClaimRecord({
                 cluster: payload.network ?? 'mainnet-beta',
                 accountId: payload.accountId,
@@ -173,7 +160,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
         if (typeof hash === 'string') {
             refreshRedPacket()
         }
-    }, [canClaim, canRefund, claimCallback, refreshRedPacket, payload.rpid, myProfileId, myHandle, account])
+    }, [canClaim, canRefund, claimCallback, refreshRedPacket, payload.rpid, account])
 
     const outdated = availability?.isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
@@ -214,9 +201,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                     />
                 </SOLWeb3ContextProvider>
             </Card>
-            {outdated ?
-                null
-            : myHandle ?
+            {outdated ? null : (
                 <NetworkContextProvider initialNetwork={currentPluginID}>
                     {/* ChainBoundary needs to know the current network */}
                     <OperationFooter
@@ -229,13 +214,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                         onClaimOrRefund={onClaimOrRefund}
                     />
                 </NetworkContextProvider>
-            :   <RequestLoginFooter
-                    className={classes.footer}
-                    onRequest={() => {
-                        requestLogin?.(source)
-                    }}
-                />
-            }
+            )}
         </>
     )
 })
