@@ -146,7 +146,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const settings: RedPacketSettings = useMemo(
         () => ({
             duration: DURATION,
-            isRandom: !!isRandom,
+            isRandom,
             name: creator,
             message: message || t`Best Wishes!`,
             shares: shares || 0,
