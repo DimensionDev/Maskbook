@@ -11,14 +11,12 @@ import Services from '#services'
 import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { useSearchParams } from 'react-router-dom'
-import { compact } from 'lodash-es'
 import { isZero } from '@masknet/web3-shared-base'
 import { useAsyncRetry } from 'react-use'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { msg, plural } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
+import { plural } from '@lingui/core/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -78,7 +76,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Onboarding() {
-    const { _ } = useLingui()
+    const { t } = useLingui()
     const { classes } = useStyles()
 
     const [params] = useSearchParams()
@@ -117,36 +115,24 @@ export const Component = memo(function Onboarding() {
         })
     }, [retry])
 
-    const words = useMemo(() => {
+    const sentence: Array<string[] | undefined> = useMemo(() => {
         const count = params.get('count')
-        return compact([
-            <Typography key="identity">
-                {_(msg`Creating your `)}
-                {_(msg`identity`)}
-            </Typography>,
-            <Typography key="account">
-                {_(msg`Generating your `)}
-                {_(msg`accounts`)}
-            </Typography>,
-            <Typography key="data">
-                {_(msg`Encrypting your `)}
-                {_(msg`data`)}
-            </Typography>,
-            <Typography key="ready">
-                {_(msg`Your Persona is on `)}
-                {_(msg`ready 🚀`)}
-            </Typography>,
+        return [
+            [t`Creating your `, t`identity`],
+            [t`Generating your `, t`accounts`],
+            [t`Encrypting your `, t`data`],
+            [t`Your Persona is on `, t`ready 🚀`],
             count && !isZero(count) ?
-                <Typography key="wallets">
-                    {_(msg`You have recovered `)}
-                    {plural(count, {
+                [
+                    t`You have recovered `,
+                    plural(count, {
                         one: '# Wallet 🚀',
                         other: '# Wallets 🚀',
-                    })}
-                </Typography>
+                    }),
+                ]
             :   undefined,
-        ])
-    }, [_])
+        ]
+    }, [])
 
     return (
         <>
@@ -172,7 +158,7 @@ export const Component = memo(function Onboarding() {
             </Box>
             <img className={classes.trend} src={Trend} />
             <Box>
-                <OnboardingWriter words={words} />
+                <OnboardingWriter sentence={sentence} />
             </Box>
             <SetupFrameController>
                 <PrimaryButton

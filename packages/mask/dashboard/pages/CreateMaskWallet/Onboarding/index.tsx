@@ -9,9 +9,7 @@ import { PopupRoutes } from '@masknet/shared-base'
 
 import Services from '#services'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -69,33 +67,21 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function Onboarding() {
     const { classes } = useStyles()
-    const { _ } = useLingui()
+    const { t } = useLingui()
 
     const onOpenPopupWallet = useCallback(async () => {
         await Services.Helper.openPopupWindow(PopupRoutes.Wallet, {})
         window.close()
     }, [])
 
-    const words = useMemo(() => {
+    const sentence: string[][] = useMemo(() => {
         return [
-            <Typography key="identity">
-                {_(msg`Creating your `)}
-                {_(msg`wallet`)}
-            </Typography>,
-            <Typography key="account">
-                {_(msg`Generating your `)}
-                {_(msg`accounts`)}
-            </Typography>,
-            <Typography key="data">
-                {_(msg`Encrypting your `)}
-                {_(msg`data`)}
-            </Typography>,
-            <Typography key="ready">
-                {_(msg`Your Wallet is on `)}
-                {_(msg`ready 🚀`)}
-            </Typography>,
+            [t`Creating your `, t`wallet`],
+            [t`Generating your `, t`accounts`],
+            [t`Encrypting your `, t`data`],
+            [t`Your Wallet is on `, t`ready 🚀`],
         ]
-    }, [_])
+    }, [])
 
     return (
         <>
@@ -121,7 +107,7 @@ export const Component = memo(function Onboarding() {
             </Box>
             <img className={classes.trend} src={Trend} />
             <Box>
-                <OnboardingWriter words={words} />
+                <OnboardingWriter sentence={sentence} />
             </Box>
             <SetupFrameController>
                 <PrimaryButton onClick={onOpenPopupWallet} size="large" width={'228px'}>

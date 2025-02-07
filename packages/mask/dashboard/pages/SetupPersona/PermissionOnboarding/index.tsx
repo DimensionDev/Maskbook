@@ -11,7 +11,7 @@ import { delay } from '@masknet/kit'
 import { OnboardingWriter } from '../../../components/OnboardingWriter/index.js'
 import { TwitterAdaptor } from '../../../../shared/site-adaptors/implementations/twitter.com.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { Trans } from '@lingui/react/macro'
+import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -87,6 +87,8 @@ export const Component = memo(function Onboarding() {
 
     const theme = useTheme()
 
+    const { t } = useLingui()
+
     const onSetupTwitter = useCallback(async () => {
         if (!(await requestPermissionFromExtensionPage(EnhanceableSite.Twitter))) return
         if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
@@ -98,15 +100,11 @@ export const Component = memo(function Onboarding() {
         window.close()
     }, [])
 
-    const words = useMemo(() => {
+    const sentence: string[][] = useMemo(() => {
         return [
-            <Typography key="identity">
-                <Trans>
-                    We are pleased to inform you that the update for X (formerly named Twitter) website has been
-                    completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for
-                    your continuous support!
-                </Trans>
-            </Typography>,
+            [
+                t`We are pleased to inform you that the update for X (formerly named Twitter) website has been completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!`,
+            ],
         ]
     }, [])
 
@@ -134,7 +132,10 @@ export const Component = memo(function Onboarding() {
             </Box>
             <img className={classes.trend} src={Trend} />
             <Box>
-                <OnboardingWriter classes={{ typed: classes.typed, endTyping: classes.endTyping }} words={words} />
+                <OnboardingWriter
+                    classes={{ typed: classes.typed, endTyping: classes.endTyping }}
+                    sentence={sentence}
+                />
             </Box>
             <SetupFrameController>
                 <PrimaryButton
