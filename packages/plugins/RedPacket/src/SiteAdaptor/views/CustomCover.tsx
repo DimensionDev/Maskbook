@@ -85,20 +85,25 @@ export function CustomCover() {
     const [{ loading: saving }, save] = useAsyncFn(async () => {
         if (!blob) return
         const file = blob instanceof File ? blob : new File([blob], 'custom-cover.png')
-        const url = await FireflyConfig.uploadToS3(file)
-        const themeId = await FireflyRedPacket.createTheme({
-            font_color: '#ffffff',
-            image: url,
-        })
-        const theme = await FireflyRedPacket.getTheme({ themeId })
-        if (unmountedRef.current) return
-        if (theme) {
-            setCustomThemes((themes) => [...themes, theme])
-            setTheme(theme)
-            navigate(-1)
-        } else {
+        try {
+            const url = await FireflyConfig.uploadToS3(file)
+            const themeId = await FireflyRedPacket.createTheme({
+                font_color: '#ffffff',
+                image: url,
+            })
+            const theme = await FireflyRedPacket.getTheme({ themeId })
+            if (unmountedRef.current) return
+            if (theme) {
+                setCustomThemes((themes) => [...themes, theme])
+                setTheme(theme)
+                navigate(-1)
+            } else {
+                throw new Error('No theme created')
+            }
+        } catch (err) {
             snackbar.showSnackbar(t`Failed to create theme.`, {
                 variant: 'error',
+                message: (err as Error).message,
             })
         }
     }, [blob])
