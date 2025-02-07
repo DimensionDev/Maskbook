@@ -41,6 +41,7 @@ export const useStyles = makeStyles()((theme) => ({
     },
     itemText: {
         marginLeft: 6,
+        marginRight: 2,
         fontSize: 14,
         color: theme.palette.maskColor.main,
     },

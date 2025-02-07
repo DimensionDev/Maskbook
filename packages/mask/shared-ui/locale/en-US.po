@@ -69,6 +69,10 @@ msgstr ""
 msgid "<0>Granted to </0><1>{0}</1>"
 msgstr ""
 
+#: popups/pages/Wallet/WalletSettings/DisablePermit.tsx
+msgid "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
+msgstr ""
+
 #: content-script/components/InjectedComponents/ProfileTabContent.tsx
 msgid "<0>Powered by</0><1>Mask Network</1>"
 msgstr ""
@@ -107,6 +111,10 @@ msgstr ""
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "About {collectionName}"
+msgstr ""
+
+#: popups/pages/Wallet/WalletSettings/DisablePermit.tsx
+msgid "About Permit"
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
@@ -860,6 +868,10 @@ msgstr ""
 
 #: popups/pages/Wallet/CollectibleDetail/index.tsx
 msgid "Description"
+msgstr ""
+
+#: popups/pages/Wallet/WalletSettings/DisablePermit.tsx
+msgid "Disable Permit"
 msgstr ""
 
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
@@ -1888,6 +1900,10 @@ msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 msgid "OK"
+msgstr ""
+
+#: popups/pages/Wallet/WalletSettings/DisablePermit.tsx
+msgid "Okay"
 msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx

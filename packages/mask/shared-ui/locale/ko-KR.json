@@ -30,6 +30,9 @@
         ],
         "wUlAUI": ["<0>@", ["currentUserId"], "</0> connected already."],
         "fRQP7E": ["<0>Granted to </0><1>", ["0"], "</1>"],
+        "E7prOW": [
+            "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
+        ],
         "oX+QCa": ["<0>Powered by</0><1>Mask Network</1>"],
         "BkN2qg": ["<0>Service Agreement</0> and <1>Privacy Policy</1>"],
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
@@ -48,6 +51,7 @@
         "llLBQ1": ["a token"],
         "uyJsf6": ["알아보기"],
         "rm0yu/": ["About ", ["collectionName"]],
+        "pv5v6j": ["About Permit"],
         "k0USDt": ["Account connected.<0/><1/>Try to explore more features powered by Mask Network."],
         "R2K7XH": ["소결 미디어에서 웹3 앱을 탐색해 보세요."],
         "6c6xyD": ["계정"],
@@ -219,6 +223,7 @@
         "+m7PfT": ["삭제 성공"],
         "5hFImX": ["Deploy Contract"],
         "Nu4oKW": ["설명"],
+        "xoKE3v": ["Disable Permit"],
         "+K0AvT": ["연결 해제"],
         "jas0vv": ["모두 계정 연결 해제"],
         "u2OWVJ": ["연결 해제 실패"],
@@ -466,6 +471,7 @@
             "참고: 마지막 불러오기에서 니모닉 문구를 사용하면 해당 니모닉 문구에서 파생된 월렛을 복구할 수 있습니다."
         ],
         "zga9sT": ["확인"],
+        "UaXeX3": ["Okay"],
         "XjDSdO": ["지난 결제 비밀번호"],
         "43g2kf": ["나에게만 보이기"],
         "XGRJzS": ["새로운 탭에서 열기"],

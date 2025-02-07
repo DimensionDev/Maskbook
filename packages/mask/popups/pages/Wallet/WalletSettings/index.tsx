@@ -23,6 +23,7 @@ import { ShowPrivateKey } from './ShowPrivateKey.js'
 import { useStyles } from './useStyles.js'
 import { HidingScamTx } from './HidingScamTx.js'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { DisablePermit } from './DisablePermit.js'
 
 function getPathIndex(path?: string) {
     const rawIndex = path?.split('/').pop()
@@ -84,6 +85,7 @@ export const Component = memo(function WalletSettings() {
                 <Rename />
                 <Contacts />
                 <HidingScamTx />
+                <DisablePermit />
                 {wallet.owner ? null : <ConnectedOrigins />}
                 <AutoLock />
                 <ChangeCurrency />

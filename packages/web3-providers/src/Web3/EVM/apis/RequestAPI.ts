@@ -1,14 +1,16 @@
+import { disablePermitSettings } from '@masknet/shared-base'
 import { EthereumMethodType, PayloadEditor, type RequestArguments } from '@masknet/web3-shared-evm'
-import { Composer } from './ComposerAPI.js'
+import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
+import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
 import { evm } from '../../../Manager/registry.js'
-import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
-import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 import { createContext } from '../helpers/createContext.js'
 import { EVMWalletProviders } from '../providers/index.js'
 import type { EVMConnectionOptions } from '../types/index.js'
-import { createWeb3FromProvider } from '../../../helpers/createWeb3FromProvider.js'
-import { createWeb3ProviderFromRequest } from '../../../helpers/createWeb3ProviderFromRequest.js'
+import { Composer } from './ComposerAPI.js'
+import { ConnectionOptionsAPI } from './ConnectionOptionsAPI.js'
+import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
 
+const PERMIT_SELECTOR = '0x8fcbaf0c'
 export class EVMRequestAPI extends EVMRequestReadonlyAPI {
     static override Default = new EVMRequestAPI()
     private Request = new EVMRequestReadonlyAPI(this.options)
@@ -31,6 +33,14 @@ export class EVMRequestAPI extends EVMRequestReadonlyAPI {
                         if (!context.writable) return
                         try {
                             switch (context.method) {
+                                case EthereumMethodType.eth_call:
+                                    if (!disablePermitSettings.value) break
+                                    const params = context.request.params || []
+                                    if (params.some((x) => x.data?.startsWith?.(PERMIT_SELECTOR))) {
+                                        context.abort(new Error('The Permit method has been disabled.'))
+                                    }
+                                    break
+
                                 case EthereumMethodType.MASK_LOGIN:
                                     context.write(
                                         await this.Provider?.connect(

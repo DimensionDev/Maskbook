@@ -30,6 +30,9 @@
         ],
         "wUlAUI": ["<0>@", ["currentUserId"], "</0> connected already."],
         "fRQP7E": ["<0>Granted to </0><1>", ["0"], "</1>"],
+        "E7prOW": [
+            "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
+        ],
         "oX+QCa": ["<0>Powered by</0><1>Mask Network</1>"],
         "BkN2qg": ["<0>Service Agreement</0> and <1>Privacy Policy</1>"],
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
@@ -48,6 +51,7 @@
         "llLBQ1": ["代币"],
         "uyJsf6": ["关于"],
         "rm0yu/": ["About ", ["collectionName"]],
+        "pv5v6j": ["About Permit"],
         "k0USDt": ["Account connected.<0/><1/>Try to explore more features powered by Mask Network."],
         "R2K7XH": ["尝试探索社交媒体上的 Web3 dApps 功能。"],
         "6c6xyD": ["账户"],
@@ -217,6 +221,7 @@
         "+m7PfT": ["成功删除"],
         "5hFImX": ["Deploy Contract"],
         "Nu4oKW": ["描述"],
+        "xoKE3v": ["Disable Permit"],
         "+K0AvT": ["断开"],
         "jas0vv": ["断开所有社交账户"],
         "u2OWVJ": ["断开连接失败。"],
@@ -462,6 +467,7 @@
         "MTqQMG": ["未设置"],
         "1TaavV": ["注意：如果您使用最后一次导入中的助记词，您可以恢复来自该助记词句的钱包。"],
         "zga9sT": ["確認"],
+        "UaXeX3": ["Okay"],
         "XjDSdO": ["原支付密码"],
         "43g2kf": ["只对您可见"],
         "XGRJzS": ["在新分頁中開啟"],

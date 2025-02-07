@@ -30,6 +30,9 @@
         ],
         "wUlAUI": ["<0>@", ["currentUserId"], "</0> connected already."],
         "fRQP7E": ["<0>Granted to </0><1>", ["0"], "</1>"],
+        "E7prOW": [
+            "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
+        ],
         "oX+QCa": ["<0>Powered by</0><1>Mask Network</1>"],
         "BkN2qg": ["<0>Service Agreement</0> and <1>Privacy Policy</1>"],
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
@@ -48,6 +51,7 @@
         "llLBQ1": ["a token"],
         "uyJsf6": ["About"],
         "rm0yu/": ["About ", ["collectionName"]],
+        "pv5v6j": ["About Permit"],
         "k0USDt": ["Account connected.<0/><1/>Try to explore more features powered by Mask Network."],
         "R2K7XH": ["Account successfully connected to persona"],
         "6c6xyD": ["accounts"],
@@ -221,6 +225,7 @@
         "+m7PfT": ["Deleted successfully"],
         "5hFImX": ["Deploy Contract"],
         "Nu4oKW": ["Description"],
+        "xoKE3v": ["Disable Permit"],
         "+K0AvT": ["Disconnect"],
         "jas0vv": ["Disconnect all accounts"],
         "u2OWVJ": ["Disconnect failed."],
@@ -468,6 +473,7 @@
             "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
         ],
         "zga9sT": ["OK"],
+        "UaXeX3": ["Okay"],
         "XjDSdO": ["Old Payment Password"],
         "43g2kf": ["Only visible to yourself"],
         "XGRJzS": ["Open in a new tab"],

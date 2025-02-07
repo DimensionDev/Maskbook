@@ -85,3 +85,4 @@ try {
 export const switchLogoSettings = createBulkSettings('SwitchLogo', SwitchLogoType.New)
 
 export const hidingScamSettings = createGlobalSettings('hidingScam', true)
+export const disablePermitSettings = createGlobalSettings('disablePermit', true)

@@ -30,6 +30,9 @@
         ],
         "wUlAUI": ["<0>@", ["currentUserId"], "</0> connected already."],
         "fRQP7E": ["<0>Granted to </0><1>", ["0"], "</1>"],
+        "E7prOW": [
+            "<0>Permit allows users to authorize an address to access their ERC-20 tokens without requiring a separate approval transaction, providing a more efficient way to manage token permissions.</0><1>However, if the authorized limit is exceeded or the Permit expires, the authorization automatically becomes invalid. Despite this, security risks remain.</1><2>To prevent potential misuse, you can disable the Permit feature.</2>"
+        ],
         "oX+QCa": ["<0>Powered by</0><1>Mask Network</1>"],
         "BkN2qg": ["<0>Service Agreement</0> and <1>Privacy Policy</1>"],
         "OCJdad": ["<0>To</0>: <1>", ["to"], "</1>"],
@@ -48,6 +51,7 @@
         "llLBQ1": ["トークン"],
         "uyJsf6": ["詳細"],
         "rm0yu/": ["About ", ["collectionName"]],
+        "pv5v6j": ["About Permit"],
         "k0USDt": ["Account connected.<0/><1/>Try to explore more features powered by Mask Network."],
         "R2K7XH": ["ソーシャルメディアで Web3 dApps の機能を探索してみてください。"],
         "6c6xyD": ["アカウント"],
@@ -219,6 +223,7 @@
         "+m7PfT": ["正常に削除されました"],
         "5hFImX": ["コントラクトのデプロイ"],
         "Nu4oKW": ["説明"],
+        "xoKE3v": ["Disable Permit"],
         "+K0AvT": ["接続解除"],
         "jas0vv": ["すべてのアカウントとの接続を解除"],
         "u2OWVJ": ["接続解除に失敗しました。"],
@@ -466,6 +471,7 @@
             "注：前回のインポートで使用したニーモニックフレーズを使用している場合、そのニーモニックフレーズに由来するウォレットを復元することができます。"
         ],
         "zga9sT": ["OK"],
+        "UaXeX3": ["Okay"],
         "XjDSdO": ["以前の決済パスワード"],
         "43g2kf": ["自分にのみ表示されます"],
         "XGRJzS": ["新しいタブで開く"],
