@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-05 12:14\n"
+"PO-Revision-Date: 2025-02-07 05:42\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -38,6 +38,10 @@ msgstr "crwdns29338:0crwdne29338:0"
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Cast your vote"
 msgstr "crwdns29340:0crwdne29340:0"
+
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Confirm this Signature in your wallet."
+msgstr "crwdns36690:0crwdne36690:0"
 
 #: src/SiteAdaptor/ResultCard.tsx
 #: src/SiteAdaptor/ResultCard.tsx
@@ -170,6 +174,7 @@ msgstr "crwdns29390:0crwdne29390:0"
 
 #: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
 msgid "Vote"
 msgstr "crwdns29392:0crwdne29392:0"
@@ -179,8 +184,8 @@ msgstr "crwdns29392:0crwdne29392:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/VotingDialog.tsx
-msgid "Voted."
-msgstr "crwdns32438:0crwdne32438:0"
+#~ msgid "Voted."
+#~ msgstr ""
 
 #: src/SiteAdaptor/VotesCard.tsx
 #: src/SiteAdaptor/VotesCard.tsx
@@ -195,6 +200,10 @@ msgstr "crwdns36674:0crwdne36674:0"
 #: src/SiteAdaptor/VotesCard.tsx
 msgid "You"
 msgstr "crwdns29400:0crwdne29400:0"
+
+#: src/SiteAdaptor/VotingDialog.tsx
+msgid "Your vote has been successful."
+msgstr "crwdns36692:0crwdne36692:0"
 
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
