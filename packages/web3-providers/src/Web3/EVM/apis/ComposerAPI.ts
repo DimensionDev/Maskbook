@@ -6,6 +6,7 @@ import { RecentTransaction } from '../middleware/RecentTransaction.js'
 import { TransactionWatcher } from '../middleware/TransactionWatcher.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import type { WalletAPI } from '../../../entry-types.js'
+import { Permit } from '../middleware/Permit.js'
 
 let instance: EVMComposer<ConnectionContext> | undefined
 export class Composer {
@@ -13,6 +14,7 @@ export class Composer {
         if (instance) return instance
 
         instance = EVMComposer.from<ConnectionContext>(
+            new Permit(),
             Nonce,
             new Translator(),
             new Interceptor(signWithPersona),
