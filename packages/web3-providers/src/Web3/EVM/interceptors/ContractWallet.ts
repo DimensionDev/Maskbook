@@ -1,5 +1,5 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import { type ECKeyIdentifier, SignType } from '@masknet/shared-base'
+import { disablePermitSettings, type ECKeyIdentifier, SignType } from '@masknet/shared-base'
 import {
     Signer,
     EthereumMethodType,
@@ -17,6 +17,7 @@ import { EVMWalletProviders } from '../providers/index.js'
 import type { BaseEIP4337WalletProvider } from '../providers/BaseContractWallet.js'
 import type { BundlerAPI, AbstractAccountAPI, FunderAPI, WalletAPI } from '../../../entry-types.js'
 
+const PERMIT_SELECTOR = '0x8fcbaf0c'
 export class ContractWallet implements Middleware<ConnectionContext> {
     private Web3 = new ConnectionAPI()
     constructor(
@@ -34,6 +35,12 @@ export class ContractWallet implements Middleware<ConnectionContext> {
     }
 
     private getSigner(context: ConnectionContext) {
+        if (disablePermitSettings.value) {
+            const params = context.request.params || []
+            if (params.some((x) => x.data?.startsWith?.(PERMIT_SELECTOR))) {
+                throw new Error('The Permit method has been disabled.')
+            }
+        }
         if (context.identifier)
             return new Signer(
                 context.identifier,
