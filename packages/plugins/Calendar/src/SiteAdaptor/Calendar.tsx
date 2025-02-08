@@ -16,6 +16,7 @@ export function Calendar({ target }: Props) {
         setPathname(location.pathname)
     })
     if (isMinimalMode || (target && !pathname.includes(target))) return null
+    if (!target && ['/search', '/explore'].includes(pathname)) return null
 
     return <CalendarContent style={{ marginTop: pathname.includes('explore') ? 24 : 0 }} />
 }
