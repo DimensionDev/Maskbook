@@ -11,7 +11,7 @@ export class Permit implements Middleware<ConnectionContext> {
         }
         const params = context.request.params || []
         if (params.some((x) => x.data?.startsWith?.(PERMIT_SELECTOR))) {
-            context.abort('The Permit method has been disabled.')
+            context.abort(new Error('The Permit method has been disabled.'))
         }
         await next()
     }
