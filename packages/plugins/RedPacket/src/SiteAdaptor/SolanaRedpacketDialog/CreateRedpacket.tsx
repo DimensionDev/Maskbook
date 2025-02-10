@@ -272,7 +272,8 @@ export function CreateSolRedPacket() {
         if (!token) return <Trans>Select a Token</Trans>
         if (!account) return <Trans>Connect Wallet</Trans>
         if (!shares) return <Trans>Enter Number of Winners</Trans>
-        if (isGreaterThan(shares, 255)) return <Trans>At most 255 recipients</Trans>
+        if (isGreaterThan(shares, SOL_REDPACKET_MAX_SHARES))
+            return <Trans>At most {SOL_REDPACKET_MAX_SHARES} recipients</Trans>
         if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
             return <Trans>Insufficient {token?.symbol} Balance</Trans>
         if (isZero(amount)) {

@@ -42,6 +42,8 @@
         "hehnjM": ["Amount"],
         "Fgyfqo": ["每个金额"],
         "wGtbaw": ["单个红包数额"],
+        "1QJyuR": ["At most ", ["RED_PACKET_MAX_SHARES"], " recipients"],
+        "lmYQuN": ["At most ", ["SOL_REDPACKET_MAX_SHARES"], " recipients"],
         "W+lPUh": ["最多255个领取者"],
         "AbR6G1": ["附加信息"],
         "oG67vO": ["Available to Everyone"],
@@ -254,12 +256,18 @@
         "hdmRb+": ["The Lucky Drop is broken."],
         "gPL7RI": ["The Lucky Drop is empty."],
         "XCpVdp": ["The Lucky Drop is expired."],
+        "GCbtX1": [
+            "The maximum number of NFTs to be sold in NFT lucky drop contract is ",
+            ["NFT_RED_PACKET_MAX_SHARES"],
+            "."
+        ],
         "7lVDIk": [
             "The maximum number of NFTs to be sold in NFT lucky drop contract is ",
             ["RED_PACKET_MAX_SHARES"],
             "."
         ],
         "51cT/A": ["The minimum amount for each share is ", ["0"], " ", ["1"]],
+        "25/Bbu": ["The NFT lucky drop supports up to ", ["NFT_RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "uQLq0T": ["The NFT lucky drop supports up to ", ["RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "QH3LZ+": ["Token ID可用逗号分隔，例如：1224, 7873"],
         "DYoO0m": ["Token quantity greater than"],

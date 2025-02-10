@@ -28,7 +28,7 @@ import { Box, List, ListItem, Skeleton, Typography } from '@mui/material'
 import { useCallback, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
-import { RED_PACKET_MAX_SHARES, RoutePaths } from '../../constants.js'
+import { NFT_RED_PACKET_MAX_SHARES, RoutePaths } from '../../constants.js'
 import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNFTRedpacketGas } from '../hooks/useCreateNftRedpacketGas.js'
@@ -271,7 +271,7 @@ export function CreateNftRedPacket() {
         [selectOption, setSelectOption, setExistTokenDetailedList, setAllTokenDetailedList],
     )
 
-    const maxSelectShares = Math.min(RED_PACKET_MAX_SHARES, balance)
+    const maxSelectShares = Math.min(NFT_RED_PACKET_MAX_SHARES, balance)
 
     useRenderPhraseCallbackOnDepsChange(() => {
         if (!selectOption) setSelectOption(NFTSelectOption.Partial)
@@ -348,7 +348,7 @@ export function CreateNftRedPacket() {
                                     <Typography color="textPrimary">
                                         {balance === 0 ?
                                             <Trans>ALL</Trans>
-                                        :   <Trans>ALL ({Math.min(RED_PACKET_MAX_SHARES, balance)} NFT)</Trans>}
+                                        :   <Trans>ALL ({Math.min(NFT_RED_PACKET_MAX_SHARES, balance)} NFT)</Trans>}
                                     </Typography>
                                 </div>
                                 <div

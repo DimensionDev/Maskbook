@@ -234,21 +234,18 @@ export function CreateTokenRedPacket() {
     // #endregion
 
     // shares
-    const onShareChange = useCallback(
-        (ev: ChangeEvent<HTMLInputElement>) => {
-            const inputShares = ev.currentTarget.value.replaceAll(/[,.]/g, '')
-            if (inputShares === '') setShares(0)
-            else if (/^[1-9]+\d*$/.test(inputShares)) {
-                const parsed = Number.parseInt(inputShares, 10)
-                if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES) {
-                    setShares(Number.parseInt(inputShares, 10))
-                } else if (parsed > RED_PACKET_MAX_SHARES) {
-                    setShares(RED_PACKET_MAX_SHARES)
-                }
+    const onShareChange = useCallback((ev: ChangeEvent<HTMLInputElement>) => {
+        const inputShares = ev.currentTarget.value.replaceAll(/[,.]/g, '')
+        if (inputShares === '') setShares(0)
+        else if (/^[1-9]+\d*$/.test(inputShares)) {
+            const parsed = Number.parseInt(inputShares, 10)
+            if (parsed >= RED_PACKET_MIN_SHARES && parsed <= RED_PACKET_MAX_SHARES) {
+                setShares(Number.parseInt(inputShares, 10))
+            } else if (parsed > RED_PACKET_MAX_SHARES) {
+                setShares(RED_PACKET_MAX_SHARES)
             }
-        },
-        [RED_PACKET_MIN_SHARES, RED_PACKET_MAX_SHARES],
-    )
+        }
+    }, [])
 
     // amount
     const amount = rightShift(rawAmount || '0', token?.decimals)
@@ -288,7 +285,8 @@ export function CreateTokenRedPacket() {
         if (!token) return <Trans>Select a Token</Trans>
         if (!account) return <Trans>Connect Wallet</Trans>
         if (!shares) return <Trans>Enter Number of Winners</Trans>
-        if (isGreaterThan(shares, 255)) return <Trans>At most 255 recipients</Trans>
+        if (isGreaterThan(shares, RED_PACKET_MAX_SHARES))
+            return <Trans>At most {RED_PACKET_MAX_SHARES} recipients</Trans>
         if (isGreaterThan(minTotalAmount, balance) || isGreaterThan(totalAmount, balance))
             return <Trans>Insufficient {token?.symbol} Balance</Trans>
         if (isZero(amount)) {

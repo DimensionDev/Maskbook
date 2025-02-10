@@ -108,7 +108,7 @@ msgstr ""
 msgid "ALL"
 msgstr ""
 
-#. placeholder {0}: Math.min(RED_PACKET_MAX_SHARES, balance)
+#. placeholder {0}: Math.min(NFT_RED_PACKET_MAX_SHARES, balance)
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "ALL ({0} NFT)"
 msgstr ""
@@ -128,9 +128,17 @@ msgid "Amount per Share"
 msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
-#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
-msgid "At most 255 recipients"
+msgid "At most {RED_PACKET_MAX_SHARES} recipients"
 msgstr ""
+
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+msgid "At most {SOL_REDPACKET_MAX_SHARES} recipients"
+msgstr ""
+
+#: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
+#: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
+#~ msgid "At most 255 recipients"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Attached Message"
@@ -832,8 +840,15 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
-msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
+msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
 msgstr ""
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#~ msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
+#~ msgstr ""
 
 #. placeholder {0}: formatBalance(1, token.decimals)
 #. placeholder {1}: token.symbol
@@ -850,8 +865,19 @@ msgstr ""
 #: src/SiteAdaptor/views/SelectNft.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx
-msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
+msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
 msgstr ""
+
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/SelectNftTokenDialog.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectNft.tsx
+#~ msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/SelectNft.tsx

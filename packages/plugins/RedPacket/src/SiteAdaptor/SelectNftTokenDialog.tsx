@@ -12,7 +12,7 @@ import { Check as CheckIcon, QuestionMark as QuestionMarkIcon } from '@mui/icons
 import { Box, Button, DialogContent, InputBase, ListItem, Typography, useTheme } from '@mui/material'
 import { findLastIndex, uniq } from 'lodash-es'
 import { useCallback, useState } from 'react'
-import { RED_PACKET_MAX_SHARES } from '../constants.js'
+import { NFT_RED_PACKET_MAX_SHARES } from '../constants.js'
 import type { OrderedERC721Token } from '../types.js'
 
 interface StyleProps {
@@ -244,7 +244,7 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
     const [tokenIdListInput, setTokenIdListInput] = useState<string>('')
     const [tokenIdFilterList, setTokenIdFilterList] = useState<string[]>(EMPTY_LIST)
     const isSelectSharesExceed =
-        (tokenDetailedOwnerList.length === 0 ? RED_PACKET_MAX_SHARES - 1 : RED_PACKET_MAX_SHARES) <
+        (tokenDetailedOwnerList.length === 0 ? NFT_RED_PACKET_MAX_SHARES - 1 : NFT_RED_PACKET_MAX_SHARES) <
         tokenDetailedSelectedList.length
     const { classes, cx } = useStyles({ isSelectSharesExceed })
     const [selectAll, setSelectAll] = useState(false)
@@ -386,7 +386,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Typography className={classes.selectSharesExceed}>
                         {isSelectSharesExceed ?
                             <Trans>
-                                The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time.
+                                The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one
+                                time.
                             </Trans>
                         :   null}
                     </Typography>
@@ -394,14 +395,14 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         <ShadowRootTooltip
                             title={
                                 <Typography className={classes.tooltipText}>
-                                    {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES ?
+                                    {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES ?
                                         <Trans>
-                                            The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for
-                                            one time.
+                                            The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected
+                                            for one time.
                                         </Trans>
                                     :   <Trans>
                                             The maximum number of NFTs to be sold in NFT lucky drop contract is{' '}
-                                            {RED_PACKET_MAX_SHARES}.
+                                            {NFT_RED_PACKET_MAX_SHARES}.
                                         </Trans>
                                     }
                                 </Typography>
@@ -509,7 +510,8 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                     <Typography className={classes.selectSharesExceed}>
                         {isSelectSharesExceed ?
                             <Trans>
-                                The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time.
+                                The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one
+                                time.
                             </Trans>
                         :   null}
                     </Typography>
@@ -518,14 +520,14 @@ export function SelectNftTokenDialog(props: SelectNftTokenDialogProps) {
                         <ShadowRootTooltip
                             title={
                                 <Typography className={classes.tooltipText}>
-                                    {tokenDetailedSelectedList.length > RED_PACKET_MAX_SHARES ?
+                                    {tokenDetailedSelectedList.length > NFT_RED_PACKET_MAX_SHARES ?
                                         <Trans>
-                                            The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for
-                                            one time.
+                                            The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected
+                                            for one time.
                                         </Trans>
                                     :   <Trans>
                                             The maximum number of NFTs to be sold in NFT lucky drop contract is{' '}
-                                            {RED_PACKET_MAX_SHARES}.
+                                            {NFT_RED_PACKET_MAX_SHARES}.
                                         </Trans>
                                     }
                                 </Typography>

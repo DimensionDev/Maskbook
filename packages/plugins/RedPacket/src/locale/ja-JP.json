@@ -42,6 +42,8 @@
         "hehnjM": ["Amount"],
         "Fgyfqo": ["各金額"],
         "wGtbaw": ["1株当たりの金額"],
+        "1QJyuR": ["At most ", ["RED_PACKET_MAX_SHARES"], " recipients"],
+        "lmYQuN": ["At most ", ["SOL_REDPACKET_MAX_SHARES"], " recipients"],
         "W+lPUh": ["受信者は最大255人です"],
         "AbR6G1": ["添付メッセージ"],
         "oG67vO": ["Available to Everyone"],
@@ -253,12 +255,18 @@
         "hdmRb+": ["The Lucky Drop is broken."],
         "gPL7RI": ["The Lucky Drop is empty."],
         "XCpVdp": ["The Lucky Drop is expired."],
+        "GCbtX1": [
+            "The maximum number of NFTs to be sold in NFT lucky drop contract is ",
+            ["NFT_RED_PACKET_MAX_SHARES"],
+            "."
+        ],
         "7lVDIk": [
             "The maximum number of NFTs to be sold in NFT lucky drop contract is ",
             ["RED_PACKET_MAX_SHARES"],
             "."
         ],
         "51cT/A": ["The minimum amount for each share is ", ["0"], " ", ["1"]],
+        "25/Bbu": ["The NFT lucky drop supports up to ", ["NFT_RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "uQLq0T": ["The NFT lucky drop supports up to ", ["RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "QH3LZ+": ["トークンIDはカンマで区切られています。例: 1224, 7873, 8948"],
         "DYoO0m": ["Token quantity greater than"],
