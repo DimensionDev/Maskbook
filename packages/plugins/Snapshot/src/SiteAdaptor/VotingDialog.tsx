@@ -34,6 +34,10 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.second,
         margin: '0',
     },
+    value: {
+        fontWeight: 700,
+        color: theme.palette.maskColor.main,
+    },
     content: {
         padding: 16,
         display: 'flex',
@@ -51,15 +55,15 @@ const useStyles = makeStyles()((theme) => ({
         gap: theme.spacing(2),
     },
     optionButton: {
-        backgroundColor: theme.palette.maskColor.third,
+        backgroundColor: theme.palette.maskColor.thirdMain,
         color: theme.palette.maskColor.main,
         '&:hover': {
             backgroundColor: 'transparent',
         },
     },
     selectedOption: {
-        backgroundColor: `${theme.palette.maskColor.publicMain} !important`,
-        color: `${theme.palette.maskColor.white} !important`,
+        backgroundColor: `${theme.palette.maskColor.main} !important`,
+        color: `${theme.palette.maskColor.bottom} !important`,
     },
     tip: {
         padding: theme.spacing(2),
@@ -195,7 +199,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                 </SnapshotCard>
                 <InfoField classes={{ field: classes.field }} title={<Trans>Snapshot</Trans>}>
                     <Link
-                        className={classes.link}
+                        className={cx(classes.link, classes.value)}
                         target="_blank"
                         rel="noopener"
                         href={EVMExplorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
@@ -204,7 +208,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                     </Link>
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={<Trans>Your voting power</Trans>}>
-                    <Typography>
+                    <Typography className={classes.value}>
                         {power !== undefined ? formatCount(power, 2, true) : '--'} {powerSymbol.toUpperCase()}
                     </Typography>
                 </InfoField>

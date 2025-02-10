@@ -18,7 +18,7 @@ const useStyles = makeStyles()((theme) => {
             '&:last-child': {
                 marginBottom: 0,
             },
-            background: theme.palette.mode === 'dark' ? theme.palette.maskColor.bg : theme.palette.maskColor.white,
+            background: theme.palette.maskColor.bg,
         },
         header: {
             borderBottom: `solid 1px ${theme.palette.maskColor.line}`,
