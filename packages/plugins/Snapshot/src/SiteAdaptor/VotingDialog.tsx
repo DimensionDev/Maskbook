@@ -1,13 +1,13 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { InjectedDialog, PluginWalletStatusBar, useSnackbarCallback, WalletConnectedBoundary } from '@masknet/shared'
 import { formatWithCommas, type NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { formatCount } from '@masknet/web3-shared-base'
 import { checksumAddress } from '@masknet/web3-shared-evm'
-import { OpenInNew } from '@mui/icons-material'
 import { Box, Button, DialogActions, DialogContent, Link, Typography } from '@mui/material'
 import { unstable_useCacheRefresh, useContext, useState } from 'react'
 import { SNAPSHOT_VOTE_DOMAIN } from '../constants.js'
@@ -172,6 +172,8 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
         messageText(<Trans>Your vote has been successful.</Trans>),
         messageText(<Trans>Please try again if you failed to vote.</Trans>),
     )
+    const link = `https://snapshot.box/#/${identifier.space}/proposal/${identifier.id}`
+
     return (
         <InjectedDialog open={open} onClose={onClose} title={<Trans>Cast your vote</Trans>}>
             <DialogContent className={classes.content}>
@@ -198,13 +200,9 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                     </Box>
                 </SnapshotCard>
                 <InfoField classes={{ field: classes.field }} title={<Trans>Snapshot</Trans>}>
-                    <Link
-                        className={cx(classes.link, classes.value)}
-                        target="_blank"
-                        rel="noopener"
-                        href={EVMExplorerResolver.blockLink(chainId, Number.parseInt(snapshot, 10))}>
+                    <Link className={cx(classes.link, classes.value)} target="_blank" rel="noopener" href={link}>
                         {formatWithCommas(snapshot)}
-                        <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
+                        <Icons.LinkOut sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={<Trans>Your voting power</Trans>}>
