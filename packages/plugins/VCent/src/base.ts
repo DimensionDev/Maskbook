@@ -18,4 +18,5 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     i18n: languages,
+    inMinimalModeByDefault: true,
 }
