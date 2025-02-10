@@ -181,3 +181,41 @@ export async function vote(body: string) {
     const result: VoteSuccess = await response.json()
     return result
 }
+
+interface VpResponse {
+    data?: {
+        vp: {
+            vp: number
+            vp_by_strategy: number[]
+            vp_state: string
+        }
+    }
+}
+export async function getVp(voter: string, space: string, proposal: string) {
+    const response = await fetch('https://hub.snapshot.org/graphql', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            operationName: 'VotePower',
+            query: /* GraphQL */ `
+                query VotePower($voter: String!, $space: String!, $proposal: String!) {
+                    vp(voter: $voter, space: $space, proposal: $proposal) {
+                        vp
+                        vp_by_strategy
+                        vp_state
+                    }
+                }
+            `,
+            variables: {
+                voter,
+                space,
+                proposal,
+            },
+        }),
+    })
+    const result: VpResponse = await response.json()
+    return result.data?.vp
+}

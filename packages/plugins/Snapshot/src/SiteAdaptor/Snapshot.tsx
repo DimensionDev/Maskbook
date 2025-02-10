@@ -106,7 +106,7 @@ export function Snapshot() {
         },
     ]
     const [openVotingDialog, setOpenVotingDialog] = useState(false)
-    const power = usePower(identifier)
+    const { data: power } = usePower(identifier)
 
     const disabled = !power
 

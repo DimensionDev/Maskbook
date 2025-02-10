@@ -98,7 +98,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const choices = proposal.choices
-    const power = usePower(identifier)
+    const { data: power } = usePower(identifier)
     const powerSymbol = proposal.space.symbol
     const snapshot = proposal.snapshot
     const [selected, setSelected] = useState<string[]>([])
@@ -205,7 +205,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                 </InfoField>
                 <InfoField classes={{ field: classes.field }} title={<Trans>Your voting power</Trans>}>
                     <Typography>
-                        {formatCount(power, 2, true)} {powerSymbol.toUpperCase()}
+                        {power !== undefined ? formatCount(power, 2, true) : '--'} {powerSymbol.toUpperCase()}
                     </Typography>
                 </InfoField>
                 {!power ?
