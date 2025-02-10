@@ -88,7 +88,7 @@ export namespace FireflyConfigAPI {
     }
     export interface FarcasterProfile {
         id: number
-        fid: string
+        fid: number
         raw_data: string
         username: string
         display_name: string

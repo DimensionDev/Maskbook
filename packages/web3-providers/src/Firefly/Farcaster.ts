@@ -1,10 +1,11 @@
 import { createIndicator, createNextIndicator, createPageable, type PageIndicator } from '@masknet/shared-base'
-import urlcat from 'urlcat'
-import { FIREFLY_BASE_URL } from './constants.js'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import type { FireflyFarcasterAPI } from '@masknet/web3-providers/types'
 import { isZero } from '@masknet/web3-shared-base'
+import { uniq } from 'lodash-es'
+import urlcat from 'urlcat'
+import { FIREFLY_BASE_URL } from './constants.js'
 import { formatFarcasterPostFromFirefly, resolveFireflyResponseData } from './helpers.js'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
 
 export class FireflyFarcaster {
     static async getPostsByProfileId(fids: string | string[] | number | number[], indicator?: PageIndicator) {
@@ -15,7 +16,7 @@ export class FireflyFarcaster {
                 'content-type': 'application/json',
             },
             body: JSON.stringify({
-                fids: Array.isArray(fids) ? fids.map((x) => x.toString()) : [fids.toString()],
+                fids: Array.isArray(fids) ? uniq(fids.map((x) => x.toString())) : [fids.toString()],
                 size: 25,
                 cursor: indicator?.id && !isZero(indicator.id) ? indicator.id : undefined,
             }),
