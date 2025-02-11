@@ -27,7 +27,7 @@ export function useSocialFeeds({ userId, address }: Options) {
         },
     })
 
-    const fids = uniq(farAccounts.map((x) => x.id.toString()).concat(profiles?.fids || []))
+    const fids = uniq([...farAccounts.map((x) => x.id), ...(profiles?.fids || [])].map((x) => x.toString()))
     const {
         data: farcasterPosts = EMPTY_LIST,
         error: farcasterError,
