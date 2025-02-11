@@ -1,20 +1,19 @@
 /// <reference types="react/canary" />
-import { unstable_useCacheRefresh, useContext } from 'react'
-import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
+import { Trans } from '@lingui/react/macro'
+import { EthereumBlockie } from '@masknet/shared'
+import type { NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
 import { formatCount, formatPercentage, isSameAddress } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import { EVMExplorerResolver } from '@masknet/web3-providers'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import type { NetworkPluginID } from '@masknet/shared-base'
-import { EthereumBlockie } from '@masknet/shared'
+import { Badge, Box, Link, List, ListItem, Typography } from '@mui/material'
+import { unstable_useCacheRefresh, useContext } from 'react'
 import { SnapshotContext } from '../context.js'
-import { useVotes } from './hooks/useVotes.js'
 import { useProposal } from './hooks/useProposal.js'
+import { useVotes } from './hooks/useVotes.js'
 import { LoadingCard } from './LoadingCard.js'
 import { LoadingFailCard } from './LoadingFailCard.js'
 import { SnapshotCard } from './SnapshotCard.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -85,11 +84,11 @@ const useStyles = makeStyles()((theme) => {
 })
 
 function Content() {
-    const { chainId, account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { classes, cx, theme } = useStyles()
+    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier, account)
-    const { classes, cx, theme } = useStyles()
     return (
         <SnapshotCard
             lazy
@@ -115,13 +114,14 @@ function Content() {
                                 ])
                                 .join('')
                         :   null
+                    const link = `https://snapshot.box/#/${identifier.space}/profile/${v.address}`
                     return (
                         <ListItem className={classes.listItem} key={v.address}>
                             <Link
                                 className={cx(classes.link, classes.ellipsisText)}
                                 target="_blank"
                                 rel="noopener"
-                                href={EVMExplorerResolver.addressLink(chainId, v.address)}>
+                                href={link}>
                                 <Box className={classes.avatarWrapper}>
                                     <EthereumBlockie address={v.address} />
                                 </Box>
@@ -155,17 +155,13 @@ function Content() {
                                 classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
                                 title={
                                     <Typography className={classes.shadowRootTooltip}>
-                                        {formatCount(v.balance, 2, true) +
-                                            ' ' +
-                                            (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                        {formatCount(v.balance, 2, true) + ' ' + v.strategySymbol.toUpperCase()}
                                     </Typography>
                                 }
                                 placement="top"
                                 arrow>
                                 <Typography className={classes.power}>
-                                    {formatCount(v.balance, 2, true) +
-                                        ' ' +
-                                        (v.strategySymbol ? v.strategySymbol.toUpperCase() : '')}
+                                    {formatCount(v.balance, 2, true) + ' ' + v.strategySymbol.toUpperCase()}
                                 </Typography>
                             </TextOverflowTooltip>
                         </ListItem>

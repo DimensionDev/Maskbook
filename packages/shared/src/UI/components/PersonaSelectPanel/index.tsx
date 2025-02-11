@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
@@ -12,6 +13,7 @@ import {
     type PersonaIdentifier,
     type ProfileIdentifier,
 } from '@masknet/shared-base'
+import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
@@ -21,13 +23,11 @@ import { useAsyncFn } from 'react-use'
 import { useConnectedPersonas } from '../../../hooks/useConnectedPersonas.js'
 import { useCurrentPersona } from '../../../hooks/useCurrentPersona.js'
 import { useNextIDVerify } from '../../../hooks/useNextIDVerify.js'
-import { ReloadStatus } from '../ReloadStatus/index.js'
+import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
 import { LoadingStatus } from '../LoadingStatus/index.js'
+import { ReloadStatus } from '../ReloadStatus/index.js'
 import type { PersonaNextIDMixture } from './PersonaItemUI.js'
 import { PersonaItemUI } from './PersonaItemUI.js'
-import { ApplicationBoardModal, LeavePageConfirmModal } from '../../modals/index.js'
-import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

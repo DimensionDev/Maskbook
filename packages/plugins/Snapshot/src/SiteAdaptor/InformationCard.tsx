@@ -1,11 +1,11 @@
 import { Plural, Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { EthereumBlockie } from '@masknet/shared'
 import { formatWithCommas } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
 import { formatEthereumAddress } from '@masknet/web3-shared-evm'
-import { OpenInNew } from '@mui/icons-material'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useContext, type PropsWithChildren, type ReactNode } from 'react'
@@ -77,6 +77,8 @@ export function InformationCard() {
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const { start, end, snapshot, strategies, chainId } = proposal
+    const authorProfile = `https://snapshot.box/#/${identifier.space}/profile/${proposal.address}`
+    const link = `https://snapshot.box/#/${identifier.space}/proposal/${identifier.id}`
     return (
         <SnapshotCard title={<Trans>Information</Trans>}>
             <div className={classes.infos}>
@@ -99,11 +101,7 @@ export function InformationCard() {
                     </Box>
                 </InfoField>
                 <InfoField title={<Trans>Author</Trans>} classes={{ field: classes.infoColor }}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={EVMExplorerResolver.addressLink(proposal.chainId, proposal.address)}>
+                    <Link className={classes.link} target="_blank" rel="noopener" href={authorProfile}>
                         <div className={classes.avatarWrapper}>
                             {proposal.authorAvatar ?
                                 <Avatar src={resolveIPFS_URL(proposal.authorAvatar)} className={classes.avatar} />
@@ -121,7 +119,7 @@ export function InformationCard() {
                         rel="noopener"
                         href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
                         <Typography fontSize={14}>#{identifier.id.slice(0, 7)}</Typography>
-                        <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
+                        <Icons.LinkOut size={16} sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
                 <InfoField title={<Trans>Start date</Trans>} classes={{ field: classes.infoColor }}>
@@ -135,13 +133,9 @@ export function InformationCard() {
                     </Typography>
                 </InfoField>
                 <InfoField title={<Trans>Snapshot</Trans>} classes={{ field: classes.infoColor }}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={EVMExplorerResolver.blockLink(proposal.chainId, Number.parseInt(snapshot, 10))}>
+                    <Link className={classes.link} target="_blank" rel="noopener" href={link}>
                         <Typography fontSize={14}>{formatWithCommas(snapshot)}</Typography>
-                        <OpenInNew fontSize="small" sx={{ paddingLeft: 1 }} />
+                        <Icons.LinkOut size={16} sx={{ paddingLeft: 1 }} />
                     </Link>
                 </InfoField>
             </div>
