@@ -128,6 +128,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
     const onVoteConfirm = useSnackbarCallback(
         async () => {
             setLoading(true)
+            const isType2 = identifier.id.startsWith('0x')
             const types = {
                 ...getSnapshotVoteTypes(proposal.type, identifier.id, proposal.privacy),
                 EIP712Domain: [
@@ -145,7 +146,7 @@ export function VotingDialog({ open, onClose }: VotingDialogProps) {
                 choice,
                 metadata: '{}',
                 reason: '',
-                app: 'snapshot-v2',
+                app: isType2 ? 'snapshot-v2' : 'snapshot',
             }
             const domain = SNAPSHOT_VOTE_DOMAIN
             showSnackbar(<Trans>Vote</Trans>, {

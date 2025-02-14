@@ -102,6 +102,7 @@ function Content() {
     const votes = useVotes(identifier)
     const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
+    console.log({ results })
 
     const dataForCsv = useMemo(() => {
         if (!isArray(votes)) return EMPTY_LIST
@@ -119,63 +120,56 @@ function Content() {
         <ThemeProvider theme={MaskLightTheme}>
             <SnapshotCard title={proposal.isEnd ? <Trans>Results</Trans> : <Trans>Current results</Trans>}>
                 <List className={classes.list}>
-                    {results ?
-                        results.map((result, i) => (
-                            <ListItem className={classes.listItem} key={i}>
-                                <Box className={classes.listItemHeader}>
-                                    <TextOverflowTooltip
-                                        as={ShadowRootTooltip}
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}
-                                        title={<Typography>{result.choice}</Typography>}
-                                        placement="top"
-                                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                        arrow>
-                                        <Typography className={cx(classes.choice, classes.ellipsisText)}>
-                                            {result.choice}
-                                        </Typography>
-                                    </TextOverflowTooltip>
-                                    <ShadowRootTooltip
-                                        PopperProps={{
-                                            disablePortal: true,
-                                        }}
-                                        classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
-                                        title={
-                                            <Typography className={classes.ellipsisText}>
-                                                {result.powerDetail
-                                                    .filter((x) => x.power)
-                                                    .flatMap((detail, index) => {
-                                                        const name = formatCount(
-                                                            proposal.scores_by_strategy[i][index],
-                                                            2,
-                                                            true,
-                                                        )
-                                                        return [index === 0 ? '' : '+', name, detail.name]
-                                                    })
-                                                    .join(' ')}
-                                            </Typography>
-                                        }
-                                        placement="top"
-                                        arrow>
-                                        <Typography className={classes.power}>
-                                            {formatCount(proposal.scores[i], 2, true)}
-                                        </Typography>
-                                    </ShadowRootTooltip>
-                                    <Typography className={classes.ratio}>
-                                        {Number.parseFloat(result.percentage.toFixed(2))}%
+                    {results.map((result, i) => (
+                        <ListItem className={classes.listItem} key={i}>
+                            <Box className={classes.listItemHeader}>
+                                <TextOverflowTooltip
+                                    as={ShadowRootTooltip}
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    title={<Typography>{result.choice}</Typography>}
+                                    placement="top"
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                    arrow>
+                                    <Typography className={cx(classes.choice, classes.ellipsisText)}>
+                                        {result.choice}
                                     </Typography>
-                                </Box>
-                                <Box className={classes.linearProgressWrap}>
-                                    <StyledLinearProgress
-                                        color="inherit"
-                                        variant="determinate"
-                                        value={result.percentage}
-                                    />
-                                </Box>
-                            </ListItem>
-                        ))
-                    :   null}
+                                </TextOverflowTooltip>
+                                <ShadowRootTooltip
+                                    PopperProps={{
+                                        disablePortal: true,
+                                    }}
+                                    classes={{ tooltip: classes.tooltip, arrow: classes.arrow }}
+                                    title={
+                                        <Typography className={classes.ellipsisText}>
+                                            {result.powerDetail
+                                                .flatMap((detail, index) => {
+                                                    const name = formatCount(
+                                                        proposal.scores_by_strategy[i][index],
+                                                        2,
+                                                        true,
+                                                    )
+                                                    return [index === 0 ? '' : '+', name, detail.name]
+                                                })
+                                                .join(' ')}
+                                        </Typography>
+                                    }
+                                    placement="top"
+                                    arrow>
+                                    <Typography className={classes.power}>
+                                        {formatCount(proposal.scores[i], 2, true)}
+                                    </Typography>
+                                </ShadowRootTooltip>
+                                <Typography className={classes.ratio}>
+                                    {Number.parseFloat(result.percentage.toFixed(2))}%
+                                </Typography>
+                            </Box>
+                            <Box className={classes.linearProgressWrap}>
+                                <StyledLinearProgress color="inherit" variant="determinate" value={result.percentage} />
+                            </Box>
+                        </ListItem>
+                    ))}
                 </List>
                 {proposal.isEnd ?
                     <Button
