@@ -1,5 +1,6 @@
-import type { Proposal, VoteSuccess, Strategy } from '../types.js'
 import type { ChainId } from '@masknet/web3-shared-evm'
+import { SNAPSHOT_RELAY_URL, SNAPSHOT_SEQ_URL } from '../constants.js'
+import type { Proposal, Strategy, VoteResult } from '../types.js'
 
 export async function fetchProposal(id: string) {
     const { proposal } = await fetchProposalFromGraphql(id)
@@ -112,6 +113,7 @@ async function fetchProposalFromGraphql(id: string) {
                     network
                     type
                     votes
+                    privacy,
                     strategies {
                       name
                       params
@@ -159,6 +161,7 @@ async function fetchProposalFromGraphql(id: string) {
                 title: string
                 type: string
                 network: string
+                privacy: string
                 strategies: Strategy[]
             }
         }
@@ -168,8 +171,8 @@ async function fetchProposalFromGraphql(id: string) {
     return data
 }
 
-export async function vote(body: string) {
-    const response = await fetch('https://hub.snapshot.org/api/msg', {
+export async function vote(body: string, useRelay: boolean) {
+    const response = await fetch(useRelay ? SNAPSHOT_RELAY_URL : SNAPSHOT_SEQ_URL, {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -178,7 +181,7 @@ export async function vote(body: string) {
         body,
     })
 
-    const result: VoteSuccess = await response.json()
+    const result: VoteResult = await response.json()
     return result
 }
 

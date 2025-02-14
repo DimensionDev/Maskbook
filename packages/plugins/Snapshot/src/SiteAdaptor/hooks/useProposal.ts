@@ -1,9 +1,9 @@
-import { PluginSnapshotRPC } from '../../messages.js'
 import { useSuspenseQuery } from '@tanstack/react-query'
+import { PluginSnapshotRPC } from '../../messages.js'
 
 export function useProposal(id: string) {
     return useSuspenseQuery({
-        queryKey: ['plugin', 'snapshot', 'fetchProposal', id],
+        queryKey: ['snapshot', 'proposal', id],
         queryFn: () => PluginSnapshotRPC.fetchProposal(id),
         select(proposal) {
             proposal.status =

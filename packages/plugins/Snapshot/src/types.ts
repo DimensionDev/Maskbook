@@ -53,6 +53,7 @@ export interface Proposal {
     isStart: boolean
     isEnd: boolean
     status: string
+    privacy: string
     strategies: Strategy[]
     authorName?: string
     authorAvatar?: string
@@ -118,6 +119,15 @@ export interface ProposalResult {
 export interface VoteSuccess {
     ipfsHash: string
 }
+
+export type VoteResult =
+    | {
+          ipfsHash: string
+      }
+    | {
+          error: string
+          error_description: string
+      }
 
 export enum ContentTabs {
     All = 'All',
