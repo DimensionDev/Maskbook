@@ -4,9 +4,10 @@ import { EmojiAvatar } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { useAccount, useWeb3Utils } from '@masknet/web3-hooks-base'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { formatBalance, isSameAddress } from '@masknet/web3-shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { Typography } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
+import { formatTokenAmount } from '../helpers/formatTokenAmount.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -90,10 +91,7 @@ export const ClaimRecord = memo(function ClaimRecord({ className, record, chainI
                 </Typography>
             </div>
             <Typography className={classes.asset} component="div">
-                {formatBalance(record.token_amounts, record.token_decimal, {
-                    significant: 6,
-                    isPrecise: true,
-                })}
+                {formatTokenAmount(record.token_amounts || 0, record.token_decimal, false)}
                 <Typography component="span" className={classes.symbol}>
                     {record.token_symbol}
                 </Typography>

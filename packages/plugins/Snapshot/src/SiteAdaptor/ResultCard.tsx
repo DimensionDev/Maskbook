@@ -102,7 +102,6 @@ function Content() {
     const votes = useVotes(identifier)
     const { results } = useResults(identifier, proposal)
     const { classes, cx } = useStyles()
-    console.log({ results })
 
     const dataForCsv = useMemo(() => {
         if (!isArray(votes)) return EMPTY_LIST
