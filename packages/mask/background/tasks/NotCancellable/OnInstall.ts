@@ -48,3 +48,5 @@ browser.runtime.onInstalled.addListener(async (detail) => {
         }
     }
 })
+
+browser.runtime.setUninstallURL('https://www.mask.io/feedback')
