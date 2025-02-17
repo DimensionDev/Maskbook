@@ -458,31 +458,6 @@ export class NextIDProof {
         return bindings
     }
 
-    static async queryProfilesByTwitterId(twitterId: string, depth?: number) {
-        const { data } = await fetchSquashedJSON<{
-            data: {
-                identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborNode[]
-                }
-            }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_PROFILES_BY_TWITTER_ID',
-                variables: { platform: NextIDPlatform.Twitter, identity: twitterId.toLowerCase() },
-                query: `
-                    query GET_PROFILES_BY_TWITTER_ID($platform: String, $identity: String) {
-                        ${relationServiceIdentityQuery(depth)}
-                    }
-                `,
-            }),
-        })
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
-        return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
-    }
-
     static async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
         const lowerCaseId = twitterId.toLowerCase()
         const { data } = await fetchSquashedJSON<{

@@ -1,6 +1,6 @@
-import urlcat from 'urlcat'
-import { uniqWith } from 'lodash-es'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { Web3Bio } from '@masknet/web3-providers'
 import {
     attemptUntil,
     type DomainResult,
@@ -13,9 +13,6 @@ import {
     SearchResultType,
     SourceType,
 } from '@masknet/web3-shared-base'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
 import {
     ChainId as ChainIdEVM,
     isValidAddress as isValidAddressEVM,
@@ -32,18 +29,21 @@ import {
     isValidDomain as isValidDomainSolana,
     isZeroAddress as isZeroAddressSolana,
 } from '@masknet/web3-shared-solana'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { uniqWith } from 'lodash-es'
+import urlcat from 'urlcat'
+import { ARBID } from '../ARBID/index.js'
 import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinGeckoTrending } from '../CoinGecko/apis/TrendingAPI.js'
-import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/apis/DSearchAPI.js'
-import { RSS3 } from '../RSS3/index.js'
 import { ENS } from '../ENS/index.js'
-import { SpaceID } from '../SpaceID/index.js'
-import { ARBID } from '../ARBID/index.js'
-import { NextIDProof } from '../NextID/proof.js'
+import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/apis/DSearchAPI.js'
 import { PlatformToChainIdMap } from '../RSS3/constants.js'
-import { getHandlers } from './rules.js'
+import { RSS3 } from '../RSS3/index.js'
+import { SpaceID } from '../SpaceID/index.js'
 import { DSEARCH_BASE_URL } from './constants.js'
 import { fetchFromDSearch } from './helpers.js'
+import { getHandlers } from './rules.js'
 
 function isValidAddress(address?: string): boolean {
     return isValidAddressEVM(address) || isValidAddressFlow(address) || isValidAddressSolana(address)
@@ -195,7 +195,7 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                 keyword: address,
                 domain: isValidDomainEVM(domain) ? domain : undefined,
                 address,
-                bindingProofs: await NextIDProof.queryProfilesByAddress(address),
+                web3bioProfiles: await Web3Bio.getProfilesBy(address),
             },
         ]
     }

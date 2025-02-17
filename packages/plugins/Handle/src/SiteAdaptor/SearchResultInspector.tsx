@@ -1,16 +1,16 @@
 /* eslint-disable react-compiler/react-compiler */
-import { memo, useContext, useEffect } from 'react'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { Box, Link, Typography, type Theme } from '@mui/material'
 import { CopyButton, SocialAccountList, useUserTotalBalance } from '@masknet/shared'
 import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { EVMUtils } from '@masknet/web3-providers'
-import { PluginHeader } from './PluginHeader.js'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography, type Theme } from '@mui/material'
+import { memo, useContext, useEffect } from 'react'
 import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
-import { Trans } from '@lingui/react/macro'
+import { PluginHeader } from './PluginHeader.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
