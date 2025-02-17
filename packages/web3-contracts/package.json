@@ -3,9 +3,6 @@
   "private": true,
   "sideEffects": false,
   "type": "module",
-  "scripts": {
-    "start": "node --import @swc-node/register/esm-register compile-contracts.ts"
-  },
   "dependencies": {
     "@typechain/web3-v1": "^6.0.2",
     "typechain": "^8.3.1",

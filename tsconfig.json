@@ -3,7 +3,6 @@
   "references": [
     { "path": "./packages/base/tsconfig.json" },
     { "path": "./packages/flags/tsconfig.json" },
-    { "path": "./packages/polyfills/tsconfig.json" },
     { "path": "./packages/shared-base/tsconfig.json" },
     { "path": "./packages/shared-base-ui/tsconfig.json" },
     { "path": "./packages/web3-helpers/tsconfig.json" },
