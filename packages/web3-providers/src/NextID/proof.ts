@@ -1,9 +1,5 @@
-import urlcat from 'urlcat'
-import { first, sortBy, uniqBy } from 'lodash-es'
+import { env } from '@masknet/flags'
 import {
-    NextIDPlatform,
-    fromHex,
-    toBase64,
     type BindingProof,
     NextIDAction,
     type NextIDBindings,
@@ -11,18 +7,17 @@ import {
     type NextIDIdentity,
     type NextIDPayload,
     type NextIDPersonaBindings,
-    type NextIDEnsRecord,
+    NextIDPlatform,
     createBindingProofFromProfileQuery,
-    EMPTY_LIST,
-    getDomainSystem,
+    fromHex,
+    toBase64,
 } from '@masknet/shared-base'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD, RELATION_SERVICE_URL } from './constants.js'
-import { staleNextIDCached } from './helpers.js'
-import PRESET_LENS from './preset-lens.json' with { type: 'json' }
-import { fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
-import type { NextIDBaseAPI } from '../entry-types.js'
+import { first, sortBy, uniqBy } from 'lodash-es'
+import urlcat from 'urlcat'
 import { Expiration, stableSquashedCached } from '../entry-helpers.js'
-import { env } from '@masknet/flags'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants.js'
+import { staleNextIDCached } from './helpers.js'
 
 const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
@@ -372,87 +367,6 @@ export class NextIDProof {
         } catch {
             return false
         }
-    }
-
-    static async queryProfilesByPublicKey(publicKey: string, depth?: number) {
-        const { data } = await fetchJSON<{
-            data: {
-                identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborNode[]
-                }
-            }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_PROFILES_QUERY',
-                variables: { platform: NextIDPlatform.NextID, identity: publicKey },
-                query: `
-                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                       ${relationServiceIdentityQuery(depth)}
-                    }
-                `,
-            }),
-        })
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
-        return bindings
-    }
-
-    static async queryAllLens(twitterId: string, depth?: number): Promise<NextIDBaseAPI.LensAccount[]> {
-        const lowerCaseId = twitterId.toLowerCase()
-        const { data } = await fetchSquashedJSON<{
-            data: {
-                domain: {
-                    owner: {
-                        neighborWithTraversal: NeighborNode[]
-                    }
-                } | null
-            }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_LENS_PROFILES',
-                variables: {
-                    domainSystem: 'lens',
-                    domain: lowerCaseId.endsWith('.lens') ? lowerCaseId : `${lowerCaseId}.lens`,
-                },
-                query: `
-                    query GET_LENS_PROFILES($domainSystem: String, $domain: String) {
-                        ${relationServiceDomainQuery(depth)}
-                    }
-                `,
-            }),
-        })
-
-        const connectionsTo =
-            data.domain?.owner.neighborWithTraversal.filter((x) => x.to.platform === NextIDPlatform.LENS) || []
-
-        const connectionsFrom =
-            data.domain?.owner.neighborWithTraversal.filter((x) => x.from.platform === NextIDPlatform.LENS) || []
-
-        const id = lowerCaseId as keyof typeof PRESET_LENS
-        if (connectionsTo.length === 0 && connectionsFrom.length === 0 && PRESET_LENS[id]) {
-            return PRESET_LENS[id]
-        }
-
-        return uniqBy(
-            connectionsTo
-                .map((x) => ({
-                    handle: x.to.identity,
-                    displayName: x.to.displayName,
-                    address: x.to.identity,
-                }))
-                .concat(
-                    connectionsFrom.map((x) => ({
-                        handle: x.from.identity,
-                        displayName: x.from.displayName,
-                        address: x.from.identity,
-                    })),
-                ),
-            (x) => x.handle,
-        )
     }
 
     static async createPersonaPayload(

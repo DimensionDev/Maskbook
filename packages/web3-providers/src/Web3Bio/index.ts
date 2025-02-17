@@ -45,4 +45,9 @@ export class Web3Bio {
         const url = urlcat(WEB3_BIO_HOST, '/profile/nextid,:pubkey', { pubkey })
         return fetchCachedJSON<Web3BioProfile[]>(url)
     }
+
+    static async getAllLens(twitterId: string) {
+        const profiles = await Web3Bio.getProfilesByTwitterId(twitterId)
+        return profiles.filter((x) => x.platform === NextIDPlatform.LENS)
+    }
 }
