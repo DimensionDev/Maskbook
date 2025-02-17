@@ -1,8 +1,7 @@
 import { createLookupTableResolver } from '@masknet/shared-base'
-import { isZero, type NonFungibleTokenTrait } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { BigNumber } from 'bignumber.js'
 import { memoize } from 'lodash-es'
-import { format as formatDateTime } from 'date-fns'
 import { SchemaType } from '../types/index.js'
 import { checksumAddress, isValidAddress } from './address.js'
 import { isEnsSubdomain, isValidDomain } from './isValidDomain.js'
@@ -20,19 +19,6 @@ export const formatEthereumAddress: (address: string, size?: number) => string =
     },
     (addr, size) => `${addr}.${size}`,
 )
-
-/**
- * timestamp in seconds or milliseconds
- */
-const formatTimestamp = (timestamp: string) => {
-    const value = Number.parseInt(timestamp, 10) * (timestamp.length === 10 ? 1000 : 1)
-    return formatDateTime(new Date(value), 'yyyy-MM-dd HH:mm')
-}
-export function formatTrait(trait: NonFungibleTokenTrait) {
-    if (isValidAddress(trait.value)) return formatEthereumAddress(trait.value, 4)
-    if (trait.displayType === 'date') return formatTimestamp(trait.value)
-    return trait.value
-}
 
 export function formatHash(hash: string, size = 0) {
     if (size === 0) return hash

@@ -18,7 +18,6 @@
     "@masknet/web3-contracts": "workspace:^",
     "@masknet/web3-shared-base": "workspace:^",
     "bignumber.js": "9.1.2",
-    "date-fns": "^2.30.0",
     "punycode": "^2.3.0",
     "web3-core": "1.10.2",
     "web3-core-helpers": "1.10.2",
