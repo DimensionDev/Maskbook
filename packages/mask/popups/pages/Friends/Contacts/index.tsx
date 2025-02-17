@@ -1,11 +1,11 @@
-import { memo } from 'react'
-import { first } from 'lodash-es'
-import { Box } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { ElementAnchor, EmptyStatus } from '@masknet/shared'
-import { ContactCard } from '../ContactCard/index.js'
-import { type Friend } from '../../../hooks/index.js'
 import { Trans } from '@lingui/react/macro'
+import { ElementAnchor, EmptyStatus } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import { Box } from '@mui/material'
+import { first } from 'lodash-es'
+import { memo } from 'react'
+import { type Friend } from '../../../hooks/index.js'
+import { ContactCard } from '../ContactCard/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     empty: {

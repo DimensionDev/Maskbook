@@ -135,7 +135,7 @@ ENSAddress.displayName = 'ENSAddress'
 interface SocialAccountListItemProps {
     platform: NextIDPlatform
     identity: string
-    name: string
+    displayName: string
     onClose: () => void
     relatedList?: BindingProof[]
     link?: string
@@ -146,7 +146,7 @@ export function SocialAccountListItem({
     platform,
     link,
     identity,
-    name,
+    displayName: name,
     onClose,
     relatedList,
     profileUrl,

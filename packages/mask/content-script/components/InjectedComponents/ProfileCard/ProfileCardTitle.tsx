@@ -11,7 +11,7 @@ import {
 } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { NextIDProof } from '@masknet/web3-providers'
+import { Web3Bio } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import type { HTMLProps } from 'react'
 import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
@@ -105,12 +105,12 @@ export function ProfileCardTitle({
 
     const userId = identity?.identifier?.userId
     const itsMe = !!userId && userId === me?.identifier?.userId
-    const { data: nextIdBindings = EMPTY_LIST } = useQuery({
-        queryKey: ['next-id', 'profiles-by-twitter-id', userId],
+    const { data: web3bioProfiles = EMPTY_LIST } = useQuery({
+        queryKey: ['web3bio', 'profiles-by-twitter-id', userId],
         enabled: !!userId,
         queryFn: async () => {
             if (!userId) return EMPTY_LIST
-            return NextIDProof.queryProfilesByTwitterId(userId)
+            return Web3Bio.getProfilesByTwitterId(userId)
         },
     })
     const tipsDisabled = useIsMinimalMode(PluginID.Tips)
@@ -131,9 +131,9 @@ export function ProfileCardTitle({
                 address={address}
                 onAddressChange={onAddressChange}>
                 <div className={classes.operations}>
-                    {nextIdBindings.length ?
+                    {web3bioProfiles.length ?
                         <SocialAccountList
-                            nextIdBindings={nextIdBindings}
+                            web3bioProfiles={web3bioProfiles}
                             userId={userId}
                             disablePortal
                             anchorPosition={{
