@@ -12,7 +12,6 @@
     "./theme-global": { "types": "./theme-global.d.cts" },
     "./webpack": { "types": "./webpack.d.ts" },
     "./webpack-hmr": { "types": "./webpack-hmr.d.ts" },
-    "./web-extension": { "types": "./web-extension.d.ts" },
     "./module-loader": { "types": "./module-loader.d.ts" }
   }
 }

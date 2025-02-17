@@ -2,10 +2,5 @@
   "name": "@masknet/web3-constants",
   "private": true,
   "sideEffects": false,
-  "type": "module",
-  "scripts": {
-    "start": "node --import @swc-node/register/esm-register constants.ts"
-  },
-  "dependencies": {
-  }
+  "type": "module"
 }
