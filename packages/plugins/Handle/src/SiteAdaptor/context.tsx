@@ -20,11 +20,11 @@ export const ENSContext = createContext<ENSContextProps>({
 ENSContext.displayName = 'ENSContext'
 
 export function ENSProvider({ children, result }: PropsWithChildren<SearchResultInspectorProps>) {
-    const { domain, address, bindingProofs } = result
+    const { domain, address, web3bioProfiles: profiles } = result
 
     const tokenId = domain ? resolveNonFungibleTokenIdFromEnsDomain(domain) : ''
 
-    const { data: web3bioProfiles = EMPTY_LIST } = useSocialAccountListByAddressOrDomain(address, domain, bindingProofs)
+    const { data: web3bioProfiles = EMPTY_LIST } = useSocialAccountListByAddressOrDomain(address, domain, profiles)
 
     const context = useMemo(
         () => ({

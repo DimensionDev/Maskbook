@@ -6,11 +6,11 @@ import { useQuery } from '@tanstack/react-query'
 export function useSocialAccountListByAddressOrDomain(
     address: string,
     domain?: string,
-    defaultBindingProofs?: Web3BioProfile[],
+    defaultProfiles?: Web3BioProfile[],
 ) {
     return useQuery({
         queryKey: ['web3-bio', 'profiles', address, domain],
-        placeholderData: defaultBindingProofs,
+        placeholderData: defaultProfiles,
         queryFn: () => {
             if (!address && !domain) return EMPTY_LIST
             return attemptUntil(

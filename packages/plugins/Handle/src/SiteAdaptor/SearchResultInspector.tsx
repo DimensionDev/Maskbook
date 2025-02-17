@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
 
 export const SearchResultInspectorContent = memo(function SearchResultInspectorContent() {
     const { classes } = useStyles()
-    const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
+    const { reversedAddress, web3bioProfiles, domain } = useContext(ENSContext)
     const suffix = domain ? domain.split('.').pop()! : undefined
     const ChainIcon = suffix ? (SuffixToChainIconMap[suffix] ?? Icons.ETH) : null
 
@@ -138,7 +138,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                                 </Trans>
                             </div>
                         :   null}
-                        <SocialAccountList nextIdBindings={nextIdBindings} />
+                        <SocialAccountList web3bioProfiles={web3bioProfiles} />
                     </div>
                 </section>
             </Box>

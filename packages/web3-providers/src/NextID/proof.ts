@@ -374,65 +374,6 @@ export class NextIDProof {
         }
     }
 
-    static async queryProfilesByDomain(domain?: string, depth?: number) {
-        const domainSystem = getDomainSystem(domain)
-        if (domainSystem === 'unknown') return EMPTY_LIST
-        const { data } = await fetchSquashedJSON<{
-            data: {
-                domain: {
-                    owner: {
-                        neighborWithTraversal: NeighborNode[]
-                        nft: NextIDEnsRecord[]
-                    }
-                } | null
-            }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_PROFILES_QUERY',
-                variables: { domainSystem, domain: domain?.toLowerCase() },
-                query: `
-                    query GET_PROFILES_QUERY($domainSystem:String, $domain: String) {
-                      ${relationServiceDomainQuery(depth)}
-                    }
-                `,
-            }),
-        })
-        if (!data.domain) return EMPTY_LIST
-
-        const bindings = createBindProofsFromNeighbor(data.domain.owner.neighborWithTraversal)
-        return bindings.filter((x) => ![NextIDPlatform.NextID].includes(x.platform) && x.identity)
-    }
-
-    static async queryProfilesByAddress(address: string, depth?: number) {
-        const { data } = await fetchSquashedJSON<{
-            data: {
-                identity: {
-                    nft: NextIDEnsRecord[]
-                    neighborWithTraversal: NeighborNode[]
-                }
-            }
-        }>(RELATION_SERVICE_URL, {
-            method: 'POST',
-            mode: 'cors',
-            body: JSON.stringify({
-                operationName: 'GET_PROFILES_QUERY',
-                variables: { platform: NextIDPlatform.Ethereum, identity: address.toLowerCase() },
-                query: `
-                    query GET_PROFILES_QUERY($platform: String, $identity: String) {
-                       ${relationServiceIdentityQuery(depth)}
-                    }
-                `,
-            }),
-        })
-
-        const bindings = createBindProofsFromNeighbor(data.identity.neighborWithTraversal)
-        return bindings.filter(
-            (x) => ![NextIDPlatform.Ethereum, NextIDPlatform.NextID].includes(x.platform) && x.identity,
-        )
-    }
-
     static async queryProfilesByPublicKey(publicKey: string, depth?: number) {
         const { data } = await fetchJSON<{
             data: {

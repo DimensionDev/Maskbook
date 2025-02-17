@@ -36,8 +36,13 @@ export class Web3Bio {
     }
 
     /** Get profiles by address or domain */
-    static getProfilesBy(domainOrAddress: string) {
+    static async getProfilesBy(domainOrAddress: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/:id', { id: domainOrAddress })
+        return fetchCachedJSON<Web3BioProfile[]>(url)
+    }
+
+    static async getProfilesByNextId(pubkey: string) {
+        const url = urlcat(WEB3_BIO_HOST, '/profile/nextid,:pubkey', { pubkey })
         return fetchCachedJSON<Web3BioProfile[]>(url)
     }
 }
