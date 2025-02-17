@@ -4,15 +4,13 @@ import {
     NextIDAction,
     type NextIDBindings,
     type NextIDErrorBody,
-    type NextIDIdentity,
     type NextIDPayload,
     type NextIDPersonaBindings,
     NextIDPlatform,
-    createBindingProofFromProfileQuery,
     fromHex,
     toBase64,
 } from '@masknet/shared-base'
-import { first, sortBy, uniqBy } from 'lodash-es'
+import { first, sortBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import { Expiration, stableSquashedCached } from '../entry-helpers.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
@@ -21,172 +19,6 @@ import { staleNextIDCached } from './helpers.js'
 
 const BASE_URL =
     env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
-
-function relationServiceDomainQuery(depth?: number) {
-    return `domain(domainSystem: $domainSystem, name: $domain) {
-    source
-    system
-    name
-    fetcher
-    resolved {
-      identity
-      platform
-      displayName
-    }
-    owner {
-      identity
-      platform
-      displayName
-      uuid
-      nft(category: ["ens"], limit: 100, offset: 0) {
-        uuid
-        category
-        chain
-        id
-      }
-      neighborWithTraversal(depth: ${depth ?? 5}) {
-        ... on ProofRecord {
-          source
-          from {
-            nft(category: ["ens"], limit: 100, offset: 0) {
-              uuid
-              category
-              chain
-              id
-            }
-            uuid
-            platform
-            identity
-            displayName
-          }
-          to {
-            nft(category: ["ens"], limit: 100, offset: 0) {
-              uuid
-              category
-              chain
-              id
-            }
-            uuid
-            platform
-            identity
-            displayName
-          }
-        }
-        ... on HoldRecord {
-          source
-          from {
-            nft(category: ["ens"], limit: 100, offset: 0) {
-              uuid
-              category
-              chain
-              id
-            }
-            uuid
-            platform
-            identity
-            displayName
-          }
-          to {
-            nft(category: ["ens"], limit: 100, offset: 0) {
-              uuid
-              category
-              chain
-              id
-            }
-            uuid
-            platform
-            identity
-            displayName
-          }
-        }
-      }
-    }
-    }`
-}
-
-function relationServiceIdentityQuery(depth = 5) {
-    return `
-    identity(platform: $platform, identity: $identity) {
-        platform
-        identity
-        uid
-        displayName
-        uuid
-        ownedBy {
-          uuid
-          platform
-          identity
-          displayName
-        }
-        nft(category: ["ens"], limit: 100, offset: 0) {
-          uuid
-          category
-          chain
-          address
-          id
-        }
-        neighborWithTraversal(depth: ${depth}) {
-          ... on ProofRecord {
-            source
-            from {
-              nft(category: ["ens"], limit: 100, offset: 0) {
-                uuid
-                category
-                chain
-                id
-              }
-              uuid
-              platform
-              identity
-              uid
-              displayName
-            }
-            to {
-              nft(category: ["ens"], limit: 100, offset: 0) {
-                uuid
-                category
-                chain
-                id
-              }
-              uuid
-              platform
-              identity
-              uid
-              displayName
-            }
-          }
-          ... on HoldRecord {
-            source
-            from {
-              nft(category: ["ens"], limit: 100, offset: 0) {
-                uuid
-                category
-                chain
-                id
-              }
-              uuid
-              platform
-              identity
-              uid
-              displayName
-            }
-            to {
-              nft(category: ["ens"], limit: 100, offset: 0) {
-                uuid
-                category
-                chain
-                id
-              }
-              uuid
-              platform
-              identity
-              uid
-              displayName
-            }
-          }
-        }
-      }`
-}
 
 interface CreatePayloadBody {
     action: string
@@ -209,12 +41,6 @@ interface CreatePayloadResponse {
 interface RestorePubkeyResponse {
     /** hex public key */
     public_key: string
-}
-
-interface NeighborNode {
-    source: NextIDPlatform
-    to: NextIDIdentity
-    from: NextIDIdentity
 }
 
 function getPersonaQueryURL(platform: string, identity: string) {
@@ -413,35 +239,4 @@ export class NextIDProof {
         })
         return response.public_key
     }
-}
-
-function createBindingProofNodeFromNeighbor(nextIDIdentity: NextIDIdentity, source: NextIDPlatform) {
-    const nft = nextIDIdentity.nft.map((x) =>
-        createBindingProofFromProfileQuery(NextIDPlatform.NextID, x.id, x.id, undefined, NextIDPlatform.ENS),
-    )
-    return createBindingProofFromProfileQuery(
-        nft.length === 0 ? nextIDIdentity.platform : NextIDPlatform.ENS,
-        nextIDIdentity.identity,
-        nextIDIdentity.displayName,
-        undefined,
-        source,
-        nft,
-        nextIDIdentity.uid,
-    )
-}
-
-function createBindProofsFromNeighbor(neighborList: NeighborNode[]): BindingProof[] {
-    const bindings = neighborList.flatMap((x) => {
-        return [
-            {
-                uuid: x.from.uuid,
-                data: createBindingProofNodeFromNeighbor(x.from, x.source),
-            },
-            {
-                uuid: x.to.uuid,
-                data: createBindingProofNodeFromNeighbor(x.to, x.source),
-            },
-        ]
-    })
-    return uniqBy(bindings, (x) => x.uuid).map((x) => x.data)
 }
