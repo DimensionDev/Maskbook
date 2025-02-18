@@ -492,7 +492,11 @@ msgid "I just claimed a lucky drop from @{0} on {1} network."
 msgstr ""
 
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
-msgid "I just claimed a lucky drop from @{sender} on Solana"
+#~ msgid "I just claimed a lucky drop from @{sender} on Solana"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "I just claimed a lucky drop from @{sender} on Solana."
 msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
