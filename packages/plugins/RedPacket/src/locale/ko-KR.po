@@ -1046,4 +1046,3 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
-

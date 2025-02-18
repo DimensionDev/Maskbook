@@ -44,7 +44,7 @@
         "wGtbaw": ["单个红包数额"],
         "1QJyuR": ["At most ", ["RED_PACKET_MAX_SHARES"], " recipients"],
         "lmYQuN": ["At most ", ["SOL_REDPACKET_MAX_SHARES"], " recipients"],
-        "W+lPUh": ["最多255个领取者"],
+        "W+lPUh": ["At most 255 recipients"],
         "AbR6G1": ["附加信息"],
         "oG67vO": ["Available to Everyone"],
         "dTgELI": ["Best Wishes"],

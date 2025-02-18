@@ -44,7 +44,7 @@
         "wGtbaw": ["한 지분 금액"],
         "1QJyuR": ["At most ", ["RED_PACKET_MAX_SHARES"], " recipients"],
         "lmYQuN": ["At most ", ["SOL_REDPACKET_MAX_SHARES"], " recipients"],
-        "W+lPUh": ["최대 255명까지 받을 수 있습니다"],
+        "W+lPUh": ["At most 255 recipients"],
         "AbR6G1": ["첨부 메시지"],
         "oG67vO": ["Available to Everyone"],
         "dTgELI": ["Best Wishes"],
