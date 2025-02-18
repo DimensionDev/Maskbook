@@ -31,7 +31,7 @@ export class Web3Bio {
         return BindingProofs
     }
     static async getProfilesByTwitterId(handle: string) {
-        const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle}`)
+        const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle.toLowerCase()}`)
         return fetchCachedJSON<Web3BioProfile[]>(url)
     }
 
