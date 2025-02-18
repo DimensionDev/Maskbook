@@ -116,7 +116,6 @@ export const SocialAccountList = memo(function SocialAccountList({
         const priorities = [NextIDPlatform.ENS, NextIDPlatform.Farcaster, NextIDPlatform.LENS]
         return sortBy(merged, (x) => priorities.indexOf(x.platform))
     }, [web3bioProfiles, lensAccounts, farcasterAccounts])
-    console.log({ userId, lensAccounts, farcasterAccounts, web3bioProfiles, mergedProfiles })
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
         mergedProfiles.map((x, i) => {
