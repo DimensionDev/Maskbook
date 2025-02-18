@@ -108,7 +108,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
             const account = isOnTwitter ? 'realMaskNetwork' : 'masknetwork'
 
             if (hasClaimed) {
-                const claimed = _(msg`I just claimed a lucky drop from @${sender} on Solana`)
+                const claimed = _(msg`I just claimed a lucky drop from @${sender} on Solana.`)
                 return isOnTwitter || isOnFacebook ?
                         _(msg`${claimed} Follow @${account} (mask.io) to claim lucky drops.`) +
                             `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`

@@ -3,7 +3,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { getHub } from '@masknet/web3-providers'
 import type { HubOptions } from '@masknet/web3-providers/types'
 import { attemptUntil } from '@masknet/web3-shared-base'
-import { isNativeTokenAddress } from '@masknet/web3-shared-evm'
+import { isNativeTokenAddress, isValidAddress } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
 import { useChainContext, useNetworkContext } from './useContext.js'
 import { useNetworks } from './useNetworks.js'
@@ -19,7 +19,7 @@ export function useFungibleToken<S extends 'all' | void = void, T extends Networ
     const networks = useNetworks(contextPluginID)
 
     return useQuery({
-        enabled: !!address,
+        enabled: !!address && isValidAddress(address),
         queryKey: ['fungible-token', contextPluginID, address, chainId, options],
         queryFn: async () => {
             return attemptUntil(

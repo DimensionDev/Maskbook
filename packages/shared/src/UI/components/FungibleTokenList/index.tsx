@@ -259,25 +259,19 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
 
     const isAddressNotContract = addressType !== AddressType.Contract && Utils.isValidAddress(keyword)
 
-    const searchedTokenAddress = useMemo(() => {
-        if (!keyword || !Utils.isValidAddress(keyword)) return
-        if (sortedFungibleTokensForList.some((x) => isSameAddress(x.address, keyword))) return keyword
-        return ''
-    }, [keyword, sortedFungibleTokensForList])
-
     const searchError =
         keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
     useEffect(() => {
         onSearchError?.(!!searchError)
     }, [searchError, !searchError])
 
-    const { data: searchedToken } = useFungibleToken(pluginID, searchedTokenAddress, undefined, {
+    const { data: searchedToken } = useFungibleToken(pluginID, keyword, undefined, {
         chainId,
     })
 
     const isCustomToken = useMemo(() => {
         if (!searchedToken) return false
-        return sortedFungibleTokensForManage.some(
+        return !sortedFungibleTokensForManage.some(
             (x) => isSameAddress(x.address, searchedToken.address) && searchedToken.chainId === x.chainId,
         )
     }, [sortedFungibleTokensForManage, searchedToken])
@@ -313,17 +307,17 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
                 strategy?: 'add' | 'remove',
             ) => {
-                if (mode === TokenListMode.Manage) {
-                    if (strategy === 'add') await Token?.addToken?.(account, token)
-                    if (strategy === 'remove') await Token?.removeToken?.(account, token)
-                } else if (mode === TokenListMode.Select) {
+                if (mode === TokenListMode.Select) {
                     const selected = selectedTokens.find(
                         (x) => isSameAddress(x.address, token.address) && x.chainId === token.chainId,
                     )
                     if (!enabled && !selected) return
                     const result = selected ? selectedTokens.filter((x) => x !== selected) : [...selectedTokens, token]
                     onSelectedChange?.(result)
+                    return
                 }
+                if (strategy === 'add') await Token?.addToken?.(account, token)
+                if (strategy === 'remove') await Token?.removeToken?.(account, token)
             },
             trustOrBlockTokenToLocal: async (
                 token: FungibleToken<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
@@ -369,7 +363,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const data = useMemo(() => {
         return (
             isAddressNotContract ? EMPTY_LIST
-            : searchedToken && isSameAddress(searchedToken.address, searchedTokenAddress) ?
+            : searchedToken ?
                 // balance field work for case: user search someone token by contract and whitelist is empty.
                 [{ ...searchedToken, balance: tokenBalance, isCustomToken }]
             : mode === TokenListMode.List ? sortedFungibleTokensForList
@@ -378,7 +372,6 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     }, [
         isAddressNotContract,
         searchedToken,
-        searchedTokenAddress,
         tokenBalance,
         isCustomToken,
         sortedFungibleTokensForList,
