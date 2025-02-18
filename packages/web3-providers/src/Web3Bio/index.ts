@@ -1,8 +1,5 @@
 import urlcat from 'urlcat'
-import {
-    NextIDPlatform,
-    type Web3BioProfile,
-} from '@masknet/shared-base'
+import { NextIDPlatform, type Web3BioProfile } from '@masknet/shared-base'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import { WEB3_BIO_HOST } from './constants.js'
 
