@@ -97,11 +97,11 @@ const StyledLinearProgress = styled(LinearProgress)(({ theme }) => ({
 }))
 
 function Content() {
+    const { classes, cx } = useStyles()
     const identifier = useContext(SnapshotContext)
     const proposal = useProposal(identifier.id)
     const votes = useVotes(identifier)
     const { results } = useResults(identifier, proposal)
-    const { classes, cx } = useStyles()
 
     const dataForCsv = useMemo(() => {
         if (!isArray(votes)) return EMPTY_LIST
@@ -144,11 +144,7 @@ function Content() {
                                         <Typography className={classes.ellipsisText}>
                                             {result.powerDetail
                                                 .flatMap((detail, index) => {
-                                                    const name = formatCount(
-                                                        proposal.scores_by_strategy[i][index],
-                                                        2,
-                                                        true,
-                                                    )
+                                                    const name = formatCount(result.power, 2, true)
                                                     return [index === 0 ? '' : '+', name, detail.name]
                                                 })
                                                 .join(' ')}
@@ -157,7 +153,7 @@ function Content() {
                                     placement="top"
                                     arrow>
                                     <Typography className={classes.power}>
-                                        {formatCount(proposal.scores[i], 2, true)}
+                                        {formatCount(result.power, 2, true)}
                                     </Typography>
                                 </ShadowRootTooltip>
                                 <Typography className={classes.ratio}>
