@@ -1,48 +1,51 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useUpdateEffect } from 'react-use'
-import { first } from 'lodash-es'
-import { TabContext } from '@mui/lab'
-import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { useQuery } from '@tanstack/react-query'
-import { Telemetry } from '@masknet/web3-telemetry'
-import { EventType, EventID } from '@masknet/web3-telemetry/types'
+import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
+    getProfileTabContent,
     useActivatedPluginsSiteAdaptor,
     useIsMinimalMode,
     usePluginTransField,
-    getProfileTabContent,
 } from '@masknet/plugin-infra/content-script'
-import { getAvailablePlugins } from '@masknet/plugin-infra'
 import {
     AddressItem,
+    addressSorter,
     ConnectPersonaBoundary,
     GrantPermissions,
+    LoadingStatus,
     PluginCardFrameMini,
+    SocialAccountList,
+    TokenWithSocialGroupMenu,
+    useCollectionByTwitterHandle,
     useCurrentPersonaConnectStatus,
     useSocialAccountsBySettings,
-    TokenWithSocialGroupMenu,
-    SocialAccountList,
-    useCollectionByTwitterHandle,
-    addressSorter,
     WalletSettingsEntry,
-    LoadingStatus,
 } from '@masknet/shared'
 import {
     CrossIsolationMessages,
+    currentPersonaIdentifier,
     EMPTY_LIST,
     MaskMessages,
     NextIDPlatform,
     PluginID,
     ProfileTabs,
     Sniffings,
-    currentPersonaIdentifier,
 } from '@masknet/shared-base'
-import { useValueRef, useLocationChange } from '@masknet/shared-base-ui'
+import { useLocationChange, useValueRef } from '@masknet/shared-base-ui'
 import { makeStyles, MaskLightTheme, MaskTabList, useTabs } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
-import { isSameAddress } from '@masknet/web3-shared-base'
 import { ScopedDomainsContainer, useSnapshotSpacesByTwitterHandle } from '@masknet/web3-hooks-base'
+import { Web3Bio } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { Telemetry } from '@masknet/web3-telemetry'
+import { EventID, EventType } from '@masknet/web3-telemetry/types'
+import { TabContext } from '@mui/lab'
+import { Button, Stack, Tab, ThemeProvider, Typography } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { first } from 'lodash-es'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
 import {
     useCurrentVisitingIdentity,
     useLastRecognizedIdentity,
@@ -51,9 +54,6 @@ import {
 } from '../DataSource/useActivatedUI.js'
 import { useGrantPermissions, usePluginHostPermissionCheck } from '../DataSource/usePluginHostPermission.js'
 import { SearchResultInspector } from './SearchResultInspector.js'
-import { usePersonasFromDB } from '../../../shared-ui/hooks/usePersonasFromDB.js'
-import Services from '#services'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -306,11 +306,11 @@ function Content(props: ProfileTabContentProps) {
 
     const { data: identity } = useSocialIdentityByUserId(currentVisitingUserId)
 
-    const { data: nextIdBindings = EMPTY_LIST } = useQuery({
-        queryKey: ['profiles', 'by-twitter-id', currentVisitingUserId],
+    const { data: web3bioProfiles = EMPTY_LIST } = useQuery({
+        queryKey: ['web3bio', 'by-twitter-id', currentVisitingUserId],
         queryFn: () => {
             if (!currentVisitingUserId) return EMPTY_LIST
-            return NextIDProof.queryProfilesByTwitterId(currentVisitingUserId)
+            return Web3Bio.getProfilesByTwitterId(currentVisitingUserId)
         },
     })
 
@@ -465,7 +465,7 @@ function Content(props: ProfileTabContentProps) {
                                 fromSocialCard
                             />
 
-                            <SocialAccountList nextIdBindings={nextIdBindings} userId={currentVisitingUserId} />
+                            <SocialAccountList web3bioProfiles={web3bioProfiles} userId={currentVisitingUserId} />
                         </div>
                         <div className={classes.settingItem}>
                             <Trans>

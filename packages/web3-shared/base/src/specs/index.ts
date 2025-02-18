@@ -7,13 +7,13 @@ import type {
     EnhanceableSite,
     ExtensionSite,
     NetworkPluginID,
-    BindingProof,
     Account,
     Color,
     SocialAddress,
     SocialIdentity,
     SocialAccount,
     SignType,
+    Web3BioProfile,
 } from '@masknet/shared-base'
 
 export enum CurrencyType {
@@ -660,7 +660,7 @@ export interface Result<ChainId> {
 export interface EOAResult<ChainId> extends Result<ChainId> {
     type: SearchResultType.EOA
     domain?: string
-    bindingProofs?: BindingProof[]
+    web3bioProfiles?: Web3BioProfile[]
     address: string
 }
 

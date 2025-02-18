@@ -1,8 +1,13 @@
 import urlcat from 'urlcat'
-import { EMPTY_LIST, createBindingProofFromProfileQuery, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
+import {
+    EMPTY_LIST,
+    createBindingProofFromProfileQuery,
+    NextIDPlatform,
+    type BindingProof,
+    type Web3BioProfile,
+} from '@masknet/shared-base'
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
-import { WEB3_BIO_ROOT_URL } from './constants.js'
-import type { Web3BioProfile } from './types.js'
+import { WEB3_BIO_HOST, WEB3_BIO_ROOT_URL } from './constants.js'
 
 export class Web3Bio {
     static fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
@@ -24,5 +29,25 @@ export class Web3Bio {
             .filter(Boolean) as BindingProof[]
 
         return BindingProofs
+    }
+    static async getProfilesByTwitterId(handle: string) {
+        const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle}`)
+        return fetchCachedJSON<Web3BioProfile[]>(url)
+    }
+
+    /** Get profiles by address or domain */
+    static async getProfilesBy(domainOrAddress: string) {
+        const url = urlcat(WEB3_BIO_HOST, '/profile/:id', { id: domainOrAddress })
+        return fetchCachedJSON<Web3BioProfile[]>(url)
+    }
+
+    static async getProfilesByNextId(pubkey: string) {
+        const url = urlcat(WEB3_BIO_HOST, '/profile/nextid,:pubkey', { pubkey })
+        return fetchCachedJSON<Web3BioProfile[]>(url)
+    }
+
+    static async getAllLens(twitterId: string) {
+        const profiles = await Web3Bio.getProfilesByTwitterId(twitterId)
+        return profiles.filter((x) => x.platform === NextIDPlatform.LENS)
     }
 }

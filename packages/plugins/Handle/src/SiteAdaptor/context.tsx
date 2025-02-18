@@ -1,18 +1,18 @@
 import { createContext, useMemo, type PropsWithChildren } from 'react'
 import type { SearchResultType, EOAResult } from '@masknet/web3-shared-base'
-import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST, type Web3BioProfile } from '@masknet/shared-base'
 import { resolveNonFungibleTokenIdFromEnsDomain, type ChainId } from '@masknet/web3-shared-evm'
 import { useSocialAccountListByAddressOrDomain } from '@masknet/web3-hooks-base'
 
 interface ENSContextProps {
-    nextIdBindings: BindingProof[]
+    web3bioProfiles: Web3BioProfile[]
     reversedAddress: string | undefined
     domain: string | undefined
     tokenId: string | undefined
 }
 
 export const ENSContext = createContext<ENSContextProps>({
-    nextIdBindings: [],
+    web3bioProfiles: [],
     reversedAddress: undefined,
     tokenId: undefined,
     domain: '',
@@ -20,21 +20,20 @@ export const ENSContext = createContext<ENSContextProps>({
 ENSContext.displayName = 'ENSContext'
 
 export function ENSProvider({ children, result }: PropsWithChildren<SearchResultInspectorProps>) {
-    const { domain, address, bindingProofs } = result
+    const { domain, address, web3bioProfiles: profiles } = result
 
     const tokenId = domain ? resolveNonFungibleTokenIdFromEnsDomain(domain) : ''
 
-    const { value: nextIdBindings = EMPTY_LIST } = useSocialAccountListByAddressOrDomain(address, domain, bindingProofs)
+    const { data: web3bioProfiles = EMPTY_LIST } = useSocialAccountListByAddressOrDomain(address, domain, profiles)
 
     const context = useMemo(
         () => ({
             reversedAddress: address,
             tokenId,
             domain,
-            nextIdBindings,
+            web3bioProfiles,
         }),
-        // eslint-disable-next-line react-compiler/react-compiler
-        [address, tokenId, domain, JSON.stringify(nextIdBindings)],
+        [address, tokenId, domain, web3bioProfiles],
     )
 
     return <ENSContext value={context}>{children}</ENSContext>

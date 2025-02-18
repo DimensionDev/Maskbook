@@ -21,6 +21,7 @@ export enum NextIDPlatform {
     Unstoppable = 'unstoppabledomains',
     CyberConnect = 'cyberconnect',
 }
+export { NextIDPlatform as Web3BioPlatform }
 
 export interface NextIDEnsRecord {
     category: 'ENS'

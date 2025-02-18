@@ -1,26 +1,26 @@
-import { Web3Bio, NextIDProof } from '@masknet/web3-providers'
-import { useAsync } from 'react-use'
-import { type BindingProof, EMPTY_LIST } from '@masknet/shared-base'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { EMPTY_LIST, type Web3BioProfile } from '@masknet/shared-base'
+import { Web3Bio } from '@masknet/web3-providers'
 import { attemptUntil } from '@masknet/web3-shared-base'
+import { useQuery } from '@tanstack/react-query'
 
 export function useSocialAccountListByAddressOrDomain(
     address: string,
     domain?: string,
-    defaultBindingProofs?: BindingProof[],
-): AsyncState<BindingProof[]> {
-    return useAsync(async () => {
-        if (defaultBindingProofs?.length) return defaultBindingProofs
-        if (!address && !domain) return EMPTY_LIST
-
-        return attemptUntil(
-            [
-                async () => (domain ? NextIDProof.queryProfilesByDomain(domain) : EMPTY_LIST),
-                async () => (address ? NextIDProof.queryProfilesByAddress(address) : EMPTY_LIST),
-                async () => (address ? Web3Bio.queryProfilesByAddress(address) : EMPTY_LIST),
-            ],
-            undefined,
-            (result) => !result?.length,
-        )
-    }, [address, domain, defaultBindingProofs])
+    defaultProfiles?: Web3BioProfile[],
+) {
+    return useQuery({
+        queryKey: ['web3-bio', 'profiles', address, domain],
+        placeholderData: defaultProfiles,
+        queryFn: () => {
+            if (!address && !domain) return EMPTY_LIST
+            return attemptUntil(
+                [
+                    async () => (domain ? Web3Bio.getProfilesBy(domain) : EMPTY_LIST),
+                    async () => (address ? Web3Bio.getProfilesBy(address) : EMPTY_LIST),
+                ],
+                undefined,
+                (result) => !result?.length,
+            )
+        },
+    })
 }

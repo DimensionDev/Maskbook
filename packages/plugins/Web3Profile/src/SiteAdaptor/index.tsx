@@ -4,7 +4,7 @@ import { PluginTransFieldRender } from '@masknet/plugin-infra/content-script'
 import { ApplicationEntry } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST, PluginID } from '@masknet/shared-base'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
-import { NextIDProof } from '@masknet/web3-providers'
+import { Web3Bio } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import { uniqBy } from 'lodash-es'
 import { useEffect, useMemo } from 'react'
@@ -13,7 +13,7 @@ import { base } from '../base.js'
 import { Web3ProfileGlobalInjection } from './Web3ProfileGlobalInjection.js'
 import { setupStorage } from './context.js'
 import { SocialBadges } from './components/SocialBadges/Badges.js'
-import { NextIdLensToFireflyLens } from '../utils.js'
+import { Web3BioProfileToFireflyLens } from '../utils.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -76,8 +76,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                     queryKey: ['next-id', 'all-lens', userId, handle],
                     enabled: isProfile && !!handle && !!accounts.length,
                     queryFn: async () => {
-                        const lensAccounts = await NextIDProof.queryAllLens(handle)
-                        return lensAccounts.map(NextIdLensToFireflyLens)
+                        const lensAccounts = await Web3Bio.getAllLens(handle)
+                        return lensAccounts.map(Web3BioProfileToFireflyLens)
                     },
                 })
 
