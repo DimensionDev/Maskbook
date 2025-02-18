@@ -8,18 +8,18 @@ export interface Web3BioProfile {
     /** avatar url */
     avatar: string
     description: string
-    email: string
-    location: string | null
+    email?: string
+    location?: string | null
     /** banner url */
-    header: string
-    contenthash: string
-    links: {
+    header?: string
+    contenthash?: string
+    links?: {
         [key in Web3BioPlatform]: {
             link: string
             handle: string
         }
     }
-    social: {
+    social?: {
         uid: string | null
         follower: number
         following: number
