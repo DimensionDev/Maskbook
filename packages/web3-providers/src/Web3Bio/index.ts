@@ -9,6 +9,15 @@ import {
 import { fetchCachedJSON } from '../helpers/fetchJSON.js'
 import { WEB3_BIO_HOST, WEB3_BIO_ROOT_URL } from './constants.js'
 
+type Response<T> =
+    | T
+    | {
+          address: null
+          identity: string
+          platform: string
+          error: string
+      }
+
 export class Web3Bio {
     static fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
         return fetchCachedJSON<T>(request, init)
@@ -32,18 +41,21 @@ export class Web3Bio {
     }
     static async getProfilesByTwitterId(handle: string) {
         const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle.toLowerCase()}`)
-        return fetchCachedJSON<Web3BioProfile[]>(url)
+        const res = await fetchCachedJSON<Response<Web3BioProfile[]>>(url)
+        return Array.isArray(res) ? res : []
     }
 
     /** Get profiles by address or domain */
     static async getProfilesBy(domainOrAddress: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/:id', { id: domainOrAddress })
-        return fetchCachedJSON<Web3BioProfile[]>(url)
+        const res = await fetchCachedJSON<Response<Web3BioProfile[]>>(url)
+        return Array.isArray(res) ? res : []
     }
 
     static async getProfilesByNextId(pubkey: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/nextid,:pubkey', { pubkey })
-        return fetchCachedJSON<Web3BioProfile[]>(url)
+        const res = await fetchCachedJSON<Response<Web3BioProfile[]>>(url)
+        return Array.isArray(res) ? res : []
     }
 
     static async getAllLens(twitterId: string) {
