@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-24 04:49\n"
+"PO-Revision-Date: 2025-02-18 04:44\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -137,7 +137,7 @@ msgstr ""
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 #~ msgid "At most 255 recipients"
-#~ msgstr "受信者は最大255人です"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Attached Message"
@@ -709,7 +709,7 @@ msgstr "リポスト"
 
 #: src/SiteAdaptor/Requirements/index.tsx
 #~ msgid "Requirements"
-#~ msgstr "必要条件"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Reset"
@@ -1046,3 +1046,4 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
+
