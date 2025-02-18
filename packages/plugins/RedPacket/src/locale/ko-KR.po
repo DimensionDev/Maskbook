@@ -313,8 +313,8 @@ msgstr ""
 
 #: src/SiteAdaptor/SolanaRedPacket/RequestLoginFooter.tsx
 #: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx
-msgid "Connect to {source}"
-msgstr ""
+#~ msgid "Connect to {source}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
