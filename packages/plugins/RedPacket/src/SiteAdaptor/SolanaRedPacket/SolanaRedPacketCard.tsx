@@ -19,7 +19,7 @@ import { RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-
 import { TokenType, formatBalance, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-solana'
 import { Card } from '@mui/material'
-import { memo, useCallback, useMemo } from 'react'
+import { memo, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 import { getClaimRecord } from '../helpers/getClaimRecord.js'
@@ -99,31 +99,19 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
 
-    const getShareText = useCallback(
-        (hasClaimed: boolean) => {
-            const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
-            const isOnTwitter = Sniffings.is_twitter_page
-            const isOnFacebook = Sniffings.is_facebook_page
-            const sender = payload.sender.name.replace(/^@/, '')
-            const account = isOnTwitter ? 'realMaskNetwork' : 'masknetwork'
+    const claimedShareText = useMemo(() => {
+        const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
+        const isOnTwitter = Sniffings.is_twitter_page
+        const isOnFacebook = Sniffings.is_facebook_page
+        const sender = payload.sender.name.replace(/^@/, '')
+        const account = isOnTwitter ? 'realMaskNetwork' : 'masknetwork'
 
-            if (hasClaimed) {
-                const claimed = _(msg`I just claimed a lucky drop from @${sender} on Solana`)
-                return isOnTwitter || isOnFacebook ?
-                        _(msg`${claimed} Follow @${account} (mask.io) to claim lucky drops.`) +
-                            `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`
-                    :   `${claimed}\n${promote_short}\n${link}`
-            }
-            const head = _(msg`Hi friends, I just found a lucky drop sent by @${sender} on Solana.`)
-
-            return isOnTwitter || isOnFacebook ?
-                    _(msg`${head} Follow @${account} (mask.io) to claim lucky drops.`) +
-                        `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`
-                :   `${head}\n${promote_short}\n${link}`
-        },
-        [payload, link, claimTxHash, network?.name, platform, _],
-    )
-    const claimedShareText = useMemo(() => getShareText(true), [getShareText])
+        const claimed = _(msg`I just claimed a lucky drop from @${sender} on Solana`)
+        return isOnTwitter || isOnFacebook ?
+                _(msg`${claimed} Follow @${account} (mask.io) to claim lucky drops.`) +
+                    `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`
+            :   `${claimed}\n${promote_short}\n${link}`
+    }, [payload, link, claimTxHash, network?.name, platform, _])
 
     const [{ loading: isClaimingAndChecking }, onClaimOrRefund] = useAsyncFn(async () => {
         let hash: string | undefined
