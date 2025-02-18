@@ -21,7 +21,7 @@ import { useClaimCallback } from '../hooks/useClaimCallback.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { useRedPacketCover } from './useRedPacketCover.js'
+import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 
 const useStyles = makeStyles()((theme) => {
     return {

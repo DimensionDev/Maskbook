@@ -26,7 +26,7 @@ import { getClaimRecord } from '../helpers/getClaimRecord.js'
 import { useSolanaAvailability } from './hooks/useAvailability.js'
 import { useClaimCallback } from './hooks/useClaimCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { useRedPacketCover } from './useRedPacketCover.js'
+import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
