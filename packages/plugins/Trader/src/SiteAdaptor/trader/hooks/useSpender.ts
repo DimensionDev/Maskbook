@@ -1,3 +1,5 @@
+import { getSupportedChainsOptions } from '@masknet/plugin-trader'
+import { queryClient } from '@masknet/shared-base-ui'
 import { OKX } from '@masknet/web3-providers'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { useQuery } from '@tanstack/react-query'
@@ -10,7 +12,7 @@ export function useSpender(expectedMode?: TradeMode) {
     return useQuery({
         queryKey: ['okx', 'supported-chains', mode],
         queryFn: async () => {
-            if (mode === 'swap') return OKX.getSupportedChains()
+            if (mode === 'swap') return queryClient.fetchQuery(getSupportedChainsOptions)
             return OKX.getBridgeSupportedChains()
         },
         select(chains) {

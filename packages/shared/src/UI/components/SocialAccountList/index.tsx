@@ -73,7 +73,7 @@ const FireflyLensToWeb3BioProfile = (account: FireflyConfigAPI.LensAccount): Web
 const FireflyFarcasterToWeb3bioProfile = (account: FireflyConfigAPI.FarcasterProfile): Web3BioProfile => {
     return {
         platform: NextIDPlatform.Farcaster,
-        identity: account.fid,
+        identity: account.fid.toString(),
         address: account.signer_address,
         displayName: account.display_name,
         avatar: account.avatar.url,
@@ -162,7 +162,7 @@ export const SocialAccountList = memo(function SocialAccountList({
             .map((x) => resolveNextIDPlatformIcon(x.platform))
             .filter(isNonNull)
             .slice(0, 3)
-    }, [web3bioProfiles])
+    }, [mergedProfiles])
 
     if (!mergedProfiles.length) return null
 
