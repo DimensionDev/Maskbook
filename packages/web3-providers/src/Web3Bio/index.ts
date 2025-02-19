@@ -16,7 +16,7 @@ function patchProfile(profile: Web3BioProfile): Web3BioProfile {
     if (profile.platform === NextIDPlatform.Farcaster && profile.social?.uid) {
         return {
             ...profile,
-            identity: profile.social.uid,
+            identity: profile.social.uid.toString(),
         }
     }
     return profile

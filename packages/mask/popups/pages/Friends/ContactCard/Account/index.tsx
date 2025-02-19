@@ -10,6 +10,7 @@ import { PlatformIconMap, PlatformUrlMap, type SupportedPlatforms } from '../../
 interface AccountProps {
     platform: SupportedPlatforms
     userId?: string
+    displayName?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -27,7 +28,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Account = memo<AccountProps>(function Account({ userId, platform }) {
+export const Account = memo<AccountProps>(function Account({ userId, displayName, platform }) {
     const { classes } = useStyles()
     const Icon = PlatformIconMap[platform]
 
@@ -37,7 +38,11 @@ export const Account = memo<AccountProps>(function Account({ userId, platform })
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
             <Icon size={30} />
             <Box className={classes.userId}>
-                {platform === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatUserId(userId)}
+                {platform === NextIDPlatform.Ethereum ?
+                    formatEthereumAddress(userId, 4)
+                : platform === NextIDPlatform.Farcaster && displayName ?
+                    displayName
+                :   formatUserId(userId)}
                 <Link
                     underline="none"
                     target="_blank"

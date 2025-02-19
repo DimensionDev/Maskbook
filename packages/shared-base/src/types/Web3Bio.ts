@@ -21,7 +21,7 @@ export interface Web3BioProfile {
         }
     }
     social?: {
-        uid: string | null
+        uid: string | number | null
         follower: number
         following: number
     }

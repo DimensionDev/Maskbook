@@ -7,8 +7,9 @@ import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { PlatformIconMap, PlatformUrlMap, type SupportedPlatforms } from '../../common.js'
 
 interface AccountProps {
-    userId?: string
     platform: SupportedPlatforms
+    userId?: string
+    displayName?: string
 }
 
 const useStyles = makeStyles()((theme) => ({
@@ -34,7 +35,7 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Account = memo<AccountProps>(function Account({ userId, platform }) {
+export const Account = memo<AccountProps>(function Account({ userId, displayName, platform }) {
     const { classes } = useStyles()
     if (!userId) return null
     const Icon = PlatformIconMap[platform]
@@ -48,7 +49,11 @@ export const Account = memo<AccountProps>(function Account({ userId, platform })
             className={classes.container}>
             <Icon size={40} />
             <Box className={classes.userId}>
-                {platform === NextIDPlatform.Ethereum ? formatEthereumAddress(userId, 4) : formatPersonaName(userId)}
+                {platform === NextIDPlatform.Ethereum ?
+                    formatEthereumAddress(userId, 4)
+                : platform === NextIDPlatform.Farcaster && displayName ?
+                    displayName
+                :   formatPersonaName(userId)}
                 <Link
                     underline="none"
                     target="_blank"
