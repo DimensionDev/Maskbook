@@ -51,7 +51,7 @@ export class OKX {
             chainId,
         })
         const res = await fetchFromOKX<GetTokensResponse>(url)
-        if (res.code !== 0) return null
+        if (res.code !== 0) throw new Error('Failed to get tokens')
         const tokens = res.data
         return (
             tokens
@@ -94,7 +94,7 @@ export class OKX {
             fromChainId,
         })
         const res = await fetchFromOKX<GetTokenPairsResponse>(url)
-        if (res.code !== 0) return
+        if (res.code !== 0) throw new Error('Failed to get token pairs')
         const tokens = res.data
         return tokens.map((x) => {
             return {
@@ -111,7 +111,7 @@ export class OKX {
             chainId,
         })
         const res = await fetchFromOKX<GetTokenPairsResponse>(url)
-        if (res.code !== 0) return
+        if (res.code !== 0) throw new Error('Failed to get supported bridges')
         const tokens = res.data
         return tokens.map((x) => {
             return {
@@ -133,6 +133,7 @@ export class OKX {
             fetchFromOKX<GetLiquidityResponse>(url),
             fetchJSON<GetLiquidityResponse>(privateUrl),
         ])
+        if (res.code !== 0 || resWithLogo.code !== 0) throw new Error('Failed to get liquidity')
         const dexLogoMap = new Map(resWithLogo.data.map((x) => [x.id, x.logo]))
         return {
             ...res,
@@ -143,7 +144,8 @@ export class OKX {
     static async getApproveTx(options: ApproveTransactionOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/approve-transaction', options)
         const res = await fetchFromOKX<ApproveTransactionResponse>(url)
-        return res.code === 0 ? res.data[0] : null
+        if (res.code === 0) return res.data[0]
+        throw new Error('Failed to get approve transaction')
     }
 
     static async getQuotes(options: GetQuotesOptions) {
@@ -153,7 +155,8 @@ export class OKX {
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
         })
         const res = await fetchFromOKX<GetQuotesResponse>(url)
-        if (res.code === 0 && res.data) {
+        if (res.code !== 0) throw new Error('Failed to get quotes')
+        if (res.data) {
             // fix tokens
             res.data.forEach((quote) => {
                 quote.fromToken = fixToken(quote.fromToken)
@@ -222,6 +225,7 @@ export class OKX {
             toTokenAddress: toOkxNativeAddress(options.toTokenAddress),
         })
         const res = await fetchFromOKX<GetBridgeQuoteResponse>(url)
+        if (res.code !== 0) throw new Error('Failed to get bridge quote')
         const [fromTokenPrice = '0', toTokenPrice = '0'] = await Promise.all([
             OKX.getTokenPrice(options.fromTokenAddress, options.fromChainId),
             OKX.getTokenPrice(options.toTokenAddress, options.toChainId),
@@ -274,15 +278,16 @@ export class OKX {
     static async getBridgeStatus(options: GetBridgeStatusOptions) {
         const url = urlcat(OKX_HOST, '/api/v5/dex/cross-chain/status', options)
         const res = await fetchFromOKX<GetBridgeStatusResponse>(url)
+        if (res.code !== 0) throw new Error('Failed to get bridge status')
         // Patch data
-        if (res.code === 0 && res.data.length) {
+        if (res.data.length) {
             res.data.forEach((record) => {
                 record.fromChainId = +record.fromChainId
                 record.toChainId = record.toChainId ? +record.toChainId : 0
             })
             return res.data[0]
         }
-        return null
+        return
     }
 
     static async getUserTokenBalances(chainId: ChainId | ChainId[], account: string) {
@@ -291,6 +296,7 @@ export class OKX {
             address: account,
         })
         const res = await fetchFromOKX<GetAllTokenBalancesByAddressResponse>(url)
+        if (res.code !== 0) throw new Error('Failed to get user token balances')
         return res.data[0].tokenAssets
     }
 }
