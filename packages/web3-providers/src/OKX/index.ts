@@ -41,7 +41,8 @@ export class OKX {
     static async getSupportedChains() {
         const url = urlcat(OKX_HOST, '/api/v5/dex/aggregator/supported/chain')
         const res = await fetchFromOKX<SupportedChainResponse>(url)
-        return res.code === 0 ? res.data : undefined
+        if (res.code === 0) return res.data
+        throw new Error('Failed to get supported chains')
     }
 
     static async baseGetTokens(chainId: ChainId, apiRoute: string) {
@@ -257,7 +258,7 @@ export class OKX {
             })
             return res.data
         }
-        return undefined
+        throw new Error('Failed to get supported chains')
     }
 
     static async bridge(options: BridgeOptions) {
