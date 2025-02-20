@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { EnhanceableSite, twitterDomainMigrate } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, TextOverflowTooltip } from '@masknet/theme'
 import { FireflyTwitter } from '@masknet/web3-providers'
 import { Box, Link } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
@@ -31,14 +31,14 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '18px',
     },
+    name: {
+        flexGrow: 1,
+        minWidth: 0,
+        textOverflow: 'ellipsis',
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+    },
 }))
-
-export const formatUserId = (userId: string) => {
-    if (userId.length > 7) {
-        return `${userId.slice(0, 7)}...`
-    }
-    return userId
-}
 
 export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ avatar, userId, site }) {
     const isOnTwitter = site === EnhanceableSite.Twitter
@@ -52,6 +52,7 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
     })
     const userAvatar = isOnTwitter ? twitterAvatar : avatar
     const { classes } = useStyles()
+    const name = `@${userId}`
     return (
         <Box width="156px" padding="4px" display="flex" gap="10px" alignItems="center">
             <AccountAvatar
@@ -61,7 +62,9 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
                 classes={{ avatar: classes.avatar, container: classes.avatar }}
             />
             <Box className={classes.userId}>
-                {`@${formatUserId(userId)}`}
+                <TextOverflowTooltip title={name}>
+                    <span className={classes.name}>{name}</span>
+                </TextOverflowTooltip>
                 <Link
                     underline="none"
                     target="_blank"

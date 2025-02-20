@@ -1,12 +1,14 @@
+import { sortBy, uniqBy } from 'lodash-es'
+import { memo, useEffect, useMemo, useRef, type HTMLProps } from 'react'
 import { isNonNull } from '@masknet/kit'
 import { useMenuConfig } from '@masknet/shared'
-import { NextIDPlatform, type Web3BioProfile } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Button, type MenuProps } from '@mui/material'
-import { uniqBy } from 'lodash-es'
-import { memo, useEffect, useMemo, useRef, type HTMLProps } from 'react'
+import { EMPTY_LIST, NextIDPlatform, type Web3BioProfile } from '@masknet/shared-base'
+import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { SocialAccountListItem } from './SocialListItem.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
+import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -57,6 +59,28 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
+const FireflyLensToWeb3BioProfile = (account: FireflyConfigAPI.LensAccount): Web3BioProfile => {
+    return {
+        platform: NextIDPlatform.LENS,
+        identity: account.handle,
+        address: account.address,
+        displayName: account.name,
+        avatar: account.profileUri[0],
+        description: account.bio,
+    }
+}
+
+const FireflyFarcasterToWeb3bioProfile = (account: FireflyConfigAPI.FarcasterProfile): Web3BioProfile => {
+    return {
+        platform: NextIDPlatform.Farcaster,
+        identity: account.fid.toString(),
+        address: account.signer_address,
+        displayName: account.display_name,
+        avatar: account.avatar.url,
+        description: account.bio,
+    }
+}
+
 interface SocialAccountListProps
     extends HTMLProps<HTMLDivElement>,
         Pick<MenuProps, 'disablePortal' | 'anchorPosition' | 'anchorReference'> {
@@ -74,11 +98,29 @@ export const SocialAccountList = memo(function SocialAccountList({
 }: SocialAccountListProps) {
     const { classes } = useStyles()
     const ref = useRef<HTMLDivElement | null>(null)
+    const { data: lensAccounts = EMPTY_LIST } = useFireflyLensAccounts(userId)
+    const { data: farcasterAccounts = EMPTY_LIST } = useFireflyFarcasterAccounts(userId)
+
+    const mergedProfiles = useMemo(() => {
+        const merged = uniqBy(
+            [
+                ...lensAccounts.map(FireflyLensToWeb3BioProfile),
+                ...farcasterAccounts.map(FireflyFarcasterToWeb3bioProfile),
+                ...web3bioProfiles,
+            ],
+            (x) => {
+                const identity = x.platform === NextIDPlatform.LENS ? x.identity.replace(/\.lens$/, '') : x.identity
+                return `${x.platform}-${identity}`
+            },
+        )
+        const priorities = [NextIDPlatform.ENS, NextIDPlatform.Farcaster, NextIDPlatform.LENS]
+        return sortBy(merged, (x) => priorities.indexOf(x.platform))
+    }, [web3bioProfiles, lensAccounts, farcasterAccounts])
 
     const [menu, openMenu, closeMenu] = useMenuConfig(
-        web3bioProfiles.map((x, i) => {
+        mergedProfiles.map((x, i) => {
             const isLens = x.platform === NextIDPlatform.LENS
-            const profileUri = isLens ? x.links.lens.link : undefined
+            const profileUri = isLens ? x.links?.lens.link : undefined
             return <SocialAccountListItem key={i} {...x} profileUrl={profileUri} onClose={() => closeMenu()} />
         }),
         {
@@ -116,13 +158,13 @@ export const SocialAccountList = memo(function SocialAccountList({
     }, [closeMenu])
 
     const platformIcons = useMemo(() => {
-        return uniqBy(web3bioProfiles, (x) => x.platform)
+        return uniqBy(mergedProfiles, (x) => x.platform)
             .map((x) => resolveNextIDPlatformIcon(x.platform))
             .filter(isNonNull)
             .slice(0, 3)
-    }, [web3bioProfiles])
+    }, [mergedProfiles])
 
-    if (!platformIcons.length) return null
+    if (!mergedProfiles.length) return null
 
     return (
         <div {...rest}>

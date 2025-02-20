@@ -12,7 +12,11 @@ import { useMarkdownStyles } from '../hooks/index.js'
 
 const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body' | 'playButton' | 'verbose'>()(
     (theme, _, refs) => ({
-        markdown: {},
+        markdown: {
+            '& a': {
+                wordBreak: 'break-all',
+            },
+        },
         canInspect: {
             cursor: 'pointer',
             padding: theme.spacing(1.5),

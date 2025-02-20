@@ -157,6 +157,7 @@ export const getFungibleTokenItem = <T extends NetworkPluginID>({
                     <>
                         {isCustomToken ?
                             <ActionButton
+                                size="small"
                                 color="primary"
                                 disabled={onAddOrRemoveTokenToLocalLoading}
                                 loading={onAddOrRemoveTokenToLocalLoading}

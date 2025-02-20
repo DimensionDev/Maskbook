@@ -41,8 +41,8 @@ export const AccountRender = memo<AccountRenderProps>(function AccountRender({ p
                     profile.name
                 :   profile.identity
             return detail ?
-                    <DetailAccount userId={_userID} platform={profile.platform} />
-                :   <Account userId={_userID} platform={profile.platform} />
+                    <DetailAccount userId={_userID} displayName={profile.name} platform={profile.platform} />
+                :   <Account userId={_userID} displayName={profile.name} platform={profile.platform} />
         case NextIDPlatform.CyberConnect:
         case NextIDPlatform.Bit:
         case NextIDPlatform.SYBIL:
