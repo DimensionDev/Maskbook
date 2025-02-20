@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-18 04:44\n"
+"PO-Revision-Date: 2025-02-20 11:12\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -497,8 +497,12 @@ msgid "I just claimed a lucky drop from @{0} on {1} network."
 msgstr "crwdns32306:0{0}crwdnd32306:0{1}crwdne32306:0"
 
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
-msgid "I just claimed a lucky drop from @{sender} on Solana"
-msgstr "crwdns36588:0{sender}crwdne36588:0"
+#~ msgid "I just claimed a lucky drop from @{sender} on Solana"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "I just claimed a lucky drop from @{sender} on Solana."
+msgstr "crwdns36832:0{sender}crwdne36832:0"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network."
