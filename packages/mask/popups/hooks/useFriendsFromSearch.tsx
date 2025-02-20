@@ -22,29 +22,28 @@ export function useFriendsFromSearch(
     const currentIdentifier = useCurrentLinkedPersona()
     return useMemo(() => {
         if (!searchResult?.length && !localSearchedResult?.length) return EMPTY_LIST
-        const localProfiles: NextIDPersonaBindingsWithIdentifier[] =
-            localSearchedResult
-                .filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex && x.profile)
-                .map((item) => {
-                    const profile = item.profile!
-                    return {
-                        proofs: [
-                            {
-                                platform: profile.network as FriendNetwork,
-                                identity: profile.userId,
-                                is_valid: true,
-                                last_checked_at: '',
-                                name: profile.userId,
-                                created_at: '',
-                            },
-                        ],
-                        linkedPersona: item.persona,
-                        activated_at: '',
-                        persona: item.persona.publicKeyAsHex,
-                        isLocal: true,
-                        avatar: item.avatar,
-                    }
-                }) ?? EMPTY_LIST
+        const localProfiles: NextIDPersonaBindingsWithIdentifier[] = localSearchedResult
+            .filter((x) => x.persona.publicKeyAsHex !== currentIdentifier?.identifier.publicKeyAsHex && x.profile)
+            .map((item) => {
+                const profile = item.profile!
+                return {
+                    proofs: [
+                        {
+                            platform: profile.network as FriendNetwork,
+                            identity: profile.userId,
+                            is_valid: true,
+                            last_checked_at: '',
+                            name: profile.userId,
+                            created_at: '',
+                        },
+                    ],
+                    linkedPersona: item.persona,
+                    activated_at: '',
+                    persona: item.persona.publicKeyAsHex,
+                    isLocal: true,
+                    avatar: item.avatar,
+                }
+            })
         const profiles: NextIDPersonaBindingsWithIdentifier[] =
             searchResult ?
                 searchResult

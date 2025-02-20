@@ -1,16 +1,16 @@
 /* eslint-disable react-compiler/react-compiler */
-import { memo, useContext, useEffect } from 'react'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { Box, Link, Typography, type Theme } from '@mui/material'
 import { CopyButton, SocialAccountList, useUserTotalBalance } from '@masknet/shared'
 import { MaskLightTheme, MaskThemeProvider, makeStyles } from '@masknet/theme'
 import { ScopedDomainsContainer } from '@masknet/web3-hooks-base'
-import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { EVMUtils } from '@masknet/web3-providers'
-import { PluginHeader } from './PluginHeader.js'
+import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
+import { Box, Link, Typography, type Theme } from '@mui/material'
+import { memo, useContext, useEffect } from 'react'
 import { SuffixToChainIconMap, SuffixToChainIdMap } from '../constants.js'
 import { ENSContext, ENSProvider, type SearchResultInspectorProps } from './context.js'
-import { Trans } from '@lingui/react/macro'
+import { PluginHeader } from './PluginHeader.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -78,7 +78,7 @@ const useStyles = makeStyles()((theme) => {
 
 export const SearchResultInspectorContent = memo(function SearchResultInspectorContent() {
     const { classes } = useStyles()
-    const { reversedAddress, nextIdBindings, domain } = useContext(ENSContext)
+    const { reversedAddress, web3bioProfiles, domain } = useContext(ENSContext)
     const suffix = domain ? domain.split('.').pop()! : undefined
     const ChainIcon = suffix ? (SuffixToChainIconMap[suffix] ?? Icons.ETH) : null
 
@@ -138,7 +138,7 @@ export const SearchResultInspectorContent = memo(function SearchResultInspectorC
                                 </Trans>
                             </div>
                         :   null}
-                        <SocialAccountList nextIdBindings={nextIdBindings} />
+                        <SocialAccountList web3bioProfiles={web3bioProfiles} />
                     </div>
                 </section>
             </Box>

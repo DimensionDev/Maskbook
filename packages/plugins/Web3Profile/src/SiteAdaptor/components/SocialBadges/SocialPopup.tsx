@@ -1,13 +1,13 @@
 import { isEqual, sortBy, uniqBy } from 'lodash-es'
 import { memo, useEffect, useRef, useState } from 'react'
 import { ShadowRootPopper, makeStyles } from '@masknet/theme'
-import { NextIDProof } from '@masknet/web3-providers'
+import { Web3Bio } from '@masknet/web3-providers'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { Fade, List } from '@mui/material'
 import { emitter } from '../../emitter.js'
 import { LensList } from './LensList.js'
 import { FarcasterList } from './FarcasterList.js'
-import { NextIdLensToFireflyLens } from '../../../utils.js'
+import { Web3BioProfileToFireflyLens } from '../../../utils.js'
 import { useControlSocialPopup } from '../../hooks/useControlSocialPopup.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -55,12 +55,15 @@ export const SocialPopup = memo(function SocialPopup() {
             setAnchorEl(popupAnchorEl)
             anchorElRef.current = popupAnchorEl
             if (lensAccounts[0]?.handle) {
-                const accounts = await NextIDProof.queryAllLens(lensAccounts[0].handle)
+                const accounts = await Web3Bio.getAllLens(lensAccounts[0].handle)
                 if (!accounts.length) return
                 setLensAccounts((oldAccounts) => {
                     if (accounts.length <= oldAccounts.length) return oldAccounts
-                    const merged = uniqBy([...oldAccounts, ...accounts.map(NextIdLensToFireflyLens)], (x) => x.handle)
-                    return sortBy(merged, [(x) => -accounts.findIndex((y) => x.handle === y.handle)])
+                    const merged = uniqBy(
+                        [...oldAccounts, ...accounts.map(Web3BioProfileToFireflyLens)],
+                        (x) => x.handle,
+                    )
+                    return sortBy(merged, [(x) => -accounts.findIndex((y) => x.handle === y.identity)])
                 })
             }
         })

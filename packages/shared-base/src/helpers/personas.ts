@@ -21,7 +21,7 @@ export const MAX_PERSONA_LIMIT = 10
 export const MAX_PERSONA_NAME_LENGTH = 12
 
 export const formatPersonaName = (nickname?: string) => {
-    if (!nickname) return ''
+    if (typeof nickname !== 'string') return ''
     if (nickname.length < MAX_PERSONA_NAME_LENGTH) return nickname
 
     return `${nickname.slice(0, 12)}...`

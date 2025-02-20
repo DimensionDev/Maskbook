@@ -103,7 +103,7 @@ export const ContactCard = memo<ContactCardProps>(function ContactCard({
                 profile: profileIdentifier,
             }
         }
-    }, [profiles, nextId, rawPublicKey])
+    }, [nextId, rawPublicKey])
 
     const handleAddFriend = useCallback(async () => {
         if (!friendInfo || !currentPersona) return
