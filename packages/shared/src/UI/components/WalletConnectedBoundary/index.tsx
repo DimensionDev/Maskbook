@@ -6,10 +6,9 @@ import {
     useNativeTokenBalance,
     useRiskWarningApproved,
     useWallet,
+    useSmartPayChainId,
 } from '@masknet/web3-hooks-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { useAsync } from 'react-use'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { SelectProviderModal, WalletRiskWarningModal } from '../../modals/modals.js'
 import { Trans } from '@lingui/react/macro'
@@ -37,7 +36,7 @@ export function WalletConnectedBoundary(props: WalletConnectedBoundaryProps) {
     const { pluginID } = useNetworkContext()
     const { account, chainId: chainIdValid } = useChainContext({ chainId: expectedChainId })
     const wallet = useWallet()
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const smartPayChainId = useSmartPayChainId()
 
     const nativeTokenBalance = useNativeTokenBalance(undefined, {
         chainId: chainIdValid,

@@ -38,13 +38,16 @@ export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>
     })
 
     // #region paymaster ratio
-    const { value: currencyRatio, loading } = useAsync(async () => {
-        const chainId = await SmartPayBundler.getSupportedChainId()
-        const depositPaymaster = new DepositPaymaster(chainId)
-        const ratio = await depositPaymaster.getRatio()
+    const { data: currencyRatio, isLoading: loading } = useQuery({
+        queryKey: ['currency-ratio', chainId],
+        queryFn: async () => {
+            const chainId = await SmartPayBundler.getSupportedChainId()
+            const depositPaymaster = new DepositPaymaster(chainId)
+            const ratio = await depositPaymaster.getRatio()
 
-        return ratio
-    }, [])
+            return ratio
+        },
+    })
     // #endregion
 
     const gasFee = useMemo(() => {

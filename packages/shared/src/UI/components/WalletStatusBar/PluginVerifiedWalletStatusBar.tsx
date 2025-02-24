@@ -1,32 +1,32 @@
-import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
-import { first, omit } from 'lodash-es'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { makeStyles, MaskColorVar } from '@masknet/theme'
-import { SmartPayBundler } from '@masknet/web3-providers'
-import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
 import { type BindingProof, type NetworkPluginID, Sniffings } from '@masknet/shared-base'
+import { makeStyles, MaskColorVar } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import {
+    useAccount,
     useChainContext,
+    useChainId,
+    useDefaultChainId,
     useNetworkContext,
     useNetworkDescriptor,
     useProviderDescriptor,
-    useDefaultChainId,
     useRecentTransactions,
+    useSmartPayChainId,
     useWallets,
-    useAccount,
-    useChainId,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
+import { isSameAddress, resolveNextID_NetworkPluginID, TransactionStatusType } from '@masknet/web3-shared-base'
+import { alpha, Box, Button, Divider, MenuItem, Typography } from '@mui/material'
+import { first, omit } from 'lodash-es'
+import { memo, type PropsWithChildren, useCallback, useMemo, useState } from 'react'
+import { useUpdateEffect } from 'react-use'
+import { SelectProviderModal, useMenuConfig, WalletStatusModal } from '../../../index.js'
 import { Action } from './Action.js'
-import type { WalletDescriptionProps } from './WalletDescription.js'
 import { useWalletName } from './hooks/useWalletName.js'
+import type { WalletDescriptionProps } from './WalletDescription.js'
 import { WalletDescription } from './WalletDescription.js'
 import { WalletMenuItem } from './WalletMenuItem.js'
-import { SelectProviderModal, WalletStatusModal, useMenuConfig } from '../../../index.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -80,7 +80,7 @@ export const PluginVerifiedWalletStatusBar = memo<PluginVerifiedWalletStatusBarP
         const allWallets = useWallets()
         const { pluginID: currentPluginID } = useNetworkContext()
         const isSmartPay = !!allWallets.find((x) => isSameAddress(x.address, account) && x.owner)
-        const { value: smartPaySupportChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+        const smartPaySupportChainId = useSmartPayChainId()
 
         // exclude current account
         const wallets = verifiedWallets.filter((x) => !isSameAddress(x.identity, account))

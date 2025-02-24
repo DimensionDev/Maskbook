@@ -1,3 +1,6 @@
+import { msg, select } from '@lingui/core/macro'
+import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { ChainBoundary, InjectedDialog, PluginWalletStatusBar, TransactionConfirmModal } from '@masknet/shared'
 import { NetworkPluginID, getSiteType, pluginIDsSettings } from '@masknet/shared-base'
@@ -9,25 +12,22 @@ import {
     useNetworkContext,
     useNonFungibleAsset,
     useReverseAddress,
+    useSmartPayChainId,
     useWallet,
 } from '@masknet/web3-hooks-base'
-import { SmartPayBundler } from '@masknet/web3-providers'
 import { TokenType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { TabContext, TabPanel } from '@mui/lab'
 import { DialogContent, Tab } from '@mui/material'
 import { useCallback, useMemo } from 'react'
-import { useAsync, useUpdateEffect } from 'react-use'
+import { useUpdateEffect } from 'react-use'
 import { TargetRuntimeContext } from '../contexts/TargetRuntimeContext.js'
 import { useTip } from '../contexts/index.js'
 import { NFTSection } from './NFTSection/index.js'
 import { NetworkSection } from './NetworkSection/index.js'
 import { RecipientSection } from './RecipientSection/index.js'
 import { TokenSection } from './TokenSection/index.js'
-import { msg, select } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
 
 const useStyles = makeStyles()((theme) => ({
     dialog: {
@@ -159,7 +159,7 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
 
     const pluginId = site ? pluginIDs[site] : NetworkPluginID.PLUGIN_EVM
 
-    const { value: smartPayChainId } = useAsync(async () => SmartPayBundler.getSupportedChainId(), [])
+    const smartPayChainId = useSmartPayChainId()
 
     const { setTargetChainId } = TargetRuntimeContext.useContainer()
 
