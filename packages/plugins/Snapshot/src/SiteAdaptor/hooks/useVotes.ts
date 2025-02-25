@@ -36,7 +36,7 @@ export function useVotes(identifier: ProposalIdentifier, account?: string) {
                     :   undefined,
                 address: v.voter,
                 authorIpfsHash: v.ipfs ?? v.id,
-                balance: sumBy(scores, (score) => score[v.voter.toLowerCase()] ?? 0),
+                balance: v.vp || sumBy(scores, (score) => score[v.voter.toLowerCase()] ?? 0),
                 scores: scores.map((score) => score[v.voter.toLowerCase()] || 0),
                 strategySymbol: proposal.space.symbol ?? strategies[0].params.symbol,
                 timestamp: v.created,

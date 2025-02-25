@@ -22,6 +22,7 @@ import { ProposalTab } from './ProposalTab.js'
 import { VotingDialog } from './VotingDialog.js'
 import { usePower } from './hooks/usePower.js'
 import { useProposal } from './hooks/useProposal.js'
+import { formatSpaceId } from './helpers.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -149,7 +150,7 @@ export function Snapshot() {
                                         by
                                     </Typography>
                                     <Typography fontSize={14} fontWeight="700">
-                                        {proposal.space.id}
+                                        {formatSpaceId(proposal.space.id)}
                                     </Typography>
                                 </Box>
                             </Box>

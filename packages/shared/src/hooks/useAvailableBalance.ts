@@ -1,5 +1,3 @@
-import { useMemo } from 'react'
-import { BigNumber } from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
@@ -12,11 +10,14 @@ import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import { isGreaterThan, isSameAddress, toFixed, ZERO } from '@masknet/web3-shared-base'
 import {
     type ChainId,
+    formatEtherToWei,
     type GasConfig,
     GasEditor,
     isNativeTokenAddress,
-    formatEtherToWei,
 } from '@masknet/web3-shared-evm'
+import { useQuery } from '@tanstack/react-query'
+import { BigNumber } from 'bignumber.js'
+import { useMemo } from 'react'
 
 export function useAvailableBalance<T extends NetworkPluginID = NetworkPluginID>(
     pluginID: T,

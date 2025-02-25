@@ -106,6 +106,10 @@ msgstr "自分の投票"
 msgid "No power"
 msgstr "パワーなし"
 
+#: src/SiteAdaptor/VotesCard.tsx
+msgid "No votes"
+msgstr ""
+
 #. placeholder {0}: formatWithCommas(snapshot)
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Oops, it seems you don't have any voting power at block {0}. <0>Learn more</0>"

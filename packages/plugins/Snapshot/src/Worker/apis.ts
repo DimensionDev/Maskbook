@@ -1,10 +1,11 @@
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { SNAPSHOT_RELAY_URL, SNAPSHOT_SEQ_URL } from '../constants.js'
-import type { Proposal, Strategy, VoteResult } from '../types.js'
+import type { HubProposal, Proposal, RawVote, VoteResult } from '../types.js'
+import { formatBoxProposal, fetchProposalFromBoxApi, fetchVotesFromBox, formatBoxVote } from './box.js'
 
 export async function fetchProposal(id: string) {
-    const { proposal } = await fetchProposalFromGraphql(id)
-    const { votes } = await fetchVotesFromGraphql(id, 500, 0, proposal.space.id)
+    const proposal = await fetchProposalFromGraphql(id)
+    const votes = await fetchVotesFromGraphql(id, 500, 0, proposal.space.id)
     const now = Date.now()
     const isStart = proposal.start * 1000 < now
     const isEnd = proposal.end * 1000 < now
@@ -20,6 +21,10 @@ export async function fetchProposal(id: string) {
 }
 
 async function fetchVotesFromGraphql(id: string, first: number, skip: number, space: string) {
+    if (id.includes('/')) {
+        const res = await fetchVotesFromBox(id.split('/').pop()!, first, skip, space)
+        return res.votes.map(formatBoxVote)
+    }
     const response = await fetch('https://hub.snapshot.org/graphql', {
         method: 'POST',
         headers: {
@@ -65,24 +70,21 @@ async function fetchVotesFromGraphql(id: string, first: number, skip: number, sp
         }),
     })
 
-    const { data }: Res = await response.json()
-
     interface Res {
         data: {
-            votes: Array<{
-                ipfs: string
-                choice: number | { [choiceIndex: number]: number } | number[]
-                created: number
-                vp: number
-                vp_by_strategy: number[]
-            }>
+            votes: RawVote[]
         }
     }
+    const res: Res = await response.json()
 
-    return data
+    return res.data.votes
 }
 
-async function fetchProposalFromGraphql(id: string) {
+async function fetchProposalFromGraphql(id: string): Promise<HubProposal> {
+    if (id.includes('/')) {
+        const proposal = await fetchProposalFromBoxApi(id)
+        return formatBoxProposal(proposal.proposal)
+    }
     const response = await fetch('https://hub.snapshot.org/graphql', {
         method: 'POST',
         headers: {
@@ -91,43 +93,45 @@ async function fetchProposalFromGraphql(id: string) {
         },
         body: JSON.stringify({
             operationName: 'Proposal',
-            query: `query Proposal($id: String!) {
-                proposal(id: $id) {
-                    id
-                    ipfs
-                    title
-                    body
-                    discussion
-                    choices
-                    start
-                    end
-                    snapshot
-                    state
-                    author
-                    created
-                    plugins
-                    symbol
-                    scores
-                    scores_total
-                    scores_by_strategy
-                    network
-                    type
-                    votes
-                    privacy,
-                    strategies {
-                      name
-                      params
-                      network
-                      __typename
-                    }
-                    space {
-                      id
-                      name
-                      symbol
-                      avatar
+            query: /* GraphQL */ `
+                query Proposal($id: String!) {
+                    proposal(id: $id) {
+                        id
+                        ipfs
+                        title
+                        body
+                        discussion
+                        choices
+                        start
+                        end
+                        snapshot
+                        state
+                        author
+                        created
+                        plugins
+                        symbol
+                        scores
+                        scores_total
+                        scores_by_strategy
+                        network
+                        type
+                        votes
+                        privacy
+                        strategies {
+                            name
+                            params
+                            network
+                            __typename
+                        }
+                        space {
+                            id
+                            name
+                            symbol
+                            avatar
+                        }
                     }
                 }
-            }`,
+            `,
             variables: {
                 id,
             },
@@ -135,40 +139,12 @@ async function fetchProposalFromGraphql(id: string) {
     })
     interface Res {
         data: {
-            proposal: {
-                author: string
-                body: string
-                discussion: string
-                votes: number
-                choices: string[]
-                created: number
-                end: number
-                start: number
-                symbol: string
-                scores_total: number
-                scores: number[]
-                scores_by_strategy: number[][]
-                id: string
-                ipfs: string
-                snapshot: string
-                space: {
-                    id: string
-                    name: string
-                    symbol: string
-                    avatar: string
-                }
-                state: string
-                title: string
-                type: string
-                network: string
-                privacy: string
-                strategies: Strategy[]
-            }
+            proposal: HubProposal
         }
     }
 
-    const { data }: Res = await response.json()
-    return data
+    const res: Res = await response.json()
+    return res.data.proposal
 }
 
 export async function vote(body: string, useRelay: boolean) {

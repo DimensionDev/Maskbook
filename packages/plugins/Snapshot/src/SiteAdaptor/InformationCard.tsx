@@ -5,7 +5,6 @@ import { formatWithCommas } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { EVMExplorerResolver } from '@masknet/web3-providers'
 import { resolveIPFS_URL, resolveResourceURL } from '@masknet/web3-shared-base'
-import { formatEthereumAddress } from '@masknet/web3-shared-evm'
 import { Avatar, Box, Link, Typography } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { useContext, type PropsWithChildren, type ReactNode } from 'react'
@@ -14,6 +13,7 @@ import { SNAPSHOT_IPFS } from '../constants.js'
 import { SnapshotContext } from '../context.js'
 import { useProposal } from './hooks/useProposal.js'
 import { SnapshotCard } from './SnapshotCard.js'
+import { formatLongHex, formatSpaceId } from './helpers.js'
 
 interface InfoFieldProps extends withClasses<'field'>, PropsWithChildren {
     title: ReactNode
@@ -78,7 +78,7 @@ export function InformationCard() {
     const proposal = useProposal(identifier.id)
     const { start, end, snapshot, strategies, chainId } = proposal
     const authorProfile = `https://snapshot.box/#/${identifier.space}/profile/${proposal.address}`
-    const link = `https://snapshot.box/#/${identifier.space}/proposal/${identifier.id}`
+    const link = `https://snapshot.box/#/${identifier.space}/proposal/${identifier.id.split('/').pop()}`
     return (
         <SnapshotCard title={<Trans>Information</Trans>}>
             <div className={classes.infos}>
@@ -108,20 +108,22 @@ export function InformationCard() {
                             :   <EthereumBlockie address={proposal.address} />}
                         </div>
                         <Typography fontSize={14}>
-                            {proposal.space.id ?? formatEthereumAddress(proposal.address, 4)}
+                            {proposal.space.id ? formatSpaceId(proposal.space.id) : formatLongHex(proposal.address)}
                         </Typography>
                     </Link>
                 </InfoField>
-                <InfoField title={<Trans>IPFS</Trans>} classes={{ field: classes.infoColor }}>
-                    <Link
-                        className={classes.link}
-                        target="_blank"
-                        rel="noopener"
-                        href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
-                        <Typography fontSize={14}>#{identifier.id.slice(0, 7)}</Typography>
-                        <Icons.LinkOut size={16} sx={{ paddingLeft: 1 }} />
-                    </Link>
-                </InfoField>
+                {proposal.ipfs ?
+                    <InfoField title={<Trans>IPFS</Trans>} classes={{ field: classes.infoColor }}>
+                        <Link
+                            className={classes.link}
+                            target="_blank"
+                            rel="noopener"
+                            href={resolveResourceURL(urlcat(SNAPSHOT_IPFS, proposal.ipfs))}>
+                            <Typography fontSize={14}>#{identifier.id.slice(0, 7)}</Typography>
+                            <Icons.LinkOut size={16} sx={{ paddingLeft: 1 }} />
+                        </Link>
+                    </InfoField>
+                :   null}
                 <InfoField title={<Trans>Start date</Trans>} classes={{ field: classes.infoColor }}>
                     <Typography fontSize={14} fontWeight={400}>
                         {formatDateTime(start * 1000, 'MMM dd, yyyy, hh:mm a')}

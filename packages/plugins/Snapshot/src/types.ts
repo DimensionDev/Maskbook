@@ -10,57 +10,62 @@ export interface ProposalIdentifier {
     /** the identifier of proposal */
     id: string
 }
-interface RawVote {
+export interface RawVote {
     /**
      * There're two sorts of vote,
      * for multiple choice vote, each choice can be assigned to a different weight.
      */
     choice: number | { [choiceIndex: number]: number } | number[]
     created: number
-    voter: string
-    ipfs: string
     id: string
+    ipfs: string
+    voter: string
     vp: number
     vp_by_strategy: number[]
 }
 
-export interface Proposal {
+export interface Proposal extends Omit<HubProposal, 'votes'> {
     address: string
-    author: string
-    // forum link
-    discussion: string
-    // number of voters
-    voterAmounts: number
-    symbol: string
-    scores_total: number
-    scores: number[]
-    scores_by_strategy: number[][]
+    authorAvatar?: string
+    authorName?: string
+    chainId: ChainId
+    isEnd: boolean
+    isStart: boolean
     msg: string
-    title: string
+    status: string
     version: string
+    voterAmounts: number // number of voters
+    votes: RawVote[]
+}
+
+export interface HubProposal {
+    author: string
+    body: string
+    choices: string[]
+    created: number
+    discussion: string
     end: number
+    id: string
     ipfs: string
+    network: string
+    privacy: string
+    scores: number[]
+    scores_by_strategy: number[]
+    scores_total: number
+    snapshot: string
+    start: number
+    state: string
+    strategies: Strategy[]
+    symbol: string
+    title: string
+    type: string
+    votes: number
     space: {
         id: string
         name: string
         symbol: string
         avatar: string
     }
-    start: number
-    snapshot: string
-    body: string
-    choices: string[]
-    isStart: boolean
-    isEnd: boolean
-    status: string
-    privacy: string
-    strategies: Strategy[]
-    authorName?: string
-    authorAvatar?: string
-    chainId: ChainId
-    network: string
-    type: string
-    votes: RawVote[]
 }
 
 /**
