@@ -190,7 +190,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const { loading: connecting } = useConnectPersona()
 
     const [, handleVerifyNextID] = useVerifyNextID()
-    const [{ loading: verifying, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
+    const [{ loading: verifying, error, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
         if (!userId) return
         if (!personaInfo) return
         if (!nextIdPlatform) return
@@ -353,7 +353,9 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
                             loading={verifying}
                             onClick={onVerify}>
                             <Icons.Send size={18} className={classes.send} />
-                            <Trans>Send</Trans>
+                            {error ?
+                                <Trans>Resend</Trans>
+                            :   <Trans>Send</Trans>}
                         </ActionButton>
                     }
                 </Box>

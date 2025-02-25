@@ -175,7 +175,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
         return !myIdentity?.identifier || !userId ? false : myIdentity.identifier.userId !== userId
     }, [myIdentity, userId])
 
-    const [{ loading: verifying, value: verifiedSuccess }, onVerify] = useAsyncFn(async () => {
+    const [{ loading: verifying, error }, onVerify] = useAsyncFn(async () => {
         const post = content?.post
         if (!personaInfo || !platform || !post) return
 
@@ -231,7 +231,7 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                             </Box>
                         </Box>
                     </Box>
-                    {!platform || verifiedSuccess ?
+                    {!platform ?
                         <Typography className={classes.text}>
                             {platform ?
                                 <Trans>
@@ -294,7 +294,9 @@ export function VerifyNextIDDialog({ onSentPost, onClose, personaInfo }: VerifyN
                         loading={verifying}
                         onClick={onVerify}>
                         <Icons.Send size={18} className={classes.send} />
-                        <Trans>Send</Trans>
+                        {error ?
+                            <Trans>Resend</Trans>
+                        :   <Trans>Send</Trans>}
                     </ActionButton>
                 </Box>
             </div>

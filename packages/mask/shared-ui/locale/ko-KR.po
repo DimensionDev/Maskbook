@@ -2292,6 +2292,7 @@ msgstr "소스 요청"
 msgid "Reselect"
 msgstr "다시 선택"
 
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Resend"

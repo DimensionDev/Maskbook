@@ -2287,6 +2287,7 @@ msgstr ""
 msgid "Reselect"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Resend"

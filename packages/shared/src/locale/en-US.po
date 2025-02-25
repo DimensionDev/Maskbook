@@ -1170,6 +1170,10 @@ msgstr ""
 msgid "Requesting Connection"
 msgstr ""
 
+#: src/UI/components/VerifyNextIDDialog/index.tsx
+msgid "Resend"
+msgstr ""
+
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Reset"
 msgstr ""
