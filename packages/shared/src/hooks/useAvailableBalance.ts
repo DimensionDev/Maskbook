@@ -1,5 +1,4 @@
 import { useMemo } from 'react'
-import { useAsync } from 'react-use'
 import { BigNumber } from 'bignumber.js'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
