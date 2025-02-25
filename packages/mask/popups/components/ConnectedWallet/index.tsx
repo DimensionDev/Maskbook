@@ -1,6 +1,16 @@
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { ConfirmDialog, FormattedAddress, ImageIcon, PersonaContext, ProgressiveText } from '@masknet/shared'
-import { MaskMessages, NetworkPluginID, NextIDAction, PopupModalRoutes, SignType } from '@masknet/shared-base'
+import {
+    MaskMessages,
+    NetworkPluginID,
+    NextIDAction,
+    PopupModalRoutes,
+    SignType,
+    type BindingProof,
+    type PersonaInformation,
+} from '@masknet/shared-base'
 import { makeStyles, usePopupCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworkDescriptor, useWallets, useWeb3State } from '@masknet/web3-hooks-base'
 import { EVMExplorerResolver, NextIDProof } from '@masknet/web3-providers'
@@ -9,11 +19,8 @@ import { ChainId, formatDomainName, formatEthereumAddress } from '@masknet/web3-
 import { Box, Link, Typography, useTheme } from '@mui/material'
 import { useQueries } from '@tanstack/react-query'
 import { memo, useCallback } from 'react'
-import Services from '#services'
-import type { ConnectedWalletInfo } from '../../pages/Personas/type.js'
-import { useModalNavigate } from '../ActionModal/index.js'
 import { useVerifiedWallets } from '../../hooks/index.js'
-import { Trans } from '@lingui/react/macro'
+import { useModalNavigate } from '../ActionModal/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     walletList: {
@@ -85,9 +92,9 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
     const wallets = useVerifiedWallets(proofs)
 
     const queries = useQueries({
-        queries: wallets.map((wallet, index) => ({
+        queries: wallets.map((wallet) => ({
             enabled: !!NameService,
-            queryKey: ['persona-connected-wallet', wallet.identity, index],
+            queryKey: ['persona-connected-wallet', wallet.identity],
             queryFn: async () => {
                 const domain = await NameService?.reverse?.(wallet.identity)
                 if (domain) return domain
@@ -100,51 +107,46 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
     // TODO: remove this after next dot id support multiple chain
     const networkDescriptor = useNetworkDescriptor(NetworkPluginID.PLUGIN_EVM, ChainId.Mainnet)
 
-    const handleConfirmRelease = useCallback(
-        async (wallet?: ConnectedWalletInfo) => {
-            try {
-                if (!currentPersona?.identifier.publicKeyAsHex || !wallet) return
+    const handleConfirmDisconnect = useCallback(async (wallet: BindingProof, persona: PersonaInformation) => {
+        try {
+            const result = await NextIDProof.createPersonaPayload(
+                persona.identifier.publicKeyAsHex,
+                NextIDAction.Delete,
+                wallet.identity,
+                wallet.platform,
+            )
 
-                const result = await NextIDProof.createPersonaPayload(
-                    currentPersona.identifier.publicKeyAsHex,
-                    NextIDAction.Delete,
-                    wallet.identity,
-                    wallet.platform,
-                )
+            if (!result) return
 
-                if (!result) return
+            const signature = await Services.Identity.signWithPersona(
+                SignType.Message,
+                result.signPayload,
+                persona.identifier,
+                location.origin,
+                true,
+            )
 
-                const signature = await Services.Identity.signWithPersona(
-                    SignType.Message,
-                    result.signPayload,
-                    currentPersona.identifier,
-                    location.origin,
-                    true,
-                )
+            if (!signature) return
 
-                if (!signature) return
+            await NextIDProof.bindProof(
+                result.uuid,
+                persona.identifier.publicKeyAsHex,
+                NextIDAction.Delete,
+                wallet.platform,
+                wallet.identity,
+                result.createdAt,
+                { signature },
+            )
 
-                await NextIDProof.bindProof(
-                    result.uuid,
-                    currentPersona.identifier.publicKeyAsHex,
-                    NextIDAction.Delete,
-                    wallet.platform,
-                    wallet.identity,
-                    result.createdAt,
-                    { signature },
-                )
-
-                // Broadcast updates.
-                MaskMessages.events.ownProofChanged.sendToAll()
-                showSnackbar(<Trans>Wallet disconnected</Trans>)
-            } catch {
-                showSnackbar(<Trans>Failed to disconnect wallet</Trans>, {
-                    variant: 'error',
-                })
-            }
-        },
-        [currentPersona],
-    )
+            // Broadcast updates.
+            MaskMessages.events.ownProofChanged.sendToAll()
+            showSnackbar(<Trans>Wallet disconnected</Trans>)
+        } catch {
+            showSnackbar(<Trans>Failed to disconnect wallet</Trans>, {
+                variant: 'error',
+            })
+        }
+    }, [])
 
     return (
         <Box className={classes.walletList}>
@@ -201,7 +203,7 @@ export const ConnectedWallet = memo(function ConnectedWallet() {
                                         </Trans>
                                     ),
                                 })
-                                if (confirmed) return handleConfirmRelease(wallet)
+                                if (confirmed) return handleConfirmDisconnect(wallet, currentPersona)
                             }}
                         />
                     </Box>

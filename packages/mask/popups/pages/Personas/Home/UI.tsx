@@ -1,6 +1,13 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { PopupHomeTabType, useParamTab } from '@masknet/shared'
-import { PopupModalRoutes, PopupRoutes, type EnhanceableSite, type ProfileAccount } from '@masknet/shared-base'
+import {
+    PopupModalRoutes,
+    PopupRoutes,
+    type BindingProof,
+    type EnhanceableSite,
+    type ProfileAccount,
+} from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext, TabPanel } from '@mui/lab'
 import { Box, Tab, Typography, useTheme } from '@mui/material'
@@ -12,8 +19,6 @@ import { PersonaPublicKey } from '../../../components/PersonaPublicKey/index.js'
 import { SelectProvider } from '../../../components/SelectProvider/index.js'
 import { SocialAccounts } from '../../../components/SocialAccounts/index.js'
 import { useModalNavigate } from '../../../components/index.js'
-import type { ConnectedWalletInfo } from '../type.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -171,7 +176,7 @@ interface PersonaHomeUIProps {
     networks: EnhanceableSite[]
     onConnect: (networkIdentifier: EnhanceableSite) => void
     onAccountClick: (account: ProfileAccount) => void
-    bindingWallets?: ConnectedWalletInfo[]
+    bindingWallets?: BindingProof[]
     hasPaymentPassword?: boolean
 }
 
