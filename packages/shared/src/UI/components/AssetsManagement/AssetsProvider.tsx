@@ -40,7 +40,6 @@ interface AssetsContextOptions {
     multiple?: boolean
     selectedAsset?: Web3Helper.NonFungibleAssetAll
     selectedAssets?: Web3Helper.NonFungibleAssetAll[]
-    onItemClick?(asset: Web3Helper.NonFungibleAssetAll): void
     /**
      * For example, NFT redpacket allows 255 at most.
      * Since only NFT redpacket has such limit, we set it as default
@@ -86,13 +85,7 @@ export interface AssetsProviderProps
     extends PropsWithChildren,
         Pick<
             AssetsContextOptions,
-            | 'selectMode'
-            | 'multiple'
-            | 'selectedAsset'
-            | 'selectedAssets'
-            | 'maxSelection'
-            | 'maxSelectionDescription'
-            | 'onItemClick'
+            'selectMode' | 'multiple' | 'selectedAsset' | 'selectedAssets' | 'maxSelection' | 'maxSelectionDescription'
         > {
     /** blocked ids in format of `${chainid}.${address}.${tokenId}` */
     blockedIds?: string[]
@@ -106,7 +99,6 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
     maxSelectionDescription,
     selectedAsset,
     selectedAssets,
-    onItemClick,
 }) {
     const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
     const indicatorMapRef = useRef<Map<string, PageIndicator | undefined>>(new Map())
@@ -304,7 +296,6 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
             maxSelectionDescription,
             searchKeyword,
             setSearchKeyword,
-            onItemClick,
         }
     }, [
         getAssets,
@@ -321,7 +312,6 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
         maxSelectionDescription,
         selectedAssets,
         selectedAsset,
-        onItemClick,
     ])
 
     return <AssetsContext value={contextValue}>{children}</AssetsContext>

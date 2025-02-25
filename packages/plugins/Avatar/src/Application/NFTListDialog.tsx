@@ -196,8 +196,7 @@ export function NFTListDialog() {
                         pluginID={selectedPluginId}
                         account={targetAccount}
                         selectMode
-                        selectedAsset={selectedToken}
-                        onItemClick={setSelectedToken}>
+                        selectedAsset={selectedToken}>
                         <CollectionList
                             height={479}
                             gridProps={gridProps}
@@ -205,6 +204,7 @@ export function NFTListDialog() {
                             additionalAssets={tokens}
                             pendingAdditionalAssetCount={pendingTokenCount}
                             onChainChange={setAssetChainId as (chainId?: Web3Helper.ChainIdAll) => void}
+                            onItemClick={setSelectedToken}
                         />
                     </UserAssetsProvider>
                 :   <EmptyStatus width="100%" height={479}>

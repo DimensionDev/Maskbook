@@ -89,6 +89,7 @@ export interface CollectionProps
     onExpand?(id: string): void
     /** Invoke when component first renders */
     onInitialRender?(collection: Web3Helper.NonFungibleCollectionAll): void
+    onItemClick?(asset: Web3Helper.NonFungibleAssetAll): void
 }
 
 /**
@@ -109,6 +110,7 @@ export const Collection = memo(
         onActionClick,
         onExpand,
         onInitialRender,
+        onItemClick,
         ...rest
     }: CollectionProps) => {
         const { compact, containerRef } = useCompactDetection()
@@ -145,13 +147,14 @@ export const Collection = memo(
                     disableName={expanded}
                     actionLabel={<Trans>Send</Trans>}
                     disableAction={disableAction}
-                    onActionClick={onActionClick}
                     verifiedBy={verifiedBy}
                     isSelected={
                         multiple ?
                             selectedAssets?.some((a) => isSameNFT(pluginID, asset, a))
                         :   isSameNFT(pluginID, asset, selectedAsset)
                     }
+                    onActionClick={onActionClick}
+                    onItemClick={onItemClick}
                 />
             ))
             return <>{renderAssets}</>

@@ -57,6 +57,7 @@ export interface CollectibleCardProps extends HTMLProps<HTMLDivElement> {
     disableNetworkIcon?: boolean
     /** disable inspect NFT details */
     disableInspect?: boolean
+    selectable?: boolean
     isSelected?: boolean
     hideIndicator?: boolean
 }
@@ -68,6 +69,7 @@ export const CollectibleCard = memo(
         asset,
         disableNetworkIcon,
         disableInspect,
+        selectable,
         isSelected,
         hideIndicator,
         ...rest
@@ -75,7 +77,7 @@ export const CollectibleCard = memo(
         const { classes, cx } = useStyles()
         const theme = useTheme()
         const { selectMode, multiple } = useUserAssets()
-        const showIndicator = selectMode && (multiple ? !hideIndicator : isSelected)
+        const showIndicator = (selectMode || selectable) && (multiple ? !hideIndicator : isSelected)
 
         const icon =
             pluginID && !disableNetworkIcon ? <NetworkIcon pluginID={pluginID} chainId={asset.chainId} /> : null

@@ -82,8 +82,8 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
                                 if (disabled) return
                                 onItemClick(!selected ? x : undefined)
                             }}
+                            selectable
                             isSelected={isSameNFT(pluginID, x, selected)}
-                            useRadio
                         />
                     )
                 })

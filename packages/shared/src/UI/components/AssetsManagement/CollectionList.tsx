@@ -113,6 +113,7 @@ export interface CollectionListProps
     from?: 'web3Profile' | 'profileCard'
     onChainChange?: (chainId?: Web3Helper.ChainIdAll) => void
     onCollectionChange?: (collectionId: string | undefined) => void
+    onItemClick?: (asset: Web3Helper.NonFungibleAssetAll) => void
 }
 
 export const CollectionList = memo(function CollectionList({
@@ -125,10 +126,11 @@ export const CollectionList = memo(function CollectionList({
     disableWindowScroll,
     scrollElementRef,
     emptyText,
+    from,
     onActionClick,
     onChainChange,
     onCollectionChange,
-    from,
+    onItemClick,
     ...rest
 }: CollectionListProps) {
     const { classes, cx } = useStyles(gridProps, { props: rest })
@@ -283,6 +285,7 @@ export const CollectionList = memo(function CollectionList({
                                 disableAction={disableAction}
                                 onActionClick={onActionClick}
                                 onInitialRender={handleInitialRender}
+                                onItemClick={onItemClick}
                             />
                         </Box>
                     :   <Box className={classes.grid}>
@@ -308,6 +311,7 @@ export const CollectionList = memo(function CollectionList({
                                         :   isSameNFT(pluginID, asset, selectedAsset)
                                     }
                                     onActionClick={onActionClick}
+                                    onItemClick={onItemClick}
                                 />
                             ))}
                             {collections.map((collection) => {
@@ -326,6 +330,7 @@ export const CollectionList = memo(function CollectionList({
                                         onInitialRender={handleInitialRender}
                                         disableAction={disableAction}
                                         onActionClick={onActionClick}
+                                        onItemClick={onItemClick}
                                     />
                                 )
                             })}

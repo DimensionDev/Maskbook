@@ -61,11 +61,8 @@ const TabConfig: Plugin.SiteAdaptor.ProfileTab = {
             if (!socialAccount) return null
             return (
                 <Web3ContextProvider network={socialAccount.pluginID}>
-                    <UserAssetsProvider
-                        pluginID={socialAccount.pluginID}
-                        account={socialAccount.address}
-                        onItemClick={handleItemClick}>
-                        <CollectionList gridProps={gridProps} from="web3Profile" />
+                    <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
+                        <CollectionList gridProps={gridProps} from="web3Profile" onItemClick={handleItemClick} />
                     </UserAssetsProvider>
                 </Web3ContextProvider>
             )
@@ -124,16 +121,14 @@ const site: Plugin.SiteAdaptor.Definition = {
 
                     return (
                         <Web3ContextProvider network={socialAccount.pluginID}>
-                            <UserAssetsProvider
-                                pluginID={socialAccount.pluginID}
-                                account={socialAccount.address}
-                                onItemClick={handleItemClick}>
+                            <UserAssetsProvider pluginID={socialAccount.pluginID} account={socialAccount.address}>
                                 <CollectionList
                                     height={392}
                                     gridProps={gridProps}
                                     classes={{ sidebar: classes.sidebar }}
                                     disableWindowScroll
                                     from="profileCard"
+                                    onItemClick={handleItemClick}
                                 />
                             </UserAssetsProvider>
                         </Web3ContextProvider>
@@ -168,11 +163,13 @@ const site: Plugin.SiteAdaptor.Definition = {
                     return (
                         <Box style={{ minHeight: 300 }}>
                             <Web3ContextProvider network={result.pluginID}>
-                                <UserAssetsProvider
-                                    pluginID={result.pluginID}
-                                    account={socialAccount.address}
-                                    onItemClick={inspectCollectible}>
-                                    <CollectionList height={478} gridProps={gridProps} disableWindowScroll />
+                                <UserAssetsProvider pluginID={result.pluginID} account={socialAccount.address}>
+                                    <CollectionList
+                                        height={478}
+                                        gridProps={gridProps}
+                                        disableWindowScroll
+                                        onItemClick={inspectCollectible}
+                                    />
                                 </UserAssetsProvider>
                             </Web3ContextProvider>
                         </Box>

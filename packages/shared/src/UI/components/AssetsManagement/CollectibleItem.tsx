@@ -12,7 +12,6 @@ import {
 } from '@masknet/web3-shared-evm'
 import { Button, Skeleton, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, type HTMLProps, type ReactNode } from 'react'
-import { useUserAssets } from './AssetsProvider.js'
 import { CollectibleCard, type CollectibleCardProps } from './CollectibleCard.js'
 
 const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((theme, _, refs) => ({
@@ -127,13 +126,13 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
         disableAction = true,
         actionLabel,
         verifiedBy = EMPTY_LIST,
-        onActionClick,
         isSelected,
         hideIndicator,
+        onActionClick,
+        onItemClick,
         ...rest
     } = props
     const { classes, cx } = useStyles()
-    const { onItemClick } = useUserAssets()
     const name = asset.collection?.name ?? ''
     const popperProps = useBoundedPopperProps()
     const handleClick = useCallback(() => {
