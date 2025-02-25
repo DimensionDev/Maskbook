@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-24 04:49\n"
+"PO-Revision-Date: 2025-02-25 04:54\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -207,10 +207,9 @@ msgstr ""
 msgid "Balance"
 msgstr "余额"
 
-#. placeholder {0}: balance ? balance : '0'
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
-msgid "Balance: {0}"
-msgstr ""
+#~ msgid "Balance: {0}"
+#~ msgstr ""
 
 #: src/UI/components/TokenAmountPanel/index.tsx
 msgid "Balance: <0/>"
@@ -244,6 +243,7 @@ msgstr ""
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Cancel"
 msgstr "取消"
 
@@ -896,7 +896,7 @@ msgstr "编辑代币列表"
 
 #: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx
 #~ msgid "Manage Token Lists"
-#~ msgstr "编辑代币列表"
+#~ msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -1022,7 +1022,7 @@ msgstr "确定"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 #~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-#~ msgstr "仅支持 EVM 链、ETH、BNB 、Polygon、Arb、Op等。"
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
@@ -1057,7 +1057,7 @@ msgstr "身份"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 #~ msgid "Phantom only supports the Solana chain."
-#~ msgstr "Phantom 只支持Solana 链。"
+#~ msgstr ""
 
 #: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -1092,6 +1092,10 @@ msgstr ""
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoard.tsx
 msgid "Please create a persona for accessing Dapps."
 msgstr "请创建一个身份访问 Dapps。"
+
+#: src/UI/components/AssetsManagement/SelectionSection.tsx
+msgid "Please enter token contract address."
+msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
@@ -1205,6 +1209,11 @@ msgstr ""
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
 
+#: src/UI/components/AssetsManagement/SelectionSection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Search"
+msgstr ""
+
 #: src/UI/components/CountryCodePicker/index.tsx
 msgid "Search Area"
 msgstr "探索范围"
@@ -1226,9 +1235,13 @@ msgstr "选择代币"
 msgid "Select a token"
 msgstr "选择代币"
 
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Select All"
+msgstr ""
+
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
-msgid "Select an NFT"
-msgstr "请选择一个 NFT"
+#~ msgid "Select an NFT"
+#~ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
@@ -1327,7 +1340,7 @@ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 #~ msgid "This network is not supported yet."
-#~ msgstr "此网络尚未支持。"
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
@@ -1335,6 +1348,10 @@ msgstr "MATIC 代币用于支付与 Polygon Network 交互时支付的网络费�
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
+msgstr ""
+
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
+msgid "Token ID separated by comma, e.g. 1223,1224,"
 msgstr ""
 
 #: src/UI/components/AddCollectibles/index.tsx
@@ -1553,3 +1570,4 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
+
