@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-25 04:54\n"
+"PO-Revision-Date: 2025-02-26 03:48\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1174,6 +1174,10 @@ msgstr "crwdns35852:0crwdne35852:0"
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
 msgstr "crwdns31096:0crwdne31096:0"
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx
+msgid "Resend"
+msgstr "crwdns36869:0crwdne36869:0"
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Reset"
