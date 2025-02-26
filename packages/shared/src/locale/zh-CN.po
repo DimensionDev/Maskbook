@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-25 04:54\n"
+"PO-Revision-Date: 2025-02-26 03:48\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -1173,6 +1173,10 @@ msgstr ""
 
 #: src/UI/modals/ConnectWalletModal/index.tsx
 msgid "Requesting Connection"
+msgstr ""
+
+#: src/UI/components/VerifyNextIDDialog/index.tsx
+msgid "Resend"
 msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
