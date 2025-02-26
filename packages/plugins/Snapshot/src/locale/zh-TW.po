@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-02-26 05:04\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -104,6 +104,10 @@ msgstr ""
 #: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
 msgid "No power"
+msgstr ""
+
+#: src/SiteAdaptor/VotesCard.tsx
+msgid "No votes"
 msgstr ""
 
 #. placeholder {0}: formatWithCommas(snapshot)
@@ -208,3 +212,4 @@ msgstr ""
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
 msgstr ""
+
