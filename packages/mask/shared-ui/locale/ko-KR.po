@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-02-28 08:23\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -670,6 +670,10 @@ msgstr ""
 #: popups/pages/Wallet/ConnectedSites/index.tsx
 msgid "Connected sites"
 msgstr "연결된 사이트"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Connected successfully."
+msgstr ""
 
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
@@ -2292,6 +2296,7 @@ msgstr "소스 요청"
 msgid "Reselect"
 msgstr "다시 선택"
 
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Resend"
@@ -2416,6 +2421,10 @@ msgstr "월렛 선택"
 #: popups/components/TransactionPreview/index.tsx
 msgid "Send"
 msgstr "보내기"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Sent verification post successfully."
+msgstr ""
 
 #: popups/pages/Settings/index.tsx
 msgid "Service Agreement"
@@ -2892,6 +2901,10 @@ msgstr ""
 msgid "Try"
 msgstr "시도"
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Trying exploring more features powered by Mask Network."
+msgstr ""
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Two entered passwords are different."
 msgstr ""
@@ -3102,6 +3115,10 @@ msgstr "니모닉 단어를 적어두세요"
 msgid "Write down recovery phrase"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr ""
+
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "You have backed up your data."
 msgstr ""
@@ -3155,3 +3172,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on "
 msgstr ""
+
