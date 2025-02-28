@@ -666,6 +666,10 @@ msgstr ""
 msgid "Connected sites"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Connected successfully."
+msgstr ""
+
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
 msgstr ""
@@ -2413,6 +2417,10 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Sent verification post successfully."
+msgstr ""
+
 #: popups/pages/Settings/index.tsx
 msgid "Service Agreement"
 msgstr ""
@@ -2888,6 +2896,10 @@ msgstr ""
 msgid "Try"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Trying exploring more features powered by Mask Network."
+msgstr ""
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Two entered passwords are different."
 msgstr ""
@@ -3096,6 +3108,10 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Write down recovery phrase"
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
 msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx

@@ -168,6 +168,7 @@
         "QHcLEN": ["Connected"],
         "aFht5e": ["Connected ", ["0"], " with ", ["walletName"], "."],
         "LWJCIn": ["接続されたサイト"],
+        "0ZC72+": ["Connected successfully."],
         "ai3VNq": ["接続されたウォレット"],
         "cJv4Ca": ["サードパーティウォレットで接続がキャンセルされました。"],
         "Z8+FzC": ["Connecting your ", ["providerType"], " wallet"],
@@ -593,6 +594,7 @@
         "PI/VCJ": ["このサイトで使用するウォレットを選択してください。信頼しないウェブサイトに接続しないでください。"],
         "a1SmQh": ["ウォレットを選択"],
         "JlFcis": ["送信"],
+        "bnfo6T": ["Sent verification post successfully."],
         "9d/Qe4": ["サービス利用契約"],
         "IIVS5Z": ["新しい管理アカウントを設定"],
         "y49awp": ["NFT 写真を設定"],
@@ -742,6 +744,7 @@
         "66J/I3": ["トランザクション手数料"],
         "BiGQfG": ["トランザクションハッシュ"],
         "/7tku+": ["試してみる"],
+        "fvRGyC": ["Trying exploring more features powered by Mask Network."],
         "DC3sw8": ["Two entered passwords are different."],
         "SGVkVp": ["Two entered passwords are not the same."],
         "VzQ7uf": ["不明なEIP-4361メッセージバージョンです。"],
@@ -792,6 +795,9 @@
         "fFYJ8f": ["Mask Networkへようこそ"],
         "Qbo7Ev": ["ニーモニックワードを書き留めてください"],
         "f5AidZ": ["Write down recovery phrase"],
+        "yGyJ1l": [
+            "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+        ],
         "FP6WjU": ["You have backed up your data."],
         "dyqtoj": ["You have recovered"],
         "V8x6o5": ["You have recovered "],

@@ -170,6 +170,7 @@
         "QHcLEN": ["Connected"],
         "aFht5e": ["Connected ", ["0"], " with ", ["walletName"], "."],
         "LWJCIn": ["Connected sites"],
+        "0ZC72+": ["Connected successfully."],
         "ai3VNq": ["Connected Wallet"],
         "cJv4Ca": ["Connecting operation cancelled in third-party wallet."],
         "Z8+FzC": ["Connecting your ", ["providerType"], " wallet"],
@@ -597,6 +598,7 @@
         "PI/VCJ": ["Select the wallet(s) to use on this site. You should not connect to website you don't trust."],
         "a1SmQh": ["Select Wallet"],
         "JlFcis": ["Send"],
+        "bnfo6T": ["Sent verification post successfully."],
         "9d/Qe4": ["Service Agreement"],
         "IIVS5Z": ["Set a New Management Account"],
         "y49awp": ["Set NFT Photo"],
@@ -742,6 +744,7 @@
         "66J/I3": ["Transaction Fee"],
         "BiGQfG": ["Transaction Hash"],
         "/7tku+": ["Try"],
+        "fvRGyC": ["Trying exploring more features powered by Mask Network."],
         "DC3sw8": ["Two entered passwords are different."],
         "SGVkVp": ["Two entered passwords are not the same."],
         "VzQ7uf": ["Unknown EIP-4361 message version."],
@@ -792,6 +795,9 @@
         "fFYJ8f": ["Welcome to use Mask Network"],
         "Qbo7Ev": ["Write down mnemonic words"],
         "f5AidZ": ["Write down recovery phrase"],
+        "yGyJ1l": [
+            "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+        ],
         "FP6WjU": ["You have backed up your data."],
         "dyqtoj": ["You have recovered"],
         "V8x6o5": ["You have recovered "],

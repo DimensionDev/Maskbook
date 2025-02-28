@@ -168,6 +168,7 @@
         "QHcLEN": ["Connected"],
         "aFht5e": ["Connected ", ["0"], " with ", ["walletName"], "."],
         "LWJCIn": ["연결된 사이트"],
+        "0ZC72+": ["Connected successfully."],
         "ai3VNq": ["연결된 월렛"],
         "cJv4Ca": ["연결 작업은 제3자 월렛에서 최소되었습니다."],
         "Z8+FzC": ["Connecting your ", ["providerType"], " wallet"],
@@ -593,6 +594,7 @@
         "PI/VCJ": ["Select the wallet(s) to use on this site. You should not connect to website you don't trust."],
         "a1SmQh": ["월렛 선택"],
         "JlFcis": ["보내기"],
+        "bnfo6T": ["Sent verification post successfully."],
         "9d/Qe4": ["서비스 약관"],
         "IIVS5Z": ["새로운 관리자 계정 설정"],
         "y49awp": ["NFT 사진 설정"],
@@ -738,6 +740,7 @@
         "66J/I3": ["거래 수수료"],
         "BiGQfG": ["Transaction Hash"],
         "/7tku+": ["시도"],
+        "fvRGyC": ["Trying exploring more features powered by Mask Network."],
         "DC3sw8": ["Two entered passwords are different."],
         "SGVkVp": ["Two entered passwords are not the same."],
         "VzQ7uf": ["Unknown EIP-4361 message version."],
@@ -788,6 +791,9 @@
         "fFYJ8f": ["환영합니다"],
         "Qbo7Ev": ["니모닉 단어를 적어두세요"],
         "f5AidZ": ["Write down recovery phrase"],
+        "yGyJ1l": [
+            "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+        ],
         "FP6WjU": ["You have backed up your data."],
         "dyqtoj": ["You have recovered"],
         "V8x6o5": ["You have recovered "],

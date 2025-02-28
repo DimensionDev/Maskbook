@@ -166,6 +166,7 @@
         "QHcLEN": ["Connected"],
         "aFht5e": ["Connected ", ["0"], " with ", ["walletName"], "."],
         "LWJCIn": ["已连接的网站"],
+        "0ZC72+": ["Connected successfully."],
         "ai3VNq": ["已连接的钱包"],
         "cJv4Ca": ["第三方钱包中取消了连接操作。"],
         "Z8+FzC": ["Connecting your ", ["providerType"], " wallet"],
@@ -589,6 +590,7 @@
         "PI/VCJ": ["Select the wallet(s) to use on this site. You should not connect to website you don't trust."],
         "a1SmQh": ["选择钱包"],
         "JlFcis": ["發送"],
+        "bnfo6T": ["Sent verification post successfully."],
         "9d/Qe4": ["服务协议"],
         "IIVS5Z": ["设置新的管理账户"],
         "y49awp": ["设置 NFT 头像"],
@@ -732,6 +734,7 @@
         "66J/I3": ["交易费"],
         "BiGQfG": ["交易哈希"],
         "/7tku+": ["試一下"],
+        "fvRGyC": ["Trying exploring more features powered by Mask Network."],
         "DC3sw8": ["Two entered passwords are different."],
         "SGVkVp": ["Two entered passwords are not the same."],
         "VzQ7uf": ["Unknown EIP-4361 message version."],
@@ -782,6 +785,9 @@
         "fFYJ8f": ["欢迎来到 Mask Network！"],
         "Qbo7Ev": ["写下助记词"],
         "f5AidZ": ["Write down recovery phrase"],
+        "yGyJ1l": [
+            "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+        ],
         "FP6WjU": ["You have backed up your data."],
         "dyqtoj": ["You have recovered"],
         "V8x6o5": ["You have recovered "],
