@@ -1,12 +1,13 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import {
     BindingDialog,
     EmojiAvatar,
-    type BindingDialogProps,
-    useVerifyContent,
     useBaseUIRuntime,
+    useVerifyContent,
     useVerifyNextID,
+    type BindingDialogProps,
 } from '@masknet/shared'
 import {
     MaskMessages,
@@ -27,7 +28,6 @@ import { AccountConnectStatus } from './AccountConnectStatus.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
 import { useConnectPersona } from './hooks/useConnectPersona.js'
 import { useNotifyConnected } from './hooks/useNotifyConnected.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     body: {
@@ -157,8 +157,16 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
     const { classes, cx } = useStyles()
     const queryClient = useQueryClient()
 
-    const { userId, myIdentity, personaInfo, checkingVerified, verified, loadingCurrentUserId, currentUserId } =
-        SetupGuideContext.useContainer()
+    const {
+        userId,
+        myIdentity,
+        personaInfo,
+        checkingVerified,
+        verified,
+        loadingCurrentUserId,
+        currentUserId,
+        setIsFirstVerification,
+    } = SetupGuideContext.useContainer()
     const { nickname: username, avatar } = myIdentity
     const personaName = personaInfo?.nickname
     const personaIdentifier = personaInfo?.identifier
@@ -197,6 +205,7 @@ export function VerifyNextID({ onClose }: VerifyNextIDProps) {
 
         const isBound = await NextIDProof.queryIsBound(personaInfo.identifier.publicKeyAsHex, nextIdPlatform, userId)
         if (!isBound) {
+            setIsFirstVerification(true)
             await handleVerifyNextID(personaInfo, userId)
             Telemetry.captureEvent(EventType.Access, EventID.EntryPopupSocialAccountVerifyTwitter)
         }

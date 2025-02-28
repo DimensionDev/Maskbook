@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { BindingDialog, LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING, type BindingDialogProps } from '@masknet/shared'
-import { SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
+import { Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo } from 'react'
@@ -75,7 +75,7 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
     const site = activatedSiteAdaptorUI!.networkIdentifier
     const siteName = SOCIAL_MEDIA_NAME[site] || ''
 
-    const { connected } = SetupGuideContext.useContainer()
+    const { connected, isFirstConnection, isFirstVerification } = SetupGuideContext.useContainer()
 
     if (loading)
         return (
@@ -85,6 +85,35 @@ export const AccountConnectStatus = memo<Props>(function AccountConnectStatus({
                 </div>
             </Frame>
         )
+
+    if (isFirstConnection || isFirstVerification) {
+        if (Sniffings.is_twitter_page) {
+            return (
+                <Frame {...rest}>
+                    <Typography className={classes.text}>
+                        <Trans>Sent verification post successfully.</Trans>
+                    </Typography>
+                    <Typography className={classes.text} mt="1.5em">
+                        <Trans>
+                            You could check the verification result on Mask Pop-up after few minutes. If failed, try
+                            sending verification post again.
+                        </Trans>
+                    </Typography>
+                </Frame>
+            )
+        } else {
+            return (
+                <Frame {...rest}>
+                    <Typography className={classes.text}>
+                        <Trans>Connected successfully.</Trans>
+                    </Typography>
+                    <Typography className={classes.text} mt="1.5em">
+                        <Trans>Trying exploring more features powered by Mask Network.</Trans>
+                    </Typography>
+                </Frame>
+            )
+        }
+    }
 
     if (connected)
         return (

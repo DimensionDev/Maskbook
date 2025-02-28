@@ -63,6 +63,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     }, [userId])
 
     const [isFirstConnection, setIsFirstConnection] = useState(false)
+    const [isFirstVerification, setIsFirstVerification] = useState(false)
     const step = useMemo(() => {
         if (!setupGuide.status) {
             // Should show pin extension when not set
@@ -98,6 +99,8 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
         personaInfo,
         isFirstConnection,
         setIsFirstConnection,
+        isFirstVerification,
+        setIsFirstVerification,
         checkingConnected,
         checkingVerified,
         verified,
