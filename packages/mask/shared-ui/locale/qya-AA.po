@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-26 03:48\n"
+"PO-Revision-Date: 2025-02-28 08:23\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -670,6 +670,10 @@ msgstr "crwdns32022:0{0}crwdnd32022:0{walletName}crwdne32022:0"
 #: popups/pages/Wallet/ConnectedSites/index.tsx
 msgid "Connected sites"
 msgstr "crwdns30012:0crwdne30012:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Connected successfully."
+msgstr "crwdns36875:0crwdne36875:0"
 
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Connected Wallet"
@@ -2418,6 +2422,10 @@ msgstr "crwdns30536:0crwdne30536:0"
 msgid "Send"
 msgstr "crwdns29746:0crwdne29746:0"
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Sent verification post successfully."
+msgstr "crwdns36877:0crwdne36877:0"
+
 #: popups/pages/Settings/index.tsx
 msgid "Service Agreement"
 msgstr "crwdns30538:0crwdne30538:0"
@@ -2893,6 +2901,10 @@ msgstr "crwdns30672:0crwdne30672:0"
 msgid "Try"
 msgstr "crwdns30674:0crwdne30674:0"
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Trying exploring more features powered by Mask Network."
+msgstr "crwdns36879:0crwdne36879:0"
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Two entered passwords are different."
 msgstr "crwdns32172:0crwdne32172:0"
@@ -3102,6 +3114,10 @@ msgstr "crwdns30734:0crwdne30734:0"
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Write down recovery phrase"
 msgstr "crwdns32196:0crwdne32196:0"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr "crwdns36881:0crwdne36881:0"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "You have backed up your data."
