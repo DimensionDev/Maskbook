@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-02-28 08:23\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -669,6 +669,10 @@ msgstr ""
 #: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 #: popups/pages/Wallet/ConnectedSites/index.tsx
 msgid "Connected sites"
+msgstr ""
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Connected successfully."
 msgstr ""
 
 #: popups/pages/Personas/Home/UI.tsx
@@ -2292,6 +2296,7 @@ msgstr ""
 msgid "Reselect"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 msgid "Resend"
@@ -2416,6 +2421,10 @@ msgstr ""
 #: popups/components/TransactionPreview/index.tsx
 msgid "Send"
 msgstr "發送"
+
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Sent verification post successfully."
+msgstr ""
 
 #: popups/pages/Settings/index.tsx
 msgid "Service Agreement"
@@ -2892,6 +2901,10 @@ msgstr ""
 msgid "Try"
 msgstr "試一下"
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "Trying exploring more features powered by Mask Network."
+msgstr ""
+
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Two entered passwords are different."
 msgstr ""
@@ -3102,6 +3115,10 @@ msgstr ""
 msgid "Write down recovery phrase"
 msgstr ""
 
+#: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+msgid "You could check the verification result on Mask Pop-up after few minutes. If failed, try sending verification post again."
+msgstr ""
+
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "You have backed up your data."
 msgstr ""
@@ -3155,3 +3172,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on "
 msgstr ""
+
