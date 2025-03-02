@@ -2,7 +2,7 @@ import { EMPTY_LIST } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNonFungibleCollections } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
-import { isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
+import { type ChainId, isLensCollect, isLensFollower } from '@masknet/web3-shared-evm'
 import { produce, type Draft } from 'immer'
 import { sum } from 'lodash-es'
 import { memo, useMemo, useState, type PropsWithChildren } from 'react'
@@ -10,7 +10,7 @@ import { createContainer } from '@masknet/shared-base-ui'
 import { useChainRuntime } from './ChainRuntimeProvider.js'
 
 function useCollections(defaultCollectionId?: string) {
-    const { pluginID, chainId, account } = useChainRuntime()
+    const { pluginID, chainId, chainWhiteList, account } = useChainRuntime()
     const [currentCollectionId = defaultCollectionId, setCurrentCollectionId] = useState<string>()
     const {
         data: rawCollections = EMPTY_LIST,
@@ -44,10 +44,13 @@ function useCollections(defaultCollectionId?: string) {
         })
     }, [rawCollections])
 
-    const collections = useMemo(
-        () => (chainId ? merged.filter((x) => x.chainId === chainId) : merged),
-        [merged, chainId],
-    )
+    const collections = useMemo(() => {
+        if (chainId) return merged.filter((x) => x.chainId === chainId)
+        if (chainWhiteList?.length) {
+            return merged.filter((x) => chainWhiteList.includes(x.chainId as ChainId))
+        }
+        return merged
+    }, [merged, chainId, chainWhiteList])
 
     const currentCollection = currentCollectionId ? merged.find((x) => x.id === currentCollectionId) : undefined
 

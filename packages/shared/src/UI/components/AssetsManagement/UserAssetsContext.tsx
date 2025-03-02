@@ -19,6 +19,7 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
     account,
     defaultChainId,
     defaultCollectionId,
+    chainWhiteList,
     children,
 
     // select mode
@@ -38,7 +39,11 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
     }, [blockedTokens, systemAccount, account])
 
     return (
-        <ChainRuntimeProvider pluginID={pluginID} defaultChainId={defaultChainId} account={account}>
+        <ChainRuntimeProvider
+            pluginID={pluginID}
+            defaultChainId={defaultChainId}
+            chainWhiteList={chainWhiteList}
+            account={account}>
             <CollectionsProvider defaultCollectionId={defaultCollectionId}>
                 <AssetsProvider
                     blockedIds={blockedIds}

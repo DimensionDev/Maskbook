@@ -2,7 +2,7 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { Image, NFTSpamBadge, useReportSpam } from '@masknet/shared'
-import { LoadingBase, MaskTextField, ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { LoadingBase, MaskTextField, ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Checkbox, Stack, Typography } from '@mui/material'
 import { memo, useState, type HTMLProps, type KeyboardEvent } from 'react'
 import { useUserAssets } from './AssetsProvider.js'
@@ -15,6 +15,13 @@ const useStyles = makeStyles()((theme) => {
             flexDirection: 'column',
             color: theme.palette.maskColor.main,
             gap: theme.spacing(1),
+            minWidth: 0,
+        },
+        collectionName: {
+            whiteSpace: 'nowrap',
+            textOverflow: 'ellipsis',
+            minWidth: 0,
+            overflow: 'hidden',
         },
         infoRow: {
             display: 'flex',
@@ -93,7 +100,11 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                     {currentCollection.iconURL ?
                         <Image className={classes.icon} size={24} src={currentCollection.iconURL} />
                     :   null}
-                    <Typography mx={1}>{currentCollection.name}</Typography>
+                    <TextOverflowTooltip title={currentCollection.name} as={ShadowRootTooltip} placement="top">
+                        <Typography className={classes.collectionName} mx={1}>
+                            {currentCollection.name}
+                        </Typography>
+                    </TextOverflowTooltip>
                     {currentVerifiedBy.length ?
                         <ShadowRootTooltip title={<Trans>Verified by {currentVerifiedBy.join(', ')}</Trans>}>
                             <Icons.Verification size={16} />

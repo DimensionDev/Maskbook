@@ -13,7 +13,6 @@ import { getLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 
 export function useCreateFTRedpacketCallback(
     redpacketPubkey: string,
-    privateKey: string,
     settings: RedPacketSettings,
     gasOption?: GasConfig,
     onCreated?: (payload: RedPacketJSONPayload) => void,
@@ -88,7 +87,6 @@ export function useCreateFTRedpacketCallback(
             },
             is_random: settings.isRandom,
             shares: settings.shares,
-            password: privateKey,
             rpid: CreationSuccess.id,
             total: CreationSuccess.total,
             duration: settings.duration,

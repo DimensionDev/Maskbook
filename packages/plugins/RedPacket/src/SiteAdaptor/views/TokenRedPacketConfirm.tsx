@@ -13,15 +13,14 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, FireflyRedPacket } from '@masknet/web3-providers'
-import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import { isZero, rightShift } from '@masknet/web3-shared-base'
+import { isZero } from '@masknet/web3-shared-base'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Link, Paper, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { PreviewRedPacket } from '../components/PreviewRedPacket.js'
-import { ConditionType, useRedPacket } from '../contexts/RedPacketContext.js'
+import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateFTRedpacketCallback } from '../hooks/useCreateFTRedpacketCallback.js'
 import { useHandleCreateOrSelect } from '../hooks/useHandleCreateOrSelect.js'
 
@@ -140,47 +139,15 @@ export function TokenRedPacketConfirm() {
         creator,
         gasOption,
         setGasOption,
-        conditions,
         tokenQuantity,
         requiredTokens,
         requiredCollections,
+        needHoldingTokens,
+        needHoldingCollections,
+        claimStrategies,
         message,
         rawAmount,
     } = useRedPacket()
-    const needHoldingTokens = conditions.includes(ConditionType.Crypto) && requiredTokens.length > 0
-    const needHoldingCollections = conditions.includes(ConditionType.NFT) && requiredCollections.length > 0
-
-    const strategies = useMemo(() => {
-        const list: FireflyRedPacketAPI.StrategyPayload[] = []
-        if (needHoldingTokens) {
-            list.push({
-                type: FireflyRedPacketAPI.StrategyType.tokens,
-                payload: requiredTokens.map((token) => ({
-                    chainId: token.chainId.toString(),
-                    contractAddress: token.address,
-                    name: token.name,
-                    symbol: token.symbol,
-                    decimals: token.decimals,
-                    amount: tokenQuantity ? rightShift(tokenQuantity, token.decimals).toFixed(0, 1) : '0',
-                    icon: token.logoURL,
-                })) as FireflyRedPacketAPI.TokensStrategyPayload[],
-            })
-            return list
-        }
-        if (needHoldingCollections) {
-            list.push({
-                type: FireflyRedPacketAPI.StrategyType.nftOwned,
-                payload: requiredCollections.map((collection) => ({
-                    chainId: collection.chainId.toString(),
-                    contractAddress: collection.address!,
-                    collectionName: collection.name || collection.symbol || '',
-                    icon: collection.iconURL!,
-                })),
-            })
-            return list
-        }
-        return list
-    }, [needHoldingTokens, requiredTokens, requiredCollections, tokenQuantity])
 
     const currentIdentity = useCurrentVisitingIdentity()
     const me = useLastRecognizedIdentity()
@@ -198,10 +165,10 @@ export function TokenRedPacketConfirm() {
     const themeId = theme?.tid
     const { isLoading: creatingPubkey, data: publicKey } = useQuery({
         enabled: !!themeId,
-        queryKey: ['red-packet', 'create-pubkey', themeId, creator, strategies],
+        queryKey: ['red-packet', 'create-pubkey', themeId, creator, claimStrategies],
         queryFn: async () => {
             if (!themeId) return null
-            return FireflyRedPacket.createPublicKey(themeId, creator, strategies)
+            return FireflyRedPacket.createPublicKey(themeId, creator, claimStrategies)
         },
     })
 
@@ -214,15 +181,7 @@ export function TokenRedPacketConfirm() {
         isCreating,
         isWaitGasBeMinus,
         createRedpacket,
-    } = useCreateFTRedpacketCallback(
-        publicKey ?? '',
-        // TODO get rid of privateKey since we don't need it anymore
-        '',
-        settings,
-        gasOption,
-        handleCreated,
-        onClose,
-    )
+    } = useCreateFTRedpacketCallback(publicKey ?? '', settings, gasOption, handleCreated, onClose)
 
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })

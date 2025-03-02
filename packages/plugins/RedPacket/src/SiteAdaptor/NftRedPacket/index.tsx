@@ -15,7 +15,6 @@ import {
 } from '@masknet/web3-hooks-base'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType } from '@masknet/web3-shared-base'
-import { signMessage } from '@masknet/web3-shared-evm'
 import { Card } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useAvailabilityNftRedPacket } from '../hooks/useAvailabilityNftRedPacket.js'
@@ -72,11 +71,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
         error: availabilityError,
     } = useAvailabilityNftRedPacket(payload.id, account, payload.chainId)
 
-    const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(
-        payload.id,
-        availability?.totalAmount,
-        signMessage(account, payload.privateKey).signature ?? '',
-    )
+    const [{ loading: isClaiming }, claimCallback] = useClaimNftRedpacketCallback(payload, availability?.totalAmount)
 
     useEffect(() => {
         retryAvailability()

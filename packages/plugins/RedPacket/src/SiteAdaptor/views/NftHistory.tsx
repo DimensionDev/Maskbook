@@ -10,7 +10,7 @@ import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { List, ListItem } from '@mui/material'
 import { useCallback, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { nftDefaultChains } from '../../constants.js'
+import { NFT_DEFAULT_CHAINS } from '../../constants.js'
 import { NftRedPacketRecord } from '../components/NftRedPacketRecord.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useNftRedPacketHistory } from '../hooks/useNftRedPacketHistory.js'
@@ -97,7 +97,7 @@ export function NftHistory() {
 
     return (
         <div className={classes.root}>
-            <NetworkTab chains={nftDefaultChains} hideArrowButton pluginID={NetworkPluginID.PLUGIN_EVM} />
+            <NetworkTab chains={NFT_DEFAULT_CHAINS} hideArrowButton pluginID={NetworkPluginID.PLUGIN_EVM} />
             {isLoading ?
                 <LoadingStatus className={classes.placeholder} iconSize={30} />
             : !histories?.length ?

@@ -3,7 +3,7 @@ import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { multipliedBy, rightShift, type FungibleToken, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig, SchemaType } from '@masknet/web3-shared-evm'
 import { noop, omit } from 'lodash-es'
@@ -46,6 +46,9 @@ interface RedPacketContextOptions {
     setRequiredTokens: Dispatch<SetStateAction<Array<FungibleToken<ChainId, SchemaType>>>>
     requiredCollections: Array<NonFungibleCollection<ChainId, SchemaType>>
     setRequiredCollections: Dispatch<SetStateAction<Array<NonFungibleCollection<ChainId, SchemaType>>>>
+    needHoldingTokens: boolean
+    needHoldingCollections: boolean
+    claimStrategies: FireflyRedPacketAPI.StrategyPayload[]
     // Token
     token: FungibleToken<ChainId, SchemaType> | undefined
     setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | undefined>>
@@ -88,6 +91,9 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     setTokenQuantity: noop,
     requiredCollections: EMPTY_LIST,
     setRequiredCollections: noop,
+    needHoldingTokens: false,
+    needHoldingCollections: false,
+    claimStrategies: EMPTY_LIST,
     // Token
     token: undefined,
     setToken: noop,
@@ -130,6 +136,41 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const [requiredCollections, setRequiredCollections] = useState<Array<NonFungibleCollection<ChainId, SchemaType>>>(
         [],
     )
+
+    const needHoldingTokens = conditions.includes(ConditionType.Crypto) && requiredTokens.length > 0
+    const needHoldingCollections = conditions.includes(ConditionType.NFT) && requiredCollections.length > 0
+
+    const claimStrategies = useMemo(() => {
+        const list: FireflyRedPacketAPI.StrategyPayload[] = []
+        if (needHoldingTokens) {
+            list.push({
+                type: FireflyRedPacketAPI.StrategyType.tokens,
+                payload: requiredTokens.map((token) => ({
+                    chainId: token.chainId.toString(),
+                    contractAddress: token.address,
+                    name: token.name,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
+                    amount: tokenQuantity ? rightShift(tokenQuantity, token.decimals).toFixed(0, 1) : '0',
+                    icon: token.logoURL,
+                })) as FireflyRedPacketAPI.TokensStrategyPayload[],
+            })
+            return list
+        }
+        if (needHoldingCollections) {
+            list.push({
+                type: FireflyRedPacketAPI.StrategyType.nftOwned,
+                payload: requiredCollections.map((collection) => ({
+                    chainId: collection.chainId.toString(),
+                    contractAddress: collection.address!,
+                    collectionName: collection.name || collection.symbol || '',
+                    icon: collection.iconURL!,
+                })),
+            })
+            return list
+        }
+        return list
+    }, [needHoldingTokens, requiredTokens, requiredCollections, tokenQuantity])
 
     // Token
     const [rawAmount, setRawAmount] = useState('')
@@ -187,6 +228,9 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             setRequiredTokens,
             requiredCollections,
             setRequiredCollections,
+            needHoldingTokens,
+            needHoldingCollections,
+            claimStrategies,
 
             // Token
             token,
@@ -226,6 +270,9 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         tokenQuantity,
         requiredTokens,
         requiredCollections,
+        needHoldingTokens,
+        needHoldingCollections,
+        claimStrategies,
         isRandom,
         shares,
         selectOption,

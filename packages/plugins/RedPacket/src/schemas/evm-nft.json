@@ -54,7 +54,6 @@
         "senderName",
         "contractName",
         "contractAddress",
-        "privateKey",
         "chainId",
         "contractTokenURI"
     ]
