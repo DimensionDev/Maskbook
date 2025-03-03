@@ -73,7 +73,8 @@ export function SelectCollectibles() {
                 maxSelectionDescription={
                     <Trans>The maximum number of NFTs to be sold in one collection lucky drop contract is 255.</Trans>
                 }
-                selectedAssets={pendingNfts}>
+                selectedAssets={pendingNfts}
+                disableReport>
                 <CollectionList height={564} gridProps={gridProps} disableWindowScroll onItemClick={handleItemClick} />
             </UserAssetsProvider>
             <DialogActions className={classes.dialogActions}>

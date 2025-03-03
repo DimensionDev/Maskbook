@@ -80,6 +80,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
         maxSelectionDescription,
         searchKeyword,
         setSearchKeyword,
+        disableReport,
     } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
     const { isReporting, isSpam, promptReport } = useReportSpam({
@@ -117,7 +118,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                 <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                     <Icons.Undo size={16} />
                 </Button>
-                {!isSpam ?
+                {!isSpam && !disableReport ?
                     <Button variant="text" className={classes.backButton} onClick={promptReport}>
                         {isReporting ?
                             <LoadingBase size={16} />

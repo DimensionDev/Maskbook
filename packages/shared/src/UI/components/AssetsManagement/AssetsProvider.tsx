@@ -53,6 +53,7 @@ interface AssetsContextOptions {
     /** All collectibles get hidden */
     isAllHidden: boolean
     isEmpty: boolean
+    disableReport?: boolean
 }
 
 const AssetsContext = createContext<AssetsContextOptions>({
@@ -73,6 +74,7 @@ const AssetsContext = createContext<AssetsContextOptions>({
 
     isAllHidden: false,
     isEmpty: false,
+    disableReport: false,
 })
 
 /** Min merged collection chunk size */
@@ -85,7 +87,13 @@ export interface AssetsProviderProps
     extends PropsWithChildren,
         Pick<
             AssetsContextOptions,
-            'selectMode' | 'multiple' | 'selectedAsset' | 'selectedAssets' | 'maxSelection' | 'maxSelectionDescription'
+            | 'selectMode'
+            | 'multiple'
+            | 'selectedAsset'
+            | 'selectedAssets'
+            | 'maxSelection'
+            | 'maxSelectionDescription'
+            | 'disableReport'
         > {
     /** blocked ids in format of `${chainid}.${address}.${tokenId}` */
     blockedIds?: string[]
@@ -99,6 +107,7 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
     maxSelectionDescription,
     selectedAsset,
     selectedAssets,
+    disableReport,
 }) {
     const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
     const indicatorMapRef = useRef<Map<string, PageIndicator | undefined>>(new Map())
@@ -296,6 +305,7 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
             maxSelectionDescription,
             searchKeyword,
             setSearchKeyword,
+            disableReport,
         }
     }, [
         getAssets,
@@ -312,6 +322,7 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
         maxSelectionDescription,
         selectedAssets,
         selectedAsset,
+        disableReport,
     ])
 
     return <AssetsContext value={contextValue}>{children}</AssetsContext>
