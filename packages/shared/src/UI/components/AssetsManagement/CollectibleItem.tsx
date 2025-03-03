@@ -128,6 +128,7 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
         verifiedBy = EMPTY_LIST,
         isSelected,
         hideIndicator,
+        selectable,
         onActionClick,
         onItemClick,
         ...rest
@@ -174,6 +175,7 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
                     onClick={handleClick}
                     isSelected={isSelected}
                     hideIndicator={hideIndicator}
+                    selectable
                 />
                 <div className={cx(classes.info, classes.ease)}>
                     {disableName ? null : (
