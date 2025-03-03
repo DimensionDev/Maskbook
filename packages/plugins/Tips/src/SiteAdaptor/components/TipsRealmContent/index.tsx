@@ -1,12 +1,12 @@
+import { Trans } from '@lingui/react/macro'
 import { Plugin } from '@masknet/plugin-infra'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { PluginGuide } from '@masknet/shared'
 import { Sniffings, type EnhanceableSite } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Stack } from '@mui/material'
+import { TipsButton } from '../../../components/index.js'
 import { useTipsUserGuide } from '../../../storage/index.js'
-import { TipButton } from '../../../components/index.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ buttonSize: number }, 'postTipsButton'>()((theme, { buttonSize }, refs) => ({
     postButtonWrapper: {
@@ -84,7 +84,7 @@ export function TipsRealmContent({
     }
 
     const button = (
-        <TipButton
+        <TipsButton
             accounts={accounts}
             className={buttonClassMap[slot]}
             iconSize={iconSize}

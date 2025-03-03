@@ -1,9 +1,9 @@
-import { memo, useRef } from 'react'
+import { memo, useMemo, useRef } from 'react'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { AccountIcons, ReversedAddress } from '@masknet/shared'
 import { Link, MenuItem, Select, Typography } from '@mui/material'
-import { useDefaultChainId, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { useDefaultChainId, useReverseAddresses, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { NetworkPluginID, type SocialAccount } from '@masknet/shared-base'
@@ -17,13 +17,21 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
             flexGrow: 1,
         },
         menuItem: {
-            height: 32,
+            minHeight: 32,
             color: theme.palette.maskColor.main,
             borderRadius: theme.spacing(1),
-            padding: theme.spacing(0, 0.5),
+            padding: 6,
+            gap: theme.spacing(1),
             '&:not(:first-of-type)': {
                 marginTop: theme.spacing(1),
             },
+        },
+        address: {
+            fontSize: 14,
+            fontWeight: 400,
+            lineHeight: '18px',
+            display: 'flex',
+            alignItems: 'center',
         },
         text: {
             fontWeight: 700,
@@ -76,7 +84,7 @@ const useStyles = makeStyles<void, 'icon' | 'pluginIcon' | 'text'>()((theme, _, 
     }
 })
 
-const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
+const ChainRuntimeIcon = ({ runtime }: { runtime: NetworkPluginID }) => {
     const { classes } = useStyles()
     const mapping = {
         [NetworkPluginID.PLUGIN_EVM]: (
@@ -110,7 +118,7 @@ const PluginIcon = ({ pluginID }: { pluginID: NetworkPluginID }) => {
             />
         ),
     }
-    return mapping[pluginID]
+    return mapping[runtime]
 }
 
 function ExternalLink({ account }: { account: SocialAccount<Web3Helper.ChainIdAll> }) {
@@ -141,6 +149,11 @@ export const RecipientSelect = memo(({ className }: Props) => {
     const selectRef = useRef(null)
     const { recipient, recipients, setRecipient } = useTip()
     const recipientAddress = recipient?.address
+    const addresses = useMemo(() => {
+        return recipients.map((x) => ({ address: x.address, pluginID: x.pluginID }))
+    }, [recipients])
+
+    const queries = useReverseAddresses(addresses)
 
     return (
         <Select
@@ -166,11 +179,11 @@ export const RecipientSelect = memo(({ className }: Props) => {
                 BackdropProps: {
                     invisible: true,
                 },
-            }}>
-            {recipients.map((account) => (
-                <MenuItem className={classes.menuItem} key={account.address} value={account.address}>
-                    <PluginIcon pluginID={account.pluginID} />
-                    {account.label ?
+            }}
+            renderValue={(value) => {
+                const account = recipients.find((x) => isSameAddress(x.address, value))
+                if (!account) return null
+                return account.label ?
                         <Typography component="span" className={classes.text}>
                             {account.label}
                         </Typography>
@@ -180,14 +193,33 @@ export const RecipientSelect = memo(({ className }: Props) => {
                             component="span"
                             className={classes.text}
                         />
-                    }
-                    <ExternalLink account={account} />
-                    <AccountIcons socialAccount={account} classes={{ icon: classes.icon }} />
-                    {isSameAddress(account.address, recipientAddress) ?
-                        <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
-                    :   null}
-                </MenuItem>
-            ))}
+            }}>
+            {recipients.map((account, index) => {
+                const selected = isSameAddress(account.address, recipientAddress)
+                const domain = queries[index].data
+                const label = account.label || domain
+
+                return (
+                    <MenuItem className={classes.menuItem} key={account.address} value={account.address}>
+                        <ChainRuntimeIcon runtime={account.pluginID} />
+                        <div>
+                            {label ?
+                                <Typography component="span" className={classes.text}>
+                                    {account.label}
+                                </Typography>
+                            :   null}
+                            <Typography className={classes.address}>
+                                {account.address}
+                                <ExternalLink account={account} />
+                            </Typography>
+                        </div>
+                        <AccountIcons socialAccount={account} classes={{ icon: classes.icon }} />
+                        {selected ?
+                            <Icons.CheckCircle className={cx(classes.checkIcon, classes.icon)} />
+                        :   null}
+                    </MenuItem>
+                )
+            })}
         </Select>
     )
 })

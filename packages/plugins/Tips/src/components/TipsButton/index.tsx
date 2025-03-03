@@ -36,7 +36,7 @@ const useStyles = makeStyles()({
     },
 })
 
-export function TipButton(props: Props) {
+export function TipsButton(props: Props) {
     const {
         className,
         accounts: receivingAccounts = EMPTY_LIST,

@@ -1,29 +1,46 @@
-import { skipToken, useQuery } from '@tanstack/react-query'
 import { NameServiceID, type NetworkPluginID } from '@masknet/shared-base'
-import { useWeb3State } from './useWeb3State.js'
-import { Lens } from '@masknet/web3-providers'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { getActivatedPluginWeb3State, Lens } from '@masknet/web3-providers'
+import { useQueries, useQuery } from '@tanstack/react-query'
 
 export function useReverseAddress<T extends NetworkPluginID>(
-    pluginID?: T,
+    expectedPluginID?: T,
     address?: string,
     domainOnly?: boolean,
     preferredType?: NameServiceID,
 ) {
-    const { NameService } = useWeb3State(pluginID)
-
+    const { pluginID } = useNetworkContext<T>(expectedPluginID)
     return useQuery({
-        queryKey: ['reverse', address, domainOnly, preferredType],
-        enabled: !!NameService?.reverse,
-        queryFn:
-            NameService ?
-                async () => {
-                    if (!address) return null
-                    if (preferredType === NameServiceID.Lens) {
-                        const result = await Lens.reverse?.(address)
-                        if (result) return result
-                    }
-                    return (await NameService?.reverse?.(address, domainOnly)) || null
+        queryKey: ['reverse', address, pluginID, domainOnly, preferredType],
+        queryFn: async () => {
+            const { NameService } = getActivatedPluginWeb3State(pluginID)
+            if (!address || !NameService) return null
+            if (preferredType === NameServiceID.Lens) {
+                const result = await Lens.reverse?.(address)
+                if (result) return result
+            }
+            return (await NameService?.reverse?.(address, domainOnly)) || null
+        },
+    })
+}
+
+export function useReverseAddresses<T extends NetworkPluginID>(
+    addresses: Array<{ address: string; pluginID: T }>,
+    domainOnly?: boolean,
+    preferredType?: NameServiceID,
+) {
+    return useQueries({
+        queries: addresses.map(({ address, pluginID }) => ({
+            queryKey: ['reverse', address, pluginID, domainOnly, preferredType],
+            queryFn: async () => {
+                const { NameService } = getActivatedPluginWeb3State(pluginID)
+                if (!address || !NameService) return null
+                if (preferredType === NameServiceID.Lens) {
+                    const result = await Lens.reverse?.(address)
+                    if (result) return result
                 }
-            :   skipToken,
+                return (await NameService?.reverse?.(address, domainOnly)) || null
+            },
+        })),
     })
 }

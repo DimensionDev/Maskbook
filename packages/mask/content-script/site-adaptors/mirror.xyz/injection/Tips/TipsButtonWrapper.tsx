@@ -1,5 +1,5 @@
 import { memo, useMemo, useState } from 'react'
-import { EMPTY_LIST, PluginID, type SocialAccount } from '@masknet/shared-base'
+import { EMPTY_LIST, EnhanceableSite, PluginID, type SocialAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -48,10 +48,7 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
             {
                 pluginID,
                 address: visitingIdentity.identifier.userId,
-                label:
-                    visitingIdentity.nickname ?
-                        `(${visitingIdentity.nickname}) ${Utils.formatAddress(visitingIdentity.identifier.userId, 4)}`
-                    :   visitingIdentity.identifier.userId,
+                label: visitingIdentity.nickname || visitingIdentity.identifier.userId,
             },
         ]
     }, [visitingIdentity, Utils.formatAddress])
@@ -72,7 +69,13 @@ export const TipsButtonWrapper = memo(function TipsButtonWrapper({ slot }: Props
         )
     }, [visitingIdentity.identifier, accounts, slot])
 
-    if (disabled || !component || !visitingIdentity.identifier || isMinimalMode || location.pathname === '/')
+    if (
+        disabled ||
+        !component ||
+        !visitingIdentity.identifier ||
+        isMinimalMode ||
+        (location.hostname === EnhanceableSite.Mirror && location.pathname === '/') // exclude hostname like vitalik.mirror.xyz
+    )
         return null
 
     return (
