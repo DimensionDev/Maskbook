@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-25 04:54\n"
+"PO-Revision-Date: 2025-03-03 04:02\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -61,11 +61,9 @@ msgstr "crwdns31710:0{sender}crwdnd31710:0{networkName}crwdnd31710:0{account_pro
 #~ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}"
 #~ msgstr ""
 
-#. placeholder {0}: tokenDetailedSelectedList.length
-#. placeholder {1}: tokenDetailedSelectedList.length
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
-msgstr "crwdns32290:00={0}crwdnd32290:01={1}crwdne32290:0"
+#~ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}."
@@ -195,6 +193,7 @@ msgstr "crwdns28950:0crwdne28950:0"
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Claim Conditions"
 msgstr "crwdns36408:0crwdne36408:0"
 
@@ -294,8 +293,6 @@ msgstr "crwdns28968:0crwdne28968:0"
 #~ msgid "Conditions not met"
 #~ msgstr ""
 
-#: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/SelectCollectibles.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
@@ -580,8 +577,8 @@ msgstr "crwdns29034:0crwdne29034:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Loading token..."
-msgstr "crwdns29036:0crwdne29036:0"
+#~ msgid "Loading token..."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
@@ -649,8 +646,8 @@ msgstr "crwdns36094:0crwdne36094:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "No results"
-msgstr "crwdns29058:0crwdne29058:0"
+#~ msgid "No results"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
@@ -738,8 +735,8 @@ msgstr "crwdns36100:0crwdne36100:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Search"
-msgstr "crwdns29084:0crwdne29084:0"
+#~ msgid "Search"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -752,8 +749,8 @@ msgid "Select a Token"
 msgstr "crwdns29086:0crwdne29086:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Select All"
-msgstr "crwdns29088:0crwdne29088:0"
+#~ msgid "Select All"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
@@ -845,8 +842,8 @@ msgstr "crwdns32310:0crwdne32310:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
-msgstr "crwdns36732:0{NFT_RED_PACKET_MAX_SHARES}crwdne36732:0"
+#~ msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -870,8 +867,8 @@ msgstr "crwdns29118:0{0}crwdnd29118:0{1}crwdne29118:0"
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
-msgstr "crwdns36734:0{NFT_RED_PACKET_MAX_SHARES}crwdne36734:0"
+#~ msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -885,8 +882,8 @@ msgstr "crwdns36734:0{NFT_RED_PACKET_MAX_SHARES}crwdne36734:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
-msgstr "crwdns29120:0crwdne29120:0"
+#~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
@@ -968,8 +965,8 @@ msgid "Winners"
 msgstr "crwdns29146:0crwdne29146:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "You can also use <0>Shift</0> to select multiple NFTs."
-msgstr "crwdns31754:0crwdne31754:0"
+#~ msgid "You can also use <0>Shift</0> to select multiple NFTs."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 #: src/SiteAdaptor/components/ConditionSettings.tsx
