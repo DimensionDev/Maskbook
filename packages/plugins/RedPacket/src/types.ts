@@ -1,7 +1,5 @@
 import type { BN, web3 } from '@coral-xyz/anchor'
 import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
-import type { NonFungibleToken } from '@masknet/web3-shared-base'
-import type { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 
 export enum NFTSelectOption {
     All = 'All',
@@ -51,11 +49,6 @@ export enum RedPacketTabs {
 export enum HistoryTabs {
     Sent = 'sent',
     Claimed = 'claimed',
-}
-
-// TODO Get rid of index which is from legacy code
-export type OrderedERC721Token = NonFungibleToken<ChainId, SchemaType.ERC721> & {
-    index: number
 }
 
 export interface RedPack {

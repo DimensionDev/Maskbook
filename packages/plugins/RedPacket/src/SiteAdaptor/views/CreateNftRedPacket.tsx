@@ -26,7 +26,6 @@ import { Box, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 import { CollectionSelectPanel } from '../components/CollectionSelectPanel.js'
 import { MessageInput } from '../components/MessageInput.js'
 import { NFTCard } from '../components/NFTCard.js'
@@ -102,8 +101,6 @@ export function CreateNftRedPacket() {
     const {
         nftGasOption: gasOption,
         setNftGasOption: setGasOption,
-        selectOption,
-        setSelectOption,
         collection,
         setCollection,
         message,
@@ -134,20 +131,14 @@ export function CreateNftRedPacket() {
     const { data: assets_ = EMPTY_LIST } = useMyCollectionNfts()
 
     const assets = collection?.assets?.length ? collection.assets : assets_
-    const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index }) as OrderedERC721Token)
 
-    const balance = collection?.balance ?? tokenDetailedOwnerList.length
+    const balance = collection?.balance ?? assets.length
     const removeToken = useCallback((token: Web3Helper.NonFungibleAssetAll) => {
         setSelectedNfts((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
 
     useRenderPhraseCallbackOnDepsChange(() => {
-        if (!selectOption) setSelectOption(NFTSelectOption.Partial)
-    }, [tokenDetailedOwnerList.map((x) => x.address).join(','), selectOption])
-
-    useRenderPhraseCallbackOnDepsChange(() => {
         setSelectedNfts(EMPTY_LIST)
-        setSelectOption(NFTSelectOption.Partial)
     }, [collection, account])
 
     useRenderPhraseCallbackOnDepsChange(() => {
