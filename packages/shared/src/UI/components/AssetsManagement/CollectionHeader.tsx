@@ -67,12 +67,14 @@ const useStyles = makeStyles()((theme) => {
 })
 
 export interface CollectionHeaderProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
+    assets: Web3Helper.NonFungibleAssetScope[]
     onResetCollection?: (id: undefined) => void
     onSelect?: (assets: Web3Helper.NonFungibleAssetAll[]) => void
 }
 
 export const CollectionHeader = memo(function CollectionHeader({
     className,
+    assets,
     onResetCollection,
     onSelect,
     ...rest
@@ -82,7 +84,6 @@ export const CollectionHeader = memo(function CollectionHeader({
         getVerifiedBy,
         selectMode,
         multiple,
-        getAssets,
         selectedAssets,
         maxSelection,
         maxSelectionDescription,
@@ -98,7 +99,6 @@ export const CollectionHeader = memo(function CollectionHeader({
     })
     const [pendingKeyword, setPendingKeyword] = useState('')
 
-    const assets = currentCollection ? getAssets(currentCollection).assets : EMPTY_LIST
     const { isSelectedAll, isSelectedSome } = useMemo(() => {
         if (!currentCollection) return { isSelectedAll: false, isSelectedSome: false }
         const selectedSet = new Set(
@@ -168,7 +168,7 @@ export const CollectionHeader = memo(function CollectionHeader({
                         />
                         <Button
                             className={classes.searchButton}
-                            disabled={!pendingKeyword}
+                            disabled={!pendingKeyword && !searchKeyword}
                             onClick={() => {
                                 if (searchKeyword) {
                                     setSearchKeyword('')

@@ -186,7 +186,7 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
 
             // Fetch less in collection list, and more every time in expanded collection.
             // Also expand size if for id chunk, since there might be more assets than chunk size
-            const size = assetsState?.assets.length || collectionId ? 20 : 4
+            const size = assetsState?.assets.length || collectionId ? 40 : 4
             const indicator = (!collectionId && indicatorMapRef.current.get(storeId)) || createIndicator()
             dispatch({ type: 'SET_LOADING_STATUS', account, id: stateKey, loading: true })
             const pageable = await Hub.getNonFungibleAssetsByCollectionAndOwner(realId, account, {

@@ -272,6 +272,7 @@ export const CollectionList = memo(function CollectionList({
                 {sidebar}
                 <div className={classes.main} ref={forkedMainColumnRef}>
                     <CollectionHeader
+                        assets={filteredAssets}
                         className={classes.collectionHeader}
                         onResetCollection={handleCollectionChange}
                         onSelect={onSelect}
