@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { useIsMinimalMode } from '@masknet/plugin-infra/content-script'
-import { TipButton } from '@masknet/plugin-tips'
+import { TipsButton } from '@masknet/plugin-tips'
 import { PersonaSelectPanelModal, SocialAccountList, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import {
     CrossIsolationMessages,
@@ -14,8 +14,8 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Web3Bio } from '@masknet/web3-providers'
 import { useQuery } from '@tanstack/react-query'
 import type { HTMLProps } from 'react'
-import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { useCurrentPersona, usePersonasFromDB } from '../../../../shared-ui/hooks/index.js'
+import { useLastRecognizedIdentity } from '../../DataSource/useActivatedUI.js'
 import { ProfileBar, ProfileBarSkeleton } from './ProfileBar.js'
 
 const useStyles = makeStyles()((theme) => {
@@ -146,7 +146,7 @@ export function ProfileCardTitle({
                     {itsMe ?
                         <Web3ProfileSettingButton />
                     : !tipsDisabled ?
-                        <TipButton className={classes.tipButton} receiver={identity.identifier} />
+                        <TipsButton className={classes.tipButton} receiver={identity.identifier} />
                     :   null}
                 </div>
             </ProfileBar>
