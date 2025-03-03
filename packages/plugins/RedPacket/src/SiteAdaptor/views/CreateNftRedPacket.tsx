@@ -26,13 +26,13 @@ import { Box, Typography } from '@mui/material'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
-import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 import { CollectionSelectPanel } from '../components/CollectionSelectPanel.js'
 import { MessageInput } from '../components/MessageInput.js'
 import { NFTCard } from '../components/NFTCard.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNFTRedpacketGas } from '../hooks/useCreateNftRedpacketGas.js'
 import { useMyCollectionNfts } from '../hooks/useMyCollectionNfts.js'
+import { ConditionSettings } from '../components/ConditionSettings.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -43,12 +43,26 @@ const useStyles = makeStyles()((theme) => {
             gap: theme.spacing(2),
             paddingBottom: 88,
         },
+        field: {
+            display: 'flex',
+            gap: 16,
+            alignItems: 'center',
+        },
+        label: {
+            fontSize: 14,
+            fontWeight: 700,
+            lineHeight: '18px',
+            color: theme.palette.maskColor.second,
+        },
+        fieldValue: {
+            marginLeft: 'auto',
+        },
         approveAllTip: {
             color: '#FF5F5F',
-            margin: '8px 4px 8px 4px',
+            margin: theme.spacing(0, 0.5),
         },
         toolbar: {
-            marginTop: 0,
+            margin: 0,
         },
         approveButton: {
             height: 40,
@@ -87,8 +101,6 @@ export function CreateNftRedPacket() {
     const {
         nftGasOption: gasOption,
         setNftGasOption: setGasOption,
-        selectOption,
-        setSelectOption,
         collection,
         setCollection,
         message,
@@ -119,20 +131,14 @@ export function CreateNftRedPacket() {
     const { data: assets_ = EMPTY_LIST } = useMyCollectionNfts()
 
     const assets = collection?.assets?.length ? collection.assets : assets_
-    const tokenDetailedOwnerList = assets.map((v, index) => ({ ...v, index }) as OrderedERC721Token)
 
-    const balance = collection?.balance ?? tokenDetailedOwnerList.length
+    const balance = collection?.balance ?? assets.length
     const removeToken = useCallback((token: Web3Helper.NonFungibleAssetAll) => {
         setSelectedNfts((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])
 
     useRenderPhraseCallbackOnDepsChange(() => {
-        if (!selectOption) setSelectOption(NFTSelectOption.Partial)
-    }, [tokenDetailedOwnerList.map((x) => x.address).join(','), selectOption])
-
-    useRenderPhraseCallbackOnDepsChange(() => {
         setSelectedNfts(EMPTY_LIST)
-        setSelectOption(NFTSelectOption.Partial)
     }, [collection, account])
 
     useRenderPhraseCallbackOnDepsChange(() => {
@@ -169,14 +175,12 @@ export function CreateNftRedPacket() {
                         </Typography>
                     :   null}
                 </Box>
-                {collection && balance ?
-                    <Typography className={classes.approveAllTip}>
-                        <Trans>
-                            Note: When you "Unlock All", all of the NFTs in the collection will be by default authorized
-                            for sale. This includes the NFTs transferred afterwards.
-                        </Trans>
+                <Box className={classes.field}>
+                    <Typography className={classes.label}>
+                        <Trans>Claim Conditions</Trans>
                     </Typography>
-                :   null}
+                    <ConditionSettings className={classes.fieldValue} />
+                </Box>
                 {nativeTokenDetailed && nativeTokenPrice ?
                     <SelectGasSettingsToolbar
                         className={classes.toolbar}
@@ -187,6 +191,14 @@ export function CreateNftRedPacket() {
                         gasLimit={Number.parseInt(gasLimit, 10)}
                         onChange={setGasOption}
                     />
+                :   null}
+                {collection && balance ?
+                    <Typography className={classes.approveAllTip}>
+                        <Trans>
+                            Note: When you "Unlock All", all of the NFTs in the collection will be by default authorized
+                            for sale. This includes the NFTs transferred afterwards.
+                        </Trans>
+                    </Typography>
                 :   null}
             </Box>
 

@@ -3,7 +3,7 @@ import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { EVMChainResolver } from '@masknet/web3-providers'
-import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
+import { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { multipliedBy, rightShift, type FungibleToken, type NonFungibleCollection } from '@masknet/web3-shared-base'
 import type { ChainId, GasConfig, SchemaType } from '@masknet/web3-shared-evm'
 import { noop, omit } from 'lodash-es'
@@ -18,7 +18,6 @@ import {
     type SetStateAction,
 } from 'react'
 import { DURATION, PRESET_THEMES, RED_PACKET_DEFAULT_SHARES } from '../../constants.js'
-import { NFTSelectOption, type OrderedERC721Token } from '../../types.js'
 import type { RedPacketSettings } from '../hooks/useCreateCallback.js'
 import type { Web3Helper } from '@masknet/web3-helpers'
 
@@ -46,6 +45,9 @@ interface RedPacketContextOptions {
     setRequiredTokens: Dispatch<SetStateAction<Array<FungibleToken<ChainId, SchemaType>>>>
     requiredCollections: Array<NonFungibleCollection<ChainId, SchemaType>>
     setRequiredCollections: Dispatch<SetStateAction<Array<NonFungibleCollection<ChainId, SchemaType>>>>
+    needHoldingTokens: boolean
+    needHoldingCollections: boolean
+    claimStrategies: FireflyRedPacketAPI.StrategyPayload[]
     // Token
     token: FungibleToken<ChainId, SchemaType> | undefined
     setToken: Dispatch<SetStateAction<FungibleToken<ChainId, SchemaType> | undefined>>
@@ -62,10 +64,6 @@ interface RedPacketContextOptions {
     setNftGasOption: Dispatch<SetStateAction<GasConfig | undefined>>
     selectedNfts: Web3Helper.NonFungibleAssetAll[]
     setSelectedNfts: Dispatch<SetStateAction<Web3Helper.NonFungibleAssetAll[]>>
-    myNfts: OrderedERC721Token[]
-    setMyNfts: Dispatch<SetStateAction<OrderedERC721Token[]>>
-    selectOption: NFTSelectOption | undefined
-    setSelectOption: Dispatch<SetStateAction<NFTSelectOption>>
     collection: Web3Helper.NonFungibleCollectionAll | undefined
     setCollection: Dispatch<SetStateAction<Web3Helper.NonFungibleCollectionAll | undefined>>
 }
@@ -88,6 +86,9 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     setTokenQuantity: noop,
     requiredCollections: EMPTY_LIST,
     setRequiredCollections: noop,
+    needHoldingTokens: false,
+    needHoldingCollections: false,
+    claimStrategies: EMPTY_LIST,
     // Token
     token: undefined,
     setToken: noop,
@@ -104,10 +105,6 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     setNftGasOption: noop,
     selectedNfts: EMPTY_LIST,
     setSelectedNfts: noop,
-    myNfts: EMPTY_LIST,
-    setMyNfts: noop,
-    selectOption: NFTSelectOption.Partial,
-    setSelectOption: noop,
     collection: undefined,
     setCollection: noop,
 })
@@ -130,6 +127,41 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     const [requiredCollections, setRequiredCollections] = useState<Array<NonFungibleCollection<ChainId, SchemaType>>>(
         [],
     )
+
+    const needHoldingTokens = conditions.includes(ConditionType.Crypto) && requiredTokens.length > 0
+    const needHoldingCollections = conditions.includes(ConditionType.NFT) && requiredCollections.length > 0
+
+    const claimStrategies = useMemo(() => {
+        const list: FireflyRedPacketAPI.StrategyPayload[] = []
+        if (needHoldingTokens) {
+            list.push({
+                type: FireflyRedPacketAPI.StrategyType.tokens,
+                payload: requiredTokens.map((token) => ({
+                    chainId: token.chainId.toString(),
+                    contractAddress: token.address,
+                    name: token.name,
+                    symbol: token.symbol,
+                    decimals: token.decimals,
+                    amount: tokenQuantity ? rightShift(tokenQuantity, token.decimals).toFixed(0, 1) : '0',
+                    icon: token.logoURL,
+                })) as FireflyRedPacketAPI.TokensStrategyPayload[],
+            })
+            return list
+        }
+        if (needHoldingCollections) {
+            list.push({
+                type: FireflyRedPacketAPI.StrategyType.nftOwned,
+                payload: requiredCollections.map((collection) => ({
+                    chainId: collection.chainId.toString(),
+                    contractAddress: collection.address!,
+                    collectionName: collection.name || collection.symbol || '',
+                    icon: collection.iconURL!,
+                })),
+            })
+            return list
+        }
+        return list
+    }, [needHoldingTokens, requiredTokens, requiredCollections, tokenQuantity])
 
     // Token
     const [rawAmount, setRawAmount] = useState('')
@@ -163,8 +195,6 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
     // NFT
     const [nftGasOption, setNftGasOption] = useState<GasConfig>()
     const [selectedNfts, setSelectedNfts] = useState<Web3Helper.NonFungibleAssetAll[]>([])
-    const [myNfts, setMyNfts] = useState<OrderedERC721Token[]>([])
-    const [selectOption, setSelectOption] = useState<NFTSelectOption>(NFTSelectOption.Partial)
     const [collection, setCollection] = useState<Web3Helper.NonFungibleCollectionAll>()
 
     const contextValue = useMemo(() => {
@@ -187,6 +217,9 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             setRequiredTokens,
             requiredCollections,
             setRequiredCollections,
+            needHoldingTokens,
+            needHoldingCollections,
+            claimStrategies,
 
             // Token
             token,
@@ -204,10 +237,6 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
             setNftGasOption,
             selectedNfts,
             setSelectedNfts,
-            myNfts,
-            setMyNfts,
-            selectOption,
-            setSelectOption,
             collection,
             setCollection,
         }
@@ -226,12 +255,13 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         tokenQuantity,
         requiredTokens,
         requiredCollections,
+        needHoldingTokens,
+        needHoldingCollections,
+        claimStrategies,
         isRandom,
         shares,
-        selectOption,
         collection,
         nftGasOption,
-        myNfts,
         selectedNfts,
     ])
 

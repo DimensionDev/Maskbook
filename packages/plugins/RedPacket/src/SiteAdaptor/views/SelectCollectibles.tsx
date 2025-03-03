@@ -8,7 +8,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { alpha, Box, Button, DialogActions } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { NFT_RED_PACKET_MAX_SHARES } from '../../constants.js'
+import { NFT_RED_PACKET_MAX_SHARES, NFT_DEFAULT_CHAINS } from '../../constants.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -64,6 +64,7 @@ export function SelectCollectibles() {
         <Box className={classes.container}>
             <UserAssetsProvider
                 pluginID={NetworkPluginID.PLUGIN_EVM}
+                chainWhiteList={NFT_DEFAULT_CHAINS}
                 account={account}
                 multiple
                 selectMode

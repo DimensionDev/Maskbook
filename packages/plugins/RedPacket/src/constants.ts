@@ -42,7 +42,29 @@ export const enum RoutePaths {
 export const MAX_FILE_SIZE = 1.5 * 1024 * 1024
 export const DURATION = 60 * 60 * 24
 
-export const nftDefaultChains = [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon]
+export const NFT_DEFAULT_CHAINS = [
+    ChainId.Mainnet,
+    ChainId.BSC,
+    ChainId.Polygon,
+    ChainId.Arbitrum,
+    ChainId.xDai,
+    ChainId.Fantom,
+    ChainId.Avalanche,
+    ChainId.Celo,
+    ChainId.Optimism,
+    ChainId.Aurora,
+    ChainId.Fuse,
+    ChainId.Boba,
+    ChainId.Moonriver,
+    ChainId.Conflux,
+    ChainId.Harmony,
+    ChainId.Metis,
+    ChainId.Astar,
+    ChainId.Base,
+    ChainId.Scroll,
+    ChainId.XLayer,
+    ChainId.Sei,
+]
 
 function createTheme(themeId: string, cover: string): FireflyRedPacketAPI.ThemeGroupSettings {
     return {

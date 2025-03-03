@@ -240,5 +240,21 @@
     ],
     "ignoreRegExpList": ["/[A-Za-z0-9]{44}/", "/[A-Za-z0-9]{46}/", "/[A-Za-z0-9]{59}/"],
     "overrides": [],
-    "words": ["cashtags", "endregion", "linkedin", "luma", "muln", "tiktok", "tweetnacl", "txid", "waitlist", "youtube"]
+    "words": [
+        "Arbitrum",
+        "Boba",
+        "cashtags",
+        "Celo",
+        "endregion",
+        "linkedin",
+        "luma",
+        "muln",
+        "Sepolia",
+        "tanstack",
+        "tiktok",
+        "tweetnacl",
+        "txid",
+        "waitlist",
+        "youtube"
+    ]
 }

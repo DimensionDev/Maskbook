@@ -1,29 +1,13 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { useSiteThemeMode } from '@masknet/plugin-infra/content-script'
-import { InjectedDialog, NetworkTab, usePageTab, useParamTab, type InjectedDialogProps } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { makeStyles, MaskTabList } from '@masknet/theme'
+import { InjectedDialog, usePageTab, useParamTab, type InjectedDialogProps } from '@masknet/shared'
+import { MaskTabList } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
-import { Tab, useTheme } from '@mui/material'
+import { Tab } from '@mui/material'
 import { useLayoutEffect, type ReactNode } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
-import { nftDefaultChains, RoutePaths } from '../../constants.js'
+import { RoutePaths } from '../../constants.js'
 import { HistoryTabs, RedPacketTabs } from '../../types.js'
-
-const useStyles = makeStyles<{ isDim: boolean }>()((theme, { isDim }) => {
-    // it's hard to set dynamic color, since the background color of the button is blended transparent
-    const darkBackgroundColor = isDim ? '#38414b' : '#292929'
-    return {
-        tabWrapper: {
-            width: '100%',
-            paddingBottom: theme.spacing(2),
-        },
-        arrowButton: {
-            backgroundColor: theme.palette.mode === 'dark' ? darkBackgroundColor : undefined,
-        },
-    }
-})
 
 export function RouterDialog({
     pageMap,
@@ -31,8 +15,6 @@ export function RouterDialog({
 }: InjectedDialogProps & { pageMap: Record<RedPacketTabs, RoutePaths> }) {
     const { pathname } = useLocation()
     const navigate = useNavigate()
-    const theme = useTheme()
-    const mode = useSiteThemeMode(theme)
 
     useLayoutEffect(() => {
         if (pathname === RoutePaths.Exit) {
@@ -40,7 +22,6 @@ export function RouterDialog({
         }
     }, [pathname === RoutePaths.Exit, props.onClose])
 
-    const { classes } = useStyles({ isDim: mode === 'dim' })
     const [currentTab, onChange] = usePageTab<RedPacketTabs>(pageMap)
 
     const createTabs = (
@@ -61,23 +42,10 @@ export function RouterDialog({
         </TabContext>
     )
     const isCreate = matchPath(`${RoutePaths.Create}/*`, pathname)
-    const isEvmCreate =
-        matchPath(RoutePaths.CreateTokenRedPacket, pathname) || matchPath(RoutePaths.CreateNftRedPacket, pathname)
     const titleTabs =
         isCreate ? createTabs
         : matchPath(RoutePaths.History, pathname) ? historyTabs
         : null
-    const networkTabs =
-        isEvmCreate && currentTab === RedPacketTabs.collectibles ?
-            <div className={classes.tabWrapper}>
-                <NetworkTab
-                    chains={nftDefaultChains}
-                    hideArrowButton={currentTab === RedPacketTabs.collectibles}
-                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                    classes={{ arrowButton: classes.arrowButton }}
-                />
-            </div>
-        :   null
     const titleMap: Record<string, ReactNode> = {
         [RoutePaths.ConfirmTokenRedPacket]: <Trans>Confirm the Lucky Drop</Trans>,
         [RoutePaths.History]: <Trans>History</Trans>,
@@ -110,7 +78,6 @@ export function RouterDialog({
             {...props}
             title={titleMap[pathname] || <Trans>Lucky Drop</Trans>}
             titleTabs={titleTabs}
-            networkTabs={networkTabs}
             titleTail={titleTailMap[pathname] || null}
             onClose={() => {
                 navigate(-1)

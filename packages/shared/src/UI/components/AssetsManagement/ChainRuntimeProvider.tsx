@@ -25,6 +25,7 @@ interface ChainRuntimeOptions {
     chainId?: Web3Helper.ChainIdAll
     setChainId: Dispatch<SetStateAction<ChainId | FlowChainId | SolanaChainId | undefined>>
     networks: Array<ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>>
+    chainWhiteList?: ChainId[]
 }
 
 const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
@@ -35,12 +36,13 @@ const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
 })
 
 export interface ChainRuntimeProviderProps
-    extends Pick<ChainRuntimeOptions, 'pluginID' | 'defaultChainId' | 'account'> {}
+    extends Pick<ChainRuntimeOptions, 'pluginID' | 'defaultChainId' | 'account' | 'chainWhiteList'> {}
 
 export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderProps>>(function ChainRuntimeProvider({
     pluginID,
     account,
     defaultChainId,
+    chainWhiteList,
     children,
 }) {
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
@@ -56,14 +58,15 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
             const zora = CHAIN_DESCRIPTORS.find((x) => x.chainId === ChainId.Zora)
             if (zora) networks.push(zora as ReasonableNetwork<ChainId, SchemaType, NetworkType>)
         }
-        return sortBy(networks, (x) => supported.indexOf(x.chainId))
-    }, [allNetworks, pluginID])
+        const list = sortBy(networks, (x) => supported.indexOf(x.chainId))
+        return chainWhiteList?.length ? list.filter((x) => chainWhiteList.includes(x.chainId as ChainId)) : list
+    }, [allNetworks, pluginID, chainWhiteList])
 
     const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
 
     const value = useMemo(
-        () => ({ pluginID, account, defaultChainId, chainId: currentChainId, setChainId, networks }),
-        [pluginID, account, defaultChainId, currentChainId, networks],
+        () => ({ pluginID, account, defaultChainId, chainId: currentChainId, setChainId, networks, chainWhiteList }),
+        [pluginID, account, defaultChainId, currentChainId, networks, chainWhiteList],
     )
 
     return <ChainRuntimeContext value={value}>{children}</ChainRuntimeContext>
