@@ -5,10 +5,11 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, DialogActions } from '@mui/material'
 import { useCallback, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { NFT_RED_PACKET_MAX_SHARES, NFT_DEFAULT_CHAINS } from '../../constants.js'
+import { NFT_DEFAULT_CHAINS, NFT_RED_PACKET_MAX_SHARES } from '../../constants.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -39,7 +40,7 @@ const gridProps = {
 }
 export function SelectCollectibles() {
     const { classes } = useStyles()
-    const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account, setChainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const navigate = useNavigate()
     const { selectedNfts, setSelectedNfts, setCollection } = useRedPacket()
     const [pendingNfts, setPendingNfts] = useState<Web3Helper.NonFungibleAssetAll[]>(selectedNfts)
@@ -86,6 +87,7 @@ export function SelectCollectibles() {
                     onClick={() => {
                         setSelectedNfts(pendingNfts)
                         setCollection(pendingNfts[0].collection)
+                        setChainId(pendingNfts[0].chainId as ChainId)
                         navigate(-1)
                     }}>
                     <Trans>Confirm</Trans>

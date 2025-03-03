@@ -56,11 +56,9 @@ msgstr ""
 #~ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}"
 #~ msgstr ""
 
-#. placeholder {0}: tokenDetailedSelectedList.length
-#. placeholder {1}: tokenDetailedSelectedList.length
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
-msgstr ""
+#~ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}."
@@ -190,6 +188,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
+#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Claim Conditions"
 msgstr ""
 
@@ -289,8 +288,6 @@ msgstr ""
 #~ msgid "Conditions not met"
 #~ msgstr ""
 
-#: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/SelectCollectibles.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
@@ -577,8 +574,8 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Loading token..."
-msgstr ""
+#~ msgid "Loading token..."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
@@ -646,8 +643,8 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "No results"
-msgstr ""
+#~ msgid "No results"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
@@ -735,8 +732,8 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Search"
-msgstr ""
+#~ msgid "Search"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -749,8 +746,8 @@ msgid "Select a Token"
 msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Select All"
-msgstr ""
+#~ msgid "Select All"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
@@ -842,8 +839,8 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
-msgstr ""
+#~ msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -867,8 +864,8 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
-msgstr ""
+#~ msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -882,8 +879,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
-msgstr ""
+#~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
@@ -965,8 +962,8 @@ msgid "Winners"
 msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "You can also use <0>Shift</0> to select multiple NFTs."
-msgstr ""
+#~ msgid "You can also use <0>Shift</0> to select multiple NFTs."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 #: src/SiteAdaptor/components/ConditionSettings.tsx
