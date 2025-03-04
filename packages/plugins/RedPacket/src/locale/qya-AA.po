@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-03 04:02\n"
+"PO-Revision-Date: 2025-03-04 11:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -193,7 +193,6 @@ msgstr "crwdns28950:0crwdne28950:0"
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
-#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Claim Conditions"
 msgstr "crwdns36408:0crwdne36408:0"
 
@@ -764,6 +763,10 @@ msgstr "crwdns36430:0crwdne36430:0"
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "Select partially"
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
+msgid "Selecting NFTs"
+msgstr "crwdns36919:0crwdne36919:0"
 
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
