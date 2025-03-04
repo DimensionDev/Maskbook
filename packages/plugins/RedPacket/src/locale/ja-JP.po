@@ -193,7 +193,6 @@ msgstr "受取る"
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
-#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Claim Conditions"
 msgstr ""
 
@@ -766,6 +765,10 @@ msgstr ""
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "Select partially"
 #~ msgstr "一部を選択"
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
+msgid "Selecting NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
