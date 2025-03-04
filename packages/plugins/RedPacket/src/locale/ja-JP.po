@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-03 04:02\n"
+"PO-Revision-Date: 2025-03-04 11:55\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -193,7 +193,6 @@ msgstr "受取る"
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
-#: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Claim Conditions"
 msgstr ""
 
@@ -764,6 +763,10 @@ msgstr ""
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "Select partially"
 #~ msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
+msgid "Selecting NFTs"
+msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
