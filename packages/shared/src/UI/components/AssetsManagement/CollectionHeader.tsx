@@ -4,9 +4,11 @@ import { Icons } from '@masknet/icons'
 import { Image, NFTSpamBadge, useReportSpam } from '@masknet/shared'
 import { LoadingBase, MaskTextField, ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Checkbox, Stack, Typography } from '@mui/material'
-import { memo, useState, type HTMLProps, type KeyboardEvent } from 'react'
+import { memo, useMemo, useState, type HTMLProps, type KeyboardEvent } from 'react'
 import { useUserAssets } from './AssetsProvider.js'
 import { CollectionsContext } from './CollectionsProvider.js'
+import { EMPTY_LIST } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -64,22 +66,30 @@ const useStyles = makeStyles()((theme) => {
     }
 })
 
-interface Props extends HTMLProps<HTMLDivElement> {
+export interface CollectionHeaderProps extends Omit<HTMLProps<HTMLDivElement>, 'onSelect'> {
+    assets: Web3Helper.NonFungibleAssetScope[]
     onResetCollection?: (id: undefined) => void
+    onSelect?: (assets: Web3Helper.NonFungibleAssetAll[]) => void
 }
 
-export const CollectionHeader = memo(function CollectionHeader({ className, onResetCollection, ...rest }: Props) {
+export const CollectionHeader = memo(function CollectionHeader({
+    className,
+    assets,
+    onResetCollection,
+    onSelect,
+    ...rest
+}: CollectionHeaderProps) {
     const { classes, cx } = useStyles()
     const {
         getVerifiedBy,
         selectMode,
         multiple,
-        getAssets,
         selectedAssets,
         maxSelection,
         maxSelectionDescription,
         searchKeyword,
         setSearchKeyword,
+        disableReport,
     } = useUserAssets()
     const { currentCollectionId, currentCollection } = CollectionsContext.useContainer()
     const { isReporting, isSpam, promptReport } = useReportSpam({
@@ -89,8 +99,21 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
     })
     const [pendingKeyword, setPendingKeyword] = useState('')
 
+    const { isSelectedAll, isSelectedSome } = useMemo(() => {
+        if (!currentCollection) return { isSelectedAll: false, isSelectedSome: false }
+        const selectedSet = new Set(
+            selectedAssets?.map((x) => `${x.chainId}.${x.address}.${x.tokenId}`.toLowerCase()) ?? [],
+        )
+        const listingSet = new Set(assets.map((x) => `${x.chainId}.${x.address}.${x.tokenId}`.toLowerCase()))
+        const isSelectedAll = selectedSet.size === listingSet.size && selectedSet.difference(listingSet).size === 0
+        const isSelectedSome = selectedSet.size > 0 && listingSet.difference(selectedSet).size > 0
+        return {
+            isSelectedAll,
+            isSelectedSome,
+        }
+    }, [assets, selectedAssets, currentCollection])
+
     if (!currentCollection) return null
-    const total = getAssets(currentCollection).assets.length
     const currentVerifiedBy = currentCollectionId ? getVerifiedBy(currentCollectionId) : []
 
     return (
@@ -117,7 +140,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                 <Button variant="text" className={classes.backButton} onClick={() => onResetCollection?.(undefined)}>
                     <Icons.Undo size={16} />
                 </Button>
-                {!isSpam ?
+                {!isSpam && !disableReport ?
                     <Button variant="text" className={classes.backButton} onClick={promptReport}>
                         {isReporting ?
                             <LoadingBase size={16} />
@@ -145,7 +168,7 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                         />
                         <Button
                             className={classes.searchButton}
-                            disabled={!pendingKeyword}
+                            disabled={!pendingKeyword && !searchKeyword}
                             onClick={() => {
                                 if (searchKeyword) {
                                     setSearchKeyword('')
@@ -168,11 +191,22 @@ export const CollectionHeader = memo(function CollectionHeader({ className, onRe
                                 gap="4px"
                                 display="flex"
                                 alignItems="center">
-                                <Checkbox classes={{ root: classes.checkbox }} />
+                                <Checkbox
+                                    checked={isSelectedAll}
+                                    indeterminate={isSelectedSome}
+                                    classes={{ root: classes.checkbox }}
+                                    onChange={() => {
+                                        if (isSelectedAll) {
+                                            onSelect?.(EMPTY_LIST)
+                                        } else {
+                                            onSelect?.(assets)
+                                        }
+                                    }}
+                                />
                                 <Trans>Select All</Trans>
                             </Typography>
                             <Typography className={classes.text} component="span">
-                                ({total})
+                                ({assets.length})
                             </Typography>
                         </Stack>
                         <Stack direction="row" gap="4px" alignItems="center" ml="auto">

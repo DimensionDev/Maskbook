@@ -335,6 +335,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                                         actionLabel={<Trans>Send</Trans>}
                                         disableAction
                                         onItemClick={isMine ? toggleSelect : undefined}
+                                        selectable
                                         isSelected={selectedTokenIds.includes(asset.tokenId)}
                                     />
                                 )
@@ -343,7 +344,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
                 }
             </div>
             <Stack className={classes.toolbar} direction="row" justifyContent="center">
-                <ActionButton fullWidth startIcon={<Icons.Avatar size={18} />} disabled={disabled} onClick={handleAdd}>
+                <ActionButton fullWidth disabled={disabled} onClick={handleAdd}>
                     <Trans>Add NFTs</Trans>
                 </ActionButton>
             </Stack>

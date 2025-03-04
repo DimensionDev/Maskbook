@@ -14,7 +14,7 @@ import { useUserAssets } from './AssetsProvider.js'
 import { useChainRuntime } from './ChainRuntimeProvider.js'
 import { CollectibleItem, CollectibleItemSkeleton } from './CollectibleItem.js'
 import { Collection, CollectionSkeleton, LazyCollection, type CollectionProps } from './Collection.js'
-import { CollectionHeader } from './CollectionHeader.js'
+import { CollectionHeader, type CollectionHeaderProps } from './CollectionHeader.js'
 import { CollectionsContext } from './CollectionsProvider.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './types.js'
@@ -98,8 +98,9 @@ function getTopOffset() {
 }
 
 export interface CollectionListProps
-    extends BoxProps,
+    extends Omit<BoxProps, 'onSelect'>,
         Pick<CollectionProps, 'disableAction' | 'onActionClick'>,
+        Pick<CollectionHeaderProps, 'onSelect'>,
         withClasses<'sidebar' | 'grid'> {
     gridProps?: CollectibleGridProps
     disableSidebar?: boolean
@@ -131,6 +132,7 @@ export const CollectionList = memo(function CollectionList({
     onChainChange,
     onCollectionChange,
     onItemClick,
+    onSelect,
     ...rest
 }: CollectionListProps) {
     const { classes, cx } = useStyles(gridProps, { props: rest })
@@ -269,7 +271,12 @@ export const CollectionList = memo(function CollectionList({
             <div className={classes.columns}>
                 {sidebar}
                 <div className={classes.main} ref={forkedMainColumnRef}>
-                    <CollectionHeader className={classes.collectionHeader} onResetCollection={handleCollectionChange} />
+                    <CollectionHeader
+                        assets={filteredAssets}
+                        className={classes.collectionHeader}
+                        onResetCollection={handleCollectionChange}
+                        onSelect={onSelect}
+                    />
                     {currentCollection ?
                         <Box className={classes.expanded} display={!selectMode || !multiple ? 'contents' : undefined}>
                             <ExpandedCollection

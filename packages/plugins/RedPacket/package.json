@@ -33,6 +33,7 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
+    "@servie/events": "^3.0.0",
     "@solana/spl-token": "^0.4.9",
     "@solana/web3.js": "^1.75.0",
     "@tanstack/react-query": "^5.49.2",

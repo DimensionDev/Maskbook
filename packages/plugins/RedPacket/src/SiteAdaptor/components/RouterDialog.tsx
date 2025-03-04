@@ -8,6 +8,7 @@ import { useLayoutEffect, type ReactNode } from 'react'
 import { matchPath, useLocation, useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { HistoryTabs, RedPacketTabs } from '../../types.js'
+import { addCollectibles } from '../emitter.js'
 
 export function RouterDialog({
     pageMap,
@@ -52,6 +53,7 @@ export function RouterDialog({
         [RoutePaths.HistoryDetail]: <Trans>Claim Details</Trans>,
         [RoutePaths.NftHistory]: <Trans>History</Trans>,
         [RoutePaths.CustomCover]: <Trans>Add a Custom Cover</Trans>,
+        [RoutePaths.SelectCollectibles]: <Trans>Selecting NFTs</Trans>,
     }
     const titleTailMap: Record<string, ReactNode> = {
         [RoutePaths.CreateTokenRedPacket]: (
@@ -71,6 +73,7 @@ export function RouterDialog({
                 }}
             />
         ),
+        [RoutePaths.SelectCollectibles]: <Icons.Plus onClick={addCollectibles} />,
     }
 
     return (

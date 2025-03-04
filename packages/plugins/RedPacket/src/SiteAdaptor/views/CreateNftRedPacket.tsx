@@ -32,7 +32,6 @@ import { NFTCard } from '../components/NFTCard.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNFTRedpacketGas } from '../hooks/useCreateNftRedpacketGas.js'
 import { useMyCollectionNfts } from '../hooks/useMyCollectionNfts.js'
-import { ConditionSettings } from '../components/ConditionSettings.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -42,20 +41,6 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(2),
             gap: theme.spacing(2),
             paddingBottom: 88,
-        },
-        field: {
-            display: 'flex',
-            gap: 16,
-            alignItems: 'center',
-        },
-        label: {
-            fontSize: 14,
-            fontWeight: 700,
-            lineHeight: '18px',
-            color: theme.palette.maskColor.second,
-        },
-        fieldValue: {
-            marginLeft: 'auto',
         },
         approveAllTip: {
             color: '#FF5F5F',
@@ -174,12 +159,6 @@ export function CreateNftRedPacket() {
                             +{selectedNfts.length - 5}
                         </Typography>
                     :   null}
-                </Box>
-                <Box className={classes.field}>
-                    <Typography className={classes.label}>
-                        <Trans>Claim Conditions</Trans>
-                    </Typography>
-                    <ConditionSettings className={classes.fieldValue} />
                 </Box>
                 {nativeTokenDetailed && nativeTokenPrice ?
                     <SelectGasSettingsToolbar
