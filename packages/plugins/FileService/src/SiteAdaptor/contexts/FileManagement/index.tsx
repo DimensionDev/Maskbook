@@ -47,6 +47,7 @@ const FileManagementContext = createContext<FileManagementContextOptions>({
     uploadFile: null!,
     attachToPost: noop,
 })
+FileManagementContext.displayName = 'FileManagementContext'
 
 function openCompositionWithFiles(type: CompositionType, files: FileInfo[]) {
     CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

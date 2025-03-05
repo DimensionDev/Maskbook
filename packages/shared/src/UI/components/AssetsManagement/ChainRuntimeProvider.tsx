@@ -33,6 +33,7 @@ const ChainRuntimeContext = createContext<ChainRuntimeOptions>({
     setChainId: noop,
     networks: EMPTY_LIST,
 })
+ChainRuntimeContext.displayName = 'ChainRuntimeContext'
 
 export interface ChainRuntimeProviderProps
     extends Pick<ChainRuntimeOptions, 'pluginID' | 'defaultChainId' | 'account' | 'chainWhiteList'> {}

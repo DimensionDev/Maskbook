@@ -82,6 +82,7 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     publicKey: '',
     password: '',
 })
+RedPacketContext.displayName = 'RedPacketContext'
 
 interface Props extends PropsWithChildren {}
 
@@ -170,7 +171,7 @@ export const SOLRedPacketProvider = memo(function RedPacketProvider({ children }
         privateKey,
     ])
 
-    return <RedPacketContext.Provider value={contextValue}>{children}</RedPacketContext.Provider>
+    return <RedPacketContext value={contextValue}>{children}</RedPacketContext>
 })
 
 export function useSolRedpacket() {

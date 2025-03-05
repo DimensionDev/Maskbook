@@ -76,6 +76,7 @@ const AssetsContext = createContext<AssetsContextOptions>({
     isEmpty: false,
     disableReport: false,
 })
+AssetsContext.displayName = 'AssetsContext'
 
 /** Min merged collection chunk size */
 const CHUNK_SIZE = 8

@@ -31,12 +31,12 @@ describe('SingletonModal', () => {
     it('opens and waits for closing', async () => {
         const promise = modal.openAndWaitForClose()
         closeCallback({ closeProp: 1 })
-        expect(promise).resolves.toEqual({ closeProp: 1 })
+        await expect(promise).resolves.toEqual({ closeProp: 1 })
     })
 
-    it('gets rejected error', () => {
+    it('gets rejected error', async () => {
         const promise = modal.openAndWaitForClose()
         rejectCallback(new Error('Mock Error Message'))
-        expect(promise).rejects.toThrow('Mock Error Message')
+        await expect(promise).rejects.toThrow('Mock Error Message')
     })
 })

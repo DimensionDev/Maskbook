@@ -91,6 +91,7 @@ function useModeState<T>(mode: TradeMode, defaultValue?: T): [T | undefined, Dis
 }
 
 const SwapContext = createContext<Options>(null!)
+SwapContext.displayName = 'SwapContext'
 const otherChainIdMap: Record<number, ChainId> = {
     [ChainId.BSC]: ChainId.Mainnet,
     [ChainId.Mainnet]: ChainId.BSC,
@@ -249,7 +250,7 @@ export function TradeProvider({ children }: PropsWithChildren) {
             reset,
         ],
     )
-    return <SwapContext.Provider value={value}>{children}</SwapContext.Provider>
+    return <SwapContext value={value}>{children}</SwapContext>
 }
 
 export function useTrade() {

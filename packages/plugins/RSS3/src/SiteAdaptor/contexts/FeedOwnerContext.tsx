@@ -7,7 +7,7 @@ export interface FeedOwnerOptions {
     ownerDisplay: string
 }
 export const FeedOwnerContext = createContext<FeedOwnerOptions>(null!)
-
+FeedOwnerContext.displayName = 'FeedOwnerContext'
 export function useFeedOwner() {
     return useContext(FeedOwnerContext)
 }

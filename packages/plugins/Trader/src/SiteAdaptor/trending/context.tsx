@@ -15,6 +15,7 @@ export const TrendingViewContext = createContext<TrendingViewContextProps>({
     isPreciseSearch: false,
     isDSearch: false,
 })
+TrendingViewContext.displayName = 'TrendingViewContext'
 
 export function TrendingViewProvider({
     isTokenTagPopper,

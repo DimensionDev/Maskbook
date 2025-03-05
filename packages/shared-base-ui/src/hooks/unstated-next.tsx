@@ -15,9 +15,10 @@ export function createContainer<Value, State = void>(
     useHook: (initialState?: State) => Value,
 ): Container<Value, State> {
     const Context = createContext<Value | null>(null)
+    Context.displayName = useHook.name.slice(3) + 'Context'
     const Provider: Container<Value, State> = function Provider(props: ContainerProviderProps<State>) {
         const value = useHook(props.initialState)
-        return <Context.Provider value={value}>{props.children}</Context.Provider>
+        return <Context value={value}>{props.children}</Context>
     }
     Provider.Provider = Provider
     Provider.useContainer = useContainer

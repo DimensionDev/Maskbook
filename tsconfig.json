@@ -29,6 +29,7 @@
     "types": ["masknet__global-types"],
     "resolveJsonModule": true,
     "emitDeclarationOnly": true,
+    "libReplacement": true,
     "paths": {
       // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.

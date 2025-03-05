@@ -19,9 +19,9 @@ export interface RuntimeOptions {
 }
 
 const RuntimeContext = createContext<RuntimeOptions>(null!)
-
+RuntimeContext.displayName = 'RuntimeContext'
 export function RuntimeProvider({ children, runtime }: PropsWithChildren<{ runtime: RuntimeOptions }>) {
-    return <RuntimeContext.Provider value={runtime}>{children}</RuntimeContext.Provider>
+    return <RuntimeContext value={runtime}>{children}</RuntimeContext>
 }
 
 export function useRuntime() {

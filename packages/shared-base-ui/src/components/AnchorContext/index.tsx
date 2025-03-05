@@ -8,6 +8,7 @@ interface AnchorContextOptions {
 export const AnchorContext = createContext<AnchorContextOptions>({
     anchorEl: null,
 })
+AnchorContext.displayName = 'AnchorContext'
 
 interface Props {
     anchorEl: HTMLElement | null

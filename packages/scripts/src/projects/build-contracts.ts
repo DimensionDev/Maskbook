@@ -3,6 +3,7 @@ import { join } from 'path'
 import { task } from '../utils/task.js'
 import { awaitChildProcess } from '../utils/awaitChildProcess.js'
 import { shell } from '../utils/run.js'
+import { rimraf } from 'rimraf'
 
 const ABIS_PATH = join(import.meta.dirname, '../../../web3-contracts/abis/')
 const GENERATED_PATH = join(import.meta.dirname, '../../../web3-contracts/types/')
@@ -23,6 +24,7 @@ export async function buildContracts() {
     // find all files matching the glob
     const allFiles = glob(cwd, ['./abis/*.json'])
 
+    await rimraf(GENERATED_PATH)
     await runTypeChain({
         cwd,
         filesToProcess: allFiles,
@@ -37,6 +39,7 @@ export async function buildContracts() {
         ['type Qualification', 'type QualificationEvent'],
         ['Callback<Qualification>', 'Callback<QualificationEvent>'],
     ])
+    replaceFileAll(join(GENERATED_PATH, 'types.ts'), [['web3-core/types', 'web3-core']])
 
     await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpx @magic-works/ts-esm-migrate .`)
     // format code

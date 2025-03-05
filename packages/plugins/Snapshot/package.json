@@ -29,7 +29,7 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "@react-hookz/web": "^24.0.4",
-    "@types/color": "^3.0.6",
+    "@types/color": "^4.2.0",
     "color": "^4.2.3",
     "date-fns": "^3.6.0",
     "react-use": "^17.5.0",
