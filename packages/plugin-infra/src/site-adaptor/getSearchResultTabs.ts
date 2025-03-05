@@ -7,7 +7,7 @@ import { getAvailablePlugins } from '../utils/getAvailablePlugins.js'
 export function getSearchResultTabs(
     definitions: readonly Plugin.SiteAdaptor.Definition[],
     result: SearchResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>,
-    translate: (pluginID: string, field: I18NStringField) => string,
+    translate: (field: I18NStringField) => string,
 ) {
     const displayPlugins = getAvailablePlugins(definitions, (plugins) => {
         if (!result) return EMPTY_LIST
@@ -19,6 +19,6 @@ export function getSearchResultTabs(
 
     return displayPlugins.map((x) => ({
         id: x.ID,
-        label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+        label: typeof x.label === 'string' ? x.label : translate(x.label),
     }))
 }

@@ -6,7 +6,7 @@ import { querySelector } from '../utils/selector.js'
 
 function sidebarSearchSelector() {
     return querySelector<HTMLElement>(
-        '[data-testid="sidebarColumn"] > div > div > div > div[tabindex="0"] > div > div:not(div[tabindex="0"]):empty',
+        '[data-testid="sidebarColumn"] > div > div > div > div[tabindex="0"] > div > div > div:not(div[tabindex="0"]):empty',
     )
 }
 

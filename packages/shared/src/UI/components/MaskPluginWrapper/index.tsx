@@ -183,7 +183,7 @@ export function MaskPostExtraPluginWrapper(props: PluginWrapperComponentProps<Pl
             ID={props.definition.ID}
             wrapperProps={wrapperProps}
             open={open}
-            title={title || t(ID, name)}
+            title={title || t(name)}
             width={width}
             publisher={publisher ? <PluginTransFieldRender pluginID={ID} field={publisher.name} /> : undefined}
             publisherLink={publisher?.link}

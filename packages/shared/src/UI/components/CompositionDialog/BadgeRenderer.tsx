@@ -46,7 +46,7 @@ export function BadgeRenderer({ meta, onDeleteMeta, readonly }: BadgeRendererPro
                 if (typeof desc === 'string')
                     desc = {
                         text: desc,
-                        tooltip: <Trans>Provided by plugin "{i18n(plugin.ID, plugin.name)}"</Trans>,
+                        tooltip: <Trans>Provided by plugin "{i18n(plugin.name)}"</Trans>,
                     }
                 return (
                     <MetaBadge

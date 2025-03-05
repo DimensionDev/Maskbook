@@ -51,7 +51,7 @@ export const PluginEntryRender = memo((props: PluginEntryRenderProps) => {
             const extra: ExtraPluginProps = { unstable, id: ID, readonly: props.readonly }
             if (lackPermission?.has(ID)) {
                 return (
-                    <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
+                    <ErrorBoundary subject={`Plugin "${pluginField(plugin.name)}"`} key={plugin.ID}>
                         <DialogEntry
                             label={entry.label}
                             {...extra}
@@ -63,7 +63,7 @@ export const PluginEntryRender = memo((props: PluginEntryRenderProps) => {
                 )
             }
             return (
-                <ErrorBoundary subject={`Plugin "${pluginField(ID, plugin.name)}"`} key={plugin.ID}>
+                <ErrorBoundary subject={`Plugin "${pluginField(plugin.name)}"`} key={plugin.ID}>
                     {'onClick' in entry ?
                         <CustomEntry {...entry} {...extra} ref={trackPluginRef(ID)} />
                     :   <DialogEntry

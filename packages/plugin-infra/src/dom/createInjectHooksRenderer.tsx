@@ -41,7 +41,7 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
         const ui = pickInjectorHook(plugin)
         return usePluginWrapperProvider(
             ui ?
-                <ErrorBoundary subject={'Plugin ' + t(plugin.ID, plugin.name)}>
+                <ErrorBoundary subject={'Plugin ' + t(plugin.name)}>
                     <Main UI={ui} data={props} />
                 </ErrorBoundary>
             :   null,

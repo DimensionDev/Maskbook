@@ -1133,7 +1133,7 @@ msgstr ""
 msgid "Price Statistic"
 msgstr "가격 통계"
 
-#. placeholder {0}: i18n(plugin.ID, plugin.name)
+#. placeholder {0}: i18n(plugin.name)
 #: src/UI/components/CompositionDialog/BadgeRenderer.tsx
 msgid "Provided by plugin \"{0}\""
 msgstr ""
