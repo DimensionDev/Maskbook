@@ -1,5 +1,11 @@
 # @masknet/encryption
 
+## 0.5.3
+
+### Patch Changes
+
+- 9cd6da8: Update elliptic
+
 ## 0.5.2
 
 ### Patch Changes
