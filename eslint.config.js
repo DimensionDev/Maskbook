@@ -213,7 +213,7 @@ const avoidMistakeRules = {
     'valid-typeof': 'error', // typeof expr === undefined
     'unicorn/no-invalid-remove-event-listener': 'error', // removeEventListener('click', f.bind(...))
     'unicorn/no-negation-in-equality-check': 'error', // !foo === bar
-    'react/dom/no-children-in-void-dom-elements': 'warn', // <img>children</img>
+    'react/dom/no-void-elements-with-children': 'warn', // <img>children</img>
     'react/web-api/no-leaked-event-listener': 'warn', // addEventListener in hooks without removeEventListener
     'react/web-api/no-leaked-interval': 'warn', // setInterval in hooks without clearInterval
     'react/web-api/no-leaked-resize-observer': 'warn', // new ResizeObserver in hooks without disconnect
@@ -246,6 +246,8 @@ const codeStyleRules = {
     'no-var': 'error', // var x
     'unicorn/no-new-buffer': 'error', // NodeJS
     'react/no-class-component': 'error',
+    'react/no-context-provider': 'error',
+    'react/no-forward-ref': 'error',
     // Let's wait for https://github.com/typescript-eslint/typescript-eslint/issues/6572
     // '@typescript-eslint/no-namespace': 'error', // namespace T {}
     '@typescript-eslint/prefer-namespace-keyword': 'error', // but if you really need to, don't use `module T {}`
@@ -264,6 +266,7 @@ const codeStyleRules = {
     'no-useless-concat': 'warn', // "a" + "b"
     'no-useless-escape': 'warn', // "hol\a"
     // 'no-lone-blocks': 'warn', // no block that not introducing a new scope
+    'react/no-missing-context-display-name': 'warn',
     'react/no-useless-fragment': 'warn',
     'unicorn/no-console-spaces': 'warn', // console.log('id: ', id)
     'unicorn/no-empty-file': 'warn',

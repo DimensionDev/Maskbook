@@ -65,9 +65,9 @@ const FinanceTabConfigInSearchResult: Plugin.SiteAdaptor.SearchResultTab = {
             if (result.type === SearchResultType.Domain || result.type === SearchResultType.EOA) {
                 return (
                     <Box style={{ minHeight: 300 }}>
-                        <ScopedDomainsContainer.Provider initialState={map}>
+                        <ScopedDomainsContainer initialState={map}>
                             <FinanceFeeds address={result.address} />
-                        </ScopedDomainsContainer.Provider>
+                        </ScopedDomainsContainer>
                     </Box>
                 )
             }

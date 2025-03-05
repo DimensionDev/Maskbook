@@ -41,10 +41,10 @@ export function FinanceFeedDetailsDialog({ transaction, onClose, scopedDomainsMa
                 onClose?.()
             }}>
             <DialogContent className={classes.content}>
-                <ScopedDomainsContainer.Provider initialState={scopedDomainsMap}>
+                <ScopedDomainsContainer initialState={scopedDomainsMap}>
                     <FinanceFeed transaction={transaction} verbose />
                     <TxDetails transaction={transaction} />
-                </ScopedDomainsContainer.Provider>
+                </ScopedDomainsContainer>
             </DialogContent>
         </InjectedDialog>
     )

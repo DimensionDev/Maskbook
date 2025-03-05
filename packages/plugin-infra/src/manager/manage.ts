@@ -145,6 +145,7 @@ export function createManager<
             controller: abort,
             context: {
                 ...getManagedContext(id, abort.signal),
+                // eslint-disable-next-line react/no-missing-context-display-name
                 ..._host.createContext(id, definition, abort.signal),
             } as any,
             minimalModeEnabled: new ValueRefWithReady(),

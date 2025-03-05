@@ -31,6 +31,7 @@ interface Options {
 }
 
 const GasManagerContext = createContext<Options>(null!)
+GasManagerContext.displayName = 'GasManagerContext'
 export function GasManager({ children }: PropsWithChildren) {
     const { quote, mode, bridgeQuote, chainId, fromToken, toToken } = useTrade()
     const gasLimit = mode === 'swap' ? quote?.estimateGasFee : bridgeQuote?.routerList[0]?.estimateGasFee
@@ -66,7 +67,7 @@ export function GasManager({ children }: PropsWithChildren) {
         }),
         [gasLimit, gasConfig, gasOptions, isLoadingGasOptions, gasFee, gasCost],
     )
-    return <GasManagerContext.Provider value={value}>{children}</GasManagerContext.Provider>
+    return <GasManagerContext value={value}>{children}</GasManagerContext>
 }
 
 export function useGasManagement() {

@@ -214,3 +214,4 @@ interface PluginGuideContext {
     nextStep: () => void
 }
 const PluginGuideContext = createContext<PluginGuideContext>(null!)
+PluginGuideContext.displayName = 'PluginGuideContext'

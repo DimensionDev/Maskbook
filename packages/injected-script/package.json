@@ -25,7 +25,7 @@
     "start": "rollup -c -w"
   },
   "devDependencies": {
-    "rollup": "^4.27.4",
+    "rollup": "^4.34.9",
     "rollup-plugin-swc3": "^0.12.1"
   }
 }

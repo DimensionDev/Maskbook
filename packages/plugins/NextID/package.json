@@ -27,7 +27,7 @@
     "@masknet/web3-shared-base": "workspace:^",
     "@masknet/web3-shared-evm": "workspace:^",
     "react-use": "^17.5.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.2"
   },
   "lingui": {
     "compileNamespace": "json",

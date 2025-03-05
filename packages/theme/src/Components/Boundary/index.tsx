@@ -16,6 +16,7 @@ interface Options {
 const BoundaryContext = createContext<Options>({
     boundaryRef: { current: null },
 })
+BoundaryContext.displayName = 'BoundaryContext'
 
 interface BoundaryProps<T> {
     // cloneElement is used.

@@ -18,6 +18,7 @@ export const useUnconfirmedRequest = () => {
 
         const computedPayload = PayloadEditor.fromPayload(payload).config
         const formatterTransaction = await TransactionFormatter?.formatTransaction(chainId, computedPayload)
+        // eslint-disable-next-line react/no-missing-context-display-name
         const transactionContext = await TransactionFormatter?.createContext(chainId, computedPayload)
         return {
             owner: payload.owner,

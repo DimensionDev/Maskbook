@@ -60,6 +60,7 @@ const AvatarManagementContext = createContext<AvatarManagementContextOptions>({
     selectedTokenInfo: undefined,
     setSelectedTokenInfo: noop,
 })
+AvatarManagementContext.displayName = 'AvatarManagementContext'
 
 interface Props extends PropsWithChildren<{ socialIdentity?: SocialIdentity }> {}
 

@@ -1,5 +1,5 @@
 import { isEmpty } from 'lodash-es'
-import Arweave from 'arweave/web'
+import Arweave from 'arweave/web/index.js'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import type Transaction from 'arweave/web/lib/transaction.js'

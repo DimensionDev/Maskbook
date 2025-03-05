@@ -1,7 +1,7 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
-import { forwardRef, memo } from 'react'
+import { memo } from 'react'
 import { NetworkOptions, Networks } from '../constants.js'
 import { useFilters } from './filters.js'
 import { Trans } from '@lingui/react/macro'
@@ -42,55 +42,53 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const FeedFilters = memo(
-    forwardRef<HTMLDivElement, BoxProps>(function FeedFilters(props: BoxProps, ref) {
-        const { classes, cx } = useStyles()
+export const FeedFilters = memo(function FeedFilters(props: BoxProps) {
+    const { classes, cx } = useStyles()
 
-        const [filters, setFilters] = useFilters()
-        const { networks, isDirect } = filters
+    const [filters, setFilters] = useFilters()
+    const { networks, isDirect } = filters
 
-        return (
-            <Box {...props} ref={ref} className={cx(classes.container, props.className)}>
-                <Box className={classes.header}>
-                    <Typography fontWeight="bold">
-                        <Trans>{networks.length} Networks</Trans>
-                    </Typography>
-                    <Box
-                        className={classes.button}
-                        onClick={() => {
-                            setFilters((origin) => ({ ...origin, isDirect: !origin.isDirect }))
-                        }}>
-                        <Icons.Blocks size={16} />
-                        {isDirect ?
-                            <Trans>Direct</Trans>
-                        :   <Trans>Related</Trans>}
-                    </Box>
-                </Box>
-                <Box className={classes.networks}>
-                    {NetworkOptions.map((op) => {
-                        if (op.hidden) return null
-                        const checked = networks.includes(op.network)
-                        return (
-                            <Typography
-                                key={op.network}
-                                className={classes.button}
-                                onClick={() => {
-                                    setFilters((origin) => ({
-                                        ...origin,
-                                        networks: Networks.filter((x) =>
-                                            op.network === x ? !checked : networks.includes(x),
-                                        ),
-                                    }))
-                                }}>
-                                {checked ?
-                                    <Icons.Check size={16} />
-                                :   <Icons.Minus size={16} />}
-                                <span>{op.name}</span>
-                            </Typography>
-                        )
-                    })}
+    return (
+        <Box {...props} className={cx(classes.container, props.className)}>
+            <Box className={classes.header}>
+                <Typography fontWeight="bold">
+                    <Trans>{networks.length} Networks</Trans>
+                </Typography>
+                <Box
+                    className={classes.button}
+                    onClick={() => {
+                        setFilters((origin) => ({ ...origin, isDirect: !origin.isDirect }))
+                    }}>
+                    <Icons.Blocks size={16} />
+                    {isDirect ?
+                        <Trans>Direct</Trans>
+                    :   <Trans>Related</Trans>}
                 </Box>
             </Box>
-        )
-    }),
-)
+            <Box className={classes.networks}>
+                {NetworkOptions.map((op) => {
+                    if (op.hidden) return null
+                    const checked = networks.includes(op.network)
+                    return (
+                        <Typography
+                            key={op.network}
+                            className={classes.button}
+                            onClick={() => {
+                                setFilters((origin) => ({
+                                    ...origin,
+                                    networks: Networks.filter((x) =>
+                                        op.network === x ? !checked : networks.includes(x),
+                                    ),
+                                }))
+                            }}>
+                            {checked ?
+                                <Icons.Check size={16} />
+                            :   <Icons.Minus size={16} />}
+                            <span>{op.name}</span>
+                        </Typography>
+                    )
+                })}
+            </Box>
+        </Box>
+    )
+})

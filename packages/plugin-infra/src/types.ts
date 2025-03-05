@@ -450,7 +450,7 @@ export namespace Plugin.SiteAdaptor {
     export interface SearchResultContent {
         ID: string
         UI?: {
-            Content?: React.ForwardRefExoticComponent<{ keyword: string } & React.RefAttributes<unknown>>
+            Content?: React.ComponentType<{ keyword: string } & React.RefAttributes<unknown>>
         }
     }
 
@@ -934,7 +934,7 @@ export namespace Plugin.GeneralUI {
          *
          * 3. Actions
          *
-         * The render component MUST BE a ForwardRefExotic React Component
+         * The render component MUST BE accept a ref.
          * that support operations defined in `Plugin.ContextFree.MetadataRender.RenderActions`
          */
         metadataRender?: MetadataRender.StaticRender | MetadataRender.DynamicRender
@@ -945,14 +945,14 @@ export namespace Plugin.GeneralUI {
         // #region Static render
         // new Map([ [reader, react component] ])
         export type StaticRender<T = any> = ReadonlyMap<MetadataReader<T>, StaticRenderComponent<T>>
-        export type StaticRenderComponent<T> = Omit<React.ForwardRefExoticComponent<StaticRenderProps<T>>, 'propTypes'>
+        export type StaticRenderComponent<T> = Omit<React.ComponentType<StaticRenderProps<T>>, 'propTypes'>
         export type StaticRenderProps<T> = Context<T> &
             React.RefAttributes<RenderActions<T>> & {
                 metadata: T
             }
         // #endregion
         // #region DynamicRender
-        export type DynamicRender = Omit<React.ForwardRefExoticComponent<DynamicRenderProps>, 'propTypes'>
+        export type DynamicRender = Omit<React.ComponentType<DynamicRenderProps>, 'propTypes'>
         export type DynamicRenderProps = Context<unknown> &
             React.RefAttributes<RenderActions<unknown>> & {
                 metadata: TypedMessage['meta']

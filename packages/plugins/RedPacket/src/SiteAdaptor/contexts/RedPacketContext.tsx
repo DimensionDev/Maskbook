@@ -108,6 +108,7 @@ export const RedPacketContext = createContext<RedPacketContextOptions>({
     collection: undefined,
     setCollection: noop,
 })
+RedPacketContext.displayName = 'RedPacketContext'
 
 interface Props extends PropsWithChildren {}
 
@@ -265,7 +266,7 @@ export const RedPacketProvider = memo(function RedPacketProvider({ children }: P
         selectedNfts,
     ])
 
-    return <RedPacketContext.Provider value={contextValue}>{children}</RedPacketContext.Provider>
+    return <RedPacketContext value={contextValue}>{children}</RedPacketContext>
 })
 
 export function useRedPacket() {
