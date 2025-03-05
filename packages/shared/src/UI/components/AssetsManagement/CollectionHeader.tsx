@@ -157,13 +157,13 @@ export const CollectionHeader = memo(function CollectionHeader({
                             autoFocus
                             fullWidth
                             value={pendingKeyword}
-                            onKeyDown={(event: KeyboardEvent<HTMLInputElement>) => {
-                                if (event.key !== 'Enter') return
-                                setSearchKeyword(event.currentTarget.value)
-                            }}
                             onChange={(event) => setPendingKeyword(event.target.value)}
                             InputProps={{
                                 startAdornment: <Icons.Search size={16} />,
+                                onKeyDown: (event: KeyboardEvent<HTMLInputElement>) => {
+                                    if (event.key !== 'Enter') return
+                                    setSearchKeyword(pendingKeyword)
+                                },
                             }}
                         />
                         <Button

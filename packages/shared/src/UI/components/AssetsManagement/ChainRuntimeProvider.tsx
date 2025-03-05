@@ -1,22 +1,21 @@
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CHAIN_DESCRIPTORS, ChainId, type NetworkType, type SchemaType } from '@masknet/web3-shared-evm'
+import type { ReasonableNetwork } from '@masknet/web3-shared-base'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { type ChainId as FlowChainId } from '@masknet/web3-shared-flow'
-import { noop, sortBy } from 'lodash-es'
 import { type ChainId as SolanaChainId } from '@masknet/web3-shared-solana'
-import { useNetworks } from '@masknet/web3-hooks-base'
+import { noop } from 'lodash-es'
 import {
     createContext,
     memo,
-    useMemo,
-    type PropsWithChildren,
-    useState,
-    type SetStateAction,
-    type Dispatch,
     useContext,
+    useMemo,
+    useState,
+    type Dispatch,
+    type PropsWithChildren,
+    type SetStateAction,
 } from 'react'
-import type { ReasonableNetwork } from '@masknet/web3-shared-base'
-import { SimpleHashSupportedChains } from '../../../constants.js'
+import { useAssetsNetworks } from './useAssetsNetworks.js'
 
 interface ChainRuntimeOptions {
     pluginID: NetworkPluginID
@@ -46,21 +45,13 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
     children,
 }) {
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
-    const allNetworks = useNetworks(pluginID, true)
+    const assetsNetworks = useAssetsNetworks(pluginID)
 
     const networks = useMemo(() => {
-        const supported = SimpleHashSupportedChains[pluginID]
-        const networks = allNetworks.filter(
-            (x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId),
-        )
-        // hard-coded for Zora
-        if (pluginID === NetworkPluginID.PLUGIN_EVM) {
-            const zora = CHAIN_DESCRIPTORS.find((x) => x.chainId === ChainId.Zora)
-            if (zora) networks.push(zora as ReasonableNetwork<ChainId, SchemaType, NetworkType>)
-        }
-        const list = sortBy(networks, (x) => supported.indexOf(x.chainId))
-        return chainWhiteList?.length ? list.filter((x) => chainWhiteList.includes(x.chainId as ChainId)) : list
-    }, [allNetworks, pluginID, chainWhiteList])
+        return chainWhiteList?.length ?
+                assetsNetworks.filter((x) => chainWhiteList.includes(x.chainId as ChainId))
+            :   assetsNetworks
+    }, [chainWhiteList, assetsNetworks])
 
     const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
 

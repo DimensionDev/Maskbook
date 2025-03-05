@@ -1,8 +1,8 @@
-import { useState } from 'react'
-import { NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
+import { EMPTY_LIST, NetworkPluginID, type SingletonModalProps } from '@masknet/shared-base'
 import { useSingletonModal } from '@masknet/shared-base-ui'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
+import { useState } from 'react'
 import { AddCollectiblesDialog } from './AddCollectiblesDialog.js'
 
 export interface AddCollectiblesModalOpenProps {
@@ -13,6 +13,7 @@ export interface AddCollectiblesModalOpenProps {
      * For example, in PFP, we can add collectibles from verified wallets if no wallet connected.
      */
     account?: string
+    chainWhiteList?: Web3Helper.ChainIdAll[]
 }
 
 export type AddCollectiblesModalCloseProps =
@@ -25,12 +26,14 @@ export function AddCollectiblesModal({
     const [pluginID, setPluginID] = useState<NetworkPluginID>(NetworkPluginID.PLUGIN_EVM)
     const [chainId, setChainId] = useState<Web3Helper.ChainIdAll>()
     const [account, setAccount] = useState<string>()
+    const [chainWhiteList, setChainWhiteList] = useState<Web3Helper.ChainIdAll[]>(EMPTY_LIST)
 
     const [open, dispatch] = useSingletonModal(ref, {
         onOpen(props) {
             setPluginID(props.pluginID ?? NetworkPluginID.PLUGIN_EVM)
             setChainId(props.chainId)
             setAccount(props.account)
+            setChainWhiteList(props.chainWhiteList ?? EMPTY_LIST)
         },
     })
 
@@ -42,6 +45,7 @@ export function AddCollectiblesModal({
             pluginID={pluginID}
             account={account}
             chainId={chainId}
+            chainWhiteList={chainWhiteList}
         />
     )
 }
