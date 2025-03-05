@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import { AddCollectiblesModal, CollectionList, UserAssetsProvider } from '@masknet/shared'
+import { AddCollectiblesModal, CollectionList, useAssetsNetworks, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -7,12 +7,12 @@ import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } fro
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, DialogActions } from '@mui/material'
+import { compact, uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { NFT_DEFAULT_CHAINS, NFT_RED_PACKET_MAX_SHARES } from '../../constants.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { emitter } from '../emitter.js'
-import { compact, uniqBy } from 'lodash-es'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -48,6 +48,7 @@ export function SelectCollectibles() {
     const { pluginID } = useNetworkContext()
     const Web3 = useWeb3Connection(pluginID)
     const Hub = useWeb3Hub(pluginID)
+    const networks = useAssetsNetworks(pluginID)
     const { selectedNfts, setSelectedNfts, setCollection } = useRedPacket()
     const [pendingNfts, setPendingNfts] = useState<Web3Helper.NonFungibleAssetAll[]>(selectedNfts)
     const handleItemClick = useCallback((nft: Web3Helper.NonFungibleAssetAll) => {
@@ -71,10 +72,14 @@ export function SelectCollectibles() {
     const [pendingTokenCount, setPendingTokenCount] = useState(0)
     const [tokens, setTokens] = useState<Web3Helper.NonFungibleAssetAll[]>([])
     const handleAddCollectibles = useCallback(async () => {
+        const chainWhiteList = networks
+            .filter((x) => NFT_DEFAULT_CHAINS.includes(x.chainId as ChainId))
+            .map((x) => x.chainId)
         const results = await AddCollectiblesModal.openAndWaitForClose({
             pluginID,
             chainId: assetChainId || chainId,
             account,
+            chainWhiteList,
         })
         if (!results) return
         const [contract, tokenIds] = results
@@ -108,7 +113,7 @@ export function SelectCollectibles() {
         setTokens((originalTokens) => {
             return uniqBy([...originalTokens, ...tokens], (x) => `${x.contract?.address}.${x.tokenId}`)
         })
-    }, [pluginID, assetChainId, chainId, account])
+    }, [pluginID, assetChainId, chainId, account, networks])
 
     const handleSelect = useCallback((assets: Web3Helper.NonFungibleAssetAll[]) => {
         setPendingNfts(assets.length > NFT_RED_PACKET_MAX_SHARES ? assets.slice(0, NFT_RED_PACKET_MAX_SHARES) : assets)
