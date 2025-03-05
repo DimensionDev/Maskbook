@@ -17,6 +17,7 @@ overrides:
   '@types/node': 22.7.5
   '@types/react': npm:types-react@beta
   '@types/react-dom': npm:types-react-dom@beta
+  elliptic: 6.6.1
   glob-stream: 7.0.0
   react: 0.0.0-experimental-58af67a8f8-20240628
   react-dom: 0.0.0-experimental-58af67a8f8-20240628
@@ -273,8 +274,8 @@ importers:
         specifier: ^3.0.0-beta2
         version: 3.0.0-beta2
       elliptic:
-        specifier: ^6.5.5
-        version: 6.5.5
+        specifier: 6.6.1
+        version: 6.6.1
       pvtsutils:
         specifier: ^1.3.5
         version: 1.3.5
@@ -309,8 +310,8 @@ importers:
         specifier: workspace:^
         version: link:../base
       '@masknet/secp256k1-webcrypto':
-        specifier: 1.0.0
-        version: 1.0.0
+        specifier: 1.0.1
+        version: 1.0.1
       '@masknet/stego-js':
         specifier: 0.14.2
         version: 0.14.2
@@ -600,8 +601,8 @@ importers:
         specifier: ^1.0.0
         version: 1.0.0
       elliptic:
-        specifier: ^6.5.5
-        version: 6.5.5
+        specifier: 6.6.1
+        version: 6.6.1
       event-iterator:
         specifier: ^2.0.0
         version: 2.0.0
@@ -5169,6 +5170,9 @@ packages:
   '@masknet/secp256k1-webcrypto@1.0.0':
     resolution: {integrity: sha512-oIrlLzsjEsE1XmBLJVpH8pIQ9ugefQUqGyjtDXTGhzYi3sB8HviwY03JgYo8FRywNsSEj5HuE3iYJI16jYublQ==}
 
+  '@masknet/secp256k1-webcrypto@1.0.1':
+    resolution: {integrity: sha512-KbJoVGm4elsWBY6BP/EQReHF5TEHajyYhVreEcpWYgXbtU7w2hl3U9tUdD5ksjzhduF/kBiaTaPIyoASqbG5jA==}
+
   '@masknet/static-module-record-swc@0.6.0':
     resolution: {integrity: sha512-DzM4zDPnjoAF4O36upupPn/2dI0/S3H4UkaMhg2X/nZbGgg+aPCqt1V9eGamqeci7id/feSbdQs5HcJn/1ia1g==}
     peerDependencies:
@@ -9351,12 +9355,6 @@ packages:
   electron-to-chromium@1.5.65:
     resolution: {integrity: sha512-PWVzBjghx7/wop6n22vS2MLU8tKGd4Q91aCEGhG/TYmW6PP5OcSXcdnxTe1NNt0T66N8D6jxh4kC8UsdzOGaIw==}
 
-  elliptic@6.5.4:
-    resolution: {integrity: sha512-iLhC6ULemrljPZb+QutR5TQGB+pdW6KGD5RSegS+8sorOZT+rdQFbsQFJgvN3eRqNALqJer4oQ16YvJHlU8hzQ==}
-
-  elliptic@6.5.5:
-    resolution: {integrity: sha512-7EjbcmUm17NQFu4Pmgmq2olYMj8nwMnpcddByChSUjArp8F5DQWcIcpriwO4ZToLNAJig0yiyjswfyGNje/ixw==}
-
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
 
@@ -13148,6 +13146,9 @@ packages:
 
   pvtsutils@1.3.5:
     resolution: {integrity: sha512-ARvb14YB9Nm2Xi6nBq1ZX6dAM0FsJnuk+31aUp4TrcZEdKUlSqOqsxJHUPJDNE3qiIp+iUPEIeR6Je/tgV7zsA==}
+
+  pvtsutils@1.3.6:
+    resolution: {integrity: sha512-PLgQXQ6H2FWCaeRak8vvk1GW462lMxB5s3Jm673N82zI4vqtVUPuZdffdZbPDFRoU8kAhItWFtPCWiPpp4/EDg==}
 
   pvutils@1.1.3:
     resolution: {integrity: sha512-pMpnA0qRdFp32b1sJl1wOJNxZLQ2cbQx+k6tjNtZ8CpvVhNqEPRgivZ2WOUev2YMajecdH7ctUPDvEe87nariQ==}
@@ -18215,7 +18216,7 @@ snapshots:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.7.0
       bn.js: 4.12.1
-      elliptic: 6.5.4
+      elliptic: 6.6.1
       hash.js: 1.1.7
 
   '@ethersproject/signing-key@5.7.0':
@@ -18224,7 +18225,7 @@ snapshots:
       '@ethersproject/logger': 5.7.0
       '@ethersproject/properties': 5.7.0
       bn.js: 5.2.1
-      elliptic: 6.5.4
+      elliptic: 6.6.1
       hash.js: 1.1.7
 
   '@ethersproject/solidity@5.4.0':
@@ -19242,6 +19243,11 @@ snapshots:
     dependencies:
       elliptic: 6.6.1
       pvtsutils: 1.3.5
+
+  '@masknet/secp256k1-webcrypto@1.0.1':
+    dependencies:
+      elliptic: 6.6.1
+      pvtsutils: 1.3.6
 
   '@masknet/static-module-record-swc@0.6.0(@swc/core@1.9.3(@swc/helpers@0.5.15))':
     dependencies:
@@ -24683,26 +24689,6 @@ snapshots:
 
   electron-to-chromium@1.5.65: {}
 
-  elliptic@6.5.4:
-    dependencies:
-      bn.js: 4.12.1
-      brorand: 1.1.0
-      hash.js: 1.1.7
-      hmac-drbg: 1.0.1
-      inherits: 2.0.4
-      minimalistic-assert: 1.0.1
-      minimalistic-crypto-utils: 1.0.1
-
-  elliptic@6.5.5:
-    dependencies:
-      bn.js: 4.12.1
-      brorand: 1.1.0
-      hash.js: 1.1.7
-      hmac-drbg: 1.0.1
-      inherits: 2.0.4
-      minimalistic-assert: 1.0.1
-      minimalistic-crypto-utils: 1.0.1
-
   elliptic@6.6.1:
     dependencies:
       bn.js: 4.12.1
@@ -29595,6 +29581,10 @@ snapshots:
       react-dom: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
 
   pvtsutils@1.3.5:
+    dependencies:
+      tslib: 2.8.1
+
+  pvtsutils@1.3.6:
     dependencies:
       tslib: 2.8.1
 
