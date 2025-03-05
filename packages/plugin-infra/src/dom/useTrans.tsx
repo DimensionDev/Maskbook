@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import type { I18NFieldOrReactNode, I18NStringField } from '../types.js'
 
 export interface PluginTransFieldRenderProps {
@@ -13,7 +14,5 @@ export function PluginTransFieldRender({ pluginID, field }: PluginTransFieldRend
     return <>{field}</>
 }
 export function usePluginTransField() {
-    return function (pluginID: string, field: I18NStringField) {
-        return field.fallback
-    }
+    return useCallback((field: I18NStringField) => field.fallback, [])
 }

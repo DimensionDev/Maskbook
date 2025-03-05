@@ -163,7 +163,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         })
         return displayProfileTabs.map((x) => ({
             id: x.ID,
-            label: typeof x.label === 'string' ? x.label : translate(x.pluginID, x.label),
+            label: typeof x.label === 'string' ? x.label : translate(x.label),
         }))
     }, [activatedPlugins, translate])
 
