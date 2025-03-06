@@ -203,6 +203,9 @@
         "yQE2r9": ["Loading"],
         "0+plfy": ["토큰 로딩..."],
         "If2v4h": ["행운 드랍"],
+        "A3Ndml": [
+            "Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."
+        ],
         "xDAtGP": ["Message"],
         "LEbOpR": ["More details"],
         "gtdJ43": ["My wallet"],
@@ -217,6 +220,9 @@
         "CT10+i": ["No Lucky Drops created. Select 🎁 when you compose a post to start your first drop."],
         "8IN0ph": ["No more data available."],
         "Ev2r9A": ["결과 없음"],
+        "7k2lei": [
+            "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
+        ],
         "AuXfDa": [
             "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
         ],

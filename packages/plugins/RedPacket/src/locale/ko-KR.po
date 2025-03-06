@@ -590,6 +590,10 @@ msgstr ""
 msgid "Lucky Drop"
 msgstr "행운 드랍"
 
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."
+msgstr ""
+
 #: src/SiteAdaptor/components/MessageInput.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Message"
@@ -649,6 +653,10 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "No results"
 #~ msgstr "결과 없음"
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
+msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."

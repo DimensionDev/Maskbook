@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
             display: 'flex',
             alignItems: 'center',
             marginRight: 'auto',
+            minWidth: 0,
         },
         icon: {
             width: 24,
