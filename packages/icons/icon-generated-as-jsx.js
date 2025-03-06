@@ -4247,7 +4247,12 @@ export const Savings = /*#__PURE__*/ __createIcon('Savings', [
 ])
 export const ScamSniffer = /*#__PURE__*/ __createIcon('ScamSniffer', [
     {
-        u: () => new URL('./plugins/ScamSniffer.svg', import.meta.url).href,
+        c: ['dark'],
+        u: () => new URL('./plugins/ScamSniffer.dark.svg', import.meta.url).href,
+    },
+    {
+        c: ['light'],
+        u: () => new URL('./plugins/ScamSniffer.light.svg', import.meta.url).href,
     },
 ])
 export const SecurityChecker = /*#__PURE__*/ __createIcon('SecurityChecker', [

@@ -21,7 +21,10 @@
     "@masknet/shared-base": "workspace:^",
     "@masknet/theme": "workspace:^",
     "@masknet/typed-message": "workspace:^",
+    "@masknet/web3-shared-evm": "workspace:^",
+    "@masknet/web3-shared-solana": "workspace:^",
     "@masknet/web3-providers": "workspace:^",
+    "@scamsniffer/detector": "0.0.39",
     "react-use": "^17.5.0"
   },
   "lingui": {

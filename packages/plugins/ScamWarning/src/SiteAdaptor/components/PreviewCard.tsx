@@ -1,10 +1,10 @@
-import { useAsync } from 'react-use'
-import { uniq } from 'lodash-es'
-import { Stack, ThemeProvider, Typography } from '@mui/material'
-import { CryptoScamDB } from '@masknet/web3-providers'
+import { Plural, Trans } from '@lingui/react/macro'
 import { usePluginWrapper } from '@masknet/plugin-infra/content-script'
 import { makeStyles, MaskDarkTheme } from '@masknet/theme'
-import { Plural, Trans } from '@lingui/react/macro'
+import { CryptoScamDB } from '@masknet/web3-providers'
+import { Stack, ThemeProvider, Typography } from '@mui/material'
+import { uniq } from 'lodash-es'
+import { useAsync } from 'react-use'
 
 interface PreviewCardProps {
     links: readonly string[]

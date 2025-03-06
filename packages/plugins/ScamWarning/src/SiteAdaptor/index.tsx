@@ -1,12 +1,14 @@
-import { useMemo } from 'react'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { usePostInfoDetails } from '@masknet/plugin-infra/content-script'
-import { PreviewCard } from './components/PreviewCard.js'
-import { Icons } from '@masknet/icons'
 import { parseURLs } from '@masknet/shared-base'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
+import { useMemo } from 'react'
 import { base } from '../base.js'
-import { Trans } from '@lingui/react/macro'
+import { PreviewCard } from './components/PreviewCard.js'
+import { LinkModifier } from './components/LinkModifier.js'
+import { TextModifier } from './components/TextModifier.js'
 
 const site: Plugin.SiteAdaptor.Definition = {
     ...base,
@@ -46,6 +48,8 @@ const site: Plugin.SiteAdaptor.Definition = {
         icon: <Icons.Danger size={24} />,
         backgroundGradient: 'rgba(255, 235, 237)',
     },
+    LinkModifier,
+    TextModifier,
 }
 
 export default site
