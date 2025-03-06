@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-18 04:44\n"
+"PO-Revision-Date: 2025-03-06 12:16\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "ALL ({0} NFT)"
-#~ msgstr "すべて（{0} NFT）"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Amount"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Attached Message"
-#~ msgstr "添付メッセージ"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
@@ -278,7 +278,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Collections"
-#~ msgstr "コレクション"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Comment"
@@ -286,7 +286,7 @@ msgstr "コメント"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
-#~ msgstr "完了しました"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #~ msgid "Conditions not met"
@@ -374,7 +374,7 @@ msgstr "空です"
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #~ msgid "Enclose a Message"
-#~ msgstr "メッセージを閉じる"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -473,9 +473,7 @@ msgstr "{0} にラッキードロップスマートコントラクトへのア�
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
-"\n"
+msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
@@ -579,7 +577,7 @@ msgstr "いいね/リポスト/コメント"
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Loading token..."
-#~ msgstr "トークンを読み込み中..."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
@@ -589,6 +587,10 @@ msgstr "いいね/リポスト/コメント"
 #: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Lucky Drop"
 msgstr "ラッキードロップ"
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."
+msgstr ""
 
 #: src/SiteAdaptor/components/MessageInput.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -648,7 +650,11 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "No results"
-#~ msgstr "該当なし"
+#~ msgstr ""
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
+msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
@@ -737,7 +743,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Search"
-#~ msgstr "検索"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -751,7 +757,7 @@ msgstr "トークンを選択してください"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Select All"
-#~ msgstr "全て選ぶ"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
@@ -764,7 +770,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "Select partially"
-#~ msgstr "一部を選択"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Selecting NFTs"
@@ -888,7 +894,7 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
-#~ msgstr "トークンIDはカンマで区切られています。例: 1224, 7873, 8948"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
@@ -905,7 +911,7 @@ msgstr "合計金額"
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Total Amount"
-#~ msgstr "合計金額"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Total amount shared among all winners"
@@ -949,7 +955,7 @@ msgstr "表示"
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Wallet account"
-#~ msgstr "ウォレットアカウント"
+#~ msgstr ""
 
 #. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -1059,3 +1065,4 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
+
