@@ -72,7 +72,7 @@ export const NFTCard = memo(function NFTCard({ token, onRemove, className, ...re
                 {formatTokenId(token.tokenId, 2)}
             </Typography>
             {onRemove ?
-                <Icons.Clear size={20} className={classes.removeButton} />
+                <Icons.Clear size={20} className={classes.removeButton} onClick={() => onRemove(token)} />
             :   null}
         </div>
     )

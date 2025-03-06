@@ -12,7 +12,7 @@ import { NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
-import { Box, Link, Typography } from '@mui/material'
+import { alpha, Box, Link, Paper, Typography } from '@mui/material'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
@@ -32,7 +32,7 @@ const useStyles = makeStyles()((theme) => ({
     settings: {
         display: 'flex',
         flexDirection: 'column',
-        gap: theme.spacing(2),
+        gap: theme.spacing(1.5),
         padding: theme.spacing(2),
         flexGrow: 1,
     },
@@ -84,6 +84,20 @@ const useStyles = makeStyles()((theme) => ({
         borderRadius: 8,
         overflow: 'hidden',
         backgroundColor: theme.palette.maskColor.input,
+    },
+    hit: {
+        display: 'flex',
+        alignItems: 'center',
+        maxWidth: 568,
+        fontWeight: 300,
+        borderRadius: 8,
+        backgroundColor: theme.palette.maskColor.bg,
+        color: theme.palette.text.primary,
+        padding: 12,
+    },
+    warningHit: {
+        color: theme.palette.maskColor.danger,
+        backgroundColor: alpha(theme.palette.maskColor.danger, 0.1),
     },
 }))
 
@@ -248,6 +262,36 @@ export function NftRedPacketConfirm() {
                         />
                     </div>
                 </div>
+                <Paper className={cx(classes.hit, classes.warningHit)}>
+                    <Icons.Warning size={20} />
+                    <Typography
+                        variant="body1"
+                        align="left"
+                        marginTop="1px"
+                        marginLeft="8.5px"
+                        style={{ lineHeight: '18px' }}
+                        fontSize="14px">
+                        <Trans>
+                            Note: When selecting approve all, all NFTs in the contract will be authorized for sale by
+                            default, including the NFTs transferred later.
+                        </Trans>
+                    </Typography>
+                </Paper>
+                <Paper className={classes.hit}>
+                    <Icons.SettingInfo size={20} />
+                    <Typography
+                        variant="body1"
+                        align="left"
+                        marginTop="1px"
+                        marginLeft="8.5px"
+                        style={{ lineHeight: '18px' }}
+                        fontSize="14px">
+                        <Trans>
+                            Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send
+                            approved NFTs to the participants of Lucky Drop.
+                        </Trans>
+                    </Typography>
+                </Paper>
             </div>
             <Box style={{ position: 'absolute', bottom: 0, left: 0, width: '100%' }}>
                 <PluginWalletStatusBar>

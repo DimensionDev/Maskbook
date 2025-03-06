@@ -126,6 +126,12 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         gap: theme.spacing(1),
     },
+    name: {
+        maxWidth: 300,
+        whiteSpace: 'nowrap',
+        overflow: 'hidden',
+        textOverflow: 'ellipsis',
+    },
     status: {
         display: 'flex',
         alignItems: 'center',
@@ -272,7 +278,10 @@ export function NftRedPacketEnvelope({
                         <Typography className={classes.amount}>{claimedZero ? null : `1 ${metadata?.name}`}</Typography>
                     :   <Typography className={classes.amount}>
                             {`${claimedCount} / ${total} `}
-                            {metadata?.name}
+
+                            <TextOverflowTooltip key={metadata?.name} title={metadata?.name} as={ShadowRootTooltip}>
+                                <span className={classes.name}>{metadata?.name}</span>
+                            </TextOverflowTooltip>
                             {showConditionButton ?
                                 <Icons.Questions size={24} onClick={onClickCondition} />
                             :   null}
