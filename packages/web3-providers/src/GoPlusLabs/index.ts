@@ -15,7 +15,7 @@ import {
 import { SecurityMessages } from './rules.js'
 import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInfo.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
-import type { AuthorizationAPI, SecurityAPI } from '../entry-types.js'
+import type { AuthorizationAPI, PhishingSiteResponse, SecurityAPI } from '../entry-types.js'
 
 function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
     const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
@@ -161,14 +161,32 @@ export class GoPlusLabs {
         )
 
         if (response.code !== 1) return
-        return createTokenSecurity(chainId, response.result)
+        return createTokenSecurity(response.result, chainId)
+    }
+
+    static async getSolTokenSecurity(address: string) {
+        const response = await fetchJSON<{
+            code: 0 | 1
+            message: 'OK' | string
+            result: Record<
+                string,
+                SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
+            >
+        }>(
+            urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/token_security/:id', {
+                contract_addresses: address,
+            }),
+        )
+
+        if (response.code !== 1) return
+        return createTokenSecurity(response.result)
     }
 
     static async getAddressSecurity(
-        chainId: ChainId,
+        chainId: ChainId | 'solana' | 'tron',
         address: string,
     ): Promise<SecurityAPI.AddressSecurity | undefined> {
-        if (!isValidChainId(chainId)) return
+        if (chainId !== 'solana' && chainId !== 'tron' && !isValidChainId(chainId)) return
         const response = await fetchJSON<{
             code: 0 | 1
             message: 'OK' | string
@@ -184,6 +202,13 @@ export class GoPlusLabs {
         return response.result
     }
 
+    static async checkIfAddressIsScam(chainId: ChainId | 'solana' | 'tron', address: string): Promise<boolean> {
+        const security = await GoPlusLabs.getAddressSecurity(chainId, address)
+        if (!security) return false
+        const values: string[] = Object.values(security)
+        return values.some((x) => x === '1')
+    }
+
     static async getSupportedChain(): Promise<Array<SecurityAPI.SupportedChain<ChainId>>> {
         const { code, result } = await fetchJSON<{
             code: 0 | 1
@@ -194,15 +219,20 @@ export class GoPlusLabs {
         if (code !== 1) return []
         return result.map((x) => ({ chainId: parseInt(x.id) ?? ChainId.Mainnet, name: x.name }))
     }
+    static async checkIsPhishingSite(url: string): Promise<boolean> {
+        const path = urlcat(GO_PLUS_LABS_ROOT_URL, 'api/v1/phishing_site', {
+            url,
+        })
+        const res = await fetchJSON<PhishingSiteResponse>(path)
+        if (res.code !== 1) return false
+        return +res.result.phishing_site === 1
+    }
 }
 export const GoPlusAuthorization = new GoPlusAuthorizationAPI()
 
 function createTokenSecurity(
-    chainId: ChainId,
-    response: Record<
-        string,
-        SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity
-    > = {},
+    response: Record<string, SecurityAPI.ContractSecurity & SecurityAPI.TokenSecurity & SecurityAPI.TradingSecurity>,
+    chainId?: ChainId,
 ) {
     if (isEmpty(response) || !isValidChainId(chainId)) return
     const entity = first(Object.entries(response))
@@ -212,7 +242,7 @@ function createTokenSecurity(
     const makeMessageList = getMessageList(tokenSecurity)
     const risk_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.High).length
     const warn_item_quantity = makeMessageList.filter((x) => x.level === SecurityMessageLevel.Medium).length
-    const inWhitelist = checkInWhitelist(chainId, tokenSecurity.contract)
+    const inWhitelist = chainId ? checkInWhitelist(chainId, tokenSecurity.contract) : false
     return {
         ...tokenSecurity,
         is_high_risk: inWhitelist ? false : is_high_risk,

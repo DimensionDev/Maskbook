@@ -384,6 +384,7 @@ export function gitcoin_dark_url() { return new URL("./plugins/Gitcoin.dark.svg"
 export function gitcoin_light_url() { return new URL("./plugins/Gitcoin.light.svg", import.meta.url).href }
 export function good_ghosting_dark_url() { return new URL("./plugins/GoodGhosting.dark.svg", import.meta.url).href }
 export function good_ghosting_light_url() { return new URL("./plugins/GoodGhosting.light.svg", import.meta.url).href }
+export function go_plus_url() { return new URL("./plugins/GoPlus.svg", import.meta.url).href }
 export function markets_url() { return new URL("./plugins/Markets.png", import.meta.url).href }
 export function markets_claim_url() { return new URL("./plugins/MarketsClaim.svg", import.meta.url).href }
 export function nft_avatar_url() { return new URL("./plugins/NFTAvatar.svg", import.meta.url).href }

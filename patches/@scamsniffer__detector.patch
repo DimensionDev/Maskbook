@@ -45,3 +45,27 @@ index 45bb6c9c0fde9b7e9fe245e4c8691703b56425a5..f9b7498cf850e3359aa2df6ce7be85ec
  
    async checkSiteStatus(url: string): Promise<any> {
      const domain = getTopDomainFromUrl(url);
+diff --git a/dist/cjs/src/detector.d.ts b/dist/cjs/src/detector.d.ts
+index f55fd7125a5fa7441fbb23fce28f9b7bee3fe105..1eb16e0280f259efb97caca81a843383c0bfe735 100644
+--- a/dist/cjs/src/detector.d.ts
++++ b/dist/cjs/src/detector.d.ts
+@@ -24,6 +24,7 @@ export declare class Detector {
+     update(): Promise<void>;
+     detectScam(post: PostDetail, options?: any): Promise<ScamResult | null>;
+     checkUrlInBlacklist(url: string): Promise<Boolean>;
++    checkAddressInBlacklist(url: string): Promise<Boolean>;
+     checkSiteStatus(url: string): Promise<any>;
+     checkNFTToken(contract: string, tokenId: string): Promise<NFTCheckResult | null>;
+ }
+diff --git a/dist/esnext/src/detector.d.ts b/dist/esnext/src/detector.d.ts
+index f55fd7125a5fa7441fbb23fce28f9b7bee3fe105..1eb16e0280f259efb97caca81a843383c0bfe735 100644
+--- a/dist/esnext/src/detector.d.ts
++++ b/dist/esnext/src/detector.d.ts
+@@ -24,6 +24,7 @@ export declare class Detector {
+     update(): Promise<void>;
+     detectScam(post: PostDetail, options?: any): Promise<ScamResult | null>;
+     checkUrlInBlacklist(url: string): Promise<Boolean>;
++    checkAddressInBlacklist(url: string): Promise<Boolean>;
+     checkSiteStatus(url: string): Promise<any>;
+     checkNFTToken(contract: string, tokenId: string): Promise<NFTCheckResult | null>;
+ }

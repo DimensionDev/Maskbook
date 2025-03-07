@@ -4,6 +4,7 @@ import { Icons } from '@masknet/icons'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import { Button, Typography } from '@mui/material'
 import { memo, useState, type HTMLProps } from 'react'
+import { SecurityProvider } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     card: {
@@ -88,15 +89,17 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         lineHeight: '16px',
         backgroundColor: theme.palette.maskColor.danger,
+        color: theme.palette.maskColor.white,
     },
 }))
 
 interface Props extends HTMLProps<HTMLDivElement> {
     link?: string
     address?: string
+    securityProvider: SecurityProvider
 }
 
-export const WarningCard = memo(function WarningCard({ link, address, ...rest }: Props) {
+export const WarningCard = memo(function WarningCard({ link, address, securityProvider, ...rest }: Props) {
     const { classes, cx } = useStyles()
     const [isReporting] = useState(false)
     return (
@@ -106,14 +109,24 @@ export const WarningCard = memo(function WarningCard({ link, address, ...rest }:
                     <Icons.Danger className={classes.icon} size={24} />
                     <Typography className={classes.name}>{t`Scam Warning`}</Typography>
                 </div>
-                <div className={classes.provider}>
-                    <Typography>
-                        <Trans>
-                            Powered by <span className={classes.providerName}>Scamsniffer</span>
-                        </Trans>
-                    </Typography>
-                    <Icons.ScamSniffer size={24} />
-                </div>
+                {securityProvider === SecurityProvider.GoPlus ?
+                    <div className={classes.provider}>
+                        <Typography>
+                            <Trans>
+                                Powered by <span className={classes.providerName}>Go+</span>
+                            </Trans>
+                        </Typography>
+                        <Icons.GoPlus size={24} />
+                    </div>
+                :   <div className={classes.provider}>
+                        <Typography>
+                            <Trans>
+                                Powered by <span className={classes.providerName}>Scamsniffer</span>
+                            </Trans>
+                        </Typography>
+                        <Icons.ScamSniffer size={24} />
+                    </div>
+                }
             </div>
             <div className={classes.content}>
                 {link ?

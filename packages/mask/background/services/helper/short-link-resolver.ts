@@ -17,4 +17,4 @@ async function resolver(u: string): Promise<string | null> {
     return url ?? null
 }
 /** Resolve a https://t.co/ link to it's real address. */
-export const resolveTCOLink = memoizePromise(memoize, resolver, (x) => x)
+export const resolveTCOLink: (u: string) => Promise<string | null> = memoizePromise(memoize, resolver, (x) => x)

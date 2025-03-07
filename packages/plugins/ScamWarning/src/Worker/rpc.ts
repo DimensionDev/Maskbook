@@ -49,5 +49,6 @@ export async function checkUrl(url: string) {
 
 export async function checkAddress(address: string) {
     const detector = getDetector()
-    return true // detector.checkAddressInBlacklist(address)
+    const result = await detector.checkAddressInBlacklist(address)
+    return !!result
 }

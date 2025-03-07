@@ -1,11 +1,15 @@
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
+import { resolveTCOLink } from '@masknet/plugin-infra/dom/context'
 import { makeStyles, ShadowRootPopper } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { memo } from 'react'
+import { PluginScamRPC } from '../../messages.js'
 import { usePopoverControl } from './usePopoverControl.js'
 import { WarningCard } from './WarningCard.js'
+import { SecurityProvider } from '../../constants.js'
+import { GoPlusLabs } from '@masknet/web3-providers'
 
 const useStyles = makeStyles()({
     link: {
@@ -24,21 +28,38 @@ const useStyles = makeStyles()({
     },
 })
 
+function isTCO(url: string | null) {
+    if (!url) return false
+    return url.startsWith('https://t.co/')
+}
+
 export const LinkModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['LinkModifier']>>(function ModifyLink({
     fallback,
     ...props
 }) {
     const { classes } = useStyles()
-    const { data: isScam = true } = useQuery({
+    const { data } = useQuery({
         queryKey: ['scam-warning', 'check-link', props.href],
-        queryFn: () => {
-            // return PluginScamRPC.checkUrl(props.href) || true
-            return true
+        queryFn: async () => {
+            const resolvedLink = isTCO(props.href) ? await resolveTCOLink(props.href) : props.href
+            if (!resolvedLink) return { isScam: false }
+            const result = await GoPlusLabs.checkIsPhishingSite(resolvedLink)
+            if (result)
+                return {
+                    isScam: result,
+                    provider: SecurityProvider.GoPlus,
+                    resolvedLink,
+                }
+            return {
+                isScam: await PluginScamRPC.checkUrl(resolvedLink),
+                provider: SecurityProvider.ScamSniffer,
+                resolvedLink,
+            }
         },
     })
     const { open, anchorEl, iconRef, onMouseEnter, onMouseLeave } = usePopoverControl()
 
-    if (!isScam) return fallback
+    if (!data?.isScam) return fallback
 
     return (
         <span className={classes.link}>
@@ -51,7 +72,8 @@ export const LinkModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['LinkModi
             />
             <ShadowRootPopper open={open} anchorEl={anchorEl}>
                 <WarningCard
-                    link={props.href}
+                    link={data.resolvedLink || props.href}
+                    securityProvider={data.provider!}
                     onMouseEnter={onMouseEnter}
                     onMouseLeave={onMouseLeave}
                     onClick={(e) => e.stopPropagation()}

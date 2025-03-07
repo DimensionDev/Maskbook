@@ -55,6 +55,7 @@ export interface __UIContext__ {
     setPluginMinimalModeEnabled: ((id: string, enabled: boolean) => Promise<void>) | undefined
     hasHostPermission: ((origins: readonly string[]) => Promise<boolean>) | undefined
     requestHostPermission: ((origins: readonly string[]) => Promise<boolean>) | undefined
+    resolveTCOLink: (url: string) => Promise<string | null>
 }
 export let allPersonas: __UIContext__['allPersonas']
 export let currentPersona: __UIContext__['currentPersona']
@@ -72,6 +73,7 @@ export let attachProfile: __UIContext__['attachProfile']
 export let setPluginMinimalModeEnabled: __UIContext__['setPluginMinimalModeEnabled']
 export let hasHostPermission: __UIContext__['hasHostPermission']
 export let requestHostPermission: __UIContext__['requestHostPermission']
+export let resolveTCOLink: __UIContext__['resolveTCOLink']
 
 export function __setUIContext__(value: __UIContext__) {
     ;({
@@ -91,5 +93,6 @@ export function __setUIContext__(value: __UIContext__) {
         setPluginMinimalModeEnabled,
         hasHostPermission,
         requestHostPermission,
+        resolveTCOLink,
     } = value)
 }
