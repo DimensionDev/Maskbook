@@ -1,3 +1,5 @@
+// todo:the issue is potentially the file size limit
+
 import { Icons } from '@masknet/icons'
 import { UploadDropArea } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -91,6 +93,10 @@ export function UploadFile() {
         {
             provider: Provider.IPFS,
             name: <Trans>IPFS</Trans>,
+        },
+        {
+            provider: Provider.WeaveVM,
+            name: <Trans>WeaveVM</Trans>,
         },
     ]
 
