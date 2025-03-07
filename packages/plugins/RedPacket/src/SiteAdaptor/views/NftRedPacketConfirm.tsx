@@ -12,18 +12,19 @@ import { NetworkPluginID, RedPacketNftMetaKey } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext, useNativeTokenPrice, useSmartPayChainId, useWallet } from '@masknet/web3-hooks-base'
 import { EVMChainResolver, EVMExplorerResolver, EVMWeb3 } from '@masknet/web3-providers'
+import { isZero } from '@masknet/web3-shared-base'
 import { alpha, Box, Link, Paper, Typography } from '@mui/material'
 import { useCallback, useContext, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { RoutePaths } from '../../constants.js'
 import { RedPacketRPC } from '../../messages.js'
 import { NFTCard } from '../components/NFTCard.js'
+import { PreviewNftRedPacket } from '../components/PreviewNftRedPacket.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNftRedpacketCallback } from '../hooks/useCreateNftRedpacketCallback.js'
+import { useSimpleHashCollection } from '../hooks/useSimpleHashCollection.js'
 import { openComposition } from '../openComposition.js'
-import { PreviewNftRedPacket } from '../components/PreviewNftRedPacket.js'
-import { isZero } from '@masknet/web3-shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -115,6 +116,7 @@ export function NftRedPacketConfirm() {
         setGasOption,
     } = useRedPacket()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { data: simplehashCollection } = useSimpleHashCollection(collection?.address, chainId)
 
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -258,6 +260,7 @@ export function NftRedPacketConfirm() {
                             creator={creator}
                             totalShares={selectedNfts.length}
                             asset={selectedNfts[0]}
+                            collection={simplehashCollection}
                             theme={theme}
                         />
                     </div>

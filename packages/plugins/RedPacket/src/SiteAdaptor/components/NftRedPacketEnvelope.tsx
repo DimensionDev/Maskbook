@@ -5,7 +5,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworks } from '@masknet/web3-hooks-base'
+import { SimpleHashResolveChainId } from '@masknet/web3-providers'
+import type { SimpleHash } from '@masknet/web3-providers/types'
 import { isZero, type NonFungibleAsset } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 
@@ -189,7 +192,8 @@ const useStyles = makeStyles()((theme) => ({
 interface Props extends HTMLProps<HTMLDivElement> {
     cover: string
     message: string
-    asset: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
+    collection: SimpleHash.Collection | undefined
     shares?: number
     /** claimed entities */
     claimedCount: number
@@ -207,6 +211,7 @@ export function NftRedPacketEnvelope({
     cover,
     message,
     asset,
+    collection,
     shares = 1,
     claimedCount,
     total,
@@ -221,12 +226,19 @@ export function NftRedPacketEnvelope({
 }: Props) {
     const { classes, cx } = useStyles()
     const claimedZero = isZero(claimedCount)
-    const metadata = asset.metadata
+    const metadata = asset?.metadata
 
-    const pluginID = asset.runtime || NetworkPluginID.PLUGIN_EVM
+    const pluginID = asset?.runtime || NetworkPluginID.PLUGIN_EVM
+    const chainId = asset?.chainId || SimpleHashResolveChainId(collection?.chain) || ChainId.Mainnet
     const networks = useNetworks(pluginID)
     const network = networks.find((x) => x.chainId === asset?.chainId)
-    const assetId = `#${asset.id}`.replace(/^##/, '#')
+    const assetId = asset?.id ? `#${asset.id}`.replace(/^##/, '#') : ''
+
+    const assetImage = metadata?.imageURL || metadata?.mediaURL || metadata?.previewImageURL
+    const collectionImage = collection?.image_url
+    const imageURL = assetImage || collectionImage
+    const name = metadata?.symbol || metadata?.name || collection?.name
+
     return (
         <div {...props} className={cx(classes.container, props.className)}>
             <img src={cover} className={classes.cover} />
@@ -243,44 +255,45 @@ export function NftRedPacketEnvelope({
                         <div className={classes.assetCard}>
                             <Image
                                 classes={{ container: classes.assetImage }}
-                                src={metadata?.imageURL || metadata?.mediaURL || metadata?.previewImageURL}
-                                fallback={metadata?.imageURL || metadata?.mediaURL || metadata?.previewImageURL}
+                                src={imageURL}
+                                fallback={imageURL}
                                 width="100%"
                                 height="100%"
                             />
                             <NetworkIcon
                                 pluginID={pluginID}
                                 className={classes.badgeIcon}
-                                chainId={asset.chainId}
+                                chainId={chainId!}
                                 size={20}
                                 network={network}
                             />
                             <div className={classes.assetInfo}>
-                                <TextOverflowTooltip title={asset.collection?.name} as={ShadowRootTooltip}>
-                                    <Typography className={classes.collectionName}>{asset.collection?.name}</Typography>
+                                <TextOverflowTooltip title={collection?.name} as={ShadowRootTooltip}>
+                                    <Typography className={classes.collectionName}>{collection?.name}</Typography>
                                 </TextOverflowTooltip>
-                                <TextOverflowTooltip title={assetId} as={ShadowRootTooltip}>
-                                    <Typography className={classes.assetId}>{assetId}</Typography>
-                                </TextOverflowTooltip>
+                                {assetId ?
+                                    <TextOverflowTooltip title={assetId} as={ShadowRootTooltip}>
+                                        <Typography className={classes.assetId}>{assetId}</Typography>
+                                    </TextOverflowTooltip>
+                                :   null}
                             </div>
                         </div>
                     :   <TokenIcon
                             size={36}
                             badgeSize={16}
                             pluginID={pluginID}
-                            logoURL={metadata?.imageURL || metadata?.mediaURL || metadata?.previewImageURL}
-                            address={asset.address}
-                            symbol={metadata?.symbol || metadata?.name}
-                            chainId={asset.chainId}
+                            logoURL={imageURL}
+                            symbol={name}
+                            chainId={chainId}
                         />
                     }
                     {isClaimed ?
-                        <Typography className={classes.amount}>{claimedZero ? null : `1 ${metadata?.name}`}</Typography>
+                        <Typography className={classes.amount}>{claimedZero ? null : `1 ${name}`}</Typography>
                     :   <Typography className={classes.amount}>
                             {`${claimedCount} / ${total} `}
 
-                            <TextOverflowTooltip key={metadata?.name} title={metadata?.name} as={ShadowRootTooltip}>
-                                <span className={classes.name}>{metadata?.name}</span>
+                            <TextOverflowTooltip key={name} title={name} as={ShadowRootTooltip}>
+                                <span className={classes.name}>{name}</span>
                             </TextOverflowTooltip>
                             {showConditionButton ?
                                 <Icons.Questions size={24} onClick={onClickCondition} />

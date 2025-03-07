@@ -41,6 +41,7 @@ export function useAvailabilityNftRedPacket(id: string, from: string, chainId?: 
                 isEnd,
                 bitStatusList,
                 ...availability,
+                claimed_id: availability.claimed_id === '0' ? undefined : availability.claimed_id,
             }
         },
     })

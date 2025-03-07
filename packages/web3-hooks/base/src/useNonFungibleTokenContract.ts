@@ -1,9 +1,9 @@
-import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
 import type { NonFungibleTokenContract } from '@masknet/web3-shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Connection } from './useWeb3Connection.js'
+import { useQuery } from '@tanstack/react-query'
 
 export function useNonFungibleTokenContract<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
@@ -13,10 +13,14 @@ export function useNonFungibleTokenContract<S extends 'all' | void = void, T ext
 ) {
     const Web3 = useWeb3Connection(pluginID, options)
 
-    return useAsyncRetry<
-        NonFungibleTokenContract<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>> | undefined
-    >(async () => {
-        if (!address) return
-        return Web3.getNonFungibleTokenContract?.(address, schemaType)
-    }, [address, schemaType, Web3])
+    return useQuery({
+        enabled: !!address,
+        queryKey: ['non-fungible-token-contract', pluginID, address, schemaType, options],
+        queryFn: async (): Promise<
+            NonFungibleTokenContract<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>> | undefined
+        > => {
+            if (!address) return
+            return Web3.getNonFungibleTokenContract?.(address, schemaType)
+        },
+    })
 }
