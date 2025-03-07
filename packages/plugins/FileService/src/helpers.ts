@@ -45,6 +45,7 @@ const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.Arweave]: 'https://arweave.net',
         [Provider.IPFS]: 'https://mask.infura-ipfs.io/ipfs',
+        [Provider.WeaveVM]: 'https://gateway.wvm.network/bundle',
     },
     () => 'Unknown provider',
 )
