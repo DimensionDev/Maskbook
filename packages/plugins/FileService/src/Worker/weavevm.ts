@@ -9,7 +9,7 @@ import { makeFileKeySigned } from '../helpers.js'
 // WeaveVM configuration
 const WEAVEVM_UPLOAD_ENDPOINT = 'https://mechanism-gi3c.shuttle.app/'
 const WEAVEVM_GATEWAY_URL = 'https://gateway.wvm.network/bundle'
-const API_KEY = process.env.WEAVEVM_API_KEY || 'd025e132382aea412f4256049c13d0e92d5c64095d1c88e1f5de7652966b69af'
+const API_KEY = process.env.WEAVEVM_API_KEY || 'd025e132382aea412f4256049c13d0e92d5c64095d1c88e1f5de7652966b69af' // move to env
 
 class WeaveVMAgent implements ProviderAgent {
     static providerName = 'WeaveVM'
