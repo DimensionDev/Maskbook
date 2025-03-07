@@ -138,8 +138,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       bundler-upload-sdk:
-        specifier: ^2.0.0
-        version: 2.0.0
+        specifier: ^2.1.0
+        version: 2.1.0
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -8131,8 +8131,8 @@ packages:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
     engines: {node: '>=18'}
 
-  bundler-upload-sdk@2.0.0:
-    resolution: {integrity: sha512-/bG1YuYmGn1ulyRMsb7VdX5ls+lgHvmZgIC+CPgdtzWMywy9CpI957n/c+KRhxJbmTfMpmYV+oNITunE+Kmalw==}
+  bundler-upload-sdk@2.1.0:
+    resolution: {integrity: sha512-AeaTWWA8OQS26jBXI8eiBImQ1av3CNxcb6PMmJIAEw53XSmZnfvls/68EWReX3AqDQGgPBFZQ2bEzZ6qt5aRFQ==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -22870,7 +22870,7 @@ snapshots:
     dependencies:
       run-applescript: 7.0.0
 
-  bundler-upload-sdk@2.0.0:
+  bundler-upload-sdk@2.1.0:
     dependencies:
       form-data: 4.0.0
       node-fetch: 3.3.2
