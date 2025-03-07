@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-12-24 04:49\n"
+"PO-Revision-Date: 2025-03-07 09:03\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -904,7 +904,7 @@ msgstr "トークンリストを管理"
 
 #: src/UI/components/FungibleTokenList/ManageTokenListBar.tsx
 #~ msgid "Manage Token Lists"
-#~ msgstr "トークンリストを管理"
+#~ msgstr ""
 
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
 #: src/UI/components/FungibleCoinMarketTable/index.tsx
@@ -1030,7 +1030,7 @@ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 #~ msgid "Only supports EVM chains, ETH, BNB chain, Polygon, Arb, Op, etc."
-#~ msgstr "EVMチェーン、ETH、BNBチェーン、Polygon、Arb、Opなどに対応しています。"
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/TypedMessageEditor.tsx
 msgid "Only TypedMessageText is supported currently."
@@ -1065,7 +1065,7 @@ msgstr "ペルソナ"
 
 #: src/UI/modals/SelectProviderModal/PluginProviderRender.tsx
 #~ msgid "Phantom only supports the Solana chain."
-#~ msgstr "Phantom は Solana チェーンのみを対応します。"
+#~ msgstr ""
 
 #: src/UI/components/PhoneNumberField/index.tsx
 msgid "Phone Number"
@@ -1253,7 +1253,7 @@ msgstr ""
 
 #: src/UI/components/ERC721ContractSelectPanel/index.tsx
 #~ msgid "Select an NFT"
-#~ msgstr "NFT を選択します"
+#~ msgstr ""
 
 #: src/UI/components/EthereumERC721TokenApprovedBoundary/index.tsx
 msgid "Select an NFT Contract"
@@ -1352,7 +1352,7 @@ msgstr ""
 
 #: src/UI/components/ChainBoundary/index.tsx
 #~ msgid "This network is not supported yet."
-#~ msgstr "{network} はまだサポートされていません."
+#~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
 msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
@@ -1582,3 +1582,4 @@ msgstr ""
 #: src/hooks/useOpenShareTxDialog.tsx
 msgid "Your transaction has been confirmed!"
 msgstr ""
+
