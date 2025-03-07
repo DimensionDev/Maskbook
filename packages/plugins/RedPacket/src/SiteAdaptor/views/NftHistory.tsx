@@ -97,7 +97,7 @@ export function NftHistory() {
 
     return (
         <div className={classes.root}>
-            <NetworkTab chains={NFT_DEFAULT_CHAINS} hideArrowButton pluginID={NetworkPluginID.PLUGIN_EVM} />
+            <NetworkTab chains={NFT_DEFAULT_CHAINS} pluginID={NetworkPluginID.PLUGIN_EVM} />
             {isLoading ?
                 <LoadingStatus className={classes.placeholder} iconSize={30} />
             : !histories?.length ?
