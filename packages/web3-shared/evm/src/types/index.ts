@@ -50,6 +50,7 @@ export enum ChainId {
     xDai = 100,
 
     // Avalanche
+    /** C-Chain */
     Avalanche = 43114,
     Avalanche_Fuji = 43113,
 

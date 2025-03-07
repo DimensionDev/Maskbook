@@ -22,10 +22,10 @@ const useStyles = makeStyles()((theme) => {
     return {
         root: {
             display: 'flex',
-            width: 568,
-            padding: 0,
+            width: '100%',
+            minHeight: 0,
             boxSizing: 'border-box',
-            height: 474,
+            padding: theme.spacing(0, 2),
             flexDirection: 'column',
             margin: '0 auto',
             overflow: 'auto',
@@ -33,6 +33,15 @@ const useStyles = makeStyles()((theme) => {
                 width: '100%',
                 padding: 0,
             },
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': {
+                display: 'none',
+            },
+        },
+        content: {
+            minHeight: 0,
+            flexGrow: 1,
+            overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
@@ -98,23 +107,25 @@ export function NftHistory() {
     return (
         <div className={classes.root}>
             <NetworkTab chains={NFT_DEFAULT_CHAINS} pluginID={NetworkPluginID.PLUGIN_EVM} />
-            {isLoading ?
-                <LoadingStatus className={classes.placeholder} iconSize={30} />
-            : !histories?.length ?
-                <EmptyStatus className={classes.placeholder} iconSize={36}>
-                    <Trans>
-                        You haven't created any NFT lucky drop yet. Try to create one and share fortune with your
-                        friends.
-                    </Trans>
-                </EmptyStatus>
-            :   <List style={{ padding: '16px 0 0' }}>
-                    {histories.map((history) => (
-                        <ListItem className={classes.item} key={history.txid}>
-                            <NftRedPacketRecord collections={collections} history={history} onSend={onSend} />
-                        </ListItem>
-                    ))}
-                </List>
-            }
+            <div className={classes.content}>
+                {isLoading ?
+                    <LoadingStatus className={classes.placeholder} iconSize={30} />
+                : !histories?.length ?
+                    <EmptyStatus className={classes.placeholder} iconSize={36}>
+                        <Trans>
+                            You haven't created any NFT lucky drop yet. Try to create one and share fortune with your
+                            friends.
+                        </Trans>
+                    </EmptyStatus>
+                :   <List style={{ padding: '16px 0 0' }}>
+                        {histories.map((history) => (
+                            <ListItem className={classes.item} key={history.txid}>
+                                <NftRedPacketRecord collections={collections} history={history} onSend={onSend} />
+                            </ListItem>
+                        ))}
+                    </List>
+                }
+            </div>
         </div>
     )
 }
