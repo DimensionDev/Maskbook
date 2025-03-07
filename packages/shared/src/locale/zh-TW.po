@@ -502,9 +502,13 @@ msgstr ""
 msgid "Custom"
 msgstr ""
 
-#. placeholder {0}: fromTwitter ? AddressPlatform.Twitter : fromNextId ? AddressPlatform.NextId : 'normal'
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and } next_id {NEXT.ID and }}{sources}."
+#~ msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and } next_id {NEXT.ID and }}{sources}."
+#~ msgstr ""
+
+#. placeholder {0}: fromTwitter ? AddressPlatform.Twitter : 'normal'
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and }}{sources}."
 msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
@@ -519,7 +523,11 @@ msgid "Data source is retrieved from {0}."
 msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile} next_id {NEXT.ID}}."
+#~ msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile} next_id {NEXT.ID}}."
+#~ msgstr ""
+
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
 msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx

@@ -122,6 +122,12 @@
             ["sources"],
             "."
         ],
+        "a1S2x7": [
+            "Data source is retrieved from ",
+            ["0", "select", { "other": [], "twitter": ["Twitter profile and "] }],
+            ["sources"],
+            "."
+        ],
         "ulAtwO": [
             "Data source is retrieved from ",
             ["0", "select", { "other": [], "twitter": ["Twitter profile and"], "next_id": ["NEXT.ID and"] }],
@@ -136,6 +142,11 @@
                 "select",
                 { "twitter": ["Twitter profile"], "facebook": ["Facebook profile"], "next_id": ["NEXT.ID"] }
             ],
+            "."
+        ],
+        "qfprkE": [
+            "Data source is retrieved from ",
+            ["platform", "select", { "twitter": ["Twitter profile"], "facebook": ["Facebook profile"] }],
             "."
         ],
         "bQXBhp": [

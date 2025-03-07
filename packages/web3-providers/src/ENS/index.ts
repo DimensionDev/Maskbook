@@ -12,9 +12,7 @@ class ENS_API implements NameServiceAPI.Provider {
 
     async lookup(name: string) {
         return attemptUntil(
-            [ChainbaseDomain, Unstoppable, R2D2Domain, TheGraphDomain].map(
-                (x) => () => x.lookup(ChainId.Mainnet, name),
-            ),
+            [ChainbaseDomain, Unstoppable, TheGraphDomain].map((x) => () => x.lookup(ChainId.Mainnet, name)),
             undefined,
         )
     }

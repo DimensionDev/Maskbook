@@ -53,7 +53,6 @@ const useStyles = makeStyles()((theme) => {
 enum AddressPlatform {
     Facebook = 'facebook',
     Twitter = 'twitter',
-    NextId = 'next_id',
 }
 
 interface AccountTooltipsProps extends Omit<TooltipProps, 'title'> {
@@ -72,13 +71,7 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
                     {SocialAddressType.Address === type ?
                         <Trans>
                             Data source is retrieved from{' '}
-                            <Select
-                                _twitter="Twitter profile"
-                                _facebook="Facebook profile"
-                                _next_id="NEXT.ID"
-                                value={platform}
-                            />
-                            .
+                            <Select _twitter="Twitter profile" _facebook="Facebook profile" value={platform} />.
                         </Trans>
                     :   <Trans>Data source is retrieved from {type?.replace('_', ' ') ?? ''}.</Trans>}
                 </Typography>
@@ -117,18 +110,10 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
         SocialAddressType.Address,
         SocialAddressType.SOL,
     ].find((x) => supportedAddressTypes.includes(x))
-    const fromNextId = supportedAddressTypes.includes(SocialAddressType.NEXT_ID)
 
     const normalClasses = cx(classes.actionIcon, classes.icon)
     const roundedClasses = cx(classes.actionIcon, classes.icon, classes.roundedIcon)
     const configs = compact([
-        fromNextId ?
-            {
-                link: resolveSocialAddressLink(SocialAddressType.NEXT_ID),
-                platform: AddressPlatform.NextId,
-                icon: <Icons.NextIDMini className={normalClasses} style={{ ...iconStyle, width: 32, height: 18 }} />,
-            }
-        :   null,
         fromTwitter ?
             {
                 platform: AddressPlatform.Twitter,
@@ -243,13 +228,7 @@ export function AccountIcons({ socialAccount, classes: externalClasses }: Accoun
                         <Select
                             other=""
                             _twitter="Twitter profile and "
-                            _next_id="NEXT.ID and "
-                            value={
-                                fromTwitter ? AddressPlatform.Twitter
-                                : fromNextId ?
-                                    AddressPlatform.NextId
-                                :   'normal'
-                            }
+                            value={fromTwitter ? AddressPlatform.Twitter : 'normal'}
                         />
                         {sources}.
                     </Trans>
