@@ -14,7 +14,7 @@ import {
     useWeb3Hub,
 } from '@masknet/web3-hooks-base'
 import { type RedPacketNftJSONPayload } from '@masknet/web3-providers/types'
-import { TokenType } from '@masknet/web3-shared-base'
+import { SourceType, TokenType } from '@masknet/web3-shared-base'
 import { Card } from '@mui/material'
 import { useCallback, useEffect, useMemo } from 'react'
 import { useAvailabilityNftRedPacket } from '../hooks/useAvailabilityNftRedPacket.js'
@@ -23,6 +23,7 @@ import { useNftRedPacketContract } from '../hooks/useNftRedPacketContract.js'
 import { OperationFooter } from './OperationFooter.js'
 import { NftRedPacketEnvelope } from '../components/NftRedPacketEnvelope.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
+import { useSimpleHashCollection } from '../hooks/useSimpleHashCollection.js'
 
 const useStyles = makeStyles<{ claimed: boolean }>()((theme) => ({
     root: {
@@ -76,6 +77,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
     useEffect(() => {
         retryAvailability()
     }, [account])
+    console.log('availability', availability)
     const network = useNetwork(pluginID, payload.chainId)
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
 
@@ -94,17 +96,20 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
     }, [_])
     // #endregion
 
-    const { data: asset } = useNonFungibleAsset(
+    const { data: claimedAsset, error: assetError } = useNonFungibleAsset(
         NetworkPluginID.PLUGIN_EVM,
         payload.contractAddress,
         availability?.claimed_id,
         {
             chainId: payload.chainId,
+            sourceType: SourceType.SimpleHash,
         },
     )
     const Hub = useWeb3Hub(pluginID, {
         account,
+        sourceType: SourceType.SimpleHash,
     })
+    const { data: collection } = useSimpleHashCollection(payload.contractAddress, payload.chainId)
     const nftRedPacketContract = useNftRedPacketContract(payload.chainId)
     const checkResult = useCallback(async () => {
         if (!nftRedPacketContract) return
@@ -160,7 +165,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
 
     const { data: cover } = useRedPacketCover({
         rpid: payload.id,
-        symbol: asset?.metadata?.symbol ?? 'N/A',
+        symbol: claimedAsset?.metadata?.symbol ?? 'N/A',
         shares: availability?.totalAmount ?? 1,
         total: availability?.totalAmount ?? 1,
         sender: payload.senderName,
@@ -168,10 +173,10 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
         claimedShares: availability?.claimedAmount,
     })
 
-    if (availabilityError)
+    if (availabilityError || assetError)
         return <ReloadStatus message={<Trans>Something went wrong.</Trans>} onRetry={retryAvailability} />
 
-    if (!availability || loading || !asset) return <LoadingStatus minHeight={148} iconSize={24} />
+    if (!availability || loading) return <LoadingStatus minHeight={148} iconSize={24} />
 
     const card = (
         <Card className={classes.card} component="article" elevation={0}>
@@ -179,7 +184,8 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
                 cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
                 message={payload.message}
                 creator={payload.senderName}
-                asset={asset}
+                asset={claimedAsset}
+                collection={collection}
                 shares={availability.totalAmount}
                 claimedCount={+availability.claimedAmount}
                 total={availability.totalAmount}

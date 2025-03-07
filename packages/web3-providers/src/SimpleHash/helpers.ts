@@ -141,39 +141,39 @@ export function createNonFungibleCollection(
     }
 }
 
-export const resolveChainId: (chain: string) => ChainId | undefined = memoize(function resolveChainId(
-    chain: string,
-): ChainId | undefined {
-    // Some of the `chainResolver.chainId()` results do not match.
-    switch (chain) {
-        case 'ethereum':
-            return ChainId.Mainnet
-        case 'polygon':
-            return ChainId.Polygon
-        case 'arbitrum':
-            return ChainId.Arbitrum
-        case 'optimism':
-            return ChainId.Optimism
-        case 'avalanche':
-            return ChainId.Avalanche
-        case 'gnosis':
-            return ChainId.xDai
-        case 'bsc':
-            return ChainId.BSC
-        case 'base':
-            return ChainId.Base
-        case 'scroll':
-            return ChainId.Scroll
-        case 'celo':
-            return ChainId.Celo
-        case 'zora':
-            return ChainId.Zora
-        case 'fantom':
-            return ChainId.Fantom
-        default:
-            return undefined
-    }
-})
+export const resolveChainId: (chain: string | undefined) => ChainId | undefined = memoize(
+    function resolveChainId(chain): ChainId | undefined {
+        // Some of the `chainResolver.chainId()` results do not match.
+        switch (chain) {
+            case 'ethereum':
+                return ChainId.Mainnet
+            case 'polygon':
+                return ChainId.Polygon
+            case 'arbitrum':
+                return ChainId.Arbitrum
+            case 'optimism':
+                return ChainId.Optimism
+            case 'avalanche':
+                return ChainId.Avalanche
+            case 'gnosis':
+                return ChainId.xDai
+            case 'bsc':
+                return ChainId.BSC
+            case 'base':
+                return ChainId.Base
+            case 'scroll':
+                return ChainId.Scroll
+            case 'celo':
+                return ChainId.Celo
+            case 'zora':
+                return ChainId.Zora
+            case 'fantom':
+                return ChainId.Fantom
+            default:
+                return undefined
+        }
+    },
+)
 
 export const resolveActivityType = (eventType: string) => {
     const map: Record<string, ActivityType> = {

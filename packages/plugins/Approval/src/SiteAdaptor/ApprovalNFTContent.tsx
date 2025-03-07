@@ -213,9 +213,9 @@ function ApprovalNFTItem(props: ApprovalNFTItemProps) {
         chainId,
     )
 
-    const { value: contractDetailed } = useNonFungibleTokenContract(
+    const { data: contractDetailed } = useNonFungibleTokenContract(
         NetworkPluginID.PLUGIN_EVM,
-        spender.contract.address ?? '',
+        spender.contract.address,
         SchemaType.ERC721,
         {
             chainId,

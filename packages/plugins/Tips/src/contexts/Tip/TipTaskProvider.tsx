@@ -79,7 +79,7 @@ export const TipTaskProvider = memo(({ children, task }: Props) => {
         isGasSufficient,
     })
 
-    const { value: nonFungibleTokenContract } = useNonFungibleTokenContract(targetPluginID, nonFungibleTokenAddress)
+    const { data: nonFungibleTokenContract } = useNonFungibleTokenContract(targetPluginID, nonFungibleTokenAddress)
 
     const connectionOptions =
         targetPluginID === NetworkPluginID.PLUGIN_EVM ?
