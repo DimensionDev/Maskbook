@@ -25,7 +25,6 @@ const useStyles = makeStyles()((theme) => {
             width: '100%',
             minHeight: 0,
             boxSizing: 'border-box',
-            padding: theme.spacing(0, 2),
             flexDirection: 'column',
             margin: '0 auto',
             overflow: 'auto',
@@ -41,6 +40,7 @@ const useStyles = makeStyles()((theme) => {
         content: {
             minHeight: 0,
             flexGrow: 1,
+            padding: theme.spacing(0, 2),
             overflow: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {

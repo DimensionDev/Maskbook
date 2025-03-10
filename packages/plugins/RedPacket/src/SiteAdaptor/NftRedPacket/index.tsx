@@ -77,7 +77,6 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
     useEffect(() => {
         retryAvailability()
     }, [account])
-    console.log('availability', availability)
     const network = useNetwork(pluginID, payload.chainId)
     const outdated = !!(availability?.isClaimedAll || availability?.isCompleted || availability?.expired)
 
@@ -152,12 +151,14 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
 
     const { showSnackbar } = useCustomSnackbar()
     const claim = useCallback(async () => {
-        const hash = await claimCallback()
-        await checkResult()
-        if (typeof hash === 'string') {
-            retryAvailability()
-        } else if (hash instanceof Error) {
-            showSnackbar(hash.message, {
+        try {
+            const hash = await claimCallback()
+            await checkResult()
+            if (typeof hash === 'string') {
+                retryAvailability()
+            }
+        } catch (err) {
+            showSnackbar((err as Error).message, {
                 variant: 'error',
             })
         }

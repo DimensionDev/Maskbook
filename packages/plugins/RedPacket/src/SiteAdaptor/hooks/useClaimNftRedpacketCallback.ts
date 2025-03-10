@@ -19,7 +19,7 @@ export function useClaimNftRedpacketCallback(payload: RedPacketNftJSONPayload, t
     const signedMsg = useMemo(() => {
         return signMessage(account, payload.privateKey).signature ?? ''
     }, [account, payload.privateKey])
-    return useAsyncFn(async (): Promise<string | undefined | Error> => {
+    return useAsyncFn(async () => {
         if (!nftRedPacketContract || !id || !account || !totalAmount || !signedMsg) return
 
         const transaction = nftRedPacketContract.methods.claim(id, signedMsg, account)
