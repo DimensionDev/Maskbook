@@ -15,7 +15,7 @@ import type { RedPacketBaseAPI } from '../../entry-types.js'
 
 export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, SchemaType> {
     /**
-     * @see https://docs.chainbase.com/reference/supported-chains
+     * @see https://docs.chainbase.com/platform/supported-networks/supported-networks
      */
     static isSupportedChain(chainId: ChainId) {
         const supported = [
@@ -25,9 +25,14 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
             ChainId.Avalanche,
             ChainId.Arbitrum,
             ChainId.Base,
+            ChainId.Optimism,
             /** zkSync */ 324,
         ].includes(chainId)
-        console.error('Unsupported chain by ChainBase, see https://docs.chainbase.com/reference/supported-chains')
+        if (process.env.NODE_ENV === 'development' && !supported) {
+            console.error(
+                `Unsupported chain ${chainId} by Chainbase\n, see https://docs.chainbase.com/platform/supported-networks/supported-networks`,
+            )
+        }
         return supported
     }
     static async getHistoryTransactions(
