@@ -395,30 +395,32 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
 
         let erc721CollectionIdList: string[] = EMPTY_LIST
 
-        if (isERC712Only) {
-            const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
-            while (nftIdList.length) {
-                const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
-                    nft_ids: nftIdList.splice(0, 50).join(','),
-                })
+        const nftIdList = filteredCollections.map((x) => x.nft_ids?.[0] || '').filter(Boolean)
+        while (nftIdList.length) {
+            const batchAssetsPath = urlcat('/api/v0/nfts/assets', {
+                nft_ids: nftIdList.splice(0, 50).join(','),
+            })
 
-                const batchAssetsResponse = await fetchFromSimpleHash<{
-                    nfts: SimpleHash.Asset[]
-                }>(batchAssetsPath)
+            const batchAssetsResponse = await fetchFromSimpleHash<{
+                nfts: SimpleHash.Asset[]
+            }>(batchAssetsPath)
 
-                erc721CollectionIdList = erc721CollectionIdList.concat(
-                    batchAssetsResponse.nfts
-                        .filter((x) => x.contract.type === 'ERC721')
-                        .map((x) => x.collection.collection_id),
-                )
-            }
+            erc721CollectionIdList = erc721CollectionIdList.concat(
+                batchAssetsResponse.nfts
+                    .filter((x) => x.contract.type === 'ERC721')
+                    .map((x) => x.collection.collection_id),
+            )
         }
 
-        const collections = filteredCollections
-            .filter((x) => !isERC712Only || erc721CollectionIdList.includes(x.id))
-            .map((x) => createNonFungibleCollection(x))
+        const collections = filteredCollections.map((x) => {
+            const schema = erc721CollectionIdList.includes(x.id) ? SchemaType.ERC721 : SchemaType.ERC1155
+            return createNonFungibleCollection(x, schema)
+        })
 
-        return createPageable(collections, createIndicator(indicator))
+        return createPageable(
+            isERC712Only ? collections.filter((x) => x.schema === SchemaType.ERC721) : collections,
+            createIndicator(indicator),
+        )
     }
 
     async getAssetsByCollectionAndOwner(

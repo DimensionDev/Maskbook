@@ -894,6 +894,10 @@ msgstr ""
 #~ msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
 #~ msgstr ""
 
+#: src/SiteAdaptor/views/SelectCollectibles.tsx
+msgid "This NFT contract cannot be modified now."
+msgstr ""
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
 #~ msgstr "トークンIDはカンマで区切られています。例: 1224, 7873, 8948"

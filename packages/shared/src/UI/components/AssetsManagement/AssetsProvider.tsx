@@ -12,6 +12,7 @@ import {
     type MutableRefObject,
     useState,
     type JSX,
+    type ReactNode,
 } from 'react'
 import { createIndicator, EMPTY_LIST, EMPTY_OBJECT, type PageIndicator } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -54,6 +55,11 @@ interface AssetsContextOptions {
     isAllHidden: boolean
     isEmpty: boolean
     disableReport?: boolean
+    assetDisableRule?: (
+        collection: Web3Helper.NonFungibleCollectionAll,
+        asset?: Web3Helper.NonFungibleAssetAll,
+    ) => boolean
+    assetDisableDescription?: string | ReactNode
 }
 
 const AssetsContext = createContext<AssetsContextOptions>({
@@ -95,6 +101,8 @@ export interface AssetsProviderProps
             | 'maxSelection'
             | 'maxSelectionDescription'
             | 'disableReport'
+            | 'assetDisableRule'
+            | 'assetDisableDescription'
         > {
     /** blocked ids in format of `${chainid}.${address}.${tokenId}` */
     blockedIds?: string[]
@@ -109,6 +117,8 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
     selectedAsset,
     selectedAssets,
     disableReport,
+    assetDisableRule,
+    assetDisableDescription,
 }) {
     const [{ assetsMap, verifiedMap }, dispatch] = useReducer(assetsReducer, initialAssetsState)
     const indicatorMapRef = useRef<Map<string, PageIndicator | undefined>>(new Map())
@@ -307,6 +317,8 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
             searchKeyword,
             setSearchKeyword,
             disableReport,
+            assetDisableRule,
+            assetDisableDescription,
         }
     }, [
         getAssets,
@@ -324,6 +336,8 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
         selectedAssets,
         selectedAsset,
         disableReport,
+        assetDisableRule,
+        assetDisableDescription,
     ])
 
     return <AssetsContext value={contextValue}>{children}</AssetsContext>

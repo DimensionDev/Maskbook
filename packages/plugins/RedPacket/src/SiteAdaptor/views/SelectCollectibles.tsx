@@ -1,3 +1,4 @@
+import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { AddCollectiblesModal, CollectionList, useAssetsNetworks, UserAssetsProvider } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -5,7 +6,7 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useWeb3Connection, useWeb3Hub } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import { SchemaType, type ChainId } from '@masknet/web3-shared-evm'
 import { alpha, Box, Button, DialogActions } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -125,6 +126,9 @@ export function SelectCollectibles() {
             unsubscribe()
         }
     }, [handleAddCollectibles])
+    const assetDisableRule = useCallback((asset: Web3Helper.NonFungibleCollectionAll) => {
+        return asset.schema !== SchemaType.ERC721
+    }, [])
 
     return (
         <Box className={classes.container}>
@@ -139,7 +143,9 @@ export function SelectCollectibles() {
                     <Trans>The maximum number of NFTs to be sold in one collection lucky drop contract is 255.</Trans>
                 }
                 selectedAssets={pendingNfts}
-                disableReport>
+                disableReport
+                assetDisableRule={assetDisableRule}
+                assetDisableDescription={t`This NFT contract cannot be modified now.`}>
                 <CollectionList
                     height={564}
                     gridProps={gridProps}

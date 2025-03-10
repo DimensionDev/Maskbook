@@ -121,6 +121,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
 
 export function createNonFungibleCollection(
     collection: SimpleHash.Collection,
+    schema: SchemaType,
 ): NonFungibleCollection<ChainId, SchemaType> {
     const chainId = resolveChainId(collection.chain)!
 
@@ -130,7 +131,7 @@ export function createNonFungibleCollection(
         chainId,
         name: collection.name || '',
         slug: collection.name,
-        schema: SchemaType.ERC721,
+        schema,
         balance: collection.distinct_nfts_owned,
         iconURL: collection.image_url,
         ownersTotal: collection.total_quantity,
