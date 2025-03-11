@@ -97,12 +97,28 @@ function resolveType(content: string) {
     return 'normal'
 }
 
+function getVisibleText(node: Node) {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent
+    if (node.nodeType !== Node.ELEMENT_NODE) return ''
+    if (
+        (node as Element).getAttribute('aria-hidden') === 'true' && // getBoundingClientRect() causes layout, getAttribute() is cheaper
+        (node as Element).getBoundingClientRect().width === 0
+    )
+        return ''
+    let text = ''
+    for (const child of node.childNodes) {
+        text += getVisibleText(child)
+    }
+    return text
+}
+
 export function postContentMessageParser(node: HTMLElement): TypedMessage {
     function make(node: Node): TypedMessage {
         if (node.nodeType === Node.TEXT_NODE) {
             if (!node.nodeValue) return makeTypedMessageEmpty()
             return makeTypedMessageText(node.nodeValue, getElementStyle(node.parentElement))
-        } else if (node instanceof HTMLAnchorElement) {
+        }
+        if (node instanceof HTMLAnchorElement) {
             const anchor = node
             const href = anchor.getAttribute('title') ?? anchor.getAttribute('href')
             if (href?.includes('/photo/')) {
@@ -131,7 +147,7 @@ export function postContentMessageParser(node: HTMLElement): TypedMessage {
                     makeTypedMessageEmpty(),
                 )
             }
-            const content = anchor.textContent
+            const content = getVisibleText(anchor)
             if (!content) return makeTypedMessageEmpty()
             const altImage = node.querySelector('img')
             return makeTypedMessageAnchor(
