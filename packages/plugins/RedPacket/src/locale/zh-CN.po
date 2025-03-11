@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-18 04:44\n"
+"PO-Revision-Date: 2025-03-11 04:02\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "ALL ({0} NFT)"
-#~ msgstr "全部 ({0} NFT)"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Amount"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Attached Message"
-#~ msgstr "附加信息"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
@@ -278,7 +278,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Collections"
-#~ msgstr "NFT 系列"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Comment"
@@ -286,7 +286,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
-#~ msgstr "已完成"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #~ msgid "Conditions not met"
@@ -374,7 +374,7 @@ msgstr "空的"
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #~ msgid "Enclose a Message"
-#~ msgstr "标题"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -473,9 +473,7 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
-"\n"
+msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
@@ -579,7 +577,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Loading token..."
-#~ msgstr "正在加载代币..."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
@@ -652,7 +650,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "No results"
-#~ msgstr "没有任何结果。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
@@ -745,7 +743,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Search"
-#~ msgstr "搜索"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -759,7 +757,7 @@ msgstr "选择代币"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Select All"
-#~ msgstr "全选"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
@@ -772,7 +770,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "Select partially"
-#~ msgstr "选择部分"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Selecting NFTs"
@@ -894,9 +892,13 @@ msgstr ""
 #~ msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
 #~ msgstr ""
 
+#: src/SiteAdaptor/views/SelectCollectibles.tsx
+msgid "This NFT contract cannot be modified now."
+msgstr ""
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
-#~ msgstr "Token ID可用逗号分隔，例如：1224, 7873"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
@@ -913,7 +915,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Total Amount"
-#~ msgstr "总数"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Total amount shared among all winners"
@@ -957,7 +959,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Wallet account"
-#~ msgstr "钱包账户"
+#~ msgstr ""
 
 #. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -1067,3 +1069,4 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
+
