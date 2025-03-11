@@ -1,16 +1,11 @@
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootPopper } from '@masknet/theme'
-import { GoPlusLabs } from '@masknet/web3-providers'
-import { isValidAddress } from '@masknet/web3-shared-evm'
-import { isValidAddress as isSolAddress } from '@masknet/web3-shared-solana'
-import { useQuery } from '@tanstack/react-query'
 import { Fragment, memo, useMemo } from 'react'
-import { EVM_ADDRESS, SecurityProvider, SOLANA_ADDRESS, TRON_ADDRESS } from '../../constants.js'
-import { PluginScamRPC } from '../../messages.js'
-import { isTronAddress } from '../../utils.js'
+import { extractAddresses } from '../../utils.js'
 import { usePopoverControl } from './usePopoverControl.js'
 import { WarningCard } from './WarningCard.js'
+import { useDetectAddress } from '../hooks/useDetectAddress.js'
 
 const useStyles = makeStyles()({
     text: {
@@ -27,40 +22,25 @@ const useStyles = makeStyles()({
         overflow: 'hidden',
         cursor: 'pointer',
     },
-})
+}))
 
 type TextModifierProps = PropsOf<Plugin.SiteAdaptor.Definition['TextModifier']>
 
 interface AddressTagProps {
     address: string
     text: string
+    nested?: boolean
+    className?: string
 }
 
-const AddressTag = memo<AddressTagProps>(function AddressTag({ address, text }) {
-    const { classes } = useStyles()
+export const AddressTag = memo<AddressTagProps>(function AddressTag({ address, text, className, nested }) {
+    const { classes, cx } = useStyles()
     const { open, anchorEl, iconRef, onMouseEnter, onMouseLeave } = usePopoverControl()
-    const { data } = useQuery({
-        queryKey: ['detect-address', address],
-        queryFn: async () => {
-            if (isValidAddress(address)) {
-                return { isScam: await PluginScamRPC.checkAddress(address), provider: SecurityProvider.ScamSniffer }
-            }
-            if (isSolAddress(address))
-                return {
-                    isScam: await GoPlusLabs.checkIfAddressIsScam('solana', address),
-                    provider: SecurityProvider.GoPlus,
-                }
-            if (isTronAddress(address))
-                return {
-                    isScam: GoPlusLabs.checkIfAddressIsScam('tron', address),
-                    provider: SecurityProvider.GoPlus,
-                }
-            return { isScam: false, provider: null }
-        },
-    })
+    const { data } = useDetectAddress(address)
+
     if (!data?.isScam) return text
     return (
-        <span className={classes.text}>
+        <span className={cx(classes.text, className)}>
             <Icons.Danger
                 size={18}
                 className={classes.icon}
@@ -68,7 +48,7 @@ const AddressTag = memo<AddressTagProps>(function AddressTag({ address, text }) 
                 onMouseEnter={onMouseEnter}
                 onMouseLeave={onMouseLeave}
             />
-            {address}
+            {nested ? null : address}
             <ShadowRootPopper open={open} anchorEl={anchorEl}>
                 <WarningCard
                     address={address}
@@ -88,12 +68,7 @@ interface Segment {
 }
 
 export const TextModifier = memo<TextModifierProps>(function TextModifier({ fallback, children: fullText }) {
-    const addresses = useMemo(() => {
-        const evmAddresses = fullText.match(EVM_ADDRESS) || []
-        const solAddresses = fullText.match(SOLANA_ADDRESS) || []
-        const tronAddresses = fullText.match(TRON_ADDRESS) || []
-        return [...evmAddresses, ...solAddresses, ...tronAddresses]
-    }, [fullText])
+    const addresses = useMemo(() => extractAddresses(fullText), [fullText])
 
     const segments = useMemo(() => {
         let leftOffset = 0

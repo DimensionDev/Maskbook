@@ -65,6 +65,7 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 0,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     link: {
         textDecoration: 'underline',
@@ -130,10 +131,13 @@ export const WarningCard = memo(function WarningCard({ link, address, securityPr
             </div>
             <div className={classes.content}>
                 {link ?
-                    <a className={cx(classes.link, classes.target)} href={link}>
+                    <a className={cx(classes.link, classes.target)} href={link} title={link}>
                         {link}
                     </a>
-                :   <Typography className={classes.target}>{address}</Typography>}
+                :   <Typography className={classes.target} title={address}>
+                        {address}
+                    </Typography>
+                }
                 <Button variant="text" className={classes.reportButton}>
                     {isReporting ?
                         <LoadingBase size={16} />
