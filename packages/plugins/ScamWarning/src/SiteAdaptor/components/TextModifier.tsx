@@ -7,13 +7,14 @@ import { usePopoverControl } from './usePopoverControl.js'
 import { WarningCard } from './WarningCard.js'
 import { useDetectAddress } from '../hooks/useDetectAddress.js'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     text: {
         whiteSpace: 'nowrap',
         display: 'inline-flex',
         alignItems: 'center',
         gap: 4,
         verticalAlign: 'bottom',
+        color: theme.palette.maskColor.danger,
     },
     icon: {
         width: 18,

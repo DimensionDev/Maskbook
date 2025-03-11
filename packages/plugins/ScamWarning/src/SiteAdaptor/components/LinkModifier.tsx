@@ -14,13 +14,16 @@ import { extractAddresses } from '../../utils.js'
 import { useDetectAddress } from '../hooks/useDetectAddress.js'
 import { AddressTag } from './TextModifier.js'
 
-const useStyles = makeStyles()({
+const useStyles = makeStyles()((theme) => ({
     link: {
         whiteSpace: 'nowrap',
         display: 'inline-flex',
         alignItems: 'center',
         gap: 4,
         verticalAlign: 'bottom',
+        '& > a': {
+            color: theme.palette.maskColor.danger,
+        },
     },
     address: {
         display: 'contents',
