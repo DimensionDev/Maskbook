@@ -18,6 +18,8 @@ interface UserAssetsProviderProps
             | 'maxSelection'
             | 'maxSelectionDescription'
             | 'disableReport'
+            | 'assetDisableRule'
+            | 'assetDisableDescription'
         > {}
 
 export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps>>(function UserAssetsProvider({
@@ -35,6 +37,8 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
     selectedAssets,
     maxSelection,
     maxSelectionDescription,
+    assetDisableRule,
+    assetDisableDescription,
     disableReport,
 }) {
     const systemAccount = useAccount()
@@ -60,7 +64,9 @@ export const UserAssetsProvider = memo<PropsWithChildren<UserAssetsProviderProps
                     selectedAssets={selectedAssets}
                     maxSelection={maxSelection}
                     maxSelectionDescription={maxSelectionDescription}
-                    disableReport={disableReport}>
+                    disableReport={disableReport}
+                    assetDisableRule={assetDisableRule}
+                    assetDisableDescription={assetDisableDescription}>
                     {children}
                 </AssetsProvider>
             </CollectionsProvider>

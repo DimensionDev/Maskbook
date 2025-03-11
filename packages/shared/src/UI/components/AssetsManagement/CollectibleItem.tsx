@@ -26,6 +26,10 @@ const useStyles = makeStyles<void, 'action' | 'collectibleCard' | 'info'>()((the
         zIndex: 0,
         willChange: 'opacity',
     },
+    assetDisabled: {
+        cursor: 'not-allowed !important',
+        opacity: 0.5,
+    },
     withAction: {
         '&:hover': {
             transform: 'translateY(19px)',
@@ -112,6 +116,8 @@ export interface CollectibleItemProps extends HTMLProps<HTMLDivElement>, Collect
     disableAction?: boolean
     actionLabel?: ReactNode
     verifiedBy?: string[]
+    assetDisabled?: boolean
+    assetDisableDescription?: string | ReactNode
     onActionClick?(asset: CollectibleCardProps['asset']): void
     onItemClick?(asset: CollectibleCardProps['asset']): void
 }
@@ -129,6 +135,8 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
         isSelected,
         hideIndicator,
         selectable,
+        assetDisabled,
+        assetDisableDescription,
         onActionClick,
         onItemClick,
         ...rest
@@ -137,8 +145,9 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
     const name = asset.collection?.name ?? ''
     const popperProps = useBoundedPopperProps()
     const handleClick = useCallback(() => {
+        if (assetDisabled) return
         onItemClick?.(asset)
-    }, [onItemClick, asset])
+    }, [onItemClick, asset, assetDisabled])
 
     const assetName = useMemo(() => {
         if (!asset.collection) return
@@ -155,7 +164,8 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
     const [nameOverflow, nameRef] = useDetectOverflow()
     const [identityOverflow, identityRef] = useDetectOverflow()
     const tooltip =
-        nameOverflow || identityOverflow ?
+        assetDisabled ? assetDisableDescription
+        : nameOverflow || identityOverflow ?
             <Typography component="div">
                 {disableName ? null : <div>{name}</div>}
                 {assetName}
@@ -165,7 +175,13 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
     return (
         <ShadowRootTooltip PopperProps={popperProps} title={tooltip} placement="top" disableInteractive arrow>
             <div
-                className={cx(classes.card, classes.fadeIn, className, disableAction ? null : classes.withAction)}
+                className={cx(
+                    classes.card,
+                    classes.fadeIn,
+                    className,
+                    disableAction ? null : classes.withAction,
+                    assetDisabled ? classes.assetDisabled : null,
+                )}
                 {...rest}>
                 <CollectibleCard
                     className={cx(classes.collectibleCard, classes.ease)}

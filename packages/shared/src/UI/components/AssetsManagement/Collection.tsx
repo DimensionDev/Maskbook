@@ -21,6 +21,13 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         backgroundColor: theme.palette.maskColor.bg,
         borderRadius: 8,
     },
+    assetDisabled: {
+        cursor: 'not-allowed !important',
+        opacity: 0.5,
+        '& *': {
+            cursor: 'not-allowed !important',
+        },
+    },
     grid: {
         display: 'grid',
         overflow: 'auto',
@@ -116,7 +123,7 @@ export const Collection = memo(
         const { compact, containerRef } = useCompactDetection()
         const popperProps = useBoundedPopperProps()
         const { classes, cx } = useStyles({ compact })
-        const { multiple, selectedAsset, selectedAssets } = useUserAssets()
+        const { multiple, selectedAsset, selectedAssets, assetDisableRule, assetDisableDescription } = useUserAssets()
 
         useLayoutEffect(() => {
             onInitialRender?.(collection)
@@ -137,6 +144,7 @@ export const Collection = memo(
         const hasExtra = count > 4 && !expanded
         const assetsSlice = hasExtra ? assets.slice(0, 3) : assets
 
+        const assetDisabled = assetDisableRule?.(collection)
         if (collection.balance! <= 2 || (!loading && assets.length < 2) || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
@@ -155,6 +163,8 @@ export const Collection = memo(
                     }
                     onActionClick={onActionClick}
                     onItemClick={onItemClick}
+                    assetDisabled={assetDisabled}
+                    assetDisableDescription={assetDisableDescription}
                 />
             ))
             return <>{renderAssets}</>
@@ -178,14 +188,20 @@ export const Collection = memo(
         return (
             <ShadowRootTooltip
                 PopperProps={popperProps}
-                title={nameOverflow ? collection.name : undefined}
+                title={
+                    assetDisabled ? assetDisableDescription
+                    : nameOverflow ?
+                        collection.name
+                    :   undefined
+                }
                 placement="top"
                 disableInteractive
                 arrow>
                 <div
-                    className={cx(className, classes.folder)}
+                    className={cx(className, classes.folder, assetDisabled ? classes.assetDisabled : null)}
                     {...rest}
                     onClick={() => {
+                        if (assetDisabled) return
                         onExpand?.(collection.id!)
                     }}
                     ref={containerRef}>

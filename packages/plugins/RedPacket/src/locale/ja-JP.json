@@ -283,6 +283,7 @@
         "51cT/A": ["The minimum amount for each share is ", ["0"], " ", ["1"]],
         "25/Bbu": ["The NFT lucky drop supports up to ", ["NFT_RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
         "uQLq0T": ["The NFT lucky drop supports up to ", ["RED_PACKET_MAX_SHARES"], " NFTs selected for one time."],
+        "6knJVf": ["This NFT contract cannot be modified now."],
         "QH3LZ+": ["トークンIDはカンマで区切られています。例: 1224, 7873, 8948"],
         "DYoO0m": ["Token quantity greater than"],
         "6RDwJM": ["トークン"],
