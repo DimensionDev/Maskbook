@@ -26,22 +26,21 @@ msgid "Detecting whether user-published crypto websites are risky or malicious. 
 msgstr "사용자가 게시한 암호화 웹 사이트가 위험한지 악의적인지 탐지합니다. 디지털 자산을 저장하는 데 도움이 됩니다."
 
 #: src/SiteAdaptor/components/WarningCard.tsx
-msgid "Powered by <0>Go+</0>"
-msgstr ""
+#~ msgid "Powered by <0>Go+</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/WarningCard.tsx
-msgid "Powered by <0>Scamsniffer</0>"
-msgstr ""
+#~ msgid "Powered by <0>Scamsniffer</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 msgid "Safety Warning"
 msgstr "안전 경고"
 
 #: src/SiteAdaptor/components/WarningCard.tsx
-msgid "Scam Warning"
-msgstr ""
+#~ msgid "Scam Warning"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/WarningCard.tsx
-msgid "This domain or address is currently on the Mask Network warning list which may include malicious entries, phishing or scams."
-msgstr ""
-
+#~ msgid "This domain or address is currently on the Mask Network warning list which may include malicious entries, phishing or scams."
+#~ msgstr ""
