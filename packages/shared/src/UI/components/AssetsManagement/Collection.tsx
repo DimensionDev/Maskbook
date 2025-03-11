@@ -1,17 +1,18 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EMPTY_LIST, type NetworkPluginID } from '@masknet/shared-base'
 import { useEverSeen } from '@masknet/shared-base-ui'
 import { ShadowRootTooltip, makeStyles, useBoundedPopperProps, useDetectOverflow } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { Skeleton, Typography, useForkRef } from '@mui/material'
 import { range } from 'lodash-es'
-import { memo, useLayoutEffect, type HTMLProps, useMemo } from 'react'
+import { memo, useLayoutEffect, useMemo, type HTMLProps } from 'react'
 import { isSameNFT } from '../../../utils/index.js'
+import { useUserAssets } from './AssetsProvider.js'
 import { CollectibleCard } from './CollectibleCard.js'
 import { CollectibleItem, CollectibleItemSkeleton, type CollectibleItemProps } from './CollectibleItem.js'
 import { useCompactDetection } from './useCompactDetection.js'
-import { Trans } from '@lingui/react/macro'
-import { useUserAssets } from './AssetsProvider.js'
 
 const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
     folder: {
@@ -27,6 +28,9 @@ const useStyles = makeStyles<{ compact?: boolean }>()((theme, { compact }) => ({
         '& *': {
             cursor: 'not-allowed !important',
         },
+    },
+    dim: {
+        opacity: 0.5,
     },
     grid: {
         display: 'grid',
@@ -145,11 +149,18 @@ export const Collection = memo(
         const assetsSlice = hasExtra ? assets.slice(0, 3) : assets
 
         const assetDisabled = assetDisableRule?.(collection)
+        const selectedCollection = selectedAssets?.[0]?.collection
+        const isDim =
+            multiple && selectedCollection ?
+                !isSameAddress(selectedCollection.address, collection.address) ||
+                selectedCollection.chainId !== collection.chainId
+            :   false
+
         if (collection.balance! <= 2 || (!loading && assets.length < 2) || expanded) {
             const renderAssets = assetsSlice.map((asset) => (
                 <CollectibleItem
                     key={`${asset.chainId}.${asset.address}.${asset.tokenId}`}
-                    className={className}
+                    className={cx(className, isDim ? classes.dim : null)}
                     asset={asset}
                     pluginID={pluginID}
                     disableName={expanded}
@@ -172,7 +183,7 @@ export const Collection = memo(
 
         const renderAssets = assetsSlice.map((asset) => (
             <CollectibleCard
-                className={classes.collectibleCard}
+                className={cx(classes.collectibleCard, isDim ? classes.dim : null)}
                 asset={asset}
                 pluginID={pluginID}
                 key={`${collection.id}.${asset.address}.${asset.tokenId}`}
