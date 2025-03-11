@@ -1,9 +1,9 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { LoadingBase, makeStyles } from '@masknet/theme'
-import { Button, Typography } from '@mui/material'
-import { memo, useState, type HTMLProps } from 'react'
+import { makeStyles } from '@masknet/theme'
+import { Typography } from '@mui/material'
+import { memo, type HTMLProps } from 'react'
 import { SecurityProvider } from '../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,21 +65,10 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 0,
         textOverflow: 'ellipsis',
         overflow: 'hidden',
+        whiteSpace: 'nowrap',
     },
     link: {
         textDecoration: 'underline',
-    },
-    reportButton: {
-        padding: theme.spacing(1, 0),
-        width: 60,
-        minWidth: 60,
-        textAlign: 'center',
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 32,
-        color: theme.palette.maskColor.main,
-        backgroundColor: theme.palette.maskColor.thirdMain,
-        marginLeft: 'auto',
     },
     description: {
         fontFamily: 'Helvetica',
@@ -101,7 +90,6 @@ interface Props extends HTMLProps<HTMLDivElement> {
 
 export const WarningCard = memo(function WarningCard({ link, address, securityProvider, ...rest }: Props) {
     const { classes, cx } = useStyles()
-    const [isReporting] = useState(false)
     return (
         <div {...rest} className={cx(classes.card, rest.className)}>
             <div className={classes.header}>
@@ -130,15 +118,13 @@ export const WarningCard = memo(function WarningCard({ link, address, securityPr
             </div>
             <div className={classes.content}>
                 {link ?
-                    <a className={cx(classes.link, classes.target)} href={link}>
+                    <a className={cx(classes.link, classes.target)} href={link} title={link}>
                         {link}
                     </a>
-                :   <Typography className={classes.target}>{address}</Typography>}
-                <Button variant="text" className={classes.reportButton}>
-                    {isReporting ?
-                        <LoadingBase size={16} />
-                    :   <Icons.Flag size={16} />}
-                </Button>
+                :   <Typography className={classes.target} title={address}>
+                        {address}
+                    </Typography>
+                }
             </div>
             <Typography className={classes.description}>
                 <Trans>

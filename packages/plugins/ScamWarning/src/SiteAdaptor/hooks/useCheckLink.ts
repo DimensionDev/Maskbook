@@ -1,0 +1,38 @@
+import { resolveTCOLink } from '@masknet/plugin-infra/dom/context'
+import { GoPlusLabs } from '@masknet/web3-providers'
+import { useQuery } from '@tanstack/react-query'
+import { SecurityProvider } from '../../constants.js'
+import { PluginScamRPC } from '../../messages.js'
+import { extractAddresses } from '../../utils.js'
+
+function isTCO(url: string | null) {
+    if (!url) return false
+    return url.startsWith('https://t.co/')
+}
+
+export function useCheckLink(link: string, text: string) {
+    return useQuery({
+        queryKey: ['scam-warning', 'check-link', link, text],
+        queryFn: async () => {
+            const resolvedLink = isTCO(link) ? await resolveTCOLink(link) : link
+            if (!resolvedLink) return { isScam: false }
+            const result = await GoPlusLabs.checkIsPhishingSite(resolvedLink)
+            if (result)
+                return {
+                    isScam: result,
+                    provider: SecurityProvider.GoPlus,
+                    resolvedLink,
+                }
+            const isEllipsis = text.endsWith('…')
+            // We assume that the link contains only one address
+            const address = isEllipsis ? extractAddresses(resolvedLink)[0] : undefined
+
+            return {
+                isScam: await PluginScamRPC.checkUrl(resolvedLink),
+                provider: SecurityProvider.ScamSniffer,
+                resolvedLink,
+                address,
+            }
+        },
+    })
+}
