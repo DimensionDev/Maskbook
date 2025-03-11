@@ -14,7 +14,14 @@ class EtherscanRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId, Schema
         startBlock: number,
         endBlock: number,
     ): Promise<Array<Transaction<ChainId, SchemaType>> | undefined> {
-        if (!senderAddress || !contractAddress || !startBlock || !endBlock || !methodId) return
+        if (!senderAddress || !contractAddress || !endBlock || !methodId) {
+            if (process.env.NODE_ENV === 'development') {
+                if (!startBlock || !endBlock) {
+                    console.error('Start block or end block is empty or 0', { startBlock, endBlock })
+                }
+            }
+            return
+        }
 
         const { result } = await fetchJSON<{ result: Array<Transaction<ChainId, SchemaType>> }>(
             urlcat(EtherscanURL.from(chainId), {

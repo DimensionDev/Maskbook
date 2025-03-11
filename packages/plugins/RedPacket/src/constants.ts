@@ -50,7 +50,6 @@ export const NFT_DEFAULT_CHAINS = [
     ChainId.Arbitrum,
     ChainId.Avalanche,
     ChainId.Optimism,
-    ChainId.Base,
 ]
 
 function createTheme(themeId: string, cover: string): FireflyRedPacketAPI.ThemeGroupSettings {

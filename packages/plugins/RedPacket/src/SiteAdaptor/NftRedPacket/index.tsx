@@ -187,6 +187,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
                 creator={payload.senderName}
                 asset={claimedAsset}
                 collection={collection}
+                chainId={payload.chainId}
                 shares={availability.totalAmount}
                 claimedCount={+availability.claimedAmount}
                 total={availability.totalAmount}

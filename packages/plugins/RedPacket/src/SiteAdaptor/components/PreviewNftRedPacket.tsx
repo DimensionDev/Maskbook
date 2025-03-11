@@ -1,8 +1,9 @@
-import { type HTMLProps } from 'react'
 import { t } from '@lingui/core/macro'
-import { type NonFungibleAsset } from '@masknet/web3-shared-base'
-import type { FireflyRedPacketAPI, SimpleHash } from '@masknet/web3-providers/types'
 import type { Web3Helper } from '@masknet/web3-helpers'
+import type { FireflyRedPacketAPI, SimpleHash } from '@masknet/web3-providers/types'
+import { type NonFungibleAsset } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
+import { type HTMLProps } from 'react'
 import { NftRedPacketEnvelope } from './NftRedPacketEnvelope.js'
 
 interface Props extends HTMLProps<HTMLDivElement> {
@@ -10,6 +11,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     message: string
     asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     collection: SimpleHash.Collection | undefined
+    chainId: ChainId
     creator: string
     totalShares: number
 }

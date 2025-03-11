@@ -74,7 +74,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface CollectionSelectPanelProps extends BoxProps {
     chainId?: ChainId
-    balance: number
+    balance: string | null | undefined
     collection?: Web3Helper.NonFungibleCollectionAll
 }
 
@@ -103,7 +103,7 @@ export function CollectionSelectPanel({
                     null
                 :   <Typography className={classes.title} component="span">
                         <Trans>
-                            Balance: <b>{balance ? balance : '0'}</b>
+                            Balance: <b>{balance || 0}</b>
                         </Trans>
                     </Typography>}
             </div>

@@ -261,6 +261,7 @@ export function NftRedPacketConfirm() {
                             totalShares={selectedNfts.length}
                             asset={selectedNfts[0]}
                             collection={simplehashCollection}
+                            chainId={chainId}
                             theme={theme}
                         />
                     </div>
