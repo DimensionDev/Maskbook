@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-11 04:02\n"
+"PO-Revision-Date: 2025-03-11 11:00\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -141,7 +141,7 @@ msgstr "crwdns36730:0{SOL_REDPACKET_MAX_SHARES}crwdne36730:0"
 msgid "Available to Everyone"
 msgstr "crwdns36406:0crwdne36406:0"
 
-#. placeholder {0}: balance ? balance : '0'
+#. placeholder {0}: balance || 0
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Balance: <0>{0}</0>"
 msgstr "crwdns36847:0{0}crwdne36847:0"
