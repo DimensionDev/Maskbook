@@ -5,10 +5,9 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworks } from '@masknet/web3-hooks-base'
-import { SimpleHashResolveChainId } from '@masknet/web3-providers'
 import type { SimpleHash } from '@masknet/web3-providers/types'
 import { isZero, type NonFungibleAsset } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { type ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
 import type { HTMLProps } from 'react'
 
@@ -194,6 +193,7 @@ interface Props extends HTMLProps<HTMLDivElement> {
     message: string
     asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
     collection: SimpleHash.Collection | undefined
+    chainId: ChainId
     shares?: number
     /** claimed entities */
     claimedCount: number
@@ -212,6 +212,7 @@ export function NftRedPacketEnvelope({
     message,
     asset,
     collection,
+    chainId,
     shares = 1,
     claimedCount,
     total,
@@ -229,7 +230,6 @@ export function NftRedPacketEnvelope({
     const metadata = asset?.metadata
 
     const pluginID = asset?.runtime || NetworkPluginID.PLUGIN_EVM
-    const chainId = asset?.chainId || SimpleHashResolveChainId(collection?.chain) || ChainId.Mainnet
     const networks = useNetworks(pluginID)
     const network = networks.find((x) => x.chainId === asset?.chainId)
     const assetId = asset?.id ? `#${asset.id}`.replace(/^##/, '#') : ''

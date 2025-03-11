@@ -24,7 +24,7 @@ export class ChainbaseRedPacketAPI implements RedPacketBaseAPI.Provider<ChainId,
             ChainId.BSC,
             ChainId.Avalanche,
             ChainId.Arbitrum,
-            ChainId.Base,
+            // ChainId.Base,
             ChainId.Optimism,
             /** zkSync */ 324,
         ].includes(chainId)

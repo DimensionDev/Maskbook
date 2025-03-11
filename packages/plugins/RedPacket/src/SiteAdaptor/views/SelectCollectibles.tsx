@@ -67,7 +67,7 @@ export function SelectCollectibles() {
     const noChanges = useMemo(() => {
         const pendingSet = new Set(pendingNfts.map((x) => [x.chainId, x.address, x.tokenId].join(':').toLowerCase()))
         const selectedSet = new Set(selectedNfts.map((x) => [x.chainId, x.address, x.tokenId].join(':').toLowerCase()))
-        return pendingSet.difference(selectedSet).size === 0
+        return pendingSet.difference(selectedSet).size === 0 && selectedSet.difference(pendingSet).size === 0
     }, [pendingNfts, selectedNfts])
 
     const [pendingTokenCount, setPendingTokenCount] = useState(0)

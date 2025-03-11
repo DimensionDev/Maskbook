@@ -1,17 +1,25 @@
-import { useAsyncRetry } from 'react-use'
 import type { NetworkPluginID } from '@masknet/shared-base'
+import { useNetworkContext } from '@masknet/web3-hooks-base'
+import { getConnection } from '@masknet/web3-providers'
 import type { ConnectionOptions } from '@masknet/web3-providers/types'
-import { useWeb3Connection } from './useWeb3Connection.js'
+import { useQuery } from '@tanstack/react-query'
 
 export function useNonFungibleTokenBalance<T extends NetworkPluginID = NetworkPluginID>(
-    pluginID?: T,
+    expectedPluginID?: T,
     address?: string,
     options?: ConnectionOptions<T>,
 ) {
-    const Web3 = useWeb3Connection(pluginID, options)
+    const { pluginID } = useNetworkContext(expectedPluginID)
 
-    return useAsyncRetry(async () => {
-        if (!address) return '0'
-        return Web3.getNonFungibleTokenBalance(address)
-    }, [address, Web3])
+    return useQuery({
+        queryKey: ['non-fungible-token', 'balance', pluginID, address, options],
+        queryFn: async () => {
+            if (!pluginID || !address) return null
+            const Web3 = getConnection(pluginID, options)
+            return Web3.getNonFungibleTokenBalance(address, undefined, undefined, {
+                chainId: options?.chainId,
+                account: options?.account,
+            })
+        },
+    })
 }
