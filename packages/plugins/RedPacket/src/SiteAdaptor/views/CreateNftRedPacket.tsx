@@ -17,6 +17,7 @@ import {
     useEnvironmentContext,
     useNativeToken,
     useNativeTokenPrice,
+    useNonFungibleTokenBalance,
     useSmartPayChainId,
     useWallet,
 } from '@masknet/web3-hooks-base'
@@ -31,7 +32,6 @@ import { MessageInput } from '../components/MessageInput.js'
 import { NFTCard } from '../components/NFTCard.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNFTRedpacketGas } from '../hooks/useCreateNftRedpacketGas.js'
-import { useMyCollectionNfts } from '../hooks/useMyCollectionNfts.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -113,11 +113,10 @@ export function CreateNftRedPacket() {
         { chainId },
     )
 
-    const { data: assets_ = EMPTY_LIST } = useMyCollectionNfts()
-
-    const assets = collection?.assets?.length ? collection.assets : assets_
-
-    const balance = collection?.balance ?? assets.length
+    const { data: balance } = useNonFungibleTokenBalance(pluginID, collection?.address, {
+        account,
+        chainId,
+    })
     const removeToken = useCallback((token: Web3Helper.NonFungibleAssetAll) => {
         setSelectedNfts((list) => list.filter((t) => t.tokenId !== token.tokenId))
     }, [])

@@ -141,7 +141,7 @@ msgstr ""
 msgid "Available to Everyone"
 msgstr ""
 
-#. placeholder {0}: balance ? balance : '0'
+#. placeholder {0}: balance || 0
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Balance: <0>{0}</0>"
 msgstr ""
