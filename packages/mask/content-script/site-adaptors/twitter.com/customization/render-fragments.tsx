@@ -1,6 +1,7 @@
-import { memo } from 'react'
-import { Link } from '@mui/material'
+import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-script'
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
+import { Link } from '@mui/material'
+import { memo } from 'react'
 import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
 
 /**
@@ -32,5 +33,24 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
         return props.width === 0 || props.meta?.get(IMAGE_RENDER_IGNORE) ?
                 null
             :   <img src={props.src} width={props.width} height={props.height} style={props.style} />
+    }),
+    Text: memo(function TextFragment(props: RenderFragmentsContextType.TextProps) {
+        const TextModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.TextModifier)?.TextModifier
+
+        const text = props.style ? <span style={props.style}>{props.children}</span> : props.children
+        if (!TextModifier) return text
+
+        return <TextModifier {...props} fallback={text}></TextModifier>
+    }),
+    Link: memo(function LinkFragment(props: RenderFragmentsContextType.LinkProps) {
+        const LinkModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.LinkModifier)?.LinkModifier
+        const link = (
+            <Link href={props.href} target="_blank" rel="noopener noreferrer" fontSize="inherit">
+                {props.children}
+                {props.suggestedPostImage}
+            </Link>
+        )
+        if (!LinkModifier) return link
+        return <LinkModifier {...props} fallback={link}></LinkModifier>
     }),
 }

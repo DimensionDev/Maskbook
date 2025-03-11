@@ -384,12 +384,14 @@ export function gitcoin_dark_url() { return new URL("./plugins/Gitcoin.dark.svg"
 export function gitcoin_light_url() { return new URL("./plugins/Gitcoin.light.svg", import.meta.url).href }
 export function good_ghosting_dark_url() { return new URL("./plugins/GoodGhosting.dark.svg", import.meta.url).href }
 export function good_ghosting_light_url() { return new URL("./plugins/GoodGhosting.light.svg", import.meta.url).href }
+export function go_plus_url() { return new URL("./plugins/GoPlus.svg", import.meta.url).href }
 export function markets_url() { return new URL("./plugins/Markets.png", import.meta.url).href }
 export function markets_claim_url() { return new URL("./plugins/MarketsClaim.svg", import.meta.url).href }
 export function nft_avatar_url() { return new URL("./plugins/NFTAvatar.svg", import.meta.url).href }
 export function pool_together_url() { return new URL("./plugins/PoolTogether.png", import.meta.url).href }
 export function savings_url() { return new URL("./plugins/Savings.svg", import.meta.url).href }
-export function scam_sniffer_url() { return new URL("./plugins/ScamSniffer.svg", import.meta.url).href }
+export function scam_sniffer_dark_url() { return new URL("./plugins/ScamSniffer.dark.svg", import.meta.url).href }
+export function scam_sniffer_light_url() { return new URL("./plugins/ScamSniffer.light.svg", import.meta.url).href }
 export function security_checker_url() { return new URL("./plugins/SecurityChecker.svg", import.meta.url).href }
 export function setting_info_dark_url() { return new URL("./plugins/SettingInfo.dark.svg", import.meta.url).href }
 export function setting_info_light_url() { return new URL("./plugins/SettingInfo.light.svg", import.meta.url).href }

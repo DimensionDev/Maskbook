@@ -49,5 +49,6 @@ export function setupUIContext() {
         hasHostPermission: Services.Helper.hasHostPermission,
         requestHostPermission: (origins: readonly string[]) =>
             Services.Helper.requestExtensionPermissionFromContentScript({ origins: [...origins] }),
+        resolveTCOLink: Services.Helper.resolveTCOLink,
     })
 }

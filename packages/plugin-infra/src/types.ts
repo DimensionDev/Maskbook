@@ -1,24 +1,24 @@
+import type { Emitter } from '@servie/events'
 import type React from 'react'
 import type { Option, Result } from 'ts-results-es'
-import type { Emitter } from '@servie/events'
 /* eslint @masknet/unicode-specific-set: ["error", { "only": "code" }] */
 import type {
     BindingProof,
+    BooleanPreference,
     ECKeyIdentifier,
+    EnhanceableSite,
     NetworkPluginID,
     PluginID,
     ProfileIdentifier,
     ScopedStorage,
     SocialAccount,
     SocialIdentity,
-    BooleanPreference,
-    EnhanceableSite,
 } from '@masknet/shared-base'
 import type { TypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SearchResult } from '@masknet/web3-shared-base'
-import type { CompositionType } from './entry-content-script.js'
 import type { JSX } from 'react'
+import type { CompositionType } from './entry-content-script.js'
 
 export declare namespace Plugin {
     /**
@@ -271,6 +271,18 @@ export namespace Plugin.SiteAdaptor {
             onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
             onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
         }
+        TextModifier?: React.ComponentType<{
+            children: string
+            style?: React.CSSProperties
+            fallback?: React.ReactNode
+        }>
+        LinkModifier?: React.ComponentType<{
+            children: string
+            style?: React.CSSProperties
+            href: string
+            suggestedPostImage: React.ReactNode | undefined
+            fallback?: React.ReactNode
+        }>
     }
 
     // #region Composition entry

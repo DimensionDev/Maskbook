@@ -78,3 +78,11 @@ export interface SecurityMessage {
     message: MessageDescriptor
     shouldHide(info: SecurityAPI.TokenSecurityType): boolean
 }
+
+export interface PhishingSiteResponse {
+    code: number
+    message: string
+    result: {
+        phishing_site: 0 | 1
+    }
+}
