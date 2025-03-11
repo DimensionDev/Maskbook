@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-18 04:44\n"
+"PO-Revision-Date: 2025-03-11 04:02\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -53,22 +53,17 @@ msgstr "crwdns36578:0{claimed}crwdnd36578:0{account}crwdne36578:0"
 #~ msgid "{head} Follow @{account} (mask.io) to claim lucky drops."
 #~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketNft.tsx
-#: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "@{sender} is sending an NFT lucky drop on {networkName} network. {account_promote} {promote_short} #mask_io #LuckyDrop {postLink}"
 msgstr "crwdns31710:0{sender}crwdnd31710:0{networkName}crwdnd31710:0{account_promote}crwdnd31710:0{promote_short}crwdnd31710:0{postLink}crwdne31710:0"
 
-#. placeholder {0}: tokenDetailedSelectedList.length
-#. placeholder {1}: tokenDetailedSelectedList.length
 #: src/SiteAdaptor/views/SelectNft.tsx
-msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}"
-msgstr "crwdns36070:00={0}crwdnd36070:01={1}crwdne36070:0"
+#~ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}"
+#~ msgstr ""
 
-#. placeholder {0}: tokenDetailedSelectedList.length
-#. placeholder {1}: tokenDetailedSelectedList.length
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
-msgstr "crwdns32290:00={0}crwdnd32290:01={1}crwdne32290:0"
+#~ msgid "<0>{0}</0> {1, plural, one {NFT} other {NFTs}}NFT"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "🤑 Check this Lucky Drop  🧧💰✨ sent by @{sender}."
@@ -78,14 +73,14 @@ msgstr "crwdns32290:00={0}crwdnd32290:01={1}crwdne32290:0"
 #~ msgid "🤑 Just claimed a #LuckyDrop  🧧💰✨ on https://firefly.mask.social from @{sender} !"
 #~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr "crwdns31720:0crwdne31720:0"
 
 #. placeholder {0}: token?.contract?.name || 'NFT'
-#: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "1 {0} claimed."
 msgstr "crwdns32296:0{0}crwdne32296:0"
 
@@ -104,13 +99,12 @@ msgid "Adjust Selection"
 msgstr "crwdns36404:0crwdne36404:0"
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
-msgid "ALL"
-msgstr "crwdns32300:0crwdne32300:0"
+#~ msgid "ALL"
+#~ msgstr ""
 
-#. placeholder {0}: Math.min(NFT_RED_PACKET_MAX_SHARES, balance)
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
-msgid "ALL ({0} NFT)"
-msgstr "crwdns28930:0{0}crwdne28930:0"
+#~ msgid "ALL ({0} NFT)"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Amount"
@@ -140,26 +134,31 @@ msgstr "crwdns36730:0{SOL_REDPACKET_MAX_SHARES}crwdne36730:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Attached Message"
-msgstr "crwdns28940:0crwdne28940:0"
+#~ msgid "Attached Message"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
 msgstr "crwdns36406:0crwdne36406:0"
+
+#. placeholder {0}: balance ? balance : '0'
+#: src/SiteAdaptor/components/CollectionSelectPanel.tsx
+msgid "Balance: <0>{0}</0>"
+msgstr "crwdns36847:0{0}crwdne36847:0"
 
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Best Wishes"
 #~ msgstr ""
 
-#: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/contexts/SolRedpacketContext.tsx
 #: src/SiteAdaptor/contexts/RedPacketContext.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/PreviewRedPacket.tsx
+#: src/SiteAdaptor/components/PreviewNftRedPacket.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
-#: src/SiteAdaptor/components/MessagePanel.tsx
+#: src/SiteAdaptor/components/MessageInput.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Best Wishes!"
 msgstr "crwdns28944:0crwdne28944:0"
@@ -172,6 +171,7 @@ msgstr "crwdns28944:0crwdne28944:0"
 #~ msgid "By clicking \"Next\", you acknowledge the risk associated with decentralized networks and beta products."
 #~ msgstr ""
 
+#: src/SiteAdaptor/views/SelectCollectibles.tsx
 #: src/SiteAdaptor/views/CustomCover.tsx
 msgid "Cancel"
 msgstr "crwdns36072:0crwdne36072:0"
@@ -185,9 +185,9 @@ msgstr "crwdns36074:0crwdne36074:0"
 #~ msgid "Choose your collection"
 #~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
+#: src/SiteAdaptor/NftRedPacket/OperationFooter.tsx
 msgid "Claim"
 msgstr "crwdns28950:0crwdne28950:0"
 
@@ -222,14 +222,12 @@ msgid "Claimed"
 msgstr "crwdns28954:0crwdne28954:0"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "Claimed "
-msgstr "crwdns36410:0crwdne36410:0"
+#~ msgid "Claimed "
+#~ msgstr ""
 
-#. placeholder {0}: availability.claimedAmount
-#. placeholder {1}: availability.totalAmount
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "Claimed {0}/{1}"
-msgstr "crwdns28956:0{0}crwdnd28956:0{1}crwdne28956:0"
+#~ msgid "Claimed {0}/{1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #~ msgid "Claimed Details"
@@ -260,9 +258,9 @@ msgstr "crwdns31722:0{0}crwdnd31722:0{1}crwdnd31722:0{2}crwdne31722:0"
 msgid "Claimed: <0>{claim_numbers}/{total_numbers}</0> <1>{0}/{1}</1><2><3>{tokenSymbol}</3></2>"
 msgstr "crwdns36582:0{claim_numbers}crwdnd36582:0{total_numbers}crwdnd36582:0{0}crwdnd36582:0{1}crwdnd36582:0{tokenSymbol}crwdne36582:0"
 
-#: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/SolanaRedPacket/OperationFooter.tsx
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
+#: src/SiteAdaptor/NftRedPacket/OperationFooter.tsx
 msgid "Claiming..."
 msgstr "crwdns28962:0crwdne28962:0"
 
@@ -270,27 +268,32 @@ msgstr "crwdns28962:0crwdne28962:0"
 msgid "Clear all requirements"
 msgstr "crwdns28964:0crwdne28964:0"
 
+#: src/SiteAdaptor/components/CollectionSelectPanel.tsx
+msgid "Collectibles"
+msgstr "crwdns36849:0crwdne36849:0"
+
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Collections"
-msgstr "crwdns28966:0crwdne28966:0"
+msgid "Collection"
+msgstr "crwdns36851:0crwdne36851:0"
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+#~ msgid "Collections"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Comment"
 msgstr "crwdns28968:0crwdne28968:0"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "Completed"
-msgstr "crwdns28970:0crwdne28970:0"
+#~ msgid "Completed"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #~ msgid "Conditions not met"
 #~ msgstr ""
 
-#: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
+#: src/SiteAdaptor/views/SelectCollectibles.tsx
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: src/SiteAdaptor/views/CustomCover.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
@@ -307,13 +310,13 @@ msgid "Confirming"
 msgstr "crwdns28976:0crwdne28976:0"
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
+#: src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 msgid "Congratulations!"
 msgstr "crwdns36064:0crwdne36064:0"
 
-#: src/SiteAdaptor/SolanaRedPacket/RequestLoginFooter.tsx
-#: src/SiteAdaptor/RedPacket/RequestLoginFooter.tsx
-#~ msgid "Connect to {source}"
-#~ msgstr ""
+#: src/SiteAdaptor/NftRedPacket/RequestLoginFooter.tsx
+msgid "Connect to {source}"
+msgstr "crwdns36853:0{source}crwdne36853:0"
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -323,6 +326,7 @@ msgid "Connect Wallet"
 msgstr "crwdns28980:0crwdne28980:0"
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Cover"
 msgstr "crwdns36082:0crwdne36082:0"
@@ -364,12 +368,13 @@ msgstr "crwdns36084:0crwdne36084:0"
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
+#: src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 msgid "Empty"
 msgstr "crwdns28992:0crwdne28992:0"
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
-msgid "Enclose a Message"
-msgstr "crwdns28994:0crwdne28994:0"
+#~ msgid "Enclose a Message"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -404,10 +409,10 @@ msgstr "crwdns29006:0crwdne29006:0"
 msgid "Everyone"
 msgstr "crwdns36414:0crwdne36414:0"
 
-#: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
+#: src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 msgid "Expired"
 msgstr "crwdns29008:0crwdne29008:0"
 
@@ -415,11 +420,11 @@ msgstr "crwdns29008:0crwdne29008:0"
 msgid "Failed to create theme."
 msgstr "crwdns36086:0crwdne36086:0"
 
-#: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Follow @masknetwork (mask.io) to claim NFT lucky drops."
 msgstr "crwdns31728:0crwdne31728:0"
 
-#: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Follow @realMaskNetwork (mask.io) to claim NFT lucky drops."
 msgstr "crwdns31730:0crwdne31730:0"
 
@@ -432,10 +437,9 @@ msgstr "crwdns31730:0crwdne31730:0"
 msgid "Follow me"
 msgstr "crwdns29010:0crwdne29010:0"
 
-#. placeholder {0}: payload.senderName || '-'
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "From: @{0}"
-msgstr "crwdns29012:0{0}crwdne29012:0"
+#~ msgid "From: @{0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Gas Fee"
@@ -468,6 +472,11 @@ msgstr "crwdns29016:0{0}crwdne29016:0"
 #~ "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask io."
 #~ msgstr ""
 
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n\n"
+"🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
+msgstr "crwdns36855:0crwdne36855:0"
+
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "Hi friends, I just found a lucky drop sent by @{0} on {1} network."
 #~ msgstr ""
@@ -497,12 +506,16 @@ msgid "I just claimed a lucky drop from @{0} on {1} network."
 msgstr "crwdns32306:0{0}crwdnd32306:0{1}crwdne32306:0"
 
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
-msgid "I just claimed a lucky drop from @{sender} on Solana"
-msgstr "crwdns36588:0{sender}crwdne36588:0"
+#~ msgid "I just claimed a lucky drop from @{sender} on Solana"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
+msgid "I just claimed a lucky drop from @{sender} on Solana."
+msgstr "crwdns36832:0{sender}crwdne36832:0"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network."
-msgstr "crwdns35482:0{sender}crwdnd35482:0{networkName}crwdne35482:0"
+#~ msgid "I just claimed an NFT lucky drop from @{sender} on {networkName} network."
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
@@ -563,21 +576,23 @@ msgstr "crwdns29034:0crwdne29034:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "Loading token..."
-msgstr "crwdns29036:0crwdne29036:0"
+#~ msgid "Loading token..."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/SolanaRedPacket/SolanaRedPacketCard.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Lucky Drop"
 msgstr "crwdns29038:0crwdne29038:0"
 
-#: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Lucky Drop is valid for 24 hours, within this period the Lucky Drop contract can send approved NFTs to the participants of Lucky Drop."
+msgstr "crwdns36975:0crwdne36975:0"
+
+#: src/SiteAdaptor/components/MessageInput.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
 msgid "Message"
 msgstr "crwdns29042:0crwdne29042:0"
@@ -634,10 +649,12 @@ msgstr "crwdns36094:0crwdne36094:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "No results"
-msgstr "crwdns29058:0crwdne29058:0"
+#~ msgid "No results"
+#~ msgstr ""
+
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
+msgstr "crwdns36977:0crwdne36977:0"
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 msgid "Note: When you \"Unlock All\", all of the NFTs in the collection will be by default authorized for sale. This includes the NFTs transferred afterwards."
@@ -725,10 +742,8 @@ msgstr "crwdns36100:0crwdne36100:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "Search"
-msgstr "crwdns29084:0crwdne29084:0"
+#~ msgid "Search"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -741,21 +756,25 @@ msgid "Select a Token"
 msgstr "crwdns29086:0crwdne29086:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "Select All"
-msgstr "crwdns29088:0crwdne29088:0"
+#~ msgid "Select All"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
 msgstr "crwdns29090:0crwdne29090:0"
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
+#: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Select NFTs"
 msgstr "crwdns36430:0crwdne36430:0"
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
-msgid "Select partially"
-msgstr "crwdns29092:0crwdne29092:0"
+#~ msgid "Select partially"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/RouterDialog.tsx
+msgid "Selecting NFTs"
+msgstr "crwdns36919:0crwdne36919:0"
 
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
@@ -770,7 +789,6 @@ msgstr "crwdns29096:0crwdne29096:0"
 msgid "Sent"
 msgstr "crwdns29098:0crwdne29098:0"
 
-#: src/SiteAdaptor/RedPacketNft.tsx
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
@@ -786,7 +804,7 @@ msgstr "crwdns29100:0crwdne29100:0"
 #~ msgid "Solana"
 #~ msgstr ""
 
-#: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "Something went wrong."
 msgstr "crwdns29104:0crwdne29104:0"
 
@@ -835,10 +853,8 @@ msgstr "crwdns32310:0crwdne32310:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
-msgstr "crwdns36732:0{NFT_RED_PACKET_MAX_SHARES}crwdne36732:0"
+#~ msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {NFT_RED_PACKET_MAX_SHARES}."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -846,6 +862,10 @@ msgstr "crwdns36732:0{NFT_RED_PACKET_MAX_SHARES}crwdne36732:0"
 #: src/SiteAdaptor/views/SelectNft.tsx
 #~ msgid "The maximum number of NFTs to be sold in NFT lucky drop contract is {RED_PACKET_MAX_SHARES}."
 #~ msgstr ""
+
+#: src/SiteAdaptor/views/SelectCollectibles.tsx
+msgid "The maximum number of NFTs to be sold in one collection lucky drop contract is 255."
+msgstr "crwdns36857:0crwdne36857:0"
 
 #. placeholder {0}: formatBalance(1, token.decimals)
 #. placeholder {1}: token.symbol
@@ -858,12 +878,8 @@ msgstr "crwdns29118:0{0}crwdnd29118:0{1}crwdne29118:0"
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
-msgstr "crwdns36734:0{NFT_RED_PACKET_MAX_SHARES}crwdne36734:0"
+#~ msgid "The NFT lucky drop supports up to {NFT_RED_PACKET_MAX_SHARES} NFTs selected for one time."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
@@ -876,10 +892,13 @@ msgstr "crwdns36734:0{NFT_RED_PACKET_MAX_SHARES}crwdne36734:0"
 #~ msgid "The NFT lucky drop supports up to {RED_PACKET_MAX_SHARES} NFTs selected for one time."
 #~ msgstr ""
 
+#: src/SiteAdaptor/views/SelectCollectibles.tsx
+msgid "This NFT contract cannot be modified now."
+msgstr "crwdns36991:0crwdne36991:0"
+
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
-msgstr "crwdns29120:0crwdne29120:0"
+#~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
@@ -895,8 +914,8 @@ msgid "Total amount"
 msgstr "crwdns29124:0crwdne29124:0"
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Total Amount"
-msgstr "crwdns29126:0crwdne29126:0"
+#~ msgid "Total Amount"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Total amount shared among all winners"
@@ -907,7 +926,12 @@ msgstr "crwdns29126:0crwdne29126:0"
 msgid "Total cost"
 msgstr "crwdns29130:0crwdne29130:0"
 
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
+msgid "Total NFTs"
+msgstr "crwdns36859:0crwdne36859:0"
+
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
+#: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/RedpacketConfirm.tsx
 msgid "Transaction cost"
 msgstr "crwdns36102:0crwdne36102:0"
@@ -934,8 +958,8 @@ msgid "View"
 msgstr "crwdns29140:0crwdne29140:0"
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid "Wallet account"
-msgstr "crwdns29142:0crwdne29142:0"
+#~ msgid "Wallet account"
+#~ msgstr ""
 
 #. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
@@ -956,9 +980,8 @@ msgid "Winners"
 msgstr "crwdns29146:0crwdne29146:0"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
-#: src/SiteAdaptor/views/SelectNft.tsx
-msgid "You can also use <0>Shift</0> to select multiple NFTs."
-msgstr "crwdns31754:0crwdne31754:0"
+#~ msgid "You can also use <0>Shift</0> to select multiple NFTs."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 #: src/SiteAdaptor/components/ConditionSettings.tsx
@@ -990,7 +1013,7 @@ msgstr "crwdns36104:0crwdne36104:0"
 msgid "You claimed {0} ${1}."
 msgstr "crwdns32314:0{0}crwdnd32314:0${1}crwdne32314:0"
 
-#: src/SiteAdaptor/RedPacketNft.tsx
+#: src/SiteAdaptor/NftRedPacket/index.tsx
 msgid "You claimed 1."
 msgstr "crwdns31756:0crwdne31756:0"
 
@@ -1002,10 +1025,9 @@ msgstr "crwdns31756:0crwdne31756:0"
 #~ msgid "You got {0} {1}"
 #~ msgstr ""
 
-#. placeholder {0}: payload.contractName || 'NFT'
 #: src/SiteAdaptor/RedPacketNft.tsx
-msgid "You got 1 {0}"
-msgstr "crwdns29160:0{0}crwdne29160:0"
+#~ msgid "You got 1 {0}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
 #~ msgid "You have already claimed this lucky drop."
@@ -1040,6 +1062,7 @@ msgstr "crwdns36478:0{quantity}crwdne36478:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketEnvelope.tsx
+#: src/SiteAdaptor/components/NftRedPacketEnvelope.tsx
 msgid "You've already claimed the lucky drop"
 msgstr "crwdns36600:0crwdne36600:0"
 
