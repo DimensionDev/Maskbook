@@ -205,6 +205,9 @@ export const Component = memo(function ConnectWalletPage() {
             navigate(-1)
             return
         }
+        await EVMWeb3.connect({
+            providerType: ProviderType.MaskWallet,
+        })
         await Services.Helper.removePopupWindow()
     }, [signResult])
 
