@@ -58,6 +58,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             iconFilterColor: 'rgba(240, 51, 51, 0.3)',
             category: 'dapp',
             entryWalletConnectedNotRequired: true,
+            hiddenInList: true,
         },
     ],
 }
