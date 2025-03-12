@@ -2,7 +2,7 @@ import { EVM_ADDRESS, SOLANA_ADDRESS } from '@masknet/plugin-scam-warning'
 import { EXIST_EVM_ADDRESS, EXIST_SOLANA_ADDRESS, EXIST_TRON_ADDRESS, TRON_ADDRESS } from './constants.js'
 
 export function isTronAddress(address: string) {
-    return !!address.match(address)
+    return !!address.match(TRON_ADDRESS)
 }
 
 export function extractAddresses(text: string, exist = false) {

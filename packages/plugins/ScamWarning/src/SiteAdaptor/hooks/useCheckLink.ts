@@ -25,7 +25,7 @@ export function useCheckLink(link: string, text: string) {
                 }
             const isEllipsis = text.endsWith('…')
             // We assume that the link contains only one address
-            const address = isEllipsis ? extractAddresses(resolvedLink)[0] : undefined
+            const address = isEllipsis ? extractAddresses(resolvedLink, true)[0] : undefined
 
             return {
                 isScam: await PluginScamRPC.checkUrl(resolvedLink),

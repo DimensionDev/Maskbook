@@ -22,7 +22,7 @@ export function useDetectAddress(address: string | null | undefined, enabled = t
                 }
             if (isTronAddress(address))
                 return {
-                    isScam: GoPlusLabs.checkIfAddressIsScam('tron', address),
+                    isScam: await GoPlusLabs.checkIfAddressIsScam('tron', address),
                     provider: SecurityProvider.GoPlus,
                 }
             return { isScam: false, provider: null }
