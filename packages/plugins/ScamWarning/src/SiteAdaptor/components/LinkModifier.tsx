@@ -1,18 +1,13 @@
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
-import { resolveTCOLink } from '@masknet/plugin-infra/dom/context'
 import { makeStyles, ShadowRootPopper } from '@masknet/theme'
 import { Link } from '@mui/material'
-import { useQuery } from '@tanstack/react-query'
 import { memo } from 'react'
-import { PluginScamRPC } from '../../messages.js'
 import { usePopoverControl } from './usePopoverControl.js'
 import { WarningCard } from './WarningCard.js'
-import { SecurityProvider } from '../../constants.js'
-import { GoPlusLabs } from '@masknet/web3-providers'
-import { extractAddresses } from '../../utils.js'
 import { useDetectAddress } from '../hooks/useDetectAddress.js'
 import { AddressTag } from './TextModifier.js'
+import { useCheckLink } from '../hooks/useCheckLink.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -37,40 +32,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-function isTCO(url: string | null) {
-    if (!url) return false
-    return url.startsWith('https://t.co/')
-}
-
 export const LinkModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['LinkModifier']>>(function LinkModifier({
     fallback,
     ...props
 }) {
     const { classes } = useStyles()
-    const { data } = useQuery({
-        queryKey: ['scam-warning', 'check-link', props.href, props.children],
-        queryFn: async () => {
-            const resolvedLink = isTCO(props.href) ? await resolveTCOLink(props.href) : props.href
-            if (!resolvedLink) return { isScam: false }
-            const result = await GoPlusLabs.checkIsPhishingSite(resolvedLink)
-            if (result)
-                return {
-                    isScam: result,
-                    provider: SecurityProvider.GoPlus,
-                    resolvedLink,
-                }
-            const isEllipsis = props.children.endsWith('…')
-            // We assume that the link contains only one address
-            const address = isEllipsis ? extractAddresses(resolvedLink, true)[0] : undefined
-
-            return {
-                isScam: await PluginScamRPC.checkUrl(resolvedLink),
-                provider: SecurityProvider.ScamSniffer,
-                resolvedLink,
-                address,
-            }
-        },
-    })
+    const { data } = useCheckLink(props.href, props.children)
     const { data: detected } = useDetectAddress(data?.address, data?.isScam === false)
     const { open, anchorEl, iconRef, onMouseEnter, onMouseLeave } = usePopoverControl()
 

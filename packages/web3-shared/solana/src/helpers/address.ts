@@ -1,13 +1,12 @@
+import { getEnumAsArray } from '@masknet/kit'
+import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import * as Web3 from /* webpackDefer: true */ '@solana/web3.js'
 import bs58 from 'bs58'
 import { memoize } from 'lodash-es'
-import * as Web3 from /* webpackDefer: true */ '@solana/web3.js'
-import { getEnumAsArray } from '@masknet/kit'
-import { isSameAddress } from '@masknet/web3-shared-base'
-import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
-import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 import { getTokenConstant } from '../constants/constants.js'
 import { ZERO_ADDRESS } from '../constants/primitives.js'
-import { isTronAddress } from './isTronAddress.js'
+import { ChainId, NetworkType, ProviderType, SchemaType } from '../types.js'
 
 export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
@@ -20,7 +19,7 @@ export function decodeAddress(initData: string | Buffer | Uint8Array) {
 }
 
 export function formatAddress(address: string, size = 0) {
-    if (!isValidAddress(address, false)) return address
+    if (!isValidAddress(address)) return address
     if (size === 0 || size >= 22) return address
     return `${address.slice(0, Math.max(0, size))}...${address.slice(-size)}`
 }
@@ -42,12 +41,12 @@ export function formatTokenId(tokenId = '', size_ = 4) {
     return `#${head}...${tail}`
 }
 
-export function isValidAddress(address?: string, strict?: boolean): address is string {
+export function isValidAddress(address?: string): address is string {
     const length = address?.length
     if (!length || length < 32 || length > 44) return false
     try {
         const buffer = bs58.decode(address)
-        return strict === false ? true : Web3.PublicKey.isOnCurve(buffer) && !isTronAddress(address)
+        return buffer.byteLength === 32
     } catch {
         return false
     }
