@@ -64,71 +64,69 @@ export interface WalletDescriptionProps {
     verified?: boolean
 }
 
-export const WalletDescription = memo<WalletDescriptionProps>(
-    ({
-        onClick,
-        providerIcon,
-        networkIcon,
-        iconFilterColor,
-        name,
-        address,
-        formattedAddress,
-        addressLink,
-        onPendingClick,
-        pending,
-        verified,
-    }) => {
-        const { classes } = useStyles()
+export const WalletDescription = memo<WalletDescriptionProps>(function WalletDescription({
+    onClick,
+    providerIcon,
+    networkIcon,
+    iconFilterColor,
+    name,
+    address,
+    formattedAddress,
+    addressLink,
+    onPendingClick,
+    pending,
+    verified,
+}) {
+    const { classes } = useStyles()
 
-        return (
-            <Box onClick={onClick} className={classes.root}>
-                <WalletIcon
-                    size={30}
-                    badgeSize={12}
-                    mainIcon={providerIcon ?? networkIcon}
-                    badgeIcon={providerIcon ? networkIcon : undefined}
-                    iconFilterColor={iconFilterColor}
-                />
-                <Box className={classes.description}>
-                    <Typography className={classes.walletName}>
-                        <span>{name}</span>
-                        {verified ?
-                            <Icons.Verification size={18} />
-                        :   null}
-                        {onPendingClick ?
-                            <Icons.ArrowDrop />
-                        :   null}
-                    </Typography>
-                    <Typography className={classes.address}>
-                        <span>{formattedAddress}</span>
-                        {address ?
-                            <CopyButton size={14} className={classes.linkIcon} text={address} />
-                        :   null}
-                        <Link
-                            href={addressLink}
-                            target="_blank"
-                            title="View on Explorer"
-                            rel="noopener noreferrer"
-                            onClick={(event) => {
-                                event.stopPropagation()
-                            }}
-                            className={classes.linkIcon}>
-                            <Icons.LinkOut size={14} className={classes.linkIcon} />
-                        </Link>
-                        {pending ?
-                            <span
-                                className={classes.pending}
-                                onClick={(e) => {
-                                    e.stopPropagation()
-                                    onPendingClick?.()
-                                }}>
-                                <Trans>Pending</Trans>
-                                <LoadingBase size={12} className={classes.progress} />
-                            </span>
-                        :   null}
-                    </Typography>
-                </Box>
+    return (
+        <Box onClick={onClick} className={classes.root}>
+            <WalletIcon
+                size={30}
+                badgeSize={12}
+                mainIcon={providerIcon ?? networkIcon}
+                badgeIcon={providerIcon ? networkIcon : undefined}
+                iconFilterColor={iconFilterColor}
+            />
+            <Box className={classes.description}>
+                <Typography className={classes.walletName}>
+                    <span>{name}</span>
+                    {verified ?
+                        <Icons.Verification size={18} />
+                    :   null}
+                    {onPendingClick ?
+                        <Icons.ArrowDrop />
+                    :   null}
+                </Typography>
+                <Typography className={classes.address}>
+                    <span>{formattedAddress}</span>
+                    {address ?
+                        <CopyButton size={14} className={classes.linkIcon} text={address} />
+                    :   null}
+                    <Link
+                        href={addressLink}
+                        target="_blank"
+                        title="View on Explorer"
+                        rel="noopener noreferrer"
+                        onClick={(event) => {
+                            event.stopPropagation()
+                        }}
+                        className={classes.linkIcon}>
+                        <Icons.LinkOut size={14} className={classes.linkIcon} />
+                    </Link>
+                    {pending ?
+                        <span
+                            className={classes.pending}
+                            onClick={(e) => {
+                                e.stopPropagation()
+                                onPendingClick?.()
+                            }}>
+                            <Trans>Pending</Trans>
+                            <LoadingBase size={12} className={classes.progress} />
+                        </span>
+                    :   null}
+                </Typography>
             </Box>
-        )
-    },
-)
+        </Box>
+    )
+})
