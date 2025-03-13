@@ -63,6 +63,9 @@ export function makeFileKey(length = 16) {
 export function downloadFile(file: FileInfo) {
     const gateway = resolveGatewayAPI(file.provider)
     let link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
+    if (file.provider === Provider.WeaveVM) {
+        link = `${link}/0`
+    }
     if (isAfter(new Date(2022, 8, 1), new Date(file.createdAt))) {
         link = urlcat(RECOVERY_PAGE, {
             url: encodeURIComponent(link),
