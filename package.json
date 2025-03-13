@@ -51,12 +51,13 @@
     "@types/react-dom": "npm:types-react-dom@beta",
     "@typescript/lib-dom": "npm:@types/web@^0.0.183",
     "buffer": "^6.0.3",
-    "bundler-upload-sdk": "^2.1.0",
+    "bundler-upload-sdk": "^2.1.1",
     "lodash-es": "^4.17.21",
     "react": "0.0.0-experimental-58af67a8f8-20240628",
     "react-dom": "0.0.0-experimental-58af67a8f8-20240628",
     "ses": "1.9.0",
-    "ts-results-es": "^4.2.0"
+    "ts-results-es": "^4.2.0",
+    "weavevm-bundles": "^0.0.2"
   },
   "devDependencies": {
     "@changesets/cli": "^2.28.1",

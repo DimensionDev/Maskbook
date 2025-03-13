@@ -138,8 +138,8 @@ importers:
         specifier: ^6.0.3
         version: 6.0.3
       bundler-upload-sdk:
-        specifier: ^2.1.0
-        version: 2.1.0
+        specifier: ^2.1.1
+        version: 2.1.1
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -155,6 +155,9 @@ importers:
       ts-results-es:
         specifier: ^4.2.0
         version: 4.2.0
+      weavevm-bundles:
+        specifier: ^0.0.2
+        version: 0.0.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
     devDependencies:
       '@changesets/cli':
         specifier: ^2.28.1
@@ -5758,6 +5761,12 @@ packages:
   '@popperjs/core@2.11.8':
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
 
+  '@project-serum/borsh@0.2.5':
+    resolution: {integrity: sha512-UmeUkUoKdQ7rhx6Leve1SssMR/Ghv8qrEiyywyxSWg7ooV7StdpPBhciiy5eB3T0qU1BXvdRNC8TdrkxK7WC5Q==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      '@solana/web3.js': ^1.2.0
+
   '@project-serum/sol-wallet-adapter@0.2.6':
     resolution: {integrity: sha512-cpIb13aWPW8y4KzkZAPDgw+Kb+DXjCC6rZoH74MGm3I/6e/zKyGnfAuW5olb2zxonFqsYgnv7ev8MQnvSgJ3/g==}
     engines: {node: '>=10'}
@@ -8131,8 +8140,8 @@ packages:
     resolution: {integrity: sha512-tjwM5exMg6BGRI+kNmTntNsvdZS1X8BFYS6tnJ2hdH0kVxM6/eVZ2xy+FqStSWvYmtfFMDLIxurorHwDKfDz5Q==}
     engines: {node: '>=18'}
 
-  bundler-upload-sdk@2.1.0:
-    resolution: {integrity: sha512-AeaTWWA8OQS26jBXI8eiBImQ1av3CNxcb6PMmJIAEw53XSmZnfvls/68EWReX3AqDQGgPBFZQ2bEzZ6qt5aRFQ==}
+  bundler-upload-sdk@2.1.1:
+    resolution: {integrity: sha512-BzBHTGA2YoMDDmdLl45j9Lq/MxhnJm85k/m6wy1By0M04ZkZEUbDrdPbZ45+WJA20iWU1Rb4oH2H3fNnVYuVRA==}
 
   busboy@1.6.0:
     resolution: {integrity: sha512-8SFQbg/0hQ9xy3UNTB0YEnsNBbWfhf7RtnzpL7TkBiTBRfrQ9Fxcnz7VJsleJpyp6rVLvXiuORqjlHi5q+PYuA==}
@@ -15095,6 +15104,9 @@ packages:
   wcwidth@1.0.1:
     resolution: {integrity: sha512-XHPEwS0q6TaxcvG85+8EYkbiCux2XtWG2mkc47Ng2A77BQu9+DqIOJldST4HgPkuea7dvKSj5VgX3P1d4rW8Tg==}
 
+  weavevm-bundles@0.0.2:
+    resolution: {integrity: sha512-sJ2p7350AIQUkKi0SvIOfPqHz14n1/WTNxYfaVHkhN3WRY4WwtAZluM8mKJK+6MVxveNjtgjYGea4o7TAm+Hig==}
+
   web-ext@8.4.0:
     resolution: {integrity: sha512-zO0GNacJeqw3fwbBvgHC2G8reieyN+oCKiMQepX3iv2fm9KEBqg1gdbcdEvi7edfj+gjgxyXhVlFcHIvcEM2Cg==}
     engines: {node: '>=18.0.0', npm: '>=8.0.0'}
@@ -19520,6 +19532,12 @@ snapshots:
 
   '@popperjs/core@2.11.8': {}
 
+  '@project-serum/borsh@0.2.5(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))':
+    dependencies:
+      '@solana/web3.js': 1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
+      bn.js: 5.2.1
+      buffer-layout: 1.2.2
+
   '@project-serum/sol-wallet-adapter@0.2.6(patch_hash=dl5wqnnaxjm7biesxtvdpr7gpe)(@solana/web3.js@1.75.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))':
     dependencies:
       '@solana/web3.js': 1.75.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)
@@ -22870,12 +22888,7 @@ snapshots:
     dependencies:
       run-applescript: 7.0.0
 
-  bundler-upload-sdk@2.1.0:
-    dependencies:
-      form-data: 4.0.0
-      node-fetch: 3.3.2
-
-  busboy@1.6.0:
+  bundler-upload-sdk@2.1.1:
     dependencies:
       streamsearch: 1.1.0
 
@@ -31298,6 +31311,13 @@ snapshots:
   wcwidth@1.0.1:
     dependencies:
       defaults: 1.0.4
+
+  weavevm-bundles@0.0.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10)):
+    dependencies:
+      '@project-serum/borsh': 0.2.5(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
+      bn.js: 5.2.1
+    transitivePeerDependencies:
+      - '@solana/web3.js'
 
   web-ext@8.4.0(body-parser@1.20.3)(bufferutil@4.0.8)(utf-8-validate@5.0.10):
     dependencies:
