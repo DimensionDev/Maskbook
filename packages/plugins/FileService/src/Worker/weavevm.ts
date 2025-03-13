@@ -1,6 +1,7 @@
 import { isEmpty } from 'lodash-es'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
+import { Envelope } from 'weavevm-bundles'
 import { BundlerSDK } from 'bundler-upload-sdk/browser'
 import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
@@ -69,14 +70,19 @@ class WeaveVMAgent implements ProviderAgent {
         this.init()
 
         try {
-            const tags = {
-                'Content-Type': type,
-                Filename: fileName,
-                'App-Name': 'Mask-Network',
-                'App-Version': '1.0.0',
-            }
+            const envelope = new Envelope(data)
+
+            envelope.tags.set('Content-Type', type)
+            envelope.tags.set('Filename', fileName)
+            envelope.tags.set('App-Name', 'Maskbook')
 
             const blob = new Blob([data], { type })
+
+            const tags: Record<string, string> = {}
+            for (const [key, value] of envelope.tags.entries()) {
+                tags[key] = value
+            }
+
             const txHash = await this.bundlerSDK.upload([
                 {
                     file: blob,
