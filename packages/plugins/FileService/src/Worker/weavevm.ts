@@ -1,15 +1,14 @@
 import { isEmpty } from 'lodash-es'
 import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
-import { BundlerSDK } from 'bundler-upload-sdk'
+import { BundlerSDK } from 'bundler-upload-sdk/browser'
 import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
 
-// WeaveVM configuration
-const WEAVEVM_UPLOAD_ENDPOINT = 'https://mechanism-gi3c.shuttle.app/'
 const WEAVEVM_GATEWAY_URL = 'https://gateway.wvm.network/bundle'
-const API_KEY = process.env.WEAVEVM_API_KEY || 'd025e132382aea412f4256049c13d0e92d5c64095d1c88e1f5de7652966b69af' // move to env
+const WEAVEVM_UPLOAD_ENDPOINT = 'https://mechanism-gi3c.shuttle.app/'
+const API_KEY = 'd025e132382aea412f4256049c13d0e92d5c64095d1c88e1f5de7652966b69af' // move to env
 
 class WeaveVMAgent implements ProviderAgent {
     static providerName = 'WeaveVM'
@@ -28,11 +27,15 @@ class WeaveVMAgent implements ProviderAgent {
             mime: isEmpty(options.type) ? 'application/octet-stream' : options.type,
             metadata: null,
         })
-        const txId = await this.makePayload(encoded, isEmpty(options.type) ? 'application/octet-stream' : options.type)
+
+        const effectiveType = isEmpty(options.type) ? 'application/octet-stream' : options.type
+        const effectiveName = options.name || 'unnamed_file'
+        const txId = await this.makePayload(encoded, effectiveType, effectiveName)
 
         return txId
     }
 
+    // no native support for progress tracking with WeaveVM
     async *upload(id: string) {
         yield 100
     }
@@ -43,7 +46,7 @@ class WeaveVMAgent implements ProviderAgent {
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
-            provider: Provider.WeaveVM, // Ensure this constant is updated in Mask's constants.js
+            provider: Provider.WeaveVM,
             link: `${linkPrefix}/${metadata.txId}/0`,
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
@@ -54,33 +57,39 @@ class WeaveVMAgent implements ProviderAgent {
             .replace('Arweave', WeaveVMAgent.providerName)
             .replace('Over Arweave', `Over ${WeaveVMAgent.providerName}`)
             .replace('__METADATA__', encodedMetadata)
+
         const data = encodeText(replaced)
-        return this.makePayload(data, 'text/html')
+
+        const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
+
+        return landingPageTxId
     }
 
-    async makePayload(data: Uint8Array, type: string) {
+    async makePayload(data: Uint8Array, type: string, fileName: string = 'file.dat') {
         this.init()
 
         try {
-            // Prepare tags - set the MIME type as required
             const tags = {
                 'Content-Type': type,
+                Filename: fileName,
                 'App-Name': 'Mask-Network',
+                'App-Version': '1.0.0',
             }
 
-            // Upload file with tags
+            const blob = new Blob([data], { type })
             const txHash = await this.bundlerSDK.upload([
                 {
-                    file: Buffer.from(data),
+                    file: blob,
                     tags,
                 },
             ])
 
             return txHash
         } catch (error) {
-            const enhancedError = new Error(
-                `WeaveVM upload failed: ${error instanceof Error ? error.message : String(error)}`,
-            )
+            const errorMessage = `WeaveVM upload failed: ${error instanceof Error ? error.message : String(error)}`
+            console.error('WeaveVM detailed error:', errorMessage)
+
+            const enhancedError = new Error(errorMessage)
             if (error instanceof Error && error.stack) {
                 enhancedError.stack = error.stack
             }
