@@ -81,6 +81,8 @@ export function UploadFile() {
     const [provider, setProvider] = useState<Provider>(Provider.Arweave)
     const { recentFiles, uploadingFiles, uploadFile, attachToPost } = useFileManagement()
 
+    const FILE_SIZE = provider === Provider.WeaveVM ? MAX_FILE_SIZE_WEAVEVM : MAX_FILE_SIZE
+
     const files = useMemo(() => {
         return [...uploadingFiles, ...recentFiles]
     }, [uploadingFiles, recentFiles])
@@ -109,7 +111,7 @@ export function UploadFile() {
 
     return (
         <section className={classes.container}>
-            <UploadDropArea className={classes.uploadArea} maxFileSize={provider === Provider.WeaveVM ? MAX_FILE_SIZE_WEAVEVM : MAX_FILE_SIZE} onSelectFile={onSelectFile} />
+            <UploadDropArea className={classes.uploadArea} maxFileSize={FILE_SIZE} onSelectFile={onSelectFile} />
             <div className={classes.options}>
                 {providers.map((config: ProviderConfig) => (
                     <FormControlLabel
