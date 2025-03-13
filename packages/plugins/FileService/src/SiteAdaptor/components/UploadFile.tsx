@@ -5,7 +5,7 @@ import { UploadDropArea } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Radio, Typography } from '@mui/material'
 import { useCallback, useMemo, useState, type ReactNode } from 'react'
-import { MAX_FILE_SIZE } from '../../constants.js'
+import { MAX_FILE_SIZE, MAX_FILE_SIZE_WEAVEVM } from '../../constants.js'
 import { downloadFile } from '../../helpers.js'
 import { Provider } from '../../types.js'
 import { useFileManagement } from '../contexts/index.js'
@@ -109,7 +109,7 @@ export function UploadFile() {
 
     return (
         <section className={classes.container}>
-            <UploadDropArea className={classes.uploadArea} maxFileSize={MAX_FILE_SIZE} onSelectFile={onSelectFile} />
+            <UploadDropArea className={classes.uploadArea} maxFileSize={provider === Provider.WeaveVM ? MAX_FILE_SIZE_WEAVEVM : MAX_FILE_SIZE} onSelectFile={onSelectFile} />
             <div className={classes.options}>
                 {providers.map((config: ProviderConfig) => (
                     <FormControlLabel
