@@ -1,13 +1,19 @@
-import { EVM_ADDRESS, SOLANA_ADDRESS } from '@masknet/plugin-scam-warning'
-import { EXIST_EVM_ADDRESS, EXIST_SOLANA_ADDRESS, EXIST_TRON_ADDRESS, TRON_ADDRESS } from './constants.js'
+import {
+    MATCH_EVM_ADDRESS_RE,
+    MATCH_SOLANA_ADDRESS_RE,
+    MATCH_TRON_ADDRESS_RE,
+    TRON_ADDRESS_RE,
+    SOLANA_ADDRESS_RE,
+    EVM_ADDRESS_RE,
+} from '@masknet/shared-base'
 
 export function isTronAddress(address: string) {
-    return !!address.match(TRON_ADDRESS)
+    return !!address.match(TRON_ADDRESS_RE)
 }
 
 export function extractAddresses(text: string, exist = false) {
-    const evmAddresses = text.match(exist ? EXIST_EVM_ADDRESS : EVM_ADDRESS) || []
-    const solAddresses = text.match(exist ? EXIST_SOLANA_ADDRESS : SOLANA_ADDRESS) || []
-    const tronAddresses = text.match(exist ? EXIST_TRON_ADDRESS : TRON_ADDRESS) || []
+    const evmAddresses = text.match(exist ? MATCH_EVM_ADDRESS_RE : EVM_ADDRESS_RE) || []
+    const solAddresses = text.match(exist ? MATCH_SOLANA_ADDRESS_RE : SOLANA_ADDRESS_RE) || []
+    const tronAddresses = text.match(exist ? MATCH_TRON_ADDRESS_RE : TRON_ADDRESS_RE) || []
     return [...evmAddresses, ...solAddresses, ...tronAddresses]
 }

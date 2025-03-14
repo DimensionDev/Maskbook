@@ -12,7 +12,12 @@ import {
     makeTypedMessageText,
     isTypedMessageText,
 } from '@masknet/typed-message'
-import { MaskMessages } from '@masknet/shared-base'
+import {
+    EXIST_EVM_ADDRESS_RE,
+    EXIST_SOLANA_ADDRESS_RE,
+    EXIST_TORN_ADDRESS_RE,
+    MaskMessages,
+} from '@masknet/shared-base'
 import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
 import {
     usePostInfoAuthor,
@@ -90,6 +95,7 @@ function Transformer({
         if (!isTypedMessageEqual(flatten, after)) return true
         if (hasCashOrHashTag(after)) return true
         if (shouldHiddenPostReplacer(message)) return true
+        if (hasAddresses(message)) return true
         return false
     }, [message, after])
 
@@ -112,6 +118,23 @@ function hasCashOrHashTag(message: TypedMessage): boolean {
                 return 'stop'
             }
         } else forEachTypedMessageChild(node, visitor)
+    }
+    visitor(message)
+    forEachTypedMessageChild(message, visitor)
+    return result
+}
+
+function hasAddresses(message: TypedMessage): boolean {
+    let result = false
+    function visitor(node: TypedMessage): 'stop' | void {
+        if (result) return
+        if (!isTypedMessageText(node)) return
+        const content = node.content
+        const hasAddresses =
+            EXIST_EVM_ADDRESS_RE.test(content) ||
+            EXIST_SOLANA_ADDRESS_RE.test(content) ||
+            EXIST_TORN_ADDRESS_RE.test(content)
+        result = result || hasAddresses
     }
     visitor(message)
     forEachTypedMessageChild(message, visitor)
