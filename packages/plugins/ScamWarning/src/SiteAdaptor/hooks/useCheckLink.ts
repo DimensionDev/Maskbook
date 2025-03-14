@@ -29,7 +29,7 @@ export function useCheckLink(link: string, text: string) {
 
             return {
                 isScam: await GoPlusLabs.checkIsPhishingSite(resolvedLink),
-                provider: SecurityProvider.ScamSniffer,
+                provider: SecurityProvider.GoPlus,
                 resolvedLink,
                 address,
             }
