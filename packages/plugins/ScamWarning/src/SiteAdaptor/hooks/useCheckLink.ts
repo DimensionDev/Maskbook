@@ -16,11 +16,11 @@ export function useCheckLink(link: string, text: string) {
         queryFn: async () => {
             const resolvedLink = isTCO(link) ? await resolveTCOLink(link) : link
             if (!resolvedLink) return { isScam: false }
-            const result = await GoPlusLabs.checkIsPhishingSite(resolvedLink)
+            const result = await PluginScamRPC.checkUrl(resolvedLink)
             if (result)
                 return {
                     isScam: result,
-                    provider: SecurityProvider.GoPlus,
+                    provider: SecurityProvider.ScamSniffer,
                     resolvedLink,
                 }
             const isEllipsis = text.endsWith('…')
@@ -28,7 +28,7 @@ export function useCheckLink(link: string, text: string) {
             const address = isEllipsis ? extractAddresses(resolvedLink, true)[0] : undefined
 
             return {
-                isScam: await PluginScamRPC.checkUrl(resolvedLink),
+                isScam: await GoPlusLabs.checkIsPhishingSite(resolvedLink),
                 provider: SecurityProvider.ScamSniffer,
                 resolvedLink,
                 address,
