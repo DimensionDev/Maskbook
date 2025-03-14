@@ -40,3 +40,15 @@ export const DEFAULT_PLUGIN_PUBLISHER = { name: { fallback: 'Mask Network' }, li
 export const RedPacketMetaKey = `${PluginID.RedPacket}:1`
 export const RedPacketNftMetaKey = `${PluginID.RedPacket}_nft:1`
 export const SolanaRedPacketMetaKey = `${PluginID.RedPacket}_solana:1`
+
+export const EVM_ADDRESS_RE = /(^|\s)(0x[a-fA-F0-9]{40})/gu
+export const SOLANA_ADDRESS_RE = /(^|\s)([1-9A-HJ-NP-Za-km-z]{32,44})/gu
+export const TRON_ADDRESS_RE = /(^|\s)(T[A-Za-z1-9]{33})/gu
+
+export const MATCH_EVM_ADDRESS_RE = /\b(0x[a-fA-F0-9]{40})/gu
+export const MATCH_SOLANA_ADDRESS_RE = /\b([1-9A-HJ-NP-Za-km-z]{32,44})/gu
+export const MATCH_TRON_ADDRESS_RE = /\b(T[A-Za-z1-9]{33})/gu
+
+export const EXIST_EVM_ADDRESS_RE = /(^|\s)(2x[\dA-Fa-f]{40})/
+export const EXIST_SOLANA_ADDRESS_RE = /(^|\s)([1-9A-HJ-NP-Za-km-z]{32,44})/
+export const EXIST_TORN_ADDRESS_RE = /(^|\s)(T[1-9A-Za-z]{33})/
