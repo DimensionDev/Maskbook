@@ -137,9 +137,6 @@ importers:
       buffer:
         specifier: ^6.0.3
         version: 6.0.3
-      bundler-upload-sdk:
-        specifier: ^2.1.1
-        version: 2.1.1
       lodash-es:
         specifier: ^4.17.21
         version: 4.17.21
@@ -155,9 +152,6 @@ importers:
       ts-results-es:
         specifier: ^4.2.0
         version: 4.2.0
-      weavevm-bundles:
-        specifier: ^0.0.2
-        version: 0.0.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
     devDependencies:
       '@changesets/cli':
         specifier: ^2.28.1
@@ -1286,6 +1280,9 @@ importers:
       arweave:
         specifier: ^1.13.6
         version: 1.13.6
+      bundler-upload-sdk:
+        specifier: ^2.1.1
+        version: 2.1.1
       date-fns:
         specifier: ^3.6.0
         version: 3.6.0
@@ -1304,6 +1301,9 @@ importers:
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
+      weavevm-bundles:
+        specifier: ^0.0.2
+        version: 0.0.2(@solana/web3.js@1.98.0(bufferutil@4.0.8)(encoding@0.1.13)(utf-8-validate@5.0.10))
     devDependencies:
       '@types/use-subscription':
         specifier: ^1.0.2
@@ -4038,6 +4038,9 @@ packages:
     resolution: {integrity: sha512-VRnXRqsYNXq1jzNf6piJnUamtgVGuL5/8dVXl/Qy7xGyHBqLaHbQ6QKDCc/qf9Z3gFzFSjIZZle+pNPJ925psA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/holoflows-kit/0.9.0-20240322092738-f9180f3/1d2e9df5c5cd2a733c547ceafed4860973f10836}
     peerDependencies:
       '@types/webextension-polyfill': ^0.10.0
+    peerDependenciesMeta:
+      '@types/webextension-polyfill':
+        optional: true
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f':
     resolution: {integrity: sha512-2d7v1/z9Khw4O7J7oBNKLBo7BONd7ZE2gpw34uHVtdG9i0aEz+LSRappgNTZyUZ/+TRJ7ZgAf+Dbeql1oPMvNA==, tarball: https://npm.pkg.github.com/download/@DimensionDev/mask-wallet-core/0.1.0-20211013082857-eb62e5f/04f14f2d88766a9ab098a686785f824270c5ed90}
@@ -17301,9 +17304,10 @@ snapshots:
   '@dimensiondev/holoflows-kit@0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)':
     dependencies:
       '@servie/events': 3.0.0
-      '@types/webextension-polyfill': 0.10.7
       lodash-es: 4.17.21
       tslib: 2.8.1
+    optionalDependencies:
+      '@types/webextension-polyfill': 0.10.7
 
   '@dimensiondev/mask-wallet-core@0.1.0-20211013082857-eb62e5f(protobufjs@7.2.3)':
     dependencies:
@@ -22889,6 +22893,11 @@ snapshots:
       run-applescript: 7.0.0
 
   bundler-upload-sdk@2.1.1:
+    dependencies:
+      form-data: 4.0.0
+      node-fetch: 3.3.2
+
+  busboy@1.6.0:
     dependencies:
       streamsearch: 1.1.0
 
