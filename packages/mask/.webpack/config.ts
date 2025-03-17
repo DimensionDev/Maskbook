@@ -236,7 +236,7 @@ export async function createConfiguration(
                 MASK_SENTRY: process.env.MASK_SENTRY || JSON.stringify('disabled'),
                 MASK_MIXPANEL: process.env.MASK_MIXPANEL || JSON.stringify('disabled'),
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
-                SOLANA_RPC_ENDPOINT: process.env.SOLANA_RPC_ENDPOINT || '',
+                SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
