@@ -71,44 +71,50 @@ const site: Plugin.SiteAdaptor.Definition = {
         )
     },
     enhanceTag,
-    ApplicationEntries: [
-        (() => {
-            const icon = <Icons.SwapColorful size={36} />
-            const name = <Trans>Exchange</Trans>
-            const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
-            return {
-                ApplicationEntryID: base.ID,
-                RenderEntryComponent(EntryComponentProps) {
-                    return (
-                        <ApplicationEntry
-                            {...EntryComponentProps}
-                            title={name}
-                            icon={icon}
-                            iconFilterColor={iconFilterColor}
-                            onClick={() => {
-                                EntryComponentProps.onClick ? EntryComponentProps.onClick(openDialog) : openDialog()
-                                Telemetry.captureEvent(EventType.Access, EventID.EntryAppSwapOpen)
-                            }}
-                        />
-                    )
-                },
-                appBoardSortingDefaultPriority: 7,
-                marketListSortingPriority: 7,
-                icon,
-                category: 'dapp',
-                name,
-                tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
-                description: (
-                    <Trans>
-                        Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock and trade,
-                        also invest in the best performing managers.
-                    </Trans>
-                ),
-                iconFilterColor,
-                hiddenInList: true,
-            }
-        })(),
-    ],
+    ApplicationEntries:
+        // temporarily disabled
+        process.env.MASK_ENABLE_EXCHANGE ?
+            [
+                (() => {
+                    const icon = <Icons.SwapColorful size={36} />
+                    const name = <Trans>Exchange</Trans>
+                    const iconFilterColor = 'rgba(247, 147, 30, 0.3)'
+                    return {
+                        ApplicationEntryID: base.ID,
+                        RenderEntryComponent(EntryComponentProps) {
+                            return (
+                                <ApplicationEntry
+                                    {...EntryComponentProps}
+                                    title={name}
+                                    icon={icon}
+                                    iconFilterColor={iconFilterColor}
+                                    onClick={() => {
+                                        EntryComponentProps.onClick ?
+                                            EntryComponentProps.onClick(openDialog)
+                                        :   openDialog()
+                                        Telemetry.captureEvent(EventType.Access, EventID.EntryAppSwapOpen)
+                                    }}
+                                />
+                            )
+                        },
+                        appBoardSortingDefaultPriority: 7,
+                        marketListSortingPriority: 7,
+                        icon,
+                        category: 'dapp',
+                        name,
+                        tutorialLink: 'https://realmasknetwork.notion.site/f2e7d081ee38487ca1db958393ac1edc',
+                        description: (
+                            <Trans>
+                                Pop-up trading widget allows you to instantly view prices of the hottest Crypto/Stock
+                                and trade, also invest in the best performing managers.
+                            </Trans>
+                        ),
+                        iconFilterColor,
+                        hiddenInList: true,
+                    }
+                })(),
+            ]
+        :   [],
     wrapperProps: {
         icon: <Icons.SwapColorful size={24} style={{ filter: 'drop-shadow(0px 6px 12px rgba(254, 156, 0, 0.2))' }} />,
         backgroundGradient:
