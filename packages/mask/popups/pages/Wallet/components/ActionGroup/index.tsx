@@ -102,7 +102,7 @@ export const ActionGroup = memo(function ActionGroup({ className, chainId, addre
                     <Trans>Receive</Trans>
                 </Typography>
             </button>
-            {supported || isLoading ?
+            {supported ?
                 <button
                     type="button"
                     className={classes.button}
