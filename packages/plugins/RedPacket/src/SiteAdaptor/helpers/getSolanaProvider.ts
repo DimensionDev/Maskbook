@@ -6,11 +6,10 @@ import { NetworkPluginID } from '@masknet/shared-base'
 import { getConnection } from '@masknet/web3-providers'
 import type { Cluster } from '@solana/web3.js'
 
+const SOLANA_ENDPOINT =
+    process.env.SOLANA_DEFAULT_RPC_URL || 'https://solana-mainnet.g.alchemy.com/v2/7ktku04g0dx9l6ijyba3fy99h0ic0xf3'
 export async function getSolanaConnection(cluster: Cluster | undefined) {
-    const url =
-        !cluster || cluster === 'mainnet-beta' ?
-            'https://long-intensive-shard.solana-mainnet.quiknode.pro/bc297481b248232bcd0dc95197d5b32a8981539c'
-        :   SolanaWeb3.clusterApiUrl(cluster)
+    const url = !cluster || cluster === 'mainnet-beta' ? SOLANA_ENDPOINT : SolanaWeb3.clusterApiUrl(cluster)
     return new SolanaWeb3.Connection(url, 'confirmed')
 }
 
