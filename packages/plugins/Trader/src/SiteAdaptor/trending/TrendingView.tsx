@@ -194,6 +194,7 @@ export function TrendingView(props: TrendingViewProps) {
     const isBRC20 = trending?.coin.tags?.includes('BRC-20')
 
     const isSwappable =
+        !!process.env.MASK_ENABLE_EXCHANGE &&
         !isMinimalMode &&
         !isNFT &&
         !isBRC20 &&
@@ -206,7 +207,7 @@ export function TrendingView(props: TrendingViewProps) {
         const list = [ContentTab.Market, ContentTab.Price, ContentTab.Exchange]
         if (isNFT) list.push(ContentTab.NFTItems)
         return list
-    }, [isSwappable, isNFT])
+    }, [isNFT])
     const [currentTab, , , setTab] = useTabs<ContentTab>(tabs[0], ...tabs)
     useLayoutEffect(() => {
         setTab(tabs[0])
@@ -234,7 +235,7 @@ export function TrendingView(props: TrendingViewProps) {
             :   undefined,
         ]
         return compact(configs).map((x) => <Tab value={x.key} key={x.key} label={x.label} />)
-    }, [isSwappable, isNFT])
+    }, [isNFT])
     // #endregion
 
     const { classes } = useStyles({ isTokenTagPopper, isCollectionProjectPopper, currentTab })
