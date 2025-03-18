@@ -1,30 +1,22 @@
 import { t } from '@lingui/core/macro'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FireflyRedPacketAPI, SimpleHash } from '@masknet/web3-providers/types'
-import { type NonFungibleAsset } from '@masknet/web3-shared-base'
-import type { ChainId } from '@masknet/web3-shared-evm'
+import type { FireflyRedPacketAPI } from '@masknet/web3-providers/types'
 import { type HTMLProps } from 'react'
-import { NftRedPacketEnvelope } from './NftRedPacketEnvelope.js'
+import { NftRedPacketEnvelope, type NftRedPacketEnvelopeProps } from './NftRedPacketEnvelope.js'
 
-interface Props extends HTMLProps<HTMLDivElement> {
+interface Props extends HTMLProps<HTMLDivElement>, Pick<NftRedPacketEnvelopeProps, 'address' | 'chainId' | 'tokenId'> {
     theme?: FireflyRedPacketAPI.ThemeGroupSettings
     message: string
-    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
-    collection: SimpleHash.Collection | undefined
-    chainId: ChainId
     creator: string
     totalShares: number
 }
-export function PreviewNftRedPacket({ theme, message, asset, collection, creator, totalShares, ...props }: Props) {
-    if (!theme || !asset) return null
+export function PreviewNftRedPacket({ theme, message, creator, totalShares, ...props }: Props) {
+    if (!theme || !props.address) return null
 
     return (
         <NftRedPacketEnvelope
             {...props}
-            collection={collection}
             cover={theme.cover.bg_image}
             message={message || t`Best Wishes!`}
-            asset={asset}
             creator={creator}
             total={totalShares}
             shares={totalShares}

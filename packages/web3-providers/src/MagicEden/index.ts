@@ -68,6 +68,7 @@ function createNFTToken(
             description: collection.description,
             iconURL: collection.image,
             verified: false,
+            isSpam: undefined,
             createdAt: new Date(collection.createdAt).getTime(),
         },
     }
@@ -186,6 +187,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
                     description: '',
                     iconURL: '',
                     verified: false,
+                    isSpam: undefined,
                 },
                 source: SourceType.MagicEden,
             }
@@ -302,6 +304,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
             symbol: collection.symbol,
             iconURL: resolveIPFS_URL(collection.image),
             source: SourceType.MagicEden,
+            isSpam: undefined,
         }))
 
         return createPageable(

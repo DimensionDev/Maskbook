@@ -3,12 +3,12 @@ import { Icons } from '@masknet/icons'
 import { Image, NetworkIcon, TokenIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { useNetworks } from '@masknet/web3-hooks-base'
-import type { SimpleHash } from '@masknet/web3-providers/types'
-import { isZero, type NonFungibleAsset } from '@masknet/web3-shared-base'
+import { useNetworks, useNonFungibleAsset } from '@masknet/web3-hooks-base'
+import { NFTScanNonFungibleTokenEVM } from '@masknet/web3-providers'
+import { isZero, SourceType } from '@masknet/web3-shared-base'
 import { type ChainId } from '@masknet/web3-shared-evm'
 import { Typography } from '@mui/material'
+import { skipToken, useQuery } from '@tanstack/react-query'
 import type { HTMLProps } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
@@ -188,12 +188,12 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends HTMLProps<HTMLDivElement> {
+export interface NftRedPacketEnvelopeProps extends HTMLProps<HTMLDivElement> {
+    chainId: ChainId
+    address: string | undefined
+    tokenId?: string
     cover: string
     message: string
-    asset?: NonFungibleAsset<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll> | null
-    collection: SimpleHash.Collection | undefined
-    chainId: ChainId
     shares?: number
     /** claimed entities */
     claimedCount: number
@@ -208,11 +208,11 @@ interface Props extends HTMLProps<HTMLDivElement> {
     onClickCondition?(): void
 }
 export function NftRedPacketEnvelope({
+    chainId,
+    address,
+    tokenId,
     cover,
     message,
-    asset,
-    collection,
-    chainId,
     shares = 1,
     claimedCount,
     total,
@@ -224,19 +224,28 @@ export function NftRedPacketEnvelope({
     showConditionButton,
     onClickCondition,
     ...props
-}: Props) {
+}: NftRedPacketEnvelopeProps) {
     const { classes, cx } = useStyles()
     const claimedZero = isZero(claimedCount)
-    const metadata = asset?.metadata
 
+    const { data: collection } = useQuery({
+        queryKey: ['nftscan', 'collection', chainId, address],
+        queryFn: address ? () => NFTScanNonFungibleTokenEVM.getCollection(address, { chainId }) : skipToken,
+    })
+    const { data: asset } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, tokenId, {
+        chainId,
+        sourceType: SourceType.NFTScan,
+    })
+
+    const metadata = asset?.metadata
     const pluginID = asset?.runtime || NetworkPluginID.PLUGIN_EVM
     const networks = useNetworks(pluginID)
     const network = networks.find((x) => x.chainId === asset?.chainId)
     const assetId = asset?.id ? `#${asset.id}`.replace(/^##/, '#') : ''
 
     const assetImage = metadata?.imageURL || metadata?.mediaURL || metadata?.previewImageURL
-    const collectionImage = collection?.image_url
-    const imageURL = assetImage || collectionImage
+    const collectionImage = collection?.iconURL
+    const imageURL = assetImage || collectionImage || undefined
     const name = metadata?.symbol || metadata?.name || collection?.name
 
     return (

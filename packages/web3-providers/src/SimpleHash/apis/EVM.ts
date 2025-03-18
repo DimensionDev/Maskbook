@@ -671,4 +671,4 @@ class SimpleHashAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaT
         return response.collections[0]
     }
 }
-export const SimpleHashEVM = new SimpleHashAPI_EVM()
+export const SimpleHashEV = new SimpleHashAPI_EVM()

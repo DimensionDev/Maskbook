@@ -132,6 +132,7 @@ function createNFTToken(chainId: ChainId, asset: OpenSeaAssetResponse): NonFungi
             ),
             verified: ['approved', 'verified'].includes(asset.collection.safelist_request_status ?? ''),
             createdAt: getUnixTime(new Date(asset.collection.created_date)),
+            isSpam: asset.collection.isSpam,
         },
     }
 }
@@ -442,6 +443,7 @@ class OpenSeaAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
                     balance: x.owned_asset_count,
                     verified: ['approved', 'verified'].includes(x.safelist_request_status ?? ''),
                     createdAt: getUnixTime(new Date(x.created_date)),
+                    isSpam: x.isSpam,
                 }))
                 .filter((x) => x.address) ?? EMPTY_LIST
 

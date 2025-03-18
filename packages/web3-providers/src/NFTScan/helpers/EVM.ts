@@ -156,6 +156,7 @@ export function createNonFungibleAsset(
             iconURL: collection ? collection.logo_url : `${urlcat(NFTSCAN_LOGO_BASE, asset.contract_address)}.png`,
             verified: collection?.verified || collection?.opensea_verified,
             createdAt: asset.mint_timestamp,
+            isSpam: collection && 'is_spam' in collection ? collection.is_spam : false,
         },
         source: SourceType.NFTScan,
     }
@@ -180,6 +181,7 @@ export function createNonFungibleCollectionFromGroup(
         iconURL: group.logo_url,
         balance: group.assets.length,
         source: SourceType.NFTScan,
+        isSpam: undefined,
     }
 }
 
@@ -198,6 +200,7 @@ export function createNonFungibleCollectionFromCollection(
         iconURL: collection.logo_url,
         verified: collection.verified,
         source: SourceType.NFTScan,
+        isSpam: collection.is_spam,
     }
 }
 

@@ -2,13 +2,13 @@ import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { Image, NFTSpamBadge, useReportSpam } from '@masknet/shared'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { LoadingBase, MaskTextField, ShadowRootTooltip, TextOverflowTooltip, makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, Button, Checkbox, Stack, Typography } from '@mui/material'
 import { memo, useMemo, useState, type HTMLProps, type KeyboardEvent } from 'react'
 import { useUserAssets } from './AssetsProvider.js'
 import { CollectionsContext } from './CollectionsProvider.js'
-import { EMPTY_LIST } from '@masknet/shared-base'
-import type { Web3Helper } from '@masknet/web3-helpers'
 
 const useStyles = makeStyles()((theme) => {
     return {

@@ -46,6 +46,7 @@ export namespace SimpleHash {
         distinct_owner_count: number
         distinct_nft_count: number
         name: string
+        isSpam: boolean | undefined
         /** e.g ["ethereum.0x18487d2cac946c7fe800855c4039aac210f68baa"] */
         top_contracts: string[]
         nft_ids?: string[]

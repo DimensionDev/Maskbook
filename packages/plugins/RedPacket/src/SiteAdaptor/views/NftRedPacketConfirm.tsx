@@ -23,7 +23,6 @@ import { PreviewNftRedPacket } from '../components/PreviewNftRedPacket.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'
 import { useRedPacket } from '../contexts/RedPacketContext.js'
 import { useCreateNftRedpacketCallback } from '../hooks/useCreateNftRedpacketCallback.js'
-import { useSimpleHashCollection } from '../hooks/useSimpleHashCollection.js'
 import { openComposition } from '../openComposition.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -116,7 +115,6 @@ export function NftRedPacketConfirm() {
         setGasOption,
     } = useRedPacket()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: simplehashCollection } = useSimpleHashCollection(collection?.address, chainId)
 
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
     const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
@@ -259,8 +257,7 @@ export function NftRedPacketConfirm() {
                             message={message}
                             creator={creator}
                             totalShares={selectedNfts.length}
-                            asset={selectedNfts[0]}
-                            collection={simplehashCollection}
+                            address={collection?.address}
                             chainId={chainId}
                             theme={theme}
                         />

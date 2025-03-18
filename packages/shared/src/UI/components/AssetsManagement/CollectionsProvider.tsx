@@ -20,7 +20,7 @@ function useCollections(defaultCollectionId?: string) {
     } = useNonFungibleCollections(pluginID, {
         account,
         allChains: true,
-        sourceType: SourceType.SimpleHash,
+        sourceType: SourceType.NFTScan,
     })
 
     const merged = useMemo(() => {

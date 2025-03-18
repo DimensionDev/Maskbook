@@ -50,6 +50,7 @@ export namespace NonFungibleTokenAPI {
         deploy_block_number: number
         owner: string
         verified: boolean
+        is_spam: boolean
         opensea_verified: boolean
         items_total: number
         owners_total: number

@@ -75,6 +75,7 @@ export interface Token<T = unknown> {
         totalSupply?: number
         network?: string
         collectionAddress: string
+        isSpam?: boolean | undefined
     }
     name?: string
     description?: string

@@ -66,6 +66,7 @@ export function createNonFungibleTokenContract<ChainId, SchemaType>(
         address,
     }
 }
+
 export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     chainId: ChainId,
     address: string,
@@ -75,6 +76,7 @@ export function createNonFungibleTokenCollection<ChainId, SchemaType>(
     iconURL?: string,
     verified?: boolean,
     createdAt?: number,
+    isSpam?: boolean,
 ): NonFungibleCollection<ChainId, SchemaType> {
     return {
         id: address,
@@ -85,6 +87,7 @@ export function createNonFungibleTokenCollection<ChainId, SchemaType>(
         iconURL,
         verified,
         createdAt,
+        isSpam,
     }
 }
 export function createNonFungibleToken<ChainId, SchemaType>(

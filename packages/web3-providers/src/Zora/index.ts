@@ -29,6 +29,7 @@ import { ZORA_MAINNET_GRAPHQL_URL } from './constants.js'
 import { getAssetFullName } from '../helpers/getAssetFullName.js'
 import { resolveActivityType } from '../helpers/resolveActivityType.js'
 import type { BaseHubOptions, NonFungibleTokenAPI } from '../entry-types.js'
+import { compact } from 'lodash-es'
 
 class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     private client = new GraphQLClient(ZORA_MAINNET_GRAPHQL_URL)
@@ -47,11 +48,12 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     }
 
     private createNonFungibleAssetFromToken(chainId: ChainId, token: Token): NonFungibleAsset<ChainId, SchemaType> {
+        const contract = token.tokenContract
         const shared = {
             chainId,
-            address: token.tokenContract?.collectionAddress ?? token.collectionAddress,
-            name: token.tokenContract?.name ?? token.collectionName ?? '',
-            symbol: token.tokenContract?.symbol ?? 'UNKNOWN',
+            address: contract?.collectionAddress ?? token.collectionAddress,
+            name: contract?.name ?? token.collectionName ?? '',
+            symbol: contract?.symbol ?? 'UNKNOWN',
             schema: SchemaType.ERC721,
         }
         return {
@@ -68,20 +70,21 @@ class ZoraAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
             },
             collection: {
                 ...shared,
-                slug: token.tokenContract?.symbol ?? 'UNKNOWN',
-                description: token.tokenContract?.description ?? token.description,
+                slug: contract?.symbol ?? '',
+                description: contract?.description ?? token.description,
+                isSpam: contract?.isSpam,
             },
             metadata: {
                 ...shared,
                 name: getAssetFullName(shared.address, shared.name ?? '', token.name, token.tokenId),
             },
-            traits:
-                token.attributes
-                    ?.filter((x) => x.traitType && x.value)
-                    .map((x) => ({
-                        type: x.traitType!,
-                        value: x.value!,
-                    })) ?? EMPTY_LIST,
+            traits: compact(
+                token.attributes?.map((x) => {
+                    return x.displayType !== undefined && x.value !== undefined ?
+                            { type: x.traitType!, value: x.value! }
+                        :   null
+                }) ?? [],
+            ),
             price:
                 token.mintInfo?.price.usdcPrice?.raw ?
                     {

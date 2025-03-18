@@ -98,6 +98,7 @@ class ChainbaseNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<Chain
             slug: nft.contract_symbol,
             address: nft.contract_address,
             source: SourceType.Chainbase,
+            isSpam: undefined,
         }
     }
 

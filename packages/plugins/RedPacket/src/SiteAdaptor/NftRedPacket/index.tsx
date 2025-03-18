@@ -23,7 +23,6 @@ import { useNftRedPacketContract } from '../hooks/useNftRedPacketContract.js'
 import { OperationFooter } from './OperationFooter.js'
 import { NftRedPacketEnvelope } from '../components/NftRedPacketEnvelope.js'
 import { useRedPacketCover } from './useRedPacketCover.js'
-import { useSimpleHashCollection } from '../hooks/useSimpleHashCollection.js'
 
 const useStyles = makeStyles<{ claimed: boolean }>()((theme) => ({
     root: {
@@ -108,7 +107,6 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
         account,
         sourceType: SourceType.SimpleHash,
     })
-    const { data: collection } = useSimpleHashCollection(payload.contractAddress, payload.chainId)
     const nftRedPacketContract = useNftRedPacketContract(payload.chainId)
     const checkResult = useCallback(async () => {
         if (!nftRedPacketContract) return
@@ -185,9 +183,9 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
                 cover={cover?.backgroundImageUrl || new URL('../assets/cover.png', import.meta.url).href}
                 message={payload.message}
                 creator={payload.senderName}
-                asset={claimedAsset}
-                collection={collection}
                 chainId={payload.chainId}
+                address={payload.contractAddress}
+                tokenId={availability.claimed_id}
                 shares={availability.totalAmount}
                 claimedCount={+availability.claimedAmount}
                 total={availability.totalAmount}

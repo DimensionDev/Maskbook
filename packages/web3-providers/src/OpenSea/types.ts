@@ -93,6 +93,7 @@ export interface OpenSeaCollection extends OpenSeaFees {
     editors: string[]
     hidden: boolean
     featured: boolean
+    isSpam: boolean | undefined
     created_date: string
     description: string
     image_url: string

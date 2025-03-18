@@ -108,6 +108,7 @@ export function createNonFungibleAsset(asset: SimpleHash.Asset): NonFungibleAsse
             verified: Boolean(asset.collection.marketplace_pages?.some((x) => x.verified)),
             createdAt: new Date(asset.created_date).getTime(),
             floorPrices: asset.collection.floor_prices,
+            isSpam: spam_score !== null && spam_score >= SPAM_SCORE,
         },
         source: SourceType.SimpleHash,
         traits:
@@ -139,6 +140,7 @@ export function createNonFungibleCollection(
         address: collection.top_contracts?.[0]?.split('.')?.[1] ?? '',
         verified: verifiedMarketplaces.length > 0,
         verifiedBy: verifiedMarketplaces.map((x) => x.marketplace_name),
+        isSpam: collection.spam_score !== null && collection.spam_score >= SPAM_SCORE,
     }
 }
 

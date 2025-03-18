@@ -66,6 +66,7 @@ export function createSolanaNonFungibleAsset(
             address: asset.contract_address,
             iconURL: asset.collection.image_url,
             verified: Boolean(asset.collection.marketplace_pages?.some((x) => x.verified)),
+            isSpam: asset.collection.spam_score !== null && asset.collection.spam_score >= SPAM_SCORE,
             createdAt: new Date(asset.created_date).getTime(),
         },
         source: SourceType.SimpleHash,
@@ -90,6 +91,7 @@ export function createSolanaNonFungibleCollection(
         source: SourceType.SimpleHash,
         address: collection.top_contracts?.[0]?.split('.')?.[1] ?? '',
         verified: verifiedMarketplaces.length > 0,
+        isSpam: collection.spam_score !== null && collection.spam_score >= SPAM_SCORE,
         verifiedBy: verifiedMarketplaces.map((x) => x.marketplace_name),
     }
 }

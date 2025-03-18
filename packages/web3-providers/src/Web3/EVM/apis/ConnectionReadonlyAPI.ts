@@ -1,59 +1,58 @@
-import { first, omit, toNumber } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { Account, ECKeyIdentifier, Proof, UpdatableWallet, Wallet } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import {
-    AddressType,
-    SchemaType,
-    type ChainId,
-    type Transaction,
-    type TransactionDetailed,
-    type TransactionReceipt,
-    type Block,
-    EthereumMethodType,
-    AccountTransaction,
-    isNativeTokenAddress,
-    type TransactionSignature,
-    type ProviderType,
-    type Signature,
-    type UserOperation,
-    type Web3,
-    isValidAddress,
-    isEmptyHex,
-    getTransactionStatusType,
-    parseStringOrBytes32,
-    createERC20Token,
-    isCryptoPunksContractAddress,
-    getEthereumConstant,
-    getTokenConstant,
-    createAccount,
-    type NetworkType,
-} from '@masknet/web3-shared-evm'
-import {
+    createNonFungibleToken,
+    createNonFungibleTokenContract,
+    createNonFungibleTokenMetadata,
+    isGreaterThan,
+    isSameAddress,
+    resolveCrossOriginURL,
+    resolveIPFS_URL,
     type FungibleToken,
     type NonFungibleCollection,
     type NonFungibleToken,
     type NonFungibleTokenContract,
     type NonFungibleTokenMetadata,
     type TransactionStatusType,
-    isSameAddress,
-    createNonFungibleToken,
-    resolveCrossOriginURL,
-    resolveIPFS_URL,
-    createNonFungibleTokenMetadata,
-    createNonFungibleTokenContract,
-    createNonFungibleTokenCollection,
-    isGreaterThan,
 } from '@masknet/web3-shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
-import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
-import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
-import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
-import type { BaseConnection } from '../../Base/apis/Connection.js'
-import { fetchJSON } from '../../../helpers/fetchJSON.js'
-import type { EVMConnectionOptions } from '../types/index.js'
+import {
+    AccountTransaction,
+    AddressType,
+    createAccount,
+    createERC20Token,
+    EthereumMethodType,
+    getEthereumConstant,
+    getTokenConstant,
+    getTransactionStatusType,
+    isCryptoPunksContractAddress,
+    isEmptyHex,
+    isNativeTokenAddress,
+    isValidAddress,
+    parseStringOrBytes32,
+    SchemaType,
+    type Block,
+    type ChainId,
+    type NetworkType,
+    type ProviderType,
+    type Signature,
+    type Transaction,
+    type TransactionDetailed,
+    type TransactionReceipt,
+    type TransactionSignature,
+    type UserOperation,
+    type Web3,
+} from '@masknet/web3-shared-evm'
+import { first, omit, toNumber } from 'lodash-es'
+import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
-import { EVMChainResolver } from './ResolverAPI.js'
+import { fetchJSON } from '../../../helpers/fetchJSON.js'
+import type { BaseConnection } from '../../Base/apis/Connection.js'
 import type { ConnectionOptionsProvider } from '../../Base/apis/ConnectionOptions.js'
+import type { EVMConnectionOptions } from '../types/index.js'
+import { ConnectionOptionsReadonlyAPI } from './ConnectionOptionsReadonlyAPI.js'
+import { EVMContractReadonlyAPI } from './ContractReadonlyAPI.js'
+import { EVMRequestReadonlyAPI } from './RequestReadonlyAPI.js'
+import { EVMChainResolver } from './ResolverAPI.js'
 
 const EMPTY_STRING = Promise.resolve('')
 const ZERO = Promise.resolve(0)
@@ -453,7 +452,15 @@ export class EVMConnectionReadonlyAPI
         const contract = this.Contract.getERC721Contract(address, options)
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
         const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
-        return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
+        // return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
+        return {
+            id: address,
+            chainId: options.chainId,
+            name: name ?? 'Unknown Token',
+            symbol: '',
+            slug: '',
+            isSpam: undefined,
+        }
     }
 
     createAccount(initial?: BaseConnectionOptions<ChainId, ProviderType, Transaction> | undefined): Account<ChainId> {
