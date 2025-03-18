@@ -11,6 +11,7 @@ const useStyles = makeStyles()((theme) => ({
         alignItems: 'center',
         position: 'relative',
         zIndex: 0,
+        minWidth: 0,
         background: theme.palette.maskColor.bg,
         borderRadius: theme.spacing(1),
     },
