@@ -1,4 +1,4 @@
-import { type HTMLProps, memo } from 'react'
+import { type HTMLProps, memo, useRef } from 'react'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { makeStyles } from '@masknet/theme'
 import { Checkbox, Radio, Skeleton, Typography, useForkRef } from '@mui/material'
@@ -64,7 +64,7 @@ export interface SelectableProps {
     onChange?(options: ChangeEventOptions): void
 }
 
-interface CollectibleItemProps
+export interface CollectibleItemProps
     extends Omit<HTMLProps<HTMLDivElement>, keyof SelectableProps>,
         CollectibleCardProps,
         SelectableProps {}
@@ -91,10 +91,12 @@ export const CollectibleItem = memo(function CollectibleItem(props: CollectibleI
     const Utils = useWeb3Utils()
 
     const uiTokenId = Utils.formatTokenId(asset.tokenId, 4)
+    const scrolledRef = useRef(false)
 
     const SelectableButton = selectable && multiple ? Checkbox : Radio
     const scrollIntoViewRef = (node: HTMLDivElement) => {
-        if (!checked || multiple || !node) return
+        if (!checked || multiple || !node || scrolledRef.current) return
+        scrolledRef.current = true
         node.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     }
     const forkedRef = useForkRef(ref, scrollIntoViewRef)

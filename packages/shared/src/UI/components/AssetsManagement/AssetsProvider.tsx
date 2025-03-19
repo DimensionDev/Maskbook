@@ -1,4 +1,4 @@
-import { chunk, noop, sum, take } from 'lodash-es'
+import { noop, sum } from 'lodash-es'
 import {
     createContext,
     memo,
@@ -241,7 +241,7 @@ export const AssetsProvider = memo<AssetsProviderProps>(function AssetsProvider(
                 assets = await loadAssetsViaHub(collection)
             } else {
                 async function* generate(collection: Web3Helper.NonFungibleCollectionAll) {
-                    const chunks = [take(allIds, 4), ...chunk(allIds.slice(4), CHUNK_SIZE)].map((x) => x.join(','))
+                    const chunks = allIds // [take(allIds, 4), ...chunk(allIds.slice(4), CHUNK_SIZE)].map((x) => x.join(','))
                     for (const idChunk of chunks) {
                         // TODO We assume that each individual collection in merged-collection has at most 2 assets
                         yield await loadAssetsViaHub(collection, idChunk)

@@ -168,7 +168,6 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                         return (
                             <div className={classes.loadingList}>
                                 <CollectibleList
-                                    classes={{ root: classes.collectibleList }}
                                     retry={fetchNextPage}
                                     collectibles={tokens}
                                     pluginID={pluginID}

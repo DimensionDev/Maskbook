@@ -33,7 +33,7 @@ import { resolveActivityType } from '../../helpers/resolveActivityType.js'
 import type { NonFungibleTokenAPI } from '../../entry-types.js'
 
 export async function fetchFromNFTScanV2<T>(chainId: ChainId, pathname: string, init?: RequestInit) {
-    return fetchSquashedJSON<T>(urlcat(NFTSCAN_URL, pathname), {
+    return fetchSquashedJSON<T>(urlcat(`${NFTSCAN_URL}/${chainId}`, pathname), {
         ...init,
         headers: {
             'content-type': 'application/json',

@@ -76,7 +76,7 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
         return createPageable(
             assets,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response?.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 
@@ -106,10 +106,15 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
             contract_address: address,
             erc_type: SchemaTypeMap[schemaType || SchemaType.ERC721] || EVM.ErcType.ERC721,
             limit: size,
+            cursor: indicator?.id,
         })
         const response = await fetchFromNFTScanV2<PageableResponse<EVM.Asset>>(chainId, path)
         const assets = response.data.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
-        return createPageable(assets, createIndicator(indicator))
+        return createPageable(
+            assets,
+            createIndicator(indicator),
+            response.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
+        )
     }
 
     async getCollectionRaw(
