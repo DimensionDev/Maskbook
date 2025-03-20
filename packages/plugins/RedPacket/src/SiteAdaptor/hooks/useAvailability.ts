@@ -25,7 +25,6 @@ export function useAvailability(
                 // check availability is ok w/o account
                 from: account,
             })
-            console.log('availability', availability)
             return availability
         },
         refetchInterval(query) {
