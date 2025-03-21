@@ -188,9 +188,8 @@ function Content(props: ProfileTabContentProps) {
             return plugins
                 .flatMap((x) => x.ProfileTabs?.map((y) => ({ ...y, pluginID: x.ID })) || [])
                 .filter((x) => {
-                    const shouldDisplay =
-                        x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
-                    return x.pluginID !== PluginID.NextID && shouldDisplay
+                    if (x.pluginID === PluginID.NextID) return false
+                    return x.Utils?.shouldDisplay?.(currentVisitingSocialIdentity, selectedSocialAccount) ?? true
                 })
                 .sort((a, z) => a.priority - z.priority)
         })
@@ -199,7 +198,7 @@ function Content(props: ProfileTabContentProps) {
             id: x.ID,
             label: typeof x.label === 'string' ? x.label : translate(x.label),
         }))
-    }, [activatedPlugins, translate])
+    }, [activatedPlugins, translate, selectedSocialAccount])
 
     const [currentTab, onChange] = useTabs(first(tabs)?.id ?? PluginID.Collectible, ...tabs.map((tab) => tab.id))
 
