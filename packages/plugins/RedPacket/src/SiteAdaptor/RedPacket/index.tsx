@@ -1,5 +1,7 @@
 import { msg } from '@lingui/core/macro'
 import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
 import { usePostInfoDetails, usePostLink } from '@masknet/plugin-infra/content-script'
 import { share } from '@masknet/plugin-infra/content-script/context'
 import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
@@ -12,16 +14,17 @@ import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Card, Grow } from '@mui/material'
+import { Card, Grow, Link } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
 import { Conditions } from '../Conditions/index.js'
 import { useAvailabilityComputed } from '../hooks/useAvailabilityComputed.js'
 import { useClaimCallback } from '../hooks/useClaimCallback.js'
+import { useIsFireflyRedpacket } from '../hooks/useIsFireflyRedpacket.js'
 import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
+import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
-import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -47,6 +50,18 @@ const useStyles = makeStyles()((theme) => {
         },
         footer: {
             margin: theme.spacing(2),
+            display: 'flex',
+            height: 40,
+            gap: theme.spacing(0.5),
+            alignItems: 'center',
+            justifyContent: 'center',
+            borderRadius: 99,
+            fontSize: 14,
+            fontWeight: 700,
+            backgroundColor: theme.palette.maskColor.dark,
+            color: 'white',
+            cursor: 'pointer',
+            textDecoration: 'none !important',
         },
         envelope: {
             height: '100%',
@@ -96,6 +111,8 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     const postUrl = usePostInfoDetails.url()
     const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
+    const isFireflyRedpacket = useIsFireflyRedpacket()
+    const postId = usePostInfoDetails.postID()
 
     // TODO payload.chainId is undefined on production mode
     const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(
@@ -224,6 +241,22 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     )
 
     if (outdated) return card
+
+    if (isFireflyRedpacket) {
+        return (
+            <>
+                {card}
+                <Link
+                    className={classes.footer}
+                    href={`https://firefly.mask.social/post/twitter/${postId}`}
+                    target="_blank"
+                    rel="noreferrer noopener">
+                    <Icons.LinkOut size={18} />
+                    <Trans>Claim on Firefly</Trans>
+                </Link>
+            </>
+        )
+    }
 
     return (
         <>
