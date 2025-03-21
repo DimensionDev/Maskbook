@@ -21,10 +21,11 @@ export function useAvailability(
         queryKey: ['red-packet', 'check-availability', chainId, version, id, account],
         queryFn: async () => {
             if (!id || !redPacketContract) return null
-            return redPacketContract.methods.check_availability(id).call({
+            const availability = await redPacketContract.methods.check_availability(id).call({
                 // check availability is ok w/o account
                 from: account,
             })
+            return availability
         },
         refetchInterval(query) {
             const { data } = query.state

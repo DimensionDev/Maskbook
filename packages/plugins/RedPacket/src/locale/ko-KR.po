@@ -205,6 +205,10 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/index.tsx
+msgid "Claim on Firefly"
+msgstr ""
+
+#: src/SiteAdaptor/RedPacket/index.tsx
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "Claim on Lens: {link}"
 #~ msgstr ""
