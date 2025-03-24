@@ -28,6 +28,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
         const localStorage = (globalThis as any).localStorage
         if (localStorage) {
             const backupPassword = localStorage.getItem('backupPassword')
+            // Migration
             if (backupPassword) {
                 const backupMethod = localStorage.getItem('backupMethod')
                 base.PersistentStorages.Settings.storage.backupConfig.setValue({
@@ -37,6 +38,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
                     cloudBackupAt: backupMethod && backupMethod === 'cloud' ? localStorage.getItem('backupAt') : null,
                     localBackupAt: backupMethod && backupMethod === 'local' ? localStorage.getItem('backupAt') : null,
                     cloudBackupMethod: null,
+                    googleToken: null,
                 })
             }
             // remove old data after migrate

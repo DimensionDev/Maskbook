@@ -7,6 +7,7 @@ export enum DashboardRoutes {
     RecoveryPersona = '/setup/recovery',
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
     SignUpPersonaOnboarding = '/setup/sign-up/onboarding',
+    Backup = '/setup/backup',
     LocalBackup = '/setup/local-backup',
     CloudBackup = '/setup/cloud-backup',
     CloudBackupPreview = '/setup/cloud-backup-preview',

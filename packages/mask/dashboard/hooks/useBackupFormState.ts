@@ -1,12 +1,12 @@
+import Services from '#services'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useLingui } from '@lingui/react/macro'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useAsync } from 'react-use'
 import { z } from 'zod'
 import { UserContext } from '../../shared-ui/index.js'
-import Services from '#services'
 import { passwordRegexp } from '../utils/regexp.js'
-import { useLingui } from '@lingui/react/macro'
 
 export type BackupFormInputs = {
     backupPassword: string
@@ -16,7 +16,6 @@ export type BackupFormInputs = {
 export function useBackupFormState() {
     const { t } = useLingui()
     const { value: hasPassword } = useAsync(Services.Wallet.hasPassword, [])
-    const { value: previewInfo, loading } = useAsync(Services.Backup.generateBackupPreviewInfo, [])
     const { user } = UserContext.useContainer()
     const [backupWallets, setBackupWallets] = useState(false)
 
@@ -24,7 +23,6 @@ export function useBackupFormState() {
         mode: 'onBlur',
         context: {
             user,
-
             backupWallets,
             hasPassword,
         },
@@ -55,8 +53,6 @@ export function useBackupFormState() {
 
     return {
         hasPassword,
-        previewInfo,
-        loading,
         backupWallets,
         setBackupWallets,
         formState,

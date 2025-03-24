@@ -12,7 +12,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 const useStyles = makeStyles()((theme) => ({
     paper: {
         padding: theme.spacing(2),
-        borderRadius: 8,
+        borderRadius: 24,
         width: 320,
         height: 316,
         background: theme.palette.maskColor.bottom,
@@ -98,10 +98,10 @@ export const CountryCodePicker = memo<CountryCodePickerProps>(({ open, anchorEl,
                 onClose()
             }}
             classes={{ paper: classes.paper }}
-            anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+            anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
             transformOrigin={{
                 vertical: 'top',
-                horizontal: 'center',
+                horizontal: 'left',
             }}>
             <TextField
                 fullWidth

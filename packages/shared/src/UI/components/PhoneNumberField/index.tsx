@@ -5,6 +5,13 @@ import { getCountryFlag } from '../../../index.js'
 import { Icons } from '@masknet/icons'
 import { CountryCodePicker } from '../CountryCodePicker/index.js'
 import { useLingui } from '@lingui/react/macro'
+import { makeStyles } from '@masknet/theme'
+
+const useStyles = makeStyles()((theme) => ({
+    button: {
+        padding: 0,
+    },
+}))
 
 export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'variant'> {
     code: string
@@ -12,6 +19,7 @@ export interface PhoneNumberFieldProps extends Omit<FilledTextFieldProps, 'varia
 }
 
 export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFieldProps) {
+    const { classes } = useStyles()
     const { t } = useLingui()
     const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
 
@@ -32,7 +40,10 @@ export function PhoneNumberField({ code, onCodeChange, ...rest }: PhoneNumberFie
                     ...rest.InputProps,
                     disableUnderline: true,
                     startAdornment: (
-                        <Button variant="text" onClick={(event) => setAnchorEl(event.currentTarget)}>
+                        <Button
+                            className={classes.button}
+                            variant="text"
+                            onClick={(event) => setAnchorEl(event.currentTarget)}>
                             <img src={countryIcon} style={{ width: 16, height: 12 }} />
                             <Typography component="span" sx={{ minWidth: 32, mx: 0.5, textAlign: 'right' }}>
                                 +{code}

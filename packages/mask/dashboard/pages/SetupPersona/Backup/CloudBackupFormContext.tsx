@@ -1,11 +1,11 @@
-import { zodResolver } from '@hookform/resolvers/zod'
-import { useLingui } from '@lingui/react/macro'
 import { createContainer } from '@masknet/shared-base-ui'
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useTabs } from '@masknet/theme'
 import guessCallingCode from 'guess-calling-code'
-import { useForm } from 'react-hook-form'
-import { z } from 'zod'
-import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
+import { useLingui } from '@lingui/react/macro'
+import { emailRegexp, phoneRegexp } from '../../../utils/regexp.js'
 
 export interface CloudBackupFormInputs {
     email: string

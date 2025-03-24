@@ -1,10 +1,11 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
+import { Box, Typography, type AlertProps } from '@mui/material'
 import type { BoxProps } from '@mui/system'
 import { memo } from 'react'
 
-const useStyles = makeStyles()((theme) => ({
+const useStyles = makeStyles<void, 'warning'>()((theme, _, refs) => ({
+    warning: {},
     alert: {
         display: 'flex',
         borderRadius: 4,
@@ -15,21 +16,31 @@ const useStyles = makeStyles()((theme) => ({
         color: theme.palette.maskColor.main,
         backdropFilter: 'blur(5px)',
         gap: 10,
+        [`&.${refs.warning}`]: {
+            backgroundColor: 'rgba(255, 177, 0, 0.1)',
+            color: '#FFB100',
+        },
     },
 }))
-interface Props extends BoxProps {
+interface Props extends BoxProps, Pick<AlertProps, 'severity'> {
     open?: boolean
     onClose?: () => void
 }
 
-export const Alert = memo(function Alert({ className, children, open, onClose, ...rest }: Props) {
+export const Alert = memo<Props>(function Alert({ className, children, open, onClose, severity, ...rest }: Props) {
     const { classes, cx } = useStyles()
 
     if (!open) return null
 
     return (
-        <Box className={cx(classes.alert, className)} {...rest}>
-            <Icons.Info size={20} />
+        <Box
+            className={cx(classes.alert, className, {
+                [classes.warning]: severity === 'warning',
+            })}
+            {...rest}>
+            {severity === 'warning' ?
+                <Icons.WarningTriangle size={20} />
+            :   <Icons.Info size={20} />}
             <Typography fontSize={14} component="div">
                 {children}
             </Typography>

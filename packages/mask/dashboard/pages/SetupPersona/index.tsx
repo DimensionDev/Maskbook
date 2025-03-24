@@ -11,6 +11,7 @@ export const personaRoutes: RouteObject[] = [
     { path: r(DashboardRoutes.RecoveryPersona), lazy: () => import('./Recovery/index.js') },
     { path: r(DashboardRoutes.SignUpPersonaMnemonic), lazy: () => import('./Mnemonic/index.js') },
     { path: r(DashboardRoutes.SignUpPersonaOnboarding), lazy: () => import('./Onboarding/index.js') },
+    { path: r(DashboardRoutes.Backup), lazy: () => import('./Backup/index.js') },
     { path: r(DashboardRoutes.LocalBackup), lazy: () => import('./LocalBackup/index.js') },
     { path: r(DashboardRoutes.CloudBackup), lazy: () => import('./CloudBackup/index.js') },
     { path: r(DashboardRoutes.CloudBackupPreview), lazy: () => import('./CloudBackupPreview/index.js') },

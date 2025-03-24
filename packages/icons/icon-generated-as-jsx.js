@@ -239,6 +239,11 @@ export const Gnosis = /*#__PURE__*/ __createIcon('Gnosis', [
         u: () => new URL('./brands/Gnosis.svg', import.meta.url).href,
     },
 ])
+export const GoogleDrive = /*#__PURE__*/ __createIcon('GoogleDrive', [
+    {
+        u: () => new URL('./brands/GoogleDrive.svg', import.meta.url).href,
+    },
+])
 export const Highlight = /*#__PURE__*/ __createIcon('Highlight', [
     {
         u: () => new URL('./brands/Highlight.svg', import.meta.url).href,

@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
-import { useAsync } from 'react-use'
-import { DialogContent, alpha } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
-import { useCurrentPersonaConnectStatus, InjectedDialog, PersonaAction } from '@masknet/shared'
+import Services from '#services'
+import { Trans } from '@lingui/react/macro'
+import type { CompositionType } from '@masknet/plugin-infra/content-script'
+import { InjectedDialog, PersonaAction, useCurrentPersonaConnectStatus } from '@masknet/shared'
 import {
     CrossIsolationMessages,
     EMPTY_OBJECT,
@@ -12,19 +11,20 @@ import {
     currentPersonaIdentifier,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
-import type { CompositionType } from '@masknet/plugin-infra/content-script'
-import Services from '#services'
+import { DialogContent, alpha } from '@mui/material'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { useAsync } from 'react-use'
+import { useCurrentPersona, usePersonasFromDB } from '../../../shared-ui/hooks/index.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/index.js'
 import { useCurrentIdentity, useLastRecognizedIdentity } from '../DataSource/useActivatedUI.js'
 import { CompositionDialogUI, type CompositionRef, E2EUnavailableReason } from './CompositionUI.js'
+import { EncryptionMethodType } from './EncryptionMethodSelector.js'
 import { useCompositionClipboardRequest } from './useCompositionClipboardRequest.js'
 import { useRecipientsList } from './useRecipientsList.js'
 import { useSubmit } from './useSubmit.js'
-import { usePersonasFromDB, useCurrentPersona } from '../../../shared-ui/hooks/index.js'
-import { EncryptionMethodType } from './EncryptionMethodSelector.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     dialogRoot: {

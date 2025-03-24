@@ -4,38 +4,24 @@ import { encryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { LoadingStatus } from '@masknet/shared'
 import { MimeType } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
-import { Box, Typography } from '@mui/material'
+import { Box, Portal } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
-import { memo } from 'react'
+import { memo, type RefObject } from 'react'
 import { Controller } from 'react-hook-form'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../../components/BackupPreview/index.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../../hooks/useBackupPreviewInfo.js'
 
-const useStyles = makeStyles()((theme) => ({
-    title: {
-        fontSize: 36,
-        lineHeight: 1.2,
-        fontWeight: 700,
-    },
-    description: {
-        color: theme.palette.maskColor.second,
-        fontSize: 14,
-        marginTop: theme.spacing(1.5),
-        marginBottom: theme.spacing(3),
-    },
-}))
-
-export const Component = memo(function LocalBackup() {
+interface Props {
+    portalContainerRef: RefObject<HTMLDivElement | null>
+}
+export const LocalBackup = memo<Props>(function LocalBackup({ portalContainerRef }) {
     const { t } = useLingui()
-    const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const {
         hasPassword,
@@ -84,18 +70,34 @@ export const Component = memo(function LocalBackup() {
     )
 
     return (
-        <>
-            <form>
-                <Typography variant="h1" className={classes.title}>
-                    <Trans>Select the contents of the backup</Trans>
-                </Typography>
-                <Typography className={classes.description}>
-                    <Trans>Please select the appropriate method to restore your personal data.</Trans>
-                </Typography>
-                {!loading && previewInfo ?
-                    <Box display="flex" flexDirection="column">
-                        <PersonasBackupPreview info={previewInfo} />
+        <form>
+            {!loading && previewInfo ?
+                <Box display="flex" flexDirection="column">
+                    <PersonasBackupPreview info={previewInfo} />
 
+                    <Controller
+                        control={control}
+                        render={({ field }) => (
+                            <PasswordField
+                                {...field}
+                                onFocus={() => clearErrors()}
+                                sx={{ mb: 2 }}
+                                placeholder={t`Backup Password`}
+                                error={!!errors.backupPassword?.message}
+                                helperText={errors.backupPassword?.message}
+                            />
+                        )}
+                        name="backupPassword"
+                    />
+
+                    <WalletsBackupPreview
+                        wallets={previewInfo.wallets}
+                        selectable
+                        selected={backupWallets}
+                        onChange={setBackupWallets}
+                    />
+
+                    {backupWallets ?
                         <Controller
                             control={control}
                             render={({ field }) => (
@@ -103,41 +105,17 @@ export const Component = memo(function LocalBackup() {
                                     {...field}
                                     onFocus={() => clearErrors()}
                                     sx={{ mb: 2 }}
-                                    placeholder={t`Backup Password`}
-                                    error={!!errors.backupPassword?.message}
-                                    helperText={errors.backupPassword?.message}
+                                    placeholder={t`Payment Password`}
+                                    error={!!errors.paymentPassword?.message}
+                                    helperText={errors.paymentPassword?.message}
                                 />
                             )}
-                            name="backupPassword"
+                            name="paymentPassword"
                         />
-
-                        <WalletsBackupPreview
-                            wallets={previewInfo.wallets}
-                            selectable
-                            selected={backupWallets}
-                            onChange={setBackupWallets}
-                        />
-
-                        {backupWallets ?
-                            <Controller
-                                control={control}
-                                render={({ field }) => (
-                                    <PasswordField
-                                        {...field}
-                                        onFocus={() => clearErrors()}
-                                        sx={{ mb: 2 }}
-                                        placeholder={t`Payment Password`}
-                                        error={!!errors.paymentPassword?.message}
-                                        helperText={errors.paymentPassword?.message}
-                                    />
-                                )}
-                                name="paymentPassword"
-                            />
-                        :   null}
-                    </Box>
-                :   <LoadingStatus minHeight={320} />}
-            </form>
-            <SetupFrameController>
+                    :   null}
+                </Box>
+            :   <LoadingStatus minHeight={320} />}
+            <Portal container={() => portalContainerRef.current}>
                 <PrimaryButton
                     startIcon={<Icons.Download />}
                     size="large"
@@ -147,7 +125,7 @@ export const Component = memo(function LocalBackup() {
                     onClick={handleSubmit(handleFormSubmit)}>
                     <Trans>Download Backup</Trans>
                 </PrimaryButton>
-            </SetupFrameController>
-        </>
+            </Portal>
+        </form>
     )
 })

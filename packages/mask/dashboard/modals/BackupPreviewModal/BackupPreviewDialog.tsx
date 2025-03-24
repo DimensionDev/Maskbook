@@ -1,25 +1,26 @@
-import { InjectedDialog, LoadingStatus } from '@masknet/shared'
-import { memo, useCallback, useMemo, useRef } from 'react'
-import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
-import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
-import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Icons } from '@masknet/icons'
-import { useAsyncFn, useUpdateEffect } from 'react-use'
 import Services from '#services'
-import type { BackupAccountType } from '@masknet/shared-base'
-import { fetchDownloadLink, fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
+import { msg } from '@lingui/core/macro'
+import { useLingui } from '@lingui/react'
+import { Trans } from '@lingui/react/macro'
 import { encryptBackup } from '@masknet/backup-format'
+import { Icons } from '@masknet/icons'
+import { InjectedDialog, LoadingStatus } from '@masknet/shared'
+import type { BackupAccountType } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
+import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
+import { format as formatDateTime } from 'date-fns'
+import { memo, useCallback, useMemo, useRef } from 'react'
 import { Controller } from 'react-hook-form'
+import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsyncFn, useUpdateEffect } from 'react-use'
+import { UserContext } from '../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/BackupPreview/index.js'
 import PasswordField from '../../components/PasswordField/index.js'
-import { useNavigate, useSearchParams } from 'react-router-dom'
-import { DashboardRoutes } from '@masknet/shared-base'
-import { format as formatDateTime } from 'date-fns'
-import { UserContext } from '../../../shared-ui/index.js'
-import { msg } from '@lingui/core/macro'
-import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
+import { useBackupPreviewInfo } from '../../hooks/useBackupPreviewInfo.js'
+import { fetchDownloadLink, fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -83,8 +84,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { updateUser } = UserContext.useContainer()
     const {
         hasPassword,
-        previewInfo,
-        loading,
         backupWallets,
         setBackupWallets,
         formState: {
@@ -96,6 +95,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             formState: { errors, isDirty, isValid },
         },
     } = useBackupFormState()
+    const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
     const { showSnackbar } = useCustomSnackbar()
 
     const [{ loading: uploadLoading, value }, handleUploadBackup] = useAsyncFn(

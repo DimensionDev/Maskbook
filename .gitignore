@@ -122,3 +122,4 @@ common/autoinstallers/*/.npmrc
 /package-lock.json
 /yarn.lock
 quick-lint-js.config
+.aider*

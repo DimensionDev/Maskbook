@@ -1,11 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useLingui } from '@lingui/react/macro'
-import { createContainer } from '@masknet/shared-base-ui'
-import { useTabs } from '@masknet/theme'
+import { BackupAccountType } from '@masknet/shared-base'
 import guessCallingCode from 'guess-calling-code'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
-import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
+import { emailRegexp, phoneRegexp } from '../../../../utils/regexp.js'
 
 export interface CloudBackupFormInputs {
     email: string
@@ -14,16 +13,13 @@ export interface CloudBackupFormInputs {
     countryCode: string
 }
 
-function useCloudBackupFormContext() {
+export function useCloudBackupForm(backupType: BackupAccountType) {
     const { t } = useLingui()
-
-    const [currentTab, onChange, tabs] = useTabs('email', 'mobile')
 
     const formState = useForm<CloudBackupFormInputs>({
         mode: 'onSubmit',
         context: {
-            currentTab,
-            tabs,
+            backupType,
         },
         defaultValues: {
             email: '',
@@ -35,14 +31,12 @@ function useCloudBackupFormContext() {
             z
                 .object({
                     email:
-                        currentTab === tabs.email ?
-                            z.string().refine((email) => emailRegexp.test(email), t`Invalid email address format.`)
+                        backupType === BackupAccountType.Email ?
+                            z.string().regex(emailRegexp, t`Invalid email address format.`)
                         :   z.string().optional(),
-                    countryCode: currentTab === tabs.mobile ? z.string() : z.string().optional(),
+                    countryCode: backupType === BackupAccountType.Phone ? z.string() : z.string().optional(),
                     phone:
-                        currentTab === tabs.mobile ?
-                            z.string().refine((mobile) => phoneRegexp.test(mobile))
-                        :   z.string().optional(),
+                        backupType === BackupAccountType.Phone ? z.string().regex(phoneRegexp) : z.string().optional(),
                     code: z
                         .string()
                         .min(1, t`The code is incorrect.`)
@@ -50,7 +44,7 @@ function useCloudBackupFormContext() {
                 })
                 .refine(
                     (data) => {
-                        if (currentTab !== tabs.mobile) return true
+                        if (backupType !== BackupAccountType.Phone) return true
                         if (!data.countryCode || !data.phone) return false
                         return phoneRegexp.test(`+${data.countryCode} ${data.phone}`)
                     },
@@ -64,10 +58,5 @@ function useCloudBackupFormContext() {
 
     return {
         formState,
-        currentTab,
-        onChange,
-        tabs,
     }
 }
-
-export const CloudBackupFormContext = createContainer(useCloudBackupFormContext)
