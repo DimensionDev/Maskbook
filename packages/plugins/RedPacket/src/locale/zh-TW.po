@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-18 04:44\n"
+"PO-Revision-Date: 2025-03-21 03:11\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Attached Message"
-#~ msgstr "附加的訊息"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
@@ -290,7 +290,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
-#~ msgstr "已完成"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #~ msgid "Conditions not met"
@@ -378,7 +378,7 @@ msgstr "空的"
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #~ msgid "Enclose a Message"
-#~ msgstr "標題"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -749,7 +749,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Search"
-#~ msgstr "搜尋"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -921,7 +921,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Total Amount"
-#~ msgstr "總額"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Total amount shared among all winners"

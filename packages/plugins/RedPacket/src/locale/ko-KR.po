@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-02-18 04:44\n"
+"PO-Revision-Date: 2025-03-21 03:11\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -104,7 +104,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "ALL ({0} NFT)"
-#~ msgstr "모든 ({0} NFT)"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Amount"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Attached Message"
-#~ msgstr "첨부 메시지"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/TokenRedPacketConfirm.tsx
 msgid "Available to Everyone"
@@ -282,7 +282,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Collections"
-#~ msgstr "수집품"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Comment"
@@ -290,7 +290,7 @@ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
-#~ msgstr "완료됨"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacket/OperationFooter.tsx
 #~ msgid "Conditions not met"
@@ -378,7 +378,7 @@ msgstr "비어 있음"
 
 #: src/SiteAdaptor/components/MessagePanel.tsx
 #~ msgid "Enclose a Message"
-#~ msgstr "메시지 동봉"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -583,7 +583,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Loading token..."
-#~ msgstr "토큰 로딩..."
+#~ msgstr ""
 
 #: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/index.tsx
@@ -656,7 +656,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "No results"
-#~ msgstr "결과 없음"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 msgid "Note: When selecting approve all, all NFTs in the contract will be authorized for sale by default, including the NFTs transferred later."
@@ -749,7 +749,7 @@ msgstr ""
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Search"
-#~ msgstr "검색"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Select a token"
@@ -763,7 +763,7 @@ msgstr "토큰 선택"
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Select All"
-#~ msgstr "전체 선택"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
 msgid "Select NFT collection to gate access"
@@ -776,7 +776,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
 #~ msgid "Select partially"
-#~ msgstr "일부 선택"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Selecting NFTs"
@@ -904,7 +904,7 @@ msgstr ""
 
 #: src/SiteAdaptor/SelectNftTokenDialog.tsx
 #~ msgid "Token ID separated by comma, e.g. 1224, 7873, 8948"
-#~ msgstr "토큰 ID는 쉽표로 분리됩니다. 예시: 1224, 7873, 8948"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "Token quantity greater than"
@@ -921,7 +921,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Total Amount"
-#~ msgstr "총액"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateERC20RedPacket.tsx
 #~ msgid "Total amount shared among all winners"
@@ -965,7 +965,7 @@ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
 #~ msgid "Wallet account"
-#~ msgstr "월렛 계정"
+#~ msgstr ""
 
 #. placeholder {0}: nativeTokenDetailed?.symbol || 'ETH'
 #: src/SiteAdaptor/views/CreateNftRedPacket.tsx
