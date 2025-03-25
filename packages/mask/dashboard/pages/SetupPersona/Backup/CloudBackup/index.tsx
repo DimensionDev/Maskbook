@@ -2,10 +2,11 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography, type BoxProps } from '@mui/material'
+import { GoogleOAuthProvider } from '@react-oauth/google'
 import { memo, useState } from 'react'
+import type { PortalContainerProps } from '../types.js'
 import { GoogleDriveBackup } from './GoogleDriveBackup.js'
 import { MaskNetworkBackup } from './MaskNetworkBackup.js'
-import type { PortalContainerProps } from '../types.js'
 
 const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     container: {
@@ -48,9 +49,13 @@ enum CloudProvider {
 }
 
 interface Props extends BoxProps, PortalContainerProps {}
+// cspell:disable
+const clientId =
+    process.env.GOOGLE_CLIENT_ID || '18954568633-c7has4fcrm5b7fop5si83fleb51oodji.apps.googleusercontent.com'
+// cspell:enable
 export const CloudBackup = memo<Props>(function CloudBackup({ portalContainerRef, ...rest }) {
     const { classes, cx } = useStyles()
-    const [cloudProvider, setCloudProvider] = useState<CloudProvider>(CloudProvider.MaskNetwork)
+    const [cloudProvider, setCloudProvider] = useState<CloudProvider>(CloudProvider.GoogleDrive)
 
     const isMaskNetwork = cloudProvider === CloudProvider.MaskNetwork
 
@@ -78,7 +83,10 @@ export const CloudBackup = memo<Props>(function CloudBackup({ portalContainerRef
             </Box>
             {isMaskNetwork ?
                 <MaskNetworkBackup portalContainerRef={portalContainerRef} />
-            :   <GoogleDriveBackup />}
+            :   <GoogleOAuthProvider clientId={clientId}>
+                    <GoogleDriveBackup />
+                </GoogleOAuthProvider>
+            }
         </Box>
     )
 })

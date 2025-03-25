@@ -35,6 +35,7 @@ export interface BackupConfig {
     cloudBackupAt: string | null
     cloudBackupMethod: BackupAccountType | null
     googleToken: string | null
+    googleAccount: string | null
 }
 
 export const PersistentStorages = {
@@ -55,6 +56,7 @@ export const PersistentStorages = {
             cloudBackupAt: '',
             cloudBackupMethod: null,
             googleToken: '',
+            googleAccount: '',
         },
     }),
     /**
