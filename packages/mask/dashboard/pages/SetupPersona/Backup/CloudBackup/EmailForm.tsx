@@ -5,9 +5,9 @@ import { Box, TextField } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { Controller } from 'react-hook-form'
 import { UserContext, useLanguage } from '../../../../../shared-ui/index.js'
-import { CloudBackupFormContext } from '../../../../contexts/CloudBackupFormContext.js'
 import { sendCode } from '../../../../utils/api.js'
 import { Locale, Scenario } from '../../../../utils/type.js'
+import { CloudBackupFormContext } from './CloudBackupFormContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -23,7 +23,7 @@ export const EmailForm = memo(function EmailForm() {
     const { user } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
     const {
-        formState: {
+        form: {
             clearErrors,
             control,
             watch,

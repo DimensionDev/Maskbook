@@ -39,6 +39,7 @@ browser.runtime.onInstalled.addListener(async (detail) => {
                     localBackupAt: backupMethod && backupMethod === 'local' ? localStorage.getItem('backupAt') : null,
                     cloudBackupMethod: null,
                     googleToken: null,
+                    googleAccount: null,
                 })
             }
             // remove old data after migrate

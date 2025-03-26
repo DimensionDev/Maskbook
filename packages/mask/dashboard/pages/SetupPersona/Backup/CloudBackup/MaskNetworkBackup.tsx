@@ -1,11 +1,11 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { Alert } from '@masknet/shared'
+import { Alert, useParamTab } from '@masknet/shared'
 import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Portal, Radio, RadioGroup, Typography, type BoxProps } from '@mui/material'
+import { Box, Portal, Radio, RadioGroup, Typography } from '@mui/material'
 import { memo, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
 import { UserContext } from '../../../../../shared-ui/index.js'
@@ -14,16 +14,13 @@ import { fetchDownloadLink } from '../../../../utils/api.js'
 import type { PortalContainerProps } from '../types.js'
 import { EmailForm } from './EmailForm.js'
 import { PhoneForm } from './PhoneForm.js'
-import { useCloudBackupForm, type CloudBackupFormInputs } from './useCloudBackupForm.js'
+import { CloudBackupFormContext, type CloudBackupFormInputs } from './CloudBackupFormContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(2),
-    },
-    tabContainer: {
-        overflow: 'hidden',
     },
     radios: {
         flexDirection: 'row',
@@ -39,18 +36,18 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends PortalContainerProps, BoxProps {}
-
-export const MaskNetworkBackup = memo<Props>(function MaskNetworkBackup({ portalContainerRef, ...rest }) {
+export const Component = memo(function MaskNetworkBackup() {
     const { classes } = useStyles()
+    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { user, updateUser } = UserContext.useContainer()
     const navigate = useNavigate()
     const [showAlert, setShowAlert] = useState(true)
-    const [backupType, setBackupType] = useState<BackupAccountType>(BackupAccountType.Email)
 
-    const { formState } = useCloudBackupForm(backupType)
+    const [accountType, setAccountType] = useParamTab<BackupAccountType>(BackupAccountType.Email, 'account-type')
+    const { form } = CloudBackupFormContext.useContainer()
+    const { setError, formState } = form
 
-    const isEmail = backupType === BackupAccountType.Email
+    const isEmail = accountType === BackupAccountType.Email
     const incorrectCodeMsg = t`The code is incorrect.`
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
@@ -60,14 +57,14 @@ export const MaskNetworkBackup = memo<Props>(function MaskNetworkBackup({ portal
                 code: data.code,
             }).catch((error) => {
                 if (error.status === 400) {
-                    formState.setError('code', {
+                    setError('code', {
                         type: 'custom',
                         message: incorrectCodeMsg,
                     })
                 } else if (error.status === 404) {
                     // No cloud backup file
                     navigate(
-                        urlcat(DashboardRoutes.CloudBackupPreview, {
+                        urlcat(DashboardRoutes.BackupPreview, {
                             type: isEmail ? BackupAccountType.Email : BackupAccountType.Phone,
                             account: isEmail ? data.email : `+${data.countryCode} ${data.phone}`,
                             code: data.code,
@@ -83,7 +80,7 @@ export const MaskNetworkBackup = memo<Props>(function MaskNetworkBackup({ portal
                 phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
             })
             navigate(
-                urlcat(DashboardRoutes.CloudBackupPreview, {
+                urlcat(DashboardRoutes.BackupPreview, {
                     ...response,
                     type: isEmail ? BackupAccountType.Email : BackupAccountType.Phone,
                     account: isEmail ? data.email : `+${data.countryCode} ${data.phone}`,
@@ -91,16 +88,16 @@ export const MaskNetworkBackup = memo<Props>(function MaskNetworkBackup({ portal
                 }),
             )
         },
-        [isEmail, formState, navigate, updateUser, user],
+        [isEmail, setError, navigate, updateUser, user],
     )
 
     return (
-        <Box {...rest} className={classes.container}>
+        <Box className={classes.container}>
             <RadioGroup
                 className={classes.radios}
-                value={backupType}
+                value={accountType}
                 onChange={() => {
-                    setBackupType(isEmail ? BackupAccountType.Phone : BackupAccountType.Email)
+                    setAccountType(undefined, isEmail ? BackupAccountType.Phone : BackupAccountType.Email)
                 }}>
                 <div className={classes.radioContainer}>
                     <label>
@@ -129,8 +126,8 @@ export const MaskNetworkBackup = memo<Props>(function MaskNetworkBackup({ portal
                     size="large"
                     color="primary"
                     loading={loading}
-                    disabled={!formState.formState.isDirty || !formState.formState.isValid}
-                    onClick={formState.handleSubmit(handleSubmit)}>
+                    disabled={!formState.isDirty || !formState.isValid}
+                    onClick={form.handleSubmit(handleSubmit)}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
             </Portal>

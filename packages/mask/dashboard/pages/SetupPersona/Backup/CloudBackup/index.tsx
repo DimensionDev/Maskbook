@@ -1,12 +1,12 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Box, Typography, type BoxProps } from '@mui/material'
-import { GoogleOAuthProvider } from '@react-oauth/google'
-import { memo, useState } from 'react'
+import { Box, Typography } from '@mui/material'
+import { memo } from 'react'
+import { Outlet, useMatch, useNavigate, useOutletContext } from 'react-router-dom'
 import type { PortalContainerProps } from '../types.js'
-import { GoogleDriveBackup } from './GoogleDriveBackup.js'
-import { MaskNetworkBackup } from './MaskNetworkBackup.js'
+import { CloudBackupFormContext } from './CloudBackupFormContext.js'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     container: {
@@ -23,6 +23,7 @@ const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
         fontSize: 14,
         lineHeight: '18px',
         height: 18,
+        color: theme.palette.maskColor.main,
     },
     activeButton: {
         backgroundColor: theme.palette.maskColor.input,
@@ -43,29 +44,25 @@ const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     },
 }))
 
-enum CloudProvider {
-    MaskNetwork = 'mask-network',
-    GoogleDrive = 'google-drive',
-}
-
-interface Props extends BoxProps, PortalContainerProps {}
 // cspell:disable
 const clientId =
     process.env.GOOGLE_CLIENT_ID || '18954568633-c7has4fcrm5b7fop5si83fleb51oodji.apps.googleusercontent.com'
 // cspell:enable
-export const CloudBackup = memo<Props>(function CloudBackup({ portalContainerRef, ...rest }) {
+export const Component = memo(function CloudBackup() {
+    const outletContext = useOutletContext<PortalContainerProps>()
     const { classes, cx } = useStyles()
-    const [cloudProvider, setCloudProvider] = useState<CloudProvider>(CloudProvider.GoogleDrive)
 
-    const isMaskNetwork = cloudProvider === CloudProvider.MaskNetwork
+    const navigate = useNavigate()
+    const match = useMatch(DashboardRoutes.BackupCloudGoogleDrive) // MaskBook is index
+    const isGoogleDrive = !!match
 
     return (
-        <Box {...rest} className={classes.container}>
+        <Box className={classes.container}>
             <Box className={classes.providers}>
                 <button
                     type="button"
-                    className={cx(classes.toggleButton, isMaskNetwork ? classes.activeButton : null)}
-                    onClick={() => setCloudProvider(CloudProvider.MaskNetwork)}>
+                    className={cx(classes.toggleButton, isGoogleDrive ? null : classes.activeButton)}
+                    onClick={() => navigate(DashboardRoutes.BackupCloudMaskNetwork, { replace: true })}>
                     <Icons.MaskBlue size={18} />
                     <Typography className={classes.providerName}>
                         <Trans>Mask Network</Trans>
@@ -73,20 +70,17 @@ export const CloudBackup = memo<Props>(function CloudBackup({ portalContainerRef
                 </button>
                 <button
                     type="button"
-                    className={cx(classes.toggleButton, isMaskNetwork ? null : classes.activeButton)}
-                    onClick={() => setCloudProvider(CloudProvider.GoogleDrive)}>
+                    className={cx(classes.toggleButton, isGoogleDrive ? classes.activeButton : null)}
+                    onClick={() => navigate(DashboardRoutes.BackupCloudGoogleDrive, { replace: true })}>
                     <Icons.GoogleDrive size={18} />
                     <Typography className={classes.providerName}>
                         <Trans>Google Drive</Trans>
                     </Typography>
                 </button>
             </Box>
-            {isMaskNetwork ?
-                <MaskNetworkBackup portalContainerRef={portalContainerRef} />
-            :   <GoogleOAuthProvider clientId={clientId}>
-                    <GoogleDriveBackup />
-                </GoogleOAuthProvider>
-            }
+            <CloudBackupFormContext.Provider>
+                <Outlet context={outletContext} />
+            </CloudBackupFormContext.Provider>
         </Box>
     )
 })

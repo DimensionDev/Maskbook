@@ -19,6 +19,8 @@ export function useBackupFormState() {
     const { user } = UserContext.useContainer()
     const [backupWallets, setBackupWallets] = useState(false)
 
+    console.log('user', user)
+
     const formState = useForm<BackupFormInputs>({
         mode: 'onBlur',
         context: {

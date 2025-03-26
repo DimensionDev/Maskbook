@@ -1,11 +1,11 @@
 import { Trans } from '@lingui/react/macro'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { TabContext, TabPanel } from '@mui/lab'
+import { MaskTabList, makeStyles } from '@masknet/theme'
+import { TabContext } from '@mui/lab'
 import { Box, Tab, Typography } from '@mui/material'
-import { memo, useMemo, useRef } from 'react'
-import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
-import { CloudBackup } from './CloudBackup/index.js'
-import { LocalBackup } from './LocalBackup.js'
+import { memo, useRef } from 'react'
+import { Outlet, useLocation, useNavigate } from 'react-router-dom'
+import { CloudBackupRoutes } from './constants.js'
+import { StorageType } from './types.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -35,12 +35,6 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
     },
-    panels: {
-        display: 'flex',
-        flexDirection: 'column',
-        padding: 0,
-        width: '100%',
-    },
     panelContainer: {
         padding: theme.spacing(2),
     },
@@ -49,13 +43,16 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const Backup = memo(function Backup() {
+export const Backup = memo(function Backup() {
     const { classes } = useStyles()
-    const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
 
-    const [currentTab, onChange, tabs] = useTabs('cloud', 'local')
+    const location = useLocation()
+    const { pathname } = location
+    const isCloud = CloudBackupRoutes.includes(pathname)
+    console.log('backup', { isCloud, pathname })
+    const tab = isCloud ? StorageType.Cloud : StorageType.Local
+    const navigate = useNavigate()
 
-    const { formState } = CloudBackupFormContext.useContainer()
     const portalContainerRef = useRef<HTMLDivElement>(null)
 
     return (
@@ -70,38 +67,32 @@ const Backup = memo(function Backup() {
                 </Trans>
             </Typography>
             <Box className={classes.tabContainer}>
-                <TabContext value={currentTab}>
-                    <div className={classes.tabList}>
+                <div className={classes.tabList}>
+                    <TabContext value={tab}>
                         <MaskTabList
                             variant="base"
                             onChange={(_, value) => {
-                                onChange(_, value)
-                                formState.reset()
+                                navigate(value === StorageType.Cloud ? '/setup/backup/cloud' : '/setup/backup/local')
                             }}
                             aria-label="Cloud Backup Methods">
-                            <Tab className={classes.tab} label={<Trans>Locale Backup</Trans>} value={tabs.local} />
-                            <Tab className={classes.tab} label={<Trans>Cloud Backup</Trans>} value={tabs.cloud} />
+                            <Tab
+                                className={classes.tab}
+                                label={<Trans>Locale Backup</Trans>}
+                                value={StorageType.Local}
+                            />
+                            <Tab
+                                className={classes.tab}
+                                label={<Trans>Cloud Backup</Trans>}
+                                value={StorageType.Cloud}
+                            />
                         </MaskTabList>
-                    </div>
-                    <div className={classes.panelContainer}>
-                        <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                            <LocalBackup portalContainerRef={portalContainerRef} />
-                        </TabPanel>
-                        <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
-                            <CloudBackup portalContainerRef={portalContainerRef} />
-                        </TabPanel>
-                    </div>
-                </TabContext>
+                    </TabContext>
+                </div>
+                <div className={classes.panelContainer}>
+                    <Outlet context={{ portalContainerRef }} />
+                </div>
             </Box>
             <Box className={classes.exclaveActions} ref={portalContainerRef}></Box>
         </Box>
-    )
-})
-
-export const Component = memo(function BackupPage() {
-    return (
-        <CloudBackupFormContext>
-            <Backup />
-        </CloudBackupFormContext>
     )
 })

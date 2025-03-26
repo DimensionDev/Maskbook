@@ -8,6 +8,12 @@ export enum DashboardRoutes {
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
     SignUpPersonaOnboarding = '/setup/sign-up/onboarding',
     Backup = '/setup/backup',
+    BackupLocal = '/setup/backup/local',
+    BackupCloud = '/setup/backup/cloud',
+    BackupCloudMaskNetwork = '/setup/backup/cloud/mask-network',
+    BackupCloudGoogleDrive = '/setup/backup/cloud/google-drive',
+    BackupPreview = '/setup/backup/cloud/preview',
+
     LocalBackup = '/setup/local-backup',
     CloudBackup = '/setup/cloud-backup',
     CloudBackupPreview = '/setup/cloud-backup-preview',

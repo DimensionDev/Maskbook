@@ -5,6 +5,7 @@ import { memo, useEffect } from 'react'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { requestGoogleDriveAccessToken } from '../helpers.js'
 import { t } from '@lingui/core/macro'
+import Services from '#services'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -30,15 +31,15 @@ interface Props extends BoxProps {}
 const clientId =
     process.env.GOOGLE_CLIENT_ID || '18954568633-c7has4fcrm5b7fop5si83fleb51oodji.apps.googleusercontent.com'
 // cspell:enable
-const SCOPE = 'https://www.googleapis.com/auth/drive.file'
+const SCOPES = ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/userinfo.email']
 const redirectUri = browser.runtime.getURL('oauth2.html')
 
 const handleSignIn = () => {
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(SCOPE)}&access_type=offline`
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(SCOPES.join(' '))}&access_type=offline`
     window.location.assign(authUrl)
 }
-export const GoogleDriveBackup = memo<Props>(function GoogleDriveBackup(props) {
-    const { classes, cx } = useStyles()
+export const Component = memo<Props>(function GoogleDriveBackup() {
+    const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
 
@@ -54,7 +55,6 @@ export const GoogleDriveBackup = memo<Props>(function GoogleDriveBackup(props) {
                     redirectUri,
                 })
                 if (res.access_token) {
-                    debugger
                     // TODO account
                     updateUser((user) => ({
                         ...user,
@@ -70,9 +70,22 @@ export const GoogleDriveBackup = memo<Props>(function GoogleDriveBackup(props) {
         return () => controller.abort()
     }, [])
 
+    const login = async () => {
+        // const token = await browser.identity.launchWebAuthFlow({
+        //     url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(SCOPES.join(' '))}&access_type=offline`,
+        //     interactive: true,
+        // })
+        const token = await Services.Backup.getAccessToken()
+        if (!token) return
+        updateUser((user) => ({
+            ...user,
+            googleAccessToken: token,
+        }))
+    }
+
     if (!user.googleAccount) {
         return (
-            <Box {...props} className={cx(classes.container, props.className)}>
+            <Box className={classes.container}>
                 <Typography className={classes.title}>
                     <Trans>Add google Drive</Trans>
                 </Typography>
@@ -82,7 +95,7 @@ export const GoogleDriveBackup = memo<Props>(function GoogleDriveBackup(props) {
                     </Trans>
                 </Typography>
                 <Box display="flex" justifyContent="center" mt="48px">
-                    <Button variant="contained" onClick={handleSignIn}>
+                    <Button variant="contained" onClick={login}>
                         Add Google Drive
                     </Button>
                 </Box>
@@ -90,7 +103,7 @@ export const GoogleDriveBackup = memo<Props>(function GoogleDriveBackup(props) {
         )
     }
     return (
-        <Box {...props}>
+        <Box>
             <Box>
                 <Typography>test@gmail.com</Typography>
                 <Button variant="text">Switch other accounts</Button>

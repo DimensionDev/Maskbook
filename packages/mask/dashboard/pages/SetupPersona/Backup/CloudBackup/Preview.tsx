@@ -1,28 +1,18 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { EmptyStatus, formatFileSize } from '@masknet/shared'
+import { ConfirmDialog, EmptyStatus, formatFileSize } from '@masknet/shared'
 import type { BackupAccountType } from '@masknet/shared-base'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
+import { Box, Portal, Typography } from '@mui/material'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import { memo, useCallback, useMemo } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
+import { MergeBackupModal, BackupPreviewModal } from '../../../../modals/modals.js'
+import type { PortalContainerProps } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
-    title: {
-        fontSize: 36,
-        lineHeight: 1.2,
-        fontWeight: 700,
-    },
-    description: {
-        color: theme.palette.maskColor.second,
-        fontSize: 14,
-        marginTop: theme.spacing(1.5),
-    },
     text: {
         fontSize: 14,
         lineHeight: '18px',
@@ -52,6 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function CloudBackupPreview() {
     const { classes, theme, cx } = useStyles()
     const [params] = useSearchParams()
+    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
 
     const navigate = useNavigate()
 
@@ -105,9 +96,7 @@ export const Component = memo(function CloudBackupPreview() {
             message: <Trans>Are you sure to overwrite the backups stored on Mask Cloud Service?</Trans>,
             confirmLabel: <Trans>Confirm</Trans>,
             cancelLabel: <Trans>Cancel</Trans>,
-            confirmButtonProps: {
-                color: 'error',
-            },
+            confirmVariant: 'error',
             onConfirm: () => {
                 ConfirmDialog.close(false)
                 if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
@@ -126,25 +115,20 @@ export const Component = memo(function CloudBackupPreview() {
     return (
         <>
             <Box>
-                <Typography className={classes.title}>
-                    <Trans>Back Up Your Data Your Way</Trans>
-                </Typography>
-                <Typography className={classes.description}>
-                    <Trans>
-                        Choose from multiple backup options, now including encrypted storage via your authorized Google
-                        Drive for added security and flexibility.
-                    </Trans>
-                </Typography>
                 {previewInfo.downloadLink ?
                     <>
                         <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
                             <Typography className={classes.text}>{previewInfo.account}</Typography>
-                            <Typography
-                                sx={{ cursor: 'pointer' }}
-                                className={classes.text}
-                                onClick={() => navigate(DashboardRoutes.CloudBackup, { replace: true })}>
-                                <Trans>Switch other account</Trans>
-                            </Typography>
+                            <ActionButton
+                                loading={overwriteLoading}
+                                startIcon={<Icons.Cloud size={18} />}
+                                color="primary"
+                                className={cx(classes.button)}
+                                onClick={() => {
+                                    navigate(-1)
+                                }}>
+                                <Trans>Logout</Trans>
+                            </ActionButton>
                         </Box>
                         <Box className={classes.content}>
                             <Icons.Message size={48} />
@@ -188,10 +172,10 @@ export const Component = memo(function CloudBackupPreview() {
                                 <ActionButton
                                     loading={overwriteLoading}
                                     onClick={handleOverwriteClick}
-                                    startIcon={<Icons.CloudBackup2 size={18} />}
-                                    color="error"
+                                    startIcon={<Icons.Cloud size={18} />}
+                                    color="primary"
                                     className={cx(classes.button)}>
-                                    <Trans>Overwrite Backup</Trans>
+                                    <Trans>Download</Trans>
                                 </ActionButton>
                             </Box>
                         </Box>
@@ -213,11 +197,11 @@ export const Component = memo(function CloudBackupPreview() {
                 }
             </Box>
             {!previewInfo.downloadLink ?
-                <SetupFrameController>
-                    <ActionButton onClick={handleBackupClick} startIcon={<Icons.CloudBackup2 size={20} />}>
-                        <Trans>Backup</Trans>
+                <Portal container={() => portalContainerRef.current}>
+                    <ActionButton onClick={handleBackupClick}>
+                        <Trans>Back</Trans>
                     </ActionButton>
-                </SetupFrameController>
+                </Portal>
             :   null}
         </>
     )

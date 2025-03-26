@@ -7,8 +7,9 @@ import { MimeType } from '@masknet/shared-base'
 import { encode } from '@msgpack/msgpack'
 import { Box, Portal } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
-import { memo, type RefObject } from 'react'
+import { memo } from 'react'
 import { Controller } from 'react-hook-form'
+import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../../components/BackupPreview/index.js'
@@ -16,13 +17,13 @@ import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../../hooks/useBackupPreviewInfo.js'
+import type { PortalContainerProps } from './types.js'
 
-interface Props {
-    portalContainerRef: RefObject<HTMLDivElement | null>
-}
-export const LocalBackup = memo<Props>(function LocalBackup({ portalContainerRef }) {
+export const Component = memo(function LocalBackup() {
+    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { t } = useLingui()
     const { user, updateUser } = UserContext.useContainer()
+    console.log({ user })
     const {
         hasPassword,
         backupWallets,

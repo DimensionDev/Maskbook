@@ -60,7 +60,7 @@ interface ConfirmDialogProps extends Omit<DialogProps, 'title' | 'onSubmit' | 'o
     cancelLabel?: ReactNode
     /** Change color of confirm button */
     confirmVariant?: 'error' | 'warning'
-    onConfirm(): void
+    onConfirm?(): void
     onClose?(): void
 }
 
@@ -98,7 +98,7 @@ const Dialog = memo(function Dialog({
                         fullWidth
                         variant="roundedContained"
                         color={confirmVariant}
-                        onClick={() => onConfirm()}>
+                        onClick={() => onConfirm?.()}>
                         {confirmLabel ?? <Trans>Confirm</Trans>}
                     </ActionButton>
                 </Box>
@@ -107,7 +107,7 @@ const Dialog = memo(function Dialog({
     )
 })
 
-export type ConfirmDialogOpenProps = Omit<ConfirmDialogProps, 'open' | 'onConfirm'>
+export type ConfirmDialogOpenProps = Omit<ConfirmDialogProps, 'open'>
 
 export function ConfirmDialogComponent({ ref }: SingletonModalProps<ConfirmDialogOpenProps, boolean>) {
     const [props, setProps] = useState<ConfirmDialogOpenProps>({
