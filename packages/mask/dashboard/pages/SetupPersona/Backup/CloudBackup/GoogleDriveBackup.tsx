@@ -1,11 +1,34 @@
-import { Trans } from '@lingui/react/macro'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Box, Button, Typography, type BoxProps } from '@mui/material'
-import { memo, useEffect } from 'react'
-import { UserContext } from '../../../../../shared-ui/index.js'
-import { requestGoogleDriveAccessToken } from '../helpers.js'
-import { t } from '@lingui/core/macro'
 import Services from '#services'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
+import {
+    Box,
+    Button,
+    Checkbox,
+    Paper,
+    Portal,
+    Table,
+    TableBody,
+    TableCell,
+    TableContainer,
+    TableHead,
+    TableRow,
+    Typography,
+} from '@mui/material'
+import { compact } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
+import { useOutletContext } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
+import { UserContext } from '../../../../../shared-ui/index.js'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
+import type { PortalContainerProps } from '../types.js'
+import { BackupPreviewModal } from '../../../../modals/modals.js'
+import { MoreMenu } from '../../../../components/MoreMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -13,6 +36,30 @@ const useStyles = makeStyles()((theme) => ({
         flexDirection: 'column',
         gap: theme.spacing(1.5),
         paddingBottom: theme.spacing(6),
+    },
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    user: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1),
+    },
+    providerName: {
+        fontWeight: 400,
+        fontSize: 14,
+        lineHeight: '18px',
+        height: 18,
+        color: theme.palette.maskColor.second,
+    },
+    userAccount: {
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        height: 18,
+        color: theme.palette.maskColor.main,
     },
     title: {
         fontSize: 16,
@@ -24,66 +71,126 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 400,
         lineHeight: '18px',
     },
+    folder: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+    },
+    tableContainer: {
+        border: `1px solid ${theme.palette.maskColor.line}`,
+        borderRadius: 8,
+        overflow: 'hidden',
+        height: 340,
+        marginTop: theme.spacing(2),
+    },
+    table: {
+        borderRadius: 8,
+        borderCollapse: 'collapse',
+        borderSpacing: 0,
+    },
+    tableHeadCell: {
+        borderBottom: `1px solid ${theme.palette.maskColor.line}`,
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        padding: theme.spacing(1.5),
+        height: 18,
+    },
+    bodyCell: {
+        padding: theme.spacing(0, 1.5),
+        height: 42,
+        lineHeight: '18px',
+        verticalAlign: 'middle',
+    },
+    actionButton: {
+        color: theme.palette.maskColor.second,
+        '&:hover': {
+            color: theme.palette.maskColor.main,
+        },
+    },
+    actions: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1.5),
+    },
+    action: {
+        padding: 6,
+        height: 30,
+        display: 'flex',
+        gap: 4,
+        alignItems: 'center',
+        cursor: 'pointer',
+        borderRadius: 8,
+        '&:hover': {
+            backgroundColor: theme.palette.maskColor.bg,
+        },
+    },
+    actionLabel: {
+        fontSize: 14,
+        fontWeight: 700,
+        lineHeight: '18px',
+        color: theme.palette.maskColor.main,
+    },
 }))
 
-interface Props extends BoxProps {}
-// cspell:disable
-const clientId =
-    process.env.GOOGLE_CLIENT_ID || '18954568633-c7has4fcrm5b7fop5si83fleb51oodji.apps.googleusercontent.com'
-// cspell:enable
-const SCOPES = ['https://www.googleapis.com/auth/drive.file', 'https://www.googleapis.com/auth/userinfo.email']
-const redirectUri = browser.runtime.getURL('oauth2.html')
-
-const handleSignIn = () => {
-    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(SCOPES.join(' '))}&access_type=offline`
-    window.location.assign(authUrl)
-}
-export const Component = memo<Props>(function GoogleDriveBackup() {
+export const Component = memo(function GoogleDriveBackup() {
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
-
-    useEffect(() => {
-        const controller = new AbortController()
-        window.addEventListener(
-            'message',
-            async (event) => {
-                if (!event.data.code) return
-                const res = await requestGoogleDriveAccessToken({
-                    code: event.data.code,
-                    clientId,
-                    redirectUri,
-                })
-                if (res.access_token) {
-                    // TODO account
-                    updateUser((user) => ({
-                        ...user,
-                        googleAccessToken: res.access_token,
-                        googleAccount: res.access_token,
-                    }))
-                } else if (res.error_description) {
-                    showSnackbar(t`Failed to login: ${res.error_description}`, { variant: 'error' })
-                }
-            },
-            { signal: controller.signal },
-        )
-        return () => controller.abort()
-    }, [])
+    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
+    const token = user.googleToken
+    // const googleDriveClient = useMemo(() => {
+    //     if (!user.googleToken) return null
+    //     return new GoogleDriveClient(user.googleToken)
+    // }, [user.googleToken])
+    const { data: files = EMPTY_LIST, fetchNextPage } = useGoogleDriveFiles()
 
     const login = async () => {
-        // const token = await browser.identity.launchWebAuthFlow({
-        //     url: `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(SCOPES.join(' '))}&access_type=offline`,
-        //     interactive: true,
-        // })
-        const token = await Services.Backup.getAccessToken()
-        if (!token) return
-        updateUser((user) => ({
-            ...user,
-            googleAccessToken: token,
-        }))
+        try {
+            const token = await Services.Backup.getAccessToken()
+            if (!token) return
+            const googleDriveClient = new GoogleDriveClient(token)
+            const userInfo = await googleDriveClient.getUserInfo()
+            updateUser((user) => ({
+                ...user,
+                googleToken: token,
+                googleAccount: userInfo.email || '',
+            }))
+        } catch (err) {
+            showSnackbar(t`Failed to login: ${(err as Error).message}`, { variant: 'error' })
+        }
     }
 
-    if (!user.googleAccount) {
+    const selectFile = useCallback(() => {
+        return new Promise<File>((resolve) => {
+            const input = document.createElement('input')
+            input.type = 'file'
+            input.hidden = true
+            input.addEventListener('input', function onInput(event) {
+                resolve((event.currentTarget as any).files[0] as File)
+                input.removeEventListener('input', onInput)
+                document.body.removeChild(input)
+            })
+            input.click()
+            document.body.append(input)
+        })
+    }, [])
+
+    const [uploadedFile, setUploadedFile] = useState<DriveFile | null>(null)
+    console.log('GoogleDrive', { token, user })
+    const [{ loading }, uploadFile] = useAsyncFn(async () => {
+        if (!token) return
+        const file = await selectFile()
+        console.log('GoogleDrive', { file })
+        if (!file) return
+        const googleDriveClient = new GoogleDriveClient(token)
+        const uploaded = await googleDriveClient.uploadFile(file)
+        setUploadedFile(uploaded)
+    }, [token])
+
+    const mergedFiles = useMemo(() => compact([...files, uploadedFile]), [files, uploadedFile])
+
+    if (!user.googleAccount || !token) {
         return (
             <Box className={classes.container}>
                 <Typography className={classes.title}>
@@ -103,11 +210,101 @@ export const Component = memo<Props>(function GoogleDriveBackup() {
         )
     }
     return (
-        <Box>
-            <Box>
-                <Typography>test@gmail.com</Typography>
-                <Button variant="text">Switch other accounts</Button>
+        <Box className={classes.container}>
+            <Box className={classes.header}>
+                <Box className={classes.user}>
+                    <Typography className={classes.providerName}>
+                        <Trans>Google Drive</Trans>
+                    </Typography>
+                    <Typography className={classes.userAccount}>{user.googleAccount}</Typography>
+                </Box>
+                <Button
+                    variant="roundedContained"
+                    size="small"
+                    onClick={() => {
+                        updateUser((user) => ({
+                            ...user,
+                            googleAccount: '',
+                            googleAccessToken: '',
+                        }))
+                    }}>
+                    <Trans>Logout</Trans>
+                </Button>
             </Box>
+            <Box>
+                <Typography className={classes.folder}>MaskBackup file</Typography>
+                <TableContainer component={Paper} elevation={0} className={classes.tableContainer}>
+                    <Table className={classes.table}>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell className={classes.tableHeadCell} colSpan={2}>
+                                    <strong>File name</strong>
+                                </TableCell>
+                                <TableCell className={classes.tableHeadCell}>
+                                    <strong>Size</strong>
+                                </TableCell>
+                                <TableCell className={classes.tableHeadCell} align="right">
+                                    <strong>Date & Time</strong>
+                                </TableCell>
+                                <TableCell className={classes.tableHeadCell}>
+                                    <strong>Actions</strong>
+                                </TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {mergedFiles.map((file, index) => (
+                                <TableRow key={index}>
+                                    <TableCell padding="checkbox" className={classes.bodyCell}>
+                                        <Checkbox sx={{ padding: 0 }} size="small" />
+                                    </TableCell>
+                                    <TableCell className={classes.bodyCell}>{file.name}</TableCell>
+                                    <TableCell className={classes.bodyCell}>{file.size}</TableCell>
+                                    <TableCell className={classes.bodyCell}>{file?.createdTime}</TableCell>
+                                    <TableCell align="right" className={classes.bodyCell}>
+                                        <MoreMenu className={classes.actionButton}>
+                                            <div className={classes.actions}>
+                                                <div className={classes.action}>
+                                                    <Icons.Cloud size={16} />
+                                                    <Typography className={classes.actionLabel}>
+                                                        <Trans>Merge to Browser</Trans>
+                                                    </Typography>
+                                                </div>
+                                                <div className={classes.action}>
+                                                    <Icons.Cloud size={16} />
+                                                    <Typography className={classes.actionLabel}>
+                                                        <Trans>Merge to Browser</Trans>
+                                                    </Typography>
+                                                </div>
+                                            </div>
+                                        </MoreMenu>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Box>
+            <Portal container={() => portalContainerRef.current}>
+                <PrimaryButton
+                    variant="roundedContained"
+                    startIcon={<Icons.CloudBackup2 size={18} />}
+                    size="large"
+                    color="primary"
+                    loading={loading}
+                    disabled={loading}
+                    onClick={() => {
+                        // uploadFile()
+                        // return
+                        if (!user.googleAccount) return
+                        BackupPreviewModal.open({
+                            code: 'google-drive',
+                            type: BackupAccountType.Email,
+                            account: user.googleAccount!,
+                        })
+                    }}>
+                    <Trans>Back Up to Google Drive</Trans>
+                </PrimaryButton>
+            </Portal>
         </Box>
     )
 })

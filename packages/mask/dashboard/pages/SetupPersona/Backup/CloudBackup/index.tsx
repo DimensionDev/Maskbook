@@ -44,10 +44,6 @@ const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     },
 }))
 
-// cspell:disable
-const clientId =
-    process.env.GOOGLE_CLIENT_ID || '18954568633-c7has4fcrm5b7fop5si83fleb51oodji.apps.googleusercontent.com'
-// cspell:enable
 export const Component = memo(function CloudBackup() {
     const outletContext = useOutletContext<PortalContainerProps>()
     const { classes, cx } = useStyles()

@@ -23,3 +23,10 @@ export async function requestGoogleDriveAccessToken(options: Options) {
         }),
     })
 }
+
+export function downloadBackup(url: string, name?: string) {
+    const a = document.createElement('a')
+    a.href = url
+    if (name) a.download = name
+    a.click()
+}

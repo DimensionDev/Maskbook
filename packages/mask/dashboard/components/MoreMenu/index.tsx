@@ -1,0 +1,41 @@
+import { Icons, type GeneratedIconProps } from '@masknet/icons'
+import { makeStyles } from '@masknet/theme'
+import { Popover } from '@mui/material'
+import { memo, useState, type PropsWithChildren } from 'react'
+
+const useStyles = makeStyles()((theme) => ({
+    paper: {
+        padding: theme.spacing(2),
+        borderRadius: 24,
+        background: theme.palette.maskColor.bottom,
+        boxShadow:
+            theme.palette.mode === 'dark' ?
+                '0px 4px 30px 0px rgba(255, 255, 255, 0.15)'
+            :   '0px 4px 30px 0px rgba(0, 0, 0, 0.10)',
+    },
+}))
+
+interface Props extends PropsWithChildren<GeneratedIconProps> {}
+
+export const MoreMenu = memo<Props>(function MoreMenu({ children, ...rest }) {
+    const { classes } = useStyles()
+    const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null)
+    return (
+        <>
+            <Icons.More size={24} {...rest} onClick={(e) => setAnchorEl(e.currentTarget)} />
+            <Popover
+                disableScrollLock
+                anchorEl={anchorEl}
+                open={!!anchorEl}
+                onClose={() => setAnchorEl(null)}
+                classes={{ paper: classes.paper }}
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}>
+                {children}
+            </Popover>
+        </>
+    )
+})

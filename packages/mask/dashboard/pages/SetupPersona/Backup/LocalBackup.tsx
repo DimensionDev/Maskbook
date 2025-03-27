@@ -18,12 +18,12 @@ import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../../hooks/useBackupPreviewInfo.js'
 import type { PortalContainerProps } from './types.js'
+import { downloadBackup } from './helpers.js'
 
 export const Component = memo(function LocalBackup() {
     const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { t } = useLingui()
     const { user, updateUser } = UserContext.useContainer()
-    console.log({ user })
     const {
         hasPassword,
         backupWallets,
@@ -56,10 +56,7 @@ export const Component = memo(function LocalBackup() {
             const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
             const blob = new Blob([encrypted], { type: MimeType.Binary })
             const url = URL.createObjectURL(blob)
-            const a = document.createElement('a')
-            a.href = url
-            a.download = `mask-network-keystore-backup-${now}.bin`
-            a.click()
+            downloadBackup(url, `mask-network-keystore-backup-${now}.bin`)
 
             await updateUser({
                 localBackupAt: now,

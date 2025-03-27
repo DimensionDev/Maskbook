@@ -126,3 +126,5 @@ export { NFTSpam } from './NFTSpam/index.js'
 
 // Stores
 export { AvatarStore, getAvatarFromStorage, setAvatarToStorage } from './AvatarStore/index.js'
+
+export * from './GoogleDriveClient/index.js'

@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react'
-import { Button, TextField, type FilledTextFieldProps, Typography } from '@mui/material'
-import { COUNTRIES } from '@masknet/shared-base-ui'
-import { getCountryFlag } from '../../../index.js'
-import { Icons } from '@masknet/icons'
-import { CountryCodePicker } from '../CountryCodePicker/index.js'
 import { useLingui } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { COUNTRIES } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
+import { Button, TextField, Typography, type FilledTextFieldProps } from '@mui/material'
+import { useMemo, useState } from 'react'
+import { getCountryFlag } from '../../../index.js'
+import { CountryCodePicker } from '../CountryCodePicker/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     button: {

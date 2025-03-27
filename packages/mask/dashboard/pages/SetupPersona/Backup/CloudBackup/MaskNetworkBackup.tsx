@@ -45,7 +45,7 @@ export const Component = memo(function MaskNetworkBackup() {
 
     const [accountType, setAccountType] = useParamTab<BackupAccountType>(BackupAccountType.Email, 'account-type')
     const { form } = CloudBackupFormContext.useContainer()
-    const { setError, formState } = form
+    const { setError, formState, reset } = form
 
     const isEmail = accountType === BackupAccountType.Email
     const incorrectCodeMsg = t`The code is incorrect.`
@@ -62,6 +62,7 @@ export const Component = memo(function MaskNetworkBackup() {
                         message: incorrectCodeMsg,
                     })
                 } else if (error.status === 404) {
+                    reset()
                     // No cloud backup file
                     navigate(
                         urlcat(DashboardRoutes.BackupPreview, {
@@ -79,6 +80,7 @@ export const Component = memo(function MaskNetworkBackup() {
                 email: data.email || user.email,
                 phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
             })
+            reset()
             navigate(
                 urlcat(DashboardRoutes.BackupPreview, {
                     ...response,
@@ -88,7 +90,7 @@ export const Component = memo(function MaskNetworkBackup() {
                 }),
             )
         },
-        [isEmail, setError, navigate, updateUser, user],
+        [isEmail, setError, reset, navigate, updateUser, user],
     )
 
     return (

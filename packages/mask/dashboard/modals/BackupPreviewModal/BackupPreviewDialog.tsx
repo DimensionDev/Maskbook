@@ -151,7 +151,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 return false
             }
         },
-        [code, hasPassword, backupWallets, abstract, code, account, type, _, navigate, updateUser, params],
+        [code, hasPassword, backupWallets, abstract, code, account, type, _, navigate, updateUser],
     )
 
     const handleClose = useCallback(() => {

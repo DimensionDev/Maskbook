@@ -9,8 +9,9 @@ import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
-import { MergeBackupModal, BackupPreviewModal } from '../../../../modals/modals.js'
+import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
 import type { PortalContainerProps } from '../types.js'
+import { downloadBackup } from '../helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -90,6 +91,7 @@ export const Component = memo(function CloudBackupPreview() {
         })
     }, [previewInfo])
 
+    // Remove
     const [{ loading: overwriteLoading }, handleOverwriteClick] = useAsyncFn(async () => {
         await ConfirmDialog.openAndWaitForClose({
             title: <Trans>Overwrite current backup</Trans>,
@@ -119,14 +121,7 @@ export const Component = memo(function CloudBackupPreview() {
                     <>
                         <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
                             <Typography className={classes.text}>{previewInfo.account}</Typography>
-                            <ActionButton
-                                loading={overwriteLoading}
-                                startIcon={<Icons.Cloud size={18} />}
-                                color="primary"
-                                className={cx(classes.button)}
-                                onClick={() => {
-                                    navigate(-1)
-                                }}>
+                            <ActionButton color="primary" className={classes.button} onClick={() => navigate(-1)}>
                                 <Trans>Logout</Trans>
                             </ActionButton>
                         </Box>
@@ -170,8 +165,9 @@ export const Component = memo(function CloudBackupPreview() {
                                     <Trans>Merge data to local database</Trans>
                                 </ActionButton>
                                 <ActionButton
-                                    loading={overwriteLoading}
-                                    onClick={handleOverwriteClick}
+                                    onClick={() => {
+                                        downloadBackup(previewInfo.downloadLink!)
+                                    }}
                                     startIcon={<Icons.Cloud size={18} />}
                                     color="primary"
                                     className={cx(classes.button)}>

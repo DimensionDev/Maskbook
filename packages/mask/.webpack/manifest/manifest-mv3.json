@@ -32,5 +32,9 @@
         "gecko": {
             "id": "{0e57e2ae-3e13-4d5d-9243-6159219852a6}"
         }
+    },
+    "oauth2": {
+        "client_id": "884348965548-npd1mffii0tbrr87eb2fm73ue022k3t3.apps.googleusercontent.com",
+        "scopes": ["https://www.googleapis.com/auth/drive.file", "https://www.googleapis.com/auth/userinfo.email"]
     }
 }
