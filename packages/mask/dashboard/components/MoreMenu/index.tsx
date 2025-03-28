@@ -1,7 +1,7 @@
 import { Icons, type GeneratedIconProps } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
 import { Popover } from '@mui/material'
-import { memo, useState, type PropsWithChildren } from 'react'
+import { memo, useState, type ReactNode } from 'react'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -15,7 +15,9 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface Props extends PropsWithChildren<GeneratedIconProps> {}
+interface Props extends GeneratedIconProps {
+    children: ReactNode | ((props: { close: () => void }) => ReactNode)
+}
 
 export const MoreMenu = memo<Props>(function MoreMenu({ children, ...rest }) {
     const { classes } = useStyles()
@@ -34,7 +36,7 @@ export const MoreMenu = memo<Props>(function MoreMenu({ children, ...rest }) {
                     vertical: 'bottom',
                     horizontal: 'right',
                 }}>
-                {children}
+                {typeof children === 'function' ? children({ close: () => setAnchorEl(null) }) : children}
             </Popover>
         </>
     )

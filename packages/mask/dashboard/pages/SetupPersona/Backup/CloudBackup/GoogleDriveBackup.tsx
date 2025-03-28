@@ -1,14 +1,14 @@
-import Services from '#services'
 import { t } from '@lingui/core/macro'
+import { formatFileSize } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
+import { format } from 'date-fns'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
 import {
     Box,
     Button,
-    Checkbox,
     Paper,
     Portal,
     Table,
@@ -16,11 +16,12 @@ import {
     TableCell,
     TableContainer,
     TableHead,
+    Tooltip,
     TableRow,
     Typography,
 } from '@mui/material'
-import { compact } from 'lodash-es'
-import { memo, useCallback, useMemo, useState } from 'react'
+import { compact, uniqBy } from 'lodash-es'
+import { memo, useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../../shared-ui/index.js'
@@ -28,6 +29,7 @@ import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
 import type { PortalContainerProps } from '../types.js'
 import { BackupPreviewModal } from '../../../../modals/modals.js'
+import { createBackupName, downloadBackup, getGoogleDriveAccessToken } from '../helpers.js'
 import { MoreMenu } from '../../../../components/MoreMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -98,9 +100,15 @@ const useStyles = makeStyles()((theme) => ({
     },
     bodyCell: {
         padding: theme.spacing(0, 1.5),
+        fontSize: 14,
         height: 42,
         lineHeight: '18px',
+        fontWeight: 400,
+        color: theme.palette.maskColor.main,
         verticalAlign: 'middle',
+    },
+    cellText: {
+        fontSize: 14,
     },
     actionButton: {
         color: theme.palette.maskColor.second,
@@ -138,59 +146,44 @@ export const Component = memo(function GoogleDriveBackup() {
     const { user, updateUser } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
     const { portalContainerRef } = useOutletContext<PortalContainerProps>()
-    const token = user.googleToken
-    // const googleDriveClient = useMemo(() => {
-    //     if (!user.googleToken) return null
-    //     return new GoogleDriveClient(user.googleToken)
-    // }, [user.googleToken])
-    const { data: files = EMPTY_LIST, fetchNextPage } = useGoogleDriveFiles()
+    const { data: files = EMPTY_LIST, fetchNextPage, refetch } = useGoogleDriveFiles()
+    const googleDriveClient = useMemo(() => new GoogleDriveClient(getGoogleDriveAccessToken), [])
 
     const login = async () => {
         try {
-            const token = await Services.Backup.getAccessToken()
-            if (!token) return
-            const googleDriveClient = new GoogleDriveClient(token)
             const userInfo = await googleDriveClient.getUserInfo()
-            updateUser((user) => ({
-                ...user,
-                googleToken: token,
+            updateUser({
+                backupPassword: '123543Aa!',
                 googleAccount: userInfo.email || '',
-            }))
+            })
         } catch (err) {
             showSnackbar(t`Failed to login: ${(err as Error).message}`, { variant: 'error' })
         }
     }
 
-    const selectFile = useCallback(() => {
-        return new Promise<File>((resolve) => {
-            const input = document.createElement('input')
-            input.type = 'file'
-            input.hidden = true
-            input.addEventListener('input', function onInput(event) {
-                resolve((event.currentTarget as any).files[0] as File)
-                input.removeEventListener('input', onInput)
-                document.body.removeChild(input)
-            })
-            input.click()
-            document.body.append(input)
-        })
-    }, [])
-
     const [uploadedFile, setUploadedFile] = useState<DriveFile | null>(null)
-    console.log('GoogleDrive', { token, user })
-    const [{ loading }, uploadFile] = useAsyncFn(async () => {
-        if (!token) return
-        const file = await selectFile()
-        console.log('GoogleDrive', { file })
-        if (!file) return
-        const googleDriveClient = new GoogleDriveClient(token)
-        const uploaded = await googleDriveClient.uploadFile(file)
-        setUploadedFile(uploaded)
-    }, [token])
+    console.log('GoogleDrive', { user })
+    const [{ loading }, uploadFile] = useAsyncFn(
+        async (content: ArrayBuffer) => {
+            const name = createBackupName()
+            const file = new File([content], name, { type: 'application/octet-stream' })
+            const result = await googleDriveClient.uploadFile(file)
+            const date = new Date()
+            setUploadedFile({
+                ...result,
+                name,
+                size: file.size.toString(),
+                createdTime: date.toISOString(),
+                modifiedTime: date.toISOString(),
+            })
+            refetch()
+        },
+        [googleDriveClient],
+    )
 
-    const mergedFiles = useMemo(() => compact([...files, uploadedFile]), [files, uploadedFile])
+    const mergedFiles = useMemo(() => uniqBy(compact([...files, uploadedFile]), (x) => x.id), [files, uploadedFile])
 
-    if (!user.googleAccount || !token) {
+    if (!user.googleAccount) {
         return (
             <Box className={classes.container}>
                 <Typography className={classes.title}>
@@ -222,11 +215,10 @@ export const Component = memo(function GoogleDriveBackup() {
                     variant="roundedContained"
                     size="small"
                     onClick={() => {
-                        updateUser((user) => ({
-                            ...user,
+                        updateUser({
                             googleAccount: '',
-                            googleAccessToken: '',
-                        }))
+                            googleToken: '',
+                        })
                     }}>
                     <Trans>Logout</Trans>
                 </Button>
@@ -237,7 +229,7 @@ export const Component = memo(function GoogleDriveBackup() {
                     <Table className={classes.table}>
                         <TableHead>
                             <TableRow>
-                                <TableCell className={classes.tableHeadCell} colSpan={2}>
+                                <TableCell className={classes.tableHeadCell}>
                                     <strong>File name</strong>
                                 </TableCell>
                                 <TableCell className={classes.tableHeadCell}>
@@ -254,28 +246,43 @@ export const Component = memo(function GoogleDriveBackup() {
                         <TableBody>
                             {mergedFiles.map((file, index) => (
                                 <TableRow key={index}>
-                                    <TableCell padding="checkbox" className={classes.bodyCell}>
-                                        <Checkbox sx={{ padding: 0 }} size="small" />
-                                    </TableCell>
                                     <TableCell className={classes.bodyCell}>{file.name}</TableCell>
-                                    <TableCell className={classes.bodyCell}>{file.size}</TableCell>
-                                    <TableCell className={classes.bodyCell}>{file?.createdTime}</TableCell>
+                                    <TableCell className={classes.bodyCell}>{formatFileSize(+file.size)}</TableCell>
+                                    <TableCell className={classes.bodyCell} align="right">
+                                        <Tooltip title={file.modifiedTime} placement="top">
+                                            <Typography component="span" className={classes.cellText}>
+                                                {format(file.modifiedTime, 'LLL d, yyyy')}
+                                            </Typography>
+                                        </Tooltip>
+                                    </TableCell>
                                     <TableCell align="right" className={classes.bodyCell}>
                                         <MoreMenu className={classes.actionButton}>
-                                            <div className={classes.actions}>
-                                                <div className={classes.action}>
-                                                    <Icons.Cloud size={16} />
-                                                    <Typography className={classes.actionLabel}>
-                                                        <Trans>Merge to Browser</Trans>
-                                                    </Typography>
+                                            {({ close }) => (
+                                                <div className={classes.actions}>
+                                                    <div className={classes.action}>
+                                                        <Icons.Cloud size={16} />
+                                                        <Typography className={classes.actionLabel}>
+                                                            <Trans>Merge to Browser</Trans>
+                                                        </Typography>
+                                                    </div>
+                                                    <div
+                                                        className={classes.action}
+                                                        onClick={async () => {
+                                                            const blob = await googleDriveClient.downloadFile(file.id)
+                                                            const url = URL.createObjectURL(blob)
+                                                            downloadBackup(url, file.name)
+                                                            Promise.resolve().then(() => {
+                                                                URL.revokeObjectURL(url)
+                                                            })
+                                                            close()
+                                                        }}>
+                                                        <Icons.Cloud size={16} />
+                                                        <Typography className={classes.actionLabel}>
+                                                            <Trans>Download</Trans>
+                                                        </Typography>
+                                                    </div>
                                                 </div>
-                                                <div className={classes.action}>
-                                                    <Icons.Cloud size={16} />
-                                                    <Typography className={classes.actionLabel}>
-                                                        <Trans>Merge to Browser</Trans>
-                                                    </Typography>
-                                                </div>
-                                            </div>
+                                            )}
                                         </MoreMenu>
                                     </TableCell>
                                 </TableRow>
@@ -300,6 +307,7 @@ export const Component = memo(function GoogleDriveBackup() {
                             code: 'google-drive',
                             type: BackupAccountType.Email,
                             account: user.googleAccount!,
+                            onUpload: uploadFile,
                         })
                     }}>
                     <Trans>Back Up to Google Drive</Trans>

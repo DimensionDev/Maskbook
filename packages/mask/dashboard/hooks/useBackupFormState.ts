@@ -38,16 +38,16 @@ export function useBackupFormState() {
                     .string()
                     .min(8, t`Incorrect Password`)
                     .max(20, t`Incorrect Password`)
-                    .refine((password) => password === user.backupPassword, t`Incorrect Password`)
+                    .refine((password) => password === user.backupPassword, t`Incorrect Backup Password`)
                     .refine((password) => passwordRegexp.test(password), t`Incorrect Password`),
                 paymentPassword:
                     backupWallets && hasPassword ?
                         z
                             .string({
-                                required_error: t`Incorrect Password`,
+                                required_error: t`Incorrect Password2`,
                             })
-                            .min(6, t`Incorrect Password`)
-                            .max(20, t`Incorrect Password`)
+                            .min(6, t`Incorrect Password3`)
+                            .max(20, t`Incorrect Password4`)
                     :   z.string().optional(),
             }),
         ),

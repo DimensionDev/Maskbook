@@ -9,8 +9,7 @@ function useUserContext() {
     )
 
     const updateUser = useCallback(
-        async (userConfig: Partial<BackupConfig> | ((user: BackupConfig) => BackupConfig)) => {
-            if (typeof userConfig === 'function') userConfig = userConfig(user)
+        async (userConfig: Partial<BackupConfig>) => {
             await PersistentStorages.Settings.storage.backupConfig.setValue({
                 ...user,
                 ...userConfig,
@@ -31,7 +30,7 @@ function useUserContext() {
             // Maybe `backupPassword` is not base64-encoded.
             return user
         }
-    }, [user, updateUser])
+    }, [user])
 
     return {
         user: result,

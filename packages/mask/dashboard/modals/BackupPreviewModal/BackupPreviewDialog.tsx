@@ -10,7 +10,6 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
-import { format as formatDateTime } from 'date-fns'
 import { memo, useCallback, useMemo, useRef } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate, useSearchParams } from 'react-router-dom'
@@ -20,7 +19,6 @@ import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/Ba
 import PasswordField from '../../components/PasswordField/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../hooks/useBackupPreviewInfo.js'
-import { fetchDownloadLink, fetchUploadLink, uploadBackupValue } from '../../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -58,28 +56,30 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-interface BackupPreviewDialogProps {
+export interface BackupPreviewDialogProps {
     open: boolean
-    onClose: () => void
-    isOverwrite: boolean
+    isOverwrite?: boolean
     code: string
     type: BackupAccountType
     account: string
     abstract?: string
+    onClose: () => void
+    onUpload?: (content: ArrayBuffer, signal: AbortSignal) => Promise<void>
 }
 export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function BackupPreviewDialog({
     open,
-    onClose,
     isOverwrite,
     code,
     type,
     account,
     abstract,
+    onClose,
+    onUpload,
 }) {
     const { _ } = useLingui()
     const controllerRef = useRef<AbortController | null>(null)
     const { classes, theme } = useStyles()
-    const [params, setParams] = useSearchParams()
+    const [, setParams] = useSearchParams()
     const navigate = useNavigate()
     const { updateUser } = UserContext.useContainer()
     const {
@@ -102,47 +102,50 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         async (data: BackupFormInputs) => {
             try {
                 if (backupWallets && hasPassword) {
+                    console.log('data.paymentPassword', data.paymentPassword)
                     const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
                     if (!verified) {
                         setError('paymentPassword', { type: 'custom', message: _(msg`Incorrect Password`) })
                         return
                     }
                 }
+                console.log('data.backupPassword', data.backupPassword)
 
                 const { file } = await Services.Backup.createBackupFile({
                     excludeBase: false,
                     excludeWallet: !backupWallets,
                 })
 
-                const name = `mask-network-keystore-backup-${formatDateTime(new Date(), 'yyyy-MM-dd')}`
-                const uploadUrl = await fetchUploadLink({
-                    code,
-                    account,
-                    type,
-                    abstract: name,
-                })
                 const encrypted = await encryptBackup(encode(account + data.backupPassword), encode(file))
                 const controller = new AbortController()
                 controllerRef.current = controller
-                const response = await uploadBackupValue(uploadUrl, encrypted, controller.signal)
+                // const name = `mask-network-keystore-backup-${formatDateTime(new Date(), 'yyyy-MM-dd')}`
+                // const uploadUrl = await fetchUploadLink({
+                //     code,
+                //     account,
+                //     type,
+                //     abstract: name,
+                // })
+                // const response = await uploadBackupValue(uploadUrl, encrypted, controller.signal)
+                await onUpload?.(encrypted, controller.signal)
 
-                if (response.ok) {
-                    const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
-                    const downloadLinkResponse = await fetchDownloadLink({
-                        account,
-                        type,
-                        code,
-                    })
-                    showSnackbar(<Trans>You have backed up your data.</Trans>, { variant: 'success' })
-                    updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
-                    setParams((params) => {
-                        params.set('size', downloadLinkResponse.size.toString())
-                        params.set('abstract', downloadLinkResponse.abstract)
-                        params.set('uploadedAt', downloadLinkResponse.uploadedAt.toString())
-                        params.set('downloadURL', downloadLinkResponse.downloadURL)
-                        return params.toString()
-                    })
-                }
+                // if (response.ok) {
+                //     const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
+                //     const downloadLinkResponse = await fetchDownloadLink({
+                //         account,
+                //         type,
+                //         code,
+                //     })
+                //     showSnackbar(<Trans>You have backed up your data.</Trans>, { variant: 'success' })
+                //     updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
+                //     setParams((params) => {
+                //         params.set('size', downloadLinkResponse.size.toString())
+                //         params.set('abstract', downloadLinkResponse.abstract)
+                //         params.set('uploadedAt', downloadLinkResponse.uploadedAt.toString())
+                //         params.set('downloadURL', downloadLinkResponse.downloadURL)
+                //         return params.toString()
+                //     })
+                // }
                 return true
             } catch (error) {
                 showSnackbar(<Trans>Backup Failed</Trans>, { variant: 'error' })

@@ -35,17 +35,18 @@ interface UserInfo {
 }
 
 export class GoogleDriveClient {
-    private accessToken: string
+    private getToken: () => Promise<string>
     private baseUrl: string = 'https://www.googleapis.com/drive/v3'
     private uploadUrl: string = 'https://www.googleapis.com/upload/drive/v3'
     private backupFolderName: string = 'Mask network backup'
 
-    constructor(accessToken: string) {
-        this.accessToken = accessToken
+    constructor(getToken: () => Promise<string>) {
+        this.getToken = getToken
     }
 
     public async listFiles(params: ListFilesParams = {}): Promise<DriveFile[]> {
         try {
+            const token = await this.getToken()
             const queryParams = new URLSearchParams({
                 fields: 'files(id,name,mimeType,createdTime,modifiedTime,size)',
                 ...params,
@@ -54,7 +55,7 @@ export class GoogleDriveClient {
             const response = await fetch(`${this.baseUrl}/files?${queryParams}`, {
                 method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -74,6 +75,7 @@ export class GoogleDriveClient {
     // Get or create backup folder
     private async getOrCreateBackupFolder(): Promise<string> {
         try {
+            const token = await this.getToken()
             // Check if the folder exists
             const response = await fetch(
                 `${this.baseUrl}/files?${new URLSearchParams({
@@ -84,7 +86,7 @@ export class GoogleDriveClient {
                 {
                     method: 'GET',
                     headers: {
-                        Authorization: `Bearer ${this.accessToken}`,
+                        Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 },
@@ -109,7 +111,7 @@ export class GoogleDriveClient {
             const createResponse = await fetch(`${this.baseUrl}/files`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(folderMetadata),
@@ -130,6 +132,7 @@ export class GoogleDriveClient {
     // List files in the backup folder
     public async listBackupFiles(params: ListFilesParams = {}): Promise<DriveFile[]> {
         try {
+            const token = await this.getToken()
             const folderId = await this.getOrCreateBackupFolder()
 
             const queryParams = new URLSearchParams({
@@ -142,7 +145,7 @@ export class GoogleDriveClient {
             const response = await fetch(`${this.baseUrl}/files?${queryParams}`, {
                 method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -161,6 +164,7 @@ export class GoogleDriveClient {
 
     public async uploadFile(file: File, metadata: FileMetadata = {}): Promise<DriveFile> {
         try {
+            const token = await this.getToken()
             const folderId = await this.getOrCreateBackupFolder()
             const formData = new FormData()
             const fileMetadata: FileMetadata = {
@@ -180,7 +184,7 @@ export class GoogleDriveClient {
             const response = await fetch(`${this.uploadUrl}/files?uploadType=multipart`, {
                 method: 'POST',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                 },
                 body: formData,
             })
@@ -198,10 +202,11 @@ export class GoogleDriveClient {
 
     public async deleteFile(fileId: string): Promise<boolean> {
         try {
+            const token = await this.getToken()
             const response = await fetch(`${this.baseUrl}/files/${fileId}`, {
                 method: 'DELETE',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
 
@@ -218,10 +223,11 @@ export class GoogleDriveClient {
 
     public async downloadFile(fileId: string): Promise<Blob> {
         try {
+            const token = await this.getToken()
             const response = await fetch(`${this.baseUrl}/files/${fileId}?alt=media`, {
                 method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                 },
             })
 
@@ -238,10 +244,11 @@ export class GoogleDriveClient {
 
     public async getUserInfo(): Promise<UserInfo> {
         try {
+            const token = await this.getToken()
             const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
                 method: 'GET',
                 headers: {
-                    Authorization: `Bearer ${this.accessToken}`,
+                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })

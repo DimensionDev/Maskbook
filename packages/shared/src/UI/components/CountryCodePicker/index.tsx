@@ -1,13 +1,13 @@
 import { List, ListItemButton, ListItemIcon, ListItemText, Popover, TextField, Typography } from '@mui/material'
 import { memo, useDeferredValue, useMemo, useState } from 'react'
 
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { COUNTRIES, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
 import Fuse from 'fuse.js'
 import { EmptyStatus } from '../../../index.js'
-import { COUNTRIES, useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
 import { getCountryFlag } from '../../../utils/getCountryFlag.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
