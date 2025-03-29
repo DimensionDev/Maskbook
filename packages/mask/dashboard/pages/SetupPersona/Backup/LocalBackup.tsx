@@ -118,6 +118,7 @@ export const Component = memo(function LocalBackup() {
                     startIcon={<Icons.Download />}
                     size="large"
                     color="primary"
+                    variant="roundedContained"
                     loading={downloadLoading}
                     disabled={!isDirty || !isValid}
                     onClick={handleSubmit(handleFormSubmit)}>

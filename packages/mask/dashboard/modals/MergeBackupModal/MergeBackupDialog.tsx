@@ -3,21 +3,20 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { decryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, InjectedDialog } from '@masknet/shared'
-import type { BackupAccountType } from '@masknet/shared-base'
-import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
-import { last } from 'lodash-es'
-import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { memo, useCallback, useState, type ReactNode } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import PasswordField from '../../components/PasswordField/index.js'
 import { passwordRegexp } from '../../utils/regexp.js'
-import { BackupPreviewModal } from '../modals.js'
 
 const useStyles = makeStyles()((theme) => ({
+    dialog: {
+        height: 620,
+        width: 600,
+    },
     account: {
         padding: theme.spacing(0.5, 2),
         fontSize: 14,
@@ -38,95 +37,101 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 14,
         lineHeight: '18px',
     },
-    container: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center',
-        minHeight: 276,
-    },
 }))
 
-interface MergeBackupDialogProps {
-    open: boolean
-    onClose: () => void
-    downloadLink: string
+export interface MergeBackupDialogProps {
     account: string
-    uploadedAt: string
+    /**
+     * A generator that yield progress of download,
+     * and return the content of the downloaded file at the end
+     */
+    download: () => AsyncGenerator<number, ArrayBuffer | undefined>
+    // downloadLink: string
+    fileName: string
+    onClose: () => void
+    open: boolean
     size: string
-    type?: BackupAccountType
-    abstract?: string
-    code: string
+    uploadedAt: string
 }
 
 export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBackupDialog({
     open,
     onClose,
-    downloadLink,
+    // downloadLink,
+    fileName,
+    download,
     account,
     uploadedAt,
     size,
-    type,
-    code,
-    abstract,
 }) {
     const { t } = useLingui()
     const { classes, theme } = useStyles()
     const [process, setProcess] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')
     const [backupPasswordError, setBackupPasswordError] = useState<ReactNode>()
-    const [showCongratulation, setShowCongratulation] = useState(false)
-    const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
 
     const handleClose = useCallback(() => {
         setBackupPassword('')
         setBackupPasswordError('')
-        setShowCongratulation(false)
         onClose()
     }, [onClose])
 
     const { value: encrypted } = useAsync(async () => {
-        if (!downloadLink || !open) return
-
-        const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })
-
-        if (!response.ok || response.status !== 200) {
-            showSnackbar(<Trans>The download link is expired</Trans>, { variant: 'error' })
-            handleClose()
-            navigate(DashboardRoutes.CloudBackup, { replace: true })
-            return
-        }
-        const reader = response.body?.getReader()
-        const contentLength = response.headers.get('Content-Length')
-
-        if (!contentLength || !reader) return
-        let received = 0
-        const chunks: number[] = []
-        while (true) {
-            const { done, value } = await reader.read()
-
-            if (done || !value) {
-                setProcess(100)
-                break
-            }
-            chunks.push(...value)
-            received += value.length
-
-            setProcess((received / Number(contentLength)) * 100)
-        }
-        return Uint8Array.from(chunks).buffer
-    }, [downloadLink, handleClose, open])
-
-    const fileName = useMemo(() => {
+        if (!open) return
+        const generator = download()
         try {
-            if (!downloadLink) return ''
-            const url = new URL(downloadLink)
-            return last(url.pathname.split('/'))
-        } catch {
-            return ''
+            let step: IteratorResult<number, ArrayBuffer | undefined>
+            while (!(step = await generator.next()).done) {
+                setProcess(step.value)
+            }
+            return step.value
+        } catch (err) {
+            showSnackbar((err as Error).message, { variant: 'error' })
+            handleClose()
+            throw err
         }
-    }, [downloadLink])
+        // buffer
+        //
+        // const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })
+        //
+        // if (!response.ok || response.status !== 200) {
+        //     showSnackbar(<Trans>The download link is expired</Trans>, { variant: 'error' })
+        //     handleClose()
+        //     navigate(DashboardRoutes.CloudBackup, { replace: true })
+        //     return
+        // }
+        // if (!response.body) return
+        // const reader = response.body.getReader()
+        // const contentLength = response.headers.get('Content-Length')
+        //
+        // if (!contentLength || !reader) return
+        // let received = 0
+        // const chunks: number[] = []
+        // while (true) {
+        //     const { done, value } = await reader.read()
+        //
+        //     if (done || !value) {
+        //         setProcess(100)
+        //         break
+        //     }
+        //     chunks.push(...value)
+        //     received += value.length
+        //
+        //     setProcess((received / Number(contentLength)) * 100)
+        // }
+        // return Uint8Array.from(chunks).buffer
+    }, [handleClose, open, download])
+
+    // const fileName = useMemo(() => {
+    //     try {
+    //         if (!downloadLink) return ''
+    //         const url = new URL(downloadLink)
+    //         return last(url.pathname.split('/'))
+    //     } catch {
+    //         return ''
+    //     }
+    // }, [downloadLink])
 
     const [{ loading }, handleClickMerge] = useAsyncFn(async () => {
         try {
@@ -145,60 +150,21 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                 if (!hasPassword) await Services.Wallet.setDefaultPassword()
             }
             await Services.Backup.restoreBackup(backupText)
-            showSnackbar(<Trans>Download backup</Trans>, {
+            showSnackbar(<Trans>Merge Completed</Trans>, {
                 variant: 'success',
-                message: <Trans>Backup downloaded and merged to local successfully.</Trans>,
+                message: <Trans>Your file has been successfully merged into the browser data.</Trans>,
             })
-            setShowCongratulation(true)
-        } catch {
-            showSnackbar(<Trans>Failed to download and merge the backup.</Trans>)
+        } catch (err) {
+            showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>)
         }
     }, [encrypted, backupPassword, account])
 
-    const handleClickBackup = useCallback(async () => {
-        if (!type) return
-        BackupPreviewModal.open({
-            isOverwrite: true,
-            code,
-            abstract,
-            type,
-            account,
-        })
-        handleClose()
-    }, [code, abstract, type, account, handleClose])
-
-    if (showCongratulation)
-        return (
-            <InjectedDialog title={<Trans>Merge data to local database</Trans>} open={open} onClose={handleClose}>
-                <DialogContent>
-                    <Box className={classes.container}>
-                        <Typography fontSize={36}>🎉</Typography>
-                        <Typography fontSize={24} fontWeight={700} lineHeight="120%" sx={{ my: 1.5 }}>
-                            <Trans>Congratulations</Trans>
-                        </Typography>
-                        <Typography
-                            fontSize={14}
-                            fontWeight={700}
-                            lineHeight="18px"
-                            color={theme.palette.maskColor.second}
-                            textAlign="center">
-                            <Trans>
-                                Data merged from Mask Cloud Service to local successfully. Re-enter your password to
-                                encrypt and upload the new backup to Mask Cloud Service.
-                            </Trans>
-                        </Typography>
-                    </Box>
-                </DialogContent>
-                <DialogActions>
-                    <ActionButton fullWidth onClick={handleClickBackup}>
-                        <Trans>Backup to Mask Cloud Service</Trans>
-                    </ActionButton>
-                </DialogActions>
-            </InjectedDialog>
-        )
-
     return (
-        <InjectedDialog title={<Trans>Merge data to local database</Trans>} open={open} onClose={onClose}>
+        <InjectedDialog
+            classes={{ paper: classes.dialog }}
+            title={<Trans>Merge data to local database</Trans>}
+            open={open}
+            onClose={onClose}>
             <DialogContent>
                 <Typography className={classes.account}>{account}</Typography>
                 <Box className={classes.box}>
@@ -254,10 +220,11 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
             <DialogActions>
                 <ActionButton
                     fullWidth
+                    startIcon={<Icons.Cloud size={18} />}
                     onClick={handleClickMerge}
                     loading={loading}
                     disabled={!!backupPasswordError || !backupPassword || !encrypted}>
-                    <Trans>Merge to local</Trans>
+                    <Trans>Merge to Browser</Trans>
                 </ActionButton>
             </DialogActions>
         </InjectedDialog>

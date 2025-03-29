@@ -12,9 +12,9 @@ import { UserContext } from '../../../../../shared-ui/index.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { fetchDownloadLink } from '../../../../utils/api.js'
 import type { PortalContainerProps } from '../types.js'
+import { CloudBackupFormContext, type CloudBackupFormInputs } from './CloudBackupFormContext.js'
 import { EmailForm } from './EmailForm.js'
 import { PhoneForm } from './PhoneForm.js'
-import { CloudBackupFormContext, type CloudBackupFormInputs } from './CloudBackupFormContext.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -126,7 +126,7 @@ export const Component = memo(function MaskNetworkBackup() {
             <Portal container={() => portalContainerRef.current}>
                 <PrimaryButton
                     size="large"
-                    color="primary"
+                    variant="roundedContained"
                     loading={loading}
                     disabled={!formState.isDirty || !formState.isValid}
                     onClick={form.handleSubmit(handleSubmit)}>

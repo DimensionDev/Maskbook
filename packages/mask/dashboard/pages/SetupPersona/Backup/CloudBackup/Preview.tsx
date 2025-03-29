@@ -4,16 +4,40 @@ import { ConfirmDialog, EmptyStatus, formatFileSize } from '@masknet/shared'
 import type { BackupAccountType } from '@masknet/shared-base'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { Box, Portal, Typography } from '@mui/material'
+import { Box, Button, Portal, Typography } from '@mui/material'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import { memo, useCallback, useMemo } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
 import type { PortalContainerProps } from '../types.js'
-import { downloadBackup } from '../helpers.js'
+import { createBackupName, downloadBackup, getFileName, progressDownload } from '../helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
+    header: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+    },
+    user: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1),
+    },
+    providerName: {
+        fontWeight: 400,
+        fontSize: 14,
+        lineHeight: '18px',
+        height: 18,
+        color: theme.palette.maskColor.second,
+    },
+    userAccount: {
+        fontWeight: 700,
+        fontSize: 14,
+        lineHeight: '18px',
+        height: 18,
+        color: theme.palette.maskColor.main,
+    },
     text: {
         fontSize: 14,
         lineHeight: '18px',
@@ -28,15 +52,14 @@ const useStyles = makeStyles()((theme) => ({
         columnGap: 8,
         alignItems: 'center',
     },
-    button: {
-        height: 40,
-        borderRadius: 20,
-    },
     container: {
         padding: theme.spacing(2),
         borderRadius: 8,
         border: `1px solid ${theme.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
+    },
+    button: {
+        whiteSpace: 'nowrap',
     },
 }))
 
@@ -70,7 +93,8 @@ export const Component = memo(function CloudBackupPreview() {
         )
             return
         await MergeBackupModal.openAndWaitForClose({
-            downloadLink: previewInfo.downloadLink,
+            download: () => progressDownload(previewInfo.downloadLink),
+            fileName: getFileName(previewInfo.downloadLink) || createBackupName(),
             account: previewInfo.account,
             size: previewInfo.size,
             uploadedAt: previewInfo.uploadedAt,
@@ -119,15 +143,20 @@ export const Component = memo(function CloudBackupPreview() {
             <Box>
                 {previewInfo.downloadLink ?
                     <>
-                        <Box py={0.5} px={2} mt={3} display="flex" justifyContent="space-between">
-                            <Typography className={classes.text}>{previewInfo.account}</Typography>
-                            <ActionButton color="primary" className={classes.button} onClick={() => navigate(-1)}>
+                        <Box className={classes.header}>
+                            <Box className={classes.user}>
+                                <Typography className={classes.providerName}>
+                                    <Trans>Mask Network Cloud</Trans>
+                                </Typography>
+                                <Typography className={classes.userAccount}>{previewInfo.account}</Typography>
+                            </Box>
+                            <Button variant="roundedContained" size="small" onClick={() => navigate(-1)}>
                                 <Trans>Logout</Trans>
-                            </ActionButton>
+                            </Button>
                         </Box>
                         <Box className={classes.content}>
                             <Icons.Message size={48} />
-                            <Box width="clamp(188px, 27%, 35%)" flex={1}>
+                            <Box display="flex" flexDirection="column" gap="12px" flex={1} minWidth={0}>
                                 <TextOverflowTooltip title={previewInfo.abstract} arrow placement="top">
                                     <Typography
                                         className={classes.text}
@@ -155,22 +184,24 @@ export const Component = memo(function CloudBackupPreview() {
                                 </Typography>
                             </Box>
 
-                            <Box display="flex" justifyContent="flex-end" flex={1} columnGap={1} minWidth={436}>
+                            <Box display="flex" justifyContent="flex-end" flex={1} columnGap={1}>
                                 <ActionButton
+                                    className={classes.button}
                                     startIcon={<Icons.Cloud size={18} />}
                                     color="primary"
-                                    className={classes.button}
+                                    variant="roundedContained"
                                     loading={mergeLoading}
                                     onClick={handleMergeClick}>
                                     <Trans>Merge data to local database</Trans>
                                 </ActionButton>
                                 <ActionButton
+                                    className={classes.button}
                                     onClick={() => {
                                         downloadBackup(previewInfo.downloadLink!)
                                     }}
                                     startIcon={<Icons.Cloud size={18} />}
                                     color="primary"
-                                    className={cx(classes.button)}>
+                                    variant="roundedContained">
                                     <Trans>Download</Trans>
                                 </ActionButton>
                             </Box>

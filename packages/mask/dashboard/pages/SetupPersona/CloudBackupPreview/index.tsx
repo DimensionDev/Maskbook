@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
+import { createBackupName, getFileName, progressDownload } from '../Backup/helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -78,7 +79,8 @@ export const Component = memo(function CloudBackupPreview() {
         )
             return
         await MergeBackupModal.openAndWaitForClose({
-            downloadLink: previewInfo.downloadLink,
+            download: () => progressDownload(previewInfo.downloadLink),
+            fileName: getFileName(previewInfo.downloadLink) || createBackupName(),
             account: previewInfo.account,
             size: previewInfo.size,
             uploadedAt: previewInfo.uploadedAt,

@@ -247,7 +247,9 @@ export const Component = memo(function GoogleDriveBackup() {
                             {mergedFiles.map((file, index) => (
                                 <TableRow key={index}>
                                     <TableCell className={classes.bodyCell}>{file.name}</TableCell>
-                                    <TableCell className={classes.bodyCell}>{formatFileSize(+file.size)}</TableCell>
+                                    <TableCell className={classes.bodyCell}>
+                                        {file.size ? formatFileSize(+file.size) : '--'}
+                                    </TableCell>
                                     <TableCell className={classes.bodyCell} align="right">
                                         <Tooltip title={file.modifiedTime} placement="top">
                                             <Typography component="span" className={classes.cellText}>
@@ -259,7 +261,11 @@ export const Component = memo(function GoogleDriveBackup() {
                                         <MoreMenu className={classes.actionButton}>
                                             {({ close }) => (
                                                 <div className={classes.actions}>
-                                                    <div className={classes.action}>
+                                                    <div
+                                                        className={classes.action}
+                                                        onClick={async () => {
+                                                            //
+                                                        }}>
                                                         <Icons.Cloud size={16} />
                                                         <Typography className={classes.actionLabel}>
                                                             <Trans>Merge to Browser</Trans>

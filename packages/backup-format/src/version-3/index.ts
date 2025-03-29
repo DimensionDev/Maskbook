@@ -14,10 +14,11 @@ export async function encryptBackup(password: BufferSource, binaryBackup: Buffer
 export async function decryptBackup(password: BufferSource, data: ArrayBuffer | ArrayLike<number>) {
     const container = await parseEncryptedJSONContainer(SupportedVersions.Version0, data)
 
-    const _ = decode(container)
-    if (!Array.isArray(_) || _.length !== 3) throw new TypeError(BackupErrors.UnknownFormat)
-    if (!_.every((x): x is Uint8Array => x instanceof Uint8Array)) throw new TypeError(BackupErrors.UnknownFormat)
-    const [pbkdf2IV, encryptIV, encrypted] = _
+    const payloadTuple = decode(container)
+    if (!Array.isArray(payloadTuple) || payloadTuple.length !== 3) throw new TypeError(BackupErrors.UnknownFormat)
+    if (!payloadTuple.every((x): x is Uint8Array => x instanceof Uint8Array))
+        throw new TypeError(BackupErrors.UnknownFormat)
+    const [pbkdf2IV, encryptIV, encrypted] = payloadTuple
 
     const aes = await getAESFromPassword(password, pbkdf2IV)
 

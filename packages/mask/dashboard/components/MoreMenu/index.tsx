@@ -33,7 +33,7 @@ export const MoreMenu = memo<Props>(function MoreMenu({ children, ...rest }) {
                 classes={{ paper: classes.paper }}
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
                 transformOrigin={{
-                    vertical: 'bottom',
+                    vertical: 'top',
                     horizontal: 'right',
                 }}>
                 {typeof children === 'function' ? children({ close: () => setAnchorEl(null) }) : children}
