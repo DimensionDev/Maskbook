@@ -16,7 +16,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface Props extends GeneratedIconProps {
-    children: ReactNode | ((props: { close: () => void }) => ReactNode)
+    children?: ReactNode | ((props: { close: () => void }) => ReactNode)
 }
 
 export const MoreMenu = memo<Props>(function MoreMenu({ children, ...rest }) {

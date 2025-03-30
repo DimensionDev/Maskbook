@@ -83,31 +83,20 @@ export const Component = memo(function CloudBackupPreview() {
     }, [params])
 
     const [{ loading: mergeLoading }, handleMergeClick] = useAsyncFn(async () => {
-        if (
-            !previewInfo.downloadLink ||
-            !previewInfo.account ||
-            !previewInfo.size ||
-            !previewInfo.uploadedAt ||
-            !previewInfo.type ||
-            !previewInfo.code
-        )
-            return
+        if (!previewInfo.downloadLink || !previewInfo.account || !previewInfo.size || !previewInfo.uploadedAt) return
         await MergeBackupModal.openAndWaitForClose({
             download: () => progressDownload(previewInfo.downloadLink),
             fileName: getFileName(previewInfo.downloadLink) || createBackupName(),
             account: previewInfo.account,
             size: previewInfo.size,
             uploadedAt: previewInfo.uploadedAt,
-            code: previewInfo.code,
-            abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-            type: previewInfo.type as BackupAccountType,
         })
     }, [previewInfo])
 
     const handleBackupClick = useCallback(() => {
         if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
         BackupPreviewModal.open({
-            isOverwrite: false,
+            isUpload: false,
             code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as BackupAccountType,
@@ -128,7 +117,7 @@ export const Component = memo(function CloudBackupPreview() {
                 if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
 
                 BackupPreviewModal.open({
-                    isOverwrite: true,
+                    isUpload: true,
                     code: previewInfo.code,
                     abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
                     type: previewInfo.type as BackupAccountType,

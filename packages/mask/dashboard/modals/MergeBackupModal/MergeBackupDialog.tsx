@@ -51,7 +51,8 @@ export interface MergeBackupDialogProps {
     onClose: () => void
     open: boolean
     size: string
-    uploadedAt: string
+    /** unix time */
+    uploadedAt: string | number
 }
 
 export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBackupDialog({

@@ -84,16 +84,13 @@ export const Component = memo(function CloudBackupPreview() {
             account: previewInfo.account,
             size: previewInfo.size,
             uploadedAt: previewInfo.uploadedAt,
-            code: previewInfo.code,
-            abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-            type: previewInfo.type as BackupAccountType,
         })
     }, [previewInfo])
 
     const handleBackupClick = useCallback(() => {
         if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
         BackupPreviewModal.open({
-            isOverwrite: false,
+            isUpload: false,
             code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as BackupAccountType,
@@ -115,7 +112,7 @@ export const Component = memo(function CloudBackupPreview() {
                 if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
 
                 BackupPreviewModal.open({
-                    isOverwrite: true,
+                    isUpload: true,
                     code: previewInfo.code,
                     abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
                     type: previewInfo.type as BackupAccountType,

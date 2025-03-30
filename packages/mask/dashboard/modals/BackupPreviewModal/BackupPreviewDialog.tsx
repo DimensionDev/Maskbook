@@ -58,22 +58,24 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface BackupPreviewDialogProps {
     open: boolean
-    isOverwrite?: boolean
+    isUpload?: boolean
     code: string
     type: BackupAccountType
     account: string
     abstract?: string
     onClose: () => void
+    uploadButtonLabel?: React.ReactNode | string
     onUpload?: (content: ArrayBuffer, signal: AbortSignal) => Promise<void>
 }
 export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function BackupPreviewDialog({
     open,
-    isOverwrite,
+    isUpload,
     code,
     type,
     account,
     abstract,
     onClose,
+    uploadButtonLabel,
     onUpload,
 }) {
     const { _ } = useLingui()
@@ -236,7 +238,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                             name="paymentPassword"
                         />
                     :   null}
-                    {isOverwrite ?
+                    {isUpload ?
                         <Typography color={theme.palette.maskColor.danger} fontSize={14} lineHeight="18px">
                             <Trans>
                                 This will overwrite the existing cloud backup with the local data, this cannot be undo.
@@ -254,7 +256,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         JSON.stringify(errors),
         backupWallets,
         setBackupWallets,
-        isOverwrite,
+        isUpload,
         theme,
         value,
         uploadLoading,
@@ -278,17 +280,15 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             <ActionButton
                 fullWidth
                 onClick={handleSubmit(handleUploadBackup)}
-                startIcon={isOverwrite ? <Icons.CloudBackup2 size={18} /> : <Icons.Cloud />}
-                color={isOverwrite ? 'error' : 'primary'}
+                startIcon={isUpload ? <Icons.CloudBackup2 size={18} /> : <Icons.Cloud />}
+                color="primary"
                 disabled={!isDirty || !isValid}>
-                {isOverwrite ?
-                    <Trans>Overwrite Backup</Trans>
-                :   <Trans>Backup to the Cloud</Trans>}
+                {isUpload ? (uploadButtonLabel ?? <Trans>Backup</Trans>) : <Trans>Backup to the Cloud</Trans>}
             </ActionButton>
         )
     }, [
         backupWallets,
-        isOverwrite,
+        isUpload,
         isDirty,
         isValid,
         hasPassword,

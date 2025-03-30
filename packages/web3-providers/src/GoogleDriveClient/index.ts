@@ -221,10 +221,13 @@ export class GoogleDriveClient {
         }
     }
 
+    public getDownloadUrl(fileId: string): string {
+        return `${this.baseUrl}/files/${fileId}?alt=media`
+    }
     public async downloadFile(fileId: string): Promise<Blob> {
         try {
             const token = await this.getToken()
-            const response = await fetch(`${this.baseUrl}/files/${fileId}?alt=media`, {
+            const response = await fetch(this.getDownloadUrl(fileId), {
                 method: 'GET',
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -240,6 +243,17 @@ export class GoogleDriveClient {
             console.error('Error downloading file:', error)
             throw error
         }
+    }
+    /** Avoid leaking token */
+    public async requestFile(fileId: string): Promise<Response> {
+        const token = await this.getToken()
+        const response = await fetch(this.getDownloadUrl(fileId), {
+            method: 'GET',
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+        })
+        return response
     }
 
     public async getUserInfo(): Promise<UserInfo> {

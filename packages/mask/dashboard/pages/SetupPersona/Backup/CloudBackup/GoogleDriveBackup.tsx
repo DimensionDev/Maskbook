@@ -19,8 +19,9 @@ import {
     Tooltip,
     TableRow,
     Typography,
+    Skeleton,
 } from '@mui/material'
-import { compact, uniqBy } from 'lodash-es'
+import { compact, range, uniqBy } from 'lodash-es'
 import { memo, useMemo, useState } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
@@ -28,8 +29,8 @@ import { UserContext } from '../../../../../shared-ui/index.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
 import type { PortalContainerProps } from '../types.js'
-import { BackupPreviewModal } from '../../../../modals/modals.js'
-import { createBackupName, downloadBackup, getGoogleDriveAccessToken } from '../helpers.js'
+import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
+import { createBackupName, downloadBackup, getGoogleDriveAccessToken, progressDownload } from '../helpers.js'
 import { MoreMenu } from '../../../../components/MoreMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -146,7 +147,7 @@ export const Component = memo(function GoogleDriveBackup() {
     const { user, updateUser } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
     const { portalContainerRef } = useOutletContext<PortalContainerProps>()
-    const { data: files = EMPTY_LIST, fetchNextPage, refetch } = useGoogleDriveFiles()
+    const { data: files = EMPTY_LIST, refetch, isLoading } = useGoogleDriveFiles()
     const googleDriveClient = useMemo(() => new GoogleDriveClient(getGoogleDriveAccessToken), [])
 
     const login = async () => {
@@ -162,7 +163,7 @@ export const Component = memo(function GoogleDriveBackup() {
     }
 
     const [uploadedFile, setUploadedFile] = useState<DriveFile | null>(null)
-    console.log('GoogleDrive', { user })
+
     const [{ loading }, uploadFile] = useAsyncFn(
         async (content: ArrayBuffer) => {
             const name = createBackupName()
@@ -201,6 +202,18 @@ export const Component = memo(function GoogleDriveBackup() {
                 </Box>
             </Box>
         )
+    }
+
+    const downloadAndMerge = async (file: DriveFile) => {
+        await MergeBackupModal.openAndWaitForClose({
+            download: () => {
+                return progressDownload(() => googleDriveClient.requestFile(file.id), file.size ? +file.size : 0)
+            },
+            fileName: file.name,
+            account: user.googleAccount!,
+            size: file.size || '0',
+            uploadedAt: new Date(file.modifiedTime).getTime(),
+        })
     }
     return (
         <Box className={classes.container}>
@@ -243,57 +256,80 @@ export const Component = memo(function GoogleDriveBackup() {
                                 </TableCell>
                             </TableRow>
                         </TableHead>
-                        <TableBody>
-                            {mergedFiles.map((file, index) => (
-                                <TableRow key={index}>
-                                    <TableCell className={classes.bodyCell}>{file.name}</TableCell>
-                                    <TableCell className={classes.bodyCell}>
-                                        {file.size ? formatFileSize(+file.size) : '--'}
-                                    </TableCell>
-                                    <TableCell className={classes.bodyCell} align="right">
-                                        <Tooltip title={file.modifiedTime} placement="top">
-                                            <Typography component="span" className={classes.cellText}>
-                                                {format(file.modifiedTime, 'LLL d, yyyy')}
-                                            </Typography>
-                                        </Tooltip>
-                                    </TableCell>
-                                    <TableCell align="right" className={classes.bodyCell}>
-                                        <MoreMenu className={classes.actionButton}>
-                                            {({ close }) => (
-                                                <div className={classes.actions}>
-                                                    <div
-                                                        className={classes.action}
-                                                        onClick={async () => {
-                                                            //
-                                                        }}>
-                                                        <Icons.Cloud size={16} />
-                                                        <Typography className={classes.actionLabel}>
-                                                            <Trans>Merge to Browser</Trans>
-                                                        </Typography>
+                        {isLoading ?
+                            <TableBody>
+                                {range(3).map((index) => (
+                                    <TableRow key={index}>
+                                        <TableCell className={classes.bodyCell}>
+                                            <Skeleton variant="text" width={350} />
+                                        </TableCell>
+                                        <TableCell className={classes.bodyCell}>
+                                            <Skeleton variant="text" />
+                                        </TableCell>
+                                        <TableCell className={classes.bodyCell} align="right">
+                                            <Skeleton variant="text" />
+                                        </TableCell>
+                                        <TableCell align="right" className={classes.bodyCell}>
+                                            <MoreMenu
+                                                className={classes.actionButton}
+                                                style={{ cursor: 'not-allowed' }}
+                                            />
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        :   <TableBody>
+                                {mergedFiles.map((file, index) => (
+                                    <TableRow key={index}>
+                                        <TableCell className={classes.bodyCell}>{file.name}</TableCell>
+                                        <TableCell className={classes.bodyCell}>
+                                            {file.size ? formatFileSize(+file.size) : '--'}
+                                        </TableCell>
+                                        <TableCell className={classes.bodyCell} align="right">
+                                            <Tooltip title={file.modifiedTime} placement="top">
+                                                <Typography component="span" className={classes.cellText}>
+                                                    {format(file.modifiedTime, 'LLL d, yyyy')}
+                                                </Typography>
+                                            </Tooltip>
+                                        </TableCell>
+                                        <TableCell align="right" className={classes.bodyCell}>
+                                            <MoreMenu className={classes.actionButton}>
+                                                {({ close }) => (
+                                                    <div className={classes.actions}>
+                                                        <div
+                                                            className={classes.action}
+                                                            onClick={() => downloadAndMerge(file)}>
+                                                            <Icons.Cloud size={16} />
+                                                            <Typography className={classes.actionLabel}>
+                                                                <Trans>Merge to Browser</Trans>
+                                                            </Typography>
+                                                        </div>
+                                                        <div
+                                                            className={classes.action}
+                                                            onClick={async () => {
+                                                                const blob = await googleDriveClient.downloadFile(
+                                                                    file.id,
+                                                                )
+                                                                const url = URL.createObjectURL(blob)
+                                                                downloadBackup(url, file.name)
+                                                                Promise.resolve().then(() => {
+                                                                    URL.revokeObjectURL(url)
+                                                                })
+                                                                close()
+                                                            }}>
+                                                            <Icons.Cloud size={16} />
+                                                            <Typography className={classes.actionLabel}>
+                                                                <Trans>Download</Trans>
+                                                            </Typography>
+                                                        </div>
                                                     </div>
-                                                    <div
-                                                        className={classes.action}
-                                                        onClick={async () => {
-                                                            const blob = await googleDriveClient.downloadFile(file.id)
-                                                            const url = URL.createObjectURL(blob)
-                                                            downloadBackup(url, file.name)
-                                                            Promise.resolve().then(() => {
-                                                                URL.revokeObjectURL(url)
-                                                            })
-                                                            close()
-                                                        }}>
-                                                        <Icons.Cloud size={16} />
-                                                        <Typography className={classes.actionLabel}>
-                                                            <Trans>Download</Trans>
-                                                        </Typography>
-                                                    </div>
-                                                </div>
-                                            )}
-                                        </MoreMenu>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
+                                                )}
+                                            </MoreMenu>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        }
                     </Table>
                 </TableContainer>
             </Box>
@@ -306,14 +342,14 @@ export const Component = memo(function GoogleDriveBackup() {
                     loading={loading}
                     disabled={loading}
                     onClick={() => {
-                        // uploadFile()
-                        // return
                         if (!user.googleAccount) return
                         BackupPreviewModal.open({
                             code: 'google-drive',
                             type: BackupAccountType.Email,
                             account: user.googleAccount!,
+                            isUpload: true,
                             onUpload: uploadFile,
+                            uploadButtonLabel: <Trans>Back Up to Google Drive</Trans>,
                         })
                     }}>
                     <Trans>Back Up to Google Drive</Trans>
