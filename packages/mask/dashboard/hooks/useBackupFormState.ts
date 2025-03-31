@@ -19,8 +19,6 @@ export function useBackupFormState() {
     const { user } = UserContext.useContainer()
     const [backupWallets, setBackupWallets] = useState(false)
 
-    console.log('user', user)
-
     const formState = useForm<BackupFormInputs>({
         mode: 'onBlur',
         context: {
@@ -44,10 +42,10 @@ export function useBackupFormState() {
                     backupWallets && hasPassword ?
                         z
                             .string({
-                                required_error: t`Incorrect Password2`,
+                                required_error: t`Incorrect Password`,
                             })
-                            .min(6, t`Incorrect Password3`)
-                            .max(20, t`Incorrect Password4`)
+                            .min(6, t`Incorrect Password`)
+                            .max(20, t`Incorrect Password`)
                     :   z.string().optional(),
             }),
         ),

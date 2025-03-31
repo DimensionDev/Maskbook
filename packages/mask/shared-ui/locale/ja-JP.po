@@ -262,7 +262,6 @@ msgid "Approve amount"
 msgstr "承認金額"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
 msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
 msgstr ""
 
@@ -318,6 +317,7 @@ msgid "Back"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
 msgid "Back Up to Google Drive"
 msgstr ""
 
@@ -327,6 +327,7 @@ msgid "Back Up Your Data Your Way"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Backup"
@@ -337,16 +338,16 @@ msgid "Backup & Recovery"
 msgstr "バックアップと復元"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-msgid "Backup downloaded and merged to local successfully."
-msgstr "バックアップがダウンロードされ、ローカルに正常に統合されました。"
+#~ msgid "Backup downloaded and merged to local successfully."
+#~ msgstr "バックアップがダウンロードされ、ローカルに正常に統合されました。"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
 msgstr "バックアップ失敗"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-msgid "Backup is saved to Mask Cloud Service."
-msgstr ""
+#~ msgid "Backup is saved to Mask Cloud Service."
+#~ msgstr ""
 
 #. placeholder {0}: user.localBackupAt
 #. placeholder {0}: user.cloudBackupAt
@@ -384,9 +385,13 @@ msgstr "バックアップパスワードの設定が完了しました"
 msgid "Backup Persona"
 msgstr "ペルソナをバックアップする"
 
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+msgid "Backup Successful"
+msgstr ""
+
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-msgid "Backup to Mask Cloud Service"
-msgstr "マスククラウドサービスにバックアップ"
+#~ msgid "Backup to Mask Cloud Service"
+#~ msgstr "マスククラウドサービスにバックアップ"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup to the Cloud"
@@ -454,7 +459,6 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
@@ -577,7 +581,6 @@ msgid "Completed"
 msgstr "完了しました"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
@@ -631,8 +634,6 @@ msgstr ""
 msgid "Confirm to hide {name}? You can redisplay it by re-adding this NFT at any time."
 msgstr ""
 
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Congratulations"
 msgstr "おめでとうございます！"
@@ -862,13 +863,17 @@ msgstr "データ"
 msgid "Data"
 msgstr "データ"
 
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+msgid "Data backed up successfully!"
+msgstr ""
+
 #: popups/pages/Settings/index.tsx
 msgid "Data correlation"
 msgstr "データの相関値"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-msgid "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
-msgstr ""
+#~ msgid "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
+#~ msgstr ""
 
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
@@ -982,8 +987,8 @@ msgid "Download"
 msgstr "ダウンロード"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-msgid "Download backup"
-msgstr "バックアップをダウンロード"
+#~ msgid "Download backup"
+#~ msgstr "バックアップをダウンロード"
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/LocalBackup.tsx
@@ -1149,9 +1154,14 @@ msgstr ""
 msgid "Failed to disconnect wallet"
 msgstr ""
 
+#. placeholder {0}: (err as Error).message
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-msgid "Failed to download and merge the backup."
+msgid "Failed to download and merge the backup: {0}"
 msgstr ""
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#~ msgid "Failed to download and merge the backup."
+#~ msgstr ""
 
 #. placeholder {0}: (err as Error).message
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
@@ -1468,20 +1478,11 @@ msgstr "パスワードが間違っています"
 #: dashboard/hooks/useBackupFormState.ts
 #: dashboard/hooks/useBackupFormState.ts
 #: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
 msgid "Incorrect Password"
 msgstr "パスワードが間違っています"
-
-#: dashboard/hooks/useBackupFormState.ts
-msgid "Incorrect Password2"
-msgstr ""
-
-#: dashboard/hooks/useBackupFormState.ts
-msgid "Incorrect Password3"
-msgstr ""
-
-#: dashboard/hooks/useBackupFormState.ts
-msgid "Incorrect Password4"
-msgstr ""
 
 #: popups/pages/Personas/Logout/index.tsx
 msgid "Incorrect payment password."
@@ -1687,6 +1688,10 @@ msgstr "マスクには次の権限が必要です"
 msgid "Mask Network"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
+msgid "Mask Network Cloud"
+msgstr ""
+
 #: content-script/components/InjectedComponents/PermissionBoundary.tsx
 msgid "Mask Network requires you to authorize the following websites before using it."
 msgstr ""
@@ -1758,20 +1763,24 @@ msgstr "最大優先手数料は0GWEIより大きくなければなりません"
 msgid "Medium"
 msgstr "中間"
 
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+msgid "Merge Completed"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr "ローカルデータベースにデータを統合"
 
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge to Browser"
 msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-msgid "Merge to local"
-msgstr "ローカルに統合"
+#~ msgid "Merge to local"
+#~ msgstr "ローカルに統合"
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Message"
@@ -2023,12 +2032,10 @@ msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Overwrite Backup"
 msgstr "バックアップを上書き"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
 msgid "Overwrite current backup"
 msgstr "既存のバックアップを上書き"
 
@@ -2742,7 +2749,7 @@ msgstr "chainIDは現在接続されているものと等しくありません�
 msgid "The code is incorrect."
 msgstr "このコードは正しくありません"
 
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/helpers.tsx
 msgid "The download link is expired"
 msgstr ""
 
@@ -3247,6 +3254,10 @@ msgstr ""
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
 msgstr "このサイトへの接続は暗号化されていないため、敵対的な第三者によって変更されます。このリクエストを拒否することを強くお勧めします。"
+
+#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+msgid "Your file has been successfully merged into the browser data."
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."

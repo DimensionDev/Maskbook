@@ -12,7 +12,7 @@ import { encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useRef } from 'react'
 import { Controller } from 'react-hook-form'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
 import { UserContext } from '../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/BackupPreview/index.js'
@@ -81,7 +81,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { _ } = useLingui()
     const controllerRef = useRef<AbortController | null>(null)
     const { classes, theme } = useStyles()
-    const [, setParams] = useSearchParams()
     const navigate = useNavigate()
     const { updateUser } = UserContext.useContainer()
     const {
@@ -104,14 +103,12 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         async (data: BackupFormInputs) => {
             try {
                 if (backupWallets && hasPassword) {
-                    console.log('data.paymentPassword', data.paymentPassword)
                     const verified = await Services.Wallet.verifyPassword(data.paymentPassword || '')
                     if (!verified) {
                         setError('paymentPassword', { type: 'custom', message: _(msg`Incorrect Password`) })
                         return
                     }
                 }
-                console.log('data.backupPassword', data.backupPassword)
 
                 const { file } = await Services.Backup.createBackupFile({
                     excludeBase: false,
@@ -121,39 +118,16 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 const encrypted = await encryptBackup(encode(account + data.backupPassword), encode(file))
                 const controller = new AbortController()
                 controllerRef.current = controller
-                // const name = `mask-network-keystore-backup-${formatDateTime(new Date(), 'yyyy-MM-dd')}`
-                // const uploadUrl = await fetchUploadLink({
-                //     code,
-                //     account,
-                //     type,
-                //     abstract: name,
-                // })
-                // const response = await uploadBackupValue(uploadUrl, encrypted, controller.signal)
                 await onUpload?.(encrypted, controller.signal)
-
-                // if (response.ok) {
-                //     const now = formatDateTime(new Date(), 'yyyy-MM-dd HH:mm')
-                //     const downloadLinkResponse = await fetchDownloadLink({
-                //         account,
-                //         type,
-                //         code,
-                //     })
-                //     showSnackbar(<Trans>You have backed up your data.</Trans>, { variant: 'success' })
-                //     updateUser({ cloudBackupAt: now, cloudBackupMethod: type })
-                //     setParams((params) => {
-                //         params.set('size', downloadLinkResponse.size.toString())
-                //         params.set('abstract', downloadLinkResponse.abstract)
-                //         params.set('uploadedAt', downloadLinkResponse.uploadedAt.toString())
-                //         params.set('downloadURL', downloadLinkResponse.downloadURL)
-                //         return params.toString()
-                //     })
-                // }
-                return true
+                showSnackbar(<Trans>Backup Successful</Trans>, {
+                    variant: 'success',
+                    message: <Trans>Data backed up successfully!</Trans>,
+                })
+                onClose()
             } catch (error) {
                 showSnackbar(<Trans>Backup Failed</Trans>, { variant: 'error' })
                 onClose()
-                if ((error as any).status === 400) navigate(DashboardRoutes.CloudBackup, { replace: true })
-                return false
+                if ((error as any).status === 400) navigate(DashboardRoutes.BackupCloud, { replace: true })
             }
         },
         [code, hasPassword, backupWallets, abstract, code, account, type, _, navigate, updateUser],
@@ -170,23 +144,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     }, [backupWallets, resetField])
 
     const content = useMemo(() => {
-        if (value)
-            return (
-                <Box className={classes.container}>
-                    <Typography fontSize={36}>🎉</Typography>
-                    <Typography fontSize={24} fontWeight={700} lineHeight="120%" sx={{ my: 1.5 }}>
-                        <Trans>Congratulations</Trans>
-                    </Typography>
-                    <Typography
-                        fontSize={14}
-                        fontWeight={700}
-                        lineHeight="18px"
-                        color={theme.palette.maskColor.second}
-                        textAlign="center">
-                        <Trans>Backup is saved to Mask Cloud Service.</Trans>
-                    </Typography>
-                </Box>
-            )
         if (uploadLoading)
             return (
                 <Box className={classes.container}>
@@ -252,8 +209,8 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
         previewInfo,
         control,
         _,
-        // eslint-disable-next-line react-compiler/react-compiler
-        JSON.stringify(errors),
+        errors.backupPassword?.message,
+        errors.paymentPassword?.message,
         backupWallets,
         setBackupWallets,
         isUpload,

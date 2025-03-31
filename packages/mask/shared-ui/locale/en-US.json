@@ -116,6 +116,7 @@
         ],
         "hUF4dG": ["Backup password set successfully"],
         "UtKGok": ["Backup Persona"],
+        "+m7x4e": ["Backup Successful"],
         "7Ry254": ["Backup to Mask Cloud Service"],
         "6IHgRq": ["Backup to the Cloud"],
         "QQPCqQ": ["Backup Wallet"],
@@ -217,6 +218,7 @@
         "pvnfJD": ["Dark"],
         "Sp/me1": ["data"],
         "HKH+W+": ["Data"],
+        "K8jCIB": ["Data backed up successfully!"],
         "3B4jmY": ["Data correlation"],
         "rAcOY1": [
             "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
@@ -292,6 +294,7 @@
         "SLEDBF": ["Failed to add the wallet, please try again."],
         "09vHB+": ["Failed to decrypt."],
         "jK7nvW": ["Failed to disconnect wallet"],
+        "9hzYBR": ["Failed to download and merge the backup: ", ["0"]],
         "0tkvsz": ["Failed to download and merge the backup."],
         "etATpN": ["Failed to login: ", ["0"]],
         "mrAv9J": ["Failed to save network"],
@@ -370,9 +373,6 @@
         "NaZTE7": ["Incorrect Mnemonic Words."],
         "A9tojF": ["Incorrect password"],
         "+uISZO": ["Incorrect Password"],
-        "tqV4Pb": ["Incorrect Password2"],
-        "4Fvcjh": ["Incorrect Password3"],
-        "uo8ntw": ["Incorrect Password4"],
         "+b/06M": ["Incorrect payment password."],
         "JfI60y": ["Incorrect Payment Password."],
         "pjrgRd": ["Incorrect Private Key"],
@@ -420,6 +420,7 @@
         ],
         "lET9my": ["Mask needs the following permissions"],
         "siroPf": ["Mask Network"],
+        "jhoAzY": ["Mask Network Cloud"],
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "HsoakN": ["masknetwork"],
         "CK1KXz": ["Max"],
@@ -436,6 +437,7 @@
         "sQJ3RN": ["Max priority fee is too low for network conditions."],
         "ITBQO3": ["Max priority fee must be greater than 0 GWEI"],
         "agPptk": ["Medium"],
+        "lPsa94": ["Merge Completed"],
         "RH8jSA": ["Merge data to local database"],
         "E6YUtc": ["Merge to Browser"],
         "QTomF0": ["Merge to local"],
@@ -829,6 +831,7 @@
         "FnQek5": [
             "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
         ],
+        "UDKbPj": ["Your file has been successfully merged into the browser data."],
         "Q68Nuc": [
             "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
         ],

@@ -46,7 +46,6 @@ export interface MergeBackupDialogProps {
      * and return the content of the downloaded file at the end
      */
     download: () => AsyncGenerator<number, ArrayBuffer | undefined>
-    // downloadLink: string
     fileName: string
     onClose: () => void
     open: boolean
@@ -58,7 +57,6 @@ export interface MergeBackupDialogProps {
 export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBackupDialog({
     open,
     onClose,
-    // downloadLink,
     fileName,
     download,
     account,
@@ -67,7 +65,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
 }) {
     const { t } = useLingui()
     const { classes, theme } = useStyles()
-    const [process, setProcess] = useState(0)
+    const [progress, setProgress] = useState(0)
     const [backupPassword, setBackupPassword] = useState('')
     const [backupPasswordError, setBackupPasswordError] = useState<ReactNode>()
     const { showSnackbar } = useCustomSnackbar()
@@ -84,7 +82,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
         try {
             let step: IteratorResult<number, ArrayBuffer | undefined>
             while (!(step = await generator.next()).done) {
-                setProcess(step.value)
+                setProgress(step.value)
             }
             return step.value
         } catch (err) {
@@ -92,47 +90,7 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
             handleClose()
             throw err
         }
-        // buffer
-        //
-        // const response = await fetch(downloadLink, { method: 'GET', cache: 'no-store' })
-        //
-        // if (!response.ok || response.status !== 200) {
-        //     showSnackbar(<Trans>The download link is expired</Trans>, { variant: 'error' })
-        //     handleClose()
-        //     navigate(DashboardRoutes.CloudBackup, { replace: true })
-        //     return
-        // }
-        // if (!response.body) return
-        // const reader = response.body.getReader()
-        // const contentLength = response.headers.get('Content-Length')
-        //
-        // if (!contentLength || !reader) return
-        // let received = 0
-        // const chunks: number[] = []
-        // while (true) {
-        //     const { done, value } = await reader.read()
-        //
-        //     if (done || !value) {
-        //         setProcess(100)
-        //         break
-        //     }
-        //     chunks.push(...value)
-        //     received += value.length
-        //
-        //     setProcess((received / Number(contentLength)) * 100)
-        // }
-        // return Uint8Array.from(chunks).buffer
     }, [handleClose, open, download])
-
-    // const fileName = useMemo(() => {
-    //     try {
-    //         if (!downloadLink) return ''
-    //         const url = new URL(downloadLink)
-    //         return last(url.pathname.split('/'))
-    //     } catch {
-    //         return ''
-    //     }
-    // }, [downloadLink])
 
     const [{ loading }, handleClickMerge] = useAsyncFn(async () => {
         try {
@@ -172,16 +130,23 @@ export const MergeBackupDialog = memo<MergeBackupDialogProps>(function MergeBack
                     <Icons.Message size={24} />
                     <Box flex={1}>
                         <Typography className={classes.fileName}>{fileName}</Typography>
-                        <LinearProgress variant="determinate" value={process} sx={{ my: 0.5 }} />
+                        <LinearProgress variant="determinate" value={progress} sx={{ my: 0.5 }} />
                         <Typography
                             color={theme.palette.maskColor.third}
+                            display="flex"
+                            gap={0.5}
                             fontSize={12}
                             fontWeight={700}
                             lineHeight="16px">
-                            {process !== 100 ?
+                            {progress !== 100 ?
                                 <Trans>Downloading</Trans>
                             :   <>
-                                    <Typography component="span" fontSize={12} fontWeight={700} lineHeight="16px">
+                                    <Typography
+                                        component="span"
+                                        fontSize={12}
+                                        fontWeight={700}
+                                        lineHeight="16px"
+                                        color={theme.palette.maskColor.main}>
                                         {formatFileSize(Number(size))}
                                     </Typography>
                                     <Typography

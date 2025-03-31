@@ -2,8 +2,8 @@
     "name": "Mask Network",
     "version": "0",
     "manifest_version": 3,
-    "permissions": ["storage", "webNavigation", "activeTab", "scripting", "identity", "tabs"],
-    "optional_permissions": ["notifications", "clipboardRead"],
+    "permissions": ["storage", "webNavigation", "activeTab", "scripting"],
+    "optional_permissions": ["notifications", "clipboardRead", "identity", "tabs"],
     "optional_host_permissions": ["<all_urls>"],
     "background": { "service_worker": "/manifest-v3.entry.js" },
     "icons": {

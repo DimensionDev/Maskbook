@@ -114,6 +114,7 @@
         "ERYJcj": ["バックアップパスワードは、大文字、小文字、特殊文字および数字を含む8-20文字でなければなりません。"],
         "hUF4dG": ["バックアップパスワードの設定が完了しました"],
         "UtKGok": ["ペルソナをバックアップする"],
+        "+m7x4e": ["Backup Successful"],
         "7Ry254": ["マスククラウドサービスにバックアップ"],
         "6IHgRq": ["Backup to the Cloud"],
         "QQPCqQ": ["ウォレットをバックアップする"],
@@ -215,6 +216,7 @@
         "pvnfJD": ["ダーク"],
         "Sp/me1": ["データ"],
         "HKH+W+": ["データ"],
+        "K8jCIB": ["Data backed up successfully!"],
         "3B4jmY": ["データの相関値"],
         "rAcOY1": [
             "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
@@ -290,6 +292,7 @@
         "SLEDBF": ["ウォレットを追加できませんでした。もう一度やり直してください。"],
         "09vHB+": ["Failed to decrypt."],
         "jK7nvW": ["Failed to disconnect wallet"],
+        "9hzYBR": ["Failed to download and merge the backup: ", ["0"]],
         "0tkvsz": ["Failed to download and merge the backup."],
         "etATpN": ["Failed to login: ", ["0"]],
         "mrAv9J": ["ネットワークを保存できませんでした"],
@@ -368,9 +371,6 @@
         "NaZTE7": ["Incorrect Mnemonic Words."],
         "A9tojF": ["パスワードが間違っています"],
         "+uISZO": ["パスワードが間違っています"],
-        "tqV4Pb": ["Incorrect Password2"],
-        "4Fvcjh": ["Incorrect Password3"],
-        "uo8ntw": ["Incorrect Password4"],
         "+b/06M": ["パスワードが正しくありません。"],
         "JfI60y": ["現在のパスワードが正しくありません。"],
         "pjrgRd": ["IDコードが間違っています"],
@@ -418,6 +418,7 @@
         ],
         "lET9my": ["マスクには次の権限が必要です"],
         "siroPf": ["Mask Network"],
+        "jhoAzY": ["Mask Network Cloud"],
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "HsoakN": ["masknetwork"],
         "CK1KXz": ["最大"],
@@ -434,6 +435,7 @@
         "sQJ3RN": ["最大優先料金がネットワーク状況に対して低すぎます。"],
         "ITBQO3": ["最大優先手数料は0GWEIより大きくなければなりません"],
         "agPptk": ["中間"],
+        "lPsa94": ["Merge Completed"],
         "RH8jSA": ["ローカルデータベースにデータを統合"],
         "E6YUtc": ["Merge to Browser"],
         "QTomF0": ["ローカルに統合"],
@@ -829,6 +831,7 @@
         "FnQek5": [
             "このサイトへの接続は暗号化されていないため、敵対的な第三者によって変更されます。このリクエストを拒否することを強くお勧めします。"
         ],
+        "UDKbPj": ["Your file has been successfully merged into the browser data."],
         "Q68Nuc": [
             "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
         ],

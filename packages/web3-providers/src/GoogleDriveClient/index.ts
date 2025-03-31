@@ -35,12 +35,12 @@ interface UserInfo {
 }
 
 export class GoogleDriveClient {
-    private getToken: () => Promise<string>
+    private getToken: () => Promise<string | undefined>
     private baseUrl: string = 'https://www.googleapis.com/drive/v3'
     private uploadUrl: string = 'https://www.googleapis.com/upload/drive/v3'
     private backupFolderName: string = 'Mask network backup'
 
-    constructor(getToken: () => Promise<string>) {
+    constructor(getToken: () => Promise<string | undefined>) {
         this.getToken = getToken
     }
 

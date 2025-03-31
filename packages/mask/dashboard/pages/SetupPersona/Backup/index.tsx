@@ -49,7 +49,6 @@ export const Backup = memo(function Backup() {
     const location = useLocation()
     const { pathname } = location
     const isCloud = CloudBackupRoutes.includes(pathname)
-    console.log('backup', { isCloud, pathname })
     const tab = isCloud ? StorageType.Cloud : StorageType.Local
     const navigate = useNavigate()
 

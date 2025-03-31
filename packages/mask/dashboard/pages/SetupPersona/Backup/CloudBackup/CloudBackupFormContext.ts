@@ -1,12 +1,12 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { createContainer } from '@masknet/shared-base-ui'
 import { useLingui } from '@lingui/react/macro'
 import { BackupAccountType } from '@masknet/shared-base'
+import { createContainer } from '@masknet/shared-base-ui'
 import guessCallingCode from 'guess-calling-code'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { z } from 'zod'
 import { phoneRegexp } from '../../../../utils/regexp.js'
-import { useState } from 'react'
 
 export interface CloudBackupFormInputs {
     email: string

@@ -112,6 +112,7 @@
         "ERYJcj": ["备份密码必须是 8-20 个字符，包括大写、小写、特殊字符和数字。"],
         "hUF4dG": ["备份密码设置成功。"],
         "UtKGok": ["备份身份"],
+        "+m7x4e": ["Backup Successful"],
         "7Ry254": ["备份到 Mask 云服务"],
         "6IHgRq": ["Backup to the Cloud"],
         "QQPCqQ": ["备份钱包"],
@@ -213,6 +214,7 @@
         "pvnfJD": ["深色"],
         "Sp/me1": ["数据"],
         "HKH+W+": ["数据"],
+        "K8jCIB": ["Data backed up successfully!"],
         "3B4jmY": ["数据关联"],
         "rAcOY1": [
             "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
@@ -288,6 +290,7 @@
         "SLEDBF": ["添加钱包失败，请重试。"],
         "09vHB+": ["Failed to decrypt."],
         "jK7nvW": ["Failed to disconnect wallet"],
+        "9hzYBR": ["Failed to download and merge the backup: ", ["0"]],
         "0tkvsz": ["Failed to download and merge the backup."],
         "etATpN": ["Failed to login: ", ["0"]],
         "mrAv9J": ["无法保存网络"],
@@ -366,9 +369,6 @@
         "NaZTE7": ["Incorrect Mnemonic Words."],
         "A9tojF": ["密码不正确"],
         "+uISZO": ["密码不正确"],
-        "tqV4Pb": ["Incorrect Password2"],
-        "4Fvcjh": ["Incorrect Password3"],
-        "uo8ntw": ["Incorrect Password4"],
         "+b/06M": ["支付密码错误。"],
         "JfI60y": ["支付密码错误。"],
         "pjrgRd": ["私钥不正确"],
@@ -416,6 +416,7 @@
         ],
         "lET9my": ["Mask Network需要以下权限"],
         "siroPf": ["Mask Network"],
+        "jhoAzY": ["Mask Network Cloud"],
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "HsoakN": ["masknetwork"],
         "CK1KXz": ["最大"],
@@ -432,6 +433,7 @@
         "sQJ3RN": ["最大优先费用在当前网络环境下过低。"],
         "ITBQO3": ["Max priority fee必须大于 0 GWEI"],
         "agPptk": ["中等"],
+        "lPsa94": ["Merge Completed"],
         "RH8jSA": ["合并数据到本地数据库"],
         "E6YUtc": ["Merge to Browser"],
         "QTomF0": ["合并至本地数据"],
@@ -819,6 +821,7 @@
         "FnQek5": [
             "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
         ],
+        "UDKbPj": ["Your file has been successfully merged into the browser data."],
         "Q68Nuc": [
             "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
         ],

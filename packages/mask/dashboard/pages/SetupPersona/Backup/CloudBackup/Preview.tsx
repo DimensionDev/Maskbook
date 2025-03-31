@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { ConfirmDialog, EmptyStatus, formatFileSize } from '@masknet/shared'
+import { EmptyStatus, formatFileSize } from '@masknet/shared'
 import type { BackupAccountType } from '@masknet/shared-base'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
@@ -10,8 +10,8 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
-import type { PortalContainerProps } from '../types.js'
 import { createBackupName, downloadBackup, getFileName, progressDownload } from '../helpers.js'
+import type { PortalContainerProps } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -64,7 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function CloudBackupPreview() {
-    const { classes, theme, cx } = useStyles()
+    const { classes, theme } = useStyles()
     const [params] = useSearchParams()
     const { portalContainerRef } = useOutletContext<PortalContainerProps>()
 
@@ -101,29 +101,6 @@ export const Component = memo(function CloudBackupPreview() {
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as BackupAccountType,
             account: previewInfo.account,
-        })
-    }, [previewInfo])
-
-    // Remove
-    const [{ loading: overwriteLoading }, handleOverwriteClick] = useAsyncFn(async () => {
-        await ConfirmDialog.openAndWaitForClose({
-            title: <Trans>Overwrite current backup</Trans>,
-            message: <Trans>Are you sure to overwrite the backups stored on Mask Cloud Service?</Trans>,
-            confirmLabel: <Trans>Confirm</Trans>,
-            cancelLabel: <Trans>Cancel</Trans>,
-            confirmVariant: 'error',
-            onConfirm: () => {
-                ConfirmDialog.close(false)
-                if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
-
-                BackupPreviewModal.open({
-                    isUpload: true,
-                    code: previewInfo.code,
-                    abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-                    type: previewInfo.type as BackupAccountType,
-                    account: previewInfo.account,
-                })
-            },
         })
     }, [previewInfo])
 
@@ -202,7 +179,7 @@ export const Component = memo(function CloudBackupPreview() {
                             <Typography
                                 sx={{ cursor: 'pointer' }}
                                 className={classes.text}
-                                onClick={() => navigate(DashboardRoutes.CloudBackup, { replace: true })}>
+                                onClick={() => navigate(DashboardRoutes.BackupCloud, { replace: true })}>
                                 <Trans>Switch other account</Trans>
                             </Typography>
                         </Box>

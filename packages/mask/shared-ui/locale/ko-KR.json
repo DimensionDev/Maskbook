@@ -114,6 +114,7 @@
         "ERYJcj": ["백업 비밀번호는 대문자, 소문자, 특수 문자 및 숫자를 포함하여 8-20자여야 합니다."],
         "hUF4dG": ["백업 비밀번호가 설정되었습니다."],
         "UtKGok": ["페르소나 백업"],
+        "+m7x4e": ["Backup Successful"],
         "7Ry254": ["Mask Cloud Service 백업"],
         "6IHgRq": ["Backup to the Cloud"],
         "QQPCqQ": ["지갑 백업"],
@@ -215,6 +216,7 @@
         "pvnfJD": ["다크"],
         "Sp/me1": ["데이터"],
         "HKH+W+": ["데이터"],
+        "K8jCIB": ["Data backed up successfully!"],
         "3B4jmY": ["데이터 수정"],
         "rAcOY1": [
             "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
@@ -290,6 +292,7 @@
         "SLEDBF": ["월렛 추가 실패, 다시 시도하기"],
         "09vHB+": ["Failed to decrypt."],
         "jK7nvW": ["Failed to disconnect wallet"],
+        "9hzYBR": ["Failed to download and merge the backup: ", ["0"]],
         "0tkvsz": ["Failed to download and merge the backup."],
         "etATpN": ["Failed to login: ", ["0"]],
         "mrAv9J": ["네트워크 저장 실패"],
@@ -368,9 +371,6 @@
         "NaZTE7": ["Incorrect Mnemonic Words."],
         "A9tojF": ["잘못된 비밀번호"],
         "+uISZO": ["잘못된 비밀번호"],
-        "tqV4Pb": ["Incorrect Password2"],
-        "4Fvcjh": ["Incorrect Password3"],
-        "uo8ntw": ["Incorrect Password4"],
         "+b/06M": ["잘못된 결제 비밀번호"],
         "JfI60y": ["잘못된 결제 비밀번호"],
         "pjrgRd": ["잘못된 아이디 코드"],
@@ -418,6 +418,7 @@
         ],
         "lET9my": ["Mask가 아래 권한을 요청합니다."],
         "siroPf": ["Mask Network"],
+        "jhoAzY": ["Mask Network Cloud"],
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "HsoakN": ["masknetwork"],
         "CK1KXz": ["최대치"],
@@ -434,6 +435,7 @@
         "sQJ3RN": ["네트워크 컨디션에 대한 최대 우선 가스비는 매우 낮습니다."],
         "ITBQO3": ["최대 우선 가스비는 0 GWEI보다 높아야 합니다"],
         "agPptk": ["보통"],
+        "lPsa94": ["Merge Completed"],
         "RH8jSA": ["데이터를 로컬 데이터베이스에 병합하기"],
         "E6YUtc": ["Merge to Browser"],
         "QTomF0": ["로컬로 합병하기"],
@@ -825,6 +827,7 @@
         "FnQek5": [
             "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
         ],
+        "UDKbPj": ["Your file has been successfully merged into the browser data."],
         "Q68Nuc": [
             "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
         ],

@@ -1,12 +1,12 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Outlet, useMatch, useNavigate, useOutletContext } from 'react-router-dom'
 import type { PortalContainerProps } from '../types.js'
 import { CloudBackupFormContext } from './CloudBackupFormContext.js'
-import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     container: {

@@ -154,7 +154,6 @@ export const Component = memo(function GoogleDriveBackup() {
         try {
             const userInfo = await googleDriveClient.getUserInfo()
             updateUser({
-                backupPassword: '123543Aa!',
                 googleAccount: userInfo.email || '',
             })
         } catch (err) {
@@ -298,7 +297,10 @@ export const Component = memo(function GoogleDriveBackup() {
                                                     <div className={classes.actions}>
                                                         <div
                                                             className={classes.action}
-                                                            onClick={() => downloadAndMerge(file)}>
+                                                            onClick={() => {
+                                                                close()
+                                                                downloadAndMerge(file)
+                                                            }}>
                                                             <Icons.Cloud size={16} />
                                                             <Typography className={classes.actionLabel}>
                                                                 <Trans>Merge to Browser</Trans>
