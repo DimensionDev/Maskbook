@@ -10,7 +10,6 @@ export const personaRoutes: RouteObject[] = [
     { path: r(Routes.Permissions), lazy: () => import('./Permissions/index.js') },
     { path: r(Routes.PermissionsOnboarding), lazy: () => import('./PermissionOnboarding/index.js') },
     { path: r(Routes.SignUpPersona), lazy: () => import('./SignUp/index.js') },
-    { path: r(Routes.RecoveryPersona), lazy: () => import('./Recovery/index.js') },
     { path: r(Routes.SignUpPersonaMnemonic), lazy: () => import('./Mnemonic/index.js') },
     { path: r(Routes.SignUpPersonaOnboarding), lazy: () => import('./Onboarding/index.js') },
     {
@@ -49,6 +48,36 @@ export const personaRoutes: RouteObject[] = [
                 ],
             },
         ],
+    },
+    {
+        path: r(Routes.Recovery),
+        lazy: () => import('./Recovery/index.js'),
+        children: [
+            {
+                index: true,
+                lazy: () => import('./Recovery/Phrase.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryPhrase),
+                lazy: () => import('./Recovery/Phrase.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryPrivateKey),
+                lazy: () => import('./Recovery/PrivateKey.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryLocalBackup),
+                lazy: () => import('./Recovery/LocalBackup.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryCloudBackup),
+                lazy: () => import('./Recovery/CloudBackup.js'),
+            },
+        ],
+    },
+    {
+        path: r(Routes.OldRecovery),
+        lazy: () => import('./Recovery/Old.js'),
     },
     { path: r(Routes.LocalBackup), lazy: () => import('./LocalBackup/index.js') },
     { path: r(Routes.CloudBackup), lazy: () => import('./CloudBackup/index.js') },

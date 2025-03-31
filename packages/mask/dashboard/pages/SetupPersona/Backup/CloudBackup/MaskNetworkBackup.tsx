@@ -11,10 +11,10 @@ import urlcat from 'urlcat'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { fetchDownloadLink } from '../../../../utils/api.js'
-import type { PortalContainerProps } from '../types.js'
 import { CloudBackupFormContext, type CloudBackupFormInputs } from './CloudBackupFormContext.js'
 import { EmailForm } from './EmailForm.js'
 import { PhoneForm } from './PhoneForm.js'
+import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {

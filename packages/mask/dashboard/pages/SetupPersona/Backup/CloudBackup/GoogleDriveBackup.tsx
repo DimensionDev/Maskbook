@@ -1,5 +1,5 @@
 import { t } from '@lingui/core/macro'
-import { formatFileSize } from '@masknet/shared'
+import { EmptyStatus, formatFileSize } from '@masknet/shared'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
@@ -28,7 +28,6 @@ import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
-import type { PortalContainerProps } from '../types.js'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
 import {
     clearGoogleDriveAccessToken,
@@ -38,6 +37,7 @@ import {
     progressDownload,
 } from '../helpers.js'
 import { MoreMenu } from '../../../../components/MoreMenu/index.js'
+import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -253,13 +253,13 @@ export const Component = memo(function GoogleDriveBackup() {
                                 <TableCell className={classes.tableHeadCell}>
                                     <strong>File name</strong>
                                 </TableCell>
-                                <TableCell className={classes.tableHeadCell}>
+                                <TableCell width="12%" className={classes.tableHeadCell}>
                                     <strong>Size</strong>
                                 </TableCell>
-                                <TableCell className={classes.tableHeadCell} align="right">
+                                <TableCell width="20%" className={classes.tableHeadCell} align="right">
                                     <strong>Date & Time</strong>
                                 </TableCell>
-                                <TableCell className={classes.tableHeadCell}>
+                                <TableCell width="10%" className={classes.tableHeadCell}>
                                     <strong>Actions</strong>
                                 </TableCell>
                             </TableRow>
@@ -286,7 +286,8 @@ export const Component = memo(function GoogleDriveBackup() {
                                     </TableRow>
                                 ))}
                             </TableBody>
-                        :   <TableBody>
+                        : mergedFiles.length ?
+                            <TableBody>
                                 {mergedFiles.map((file, index) => (
                                     <TableRow key={index}>
                                         <TableCell className={classes.bodyCell}>{file.name}</TableCell>
@@ -337,6 +338,15 @@ export const Component = memo(function GoogleDriveBackup() {
                                         </TableCell>
                                     </TableRow>
                                 ))}
+                            </TableBody>
+                        :   <TableBody>
+                                <TableRow>
+                                    <TableCell colSpan={4}>
+                                        <EmptyStatus height="300px">
+                                            <Trans>No backups found</Trans>
+                                        </EmptyStatus>
+                                    </TableCell>
+                                </TableRow>
                             </TableBody>
                         }
                     </Table>

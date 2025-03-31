@@ -17,7 +17,7 @@ import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../../hooks/useBackupPreviewInfo.js'
-import type { PortalContainerProps } from './types.js'
+import type { PortalContainerProps } from '../types.js'
 import { downloadBackup } from './helpers.js'
 
 export const Component = memo(function LocalBackup() {

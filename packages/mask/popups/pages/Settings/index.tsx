@@ -273,7 +273,7 @@ export const Component = memo(function SettingsPage() {
                         </ListItem>
                         <ListItem
                             className={classes.listItem}
-                            onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
+                            onClick={() => handleOpenDashboard(DashboardRoutes.Recovery)}>
                             <ListItemText
                                 classes={itemClasses}
                                 primary={<Trans>Restore Database</Trans>}

@@ -79,7 +79,7 @@ export const Component = memo(function SignUp() {
     }, [])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.RecoveryPersona)
+        navigate(DashboardRoutes.Recovery)
     }, [])
 
     return (

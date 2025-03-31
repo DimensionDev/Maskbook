@@ -4,7 +4,14 @@ export enum DashboardRoutes {
     Permissions = '/setup/permissions',
     PermissionsOnboarding = '/setup/permissions/onboarding',
     SignUpPersona = '/setup/sign-up',
-    RecoveryPersona = '/setup/recovery',
+
+    Recovery = '/setup/recovery',
+    OldRecovery = '/setup/recovery-old',
+    RecoveryPhrase = '/setup/recovery/phrase',
+    RecoveryPrivateKey = '/setup/recovery/private-key',
+    RecoveryLocalBackup = '/setup/recovery/local-backup',
+    RecoveryCloudBackup = '/setup/recovery/cloud-backup',
+
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
     SignUpPersonaOnboarding = '/setup/sign-up/onboarding',
     Backup = '/setup/backup',

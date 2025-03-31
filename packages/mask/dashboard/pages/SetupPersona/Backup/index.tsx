@@ -5,7 +5,7 @@ import { Box, Tab, Typography } from '@mui/material'
 import { memo, useRef } from 'react'
 import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { CloudBackupRoutes } from './constants.js'
-import { StorageType } from './types.js'
+import { StorageType } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

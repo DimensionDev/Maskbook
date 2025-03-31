@@ -11,7 +11,7 @@ import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom
 import { useAsyncFn } from 'react-use'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
 import { createBackupName, downloadBackup, getFileName, progressDownload } from '../helpers.js'
-import type { PortalContainerProps } from '../types.js'
+import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
