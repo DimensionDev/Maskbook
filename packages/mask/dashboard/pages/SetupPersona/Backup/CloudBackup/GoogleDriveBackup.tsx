@@ -139,8 +139,8 @@ export const Component = memo(function GoogleDriveBackup() {
                     className={classes.tableContainer}
                     files={mergedFiles}
                     loading={isLoading}
-                    onDownload={downloadAndMerge}
-                    onMerge={async (file) => {
+                    onMerge={downloadAndMerge}
+                    onDownload={async (file) => {
                         const blob = await googleDriveClient.downloadFile(file.id)
                         const url = URL.createObjectURL(blob)
                         downloadBackup(url, file.name)

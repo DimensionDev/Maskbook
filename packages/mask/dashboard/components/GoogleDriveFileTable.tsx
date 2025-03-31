@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, formatFileSize } from '@masknet/shared'
-import { CheckBoxIndicator, makeStyles } from '@masknet/theme'
+import { makeStyles, RadioIndicator } from '@masknet/theme'
 import type { DriveFile } from '@masknet/web3-providers'
 import {
     Paper,
@@ -81,6 +81,11 @@ const useStyles = makeStyles()((theme) => ({
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
     },
+    fileName: {
+        display: 'flex',
+        gap: theme.spacing(1),
+        alignItems: 'center',
+    },
 }))
 
 interface GoogleDriveFileTableProps extends Omit<TableContainerProps, 'onSelect'> {
@@ -104,7 +109,7 @@ export const GoogleDriveFileTable = memo<GoogleDriveFileTableProps>(function Goo
     className,
     ...rest
 }) {
-    const { classes, cx } = useStyles()
+    const { classes, cx, theme } = useStyles()
     return (
         <TableContainer component={Paper} elevation={0} className={cx(classes.tableContainer, className)} {...rest}>
             <Table className={classes.table}>
@@ -148,13 +153,17 @@ export const GoogleDriveFileTable = memo<GoogleDriveFileTableProps>(function Goo
                         {files.map((file, index) => (
                             <TableRow key={index}>
                                 <TableCell className={classes.bodyCell}>
-                                    {selectable ?
-                                        <CheckBoxIndicator
-                                            checked={selectedFileId === file.id}
-                                            onClick={() => onSelect?.(file)}
-                                        />
-                                    :   null}
-                                    {file.name}
+                                    <div className={classes.fileName}>
+                                        {selectable ?
+                                            <RadioIndicator
+                                                size={20}
+                                                checked={selectedFileId === file.id}
+                                                onClick={() => onSelect?.(file)}
+                                                uncheckedColor={theme.palette.maskColor.secondaryLine}
+                                            />
+                                        :   null}
+                                        {file.name}
+                                    </div>
                                 </TableCell>
                                 <TableCell className={classes.bodyCell}>
                                     {file.size ? formatFileSize(+file.size) : '--'}

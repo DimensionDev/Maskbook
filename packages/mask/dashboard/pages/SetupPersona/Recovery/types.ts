@@ -1,6 +1,6 @@
 export enum RecoveryMethod {
     Phrase = 'phrase',
-    PrivateKey = 'privateKey',
-    LocalBackup = 'localBackup',
-    CloudBackup = 'cloudBackup',
+    PrivateKey = 'private-key',
+    Local = 'local',
+    Cloud = 'cloud',
 }

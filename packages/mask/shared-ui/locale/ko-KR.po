@@ -162,7 +162,7 @@ msgstr "자산 추가"
 msgid "Add Contact"
 msgstr "연락처 추가"
 
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveLogin.tsx
 msgid "Add google Drive"
 msgstr ""
 
@@ -177,6 +177,10 @@ msgstr "현존 그룹에 새로운 주소 추가"
 
 #: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Add Suggested Token"
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Add the file to Chrome's database"
 msgstr ""
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
@@ -356,6 +360,8 @@ msgstr "백업 실패"
 msgid "Backup on {0}"
 msgstr "백업 시간 {0}"
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Backup password"
@@ -363,6 +369,7 @@ msgstr "비밀번호 백업"
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/LocalBackup.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Settings/index.tsx
@@ -575,6 +582,7 @@ msgstr "수집품"
 msgid "Coming soon"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Completed"
@@ -734,6 +742,11 @@ msgstr "연락처"
 
 #: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
+#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/MaskNetworkBackup.tsx
@@ -800,6 +813,7 @@ msgstr "새로운 Mask 아이디 만들기"
 msgid "Create Password"
 msgstr "비밀번호 생성"
 
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Create Persona"
 msgstr "페르소나 만들기"
@@ -875,6 +889,8 @@ msgstr "데이터 수정"
 #~ msgid "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
 #~ msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
@@ -982,7 +998,7 @@ msgstr "완료"
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Download"
 msgstr "다운로드"
 
@@ -995,6 +1011,7 @@ msgstr "다운로드"
 msgid "Download Backup"
 msgstr "백업 다운로드"
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Downloading"
 msgstr "다운로드 중"
@@ -1020,6 +1037,7 @@ msgstr "연락처 편집"
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/MaskNetworkBackup.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/EmailForm.tsx
@@ -1027,6 +1045,7 @@ msgstr ""
 msgid "Email"
 msgstr "이메일"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/EmailForm.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
@@ -1155,6 +1174,7 @@ msgid "Failed to disconnect wallet"
 msgstr ""
 
 #. placeholder {0}: (err as Error).message
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Failed to download and merge the backup: {0}"
 msgstr ""
@@ -1164,8 +1184,17 @@ msgstr ""
 #~ msgstr ""
 
 #. placeholder {0}: (err as Error).message
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveLogin.tsx
 msgid "Failed to login: {0}"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
+msgstr ""
+
+#. placeholder {0}: (err as Error).message
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Failed to restore the backup: {0}"
 msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx
@@ -1325,6 +1354,8 @@ msgstr ""
 msgid "Give permission to access <0/> your {0}?"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
 msgid "Google Drive"
@@ -1449,10 +1480,13 @@ msgstr ""
 msgid "Incorrect backup password."
 msgstr "잘못된 비밀번호."
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Incorrect Backup Password."
 msgstr "잘못된 백업 비밀번호."
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
@@ -1493,12 +1527,12 @@ msgstr "잘못된 결제 비밀번호"
 msgid "Incorrect Payment Password."
 msgstr "잘못된 결제 비밀번호"
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Private Key"
 msgstr "잘못된 아이디 코드"
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
 msgid "Incorrect recovery phrase."
 msgstr "잘못된 복구 문구"
 
@@ -1511,6 +1545,7 @@ msgstr "잘못된 월렛 주소."
 msgid "Incorrect words selected. Please try again!"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx
 msgid "Input your Private Key"
 msgstr "개인 키 입력하기"
@@ -1535,6 +1570,7 @@ msgstr "무효한 Block Explorer URL."
 msgid "Invalid email address format."
 msgstr "이메일 주소가 잘못되었습니다."
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid email address."
 msgstr ""
@@ -1543,6 +1579,7 @@ msgstr ""
 msgid "Invalid number"
 msgstr "잘못된 번호"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Invalid phone number, please check and try again."
 msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
@@ -1551,6 +1588,8 @@ msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
 msgid "Invalid RPC URL."
 msgstr "무효한 RPC URL"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid verification code."
@@ -1651,6 +1690,7 @@ msgstr "로그아웃"
 msgid "Login to Mask Cloud"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
 msgid "Logout"
@@ -1684,6 +1724,7 @@ msgstr "Mask가 아래 권한을 요청합니다."
 
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/index.tsx
 msgid "Mask Network"
 msgstr ""
@@ -1763,18 +1804,21 @@ msgstr "최대 우선 가스비는 0 GWEI보다 높아야 합니다"
 msgid "Medium"
 msgstr "보통"
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge Completed"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr "데이터를 로컬 데이터베이스에 병합하기"
 
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Merge to Browser"
 msgstr ""
 
@@ -1805,6 +1849,7 @@ msgstr "모바일"
 msgid "Mobile number"
 msgstr "휴대폰 번호"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Mobile verification code"
 msgstr "모바일 인증번호"
@@ -1920,6 +1965,7 @@ msgstr "백업 없음"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
+#: dashboard/components/GoogleDriveFileTable.tsx
 msgid "No backups found"
 msgstr "백업 없음"
 
@@ -2159,6 +2205,7 @@ msgstr ""
 msgid "Please enter backup password to export persona private key."
 msgstr "백업 비밀번호를 입력하고 페르소나 개인키를 내보낼 수 있습니다."
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
 msgstr "파일을 다운로드하려면 클라우드 백업 암호를 입력하세요."
@@ -2308,6 +2355,11 @@ msgstr ""
 msgid "Receive"
 msgstr "받기"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Recover"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recover your data"
 msgstr "데어터 복구"
@@ -2375,6 +2427,7 @@ msgstr ""
 msgid "Request Source"
 msgstr "소스 요청"
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Reselect"
 msgstr "다시 선택"
@@ -2395,23 +2448,36 @@ msgstr "월렛 리셋"
 msgid "Resource"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreFromCloud/index.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Restore"
 msgstr "복원하기"
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Restore backup failed."
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Restore Completed"
 msgstr ""
 
 #: popups/pages/Settings/index.tsx
 msgid "Restore Database"
 msgstr "데이터베이스 복원"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/components/Restore/RestoreFromCloud/index.tsx
 msgid "Restore failed"
 msgstr "복구 실패"
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Restore Failed"
+msgstr ""
 
 #: popups/pages/Settings/index.tsx
 msgid "Restore from a previous database backup"
@@ -2573,8 +2639,8 @@ msgid "Sign"
 msgstr "사인"
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
-msgid "Sign Up"
-msgstr "가입하기"
+#~ msgid "Sign Up"
+#~ msgstr "가입하기"
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -2711,6 +2777,7 @@ msgstr "사용자 계정 전환"
 msgid "Switch Persona"
 msgstr "페르소나 전환"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Switch to other accounts"
 msgstr ""
@@ -2749,10 +2816,11 @@ msgstr ""
 msgid "The code is incorrect."
 msgstr "코드가 잘못되었습니다."
 
-#: dashboard/pages/SetupPersona/Backup/helpers.tsx
+#: dashboard/utils/api.ts
 msgid "The download link is expired"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/MaskNetworkBackup.tsx
 msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
 msgstr ""
@@ -3018,11 +3086,14 @@ msgstr ""
 msgid "Unlock"
 msgstr "언락"
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unpacking"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unsupported data backup"
@@ -3072,10 +3143,12 @@ msgstr "텍스 암호화 이용"
 msgid "value"
 msgstr "값"
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Verification code has been sent to your phone."
 msgstr ""
@@ -3205,7 +3278,7 @@ msgstr "환영합니다"
 msgid "Welcome to use Mask Network"
 msgstr "환영합니다"
 
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveLogin.tsx
 msgid "when you click Add Google Drive button，you will be forwarded to Google authorization pages."
 msgstr ""
 
@@ -3237,6 +3310,10 @@ msgstr ""
 msgid "You have signed with your wallet."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+msgid "You have successfully restored the backup from Google Drive to your browser."
+msgstr ""
+
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"
 msgstr ""
@@ -3255,8 +3332,13 @@ msgstr ""
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
 msgstr ""
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Your file has been successfully merged into the browser data."
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Your file has been successfully restore into the browser data."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx

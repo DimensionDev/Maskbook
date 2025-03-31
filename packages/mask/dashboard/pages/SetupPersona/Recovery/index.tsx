@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import { usePathTab, type TabPathPair } from '@masknet/shared'
+import { usePathTab, type TabPathTuple } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
@@ -65,22 +65,17 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-const pairs: TabPathPair[] = [
+const tuples: TabPathTuple[] = [
     [RecoveryMethod.Phrase, DashboardRoutes.RecoveryPhrase],
     [RecoveryMethod.PrivateKey, DashboardRoutes.RecoveryPrivateKey],
-    [RecoveryMethod.LocalBackup, DashboardRoutes.RecoveryLocal],
-    [
-        RecoveryMethod.CloudBackup,
-        DashboardRoutes.RecoveryCloud,
-        DashboardRoutes.RecoveryCloudGoogleDrive,
-        DashboardRoutes.RecoveryCloudMaskNetwork,
-    ],
+    [RecoveryMethod.Local, DashboardRoutes.RecoveryLocal],
+    [RecoveryMethod.Cloud, DashboardRoutes.RecoveryCloudMaskNetwork, DashboardRoutes.RecoveryCloudGoogleDrive],
 ]
 
 export const Component = memo(function Recovery() {
     const { classes } = useStyles()
 
-    const [tab, handleTabChange] = usePathTab(pairs)
+    const [tab, handleTabChange] = usePathTab(tuples)
 
     const portalContainerRef = useRef<HTMLDivElement>(null)
 
@@ -116,12 +111,12 @@ export const Component = memo(function Recovery() {
                             <Tab
                                 className={classes.tab}
                                 label={<Trans>Local Backup</Trans>}
-                                value={RecoveryMethod.LocalBackup}
+                                value={RecoveryMethod.Local}
                             />
                             <Tab
                                 className={classes.tab}
                                 label={<Trans>Cloud Backup</Trans>}
-                                value={RecoveryMethod.CloudBackup}
+                                value={RecoveryMethod.Cloud}
                             />
                         </MaskTabList>
                     </TabContext>

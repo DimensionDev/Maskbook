@@ -6,7 +6,6 @@ export enum DashboardRoutes {
     SignUpPersona = '/setup/sign-up',
 
     Recovery = '/setup/recovery',
-    OldRecovery = '/setup/recovery-old',
     RecoveryPhrase = '/setup/recovery/phrase',
     RecoveryPrivateKey = '/setup/recovery/private-key',
     RecoveryLocal = '/setup/recovery/local',

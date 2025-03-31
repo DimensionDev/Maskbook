@@ -157,7 +157,7 @@ msgstr ""
 msgid "Add Contact"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveLogin.tsx
 msgid "Add google Drive"
 msgstr ""
 
@@ -172,6 +172,10 @@ msgstr ""
 
 #: popups/pages/Wallet/Interaction/WatchTokenRequest.tsx
 msgid "Add Suggested Token"
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Add the file to Chrome's database"
 msgstr ""
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
@@ -351,6 +355,8 @@ msgstr ""
 msgid "Backup on {0}"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Backup password"
@@ -358,6 +364,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/LocalBackup.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Settings/index.tsx
@@ -570,6 +577,7 @@ msgstr ""
 msgid "Coming soon"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Completed"
@@ -729,6 +737,11 @@ msgstr ""
 
 #: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
+#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/MaskNetworkBackup.tsx
@@ -795,6 +808,7 @@ msgstr ""
 msgid "Create Password"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Create Persona"
 msgstr ""
@@ -870,6 +884,8 @@ msgstr ""
 #~ msgid "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
 #~ msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
@@ -977,7 +993,7 @@ msgstr ""
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Download"
 msgstr ""
 
@@ -990,6 +1006,7 @@ msgstr ""
 msgid "Download Backup"
 msgstr ""
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Downloading"
 msgstr ""
@@ -1015,6 +1032,7 @@ msgstr ""
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/MaskNetworkBackup.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/EmailForm.tsx
@@ -1022,6 +1040,7 @@ msgstr ""
 msgid "Email"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/EmailForm.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
@@ -1150,6 +1169,7 @@ msgid "Failed to disconnect wallet"
 msgstr ""
 
 #. placeholder {0}: (err as Error).message
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Failed to download and merge the backup: {0}"
 msgstr ""
@@ -1159,8 +1179,17 @@ msgstr ""
 #~ msgstr ""
 
 #. placeholder {0}: (err as Error).message
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveLogin.tsx
 msgid "Failed to login: {0}"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
+msgstr ""
+
+#. placeholder {0}: (err as Error).message
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Failed to restore the backup: {0}"
 msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/index.tsx
@@ -1320,6 +1349,8 @@ msgstr ""
 msgid "Give permission to access <0/> your {0}?"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
 msgid "Google Drive"
@@ -1444,10 +1475,13 @@ msgstr ""
 msgid "Incorrect backup password."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Incorrect Backup Password."
 msgstr ""
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
@@ -1488,12 +1522,12 @@ msgstr ""
 msgid "Incorrect Payment Password."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Incorrect Private Key"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
 msgid "Incorrect recovery phrase."
 msgstr ""
 
@@ -1506,6 +1540,7 @@ msgstr ""
 msgid "Incorrect words selected. Please try again!"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx
 msgid "Input your Private Key"
 msgstr ""
@@ -1530,6 +1565,7 @@ msgstr ""
 msgid "Invalid email address format."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid email address."
 msgstr ""
@@ -1538,6 +1574,7 @@ msgstr ""
 msgid "Invalid number"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Invalid phone number, please check and try again."
 msgstr ""
@@ -1546,6 +1583,8 @@ msgstr ""
 msgid "Invalid RPC URL."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid verification code."
@@ -1646,6 +1685,7 @@ msgstr ""
 msgid "Login to Mask Cloud"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
 msgid "Logout"
@@ -1679,6 +1719,7 @@ msgstr ""
 
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/index.tsx
 msgid "Mask Network"
 msgstr ""
@@ -1758,18 +1799,21 @@ msgstr ""
 msgid "Medium"
 msgstr ""
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge Completed"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
+#: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Merge to Browser"
 msgstr ""
 
@@ -1800,6 +1844,7 @@ msgstr ""
 msgid "Mobile number"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Mobile verification code"
 msgstr ""
@@ -1915,6 +1960,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/Preview.tsx
+#: dashboard/components/GoogleDriveFileTable.tsx
 msgid "No backups found"
 msgstr ""
 
@@ -2154,6 +2200,7 @@ msgstr ""
 msgid "Please enter backup password to export persona private key."
 msgstr ""
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
 msgstr ""
@@ -2303,6 +2350,11 @@ msgstr ""
 msgid "Receive"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Recover"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 msgid "Recover your data"
 msgstr ""
@@ -2370,6 +2422,7 @@ msgstr ""
 msgid "Request Source"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Reselect"
 msgstr ""
@@ -2390,22 +2443,35 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreFromCloud/index.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Restore"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Restore backup failed."
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Restore Completed"
 msgstr ""
 
 #: popups/pages/Settings/index.tsx
 msgid "Restore Database"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/components/Restore/RestoreFromCloud/index.tsx
 msgid "Restore failed"
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Restore Failed"
 msgstr ""
 
 #: popups/pages/Settings/index.tsx
@@ -2568,8 +2634,8 @@ msgid "Sign"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
-msgid "Sign Up"
-msgstr ""
+#~ msgid "Sign Up"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -2706,6 +2772,7 @@ msgstr ""
 msgid "Switch Persona"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Switch to other accounts"
 msgstr ""
@@ -2744,10 +2811,11 @@ msgstr ""
 msgid "The code is incorrect."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/helpers.tsx
+#: dashboard/utils/api.ts
 msgid "The download link is expired"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/CloudBackup/MaskNetworkBackup.tsx
 msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
 msgstr ""
@@ -3013,11 +3081,14 @@ msgstr ""
 msgid "Unlock"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unpacking"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unsupported data backup"
@@ -3067,10 +3138,12 @@ msgstr ""
 msgid "value"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Verification code has been sent to your phone."
 msgstr ""
@@ -3200,7 +3273,7 @@ msgstr ""
 msgid "Welcome to use Mask Network"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/CloudBackup/GoogleDriveBackup.tsx
+#: dashboard/components/GoogleDriveLogin.tsx
 msgid "when you click Add Google Drive button，you will be forwarded to Google authorization pages."
 msgstr ""
 
@@ -3232,6 +3305,10 @@ msgstr ""
 msgid "You have signed with your wallet."
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+msgid "You have successfully restored the backup from Google Drive to your browser."
+msgstr ""
+
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 msgid "You have verified your cloud password and recovered your backup. Do you want to let your cloud password and local backup password be the same?"
 msgstr ""
@@ -3250,8 +3327,13 @@ msgstr ""
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
 msgstr ""
 
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Your file has been successfully merged into the browser data."
+msgstr ""
+
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+msgid "Your file has been successfully restore into the browser data."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx

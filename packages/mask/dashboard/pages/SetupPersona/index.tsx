@@ -89,10 +89,6 @@ export const personaRoutes: RouteObject[] = [
             },
         ],
     },
-    {
-        path: r(Routes.OldRecovery),
-        lazy: () => import('./Recovery/Old.js'),
-    },
     { path: r(Routes.LocalBackup), lazy: () => import('./LocalBackup/index.js') },
     { path: r(Routes.CloudBackup), lazy: () => import('./CloudBackup/index.js') },
     { path: r(Routes.CloudBackupPreview), lazy: () => import('./CloudBackupPreview/index.js') },
