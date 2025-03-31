@@ -65,15 +65,15 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Component = memo(function GoogleDriveBackup() {
+export const Component = memo(function GoogleDriveRecovery() {
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
     const { portalContainerRef } = useOutletContext<PortalContainerProps>()
+    const { data: files = EMPTY_LIST, refetch, isLoading } = useGoogleDriveFiles()
     const googleDriveClient = useMemo(
         () => new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken),
         [],
     )
-    const { data: files = EMPTY_LIST, refetch, isLoading } = useGoogleDriveFiles(googleDriveClient)
 
     const [uploadedFile, setUploadedFile] = useState<DriveFile | null>(null)
 
@@ -144,7 +144,9 @@ export const Component = memo(function GoogleDriveBackup() {
                         const blob = await googleDriveClient.downloadFile(file.id)
                         const url = URL.createObjectURL(blob)
                         downloadBackup(url, file.name)
-                        URL.revokeObjectURL(url)
+                        Promise.resolve().then(() => {
+                            URL.revokeObjectURL(url)
+                        })
                     }}
                 />
             </Box>

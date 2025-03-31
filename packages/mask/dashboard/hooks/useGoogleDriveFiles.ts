@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import { GoogleDriveClient } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
-import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../pages/SetupPersona/Backup/helpers.js'
+import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../utils/api.js'
 
 const defaultClient = new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken)
 export function useGoogleDriveFiles(client: GoogleDriveClient = defaultClient) {

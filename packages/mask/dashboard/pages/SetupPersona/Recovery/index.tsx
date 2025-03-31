@@ -68,8 +68,13 @@ const useStyles = makeStyles()((theme) => ({
 const pairs: TabPathPair[] = [
     [RecoveryMethod.Phrase, DashboardRoutes.RecoveryPhrase],
     [RecoveryMethod.PrivateKey, DashboardRoutes.RecoveryPrivateKey],
-    [RecoveryMethod.LocalBackup, DashboardRoutes.RecoveryLocalBackup],
-    [RecoveryMethod.CloudBackup, DashboardRoutes.RecoveryCloudBackup],
+    [RecoveryMethod.LocalBackup, DashboardRoutes.RecoveryLocal],
+    [
+        RecoveryMethod.CloudBackup,
+        DashboardRoutes.RecoveryCloud,
+        DashboardRoutes.RecoveryCloudGoogleDrive,
+        DashboardRoutes.RecoveryCloudMaskNetwork,
+    ],
 ]
 
 export const Component = memo(function Recovery() {

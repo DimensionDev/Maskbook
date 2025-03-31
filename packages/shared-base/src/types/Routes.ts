@@ -9,8 +9,10 @@ export enum DashboardRoutes {
     OldRecovery = '/setup/recovery-old',
     RecoveryPhrase = '/setup/recovery/phrase',
     RecoveryPrivateKey = '/setup/recovery/private-key',
-    RecoveryLocalBackup = '/setup/recovery/local-backup',
-    RecoveryCloudBackup = '/setup/recovery/cloud-backup',
+    RecoveryLocal = '/setup/recovery/local',
+    RecoveryCloud = '/setup/recovery/cloud',
+    RecoveryCloudMaskNetwork = '/setup/recovery/cloud/mask-network',
+    RecoveryCloudGoogleDrive = '/setup/recovery/cloud/google-drive',
 
     SignUpPersonaMnemonic = '/setup/sign-up/mnemonic',
     SignUpPersonaOnboarding = '/setup/sign-up/onboarding',

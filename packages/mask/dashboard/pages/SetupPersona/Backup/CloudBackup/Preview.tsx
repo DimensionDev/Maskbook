@@ -10,7 +10,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
-import { createBackupName, downloadBackup, getFileName, progressDownload } from '../helpers.js'
+import { createBackupName, downloadBackup, getFileName, progressDownload } from '../../../../utils/api.js'
 import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({

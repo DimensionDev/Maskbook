@@ -66,12 +66,26 @@ export const personaRoutes: RouteObject[] = [
                 lazy: () => import('./Recovery/PrivateKey.js'),
             },
             {
-                path: rr(Routes.Recovery, Routes.RecoveryLocalBackup),
-                lazy: () => import('./Recovery/LocalBackup.js'),
+                path: rr(Routes.Recovery, Routes.RecoveryLocal),
+                lazy: () => import('./Recovery/Local.js'),
             },
             {
-                path: rr(Routes.Recovery, Routes.RecoveryCloudBackup),
-                lazy: () => import('./Recovery/CloudBackup.js'),
+                path: rr(Routes.Recovery, Routes.RecoveryCloud),
+                lazy: () => import('./Recovery/Cloud/index.js'),
+                children: [
+                    {
+                        index: true,
+                        lazy: () => import('./Recovery/Cloud/MaskNetwork.js'),
+                    },
+                    {
+                        path: rr(Routes.RecoveryCloud, Routes.RecoveryCloudMaskNetwork),
+                        lazy: () => import('./Recovery/Cloud/MaskNetwork.js'),
+                    },
+                    {
+                        path: rr(Routes.RecoveryCloud, Routes.RecoveryCloudGoogleDrive),
+                        lazy: () => import('./Recovery/Cloud/GoogleDrive.js'),
+                    },
+                ],
             },
         ],
     },
