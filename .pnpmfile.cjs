@@ -6,10 +6,7 @@
 /** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
 const approvedList = new Map()
 
-approvedList.set('webpack', [
-    'Jack-Works/webpack#lazy-import',
-    'Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770',
-])
+approvedList.set('webpack', ['npm:@magic-works/webpack@5.88.2'])
 
 approvedList.set('@types/react', ['npm:types-react@beta'])
 approvedList.set('@types/react-dom', ['npm:types-react-dom@beta'])

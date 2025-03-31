@@ -116,7 +116,7 @@
       "react": "$react",
       "react-dom": "$react-dom",
       "reflect-metadata": "0.1.13",
-      "webpack@5": "Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770"
+      "webpack@5": "npm:@magic-works/webpack@5.88.2"
     },
     "override reason": {
       "@protobufjs/inquire": "Patching this",
