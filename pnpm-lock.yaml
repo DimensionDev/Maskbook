@@ -22,9 +22,9 @@ overrides:
   react: 0.0.0-experimental-58af67a8f8-20240628
   react-dom: 0.0.0-experimental-58af67a8f8-20240628
   reflect-metadata: 0.1.13
-  webpack@5: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+  webpack@5: npm:@magic-works/webpack@5.88.2
 
-pnpmfileChecksum: 6lrt4fdzpwjn4722kn5a7ujkd4
+pnpmfileChecksum: s6bwekups2l2ek4kug4n4lxi6q
 
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1':
@@ -611,7 +611,7 @@ importers:
         version: 2.0.0
       file-loader:
         specifier: ^6.2.0
-        version: 6.2.0(webpack@5.88.2)
+        version: 6.2.0(@magic-works/webpack@5.88.2)
       fuse.js:
         specifier: ^7.0.0
         version: 7.0.0
@@ -699,16 +699,16 @@ importers:
     devDependencies:
       '@lavamoat/webpack':
         specifier: 0.8.1-beta.0
-        version: 0.8.1-beta.0(webpack@5.88.2)
+        version: 0.8.1-beta.0(@magic-works/webpack@5.88.2)
       '@nice-labs/emit-file-webpack-plugin':
         specifier: ^1.1.4
-        version: 1.1.4(webpack@5.88.2)
+        version: 1.1.4(@magic-works/webpack@5.88.2)
       '@pmmmwh/react-refresh-webpack-plugin':
         specifier: ^0.5.15
-        version: 0.5.15(react-refresh@0.16.0)(type-fest@4.30.0)(webpack-dev-server@5.2.0)(webpack@5.88.2)
+        version: 0.5.15(@magic-works/webpack@5.88.2)(react-refresh@0.16.0)(type-fest@4.30.0)(webpack-dev-server@5.2.0)
       '@rspack/cli':
         specifier: ^1.2.7
-        version: 1.2.7(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+        version: 1.2.7(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
       '@rspack/core':
         specifier: ^1.2.7
         version: 1.2.7(@swc/helpers@0.5.15)
@@ -729,13 +729,13 @@ importers:
         version: 19.0.0-beta-df7b47d-20241124
       copy-webpack-plugin:
         specifier: ^13.0.0
-        version: 13.0.0(webpack@5.88.2)
+        version: 13.0.0(@magic-works/webpack@5.88.2)
       devtools-ignore-webpack-plugin:
         specifier: ^0.2.0
-        version: 0.2.0(webpack@5.88.2)
+        version: 0.2.0(@magic-works/webpack@5.88.2)
       html-webpack-plugin:
         specifier: ^5.6.3
-        version: 5.6.3(@rspack/core@1.2.7(@swc/helpers@0.5.15))(webpack@5.88.2)
+        version: 5.6.3(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15))
       react-compiler-webpack:
         specifier: ^0.1.2
         version: 0.1.2(babel-plugin-react-compiler@19.0.0-beta-df7b47d-20241124)
@@ -750,28 +750,28 @@ importers:
         version: 6.0.1
       source-map-loader:
         specifier: ^5.0.0
-        version: 5.0.0(webpack@5.88.2)
+        version: 5.0.0(@magic-works/webpack@5.88.2)
       svgo-loader:
         specifier: ^4.0.0
         version: 4.0.0
       swc-loader:
         specifier: ^0.2.6
-        version: 0.2.6(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack@5.88.2)
+        version: 0.2.6(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))
       terser-webpack-plugin:
         specifier: ^5.3.12
-        version: 5.3.12(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack@5.88.2)
+        version: 5.3.12(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))
       webpack:
-        specifier: Jack-Works/webpack#lazy-import
-        version: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+        specifier: npm:@magic-works/webpack@5.88.2
+        version: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
       webpack-cli:
         specifier: ^6.0.1
-        version: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
+        version: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
       webpack-dev-server:
         specifier: ^5.2.0
-        version: 5.2.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+        version: 5.2.0(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
       webpack-target-webextension:
         specifier: ^2.1.3
-        version: 2.1.3(webpack@5.88.2)
+        version: 2.1.3(@magic-works/webpack@5.88.2)
 
   packages/mask-sdk:
     devDependencies:
@@ -2290,7 +2290,7 @@ importers:
     devDependencies:
       '@rspack/cli':
         specifier: ^1.2.7
-        version: 1.2.7(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+        version: 1.2.7(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
       '@rspack/core':
         specifier: ^1.2.7
         version: 1.2.7(@swc/helpers@0.5.15)
@@ -4976,7 +4976,7 @@ packages:
     resolution: {integrity: sha512-aIXLil9jdaaFPXkHWPDDcBl7w3EASKSIkdR3nXZ8jiPIHvKI+/BBV1VqWh6EVqXLAlqIshZ+mvaw+qnD1S8trw==}
     engines: {node: ^18.0.0 || ^20.0.0 || ^22.5.1, npm: '>=7.0.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
@@ -5217,6 +5217,16 @@ packages:
 
   '@locker/near-membrane-shared@0.13.1':
     resolution: {integrity: sha512-xUVT0H9Xp1ITQiO3bZwcrSoS0gL94ePmBzE6Pse3bpX/JFxmGV1/rCAiK0GTkQ7A5mBTNzSpVVmvotEapr7xtQ==}
+
+  '@magic-works/webpack@5.88.2':
+    resolution: {integrity: sha512-/1GfHWiL4BiYaBYtdNe/5DnzRGw1tDtAN7mMcj5BjWDzLDfS7G2oNalfhe7Rsu66ITaCxhg95HtgCsoy+6xGTw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+    peerDependencies:
+      webpack-cli: '*'
+    peerDependenciesMeta:
+      webpack-cli:
+        optional: true
 
   '@manypkg/find-root@1.1.0':
     resolution: {integrity: sha512-mki5uBvhHzO8kYYix/WRy2WX8S3B5wdVSc9D6KcU5lQNglP2yt58/VfLuAK49glRXChosY8ap2oJ1qgma3GUVA==}
@@ -5581,7 +5591,7 @@ packages:
     resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   '@nice-labs/git-rev@3.5.1':
     resolution: {integrity: sha512-QVbXDN0q3VGD1X73lSKwsDVRxWi1F1ZLh8SjnkirFF0ZKzCZQmNKdLEDBlQ+/Vj6FDgDGAs4s75HRLxdCItLSw==}
@@ -5855,7 +5865,7 @@ packages:
       react-refresh: '>=0.10.0 <1.0.0'
       sockjs-client: ^1.4.0
       type-fest: '>=0.17.0 <5.0.0'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-dev-server: 3.x || 4.x || 5.x
       webpack-hot-middleware: 2.x
       webpack-plugin-serve: 0.x || 1.x
@@ -7604,21 +7614,21 @@ packages:
     resolution: {integrity: sha512-u8d0pJ5YFgneF/GuvEiDA61Tf1VDomHHYMjv/wc9XzYj7nopltpG96nXN5dJRstxZhcNpV1g+nT6CydO7pHbjA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-cli: 6.x.x
 
   '@webpack-cli/info@3.0.1':
     resolution: {integrity: sha512-coEmDzc2u/ffMvuW9aCjoRzNSPDl/XLuhPdlFRpT9tZHmJ/039az33CE7uH+8s0uL1j5ZNtfdv0HkfaKRBGJsQ==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-cli: 6.x.x
 
   '@webpack-cli/serve@3.0.1':
     resolution: {integrity: sha512-sbgw03xQaCLiT6gcY/6u3qBDn01CWw/nbaXl3gTdTFuJJ75Gffv3E3DBpgvY2fkkrdS1fpjaXNOmJlnbtKauKg==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-cli: 6.x.x
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -8363,9 +8373,6 @@ packages:
     resolution: {integrity: sha512-8WB3Jcas3swSvjIeA2yvCJ+Miyz5l1ZmB6HFb9R1317dt9LCQoswg/BGrmAmkWVEszSrrg4RwmO46qIm2OEnSA==}
     engines: {node: '>=16'}
 
-  caniuse-lite@1.0.30001684:
-    resolution: {integrity: sha512-G1LRwLIQjBQoyq0ZJGqGIJUXzJ8irpbjHLpVRXDvBEScFJ9b17sgK6vlx0GAJFE21okD7zXl08rRRUfq6HdoEQ==}
-
   caniuse-lite@1.0.30001702:
     resolution: {integrity: sha512-LoPe/D7zioC0REI5W73PeR1e1MLCipRGq/VkovJnd6Df+QVqT+vT33OXCp8QUd7kA7RZrHWxb1B36OQKI/0gOA==}
 
@@ -8807,7 +8814,7 @@ packages:
     resolution: {integrity: sha512-FgR/h5a6hzJqATDGd9YG41SeDViH+0bkHn6WNXCi5zKAZkeESeSxLySSsFLHqLEVCh0E+rITmCf0dusXWYukeQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   core-js-compat@3.41.0:
     resolution: {integrity: sha512-RFsU9LySVue9RTwdDVX/T0e2Y6jRYWXERKElIjpuEOEnxaXffI0X7RUwVzfYLfzuLXSNJDYoRYUAmRUcyln20A==}
@@ -9345,7 +9352,7 @@ packages:
     resolution: {integrity: sha512-4P+1Y1VhSt1MRBRF6my8N1bs9nNMOFfIFSBHI6u18W73iCHWXNHTSWYeMoQQ72PIIHrP1q4koKpYg1Em3jb9Rw==}
     engines: {node: '>=16.14.2', npm: '>=8.5.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   did-jwt@5.12.3:
     resolution: {integrity: sha512-/aENag1/Mu4eCwMD62X/ZOV63hkXqpRxyriJP1z/8qL44ZpdwBvvL00so+YtDcTk/xHm3t0OEe6ATvvjNYPMCA==}
@@ -9486,9 +9493,6 @@ packages:
   electron-to-chromium@1.5.112:
     resolution: {integrity: sha512-oen93kVyqSb3l+ziUgzIOlWt/oOuy4zRmpwestMn4rhFWAoFJeFuCVte9F2fASjeZZo7l/Cif9TiyrdW4CwEMA==}
 
-  electron-to-chromium@1.5.65:
-    resolution: {integrity: sha512-PWVzBjghx7/wop6n22vS2MLU8tKGd4Q91aCEGhG/TYmW6PP5OcSXcdnxTe1NNt0T66N8D6jxh4kC8UsdzOGaIw==}
-
   elliptic@6.6.1:
     resolution: {integrity: sha512-RaddvvMatK2LJHqFJ+YA4WysVN5Ita9E35botqIYspQ4TkRAlCicdzKOjlyv/1Za5RyTNn7di//eEV0uTAfe3g==}
 
@@ -9607,9 +9611,6 @@ packages:
   es-errors@1.3.0:
     resolution: {integrity: sha512-Zf5H2Kxt2xjTvbJvP2ZWLEICxA6j+hAmMzIlypy4xcBg1vKVnx89Wy0GbS+kf5cwCVFFzdCFh2XSCFNULS6csw==}
     engines: {node: '>= 0.4'}
-
-  es-module-lexer@1.5.4:
-    resolution: {integrity: sha512-MVNK56NiMrOwitFB7cqDwq0CQutbw+0BvLshJSse0MUNU+y1FC3bUS/AQg7oUng+/wKrrki7JfmwtVHkVfPLlw==}
 
   es-module-lexer@1.6.0:
     resolution: {integrity: sha512-qqnD1yMU6tk/jnaMosogGySTZP8YtUgAffA9nMN+E/rjxcfRQ6IEk7IiozUjgxKoFHBGjTLnrHB/YC45r/59EQ==}
@@ -10193,7 +10194,7 @@ packages:
     resolution: {integrity: sha512-qo3glqyTa61Ytg4u73GultjHGjdRyig3tG6lPtyX/jOEJvHif9uB0/OCI2Kif6ctF3caQTW2G5gym21oAsI4pw==}
     engines: {node: '>= 10.13.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   file-uri-to-path@1.0.0:
     resolution: {integrity: sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw==}
@@ -10761,7 +10762,7 @@ packages:
     engines: {node: '>=10.13.0'}
     peerDependencies:
       '@rspack/core': 0.x || 1.x
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
     peerDependenciesMeta:
       '@rspack/core':
         optional: true
@@ -12655,9 +12656,6 @@ packages:
   node-notifier@10.0.1:
     resolution: {integrity: sha512-YX7TSyDukOZ0g+gmzjB6abKu+hTGvO8+8+gIFDsRCU2t8fLV/P2unmt+LGFaIa4y64aX98Qksa97rgz4vMNeLQ==}
 
-  node-releases@2.0.18:
-    resolution: {integrity: sha512-d9VeXT4SJ7ZeOqGX6R5EM022wpL+eWPooLI+5UpWn2jCT1aosUQEhQP214x33Wkwx3JQMvIm+tIoVOdodFS40g==}
-
   node-releases@2.0.19:
     resolution: {integrity: sha512-xxOWJsBKtzAq7DY0J+DTzuz58K8e7sJbdgwkbMWQe8UYB6ekmsQ45q0M/tJDsGaZmbC+l7n57UV8Hl5tHxO9uw==}
 
@@ -14069,7 +14067,7 @@ packages:
     resolution: {integrity: sha512-k2Dur7CbSLcAH73sBcIkV5xjPV4SzqO1NJ7+XaQl8if3VODDUj3FNchNGpqgJSKbvUfJuhVdv8K2Eu8/TNl2eA==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
@@ -14406,7 +14404,7 @@ packages:
     resolution: {integrity: sha512-9Zi9UP2YmDpgmQVbyOPJClY0dwf58JDyDMQ7uRc4krmc72twNI2fvlBWHLqVekBpPc7h5NJkGVT1zNDxFrqhvg==}
     peerDependencies:
       '@swc/core': 1.11.7
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
 
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
@@ -14444,7 +14442,7 @@ packages:
       '@swc/core': '*'
       esbuild: '*'
       uglify-js: '*'
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
     peerDependenciesMeta:
       '@swc/core':
         optional: true
@@ -15487,7 +15485,7 @@ packages:
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-bundle-analyzer: '*'
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -15500,7 +15498,7 @@ packages:
     resolution: {integrity: sha512-xOO8n6eggxnwYpy1NlzUKpvrjfJTvae5/D6WOK0S2LSo7vjmo5gCM1DbLUmFqrMTJP+W/0YZNctm7jasWvLuBA==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
     peerDependenciesMeta:
       webpack:
         optional: true
@@ -15510,7 +15508,7 @@ packages:
     engines: {node: '>= 18.12.0'}
     hasBin: true
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-cli: '*'
     peerDependenciesMeta:
       webpack:
@@ -15523,7 +15521,7 @@ packages:
     engines: {node: '>= 18.12.0'}
     hasBin: true
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
+      webpack: npm:@magic-works/webpack@5.88.2
       webpack-cli: '*'
     peerDependenciesMeta:
       webpack:
@@ -15543,18 +15541,7 @@ packages:
     resolution: {integrity: sha512-rDNTgo0hdE1p6ayBy92qSRXdfivAqlaFbBOIirqfq/DSVdJvMbZ1yaDlftfzGDkkLlEeAblzl0zcQzTgp1UaKA==}
     engines: {node: '>=18.20.5'}
     peerDependencies:
-      webpack: Jack-Works/webpack#528c91e564d5756e21c9c462b607d913452af770
-
-  webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e:
-    resolution: {tarball: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e}
-    version: 5.88.2
-    engines: {node: '>=10.13.0'}
-    hasBin: true
-    peerDependencies:
-      webpack-cli: '*'
-    peerDependenciesMeta:
-      webpack-cli:
-        optional: true
+      webpack: npm:@magic-works/webpack@5.88.2
 
   websocket-driver@0.7.4:
     resolution: {integrity: sha512-b17KeDIQVjvb0ssuSDF2cYXSg2iztliJ4B9WdsuB6J952qCPKmnVq4DyW5motImXHDC1cBT/1UezrJVsKw5zjg==}
@@ -18853,14 +18840,14 @@ snapshots:
     dependencies:
       resolve: 1.22.8
 
-  '@lavamoat/webpack@0.8.1-beta.0(webpack@5.88.2)':
+  '@lavamoat/webpack@0.8.1-beta.0(@magic-works/webpack@5.88.2)':
     dependencies:
       '@lavamoat/aa': 4.3.1
       browser-resolve: 2.0.0
       json-stable-stringify: 1.1.1
       lavamoat-core: 16.3.1
       ses: 1.10.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
     transitivePeerDependencies:
       - supports-color
 
@@ -19360,6 +19347,40 @@ snapshots:
 
   '@locker/near-membrane-shared@0.13.1': {}
 
+  '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)':
+    dependencies:
+      '@types/eslint-scope': 3.7.4
+      '@types/estree': 1.0.6
+      '@webassemblyjs/ast': 1.11.6
+      '@webassemblyjs/wasm-edit': 1.11.6
+      '@webassemblyjs/wasm-parser': 1.11.6
+      acorn: 8.14.0
+      acorn-import-assertions: 1.9.0(acorn@8.14.0)
+      browserslist: 4.24.4
+      chrome-trace-event: 1.0.3
+      enhanced-resolve: 5.18.1
+      es-module-lexer: 1.6.0
+      eslint-scope: 5.1.1
+      events: 3.3.0
+      glob-to-regexp: 0.4.1
+      graceful-fs: 4.2.11
+      json-parse-even-better-errors: 2.3.1
+      loader-runner: 4.3.0
+      mime-types: 2.1.35
+      neo-async: 2.6.2
+      schema-utils: 3.3.0
+      tapable: 2.2.1
+      terser-webpack-plugin: 5.3.12(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))
+      watchpack: 2.4.2
+      webpack-sources: 3.2.3
+    optionalDependencies:
+      webpack-cli: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
+    transitivePeerDependencies:
+      - '@swc/core'
+      - esbuild
+      - uglify-js
+      - webpack
+
   '@manypkg/find-root@1.1.0':
     dependencies:
       '@babel/runtime': 7.26.0
@@ -19809,9 +19830,9 @@ snapshots:
       '@tybys/wasm-util': 0.9.0
     optional: true
 
-  '@nice-labs/emit-file-webpack-plugin@1.1.4(webpack@5.88.2)':
+  '@nice-labs/emit-file-webpack-plugin@1.1.4(@magic-works/webpack@5.88.2)':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   '@nice-labs/git-rev@3.5.1': {}
 
@@ -20055,7 +20076,7 @@ snapshots:
   '@pkgjs/parseargs@0.11.0':
     optional: true
 
-  '@pmmmwh/react-refresh-webpack-plugin@0.5.15(react-refresh@0.16.0)(type-fest@4.30.0)(webpack-dev-server@5.2.0)(webpack@5.88.2)':
+  '@pmmmwh/react-refresh-webpack-plugin@0.5.15(@magic-works/webpack@5.88.2)(react-refresh@0.16.0)(type-fest@4.30.0)(webpack-dev-server@5.2.0)':
     dependencies:
       ansi-html: 0.0.9
       core-js-pure: 3.32.1
@@ -20065,10 +20086,10 @@ snapshots:
       react-refresh: 0.16.0
       schema-utils: 4.2.0
       source-map: 0.7.4
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
     optionalDependencies:
       type-fest: 4.30.0
-      webpack-dev-server: 5.2.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+      webpack-dev-server: 5.2.0(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
 
   '@pnpm/config.env-replace@1.1.0': {}
 
@@ -20291,11 +20312,11 @@ snapshots:
       '@rspack/binding-win32-ia32-msvc': 1.2.7
       '@rspack/binding-win32-x64-msvc': 1.2.7
 
-  '@rspack/cli@1.2.7(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)':
+  '@rspack/cli@1.2.7(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)':
     dependencies:
       '@discoveryjs/json-ext': 0.5.7
       '@rspack/core': 1.2.7(@swc/helpers@0.5.15)
-      '@rspack/dev-server': 1.0.10(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+      '@rspack/dev-server': 1.0.10(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
       colorette: 2.0.20
       exit-hook: 4.0.0
       interpret: 3.1.1
@@ -20320,7 +20341,7 @@ snapshots:
     optionalDependencies:
       '@swc/helpers': 0.5.15
 
-  '@rspack/dev-server@1.0.10(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)':
+  '@rspack/dev-server@1.0.10(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15))(@types/express@4.17.21)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)':
     dependencies:
       '@rspack/core': 1.2.7(@swc/helpers@0.5.15)
       chokidar: 3.6.0
@@ -20329,8 +20350,8 @@ snapshots:
       http-proxy-middleware: 2.0.7(@types/express@4.17.21)
       mime-types: 2.1.35
       p-retry: 4.6.2
-      webpack-dev-middleware: 7.4.2(webpack@5.88.2)
-      webpack-dev-server: 5.0.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+      webpack-dev-middleware: 7.4.2(@magic-works/webpack@5.88.2)
+      webpack-dev-server: 5.0.4(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
       ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     transitivePeerDependencies:
       - '@types/express'
@@ -21265,20 +21286,20 @@ snapshots:
 
   '@types/babel__core@7.20.5':
     dependencies:
-      '@babel/parser': 7.26.2
-      '@babel/types': 7.26.0
+      '@babel/parser': 7.26.9
+      '@babel/types': 7.26.9
       '@types/babel__generator': 7.6.8
       '@types/babel__template': 7.4.4
       '@types/babel__traverse': 7.20.6
 
   '@types/babel__generator@7.6.8':
     dependencies:
-      '@babel/types': 7.26.0
+      '@babel/types': 7.26.9
 
   '@types/babel__template@7.4.4':
     dependencies:
-      '@babel/parser': 7.26.2
-      '@babel/types': 7.26.0
+      '@babel/parser': 7.26.9
+      '@babel/types': 7.26.9
 
   '@types/babel__traverse@7.20.6':
     dependencies:
@@ -22775,22 +22796,22 @@ snapshots:
       '@webassemblyjs/ast': 1.11.6
       '@xtuc/long': 4.2.2
 
-  '@webpack-cli/configtest@3.0.1(webpack-cli@6.0.1)(webpack@5.88.2)':
+  '@webpack-cli/configtest@3.0.1(@magic-works/webpack@5.88.2)(webpack-cli@6.0.1)':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
-      webpack-cli: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
+      webpack-cli: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
 
-  '@webpack-cli/info@3.0.1(webpack-cli@6.0.1)(webpack@5.88.2)':
+  '@webpack-cli/info@3.0.1(@magic-works/webpack@5.88.2)(webpack-cli@6.0.1)':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
-      webpack-cli: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
+      webpack-cli: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
 
-  '@webpack-cli/serve@3.0.1(webpack-cli@6.0.1)(webpack-dev-server@5.2.0)(webpack@5.88.2)':
+  '@webpack-cli/serve@3.0.1(@magic-works/webpack@5.88.2)(webpack-cli@6.0.1)(webpack-dev-server@5.2.0)':
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
-      webpack-cli: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
+      webpack-cli: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
     optionalDependencies:
-      webpack-dev-server: 5.2.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+      webpack-dev-server: 5.2.0(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
 
   '@xobotyi/scrollbar-width@1.9.5': {}
 
@@ -23194,7 +23215,7 @@ snapshots:
   babel-plugin-jest-hoist@28.1.3:
     dependencies:
       '@babel/template': 7.25.9
-      '@babel/types': 7.26.0
+      '@babel/types': 7.26.9
       '@types/babel__core': 7.20.5
       '@types/babel__traverse': 7.20.6
 
@@ -23506,9 +23527,9 @@ snapshots:
 
   browserslist@4.24.2:
     dependencies:
-      caniuse-lite: 1.0.30001684
-      electron-to-chromium: 1.5.65
-      node-releases: 2.0.18
+      caniuse-lite: 1.0.30001702
+      electron-to-chromium: 1.5.112
+      node-releases: 2.0.19
       update-browserslist-db: 1.1.1(browserslist@4.24.2)
 
   browserslist@4.24.4:
@@ -23636,8 +23657,6 @@ snapshots:
   camelcase@6.3.0: {}
 
   camelcase@8.0.0: {}
-
-  caniuse-lite@1.0.30001684: {}
 
   caniuse-lite@1.0.30001702: {}
 
@@ -24076,14 +24095,14 @@ snapshots:
     dependencies:
       toggle-selection: 1.0.6
 
-  copy-webpack-plugin@13.0.0(webpack@5.88.2):
+  copy-webpack-plugin@13.0.0(@magic-works/webpack@5.88.2):
     dependencies:
       glob-parent: 6.0.2
       normalize-path: 3.0.0
       schema-utils: 4.2.0
       serialize-javascript: 6.0.2
       tinyglobby: 0.2.12
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   core-js-compat@3.41.0:
     dependencies:
@@ -24702,9 +24721,9 @@ snapshots:
     dependencies:
       dequal: 2.0.3
 
-  devtools-ignore-webpack-plugin@0.2.0(webpack@5.88.2):
+  devtools-ignore-webpack-plugin@0.2.0(@magic-works/webpack@5.88.2):
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   did-jwt@5.12.3:
     dependencies:
@@ -24891,8 +24910,6 @@ snapshots:
 
   electron-to-chromium@1.5.112: {}
 
-  electron-to-chromium@1.5.65: {}
-
   elliptic@6.6.1:
     dependencies:
       bn.js: 4.12.1
@@ -25072,8 +25089,6 @@ snapshots:
       get-intrinsic: 1.2.4
 
   es-errors@1.3.0: {}
-
-  es-module-lexer@1.5.4: {}
 
   es-module-lexer@1.6.0: {}
 
@@ -26031,11 +26046,11 @@ snapshots:
     dependencies:
       flat-cache: 5.0.0
 
-  file-loader@6.2.0(webpack@5.88.2):
+  file-loader@6.2.0(@magic-works/webpack@5.88.2):
     dependencies:
       loader-utils: 2.0.4
       schema-utils: 3.3.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   file-uri-to-path@1.0.0: {}
 
@@ -26730,7 +26745,7 @@ snapshots:
 
   html-void-elements@3.0.0: {}
 
-  html-webpack-plugin@5.6.3(@rspack/core@1.2.7(@swc/helpers@0.5.15))(webpack@5.88.2):
+  html-webpack-plugin@5.6.3(@magic-works/webpack@5.88.2)(@rspack/core@1.2.7(@swc/helpers@0.5.15)):
     dependencies:
       '@types/html-minifier-terser': 6.1.0
       html-minifier-terser: 6.1.0
@@ -26739,7 +26754,7 @@ snapshots:
       tapable: 2.2.1
     optionalDependencies:
       '@rspack/core': 1.2.7(@swc/helpers@0.5.15)
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   htmlparser2@6.1.0:
     dependencies:
@@ -27419,7 +27434,7 @@ snapshots:
   istanbul-lib-instrument@5.2.1:
     dependencies:
       '@babel/core': 7.26.0
-      '@babel/parser': 7.26.2
+      '@babel/parser': 7.26.9
       '@istanbuljs/schema': 0.1.3
       istanbul-lib-coverage: 3.2.2
       semver: 6.3.1
@@ -27762,10 +27777,10 @@ snapshots:
   jest-snapshot@28.1.3:
     dependencies:
       '@babel/core': 7.26.0
-      '@babel/generator': 7.26.2
+      '@babel/generator': 7.26.9
       '@babel/plugin-syntax-typescript': 7.25.9(@babel/core@7.26.0)
-      '@babel/traverse': 7.25.9
-      '@babel/types': 7.26.0
+      '@babel/traverse': 7.26.5
+      '@babel/types': 7.26.9
       '@jest/expect-utils': 28.1.3
       '@jest/transform': 28.1.3
       '@jest/types': 28.1.3
@@ -27783,7 +27798,7 @@ snapshots:
       jest-util: 28.1.3
       natural-compare: 1.4.0
       pretty-format: 28.1.3
-      semver: 7.6.3
+      semver: 7.7.1
     transitivePeerDependencies:
       - supports-color
 
@@ -28355,7 +28370,7 @@ snapshots:
 
   make-dir@4.0.0:
     dependencies:
-      semver: 7.6.3
+      semver: 7.7.1
 
   make-error@1.3.6: {}
 
@@ -29106,8 +29121,6 @@ snapshots:
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
-
-  node-releases@2.0.18: {}
 
   node-releases@2.0.19: {}
 
@@ -30791,11 +30804,11 @@ snapshots:
 
   source-map-js@1.2.1: {}
 
-  source-map-loader@5.0.0(webpack@5.88.2):
+  source-map-loader@5.0.0(@magic-works/webpack@5.88.2):
     dependencies:
       iconv-lite: 0.6.3
       source-map-js: 1.2.1
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   source-map-support@0.5.13:
     dependencies:
@@ -31154,11 +31167,11 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  swc-loader@0.2.6(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack@5.88.2):
+  swc-loader@0.2.6(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15)):
     dependencies:
       '@swc/core': 1.11.7(@swc/helpers@0.5.15)
       '@swc/counter': 0.1.3
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   symbol-tree@3.2.4: {}
 
@@ -31198,14 +31211,14 @@ snapshots:
       ansi-escapes: 4.3.2
       supports-hyperlinks: 2.3.0
 
-  terser-webpack-plugin@5.3.12(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack@5.88.2):
+  terser-webpack-plugin@5.3.12(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15)):
     dependencies:
       '@jridgewell/trace-mapping': 0.3.25
       jest-worker: 27.5.1
       schema-utils: 4.3.0
       serialize-javascript: 6.0.2
       terser: 5.36.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
     optionalDependencies:
       '@swc/core': 1.11.7(@swc/helpers@0.5.15)
 
@@ -32450,12 +32463,12 @@ snapshots:
       - bufferutil
       - utf-8-validate
 
-  webpack-cli@6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2):
+  webpack-cli@6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0):
     dependencies:
       '@discoveryjs/json-ext': 0.6.3
-      '@webpack-cli/configtest': 3.0.1(webpack-cli@6.0.1)(webpack@5.88.2)
-      '@webpack-cli/info': 3.0.1(webpack-cli@6.0.1)(webpack@5.88.2)
-      '@webpack-cli/serve': 3.0.1(webpack-cli@6.0.1)(webpack-dev-server@5.2.0)(webpack@5.88.2)
+      '@webpack-cli/configtest': 3.0.1(@magic-works/webpack@5.88.2)(webpack-cli@6.0.1)
+      '@webpack-cli/info': 3.0.1(@magic-works/webpack@5.88.2)(webpack-cli@6.0.1)
+      '@webpack-cli/serve': 3.0.1(@magic-works/webpack@5.88.2)(webpack-cli@6.0.1)(webpack-dev-server@5.2.0)
       colorette: 2.0.20
       commander: 12.1.0
       cross-spawn: 7.0.6
@@ -32464,12 +32477,12 @@ snapshots:
       import-local: 3.2.0
       interpret: 3.1.1
       rechoir: 0.8.0
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
       webpack-merge: 6.0.1
     optionalDependencies:
-      webpack-dev-server: 5.2.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2)
+      webpack-dev-server: 5.2.0(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)
 
-  webpack-dev-middleware@7.4.2(webpack@5.88.2):
+  webpack-dev-middleware@7.4.2(@magic-works/webpack@5.88.2):
     dependencies:
       colorette: 2.0.20
       memfs: 4.14.0
@@ -32478,9 +32491,9 @@ snapshots:
       range-parser: 1.2.1
       schema-utils: 4.2.0
     optionalDependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
-  webpack-dev-server@5.0.4(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2):
+  webpack-dev-server@5.0.4(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
@@ -32510,18 +32523,18 @@ snapshots:
       serve-index: 1.9.1
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack-dev-middleware: 7.4.2(webpack@5.88.2)
+      webpack-dev-middleware: 7.4.2(@magic-works/webpack@5.88.2)
       ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     optionalDependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
-      webpack-cli: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
+      webpack-cli: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
     transitivePeerDependencies:
       - bufferutil
       - debug
       - supports-color
       - utf-8-validate
 
-  webpack-dev-server@5.2.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1)(webpack@5.88.2):
+  webpack-dev-server@5.2.0(@magic-works/webpack@5.88.2)(bufferutil@4.0.8)(utf-8-validate@5.0.10)(webpack-cli@6.0.1):
     dependencies:
       '@types/bonjour': 3.5.13
       '@types/connect-history-api-fallback': 1.5.4
@@ -32548,11 +32561,11 @@ snapshots:
       serve-index: 1.9.1
       sockjs: 0.3.24
       spdy: 4.0.2
-      webpack-dev-middleware: 7.4.2(webpack@5.88.2)
+      webpack-dev-middleware: 7.4.2(@magic-works/webpack@5.88.2)
       ws: 8.18.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
     optionalDependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
-      webpack-cli: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
+      webpack-cli: 6.0.1(@magic-works/webpack@5.88.2)(webpack-dev-server@5.2.0)
     transitivePeerDependencies:
       - bufferutil
       - debug
@@ -32567,42 +32580,9 @@ snapshots:
 
   webpack-sources@3.2.3: {}
 
-  webpack-target-webextension@2.1.3(webpack@5.88.2):
+  webpack-target-webextension@2.1.3(@magic-works/webpack@5.88.2):
     dependencies:
-      webpack: https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)
-
-  webpack@https://codeload.github.com/Jack-Works/webpack/tar.gz/f7244d8e23e799b84a536efb2fdccec5370ac37e(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1):
-    dependencies:
-      '@types/eslint-scope': 3.7.4
-      '@types/estree': 1.0.6
-      '@webassemblyjs/ast': 1.11.6
-      '@webassemblyjs/wasm-edit': 1.11.6
-      '@webassemblyjs/wasm-parser': 1.11.6
-      acorn: 8.14.0
-      acorn-import-assertions: 1.9.0(acorn@8.14.0)
-      browserslist: 4.24.2
-      chrome-trace-event: 1.0.3
-      enhanced-resolve: 5.17.1
-      es-module-lexer: 1.5.4
-      eslint-scope: 5.1.1
-      events: 3.3.0
-      glob-to-regexp: 0.4.1
-      graceful-fs: 4.2.11
-      json-parse-even-better-errors: 2.3.1
-      loader-runner: 4.3.0
-      mime-types: 2.1.35
-      neo-async: 2.6.2
-      schema-utils: 3.3.0
-      tapable: 2.2.1
-      terser-webpack-plugin: 5.3.12(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack@5.88.2)
-      watchpack: 2.4.2
-      webpack-sources: 3.2.3
-    optionalDependencies:
-      webpack-cli: 6.0.1(webpack-dev-server@5.2.0)(webpack@5.88.2)
-    transitivePeerDependencies:
-      - '@swc/core'
-      - esbuild
-      - uglify-js
+      webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
 
   websocket-driver@0.7.4:
     dependencies:
@@ -32928,4 +32908,5 @@ snapshots:
   zwitch@2.0.2: {}
 
 time:
+  '@magic-works/webpack@5.88.2': '2025-03-31T16:21:13.850Z'
   '@types/web@0.0.183': '2024-11-24T04:09:59.071Z'
