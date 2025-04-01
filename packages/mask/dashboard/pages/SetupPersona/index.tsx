@@ -1,7 +1,6 @@
 import { useMatch, type RouteObject } from 'react-router-dom'
 import { DashboardRoutes, relativeRoute as rr, relativeRouteOf } from '@masknet/shared-base'
 import { SetupFrame } from '../../components/SetupFrame/index.js'
-import { Backup } from './Backup/index.js'
 
 const r = relativeRouteOf(DashboardRoutes.Setup)
 const Routes = DashboardRoutes
@@ -14,36 +13,35 @@ export const personaRoutes: RouteObject[] = [
     { path: r(Routes.SignUpPersonaOnboarding), lazy: () => import('./Onboarding/index.js') },
     {
         path: r(Routes.Backup),
-        element: <Backup />,
+        lazy: () => import('./Backup/index.js'),
         children: [
             {
                 index: true,
-                lazy: () => import('./Backup/LocalBackup.js'),
+                lazy: () => import('./Backup/Local.js'),
             },
             {
                 path: rr(Routes.Backup, Routes.BackupLocal),
-                lazy: () => import('./Backup/LocalBackup.js'),
-                index: true,
+                lazy: () => import('./Backup/Local.js'),
             },
             {
                 path: rr(Routes.Backup, Routes.BackupCloud),
-                lazy: () => import('./Backup/CloudBackup/index.js'),
+                lazy: () => import('./Backup/Cloud/index.js'),
                 children: [
                     {
                         index: true,
-                        lazy: () => import('./Backup/CloudBackup/MaskNetworkBackup.js'),
+                        lazy: () => import('./Backup/Cloud/MaskNetwork.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupCloudMaskNetwork),
-                        lazy: () => import('./Backup/CloudBackup/MaskNetworkBackup.js'),
+                        lazy: () => import('./Backup/Cloud/MaskNetwork.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupCloudGoogleDrive),
-                        lazy: () => import('./Backup/CloudBackup/GoogleDriveBackup.js'),
+                        lazy: () => import('./Backup/Cloud/GoogleDrive.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupPreview),
-                        lazy: () => import('./Backup/CloudBackup/Preview.js'),
+                        lazy: () => import('./Backup/Cloud/Preview.js'),
                     },
                 ],
             },

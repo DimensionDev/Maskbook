@@ -12,11 +12,11 @@ import { UserContext } from '../../../../../shared-ui/index.js'
 import { BackupPreview } from '../../../../components/BackupPreview/index.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { ConfirmSynchronizePasswordDialog } from '../../../../components/Restore/ConfirmSynchronizePasswordDialog.js'
-import { RestoreContext } from '../../../../components/Restore/RestoreFromCloud/RestoreProvider.js'
 import { RestoreStep } from '../../../../components/Restore/RestoreFromCloud/restoreReducer.js'
 import type { PortalContainerProps } from '../../types.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
 import { InputForm } from './InputForm.js'
+import { RestoreContext } from './RestoreProvider.js'
 
 const MaskNetworkInner = memo(function MaskNetworkInner() {
     const navigate = useNavigate()

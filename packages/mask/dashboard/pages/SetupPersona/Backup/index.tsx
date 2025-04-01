@@ -54,7 +54,7 @@ const tuples: TabPathTuple[] = [
     ],
 ]
 
-export const Backup = memo(function Backup() {
+export const Component = memo(function Backup() {
     const { classes } = useStyles()
 
     const [tab, handleTabChange] = usePathTab(tuples)

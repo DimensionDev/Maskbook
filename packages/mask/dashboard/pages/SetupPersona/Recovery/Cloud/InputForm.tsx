@@ -5,8 +5,8 @@ import { memo, useState } from 'react'
 import { BackupAccountType } from '@masknet/shared-base'
 import { EmailField } from './EmailField.js'
 import { PhoneField } from './PhoneField.js'
-import { RestoreContext } from '../../../../components/Restore/RestoreFromCloud/RestoreProvider.js'
-import { RestoreStep } from '../../../../components/Restore/RestoreFromCloud/restoreReducer.js'
+import { RestoreContext } from './RestoreProvider.js'
+import { RestoreStep } from './restoreReducer.js'
 
 const useStyles = makeStyles()((theme) => ({
     purposes: {

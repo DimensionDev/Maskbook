@@ -7,11 +7,11 @@ import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { useLanguage } from '../../../../../shared-ui/index.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
-import { RestoreContext } from '../../../../components/Restore/RestoreFromCloud/RestoreProvider.js'
 import { sendCode, type RestoreQueryError } from '../../../../utils/api.js'
 import { emailRegexp } from '../../../../utils/regexp.js'
 import { Locale, Scenario } from '../../../../utils/type.js'
 import type { PortalContainerProps } from '../../types.js'
+import { RestoreContext } from './RestoreProvider.js'
 
 export const EmailField = memo(function EmailField() {
     const { t } = useLingui()
@@ -100,6 +100,7 @@ export const EmailField = memo(function EmailField() {
                 <PrimaryButton
                     color="primary"
                     size="large"
+                    variant="roundedContained"
                     onClick={async () => {
                         dispatch({ type: 'SET_LOADING', loading: true })
                         try {

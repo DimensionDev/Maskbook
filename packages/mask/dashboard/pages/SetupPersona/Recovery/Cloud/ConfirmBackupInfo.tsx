@@ -8,11 +8,11 @@ import { useOutletContext } from 'react-router-dom'
 import type { PortalContainerProps } from '../../types.js'
 import { fetchBackupValue } from '../../../../utils/api.js'
 import PasswordField from '../../../../components/PasswordField/index.js'
-import { RestoreContext } from '../../../../components/Restore/RestoreFromCloud/RestoreProvider.js'
-import { RestoreStep } from '../../../../components/Restore/RestoreFromCloud/restoreReducer.js'
 import { AccountStatusBar } from '../../../../components/Restore/AccountStatusBar.js'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { RestoreContext } from './RestoreProvider.js'
+import { RestoreStep } from './restoreReducer.js'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
     const { t } = useLingui()

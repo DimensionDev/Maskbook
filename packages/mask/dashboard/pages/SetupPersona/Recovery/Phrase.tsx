@@ -24,7 +24,7 @@ export const Component = memo(function Phrase() {
     const { classes } = useStyles()
     const [error, setError] = useState<ReactNode>()
 
-    const [values, { updateAt, set: setMnemonic }] = useList(Array.from({ length: 12 }, () => ''))
+    const [values, { updateAt, set: setMnemonic }] = useList(() => Array.from({ length: 12 }, () => ''))
     const handleWordChange = useCallback((word: string, index: number) => {
         updateAt(index, word)
         setError?.(undefined)
