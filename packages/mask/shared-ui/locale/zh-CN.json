@@ -7,6 +7,16 @@
         "y6VCOb": [["0"], " 分钟"],
         "MpnSqP": [["0"], " Pending"],
         "FKrzPv": [["count", "plural", { "one": ["#", " Wallet 🚀"], "other": ["#", " Wallets 🚀"] }]],
+        "5s6EhU": [
+            [
+                "count",
+                "plural",
+                {
+                    "one": ["You have recovered **", "#", " Wallet 🚀**"],
+                    "other": ["You have recovered **", "#", " Wallets 🚀**"]
+                }
+            ]
+        ],
         "yx3mb0": [
             [
                 "decryptProgress",
@@ -191,6 +201,8 @@
         "PjBWOL": ["创建您的身份以开始"],
         "WgawP2": ["Creating your"],
         "cEnmTp": ["Creating your "],
+        "L82H5Z": ["Creating your **identity**"],
+        "F7U8uz": ["Creating your **wallet**"],
         "Q2lUR2": ["货币"],
         "OgPkDe": ["货币符号(可选)"],
         "oOQfsI": ["Current account is not the verifying account."],
@@ -261,6 +273,7 @@
         "w1ctdJ": ["加密贴文"],
         "MRIXE3": ["Encrypting your"],
         "zutir1": ["Encrypting your "],
+        "XB3tfc": ["Encrypting your **data**"],
         "Cz6Lx7": ["加密方式"],
         "N/fqDa": ["Ens或地址(0x)"],
         "mPxxVq": ["输入Gas Limit"],
@@ -318,6 +331,7 @@
         "fUn3xA": ["生成一个新的钱包地址"],
         "tdZPpe": ["Generating your"],
         "CiU2m/": ["Generating your "],
+        "RL5m+x": ["Generating your **accounts**"],
         "2p7WMm": ["Give permission to access <0/> your ", ["0"], "?"],
         "76gPWk": ["好的"],
         "HqiAyF": ["Gwei"],
@@ -805,7 +819,9 @@
         ],
         "N19nSk": ["Your Persona is on"],
         "WC7pDz": ["Your Persona is on "],
+        "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "0kr+x1": ["Your Wallet is on"],
-        "v7OL2k": ["Your Wallet is on "]
+        "v7OL2k": ["Your Wallet is on "],
+        "wCtp6y": ["Your Wallet is on **ready 🚀**"]
     }
 }
