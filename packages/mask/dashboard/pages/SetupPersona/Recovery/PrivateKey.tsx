@@ -6,15 +6,15 @@ import { Trans, useLingui as useLinguiMacro } from '@lingui/react/macro'
 import { delay } from '@masknet/kit'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Portal } from '@mui/material'
+import { Box } from '@mui/material'
 import { memo, useCallback } from 'react'
 import { Controller, useForm, type SubmitHandler, type UseFormSetError } from 'react-hook-form'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
+import { OutletPortal } from '../../../components/OutletPortal.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
-import type { PortalContainerProps } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
@@ -28,7 +28,6 @@ const schema = z.object({
 export type FormInputs = z.infer<typeof schema>
 export const Component = memo(function RecoveryPrivateKey() {
     const { classes } = useStyles()
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { t } = useLinguiMacro()
     const { _ } = useLingui()
     const navigate = useNavigate()
@@ -97,7 +96,7 @@ export const Component = memo(function RecoveryPrivateKey() {
                 )}
                 name="privateKey"
             />
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     size="large"
                     color="primary"
@@ -106,7 +105,7 @@ export const Component = memo(function RecoveryPrivateKey() {
                     onClick={handleSubmit(onSubmit)}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </Box>
     )
 })

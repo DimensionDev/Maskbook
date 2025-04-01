@@ -3,14 +3,14 @@ import { Icons } from '@masknet/icons'
 import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
-import { Box, Button, Portal, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { memo, useMemo, useState } from 'react'
-import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { GoogleDriveFileTable } from '../../../../components/GoogleDriveFileTable.js'
 import { GoogleDriveLogin } from '../../../../components/GoogleDriveLogin.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
@@ -21,7 +21,6 @@ import {
     getGoogleDriveAccessToken,
     progressDownload,
 } from '../../../../utils/api.js'
-import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -68,7 +67,6 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function GoogleDriveBackup() {
     const { classes } = useStyles()
     const { user, updateUser } = UserContext.useContainer()
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const googleDriveClient = useMemo(
         () => new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken),
         [],
@@ -148,7 +146,7 @@ export const Component = memo(function GoogleDriveBackup() {
                     }}
                 />
             </Box>
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     variant="roundedContained"
                     startIcon={<Icons.CloudBackup2 size={18} />}
@@ -169,7 +167,7 @@ export const Component = memo(function GoogleDriveBackup() {
                     }}>
                     <Trans>Back Up to Google Drive</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </Box>
     )
 })

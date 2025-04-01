@@ -1,16 +1,15 @@
-import { decryptBackup } from '@masknet/backup-format'
-import { decode, encode } from '@msgpack/msgpack'
-import { Box, Portal } from '@mui/material'
-import { memo, useCallback, useState, type ReactNode } from 'react'
 import Services from '#services'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useOutletContext } from 'react-router-dom'
-import type { PortalContainerProps } from '../../types.js'
-import { fetchBackupValue } from '../../../../utils/api.js'
+import { decryptBackup } from '@masknet/backup-format'
+import { decode, encode } from '@msgpack/msgpack'
+import { Box } from '@mui/material'
+import { memo, useCallback, useState, type ReactNode } from 'react'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import PasswordField from '../../../../components/PasswordField/index.js'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { AccountStatusBar } from '../../../../components/Restore/AccountStatusBar.js'
 import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard.js'
-import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { fetchBackupValue } from '../../../../utils/api.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 
@@ -57,8 +56,6 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
         dispatch({ type: 'TO_INPUT' })
     }, [])
 
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
-
     if (!backupFileInfo) return null
 
     return (
@@ -83,11 +80,11 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
                     helperText={errorMessage}
                 />
             </Box>
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton color="primary" size="large" onClick={handleNext} loading={loading}>
                     <Trans>Restore</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </Box>
     )
 })

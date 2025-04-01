@@ -2,18 +2,17 @@ import { Trans, useLingui } from '@lingui/react/macro'
 import { PhoneNumberField } from '@masknet/shared'
 import { BackupAccountType } from '@masknet/shared-base'
 import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
-import { Box, Portal } from '@mui/material'
+import { Box } from '@mui/material'
 import guessCallingCode from 'guess-calling-code'
 import { pick } from 'lodash-es'
 import { memo, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
-import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { useLanguage } from '../../../../../shared-ui/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { sendCode, type RestoreQueryError } from '../../../../utils/api.js'
 import { phoneRegexp } from '../../../../utils/regexp.js'
 import { Locale, Scenario } from '../../../../utils/type.js'
-import type { PortalContainerProps } from '../../types.js'
 import { RestoreContext } from './RestoreProvider.js'
 
 export const PhoneField = memo(function PhoneField() {
@@ -61,7 +60,6 @@ export const PhoneField = memo(function PhoneField() {
         })
     }, [account, language])
 
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const phoneNotReady = !account || invalidPhone || !phoneRegexp.test(account)
     const disabled = phoneNotReady || code.length !== 6 || !!error || loading
 
@@ -96,7 +94,7 @@ export const PhoneField = memo(function PhoneField() {
                     }}
                 />
             </Box>
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     color="primary"
                     size="large"
@@ -120,7 +118,7 @@ export const PhoneField = memo(function PhoneField() {
                     disabled={disabled}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </>
     )
 })

@@ -7,16 +7,16 @@ import { FileFrame, PersonaContext, UploadDropArea } from '@masknet/shared'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
-import { Box, Button, Portal, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAsync } from 'react-use'
 import urlcat from 'urlcat'
 import { BackupPreview } from '../../../components/BackupPreview/index.js'
+import { OutletPortal } from '../../../components/OutletPortal.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { AccountStatusBar } from '../../../components/Restore/AccountStatusBar.js'
-import type { PortalContainerProps } from '../types.js'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -46,7 +46,6 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function RecoveryLocalBackup() {
     const { t } = useLingui()
     const { classes, theme } = useStyles()
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { showSnackbar } = useCustomSnackbar()
     const navigate = useNavigate()
 
@@ -196,7 +195,7 @@ export const Component = memo(function RecoveryLocalBackup() {
                     <BackupPreview mt={2} info={summary} />
                 </>
             :   null}
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     size="large"
                     color="primary"
@@ -208,7 +207,7 @@ export const Component = memo(function RecoveryLocalBackup() {
                         <Trans>Continue</Trans>
                     :   <Trans>Restore</Trans>}
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </Box>
     )
 })

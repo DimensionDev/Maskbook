@@ -5,7 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Outlet, useMatch, useNavigate, useOutletContext } from 'react-router-dom'
-import type { PortalContainerProps } from '../../types.js'
+import type { PortalContainerProps } from '../../../../components/OutletPortal.js'
 
 const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     container: {

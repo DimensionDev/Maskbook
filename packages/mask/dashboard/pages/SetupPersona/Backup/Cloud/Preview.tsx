@@ -4,14 +4,14 @@ import { EmptyStatus, formatFileSize } from '@masknet/shared'
 import type { BackupAccountType } from '@masknet/shared-base'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
-import { Box, Button, Portal, Typography } from '@mui/material'
+import { Box, Button, Typography } from '@mui/material'
 import { format as formatDateTime, fromUnixTime } from 'date-fns'
 import { memo, useCallback, useMemo } from 'react'
-import { useNavigate, useOutletContext, useSearchParams } from 'react-router-dom'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
 import { createBackupName, downloadBackup, getFileName, progressDownload } from '../../../../utils/api.js'
-import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     header: {
@@ -66,7 +66,6 @@ const useStyles = makeStyles()((theme) => ({
 export const Component = memo(function CloudBackupPreview() {
     const { classes, theme } = useStyles()
     const [params] = useSearchParams()
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
 
     const navigate = useNavigate()
 
@@ -190,11 +189,11 @@ export const Component = memo(function CloudBackupPreview() {
                 }
             </Box>
             {!previewInfo.downloadLink ?
-                <Portal container={() => portalContainerRef.current}>
+                <OutletPortal>
                     <ActionButton onClick={handleBackupClick}>
                         <Trans>Back</Trans>
                     </ActionButton>
-                </Portal>
+                </OutletPortal>
             :   null}
         </>
     )

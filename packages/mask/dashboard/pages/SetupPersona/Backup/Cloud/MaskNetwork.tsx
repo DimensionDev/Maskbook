@@ -3,18 +3,18 @@ import { Trans } from '@lingui/react/macro'
 import { Alert, useParamTab } from '@masknet/shared'
 import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Portal, Radio, RadioGroup, Typography } from '@mui/material'
+import { Box, Radio, RadioGroup, Typography } from '@mui/material'
 import { memo, useState } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
 import { UserContext } from '../../../../../shared-ui/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { fetchDownloadLink } from '../../../../utils/api.js'
 import { CloudBackupFormContext, type CloudBackupFormInputs } from './CloudBackupFormContext.js'
 import { EmailForm } from './EmailForm.js'
 import { PhoneForm } from './PhoneForm.js'
-import type { PortalContainerProps } from '../../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -38,7 +38,6 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function MaskNetworkBackup() {
     const { classes } = useStyles()
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { user, updateUser } = UserContext.useContainer()
     const navigate = useNavigate()
     const [showAlert, setShowAlert] = useState(true)
@@ -123,7 +122,7 @@ export const Component = memo(function MaskNetworkBackup() {
                     cloud backup services or local backup solutions.
                 </Trans>
             </Alert>
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     size="large"
                     variant="roundedContained"
@@ -132,7 +131,7 @@ export const Component = memo(function MaskNetworkBackup() {
                     onClick={form.handleSubmit(handleSubmit)}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </Box>
     )
 })

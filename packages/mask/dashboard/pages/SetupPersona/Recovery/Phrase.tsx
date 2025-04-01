@@ -3,15 +3,15 @@ import { Trans } from '@lingui/react/macro'
 import { delay } from '@masknet/kit'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
-import { Box, Portal, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { some } from 'lodash-es'
 import { memo, useCallback, useState, type ReactNode } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { useList } from 'react-use'
 import { DesktopMnemonicConfirm } from '../../../components/Mnemonic/index.js'
+import { OutletPortal } from '../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { SignUpRoutePath } from '../../SignUp/routePath.js'
-import type { PortalContainerProps } from '../types.js'
 
 const useStyles = makeStyles()((theme) => ({
     error: {
@@ -30,7 +30,6 @@ export const Component = memo(function Phrase() {
         setError?.(undefined)
     }, [])
 
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const disabled = some(values, (value) => !value)
     const navigate = useNavigate()
 
@@ -65,7 +64,7 @@ export const Component = memo(function Phrase() {
                 </Typography>
             :   null}
 
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     size="large"
                     color="primary"
@@ -74,7 +73,7 @@ export const Component = memo(function Phrase() {
                     onClick={handleImport}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </Box>
     )
 })

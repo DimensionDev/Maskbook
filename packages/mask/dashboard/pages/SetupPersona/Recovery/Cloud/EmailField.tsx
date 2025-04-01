@@ -1,16 +1,15 @@
 import { Trans, useLingui } from '@lingui/react/macro'
 import { BackupAccountType } from '@masknet/shared-base'
 import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
-import { Box, Portal, TextField } from '@mui/material'
+import { Box, TextField } from '@mui/material'
 import { memo, useCallback, useState, type ReactNode } from 'react'
-import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { useLanguage } from '../../../../../shared-ui/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { sendCode, type RestoreQueryError } from '../../../../utils/api.js'
 import { emailRegexp } from '../../../../utils/regexp.js'
 import { Locale, Scenario } from '../../../../utils/type.js'
-import type { PortalContainerProps } from '../../types.js'
 import { RestoreContext } from './RestoreProvider.js'
 
 export const EmailField = memo(function EmailField() {
@@ -48,7 +47,6 @@ export const EmailField = memo(function EmailField() {
         setInvalidEmail(!isValid)
     }
 
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const emailNotReady = !account || invalidEmail
     const disabled = emailNotReady || code.length !== 6
 
@@ -96,7 +94,7 @@ export const EmailField = memo(function EmailField() {
                     }}
                 />
             </Box>
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     color="primary"
                     size="large"
@@ -120,7 +118,7 @@ export const EmailField = memo(function EmailField() {
                     disabled={disabled}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </>
     )
 })

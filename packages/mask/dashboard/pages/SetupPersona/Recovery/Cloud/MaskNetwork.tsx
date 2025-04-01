@@ -1,19 +1,19 @@
 import Services from '#services'
 import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
 import { useCustomSnackbar } from '@masknet/theme'
-import { Box, Portal } from '@mui/material'
+import { Box } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
-import { useNavigate, useOutletContext } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import urlcat from 'urlcat'
 
 import { Trans } from '@lingui/react/macro'
 import { Alert, PersonaContext } from '@masknet/shared'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { BackupPreview } from '../../../../components/BackupPreview/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { ConfirmSynchronizePasswordDialog } from '../../../../components/Restore/ConfirmSynchronizePasswordDialog.js'
 import { RestoreStep } from '../../../../components/Restore/RestoreFromCloud/restoreReducer.js'
-import type { PortalContainerProps } from '../../types.js'
 import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
 import { InputForm } from './InputForm.js'
 import { RestoreContext } from './RestoreProvider.js'
@@ -25,7 +25,6 @@ const MaskNetworkInner = memo(function MaskNetworkInner() {
     const { currentPersona } = PersonaContext.useContainer()
     const { state, dispatch } = RestoreContext.useContainer()
     const { account, accountType, backupSummary, password, backupDecrypted } = state
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
 
     const [openSynchronizePasswordDialog, toggleSynchronizePasswordDialog] = useState(false)
 
@@ -103,11 +102,11 @@ const MaskNetworkInner = memo(function MaskNetworkInner() {
                 />
             :   null}
             {showButton ?
-                <Portal container={() => portalContainerRef.current}>
+                <OutletPortal>
                     <PrimaryButton size="large" color="primary" onClick={handleRestore} loading={state.loading}>
                         <Trans>Restore</Trans>
                     </PrimaryButton>
-                </Portal>
+                </OutletPortal>
             :   null}
         </Box>
     )
