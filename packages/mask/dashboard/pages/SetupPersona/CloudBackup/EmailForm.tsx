@@ -1,13 +1,13 @@
-import { memo, useCallback } from 'react'
-import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { Controller } from 'react-hook-form'
-import { Box, TextField } from '@mui/material'
-import { sendCode } from '../../../utils/api.js'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { BackupAccountType } from '@masknet/shared-base'
-import { Locale, Scenario } from '../../../utils/type.js'
+import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Box, TextField } from '@mui/material'
+import { memo, useCallback } from 'react'
+import { Controller } from 'react-hook-form'
 import { UserContext, useLanguage } from '../../../../shared-ui/index.js'
 import { CloudBackupFormContext } from '../../../contexts/CloudBackupFormContext.js'
-import { Trans, useLingui } from '@lingui/react/macro'
+import { sendCode } from '../../../utils/api.js'
+import { Locale, Scenario } from '../../../utils/type.js'
 
 const useStyles = makeStyles()((theme) => ({
     send: {
@@ -35,22 +35,21 @@ export const EmailForm = memo(function EmailForm() {
     const email = watch('email')
 
     const handleSendVerificationCode = useCallback(async () => {
-        const response = await sendCode({
-            account: email,
-            type: BackupAccountType.Email,
-            scenario: user.email ? Scenario.change : Scenario.create,
-            locale: language.includes('zh') ? Locale.zh : Locale.en,
-        }).catch((error) => {
+        try {
+            const response = await sendCode({
+                account: email,
+                type: BackupAccountType.Email,
+                scenario: user.email ? Scenario.change : Scenario.create,
+                locale: language.includes('zh') ? Locale.zh : Locale.en,
+            })
+
+            if (response) showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
+        } catch (error) {
+            const message = (error as any).message
             showSnackbar(
-                error.message.includes('SendTemplatedEmail') ?
-                    <Trans>Invalid email address format.</Trans>
-                :   error.message,
+                message.includes('SendTemplatedEmail') ? <Trans>Invalid email address format.</Trans> : message,
                 { variant: 'error' },
             )
-        })
-
-        if (response) {
-            showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
         }
     }, [email, user, language])
 

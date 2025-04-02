@@ -50,17 +50,35 @@ export const Component = memo(function MaskNetworkBackup() {
     const incorrectCodeMsg = t`The code is incorrect.`
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
-            const response = await fetchDownloadLink({
-                account: isEmail ? data.email : `+${data.countryCode} ${data.phone}`,
-                type: isEmail ? BackupAccountType.Email : BackupAccountType.Phone,
-                code: data.code,
-            }).catch((error) => {
-                if (error.status === 400) {
+            try {
+                const response = await fetchDownloadLink({
+                    account: isEmail ? data.email : `+${data.countryCode} ${data.phone}`,
+                    type: isEmail ? BackupAccountType.Email : BackupAccountType.Phone,
+                    code: data.code,
+                })
+
+                if (!response) return
+
+                updateUser({
+                    email: data.email || user.email,
+                    phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
+                })
+                reset()
+                navigate(
+                    urlcat(DashboardRoutes.BackupPreview, {
+                        ...response,
+                        type: isEmail ? BackupAccountType.Email : BackupAccountType.Phone,
+                        account: isEmail ? data.email : `+${data.countryCode} ${data.phone}`,
+                        code: data.code,
+                    }),
+                )
+            } catch (err) {
+                if ((err as any).status === 400) {
                     setError('code', {
                         type: 'custom',
                         message: incorrectCodeMsg,
                     })
-                } else if (error.status === 404) {
+                } else if ((err as any).status === 404) {
                     reset()
                     // No cloud backup file
                     navigate(
@@ -71,23 +89,7 @@ export const Component = memo(function MaskNetworkBackup() {
                         }),
                     )
                 }
-            })
-
-            if (!response) return
-
-            updateUser({
-                email: data.email || user.email,
-                phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
-            })
-            reset()
-            navigate(
-                urlcat(DashboardRoutes.BackupPreview, {
-                    ...response,
-                    type: isEmail ? BackupAccountType.Email : BackupAccountType.Phone,
-                    account: isEmail ? data.email : `+${data.countryCode} ${data.phone}`,
-                    code: data.code,
-                }),
-            )
+            }
         },
         [isEmail, setError, reset, navigate, updateUser, user],
     )
