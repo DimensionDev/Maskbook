@@ -1,11 +1,11 @@
-import { createContainer } from '@masknet/shared-base-ui'
-import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useTabs } from '@masknet/theme'
-import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
-import guessCallingCode from 'guess-calling-code'
 import { useLingui } from '@lingui/react/macro'
+import { createContainer } from '@masknet/shared-base-ui'
+import { useTabs } from '@masknet/theme'
+import guessCallingCode from 'guess-calling-code'
+import { useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { emailRegexp, phoneRegexp } from '../utils/regexp.js'
 
 export interface CloudBackupFormInputs {
     email: string
@@ -70,4 +70,5 @@ function useCloudBackupFormContext() {
     }
 }
 
+/** @deprecated */
 export const CloudBackupFormContext = createContainer(useCloudBackupFormContext)

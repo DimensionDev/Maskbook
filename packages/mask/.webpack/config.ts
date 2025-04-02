@@ -238,6 +238,7 @@ export async function createConfiguration(
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
+                GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',
@@ -312,7 +313,6 @@ export async function createConfiguration(
         // Focus on performance optimization. Not for download size/cache stability optimization.
         optimization: {
             // we don't need deterministic, and we also don't have chunk request at init we don't need "size"
-            // @ts-expect-error
             chunkIds:
                 productionLike ?
                     rspack ? 'deterministic'

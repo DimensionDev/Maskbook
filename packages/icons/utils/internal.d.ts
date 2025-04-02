@@ -20,7 +20,7 @@ export interface GeneratedIconProps<Variants extends MaskIconPalette = never>
 export type GeneratedIcon = ComponentType<GeneratedIconProps> | ComponentType<GeneratedIconProps<'dark' | 'light'>>
 
 export interface GeneratedIconNonSquareProps<Variants extends MaskIconPalette = never>
-    extends React.HTMLProps<HTMLElement> {
+    extends Omit<React.HTMLProps<HTMLElement>, 'children'> {
     variant?: Variants[] | Variants
     height?: number | string
     width?: number | string

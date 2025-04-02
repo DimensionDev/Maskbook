@@ -51,9 +51,14 @@ function fetchingInsResource(target: URL) {
     return location.origin.endsWith('instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/)
 }
 
+function fetchingGoogleDriveResource(target: URL) {
+    return target.origin === 'https://www.googleapis.com'
+}
+
 function canAccessAsContent(url: string) {
     const target = new URL(url, location.href)
-    if (fetchingTwitterResource(target) || fetchingInsResource(target)) return true
+    if (fetchingTwitterResource(target) || fetchingInsResource(target) || fetchingGoogleDriveResource(target))
+        return true
 
     // eg: https://maskbook-backup-server-staging.s3.ap-east-1.amazonaws.com/backups/xxx.zip
     // The content-length needs to be used in the client request in order to realize the progress of the download.

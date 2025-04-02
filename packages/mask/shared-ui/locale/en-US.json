@@ -61,6 +61,7 @@
         "5YfW3S": ["Add an encrypted comment..."],
         "aTzTyw": ["Add Assets"],
         "M0FgOk": ["Add Contact"],
+        "FAKSZG": ["Add google Drive"],
         "LP+1Z7": ["Add Network"],
         "68m9Nl": ["Add new address to an existing group"],
         "1LkMSp": ["Add Suggested Token"],
@@ -100,6 +101,8 @@
         "7QptC5": ["Auto-lock Time"],
         "nTFx7o": ["Avatar set successfully"],
         "iH8pgl": ["Back"],
+        "npsHM5": ["Back Up to Google Drive"],
+        "V+1pjj": ["Back Up Your Data Your Way"],
         "rLgPvm": ["Backup"],
         "h7+V7K": ["Backup & Recovery"],
         "QrHM/A": ["Backup downloaded and merged to local successfully."],
@@ -113,6 +116,7 @@
         ],
         "hUF4dG": ["Backup password set successfully"],
         "UtKGok": ["Backup Persona"],
+        "+m7x4e": ["Backup Successful"],
         "7Ry254": ["Backup to Mask Cloud Service"],
         "6IHgRq": ["Backup to the Cloud"],
         "QQPCqQ": ["Backup Wallet"],
@@ -140,6 +144,9 @@
         "tcHpvG": ["Change Owner"],
         "fDP2k4": ["Change Payment Password"],
         "IXbRbM": ["Choose another wallet"],
+        "lU6uRb": [
+            "Choose from multiple backup options, now including encrypted storage via your authorized Google Drive for added security and flexibility."
+        ],
         "xH6cn+": ["Choose Token"],
         "+adBn3": ["Chrome - external extension"],
         "EsKgLS": ["Click here to have a quick start."],
@@ -211,6 +218,7 @@
         "pvnfJD": ["Dark"],
         "Sp/me1": ["data"],
         "HKH+W+": ["Data"],
+        "K8jCIB": ["Data backed up successfully!"],
         "3B4jmY": ["Data correlation"],
         "rAcOY1": [
             "Data merged from Mask Cloud Service to local successfully. Re-enter your password to encrypt and upload the new backup to Mask Cloud Service."
@@ -286,7 +294,9 @@
         "SLEDBF": ["Failed to add the wallet, please try again."],
         "09vHB+": ["Failed to decrypt."],
         "jK7nvW": ["Failed to disconnect wallet"],
+        "9hzYBR": ["Failed to download and merge the backup: ", ["0"]],
         "0tkvsz": ["Failed to download and merge the backup."],
+        "etATpN": ["Failed to login: ", ["0"]],
         "mrAv9J": ["Failed to save network"],
         "ZsjtYe": ["Failed to set Avatar."],
         "RWoEqV": ["Failed to transfer token: ", ["message"]],
@@ -323,6 +333,7 @@
         "tdZPpe": ["Generating your"],
         "CiU2m/": ["Generating your "],
         "2p7WMm": ["Give permission to access <0/> your ", ["0"], "?"],
+        "w9Xmw/": ["Google Drive"],
         "76gPWk": ["Got it"],
         "HqiAyF": ["Gwei"],
         "pu3rTn": ["GWEI"],
@@ -354,6 +365,7 @@
         "fza4cg": ["Import Wallets"],
         "HvDfH/": ["Imported"],
         "m3XvO+": ["Imported Wallets"],
+        "ANk/Zy": ["Incorrect Backup Password"],
         "a23gJr": ["Incorrect backup password."],
         "bapItf": ["Incorrect Backup Password."],
         "bassMa": ["Incorrect cloud backup password, please try again."],
@@ -394,9 +406,11 @@
         "jygqM9": ["Loading account information..."],
         "EBC6hj": ["Local Backup"],
         "shPV5O": ["Local persona or wallet only"],
+        "crVIc7": ["Locale Backup"],
         "KGHnSc": ["Lock Wallet"],
         "FgAxTj": ["Log out"],
         "kC3Q3d": ["Login to Mask Cloud"],
+        "nOhz3x": ["Logout"],
         "NkgvWN": ["Logout failed"],
         "o4Iu2W": ["Logout successfully"],
         "nTWWCZ": ["Low"],
@@ -406,6 +420,7 @@
         ],
         "lET9my": ["Mask needs the following permissions"],
         "siroPf": ["Mask Network"],
+        "jhoAzY": ["Mask Network Cloud"],
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "HsoakN": ["masknetwork"],
         "CK1KXz": ["Max"],
@@ -422,7 +437,9 @@
         "sQJ3RN": ["Max priority fee is too low for network conditions."],
         "ITBQO3": ["Max priority fee must be greater than 0 GWEI"],
         "agPptk": ["Medium"],
+        "lPsa94": ["Merge Completed"],
         "RH8jSA": ["Merge data to local database"],
+        "E6YUtc": ["Merge to Browser"],
         "QTomF0": ["Merge to local"],
         "xDAtGP": ["Message"],
         "pGElS5": ["Mnemonic"],
@@ -655,6 +672,9 @@
         "VdhBp2": ["The chainID is not equal to the currently connected one."],
         "h3Vpnw": ["The code is incorrect."],
         "7w1rTm": ["The download link is expired"],
+        "oYkran": [
+            "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
+        ],
         "o+zDNQ": ["The mnemonic word has been copied, please keep it in a safe place."],
         "yRuvmU": ["The mnemonic words has been copied, please keep it in a safe place."],
         "thX7xs": [
@@ -793,6 +813,7 @@
         "m74yjp": ["Welcome to Mask Cloud Services"],
         "hEpXzO": ["Welcome to Mask Network"],
         "fFYJ8f": ["Welcome to use Mask Network"],
+        "OLUEnY": ["when you click Add Google Drive button，you will be forwarded to Google authorization pages."],
         "Qbo7Ev": ["Write down mnemonic words"],
         "f5AidZ": ["Write down recovery phrase"],
         "yGyJ1l": [
@@ -810,6 +831,7 @@
         "FnQek5": [
             "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
         ],
+        "UDKbPj": ["Your file has been successfully merged into the browser data."],
         "Q68Nuc": [
             "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
         ],
