@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
-export async function getAccessToken() {
+export async function getAccessToken(interactive = false) {
     const contained = await browser.permissions.contains({ permissions: ['identity'] })
     if (!contained) {
         const granted = await browser.permissions.request({ origins: ['identity'] })
@@ -7,7 +7,7 @@ export async function getAccessToken() {
     }
     return new Promise<string>((resolve, reject) => {
         // @ts-expect-error
-        chrome.identity.getAuthToken({ interactive: true }, (token, error) => {
+        chrome.identity.getAuthToken({ interactive }, (token, error) => {
             // @ts-expect-error
             if (chrome.runtime.lastError) {
                 // @ts-expect-error

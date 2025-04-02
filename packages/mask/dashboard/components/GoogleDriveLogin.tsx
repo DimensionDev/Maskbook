@@ -38,7 +38,7 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
 
     const [{ loading }, login] = useAsyncFn(async () => {
         try {
-            const userInfo = await googleDriveClient.getUserInfo()
+            const userInfo = await googleDriveClient.login(true)
             updateUser({
                 googleAccount: userInfo.email || '',
             })

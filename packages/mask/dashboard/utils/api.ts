@@ -1,8 +1,8 @@
-import { t } from '@lingui/core/macro'
-import { format as formatDateTime } from 'date-fns'
-import type { BackupAccountType } from '@masknet/shared-base'
-import type { BackupFileInfo, Scenario, Locale } from './type.js'
 import Services from '#services'
+import { t } from '@lingui/core/macro'
+import type { BackupAccountType } from '@masknet/shared-base'
+import { format as formatDateTime } from 'date-fns'
+import type { BackupFileInfo, Locale, Scenario } from './type.js'
 
 const BASE_RUL = 'https://vaalh28dbi.execute-api.ap-east-1.amazonaws.com/api'
 
@@ -169,8 +169,8 @@ export async function* progressDownload(request: string | null | (() => Promise<
     return Uint8Array.from(chunks).buffer
 }
 
-export function getGoogleDriveAccessToken() {
-    return Services.Backup.getAccessToken()
+export function getGoogleDriveAccessToken(interactive?: boolean) {
+    return Services.Backup.getAccessToken(interactive)
 }
 export function clearGoogleDriveAccessToken() {
     return Services.Backup.clearAccessToken()

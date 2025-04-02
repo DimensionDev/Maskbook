@@ -1,19 +1,14 @@
-import { useInfiniteQuery } from '@tanstack/react-query'
 import { type GoogleDriveClient } from '@masknet/web3-providers'
+import { useInfiniteQuery } from '@tanstack/react-query'
 import { compact } from 'lodash-es'
-import { useEffect, useState } from 'react'
+import { UserContext } from '../../shared-ui/index.js'
 
 export function useGoogleDriveFiles(client: GoogleDriveClient) {
-    const [isLogin, setIsLogin] = useState(false)
-
-    useEffect(() => {
-        client.login()
-        return client.subscribe(setIsLogin)
-    }, [client])
+    const { user } = UserContext.useContainer()
 
     const query = useInfiniteQuery({
-        enabled: isLogin,
-        queryKey: ['google-drive', 'files'],
+        enabled: !!user.googleAccount,
+        queryKey: ['google-drive', 'files', user.googleAccount],
         initialPageParam: '',
         queryFn: (param) => {
             return client.listBackupFiles({

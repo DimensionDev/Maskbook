@@ -1,3 +1,4 @@
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
 import { FileFrame, UploadDropArea } from '@masknet/shared'
@@ -7,7 +8,6 @@ import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 're
 import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
 import PasswordField from '../PasswordField/index.js'
 import { PrimaryButton } from '../PrimaryButton/index.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     uploadedFile: {
@@ -26,7 +26,7 @@ interface RestoreFromLocalProps {
     error: ReactNode
 }
 
-export const RestoreWalletFromLocal = memo(function RestorePersonaFromLocal({
+export const RestoreWalletFromLocal = memo(function RestoreWalletFromLocal({
     onRestore,
     setError,
     error,

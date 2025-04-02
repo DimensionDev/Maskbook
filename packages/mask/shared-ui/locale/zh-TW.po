@@ -362,8 +362,6 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Backup password"
 msgstr "備份密碼"
 
@@ -584,7 +582,6 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Completed"
 msgstr ""
 
@@ -753,11 +750,8 @@ msgstr "聯繫人"
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromMnemonic.tsx
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Continue"
 msgstr ""
 
@@ -891,8 +885,6 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Decrypt failed, please check password"
 msgstr "備份解密失敗，請檢查密碼"
 
@@ -1041,14 +1033,12 @@ msgstr ""
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Email"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Email verification code"
 msgstr ""
 
@@ -1481,7 +1471,6 @@ msgid "Incorrect backup password."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Incorrect Backup Password."
 msgstr ""
 
@@ -1571,7 +1560,6 @@ msgid "Invalid email address format."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid email address."
 msgstr ""
 
@@ -1580,7 +1568,6 @@ msgid "Invalid number"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Invalid phone number, please check and try again."
 msgstr ""
 
@@ -1590,8 +1577,6 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Invalid verification code."
 msgstr ""
 
@@ -1850,7 +1835,6 @@ msgid "Mobile number"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Mobile verification code"
 msgstr ""
 
@@ -2428,7 +2412,6 @@ msgid "Request Source"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Reselect"
 msgstr ""
 
@@ -2451,14 +2434,10 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
-#: dashboard/components/Restore/RestoreFromCloud/index.tsx
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Restore"
 msgstr "恢復"
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Restore backup failed."
 msgstr ""
 
@@ -2471,7 +2450,6 @@ msgid "Restore Database"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
-#: dashboard/components/Restore/RestoreFromCloud/index.tsx
 msgid "Restore failed"
 msgstr "恢復失敗"
 
@@ -2778,7 +2756,6 @@ msgid "Switch Persona"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
-#: dashboard/components/Restore/RestoreFromCloud/ConfirmBackupInfo.tsx
 msgid "Switch to other accounts"
 msgstr ""
 
@@ -3088,14 +3065,11 @@ msgstr "解鎖"
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unpacking"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
-#: dashboard/components/Restore/RestorePersonaFromLocal.tsx
 msgid "Unsupported data backup"
 msgstr "不支持數據備份格式"
 
@@ -3144,12 +3118,10 @@ msgid "value"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/EmailField.tsx
 msgid "Verification code has been sent to your email. Please check your mailbox."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-#: dashboard/components/Restore/RestoreFromCloud/PhoneField.tsx
 msgid "Verification code has been sent to your phone."
 msgstr ""
 

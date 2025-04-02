@@ -36,7 +36,7 @@ interface UserInfo {
 
 type Callback = (isLogin: boolean) => void
 export class GoogleDriveClient {
-    private getToken: () => Promise<string | undefined>
+    private getToken: (interactive?: boolean) => Promise<string | undefined>
     private clearToken: () => Promise<void>
     private baseUrl: string = 'https://www.googleapis.com/drive/v3'
     private uploadUrl: string = 'https://www.googleapis.com/upload/drive/v3'
@@ -48,17 +48,23 @@ export class GoogleDriveClient {
         this.clearToken = clearToken
     }
 
-    async login() {
-        const userInfo = await this.getUserInfo()
-        this.callbacks.forEach((callback) => callback(true))
+    async login(interactive?: boolean) {
+        const userInfo = await this.getUserInfo(interactive)
+        if (userInfo) {
+            this.callbacks.forEach((callback) => callback(true))
+        }
         return userInfo
     }
     async logout() {
         await this.clearToken()
         this.callbacks.forEach((callback) => callback(false))
     }
-    private async request(input: string | URL | globalThis.Request, init?: RequestInit): Promise<Response> {
-        const token = await this.getToken()
+    private async request(
+        input: string | URL | globalThis.Request,
+        init?: RequestInit,
+        interactive?: boolean,
+    ): Promise<Response> {
+        const token = await this.getToken(interactive)
         const response = await fetch(input, {
             ...init,
             headers: {
@@ -254,13 +260,17 @@ export class GoogleDriveClient {
         return response
     }
 
-    public async getUserInfo(): Promise<UserInfo> {
+    public async getUserInfo(interactive?: boolean): Promise<UserInfo> {
         try {
-            const response = await this.request('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: {
-                    'Content-Type': 'application/json',
+            const response = await this.request(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 },
-            })
+                interactive,
+            )
 
             return (await response.json()) as UserInfo
         } catch (error) {
