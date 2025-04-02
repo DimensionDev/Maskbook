@@ -1,16 +1,16 @@
+import { Trans, useLingui } from '@lingui/react/macro'
+import { BackupAccountType } from '@masknet/shared-base'
 import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Box, TextField } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
+import { memo, useCallback, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
-import { usePersonaRecovery } from '../../../contexts/RecoveryContext.js'
-import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
-import { emailRegexp } from '../../../utils/regexp.js'
-import { BackupAccountType } from '@masknet/shared-base'
-import { Locale, Scenario } from '../../../utils/type.js'
-import { PrimaryButton } from '../../PrimaryButton/index.js'
-import { useLanguage } from '../../../../shared-ui/index.js'
+import { useLanguage } from '../../../../../shared-ui/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { sendCode, type RestoreQueryError } from '../../../../utils/api.js'
+import { emailRegexp } from '../../../../utils/regexp.js'
+import { Locale, Scenario } from '../../../../utils/type.js'
 import { RestoreContext } from './RestoreProvider.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 export const EmailField = memo(function EmailField() {
     const { t } = useLingui()
@@ -47,35 +47,8 @@ export const EmailField = memo(function EmailField() {
         setInvalidEmail(!isValid)
     }
 
-    const { fillSubmitOutlet } = usePersonaRecovery()
     const emailNotReady = !account || invalidEmail
     const disabled = emailNotReady || code.length !== 6
-    useLayoutEffect(() => {
-        return fillSubmitOutlet(
-            <PrimaryButton
-                color="primary"
-                size="large"
-                onClick={async () => {
-                    dispatch({ type: 'SET_LOADING', loading: true })
-                    try {
-                        const backupFileInfo = await downloadBackupInfo(BackupAccountType.Email, account, code)
-                        dispatch({ type: 'SET_BACKUP_INFO', info: backupFileInfo })
-                        dispatch({ type: 'NEXT_STEP' })
-                    } catch (err) {
-                        const message = (err as RestoreQueryError).message
-                        if (['code not found', 'code mismatch'].includes(message))
-                            setCodeError(<Trans>Invalid verification code.</Trans>)
-                        else setError(message)
-                    } finally {
-                        dispatch({ type: 'SET_LOADING', loading: false })
-                    }
-                }}
-                loading={loading}
-                disabled={disabled}>
-                <Trans>Continue</Trans>
-            </PrimaryButton>,
-        )
-    }, [account, code, loading, disabled])
 
     const hasError = sendCodeError?.message.includes('SendTemplatedEmail') || invalidEmail || !!error
     const errorMessage =
@@ -121,6 +94,31 @@ export const EmailField = memo(function EmailField() {
                     }}
                 />
             </Box>
+            <OutletPortal>
+                <PrimaryButton
+                    color="primary"
+                    size="large"
+                    variant="roundedContained"
+                    onClick={async () => {
+                        dispatch({ type: 'SET_LOADING', loading: true })
+                        try {
+                            const backupFileInfo = await downloadBackupInfo(BackupAccountType.Email, account, code)
+                            dispatch({ type: 'SET_BACKUP_INFO', info: backupFileInfo })
+                            dispatch({ type: 'NEXT_STEP' })
+                        } catch (err) {
+                            const message = (err as RestoreQueryError).message
+                            if (['code not found', 'code mismatch'].includes(message))
+                                setCodeError(<Trans>Invalid verification code.</Trans>)
+                            else setError(message)
+                        } finally {
+                            dispatch({ type: 'SET_LOADING', loading: false })
+                        }
+                    }}
+                    loading={loading}
+                    disabled={disabled}>
+                    <Trans>Continue</Trans>
+                </PrimaryButton>
+            </OutletPortal>
         </>
     )
 })

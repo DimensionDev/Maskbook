@@ -1,7 +1,6 @@
 import { useMatch, type RouteObject } from 'react-router-dom'
 import { DashboardRoutes, relativeRoute as rr, relativeRouteOf } from '@masknet/shared-base'
 import { SetupFrame } from '../../components/SetupFrame/index.js'
-import { Backup } from './Backup/index.js'
 
 const r = relativeRouteOf(DashboardRoutes.Setup)
 const Routes = DashboardRoutes
@@ -10,41 +9,79 @@ export const personaRoutes: RouteObject[] = [
     { path: r(Routes.Permissions), lazy: () => import('./Permissions/index.js') },
     { path: r(Routes.PermissionsOnboarding), lazy: () => import('./PermissionOnboarding/index.js') },
     { path: r(Routes.SignUpPersona), lazy: () => import('./SignUp/index.js') },
-    { path: r(Routes.RecoveryPersona), lazy: () => import('./Recovery/index.js') },
     { path: r(Routes.SignUpPersonaMnemonic), lazy: () => import('./Mnemonic/index.js') },
     { path: r(Routes.SignUpPersonaOnboarding), lazy: () => import('./Onboarding/index.js') },
     {
         path: r(Routes.Backup),
-        element: <Backup />,
+        lazy: () => import('./Backup/index.js'),
         children: [
             {
                 index: true,
-                lazy: () => import('./Backup/LocalBackup.js'),
+                lazy: () => import('./Backup/Local.js'),
             },
             {
                 path: rr(Routes.Backup, Routes.BackupLocal),
-                lazy: () => import('./Backup/LocalBackup.js'),
-                index: true,
+                lazy: () => import('./Backup/Local.js'),
             },
             {
                 path: rr(Routes.Backup, Routes.BackupCloud),
-                lazy: () => import('./Backup/CloudBackup/index.js'),
+                lazy: () => import('./Backup/Cloud/index.js'),
                 children: [
                     {
                         index: true,
-                        lazy: () => import('./Backup/CloudBackup/MaskNetworkBackup.js'),
+                        lazy: () => import('./Backup/Cloud/MaskNetwork.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupCloudMaskNetwork),
-                        lazy: () => import('./Backup/CloudBackup/MaskNetworkBackup.js'),
+                        lazy: () => import('./Backup/Cloud/MaskNetwork.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupCloudGoogleDrive),
-                        lazy: () => import('./Backup/CloudBackup/GoogleDriveBackup.js'),
+                        lazy: () => import('./Backup/Cloud/GoogleDrive.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupPreview),
-                        lazy: () => import('./Backup/CloudBackup/Preview.js'),
+                        lazy: () => import('./Backup/Cloud/Preview.js'),
+                    },
+                ],
+            },
+        ],
+    },
+    {
+        path: r(Routes.Recovery),
+        lazy: () => import('./Recovery/index.js'),
+        children: [
+            {
+                index: true,
+                lazy: () => import('./Recovery/Phrase.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryPhrase),
+                lazy: () => import('./Recovery/Phrase.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryPrivateKey),
+                lazy: () => import('./Recovery/PrivateKey.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryLocal),
+                lazy: () => import('./Recovery/Local.js'),
+            },
+            {
+                path: rr(Routes.Recovery, Routes.RecoveryCloud),
+                lazy: () => import('./Recovery/Cloud/index.js'),
+                children: [
+                    {
+                        index: true,
+                        lazy: () => import('./Recovery/Cloud/MaskNetwork.js'),
+                    },
+                    {
+                        path: rr(Routes.RecoveryCloud, Routes.RecoveryCloudMaskNetwork),
+                        lazy: () => import('./Recovery/Cloud/MaskNetwork.js'),
+                    },
+                    {
+                        path: rr(Routes.RecoveryCloud, Routes.RecoveryCloudGoogleDrive),
+                        lazy: () => import('./Recovery/Cloud/GoogleDrive.js'),
                     },
                 ],
             },

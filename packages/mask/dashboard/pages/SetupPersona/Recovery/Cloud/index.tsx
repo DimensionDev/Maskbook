@@ -5,8 +5,7 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Outlet, useMatch, useNavigate, useOutletContext } from 'react-router-dom'
-import type { PortalContainerProps } from '../types.js'
-import { CloudBackupFormContext } from './CloudBackupFormContext.js'
+import type { PortalContainerProps } from '../../../../components/OutletPortal.js'
 
 const useStyles = makeStyles<void, 'activeButton'>()((theme, _, refs) => ({
     container: {
@@ -49,7 +48,7 @@ export const Component = memo(function CloudBackup() {
     const { classes, cx } = useStyles()
 
     const navigate = useNavigate()
-    const match = useMatch(DashboardRoutes.BackupCloudGoogleDrive) // MaskBook is index
+    const match = useMatch(DashboardRoutes.RecoveryCloudGoogleDrive) // MaskBook is index
     const isGoogleDrive = !!match
 
     return (
@@ -58,7 +57,7 @@ export const Component = memo(function CloudBackup() {
                 <button
                     type="button"
                     className={cx(classes.toggleButton, isGoogleDrive ? null : classes.activeButton)}
-                    onClick={() => navigate(DashboardRoutes.BackupCloudMaskNetwork, { replace: true })}>
+                    onClick={() => navigate(DashboardRoutes.RecoveryCloudMaskNetwork, { replace: true })}>
                     <Icons.MaskBlue size={18} />
                     <Typography className={classes.providerName}>
                         <Trans>Mask Network</Trans>
@@ -67,16 +66,14 @@ export const Component = memo(function CloudBackup() {
                 <button
                     type="button"
                     className={cx(classes.toggleButton, isGoogleDrive ? classes.activeButton : null)}
-                    onClick={() => navigate(DashboardRoutes.BackupCloudGoogleDrive, { replace: true })}>
+                    onClick={() => navigate(DashboardRoutes.RecoveryCloudGoogleDrive, { replace: true })}>
                     <Icons.GoogleDrive size={18} />
                     <Typography className={classes.providerName}>
                         <Trans>Google Drive</Trans>
                     </Typography>
                 </button>
             </Box>
-            <CloudBackupFormContext.Provider>
-                <Outlet context={outletContext} />
-            </CloudBackupFormContext.Provider>
+            <Outlet context={outletContext} />
         </Box>
     )
 })

@@ -1,19 +1,22 @@
-import { memo, useCallback, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
-import { useAsync } from 'react-use'
-import { Box, Button, Typography } from '@mui/material'
-import { type BackupSummary, decryptBackup } from '@masknet/backup-format'
+import Services from '#services'
+import { Trans, useLingui } from '@lingui/react/macro'
+import { decryptBackup, type BackupSummary } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { delay } from '@masknet/kit'
-import { FileFrame, UploadDropArea } from '@masknet/shared'
+import { FileFrame, PersonaContext, UploadDropArea } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
-import Services from '#services'
-import { usePersonaRecovery } from '../../contexts/RecoveryContext.js'
-import PasswordField from '../PasswordField/index.js'
-import { PrimaryButton } from '../PrimaryButton/index.js'
-import { AccountStatusBar } from './AccountStatusBar.js'
-import { BackupPreview } from '../BackupPreview/index.js'
-import { Trans, useLingui } from '@lingui/react/macro'
+import { Box, Button, Typography } from '@mui/material'
+import { memo, useCallback, useMemo, useState, type ReactNode } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAsync } from 'react-use'
+import urlcat from 'urlcat'
+import { BackupPreview } from '../../../components/BackupPreview/index.js'
+import { OutletPortal } from '../../../components/OutletPortal.js'
+import PasswordField from '../../../components/PasswordField/index.js'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { AccountStatusBar } from '../../../components/Restore/AccountStatusBar.js'
 
 enum RestoreStatus {
     WaitingInput = 0,
@@ -39,15 +42,12 @@ const useStyles = makeStyles()((theme) => ({
         marginTop: 7,
     },
 }))
-interface RestoreFromLocalProps {
-    onRestore: (count?: number) => Promise<void>
-}
 
-export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ onRestore }: RestoreFromLocalProps) {
+export const Component = memo(function RecoveryLocalBackup() {
     const { t } = useLingui()
     const { classes, theme } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
-    const { fillSubmitOutlet } = usePersonaRecovery()
+    const navigate = useNavigate()
 
     const [file, setFile] = useState<File | null>(null)
     const [summary, setSummary] = useState<BackupSummary | null>(null)
@@ -114,6 +114,22 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         }
     }, [file, password])
 
+    const { currentPersona } = PersonaContext.useContainer()
+    const hasNoPersona = !currentPersona
+    const onRestore = useCallback(
+        async (count?: number) => {
+            if (hasNoPersona) {
+                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
+                if (lastedPersona) {
+                    await Services.Settings.setCurrentPersonaIdentifier(lastedPersona)
+                    await delay(1000)
+                }
+            }
+            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count }), { replace: true })
+        },
+        [hasNoPersona, Services.Settings.setCurrentPersonaIdentifier, navigate],
+    )
+
     const restoreDB = useCallback(async () => {
         try {
             setProcessing(true)
@@ -139,21 +155,6 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
         if (restoreStatus === RestoreStatus.Decrypting) return !password
         return !file
     }, [loading, !file, restoreStatus, summary, !password])
-
-    useLayoutEffect(() => {
-        return fillSubmitOutlet(
-            <PrimaryButton
-                size="large"
-                color="primary"
-                onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
-                loading={loading}
-                disabled={disabled}>
-                {restoreStatus !== RestoreStatus.Verified ?
-                    <Trans>Continue</Trans>
-                :   <Trans>Restore</Trans>}
-            </PrimaryButton>,
-        )
-    }, [restoreStatus, decryptBackupFile, restoreDB, disabled, loading])
 
     return (
         <Box width="100%">
@@ -194,6 +195,19 @@ export const RestorePersonaFromLocal = memo(function RestorePersonaFromLocal({ o
                     <BackupPreview mt={2} info={summary} />
                 </>
             :   null}
+            <OutletPortal>
+                <PrimaryButton
+                    size="large"
+                    color="primary"
+                    variant="roundedContained"
+                    onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
+                    loading={loading}
+                    disabled={disabled}>
+                    {restoreStatus !== RestoreStatus.Verified ?
+                        <Trans>Continue</Trans>
+                    :   <Trans>Restore</Trans>}
+                </PrimaryButton>
+            </OutletPortal>
         </Box>
     )
 })

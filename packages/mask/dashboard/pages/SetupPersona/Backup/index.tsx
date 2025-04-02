@@ -3,9 +3,10 @@ import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { Box, Tab, Typography } from '@mui/material'
 import { memo, useRef } from 'react'
-import { Outlet, useLocation, useNavigate } from 'react-router-dom'
-import { CloudBackupRoutes } from './constants.js'
-import { StorageType } from './types.js'
+import { Outlet } from 'react-router-dom'
+import { StorageType } from '../types.js'
+import { usePathTab, type TabPathTuple } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -43,14 +44,20 @@ const useStyles = makeStyles()((theme) => ({
     },
 }))
 
-export const Backup = memo(function Backup() {
+const tuples: TabPathTuple[] = [
+    [StorageType.Local, DashboardRoutes.BackupLocal],
+    [
+        StorageType.Cloud,
+        DashboardRoutes.BackupCloud,
+        DashboardRoutes.BackupCloudMaskNetwork,
+        DashboardRoutes.BackupCloudGoogleDrive,
+    ],
+]
+
+export const Component = memo(function Backup() {
     const { classes } = useStyles()
 
-    const location = useLocation()
-    const { pathname } = location
-    const isCloud = CloudBackupRoutes.includes(pathname)
-    const tab = isCloud ? StorageType.Cloud : StorageType.Local
-    const navigate = useNavigate()
+    const [tab, handleTabChange] = usePathTab(tuples)
 
     const portalContainerRef = useRef<HTMLDivElement>(null)
 
@@ -68,12 +75,7 @@ export const Backup = memo(function Backup() {
             <Box className={classes.tabContainer}>
                 <div className={classes.tabList}>
                     <TabContext value={tab}>
-                        <MaskTabList
-                            variant="base"
-                            onChange={(_, value) => {
-                                navigate(value === StorageType.Cloud ? '/setup/backup/cloud' : '/setup/backup/local')
-                            }}
-                            aria-label="Cloud Backup Methods">
+                        <MaskTabList variant="base" onChange={handleTabChange} aria-label="Cloud Backup Methods">
                             <Tab
                                 className={classes.tab}
                                 label={<Trans>Locale Backup</Trans>}

@@ -37,17 +37,19 @@ export const PhoneForm = memo(function PhoneForm() {
     const [countryCode, phone] = watch(['countryCode', 'phone'])
 
     const handleSendVerificationCode = useCallback(async () => {
-        const response = await sendCode({
-            account: `+${countryCode}${phone}`,
-            type: BackupAccountType.Phone,
-            scenario: user.phone ? Scenario.change : Scenario.create,
-            locale: lang.includes('zh') ? Locale.zh : Locale.en,
-        }).catch((error) => {
-            showSnackbar(error.message, { variant: 'error' })
-        })
+        try {
+            const response = await sendCode({
+                account: `+${countryCode}${phone}`,
+                type: BackupAccountType.Phone,
+                scenario: user.phone ? Scenario.change : Scenario.create,
+                locale: lang.includes('zh') ? Locale.zh : Locale.en,
+            })
 
-        if (response) {
-            showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
+            if (response) {
+                showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
+            }
+        } catch (error) {
+            showSnackbar((error as Error).message, { variant: 'error' })
         }
     }, [phone, user, lang, countryCode])
 

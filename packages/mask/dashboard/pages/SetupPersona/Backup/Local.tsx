@@ -5,23 +5,21 @@ import { Icons } from '@masknet/icons'
 import { LoadingStatus } from '@masknet/shared'
 import { MimeType } from '@masknet/shared-base'
 import { encode } from '@msgpack/msgpack'
-import { Box, Portal } from '@mui/material'
+import { Box } from '@mui/material'
 import { format as formatDateTime } from 'date-fns'
 import { memo } from 'react'
 import { Controller } from 'react-hook-form'
-import { useOutletContext } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../../components/BackupPreview/index.js'
+import { OutletPortal } from '../../../components/OutletPortal.js'
 import PasswordField from '../../../components/PasswordField/index.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
 import { useBackupPreviewInfo } from '../../../hooks/useBackupPreviewInfo.js'
-import type { PortalContainerProps } from './types.js'
-import { downloadBackup } from './helpers.js'
+import { downloadBackup } from '../../../utils/api.js'
 
 export const Component = memo(function LocalBackup() {
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
     const { t } = useLingui()
     const { user, updateUser } = UserContext.useContainer()
     const {
@@ -113,7 +111,7 @@ export const Component = memo(function LocalBackup() {
                     :   null}
                 </Box>
             :   <LoadingStatus minHeight={320} />}
-            <Portal container={() => portalContainerRef.current}>
+            <OutletPortal>
                 <PrimaryButton
                     startIcon={<Icons.Download />}
                     size="large"
@@ -124,7 +122,7 @@ export const Component = memo(function LocalBackup() {
                     onClick={handleSubmit(handleFormSubmit)}>
                     <Trans>Download Backup</Trans>
                 </PrimaryButton>
-            </Portal>
+            </OutletPortal>
         </form>
     )
 })

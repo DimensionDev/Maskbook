@@ -11,7 +11,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
-import { createBackupName, getFileName, progressDownload } from '../Backup/helpers.js'
+import { createBackupName, getFileName, progressDownload } from '../../../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {

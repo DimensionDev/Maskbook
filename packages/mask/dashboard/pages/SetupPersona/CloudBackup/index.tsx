@@ -69,17 +69,34 @@ const CloudBackupInner = memo(function CloudBackupInner() {
 
     const [{ loading }, handleSubmit] = useAsyncFn(
         async (data: CloudBackupFormInputs) => {
-            const response = await fetchDownloadLink({
-                account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
-                type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
-                code: data.code,
-            }).catch((error) => {
-                if (error.status === 400) {
+            try {
+                const response = await fetchDownloadLink({
+                    account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
+                    type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
+                    code: data.code,
+                })
+
+                if (!response) return
+
+                updateUser({
+                    email: data.email || user.email,
+                    phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
+                })
+                navigate(
+                    urlcat(DashboardRoutes.CloudBackupPreview, {
+                        ...response,
+                        type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
+                        account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
+                        code: data.code,
+                    }),
+                )
+            } catch (error) {
+                if ((error as any).status === 400) {
                     formState.setError('code', {
                         type: 'custom',
                         message: _(msg`The code is incorrect.`),
                     })
-                } else if (error.status === 404) {
+                } else if ((error as any).status === 404) {
                     // No cloud backup file
                     navigate(
                         urlcat(DashboardRoutes.CloudBackupPreview, {
@@ -89,22 +106,7 @@ const CloudBackupInner = memo(function CloudBackupInner() {
                         }),
                     )
                 }
-            })
-
-            if (!response) return
-
-            updateUser({
-                email: data.email || user.email,
-                phone: data.phone ? `${data.countryCode} ${data.phone}` : user.phone,
-            })
-            navigate(
-                urlcat(DashboardRoutes.CloudBackupPreview, {
-                    ...response,
-                    type: currentTab === tabs.email ? BackupAccountType.Email : BackupAccountType.Phone,
-                    account: currentTab === tabs.email ? data.email : `+${data.countryCode} ${data.phone}`,
-                    code: data.code,
-                }),
-            )
+            }
         },
         [_, currentTab, tabs, formState, navigate, updateUser, user],
     )
