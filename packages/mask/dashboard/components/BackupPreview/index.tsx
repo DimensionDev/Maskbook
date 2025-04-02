@@ -83,18 +83,25 @@ const useStyles = makeStyles()((theme) => ({
     list: {
         padding: 0,
     },
+    grid: {
+        display: 'grid',
+        gridTemplateColumns: 'repeat(2, 1fr)',
+    },
     walletHeaderIcon: {
         backgroundColor: '#1C68F3',
         boxShadow: '0px 6px 12px rgba(28, 104, 243, 0.2)',
     },
     wallets: {
         margin: 0,
-        display: 'grid',
-        gridTemplateColumns: 'repeat(3, 1fr)',
+        display: 'flex',
+        flexWrap: 'wrap',
+        gap: 8,
     },
     wallet: {
+        gap: 10,
         width: 'auto',
         flexWrap: 'nowrap',
+        paddingRight: 0,
     },
     listItemIcon: {
         marginRight: theme.spacing(1),
@@ -103,12 +110,12 @@ const useStyles = makeStyles()((theme) => ({
         minWidth: 'unset',
     },
     walletIcon: {
-        marginRight: theme.spacing(1),
         color: theme.palette.maskColor.second,
         minWidth: 'unset',
     },
     listText: {
         fontSize: 14,
+        color: theme.palette.maskColor.main,
     },
     link: {
         color: theme.palette.maskColor.main,
@@ -167,7 +174,7 @@ export const PersonasBackupPreview = memo<PersonasBackupPreviewProps>(function P
                 }
             />
             <CardContent className={classes.cardContent}>
-                <List className={classes.list}>
+                <List className={cx(classes.list, classes.grid)}>
                     <ListItem secondaryAction={<Typography>{info.accounts}</Typography>}>
                         <ListItemIcon className={classes.listItemIcon}>
                             <Icons.BaseUser size={20} />
@@ -253,6 +260,7 @@ export const WalletsBackupPreview = memo<WalletsBackupPreviewProps>(function Wal
                                         pluginID={NetworkPluginID.PLUGIN_EVM}
                                         address={wallet}
                                         mr="10px"
+                                        fontWeight={400}
                                     />
                                     <Icons.LinkOut size={18} color={theme.palette.maskColor.second} />
                                 </Link>

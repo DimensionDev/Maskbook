@@ -1,0 +1,106 @@
+import { Trans, useLingui } from '@lingui/react/macro'
+import { PhoneNumberField } from '@masknet/shared'
+import { BackupAccountType } from '@masknet/shared-base'
+import { CountdownButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { Box, TextField } from '@mui/material'
+import { memo, useCallback } from 'react'
+import { Controller } from 'react-hook-form'
+import { UserContext, useLanguage } from '../../../../../shared-ui/index.js'
+import { sendCode } from '../../../../utils/api.js'
+import { Locale, Scenario } from '../../../../utils/type.js'
+import { CloudBackupFormContext } from './CloudBackupFormContext.js'
+
+const useStyles = makeStyles()((theme) => ({
+    send: {
+        color: theme.palette.maskColor.main,
+        fontSize: 14,
+    },
+}))
+
+export const PhoneForm = memo(function PhoneForm() {
+    const { t } = useLingui()
+    const { classes } = useStyles()
+    const { user } = UserContext.useContainer()
+    const lang = useLanguage()
+    const { showSnackbar } = useCustomSnackbar()
+
+    const {
+        form: {
+            control,
+            clearErrors,
+            watch,
+            setValue,
+            formState: { errors },
+        },
+    } = CloudBackupFormContext.useContainer()
+
+    const [countryCode, phone] = watch(['countryCode', 'phone'])
+
+    const handleSendVerificationCode = useCallback(async () => {
+        const response = await sendCode({
+            account: `+${countryCode}${phone}`,
+            type: BackupAccountType.Phone,
+            scenario: user.phone ? Scenario.change : Scenario.create,
+            locale: lang.includes('zh') ? Locale.zh : Locale.en,
+        }).catch((error) => {
+            showSnackbar(error.message, { variant: 'error' })
+        })
+
+        if (response) {
+            showSnackbar(<Trans>Verification code sent</Trans>, { variant: 'success' })
+        }
+    }, [phone, user, lang, countryCode])
+
+    return (
+        <Box component="form" width="100%" display="flex" flexDirection="column" rowGap={2}>
+            <Controller
+                control={control}
+                name="phone"
+                render={({ field }) => (
+                    <PhoneNumberField
+                        {...field}
+                        code={countryCode}
+                        onCodeChange={(code) => setValue('countryCode', code)}
+                        onFocus={() => clearErrors('phone')}
+                        fullWidth
+                        placeholder={t`Mobile number`}
+                        error={!!errors.phone?.message}
+                        helperText={errors.phone?.message}
+                    />
+                )}
+            />
+            <Controller
+                control={control}
+                name="code"
+                render={({ field }) => (
+                    <TextField
+                        {...field}
+                        onFocus={() => clearErrors('code')}
+                        fullWidth
+                        placeholder={t`Phone verification code`}
+                        error={!!errors.code?.message}
+                        helperText={errors.code?.message}
+                        InputProps={{
+                            disableUnderline: true,
+                            endAdornment: (
+                                <CountdownButton
+                                    disableElevation
+                                    disableTouchRipple
+                                    className={classes.send}
+                                    disableFocusRipple
+                                    disableRipple
+                                    disabled={!phone || !!errors.phone?.message}
+                                    variant="text"
+                                    sx={{ px: 0 }}
+                                    onClick={handleSendVerificationCode}
+                                    repeatContent={<Trans>Resend</Trans>}>
+                                    <Trans>Send</Trans>
+                                </CountdownButton>
+                            ),
+                        }}
+                    />
+                )}
+            />
+        </Box>
+    )
+})

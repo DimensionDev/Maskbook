@@ -25,3 +25,5 @@ const indexedDB: KVStorageBackend = {
 }
 setupMaskKVStorageBackend(indexedDB, memory)
 setupLegacySettingsAtNonBackground(Services.Settings.getLegacySettingsInitialValue)
+
+indexedDB

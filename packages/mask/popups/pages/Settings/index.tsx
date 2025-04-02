@@ -245,7 +245,7 @@ export const Component = memo(function SettingsPage() {
                                 if (!user.backupPassword) {
                                     modalNavigate(PopupModalRoutes.SetBackupPassword)
                                 } else {
-                                    handleOpenDashboard(DashboardRoutes.CloudBackup)
+                                    handleOpenDashboard(DashboardRoutes.BackupCloud)
                                 }
                             }}>
                             <ListItemText
@@ -261,7 +261,7 @@ export const Component = memo(function SettingsPage() {
                                 if (!user.backupPassword) {
                                     modalNavigate(PopupModalRoutes.SetBackupPassword)
                                 } else {
-                                    handleOpenDashboard(DashboardRoutes.LocalBackup)
+                                    handleOpenDashboard(DashboardRoutes.BackupLocal)
                                 }
                             }}>
                             <ListItemText

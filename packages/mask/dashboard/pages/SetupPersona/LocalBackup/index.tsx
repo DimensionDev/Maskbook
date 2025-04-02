@@ -1,22 +1,23 @@
-import { makeStyles } from '@masknet/theme'
-import { Box, Typography } from '@mui/material'
-import { memo } from 'react'
-import { useAsyncFn } from 'react-use'
 import Services from '#services'
-import { LoadingStatus } from '@masknet/shared'
-import PasswordField from '../../../components/PasswordField/index.js'
-import { PersonasBackupPreview, WalletsBackupPreview } from '../../../components/BackupPreview/index.js'
-import { Controller } from 'react-hook-form'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-import { Icons } from '@masknet/icons'
-import { encryptBackup } from '@masknet/backup-format'
-import { encode } from '@msgpack/msgpack'
-import { format as formatDateTime } from 'date-fns'
-import { MimeType } from '@masknet/shared-base'
-import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
-import { UserContext } from '../../../../shared-ui/index.js'
 import { Trans, useLingui } from '@lingui/react/macro'
+import { encryptBackup } from '@masknet/backup-format'
+import { Icons } from '@masknet/icons'
+import { LoadingStatus } from '@masknet/shared'
+import { MimeType } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { encode } from '@msgpack/msgpack'
+import { Box, Typography } from '@mui/material'
+import { format as formatDateTime } from 'date-fns'
+import { memo } from 'react'
+import { Controller } from 'react-hook-form'
+import { useAsyncFn } from 'react-use'
+import { UserContext } from '../../../../shared-ui/index.js'
+import { PersonasBackupPreview, WalletsBackupPreview } from '../../../components/BackupPreview/index.js'
+import PasswordField from '../../../components/PasswordField/index.js'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { useBackupFormState, type BackupFormInputs } from '../../../hooks/useBackupFormState.js'
+import { useBackupPreviewInfo } from '../../../hooks/useBackupPreviewInfo.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -38,8 +39,6 @@ export const Component = memo(function LocalBackup() {
     const { user, updateUser } = UserContext.useContainer()
     const {
         hasPassword,
-        previewInfo,
-        loading,
         backupWallets,
         setBackupWallets,
         formState: {
@@ -50,6 +49,7 @@ export const Component = memo(function LocalBackup() {
             formState: { errors, isDirty, isValid },
         },
     } = useBackupFormState()
+    const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
 
     const [{ loading: downloadLoading }, handleFormSubmit] = useAsyncFn(
         async (data: BackupFormInputs) => {

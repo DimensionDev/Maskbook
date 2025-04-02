@@ -8,3 +8,7 @@ export function relativeRouteOf(parent: PopupRoutes | DashboardRoutes) {
         return child.slice(parent.length).replace(/^\//, '')
     }
 }
+export function relativeRoute(parent: string, child: string) {
+    if (!child.startsWith(parent)) throw new Error()
+    return child.slice(parent.length).replace(/^\//, '')
+}

@@ -1,9 +1,9 @@
-import { lazy, memo, Suspense, useState, type PropsWithChildren } from 'react'
-import { Box, Typography } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { Welcome } from '../../assets/index.js'
 import { LoadingBase, makeStyles } from '@masknet/theme'
+import { Box, Typography } from '@mui/material'
+import { lazy, memo, Suspense, useState, type PropsWithChildren } from 'react'
 import { Outlet } from 'react-router-dom'
+import { Welcome } from '../../assets/index.js'
 
 const Spline = lazy(() => import('./spline.js'))
 interface SetupFrameProps {

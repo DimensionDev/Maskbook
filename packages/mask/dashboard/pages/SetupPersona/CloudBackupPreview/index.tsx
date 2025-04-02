@@ -11,6 +11,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { SetupFrameController } from '../../../components/SetupFrame/index.js'
 import { BackupPreviewModal, ConfirmDialog, MergeBackupModal } from '../../../modals/modals.js'
+import { createBackupName, getFileName, progressDownload } from '../Backup/helpers.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -78,20 +79,18 @@ export const Component = memo(function CloudBackupPreview() {
         )
             return
         await MergeBackupModal.openAndWaitForClose({
-            downloadLink: previewInfo.downloadLink,
+            download: () => progressDownload(previewInfo.downloadLink),
+            fileName: getFileName(previewInfo.downloadLink) || createBackupName(),
             account: previewInfo.account,
             size: previewInfo.size,
             uploadedAt: previewInfo.uploadedAt,
-            code: previewInfo.code,
-            abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-            type: previewInfo.type as BackupAccountType,
         })
     }, [previewInfo])
 
     const handleBackupClick = useCallback(() => {
         if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
         BackupPreviewModal.open({
-            isOverwrite: false,
+            isUpload: false,
             code: previewInfo.code,
             abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
             type: previewInfo.type as BackupAccountType,
@@ -113,7 +112,7 @@ export const Component = memo(function CloudBackupPreview() {
                 if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
 
                 BackupPreviewModal.open({
-                    isOverwrite: true,
+                    isUpload: true,
                     code: previewInfo.code,
                     abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
                     type: previewInfo.type as BackupAccountType,
@@ -127,10 +126,13 @@ export const Component = memo(function CloudBackupPreview() {
         <>
             <Box>
                 <Typography className={classes.title}>
-                    <Trans>Welcome to Mask Cloud Services</Trans>
+                    <Trans>Back Up Your Data Your Way</Trans>
                 </Typography>
                 <Typography className={classes.description}>
-                    <Trans>Please select the appropriate method to restore your personal data.</Trans>
+                    <Trans>
+                        Choose from multiple backup options, now including encrypted storage via your authorized Google
+                        Drive for added security and flexibility.
+                    </Trans>
                 </Typography>
                 {previewInfo.downloadLink ?
                     <>
