@@ -9,8 +9,10 @@ const useStyles = makeStyles()((theme) => ({
         fontWeight: 700,
         color: theme.palette.maskColor.main,
         textAlign: 'center',
+        fontSize: 14,
     },
-    no: {
+    end: {
+        width: 22,
         color: theme.palette.maskColor.third,
         fontSize: 14,
     },
@@ -59,7 +61,12 @@ export const DesktopMnemonicConfirm = memo(function DesktopMnemonicConfirm(props
                             InputProps={{
                                 disableUnderline: true,
                                 className: classes.input,
-                                startAdornment: <Typography className={classes.no}>{no}.</Typography>,
+                                startAdornment: <Typography className={classes.end}>{no}.</Typography>,
+                                endAdornment: (
+                                    <Typography className={classes.end}>
+                                        {/* balance the input, make the cursor center */}
+                                    </Typography>
+                                ),
                                 size: 'small',
                                 inputProps: {
                                     style: {

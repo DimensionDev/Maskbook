@@ -56,7 +56,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
                 size="small"
                 variant="outlined"
                 startIcon={<Icons.PopupRestore size={18} />}
-                onClick={() => handleOpenDashboard(DashboardRoutes.RecoveryPersona)}>
+                onClick={() => handleOpenDashboard(DashboardRoutes.Recovery)}>
                 <Trans>Recovery</Trans>
             </ActionButton>
             <ActionButton

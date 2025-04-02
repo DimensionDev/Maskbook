@@ -1,7 +1,7 @@
 import type { BackupSummary } from '@masknet/backup-format'
 import { produce } from 'immer'
-import { type BackupFileInfo } from '../../../utils/type.js'
 import { BackupAccountType } from '@masknet/shared-base'
+import type { BackupFileInfo } from '../../../../utils/type.js'
 
 export enum RestoreStep {
     InputEmail = 'InputEmail',

@@ -126,7 +126,7 @@ export const Component = memo(function SignUpMnemonic() {
     }, [words])
 
     const handleRecovery = useCallback(() => {
-        navigate(DashboardRoutes.RecoveryPersona)
+        navigate(DashboardRoutes.Recovery)
     }, [])
 
     const { value } = useAsync(async () => {

@@ -1,17 +1,17 @@
+import Services from '#services'
+import { Trans, useLingui } from '@lingui/react/macro'
 import { decryptBackup } from '@masknet/backup-format'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box } from '@mui/material'
-import { memo, useCallback, useLayoutEffect, useState, type ReactNode } from 'react'
-import Services from '#services'
-import { usePersonaRecovery } from '../../../contexts/index.js'
-import { fetchBackupValue } from '../../../utils/api.js'
-import PasswordField from '../../PasswordField/index.js'
-import { PrimaryButton } from '../../PrimaryButton/index.js'
-import { AccountStatusBar } from '../AccountStatusBar.js'
-import { BackupInfoCard } from '../BackupInfoCard.js'
+import { memo, useCallback, useState, type ReactNode } from 'react'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
+import PasswordField from '../../../../components/PasswordField/index.js'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { AccountStatusBar } from '../../../../components/Restore/AccountStatusBar.js'
+import { BackupInfoCard } from '../../../../components/Restore/BackupInfoCard.js'
+import { fetchBackupValue } from '../../../../utils/api.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
     const { t } = useLingui()
@@ -56,15 +56,6 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
         dispatch({ type: 'TO_INPUT' })
     }, [])
 
-    const { fillSubmitOutlet } = usePersonaRecovery()
-    useLayoutEffect(() => {
-        return fillSubmitOutlet(
-            <PrimaryButton color="primary" size="large" onClick={handleNext} loading={loading}>
-                <Trans>Restore</Trans>
-            </PrimaryButton>,
-        )
-    }, [handleNext, loading])
-
     if (!backupFileInfo) return null
 
     return (
@@ -89,6 +80,11 @@ export const ConfirmBackupInfo = memo(function ConfirmBackupInfo() {
                     helperText={errorMessage}
                 />
             </Box>
+            <OutletPortal>
+                <PrimaryButton color="primary" size="large" onClick={handleNext} loading={loading}>
+                    <Trans>Restore</Trans>
+                </PrimaryButton>
+            </OutletPortal>
         </Box>
     )
 })

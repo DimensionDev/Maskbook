@@ -36,7 +36,7 @@ export const Component = memo(function PersonaHome() {
     const onRestore = useCallback(() => {
         browser.tabs.create({
             active: true,
-            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.RecoveryPersona}`),
+            url: browser.runtime.getURL(`/dashboard.html#${DashboardRoutes.Recovery}`),
         })
         if (navigator.userAgent.includes('Firefox')) {
             window.close()

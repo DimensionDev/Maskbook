@@ -1,19 +1,19 @@
+import { Trans, useLingui } from '@lingui/react/macro'
+import { PhoneNumberField } from '@masknet/shared'
+import { BackupAccountType } from '@masknet/shared-base'
 import { SendingCodeField, useCustomSnackbar } from '@masknet/theme'
 import { Box } from '@mui/material'
 import guessCallingCode from 'guess-calling-code'
 import { pick } from 'lodash-es'
-import { memo, useCallback, useEffect, useLayoutEffect, useMemo, useState, type ReactNode } from 'react'
+import { memo, useCallback, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useAsyncFn } from 'react-use'
-import { usePersonaRecovery } from '../../../contexts/index.js'
-import { useLanguage } from '../../../../shared-ui/index.js'
-import { sendCode, type RestoreQueryError } from '../../../utils/api.js'
-import { phoneRegexp } from '../../../utils/regexp.js'
-import { BackupAccountType } from '@masknet/shared-base'
-import { Locale, Scenario } from '../../../utils/type.js'
-import { PrimaryButton } from '../../PrimaryButton/index.js'
+import { useLanguage } from '../../../../../shared-ui/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { sendCode, type RestoreQueryError } from '../../../../utils/api.js'
+import { phoneRegexp } from '../../../../utils/regexp.js'
+import { Locale, Scenario } from '../../../../utils/type.js'
 import { RestoreContext } from './RestoreProvider.js'
-import { PhoneNumberField } from '@masknet/shared'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 export const PhoneField = memo(function PhoneField() {
     const { t } = useLingui()
@@ -60,35 +60,8 @@ export const PhoneField = memo(function PhoneField() {
         })
     }, [account, language])
 
-    const { fillSubmitOutlet } = usePersonaRecovery()
     const phoneNotReady = !account || invalidPhone || !phoneRegexp.test(account)
     const disabled = phoneNotReady || code.length !== 6 || !!error || loading
-    useLayoutEffect(() => {
-        return fillSubmitOutlet(
-            <PrimaryButton
-                color="primary"
-                size="large"
-                onClick={async () => {
-                    dispatch({ type: 'SET_LOADING', loading: true })
-                    try {
-                        const backupInfo = await downloadBackupInfo(BackupAccountType.Phone, account, code)
-                        dispatch({ type: 'SET_BACKUP_INFO', info: backupInfo })
-                        dispatch({ type: 'NEXT_STEP' })
-                    } catch (err) {
-                        const message = (err as RestoreQueryError).message
-                        if (['code not found', 'code mismatch'].includes(message))
-                            setCodeError(<Trans>Invalid verification code.</Trans>)
-                        else setError(message)
-                    } finally {
-                        dispatch({ type: 'SET_LOADING', loading: false })
-                    }
-                }}
-                loading={loading}
-                disabled={disabled}>
-                <Trans>Continue</Trans>
-            </PrimaryButton>,
-        )
-    }, [account, code, disabled, loading])
 
     return (
         <>
@@ -121,6 +94,31 @@ export const PhoneField = memo(function PhoneField() {
                     }}
                 />
             </Box>
+            <OutletPortal>
+                <PrimaryButton
+                    color="primary"
+                    size="large"
+                    variant="roundedContained"
+                    onClick={async () => {
+                        dispatch({ type: 'SET_LOADING', loading: true })
+                        try {
+                            const backupInfo = await downloadBackupInfo(BackupAccountType.Phone, account, code)
+                            dispatch({ type: 'SET_BACKUP_INFO', info: backupInfo })
+                            dispatch({ type: 'NEXT_STEP' })
+                        } catch (err) {
+                            const message = (err as RestoreQueryError).message
+                            if (['code not found', 'code mismatch'].includes(message))
+                                setCodeError(<Trans>Invalid verification code.</Trans>)
+                            else setError(message)
+                        } finally {
+                            dispatch({ type: 'SET_LOADING', loading: false })
+                        }
+                    }}
+                    loading={loading}
+                    disabled={disabled}>
+                    <Trans>Continue</Trans>
+                </PrimaryButton>
+            </OutletPortal>
         </>
     )
 })

@@ -3,9 +3,9 @@ import { makeStyles } from '@masknet/theme'
 import { Box, FormControlLabel, Radio, RadioGroup, type BoxProps } from '@mui/material'
 import { memo, useState } from 'react'
 import { BackupAccountType } from '@masknet/shared-base'
-import { RestoreContext } from './RestoreProvider.js'
 import { EmailField } from './EmailField.js'
 import { PhoneField } from './PhoneField.js'
+import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
 
 const useStyles = makeStyles()((theme) => ({

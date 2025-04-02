@@ -1,13 +1,14 @@
+import { type GoogleDriveClient } from '@masknet/web3-providers'
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { GoogleDriveClient } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
-import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../pages/SetupPersona/Backup/helpers.js'
+import { UserContext } from '../../shared-ui/index.js'
 
-const defaultClient = new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken)
-export function useGoogleDriveFiles(client: GoogleDriveClient = defaultClient) {
-    return useInfiniteQuery({
-        enabled: client.hasLogin,
-        queryKey: ['google-drive', 'files'],
+export function useGoogleDriveFiles(client: GoogleDriveClient) {
+    const { user } = UserContext.useContainer()
+
+    const query = useInfiniteQuery({
+        enabled: !!user.googleAccount,
+        queryKey: ['google-drive', 'files', user.googleAccount],
         initialPageParam: '',
         queryFn: (param) => {
             return client.listBackupFiles({
@@ -20,4 +21,5 @@ export function useGoogleDriveFiles(client: GoogleDriveClient = defaultClient) {
             return compact(data.pages.flatMap((x) => x))
         },
     })
+    return query
 }

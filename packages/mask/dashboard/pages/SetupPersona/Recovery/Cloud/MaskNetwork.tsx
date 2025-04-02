@@ -1,45 +1,24 @@
-import urlcat from 'urlcat'
-import { memo, useCallback, useLayoutEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { Box } from '@mui/material'
-import { DashboardRoutes, BackupAccountType } from '@masknet/shared-base'
-import { useCustomSnackbar } from '@masknet/theme'
 import Services from '#services'
+import { BackupAccountType, DashboardRoutes } from '@masknet/shared-base'
+import { useCustomSnackbar } from '@masknet/theme'
+import { Box } from '@mui/material'
+import { memo, useCallback, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 
-import { ConfirmSynchronizePasswordDialog } from '../ConfirmSynchronizePasswordDialog.js'
-import { usePersonaRecovery } from '../../../contexts/index.js'
-import { PrimaryButton } from '../../PrimaryButton/index.js'
+import { Trans } from '@lingui/react/macro'
+import { Alert, PersonaContext } from '@masknet/shared'
+import { UserContext } from '../../../../../shared-ui/index.js'
+import { BackupPreview } from '../../../../components/BackupPreview/index.js'
+import { OutletPortal } from '../../../../components/OutletPortal.js'
+import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
+import { ConfirmSynchronizePasswordDialog } from '../../../../components/Restore/ConfirmSynchronizePasswordDialog.js'
+import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
+import { InputForm } from './InputForm.js'
 import { RestoreContext } from './RestoreProvider.js'
 import { RestoreStep } from './restoreReducer.js'
-import { InputForm } from './InputForm.js'
-import { ConfirmBackupInfo } from './ConfirmBackupInfo.js'
-import { UserContext } from '../../../../shared-ui/index.js'
-import { BackupPreview } from '../../BackupPreview/index.js'
-import { PersonaContext } from '@masknet/shared'
-import { Trans } from '@lingui/react/macro'
 
-interface RestoreProps {
-    onRestore: () => Promise<void>
-}
-
-const Restore = memo(function Restore({ onRestore }: RestoreProps) {
-    const { fillSubmitOutlet } = usePersonaRecovery()
-    const { state } = RestoreContext.useContainer()
-
-    useLayoutEffect(() => {
-        return fillSubmitOutlet(
-            <PrimaryButton size="large" color="primary" onClick={onRestore} loading={state.loading}>
-                <Trans>Restore</Trans>
-            </PrimaryButton>,
-        )
-    }, [onRestore, state.loading])
-
-    if (!state.backupSummary) return null
-
-    return <BackupPreview info={state.backupSummary} />
-})
-
-const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
+const MaskNetworkInner = memo(function MaskNetworkInner() {
     const navigate = useNavigate()
     const { showSnackbar } = useCustomSnackbar()
     const { user, updateUser } = UserContext.useContainer()
@@ -96,13 +75,25 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
         onCloseSynchronizePassword()
     }, [account, password, updateUser])
 
+    const showButton = ![RestoreStep.InputEmail, RestoreStep.InputPhone, RestoreStep.Decrypt].includes(state.step)
+    const [showAlert, setShowAlert] = useState(true)
     return (
         <Box width="100%">
             {[RestoreStep.InputEmail, RestoreStep.InputPhone].includes(state.step) ?
-                <InputForm />
+                <>
+                    <InputForm />
+                    <Alert mt={2} severity="warning" open={showAlert} onClose={() => setShowAlert(false)}>
+                        <Trans>
+                            The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use
+                            alternative cloud backup services or local backup solutions.
+                        </Trans>
+                    </Alert>
+                </>
             : state.step === RestoreStep.Decrypt ?
                 <ConfirmBackupInfo />
-            :   <Restore onRestore={handleRestore} />}
+            : state.backupSummary ?
+                <BackupPreview info={state.backupSummary} />
+            :   null}
             {openSynchronizePasswordDialog ?
                 <ConfirmSynchronizePasswordDialog
                     open={openSynchronizePasswordDialog}
@@ -110,14 +101,26 @@ const RestoreFromCloudInner = memo(function RestoreFromCloudInner() {
                     onConform={synchronizePassword}
                 />
             :   null}
+            {showButton ?
+                <OutletPortal>
+                    <PrimaryButton
+                        size="large"
+                        color="primary"
+                        variant="roundedContained"
+                        onClick={handleRestore}
+                        loading={state.loading}>
+                        <Trans>Restore</Trans>
+                    </PrimaryButton>
+                </OutletPortal>
+            :   null}
         </Box>
     )
 })
 
-export const RestoreFromCloud = memo(function RestoreFromCloud() {
+export const Component = memo(function RestoreFromCloud() {
     return (
         <RestoreContext>
-            <RestoreFromCloudInner />
+            <MaskNetworkInner />
         </RestoreContext>
     )
 })

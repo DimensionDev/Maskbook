@@ -34,39 +34,57 @@ interface UserInfo {
     locale?: string
 }
 
+type Callback = (isLogin: boolean) => void
 export class GoogleDriveClient {
-    private getToken: () => Promise<string | undefined>
+    private getToken: (interactive?: boolean) => Promise<string | undefined>
     private clearToken: () => Promise<void>
     private baseUrl: string = 'https://www.googleapis.com/drive/v3'
     private uploadUrl: string = 'https://www.googleapis.com/upload/drive/v3'
     private backupFolderName: string = 'Mask network backup'
-    private token: string | undefined
+    private callbacks: Callback[] = []
 
     constructor(getToken: () => Promise<string | undefined>, clearToken: () => Promise<void>) {
         this.getToken = getToken
         this.clearToken = clearToken
     }
 
-    get hasLogin() {
-        return !!this.token
+    async login(interactive?: boolean) {
+        const userInfo = await this.getUserInfo(interactive)
+        if (userInfo) {
+            this.callbacks.forEach((callback) => callback(true))
+        }
+        return userInfo
     }
-    private async request(input: string | URL | globalThis.Request, init?: RequestInit): Promise<Response> {
-        this.token = await this.getToken()
+    async logout() {
+        await this.clearToken()
+        this.callbacks.forEach((callback) => callback(false))
+    }
+    private async request(
+        input: string | URL | globalThis.Request,
+        init?: RequestInit,
+        interactive?: boolean,
+    ): Promise<Response> {
+        const token = await this.getToken(interactive)
         const response = await fetch(input, {
             ...init,
             headers: {
                 ...init?.headers,
-                Authorization: `Bearer ${this.token}`,
+                Authorization: `Bearer ${token}`,
             },
         })
         if (!response.ok) {
             if (response.status === 401 || response.status === 403) {
-                this.token = undefined
-                await this.clearToken()
+                await this.logout()
             }
             throw new Error(`HTTP error! status: ${response.status}`)
         }
         return response
+    }
+    public subscribe(callback: Callback) {
+        this.callbacks.push(callback)
+        return () => {
+            this.callbacks = this.callbacks.filter((cb) => cb !== callback)
+        }
     }
 
     public async listFiles(params: ListFilesParams = {}): Promise<DriveFile[]> {
@@ -242,13 +260,17 @@ export class GoogleDriveClient {
         return response
     }
 
-    public async getUserInfo(): Promise<UserInfo> {
+    public async getUserInfo(interactive?: boolean): Promise<UserInfo> {
         try {
-            const response = await this.request('https://www.googleapis.com/oauth2/v3/userinfo', {
-                headers: {
-                    'Content-Type': 'application/json',
+            const response = await this.request(
+                'https://www.googleapis.com/oauth2/v3/userinfo',
+                {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 },
-            })
+                interactive,
+            )
 
             return (await response.json()) as UserInfo
         } catch (error) {
