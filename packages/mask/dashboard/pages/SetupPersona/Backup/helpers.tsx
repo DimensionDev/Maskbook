@@ -37,6 +37,9 @@ export function downloadBackup(url: string, name?: string) {
 export function getGoogleDriveAccessToken() {
     return Services.Backup.getAccessToken()
 }
+export function clearGoogleDriveAccessToken() {
+    return Services.Backup.clearAccessToken()
+}
 
 export function createBackupName() {
     return `mask-network-keystore-backup-${formatDateTime(new Date(), 'yyyy-MM-dd')}.bin`

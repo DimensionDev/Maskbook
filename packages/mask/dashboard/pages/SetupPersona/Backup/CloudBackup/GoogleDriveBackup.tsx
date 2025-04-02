@@ -30,7 +30,13 @@ import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
 import type { PortalContainerProps } from '../types.js'
 import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
-import { createBackupName, downloadBackup, getGoogleDriveAccessToken, progressDownload } from '../helpers.js'
+import {
+    clearGoogleDriveAccessToken,
+    createBackupName,
+    downloadBackup,
+    getGoogleDriveAccessToken,
+    progressDownload,
+} from '../helpers.js'
 import { MoreMenu } from '../../../../components/MoreMenu/index.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -147,8 +153,11 @@ export const Component = memo(function GoogleDriveBackup() {
     const { user, updateUser } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
     const { portalContainerRef } = useOutletContext<PortalContainerProps>()
-    const { data: files = EMPTY_LIST, refetch, isLoading } = useGoogleDriveFiles()
-    const googleDriveClient = useMemo(() => new GoogleDriveClient(getGoogleDriveAccessToken), [])
+    const googleDriveClient = useMemo(
+        () => new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken),
+        [],
+    )
+    const { data: files = EMPTY_LIST, refetch, isLoading } = useGoogleDriveFiles(googleDriveClient)
 
     const login = async () => {
         try {
@@ -314,9 +323,7 @@ export const Component = memo(function GoogleDriveBackup() {
                                                                 )
                                                                 const url = URL.createObjectURL(blob)
                                                                 downloadBackup(url, file.name)
-                                                                Promise.resolve().then(() => {
-                                                                    URL.revokeObjectURL(url)
-                                                                })
+                                                                URL.revokeObjectURL(url)
                                                                 close()
                                                             }}>
                                                             <Icons.Cloud size={16} />

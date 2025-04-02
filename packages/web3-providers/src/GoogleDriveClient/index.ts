@@ -36,33 +36,51 @@ interface UserInfo {
 
 export class GoogleDriveClient {
     private getToken: () => Promise<string | undefined>
+    private clearToken: () => Promise<void>
     private baseUrl: string = 'https://www.googleapis.com/drive/v3'
     private uploadUrl: string = 'https://www.googleapis.com/upload/drive/v3'
     private backupFolderName: string = 'Mask network backup'
+    private token: string | undefined
 
-    constructor(getToken: () => Promise<string | undefined>) {
+    constructor(getToken: () => Promise<string | undefined>, clearToken: () => Promise<void>) {
         this.getToken = getToken
+        this.clearToken = clearToken
+    }
+
+    get hasLogin() {
+        return !!this.token
+    }
+    private async request(input: string | URL | globalThis.Request, init?: RequestInit): Promise<Response> {
+        this.token = await this.getToken()
+        const response = await fetch(input, {
+            ...init,
+            headers: {
+                ...init?.headers,
+                Authorization: `Bearer ${this.token}`,
+            },
+        })
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                this.token = undefined
+                await this.clearToken()
+            }
+            throw new Error(`HTTP error! status: ${response.status}`)
+        }
+        return response
     }
 
     public async listFiles(params: ListFilesParams = {}): Promise<DriveFile[]> {
         try {
-            const token = await this.getToken()
             const queryParams = new URLSearchParams({
                 fields: 'files(id,name,mimeType,createdTime,modifiedTime,size)',
                 ...params,
             } as Record<string, string>)
 
-            const response = await fetch(`${this.baseUrl}/files?${queryParams}`, {
-                method: 'GET',
+            const response = await this.request(`${this.baseUrl}/files?${queryParams}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
 
             const data = (await response.json()) as { files: DriveFile[] }
             return data.files
@@ -75,18 +93,16 @@ export class GoogleDriveClient {
     // Get or create backup folder
     private async getOrCreateBackupFolder(): Promise<string> {
         try {
-            const token = await this.getToken()
             // Check if the folder exists
-            const response = await fetch(
+            const response = await this.request(
                 `${this.baseUrl}/files?${new URLSearchParams({
                     q: `name='${this.backupFolderName}' and mimeType='application/vnd.google-apps.folder'`,
                     fields: 'files(id,name)',
                     spaces: 'drive',
                 })}`,
+
                 {
-                    method: 'GET',
                     headers: {
-                        Authorization: `Bearer ${token}`,
                         'Content-Type': 'application/json',
                     },
                 },
@@ -108,12 +124,8 @@ export class GoogleDriveClient {
                 mimeType: 'application/vnd.google-apps.folder',
             }
 
-            const createResponse = await fetch(`${this.baseUrl}/files`, {
+            const createResponse = await this.request(`${this.baseUrl}/files`, {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                    'Content-Type': 'application/json',
-                },
                 body: JSON.stringify(folderMetadata),
             })
 
@@ -132,7 +144,6 @@ export class GoogleDriveClient {
     // List files in the backup folder
     public async listBackupFiles(params: ListFilesParams = {}): Promise<DriveFile[]> {
         try {
-            const token = await this.getToken()
             const folderId = await this.getOrCreateBackupFolder()
 
             const queryParams = new URLSearchParams({
@@ -142,10 +153,8 @@ export class GoogleDriveClient {
                 ...params,
             })
 
-            const response = await fetch(`${this.baseUrl}/files?${queryParams}`, {
-                method: 'GET',
+            const response = await this.request(`${this.baseUrl}/files?${queryParams}`, {
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
@@ -164,7 +173,6 @@ export class GoogleDriveClient {
 
     public async uploadFile(file: File, metadata: FileMetadata = {}): Promise<DriveFile> {
         try {
-            const token = await this.getToken()
             const folderId = await this.getOrCreateBackupFolder()
             const formData = new FormData()
             const fileMetadata: FileMetadata = {
@@ -181,11 +189,8 @@ export class GoogleDriveClient {
             )
             formData.append('file', file)
 
-            const response = await fetch(`${this.uploadUrl}/files?uploadType=multipart`, {
+            const response = await this.request(`${this.uploadUrl}/files?uploadType=multipart`, {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
                 body: formData,
             })
 
@@ -202,17 +207,9 @@ export class GoogleDriveClient {
 
     public async deleteFile(fileId: string): Promise<boolean> {
         try {
-            const token = await this.getToken()
-            const response = await fetch(`${this.baseUrl}/files/${fileId}`, {
+            await this.request(`${this.baseUrl}/files/${fileId}`, {
                 method: 'DELETE',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
             })
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
 
             return true
         } catch (error) {
@@ -226,18 +223,7 @@ export class GoogleDriveClient {
     }
     public async downloadFile(fileId: string): Promise<Blob> {
         try {
-            const token = await this.getToken()
-            const response = await fetch(this.getDownloadUrl(fileId), {
-                method: 'GET',
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
-
+            const response = await this.request(this.getDownloadUrl(fileId))
             return await response.blob()
         } catch (error) {
             console.error('Error downloading file:', error)
@@ -247,7 +233,7 @@ export class GoogleDriveClient {
     /** Avoid leaking token */
     public async requestFile(fileId: string): Promise<Response> {
         const token = await this.getToken()
-        const response = await fetch(this.getDownloadUrl(fileId), {
+        const response = await this.request(this.getDownloadUrl(fileId), {
             method: 'GET',
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -258,18 +244,11 @@ export class GoogleDriveClient {
 
     public async getUserInfo(): Promise<UserInfo> {
         try {
-            const token = await this.getToken()
-            const response = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-                method: 'GET',
+            const response = await this.request('https://www.googleapis.com/oauth2/v3/userinfo', {
                 headers: {
-                    Authorization: `Bearer ${token}`,
                     'Content-Type': 'application/json',
                 },
             })
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`)
-            }
 
             return (await response.json()) as UserInfo
         } catch (error) {
