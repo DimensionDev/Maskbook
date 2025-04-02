@@ -1,11 +1,12 @@
 import { t } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { makeStyles, useCustomSnackbar } from '@masknet/theme'
+import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { GoogleDriveClient } from '@masknet/web3-providers'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { UserContext } from '../../shared-ui/index.js'
 import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../utils/api.js'
+import { useAsyncFn } from 'react-use'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -35,7 +36,7 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
     const { updateUser } = UserContext.useContainer()
     const { showSnackbar } = useCustomSnackbar()
 
-    const login = async () => {
+    const [{ loading }, login] = useAsyncFn(async () => {
         try {
             const userInfo = await googleDriveClient.getUserInfo()
             updateUser({
@@ -44,7 +45,7 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
         } catch (err) {
             showSnackbar(t`Failed to login: ${(err as Error).message}`, { variant: 'error' })
         }
-    }
+    }, [googleDriveClient, updateUser, showSnackbar])
     return (
         <Box className={classes.container}>
             <Typography className={classes.title}>
@@ -56,9 +57,9 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
                 </Trans>
             </Typography>
             <Box display="flex" justifyContent="center" mt="48px">
-                <Button variant="contained" onClick={login}>
+                <ActionButton variant="roundedContained" onClick={login} loading={loading}>
                     Add Google Drive
-                </Button>
+                </ActionButton>
             </Box>
         </Box>
     )

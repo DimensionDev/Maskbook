@@ -1,12 +1,18 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
-import { GoogleDriveClient } from '@masknet/web3-providers'
+import { type GoogleDriveClient } from '@masknet/web3-providers'
 import { compact } from 'lodash-es'
-import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../utils/api.js'
+import { useEffect, useState } from 'react'
 
-const defaultClient = new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken)
-export function useGoogleDriveFiles(client: GoogleDriveClient = defaultClient) {
-    return useInfiniteQuery({
-        enabled: client.hasLogin,
+export function useGoogleDriveFiles(client: GoogleDriveClient) {
+    const [isLogin, setIsLogin] = useState(false)
+
+    useEffect(() => {
+        client.login()
+        return client.subscribe(setIsLogin)
+    }, [client])
+
+    const query = useInfiniteQuery({
+        enabled: isLogin,
         queryKey: ['google-drive', 'files'],
         initialPageParam: '',
         queryFn: (param) => {
@@ -20,4 +26,5 @@ export function useGoogleDriveFiles(client: GoogleDriveClient = defaultClient) {
             return compact(data.pages.flatMap((x) => x))
         },
     })
+    return query
 }
