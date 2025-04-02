@@ -17,17 +17,24 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
         const text = props.children.slice(1)
         const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
         const { hasMatch, ...events } = useTagEnhancer('hash', text)
-        return (
+        const link = (
             <Link {...events} href={target} fontSize="inherit">
                 {props.children}
                 {props.suggestedPostImage}
             </Link>
         )
+        const TagModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.TagModifier)?.TagModifier
+        if (!TagModifier) return link
+
+        return <TagModifier {...props} href={target} fallback={link} />
     }),
     CashLink: memo(function (props) {
         const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`
         const { hasMatch, ...events } = useTagEnhancer('cash', props.children.slice(1))
-        return <Link {...events} href={target} children={props.children} fontSize="inherit" />
+        const link = <Link {...events} href={target} children={props.children} fontSize="inherit" />
+        const TagModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.TagModifier)?.TagModifier
+        if (!TagModifier) return link
+        return <TagModifier {...props} href={target} fallback={link} />
     }),
     Image: memo(function ImageFragment(props: RenderFragmentsContextType.ImageProps) {
         return props.width === 0 || props.meta?.get(IMAGE_RENDER_IGNORE) ?

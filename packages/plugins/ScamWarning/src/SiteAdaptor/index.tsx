@@ -48,7 +48,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         icon: <Icons.Danger size={24} />,
         backgroundGradient: 'rgba(255, 235, 237)',
     },
-    LinkModifier,
+    LinkModifier: LinkModifier,
     TextModifier,
 }
 

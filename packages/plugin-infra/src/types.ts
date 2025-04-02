@@ -265,13 +265,26 @@ export namespace Plugin.SiteAdaptor {
         /** This UI will be rendered as plugin wrapper page */
         wrapperProps?: PluginWrapperProps
         /**
+         * @deprecated use TagModifier instead.
          * A hook for if this plugin can enhance the #hash or $cash tag.
          */
         enhanceTag?: {
             onClick?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => void
             onHover?: (kind: 'cash' | 'hash', content: string, event: React.MouseEvent<HTMLAnchorElement>) => () => void
         }
+        /** Modifier for the #hash or $cash tag. */
+        TagModifier?: React.ComponentType<{
+            children: string
+            style?: React.CSSProperties
+            href: string
+            fallback?: React.ReactNode
+        }>
         TextModifier?: React.ComponentType<{
+            children: string
+            style?: React.CSSProperties
+            fallback?: React.ReactNode
+        }>
+        MentionModifier?: React.ComponentType<{
             children: string
             style?: React.CSSProperties
             fallback?: React.ReactNode
