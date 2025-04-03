@@ -41,7 +41,11 @@ msgid "{0} Pending"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "{count, plural, one {# Wallet 🚀} other {# Wallets 🚀}}"
+#~ msgid "{count, plural, one {# Wallet 🚀} other {# Wallets 🚀}}"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "{count, plural, one {You have recovered **# Wallet 🚀**} other {You have recovered **# Wallets 🚀**}}"
 msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
@@ -127,8 +131,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "accounts"
-msgstr ""
+#~ msgid "accounts"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 msgid "Activities"
@@ -818,7 +822,15 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Creating your "
+#~ msgid "Creating your "
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "Creating your **identity**"
+msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Creating your **wallet**"
 msgstr ""
 
 #: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
@@ -859,8 +871,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "data"
-msgstr ""
+#~ msgid "data"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Data"
@@ -1064,7 +1076,12 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Encrypting your "
+#~ msgid "Encrypting your "
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Encrypting your **data**"
 msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionMethodSelector.tsx
@@ -1329,7 +1346,12 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Generating your "
+#~ msgid "Generating your "
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Generating your **accounts**"
 msgstr ""
 
 #. placeholder {0}: contract?.symbol || ''
@@ -1411,8 +1433,8 @@ msgid "I wrote down those words in the correct order"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "identity"
-msgstr ""
+#~ msgid "identity"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
@@ -2322,8 +2344,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "ready 🚀"
-msgstr ""
+#~ msgid "ready 🚀"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "realMaskNetwork"
@@ -3176,8 +3198,8 @@ msgid "Waiting for {providerType}"
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "wallet"
-msgstr ""
+#~ msgid "wallet"
+#~ msgstr ""
 
 #: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
@@ -3270,8 +3292,8 @@ msgstr ""
 #~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "You have recovered "
-msgstr ""
+#~ msgid "You have recovered "
+#~ msgstr ""
 
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "You have signed with your wallet."
@@ -3317,7 +3339,11 @@ msgstr ""
 #~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
-msgid "Your Persona is on "
+#~ msgid "Your Persona is on "
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "Your Persona is on **ready 🚀**"
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
@@ -3325,5 +3351,9 @@ msgstr ""
 #~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
-msgid "Your Wallet is on "
+#~ msgid "Your Wallet is on "
+#~ msgstr ""
+
+#: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+msgid "Your Wallet is on **ready 🚀**"
 msgstr ""

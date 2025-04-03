@@ -7,6 +7,16 @@
         "y6VCOb": [["0"], " 분"],
         "MpnSqP": [["0"], " Pending"],
         "FKrzPv": [["count", "plural", { "one": ["#", " Wallet 🚀"], "other": ["#", " Wallets 🚀"] }]],
+        "5s6EhU": [
+            [
+                "count",
+                "plural",
+                {
+                    "one": ["You have recovered **", "#", " Wallet 🚀**"],
+                    "other": ["You have recovered **", "#", " Wallets 🚀**"]
+                }
+            ]
+        ],
         "yx3mb0": [
             [
                 "decryptProgress",
@@ -201,6 +211,8 @@
         "PjBWOL": ["이용하기 전에 페르소나 한번 만들어 보세요"],
         "WgawP2": ["Creating your"],
         "cEnmTp": ["Creating your "],
+        "L82H5Z": ["Creating your **identity**"],
+        "F7U8uz": ["Creating your **wallet**"],
         "Q2lUR2": ["통화"],
         "OgPkDe": ["통화 기호(옵션)"],
         "oOQfsI": ["Current account is not the verifying account."],
@@ -272,6 +284,7 @@
         "w1ctdJ": ["Mask: 편집"],
         "MRIXE3": ["Encrypting your"],
         "zutir1": ["Encrypting your "],
+        "XB3tfc": ["Encrypting your **data**"],
         "Cz6Lx7": ["암호화 방식"],
         "N/fqDa": ["Ens 나 주소(0x)"],
         "mPxxVq": ["기스비 한도 입력"],
@@ -333,6 +346,7 @@
         "fUn3xA": ["새로운 월렛 주소 생성"],
         "tdZPpe": ["Generating your"],
         "CiU2m/": ["Generating your "],
+        "RL5m+x": ["Generating your **accounts**"],
         "2p7WMm": ["Give permission to access <0/> your ", ["0"], "?"],
         "w9Xmw/": ["Google Drive"],
         "76gPWk": ["알겠습니다"],
@@ -841,7 +855,9 @@
         ],
         "N19nSk": ["Your Persona is on"],
         "WC7pDz": ["Your Persona is on "],
+        "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "0kr+x1": ["Your Wallet is on"],
-        "v7OL2k": ["Your Wallet is on "]
+        "v7OL2k": ["Your Wallet is on "],
+        "wCtp6y": ["Your Wallet is on **ready 🚀**"]
     }
 }
