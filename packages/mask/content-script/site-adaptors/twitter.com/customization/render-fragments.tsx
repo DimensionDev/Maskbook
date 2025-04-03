@@ -2,7 +2,6 @@ import { useActivatedPluginsSiteAdaptor } from '@masknet/plugin-infra/content-sc
 import type { RenderFragmentsContextType } from '@masknet/typed-message-react'
 import { Link } from '@mui/material'
 import { memo } from 'react'
-import { useTagEnhancer } from '../../../../shared-ui/TypedMessageRender/Components/Text.js'
 
 /**
  * For images that are rendered at the end of the post (parsed by postImagesParser), hide it in the render fragment so it won't render twice.
@@ -11,14 +10,16 @@ export const IMAGE_RENDER_IGNORE = 'IMAGE_RENDER_IGNORE'
 export const TwitterRenderFragments: RenderFragmentsContextType = {
     AtLink: memo(function (props) {
         const target = '/' + props.children.slice(1)
-        return <Link href={target} children={props.children} fontSize="inherit" />
+        const link = <Link href={target} children={props.children} fontSize="inherit" />
+        const MentionModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.MentionModifier)?.MentionModifier
+        if (!MentionModifier) return link
+        return <MentionModifier {...props} href={target} fallback={link} />
     }),
     HashLink: memo(function (props) {
         const text = props.children.slice(1)
         const target = `/hashtag/${encodeURIComponent(text)}?src=hashtag_click`
-        const { hasMatch, ...events } = useTagEnhancer('hash', text)
         const link = (
-            <Link {...events} href={target} fontSize="inherit">
+            <Link href={target} fontSize="inherit">
                 {props.children}
                 {props.suggestedPostImage}
             </Link>
@@ -30,8 +31,7 @@ export const TwitterRenderFragments: RenderFragmentsContextType = {
     }),
     CashLink: memo(function (props) {
         const target = `/search?q=${encodeURIComponent(props.children)}&src=cashtag_click`
-        const { hasMatch, ...events } = useTagEnhancer('cash', props.children.slice(1))
-        const link = <Link {...events} href={target} children={props.children} fontSize="inherit" />
+        const link = <Link href={target} children={props.children} fontSize="inherit" />
         const TagModifier = useActivatedPluginsSiteAdaptor(false).find((x) => x.TagModifier)?.TagModifier
         if (!TagModifier) return link
         return <TagModifier {...props} href={target} fallback={link} />

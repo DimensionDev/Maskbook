@@ -17,6 +17,7 @@ const useStyles = makeStyles()(() => ({
         verticalAlign: 'bottom',
     },
     icon: {
+        cursor: 'pointer',
         lineHeight: '16px',
         width: 16,
         height: 16,
@@ -29,6 +30,7 @@ const useStyles = makeStyles()(() => ({
 type TagSearchResult =
     | FungibleTokenResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
     | NonFungibleCollectionResult<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll>
+
 export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifier']>>(function TagModifier({
     children,
     href,
@@ -40,21 +42,26 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
             return DSearch.search<TagSearchResult>(children)
         },
     })
-    const imgRef = useRef<HTMLImageElement>(null)
+    const timerRef = useRef<NodeJS.Timeout>(undefined)
     if (data?.length) {
         return (
             <span
                 className={classes.tag}
                 onMouseEnter={(event) => {
-                    const element = event.currentTarget
-                    PluginTraderMessages.trendingAnchorObserved.sendToLocal({
-                        name: children.slice(1),
-                        type: children.startsWith('#') ? TrendingAPI.TagType.HASH : TrendingAPI.TagType.CASH,
-                        anchorBounding: element.getBoundingClientRect(),
-                        anchorEl: element,
-                    })
+                    timerRef.current = setTimeout(() => {
+                        const element = event.currentTarget
+                        PluginTraderMessages.trendingAnchorObserved.sendToLocal({
+                            name: children.slice(1),
+                            type: children.startsWith('#') ? TrendingAPI.TagType.HASH : TrendingAPI.TagType.CASH,
+                            anchorBounding: element.getBoundingClientRect(),
+                            anchorEl: element,
+                        })
+                    }, 300)
+                }}
+                onMouseLeave={() => {
+                    clearTimeout(timerRef.current)
                 }}>
-                <img width={16} ref={imgRef} height={16} className={classes.icon} src={data[0].logoURL} />
+                <img width={16} height={16} className={classes.icon} src={data[0].logoURL} />
                 <Link fontSize="inherit" href={href}>
                     {children}
                 </Link>

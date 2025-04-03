@@ -287,6 +287,7 @@ export namespace Plugin.SiteAdaptor {
         MentionModifier?: React.ComponentType<{
             children: string
             style?: React.CSSProperties
+            href: string
             fallback?: React.ReactNode
         }>
         LinkModifier?: React.ComponentType<{
