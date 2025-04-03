@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-04-03 11:04\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -137,7 +137,7 @@ msgstr "ソーシャルメディアで Web3 dApps の機能を探索してみて
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "accounts"
-#~ msgstr "アカウント"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 msgid "Activities"
@@ -347,7 +347,7 @@ msgstr "バックアップと復元"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup downloaded and merged to local successfully."
-#~ msgstr "バックアップがダウンロードされ、ローカルに正常に統合されました。"
+#~ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
@@ -400,7 +400,7 @@ msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup to Mask Cloud Service"
-#~ msgstr "マスククラウドサービスにバックアップ"
+#~ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup to the Cloud"
@@ -877,7 +877,7 @@ msgstr "ダーク"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "data"
-#~ msgstr "データ"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Data"
@@ -1008,7 +1008,7 @@ msgstr "ダウンロード"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Download backup"
-#~ msgstr "バックアップをダウンロード"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #~ msgid "identity"
-#~ msgstr "アイデンティティ"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
@@ -1831,7 +1831,7 @@ msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Merge to local"
-#~ msgstr "ローカルに統合"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Message"
@@ -2350,7 +2350,7 @@ msgstr "再入力"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "ready 🚀"
-#~ msgstr "準備完了🚀"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "realMaskNetwork"
@@ -2640,7 +2640,7 @@ msgstr "サイン"
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #~ msgid "Sign Up"
-#~ msgstr "新規登録"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -3204,7 +3204,7 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "wallet"
-#~ msgstr "ウォレット"
+#~ msgstr ""
 
 #: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
@@ -3262,7 +3262,7 @@ msgstr "おかえりなさい"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Welcome to Mask Cloud Services"
-#~ msgstr "マスククラウドサービスへようこそ"
+#~ msgstr ""
 
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Welcome to Mask Network"
@@ -3362,3 +3362,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
