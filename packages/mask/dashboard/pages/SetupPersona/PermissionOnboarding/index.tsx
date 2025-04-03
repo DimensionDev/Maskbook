@@ -100,13 +100,11 @@ export const Component = memo(function Onboarding() {
         window.close()
     }, [])
 
-    const sentence: string[][] = useMemo(() => {
+    const sentence: string[] = useMemo(() => {
         return [
-            [
-                t`We are pleased to inform you that the update for X (formerly named Twitter) website has been completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!`,
-            ],
+            t`We are pleased to inform you that the update for X (formerly named Twitter) website has been completed. You can now continue to enjoy all the features of Mask Network as usual. Thank you for your continuous support!`,
         ]
-    }, [])
+    }, [t])
 
     return (
         <>

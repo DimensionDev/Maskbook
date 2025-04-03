@@ -7,6 +7,16 @@
         "y6VCOb": [["0"], " Mins"],
         "MpnSqP": [["0"], " Pending"],
         "FKrzPv": [["count", "plural", { "one": ["#", " Wallet 🚀"], "other": ["#", " Wallets 🚀"] }]],
+        "5s6EhU": [
+            [
+                "count",
+                "plural",
+                {
+                    "one": ["You have recovered **", "#", " Wallet 🚀**"],
+                    "other": ["You have recovered **", "#", " Wallets 🚀**"]
+                }
+            ]
+        ],
         "yx3mb0": [
             [
                 "decryptProgress",
@@ -203,6 +213,8 @@
         "PjBWOL": ["Create your persona to get started"],
         "WgawP2": ["Creating your"],
         "cEnmTp": ["Creating your "],
+        "L82H5Z": ["Creating your **identity**"],
+        "F7U8uz": ["Creating your **wallet**"],
         "Q2lUR2": ["Currency"],
         "OgPkDe": ["Currency Symbol (Optional)"],
         "oOQfsI": ["Current account is not the verifying account."],
@@ -274,6 +286,7 @@
         "w1ctdJ": ["Encrypted Post"],
         "MRIXE3": ["Encrypting your"],
         "zutir1": ["Encrypting your "],
+        "XB3tfc": ["Encrypting your **data**"],
         "Cz6Lx7": ["Encryption Method"],
         "N/fqDa": ["Ens or Address(0x)"],
         "mPxxVq": ["Enter a gas limit"],
@@ -335,6 +348,7 @@
         "fUn3xA": ["Generate a new wallet address"],
         "tdZPpe": ["Generating your"],
         "CiU2m/": ["Generating your "],
+        "RL5m+x": ["Generating your **accounts**"],
         "2p7WMm": ["Give permission to access <0/> your ", ["0"], "?"],
         "w9Xmw/": ["Google Drive"],
         "76gPWk": ["Got it"],
@@ -845,7 +859,9 @@
         ],
         "N19nSk": ["Your Persona is on"],
         "WC7pDz": ["Your Persona is on "],
+        "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "0kr+x1": ["Your Wallet is on"],
-        "v7OL2k": ["Your Wallet is on "]
+        "v7OL2k": ["Your Wallet is on "],
+        "wCtp6y": ["Your Wallet is on **ready 🚀**"]
     }
 }

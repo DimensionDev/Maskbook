@@ -74,14 +74,14 @@ export const Component = memo(function Onboarding() {
         window.close()
     }, [])
 
-    const sentence: string[][] = useMemo(() => {
+    const sentence: string[] = useMemo(() => {
         return [
-            [t`Creating your `, t`wallet`],
-            [t`Generating your `, t`accounts`],
-            [t`Encrypting your `, t`data`],
-            [t`Your Wallet is on `, t`ready 🚀`],
+            t`Creating your **wallet**`,
+            t`Generating your **accounts**`,
+            t`Encrypting your **data**`,
+            t`Your Wallet is on **ready 🚀**`,
         ]
-    }, [])
+    }, [t])
 
     return (
         <>

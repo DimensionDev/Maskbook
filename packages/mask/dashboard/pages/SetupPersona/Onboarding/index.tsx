@@ -115,24 +115,21 @@ export const Component = memo(function Onboarding() {
         })
     }, [retry])
 
-    const sentence: Array<string[] | undefined> = useMemo(() => {
+    const sentence: Array<string | undefined> = useMemo(() => {
         const count = params.get('count')
         return [
-            [t`Creating your `, t`identity`],
-            [t`Generating your `, t`accounts`],
-            [t`Encrypting your `, t`data`],
-            [t`Your Persona is on `, t`ready 🚀`],
+            t`Creating your **identity**`,
+            t`Generating your **accounts**`,
+            t`Encrypting your **data**`,
+            t`Your Persona is on **ready 🚀**`,
             count && !isZero(count) ?
-                [
-                    t`You have recovered `,
-                    plural(count, {
-                        one: '# Wallet 🚀',
-                        other: '# Wallets 🚀',
-                    }),
-                ]
+                plural(count, {
+                    one: 'You have recovered **# Wallet 🚀**',
+                    other: 'You have recovered **# Wallets 🚀**',
+                })
             :   undefined,
         ]
-    }, [])
+    }, [t, count])
 
     return (
         <>
