@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-04-03 11:04\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -137,7 +137,7 @@ msgstr "소결 미디어에서 웹3 앱을 탐색해 보세요."
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "accounts"
-#~ msgstr "계정"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 msgid "Activities"
@@ -347,7 +347,7 @@ msgstr "백업 맟 복구"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup downloaded and merged to local successfully."
-#~ msgstr "백업을 다운로드하여 로컬로 병합했습니다."
+#~ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
@@ -400,7 +400,7 @@ msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup to Mask Cloud Service"
-#~ msgstr "Mask Cloud Service 백업"
+#~ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup to the Cloud"
@@ -877,7 +877,7 @@ msgstr "다크"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "data"
-#~ msgstr "데이터"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Data"
@@ -1008,7 +1008,7 @@ msgstr "다운로드"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Download backup"
-#~ msgstr "백업 다운로드"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #~ msgid "identity"
-#~ msgstr "아이덴티티"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
@@ -1831,7 +1831,7 @@ msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Merge to local"
-#~ msgstr "로컬로 합병하기"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Message"
@@ -2350,7 +2350,7 @@ msgstr "다시 입력"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "ready 🚀"
-#~ msgstr "준비 🚀"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "realMaskNetwork"
@@ -2640,7 +2640,7 @@ msgstr "사인"
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #~ msgid "Sign Up"
-#~ msgstr "가입하기"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -3204,7 +3204,7 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "wallet"
-#~ msgstr "월렛"
+#~ msgstr ""
 
 #: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
@@ -3362,3 +3362,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
