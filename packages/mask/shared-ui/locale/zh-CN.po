@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-04-03 11:04\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -137,7 +137,7 @@ msgstr "尝试探索社交媒体上的 Web3 dApps 功能。"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "accounts"
-#~ msgstr "账户"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 msgid "Activities"
@@ -347,7 +347,7 @@ msgstr "备份恢复"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup downloaded and merged to local successfully."
-#~ msgstr "备份下载并成功合并到本地。"
+#~ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Failed"
@@ -400,7 +400,7 @@ msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup to Mask Cloud Service"
-#~ msgstr "备份到 Mask 云服务"
+#~ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup to the Cloud"
@@ -877,7 +877,7 @@ msgstr "深色"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "data"
-#~ msgstr "数据"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/TransactionRequest.tsx
 msgid "Data"
@@ -1008,7 +1008,7 @@ msgstr "下载"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Download backup"
-#~ msgstr "下载备份"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
@@ -1439,7 +1439,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #~ msgid "identity"
-#~ msgstr "身份"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
 msgid "Identity ID"
@@ -1831,7 +1831,7 @@ msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Merge to local"
-#~ msgstr "合并至本地数据"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Message"
@@ -2350,7 +2350,7 @@ msgstr "重新输入"
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "ready 🚀"
-#~ msgstr "准备🚀"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/useSubmit.ts
 msgid "realMaskNetwork"
@@ -2640,7 +2640,7 @@ msgstr "签名"
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
 #~ msgid "Sign Up"
-#~ msgstr "注册"
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Sign-in Request"
@@ -3204,7 +3204,7 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #~ msgid "wallet"
-#~ msgstr "钱包"
+#~ msgstr ""
 
 #: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
@@ -3262,7 +3262,7 @@ msgstr "欢迎回来"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Welcome to Mask Cloud Services"
-#~ msgstr "欢迎使用 Mask 云服务"
+#~ msgstr ""
 
 #: popups/pages/Personas/Home/UI.tsx
 msgid "Welcome to Mask Network"
@@ -3362,3 +3362,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
