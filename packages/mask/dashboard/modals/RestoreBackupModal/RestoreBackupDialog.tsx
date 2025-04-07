@@ -133,10 +133,11 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                         <Trans>Failed to restore the backup: {(err as Error).message}</Trans>
                     ),
                 })
+            } else {
+                showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
+                    variant: 'error',
+                })
             }
-            showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
-                variant: 'error',
-            })
         }
     }, [
         encrypted,
