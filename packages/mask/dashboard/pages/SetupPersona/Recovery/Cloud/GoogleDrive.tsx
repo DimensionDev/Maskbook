@@ -1,10 +1,12 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { EMPTY_LIST } from '@masknet/shared-base'
+import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import urlcat from 'urlcat'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { GoogleDriveFileTable } from '../../../../components/GoogleDriveFileTable.js'
 import { GoogleDriveLogin } from '../../../../components/GoogleDriveLogin.js'
@@ -62,6 +64,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export const Component = memo(function GoogleDriveRecovery() {
     const { classes } = useStyles()
+    const navigate = useNavigate()
     const { user, updateUser } = UserContext.useContainer()
     const googleDriveClient = useMemo(
         () => new GoogleDriveClient(getGoogleDriveAccessToken, clearGoogleDriveAccessToken),
@@ -137,7 +140,7 @@ export const Component = memo(function GoogleDriveRecovery() {
                     disabled={!selectedFile}
                     onClick={async () => {
                         if (!user.googleAccount || !selectedFile?.id) return
-                        await RestoreBackupModal.openAndWaitForClose({
+                        const result = await RestoreBackupModal.openAndWaitForClose({
                             download: () => {
                                 return progressDownload(
                                     () => googleDriveClient.requestFile(selectedFile.id),
@@ -160,6 +163,16 @@ export const Component = memo(function GoogleDriveRecovery() {
                             ),
                         })
                         setSelectedFile(null)
+                        if (result) {
+                            navigate(
+                                urlcat(DashboardRoutes.SignUpPersonaOnboarding, {
+                                    count: result.countOfWallets,
+                                }),
+                                {
+                                    replace: true,
+                                },
+                            )
+                        }
                     }}>
                     <Trans>Recover</Trans>
                 </PrimaryButton>
