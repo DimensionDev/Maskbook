@@ -71,7 +71,6 @@ export const CURRENCIES_MAP: Record<SourceType, undefined | TrendingAPI.Currency
         },
     ],
     [SourceType.UniswapInfo]: undefined,
-    [SourceType.X2Y2]: undefined,
     [SourceType.Chainbase]: undefined,
     [SourceType.Zerion]: undefined,
     [SourceType.Rarible]: undefined,

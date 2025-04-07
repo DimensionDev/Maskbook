@@ -85,18 +85,6 @@ describe('getPayloadFromURL', () => {
             },
         },
 
-        // x2y2
-        {
-            give: 'https://x2y2.io/eth/0x6d19568A959FCB4211852F6472d3df7b67C6Cd54/332',
-            expected: {
-                pluginID: NetworkPluginID.PLUGIN_EVM,
-                chainId: ChainIdEVM.Mainnet,
-                address: '0x6d19568A959FCB4211852F6472d3df7b67C6Cd54',
-                tokenId: '332',
-                provider: SourceType.X2Y2,
-            },
-        },
-
         // loosrare
         {
             give: 'https://looksrare.org/collections/0x60E4d786628Fea6478F785A6d7e704777c86a7c6/28850',
