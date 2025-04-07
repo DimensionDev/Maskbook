@@ -1,10 +1,10 @@
+import { checkAndRequestPermission } from '../../../shared/helpers/index.js'
+
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 export async function getAccessToken(interactive = false) {
-    const contained = await browser.permissions.contains({ permissions: ['identity'] })
-    if (!contained) {
-        const granted = await browser.permissions.request({ origins: ['identity'] })
-        if (!granted) return
-    }
+    const granted = await checkAndRequestPermission()
+    if (!granted) return
+
     return new Promise<string>((resolve, reject) => {
         // @ts-expect-error
         chrome.identity.getAuthToken({ interactive }, (token, error) => {
