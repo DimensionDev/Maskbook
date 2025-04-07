@@ -299,6 +299,10 @@ msgstr ""
 msgid "At least 6 characters"
 msgstr ""
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Authorization Failed"
+msgstr ""
+
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
 msgstr ""
@@ -1171,6 +1175,10 @@ msgstr ""
 msgid "Failed to add the wallet, please try again."
 msgstr ""
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Failed to authorize Google Drive. Please try again."
+msgstr ""
+
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
 msgid "Failed to decrypt."
 msgstr ""
@@ -1188,10 +1196,9 @@ msgstr ""
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
 
-#. placeholder {0}: (err as Error).message
 #: dashboard/components/GoogleDriveLogin.tsx
-msgid "Failed to login: {0}"
-msgstr ""
+#~ msgid "Failed to login: {0}"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."

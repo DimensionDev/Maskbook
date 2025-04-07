@@ -1,11 +1,12 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { DashboardRoutes, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
 import urlcat from 'urlcat'
 import { UserContext } from '../../../../../shared-ui/index.js'
 import { GoogleDriveFileTable } from '../../../../components/GoogleDriveFileTable.js'
@@ -71,6 +72,13 @@ export const Component = memo(function GoogleDriveRecovery() {
         [],
     )
     const { data: files = EMPTY_LIST, isLoading } = useGoogleDriveFiles(googleDriveClient)
+    const [{ loading: logoutLoading }, logout] = useAsyncFn(async () => {
+        await googleDriveClient.logout()
+        updateUser({
+            googleAccount: '',
+            googleToken: '',
+        })
+    }, [googleDriveClient])
 
     const [selectedFile, setSelectedFile] = useState<DriveFile | null>(null)
 
@@ -99,17 +107,14 @@ export const Component = memo(function GoogleDriveRecovery() {
                     </Typography>
                     <Typography className={classes.userAccount}>{user.googleAccount}</Typography>
                 </Box>
-                <Button
+                <ActionButton
                     variant="roundedContained"
                     size="small"
-                    onClick={() => {
-                        updateUser({
-                            googleAccount: '',
-                            googleToken: '',
-                        })
-                    }}>
+                    loading={logoutLoading}
+                    disabled={logoutLoading}
+                    onClick={logout}>
                     <Trans>Logout</Trans>
-                </Button>
+                </ActionButton>
             </Box>
             <Box>
                 <Typography className={classes.folder}>MaskBackup file</Typography>

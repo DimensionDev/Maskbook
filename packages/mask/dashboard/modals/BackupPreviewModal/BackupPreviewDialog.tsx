@@ -75,7 +75,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     type,
     account,
     abstract,
-    title = <Trans>Upload backup</Trans>,
+    title,
     uploadButtonLabel,
     onClose,
     onUpload,
@@ -261,7 +261,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     ])
 
     return (
-        <InjectedDialog title={title} open={open} onClose={handleClose}>
+        <InjectedDialog title={title ?? <Trans>Upload backup</Trans>} open={open} onClose={handleClose}>
             <DialogContent data-hide-scrollbar>{content}</DialogContent>
             <DialogActions>{action}</DialogActions>
         </InjectedDialog>

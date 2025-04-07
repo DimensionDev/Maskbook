@@ -1,7 +1,7 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
 import { Box, Button, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
@@ -92,6 +92,14 @@ export const Component = memo(function GoogleDriveBackup() {
         [googleDriveClient],
     )
 
+    const [{ loading: logoutLoading }, logout] = useAsyncFn(async () => {
+        await googleDriveClient.logout()
+        updateUser({
+            googleAccount: '',
+            googleToken: '',
+        })
+    }, [googleDriveClient])
+
     const mergedFiles = useMemo(() => uniqBy(compact([...files, uploadedFile]), (x) => x.id), [files, uploadedFile])
 
     if (!user.googleAccount) {
@@ -119,17 +127,14 @@ export const Component = memo(function GoogleDriveBackup() {
                     </Typography>
                     <Typography className={classes.userAccount}>{user.googleAccount}</Typography>
                 </Box>
-                <Button
+                <ActionButton
                     variant="roundedContained"
                     size="small"
-                    onClick={() => {
-                        updateUser({
-                            googleAccount: '',
-                            googleToken: '',
-                        })
-                    }}>
+                    loading={logoutLoading}
+                    disabled={logoutLoading}
+                    onClick={logout}>
                     <Trans>Logout</Trans>
-                </Button>
+                </ActionButton>
             </Box>
             <Box>
                 <Typography className={classes.folder}>MaskBackup file</Typography>

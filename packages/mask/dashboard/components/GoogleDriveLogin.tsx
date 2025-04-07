@@ -47,7 +47,10 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
                 googleAccount: userInfo.email || '',
             })
         } catch (err) {
-            showSnackbar(t`Failed to login: ${(err as Error).message}`, { variant: 'error' })
+            showSnackbar(t`Authorization Failed`, {
+                variant: 'warning',
+                message: t`Failed to authorize Google Drive. Please try again.`,
+            })
         }
     }, [googleDriveClient, updateUser, showSnackbar])
     return (
