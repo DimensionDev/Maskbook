@@ -48,8 +48,8 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
             <span
                 className={classes.tag}
                 onMouseEnter={(event) => {
+                    const element = event.currentTarget
                     timerRef.current = setTimeout(() => {
-                        const element = event.currentTarget
                         PluginTraderMessages.trendingAnchorObserved.sendToLocal({
                             name: children.slice(1),
                             type: children.startsWith('#') ? TrendingAPI.TagType.HASH : TrendingAPI.TagType.CASH,
