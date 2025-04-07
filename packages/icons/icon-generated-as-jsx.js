@@ -638,11 +638,6 @@ export const WETH = /*#__PURE__*/ __createIcon('WETH', [
         u: () => new URL('./brands/WETH.svg', import.meta.url).href,
     },
 ])
-export const X2Y2 = /*#__PURE__*/ __createIcon('X2Y2', [
-    {
-        u: () => new URL('./brands/X2Y2.svg', import.meta.url).href,
-    },
-])
 export const XLog = /*#__PURE__*/ __createIcon('XLog', [
     {
         u: () => new URL('./brands/XLog.svg', import.meta.url).href,

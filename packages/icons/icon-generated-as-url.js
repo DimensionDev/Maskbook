@@ -115,7 +115,6 @@ export function twitter_x_round_dark_url() { return new URL("./brands/TwitterXRo
 export function twitter_x_round_light_url() { return new URL("./brands/TwitterXRound.light.svg", import.meta.url).href }
 export function uniswap_url() { return new URL("./brands/Uniswap.svg", import.meta.url).href }
 export function weth_url() { return new URL("./brands/WETH.svg", import.meta.url).href }
-export function x_2_y_2_url() { return new URL("./brands/X2Y2.svg", import.meta.url).href }
 export function x_log_dark_url() { return new URL("./brands/XLog.dark.svg", import.meta.url).href }
 export function x_log_url() { return new URL("./brands/XLog.svg", import.meta.url).href }
 export function you_tube_url() { return new URL("./brands/YouTube.svg", import.meta.url).href }

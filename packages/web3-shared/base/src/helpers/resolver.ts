@@ -48,7 +48,6 @@ export const resolveSourceTypeName = createLookupTableResolver<SourceType, strin
         [SourceType.RaritySniper]: 'RaritySniper',
         [SourceType.TraitSniper]: 'TraitSniper',
         [SourceType.Chainbase]: 'Chainbase',
-        [SourceType.X2Y2]: 'X2Y2',
         [SourceType.MagicEden]: 'MagicEden',
         [SourceType.Element]: 'Element',
         [SourceType.Flow]: 'Flow',

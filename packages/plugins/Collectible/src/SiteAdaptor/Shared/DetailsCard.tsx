@@ -11,7 +11,6 @@ const PLATFORM_COSTS: {
     [k in SourceType]?: number
 } = {
     [SourceType.OpenSea]: 2.5,
-    [SourceType.X2Y2]: 0.5,
     [SourceType.LooksRare]: 2,
 }
 
