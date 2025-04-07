@@ -56,14 +56,16 @@ export class GoogleDriveClient {
         return userInfo
     }
     async logout() {
-        const token = await this.getToken()
-        const response = await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`)
-        if (!response.ok) {
-            const failedRes = await response.json()
-            console.error('Failed to revoke access token:', response.status, failedRes)
-        }
-        await this.clearToken()
-        this.callbacks.forEach((callback) => callback(false))
+        try {
+            const token = await this.getToken()
+            const response = await fetch(`https://accounts.google.com/o/oauth2/revoke?token=${token}`)
+            if (!response.ok) {
+                const failedRes = await response.json()
+                console.error('Failed to revoke access token:', response.status, failedRes)
+            }
+            await this.clearToken()
+            this.callbacks.forEach((callback) => callback(false))
+        } catch {}
     }
     private async request(
         input: string | URL | globalThis.Request,
