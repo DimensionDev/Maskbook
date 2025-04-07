@@ -13,7 +13,7 @@ import { GoogleDriveLogin } from '../../../../components/GoogleDriveLogin.js'
 import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
-import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
+import { BackupPreviewModal, RestoreBackupModal } from '../../../../modals/modals.js'
 import {
     clearGoogleDriveAccessToken,
     createBackupName,
@@ -99,7 +99,8 @@ export const Component = memo(function GoogleDriveBackup() {
     }
 
     const downloadAndMerge = async (file: DriveFile) => {
-        await MergeBackupModal.openAndWaitForClose({
+        await RestoreBackupModal.openAndWaitForClose({
+            strategy: 'merge',
             download: () => {
                 return progressDownload(() => googleDriveClient.requestFile(file.id), file.size ? +file.size : 0)
             },
