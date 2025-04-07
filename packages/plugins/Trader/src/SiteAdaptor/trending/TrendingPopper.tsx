@@ -62,10 +62,10 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
     const location = useLocation()
     useRenderPhraseCallbackOnDepsChange(() => setActive(false), [location.state?.key, location.href])
 
-    const badgeBoundingBottom = badgeBounding?.bottom ?? 0
-    const badgeBoundingLeft = badgeBounding?.left ?? 0
+    const badgeBoundingBottom = badgeBounding?.bottom || 0
+    const badgeBoundingLeft = badgeBounding?.left || 0
+    const badgeBoundingWidth = badgeBounding?.width || 0
     const positionY_Type = badgeBoundingBottom < 550 ? 'bottom' : 'top'
-    const positionX_Type = window.innerWidth - badgeBoundingLeft < 700 ? 'right' : 'left'
 
     if (!type) return null
 
@@ -78,7 +78,7 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
                 <div
                     style={{
                         position: 'absolute',
-                        left: positionX_Type === 'left' ? badgeBoundingLeft - 20 : badgeBoundingLeft - 300,
+                        left: badgeBoundingLeft - 300 + badgeBoundingWidth / 2,
                         ...(positionY_Type === 'bottom' ?
                             { top: badgeBoundingBottom + initialOffsetY + 10 }
                         :   { bottom: window.innerHeight - badgeBoundingBottom + 10 - initialOffsetY }),

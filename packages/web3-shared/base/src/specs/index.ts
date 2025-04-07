@@ -656,6 +656,16 @@ export interface Result<ChainId> {
         // If pin this to top of results
         isPin?: boolean
     }>
+    /**
+     * Join name with underscore and will be used for hash tag or currency tag.
+     * e.g., 'Bitcoin Puppets' => 'Bitcoin_Puppets', will be used to match `#Bitcoin_Puppets` or `$Bitcoin_Puppets`
+     */
+    name_underscore?: string
+    /**
+     * Remove space in name and will be used for hash tag or currency tag.
+     * e.g., 'Bitcoin Puppets' => 'BitcoinPuppets', will be used to match `#BitcoinPuppets` or `$BitcoinPuppets`
+     */
+    name_connect?: string
 }
 
 export interface EOAResult<ChainId> extends Result<ChainId> {

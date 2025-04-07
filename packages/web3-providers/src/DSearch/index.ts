@@ -108,17 +108,17 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         const [address, chainId] = await attemptUntil(
             [
                 () =>
-                    ENS.lookup(domain).then((x = '') => {
+                    ENS.lookup(domain).then((x) => {
                         if (!x || isZeroAddressEVM(x)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Mainnet]
                     }),
                 () =>
-                    SpaceID.lookup(domain).then((x = '') => {
+                    SpaceID.lookup(domain).then((x) => {
                         if (!x || isZeroAddressEVM(x)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.BSC]
                     }),
                 () =>
-                    ARBID.lookup(domain).then((x = '') => {
+                    ARBID.lookup(domain).then((x) => {
                         if (!x || isZeroAddressEVM(x)) throw new Error(`No result for ${domain}`)
                         return [x, ChainIdEVM.Arbitrum]
                     }),
@@ -205,15 +205,12 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
             await Promise.allSettled([
                 fetchFromDSearch<Array<FungibleTokenResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/fungible-tokens/specific-list.json'),
-                    { mode: 'cors' },
                 ),
                 fetchFromDSearch<Array<NonFungibleTokenResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/non-fungible-tokens/specific-list.json'),
-                    { mode: 'cors' },
                 ),
                 fetchFromDSearch<Array<NonFungibleCollectionResult<ChainId, SchemaType>>>(
                     urlcat(DSEARCH_BASE_URL, '/non-fungible-collections/specific-list.json'),
-                    { mode: 'cors' },
                 ),
             ])
         ).flatMap(
@@ -290,19 +287,17 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         return EMPTY_LIST
     }
 
-    private async searchTokenByHandler(
+    private searchTokenByHandler(
         tokens: Array<
             | FungibleTokenResult<ChainId, SchemaType>
             | NonFungibleTokenResult<ChainId, SchemaType>
             | NonFungibleCollectionResult<ChainId, SchemaType>
         >,
         name: string,
-    ): Promise<
-        Array<
-            | FungibleTokenResult<ChainId, SchemaType>
-            | NonFungibleTokenResult<ChainId, SchemaType>
-            | NonFungibleCollectionResult<ChainId, SchemaType>
-        >
+    ): Array<
+        | FungibleTokenResult<ChainId, SchemaType>
+        | NonFungibleTokenResult<ChainId, SchemaType>
+        | NonFungibleCollectionResult<ChainId, SchemaType>
     > {
         let result: Array<
             | FungibleTokenResult<ChainId, SchemaType>
@@ -358,11 +353,32 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
 
     private async searchTokenByName(name: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
         const { specificTokens, normalTokens } = await this.searchTokens()
-        const specificResult_ = await this.searchTokenByHandler(
+        const specificResult_ = this.searchTokenByHandler(
             specificTokens.map((x) => ({ ...x, alias: x.alias?.filter((x) => !x.isPin) })),
             name,
         )
-        const normalResult = await this.searchTokenByHandler([...specificTokens, ...normalTokens], name)
+        const normalResult = this.searchTokenByHandler([...specificTokens, ...normalTokens], name)
+
+        const specificResult: Array<
+            | FungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleTokenResult<ChainId, SchemaType>
+            | NonFungibleCollectionResult<ChainId, SchemaType>
+        > = specificResult_.map((x) => {
+            const r = normalTokens.find((y) => isSameAddress(y.address, x.address) && x.chainId === y.chainId)
+            return { ...x, rank: r?.rank }
+        })
+
+        return uniqWith(specificResult.concat(normalResult), (a, b) => a.id === b.id)
+    }
+
+    private async searchTokenByTagName(tagName: string): Promise<Array<SearchResult<ChainId, SchemaType>>> {
+        const { specificTokens, normalTokens } = await this.searchTokens()
+        const lowerTagName = tagName.slice(1).toLowerCase()
+        const specificResult_ = this.searchTokenByHandler(
+            specificTokens.map((x) => ({ ...x, alias: x.alias?.filter((x) => !x.isPin) })),
+            lowerTagName,
+        )
+        const normalResult = normalTokens.filter((x) => [x.name_underscore, x.name_connect].includes(lowerTagName))
 
         const specificResult: Array<
             | FungibleTokenResult<ChainId, SchemaType>
@@ -415,47 +431,55 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
      * @returns
      */
     async search<T extends SearchResult<ChainId, SchemaType> = SearchResult<ChainId, SchemaType>>(
-        keyword_: string,
+        keyword: string,
         type?: SearchResultType,
     ): Promise<T[]> {
-        const keyword = keyword_.toLowerCase()
+        const lowerKeyword = keyword.toLowerCase()
         // filter out 'domain/xxx' or string ends with punctuation marks like 'eth.'
-        if (keyword.replace(/([#$])?([\s\w+.])+/, '').length > 0 || !new RegExp(/(\w)+/).test(keyword.at(-1)!))
+        if (
+            lowerKeyword.replace(/([#$])?([\s\w+.])+/, '').length > 0 ||
+            !new RegExp(/(\w)+/).test(lowerKeyword.at(-1)!)
+        )
             return EMPTY_LIST
         // #MASK or $MASK or MASK
-        const [_, name = ''] = keyword.match(/(\w+)/) ?? []
+        const [_, name = ''] = lowerKeyword.match(/(\w+)/) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
         if (type === SearchResultType.CollectionListByTwitterHandle)
-            return this.searchCollectionListByTwitterHandle(keyword) as Promise<T[]>
+            return this.searchCollectionListByTwitterHandle(lowerKeyword) as Promise<T[]>
 
         // token:MASK
-        const { word, field } = this.parseKeyword(keyword)
+        const { word, field } = this.parseKeyword(lowerKeyword)
         if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
 
         // vitalik.lens, vitalik.bit, etc. including ENS BNB
         // Can't get .bit domain via RSS3 profile API.
-        if (isValidHandle(keyword) && !keyword.endsWith('.bit')) {
-            if (keyword.endsWith('.eth')) Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchEns)
+        if (isValidHandle(lowerKeyword) && !lowerKeyword.endsWith('.bit')) {
+            if (lowerKeyword.endsWith('.eth')) Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchEns)
             else Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
-            const domains = (await this.searchRSS3Handle(keyword)) as T[]
+            const domains = (await this.searchRSS3Handle(lowerKeyword)) as T[]
             if (domains.length) return domains
         }
-        if (keyword.endsWith('.bit')) {
+        if (lowerKeyword.endsWith('.bit')) {
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
-            return this.searchRSS3NameService(keyword) as Promise<T[]>
+            return this.searchRSS3NameService(lowerKeyword) as Promise<T[]>
         }
         // vitalik.eth
-        if (isValidDomain(keyword)) return this.searchDomain(keyword) as Promise<T[]>
+        if (isValidDomain(lowerKeyword)) return this.searchDomain(lowerKeyword) as Promise<T[]>
 
         // 0xd8dA6BF26964aF9D7eEd9e03E53415D37aA96045
-        if (isValidAddress(keyword) && !isZeroAddress(keyword)) {
-            const tokenList = await this.searchTokenByAddress(keyword)
+        if (isValidAddress(lowerKeyword) && !isZeroAddress(lowerKeyword)) {
+            const tokenList = await this.searchTokenByAddress(lowerKeyword)
             if (tokenList.length) return tokenList as T[]
 
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchAddress)
-            const addressList = await this.searchAddress(keyword)
+            const addressList = await this.searchAddress(lowerKeyword)
             if (addressList.length) return addressList as T[]
+        }
+
+        if (keyword.startsWith('$') || keyword.startsWith('#')) {
+            const result = await this.searchTokenByTagName(keyword)
+            if (result.length) return result as T[]
         }
 
         if (name) return this.searchTokenByName(name) as Promise<T[]>

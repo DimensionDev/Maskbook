@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
 import { ApplicationEntry } from '@masknet/shared'
@@ -9,13 +10,13 @@ import { SearchResultType } from '@masknet/web3-shared-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { base } from '../base.js'
-import { enhanceTag } from './cashTag.js'
+import { TagModifier } from './components/TagModifier.js'
 import { setupStorage, type StorageOptions } from './storage.js'
 import { ExchangeInjection } from './trader/ExchangeInjection.js'
 import { TrendingViewProvider } from './trending/context.js'
 import { TagInspector } from './trending/TagInspector.js'
 import { TrendingView } from './trending/TrendingView.js'
-import { Trans } from '@lingui/react/macro'
+import { MentionModifier } from './components/MentionModifier.js'
 
 function openDialog() {
     return CrossIsolationMessages.events.swapDialogEvent.sendToLocal({
@@ -70,7 +71,8 @@ const site: Plugin.SiteAdaptor.Definition = {
             </>
         )
     },
-    enhanceTag,
+    TagModifier,
+    MentionModifier,
     ApplicationEntries:
         // temporarily disabled
         process.env.MASK_ENABLE_EXCHANGE ?

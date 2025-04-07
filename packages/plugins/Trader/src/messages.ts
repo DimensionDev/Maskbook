@@ -1,5 +1,4 @@
 import { getPluginMessage, getPluginRPC, type PluginMessageEmitter } from '@masknet/plugin-infra'
-import type { GasConfig } from '@masknet/web3-shared-evm'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { SocialIdentity } from '@masknet/shared-base'
 import { PLUGIN_ID } from './constants/index.js'
@@ -7,7 +6,7 @@ import type { TagType } from './types/index.js'
 
 interface TrendingAnchorEvent {
     name: string
-    type: TagType
+    type?: TagType
     anchorBounding: DOMRect
     anchorEl: HTMLElement | null
     address?: string
@@ -16,21 +15,12 @@ interface TrendingAnchorEvent {
     currentResult?: Web3Helper.TokenResultAll
 }
 
-interface SwapSettingsEvent {
-    open: boolean
-    gasConfig?: GasConfig
-}
-
 export interface TraderMessage {
     /**
+     * TODO Get rid of this, just put popper alongside the triggers, the tags.
      * View a cash tag
      */
     trendingAnchorObserved: TrendingAnchorEvent
-
-    /**
-     * Swap settings dialog
-     */
-    swapSettingsUpdated: SwapSettingsEvent
 
     rpc: unknown
 }
