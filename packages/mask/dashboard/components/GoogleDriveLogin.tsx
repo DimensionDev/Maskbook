@@ -4,9 +4,10 @@ import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { GoogleDriveClient } from '@masknet/web3-providers'
 import { Box, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
-import { UserContext } from '../../shared-ui/index.js'
-import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../utils/api.js'
 import { useAsyncFn } from 'react-use'
+import { UserContext } from '../../shared-ui/index.js'
+import { checkAndRequestPermission } from '../../shared/helpers/index.js'
+import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
     container: {
@@ -38,6 +39,9 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
 
     const [{ loading }, login] = useAsyncFn(async () => {
         try {
+            const granted = await checkAndRequestPermission()
+            if (!granted) return
+
             const userInfo = await googleDriveClient.login(true)
             updateUser({
                 googleAccount: userInfo.email || '',
