@@ -161,10 +161,10 @@ export const Component = memo(function GoogleDriveBackup() {
                             account: user.googleAccount!,
                             isUpload: true,
                             onUpload: uploadFile,
-                            uploadButtonLabel: <Trans>Back Up to Google Drive</Trans>,
+                            uploadButtonLabel: <Trans>Backup to Google Drive</Trans>,
                         })
                     }}>
-                    <Trans>Back Up to Google Drive</Trans>
+                    <Trans>Backup to Google Drive</Trans>
                 </PrimaryButton>
             </OutletPortal>
         </Box>

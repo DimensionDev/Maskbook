@@ -326,8 +326,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
-msgid "Back Up to Google Drive"
-msgstr ""
+#~ msgid "Back Up to Google Drive"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
@@ -396,6 +396,11 @@ msgstr "ペルソナをバックアップする"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Successful"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+msgid "Backup to Google Drive"
 msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
