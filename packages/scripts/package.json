@@ -5,10 +5,10 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "extension": "node --experimental-strip-types ./src/bin/build.ts",
-    "extension-rspack": "node --experimental-strip-types ./src/bin/build-rspack.ts",
-    "dev": "node --experimental-strip-types ./src/bin/dev.ts",
-    "dev-rspack": "node --experimental-strip-types ./src/bin/dev-rspack.ts"
+    "extension": "node ./src/bin/build.ts",
+    "extension-rspack": "node ./src/bin/build-rspack.ts",
+    "dev": "node ./src/bin/dev.ts",
+    "dev-rspack": "node ./src/bin/dev-rspack.ts"
   },
   "dependencies": {
     "@masknet/static-module-record-swc": "^0.6.0",

@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "node --experimental-strip-types ../scripts/projects/build-contracts.ts"
+    "build": "node ../scripts/projects/build-contracts.ts"
   },
   "dependencies": {
     "@typechain/web3-v1": "^6.0.7",

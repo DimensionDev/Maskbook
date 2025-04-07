@@ -33,10 +33,7 @@ export async function runBundler(builder: 'webpack' | 'rspack', flags: BuildFlag
         ]
         const rspack = await import('@rspack/cli')
         const cli = new rspack.RspackCLI()
-        console.log(
-            '$ node --experimental-strip-types ./packages/mask/node_modules/@rspack/cli/bin/rspack.js',
-            ...compact(rspack_argv),
-        )
+        console.log('$ node ./packages/mask/node_modules/@rspack/cli/bin/rspack.js', ...compact(rspack_argv))
         return cli.run(['node', 'rspack', ...compact(rspack_argv)])
     } else {
         const command = [

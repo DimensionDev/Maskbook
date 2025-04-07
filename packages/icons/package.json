@@ -4,7 +4,7 @@
   "sideEffects": false,
   "type": "module",
   "scripts": {
-    "build": "node --experimental-strip-types ../scripts/codegen/icon-codegen.ts"
+    "build": "node ../scripts/codegen/icon-codegen.ts"
   },
   "devDependencies": {
     "@masknet/cli": "workspace:*"
