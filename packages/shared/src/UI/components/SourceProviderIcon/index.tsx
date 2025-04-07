@@ -13,7 +13,6 @@ const IconMap: Partial<Record<SourceType, GeneratedIcon>> = {
     [SourceType.CoinGecko]: Icons.CoinGecko,
     [SourceType.Uniswap]: Icons.Uniswap,
     [SourceType.LooksRare]: Icons.LooksRare,
-    [SourceType.X2Y2]: Icons.X2Y2,
     [SourceType.SimpleHash]: Icons.SimpleHash,
 }
 

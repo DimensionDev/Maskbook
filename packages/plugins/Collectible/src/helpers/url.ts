@@ -93,15 +93,6 @@ const RULES = [
         address: (matched: string) => matched.replace('zora', ZORA_COLLECTION_ADDRESS),
     },
 
-    // x2y2
-    {
-        hosts: ['x2y2.io'],
-        pathname: /^\/eth\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Mainnet,
-        provider: SourceType.X2Y2,
-    },
-
     // looksrare
     {
         hosts: ['looksrare.org'],

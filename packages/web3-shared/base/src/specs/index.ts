@@ -67,7 +67,6 @@ export enum SourceType {
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
-    X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
     Solsea = 'Solsea',
