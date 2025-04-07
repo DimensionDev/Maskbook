@@ -85,13 +85,15 @@ export abstract class TransactionWatcherState<ChainId extends PropertyKey, Trans
             /** Get all supported checkers */
             getTransactionCheckers: () => Array<TransactionChecker<ChainId, Transaction>>
         },
-    ) {
+    ) {}
+
+    start() {
         const checker = new Checker(this.options.getTransactionCheckers(), this.subscriptions, {
             delay: this.options.defaultBlockDelay * 1000,
             onNotify: this.notifyTransaction.bind(this),
         })
 
-        mergeSubscription(subscriptions.chainId, subscriptions.transactions).subscribe(() => {
+        mergeSubscription(this.subscriptions.chainId, this.subscriptions.transactions).subscribe(() => {
             checker.startCheck()
         })
     }

@@ -1255,6 +1255,7 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
+    start(): void
     emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
     /** Notify error */
