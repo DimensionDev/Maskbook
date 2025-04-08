@@ -68,5 +68,5 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
             </span>
         )
     }
-    return children
+    return <Link href={href} children={children} fontSize="inherit" />
 })
