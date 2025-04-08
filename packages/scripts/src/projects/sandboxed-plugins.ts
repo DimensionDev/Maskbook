@@ -4,13 +4,13 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { isAbsolute, join, relative } from 'node:path'
 import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
-import { awaitTask, watchTask } from '../utils/task.js'
-import { PKG_PATH, ROOT_PATH } from '../utils/paths.js'
-import { parseJSONc } from '../utils/jsonc.js'
+import { awaitTask, watchTask } from '../utils/task.ts'
+import { PKG_PATH, ROOT_PATH } from '../utils/paths.ts'
+import { parseJSONc } from '../utils/jsonc.ts'
 import { transform } from '@swc/core'
 import { dest, lastRun, parallel, src, type TaskFunction } from 'gulp'
 import { parseArgs } from 'node:util'
-import { getLanguageFamilyName } from '../locale-kit-next/index.js'
+import { getLanguageFamilyName } from '../locale-kit-next/index.ts'
 
 const require = createRequire(new URL(import.meta.url))
 const sandboxedPlugins = new URL('./sandboxed-plugins/', PKG_PATH)
@@ -107,7 +107,7 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     const writeInternalList = writeFile(join(distPath, './plugins.json'), JSON.stringify(internalList, null, 4))
     await Promise.all([tasks, writeInternalList])
     await writeFile(
-        join(distPath, './mv3-preload.js'),
+        join(distPath, './mv3-preload.ts'),
         mv3PreloadList.size ?
             (function* () {
                 yield `importScripts(\n`
@@ -155,7 +155,7 @@ function createBuilder({ id, manifestRoot, distPath, onJS, origin }: BuilderOpti
     return compile
 }
 function removeMJSSuffix(name: string) {
-    if (name.endsWith('.mjs')) return name.slice(0, -4) + '.js'
+    if (name.endsWith('.mjs')) return name.slice(0, -4) + '.ts'
     return name
 }
 
@@ -210,11 +210,12 @@ async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]
     )
 }
 class TransformStream extends Transform {
-    constructor(
-        public origin: string,
-        public onJS: (id: string, relative: string) => void,
-    ) {
+    public origin: string
+    public onJS: (id: string, relative: string) => void
+    constructor(origin: string, onJS: (id: string, relative: string) => void) {
         super({ objectMode: true, defaultEncoding: 'utf-8' })
+        this.origin = origin
+        this.onJS = onJS
     }
     wasm = require.resolve('@masknet/static-module-record-swc')
     override _transform(
@@ -222,7 +223,7 @@ class TransformStream extends Transform {
         encoding: BufferEncoding,
         callback: TransformCallback,
     ): void {
-        if (!(file.path.endsWith('.js') || file.path.endsWith('.mjs'))) {
+        if (!(file.path.endsWith('.ts') || file.path.endsWith('.mjs'))) {
             return callback(null, file)
         }
         const relative = file.relative.replace(/\\/g, '/')

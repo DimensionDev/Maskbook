@@ -1,8 +1,8 @@
 import { promises as fs } from 'node:fs'
 import { resolve, join } from 'node:path'
-import { awaitChildProcess } from '../utils/awaitChildProcess.js'
-import { shell } from '../utils/run.js'
-import { task } from '../utils/task.js'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { shell } from '../utils/run.ts'
+import { task } from '../utils/task.ts'
 
 type Primitive = string | number | boolean
 

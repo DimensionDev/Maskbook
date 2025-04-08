@@ -1,11 +1,10 @@
-#!/usr/bin/env node --import swc-register-esm
-import { spawn } from 'child_process'
-import { promisify } from 'util'
+import { spawn } from 'node:child_process'
+import { promisify } from 'node:util'
 import { series } from 'gulp'
-import { codegen } from '../codegen/index.js'
-import { awaitChildProcess, awaitTask } from '../utils/index.js'
-import { buildExtensionFlag } from '../extension/index.js'
-import { extensionArgsParser } from './args.js'
+import { codegen } from '../codegen/index.ts'
+import { awaitChildProcess, awaitTask } from '../utils/index.ts'
+import { buildExtensionFlag } from '../extension/index.ts'
+import { extensionArgsParser } from './args.ts'
 
 await promisify(codegen)()
 // \\-- is used for debug

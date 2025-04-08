@@ -2,7 +2,7 @@ import { readFile, writeFile } from 'fs/promises'
 import { watch } from 'gulp'
 import { camelCase, snakeCase, upperFirst } from 'lodash-es'
 import { parse as parsePath } from 'path'
-import { PKG_PATH, ROOT_PATH, prettier, watchTask } from '../utils/index.js'
+import { PKG_PATH, ROOT_PATH, prettier, watchTask } from '../utils/index.ts'
 import type { Position } from 'source-map'
 import { fileURLToPath } from 'url'
 

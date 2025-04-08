@@ -1,6 +1,6 @@
 import { dest, parallel, series, src, type TaskFunction } from 'gulp'
-import { PKG_PATH, ROOT_PATH, task } from '../utils/index.js'
-import { codegen } from '../codegen/index.js'
+import { PKG_PATH, ROOT_PATH, task } from '../utils/index.ts'
+import { codegen } from '../codegen/index.ts'
 import { fileURLToPath } from 'url'
 
 const DIST_PATH = new URL('dist/cloudflare', ROOT_PATH)

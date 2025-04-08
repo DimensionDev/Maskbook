@@ -1,5 +1,5 @@
 import { readFile, writeFile } from 'fs/promises'
-import { prettier, ROOT_PATH, task } from '../utils/index.js'
+import { prettier, ROOT_PATH, task } from '../utils/index.ts'
 
 const CONFIGURE_PATH = new URL('cspell.json', ROOT_PATH)
 

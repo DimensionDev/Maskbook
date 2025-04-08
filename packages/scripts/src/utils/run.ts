@@ -1,9 +1,9 @@
 import { spawn } from 'child_process'
-import { ROOT_PATH } from './paths.js'
+import { ROOT_PATH } from './paths.ts'
 import { relative } from 'path'
 import chalk from 'chalk'
 import { fileURLToPath } from 'url'
-import { markChildProcess } from './exit.js'
+import { markChildProcess } from './exit.ts'
 
 function logShell(e: string, args: string[], url: URL | string) {
     if (typeof url === 'object') url = fileURLToPath(url)

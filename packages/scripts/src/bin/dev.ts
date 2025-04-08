@@ -1,9 +1,8 @@
-#!/usr/bin/env node --import swc-register-esm
-import { spawn } from 'child_process'
-import { codegenWatch } from '../codegen/index.js'
-import { awaitChildProcess, cleanupWhenExit } from '../utils/index.js'
-import { extensionWatch } from '../extension/index.js'
-import { extensionArgsParser } from './args.js'
+import { spawn } from 'node:child_process'
+import { codegenWatch } from '../codegen/index.ts'
+import { awaitChildProcess, cleanupWhenExit } from '../utils/index.ts'
+import { extensionWatch } from '../extension/index.ts'
+import { extensionArgsParser } from './args.ts'
 
 cleanupWhenExit()
 codegenWatch(console.error)

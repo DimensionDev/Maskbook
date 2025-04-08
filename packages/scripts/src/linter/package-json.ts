@@ -1,6 +1,6 @@
-import { task } from '../utils/task.js'
-import { readFile, writeFile } from 'fs/promises'
-import { ROOT_PATH } from '../utils/paths.js'
+import { task } from '../utils/task.ts'
+import { readFile, writeFile } from 'node:fs/promises'
+import { ROOT_PATH } from '../utils/paths.ts'
 
 const pattern = 'packages/**/package.json'
 export async function lintPackageJson() {

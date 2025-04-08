@@ -1,4 +1,4 @@
-import { fromNPMTask, PKG_PATH } from '../utils/index.js'
+import { fromNPMTask, PKG_PATH } from '../utils/index.ts'
 export const [buildPolyfill] = fromNPMTask(
     new URL('polyfills/', PKG_PATH),
     'polyfill',

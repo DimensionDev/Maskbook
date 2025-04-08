@@ -1,12 +1,11 @@
-#!/usr/bin/env node --import swc-register-esm
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { series, type TaskFunction } from 'gulp'
-import { buildBaseExtension } from './normal.js'
-import { ROOT_PATH, task } from '../utils/index.js'
-import { codegen } from '../codegen/index.js'
-import { type BuildFlagsExtended } from './flags.js'
-import { copyFile } from 'fs/promises'
-import { ManifestFile } from '../../../mask/.webpack/flags.js'
+import { buildBaseExtension } from './normal.ts'
+import { ROOT_PATH, task } from '../utils/index.ts'
+import { codegen } from '../codegen/index.ts'
+import { type BuildFlagsExtended } from './flags.ts'
+import { copyFile } from 'node:fs/promises'
+import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
 const BUILD_PATH = new URL('build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(

@@ -1,4 +1,4 @@
-import { fromNPMTask, PKG_PATH } from '../utils/index.js'
+import { fromNPMTask, PKG_PATH } from '../utils/index.ts'
 export const [buildInjectedScript, watchInjectedScript] = fromNPMTask(
     new URL('injected-script/', PKG_PATH),
     'injected-script',

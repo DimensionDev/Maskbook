@@ -1,8 +1,8 @@
-import { readFile } from 'fs/promises'
-import { awaitChildProcess } from '../utils/awaitChildProcess.js'
-import { ROOT_PATH } from '../utils/paths.js'
-import { shell } from '../utils/run.js'
-import { task } from '../utils/task.js'
+import { readFile } from 'node:fs/promises'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { ROOT_PATH } from '../utils/paths.ts'
+import { shell } from '../utils/run.ts'
+import { task } from '../utils/task.ts'
 import { fileURLToPath } from 'node:url'
 
 const packages = [

@@ -1,7 +1,7 @@
-import { readdir, readFile } from 'fs/promises'
-import { join, relative } from 'path'
-import { ROOT_PATH, task, shell, awaitChildProcess } from '../utils/index.js'
-import { fileURLToPath } from 'url'
+import { readdir, readFile } from 'node:fs/promises'
+import { join, relative } from 'node:path'
+import { ROOT_PATH, task, shell, awaitChildProcess } from '../utils/index.ts'
+import { fileURLToPath } from 'node:url'
 
 async function getLinguiEnabledPackages() {
     const folders: string[] = []

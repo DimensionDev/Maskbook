@@ -1,4 +1,4 @@
-import { fromNPMTask, PKG_PATH } from '../utils/index.js'
+import { fromNPMTask, PKG_PATH } from '../utils/index.ts'
 export const [buildGun] = fromNPMTask(
     //
     new URL('gun-utils/', PKG_PATH),

@@ -1,5 +1,5 @@
 import type { Options } from 'prettier'
-import { ROOT_PATH } from './paths.js'
+import { ROOT_PATH } from './paths.ts'
 
 export async function prettier(code: string, parser: Options['parser'] = 'typescript', tabWidth = 4) {
     const {

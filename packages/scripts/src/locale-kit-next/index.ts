@@ -1,6 +1,6 @@
-import { readdir, writeFile } from 'fs/promises'
-import { dirname } from 'path'
-import { ROOT_PATH, task, prettier } from '../utils/index.js'
+import { readdir, writeFile } from 'node:fs/promises'
+import { dirname } from 'node:path'
+import { ROOT_PATH, task, prettier } from '../utils/index.ts'
 
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
