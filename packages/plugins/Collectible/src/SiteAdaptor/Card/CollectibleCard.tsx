@@ -9,6 +9,7 @@ const useStyles = makeStyles()((theme) => {
             height: '100%',
             borderRadius: 0,
             overflow: 'auto',
+            scrollbarWidth: 'none',
             '::-webkit-scrollbar': {
                 display: 'none',
             },

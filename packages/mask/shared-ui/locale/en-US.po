@@ -299,6 +299,10 @@ msgstr ""
 msgid "At least 6 characters"
 msgstr ""
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Authorization Failed"
+msgstr ""
+
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
 msgstr ""
@@ -321,8 +325,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
-msgid "Back Up to Google Drive"
-msgstr ""
+#~ msgid "Back Up to Google Drive"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
@@ -330,6 +334,7 @@ msgid "Back Up Your Data Your Way"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
@@ -367,7 +372,6 @@ msgstr ""
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Settings/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -391,6 +395,11 @@ msgstr ""
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Successful"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+msgid "Backup to Google Drive"
 msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
@@ -1011,7 +1020,6 @@ msgid "Download Backup"
 msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Downloading"
 msgstr ""
 
@@ -1167,6 +1175,10 @@ msgstr ""
 msgid "Failed to add the wallet, please try again."
 msgstr ""
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Failed to authorize Google Drive. Please try again."
+msgstr ""
+
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
 msgid "Failed to decrypt."
 msgstr ""
@@ -1177,7 +1189,6 @@ msgstr ""
 
 #. placeholder {0}: (err as Error).message
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Failed to download and merge the backup: {0}"
 msgstr ""
 
@@ -1185,10 +1196,9 @@ msgstr ""
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
 
-#. placeholder {0}: (err as Error).message
 #: dashboard/components/GoogleDriveLogin.tsx
-msgid "Failed to login: {0}"
-msgstr ""
+#~ msgid "Failed to login: {0}"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
@@ -1493,8 +1503,6 @@ msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
 msgstr ""
 
@@ -1807,19 +1815,16 @@ msgid "Medium"
 msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge Completed"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Merge to Browser"
 msgstr ""
@@ -2207,7 +2212,6 @@ msgid "Please enter backup password to export persona private key."
 msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
 msgstr ""
 
@@ -3322,7 +3326,6 @@ msgid "Your connection to this site is not encrypted which can be modified by a 
 msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Your file has been successfully merged into the browser data."
 msgstr ""
 
