@@ -25,16 +25,16 @@ export async function syncLanguages() {
             for (const [language] of languages) {
                 code += `import ${language.replace('-', '_')} from './${language}.json' with { type: 'json' }\n`
             }
-            code += "export const languages = {\n"
+            code += 'export const languages = {\n'
             for (const [language, familyName] of languages) {
                 code += `    '${familyName}': ${language.replace('-', '_')},\n`
             }
-            code += "}\n"
+            code += '}\n'
             // Non-plugin i18n files
             if (!poFile.includes('plugin')) {
-                const target = "@masknet/shared-base"
+                const target = '@masknet/shared-base'
                 code += `import { createI18NBundle } from '${target}'\n`
-                code += "export const addI18N = createI18NBundle(languages as any)\n"
+                code += 'export const addI18N = createI18NBundle(languages as any)\n'
             }
 
             {
@@ -60,9 +60,13 @@ export async function syncLanguages() {
     {
         const map: Record<string, string> = {}
         const code = await prettier(`${basicHeader}\nexport default ${JSON.stringify(map)}`)
-        await writeFile(new URL('./packages/mask/background/services/helper/i18n-cache-query-list.ts', ROOT_PATH), code, {
-            encoding: 'utf8',
-        })
+        await writeFile(
+            new URL('./packages/mask/background/services/helper/i18n-cache-query-list.ts', ROOT_PATH),
+            code,
+            {
+                encoding: 'utf8',
+            },
+        )
     }
 }
 task(

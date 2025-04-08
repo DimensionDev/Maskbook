@@ -110,14 +110,14 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         join(distPath, './mv3-preload.js'),
         mv3PreloadList.size ?
             (function* () {
-                yield "importScripts(\n"
+                yield 'importScripts(\n'
                 for (const file of mv3PreloadList) {
                     if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
                     yield '    "/sandboxed-modules/'
                     yield file
                     yield '", \n'
                 }
-                yield ")\nnull"
+                yield ')\nnull'
             })()
         :   'null',
         { encoding: 'utf-8' },
@@ -199,7 +199,7 @@ async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]
     if (!locales) return []
     const base = join(manifestPath, '../')
     const localesPath = join(base, locales)
-    if (!localesPath.startsWith(base)) throw new TypeError("locales cannot point to parent of the manifest file.")
+    if (!localesPath.startsWith(base)) throw new TypeError('locales cannot point to parent of the manifest file.')
     const directChildren = await readdir(localesPath, { withFileTypes: true })
     const languageFamily = getLanguageFamilyName(directChildren.filter((x) => x.isFile()).map((x) => x.name))
     return [...languageFamily].map(
