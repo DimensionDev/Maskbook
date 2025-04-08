@@ -7,7 +7,7 @@ import { type BuildFlagsExtended } from './flags.ts'
 import { copyFile } from 'node:fs/promises'
 import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
-const BUILD_PATH = new URL('build/', ROOT_PATH)
+const BUILD_PATH = new URL('./build/', ROOT_PATH)
 export const ciBuild: TaskFunction = series(
     codegen,
     buildBaseExtension,
@@ -31,9 +31,9 @@ function zipTo(
     reproducible?: boolean,
 ): TaskFunction {
     const f: TaskFunction = async () => {
-        await copyFile(new URL(`manifest-${withManifestFile}.json`, BUILD_PATH), new URL('manifest.json', BUILD_PATH))
+        await copyFile(new URL(`manifest-${withManifestFile}.json`, BUILD_PATH), new URL('./manifest.json', BUILD_PATH))
         if (!reproducible && withManifestFile === ManifestFile.ChromiumBetaMV3) {
-            await copyFile(new URL('build-info-beta.json', BUILD_PATH), new URL('build-info.json', BUILD_PATH))
+            await copyFile(new URL('./build-info-beta.json', BUILD_PATH), new URL('./build-info.json', BUILD_PATH))
         }
         const { cmd } = await import('web-ext')
         await cmd.build({

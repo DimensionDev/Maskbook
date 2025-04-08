@@ -19,7 +19,7 @@ export async function lintPackageJson() {
                     if (!('type' in json)) type.push(file)
 
                     if ('lingui' in json) {
-                        let template: any = {
+                        const template: any = {
                             compileNamespace: 'json',
                             locales: ['en-US', 'ja-JP', 'ko-KR', 'zh-CN', 'zh-TW'],
                             fallbackLocales: {

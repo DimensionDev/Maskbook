@@ -14,7 +14,7 @@ const packages = [
 ]
 export async function changesetRelease() {
     const tsc = awaitChildProcess(shell.cwd(ROOT_PATH)`npx tsc -b ./tsconfig.npm.json`)
-    const buildTask: Promise<any>[] = packages.map((path) =>
+    const buildTask: Array<Promise<any>> = packages.map((path) =>
         readFile(new URL('./package.json', path), 'utf-8')
             .then(JSON.parse)
             .then((json) => {

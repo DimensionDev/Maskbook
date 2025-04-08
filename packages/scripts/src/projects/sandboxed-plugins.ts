@@ -107,17 +107,17 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
     const writeInternalList = writeFile(join(distPath, './plugins.json'), JSON.stringify(internalList, null, 4))
     await Promise.all([tasks, writeInternalList])
     await writeFile(
-        join(distPath, './mv3-preload.ts'),
+        join(distPath, './mv3-preload.js'),
         mv3PreloadList.size ?
             (function* () {
-                yield `importScripts(\n`
+                yield "importScripts(\n"
                 for (const file of mv3PreloadList) {
                     if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
                     yield '    "/sandboxed-modules/'
                     yield file
                     yield '", \n'
                 }
-                yield `)\nnull`
+                yield ")\nnull"
             })()
         :   'null',
         { encoding: 'utf-8' },
@@ -155,7 +155,7 @@ function createBuilder({ id, manifestRoot, distPath, onJS, origin }: BuilderOpti
     return compile
 }
 function removeMJSSuffix(name: string) {
-    if (name.endsWith('.mjs')) return name.slice(0, -4) + '.ts'
+    if (name.endsWith('.mjs')) return name.slice(0, -4) + '.js'
     return name
 }
 
@@ -199,7 +199,7 @@ async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]
     if (!locales) return []
     const base = join(manifestPath, '../')
     const localesPath = join(base, locales)
-    if (!localesPath.startsWith(base)) throw new TypeError(`locales cannot point to parent of the manifest file.`)
+    if (!localesPath.startsWith(base)) throw new TypeError("locales cannot point to parent of the manifest file.")
     const directChildren = await readdir(localesPath, { withFileTypes: true })
     const languageFamily = getLanguageFamilyName(directChildren.filter((x) => x.isFile()).map((x) => x.name))
     return [...languageFamily].map(
@@ -223,10 +223,10 @@ class TransformStream extends Transform {
         encoding: BufferEncoding,
         callback: TransformCallback,
     ): void {
-        if (!(file.path.endsWith('.ts') || file.path.endsWith('.mjs'))) {
+        if (!(file.path.endsWith('.js') || file.path.endsWith('.mjs'))) {
             return callback(null, file)
         }
-        const relative = file.relative.replace(/\\/g, '/')
+        const relative = file.relative.replaceAll('\\', '/')
         this.onJS(this.origin, file.relative)
         const sandboxedPath = 'mask-modules://' + this.origin + '/' + relative
         const options = {

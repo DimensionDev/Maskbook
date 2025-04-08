@@ -1,8 +1,8 @@
-import { spawn } from 'child_process'
+import { spawn } from 'node:child_process'
 import { ROOT_PATH } from './paths.ts'
-import { relative } from 'path'
+import { relative } from 'node:path'
 import chalk from 'chalk'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 import { markChildProcess } from './exit.ts'
 
 function logShell(e: string, args: string[], url: URL | string) {

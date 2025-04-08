@@ -61,7 +61,7 @@ function preTask() {
     watchMaskSDK()
     buildSentry()
 }
-export async function extensionWatch(f: Function | BuildFlagsExtended) {
+export async function extensionWatch(f: (() => void) | BuildFlagsExtended) {
     preTask()
     if (typeof f === 'function') {
         const flags: BuildFlags = {
@@ -74,7 +74,7 @@ export async function extensionWatch(f: Function | BuildFlagsExtended) {
     }
     return webpack(false, f)
 }
-export async function extensionWatchRspack(f: Function | BuildFlagsExtended) {
+export async function extensionWatchRspack(f: (() => void) | BuildFlagsExtended) {
     preTask()
     if (typeof f === 'function') {
         const flags: BuildFlags = {
@@ -128,6 +128,6 @@ async function webpack(rspack: boolean, flags: BuildFlagsExtended) {
             flags.mode === 'development' ? 'serve' : undefined,
             ...argv,
         ]
-        return awaitChildProcess(shell.cwd(new URL('mask', PKG_PATH))([compact(command).join(' ')]))
+        return awaitChildProcess(shell.cwd(new URL('./mask', PKG_PATH))([compact(command).join(' ')]))
     }
 }

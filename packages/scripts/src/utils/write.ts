@@ -1,4 +1,4 @@
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { prettier } from './prettier.ts'
 
 export async function changeFile(path: string | URL, f: (x: string) => string | Promise<string>) {
