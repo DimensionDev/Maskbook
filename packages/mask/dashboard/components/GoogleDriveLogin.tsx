@@ -6,7 +6,7 @@ import { Box, Typography } from '@mui/material'
 import { memo, useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import { UserContext } from '../../shared-ui/index.js'
-import { checkAndRequestPermission } from '../../shared/helpers/index.js'
+import { checkAndRequestPermission, requestDriveAccessToken } from '../../shared/helpers/index.js'
 import { clearGoogleDriveAccessToken, getGoogleDriveAccessToken } from '../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -43,11 +43,15 @@ export const GoogleDriveLogin = memo(function GoogleDriveLogin() {
             if (!granted) return
 
             const userInfo = await googleDriveClient.login(true)
+            await requestDriveAccessToken(true) // request permission to manipulate files
             updateUser({
                 googleAccount: userInfo.email || '',
             })
         } catch (err) {
-            showSnackbar(t`Failed to login: ${(err as Error).message}`, { variant: 'error' })
+            showSnackbar(t`Authorization Failed`, {
+                variant: 'warning',
+                message: t`Failed to authorize Google Drive. Please try again.`,
+            })
         }
     }, [googleDriveClient, updateUser, showSnackbar])
     return (

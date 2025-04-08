@@ -1,4 +1,4 @@
-import { getBackupSummary, normalizeBackup } from '@masknet/backup-format'
+import { getBackupSummary, normalizeBackup, type BackupSummary } from '@masknet/backup-format'
 import { restoreNormalizedBackup } from './internal_restore.js'
 import { Result } from 'ts-results-es'
 import { SmartPayBundler, SmartPayOwner } from '@masknet/web3-providers'
@@ -7,7 +7,7 @@ import { bytesToHex, privateToPublic, publicToAddress } from '@ethereumjs/util'
 import { fromBase64URL } from '@masknet/shared-base'
 
 export async function generateBackupSummary(raw: string) {
-    return Result.wrapAsync(async () => {
+    return Result.wrapAsync(async (): Promise<BackupSummary> => {
         const backupObj: unknown = JSON.parse(raw)
         const backup = await normalizeBackup(backupObj)
 

@@ -1,12 +1,12 @@
 import Services from '#services'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { decryptBackup } from '@masknet/backup-format'
+import { decryptBackup, type BackupSummary } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { formatFileSize, InjectedDialog } from '@masknet/shared'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { decode, encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, LinearProgress, Typography } from '@mui/material'
-import { format as formatDateTime, fromUnixTime } from 'date-fns'
+import { format as formatDateTime } from 'date-fns'
 import { memo, useCallback, useState, type ReactNode } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
 import PasswordField from '../../components/PasswordField/index.js'
@@ -54,7 +54,7 @@ export interface RestoreBackupDialogProps {
      * and return the content of the downloaded file at the end
      */
     download: () => AsyncGenerator<number, ArrayBuffer | undefined>
-    onClose: () => void
+    onClose: (summary?: BackupSummary) => void
 }
 
 export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function RestoreBackupDialog({
@@ -124,7 +124,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                         <Trans>Your file has been successfully restore into the browser data.</Trans>
                     :   <Trans>Your file has been successfully merged into the browser data.</Trans>),
             })
-            onClose()
+            onClose(backupSummary)
         } catch (err) {
             if (isImport) {
                 showSnackbar(<Trans>Restore Failed</Trans>, {
@@ -133,10 +133,11 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                         <Trans>Failed to restore the backup: {(err as Error).message}</Trans>
                     ),
                 })
+            } else {
+                showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
+                    variant: 'error',
+                })
             }
-            showSnackbar(<Trans>Failed to download and merge the backup: {(err as Error).message}</Trans>, {
-                variant: 'error',
-            })
         }
     }, [
         encrypted,
@@ -158,7 +159,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                 :   <Trans>Merge data to local database</Trans>
             }
             open={open}
-            onClose={onClose}>
+            onClose={() => onClose()}>
             <DialogContent>
                 <Typography className={classes.account}>{account}</Typography>
                 <Box className={classes.box}>
@@ -189,7 +190,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                                         fontSize={12}
                                         lineHeight="16px"
                                         color={theme.palette.maskColor.third}>
-                                        {formatDateTime(fromUnixTime(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
+                                        {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-mm-dd HH:mm')}
                                     </Typography>
                                 </>
                             }

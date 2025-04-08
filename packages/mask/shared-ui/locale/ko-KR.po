@@ -304,6 +304,10 @@ msgstr "관련 계정"
 msgid "At least 6 characters"
 msgstr "최소 8 글자 이상 이용하세요"
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Authorization Failed"
+msgstr ""
+
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
 msgstr ""
@@ -326,8 +330,8 @@ msgstr "뒤로"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
-msgid "Back Up to Google Drive"
-msgstr ""
+#~ msgid "Back Up to Google Drive"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
@@ -335,6 +339,7 @@ msgid "Back Up Your Data Your Way"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
@@ -372,7 +377,6 @@ msgstr "비밀번호 백업"
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Settings/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -396,6 +400,11 @@ msgstr "페르소나 백업"
 
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Successful"
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+msgid "Backup to Google Drive"
 msgstr ""
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
@@ -1016,7 +1025,6 @@ msgid "Download Backup"
 msgstr "백업 다운로드"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Downloading"
 msgstr "다운로드 중"
 
@@ -1172,6 +1180,10 @@ msgstr "실패"
 msgid "Failed to add the wallet, please try again."
 msgstr "월렛 추가 실패, 다시 시도하기"
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Failed to authorize Google Drive. Please try again."
+msgstr ""
+
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
 msgid "Failed to decrypt."
 msgstr ""
@@ -1182,7 +1194,6 @@ msgstr ""
 
 #. placeholder {0}: (err as Error).message
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Failed to download and merge the backup: {0}"
 msgstr ""
 
@@ -1190,10 +1201,9 @@ msgstr ""
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
 
-#. placeholder {0}: (err as Error).message
 #: dashboard/components/GoogleDriveLogin.tsx
-msgid "Failed to login: {0}"
-msgstr ""
+#~ msgid "Failed to login: {0}"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
@@ -1498,8 +1508,6 @@ msgstr "잘못된 백업 비밀번호."
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
 msgstr "잘못된 클라우드 백업 비밀번호입니다. 다시 시도하세요."
 
@@ -1812,19 +1820,16 @@ msgid "Medium"
 msgstr "보통"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge Completed"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr "데이터를 로컬 데이터베이스에 병합하기"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Merge to Browser"
 msgstr ""
@@ -2212,7 +2217,6 @@ msgid "Please enter backup password to export persona private key."
 msgstr "백업 비밀번호를 입력하고 페르소나 개인키를 내보낼 수 있습니다."
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
 msgstr "파일을 다운로드하려면 클라우드 백업 암호를 입력하세요."
 
@@ -3327,7 +3331,6 @@ msgid "Your connection to this site is not encrypted which can be modified by a 
 msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Your file has been successfully merged into the browser data."
 msgstr ""
 

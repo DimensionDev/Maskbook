@@ -1,22 +1,11 @@
-import { checkAndRequestPermission } from '../../../shared/helpers/index.js'
+import { checkAndRequestPermission, requestDriveAccessToken } from '../../../shared/helpers/index.js'
 
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 export async function getAccessToken(interactive = false) {
     const granted = await checkAndRequestPermission()
     if (!granted) return
 
-    return new Promise<string>((resolve, reject) => {
-        // @ts-expect-error
-        chrome.identity.getAuthToken({ interactive }, (token, error) => {
-            // @ts-expect-error
-            if (chrome.runtime.lastError) {
-                // @ts-expect-error
-                reject(new Error(chrome.runtime.lastError.message))
-                return
-            }
-            resolve(token)
-        })
-    })
+    return requestDriveAccessToken(interactive)
 }
 
 export async function clearAccessToken() {

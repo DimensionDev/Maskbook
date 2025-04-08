@@ -10,7 +10,7 @@ import { memo, useCallback, useMemo } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useAsyncFn } from 'react-use'
 import { OutletPortal } from '../../../../components/OutletPortal.js'
-import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
+import { BackupPreviewModal, RestoreBackupModal } from '../../../../modals/modals.js'
 import { createBackupName, downloadBackup, getFileName, progressDownload } from '../../../../utils/api.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -83,7 +83,8 @@ export const Component = memo(function CloudBackupPreview() {
 
     const [{ loading: mergeLoading }, handleMergeClick] = useAsyncFn(async () => {
         if (!previewInfo.downloadLink || !previewInfo.account || !previewInfo.size || !previewInfo.uploadedAt) return
-        await MergeBackupModal.openAndWaitForClose({
+        await RestoreBackupModal.openAndWaitForClose({
+            strategy: 'merge',
             download: () => progressDownload(previewInfo.downloadLink),
             fileName: getFileName(previewInfo.downloadLink) || createBackupName(),
             account: previewInfo.account,

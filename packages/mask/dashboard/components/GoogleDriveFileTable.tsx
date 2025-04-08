@@ -26,6 +26,7 @@ const useStyles = makeStyles()((theme) => ({
         border: `1px solid ${theme.palette.maskColor.line}`,
         borderRadius: 8,
         overflow: 'hidden',
+        backgroundColor: theme.palette.maskColor.bottom,
     },
     table: {
         borderRadius: 8,

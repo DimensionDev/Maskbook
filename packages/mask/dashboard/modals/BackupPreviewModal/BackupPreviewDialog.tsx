@@ -63,8 +63,9 @@ export interface BackupPreviewDialogProps {
     type: BackupAccountType
     account: string
     abstract?: string
-    onClose: () => void
+    title?: React.ReactNode | string
     uploadButtonLabel?: React.ReactNode | string
+    onClose: () => void
     onUpload?: (content: ArrayBuffer, signal: AbortSignal) => Promise<void>
 }
 export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function BackupPreviewDialog({
@@ -74,8 +75,9 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     type,
     account,
     abstract,
-    onClose,
+    title,
     uploadButtonLabel,
+    onClose,
     onUpload,
 }) {
     const { _ } = useLingui()
@@ -259,7 +261,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     ])
 
     return (
-        <InjectedDialog title={<Trans>Upload backup</Trans>} open={open} onClose={handleClose}>
+        <InjectedDialog title={title ?? <Trans>Upload backup</Trans>} open={open} onClose={handleClose}>
             <DialogContent data-hide-scrollbar>{content}</DialogContent>
             <DialogActions>{action}</DialogActions>
         </InjectedDialog>

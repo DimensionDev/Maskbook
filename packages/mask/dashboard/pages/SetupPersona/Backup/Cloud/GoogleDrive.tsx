@@ -1,9 +1,9 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { ActionButton, makeStyles } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
-import { Box, Button, Typography } from '@mui/material'
+import { Box, Typography } from '@mui/material'
 import { compact, uniqBy } from 'lodash-es'
 import { memo, useMemo, useState } from 'react'
 import { useAsyncFn } from 'react-use'
@@ -13,7 +13,7 @@ import { GoogleDriveLogin } from '../../../../components/GoogleDriveLogin.js'
 import { OutletPortal } from '../../../../components/OutletPortal.js'
 import { PrimaryButton } from '../../../../components/PrimaryButton/index.js'
 import { useGoogleDriveFiles } from '../../../../hooks/useGoogleDriveFiles.js'
-import { BackupPreviewModal, MergeBackupModal } from '../../../../modals/modals.js'
+import { BackupPreviewModal, RestoreBackupModal } from '../../../../modals/modals.js'
 import {
     clearGoogleDriveAccessToken,
     createBackupName,
@@ -27,7 +27,6 @@ const useStyles = makeStyles()((theme) => ({
         display: 'flex',
         flexDirection: 'column',
         gap: theme.spacing(1.5),
-        paddingBottom: theme.spacing(6),
     },
     header: {
         display: 'flex',
@@ -93,6 +92,14 @@ export const Component = memo(function GoogleDriveBackup() {
         [googleDriveClient],
     )
 
+    const [{ loading: logoutLoading }, logout] = useAsyncFn(async () => {
+        await googleDriveClient.logout()
+        updateUser({
+            googleAccount: '',
+            googleToken: '',
+        })
+    }, [googleDriveClient])
+
     const mergedFiles = useMemo(() => uniqBy(compact([...files, uploadedFile]), (x) => x.id), [files, uploadedFile])
 
     if (!user.googleAccount) {
@@ -100,7 +107,8 @@ export const Component = memo(function GoogleDriveBackup() {
     }
 
     const downloadAndMerge = async (file: DriveFile) => {
-        await MergeBackupModal.openAndWaitForClose({
+        await RestoreBackupModal.openAndWaitForClose({
+            strategy: 'merge',
             download: () => {
                 return progressDownload(() => googleDriveClient.requestFile(file.id), file.size ? +file.size : 0)
             },
@@ -119,17 +127,14 @@ export const Component = memo(function GoogleDriveBackup() {
                     </Typography>
                     <Typography className={classes.userAccount}>{user.googleAccount}</Typography>
                 </Box>
-                <Button
+                <ActionButton
                     variant="roundedContained"
                     size="small"
-                    onClick={() => {
-                        updateUser({
-                            googleAccount: '',
-                            googleToken: '',
-                        })
-                    }}>
+                    loading={logoutLoading}
+                    disabled={logoutLoading}
+                    onClick={logout}>
                     <Trans>Logout</Trans>
-                </Button>
+                </ActionButton>
             </Box>
             <Box>
                 <Typography className={classes.folder}>MaskBackup file</Typography>
@@ -161,11 +166,12 @@ export const Component = memo(function GoogleDriveBackup() {
                             type: BackupAccountType.Email,
                             account: user.googleAccount!,
                             isUpload: true,
+                            title: <Trans>Backup to Google Drive</Trans>,
+                            uploadButtonLabel: <Trans>Backup</Trans>,
                             onUpload: uploadFile,
-                            uploadButtonLabel: <Trans>Back Up to Google Drive</Trans>,
                         })
                     }}>
-                    <Trans>Back Up to Google Drive</Trans>
+                    <Trans>Backup to Google Drive</Trans>
                 </PrimaryButton>
             </OutletPortal>
         </Box>
