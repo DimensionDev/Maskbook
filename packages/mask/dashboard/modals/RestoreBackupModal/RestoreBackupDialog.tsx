@@ -190,7 +190,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                                         fontSize={12}
                                         lineHeight="16px"
                                         color={theme.palette.maskColor.third}>
-                                        {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-mm-dd HH:mm')}
+                                        {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-MM-dd hh:mm')}
                                     </Typography>
                                 </>
                             }

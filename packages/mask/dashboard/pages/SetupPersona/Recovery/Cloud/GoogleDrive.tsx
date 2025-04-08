@@ -125,14 +125,12 @@ export const Component = memo(function GoogleDriveRecovery() {
                     selectable
                     selectedFileId={selectedFile?.id}
                     onSelect={setSelectedFile}
-                    onDownload={downloadAndMerge}
-                    onMerge={async (file) => {
+                    onMerge={downloadAndMerge}
+                    onDownload={async (file) => {
                         const blob = await googleDriveClient.downloadFile(file.id)
                         const url = URL.createObjectURL(blob)
                         downloadBackup(url, file.name)
-                        Promise.resolve().then(() => {
-                            URL.revokeObjectURL(url)
-                        })
+                        URL.revokeObjectURL(url)
                     }}
                 />
             </Box>
