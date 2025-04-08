@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-03 11:04\n"
+"PO-Revision-Date: 2025-04-08 03:35\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -304,6 +304,10 @@ msgstr "crwdns29536:0crwdne29536:0"
 msgid "At least 6 characters"
 msgstr "crwdns29538:0crwdne29538:0"
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Authorization Failed"
+msgstr "crwdns37292:0crwdne37292:0"
+
 #: popups/pages/Wallet/WalletSettings/AutoLock.tsx
 msgid "Auto-lock"
 msgstr "crwdns29916:0crwdne29916:0"
@@ -326,8 +330,8 @@ msgstr "crwdns29540:0crwdne29540:0"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
-msgid "Back Up to Google Drive"
-msgstr "crwdns37224:0crwdne37224:0"
+#~ msgid "Back Up to Google Drive"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
@@ -335,6 +339,7 @@ msgid "Back Up Your Data Your Way"
 msgstr "crwdns37226:0crwdne37226:0"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
@@ -372,7 +377,6 @@ msgstr "crwdns29550:0crwdne29550:0"
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Settings/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -397,6 +401,11 @@ msgstr "crwdns29930:0crwdne29930:0"
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 msgid "Backup Successful"
 msgstr "crwdns37228:0crwdne37228:0"
+
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+msgid "Backup to Google Drive"
+msgstr "crwdns37294:0crwdne37294:0"
 
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Backup to Mask Cloud Service"
@@ -1016,7 +1025,6 @@ msgid "Download Backup"
 msgstr "crwdns29592:0crwdne29592:0"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Downloading"
 msgstr "crwdns29596:0crwdne29596:0"
 
@@ -1172,6 +1180,10 @@ msgstr "crwdns30144:0crwdne30144:0"
 msgid "Failed to add the wallet, please try again."
 msgstr "crwdns30146:0crwdne30146:0"
 
+#: dashboard/components/GoogleDriveLogin.tsx
+msgid "Failed to authorize Google Drive. Please try again."
+msgstr "crwdns37296:0crwdne37296:0"
+
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostFailed.tsx
 msgid "Failed to decrypt."
 msgstr "crwdns32050:0crwdne32050:0"
@@ -1182,7 +1194,6 @@ msgstr "crwdns32052:0crwdne32052:0"
 
 #. placeholder {0}: (err as Error).message
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Failed to download and merge the backup: {0}"
 msgstr "crwdns37234:0{0}crwdne37234:0"
 
@@ -1190,10 +1201,9 @@ msgstr "crwdns37234:0{0}crwdne37234:0"
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
 
-#. placeholder {0}: (err as Error).message
 #: dashboard/components/GoogleDriveLogin.tsx
-msgid "Failed to login: {0}"
-msgstr "crwdns37236:0{0}crwdne37236:0"
+#~ msgid "Failed to login: {0}"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Failed to restore the backup from Google Drive to your browser. Please try again."
@@ -1498,8 +1508,6 @@ msgstr "crwdns29626:0crwdne29626:0"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Incorrect cloud backup password, please try again."
 msgstr "crwdns29628:0crwdne29628:0"
 
@@ -1812,19 +1820,16 @@ msgid "Medium"
 msgstr "crwdns30332:0crwdne30332:0"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge Completed"
 msgstr "crwdns37248:0crwdne37248:0"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Merge data to local database"
 msgstr "crwdns29656:0crwdne29656:0"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
 msgid "Merge to Browser"
 msgstr "crwdns37250:0crwdne37250:0"
@@ -2212,7 +2217,6 @@ msgid "Please enter backup password to export persona private key."
 msgstr "crwdns30430:0crwdne30430:0"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Please enter cloud backup password to download file."
 msgstr "crwdns29702:0crwdne29702:0"
 
@@ -3327,7 +3331,6 @@ msgid "Your connection to this site is not encrypted which can be modified by a 
 msgstr "crwdns30740:0crwdne30740:0"
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
-#: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 msgid "Your file has been successfully merged into the browser data."
 msgstr "crwdns37256:0crwdne37256:0"
 
