@@ -87,9 +87,6 @@ export const personaRoutes: RouteObject[] = [
             },
         ],
     },
-    { path: r(Routes.LocalBackup), lazy: () => import('./LocalBackup/index.js') },
-    { path: r(Routes.CloudBackup), lazy: () => import('./CloudBackup/index.js') },
-    { path: r(Routes.CloudBackupPreview), lazy: () => import('./CloudBackupPreview/index.js') },
 ]
 export function PersonaFrame() {
     const matchPersonaOnboarding = useMatch(DashboardRoutes.SignUpPersonaOnboarding)

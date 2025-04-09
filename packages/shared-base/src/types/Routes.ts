@@ -22,9 +22,6 @@ export enum DashboardRoutes {
     BackupCloudGoogleDrive = '/setup/backup/cloud/google-drive',
     BackupPreview = '/setup/backup/cloud/preview',
 
-    LocalBackup = '/setup/local-backup',
-    CloudBackup = '/setup/cloud-backup',
-    CloudBackupPreview = '/setup/cloud-backup-preview',
     SignUp = '/sign-up',
     SignIn = '/sign-in',
     Personas = '/personas',
