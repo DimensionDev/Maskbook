@@ -447,6 +447,12 @@ const codeStyleRules = {
     // 'unicorn/no-unused-properties': 'warn',
     // '@typescript-eslint/no-unused-expressions': 'warn',
     // '@typescript-eslint/no-unused-vars': 'warn',
+    'react-hooks/exhaustive-deps': [
+        'warn',
+        {
+            additionalHooks: '(useAsync|useAsyncFn)\\b',
+        },
+    ],
 }
 const moduleSystemRules = {
     '@typescript-eslint/no-restricted-imports': [

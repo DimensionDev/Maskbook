@@ -1,3 +1,4 @@
+import type { Account } from '@lens-protocol/client'
 import type { Web3BioProfile } from '@masknet/shared-base'
 import type { FireflyConfigAPI, LensBaseAPI, NextIDBaseAPI } from '@masknet/web3-providers/types'
 import urlcat from 'urlcat'
@@ -11,6 +12,10 @@ export function getProfileAvatar(profile: LensBaseAPI.Profile | undefined) {
     if (!picture) return
     if ('optimized' in picture) return picture.optimized?.uri || picture.raw.uri
     return picture.image.optimized?.uri || picture.image.raw.uri
+}
+
+export function getAccountAvatar(profile: Account) {
+    return profile.metadata?.picture
 }
 
 export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): FireflyConfigAPI.LensAccount => {

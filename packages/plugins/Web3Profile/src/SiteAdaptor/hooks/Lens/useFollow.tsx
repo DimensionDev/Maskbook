@@ -1,4 +1,5 @@
-import { useLingui } from '@lingui/react/macro'
+import { type EvmAddress } from '@lens-protocol/client'
+import { Trans, useLingui } from '@lingui/react/macro'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useCustomSnackbar, type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -7,14 +8,13 @@ import { useCallback, useRef, useState } from 'react'
 import { useLensClient } from './useLensClient.js'
 import { useMyLensAccountAddress } from './useMyLensAccountAddress.js'
 
-export interface UnfollowOptions {
-    accountAddress?: string
-    // signless?: boolean
-    onSuccess?: () => void
+export type FollowOptions = {
+    accountAddress?: EvmAddress
+    onSuccess?: (width: number, height: number) => void
     onFailed?: () => void
 }
 
-export function useUnfollow({ accountAddress, onSuccess, onFailed }: UnfollowOptions) {
+export function useFollow({ accountAddress, onFailed }: FollowOptions) {
     const { t } = useLingui()
     const [loading, setLoading] = useState(false)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -35,21 +35,27 @@ export function useUnfollow({ accountAddress, onSuccess, onFailed }: UnfollowOpt
 
     const myLensAccount = useMyLensAccountAddress()
     const lensClient = useLensClient()
-    const handleUnfollow = useCallback(async () => {
+
+    const handleFollow = useCallback<() => Promise<void>>(async () => {
         try {
             setLoading(true)
             if (!accountAddress || chainId !== ChainId.Polygon) return
             if (!lensClient || !myLensAccount) return
             await lensClient.login(myLensAccount)
-            const res = await lensClient.unfollow(accountAddress)
+            const res = await lensClient.follow(accountAddress)
             if (res.isErr()) {
                 throw res.error
             }
-            onSuccess?.()
         } catch (error) {
             if (!(error instanceof Error)) return
             const message = error.message
-            if (
+            if (message.match(/Bad user input .* is already following/)) {
+                showSingletonSnackbar(t`Follow Lens handle`, {
+                    processing: false,
+                    variant: 'warning',
+                    message: <Trans>Already following</Trans>,
+                })
+            } else if (
                 !message.includes('Transaction was rejected') &&
                 !message.includes('Signature canceled') &&
                 !message.includes('User rejected the request') &&
@@ -57,16 +63,16 @@ export function useUnfollow({ accountAddress, onSuccess, onFailed }: UnfollowOpt
                 !message.includes('RPC Error')
             ) {
                 onFailed?.()
-                showSingletonSnackbar(t`Unfollow lens handle`, {
+                showSingletonSnackbar(t`Follow Lens handle`, {
                     processing: false,
                     variant: 'error',
-                    message: t`Network error, try again`,
+                    message: <Trans>Network error, try again: {error.message}</Trans>,
                 })
             }
         } finally {
             setLoading(false)
         }
-    }, [accountAddress, chainId, lensClient, myLensAccount, onFailed, onSuccess, showSingletonSnackbar, t])
+    }, [accountAddress, chainId, lensClient, myLensAccount, onFailed, showSingletonSnackbar, t])
 
-    return { loading, handleUnfollow }
+    return { loading, handleFollow }
 }

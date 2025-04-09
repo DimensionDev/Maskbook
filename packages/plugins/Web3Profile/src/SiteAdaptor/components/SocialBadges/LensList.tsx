@@ -1,17 +1,18 @@
+import { evmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { Image } from '@masknet/shared'
-import { CrossIsolationMessages, EMPTY_LIST, PersistentStorages } from '@masknet/shared-base'
+import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { Lens } from '@masknet/web3-providers'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ListItem, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { compact, first } from 'lodash-es'
+import { compact } from 'lodash-es'
 import { memo } from 'react'
-import { useSubscription } from 'use-subscription'
+import { useLensClient } from '../../hooks/Lens/useLensClient.js'
+import { useMyLensAccountAddress } from '../../hooks/Lens/useMyLensAccountAddress.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -80,53 +81,51 @@ interface Props {
 }
 
 export const LensList = memo(function LensList({ accounts }: Props) {
-    const { account: wallet } = useChainContext()
+    const myLensAccount = useMyLensAccountAddress()
 
-    const latestProfile = useSubscription(PersistentStorages.Settings.storage.latestLensProfile.subscription)
-
-    const { data: currentProfileId = latestProfile } = useQuery({
-        queryKey: ['lens', 'current-profile', wallet],
-        enabled: !latestProfile,
-        queryFn: async () => {
-            const currentProfileId = (await Lens.queryDefaultProfileByAddress(wallet))?.id
-            if (!currentProfileId) {
-                const profiles = await Lens.queryProfilesByAddress(wallet)
-                return first(profiles)?.id || null
-            }
-            return currentProfileId
-        },
-    })
+    const lensV3 = useLensClient()
 
     const { data = accounts, isPending } = useQuery({
-        queryKey: ['lens', 'popup-list', currentProfileId, accounts.map((x) => x.handle).join('')],
+        queryKey: ['lens', 'popup-list', myLensAccount, accounts.map((x) => x.handle).join('')],
         queryFn: async () => {
             if (!accounts.length) return EMPTY_LIST
+            if (!lensV3) return accounts
 
-            const profiles = await Lens.getProfilesByHandles(accounts.map((x) => x.handle))
-            if (!currentProfileId)
+            const nativeAccounts = await lensV3.getAccountsByHandles(accounts.map((x) => x.handle))
+            if (!myLensAccount && nativeAccounts?.length)
                 return compact(
-                    profiles.map((profile) => {
-                        const target = accounts.find((x) => x.handle.replace('.lens', '') === profile.handle.localName)
+                    nativeAccounts.map((nativeAccount) => {
+                        const target = accounts.find(
+                            (x) => x.handle.replace(/\.lens$/, '') === nativeAccount.username?.localName,
+                        )
                         if (!target) return
                         return {
                             ...target,
-                            ownedBy: profile.ownedBy.address,
+                            ownedBy: nativeAccount.username?.ownedBy as string,
                         }
                     }),
                 )
 
-            const followStatusList = await Lens.queryFollowStatusList(
-                currentProfileId,
-                profiles.map((x) => x.id),
+            if (!nativeAccounts?.length) return accounts
+            const followStatus = await lensV3.getFollowStatus(
+                (nativeAccounts || []).map((x) => ({
+                    follower: evmAddress(myLensAccount),
+                    account: evmAddress(x.username?.ownedBy),
+                })),
             )
             return compact(
-                profiles.map((profile) => {
-                    const target = accounts.find((x) => x.handle.replace('.lens', '') === profile.handle.localName)
+                nativeAccounts.map((nativeAccount) => {
+                    const target = accounts.find(
+                        (x) => x.handle.replace(/\.lens$/, '') === nativeAccount.username?.localName,
+                    )
                     if (!target) return
+                    const status = followStatus.find((x) =>
+                        isSameAddress(x.account, nativeAccount.address),
+                    )?.isFollowing
                     return {
                         ...target,
-                        ownedBy: profile.ownedBy.address,
-                        isFollowing: followStatusList?.find((x) => x.profileId === profile.id)?.status.value,
+                        ownedBy: nativeAccount.username?.ownedBy as string,
+                        isFollowing: status?.onChain || status?.optimistic,
                     }
                 }),
             )

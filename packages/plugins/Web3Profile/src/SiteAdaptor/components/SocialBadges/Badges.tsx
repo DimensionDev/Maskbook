@@ -1,9 +1,9 @@
-import { memo, useRef, useEffect } from 'react'
-import { IconButton } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { Icons } from '@masknet/icons'
 import { Plugin } from '@masknet/plugin-infra'
+import { makeStyles } from '@masknet/theme'
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
+import { IconButton } from '@mui/material'
+import { memo, useEffect, useRef } from 'react'
 import { closePopup, openPopup } from '../../emitter.js'
 
 const BadgesIconSizeMap: Record<Plugin.SiteAdaptor.BadgesSlot, number> = {
@@ -77,7 +77,7 @@ export const SocialBadges = memo(function SocialBadges({ slot, lensAccounts, far
             hide()
             ob.disconnect()
         }
-        // eslint-disable-next-line react-compiler/react-compiler
+        // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
     }, [buttonRef.current])
 
     const size = BadgesIconSizeMap[slot]

@@ -1,3 +1,4 @@
+import type { Account, AccountAvailable } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { SelectProviderModal, WalletIcon } from '@masknet/shared'
@@ -11,11 +12,10 @@ import {
     useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
-import type { LensBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
-import { getProfileAvatar } from '../../../utils.js'
+import { getAccountAvatar } from '../../../utils.js'
 import { ProfilePopup } from '../ProfilePopup.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -54,14 +54,14 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 interface HandlerDescriptionProps extends withClasses<'container'> {
-    currentProfile?: LensBaseAPI.Profile
-    profiles?: LensBaseAPI.Profile[]
-    onChange: (profile: LensBaseAPI.Profile) => void
+    currentAccount?: Account
+    accounts?: AccountAvailable[]
+    onChange: (profile: Account) => void
 }
 
 export const HandlerDescription = memo<HandlerDescriptionProps>(function HandlerDescription({
-    profiles,
-    currentProfile,
+    accounts,
+    currentAccount,
     onChange,
     ...props
 }) {
@@ -80,9 +80,9 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
         if (domain) return domain
         if (providerType === ProviderType.MaskWallet && wallet?.name) return wallet?.name
         return providerDescriptor?.name
-    }, [account, domain, providerType, wallet?.name, providerDescriptor?.name])
+    }, [domain, providerType, wallet?.name, providerDescriptor?.name])
 
-    if (!profiles?.length || !currentProfile) {
+    if (!accounts?.length || !currentAccount) {
         return (
             <Box className={classes.container}>
                 <Box className={classes.description}>
@@ -105,8 +105,8 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
             </Box>
         )
     }
-    const avatar = getProfileAvatar(currentProfile) || new URL('../../assets/Lens.png', import.meta.url).href
-    const displayName = currentProfile.metadata?.displayName ?? currentProfile.handle.localName
+    const avatar = getAccountAvatar(currentAccount) || new URL('../../assets/Lens.png', import.meta.url).href
+    const displayName = currentAccount.metadata?.name ?? currentAccount.username?.localName
     return (
         <Box className={classes.container}>
             <Box className={classes.description}>
@@ -121,11 +121,11 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
             <Icons.ArrowDrop size={18} onClick={(e) => setAnchorEl(e.currentTarget)} />
             <ProfilePopup
                 walletName={walletName}
-                profiles={profiles}
+                accounts={accounts}
                 anchorEl={anchorEl}
                 open={!!anchorEl}
                 onClose={() => setAnchorEl(null)}
-                currentProfile={currentProfile}
+                currentAccount={currentAccount}
                 onChange={onChange}
             />
         </Box>

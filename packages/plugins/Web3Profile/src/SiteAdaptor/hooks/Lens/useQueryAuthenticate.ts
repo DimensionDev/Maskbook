@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { isBefore, add } from 'date-fns'
 import { useChainContext } from '@masknet/web3-hooks-base'
-import { EVMWeb3, Lens } from '@masknet/web3-providers'
+import { EVMWeb3, Lens, LensV3 } from '@masknet/web3-providers'
 import { ChainId, isValidAddress } from '@masknet/web3-shared-evm'
 import { lensStorage as storage } from '../../context.js'
 
@@ -16,7 +16,7 @@ export function useQueryAuthenticate(address: string, profileId?: string) {
         if (accessToken && isBefore(new Date(), accessToken.expireDate)) {
             return accessToken.token
         } else if (refreshToken && isBefore(new Date(), refreshToken.expireDate)) {
-            const authenticate = await Lens.refresh(refreshToken.token)
+            const authenticate = await LensV3.refresh(refreshToken.token)
             if (!authenticate) return
             // Only reset accessToken
             await storage.accessToken?.setValue({

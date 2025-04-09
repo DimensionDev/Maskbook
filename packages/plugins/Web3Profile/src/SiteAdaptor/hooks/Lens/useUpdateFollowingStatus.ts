@@ -5,19 +5,19 @@ import { useCallback } from 'react'
 export function useUpdateFollowingStatus() {
     const queryClient = useQueryClient()
     return useCallback(
-        (lensId: string | undefined, targetLensHandle: string | undefined, isFollowing: boolean) => {
-            if (!lensId || !targetLensHandle) return
+        (myLensAccount: string | undefined, targetLensAccount: string | undefined, isFollowing: boolean) => {
+            if (!myLensAccount || !targetLensAccount) return
             queryClient.setQueriesData<FireflyConfigAPI.LensAccount[]>(
-                { queryKey: ['lens', 'popup-list', lensId] },
+                { queryKey: ['lens', 'popup-list', myLensAccount] },
                 (data) => {
                     if (!data) return data
                     return data.map((x) => {
-                        return x.handle === targetLensHandle ? { ...x, isFollowing } : x
+                        return x.handle === targetLensAccount ? { ...x, isFollowing } : x
                     })
                 },
             )
             queryClient.setQueriesData(
-                { queryKey: ['lens', 'following-status', lensId, targetLensHandle] },
+                { queryKey: ['lens', 'following-status', myLensAccount, targetLensAccount] },
                 () => isFollowing,
             )
         },
