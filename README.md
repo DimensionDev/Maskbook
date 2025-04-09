@@ -12,7 +12,7 @@
 [![Join the chat at https://gitter.im/Maskbook/community][badge-gitter]][gitter]
 [![Chrome Web Store][badge-chrome]][client-chrome]
 [![Mozilla Add-on][badge-firefox]][client-firefox]
-[![Opera][badge-opera][client-opera]
+[![Opera][badge-opera]][client-opera]
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
