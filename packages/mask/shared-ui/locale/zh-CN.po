@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-08 03:35\n"
+"PO-Revision-Date: 2025-04-09 04:07\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -270,8 +270,8 @@ msgid "Approve amount"
 msgstr "已批准的金额"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
-msgstr ""
+#~ msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
+#~ msgstr ""
 
 #. placeholder {0}: formatEthereumAddress(wallet.identity, 4)
 #: popups/components/ConnectedWallet/index.tsx
@@ -333,12 +333,10 @@ msgstr "返回"
 #~ msgid "Back Up to Google Drive"
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Back Up Your Data Your Way"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/Logout/index.tsx
@@ -374,7 +372,6 @@ msgstr ""
 msgid "Backup password"
 msgstr "备份密码"
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
@@ -476,7 +473,6 @@ msgstr ""
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
@@ -549,7 +545,6 @@ msgstr "修改支付密码"
 msgid "Choose another wallet"
 msgstr "切换钱包"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Choose from multiple backup options, now including encrypted storage via your authorized Google Drive for added security and flexibility."
 msgstr ""
@@ -598,7 +593,6 @@ msgstr "即将上线"
 msgid "Completed"
 msgstr "已完成"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
@@ -758,7 +752,6 @@ msgstr "联系人"
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
@@ -1019,7 +1012,6 @@ msgstr "下载"
 #~ msgid "Download backup"
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Download Backup"
 msgstr "下载备份"
@@ -1033,8 +1025,8 @@ msgid "Drag & Drop your file here"
 msgstr "将您的文件拖放到此处"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "E-mail"
-msgstr "电子邮件"
+#~ msgid "E-mail"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit"
@@ -1050,14 +1042,12 @@ msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email"
 msgstr "电子邮箱"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email verification code"
 msgstr "邮箱验证码"
@@ -1525,7 +1515,6 @@ msgstr ""
 msgid "Incorrect password"
 msgstr "密码不正确"
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/hooks/useBackupFormState.ts
@@ -1582,7 +1571,6 @@ msgstr "Gas 不足。"
 msgid "Invalid Block Explorer URL."
 msgstr "无效的块浏览器URL。"
 
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/contexts/CloudBackupFormContext.tsx
@@ -1702,8 +1690,8 @@ msgid "Log out"
 msgstr "登出"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "Login to Mask Cloud"
-msgstr ""
+#~ msgid "Login to Mask Cloud"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
@@ -1823,7 +1811,6 @@ msgstr "中等"
 msgid "Merge Completed"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Merge data to local database"
@@ -1851,12 +1838,10 @@ msgstr "助记词"
 msgid "Mnemonic word"
 msgstr "助记词"
 
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 msgid "Mobile"
 msgstr "手机"
 
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Mobile number"
 msgstr "手机号码"
@@ -1974,7 +1959,6 @@ msgstr ""
 msgid "No back up"
 msgstr "没有备份"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
 msgid "No backups found"
@@ -2089,12 +2073,12 @@ msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-msgid "Overwrite Backup"
-msgstr "覆盖备份"
+#~ msgid "Overwrite Backup"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-msgid "Overwrite current backup"
-msgstr "覆盖当前备份"
+#~ msgid "Overwrite current backup"
+#~ msgstr ""
 
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -2106,7 +2090,6 @@ msgstr "密码"
 msgid "Paste manually"
 msgstr "手动粘贴"
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
@@ -2188,7 +2171,6 @@ msgstr ""
 msgid "Personas"
 msgstr "身份"
 
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Phone verification code"
 msgstr "验证码"
@@ -2244,7 +2226,6 @@ msgid "Please note: This Persona {0} is the management account of above listed S
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
 msgstr "请选择合适的方法来恢复个人数据。"
 
@@ -2274,8 +2255,8 @@ msgid "Please switch to <0>@{expectAccount}</0> to continue the account verifica
 msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "Please use your frequently used email or phone number for backup."
-msgstr ""
+#~ msgid "Please use your frequently used email or phone number for backup."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please write down or copy these words and save them in a secure place."
@@ -2442,8 +2423,6 @@ msgid "Reselect"
 msgstr "重新选择"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Resend"
@@ -2554,8 +2533,8 @@ msgid "Select Liquidity"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
-msgid "Select the contents of the backup"
-msgstr "选择备份的内容"
+#~ msgid "Select the contents of the backup"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
@@ -2566,8 +2545,6 @@ msgid "Select Wallet"
 msgstr "选择钱包"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
@@ -2771,8 +2748,6 @@ msgstr "所支持的网站"
 msgid "Swap"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Switch other account"
 msgstr "切换帐号"
@@ -2810,7 +2785,6 @@ msgstr ""
 msgid "The chainID is not equal to the currently connected one."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
@@ -3151,8 +3125,6 @@ msgstr ""
 msgid "Verification code has been sent to your phone."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Verification code sent"
@@ -3320,11 +3292,10 @@ msgstr ""
 msgid "You need to open the dApp to view the specific content."
 msgstr ""
 
-#. placeholder {0}: user.email
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "You used <0>{0}</0> for the last cloud backup."
-msgstr ""
+#~ msgid "You used <0>{0}</0> for the last cloud backup."
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
@@ -3365,3 +3336,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
