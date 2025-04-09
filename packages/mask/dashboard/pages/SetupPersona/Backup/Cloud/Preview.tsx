@@ -1,7 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { EmptyStatus, formatFileSize } from '@masknet/shared'
-import type { BackupAccountType } from '@masknet/shared-base'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, TextOverflowTooltip, makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
@@ -84,6 +83,7 @@ export const Component = memo(function CloudBackupPreview() {
     const [{ loading: mergeLoading }, handleMergeClick] = useAsyncFn(async () => {
         if (!previewInfo.downloadLink || !previewInfo.account || !previewInfo.size || !previewInfo.uploadedAt) return
         await RestoreBackupModal.openAndWaitForClose({
+            decryptWithAccount: true,
             strategy: 'merge',
             download: () => progressDownload(previewInfo.downloadLink),
             fileName: getFileName(previewInfo.downloadLink) || createBackupName(),
@@ -96,10 +96,8 @@ export const Component = memo(function CloudBackupPreview() {
     const handleBackupClick = useCallback(() => {
         if (!previewInfo.type || !previewInfo.account || !previewInfo.code) return
         BackupPreviewModal.open({
+            encryptWithAccount: true,
             isUpload: false,
-            code: previewInfo.code,
-            abstract: previewInfo.abstract ? previewInfo.abstract : undefined,
-            type: previewInfo.type as BackupAccountType,
             account: previewInfo.account,
         })
     }, [previewInfo])
