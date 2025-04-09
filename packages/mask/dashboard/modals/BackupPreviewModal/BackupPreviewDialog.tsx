@@ -5,7 +5,6 @@ import { Trans } from '@lingui/react/macro'
 import { encryptBackup } from '@masknet/backup-format'
 import { Icons } from '@masknet/icons'
 import { InjectedDialog, LoadingStatus } from '@masknet/shared'
-import type { BackupAccountType } from '@masknet/shared-base'
 import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
@@ -14,7 +13,6 @@ import { memo, useCallback, useMemo, useRef } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
-import { UserContext } from '../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/BackupPreview/index.js'
 import PasswordField from '../../components/PasswordField/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
@@ -59,10 +57,12 @@ const useStyles = makeStyles()((theme) => ({
 export interface BackupPreviewDialogProps {
     open: boolean
     isUpload?: boolean
-    code: string
-    type: BackupAccountType
     account: string
-    abstract?: string
+    /**
+     * MaskNetwork backup use account + password as password since legacy version.
+     * Will be removed in the future when we remove MaskNetwork backup.
+     */
+    encryptWithAccount: boolean
     title?: React.ReactNode | string
     uploadButtonLabel?: React.ReactNode | string
     onClose: () => void
@@ -71,10 +71,8 @@ export interface BackupPreviewDialogProps {
 export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function BackupPreviewDialog({
     open,
     isUpload,
-    code,
-    type,
     account,
-    abstract,
+    encryptWithAccount,
     title,
     uploadButtonLabel,
     onClose,
@@ -84,7 +82,6 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const controllerRef = useRef<AbortController | null>(null)
     const { classes, theme } = useStyles()
     const navigate = useNavigate()
-    const { updateUser } = UserContext.useContainer()
     const {
         hasPassword,
         backupWallets,
@@ -117,7 +114,8 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                     excludeWallet: !backupWallets,
                 })
 
-                const encrypted = await encryptBackup(encode(account + data.backupPassword), encode(file))
+                const password = encryptWithAccount ? account + data.backupPassword : data.backupPassword
+                const encrypted = await encryptBackup(encode(password), encode(file))
                 const controller = new AbortController()
                 controllerRef.current = controller
                 await onUpload?.(encrypted, controller.signal)
@@ -132,7 +130,18 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 if ((error as any).status === 400) navigate(DashboardRoutes.BackupCloud, { replace: true })
             }
         },
-        [code, hasPassword, backupWallets, abstract, code, account, type, _, navigate, updateUser],
+        [
+            backupWallets,
+            hasPassword,
+            encryptWithAccount,
+            account,
+            onUpload,
+            showSnackbar,
+            onClose,
+            setError,
+            _,
+            navigate,
+        ],
     )
 
     const handleClose = useCallback(() => {
@@ -207,19 +216,21 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 </Box>
             :   <LoadingStatus minHeight={320} />
     }, [
+        uploadLoading,
+        classes.container,
+        classes.icon,
         loading,
         previewInfo,
         control,
+        backupWallets,
+        setBackupWallets,
+        hasPassword,
+        isUpload,
+        theme.palette.maskColor.danger,
         _,
         errors.backupPassword?.message,
         errors.paymentPassword?.message,
-        backupWallets,
-        setBackupWallets,
-        isUpload,
-        theme,
-        value,
-        uploadLoading,
-        classes,
+        clearErrors,
     ])
 
     const action = useMemo(() => {
@@ -246,18 +257,16 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
             </ActionButton>
         )
     }, [
-        backupWallets,
-        isUpload,
-        isDirty,
-        isValid,
-        hasPassword,
-        backupWallets,
         value,
+        onClose,
         uploadLoading,
         handleClose,
         handleSubmit,
         handleUploadBackup,
-        onClose,
+        isUpload,
+        isDirty,
+        isValid,
+        uploadButtonLabel,
     ])
 
     return (

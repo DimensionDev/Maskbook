@@ -88,6 +88,7 @@ export const Component = memo(function GoogleDriveRecovery() {
 
     const downloadAndMerge = async (file: DriveFile) => {
         await RestoreBackupModal.openAndWaitForClose({
+            decryptWithAccount: false,
             strategy: 'merge',
             download: () => {
                 return progressDownload(() => googleDriveClient.requestFile(file.id), file.size ? +file.size : 0)
@@ -125,14 +126,12 @@ export const Component = memo(function GoogleDriveRecovery() {
                     selectable
                     selectedFileId={selectedFile?.id}
                     onSelect={setSelectedFile}
-                    onDownload={downloadAndMerge}
-                    onMerge={async (file) => {
+                    onMerge={downloadAndMerge}
+                    onDownload={async (file) => {
                         const blob = await googleDriveClient.downloadFile(file.id)
                         const url = URL.createObjectURL(blob)
                         downloadBackup(url, file.name)
-                        Promise.resolve().then(() => {
-                            URL.revokeObjectURL(url)
-                        })
+                        URL.revokeObjectURL(url)
                     }}
                 />
             </Box>
@@ -146,6 +145,7 @@ export const Component = memo(function GoogleDriveRecovery() {
                     onClick={async () => {
                         if (!user.googleAccount || !selectedFile?.id) return
                         const result = await RestoreBackupModal.openAndWaitForClose({
+                            decryptWithAccount: false,
                             download: () => {
                                 return progressDownload(
                                     () => googleDriveClient.requestFile(selectedFile.id),

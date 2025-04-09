@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { BackupAccountType, EMPTY_LIST } from '@masknet/shared-base'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { GoogleDriveClient, type DriveFile } from '@masknet/web3-providers'
 import { Box, Typography } from '@mui/material'
@@ -89,7 +89,7 @@ export const Component = memo(function GoogleDriveBackup() {
             })
             refetch()
         },
-        [googleDriveClient],
+        [googleDriveClient, refetch],
     )
 
     const [{ loading: logoutLoading }, logout] = useAsyncFn(async () => {
@@ -98,7 +98,7 @@ export const Component = memo(function GoogleDriveBackup() {
             googleAccount: '',
             googleToken: '',
         })
-    }, [googleDriveClient])
+    }, [googleDriveClient, updateUser])
 
     const mergedFiles = useMemo(() => uniqBy(compact([...files, uploadedFile]), (x) => x.id), [files, uploadedFile])
 
@@ -108,6 +108,7 @@ export const Component = memo(function GoogleDriveBackup() {
 
     const downloadAndMerge = async (file: DriveFile) => {
         await RestoreBackupModal.openAndWaitForClose({
+            decryptWithAccount: false,
             strategy: 'merge',
             download: () => {
                 return progressDownload(() => googleDriveClient.requestFile(file.id), file.size ? +file.size : 0)
@@ -162,8 +163,7 @@ export const Component = memo(function GoogleDriveBackup() {
                     onClick={() => {
                         if (!user.googleAccount) return
                         BackupPreviewModal.open({
-                            code: 'google-drive',
-                            type: BackupAccountType.Email,
+                            encryptWithAccount: false,
                             account: user.googleAccount!,
                             isUpload: true,
                             title: <Trans>Backup to Google Drive</Trans>,
