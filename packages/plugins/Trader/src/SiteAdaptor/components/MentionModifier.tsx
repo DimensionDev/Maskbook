@@ -70,6 +70,6 @@ export const MentionModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['Menti
                 </span>
             )
         }
-        return children
+        return <Link href={href} children={children} fontSize="inherit" />
     },
 )
