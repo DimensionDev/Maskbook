@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-08 03:35\n"
+"PO-Revision-Date: 2025-04-09 04:07\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -270,8 +270,8 @@ msgid "Approve amount"
 msgstr "crwdns29904:0crwdne29904:0"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
-msgstr "crwdns31998:0crwdne31998:0"
+#~ msgid "Are you sure to overwrite the backups stored on Mask Cloud Service?"
+#~ msgstr ""
 
 #. placeholder {0}: formatEthereumAddress(wallet.identity, 4)
 #: popups/components/ConnectedWallet/index.tsx
@@ -333,12 +333,10 @@ msgstr "crwdns29540:0crwdne29540:0"
 #~ msgid "Back Up to Google Drive"
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Back Up Your Data Your Way"
 msgstr "crwdns37226:0crwdne37226:0"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/Logout/index.tsx
@@ -374,7 +372,6 @@ msgstr "crwdns29924:0{0}crwdne29924:0"
 msgid "Backup password"
 msgstr "crwdns29550:0crwdne29550:0"
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
@@ -476,7 +473,6 @@ msgstr "crwdns32010:0crwdne32010:0"
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
@@ -549,7 +545,6 @@ msgstr "crwdns29968:0crwdne29968:0"
 msgid "Choose another wallet"
 msgstr "crwdns29972:0crwdne29972:0"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/index.tsx
 msgid "Choose from multiple backup options, now including encrypted storage via your authorized Google Drive for added security and flexibility."
 msgstr "crwdns37230:0crwdne37230:0"
@@ -598,7 +593,6 @@ msgstr "crwdns29986:0crwdne29986:0"
 msgid "Completed"
 msgstr "crwdns29562:0crwdne29562:0"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
 #: popups/pages/Wallet/components/DisconnectModal/index.tsx
@@ -758,7 +752,6 @@ msgstr "crwdns29570:0crwdne29570:0"
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
@@ -1019,7 +1012,6 @@ msgstr "crwdns30100:0crwdne30100:0"
 #~ msgid "Download backup"
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Download Backup"
 msgstr "crwdns29592:0crwdne29592:0"
@@ -1033,8 +1025,8 @@ msgid "Drag & Drop your file here"
 msgstr "crwdns30102:0crwdne30102:0"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "E-mail"
-msgstr "crwdns29598:0crwdne29598:0"
+#~ msgid "E-mail"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit"
@@ -1050,14 +1042,12 @@ msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr "crwdns32040:0crwdne32040:0"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email"
 msgstr "crwdns29600:0crwdne29600:0"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email verification code"
 msgstr "crwdns29602:0crwdne29602:0"
@@ -1525,7 +1515,6 @@ msgstr "crwdns32074:0crwdne32074:0"
 msgid "Incorrect password"
 msgstr "crwdns30236:0crwdne30236:0"
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/hooks/useBackupFormState.ts
@@ -1582,7 +1571,6 @@ msgstr "crwdns30246:0crwdne30246:0"
 msgid "Invalid Block Explorer URL."
 msgstr "crwdns30248:0crwdne30248:0"
 
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/contexts/CloudBackupFormContext.tsx
@@ -1702,8 +1690,8 @@ msgid "Log out"
 msgstr "crwdns30280:0crwdne30280:0"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "Login to Mask Cloud"
-msgstr "crwdns32080:0crwdne32080:0"
+#~ msgid "Login to Mask Cloud"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
@@ -1823,7 +1811,6 @@ msgstr "crwdns30332:0crwdne30332:0"
 msgid "Merge Completed"
 msgstr "crwdns37248:0crwdne37248:0"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Merge data to local database"
@@ -1851,12 +1838,10 @@ msgstr "crwdns30336:0crwdne30336:0"
 msgid "Mnemonic word"
 msgstr "crwdns29660:0crwdne29660:0"
 
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 msgid "Mobile"
 msgstr "crwdns29662:0crwdne29662:0"
 
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Mobile number"
 msgstr "crwdns29664:0crwdne29664:0"
@@ -1974,7 +1959,6 @@ msgstr "crwdns32802:0crwdne32802:0"
 msgid "No back up"
 msgstr "crwdns30366:0crwdne30366:0"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
 msgid "No backups found"
@@ -2089,12 +2073,12 @@ msgid "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,
 msgstr "crwdns32806:0crwdne32806:0"
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-msgid "Overwrite Backup"
-msgstr "crwdns29676:0crwdne29676:0"
+#~ msgid "Overwrite Backup"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-msgid "Overwrite current backup"
-msgstr "crwdns29678:0crwdne29678:0"
+#~ msgid "Overwrite current backup"
+#~ msgstr ""
 
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -2106,7 +2090,6 @@ msgstr "crwdns30410:0crwdne30410:0"
 msgid "Paste manually"
 msgstr "crwdns30412:0crwdne30412:0"
 
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
@@ -2188,7 +2171,6 @@ msgstr "crwdns32114:0{personaName}crwdne32114:0"
 msgid "Personas"
 msgstr "crwdns29696:0crwdne29696:0"
 
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Phone verification code"
 msgstr "crwdns29698:0crwdne29698:0"
@@ -2244,7 +2226,6 @@ msgid "Please note: This Persona {0} is the management account of above listed S
 msgstr "crwdns32808:00={0}crwdnd32808:01={1}crwdne32808:0"
 
 #: dashboard/pages/SetupPersona/Recovery/index.tsx
-#: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 msgid "Please select the appropriate method to restore your personal data."
 msgstr "crwdns29706:0crwdne29706:0"
 
@@ -2274,8 +2255,8 @@ msgid "Please switch to <0>@{expectAccount}</0> to continue the account verifica
 msgstr "crwdns32810:0{expectAccount}crwdne32810:0"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "Please use your frequently used email or phone number for backup."
-msgstr "crwdns32124:0crwdne32124:0"
+#~ msgid "Please use your frequently used email or phone number for backup."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Please write down or copy these words and save them in a secure place."
@@ -2442,8 +2423,6 @@ msgid "Reselect"
 msgstr "crwdns29732:0crwdne29732:0"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Resend"
@@ -2554,8 +2533,8 @@ msgid "Select Liquidity"
 msgstr "crwdns35408:0crwdne35408:0"
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
-msgid "Select the contents of the backup"
-msgstr "crwdns29744:0crwdne29744:0"
+#~ msgid "Select the contents of the backup"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
@@ -2566,8 +2545,6 @@ msgid "Select Wallet"
 msgstr "crwdns30536:0crwdne30536:0"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
@@ -2771,8 +2748,6 @@ msgstr "crwdns30596:0crwdne30596:0"
 msgid "Swap"
 msgstr "crwdns35412:0crwdne35412:0"
 
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
-#: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Switch other account"
 msgstr "crwdns29776:0crwdne29776:0"
@@ -2810,7 +2785,6 @@ msgstr "crwdns32146:0crwdne32146:0"
 msgid "The chainID is not equal to the currently connected one."
 msgstr "crwdns30606:0crwdne30606:0"
 
-#: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
@@ -3151,8 +3125,6 @@ msgstr "crwdns32180:0crwdne32180:0"
 msgid "Verification code has been sent to your phone."
 msgstr "crwdns32182:0crwdne32182:0"
 
-#: dashboard/pages/SetupPersona/CloudBackup/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/CloudBackup/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Verification code sent"
@@ -3320,11 +3292,10 @@ msgstr "crwdns32202:0crwdne32202:0"
 msgid "You need to open the dApp to view the specific content."
 msgstr "crwdns32204:0crwdne32204:0"
 
-#. placeholder {0}: user.email
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
-msgid "You used <0>{0}</0> for the last cloud backup."
-msgstr "crwdns32832:0{0}crwdne32832:0"
+#~ msgid "You used <0>{0}</0> for the last cloud backup."
+#~ msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."
