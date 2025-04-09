@@ -50,6 +50,11 @@ export interface RestoreBackupDialogProps {
     restoreSuccessMessage?: ReactNode
     restoreErrorMessage?: ReactNode
     /**
+     * MaskNetwork backup use account + password as password since legacy version.
+     * Will be removed in the future when we remove MaskNetwork backup.
+     */
+    decryptWithAccount: boolean
+    /**
      * A generator that yield progress of download,
      * and return the content of the downloaded file at the end
      */
@@ -61,6 +66,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
     open,
     fileName,
     account,
+    decryptWithAccount,
     uploadedAt,
     size,
     strategy = 'import',
@@ -96,13 +102,14 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
             handleClose()
             throw err
         }
-    }, [handleClose, open, download])
+    }, [open, download, showSnackbar, handleClose])
 
     const isImport = strategy === 'import'
     const [{ loading }, handleRestore] = useAsyncFn(async () => {
         try {
             if (!encrypted) return
-            const decrypted = await decryptBackup(encode(account + backupPassword), encrypted)
+            const password = decryptWithAccount ? account + backupPassword : backupPassword
+            const decrypted = await decryptBackup(encode(password), encrypted)
             const backupJson = JSON.stringify(decode(decrypted))
             const summary = await Services.Backup.generateBackupSummary(backupJson)
             if (summary.isErr()) {
@@ -141,13 +148,14 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
         }
     }, [
         encrypted,
-        backupPassword,
+        decryptWithAccount,
         account,
-        isImport,
+        backupPassword,
         showSnackbar,
+        isImport,
         restoreSuccessMessage,
-        restoreErrorMessage,
         onClose,
+        restoreErrorMessage,
     ])
 
     return (
@@ -190,7 +198,7 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                                         fontSize={12}
                                         lineHeight="16px"
                                         color={theme.palette.maskColor.third}>
-                                        {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-mm-dd HH:mm')}
+                                        {formatDateTime(new Date(Number(uploadedAt)), 'yyyy-MM-dd HH:mm')}
                                     </Typography>
                                 </>
                             }
