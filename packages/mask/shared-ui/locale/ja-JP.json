@@ -215,6 +215,7 @@
         "cEnmTp": ["Creating your "],
         "L82H5Z": ["Creating your **identity**"],
         "F7U8uz": ["Creating your **wallet**"],
+        "aF8kci": ["Creation Completed"],
         "Q2lUR2": ["通貨"],
         "OgPkDe": ["通貨記号（オプション）"],
         "oOQfsI": ["Current account is not the verifying account."],
@@ -860,6 +861,7 @@
         "Q68Nuc": [
             "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
         ],
+        "4EN5JL": ["Your Persona has been successfully created."],
         "N19nSk": ["Your Persona is on"],
         "WC7pDz": ["Your Persona is on "],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],

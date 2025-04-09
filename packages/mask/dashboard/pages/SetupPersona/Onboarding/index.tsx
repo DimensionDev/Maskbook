@@ -155,7 +155,15 @@ export const Component = memo(function Onboarding() {
             </Box>
             <img className={classes.trend} src={Trend} />
             <Box>
-                <OnboardingWriter sentence={sentence} />
+                <OnboardingWriter
+                    sentence={sentence}
+                    onFinish={() => {
+                        showSnackbar(<Trans>Creation Completed</Trans>, {
+                            variant: 'success',
+                            message: t`Your Persona has been successfully created.`,
+                        })
+                    }}
+                />
             </Box>
             <SetupFrameController>
                 <PrimaryButton
