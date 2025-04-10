@@ -840,6 +840,10 @@ msgstr ""
 msgid "Creating your **wallet**"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "Creation Completed"
+msgstr ""
+
 #: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 #: popups/modals/ChooseCurrencyModal/index.tsx
 msgid "Currency"
@@ -3311,6 +3315,10 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 msgid "Your payment password encrypts wallet data and is needed to unlocking the wallet, transaction confirmations and signing. The password is never stored, and there is no way to recover it if you forget it."
+msgstr ""
+
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+msgid "Your Persona has been successfully created."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
