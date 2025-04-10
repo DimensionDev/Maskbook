@@ -19,8 +19,9 @@ const useStyles = makeStyles()((theme) => ({
 
 interface OnboardingWriterProps extends withClasses<'typed' | 'endTyping'> {
     sentence: Array<string | undefined>
+    onFinish?: () => void
 }
-export function OnboardingWriter({ sentence, ...props }: OnboardingWriterProps) {
+export function OnboardingWriter({ sentence, onFinish, ...props }: OnboardingWriterProps) {
     const { classes, cx } = useStyles(undefined, { props })
     const typing = cx(classes.typing, classes.typed)
     const [jsx, setJsx] = useState<JSX.Element | undefined>(undefined)
@@ -31,6 +32,7 @@ export function OnboardingWriter({ sentence, ...props }: OnboardingWriterProps) 
             const next = writer.next()
             if (next.done) {
                 clearInterval(timer)
+                onFinish?.()
             } else {
                 setJsx(next.value)
             }
@@ -39,7 +41,7 @@ export function OnboardingWriter({ sentence, ...props }: OnboardingWriterProps) 
         return () => {
             clearInterval(timer)
         }
-    }, [writer])
+    }, [writer, onFinish])
 
     return jsx
 }
