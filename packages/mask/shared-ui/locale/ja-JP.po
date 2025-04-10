@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-03 11:04\n"
+"PO-Revision-Date: 2025-04-10 05:53\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -1030,7 +1030,7 @@ msgstr "ここにファイルをドラッグ&ドロップしてください"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #~ msgid "E-mail"
-#~ msgstr "メールアドレス"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit"
@@ -2078,11 +2078,11 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Overwrite Backup"
-#~ msgstr "バックアップを上書き"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Overwrite current backup"
-#~ msgstr "既存のバックアップを上書き"
+#~ msgstr ""
 
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -2538,7 +2538,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #~ msgid "Select the contents of the backup"
-#~ msgstr "バックアップの内容を選択します"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
@@ -3344,3 +3344,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
