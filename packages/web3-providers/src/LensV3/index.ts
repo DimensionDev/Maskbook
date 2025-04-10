@@ -13,40 +13,54 @@ import {
     fetchAccountsAvailable,
     fetchAccountsBulk,
     fetchFollowStatus,
+    fetchPosts,
     follow as lensFollow,
     unfollow as lensUnfollow,
 } from '@lens-protocol/client/actions'
 import { gql } from 'graphql-request'
 import { sortBy, uniqBy } from 'lodash-es'
 import { fetchJSON } from '../helpers/fetchJSON.js'
-import type { LensBaseAPI } from '../types/Lens.js'
 import { LENS_ROOT_API } from './constants.js'
 import { fragments } from './fragments/index.js'
 import type { FollowPair } from './types.js'
+import {
+    createIndicator,
+    createNextIndicator,
+    createPageable,
+    EMPTY_LIST,
+    type PageIndicator,
+} from '@masknet/shared-base'
+import { formatLensPost, getAccountAvatar } from './helpers.js'
+import { isZero } from '@masknet/web3-shared-base'
+import type { LensV3BaseAPI } from '@masknet/web3-providers/types'
+import { EVMWeb3 } from '@masknet/web3-providers'
 
 export class LensV3 {
     private signMessage: (message: string) => Promise<string>
-    public account: EvmAddress
+    public account: EvmAddress | undefined
     private sessionClient: SessionClient | null = null
     public client: PublicClient
-    constructor(account: EvmAddress, signMessage: (message: string) => Promise<string>) {
+    constructor(account?: EvmAddress | string, signMessage?: (message: string) => Promise<string>) {
         this.client = PublicClient.create({
             environment: mainnet,
             storage: window.localStorage,
             fragments,
         })
-        this.account = account
-        this.signMessage = signMessage
+        if (account) this.account = evmAddress(account)
+        this.signMessage = signMessage || ((message: string) => EVMWeb3.signMessage('message', message))
     }
 
-    async login(account: EvmAddress) {
+    async login(account: EvmAddress, manager?: EvmAddress) {
         const resumed = await this.client.resumeSession()
         if (resumed.isOk()) {
             this.sessionClient = resumed.value
         }
+        if (!this.account && !manager) {
+            throw new Error('Please set account or manager')
+        }
         const authenticated = await this.client.login({
             accountManager: {
-                manager: this.account,
+                manager: this.account || manager,
                 account,
             },
             signMessage: this.signMessage,
@@ -76,7 +90,7 @@ export class LensV3 {
 
     static async refresh(refreshToken: string) {
         if (!refreshToken) return
-        const { data } = await fetchJSON<{ data: { refresh: LensBaseAPI.Authenticate } }>(LENS_ROOT_API, {
+        const { data } = await fetchJSON<{ data: { refresh: LensV3BaseAPI.Authenticate } }>(LENS_ROOT_API, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -167,5 +181,29 @@ export class LensV3 {
         LensV3.getAccountStats({
             username: { localName: handle },
         })
+    }
+    static getAccountAvatar = getAccountAvatar
+
+    async getPostsByAccounts(accounts: string | string[], indicator?: PageIndicator) {
+        if (!accounts.length) {
+            return createPageable(EMPTY_LIST, createIndicator(indicator))
+        }
+        const authors = Array.isArray(accounts) ? accounts.map(evmAddress) : [evmAddress(accounts)]
+        const res = await fetchPosts(this.client, {
+            filter: {
+                authors,
+            },
+            cursor: indicator?.id && !isZero(indicator.id) ? indicator.id : undefined,
+        })
+        if (res.isErr()) {
+            throw new Error(res.error.message)
+        }
+        const result = res.value
+        const page = createPageable(
+            result.items.map(formatLensPost),
+            createIndicator(indicator),
+            result.pageInfo.next ? createNextIndicator(indicator, res.value.pageInfo.next) : undefined,
+        )
+        return page
     }
 }

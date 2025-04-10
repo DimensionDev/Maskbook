@@ -1,7 +1,7 @@
 import { evmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { Image } from '@masknet/shared'
+import { Image, useLensClient, useMyLensAccountAddress } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -11,8 +11,6 @@ import { ListItem, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { compact } from 'lodash-es'
 import { memo } from 'react'
-import { useLensClient } from '../../hooks/Lens/useLensClient.js'
-import { useMyLensAccountAddress } from '../../hooks/Lens/useMyLensAccountAddress.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -81,9 +79,8 @@ interface Props {
 }
 
 export const LensList = memo(function LensList({ accounts }: Props) {
-    const myLensAccount = useMyLensAccountAddress()
-
     const lensV3 = useLensClient()
+    const myLensAccount = useMyLensAccountAddress()
 
     const { data = accounts, isPending } = useQuery({
         queryKey: ['lens', 'popup-list', myLensAccount, accounts.map((x) => x.handle).join('')],
@@ -108,8 +105,8 @@ export const LensList = memo(function LensList({ accounts }: Props) {
 
             if (!nativeAccounts?.length) return accounts
             const followStatus = await lensV3.getFollowStatus(
-                (nativeAccounts || []).map((x) => ({
-                    follower: evmAddress(myLensAccount),
+                (myLensAccount ? nativeAccounts || [] : []).map((x) => ({
+                    follower: evmAddress(myLensAccount!),
                     account: evmAddress(x.username?.ownedBy),
                 })),
             )

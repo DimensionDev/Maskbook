@@ -2341,6 +2341,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.53.0(react@0.0.0-experimental-58af67a8f8-20240628))
+      '@lens-protocol/client':
+        specifier: 0.0.0-canary-20250408064617
+        version: 0.0.0-canary-20250408064617(typescript@5.8.2)
       '@masknet/icons':
         specifier: workspace:^
         version: link:../icons
@@ -19011,7 +19014,7 @@ snapshots:
       string-length: 6.0.0
       strip-ansi: 7.1.0
       ts-toolbelt: 9.6.0
-      type-fest: 4.28.1
+      type-fest: 4.30.0
       zod: 3.24.2
 
   '@molt/types@0.2.0':
@@ -22684,7 +22687,7 @@ snapshots:
       chalk: 5.3.0
       cli-boxes: 3.0.0
       string-width: 7.2.0
-      type-fest: 4.28.1
+      type-fest: 4.30.0
       widest-line: 5.0.0
       wrap-ansi: 9.0.0
 
@@ -24089,7 +24092,7 @@ snapshots:
 
   dot-prop@9.0.0:
     dependencies:
-      type-fest: 4.28.1
+      type-fest: 4.30.0
 
   dotenv@10.0.0: {}
 
@@ -28668,7 +28671,7 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.26.2
       index-to-position: 0.1.2
-      type-fest: 4.28.1
+      type-fest: 4.30.0
 
   parse-ms@4.0.0: {}
 
@@ -29241,7 +29244,7 @@ snapshots:
     dependencies:
       find-up-simple: 1.0.0
       read-pkg: 9.0.1
-      type-fest: 4.28.1
+      type-fest: 4.30.0
 
   read-pkg-up@8.0.0:
     dependencies:
@@ -29261,7 +29264,7 @@ snapshots:
       '@types/normalize-package-data': 2.4.4
       normalize-package-data: 6.0.2
       parse-json: 8.1.0
-      type-fest: 4.28.1
+      type-fest: 4.30.0
       unicorn-magic: 0.1.0
 
   read-yaml-file@1.1.0:

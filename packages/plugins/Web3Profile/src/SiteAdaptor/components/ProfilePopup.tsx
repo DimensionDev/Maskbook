@@ -5,6 +5,7 @@ import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { LensV3 } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import {
     Box,
@@ -19,7 +20,6 @@ import {
     Typography,
 } from '@mui/material'
 import { memo } from 'react'
-import { getAccountAvatar } from '../../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -157,7 +157,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
             <List disablePadding className={classes.list}>
                 {availableAccounts.map((available) => {
                     const account = available.account
-                    const avatar = getAccountAvatar(account)
+                    const avatar = LensV3.getAccountAvatar(account)
                     const name = account.metadata?.name || account.username?.localName
                     const ownerAddress: EvmAddress = account.username?.ownedBy
                     const accountId = account.username?.id

@@ -1,22 +1,27 @@
 import { type Account, type EvmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { ChainBoundary, InjectedDialog, WalletConnectedBoundary } from '@masknet/shared'
+import {
+    ChainBoundary,
+    InjectedDialog,
+    setMyLensAccountAddress,
+    useAvailableLensAccounts,
+    useLensClient,
+    useMyLensAccountAddress,
+    WalletConnectedBoundary,
+} from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import { ChainId } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Button, CircularProgress, DialogContent, Typography, buttonClasses } from '@mui/material'
+import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
 import { useCallback, useMemo, useState } from 'react'
 import { getFireflyLensProfileLink } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
-import { useAvailableLensAccounts } from '../../hooks/Lens/useAvailableLensAccounts.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
-import { useLensClient } from '../../hooks/Lens/useLensClient.js'
-import { setMyLensAccountAddress, useMyLensAccountAddress } from '../../hooks/Lens/useMyLensAccountAddress.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
 import { useUpdateFollowingStatus } from '../../hooks/Lens/useUpdateFollowingStatus.js'
 import { HandlerDescription } from './HandlerDescription.js'
@@ -129,8 +134,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const isSelf = isSameAddress(lensAccount?.username?.ownedBy as string, walletAccount)
 
     const currentAccount = accounts?.find((p) => isSameAddress(p.account.address, myLensAccount)) || first(accounts)
-    const currentAccountAddress: EvmAddress = currentAccount?.account.address
-    const targetAccountAddress: EvmAddress = lensAccount?.address
+    const currentAccountAddress: EvmAddress | undefined = currentAccount?.account.address
+    const targetAccountAddress: EvmAddress | undefined = lensAccount?.address
     const { isPending, data: isFollowing } = useQuery({
         queryKey: ['lens', 'following-status', currentAccountAddress, targetAccountAddress, !lensClient],
         queryFn: async () => {
@@ -152,14 +157,14 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         accountAddress: lensAccount?.address,
         onSuccess: (width: number, height: number) => {
             showConfettiExplosion(width, height)
-            updateFollowingStatus(currentAccountAddress, handle, true)
+            updateFollowingStatus(currentAccountAddress, targetAccountAddress, true)
         },
         onFailed: () => updateFollowingStatus(currentAccountAddress, handle, false),
     })
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow({
-        accountAddress: lensAccount?.address,
-        onSuccess: () => updateFollowingStatus(currentAccountAddress, handle, false),
-        onFailed: () => updateFollowingStatus(currentAccountAddress, handle, true),
+        accountAddress: lensAccount?.address as string,
+        onSuccess: () => updateFollowingStatus(currentAccountAddress, targetAccountAddress, false),
+        onFailed: () => updateFollowingStatus(currentAccountAddress, targetAccountAddress, true),
     })
     // #endregion
 

@@ -17,7 +17,6 @@ import { BaseMaskX } from '../../../entry-types.js'
 import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
 import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
 import * as Firefly from /* webpackDefer: true */ '../../../Firefly/index.js'
-import * as Lens from /* webpackDefer: true */ '../../../Lens/index.js'
 import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
 import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
 import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
@@ -29,17 +28,9 @@ const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
 const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
 const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/gi
 const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
-const LENS_RE = /[^\s()[\]]{1,256}\.lens\b/i
-const LENS_URL_RE = /https?:\/\/.+\/(\w+\.lens)/
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])
-}
-
-function getLensNames(nickname: string, bio: string, homepage: string) {
-    const homepageNames = homepage.match(LENS_URL_RE)?.[1]
-    const names = [nickname.match(LENS_RE), bio.match(LENS_RE)].map((result) => result?.[0] ?? '')
-    return [...names, homepageNames].filter(Boolean) as string[]
 }
 
 function getARBIDNames(userId: string, nickname: string, bio: string) {
@@ -229,23 +220,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
     }
 
-    private async getSocialAddressFromLens({ nickname = '', bio = '', homepage = '' }: SocialIdentity) {
-        const names = getLensNames(nickname, bio, homepage)
-        if (!names.length) return
-
-        const allSettled = await Promise.allSettled(
-            names.map(async (name) => {
-                const profile = await Lens.Lens.getProfileByHandle(name)
-                if (!profile) return
-                return [
-                    this.createSocialAddress(SocialAddressType.Lens, profile.ownedBy.address, name),
-                    this.createSocialAddress(SocialAddressType.Address, profile.ownedBy.address, name),
-                ]
-            }),
-        )
-        return compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : undefined)))
-    }
-
     /** Read social addresses from MaskX */
     private async getSocialAddressesFromMaskX({ identifier }: SocialIdentity) {
         const userId = identifier?.userId
@@ -289,7 +263,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             this.getSocialAddressFromCrossbell(identity),
             socialAddressFromNextID,
             socialAddressFromMaskX,
-            this.getSocialAddressFromLens(identity),
         ])
         const mergedIdentities = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 

@@ -1,15 +1,13 @@
 import { useLingui } from '@lingui/react/macro'
+import { useLensClient, useMyLensAccountAddress } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useCustomSnackbar, type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { useCallback, useRef, useState } from 'react'
-import { useLensClient } from './useLensClient.js'
-import { useMyLensAccountAddress } from './useMyLensAccountAddress.js'
 
 export interface UnfollowOptions {
     accountAddress?: string
-    // signless?: boolean
     onSuccess?: () => void
     onFailed?: () => void
 }

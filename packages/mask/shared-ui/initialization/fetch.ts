@@ -48,7 +48,7 @@ function fetchingTwitterResource(target: URL) {
 
 function fetchingInsResource(target: URL) {
     // cspell:disable-next-line
-    if (location.origin.endsWith('instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/)) return true
+    if (isHostName(location, 'instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/)) return true
     return target.host === 'api.lens.xyz'
 }
 

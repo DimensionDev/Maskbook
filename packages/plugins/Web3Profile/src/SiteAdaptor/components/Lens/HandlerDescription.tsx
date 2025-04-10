@@ -12,10 +12,10 @@ import {
     useWallet,
     useWeb3Utils,
 } from '@masknet/web3-hooks-base'
+import { LensV3 } from '@masknet/web3-providers'
 import { ChainId, ProviderType } from '@masknet/web3-shared-evm'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useMemo, useState } from 'react'
-import { getAccountAvatar } from '../../../utils.js'
 import { ProfilePopup } from '../ProfilePopup.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -105,7 +105,7 @@ export const HandlerDescription = memo<HandlerDescriptionProps>(function Handler
             </Box>
         )
     }
-    const avatar = getAccountAvatar(currentAccount) || new URL('../../assets/Lens.png', import.meta.url).href
+    const avatar = LensV3.getAccountAvatar(currentAccount) || new URL('../../assets/Lens.png', import.meta.url).href
     const displayName = currentAccount.metadata?.name ?? currentAccount.username?.localName
     return (
         <Box className={classes.container}>
