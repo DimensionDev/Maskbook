@@ -12,6 +12,7 @@
 [![Join the chat at https://gitter.im/Maskbook/community][badge-gitter]][gitter]
 [![Chrome Web Store][badge-chrome]][client-chrome]
 [![Mozilla Add-on][badge-firefox]][client-firefox]
+[![Opera][badge-opera]][client-opera]
 [![FOSSA Status][badge-fossa]][fossa]
 [![Crowdin][badge-crowdin]][crowdin]
 
@@ -54,11 +55,13 @@ Please submit your **resume** to `jobs (at) mask.io`
 [badge-chrome]: https://img.shields.io/chrome-web-store/v/jkoeaghipilijlahjplgbfiocjhldnap.svg?logo=Maskbook&logoColor=%231c68f3&style=flat-square&label=Chrome%20store
 [badge-crowdin]: https://badges.crowdin.net/mask-network/localized.svg
 [badge-firefox]: https://img.shields.io/amo/v/maskbook?label=Firefox%20store&style=flat-square
+[badge-opera]: https://img.shields.io/badge/Opera%20store-v2.32.0-blue.svg
 [badge-fossa]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=shield
 [badge-gitter]: https://badges.gitter.im/Maskbook/community.svg
 [badge-license]: https://img.shields.io/badge/license-AGPL-blue.svg?style=flat-square
 [client-chrome]: https://chrome.google.com/webstore/detail/maskbook/jkoeaghipilijlahjplgbfiocjhldnap/
 [client-firefox]: https://addons.mozilla.org/en-US/firefox/addon/maskbook/
+[client-opera]: https://addons.opera.com/en/extensions/details/maskbook/
 [crowdin]: https://crowdin.com/project/mask-network
 [fossa-status]: https://app.fossa.io/api/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook.svg?type=large
 [fossa]: https://app.fossa.io/projects/git%2Bgithub.com%2FDimensionDev%2FMaskbook
