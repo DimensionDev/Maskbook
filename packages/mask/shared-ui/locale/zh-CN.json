@@ -272,7 +272,7 @@
         "1+6BOG": ["下载备份"],
         "9hg9mc": ["正在下载"],
         "F8Wc3I": ["将您的文件拖放到此处"],
-        "5Sa1Ss": ["电子邮件"],
+        "5Sa1Ss": ["E-mail"],
         "ePK91l": ["编辑"],
         "mQpWAe": ["编辑联系人"],
         "iZLoa2": ["eg: X accounts, persona public keys, wallet addresses or ENS"],
@@ -517,8 +517,8 @@
         "YKSmxE": [
             "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
         ],
-        "MXOdMY": ["覆盖备份"],
-        "p2xE4C": ["覆盖当前备份"],
+        "MXOdMY": ["Overwrite Backup"],
+        "p2xE4C": ["Overwrite current backup"],
         "8ZsakT": ["密码"],
         "9w2hgY": ["手动粘贴"],
         "GAvnvl": ["支付密码"],
@@ -627,7 +627,7 @@
         "nTif4K": ["选择并连接到你的钱包"],
         "k/sb6z": ["选择语言"],
         "LSwUJb": ["Select Liquidity"],
-        "RjF5dk": ["选择备份的内容"],
+        "RjF5dk": ["Select the contents of the backup"],
         "PI/VCJ": ["Select the wallet(s) to use on this site. You should not connect to website you don't trust."],
         "a1SmQh": ["选择钱包"],
         "JlFcis": ["发送"],
