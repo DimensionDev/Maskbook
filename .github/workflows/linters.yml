@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  codegen:
+  linter:
     runs-on: ubuntu-latest
     permissions:
       packages: read
@@ -37,18 +37,18 @@ jobs:
         with:
             registry: true
       - run: pnpm install
-      - run: npx gulp lint-package-json
+      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
+      - run: npx markdownlint-cli --fix .
       - run: npx gulp codegen
       - run: pnpm run lingui:extract
       - run: pnpm run lingui:compile
       - run: npx gulp sync-languages
-      - run: npx prettier@3.5.3 --write .
+      - run: npx gulp lint-package-json
       - run: npx gulp fix-plugins-tsconfig
-      - run: npx markdownlint-cli --fix .
+      - run: npx prettier@3.5.3 --write .
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: linter'
-      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
   type-check:
     runs-on: ubuntu-latest
     steps:
