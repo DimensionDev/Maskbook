@@ -28,6 +28,7 @@ For general introductions, see [Mask.io](https://mask.io).
 
 - [Mask Network on Chrome Web Store][client-chrome]
 - [Mask Network on Firefox Addon Store][client-firefox]
+- [Mask Network on Opera Addon Store][client-opera]
 
 ## Useful Links
 
