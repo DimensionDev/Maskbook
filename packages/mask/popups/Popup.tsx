@@ -50,7 +50,7 @@ const PopupShell = memo(function PopupShell() {
     const navigate = useNavigate()
     useEffect(() => {
         return MaskMessages.events.popupRouteUpdated.on((url) => navigate(url, { replace: true }))
-    }, [])
+    }, [navigate])
 
     useEffect(() => {
         document.getElementById('app-spinner')?.remove()
