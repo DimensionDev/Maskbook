@@ -274,7 +274,7 @@
         "1+6BOG": ["백업 다운로드"],
         "9hg9mc": ["다운로드 중"],
         "F8Wc3I": ["파일을 끌어서 여기에 놓으세요"],
-        "5Sa1Ss": ["이메일"],
+        "5Sa1Ss": ["E-mail"],
         "ePK91l": ["편집"],
         "mQpWAe": ["연락처 편집"],
         "iZLoa2": ["eg: X accounts, persona public keys, wallet addresses or ENS"],
@@ -521,8 +521,8 @@
         "YKSmxE": [
             "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
         ],
-        "MXOdMY": ["백업 덮어쓰기"],
-        "p2xE4C": ["기존 백업 덮어쓰기"],
+        "MXOdMY": ["Overwrite Backup"],
+        "p2xE4C": ["Overwrite current backup"],
         "8ZsakT": ["비밀번호"],
         "9w2hgY": ["수동으로 붙여넣기"],
         "GAvnvl": ["결재 비밀번호"],
@@ -631,7 +631,7 @@
         "nTif4K": ["월렛 선택 및 연결"],
         "k/sb6z": ["언어 선택"],
         "LSwUJb": ["Select Liquidity"],
-        "RjF5dk": ["백업 내용을 선택하세요."],
+        "RjF5dk": ["Select the contents of the backup"],
         "PI/VCJ": ["Select the wallet(s) to use on this site. You should not connect to website you don't trust."],
         "a1SmQh": ["월렛 선택"],
         "JlFcis": ["보내기"],
