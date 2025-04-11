@@ -9,10 +9,12 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { encode } from '@msgpack/msgpack'
 import { Box, DialogActions, DialogContent, Typography } from '@mui/material'
+import { format } from 'date-fns'
 import { memo, useCallback, useMemo, useRef } from 'react'
 import { Controller } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { useAsyncFn, useUpdateEffect } from 'react-use'
+import { UserContext } from '../../../shared-ui/index.js'
 import { PersonasBackupPreview, WalletsBackupPreview } from '../../components/BackupPreview/index.js'
 import PasswordField from '../../components/PasswordField/index.js'
 import { useBackupFormState, type BackupFormInputs } from '../../hooks/useBackupFormState.js'
@@ -98,6 +100,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
     const { data: previewInfo, isLoading: loading } = useBackupPreviewInfo()
     const { showSnackbar } = useCustomSnackbar()
 
+    const { updateUser } = UserContext.useContainer()
     const [{ loading: uploadLoading, value }, handleUploadBackup] = useAsyncFn(
         async (data: BackupFormInputs) => {
             try {
@@ -119,6 +122,7 @@ export const BackupPreviewDialog = memo<BackupPreviewDialogProps>(function Backu
                 const controller = new AbortController()
                 controllerRef.current = controller
                 await onUpload?.(encrypted, controller.signal)
+                updateUser({ cloudBackupAt: format(new Date(), 'yyyy-MM-dd HH:mm:ss') })
                 showSnackbar(<Trans>Backup Successful</Trans>, {
                     variant: 'success',
                     message: <Trans>Data backed up successfully!</Trans>,
