@@ -1,10 +1,10 @@
-import { readFileSync } from 'fs'
-import { fileURLToPath } from 'url'
-import { task } from '../utils/task.js'
-import { readdir, writeFile } from 'fs/promises'
-import { join } from 'path'
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+import { task } from '../utils/task.ts'
+import { readdir, writeFile } from 'node:fs/promises'
+import { join } from 'node:path'
 import { exists } from 'fs-extra'
-import { prettier } from '../utils/prettier.js'
+import { prettier } from '../utils/prettier.ts'
 
 export async function fixPluginsTSConfig() {
     const folder = new URL('../../../plugins', import.meta.url)

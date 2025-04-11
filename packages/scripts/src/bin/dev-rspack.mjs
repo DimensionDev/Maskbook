@@ -1,12 +1,12 @@
 #!/usr/bin/env node
-import { spawnSync } from 'child_process'
-import { fileURLToPath } from 'url'
+import { spawnSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
 
 const child = spawnSync(
     process.execPath,
     [
-        '--import',
-        '@swc-node/register/esm-register',
+        '--experimental-strip-types',
+        '--disable-warning=ExperimentalWarning',
         fileURLToPath(import.meta.resolve('./dev-rspack.ts')),
         ...process.argv.slice(2),
     ],

@@ -17,5 +17,8 @@
   "dependencies": {
     "event-iterator": "^2.0.0",
     "gun": "0.2020.1234"
+  },
+  "devDependencies": {
+    "@swc/core": "1.9.3"
   }
 }

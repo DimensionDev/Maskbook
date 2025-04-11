@@ -3,7 +3,7 @@
   "type": "module",
   "packageManager": "pnpm@9.12.1",
   "engines": {
-    "node": ">=22.2.0",
+    "node": ">=23.6.0",
     "yarn": ">=999.0.0",
     "npm": ">=999.0.0"
   },
@@ -70,7 +70,6 @@
     "@masknet/eslint-plugin": "^0.3.0",
     "@masknet/typescript-plugin": "workspace:^",
     "@nice-labs/git-rev": "^3.5.1",
-    "@swc-node/register": "^1.10.9",
     "@swc/core": "1.11.7",
     "@tanstack/eslint-plugin-query": "^5.66.1",
     "@types/lodash-es": "^4.17.12",
@@ -155,10 +154,10 @@
       "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
       "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
       "react-use@17.5.0": "patches/react-use@17.5.0.patch",
-      "gulp@5.0.0": "patches/gulp@5.0.0.patch",
       "react-devtools-inline@5.3.0": "patches/react-devtools-inline@5.3.0.patch",
       "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
-      "@scamsniffer/detector": "patches/@scamsniffer__detector.patch"
+      "@scamsniffer/detector": "patches/@scamsniffer__detector.patch",
+      "gulp": "patches/gulp.patch"
     }
   }
 }

@@ -1,5 +1,5 @@
-import type { BuildFlags } from '../../../mask/.webpack/flags.js'
-export type { BuildFlags } from '../../../mask/.webpack/flags.js'
+import type { BuildFlags } from '../../../mask/.webpack/flags.ts'
+export type { BuildFlags } from '../../../mask/.webpack/flags.ts'
 
 export interface BuildFlagsExtended extends BuildFlags {
     progress?: boolean

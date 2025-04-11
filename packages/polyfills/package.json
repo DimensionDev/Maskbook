@@ -11,11 +11,11 @@
     "build": "rollup -c"
   },
   "dependencies": {
-    "@types/webextension-polyfill": "^0.10.7",
     "core-js": "3.41.0",
     "tslib": "^2.6.3"
   },
   "devDependencies": {
+    "@types/webextension-polyfill": "^0.10.7",
     "@rollup/plugin-commonjs": "^28.0.2",
     "@rollup/plugin-json": "^6.1.0",
     "@rollup/plugin-node-resolve": "^16.0.0",

@@ -1,7 +1,7 @@
 import { series, type TaskFunction } from 'gulp'
-import { shell } from './run.js'
-import { awaitChildProcess } from './awaitChildProcess.js'
-import { cleanupWhenExit } from './exit.js'
+import { shell } from './run.ts'
+import { awaitChildProcess } from './awaitChildProcess.ts'
+import { cleanupWhenExit } from './exit.ts'
 
 export function task<T extends TaskFunction>(
     f: T,
