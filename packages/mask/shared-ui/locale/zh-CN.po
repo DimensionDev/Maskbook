@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-03 11:04\n"
+"PO-Revision-Date: 2025-04-10 05:53\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -1030,7 +1030,7 @@ msgstr "将您的文件拖放到此处"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #~ msgid "E-mail"
-#~ msgstr "电子邮件"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit"
@@ -2078,11 +2078,11 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Overwrite Backup"
-#~ msgstr "覆盖备份"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Overwrite current backup"
-#~ msgstr "覆盖当前备份"
+#~ msgstr ""
 
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -2538,7 +2538,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #~ msgid "Select the contents of the backup"
-#~ msgstr "选择备份的内容"
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."

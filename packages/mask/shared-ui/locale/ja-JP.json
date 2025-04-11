@@ -274,7 +274,7 @@
         "1+6BOG": ["バックアップのダウンロード"],
         "9hg9mc": ["ダウンロード中"],
         "F8Wc3I": ["ここにファイルをドラッグ&ドロップしてください"],
-        "5Sa1Ss": ["メールアドレス"],
+        "5Sa1Ss": ["E-mail"],
         "ePK91l": ["編集"],
         "mQpWAe": ["連絡先を編集"],
         "iZLoa2": ["eg: X accounts, persona public keys, wallet addresses or ENS"],
@@ -521,8 +521,8 @@
         "YKSmxE": [
             "Other social networking platforms, such as <0>Instagram, </0><1>Facebook,</1> and <2>Minds,</2> do not have a verified relationship like X's Next.ID verified connection.<3/><4/>When connecting a persona with an account on these platforms, they only support sending encrypted posts."
         ],
-        "MXOdMY": ["バックアップを上書き"],
-        "p2xE4C": ["既存のバックアップを上書き"],
+        "MXOdMY": ["Overwrite Backup"],
+        "p2xE4C": ["Overwrite current backup"],
         "8ZsakT": ["パスワード"],
         "9w2hgY": ["手動でペーストする"],
         "GAvnvl": ["支払いパスワードの設定"],
@@ -631,7 +631,7 @@
         "nTif4K": ["選択してウォレットに接続"],
         "k/sb6z": ["言語を選択"],
         "LSwUJb": ["Select Liquidity"],
-        "RjF5dk": ["バックアップの内容を選択します"],
+        "RjF5dk": ["Select the contents of the backup"],
         "PI/VCJ": ["このサイトで使用するウォレットを選択してください。信頼しないウェブサイトに接続しないでください。"],
         "a1SmQh": ["ウォレットを選択"],
         "JlFcis": ["送信"],

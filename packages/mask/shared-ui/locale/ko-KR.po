@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-03 11:04\n"
+"PO-Revision-Date: 2025-04-10 05:53\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -1030,7 +1030,7 @@ msgstr "파일을 끌어서 여기에 놓으세요"
 
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #~ msgid "E-mail"
-#~ msgstr "이메일"
+#~ msgstr ""
 
 #: popups/pages/Wallet/ContactList/index.tsx
 msgid "Edit"
@@ -2078,11 +2078,11 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Overwrite Backup"
-#~ msgstr "백업 덮어쓰기"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/CloudBackupPreview/index.tsx
 #~ msgid "Overwrite current backup"
-#~ msgstr "기존 백업 덮어쓰기"
+#~ msgstr ""
 
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
@@ -2538,7 +2538,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/LocalBackup/index.tsx
 #~ msgid "Select the contents of the backup"
-#~ msgstr "백업 내용을 선택하세요."
+#~ msgstr ""
 
 #: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 msgid "Select the wallet(s) to use on this site. You should not connect to website you don't trust."
