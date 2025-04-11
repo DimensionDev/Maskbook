@@ -1,16 +1,16 @@
+import { Trans } from '@lingui/react/macro'
+import { Flags } from '@masknet/flags'
 import { ElementAnchor, NetworkTab, PluginVerifiedWalletStatusBar, RetryHint } from '@masknet/shared'
-import { Box, Button, Stack } from '@mui/material'
-import { memo, useCallback, useMemo, useState } from 'react'
-import { getRegisteredWeb3Networks } from '@masknet/web3-providers'
-import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
-import { first, uniqBy } from 'lodash-es'
+import { EMPTY_LIST, PopupModalRoutes, type BindingProof, type NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import { CollectionList } from './CollectionList.js'
-import { EMPTY_LIST, type NetworkPluginID, PopupModalRoutes, type BindingProof } from '@masknet/shared-base'
+import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
+import { getRegisteredWeb3Networks } from '@masknet/web3-providers'
+import { Box, Button, Stack } from '@mui/material'
+import { first, uniqBy } from 'lodash-es'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { useModalNavigate } from '../index.js'
-import { Flags } from '@masknet/flags'
-import { Trans } from '@lingui/react/macro'
+import { CollectionList } from './CollectionList.js'
 
 const useStyles = makeStyles()((theme) => ({
     picker: {
@@ -54,7 +54,7 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
     const chains = useMemo(() => {
         const networks = getRegisteredWeb3Networks(pluginID)
         return networks.filter((x) => (Flags.support_testnet_switch ? true : x.isMainnet)).map((x) => x.chainId)
-    }, [])
+    }, [pluginID])
 
     const [selected, setSelected] = useState<Web3Helper.NonFungibleAssetAll | undefined>()
 

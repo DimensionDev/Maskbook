@@ -1,8 +1,8 @@
-import { useTheme } from '@mui/material'
-import { useCallback, useRef, useState } from 'react'
-import { useNavigate, useLocation, useSearchParams } from 'react-router-dom'
 import type { PopupModalRoutes } from '@masknet/shared-base'
 import { createContainer } from '@masknet/shared-base-ui'
+import { useTheme } from '@mui/material'
+import { useCallback, useRef, useState } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 
 function useModal() {
@@ -42,16 +42,17 @@ export function useActionModal() {
  * Open a modal
  */
 export function useModalNavigate() {
-    const location = useLocation()
-    const [, setSearchParams] = useSearchParams()
+    const [searchParams] = useSearchParams()
+    const navigate = useNavigate()
     const openModal = useCallback(
         (path: PopupModalRoutes, params?: Record<string, any>) => {
-            setSearchParams((prev) => {
-                prev.set('modal', urlcat(path, params || {}))
-                return prev
-            })
+            searchParams.set('modal', urlcat(path, params || {}))
+            // useLocation().pathname is pathname of modal Routes (maybe since a certain version)
+            // So we use pathname in hash instead
+            const mainLocationPathname = location.hash.slice(1).replace(/\?.*$/, '')
+            navigate(`${mainLocationPathname}?${searchParams.toString()}`)
         },
-        [location, setSearchParams],
+        [navigate, searchParams],
     )
     return openModal
 }
