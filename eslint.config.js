@@ -529,7 +529,7 @@ const moduleSystemRules = {
     'import/no-duplicates': 'warn', // duplicate specifiers
     'import/no-empty-named-blocks': 'warn', // bans import T, {}
     'unused-imports/no-unused-imports': 'warn',
-    // 'unicorn/prefer-node-protocol': 'warn',
+    'unicorn/prefer-node-protocol': 'warn',
     '@typescript-eslint/consistent-type-exports': ['warn', { fixMixedExportsWithInlineTypeSpecifier: true }],
     '@typescript-eslint/consistent-type-imports': [
         'warn',
@@ -597,7 +597,6 @@ export default tseslint.config(
             '**/i18n_generated.ts',
             '**/languages.ts',
             'packages/contracts',
-            'packages/scripts',
             'packages/mask/.webpack',
         ],
     },

@@ -1,8 +1,8 @@
-import { readFile } from 'fs/promises'
-import { awaitChildProcess } from '../utils/awaitChildProcess.js'
-import { ROOT_PATH } from '../utils/paths.js'
-import { shell } from '../utils/run.js'
-import { task } from '../utils/task.js'
+import { readFile } from 'node:fs/promises'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { ROOT_PATH } from '../utils/paths.ts'
+import { shell } from '../utils/run.ts'
+import { task } from '../utils/task.ts'
 import { fileURLToPath } from 'node:url'
 
 const packages = [
@@ -14,7 +14,7 @@ const packages = [
 ]
 export async function changesetRelease() {
     const tsc = awaitChildProcess(shell.cwd(ROOT_PATH)`npx tsc -b ./tsconfig.npm.json`)
-    const buildTask: Promise<any>[] = packages.map((path) =>
+    const buildTask: Array<Promise<any>> = packages.map((path) =>
         readFile(new URL('./package.json', path), 'utf-8')
             .then(JSON.parse)
             .then((json) => {

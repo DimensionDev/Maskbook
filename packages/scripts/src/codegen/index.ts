@@ -1,7 +1,7 @@
-import { getProcessLock, markTaskNeedCleanup, watchTask } from '../utils/index.js'
+import { getProcessLock, markTaskNeedCleanup, watchTask } from '../utils/index.ts'
 import { series, parallel, type TaskFunction } from 'gulp'
-import { typescriptWatch } from './typescript.js'
-import { iconCodegen, iconCodegenWatch } from './icon-codegen.js'
+import { typescriptWatch } from './typescript.ts'
+import { iconCodegen, iconCodegenWatch } from './icon-codegen.ts'
 
 // typescript is explicitly eliminated from this task.
 // our build process does not rely on tsc to give output, we have an extra check for tsc.
@@ -11,5 +11,5 @@ export const codegenWatch: TaskFunction = markTaskNeedCleanup(
 )
 watchTask(codegen, codegenWatch, 'codegen', 'All codegen tasks combined into one')
 
-export * from './icon-codegen.js'
-export * from './typescript.js'
+export * from './icon-codegen.ts'
+export * from './typescript.ts'

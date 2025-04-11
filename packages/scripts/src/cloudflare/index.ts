@@ -1,9 +1,9 @@
 import { dest, parallel, series, src, type TaskFunction } from 'gulp'
-import { PKG_PATH, ROOT_PATH, task } from '../utils/index.js'
-import { codegen } from '../codegen/index.js'
-import { fileURLToPath } from 'url'
+import { PKG_PATH, ROOT_PATH, task } from '../utils/index.ts'
+import { codegen } from '../codegen/index.ts'
+import { fileURLToPath } from 'node:url'
 
-const DIST_PATH = new URL('dist/cloudflare', ROOT_PATH)
+const DIST_PATH = new URL('./dist/cloudflare', ROOT_PATH)
 
 function copyLocalesJSON() {
     return src('**/locale/*.json', {

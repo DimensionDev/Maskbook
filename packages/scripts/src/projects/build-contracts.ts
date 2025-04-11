@@ -1,8 +1,8 @@
-import { promises as fs } from 'fs'
-import { join } from 'path'
-import { task } from '../utils/task.js'
-import { awaitChildProcess } from '../utils/awaitChildProcess.js'
-import { shell } from '../utils/run.js'
+import { promises as fs } from 'node:fs'
+import { join } from 'node:path'
+import { task } from '../utils/task.ts'
+import { awaitChildProcess } from '../utils/awaitChildProcess.ts'
+import { shell } from '../utils/run.ts'
 import { rimraf } from 'rimraf'
 
 const ABIS_PATH = join(import.meta.dirname, '../../../web3-contracts/abis/')

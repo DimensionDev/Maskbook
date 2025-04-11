@@ -1,6 +1,6 @@
-import { task } from '../utils/task.js'
-import { readFile, writeFile } from 'fs/promises'
-import { ROOT_PATH } from '../utils/paths.js'
+import { task } from '../utils/task.ts'
+import { readFile, writeFile } from 'node:fs/promises'
+import { ROOT_PATH } from '../utils/paths.ts'
 
 const pattern = 'packages/**/package.json'
 export async function lintPackageJson() {
@@ -19,7 +19,7 @@ export async function lintPackageJson() {
                     if (!('type' in json)) type.push(file)
 
                     if ('lingui' in json) {
-                        let template: any = {
+                        const template: any = {
                             compileNamespace: 'json',
                             locales: ['en-US', 'ja-JP', 'ko-KR', 'zh-CN', 'zh-TW'],
                             fallbackLocales: {

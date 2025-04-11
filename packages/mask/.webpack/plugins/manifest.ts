@@ -1,9 +1,9 @@
 /* spell-checker: disable */
 import emitFile from '@nice-labs/emit-file-webpack-plugin'
-import type { ComputedFlags, NormalizedFlags } from '../flags.js'
+import type { ComputedFlags, NormalizedFlags } from '../flags.ts'
 import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import type { Manifest } from 'webextension-polyfill'
-import { parseJSONc } from '../utils.js'
+import { parseJSONc } from '../utils.ts'
 import { join } from 'node:path'
 
 const cloneDeep = <T>(x: T): T => JSON.parse(JSON.stringify(x))

@@ -1,12 +1,14 @@
 // TODO: load this lazy
 import Lock from 'proper-lockfile'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 
 export async function getProcessLock(lockName: string) {
     const lockfilePath = getLockPosition(lockName)
     while (true) {
         if (isLocked(lockName)) {
-            await new Promise((resolve) => setTimeout(resolve, 500))
+            await new Promise((resolve) => {
+                setTimeout(resolve, 500)
+            })
         } else {
             try {
                 Lock.lockSync(import.meta.filename, { lockfilePath, update: 200 })

@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'fs/promises'
-import { prettier } from './prettier.js'
+import { readFile, writeFile } from 'node:fs/promises'
+import { prettier } from './prettier.ts'
 
 export async function changeFile(path: string | URL, f: (x: string) => string | Promise<string>) {
     const content = await readFile(path, 'utf8')

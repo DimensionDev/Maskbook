@@ -1,16 +1,16 @@
-import { readFile, writeFile } from 'fs/promises'
+import { readFile, writeFile } from 'node:fs/promises'
 import { watch } from 'gulp'
 import { camelCase, snakeCase, upperFirst } from 'lodash-es'
-import { parse as parsePath } from 'path'
-import { PKG_PATH, ROOT_PATH, prettier, watchTask } from '../utils/index.js'
+import { parse as parsePath } from 'node:path'
+import { PKG_PATH, ROOT_PATH, prettier, watchTask } from '../utils/index.ts'
 import type { Position } from 'source-map'
-import { fileURLToPath } from 'url'
+import { fileURLToPath } from 'node:url'
 
 const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
-const iconRoot = new URL('icons/', PKG_PATH)
-const CODE_FILE = fileURLToPath(new URL('icon-generated-as', iconRoot))
+const iconRoot = new URL('./icons/', PKG_PATH)
+const CODE_FILE = fileURLToPath(new URL('./icon-generated-as', iconRoot))
 
-const dynamicColorRe = /(?:\w=('|")currentColor\1|var\(--icon-color)/
+const dynamicColorRe = /\w=('|")currentColor\1|var\(--icon-color/
 
 const attr2KeyValue = (attr: string) => {
     const index = attr.indexOf(':')
@@ -19,11 +19,11 @@ const attr2KeyValue = (attr: string) => {
 function svg2jsx(code: string) {
     return code
         .trim()
-        .replace(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
+        .replaceAll(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
             return p.replace(m1, camelCase(m1))
         })
         .replaceAll('xlink:href', 'xlinkHref')
-        .replace(/\bstyle=('|")(.+?)\1/g, (_p: string, _m1: string, style: string) => {
+        .replaceAll(/\bstyle=('|")(.+?)\1/g, (_p: string, _m1: string, style: string) => {
             const attributes = style
                 .split(';')
                 .map(attr2KeyValue)
@@ -37,7 +37,7 @@ function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
         // from `viewBox="0 0 2124 660"`, we match `2124 / 660` out.
         const match = data.match(/viewBox="0 0 (\d+) (\d+)"/)
         if (match) {
-            return [parseFloat(match[1]), parseFloat(match[2])]
+            return [Number.parseFloat(match[1]), Number.parseFloat(match[2])]
         }
     }
     // TODO: support binary image.
@@ -62,12 +62,12 @@ async function generateIcons() {
     const asJSX = {
         js: [
             //
-            `import { __createIcon } from './utils/internal.js'`,
+            "import { __createIcon } from './utils/internal.js'",
         ],
         dts: [
             //
-            `import type { GeneratedIconProps, GeneratedIconNonSquareProps } from './utils/internal.js'`,
-            `import type { ComponentType } from 'react'`,
+            "import type { GeneratedIconProps, GeneratedIconNonSquareProps } from './utils/internal.js'",
+            "import type { ComponentType } from 'react'",
         ],
         dtsMap: new SourceMapGenerator({ file: 'icon-generated-as-jsx.d.ts' }),
     }
@@ -142,7 +142,7 @@ async function generateIcons() {
             .map((x) => x.args)
             .map(([variant, url, jsx, isColorful]) => {
                 return (
-                    `{` +
+                    '{' +
                     [
                         variant.length === 0 ? null : `c: ${JSON.stringify(variant.sort())}`,
                         variant.length === 0 && jsx ? null : `u: () => ${url}`,
@@ -165,10 +165,10 @@ async function generateIcons() {
 
         const jsdoc = [] as string[]
         if (variant.some((x) => x.args[3])) jsdoc.push('🎨 This icon supports custom color.')
-        else jsdoc.push('🖼️ This icon brings its own colors.')
+        else jsdoc.push('🖼\uFE0F This icon brings its own colors.')
 
-        jsdoc.push(`| Variant | Link | Preview |`)
-        jsdoc.push(`| ------- | ---- | ------- |`)
+        jsdoc.push('| Variant | Link | Preview |')
+        jsdoc.push('| ------- | ---- | ------- |')
         for (const { args, assetPath } of variant) {
             jsdoc.push(`| ${args[0].join(', ') || 'default'} | ${createLink(assetPath)} | !${createLink(assetPath)} |`)
         }

@@ -1,8 +1,8 @@
 import yargs from 'yargs'
-import type { BuildFlagsExtended } from '../extension/flags.js'
+import type { BuildFlagsExtended } from '../extension/flags.ts'
 import { hideBin } from 'yargs/helpers'
-import { applyDotEnv, parseManifest } from '../extension/dotenv.js'
-import { ManifestFile } from '../../../mask/.webpack/flags.js'
+import { applyDotEnv, parseManifest } from '../extension/dotenv.ts'
+import { ManifestFile } from '../../../mask/.webpack/flags.ts'
 
 const manifestFiles = Object.values(ManifestFile)
 export function extensionArgsParser(mode: 'development' | 'production') {
@@ -23,7 +23,7 @@ export function extensionArgsParser(mode: 'development' | 'production') {
         .options('progress', { type: 'boolean', description: 'Show build progress' })
         .options('hmr', { type: 'boolean', description: 'Enable Hot Module Reload' })
         .options('reactRefresh', { type: 'boolean', description: 'Enable react-refresh', implies: 'hmr' })
-        .options('csp', { type: 'boolean', description: 'Enable strict contentScript.' })
+        .options('csp', { type: 'boolean', description: 'Enable strict Content Security Policy.' })
         .options('lavamoat', { type: 'boolean', description: 'Enable LavaMoat.' })
         .option('reactCompiler', {
             type: 'string',
@@ -36,7 +36,10 @@ export function extensionArgsParser(mode: 'development' | 'production') {
             description: 'Enable react compiler',
         })
         .options('devtools', { type: 'boolean', description: 'Enable devtools' })
-        .options('devtoolsEditorURI', { type: 'string', description: 'Editor URI to be used in React Devtools.' })
+        .options('devtoolsEditorURI', {
+            type: 'string',
+            description: 'Default editor URI to be used in React Devtools.',
+        })
         .options('sourceMap', {
             type: 'string',
             description: 'Enable source map',

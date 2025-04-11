@@ -1,16 +1,16 @@
 import { compact } from 'lodash-es'
-import { awaitChildProcess, cleanupWhenExit, PKG_PATH, shell, task, watchTask } from '../utils/index.js'
-import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.js'
-import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.js'
-import { buildPolyfill } from '../projects/polyfill.js'
-import { buildGun } from '../projects/gun.js'
+import { awaitChildProcess, cleanupWhenExit, PKG_PATH, shell, task, watchTask } from '../utils/index.ts'
+import { buildInjectedScript, watchInjectedScript } from '../projects/injected-scripts.ts'
+import { buildMaskSDK, watchMaskSDK } from '../projects/mask-sdk.ts'
+import { buildPolyfill } from '../projects/polyfill.ts'
+import { buildGun } from '../projects/gun.ts'
 import { parallel, series, type TaskFunction } from 'gulp'
-import { buildSentry } from '../projects/sentry.js'
-import type { BuildFlags, BuildFlagsExtended } from './flags.js'
-import { ManifestFile } from '../../../mask/.webpack/flags.js'
-import { applyDotEnv } from './dotenv.js'
-import { fileURLToPath } from 'url'
-import { createRequire } from 'module'
+import { buildSentry } from '../projects/sentry.ts'
+import type { BuildFlags, BuildFlagsExtended } from './flags.ts'
+import { ManifestFile } from '../../../mask/.webpack/flags.ts'
+import { applyDotEnv } from './dotenv.ts'
+import { fileURLToPath } from 'node:url'
+import { createRequire } from 'node:module'
 
 export function buildWebpackFlag(name: string, args: BuildFlagsExtended) {
     const f = () => webpack(false, args)
@@ -61,7 +61,7 @@ function preTask() {
     watchMaskSDK()
     buildSentry()
 }
-export async function extensionWatch(f: Function | BuildFlagsExtended) {
+export async function extensionWatch(f: (() => void) | BuildFlagsExtended) {
     preTask()
     if (typeof f === 'function') {
         const flags: BuildFlags = {
@@ -74,7 +74,7 @@ export async function extensionWatch(f: Function | BuildFlagsExtended) {
     }
     return webpack(false, f)
 }
-export async function extensionWatchRspack(f: Function | BuildFlagsExtended) {
+export async function extensionWatchRspack(f: (() => void) | BuildFlagsExtended) {
     preTask()
     if (typeof f === 'function') {
         const flags: BuildFlags = {
@@ -115,19 +115,19 @@ async function webpack(rspack: boolean, flags: BuildFlagsExtended) {
         const rspack = await import('@rspack/cli')
         const cli = new rspack.RspackCLI()
         console.log(
-            '$ node --import @swc-node/register/esm-register ./packages/mask/node_modules/@rspack/cli/bin/rspack.js',
+            '$ node --experimental-strip-types ./packages/mask/node_modules/@rspack/cli/bin/rspack.js',
             ...compact(rspack_argv),
         )
         return cli.run(['node', 'rspack', ...compact(rspack_argv)])
     } else {
         const command = [
             JSON.stringify(process.execPath),
-            '--import',
-            '@swc-node/register/esm-register',
+            '--experimental-strip-types',
+            '--disable-warning=ExperimentalWarning',
             fileURLToPath(import.meta.resolve(rspack ? 'rspack/bin/rspack.js' : './init.js')),
             flags.mode === 'development' ? 'serve' : undefined,
             ...argv,
         ]
-        return awaitChildProcess(shell.cwd(new URL('mask', PKG_PATH))([compact(command).join(' ')]))
+        return awaitChildProcess(shell.cwd(new URL('./mask', PKG_PATH))([compact(command).join(' ')]))
     }
 }

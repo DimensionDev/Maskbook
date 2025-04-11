@@ -1,3 +1,4 @@
+// eslint-disable-next-line unicorn/prefer-node-protocol
 import punycode from 'punycode'
 
 // cspell:ignore binanceus klever kresus taiko

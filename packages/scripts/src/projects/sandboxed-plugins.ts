@@ -4,13 +4,13 @@ import { readdir, readFile, writeFile } from 'node:fs/promises'
 import { isAbsolute, join, relative } from 'node:path'
 import { createRequire } from 'node:module'
 import { ensureDir } from 'fs-extra'
-import { awaitTask, watchTask } from '../utils/task.js'
-import { PKG_PATH, ROOT_PATH } from '../utils/paths.js'
-import { parseJSONc } from '../utils/jsonc.js'
+import { awaitTask, watchTask } from '../utils/task.ts'
+import { PKG_PATH, ROOT_PATH } from '../utils/paths.ts'
+import { parseJSONc } from '../utils/jsonc.ts'
 import { transform } from '@swc/core'
 import { dest, lastRun, parallel, src, type TaskFunction } from 'gulp'
 import { parseArgs } from 'node:util'
-import { getLanguageFamilyName } from '../locale-kit-next/index.js'
+import { getLanguageFamilyName } from '../locale-kit-next/index.ts'
 
 const require = createRequire(new URL(import.meta.url))
 const sandboxedPlugins = new URL('./sandboxed-plugins/', PKG_PATH)
@@ -110,14 +110,14 @@ export async function buildSandboxedPluginConfigurable(distPath: string, isProdu
         join(distPath, './mv3-preload.js'),
         mv3PreloadList.size ?
             (function* () {
-                yield `importScripts(\n`
+                yield 'importScripts(\n'
                 for (const file of mv3PreloadList) {
                     if (file.includes('\\') || file.includes('"')) throw new TypeError('Invalid path')
                     yield '    "/sandboxed-modules/'
                     yield file
                     yield '", \n'
                 }
-                yield `)\nnull`
+                yield ')\nnull'
             })()
         :   'null',
         { encoding: 'utf-8' },
@@ -199,7 +199,7 @@ async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]
     if (!locales) return []
     const base = join(manifestPath, '../')
     const localesPath = join(base, locales)
-    if (!localesPath.startsWith(base)) throw new TypeError(`locales cannot point to parent of the manifest file.`)
+    if (!localesPath.startsWith(base)) throw new TypeError('locales cannot point to parent of the manifest file.')
     const directChildren = await readdir(localesPath, { withFileTypes: true })
     const languageFamily = getLanguageFamilyName(directChildren.filter((x) => x.isFile()).map((x) => x.name))
     return [...languageFamily].map(
@@ -210,11 +210,12 @@ async function getLocales(manifest: any, manifestPath: string): Promise<Locale[]
     )
 }
 class TransformStream extends Transform {
-    constructor(
-        public origin: string,
-        public onJS: (id: string, relative: string) => void,
-    ) {
+    public origin: string
+    public onJS: (id: string, relative: string) => void
+    constructor(origin: string, onJS: (id: string, relative: string) => void) {
         super({ objectMode: true, defaultEncoding: 'utf-8' })
+        this.origin = origin
+        this.onJS = onJS
     }
     wasm = require.resolve('@masknet/static-module-record-swc')
     override _transform(
@@ -225,7 +226,7 @@ class TransformStream extends Transform {
         if (!(file.path.endsWith('.js') || file.path.endsWith('.mjs'))) {
             return callback(null, file)
         }
-        const relative = file.relative.replace(/\\/g, '/')
+        const relative = file.relative.replaceAll('\\', '/')
         this.onJS(this.origin, file.relative)
         const sandboxedPath = 'mask-modules://' + this.origin + '/' + relative
         const options = {

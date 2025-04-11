@@ -1,5 +1,5 @@
 import { test, expect, beforeAll } from 'vitest'
-import { webcrypto } from 'crypto'
+import { webcrypto } from 'node:crypto'
 import { encryptBackup, decryptBackup } from '../src/index.js'
 
 beforeAll(() => {

@@ -1,2 +1,2 @@
-export * from './normal.js'
-export * from './ci.js'
+export * from './normal.ts'
+export * from './ci.ts'
