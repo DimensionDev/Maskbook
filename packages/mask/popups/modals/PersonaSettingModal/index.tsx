@@ -120,7 +120,6 @@ export const PersonaSettingModal = memo<ActionModalBaseProps>(function PersonaSe
                             !user.backupPassword ?
                                 PopupModalRoutes.SetBackupPassword
                             :   PopupModalRoutes.verifyBackupPassword,
-                            { to: PopupRoutes.ExportPrivateKey },
                         )
                     }}
                 />
