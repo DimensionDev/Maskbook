@@ -38,6 +38,7 @@ For general introductions, see [Mask.io](https://mask.io).
 - [Facebook](https://www.facebook.com/masknetwork)
 - [Telegram](https://t.me/maskbook_group)
 - [Discord](https://discord.gg/4SVXvj7)
+- [YouTube](https://www.youtube.com/c/MaskNetwork)
 
 ## Developer documentation
 
