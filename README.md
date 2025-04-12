@@ -17,7 +17,7 @@
 [![Crowdin][badge-crowdin]][crowdin]
 
 Mask Network is a portal to the new, open internet, that bridge from Web2.0 to Web3.0 .
-With Mask Network, you can send encrypted posts to your friends, trade your best token on Twitter, enjoy NFT pfps,
+With Mask Network, you can send encrypted posts to your friends, trade your best token on X (formerly Twitter), enjoy NFT pfps,
 participate in crypto lucky-draws, and share encrypted files on the platforms you are already using.
 
 For general introductions, see [Mask.io](https://mask.io).
@@ -34,7 +34,7 @@ For general introductions, see [Mask.io](https://mask.io).
 
 - [User Forum](https://github.com/DimensionDev/Maskbook/discussions)
 - [Report Bug][report-bug]
-- [Twitter](https://x.com/realMaskNetwork)
+- [X (formerly Twitter)](https://x.com/realMaskNetwork)
 - [Facebook](https://www.facebook.com/masknetwork)
 - [Telegram](https://t.me/maskbook_group)
 - [Discord](https://discord.gg/4SVXvj7)
