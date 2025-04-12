@@ -17,7 +17,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  codegen:
+  linter:
     runs-on: ubuntu-latest
     permissions:
       packages: read
@@ -26,6 +26,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GGITHUB_TOKEN }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
@@ -35,58 +36,19 @@ jobs:
         uses: DimensionDev/github-token-action@latest
         with:
             registry: true
-      - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp lint-package-json
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: package.json'
+      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
+      - run: npx markdownlint-cli --fix .
       - run: npx gulp codegen
       - run: pnpm run lingui:extract
       - run: pnpm run lingui:compile
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: run codegen'
       - run: npx gulp sync-languages
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: run sync-languages'
+      - run: npx gulp lint-package-json
       - run: npx gulp fix-plugins-tsconfig
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: packages/plugins/tsconfig.json'
-  prettier:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-node@v4
       - run: npx prettier@3.5.3 --write .
       - uses: EndBug/add-and-commit@v9
         with:
-          message: 'fix: prettier'
-  markdownlint:
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-      - uses: actions/setup-node@v4
-      - run: npx markdownlint-cli --fix .
-      - uses: EndBug/add-and-commit@v9
-        with:
-          message: 'fix: markdownlint'
-  anti-trojan-source:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
+          message: 'fix: linter'
   type-check:
     runs-on: ubuntu-latest
     steps:
@@ -131,6 +93,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.ref }}
+          token: ${{ secrets.GGITHUB_TOKEN }}
       - uses: pnpm/action-setup@v4
       - uses: actions/setup-node@v4
         with:
