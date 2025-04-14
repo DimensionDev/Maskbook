@@ -1,33 +1,34 @@
-import { useEffect, useMemo, useState } from 'react'
-import { produce } from 'immer'
-import { makeStyles } from '@masknet/theme'
-import {
-    type TransformationContext,
-    type TypedMessage,
-    isTypedMessageEqual,
-    emptyTransformationContext,
-    FlattenTypedMessage,
-    forEachTypedMessageChild,
-    isTypedMessageAnchor,
-    makeTypedMessageText,
-    isTypedMessageText,
-} from '@masknet/typed-message'
-import {
-    EXIST_EVM_ADDRESS_RE,
-    EXIST_SOLANA_ADDRESS_RE,
-    EXIST_TORN_ADDRESS_RE,
-    MaskMessages,
-} from '@masknet/shared-base'
-import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
 import {
     usePostInfoAuthor,
     usePostInfoPostIVIdentifier,
     usePostInfoRawMessage,
     usePostInfoURL,
 } from '@masknet/plugin-infra/content-script'
+import { DirtyDetection, useDirtyDetection } from '@masknet/plugin-infra/dom'
+import {
+    EXIST_EVM_ADDRESS_RE,
+    EXIST_SOLANA_ADDRESS_RE,
+    EXIST_TORN_ADDRESS_RE,
+    MaskMessages,
+} from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import {
+    type TransformationContext,
+    type TypedMessage,
+    emptyTransformationContext,
+    FlattenTypedMessage,
+    forEachTypedMessageChild,
+    isTypedMessageAnchor,
+    isTypedMessageEqual,
+    isTypedMessageText,
+    makeTypedMessageText,
+} from '@masknet/typed-message'
+import { TypedMessageRender, useTransformedValue } from '@masknet/typed-message-react'
+import { produce } from 'immer'
+import { useEffect, useMemo, useState } from 'react'
 import { TypedMessageRenderContext } from '../../../shared-ui/TypedMessageRender/context.js'
-import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 import { activatedSiteAdaptorUI } from '../../site-adaptor-infra/ui.js'
+import { useCurrentIdentity } from '../DataSource/useActivatedUI.js'
 
 const useStyles = makeStyles()({
     root: {
@@ -75,7 +76,9 @@ export function PostReplacer(props: PostReplacerProps) {
                 textResizer={activatedSiteAdaptorUI!.networkIdentifier !== 'twitter.com'}
                 renderFragments={activatedSiteAdaptorUI?.customization.componentOverwrite?.RenderFragments}
                 context={initialTransformationContext}>
-                <Transformer {...props} message={postMessage} />
+                <DirtyDetection>
+                    <Transformer {...props} message={postMessage} />
+                </DirtyDetection>
             </TypedMessageRenderContext>
         </span>
     )
@@ -90,7 +93,7 @@ function Transformer({
 } & PostReplacerProps) {
     const after = useTransformedValue(message)
 
-    const shouldReplace = useMemo(() => {
+    const staticGuess = useMemo(() => {
         const flatten = FlattenTypedMessage(message, emptyTransformationContext)
         if (!isTypedMessageEqual(flatten, after)) return true
         if (hasCashOrHashTag(after)) return true
@@ -99,14 +102,22 @@ function Transformer({
         return false
     }, [message, after])
 
+    const { isDirty, isPending } = useDirtyDetection()
+
+    const shouldReplace = staticGuess ? isPending || isDirty : false
     useEffect(() => {
+        if (isPending) return
         if (shouldReplace) zip?.()
         else unzip?.()
 
         return () => unzip?.()
-    }, [])
+    }, [shouldReplace, isPending])
 
-    if (shouldReplace) return <TypedMessageRender message={after} />
+    if (shouldReplace || isDirty) {
+        const rendered = <TypedMessageRender message={after} />
+        if (isPending) return <div style={{ display: 'none' }}>{rendered}</div>
+        return rendered
+    }
     return null
 }
 function hasCashOrHashTag(message: TypedMessage): boolean {

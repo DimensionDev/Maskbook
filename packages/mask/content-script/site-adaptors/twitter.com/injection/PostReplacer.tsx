@@ -41,11 +41,21 @@ export async function injectPostReplacerAtTwitter(signal: AbortSignal, current: 
                 [
                     'a[role="link"][href*="cashtag_click"]',
                     'a[role="link"][href*="hashtag_click"]',
-                    'a[role="link"][href*="/hashtag/"][href*="/i/communities/"]', // tag in community
+                    // in communities post <a href="/i/communities/1722516678070972815/hashtag/BTC" />
+                    'a[role="link"][href*="/i/communities/"][href*="/hashtag/"]',
                 ].join(','),
             ) ?? [],
         )
-        if (!tags.length) return
+        const mentions = Array.from(
+            rootNode.querySelectorAll<HTMLAnchorElement>(
+                [
+                    'a[href^="/"]:not([role="link"][href*="mention_click"])',
+                    'a[href^="/"]:not([role="link"][href*="/i/communities/"][href*="/mention/"])',
+                    'a[href^="/"]:not([role="link"][href*="/i/communities/"][href*="/hashtag/"])',
+                ].join(','),
+            ) ?? [],
+        ).filter((x) => x.textContent?.startsWith('@'))
+        if (!tags.length && !mentions.length) return
     }
 
     return injectPostReplacer({

@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { useDirtyDetectionDependency } from '@masknet/plugin-infra/dom'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
@@ -26,7 +27,8 @@ const useStyles = makeStyles()(() => ({
         overflow: 'hidden',
         objectFit: 'cover',
     },
-    failedImage: {
+    imageContainer: {
+        display: 'contents',
         borderRadius: 16,
         overflow: 'hidden',
     },
@@ -41,12 +43,15 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
     href,
 }) {
     const { classes } = useStyles()
-    const { data } = useQuery({
+    const { data, isLoading } = useQuery({
         queryKey: ['tag', children],
         queryFn: async () => {
             return DSearch.search<TagSearchResult>(children)
         },
     })
+    const isDirty = !!data?.length && !isLoading
+    useDirtyDetectionDependency(isDirty, isLoading, children)
+
     const timerRef = useRef<NodeJS.Timeout>(undefined)
     if (data?.length) {
         return (
@@ -68,7 +73,7 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
                 }}>
                 <Image
                     size={16}
-                    classes={{ failed: classes.failedImage }}
+                    classes={{ container: classes.imageContainer, image: classes.icon }}
                     className={classes.icon}
                     src={data[0].logoURL}
                     fallback={
