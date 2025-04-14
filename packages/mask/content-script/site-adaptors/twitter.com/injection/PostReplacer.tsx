@@ -41,7 +41,7 @@ export async function injectPostReplacerAtTwitter(signal: AbortSignal, current: 
                 ['a[role="link"][href*="cashtag_click"]', 'a[role="link"][href*="hashtag_click"]'].join(','),
             ) ?? [],
         )
-        if (!tags.map((x) => x.textContent).some((x) => x && /^[#$]\w+$/i.test(x) && x.length <= 9)) return
+        if (!tags.length) return
     }
 
     return injectPostReplacer({
