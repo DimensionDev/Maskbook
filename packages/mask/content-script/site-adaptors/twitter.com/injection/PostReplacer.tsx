@@ -38,10 +38,14 @@ export async function injectPostReplacerAtTwitter(signal: AbortSignal, current: 
 
         const tags = Array.from(
             rootNode.querySelectorAll<HTMLAnchorElement>(
-                ['a[role="link"][href*="cashtag_click"]', 'a[role="link"][href*="hashtag_click"]'].join(','),
+                [
+                    'a[role="link"][href*="cashtag_click"]',
+                    'a[role="link"][href*="hashtag_click"]',
+                    'a[role="link"][href*="/hashtag/"][href*="/i/communities/"]', // tag in community
+                ].join(','),
             ) ?? [],
         )
-        if (!tags.map((x) => x.textContent).some((x) => x && /^[#$]\w+$/i.test(x) && x.length <= 9)) return
+        if (!tags.length) return
     }
 
     return injectPostReplacer({

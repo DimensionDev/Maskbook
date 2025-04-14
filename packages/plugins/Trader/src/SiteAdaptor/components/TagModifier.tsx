@@ -1,13 +1,14 @@
-import { memo, useRef } from 'react'
 import type { Plugin } from '@masknet/plugin-infra'
-import { useQuery } from '@tanstack/react-query'
-import { DSearch } from '@masknet/web3-providers'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
-import { makeStyles } from '@masknet/theme'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
+import { Image } from '@masknet/shared'
+import { makeStyles } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
+import { DSearch } from '@masknet/web3-providers'
 import { TrendingAPI } from '@masknet/web3-providers/types'
+import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
 import { Link } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
+import { memo, useRef } from 'react'
 
 const useStyles = makeStyles()(() => ({
     tag: {
@@ -24,6 +25,10 @@ const useStyles = makeStyles()(() => ({
         borderRadius: 16,
         overflow: 'hidden',
         objectFit: 'cover',
+    },
+    failedImage: {
+        borderRadius: 16,
+        overflow: 'hidden',
     },
 }))
 
@@ -61,7 +66,21 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
                 onMouseLeave={() => {
                     clearTimeout(timerRef.current)
                 }}>
-                <img width={16} height={16} className={classes.icon} src={data[0].logoURL} />
+                <Image
+                    size={16}
+                    classes={{ failed: classes.failedImage }}
+                    className={classes.icon}
+                    src={data[0].logoURL}
+                    fallback={
+                        <img
+                            width={16}
+                            height={16}
+                            className={classes.icon}
+                            src={`https://stamp.firefly.land/logo/${data[0].address}?s=50`}
+                        />
+                    }
+                />
+
                 <Link fontSize="inherit" href={href}>
                     {children}
                 </Link>
