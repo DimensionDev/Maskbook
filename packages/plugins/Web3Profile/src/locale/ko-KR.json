@@ -1,7 +1,10 @@
 {
     "messages": {
         "VydyRR": ["<0>", ["0"], "</0> Followers <1>", ["1"], "</1> Following"],
+        "f6pX67": ["<0>0</0> Followers <1>0</1> Following"],
         "GtJJAj": ["월렛 추가"],
+        "hWUuAb": ["Already following"],
+        "8bgRf6": ["Can not follow: ", ["0"]],
         "o+XJ9D": ["변경"],
         "HvUm3m": ["Choose and show your Web3 footprints on X."],
         "7VpPHA": ["확인"],
@@ -17,6 +20,7 @@
         "pIyHYi": ["Lens 팔로우"],
         "4coHVU": ["Lens 언팔로우"],
         "5iHe/7": ["네트워크 오류입니다. 다시 시도하세요."],
+        "UPJjXF": ["Network error, try again: ", ["0"]],
         "sxkNvs": ["팔로우 진행에 대한 잔액이 부족합니다."],
         "A1bmDM": ["확인된 계정이 없습니다."],
         "xzRJYu": ["Lens 핸들을 보유하는 경우에 팔로우가 가능합니다."],
@@ -28,6 +32,7 @@
         "jl7yZQ": ["Web3 Profile 설정 성공"],
         "CpciBt": ["Polygon으로 전환하고 팔로우합니다."],
         "IUp08P": ["이 월렛에서 lens가 없어서 팔로우나 언팔로우를 할 수 없습니다."],
+        "1Wbxhe": ["This profile can not be followed: ", ["0"]],
         "nV/wXH": ["이 프로필을 팔로우할 수 없습니다."],
         "/jZSwf": ["해당 유저가 팔로우 기능을 취소했습니다."],
         "p+ngUo": ["언팔로우"],

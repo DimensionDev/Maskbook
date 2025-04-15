@@ -1,7 +1,10 @@
 {
     "messages": {
         "VydyRR": ["<0>", ["0"], "</0> Followers <1>", ["1"], "</1> Following"],
+        "f6pX67": ["<0>0</0> Followers <1>0</1> Following"],
         "GtJJAj": ["Add Wallet"],
+        "hWUuAb": ["Already following"],
+        "8bgRf6": ["Can not follow: ", ["0"]],
         "o+XJ9D": ["Change"],
         "HvUm3m": ["Choose and show your Web3 footprints on X."],
         "7VpPHA": ["Confirm"],
@@ -17,6 +20,7 @@
         "pIyHYi": ["Lens Follow"],
         "4coHVU": ["Lens Unfollow"],
         "5iHe/7": ["Network error, try again"],
+        "UPJjXF": ["Network error, try again: ", ["0"]],
         "sxkNvs": ["No enough balance to complete follow process."],
         "A1bmDM": ["No verified account found here."],
         "xzRJYu": ["Only holding lens handle can follow."],
@@ -28,6 +32,7 @@
         "jl7yZQ": ["Set up Web3 Profile wallets successfully."],
         "CpciBt": ["Switch to Polygon and Follow"],
         "IUp08P": ["The current wallet does not hold a lens and cannot follow/unfollow"],
+        "1Wbxhe": ["This profile can not be followed: ", ["0"]],
         "nV/wXH": ["This profile can not be followed."],
         "/jZSwf": ["This user has banned follow function."],
         "p+ngUo": ["Unfollow"],

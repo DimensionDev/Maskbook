@@ -1,13 +1,14 @@
 import { Icons } from '@masknet/icons'
 import type { Plugin } from '@masknet/plugin-infra'
+import { useDirtyDetectionDependency } from '@masknet/plugin-infra/dom'
 import { makeStyles, ShadowRootPopper } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { memo } from 'react'
-import { usePopoverControl } from './usePopoverControl.js'
-import { WarningCard } from './WarningCard.js'
+import { useCheckLink } from '../hooks/useCheckLink.js'
 import { useDetectAddress } from '../hooks/useDetectAddress.js'
 import { AddressTag } from './TextModifier.js'
-import { useCheckLink } from '../hooks/useCheckLink.js'
+import { usePopoverControl } from './usePopoverControl.js'
+import { WarningCard } from './WarningCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {
@@ -37,9 +38,13 @@ export const LinkModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['LinkModi
     ...props
 }) {
     const { classes } = useStyles()
-    const { data } = useCheckLink(props.href, props.children)
-    const { data: detected } = useDetectAddress(data?.address, data?.isScam === false)
+    const { data, isLoading: isChecking } = useCheckLink(props.href, props.children)
+    const { data: detected, isLoading: isDetecting } = useDetectAddress(data?.address, data?.isScam === false)
     const { open, anchorEl, iconRef, onMouseEnter, onMouseLeave } = usePopoverControl()
+
+    const pending = isChecking || (data?.isScam === false && isDetecting)
+    const isDirty = !!(data?.isScam || detected?.isScam)
+    useDirtyDetectionDependency(isDirty, pending, props.href)
 
     if (!data?.isScam) {
         if (detected?.isScam) {
