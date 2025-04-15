@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-04-15 08:27\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "No enough balance to complete follow process."
-#~ msgstr "フォロープロセスを完了するための十分な残高がありません。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
@@ -117,7 +117,7 @@ msgstr "ここには確認済みのアカウントが見つかりません。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Only holding lens handle can follow."
-#~ msgstr "レンズのハンドルを握るだけでフォローできます。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -162,7 +162,7 @@ msgstr "このプロフィールはフォローできません。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "This user has banned follow function."
-#~ msgstr "このユーザーはフォロー機能を禁止しています。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
@@ -175,7 +175,7 @@ msgstr "レンズハンドルのフォローを解除"
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Unlock {0} {1} and follow"
-#~ msgstr "{0} {1} をロック解除してフォロー"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
@@ -189,3 +189,4 @@ msgstr "あなたのプロフィールをFireflyで見る"
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"
+
