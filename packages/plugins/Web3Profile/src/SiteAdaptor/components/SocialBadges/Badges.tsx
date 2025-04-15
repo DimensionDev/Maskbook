@@ -77,7 +77,7 @@ export const SocialBadges = memo(function SocialBadges({ slot, lensAccounts, far
             hide()
             ob.disconnect()
         }
-        // eslint-disable-next-line react-compiler/react-compiler, react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-compiler/react-compiler
     }, [buttonRef.current])
 
     const size = BadgesIconSizeMap[slot]
