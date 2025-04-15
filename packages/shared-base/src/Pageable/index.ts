@@ -32,7 +32,7 @@ export function createIndicator(indicator?: PageIndicator, id?: string): PageInd
     }
 }
 
-export function createNextIndicator(indicator?: PageIndicator, id?: string): PageIndicator {
+export function createNextIndicator(indicator?: PageIndicator, id?: string | null): PageIndicator {
     const index = (indicator?.index ?? 0) + 1
     return typeof id === 'string' ?
             {

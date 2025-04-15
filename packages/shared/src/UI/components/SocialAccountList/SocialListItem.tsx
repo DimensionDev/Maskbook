@@ -1,18 +1,22 @@
 import { Icons } from '@masknet/icons'
-import { CopyButton, Image } from '@masknet/shared'
-import { CrossIsolationMessages, NextIDPlatform, type BindingProof, PersistentStorages } from '@masknet/shared-base'
+// import { CopyButton, Image } from '@masknet/shared'
+import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
 import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
-import { ENS, Lens } from '@masknet/web3-providers'
+import { ENS, EVMWeb3, LensV3 } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { MenuItem, Typography } from '@mui/material'
 import { memo } from 'react'
 import { useAsync } from 'react-use'
 import { SocialTooltip } from './SocialTooltip.js'
 import { resolveNextIDPlatformIcon } from './utils.js'
-import { first } from 'lodash-es'
 import { Trans } from '@lingui/react/macro'
+import { useMyLensAccountAddress } from '../../../hooks/index.js'
+import { CopyButton } from '../CopyButton/index.js'
+import { Image } from '../Image/index.js'
+import { useQuery } from '@tanstack/react-query'
+import { evmAddress } from '@lens-protocol/client'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -155,23 +159,22 @@ export function SocialAccountListItem({
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
 
-    const { loading, value } = useAsync(async () => {
-        if (platform !== NextIDPlatform.LENS || !identity) return
-        const profile = await Lens.getProfileByHandle(identity)
-        let currentProfileId =
-            PersistentStorages.Settings.storage.latestLensProfile.value ||
-            (await Lens.queryDefaultProfileByAddress(account))?.id
-        if (!currentProfileId) {
-            const profiles = await Lens.queryProfilesByAddress(account)
-            currentProfileId = first(profiles)?.id
-        }
-
-        const isFollowing = await Lens.queryFollowStatus(currentProfileId ?? '', profile.id)
-        return {
-            ownedBy: profile.ownedBy,
-            isFollowing,
-        }
-    }, [identity, platform, account])
+    const myAccountAddress = useMyLensAccountAddress()
+    const { data: statusData, isLoading } = useQuery({
+        queryKey: ['lens', 'follow', platform, identity, account, myAccountAddress],
+        queryFn: async () => {
+            if (platform !== NextIDPlatform.LENS || !identity || !account || !myAccountAddress) return
+            const client = new LensV3(account, (message) => EVMWeb3.signMessage('message', message))
+            const profile = await client.getAccountByHandle(identity)
+            const isFollowing = await client.getFollowStatus([
+                { account: profile?.address, follower: evmAddress(myAccountAddress) },
+            ])
+            return {
+                ownedBy: profile?.username?.ownedBy as string,
+                isFollowing,
+            }
+        },
+    })
 
     const PlatformIcon = resolveNextIDPlatformIcon(platform)
     const renderIcon = PlatformIcon ? <PlatformIcon size={20} /> : null
@@ -217,7 +220,7 @@ export function SocialAccountListItem({
                     </Typography>
                     {platform === NextIDPlatform.LENS ?
                         <ActionButton
-                            loading={loading}
+                            loading={isLoading}
                             variant="text"
                             className={classes.followButton}
                             disableElevation
@@ -229,9 +232,9 @@ export function SocialAccountListItem({
                                     handle: identity,
                                 })
                             }}>
-                            {isSameAddress(account, value?.ownedBy.address) ?
+                            {isSameAddress(account, statusData?.ownedBy) ?
                                 <Trans>View</Trans>
-                            : value?.isFollowing ?
+                            : statusData?.isFollowing ?
                                 <Trans>Following</Trans>
                             :   <Trans>Follow</Trans>}
                         </ActionButton>
