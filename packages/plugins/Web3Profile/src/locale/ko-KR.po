@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-04-15 08:27\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -109,7 +109,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "No enough balance to complete follow process."
-#~ msgstr "팔로우 진행에 대한 잔액이 부족합니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
@@ -117,7 +117,7 @@ msgstr "확인된 계정이 없습니다."
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Only holding lens handle can follow."
-#~ msgstr "Lens 핸들을 보유하는 경우에 팔로우가 가능합니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -162,7 +162,7 @@ msgstr "이 프로필을 팔로우할 수 없습니다."
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "This user has banned follow function."
-#~ msgstr "해당 유저가 팔로우 기능을 취소했습니다."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
@@ -175,7 +175,7 @@ msgstr "Lens 핸들 언팔로우"
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Unlock {0} {1} and follow"
-#~ msgstr "{0}{1} 언락하고 팔로우하기"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
@@ -189,3 +189,4 @@ msgstr ""
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"
+
