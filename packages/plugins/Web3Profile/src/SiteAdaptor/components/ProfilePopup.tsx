@@ -1,11 +1,11 @@
+import type { Account, AccountAvailable, EvmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { Image, SelectProviderModal, WalletIcon } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, usePortalShadowRoot } from '@masknet/theme'
 import { useChainContext, useProviderDescriptor, useWeb3Utils } from '@masknet/web3-hooks-base'
-import type { LensBaseAPI } from '@masknet/web3-providers/types'
-import { isSameAddress } from '@masknet/web3-shared-base'
+import { LensV3 } from '@masknet/web3-providers'
 import { ChainId, formatEthereumAddress } from '@masknet/web3-shared-evm'
 import {
     Box,
@@ -20,7 +20,6 @@ import {
     Typography,
 } from '@mui/material'
 import { memo } from 'react'
-import { getProfileAvatar } from '../../utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     paper: {
@@ -38,6 +37,7 @@ const useStyles = makeStyles()((theme) => ({
     },
     avatar: {
         borderRadius: 99,
+        overflow: 'hidden',
     },
     primary: {
         color: theme.palette.maskColor.main,
@@ -81,6 +81,7 @@ const useStyles = makeStyles()((theme) => ({
         maxHeight: 200,
         overflow: 'auto',
         marginBottom: theme.spacing(1.5),
+        scrollbarWidth: 'none',
         '::-webkit-scrollbar': {
             backgroundColor: 'transparent',
             width: 18,
@@ -113,29 +114,28 @@ const useStyles = makeStyles()((theme) => ({
 interface ProfilePopupProps {
     anchorEl: HTMLElement | null
     open: boolean
-    profiles: LensBaseAPI.Profile[]
+    accounts: AccountAvailable[]
     onClose: () => void
-    onChange: (profile: LensBaseAPI.Profile) => void
-    currentProfile: LensBaseAPI.Profile
+    onChange: (profile: Account) => void
+    currentAccount: Account
     walletName?: string
 }
 
 export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
     anchorEl,
     open,
-    profiles,
+    accounts: availableAccounts,
     onClose,
-    currentProfile,
+    currentAccount,
     onChange,
     walletName,
 }) {
+    const { classes } = useStyles()
     const Utils = useWeb3Utils()
 
-    const { classes } = useStyles()
-
-    const { account } = useChainContext()
-
+    const { account: walletAddress } = useChainContext()
     const providerDescriptor = useProviderDescriptor()
+    const currentAccountId = currentAccount.username?.id
 
     return usePortalShadowRoot((container) => (
         <Popover
@@ -155,20 +155,24 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 horizontal: 'right',
             }}>
             <List disablePadding className={classes.list}>
-                {profiles.map((profile) => {
-                    const avatar = getProfileAvatar(profile)
+                {availableAccounts.map((available) => {
+                    const account = available.account
+                    const avatar = LensV3.getAccountAvatar(account)
+                    const name = account.metadata?.name || account.username?.localName
+                    const ownerAddress: EvmAddress = account.username?.ownedBy
+                    const accountId = account.username?.id
                     return (
                         <ListItemButton
                             className={classes.item}
-                            key={profile.id}
+                            key={accountId}
                             onClick={() => {
-                                if (currentProfile.id === profile.id) return
-                                onChange(profile)
+                                if (currentAccountId && currentAccountId === accountId) return
+                                onChange(account)
                             }}>
                             <ListItemIcon>
                                 {avatar ?
                                     <Image
-                                        className={classes.avatar}
+                                        rounded
                                         size={36}
                                         src={avatar}
                                         fallback={<Icons.DarkLens size={36} className={classes.avatar} />}
@@ -177,13 +181,14 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                             </ListItemIcon>
                             <ListItemText
                                 classes={{ primary: classes.primary, root: classes.listItemText }}
-                                primary={profile.metadata?.displayName ?? profile.handle?.localName}
+                                primary={name}
+                                secondaryTypographyProps={{ component: 'div' }}
                                 secondary={
                                     <div className={classes.second}>
                                         <Typography component="div" className={classes.address}>
-                                            {formatEthereumAddress(profile.ownedBy.address, 4)}
+                                            {formatEthereumAddress(ownerAddress, 4)}
                                         </Typography>
-                                        {!isSameAddress(profile.ownedBy.address, account) ?
+                                        {available.__typename === 'AccountManaged' ?
                                             <Typography component="span" className={classes.managedTag}>
                                                 Managed
                                             </Typography>
@@ -192,7 +197,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                 }
                             />
                             <ListItemSecondaryAction>
-                                <Radio checked={currentProfile.id === profile.id} />
+                                <Radio checked={currentAccountId === accountId} />
                             </ListItemSecondaryAction>
                         </ListItemButton>
                     )
@@ -203,7 +208,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                     <WalletIcon size={36} mainIcon={providerDescriptor?.icon} />
                     <Box>
                         <Typography className={classes.name}>{walletName}</Typography>
-                        <Typography className={classes.address}>{Utils.formatAddress(account, 4)}</Typography>
+                        <Typography className={classes.address}>{Utils.formatAddress(walletAddress, 4)}</Typography>
                     </Box>
                 </Box>
                 <Button

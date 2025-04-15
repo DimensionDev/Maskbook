@@ -8,7 +8,7 @@ const { fetch: original_fetch } = globalThis
 function contentFetch(input: RequestInfo | URL, init?: RequestInit) {
     const request = new Request(input, init)
 
-    if (canAccessAsContent(request.url)) {
+    if (shouldAccessViaContent(request.url)) {
         if (
             navigator.userAgent.includes('Firefox') &&
             browser.runtime.getManifest().manifest_version === 2 &&
@@ -48,14 +48,15 @@ function fetchingTwitterResource(target: URL) {
 
 function fetchingInsResource(target: URL) {
     // cspell:disable-next-line
-    return location.origin.endsWith('instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/)
+    if (isHostName(location, 'instagram.com') && target.origin.match(/(fbcdn\.net|cdninstagram\.com)$/)) return true
+    return target.host === 'api.lens.xyz'
 }
 
 function fetchingGoogleDriveResource(target: URL) {
     return target.origin === 'https://www.googleapis.com'
 }
 
-function canAccessAsContent(url: string) {
+function shouldAccessViaContent(url: string) {
     const target = new URL(url, location.href)
     if (fetchingTwitterResource(target) || fetchingInsResource(target) || fetchingGoogleDriveResource(target))
         return true

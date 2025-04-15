@@ -22,7 +22,7 @@ export const Component = memo(function FriendsHome() {
     const friends = useMemo(() => data?.pages.flatMap((x) => x.friends) ?? EMPTY_LIST, [data])
     const [searchValue, setSearchValue] = useState('')
     const type = resolveNextIDPlatform(searchValue)
-    const { loading: resolveLoading, value: keyword = '' } = useSearchValue(searchValue, type)
+    const { isLoading: resolveLoading, data: keyword = '' } = useSearchValue(searchValue, type)
     const fuse = useMemo(() => {
         return new Fuse(records, {
             keys: ['profile.userId'],

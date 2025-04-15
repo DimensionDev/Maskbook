@@ -32,6 +32,7 @@ const useStyles = makeStyles()((theme) => {
             padding: theme.spacing(1.5),
             boxSizing: 'border-box',
             borderRadius: 16,
+            scrollbarWidth: 'none',
             '&::-webkit-scrollbar': {
                 display: 'none',
             },

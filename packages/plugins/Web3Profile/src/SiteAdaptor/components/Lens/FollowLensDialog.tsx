@@ -1,24 +1,25 @@
+import { type Account, type EvmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import {
     ChainBoundary,
-    EthereumERC20TokenApprovedBoundary,
     InjectedDialog,
+    setMyLensAccountAddress,
+    useAvailableLensAccounts,
+    useLensClient,
+    useMyLensAccountAddress,
     WalletConnectedBoundary,
 } from '@masknet/shared'
-import { NetworkPluginID, PersistentStorages } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { ActionButton, makeStyles, useCustomSnackbar } from '@masknet/theme'
-import { useChainContext, useFungibleTokenBalance, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
-import { Lens } from '@masknet/web3-providers'
-import { FollowModuleType, type LensBaseAPI } from '@masknet/web3-providers/types'
-import { ZERO, formatBalance, isLessThan, isSameAddress } from '@masknet/web3-shared-base'
-import { ChainId, createERC20Token, formatAmount } from '@masknet/web3-shared-evm'
-import { Avatar, Box, Button, CircularProgress, DialogContent, Typography, buttonClasses } from '@mui/material'
+import { useChainContext, useNetworkContext, useWallet } from '@masknet/web3-hooks-base'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ChainId } from '@masknet/web3-shared-evm'
+import { Avatar, Box, Button, buttonClasses, CircularProgress, DialogContent, Typography } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
 import { first } from 'lodash-es'
-import { useCallback, useMemo, useState, type MouseEvent } from 'react'
-import { useAsyncRetry } from 'react-use'
-import { getFireflyLensProfileLink, getProfileAvatar } from '../../../utils.js'
+import { useCallback, useMemo, useState } from 'react'
+import { getFireflyLensProfileLink } from '../../../utils.js'
 import { useConfettiExplosion } from '../../hooks/ConfettiExplosion/index.js'
 import { useFollow } from '../../hooks/Lens/useFollow.js'
 import { useUnfollow } from '../../hooks/Lens/useUnfollow.js'
@@ -111,218 +112,116 @@ let task: Promise<void> | undefined
 
 export function FollowLensDialog({ handle, onClose }: Props) {
     const wallet = useWallet()
-    const [currentProfile, setCurrentProfile] = useState<LensBaseAPI.Profile>()
     const [isHovering, setIsHovering] = useState(false)
     const { classes } = useStyles({ account: !!wallet })
-    const { account, chainId, providerType } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { account: walletAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const { pluginID } = useNetworkContext()
 
     const { showSnackbar } = useCustomSnackbar()
+    const lensClient = useLensClient()
+    const myLensAccount = useMyLensAccountAddress()
 
-    // #region profile information
-    const { value, loading } = useAsyncRetry(async () => {
-        if (!handle || !open || !open) return
-        const profile = await Lens.getProfileByHandle(handle)
-
-        if (!profile) return
-
-        const defaultProfile = await Lens.queryDefaultProfileByAddress(account)
-
-        const profiles = await Lens.queryProfilesByAddress(account)
-
-        const latestProfile = PersistentStorages.Settings.storage.latestLensProfile?.value
-        setCurrentProfile((prev) => {
-            const profile = defaultProfile ?? profiles.find((x) => x.id === latestProfile) ?? first(profiles)
-            if (!prev && profile) {
-                if (latestProfile) PersistentStorages.Settings.storage.latestLensProfile.setValue(profile.id)
-                return profile
-            }
-            return prev
-        })
-        return {
-            profile,
-            isSelf: isSameAddress(profile.ownedBy.address, account),
-            profiles,
-            defaultProfile: defaultProfile || first(profiles),
-        }
-    }, [handle, open, account])
-
-    const { profile, defaultProfile, isSelf, profiles } = value || {}
-
-    const currentProfileId = currentProfile?.id
-    const targetProfileId = value?.profile.id
-    const { isPending, data: isFollowing } = useQuery({
-        queryKey: ['lens', 'following-status', currentProfileId, handle, targetProfileId],
+    const { data: lensAccount, isLoading } = useQuery({
+        enabled: !!handle && !!open,
+        queryKey: ['lens', 'profile-info', !lensClient, handle],
         queryFn: async () => {
-            if (!targetProfileId || !currentProfileId) return false
-            const result = await Lens.queryFollowStatus(currentProfileId, targetProfileId)
-            return result
+            if (!handle || !lensClient) return
+            const lensAccount = await lensClient.getAccountByHandle(handle)
+            return lensAccount
+        },
+    })
+    const { data: accounts } = useAvailableLensAccounts()
+    const isSelf = isSameAddress(lensAccount?.username?.ownedBy as string, walletAccount)
+
+    const currentAccount = accounts?.find((p) => isSameAddress(p.account.address, myLensAccount)) || first(accounts)
+    const currentAccountAddress: EvmAddress | undefined = currentAccount?.account.address
+    const targetAccountAddress: EvmAddress | undefined = lensAccount?.address
+    const { isPending, data: isFollowing } = useQuery({
+        queryKey: ['lens', 'following-status', currentAccountAddress, targetAccountAddress, !lensClient],
+        queryFn: async () => {
+            if (!targetAccountAddress || !currentAccountAddress || !lensClient) return false
+            const res = await lensClient.getFollowStatus([
+                { account: targetAccountAddress, follower: currentAccountAddress },
+            ])
+            const status = res[0].isFollowing
+            return status.onChain || status.optimistic
         },
         refetchOnWindowFocus: false,
         staleTime: 0,
     })
     const updateFollowingStatus = useUpdateFollowingStatus()
 
-    const followModule = useMemo(() => {
-        if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && defaultProfile) {
-            return {
-                profileFollowModule: {
-                    profileId: defaultProfile.id,
-                },
-            }
-        } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
-            return {
-                feeFollowModule: {
-                    currency: profile.followModule.amount.asset.contract.address,
-                    value: profile.followModule.amount.value,
-                },
-            }
-        }
-        return
-    }, [profile, defaultProfile])
-    // #endregion
-
-    const approved = useMemo(() => {
-        if (!profile?.followModule?.amount?.asset) return { amount: ZERO.toFixed() }
-        const {
-            contract: { address },
-            name,
-            symbol,
-            decimals,
-        } = profile.followModule.amount.asset
-        const token = createERC20Token(chainId, address, name, symbol, decimals)
-        const amount = formatAmount(profile.followModule.amount.value, decimals)
-
-        return {
-            token,
-            amount,
-        }
-    }, [profile?.followModule?.amount, chainId])
-
     // #region follow and unfollow event handler
     const { showConfettiExplosion, canvasRef } = useConfettiExplosion()
-    const { loading: followLoading, handleFollow } = useFollow(
-        profile?.id,
-        currentProfile?.id,
-        followModule,
-        currentProfile?.signless,
-        (event: MouseEvent<HTMLElement>) => {
-            showConfettiExplosion(event.currentTarget.offsetWidth, event.currentTarget.offsetHeight)
-            updateFollowingStatus(currentProfileId, handle, true)
+    const { loading: followLoading, handleFollow } = useFollow({
+        accountAddress: lensAccount?.address,
+        onSuccess: (width: number, height: number) => {
+            showConfettiExplosion(width, height)
+            updateFollowingStatus(currentAccountAddress, targetAccountAddress, true)
         },
-        () => updateFollowingStatus(currentProfileId, handle, false),
-    )
-    const { loading: unfollowLoading, handleUnfollow } = useUnfollow(
-        profile?.id,
-        currentProfile?.id,
-        currentProfile?.signless,
-        () => updateFollowingStatus(currentProfileId, handle, false),
-        () => updateFollowingStatus(currentProfileId, handle, true),
-    )
+        onFailed: () => updateFollowingStatus(currentAccountAddress, handle, false),
+    })
+    const { loading: unfollowLoading, handleUnfollow } = useUnfollow({
+        accountAddress: lensAccount?.address as string,
+        onSuccess: () => updateFollowingStatus(currentAccountAddress, targetAccountAddress, false),
+        onFailed: () => updateFollowingStatus(currentAccountAddress, targetAccountAddress, true),
+    })
     // #endregion
 
-    const { data: feeTokenBalance, isPending: getBalanceLoading } = useFungibleTokenBalance(
-        NetworkPluginID.PLUGIN_EVM,
-        profile?.followModule?.amount?.asset.contract.address ?? '',
-    )
+    const handleClick = useCallback(() => {
+        if (task) {
+            showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
+                processing: true,
+                message:
+                    isFollowing ?
+                        <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
+                    :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
+                autoHideDuration: 2000,
+            })
+            return
+        }
+        task = (isFollowing ? handleUnfollow() : handleFollow()).finally(() => (task = undefined))
+    }, [handleFollow, handleUnfollow, isFollowing, showSnackbar])
 
-    const handleClick = useCallback(
-        (event: MouseEvent<HTMLElement>) => {
-            if (task) {
-                showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
-                    processing: true,
-                    message:
-                        isFollowing ?
-                            <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
-                        :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
-                    autoHideDuration: 2000,
-                })
-                return
-            }
-            task = (isFollowing ? handleUnfollow(event) : handleFollow(event)).finally(() => (task = undefined))
-        },
-        [handleFollow, handleUnfollow, isFollowing],
-    )
-
-    const disabled = useMemo(() => {
-        if (
-            !account ||
-            !currentProfile ||
-            !!wallet?.owner ||
-            pluginID !== NetworkPluginID.PLUGIN_EVM ||
-            followLoading ||
-            unfollowLoading ||
-            profile?.followModule?.type === FollowModuleType.UnknownFollowModule ||
-            (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile) ||
-            (profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
-                profile.followModule.amount &&
-                (!feeTokenBalance ||
-                    isLessThan(
-                        formatBalance(feeTokenBalance, profile.followModule.amount.asset.decimals),
-                        profile.followModule.amount.value,
-                    ))) ||
-            profile?.followModule?.type === FollowModuleType.RevertFollowModule
-        )
-            return true
-
-        return false
-    }, [
-        currentProfile,
-        account,
-        wallet?.owner,
-        chainId,
-        followLoading,
-        unfollowLoading,
-        feeTokenBalance,
-        profile?.followModule,
-        pluginID,
-    ])
+    const accountConditions =
+        !walletAccount || !currentAccount || !!wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM
+    const operationConditions = followLoading || unfollowLoading
+    const disabled = accountConditions || operationConditions
 
     const buttonText = useMemo(() => {
         if (isFollowing) {
             return isHovering ? <Trans>Unfollow</Trans> : <Trans>Following</Trans>
-        } else if (profile?.followModule?.type === FollowModuleType.UnknownFollowModule) {
-            return <Trans>This profile can not be followed.</Trans>
-        } else if (profile?.followModule?.type === FollowModuleType.FeeFollowModule && profile.followModule.amount) {
-            return (
-                <Trans>
-                    Follow for {profile.followModule.amount.value} {profile.followModule.amount.asset.symbol}
-                </Trans>
-            )
+        }
+        switch (lensAccount?.operations?.canFollow.__typename) {
+            case 'AccountFollowOperationValidationPassed':
+                return <Trans>Follow</Trans>
+            case 'AccountFollowOperationValidationUnknown':
+                return <Trans>This profile can not be followed.</Trans>
+            case 'AccountFollowOperationValidationFailed':
+                return <Trans>This profile can not be followed: {lensAccount.operations.canFollow.reason}</Trans>
         }
 
         return <Trans>Follow</Trans>
-    }, [isFollowing, isHovering, profile])
+    }, [isFollowing, isHovering, lensAccount])
 
     const tips = useMemo(() => {
         if (wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM)
             return <Trans>Current wallet does not support to interact with Lens protocol.</Trans>
-        else if (profile?.followModule?.type === FollowModuleType.ProfileFollowModule && !defaultProfile)
-            return <Trans>Only holding lens handle can follow.</Trans>
-        else if (
-            profile?.followModule?.type === FollowModuleType.FeeFollowModule &&
-            profile.followModule.amount &&
-            (!feeTokenBalance ||
-                isLessThan(
-                    formatBalance(feeTokenBalance, profile.followModule.amount.asset.decimals),
-                    profile.followModule.amount.value,
-                ))
-        )
-            return <Trans>No enough balance to complete follow process.</Trans>
-        else if (profile?.followModule?.type === FollowModuleType.RevertFollowModule)
-            return <Trans>This user has banned follow function.</Trans>
-        else if (!currentProfile) {
+        else if (lensAccount?.operations?.canFollow.__typename === 'AccountFollowOperationValidationFailed')
+            return <Trans>Can not follow: {lensAccount.operations.canFollow.reason}</Trans>
+        else if (!currentAccount) {
             return <Trans>The current wallet does not hold a lens and cannot follow/unfollow</Trans>
         }
         return
-    }, [wallet?.owner, chainId, profile, feeTokenBalance, pluginID, providerType, isSelf, currentProfile])
+    }, [wallet?.owner, lensAccount, pluginID, currentAccount])
 
-    const avatar = useMemo(() => getProfileAvatar(profile), [profile])
+    const avatar = lensAccount?.metadata?.picture
 
-    const handleProfileChange = useCallback((profile: LensBaseAPI.Profile) => {
-        setCurrentProfile(profile)
-        PersistentStorages.Settings.storage.latestLensProfile.setValue(profile.id)
+    const handleProfileChange = useCallback((profile: Account) => {
+        setMyLensAccountAddress(profile.address)
     }, [])
+
+    const loading = followLoading || unfollowLoading || isLoading || isPending
 
     return (
         <InjectedDialog
@@ -331,7 +230,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
             title={<Trans>Lens</Trans>}
             classes={{ dialogTitle: classes.dialogTitle, paper: classes.dialogContent }}>
             <DialogContent sx={{ padding: 3 }}>
-                {!value && (loading || getBalanceLoading) ?
+                {!lensAccount && isLoading ?
                     <Box display="flex" justifyContent="center" alignItems="center" minHeight={342}>
                         <CircularProgress />
                     </Box>
@@ -341,13 +240,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                             sx={{ width: 64, height: 64 }}
                         />
                         <Typography className={classes.name}>
-                            {profile?.metadata?.displayName ?? profile?.handle.localName}
+                            {lensAccount?.metadata?.name ?? lensAccount?.username?.localName}
                         </Typography>
-                        <Typography className={classes.handle}>@{profile?.handle.localName}</Typography>
+                        <Typography className={classes.handle}>@{handle || '--'}</Typography>
                         <Typography className={classes.followers}>
                             <Trans>
-                                <strong>{profile?.stats.followers ?? '0'}</strong> Followers{' '}
-                                <strong>{profile?.stats.following ?? '0'}</strong> Following
+                                <strong>0</strong> Followers <strong>0</strong> Following
                             </Trans>
                         </Typography>
                         <Box className={classes.actions}>
@@ -355,7 +253,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 <Button
                                     variant="roundedContained"
                                     className={classes.followAction}
-                                    href={profile?.handle ? getFireflyLensProfileLink(profile.handle.localName) : '#'}
+                                    href={handle ? getFireflyLensProfileLink(handle) : '#'}
                                     target="_blank"
                                     rel="noopener noreferrer"
                                     endIcon={<Icons.LinkOut size={18} />}
@@ -363,57 +261,32 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                     <Trans>View your profile in firefly</Trans>
                                 </Button>
                             :   <>
-                                    <EthereumERC20TokenApprovedBoundary
-                                        spender={value?.profile.followModule?.contract?.address}
-                                        amount={approved.amount}
-                                        token={!isFollowing ? approved.token : undefined}
-                                        showHelperToken={false}
-                                        ActionButtonProps={{
+                                    <ChainBoundary
+                                        disableConnectWallet
+                                        expectedPluginID={pluginID}
+                                        expectedChainId={ChainId.Polygon}
+                                        ActionButtonPromiseProps={{
                                             variant: 'roundedContained',
                                             className: classes.followAction,
+                                            startIcon: null,
                                             disabled,
                                         }}
-                                        infiniteUnlockContent={
-                                            <Trans>
-                                                Unlock {value?.profile.followModule?.amount?.value ?? ZERO.toFixed()}{' '}
-                                                {approved.token?.symbol ?? ''} and follow
-                                            </Trans>
-                                        }
-                                        failedContent={
-                                            <Trans>
-                                                Unlock {value?.profile.followModule?.amount?.value ?? ZERO.toFixed()}{' '}
-                                                {approved.token?.symbol ?? ''} and follow
-                                            </Trans>
-                                        }>
-                                        <ChainBoundary
-                                            disableConnectWallet
-                                            expectedPluginID={pluginID}
-                                            expectedChainId={ChainId.Polygon}
-                                            ActionButtonPromiseProps={{
-                                                variant: 'roundedContained',
-                                                className: classes.followAction,
-                                                startIcon: null,
-                                                disabled,
-                                            }}
-                                            switchText={<Trans>Switch to Polygon and Follow</Trans>}>
-                                            <ActionButton
-                                                variant="roundedContained"
-                                                className={classes.followAction}
-                                                disabled={disabled}
-                                                loading={followLoading || unfollowLoading || loading || isPending}
-                                                onClick={handleClick}
-                                                onMouseOver={() => setIsHovering(true)}
-                                                onMouseOut={() => setIsHovering(false)}>
-                                                {buttonText}
-                                            </ActionButton>
-                                        </ChainBoundary>
-                                    </EthereumERC20TokenApprovedBoundary>
+                                        switchText={<Trans>Switch to Polygon and Follow</Trans>}>
+                                        <ActionButton
+                                            variant="roundedContained"
+                                            className={classes.followAction}
+                                            disabled={disabled}
+                                            loading={loading}
+                                            onClick={handleClick}
+                                            onMouseOver={() => setIsHovering(true)}
+                                            onMouseOut={() => setIsHovering(false)}>
+                                            {buttonText}
+                                        </ActionButton>
+                                    </ChainBoundary>
                                     <Button
                                         className={classes.linkButton}
                                         variant="roundedOutlined"
-                                        href={
-                                            profile?.handle ? getFireflyLensProfileLink(profile.handle.localName) : '#'
-                                        }
+                                        href={handle ? getFireflyLensProfileLink(handle) : '#'}
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         endIcon={<Icons.LinkOut size={18} />}
@@ -434,8 +307,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                                 :   null}
 
                                 <HandlerDescription
-                                    currentProfile={currentProfile}
-                                    profiles={profiles}
+                                    currentAccount={currentAccount?.account}
+                                    accounts={accounts}
                                     onChange={handleProfileChange}
                                 />
                             </WalletConnectedBoundary>

@@ -33,7 +33,7 @@ export enum LimitType {
     Fifty = 'Fifty',
 }
 
-export namespace LensBaseAPI {
+export namespace LensV3BaseAPI {
     export interface Profile {
         id: string
         signless: boolean

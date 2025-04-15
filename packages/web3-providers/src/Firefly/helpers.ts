@@ -44,6 +44,7 @@ export function formatFarcasterPostFromFirefly(cast: FireflyFarcasterAPI.Cast, t
         stats: {
             comments: Number(cast.replyCount),
             mirrors: cast.recastCount,
+            reposts: cast.recastCount,
             quotes: cast.quotedCount,
             reactions: cast.likeCount,
         },

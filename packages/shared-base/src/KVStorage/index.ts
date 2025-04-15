@@ -43,11 +43,15 @@ export const PersistentStorages = {
     Web3: createPersistentKVStorage('web3', {}),
     Settings: createPersistentKVStorage<{
         debugging: boolean
+        /** @deprecated use lastLensAccount instead */
         latestLensProfile: string
+        /** lens account address */
+        lastLensAccount: string
         backupConfig: BackupConfig
     }>('settings', {
         debugging: false,
         latestLensProfile: '',
+        lastLensAccount: '',
         backupConfig: {
             backupPassword: '',
             email: '',

@@ -1,6 +1,6 @@
-import { NameServiceID, type NetworkPluginID } from '@masknet/shared-base'
+import { type NameServiceID, type NetworkPluginID } from '@masknet/shared-base'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
-import { getActivatedPluginWeb3State, Lens } from '@masknet/web3-providers'
+import { getActivatedPluginWeb3State } from '@masknet/web3-providers'
 import { useQueries, useQuery } from '@tanstack/react-query'
 
 export function useReverseAddress<T extends NetworkPluginID>(
@@ -15,10 +15,6 @@ export function useReverseAddress<T extends NetworkPluginID>(
         queryFn: async () => {
             const { NameService } = getActivatedPluginWeb3State(pluginID)
             if (!address || !NameService) return null
-            if (preferredType === NameServiceID.Lens) {
-                const result = await Lens.reverse?.(address)
-                if (result) return result
-            }
             return (await NameService?.reverse?.(address, domainOnly)) || null
         },
     })
@@ -35,10 +31,6 @@ export function useReverseAddresses<T extends NetworkPluginID>(
             queryFn: async () => {
                 const { NameService } = getActivatedPluginWeb3State(pluginID)
                 if (!address || !NameService) return null
-                if (preferredType === NameServiceID.Lens) {
-                    const result = await Lens.reverse?.(address)
-                    if (result) return result
-                }
                 return (await NameService?.reverse?.(address, domainOnly)) || null
             },
         })),
