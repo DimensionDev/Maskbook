@@ -6,6 +6,7 @@ import { extractAddresses } from '../../utils.js'
 import { usePopoverControl } from './usePopoverControl.js'
 import { WarningCard } from './WarningCard.js'
 import { useDetectAddress } from '../hooks/useDetectAddress.js'
+import { useDirtyDetectionDependency } from '@masknet/plugin-infra/dom'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -97,6 +98,8 @@ export const TextModifier = memo<TextModifierProps>(function TextModifier({ fall
         segments.push({ type: 'text', value: fullText.slice(offset) })
         return segments
     }, [addresses, fullText])
+    const isDirty = !!addresses.length && !segments.length
+    useDirtyDetectionDependency(isDirty, false, fullText)
 
     if (addresses.length === 0 || segments.length === 0) return fallback
 

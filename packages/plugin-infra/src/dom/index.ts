@@ -3,3 +3,4 @@ export { PluginTransFieldRender, type PluginTransFieldRenderProps, usePluginTran
 
 export { type PluginWrapperMethods, type PluginWrapperComponentProps, usePluginWrapper } from './usePluginWrapper.js'
 export { __setUIContext__, type __UIContext__ } from './context.js'
+export * from './DirtyDetectionContext.js'

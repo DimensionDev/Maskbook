@@ -1,4 +1,5 @@
 import type { Plugin } from '@masknet/plugin-infra'
+import { useDirtyDetectionDependency } from '@masknet/plugin-infra/dom'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
@@ -34,7 +35,7 @@ type TagSearchResult =
 export const MentionModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['MentionModifier']>>(
     function MentionModifier({ children, href }) {
         const { classes } = useStyles()
-        const { data } = useQuery({
+        const { data, isLoading } = useQuery({
             queryKey: ['mention', children],
             queryFn: async () => {
                 return DSearch.search<TagSearchResult>(
@@ -44,6 +45,9 @@ export const MentionModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['Menti
             },
         })
         const timerRef = useRef<NodeJS.Timeout>(undefined)
+
+        const isDirty = !!data?.length && !isLoading
+        useDirtyDetectionDependency(isDirty, isLoading, children)
         if (data?.length) {
             return (
                 <span
