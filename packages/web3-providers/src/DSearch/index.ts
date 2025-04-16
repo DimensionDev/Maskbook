@@ -404,17 +404,22 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                         >,
                 )
                 .filter((x) => {
-                    const resultTwitterHandle =
+                    const resultTwitter =
                         (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.socialLinks?.twitter ||
                         (x as FungibleTokenResult<ChainId, SchemaType>).socialLinks?.twitter
-                    if (!resultTwitterHandle) return false
+                    const relatedTwitters =
+                        (x as NonFungibleCollectionResult<ChainId, SchemaType>).collection?.relatedTwitters ||
+                        (x as FungibleTokenResult<ChainId, SchemaType>).relatedTwitters ||
+                        []
                     const handle = twitterHandle.toLowerCase()
-                    return (
-                        [handle, `https://twitter.com/${handle}`, `https://x.com/${handle}`].includes(
-                            resultTwitterHandle.toLowerCase(),
-                        ) &&
-                        ((x.rank && x.rank <= 500) || x.id === 'mask-network')
-                    )
+                    const isMatched =
+                        resultTwitter ?
+                            [handle, `https://twitter.com/${handle}`, `https://x.com/${handle}`].includes(
+                                resultTwitter.toLowerCase(),
+                            )
+                        :   false
+                    const isRelated = relatedTwitters.includes(handle) || isMatched
+                    return isRelated && ((x.rank && x.rank <= 500) || x.id === 'mask-network')
                 })
                 .sort((a, b) => (a.rank || 0) - (b.rank || 0)),
             (a, b) => a.id === b.id,
