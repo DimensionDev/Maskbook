@@ -98,10 +98,11 @@ export const TextModifier = memo<TextModifierProps>(function TextModifier({ fall
         segments.push({ type: 'text', value: fullText.slice(offset) })
         return segments
     }, [addresses, fullText])
-    const isDirty = !!addresses.length && !segments.length
-    useDirtyDetectionDependency(isDirty, false, fullText)
 
-    if (addresses.length === 0 || segments.length === 0) return fallback
+    const isClean = addresses.length === 0 || segments.length === 0
+    useDirtyDetectionDependency(!isClean, false, fullText)
+
+    if (isClean) return fallback
 
     return (
         <>
