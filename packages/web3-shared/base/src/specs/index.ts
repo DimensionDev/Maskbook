@@ -406,6 +406,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     source?: SourceType
     assets?: Array<NonFungibleAsset<ChainId, SchemaType>>
     socialLinks?: SocialLinks
+    relatedTwitters?: string[]
     floorPrices?: Array<{
         marketplace_id: LiteralUnion<'blur' | 'looksrare' | 'opensea' | 'x2y2'>
         marketplace_name: LiteralUnion<'Blur' | 'LooksRare' | 'OpenSea' | 'X2Y2'>
@@ -708,6 +709,7 @@ export interface FungibleTokenResult<ChainId, SchemaType> extends Result<ChainId
     source: SourceType
     token?: FungibleToken<ChainId, SchemaType>
     socialLinks?: SocialLinks
+    relatedTwitters?: string[]
 }
 
 export interface NonFungibleTokenResult<ChainId, SchemaType> extends Result<ChainId> {
