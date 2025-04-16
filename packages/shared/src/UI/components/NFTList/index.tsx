@@ -1,14 +1,16 @@
-import { useCallback, useEffect, useMemo } from 'react'
-import { noop, range } from 'lodash-es'
-import type { Web3Helper } from '@masknet/web3-helpers'
-import { ElementAnchor, AssetPreviewer, RetryHint } from '@masknet/shared'
-import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
 import { CrossIsolationMessages, NetworkPluginID, type PageIndicator } from '@masknet/shared-base'
+import { makeStyles, ShadowRootTooltip, TextOverflowTooltip } from '@masknet/theme'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Hub, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { Checkbox, List, ListItem, Radio, Stack, Typography, type ListProps, Skeleton } from '@mui/material'
 import { isLens, resolveImageURL } from '@masknet/web3-shared-evm'
+import { Checkbox, List, ListItem, Radio, Skeleton, Stack, Typography, type ListProps } from '@mui/material'
 import { useInfiniteQuery } from '@tanstack/react-query'
+import { noop, range } from 'lodash-es'
+import { useCallback, useEffect, useMemo } from 'react'
+import { AssetPreviewer } from '../AssetPreviewer/index.js'
+import { ElementAnchor } from '../ElementAnchor/index.js'
+import { ReloadStatus } from '../ReloadStatus/index.js'
 
 interface NFTItemProps {
     token: Web3Helper.NonFungibleTokenAll
@@ -271,9 +273,7 @@ export function NFTList({
                 :   null}
             </List>
             {error && !hasNextPage && tokens.length ?
-                <Stack py={1}>
-                    <RetryHint hint={false} retry={() => fetchNextPage()} />
-                </Stack>
+                <ReloadStatus py={1} onRetry={fetchNextPage} hideMessage />
             :   null}
             <Stack py={1}>
                 <ElementAnchor callback={() => fetchNextPage()} />

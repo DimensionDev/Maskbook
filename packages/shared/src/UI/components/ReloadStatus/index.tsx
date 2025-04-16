@@ -28,6 +28,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface Props extends BoxProps {
     message?: ReactNode
+    hideMessage?: boolean
     actionLabel?: ReactNode
     onRetry?(): void
 }
@@ -36,6 +37,7 @@ export const ReloadStatus = memo(function ReloadStatus({
     className,
     children,
     message,
+    hideMessage = false,
     actionLabel,
     onRetry,
     ...rest
@@ -43,7 +45,9 @@ export const ReloadStatus = memo(function ReloadStatus({
     const { classes, cx } = useStyles()
     return (
         <Box className={cx(classes.statusBox, className)} p={2} {...rest}>
-            <Typography className={classes.text}>{message ?? <Trans>Load failed</Trans>}</Typography>
+            {hideMessage ?
+                <Typography className={classes.text}>{message ?? <Trans>Load failed</Trans>}</Typography>
+            :   null}
             <Button className={classes.button} onClick={() => onRetry?.()} variant="roundedContained" size="medium">
                 {actionLabel ?? <Trans>Reload</Trans>}
             </Button>
