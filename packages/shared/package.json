@@ -13,7 +13,7 @@
   "types": "./dist/index.d.ts",
   "dependencies": {
     "@hookform/resolvers": "^3.6.0",
-    "@lens-protocol/client": "0.0.0-canary-20250408064617",
+    "@lens-protocol/client": "0.3.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/public-api": "workspace:^",
