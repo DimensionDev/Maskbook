@@ -106,6 +106,10 @@ const useStyles = makeStyles()((theme) => ({
         padding: theme.spacing(1.5),
         borderRadius: 8,
     },
+    disabled: {
+        opacity: 0.5,
+        cursor: 'not-allowed',
+    },
     listItemText: {
         margin: 0,
     },
@@ -130,7 +134,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
     onChange,
     walletName,
 }) {
-    const { classes } = useStyles()
+    const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
 
     const { account: walletAddress } = useChainContext()
@@ -161,12 +165,16 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                     const name = account.metadata?.name || account.username?.localName
                     const ownerAddress: EvmAddress = account.username?.ownedBy
                     const accountId = account.username?.id
+                    const disabled =
+                        (currentAccountId && currentAccountId === accountId) ||
+                        available.__typename !== 'AccountManaged'
                     return (
                         <ListItemButton
-                            className={classes.item}
+                            className={cx(classes.item, { [classes.disabled]: disabled })}
                             key={accountId}
+                            disabled={disabled}
                             onClick={() => {
-                                if (currentAccountId && currentAccountId === accountId) return
+                                if (disabled) return
                                 onChange(account)
                             }}>
                             <ListItemIcon>
