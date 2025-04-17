@@ -119,7 +119,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { showSnackbar } = useCustomSnackbar()
     const lensClient = useLensClient()
-    const myLensAccount = useMyLensAccountAddress()
+    const myLensAccount = useMyLensAccountAddress(true)
 
     const { data: lensAccount, isLoading } = useQuery({
         enabled: !!handle && !!open,
@@ -134,17 +134,14 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const isSelf = isSameAddress(lensAccount?.username?.ownedBy as string, walletAccount)
 
     const currentAccount = accounts?.find((p) => isSameAddress(p.account.address, myLensAccount)) || first(accounts)
-    const currentAccountAddress: EvmAddress | undefined = currentAccount?.account.address
     const targetAccountAddress: EvmAddress | undefined = lensAccount?.address
     const { isPending, data: isFollowing } = useQuery({
-        queryKey: ['lens', 'following-status', currentAccountAddress, targetAccountAddress, !lensClient],
+        queryKey: ['lens', 'following-status', myLensAccount, targetAccountAddress, !lensClient],
         queryFn: async () => {
-            if (!targetAccountAddress || !currentAccountAddress || !lensClient) return false
-            const res = await lensClient.getFollowStatus([
-                { account: targetAccountAddress, follower: currentAccountAddress },
-            ])
+            if (!targetAccountAddress || !myLensAccount || !lensClient) return false
+            const res = await lensClient.getFollowStatus([{ account: targetAccountAddress, follower: myLensAccount }])
             const status = res[0].isFollowing
-            return status.onChain || status.optimistic
+            return status.onChain
         },
         refetchOnWindowFocus: false,
         staleTime: 0,
@@ -157,31 +154,34 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         accountAddress: lensAccount?.address,
         onSuccess: (width: number, height: number) => {
             showConfettiExplosion(width, height)
-            updateFollowingStatus(currentAccountAddress, targetAccountAddress, true)
+            updateFollowingStatus(myLensAccount, targetAccountAddress, true)
         },
-        onFailed: () => updateFollowingStatus(currentAccountAddress, handle, false),
+        onFailed: () => updateFollowingStatus(myLensAccount, targetAccountAddress, false),
     })
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow({
         accountAddress: lensAccount?.address as string,
-        onSuccess: () => updateFollowingStatus(currentAccountAddress, targetAccountAddress, false),
-        onFailed: () => updateFollowingStatus(currentAccountAddress, targetAccountAddress, true),
+        onSuccess: () => updateFollowingStatus(myLensAccount, targetAccountAddress, false),
+        onFailed: () => updateFollowingStatus(myLensAccount, targetAccountAddress, true),
     })
     // #endregion
 
-    const handleClick = useCallback(() => {
-        if (task) {
-            showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
-                processing: true,
-                message:
-                    isFollowing ?
-                        <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
-                    :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
-                autoHideDuration: 2000,
-            })
-            return
-        }
-        task = (isFollowing ? handleUnfollow() : handleFollow()).finally(() => (task = undefined))
-    }, [handleFollow, handleUnfollow, isFollowing, showSnackbar])
+    const handleClick = useCallback(
+        (event: React.MouseEvent<HTMLButtonElement>) => {
+            if (task) {
+                showSnackbar(isFollowing ? <Trans>Lens Unfollow</Trans> : <Trans>Lens Follow</Trans>, {
+                    processing: true,
+                    message:
+                        isFollowing ?
+                            <Trans>Previous unfollow transaction is in processing, please wait and try again.</Trans>
+                        :   <Trans>Previous follow transaction is in processing, please wait and try again.</Trans>,
+                    autoHideDuration: 2000,
+                })
+                return
+            }
+            task = (isFollowing ? handleUnfollow() : handleFollow(event)).finally(() => (task = undefined))
+        },
+        [handleFollow, handleUnfollow, isFollowing, showSnackbar],
+    )
 
     const accountConditions =
         !walletAccount || !currentAccount || !!wallet?.owner || pluginID !== NetworkPluginID.PLUGIN_EVM
