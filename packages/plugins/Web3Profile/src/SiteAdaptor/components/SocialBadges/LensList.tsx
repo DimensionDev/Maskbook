@@ -98,6 +98,7 @@ export const LensList = memo(function LensList({ accounts }: Props) {
                         if (!target) return
                         return {
                             ...target,
+                            address: nativeAccount.address,
                             ownedBy: nativeAccount.username?.ownedBy as string,
                         }
                     }),
@@ -107,7 +108,7 @@ export const LensList = memo(function LensList({ accounts }: Props) {
             const followStatus = await lensV3.getFollowStatus(
                 (myLensAccount ? nativeAccounts || [] : []).map((x) => ({
                     follower: evmAddress(myLensAccount!),
-                    account: evmAddress(x.username?.ownedBy),
+                    account: evmAddress(x.address),
                 })),
             )
             return compact(
@@ -121,8 +122,9 @@ export const LensList = memo(function LensList({ accounts }: Props) {
                     )?.isFollowing
                     return {
                         ...target,
+                        address: nativeAccount.address,
                         ownedBy: nativeAccount.username?.ownedBy as string,
-                        isFollowing: status?.onChain || status?.optimistic,
+                        isFollowing: status?.optimistic || status?.onChain,
                     }
                 }),
             )
