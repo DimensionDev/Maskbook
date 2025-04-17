@@ -1,4 +1,5 @@
 import type { FireflyConfigAPI } from '@masknet/web3-providers/types'
+import { isSameAddress } from '@masknet/web3-shared-base'
 import { useQueryClient } from '@tanstack/react-query'
 import { useCallback } from 'react'
 
@@ -12,7 +13,7 @@ export function useUpdateFollowingStatus() {
                 (data) => {
                     if (!data) return data
                     return data.map((x) => {
-                        return x.handle === targetLensAccount ? { ...x, isFollowing } : x
+                        return isSameAddress(x.address, targetLensAccount) ? { ...x, isFollowing } : x
                     })
                 },
             )

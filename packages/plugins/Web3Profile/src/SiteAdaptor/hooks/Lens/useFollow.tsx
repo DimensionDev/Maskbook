@@ -13,7 +13,7 @@ export type FollowOptions = {
     onFailed?: () => void
 }
 
-export function useFollow({ accountAddress, onFailed }: FollowOptions) {
+export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions) {
     const { t } = useLingui()
     const [loading, setLoading] = useState(false)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
@@ -35,43 +35,48 @@ export function useFollow({ accountAddress, onFailed }: FollowOptions) {
     const myLensAccount = useMyLensAccountAddress()
     const lensClient = useLensClient()
 
-    const handleFollow = useCallback<() => Promise<void>>(async () => {
-        try {
-            setLoading(true)
-            if (!accountAddress || chainId !== ChainId.Polygon) return
-            if (!lensClient || !myLensAccount) return
-            await lensClient.login(myLensAccount)
-            const res = await lensClient.follow(accountAddress)
-            if (res.isErr()) {
-                throw res.error
+    const handleFollow = useCallback(
+        async (event: React.MouseEvent<HTMLButtonElement>) => {
+            try {
+                setLoading(true)
+                if (!accountAddress || chainId !== ChainId.Polygon) return
+                if (!lensClient || !myLensAccount) return
+                await lensClient.login(myLensAccount)
+                const res = await lensClient.follow(accountAddress)
+                if (res.isErr()) {
+                    throw res.error
+                }
+                const target = event.target as HTMLButtonElement
+                onSuccess?.(target.offsetWidth, target.offsetHeight)
+            } catch (error) {
+                if (!(error instanceof Error)) return
+                const message = error.message
+                if (message.match(/Bad user input .* is already following/)) {
+                    showSingletonSnackbar(t`Follow Lens handle`, {
+                        processing: false,
+                        variant: 'warning',
+                        message: <Trans>Already following</Trans>,
+                    })
+                } else if (
+                    !message.includes('Transaction was rejected') &&
+                    !message.includes('Signature canceled') &&
+                    !message.includes('User rejected the request') &&
+                    !message.includes('User rejected transaction') &&
+                    !message.includes('RPC Error')
+                ) {
+                    onFailed?.()
+                    showSingletonSnackbar(t`Follow Lens handle`, {
+                        processing: false,
+                        variant: 'error',
+                        message: <Trans>Network error, try again: {error.message}</Trans>,
+                    })
+                }
+            } finally {
+                setLoading(false)
             }
-        } catch (error) {
-            if (!(error instanceof Error)) return
-            const message = error.message
-            if (message.match(/Bad user input .* is already following/)) {
-                showSingletonSnackbar(t`Follow Lens handle`, {
-                    processing: false,
-                    variant: 'warning',
-                    message: <Trans>Already following</Trans>,
-                })
-            } else if (
-                !message.includes('Transaction was rejected') &&
-                !message.includes('Signature canceled') &&
-                !message.includes('User rejected the request') &&
-                !message.includes('User rejected transaction') &&
-                !message.includes('RPC Error')
-            ) {
-                onFailed?.()
-                showSingletonSnackbar(t`Follow Lens handle`, {
-                    processing: false,
-                    variant: 'error',
-                    message: <Trans>Network error, try again: {error.message}</Trans>,
-                })
-            }
-        } finally {
-            setLoading(false)
-        }
-    }, [accountAddress, chainId, lensClient, myLensAccount, onFailed, showSingletonSnackbar, t])
+        },
+        [accountAddress, chainId, lensClient, myLensAccount, onFailed, showSingletonSnackbar, t],
+    )
 
     return { loading, handleFollow }
 }

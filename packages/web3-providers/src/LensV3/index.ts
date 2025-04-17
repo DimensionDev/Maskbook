@@ -139,7 +139,7 @@ export class LensV3 {
         })
         if (result.isErr()) return []
         const list = uniqBy(
-            sortBy(result.value.items, (x) => (x.__typename === 'AccountOwned' ? -1 : 0)),
+            sortBy(result.value.items, (x) => (x.__typename === 'AccountManaged' ? -1 : 0)),
             (x) => x.account.address,
         )
         return list as AccountAvailable[]
