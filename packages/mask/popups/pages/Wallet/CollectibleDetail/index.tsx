@@ -1,3 +1,4 @@
+import { Trans, useLingui } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { AssetPreviewer, Image, NFTFallbackImage, NFTSpamBadge, ProgressiveText, useReportSpam } from '@masknet/shared'
 import { NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
@@ -20,7 +21,6 @@ import urlcat from 'urlcat'
 import { PageTitleContext, useTitle, useTokenParams } from '../../../hooks/index.js'
 import { ConfirmModal } from '../../../modals/modal-controls.js'
 import { TransferTabType } from '../type.js'
-import { Trans, useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     page: {

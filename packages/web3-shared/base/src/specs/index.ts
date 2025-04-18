@@ -400,6 +400,7 @@ export interface NonFungibleCollection<ChainId, SchemaType> {
     /** verified by provider */
     verified?: boolean
     verifiedBy?: string[]
+    isSpam?: boolean
     /** unix timestamp */
     createdAt?: number
     /** source type */

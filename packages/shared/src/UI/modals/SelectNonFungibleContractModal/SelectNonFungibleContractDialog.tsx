@@ -166,6 +166,7 @@ export const SelectNonFungibleContractDialog = memo(
                     iconURL: contract.iconURL,
                     balance: tokenIds.length,
                     source: contract.source,
+                    isSpam: undefined,
                 }))
         }, [list, collections])
 

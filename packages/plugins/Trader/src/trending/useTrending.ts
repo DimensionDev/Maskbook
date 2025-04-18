@@ -1,7 +1,3 @@
-import { flatten } from 'lodash-es'
-import { useEffect, useMemo, useRef, useState } from 'react'
-import { useAsyncFn } from 'react-use'
-import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useFungibleToken } from '@masknet/web3-hooks-base'
@@ -9,8 +5,12 @@ import { trending } from '@masknet/web3-providers/helpers'
 import type { TrendingAPI } from '@masknet/web3-providers/types'
 import { TokenType, type NonFungibleTokenActivity } from '@masknet/web3-shared-base'
 import type { ChainId } from '@masknet/web3-shared-evm'
-import { PluginTraderRPC } from '../messages.js'
 import { useQuery } from '@tanstack/react-query'
+import { flatten } from 'lodash-es'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { useAsyncFn } from 'react-use'
+import type { AsyncState } from 'react-use/lib/useAsyncFn.js'
+import { PluginTraderRPC } from '../messages.js'
 
 export function useNFT_TrendingOverview(
     pluginID: NetworkPluginID,
@@ -128,24 +128,4 @@ export function useTrendingById(
         },
         loading: isPending,
     }
-}
-
-export function useHighestFloorPrice(id: string) {
-    return useQuery({
-        queryKey: ['highest-floor-price', id],
-        queryFn: async () => {
-            if (!id) return null
-            return PluginTraderRPC.getHighestFloorPrice(id)
-        },
-    })
-}
-
-export function useOneDaySaleAmounts(id: string) {
-    return useQuery({
-        queryKey: ['one-day-sale-amount', id],
-        queryFn: async () => {
-            if (!id) return null
-            return PluginTraderRPC.getOneDaySaleAmounts(id)
-        },
-    })
 }

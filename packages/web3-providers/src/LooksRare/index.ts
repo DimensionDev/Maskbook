@@ -68,6 +68,7 @@ function createNonFungibleAssetFromToken(
             ...shared,
             slug: token.collection?.name ?? '',
             verified: token.collection?.isVerified,
+            isSpam: token.collection?.isSpam,
         },
         link: createAssetLink(chainId, token.collectionAddress, token.tokenId),
         creator: {

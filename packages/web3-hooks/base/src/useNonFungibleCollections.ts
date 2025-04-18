@@ -12,28 +12,47 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext } from './useContext.js'
 import { useWeb3Hub } from './useWeb3Hub.js'
 
+/** Get non-fungible collections cross chains by owner */
 export function useNonFungibleCollections<S extends 'all' | void = void, T extends NetworkPluginID = NetworkPluginID>(
     pluginID?: T,
     options?: HubOptions<T>,
+    chains?: Array<Web3Helper.ChainIdScope<S, T>>,
 ) {
     const { account } = useChainContext({ account: options?.account, chainId: options?.chainId })
     const Hub = useWeb3Hub(pluginID, options)
 
     return useQuery<Array<NonFungibleCollection<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>>>>({
-        queryKey: ['non-fungible-collections', pluginID, account, options],
+        queryKey: ['non-fungible-collections', pluginID, account, options, chains],
         enabled: !!account,
         queryFn: async () => {
             if (!account) return EMPTY_LIST
-            return asyncIteratorToArray(
-                pageableToIterator(async (indicator?: PageIndicator) => {
-                    return Hub.getNonFungibleCollectionsByOwner(account, {
-                        indicator,
-                        size: 50,
-                        networkPluginId: pluginID,
-                        ...options,
-                    })
-                }),
-            )
+            if (!chains) {
+                return asyncIteratorToArray(
+                    pageableToIterator(async (indicator?: PageIndicator) => {
+                        return Hub.getNonFungibleCollectionsByOwner(account, {
+                            indicator,
+                            size: 50,
+                            networkPluginId: pluginID,
+                            ...options,
+                        })
+                    }),
+                )
+            }
+            const promises = chains.map((chainId) => {
+                return asyncIteratorToArray(
+                    pageableToIterator(async (indicator?: PageIndicator) => {
+                        return Hub.getNonFungibleCollectionsByOwner(account, {
+                            ...options,
+                            indicator,
+                            size: 50,
+                            networkPluginId: pluginID,
+                            chainId,
+                        })
+                    }),
+                )
+            })
+            const results = await Promise.allSettled(promises)
+            return results.flatMap((x) => (x.status === 'fulfilled' ? x.value : []))
         },
     })
 }

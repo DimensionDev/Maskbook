@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { CollectionList, useParamTab, type CollectionListProps } from '@masknet/shared'
 import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, PopupRoutes } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
@@ -8,9 +9,8 @@ import { memo, useCallback, useMemo, type RefAttributes } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { useSubscription } from 'use-subscription'
-import { WalletAssetTabs } from '../../type.js'
 import { useHasNavigator } from '../../../../hooks/useHasNavigator.js'
-import { Trans } from '@lingui/react/macro'
+import { WalletAssetTabs } from '../../type.js'
 
 const gridProps = {
     columns: 'repeat(auto-fill, minmax(20%, 1fr))',

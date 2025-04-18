@@ -2,6 +2,7 @@ import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { RoutePaths } from '@masknet/plugin-redpacket'
 import { TokenIcon } from '@masknet/shared'
+import { resolveTokenIcon } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
@@ -89,6 +90,8 @@ export function CollectionSelectPanel({
     const Utils = useWeb3Utils()
     const navigate = useNavigate()
 
+    const iconURL = resolveTokenIcon({ address: collection?.address ?? '', size: 24 })
+
     return (
         <Box className={cx(classes.root, className)} {...rest}>
             <div className={classes.wrapper}>
@@ -114,14 +117,7 @@ export function CollectionSelectPanel({
                 }}>
                 {collection ?
                     <div className={classes.tokenWrapper}>
-                        {collection.iconURL ?
-                            <TokenIcon
-                                logoURL={collection.iconURL}
-                                chainId={collection.chainId}
-                                size={24}
-                                badgeSize={10}
-                            />
-                        :   null}
+                        <TokenIcon logoURL={iconURL} chainId={collection.chainId} size={24} badgeSize={10} />
                         <Typography className={classes.nftName}>{collection.name}</Typography>
                         <Icons.ArrowDrop color={theme.palette.maskColor.second} size={24} />
                     </div>

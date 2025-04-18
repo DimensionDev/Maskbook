@@ -12,7 +12,7 @@ import {
     type NonFungibleTokenContract,
     type NonFungibleTokenEvent,
 } from '@masknet/web3-shared-base'
-import { ChainId, type SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
+import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-evm'
 import { EVM, type PageableResponse, type Response } from '../types/index.js'
 import {
     createNonFungibleAsset,
@@ -23,6 +23,11 @@ import {
     createNonFungibleCollectionFromCollection,
 } from '../helpers/EVM.js'
 import type { BaseHubOptions, NonFungibleTokenAPI } from '../../entry-types.js'
+
+const SchemaTypeMap: Record<string, EVM.ErcType> = {
+    [SchemaType.ERC721]: EVM.ErcType.ERC721,
+    [SchemaType.ERC1155]: EVM.ErcType.ERC1155,
+}
 
 class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
     async getAsset(address: string, tokenId: string, { chainId = ChainId.Mainnet }: BaseHubOptions<ChainId> = {}) {
@@ -71,7 +76,7 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
         return createPageable(
             assets,
             createIndicator(indicator),
-            response?.data.next ? createNextIndicator(indicator, response?.data.next) : undefined,
+            response?.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
         )
     }
 
@@ -88,6 +93,28 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
         const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
         const collections = response?.data.map((x) => createNonFungibleCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
         return createPageable(collections, createIndicator(indicator))
+    }
+
+    async getAssetsByCollectionAndOwner(
+        address: string,
+        owner: string,
+        { chainId = ChainId.Mainnet, indicator, size = 20, schemaType }: BaseHubOptions<ChainId> = {},
+    ) {
+        if (!isValidChainId(chainId) || !owner) return createPageable(EMPTY_LIST, createIndicator(indicator))
+        const path = urlcat('/api/v2/account/own/:address', {
+            address: owner,
+            contract_address: address,
+            erc_type: SchemaTypeMap[schemaType || SchemaType.ERC721] || EVM.ErcType.ERC721,
+            limit: size,
+            cursor: indicator?.id,
+        })
+        const response = await fetchFromNFTScanV2<PageableResponse<EVM.Asset>>(chainId, path)
+        const assets = response.data.content.map((x) => createNonFungibleAsset(chainId, x)) ?? EMPTY_LIST
+        return createPageable(
+            assets,
+            createIndicator(indicator),
+            response.data.next ? createNextIndicator(indicator, response.data.next) : undefined,
+        )
     }
 
     async getCollectionRaw(

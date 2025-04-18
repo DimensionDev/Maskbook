@@ -1,22 +1,22 @@
-import { type HTMLProps, useCallback, useMemo, useEffect } from 'react'
-import { compact, uniqWith } from 'lodash-es'
-import { FormControl, Typography } from '@mui/material'
-import { EVMWeb3 } from '@masknet/web3-providers'
-import { useChainContext, useNonFungibleAssets, useNetworkContext, useWeb3State } from '@masknet/web3-hooks-base'
+import { Trans } from '@lingui/react/macro'
 import {
     AddCollectiblesModal,
-    ElementAnchor,
-    RetryHint,
     CollectibleList,
-    LoadingStatus,
+    ElementAnchor,
     EmptyStatus,
+    LoadingStatus,
+    ReloadStatus,
 } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
+import { useChainContext, useNetworkContext, useNonFungibleAssets, useWeb3State } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import { isLensProfileAddress, isLensFollower, isLensCollect, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
+import { isLensCollect, isLensFollower, isLensProfileAddress, SchemaType, type ChainId } from '@masknet/web3-shared-evm'
+import { FormControl, Typography } from '@mui/material'
+import { compact, uniqWith } from 'lodash-es'
+import { useCallback, useEffect, useMemo, type HTMLProps } from 'react'
 import { useTip } from '../../contexts/index.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     root: {
@@ -46,9 +46,6 @@ const useStyles = makeStyles()((theme) => ({
         justifyContent: 'center',
         height: '100%',
         padding: theme.spacing(4),
-    },
-    collectibleList: {
-        paddingRight: 0,
     },
     loadingList: {
         overflowY: 'scroll',
@@ -168,7 +165,6 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                         return (
                             <div className={classes.loadingList}>
                                 <CollectibleList
-                                    classes={{ root: classes.collectibleList }}
                                     retry={fetchNextPage}
                                     collectibles={tokens}
                                     pluginID={pluginID}
@@ -200,7 +196,7 @@ export function NFTSection({ className, onEmpty, ...rest }: Props) {
                         return <LoadingStatus className={classes.statusBox} iconSize={36} />
                     }
                     if (fetchedTokens.length === 0 && loadError && account && !hasNextPage) {
-                        return <RetryHint retry={fetchNextPage} />
+                        return <ReloadStatus onRetry={fetchNextPage} />
                     }
                     return (
                         <EmptyStatus className={classes.statusBox} iconSize={36}>

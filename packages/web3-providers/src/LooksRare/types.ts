@@ -49,6 +49,7 @@ export interface Collection {
     discordLink?: string
     isVerified: boolean
     isExplicit: boolean
+    isSpam: boolean | undefined
 }
 
 export interface Order {

@@ -42,15 +42,8 @@ export const enum RoutePaths {
 export const MAX_FILE_SIZE = 1.5 * 1024 * 1024
 export const DURATION = 60 * 60 * 24
 
-// Chains that supported by the intersection of SimpleHash, Chainbase, and our deployed chains.
-export const NFT_DEFAULT_CHAINS = [
-    ChainId.Mainnet,
-    ChainId.BSC,
-    ChainId.Polygon,
-    ChainId.Arbitrum,
-    ChainId.Avalanche,
-    ChainId.Optimism,
-]
+// Chains that supported by the intersection of NFTScan, Chainbase, and our deployed chains.
+export const NFT_DEFAULT_CHAINS = [ChainId.Mainnet, ChainId.BSC, ChainId.Polygon, ChainId.Optimism]
 
 function createTheme(themeId: string, cover: string): FireflyRedPacketAPI.ThemeGroupSettings {
     return {

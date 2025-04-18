@@ -863,7 +863,6 @@ msgid "Listed"
 msgstr "显示"
 
 #: src/UI/components/ReloadStatus/index.tsx
-#: src/UI/components/LoadRetry/index.tsx
 msgid "Load failed"
 msgstr "加载失败"
 
@@ -1155,7 +1154,6 @@ msgid "Refund your expired Lucky Drop."
 msgstr ""
 
 #: src/UI/components/ReloadStatus/index.tsx
-#: src/UI/components/LoadRetry/index.tsx
 msgid "Reload"
 msgstr "重新加载"
 

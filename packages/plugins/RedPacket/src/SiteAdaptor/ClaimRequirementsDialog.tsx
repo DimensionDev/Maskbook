@@ -1,4 +1,12 @@
+import { Trans } from '@lingui/react/macro'
+import { Icons, type GeneratedIcon } from '@masknet/icons'
+import { getEnumAsArray } from '@masknet/kit'
 import { Alert, SelectNonFungibleContractModal } from '@masknet/shared'
+import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext } from '@masknet/web3-hooks-base'
+import type { NonFungibleCollection } from '@masknet/web3-shared-base'
+import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import {
     Box,
     Button,
@@ -10,16 +18,8 @@ import {
     ListItemText,
     Typography,
 } from '@mui/material'
-import { makeStyles } from '@masknet/theme'
 import { useCallback, useMemo, useState } from 'react'
-import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { RequirementType, type FireflyRedpacketSettings } from '../types.js'
-import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
-import type { NonFungibleCollection } from '@masknet/web3-shared-base'
-import { SchemaType, ChainId } from '@masknet/web3-shared-evm'
-import { useChainContext } from '@masknet/web3-hooks-base'
-import { getEnumAsArray } from '@masknet/kit'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{ isFirefly: boolean }>()((theme, { isFirefly }) => ({
     container: {
@@ -146,6 +146,7 @@ export function ClaimRequirementsDialog(props: ClaimRequirementsDialogProps) {
                             address: '0x577294402BA4679b6ba4A24B8e03Ce9d0C728e72',
                             slug: 'Firefly (Base) Friends',
                             symbol: '',
+                            isSpam: undefined,
                             iconURL:
                                 'https://remote-image.decentralized-content.com/image?url=https%3A%2F%2Fipfs.decentralized-content.com%2Fipfs%2Fbafybeic5qugbigrxmb4vbyt4qk6cfyqlgmvembkwyrjj3go3lrt74aysci&w=1080&q=75',
                         },

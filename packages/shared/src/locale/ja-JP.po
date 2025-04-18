@@ -863,7 +863,6 @@ msgid "Listed"
 msgstr "リストされました"
 
 #: src/UI/components/ReloadStatus/index.tsx
-#: src/UI/components/LoadRetry/index.tsx
 msgid "Load failed"
 msgstr "読み込みに失敗しました"
 
@@ -1155,7 +1154,6 @@ msgid "Refund your expired Lucky Drop."
 msgstr ""
 
 #: src/UI/components/ReloadStatus/index.tsx
-#: src/UI/components/LoadRetry/index.tsx
 msgid "Reload"
 msgstr "再読み込み"
 

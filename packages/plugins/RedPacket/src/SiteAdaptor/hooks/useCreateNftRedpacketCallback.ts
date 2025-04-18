@@ -1,6 +1,7 @@
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'
+import { useGasConfig } from '@masknet/web3-hooks-evm'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import {
     addGasMargin,
@@ -9,13 +10,12 @@ import {
     type GasConfig,
     isValidAddress,
 } from '@masknet/web3-shared-evm'
+import { useQuery } from '@tanstack/react-query'
 import { BigNumber } from 'bignumber.js'
+import { useMemo } from 'react'
 import { useAsyncFn } from 'react-use'
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 import { createNftRedpacketContract } from './useNftRedPacketContract.js'
-import { useMemo } from 'react'
-import { useQuery } from '@tanstack/react-query'
-import { useGasConfig } from '@masknet/web3-hooks-evm'
 
 interface Options {
     publicKey: string

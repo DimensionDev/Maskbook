@@ -19,13 +19,6 @@ export { Multicall } from './Multicall/index.js'
 export { LensV3 } from './LensV3/index.js'
 export { RedPacket, CREATE_LUCKY_DROP_TOPIC } from './RedPacket/index.js'
 export { TheGraphRedPacket } from './TheGraph/index.js'
-export {
-    SimpleHashEVM,
-    SimpleHashSolana,
-    SPAM_SCORE,
-    SimpleHashResolveChainId,
-    resolveSimpleHashChain,
-} from './SimpleHash/index.js'
 export { SnapshotSearch } from './Snapshot/index.js'
 export { Snapshot } from './Snapshot/index.js'
 

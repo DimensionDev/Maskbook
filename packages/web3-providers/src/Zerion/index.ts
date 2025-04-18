@@ -1,36 +1,36 @@
-import { compact, first, unionWith } from 'lodash-es'
 import {
-    createPageable,
     createIndicator,
     createNextIndicator,
-    type Pageable,
+    createPageable,
     EMPTY_LIST,
+    type Pageable,
     type PageIndicator,
 } from '@masknet/shared-base'
+import { fetchJSON } from '@masknet/web3-providers/helpers'
 import {
-    type Transaction,
-    isSameAddress,
-    TokenType,
-    SourceType,
     GasOptionType,
+    isSameAddress,
+    SourceType,
     toFixed,
+    TokenType,
+    type Transaction,
 } from '@masknet/web3-shared-base'
-import { ChainId, type GasOption, SchemaType, isValidChainId, resolveImageURL } from '@masknet/web3-shared-evm'
-import type { ZerionNonFungibleTokenItem, ZerionNonFungibleCollection } from './types.js'
-import { formatAsset, formatRestTransaction, isValidAsset, zerionChainIdResolver } from './helpers.js'
-import { getAssetsList, getGasOptions, getNonFungibleAsset, getNonFungibleAssets } from './base-api.js'
-import { getAssetFullName } from '../helpers/getAssetFullName.js'
-import { getNativeAssets } from '../helpers/getNativeAssets.js'
+import { ChainId, type GasOption, isValidChainId, resolveImageURL, SchemaType } from '@masknet/web3-shared-evm'
+import { compact, first, unionWith } from 'lodash-es'
+import urlcat from 'urlcat'
 import type {
-    FungibleTokenAPI,
     BaseGasOptions,
-    HistoryAPI,
     BaseHubOptions,
+    FungibleTokenAPI,
+    HistoryAPI,
     NonFungibleTokenAPI,
 } from '../entry-types.js'
-import urlcat from 'urlcat'
-import { fetchJSON } from '@masknet/web3-providers/helpers'
+import { getAssetFullName } from '../helpers/getAssetFullName.js'
+import { getNativeAssets } from '../helpers/getNativeAssets.js'
+import { getAssetsList, getGasOptions, getNonFungibleAsset, getNonFungibleAssets } from './base-api.js'
+import { formatAsset, formatRestTransaction, isValidAsset, zerionChainIdResolver } from './helpers.js'
 import type { TransactionsResponse } from './reset-types.js'
+import type { ZerionNonFungibleCollection, ZerionNonFungibleTokenItem } from './types.js'
 
 const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
@@ -41,24 +41,23 @@ class ZerionAPI implements FungibleTokenAPI.Provider<ChainId, SchemaType>, Histo
         const { meta, payload } = await getAssetsList(address, 'positions')
         if (meta.status !== 'ok') return createPageable(EMPTY_LIST, createIndicator(options?.indicator))
 
-        const assets =
-            payload.positions?.positions
-                .filter(
-                    (x) =>
-                        x.type === 'asset' &&
-                        x.asset.icon_url &&
-                        x.asset.is_displayable &&
-                        !filterAssetType.includes(x.asset.type) &&
-                        isValidAsset(x) &&
-                        zerionChainIdResolver(x.chain),
-                )
-                ?.map((x) => {
-                    return formatAsset(zerionChainIdResolver(x.chain)!, x)
-                }) ?? EMPTY_LIST
+        const assets = payload.positions?.positions
+            .filter(
+                (x) =>
+                    x.type === 'asset' &&
+                    x.asset.icon_url &&
+                    x.asset.is_displayable &&
+                    !filterAssetType.includes(x.asset.type) &&
+                    isValidAsset(x) &&
+                    zerionChainIdResolver(x.chain),
+            )
+            .map((x) => {
+                return formatAsset(zerionChainIdResolver(x.chain)!, x)
+            })
 
         return createPageable(
             unionWith(
-                assets,
+                assets || [],
                 getNativeAssets(),
                 (a, z) => isSameAddress(a.address, z.address) && a.chainId === z.chainId,
             ),
@@ -144,6 +143,7 @@ class ZerionNonFungibleTokenAPI implements NonFungibleTokenAPI.Provider<ChainId,
                 address: nft.asset.contract_address,
                 iconURL: nft.asset.collection_info.icon_url ?? nft.asset.collection.icon_url,
                 verified: nft.asset.is_verified,
+                isSpam: undefined,
             },
             source: SourceType.Zerion,
             link: this.createNonFungibleTokenPermalink(nft.asset.contract_address, nft.asset.token_id),

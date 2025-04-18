@@ -17,11 +17,15 @@ function useCollections(defaultCollectionId?: string) {
         isPending: loading,
         error,
         refetch: retry,
-    } = useNonFungibleCollections(pluginID, {
-        account,
-        allChains: true,
-        sourceType: SourceType.SimpleHash,
-    })
+    } = useNonFungibleCollections(
+        pluginID,
+        {
+            account,
+            allChains: true,
+            sourceType: SourceType.NFTScan,
+        },
+        chainWhiteList,
+    )
 
     const merged = useMemo(() => {
         return produce(rawCollections, (draft) => {

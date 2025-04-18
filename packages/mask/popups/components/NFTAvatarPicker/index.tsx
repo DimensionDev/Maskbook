@@ -1,12 +1,12 @@
 import { Trans } from '@lingui/react/macro'
 import { Flags } from '@masknet/flags'
-import { ElementAnchor, NetworkTab, PluginVerifiedWalletStatusBar, RetryHint } from '@masknet/shared'
+import { ElementAnchor, NetworkTab, PluginVerifiedWalletStatusBar, ReloadStatus } from '@masknet/shared'
 import { EMPTY_LIST, PopupModalRoutes, type BindingProof, type NetworkPluginID } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useChainContext, useNetworkContext, useNonFungibleAssets, useWallet } from '@masknet/web3-hooks-base'
 import { getRegisteredWeb3Networks } from '@masknet/web3-providers'
-import { Box, Button, Stack } from '@mui/material'
+import { Box, Button } from '@mui/material'
 import { first, uniqBy } from 'lodash-es'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { useModalNavigate } from '../index.js'
@@ -96,9 +96,12 @@ export const NFTAvatarPicker = memo<NFTAvatarPickerProps>(function NFTAvatarPick
                     onItemClick={setSelected}
                 />
                 {error && hasNextPage && tokens.length ?
-                    <Stack py={1} style={{ gridColumnStart: 1, gridColumnEnd: 6 }}>
-                        <RetryHint hint={false} retry={refetch} />
-                    </Stack>
+                    <ReloadStatus
+                        hideMessage
+                        onRetry={refetch}
+                        py={1}
+                        style={{ gridColumnStart: 1, gridColumnEnd: 6 }}
+                    />
                 :   null}
                 <ElementAnchor key={tokens.length} callback={() => fetchNextPage()}>
                     {hasNextPage && tokens.length !== 0 ?

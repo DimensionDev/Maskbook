@@ -24,7 +24,10 @@ export namespace EVM {
         token_id: string
         erc_type: ErcType | string
         owner: string
+        /** unix timestamp */
+        owner_timestamp: number
         mint_transaction_hash: string
+        /** unix timestamp */
         mint_timestamp: number
         mint_price: number
         token_uri?: string
@@ -34,13 +37,19 @@ export namespace EVM {
         /** mime type */
         content_type: string
         content_uri: string
+        description: string
         image_uri?: string
         external_uri: string
         latest_trade_price: string | null
         latest_trade_symbol: string | null
         latest_trade_timestamp: number | null
         nftscan_id: string | null
+        nftscan_uri: string | null
+        small_nftscan_uri: string | null
         imageURL: string | null
+        amount: string
+        rarity_rank: number | null
+        rarity_score: number | null
     }
 
     export enum ErcType {

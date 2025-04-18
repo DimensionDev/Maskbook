@@ -1,5 +1,7 @@
+import { Trans } from '@lingui/react/macro'
 import type { NetworkPluginID } from '@masknet/shared-base'
-import { ShadowRootTooltip, makeStyles } from '@masknet/theme'
+import { useEverSeen } from '@masknet/shared-base-ui'
+import { Boundary, ShadowRootTooltip, makeStyles, useBoundary } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useWeb3Utils } from '@masknet/web3-hooks-base'
 import { SourceType } from '@masknet/web3-shared-base'
@@ -9,7 +11,6 @@ import { ReloadStatus } from '../index.js'
 import { CollectibleItem, type ChangeEventOptions, type SelectableProps } from './CollectibleItem.js'
 import { LoadingSkeleton } from './LoadingSkeleton.js'
 import type { CollectibleGridProps } from './type.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 3, gap = 2 }) => {
     const gapIsNumber = typeof gap === 'number'
@@ -86,7 +87,6 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
         ...rest
     } = props
     const { classes, cx } = useStyles({ columns, gap })
-    const Utils = useWeb3Utils()
 
     const availableKeys = useMemo(() => collectibles.map(getCollectibleKey), [collectibles])
     const handleItemChange = useCallback(
@@ -105,63 +105,110 @@ export const CollectibleList = memo(function CollectibleList(props: CollectibleL
     const listRef = useRef<typeof Box>(null)
 
     return (
-        <Box className={cx(classes.list, className)} {...rest} ref={listRef}>
-            {loading && collectibles.length === 0 ?
-                <LoadingSkeleton className={classes.root} />
-            : error || (collectibles.length === 0 && !loading) ?
-                <ReloadStatus className={classes.text} message={<Trans>No collectible found.</Trans>} onRetry={retry} />
-            :   <Box className={classes.root}>
-                    {collectibles.map(
-                        // eslint-disable-next-line react-compiler/react-compiler
-                        (token, index) => {
-                            const name = token.metadata?.name
-                            const uiTokenId = Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
-                            const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
-                            const collectibleKey = getCollectibleKey(token)
-                            const checked = selectable ? value?.includes(collectibleKey) : false
-                            const inactive = value ? !!value.length && !checked : false
+        <Boundary>
+            <Box className={cx(classes.list, className)} {...rest} ref={listRef}>
+                {loading && collectibles.length === 0 ?
+                    <LoadingSkeleton className={classes.root} />
+                : error || (collectibles.length === 0 && !loading) ?
+                    <ReloadStatus
+                        className={classes.text}
+                        message={<Trans>No collectible found.</Trans>}
+                        onRetry={retry}
+                    />
+                :   <Box className={classes.root}>
+                        {collectibles.map((token, index) => {
                             return (
-                                <ShadowRootTooltip
+                                <LazyCollectibleItem
                                     key={index}
-                                    title={title}
-                                    placement="top"
-                                    disableInteractive
-                                    PopperProps={{
-                                        placement: 'top',
-                                        popperOptions: {
-                                            strategy: 'absolute',
-                                        },
-                                        modifiers: [
-                                            {
-                                                name: 'preventOverflow',
-                                                options: {
-                                                    rootBoundary: listRef.current,
-                                                    boundary: listRef.current,
-                                                },
-                                            },
-                                        ],
-                                    }}
-                                    arrow>
-                                    <CollectibleItem
-                                        className={classes.collectibleItem}
-                                        asset={token}
-                                        provider={SourceType.OpenSea}
-                                        pluginID={pluginID}
-                                        selectable={selectable}
-                                        multiple={multiple}
-                                        disableLink={disableLink}
-                                        showNetworkIcon={showNetworkIcon}
-                                        checked={checked}
-                                        inactive={inactive}
-                                        value={collectibleKey}
-                                        onChange={handleItemChange}
-                                    />
-                                </ShadowRootTooltip>
+                                    className={classes.collectibleItem}
+                                    token={token}
+                                    pluginID={pluginID}
+                                    selectable={selectable}
+                                    multiple={multiple}
+                                    disableLink={disableLink}
+                                    showNetworkIcon={showNetworkIcon}
+                                    value={value}
+                                    onChange={handleItemChange}
+                                    getCollectibleKey={getCollectibleKey}
+                                />
                             )
-                        },
-                    )}
-                </Box>
-            }
-        </Box>
+                        })}
+                    </Box>
+                }
+            </Box>
+        </Boundary>
     )
+})
+
+interface Props
+    extends Pick<
+        CollectibleListProps,
+        'className' | 'pluginID' | 'value' | 'selectable' | 'multiple' | 'disableLink' | 'showNetworkIcon'
+    > {
+    token: Web3Helper.NonFungibleAssetAll
+    onChange(options: ChangeEventOptions): void
+    getCollectibleKey(collectible: Web3Helper.NonFungibleAssetAll): string
+}
+
+export const LazyCollectibleItem = memo<Props>(function LazyCollectibleItem({
+    className,
+    pluginID,
+    token,
+    value,
+    selectable,
+    multiple,
+    disableLink,
+    showNetworkIcon,
+    getCollectibleKey,
+    onChange,
+}) {
+    const [seen, ref] = useEverSeen()
+    const { boundaryRef } = useBoundary()
+    const Utils = useWeb3Utils()
+    if (seen) {
+        const name = token.metadata?.name
+        const uiTokenId = Utils.formatTokenId(token.tokenId, 4) ?? `#${token.tokenId}`
+        const title = `${name || token.collection?.name || token.contract?.name} ${uiTokenId}`
+        const collectibleKey = getCollectibleKey(token)
+        const checked = selectable ? value?.includes(collectibleKey) : false
+        const inactive = value ? !!value.length && !checked : false
+        return (
+            <ShadowRootTooltip
+                title={title}
+                placement="top"
+                disableInteractive
+                PopperProps={{
+                    placement: 'top',
+                    popperOptions: {
+                        strategy: 'absolute',
+                    },
+                    modifiers: [
+                        {
+                            name: 'preventOverflow',
+                            options: {
+                                rootBoundary: boundaryRef.current,
+                                boundary: boundaryRef.current,
+                            },
+                        },
+                    ],
+                }}
+                arrow>
+                <CollectibleItem
+                    className={className}
+                    asset={token}
+                    provider={SourceType.NFTScan}
+                    pluginID={pluginID}
+                    selectable={selectable}
+                    multiple={multiple}
+                    disableLink={disableLink}
+                    showNetworkIcon={showNetworkIcon}
+                    checked={checked}
+                    inactive={inactive}
+                    value={collectibleKey}
+                    onChange={onChange}
+                />
+            </ShadowRootTooltip>
+        )
+    }
+    return <div className={className} style={{ minHeight: 100 }} ref={ref} />
 })
