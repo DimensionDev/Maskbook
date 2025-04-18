@@ -1,4 +1,4 @@
-import { awaitChildProcess, printShell, ROOT_PATH, shell, task } from '../utils/index.js'
+import { awaitChildProcess, printShell, ROOT_PATH, shell, task } from '../utils/index.ts'
 
 export async function clean() {
     const { rimraf: rm } = await import('rimraf')

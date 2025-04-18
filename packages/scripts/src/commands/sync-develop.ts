@@ -1,4 +1,4 @@
-import { shell, task } from '../utils/index.js'
+import { shell, task } from '../utils/index.ts'
 
 const REPO_URL = 'https://github.com/DimensionDev/Maskbook.git'
 

@@ -7,8 +7,8 @@ import { emitJSONFile } from '@nice-labs/emit-file-webpack-plugin'
 import DevtoolsIgnorePlugin from 'devtools-ignore-webpack-plugin'
 import WebExtensionPlugin from 'webpack-target-webextension'
 import ReactCompiler from 'react-compiler-webpack'
-import { getGitInfo } from './git-info.js'
-import { emitManifestFile } from './plugins/manifest.js'
+import { getGitInfo } from './git-info.ts'
+import { emitManifestFile } from './plugins/manifest.ts'
 // @ts-expect-error
 import LavaMoat from '@lavamoat/webpack'
 
@@ -16,12 +16,12 @@ import { readFile, readdir } from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import { join } from 'node:path'
 
-import { computeCacheKey, computedBuildFlags, normalizeBuildFlags, type BuildFlags } from './flags.js'
-import { ProfilingPlugin } from './plugins/ProfilingPlugin.js'
-import { joinEntryItem, normalizeEntryDescription, type EntryDescription } from './utils.js'
+import { computeCacheKey, computedBuildFlags, normalizeBuildFlags, type BuildFlags } from './flags.ts'
+import { ProfilingPlugin } from './plugins/ProfilingPlugin.ts'
+import { joinEntryItem, normalizeEntryDescription, type EntryDescription } from './utils.ts'
 
-import './clean-hmr.js'
-import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.js'
+import './clean-hmr.ts'
+import { TrustedTypesPlugin } from './plugins/TrustedTypesPlugin.ts'
 
 const require = createRequire(import.meta.url)
 const patchesDir = join(import.meta.dirname, '../../../patches')
@@ -238,6 +238,7 @@ export async function createConfiguration(
                 NEXT_PUBLIC_FIREFLY_API_URL: process.env.NEXT_PUBLIC_FIREFLY_API_URL || '',
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
+                GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',
@@ -312,7 +313,6 @@ export async function createConfiguration(
         // Focus on performance optimization. Not for download size/cache stability optimization.
         optimization: {
             // we don't need deterministic, and we also don't have chunk request at init we don't need "size"
-            // @ts-expect-error
             chunkIds:
                 productionLike ?
                     rspack ? 'deterministic'
@@ -492,11 +492,12 @@ export async function createConfiguration(
     }
 }
 
-enum TemplateType {
-    Loading,
-    NoLoading,
-    Background,
-}
+const TemplateType = {
+    Loading: 0,
+    NoLoading: 1,
+    Background: 2,
+} as const
+type TemplateType = (typeof TemplateType)[keyof typeof TemplateType]
 const pages = {
     loading: readFile(join(import.meta.dirname, './with-loading.html'), 'utf8'),
     noLoading: readFile(join(import.meta.dirname, './with-no-loading.html'), 'utf8'),

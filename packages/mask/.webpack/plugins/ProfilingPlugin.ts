@@ -11,8 +11,10 @@ export class ProfilingPlugin {
     apply(compiler: Compiler) {
         const { javascript, Template, RuntimeModule } = compiler.webpack
         class HintRuntimeModule extends RuntimeModule {
-            constructor(private modules: data) {
+            private modules: data
+            constructor(modules: data) {
                 super('profiling-hint')
+                this.modules = modules
             }
             override generate() {
                 return `globalThis.measure?.set_compile_info?.(${JSON.stringify(this.modules)});`

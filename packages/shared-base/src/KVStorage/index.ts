@@ -34,6 +34,8 @@ export interface BackupConfig {
     localBackupAt: string | null
     cloudBackupAt: string | null
     cloudBackupMethod: BackupAccountType | null
+    googleToken: string | null
+    googleAccount: string | null
 }
 
 export const PersistentStorages = {
@@ -41,11 +43,15 @@ export const PersistentStorages = {
     Web3: createPersistentKVStorage('web3', {}),
     Settings: createPersistentKVStorage<{
         debugging: boolean
+        /** @deprecated use lastLensAccount instead */
         latestLensProfile: string
+        /** lens account address */
+        lastLensAccount: string
         backupConfig: BackupConfig
     }>('settings', {
         debugging: false,
         latestLensProfile: '',
+        lastLensAccount: '',
         backupConfig: {
             backupPassword: '',
             email: '',
@@ -53,6 +59,8 @@ export const PersistentStorages = {
             localBackupAt: '',
             cloudBackupAt: '',
             cloudBackupMethod: null,
+            googleToken: '',
+            googleAccount: '',
         },
     }),
     /**

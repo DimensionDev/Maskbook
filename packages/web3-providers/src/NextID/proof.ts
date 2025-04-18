@@ -161,7 +161,7 @@ export class NextIDProof {
         const nextIDPersonaBindings: NextIDPersonaBindings[] = []
         let page = 1
         do {
-            const bindings = await fetchFromProofService<NextIDBindings>(
+            const bindings = await fetchFromProofService<NextIDBindings | { message: string }>(
                 urlcat(BASE_URL, '/v1/proof', {
                     platform,
                     identity,
@@ -170,8 +170,12 @@ export class NextIDProof {
                     order: 'desc',
                 }),
             )
+            if ('message' in bindings) {
+                console.error('NextIDProof.queryAllExistedBindingsByPlatform', bindings.message)
+                return nextIDPersonaBindings
+            }
             const personaBindings = bindings.ids
-            if (personaBindings.length === 0) return nextIDPersonaBindings
+            if (!personaBindings?.length) return nextIDPersonaBindings
             nextIDPersonaBindings.push(...personaBindings)
 
             // next is `0` if current page is the last one.

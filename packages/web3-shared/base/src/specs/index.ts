@@ -67,7 +67,6 @@ export enum SourceType {
     Alchemy_EVM = 'Alchemy_EVM',
     Alchemy_FLOW = 'Alchemy_FLOW',
     Chainbase = 'Chainbase',
-    X2Y2 = 'X2Y2',
     MagicEden = 'MagicEden',
     Element = 'Element',
     Solsea = 'Solsea',
@@ -1246,6 +1245,7 @@ export interface TransactionFormatterState<ChainId, Parameters, Transaction> {
     ) => Promise<TransactionDescriptor<ChainId, Transaction, Parameters>>
 }
 export interface TransactionWatcherState<ChainId, Transaction> {
+    start(): void
     emitter: Emitter<WatchEvents<ChainId, Transaction>>
 
     /** Notify error */

@@ -1,8 +1,7 @@
-import { sum } from 'lodash-es'
-import { useState, useMemo, useEffect } from 'react'
+import { useState, useMemo, useEffect, type JSX } from 'react'
 import { makeStyles } from '@masknet/theme'
 import { Typography } from '@mui/material'
-import { useRenderPhraseCallbackOnDepsChange } from '@masknet/shared-base-ui'
+import { isNonNull } from '@masknet/kit'
 
 const useStyles = makeStyles()((theme) => ({
     typed: {
@@ -13,75 +12,84 @@ const useStyles = makeStyles()((theme) => ({
             color: theme.palette.maskColor.highlight,
         },
     },
-    endTyping: {
+    typing: {
         opacity: 0.5,
     },
 }))
 
 interface OnboardingWriterProps extends withClasses<'typed' | 'endTyping'> {
-    sentence: Array<string[] | undefined>
+    sentence: Array<string | undefined>
+    onFinish?: () => void
 }
-let segmenter: Intl.Segmenter
-export function OnboardingWriter({ sentence, ...props }: OnboardingWriterProps) {
+export function OnboardingWriter({ sentence, onFinish, ...props }: OnboardingWriterProps) {
     const { classes, cx } = useStyles(undefined, { props })
+    const typing = cx(classes.typing, classes.typed)
+    const [jsx, setJsx] = useState<JSX.Element | undefined>(undefined)
 
-    const allChars = useMemo(() => sentence.flat().filter(Boolean).join(''), [sentence])
-    const allCharsSegmented = useMemo(() => {
-        return [...(segmenter ||= new Intl.Segmenter()).segment(allChars)].map((x) => x.segment)
-    }, [allChars])
-    const segmentCount = allCharsSegmented.length
-
-    const [codePointIndex, setCodePointIndex] = useState(0)
-    const [segmentIndex, setSegmentIndex] = useState(0)
-    useRenderPhraseCallbackOnDepsChange(() => {
-        setCodePointIndex(0)
-        setSegmentIndex(0)
-    }, [sentence])
+    const writer = useMemo(() => onBoardingWriter({ typed: classes.typed, typing }, sentence), [sentence])
     useEffect(() => {
         const timer = setInterval(() => {
-            setSegmentIndex((segmentIndex) => {
-                const nextSegmentIndex = segmentIndex + 1
-                if (segmentIndex > segmentCount) {
-                    clearInterval(timer)
-                    return segmentIndex
-                }
-                setCodePointIndex(allCharsSegmented.slice(0, nextSegmentIndex).join('').length)
-                return nextSegmentIndex
-            })
+            const next = writer.next()
+            if (next.done) {
+                clearInterval(timer)
+                onFinish?.()
+            } else {
+                setJsx(next.value)
+            }
         }, 50)
 
         return () => {
             clearInterval(timer)
         }
-    }, [allCharsSegmented, segmentCount])
+    }, [writer, onFinish])
 
-    const jsx = useMemo(() => {
-        const newJsx = []
-        let remain = codePointIndex
-        for (const fragment of sentence) {
-            if (!fragment) continue
-            if (remain <= 0) break
-            const size = sum(fragment.map((x) => x.length))
-            const take = Math.min(size, remain)
+    return jsx
+}
+let segmenter: Intl.Segmenter
+function* onBoardingWriter(className: { typed: string; typing: string }, sentences: Array<string | undefined>) {
+    segmenter ||= new Intl.Segmenter()
+    const previousLines: JSX.Element[] = []
+    const currentLine: Array<{ type: 'bold' | 'normal'; text: string }> = [{ type: 'normal', text: '' }]
 
-            remain -= take
-
-            const [text, strongText] = fragment
-
-            const className = cx(classes.typed, remain !== 0 ? classes.endTyping : undefined)
-            // the trailing space gets trimmed by i18n marco
-            if (take <= text.length) newJsx.push(<Typography className={className}>{text.slice(0, take)}</Typography>)
-            else
-                newJsx.push(
-                    <Typography className={className}>
-                        {text}
-                        <strong key={size}> {strongText.slice(0, take - text.length)}</strong>
-                    </Typography>,
-                )
+    for (const sentence of sentences.filter(isNonNull)) {
+        const chars = [...segmenter.segment(sentence)]
+        let currentLineJSX: JSX.Element | undefined
+        for (let index = 0; index < chars.length; index += 1) {
+            const char = chars[index].segment
+            const lastPiece = currentLine.at(-1)!
+            if (char === '*') {
+                const nextChar = chars[index + 1]?.segment
+                if (nextChar === '*') {
+                    currentLine.push({ type: lastPiece.type === 'normal' ? 'bold' : 'normal', text: '' })
+                    index += 1
+                    continue
+                }
+            }
+            lastPiece.text += char
+            const children = currentLine.map((x, index) =>
+                x.type === 'normal' ? x.text : <strong key={index}>{x.text}</strong>,
+            )
+            currentLineJSX = (
+                <Typography className={className.typed} key={sentence}>
+                    {children}
+                </Typography>
+            )
+            yield (
+                <>
+                    {previousLines}
+                    {
+                        <Typography className={className.typing} key={sentence}>
+                            {children}
+                        </Typography>
+                    }
+                </>
+            )
         }
-
-        return newJsx
-    }, [sentence, codePointIndex])
-
-    return <>{jsx}</>
+        if (currentLineJSX) {
+            previousLines.push(currentLineJSX)
+            currentLine.length = 0
+            currentLine.push({ type: 'normal', text: '' })
+        }
+        yield <>{previousLines}</>
+    }
 }

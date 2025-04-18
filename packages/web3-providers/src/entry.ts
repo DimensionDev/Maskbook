@@ -16,7 +16,7 @@ export { DSearch } from './DSearch/index.js'
 export { Mirror } from './Mirror/index.js'
 export { CryptoScamDB } from './CryptoScamDB/index.js'
 export { Multicall } from './Multicall/index.js'
-export { Lens } from './Lens/index.js'
+export { LensV3 } from './LensV3/index.js'
 export { RedPacket, CREATE_LUCKY_DROP_TOPIC } from './RedPacket/index.js'
 export { TheGraphRedPacket } from './TheGraph/index.js'
 export {
@@ -126,3 +126,5 @@ export { NFTSpam } from './NFTSpam/index.js'
 
 // Stores
 export { AvatarStore, getAvatarFromStorage, setAvatarToStorage } from './AvatarStore/index.js'
+
+export * from './GoogleDriveClient/index.js'

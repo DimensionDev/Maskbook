@@ -9,11 +9,11 @@ function useUserContext() {
     )
 
     const updateUser = useCallback(
-        async (obj: Partial<BackupConfig>) => {
+        async (userConfig: Partial<BackupConfig>) => {
             await PersistentStorages.Settings.storage.backupConfig.setValue({
                 ...user,
-                ...obj,
-                backupPassword: obj.backupPassword ? btoa(obj.backupPassword) : user.backupPassword,
+                ...userConfig,
+                backupPassword: userConfig.backupPassword ? btoa(userConfig.backupPassword) : user.backupPassword,
             })
         },
         [user],
@@ -30,7 +30,7 @@ function useUserContext() {
             // Maybe `backupPassword` is not base64-encoded.
             return user
         }
-    }, [user, updateUser])
+    }, [user])
 
     return {
         user: result,

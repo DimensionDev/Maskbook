@@ -8,7 +8,6 @@ import * as NFTScanNonFungibleTokenEVM from /* webpackDefer: true */ '../../../N
 import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
 import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
 import * as SimpleHashEVM from /* webpackDefer: true */ '../../../SimpleHash/index.js'
-import * as X2Y2 from /* webpackDefer: true */ '../../../X2Y2/index.js'
 import * as ZerionNonFungibleToken from /* webpackDefer: true */ '../../../Zerion/index.js'
 import * as Zora from /* webpackDefer: true */ '../../../Zora/index.js'
 import { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
@@ -26,7 +25,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
             | TokenListAPI.Provider<ChainId, SchemaType>
         >(
             {
-                [SourceType.X2Y2]: X2Y2.X2Y2,
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken.ChainbaseNonFungibleToken,
                 [SourceType.Zerion]: ZerionNonFungibleToken.ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
@@ -41,7 +39,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
                 [
                     SimpleHashEVM.SimpleHashEVM,
                     NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
-                    X2Y2.X2Y2,
                     ZerionNonFungibleToken.ZerionNonFungibleToken,
                     AlchemyEVM.AlchemyEVM,
                     Zora.Zora,

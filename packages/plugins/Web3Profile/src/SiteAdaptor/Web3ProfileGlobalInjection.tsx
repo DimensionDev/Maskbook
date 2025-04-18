@@ -19,10 +19,7 @@ export const Web3ProfileGlobalInjection = memo(function Web3ProfileGlobalInjecti
     const { open: lensOpen, closeDialog: closeLensDialog } = useRemoteControlledDialog(
         CrossIsolationMessages.events.followLensDialogEvent,
         (ev) => {
-            if (!ev.open) {
-                setHandle('')
-            }
-            setHandle(ev.handle)
+            setHandle(ev.open ? ev.handle : '')
         },
     )
 

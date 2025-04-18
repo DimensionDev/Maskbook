@@ -1,7 +1,10 @@
 {
     "messages": {
         "VydyRR": ["<0>", ["0"], "</0> Followers <1>", ["1"], "</1> Following"],
+        "f6pX67": ["<0>0</0> Followers <1>0</1> Following"],
         "GtJJAj": ["ウォレットを追加"],
+        "hWUuAb": ["Already following"],
+        "8bgRf6": ["Can not follow: ", ["0"]],
         "o+XJ9D": ["変更"],
         "HvUm3m": ["Choose and show your Web3 footprints on X."],
         "7VpPHA": ["確認"],
@@ -17,6 +20,7 @@
         "pIyHYi": ["レンズをフォロー"],
         "4coHVU": ["レンズのフォローを解除"],
         "5iHe/7": ["ネットワークエラーが発生しました。もう一度やり直してください"],
+        "UPJjXF": ["Network error, try again: ", ["0"]],
         "sxkNvs": ["フォロープロセスを完了するための十分な残高がありません。"],
         "A1bmDM": ["ここには確認済みのアカウントが見つかりません。"],
         "xzRJYu": ["レンズのハンドルを握るだけでフォローできます。"],
@@ -30,6 +34,7 @@
         "jl7yZQ": ["Web3 プロファイルウォレットを正常にセットアップしました。"],
         "CpciBt": ["Polygonに切り替えてフォロー"],
         "IUp08P": ["現在のウォレットはレンズを保持しておらず、フォロー/フォロー解除はできません"],
+        "1Wbxhe": ["This profile can not be followed: ", ["0"]],
         "nV/wXH": ["このプロフィールはフォローできません。"],
         "/jZSwf": ["このユーザーはフォロー機能を禁止しています。"],
         "p+ngUo": ["フォロー解除"],

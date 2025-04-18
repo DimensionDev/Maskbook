@@ -39,6 +39,7 @@ export function git_hub_url() { return new URL("./brands/GitHub.svg", import.met
 export function github_dark_url() { return new URL("./brands/GithubDark.svg", import.meta.url).href }
 export function git_hub_gray_url() { return new URL("./brands/GitHubGray.svg", import.meta.url).href }
 export function gnosis_url() { return new URL("./brands/Gnosis.svg", import.meta.url).href }
+export function google_drive_url() { return new URL("./brands/GoogleDrive.svg", import.meta.url).href }
 export function highlight_url() { return new URL("./brands/Highlight.svg", import.meta.url).href }
 export function instagram_url() { return new URL("./brands/Instagram.svg", import.meta.url).href }
 export function instagram_round_colored_url() { return new URL("./brands/InstagramRoundColored.svg", import.meta.url).href }
@@ -114,7 +115,6 @@ export function twitter_x_round_dark_url() { return new URL("./brands/TwitterXRo
 export function twitter_x_round_light_url() { return new URL("./brands/TwitterXRound.light.svg", import.meta.url).href }
 export function uniswap_url() { return new URL("./brands/Uniswap.svg", import.meta.url).href }
 export function weth_url() { return new URL("./brands/WETH.svg", import.meta.url).href }
-export function x_2_y_2_url() { return new URL("./brands/X2Y2.svg", import.meta.url).href }
 export function x_log_dark_url() { return new URL("./brands/XLog.dark.svg", import.meta.url).href }
 export function x_log_url() { return new URL("./brands/XLog.svg", import.meta.url).href }
 export function you_tube_url() { return new URL("./brands/YouTube.svg", import.meta.url).href }

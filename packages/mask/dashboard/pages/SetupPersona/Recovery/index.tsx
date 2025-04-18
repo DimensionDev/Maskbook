@@ -1,54 +1,50 @@
-import { DashboardRoutes } from '@masknet/shared-base'
-import type { UseFormSetError } from 'react-hook-form'
-import { MaskTabList, makeStyles, useTabs } from '@masknet/theme'
-import { TabContext, TabPanel } from '@mui/lab'
-import { Button, Tab, Typography } from '@mui/material'
-import { Box } from '@mui/system'
-import { memo, use, useCallback, useMemo, useState, type ReactNode } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { RestoreFromPrivateKey, type FormInputs } from '../../../components/Restore/RestoreFromPrivateKey.js'
-import { RestorePersonaFromLocal } from '../../../components/Restore/RestorePersonaFromLocal.js'
-import { RestoreFromCloud } from '../../../components/Restore/RestoreFromCloud/index.js'
-import { RecoveryProvider, RecoveryContext } from '../../../contexts/index.js'
-import { RestoreFromMnemonic } from '../../../components/Restore/RestoreFromMnemonic.js'
-import Services from '#services'
-import { delay } from '@masknet/kit'
-
-import urlcat from 'urlcat'
-import { SignUpRoutePath } from '../../SignUp/routePath.js'
-import { PersonaContext } from '@masknet/shared'
-import { msg } from '@lingui/core/macro'
 import { Trans } from '@lingui/react/macro'
-import { useLingui } from '@lingui/react'
+import { usePathTab, type TabPathTuple } from '@masknet/shared'
+import { DashboardRoutes } from '@masknet/shared-base'
+import { MaskTabList, makeStyles } from '@masknet/theme'
+import { TabContext } from '@mui/lab'
+import { Box, Tab, Typography } from '@mui/material'
+import { memo, useRef } from 'react'
+import { Link, Outlet } from 'react-router-dom'
+import { RecoveryMethod } from './types.js'
 
 const useStyles = makeStyles()((theme) => ({
+    container: {
+        display: 'flex',
+        flexDirection: 'column',
+        height: '100%',
+    },
     header: {
         display: 'flex',
-        justifyContent: 'space-between',
+        gap: theme.spacing(1.5),
     },
-    second: {
-        fontSize: 14,
-        lineHeight: '18px',
-        color: theme.palette.maskColor.second,
+    texts: {
+        display: 'flex',
+        flexDirection: 'column',
+        gap: theme.spacing(1.5),
+        marginRight: 'auto',
     },
     setup: {
         fontSize: 14,
         lineHeight: '18px',
         color: theme.palette.maskColor.main,
         fontWeight: 700,
+        textDecoration: 'none',
     },
     title: {
         fontSize: 36,
         lineHeight: 1.2,
         fontWeight: 700,
     },
+    description: {
+        color: theme.palette.maskColor.second,
+        fontSize: 14,
+    },
     tabContainer: {
         border: `1px solid ${theme.palette.maskColor.line}`,
         marginTop: theme.spacing(3),
         borderRadius: theme.spacing(1, 1, 0, 0),
         overflow: 'hidden',
-        marginBottom: 46,
     },
     tabList: {
         background:
@@ -61,157 +57,75 @@ const useStyles = makeStyles()((theme) => ({
         fontSize: 16,
         fontWeight: 700,
     },
-    panels: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: 0,
-        width: '100%',
-    },
     panelContainer: {
         padding: theme.spacing(2),
     },
-    buttonGroup: {
-        display: 'flex',
-        columnGap: 12,
+    exclaveActions: {
+        marginTop: 'auto',
     },
 }))
 
+const tuples: TabPathTuple[] = [
+    [RecoveryMethod.Phrase, DashboardRoutes.RecoveryPhrase],
+    [RecoveryMethod.PrivateKey, DashboardRoutes.RecoveryPrivateKey],
+    [RecoveryMethod.Local, DashboardRoutes.RecoveryLocal],
+    [RecoveryMethod.Cloud, DashboardRoutes.RecoveryCloudMaskNetwork, DashboardRoutes.RecoveryCloudGoogleDrive],
+]
+
 export const Component = memo(function Recovery() {
-    const { _ } = useLingui()
     const { classes } = useStyles()
-    const { currentPersona } = PersonaContext.useContainer()
-    const tabPanelClasses = useMemo(() => ({ root: classes.panels }), [classes.panels])
-    const navigate = useNavigate()
-    const [error, setError] = useState<ReactNode>()
 
-    const [currentTab, onChange, tabs] = useTabs('mnemonic', 'privateKey', 'local', 'cloud')
+    const [tab, handleTabChange] = usePathTab(tuples)
 
-    const handleRestoreFromMnemonic = useCallback(
-        async (values: string[]) => {
-            try {
-                const persona = await Services.Identity.queryPersonaByMnemonic(values.join(' '), '')
-                if (persona) {
-                    await Services.Settings.setCurrentPersonaIdentifier(persona)
-                    // Waiting persona changed event notify
-                    await delay(100)
-                    navigate(DashboardRoutes.SignUpPersonaOnboarding, { replace: true })
-                } else {
-                    navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
-                        replace: false,
-                        state: { mnemonic: values },
-                    })
-                }
-            } catch {
-                setError(<Trans>Incorrect recovery phrase.</Trans>)
-            }
-        },
-        [navigate],
-    )
-
-    const handleRestoreFromPrivateKey = useCallback(
-        async (data: FormInputs, onError: UseFormSetError<FormInputs>) => {
-            try {
-                const persona = await Services.Identity.loginExistPersonaByPrivateKey(data.privateKey)
-                if (persona) {
-                    await Services.Settings.setCurrentPersonaIdentifier(persona)
-                    // Waiting persona changed event notify
-                    await delay(100)
-                    navigate(DashboardRoutes.SignUpPersonaOnboarding)
-                } else {
-                    navigate(`${DashboardRoutes.SignUp}/${SignUpRoutePath.PersonaRecovery}`, {
-                        replace: false,
-                        state: { privateKey: data.privateKey },
-                    })
-                }
-            } catch {
-                onError('privateKey', { type: 'value', message: _(msg`Incorrect Private Key`) })
-            }
-        },
-        [_, navigate],
-    )
-
-    const hasNoPersona = !currentPersona
-    const onRestore = useCallback(
-        async (count?: number) => {
-            if (hasNoPersona) {
-                const lastedPersona = await Services.Identity.queryLastPersonaCreated()
-                if (lastedPersona) {
-                    await Services.Settings.setCurrentPersonaIdentifier(lastedPersona)
-                    await delay(1000)
-                }
-            }
-            navigate(urlcat(DashboardRoutes.SignUpPersonaOnboarding, { count }), { replace: true })
-        },
-        [hasNoPersona, Services.Settings.setCurrentPersonaIdentifier, navigate],
-    )
+    const portalContainerRef = useRef<HTMLDivElement>(null)
 
     return (
-        <>
+        <Box className={classes.container}>
             <Box className={classes.header}>
-                <Typography variant="h1" className={classes.title}>
-                    <Trans>Recover your data</Trans>
+                <div className={classes.texts}>
+                    <Typography variant="h1" className={classes.title}>
+                        <Trans>Recover your data</Trans>
+                    </Typography>
+                    <Typography className={classes.description}>
+                        <Trans>Please select the appropriate method to restore your personal data.</Trans>
+                    </Typography>
+                </div>
+                <Typography className={classes.setup} component={Link} to={DashboardRoutes.SignUpPersona}>
+                    <Trans>Create Persona</Trans>
                 </Typography>
-                <Button
-                    variant="text"
-                    className={classes.setup}
-                    onClick={() => {
-                        navigate(DashboardRoutes.SignUpPersona)
-                    }}>
-                    <Trans>Sign Up</Trans>
-                </Button>
             </Box>
-
-            <Typography className={classes.second} mt={2}>
-                <Trans>Please select the appropriate method to restore your personal data.</Trans>
-            </Typography>
-            <RecoveryProvider>
-                <div className={classes.tabContainer}>
-                    <TabContext value={currentTab}>
-                        <div className={classes.tabList}>
-                            <MaskTabList variant="base" onChange={onChange} aria-label="Recovery Methods">
-                                <Tab
-                                    className={classes.tab}
-                                    label={<Trans>Recovery Phrase</Trans>}
-                                    value={tabs.mnemonic}
-                                />
-                                <Tab
-                                    className={classes.tab}
-                                    label={<Trans>Private Key</Trans>}
-                                    value={tabs.privateKey}
-                                />
-                                <Tab className={classes.tab} label={<Trans>Local Backup</Trans>} value={tabs.local} />
-                                <Tab className={classes.tab} label={<Trans>Cloud Backup</Trans>} value={tabs.cloud} />
-                            </MaskTabList>
-                        </div>
-                        <div className={classes.panelContainer}>
-                            <TabPanel value={tabs.mnemonic} classes={tabPanelClasses}>
-                                <RestoreFromMnemonic
-                                    handleRestoreFromMnemonic={handleRestoreFromMnemonic}
-                                    error={error}
-                                    setError={setError}
-                                />
-                            </TabPanel>
-                            <TabPanel value={tabs.privateKey} classes={tabPanelClasses}>
-                                <RestoreFromPrivateKey handleRestoreFromPrivateKey={handleRestoreFromPrivateKey} />
-                            </TabPanel>
-                            <TabPanel value={tabs.local} classes={tabPanelClasses}>
-                                <RestorePersonaFromLocal onRestore={onRestore} />
-                            </TabPanel>
-                            <TabPanel value={tabs.cloud} classes={tabPanelClasses}>
-                                <RestoreFromCloud />
-                            </TabPanel>
-                        </div>
+            <Box className={classes.tabContainer}>
+                <div className={classes.tabList}>
+                    <TabContext value={tab}>
+                        <MaskTabList variant="base" onChange={handleTabChange} aria-label="Cloud Backup Methods">
+                            <Tab
+                                className={classes.tab}
+                                label={<Trans>Recovery Phrase</Trans>}
+                                value={RecoveryMethod.Phrase}
+                            />
+                            <Tab
+                                className={classes.tab}
+                                label={<Trans>Private Key</Trans>}
+                                value={RecoveryMethod.PrivateKey}
+                            />
+                            <Tab
+                                className={classes.tab}
+                                label={<Trans>Local Backup</Trans>}
+                                value={RecoveryMethod.Local}
+                            />
+                            <Tab
+                                className={classes.tab}
+                                label={<Trans>Cloud Backup</Trans>}
+                                value={RecoveryMethod.Cloud}
+                            />
+                        </MaskTabList>
                     </TabContext>
                 </div>
-                <SetupFrameController>
-                    <Outlet />
-                </SetupFrameController>
-            </RecoveryProvider>
-        </>
+                <div className={classes.panelContainer}>
+                    <Outlet context={{ portalContainerRef }} />
+                </div>
+            </Box>
+            <Box className={classes.exclaveActions} ref={portalContainerRef}></Box>
+        </Box>
     )
 })
-function Outlet() {
-    const { classes } = useStyles()
-    return <div className={classes.buttonGroup}>{use(RecoveryContext).SubmitOutlet}</div>
-}

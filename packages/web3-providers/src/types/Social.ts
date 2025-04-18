@@ -143,7 +143,7 @@ export namespace Social {
         isEncryptedByMask?: boolean
         restriction?: RestrictionType
         metadata: {
-            locale: string
+            locale?: string
             description?: string
             content: {
                 content?: string
@@ -173,12 +173,16 @@ export namespace Social {
         }
         stats?: {
             comments: number
-            mirrors: number
+            /** @deprecated use reposts instead */
+            mirrors?: number
+            reposts?: number
             quotes?: number
             /** Like count */
             reactions: number
             bookmarks?: number
             countOpenActions?: number
+            upvotes?: number
+            collects?: number
         }
         mirrors?: Profile[]
         reactions?: Profile[]

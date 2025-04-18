@@ -1,7 +1,10 @@
 {
     "messages": {
         "VydyRR": ["<0>", ["0"], "</0> Followers <1>", ["1"], "</1> Following"],
+        "f6pX67": ["<0>0</0> Followers <1>0</1> Following"],
         "GtJJAj": ["添加钱包"],
+        "hWUuAb": ["Already following"],
+        "8bgRf6": ["Can not follow: ", ["0"]],
         "o+XJ9D": ["切换"],
         "HvUm3m": ["Choose and show your Web3 footprints on X."],
         "7VpPHA": ["确定"],
@@ -17,6 +20,7 @@
         "pIyHYi": ["Lens 关注"],
         "4coHVU": ["Lens 取消关注"],
         "5iHe/7": ["网络错误，请重试"],
+        "UPJjXF": ["Network error, try again: ", ["0"]],
         "sxkNvs": ["没有足够的余额来完成关注流程。"],
         "A1bmDM": ["在此找不到已验证的帐户。"],
         "xzRJYu": ["只有拥有lens handle才能进行关注。"],
@@ -28,6 +32,7 @@
         "jl7yZQ": ["成功设置 Web3 个人资料钱包。"],
         "CpciBt": ["切换到 Polygon 并关注"],
         "IUp08P": ["当前钱包没有 Lens ，无法关注/取消关注"],
+        "1Wbxhe": ["This profile can not be followed: ", ["0"]],
         "nV/wXH": ["此个人信息不能被关注。"],
         "/jZSwf": ["此用户已禁止关注功能。"],
         "p+ngUo": ["取消关注"],

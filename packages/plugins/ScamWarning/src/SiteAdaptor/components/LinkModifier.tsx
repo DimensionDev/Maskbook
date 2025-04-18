@@ -3,11 +3,11 @@ import type { Plugin } from '@masknet/plugin-infra'
 import { makeStyles, ShadowRootPopper } from '@masknet/theme'
 import { Link } from '@mui/material'
 import { memo } from 'react'
-import { usePopoverControl } from './usePopoverControl.js'
-import { WarningCard } from './WarningCard.js'
+import { useCheckLink } from '../hooks/useCheckLink.js'
 import { useDetectAddress } from '../hooks/useDetectAddress.js'
 import { AddressTag } from './TextModifier.js'
-import { useCheckLink } from '../hooks/useCheckLink.js'
+import { usePopoverControl } from './usePopoverControl.js'
+import { WarningCard } from './WarningCard.js'
 
 const useStyles = makeStyles()((theme) => ({
     link: {

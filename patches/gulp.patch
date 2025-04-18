@@ -1,0 +1,44 @@
+diff --git a/bin/gulp.js b/bin/gulp.js
+index f4b80cc41c688105989296a0731729a171b27ac0..d0703389c9cb8fc7bea0a1ef8e7b920fe354fa0a 100755
+--- a/bin/gulp.js
++++ b/bin/gulp.js
+@@ -1,3 +1,2 @@
+ #!/usr/bin/env node
+-
+ require('gulp-cli')();
+diff --git a/bin/ts-gulp.js b/bin/ts-gulp.js
+new file mode 100644
+index 0000000000000000000000000000000000000000..a8e66080f68b94741ebfc5fe76336f4aea9c4897
+--- /dev/null
++++ b/bin/ts-gulp.js
+@@ -0,0 +1,17 @@
++#!/usr/bin/env node
++
++const { spawnSync } = require('child_process');
++const { join } = require('path');
++const child = spawnSync(
++  process.execPath,
++  [
++    '--disable-warning=ExperimentalWarning',
++    '--experimental-strip-types',
++    join(__dirname, './gulp.js'),
++    ...process.argv.slice(2),
++  ],
++  {
++    stdio: 'inherit',
++  },
++);
++if (child.status) process.exit(child.status);
+diff --git a/package.json b/package.json
+index be5477ddf77fc32ebce569347c38ac322dbda6e7..68a2a528abe62341b10f31a87687833065724700 100644
+--- a/package.json
++++ b/package.json
+@@ -27,7 +27,7 @@
+     "bin"
+   ],
+   "bin": {
+-    "gulp": "./bin/gulp.js"
++    "gulp": "./bin/ts-gulp.js"
+   },
+   "scripts": {
+     "lint": "eslint .",

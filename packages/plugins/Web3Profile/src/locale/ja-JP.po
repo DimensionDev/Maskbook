@@ -16,15 +16,26 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
 
-#. placeholder {0}: profile?.stats.followers ?? '0'
-#. placeholder {1}: profile?.stats.following ?? '0'
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+#~ msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "<0>0</0> Followers <1>0</1> Following"
 msgstr ""
 
 #: src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
 msgstr "ウォレットを追加"
+
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+msgid "Already following"
+msgstr ""
+
+#. placeholder {0}: lensAccount.operations.canFollow.reason
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Can not follow: {0}"
+msgstr ""
 
 #: src/SiteAdaptor/components/ProfilePopup.tsx
 #: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
@@ -57,16 +68,16 @@ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "フォロー"
 
-#. placeholder {0}: profile.followModule.amount.value
-#. placeholder {1}: profile.followModule.amount.asset.symbol
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Follow for {0} {1}"
-msgstr ""
+#~ msgid "Follow for {0} {1}"
+#~ msgstr ""
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Follow Lens handle"
 msgstr "レンズの指示に従ってください"
 
@@ -88,21 +99,25 @@ msgid "Lens Unfollow"
 msgstr "レンズのフォローを解除"
 
 #: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
 msgid "Network error, try again"
 msgstr "ネットワークエラーが発生しました。もう一度やり直してください"
 
+#. placeholder {0}: error.message
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+msgid "Network error, try again: {0}"
+msgstr ""
+
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "No enough balance to complete follow process."
-msgstr "フォロープロセスを完了するための十分な残高がありません。"
+#~ msgid "No enough balance to complete follow process."
+#~ msgstr "フォロープロセスを完了するための十分な残高がありません。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
 msgstr "ここには確認済みのアカウントが見つかりません。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Only holding lens handle can follow."
-msgstr "レンズのハンドルを握るだけでフォローできます。"
+#~ msgid "Only holding lens handle can follow."
+#~ msgstr "レンズのハンドルを握るだけでフォローできます。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -136,13 +151,18 @@ msgstr "Polygonに切り替えてフォロー"
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr "現在のウォレットはレンズを保持しておらず、フォロー/フォロー解除はできません"
 
+#. placeholder {0}: lensAccount.operations.canFollow.reason
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "This profile can not be followed: {0}"
+msgstr ""
+
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This profile can not be followed."
 msgstr "このプロフィールはフォローできません。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "This user has banned follow function."
-msgstr "このユーザーはフォロー機能を禁止しています。"
+#~ msgid "This user has banned follow function."
+#~ msgstr "このユーザーはフォロー機能を禁止しています。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
@@ -152,12 +172,10 @@ msgstr "フォロー解除"
 msgid "Unfollow lens handle"
 msgstr "レンズハンドルのフォローを解除"
 
-#. placeholder {0}: value?.profile.followModule?.amount?.value ?? ZERO.toFixed()
-#. placeholder {1}: approved.token?.symbol ?? ''
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Unlock {0} {1} and follow"
-msgstr "{0} {1} をロック解除してフォロー"
+#~ msgid "Unlock {0} {1} and follow"
+#~ msgstr "{0} {1} をロック解除してフォロー"
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"

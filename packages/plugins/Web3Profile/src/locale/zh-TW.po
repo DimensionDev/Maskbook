@@ -16,14 +16,25 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Web3Profile/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1006\n"
 
-#. placeholder {0}: profile?.stats.followers ?? '0'
-#. placeholder {1}: profile?.stats.following ?? '0'
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+#~ msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "<0>0</0> Followers <1>0</1> Following"
 msgstr ""
 
 #: src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
+msgstr ""
+
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+msgid "Already following"
+msgstr ""
+
+#. placeholder {0}: lensAccount.operations.canFollow.reason
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Can not follow: {0}"
 msgstr ""
 
 #: src/SiteAdaptor/components/ProfilePopup.tsx
@@ -57,16 +68,16 @@ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr ""
 
-#. placeholder {0}: profile.followModule.amount.value
-#. placeholder {1}: profile.followModule.amount.asset.symbol
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Follow for {0} {1}"
-msgstr ""
+#~ msgid "Follow for {0} {1}"
+#~ msgstr ""
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Follow Lens handle"
 msgstr ""
 
@@ -88,21 +99,25 @@ msgid "Lens Unfollow"
 msgstr ""
 
 #: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
 msgid "Network error, try again"
 msgstr ""
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "No enough balance to complete follow process."
+#. placeholder {0}: error.message
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+msgid "Network error, try again: {0}"
 msgstr ""
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#~ msgid "No enough balance to complete follow process."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
 msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Only holding lens handle can follow."
-msgstr ""
+#~ msgid "Only holding lens handle can follow."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -136,13 +151,18 @@ msgstr ""
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr ""
 
+#. placeholder {0}: lensAccount.operations.canFollow.reason
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "This profile can not be followed: {0}"
+msgstr ""
+
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This profile can not be followed."
 msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "This user has banned follow function."
-msgstr ""
+#~ msgid "This user has banned follow function."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
@@ -152,12 +172,10 @@ msgstr ""
 msgid "Unfollow lens handle"
 msgstr ""
 
-#. placeholder {0}: value?.profile.followModule?.amount?.value ?? ZERO.toFixed()
-#. placeholder {1}: approved.token?.symbol ?? ''
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Unlock {0} {1} and follow"
-msgstr ""
+#~ msgid "Unlock {0} {1} and follow"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"

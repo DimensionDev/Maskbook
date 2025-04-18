@@ -1,8 +1,9 @@
 import { t } from '@lingui/core/macro'
 import { timeout } from '@masknet/kit'
+import { useLensClient } from '@masknet/shared'
 import { EMPTY_LIST, type PageIndicator } from '@masknet/shared-base'
 import { useFireflyFarcasterAccounts, useFireflyLensAccounts } from '@masknet/web3-hooks-base'
-import { FireflyConfig, FireflyFarcaster, Lens } from '@masknet/web3-providers'
+import { FireflyConfig, FireflyFarcaster } from '@masknet/web3-providers'
 import { skipToken, useInfiniteQuery, useQuery } from '@tanstack/react-query'
 import { sortBy, uniq } from 'lodash-es'
 import { useCallback } from 'react'
@@ -48,12 +49,14 @@ export function useSocialFeeds({ userId, address }: Options) {
         },
     })
 
+    const lensClient = useLensClient()
     const lensHandles = uniq(lensAccounts.map((x) => x.handle).concat(profiles?.lensHandles || []))
-    const { data: lensIds = EMPTY_LIST } = useQuery({
-        queryKey: ['lens', 'popup-list', lensHandles],
+    const { data: accounts = EMPTY_LIST } = useQuery({
+        queryKey: ['lens', 'popup-list', lensHandles, !lensClient],
         queryFn: async () => {
-            const profiles = await Lens.getProfilesByHandles(lensHandles)
-            return profiles.map((x) => x.id)
+            if (!lensClient) return
+            const profiles = await lensClient.getAccountsByHandles(lensHandles)
+            return profiles?.map((x) => x.address) || EMPTY_LIST
         },
     })
     const {
@@ -65,9 +68,10 @@ export function useSocialFeeds({ userId, address }: Options) {
         hasNextPage: hasNextLensPage,
         isLoading: isLoadingLens,
     } = useInfiniteQuery({
-        queryKey: ['social-feeds', 'lens', lensIds],
+        enabled: !!lensClient,
+        queryKey: ['social-feeds', 'lens', accounts, !lensClient],
         queryFn: async ({ pageParam }) => {
-            return timeout(Lens.getPostsByProfileId(lensIds, pageParam), 30_000, t`Request timed out`)
+            return timeout(lensClient!.getPostsByAccounts(accounts, pageParam), 30_000, t`Request timed out`)
         },
         initialPageParam: undefined as PageIndicator | undefined,
         getNextPageParam: (lastPage) => lastPage?.nextIndicator,

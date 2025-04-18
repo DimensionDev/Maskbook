@@ -2,17 +2,17 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Controller, useForm } from 'react-hook-form'
 import type { UseFormSetError, SubmitHandler } from 'react-hook-form'
 import { makeStyles } from '@masknet/theme'
-import { Box, TextField } from '@mui/material'
+import { Box } from '@mui/material'
 import { memo, useCallback, useLayoutEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { z } from 'zod'
 import { PrimaryButton } from '../PrimaryButton/index.js'
 import { usePersonaRecovery } from '../../contexts/index.js'
 import { Trans, useLingui } from '@lingui/react/macro'
+import PasswordField from '../PasswordField/index.js'
 
 const useStyles = makeStyles()((theme) => ({
     input: {
-        paddingTop: 12,
         backgroundColor: theme.palette.maskColor.input,
         color: theme.palette.maskColor.main,
     },
@@ -74,7 +74,7 @@ export const RestoreFromPrivateKey = memo(function RestoreFromPrivateKey({
             <Controller
                 control={control}
                 render={({ field }) => (
-                    <TextField
+                    <PasswordField
                         {...field}
                         autoFocus
                         InputProps={{

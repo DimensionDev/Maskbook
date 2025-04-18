@@ -239,6 +239,11 @@ export const Gnosis = /*#__PURE__*/ __createIcon('Gnosis', [
         u: () => new URL('./brands/Gnosis.svg', import.meta.url).href,
     },
 ])
+export const GoogleDrive = /*#__PURE__*/ __createIcon('GoogleDrive', [
+    {
+        u: () => new URL('./brands/GoogleDrive.svg', import.meta.url).href,
+    },
+])
 export const Highlight = /*#__PURE__*/ __createIcon('Highlight', [
     {
         u: () => new URL('./brands/Highlight.svg', import.meta.url).href,
@@ -631,11 +636,6 @@ export const Uniswap = /*#__PURE__*/ __createIcon('Uniswap', [
 export const WETH = /*#__PURE__*/ __createIcon('WETH', [
     {
         u: () => new URL('./brands/WETH.svg', import.meta.url).href,
-    },
-])
-export const X2Y2 = /*#__PURE__*/ __createIcon('X2Y2', [
-    {
-        u: () => new URL('./brands/X2Y2.svg', import.meta.url).href,
     },
 ])
 export const XLog = /*#__PURE__*/ __createIcon('XLog', [
