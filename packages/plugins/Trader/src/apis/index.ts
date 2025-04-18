@@ -1,10 +1,10 @@
-import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
+import type { Web3Helper } from '@masknet/web3-helpers'
 import { CoinGeckoTrending, NFTScanTrending_EVM, NFTScanTrending_Solana } from '@masknet/web3-providers'
 import { type TrendingAPI } from '@masknet/web3-providers/types'
+import { SourceType, type NonFungibleCollectionOverview } from '@masknet/web3-shared-base'
 import type { ChainId as ChainIdEVM } from '@masknet/web3-shared-evm'
 import type { ChainId as ChainIdSolana } from '@masknet/web3-shared-solana'
-import type { Web3Helper } from '@masknet/web3-helpers'
 import type { Currency, Stat, Trending } from '../types/index.js'
 
 export async function getCoinInfoByAddress(address: string): Promise<TrendingAPI.CoinInfo | undefined> {
@@ -61,20 +61,6 @@ export async function getNFT_TrendingOverview(
     return pluginID === NetworkPluginID.PLUGIN_SOLANA ?
             NFTScanTrending_Solana.getCollectionOverview(chainId as ChainIdSolana, id)
         :   NFTScanTrending_EVM.getCollectionOverview(chainId as ChainIdEVM, id)
-}
-// #endregion
-
-// #region get hightest historical floor price
-export async function getHighestFloorPrice(id: string) {
-    // Migrate from SimpleHashEVM.getHighestFloorPrice(id)
-    return 0
-}
-// #endregion
-
-// #region get 24h sale amounts
-export async function getOneDaySaleAmounts(id: string) {
-    // Migrate from SimpleHashEVM.getOneDaySaleAmounts(id)
-    return 0 // SimpleHashEVM.getOneDaySaleAmounts(id)
 }
 // #endregion
 

@@ -1,13 +1,13 @@
-import { Stack, Typography, Grid } from '@mui/material'
+import { Trans } from '@lingui/react/macro'
+import { FungibleCoinMarketTable, TokenIcon, WalletIcon } from '@masknet/shared'
+import { NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkDescriptor } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { TokenIcon, WalletIcon, FungibleCoinMarketTable } from '@masknet/shared'
 import { CurrencyType, formatInteger, formatSupply, TokenType } from '@masknet/web3-shared-base'
+import { Grid, Stack, Typography } from '@mui/material'
+import { useNFT_TrendingOverview } from '../../trending/useTrending.js'
 import type { Trending } from '../../types/index.js'
-import { useHighestFloorPrice, useNFT_TrendingOverview, useOneDaySaleAmounts } from '../../trending/useTrending.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     gridContainer: {
@@ -53,14 +53,8 @@ function NonFungibleCoinMarketTable(props: CoinMarketTableProps) {
     const { trending, result } = props
     const chainId = result.chainId ?? trending.coin.chainId
     const { data: overview } = useNFT_TrendingOverview(result.pluginID, trending.coin.id, chainId)
-    const { data: highestPrice_ } = useHighestFloorPrice(
-        (overview?.highest_price ?? trending.market?.highest_price) ? '' : trending.coin.id,
-    )
-    const { data: salesOneDay_ } = useOneDaySaleAmounts(
-        (overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h) ? '' : trending.coin.id,
-    )
-    const salesOneDay = salesOneDay_ ?? overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h
-    const highestPrice = highestPrice_ ?? overview?.highest_price ?? trending.market?.highest_price
+    const salesOneDay = overview?.sales_24h ?? overview?.sales ?? trending.market?.total_24h
+    const highestPrice = overview?.highest_price ?? trending.market?.highest_price
 
     const { classes, cx } = useStyles()
     const chain = useNetworkDescriptor(result.pluginID ?? NetworkPluginID.PLUGIN_EVM, chainId)

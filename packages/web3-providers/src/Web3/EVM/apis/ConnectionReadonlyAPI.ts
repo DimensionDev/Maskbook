@@ -452,7 +452,6 @@ export class EVMConnectionReadonlyAPI
         const contract = this.Contract.getERC721Contract(address, options)
         const results = await Promise.allSettled([contract?.methods.name().call() ?? EMPTY_STRING])
         const [name] = results.map((result) => (result.status === 'fulfilled' ? result.value : ''))
-        // return createNonFungibleTokenCollection(options.chainId, address, name ?? 'Unknown Token', '')
         return {
             id: address,
             chainId: options.chainId,
