@@ -194,9 +194,9 @@ export async function createConfiguration(
             ],
         },
         plugins: [
-            !productionLike && flags.lavamoat ?
+            flags.lavamoat ?
                 new LavaMoat({
-                    policyLocation: join(import.meta.dirname, '../../../lavamoat/mask.json'),
+                    policyLocation: join(import.meta.dirname, '../../../security/lavamoat'),
                     generatePolicy: true,
                     emitPolicySnapshot: true,
                     readableResourceIds: true,

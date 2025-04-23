@@ -699,8 +699,8 @@ importers:
         version: 3.24.2
     devDependencies:
       '@lavamoat/webpack':
-        specifier: 0.8.1-beta.0
-        version: 0.8.1-beta.0(@magic-works/webpack@5.88.2)
+        specifier: 0.9.0-beta.0
+        version: 0.9.0-beta.0(@magic-works/webpack@5.88.2)
       '@nice-labs/emit-file-webpack-plugin':
         specifier: ^1.1.4
         version: 1.1.4(@magic-works/webpack@5.88.2)
@@ -3413,13 +3413,13 @@ packages:
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/parser@7.26.5':
-    resolution: {integrity: sha512-SRJ4jYmXRqV1/Xc+TIVG84WjHBXKlxO9sHQnA2Pf12QQEAp1LOh6kDzNHXcUnbH1QI0FDoPPVOt+vyUDucxpaw==}
+  '@babel/parser@7.26.9':
+    resolution: {integrity: sha512-81NWa1njQblgZbQHxWHpxxCzNsa3ZwvFqpUg7P+NNUU6f3UU2jBEg4OlF/J6rl8+PQGh1q6/zWScd001YwcA5A==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
-  '@babel/parser@7.26.9':
-    resolution: {integrity: sha512-81NWa1njQblgZbQHxWHpxxCzNsa3ZwvFqpUg7P+NNUU6f3UU2jBEg4OlF/J6rl8+PQGh1q6/zWScd001YwcA5A==}
+  '@babel/parser@7.27.0':
+    resolution: {integrity: sha512-iaepho73/2Pz7w2eMS0Q5f83+0RKI7i4xmiYeBmDzfRVbQtTOG7Ts0S4HzJVsTMGI9keU8rNfuZr8DKfSt7Yyg==}
     engines: {node: '>=6.0.0'}
     hasBin: true
 
@@ -3539,6 +3539,10 @@ packages:
     resolution: {integrity: sha512-9DGttpmPvIxBb/2uwpVo3dqJ+O6RooAFOS+lB+xDqoE2PVCE8nfoHMdZLpfCQRLwvohzXISPZcgxt80xLfsuwg==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/template@7.27.0':
+    resolution: {integrity: sha512-2ncevenBqXI6qRMukPlXwHKHchC7RyMuu4xv5JBXRfOGVcTy1mXCD12qrp7Jsoxll1EV3+9sE4GugBVRjT2jFA==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/traverse@7.25.9':
     resolution: {integrity: sha512-ZCuvfwOwlz/bawvAuvcj8rrithP2/N55Tzz342AkTvq4qaWbGfmCk/tKhNaV2cthijKrPAA8SRJV5WWe7IBMJw==}
     engines: {node: '>=6.9.0'}
@@ -3547,16 +3551,20 @@ packages:
     resolution: {integrity: sha512-rkOSPOw+AXbgtwUga3U4u8RpoK9FEFWBNAlTpcnkLFjL5CT+oyHNuUUC/xx6XefEJ16r38r8Bc/lfp6rYuHeJQ==}
     engines: {node: '>=6.9.0'}
 
+  '@babel/traverse@7.26.9':
+    resolution: {integrity: sha512-ZYW7L+pL8ahU5fXmNbPF+iZFHCv5scFak7MZ9bwaRPLUhHh7QQEMjZUg0HevihoqCM5iSYHN61EyCoZvqC+bxg==}
+    engines: {node: '>=6.9.0'}
+
   '@babel/types@7.26.0':
     resolution: {integrity: sha512-Z/yiTPj+lDVnF7lWeKCIJzaIkI0vYO87dMpZ4bg4TDrFe4XXLFWL1TbXU27gBP3QccxV9mZICCrnjnYlJjXHOA==}
     engines: {node: '>=6.9.0'}
 
-  '@babel/types@7.26.5':
-    resolution: {integrity: sha512-L6mZmwFDK6Cjh1nRCLXpa6no13ZIioJDz7mdkzHv399pThrTa/k0nUlNaenOeh2kWu/iaOQYElEpKPUswUa9Vg==}
-    engines: {node: '>=6.9.0'}
-
   '@babel/types@7.26.9':
     resolution: {integrity: sha512-Y3IR1cRnOxOCDvMmNiym7XpXQ93iGDDPHx+Zj+NM+rg0fBaShfQLkg+hKPaZCEvg5N/LeCo4+Rj/i3FuJsIQaw==}
+    engines: {node: '>=6.9.0'}
+
+  '@babel/types@7.27.0':
+    resolution: {integrity: sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg==}
     engines: {node: '>=6.9.0'}
 
   '@bcoe/v8-coverage@0.2.3':
@@ -4987,13 +4995,13 @@ packages:
     peerDependencies:
       tslib: '2'
 
-  '@lavamoat/aa@4.3.1':
-    resolution: {integrity: sha512-70KncU33sdupHww0+hDENxDv285PgYBuyPnX2CUkE7+qsuFNOI/m4vVChLM6RzquJmS1cxiL/bdnidznJOjd+w==}
+  '@lavamoat/aa@4.3.2':
+    resolution: {integrity: sha512-x1DCkrxTPhXaXBiG85FeDdNlWgPQ8AvgNJyrNs826nmmy7qs/GYQ4eNcteaqLKM+U2sHY2e/TWN3P+iILAgUBg==}
     engines: {node: ^16.20.0 || ^18.0.0 || ^20.0.0 || ^22.0.0}
     hasBin: true
 
-  '@lavamoat/webpack@0.8.1-beta.0':
-    resolution: {integrity: sha512-aIXLil9jdaaFPXkHWPDDcBl7w3EASKSIkdR3nXZ8jiPIHvKI+/BBV1VqWh6EVqXLAlqIshZ+mvaw+qnD1S8trw==}
+  '@lavamoat/webpack@0.9.0-beta.0':
+    resolution: {integrity: sha512-SnYXakFnxG2n7hFYZregEbFzbOvTBRr4iCGjcamrox+WpVH2H8COr7/gELOXIsdjfvj8fi3jD+tS3gZpJZ5vmA==}
     engines: {node: ^18.0.0 || ^20.0.0 || ^22.5.1, npm: '>=7.0.0'}
     peerDependencies:
       webpack: npm:@magic-works/webpack@5.88.2
@@ -10951,6 +10959,10 @@ packages:
     resolution: {integrity: sha512-z0vtXSwucUJtANQWldhbtbt7BnL0vxiFjIdDLAatwhDYty2bad6s+rijD6Ri4YuYJubLzIJLUidCh09e1djEVQ==}
     engines: {node: '>= 0.4'}
 
+  is-core-module@2.16.1:
+    resolution: {integrity: sha512-UfoeMA6fIJ8wTYFEUjelnaGI67v6+N7qXJEvQuIGa99l4xsCruSYOVSQ0uPANn4dAzm8lkYPaKLrrijLq7x23w==}
+    engines: {node: '>= 0.4'}
+
   is-data-view@1.0.1:
     resolution: {integrity: sha512-AHkaJrsUVW6wq6JS8y3JnM/GJF/9cf+k20+iDzlSaJrinEo5+7vRiteOSwBhHRiAyQATN1AmY4hwzxJKPmYf+w==}
     engines: {node: '>= 0.4'}
@@ -11677,13 +11689,13 @@ packages:
   launch-editor@2.9.1:
     resolution: {integrity: sha512-Gcnl4Bd+hRO9P9icCP/RVVT2o8SFlPXofuCxvA2SaZuH45whSvf5p8x5oih5ftLiVhEI4sp5xDY+R+b3zJBh5w==}
 
-  lavamoat-core@16.3.1:
-    resolution: {integrity: sha512-7c/LI46fsxkrKN+5Y2I7mDZFExD8Ouo8WdIW6dVEAiwJeVf8F+rUNR9n1I4FN3x4JaXFcBTN9IJ0NHUHqzeXzA==}
+  lavamoat-core@16.3.2:
+    resolution: {integrity: sha512-v3X5Wnkedr04vEy/iZKX3MyQ67AcXO9lgUBEN6kpAHPj+3YrHKG5XCi3f7v5EKk52oNW0dbF1IF0SgSoRm3M6Q==}
     engines: {node: ^18.0.0 || ^20.0.0 || ^22.0.0}
     hasBin: true
 
-  lavamoat-tofu@8.0.5:
-    resolution: {integrity: sha512-0WcCQh0fUpRKkGksBMHIk2PxjSfHxDYxXXsEyvjvJgDjW5Nl9UENlmRoYgHJ6te9HRXyJqCIzSMuHgx03e7+nQ==}
+  lavamoat-tofu@8.0.6:
+    resolution: {integrity: sha512-YGfQrQKooEDPVNoZID+oIM+vMbNSGaGtTftCeuwfeepY47xwkqWIl4WqQHLoHTtvEroAheLFBxrEMzcWv1IC4A==}
     engines: {node: ^18.0.0 || ^20.0.0 || ^22.0.0}
     peerDependencies:
       lavamoat-core: '>15.4.0'
@@ -13490,6 +13502,11 @@ packages:
   resolve.exports@1.1.1:
     resolution: {integrity: sha512-/NtpHNDN7jWhAaQ9BvBUYZ6YTXsRBgfqWFWP7BZBaoMJO/I3G5OFzvTuWNlZC3aPjins1F+TNrLKsGbH4rfsRQ==}
     engines: {node: '>=10'}
+
+  resolve@1.22.10:
+    resolution: {integrity: sha512-NPRy+/ncIMeDlTAsuqwKIiferiawhefFJtkNSW0qZJEqMEb+qBt/77B/jGeeek+F0uOeN05CDa6HXbbIgtVX4w==}
+    engines: {node: '>= 0.4'}
+    hasBin: true
 
   resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}
@@ -16244,7 +16261,7 @@ snapshots:
       '@babel/types': 7.26.9
       '@jridgewell/gen-mapping': 0.3.5
       '@jridgewell/trace-mapping': 0.3.25
-      jsesc: 3.0.2
+      jsesc: 3.1.0
 
   '@babel/helper-annotate-as-pure@7.25.9':
     dependencies:
@@ -16343,13 +16360,13 @@ snapshots:
     dependencies:
       '@babel/types': 7.26.0
 
-  '@babel/parser@7.26.5':
-    dependencies:
-      '@babel/types': 7.26.5
-
   '@babel/parser@7.26.9':
     dependencies:
       '@babel/types': 7.26.9
+
+  '@babel/parser@7.27.0':
+    dependencies:
+      '@babel/types': 7.27.0
 
   '@babel/plugin-proposal-private-methods@7.18.6(@babel/core@7.26.0)':
     dependencies:
@@ -16470,6 +16487,12 @@ snapshots:
       '@babel/parser': 7.26.2
       '@babel/types': 7.26.0
 
+  '@babel/template@7.27.0':
+    dependencies:
+      '@babel/code-frame': 7.26.2
+      '@babel/parser': 7.27.0
+      '@babel/types': 7.27.0
+
   '@babel/traverse@7.25.9':
     dependencies:
       '@babel/code-frame': 7.26.2
@@ -16486,9 +16509,21 @@ snapshots:
     dependencies:
       '@babel/code-frame': 7.26.2
       '@babel/generator': 7.26.9
-      '@babel/parser': 7.26.5
+      '@babel/parser': 7.26.9
       '@babel/template': 7.25.9
-      '@babel/types': 7.26.5
+      '@babel/types': 7.26.9
+      debug: 4.4.0
+      globals: 11.12.0
+    transitivePeerDependencies:
+      - supports-color
+
+  '@babel/traverse@7.26.9':
+    dependencies:
+      '@babel/code-frame': 7.26.2
+      '@babel/generator': 7.26.9
+      '@babel/parser': 7.26.9
+      '@babel/template': 7.27.0
+      '@babel/types': 7.26.9
       debug: 4.4.0
       globals: 11.12.0
     transitivePeerDependencies:
@@ -16499,12 +16534,12 @@ snapshots:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@babel/types@7.26.5':
+  '@babel/types@7.26.9':
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
 
-  '@babel/types@7.26.9':
+  '@babel/types@7.27.0':
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
@@ -18560,16 +18595,16 @@ snapshots:
     dependencies:
       tslib: 2.8.1
 
-  '@lavamoat/aa@4.3.1':
+  '@lavamoat/aa@4.3.2':
     dependencies:
-      resolve: 1.22.8
+      resolve: 1.22.10
 
-  '@lavamoat/webpack@0.8.1-beta.0(@magic-works/webpack@5.88.2)':
+  '@lavamoat/webpack@0.9.0-beta.0(@magic-works/webpack@5.88.2)':
     dependencies:
-      '@lavamoat/aa': 4.3.1
+      '@lavamoat/aa': 4.3.2
       browser-resolve: 2.0.0
       json-stable-stringify: 1.1.1
-      lavamoat-core: 16.3.1
+      lavamoat-core: 16.3.2
       ses: 1.10.0
       webpack: '@magic-works/webpack@5.88.2(@magic-works/webpack@5.88.2)(@swc/core@1.11.7(@swc/helpers@0.5.15))(webpack-cli@6.0.1)'
     transitivePeerDependencies:
@@ -20643,7 +20678,7 @@ snapshots:
 
   '@types/babel__traverse@7.20.6':
     dependencies:
-      '@babel/types': 7.26.5
+      '@babel/types': 7.26.9
 
   '@types/bn.js@4.11.6':
     dependencies:
@@ -26411,6 +26446,10 @@ snapshots:
     dependencies:
       hasown: 2.0.2
 
+  is-core-module@2.16.1:
+    dependencies:
+      hasown: 2.0.2
+
   is-data-view@1.0.1:
     dependencies:
       is-typed-array: 1.1.13
@@ -27317,24 +27356,24 @@ snapshots:
       picocolors: 1.1.1
       shell-quote: 1.8.1
 
-  lavamoat-core@16.3.1:
+  lavamoat-core@16.3.2:
     dependencies:
-      '@babel/types': 7.26.5
+      '@babel/types': 7.26.9
       json-stable-stringify: 1.1.1
-      lavamoat-tofu: 8.0.5(lavamoat-core@16.3.1)
+      lavamoat-tofu: 8.0.6(lavamoat-core@16.3.2)
       merge-deep: 3.0.3
       ses: 1.10.0
       type-fest: 4.30.0
     transitivePeerDependencies:
       - supports-color
 
-  lavamoat-tofu@8.0.5(lavamoat-core@16.3.1):
+  lavamoat-tofu@8.0.6(lavamoat-core@16.3.2):
     dependencies:
-      '@babel/parser': 7.26.5
-      '@babel/traverse': 7.26.5
-      '@babel/types': 7.26.5
+      '@babel/parser': 7.26.9
+      '@babel/traverse': 7.26.9
+      '@babel/types': 7.26.9
       '@types/babel__traverse': 7.20.6
-      lavamoat-core: 16.3.1
+      lavamoat-core: 16.3.2
       type-fest: 4.30.0
     transitivePeerDependencies:
       - supports-color
@@ -29494,6 +29533,12 @@ snapshots:
   resolve-pkg-maps@1.0.0: {}
 
   resolve.exports@1.1.1: {}
+
+  resolve@1.22.10:
+    dependencies:
+      is-core-module: 2.16.1
+      path-parse: 1.0.7
+      supports-preserve-symlinks-flag: 1.0.0
 
   resolve@1.22.8:
     dependencies:
