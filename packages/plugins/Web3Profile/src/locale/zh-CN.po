@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-04-15 08:27\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -74,7 +74,7 @@ msgstr "关注"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Follow for {0} {1}"
-#~ msgstr "关注 {0} {1}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/hooks/Lens/useFollow.tsx
 #: src/SiteAdaptor/hooks/Lens/useFollow.tsx
@@ -109,7 +109,7 @@ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "No enough balance to complete follow process."
-#~ msgstr "没有足够的余额来完成关注流程。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
@@ -117,7 +117,7 @@ msgstr "在此找不到已验证的帐户。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Only holding lens handle can follow."
-#~ msgstr "只有拥有lens handle才能进行关注。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -162,7 +162,7 @@ msgstr "此个人信息不能被关注。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "This user has banned follow function."
-#~ msgstr "此用户已禁止关注功能。"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
@@ -175,7 +175,7 @@ msgstr "取消关注Lens Handle"
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #~ msgid "Unlock {0} {1} and follow"
-#~ msgstr "解锁 {0} {1} 并关注"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"

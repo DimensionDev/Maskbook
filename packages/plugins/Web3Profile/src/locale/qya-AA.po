@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:56\n"
+"PO-Revision-Date: 2025-04-15 08:27\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -17,15 +17,28 @@ msgstr ""
 "X-Crowdin-File-ID: 1006\n"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "<0>{0}</0> Followers <1>{1}</1> Following"
-msgstr "crwdns31788:0{0}crwdnd31788:0{1}crwdne31788:0"
+#~ msgid "<0>{0}</0> Followers <1>{1}</1> Following"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "<0>0</0> Followers <1>0</1> Following"
+msgstr "crwdns37377:0crwdne37377:0"
 
 #: src/SiteAdaptor/components/ProfileCard.tsx
 msgid "Add Wallet"
 msgstr "crwdns31406:0crwdne31406:0"
 
-#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+msgid "Already following"
+msgstr "crwdns37379:0crwdne37379:0"
+
+#. placeholder {0}: lensAccount.operations.canFollow.reason
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "Can not follow: {0}"
+msgstr "crwdns37381:0{0}crwdne37381:0"
+
 #: src/SiteAdaptor/components/ProfilePopup.tsx
+#: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
 msgid "Change"
 msgstr "crwdns31408:0crwdne31408:0"
 
@@ -53,21 +66,23 @@ msgstr "crwdns31418:0crwdne31418:0"
 msgid "Firefly"
 msgstr "crwdns31420:0crwdne31420:0"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "crwdns31422:0crwdne31422:0"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Follow for {0} {1}"
-msgstr "crwdns31424:0{0}crwdnd31424:0{1}crwdne31424:0"
+#~ msgid "Follow for {0} {1}"
+#~ msgstr ""
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
 msgid "Follow Lens handle"
 msgstr "crwdns31426:0crwdne31426:0"
 
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Following"
 msgstr "crwdns31428:0crwdne31428:0"
 
@@ -83,22 +98,26 @@ msgstr "crwdns31432:0crwdne31432:0"
 msgid "Lens Unfollow"
 msgstr "crwdns31434:0crwdne31434:0"
 
-#: src/SiteAdaptor/hooks/Lens/useFollow.ts
 #: src/SiteAdaptor/hooks/Lens/useUnfollow.ts
 msgid "Network error, try again"
 msgstr "crwdns31436:0crwdne31436:0"
 
+#. placeholder {0}: error.message
+#: src/SiteAdaptor/hooks/Lens/useFollow.tsx
+msgid "Network error, try again: {0}"
+msgstr "crwdns37383:0{0}crwdne37383:0"
+
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "No enough balance to complete follow process."
-msgstr "crwdns31438:0crwdne31438:0"
+#~ msgid "No enough balance to complete follow process."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "No verified account found here."
 msgstr "crwdns31440:0crwdne31440:0"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Only holding lens handle can follow."
-msgstr "crwdns31442:0crwdne31442:0"
+#~ msgid "Only holding lens handle can follow."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Previous follow transaction is in processing, please wait and try again."
@@ -132,13 +151,18 @@ msgstr "crwdns31456:0crwdne31456:0"
 msgid "The current wallet does not hold a lens and cannot follow/unfollow"
 msgstr "crwdns31458:0crwdne31458:0"
 
+#. placeholder {0}: lensAccount.operations.canFollow.reason
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+msgid "This profile can not be followed: {0}"
+msgstr "crwdns37385:0{0}crwdne37385:0"
+
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "This profile can not be followed."
 msgstr "crwdns31460:0crwdne31460:0"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "This user has banned follow function."
-msgstr "crwdns31462:0crwdne31462:0"
+#~ msgid "This user has banned follow function."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Unfollow"
@@ -150,8 +174,8 @@ msgstr "crwdns31466:0crwdne31466:0"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-msgid "Unlock {0} {1} and follow"
-msgstr "crwdns31468:0{0}crwdnd31468:0{1}crwdne31468:0"
+#~ msgid "Unlock {0} {1} and follow"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "View"
@@ -161,8 +185,8 @@ msgstr "crwdns31470:0crwdne31470:0"
 msgid "View your profile in firefly"
 msgstr "crwdns31472:0crwdne31472:0"
 
-#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 #: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr "crwdns31474:0crwdne31474:0"
 
