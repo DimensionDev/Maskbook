@@ -7,7 +7,35 @@ import type { CollectiblePayload } from '../types.js'
 const ZORA_COLLECTION_ADDRESS = '0xabEFBc9fD2F806065b4f3C237d4b59D9A97Bcac7'
 const CRYPTOPUNKS_COLLECTION_ADDRESS = '0xb47e3cd837dDF8e4c57F05d70Ab865de6e193BBB'
 
-const RULES = [
+const openseaEVMPatterns = [
+    { slug: 'ethereum', chainId: ChainIdEVM.Mainnet },
+    { slug: 'matic', chainId: ChainIdEVM.Polygon },
+    { slug: 'arbitrum', chainId: ChainIdEVM.Arbitrum },
+    { slug: 'base', chainId: ChainIdEVM.Base },
+    { slug: 'optimism', chainId: ChainIdEVM.Optimism },
+    { slug: 'zora', chainId: ChainIdEVM.Zora },
+]
+type Rule = {
+    hosts: string[]
+    pathname?: RegExp
+    pluginID: NetworkPluginID
+    chainId: number
+    provider: SourceType
+    hash?: string | RegExp
+    address?: (address: string) => string
+}
+
+const openseaEVMRules: Rule[] = openseaEVMPatterns.map(({ slug, chainId }) => {
+    return {
+        hosts: ['opensea.io'],
+        pathname: new RegExp(`^/assets/${slug}/(0x[\\dA-Fa-f]{40})/(\\d+)`),
+        pluginID: NetworkPluginID.PLUGIN_EVM,
+        chainId,
+        provider: SourceType.OpenSea,
+    }
+})
+
+const RULES: Rule[] = [
     // opensea
     {
         hosts: ['opensea.io'],
@@ -16,34 +44,7 @@ const RULES = [
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.OpenSea,
     },
-    {
-        hosts: ['opensea.io'],
-        pathname: /^\/assets\/ethereum\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Mainnet,
-        provider: SourceType.OpenSea,
-    },
-    {
-        hosts: ['opensea.io'],
-        pathname: /^\/assets\/matic\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Polygon,
-        provider: SourceType.OpenSea,
-    },
-    {
-        hosts: ['opensea.io'],
-        pathname: /^\/assets\/arbitrum\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Arbitrum,
-        provider: SourceType.OpenSea,
-    },
-    {
-        hosts: ['opensea.io'],
-        pathname: /^\/assets\/optimism\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-        pluginID: NetworkPluginID.PLUGIN_EVM,
-        chainId: ChainIdEVM.Optimism,
-        provider: SourceType.OpenSea,
-    },
+    ...openseaEVMRules,
     {
         hosts: ['opensea.io'],
         pathname: /^\/assets\/solana\/(\w+)/,

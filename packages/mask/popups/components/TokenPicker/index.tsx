@@ -201,7 +201,6 @@ export const TokenPicker = memo(function TokenPicker({
                     networks={filteredNetworks}
                     pluginID={NetworkPluginID.PLUGIN_EVM}
                     chainId={sidebarChainId}
-                    hideAllButton
                     onChainChange={handleChainChange}
                 />
             :   null}

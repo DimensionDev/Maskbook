@@ -91,14 +91,14 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <DialogInspector />
     },
-    PostInspector() {
+    PostInspector: function CollectiblePostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
         const isSupported = payload?.chainId ? NFTSCAN_CHAIN_IDS.includes(payload.chainId as ChainId) : false
         usePluginWrapper(isSupported)
         return isSupported && payload ? <PostInspector payload={payload} /> : null
     },
-    DecryptedInspector(props) {
+    DecryptedInspector: function CollectibleDecryptedInspector(props) {
         const links = parseURLs(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
         const payload = getPayloadFromURLs(links)
         usePluginWrapper(!!payload)

@@ -116,7 +116,7 @@ export const WalletCollections = memo(function WalletCollections({ onAddToken, s
             ref={ref}
             classes={{ grid: classes.grid }}
             gridProps={gridProps}
-            disableSidebar
+            disableSidebar={false}
             disableWindowScroll
             scrollElementRef={scrollTargetRef}
             emptyText={collectiblesEmptyText}
