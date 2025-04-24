@@ -16,6 +16,7 @@ import {
     type SetStateAction,
 } from 'react'
 import { useAssetsNetworks } from './useAssetsNetworks.js'
+import { NFTSCAN_CHAIN_IDS } from '@masknet/web3-providers'
 
 interface ChainRuntimeOptions {
     pluginID: NetworkPluginID
@@ -49,12 +50,11 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
     const assetsNetworks = useAssetsNetworks(pluginID)
 
     const networks = useMemo(() => {
-        return chainWhiteList?.length ?
-                assetsNetworks.filter((x) => chainWhiteList.includes(x.chainId as ChainId))
-            :   assetsNetworks
+        const list = assetsNetworks.filter((x) => NFTSCAN_CHAIN_IDS.includes(x.chainId as ChainId))
+        return chainWhiteList?.length ? list.filter((x) => chainWhiteList.includes(x.chainId as ChainId)) : list
     }, [chainWhiteList, assetsNetworks])
 
-    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
+    const currentChainId = chainId ?? defaultChainId ?? networks[0].chainId
 
     const value = useMemo(
         () => ({ pluginID, account, defaultChainId, chainId: currentChainId, setChainId, networks, chainWhiteList }),

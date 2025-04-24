@@ -9,16 +9,13 @@ import { FigureCard } from '../../Shared/FigureCard.js'
 import { PriceCard } from '../../Shared/PriceCard.js'
 import { CollectibleCard } from '../CollectibleCard.js'
 
-const useStyles = makeStyles<{ hidePriceCard: boolean }>()((theme, { hidePriceCard }) => ({
+const useStyles = makeStyles()((theme) => ({
     body: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
+        gap: theme.spacing(2),
         minHeight: 300,
-    },
-    basic: {
-        width: '100%',
-        marginBottom: hidePriceCard ? 0 : 16,
     },
 }))
 
@@ -40,10 +37,9 @@ interface AboutTabProps {
 
 export function AboutTab(props: AboutTabProps) {
     const { asset, isLoading } = props
-    const { orders, offers, sourceType } = Context.useContainer()
+    const { offers } = Context.useContainer()
     const topListing = useMemo(() => resolveTopListing(offers), [offers])
-    const hidePriceCard = !topListing && Boolean(orders.error) && !sourceType
-    const { classes } = useStyles({ hidePriceCard })
+    const { classes } = useStyles()
 
     if (isLoading || !asset)
         return (
@@ -56,9 +52,7 @@ export function AboutTab(props: AboutTabProps) {
     return (
         <CollectibleCard>
             <div className={classes.body}>
-                <div className={classes.basic}>
-                    <FigureCard hideSubTitle asset={asset} />
-                </div>
+                <FigureCard hideSubTitle asset={asset} />
                 <PriceCard topListing={topListing} />
             </div>
         </CollectibleCard>

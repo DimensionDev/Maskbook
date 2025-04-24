@@ -14,15 +14,11 @@ interface Options {
     collectionId?: string
 }
 
-/**
- * @deprecated SimpleHash is shutting down
- * collectionId is more accurate
- */
 export function useReportSpam({ pluginID, chainId, address, collectionId }: Options) {
     const isSolana = pluginID === NetworkPluginID.PLUGIN_SOLANA
     const { data: collectionByAddress } = useQuery({
         enabled: !collectionId && !isSolana,
-        queryKey: ['simple-hash', 'collection', chainId, address],
+        queryKey: ['nftscan', 'collection', chainId, address],
         queryFn: async () => {
             if (!address || !chainId) return null
             return NFTScanNonFungibleTokenEVM.getCollection(address, { chainId })
@@ -30,15 +26,10 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
     })
     const collection = collectionByAddress
     const colId = collectionId
-    const [state, reportSpam] = useAsyncFn(async () => {
-        if (!colId) return
-        const res = await NFTSpam.report({
-            collection_id: colId,
-            source: 'mask-network',
-            status: 'reporting',
-        })
-        return res.code === 200
-    }, [colId])
+    const [state, reportSpam] = useAsyncFn(async (chainId: number, address: string) => {
+        const res = await NFTSpam.report(chainId, address)
+        return res.code === 0
+    }, [])
 
     const { showSnackbar } = useCustomSnackbar()
     const promptReport = useCallback(async () => {
@@ -57,8 +48,8 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
             ),
             confirmVariant: 'warning',
         })
-        if (!confirmed || !colId) return
-        const result = await reportSpam()
+        if (!confirmed || !chainId || !address) return
+        const result = await reportSpam(chainId, address)
         showSnackbar(<Trans>Report Spam</Trans>, {
             variant: result ? 'success' : 'error',
             message: result ? <Trans>Spam reported.</Trans> : <Trans>Failed to report spam.</Trans>,

@@ -4,7 +4,7 @@ import { DashboardRoutes } from '@masknet/shared-base'
 import { MaskTabList, makeStyles } from '@masknet/theme'
 import { TabContext } from '@mui/lab'
 import { Box, Tab, Typography } from '@mui/material'
-import { memo, useRef } from 'react'
+import { memo, useState } from 'react'
 import { Link, Outlet } from 'react-router-dom'
 import { RecoveryMethod } from './types.js'
 
@@ -77,7 +77,7 @@ export const Component = memo(function Recovery() {
 
     const [tab, handleTabChange] = usePathTab(tuples)
 
-    const portalContainerRef = useRef<HTMLDivElement>(null)
+    const [portalContainer, setPortalContainer] = useState<HTMLDivElement | null>(null)
 
     return (
         <Box className={classes.container}>
@@ -122,10 +122,10 @@ export const Component = memo(function Recovery() {
                     </TabContext>
                 </div>
                 <div className={classes.panelContainer}>
-                    <Outlet context={{ portalContainerRef }} />
+                    <Outlet context={{ portalContainer }} />
                 </div>
             </Box>
-            <Box className={classes.exclaveActions} ref={portalContainerRef}></Box>
+            <div className={classes.exclaveActions} ref={setPortalContainer} />
         </Box>
     )
 })

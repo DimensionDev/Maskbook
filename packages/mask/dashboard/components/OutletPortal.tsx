@@ -3,11 +3,11 @@ import { memo } from 'react'
 import { useOutletContext } from 'react-router-dom'
 
 export interface PortalContainerProps {
-    portalContainerRef: React.RefObject<HTMLDivElement | null>
+    portalContainer: HTMLDivElement | null
 }
 
 interface OutletPortalProps extends Omit<PortalProps, 'container'> {}
 export const OutletPortal = memo<OutletPortalProps>(function OutletPortal(props) {
-    const { portalContainerRef } = useOutletContext<PortalContainerProps>()
-    return <Portal container={() => portalContainerRef.current} {...props}></Portal>
+    const { portalContainer } = useOutletContext<PortalContainerProps>()
+    return <Portal container={portalContainer} {...props}></Portal>
 })

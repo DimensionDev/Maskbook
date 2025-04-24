@@ -163,7 +163,6 @@ export const Component = memo(function AddToken() {
             <div className={classes.content}>
                 <SelectNetworkSidebar
                     className={classes.sidebar}
-                    hideAllButton
                     chainId={chainId}
                     onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
                     networks={allNetworks}

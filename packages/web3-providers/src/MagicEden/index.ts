@@ -8,6 +8,7 @@ import {
     TokenType,
     resolveIPFS_URL,
     SourceType,
+    resolveCrossOriginURL,
 } from '@masknet/web3-shared-base'
 import { ChainId, SchemaType, isValidChainId } from '@masknet/web3-shared-solana'
 import { MAGIC_EDEN_API_URL } from './constants.js'
@@ -27,7 +28,7 @@ async function fetchFromMagicEden<T>(chainId: ChainId, path: string) {
     if (chainId !== ChainId.Mainnet) return
 
     const url = urlcat(MAGIC_EDEN_API_URL, path)
-    return fetchJSON<T>(url, {
+    return fetchJSON<T>(resolveCrossOriginURL(url), {
         method: 'GET',
         headers: { Accept: 'application/json' },
     })
@@ -258,7 +259,7 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
         const limit = size || 20
         const offers = await fetchFromMagicEden<WalletOffer[]>(
             chainId,
-            urlcat('/tokens/:mint_address/offer_received', {
+            urlcat('/v2/tokens/:mint_address/offers_received', {
                 mint_address: address,
                 side,
                 offset: (indicator?.index ?? 0) * limit,

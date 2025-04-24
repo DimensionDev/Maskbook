@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { usePluginWrapper, usePostInfoDetails, type Plugin } from '@masknet/plugin-infra/content-script'
 import { CollectionList, UserAssetsProvider } from '@masknet/shared'
@@ -6,7 +7,9 @@ import { makeStyles } from '@masknet/theme'
 import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Web3ContextProvider } from '@masknet/web3-hooks-base'
+import { NFTSCAN_CHAIN_IDS } from '@masknet/web3-providers'
 import { SearchResultType } from '@masknet/web3-shared-base'
+import type { ChainId } from '@masknet/web3-shared-evm'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Box } from '@mui/material'
@@ -16,7 +19,6 @@ import { PLUGIN_ID, PLUGIN_NAME } from '../constants.js'
 import { getPayloadFromURLs } from '../helpers/index.js'
 import { DialogInspector } from './DialogInspector.js'
 import { PostInspector } from './PostInspector.js'
-import { Trans } from '@lingui/react/macro'
 
 function useInspectCollectible(pluginID?: NetworkPluginID) {
     return useCallback(
@@ -89,13 +91,19 @@ const site: Plugin.SiteAdaptor.Definition = {
     GlobalInjection() {
         return <DialogInspector />
     },
-    PostInspector() {
+    PostInspector: function CollectiblePostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
-        usePluginWrapper(!!payload)
-        return payload ? <PostInspector payload={payload} /> : null
+        console.log({ payload, links }, ...links)
+        const isSupported =
+            payload?.chainId ?
+                NFTSCAN_CHAIN_IDS.includes(payload.chainId as ChainId) ||
+                payload.pluginID === NetworkPluginID.PLUGIN_SOLANA
+            :   false
+        usePluginWrapper(isSupported)
+        return isSupported && payload ? <PostInspector payload={payload} /> : null
     },
-    DecryptedInspector(props) {
+    DecryptedInspector: function CollectibleDecryptedInspector(props) {
         const links = parseURLs(extractTextFromTypedMessage(props.message, { linkAsText: true }).unwrapOr(''))
         const payload = getPayloadFromURLs(links)
         usePluginWrapper(!!payload)
