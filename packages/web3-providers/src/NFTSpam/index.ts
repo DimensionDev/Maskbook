@@ -2,22 +2,13 @@ import type { PageIndicator } from '@masknet/shared-base'
 import urlcat from 'urlcat'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 
-type ReportStatus = 'reporting' | 'approved' | 'rejected'
-type ReportSource = 'firefly' | 'mask-network'
-
 export interface ReportParams {
-    collection_id: string
-    status: ReportStatus
-    source: ReportSource
+    chainId: number
+    contract_address: string
 }
 
-export interface ReportRecord {
-    collection_id: string
-    status: ReportStatus
-    /** @example "2023-08-10T19:25:54Z" */
-    create_at: string
-    /** @example "2023-08-10T19:25:54Z" */
-    update_at: string
+export interface ReportResult {
+    status: 'SUCCESS' | string
 }
 
 /**
@@ -41,18 +32,15 @@ export type SpamResponse<T> =
           data: null
       }
 
-const ENDPOINT = 'https://nftapi.firefly.land/v1/nfts/report/spam'
+const ENDPOINT = 'https://api.firefly.land/v1/nft/reportNFT'
 const PAGE_SIZE = 10
 export class NFTSpam {
-    static async report(params: ReportParams) {
-        const res = await fetchJSON<SpamResponse<ReportRecord>>(ENDPOINT, {
-            method: 'post',
-            headers: {
-                'content-type': 'application/json',
-            },
-            body: JSON.stringify(params),
+    static async report(chainId: number, contract_address: string) {
+        const url = urlcat(ENDPOINT, {
+            chainId,
+            contract_address,
         })
-        return res
+        return fetchJSON<SpamResponse<ReportResult>>(url)
     }
     static async getReports(params: GetReportsParams, indicator?: PageIndicator) {
         const url = urlcat(ENDPOINT, {
@@ -60,6 +48,6 @@ export class NFTSpam {
             page: params.page ?? indicator?.index,
             page_size: params.page_size ?? PAGE_SIZE,
         })
-        return fetchJSON<SpamResponse<ReportRecord[]>>(url)
+        return fetchJSON<SpamResponse<ReportResult[]>>(url)
     }
 }
