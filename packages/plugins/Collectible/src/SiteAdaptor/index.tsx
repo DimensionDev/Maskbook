@@ -94,7 +94,12 @@ const site: Plugin.SiteAdaptor.Definition = {
     PostInspector: function CollectiblePostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
-        const isSupported = payload?.chainId ? NFTSCAN_CHAIN_IDS.includes(payload.chainId as ChainId) : false
+        console.log({ payload, links }, ...links)
+        const isSupported =
+            payload?.chainId ?
+                NFTSCAN_CHAIN_IDS.includes(payload.chainId as ChainId) ||
+                payload.pluginID === NetworkPluginID.PLUGIN_SOLANA
+            :   false
         usePluginWrapper(isSupported)
         return isSupported && payload ? <PostInspector payload={payload} /> : null
     },

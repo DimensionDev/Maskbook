@@ -72,9 +72,9 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
             openDashboard,
             identity,
         )
-        const isFnChildren = typeof children === 'function'
 
         const actionComponent = useMemo(() => {
+            const isFnChildren = typeof children === 'function'
             if (children && customHint && !isFnChildren) return children
             if (isFnChildren) return children(status)
 
@@ -102,7 +102,7 @@ export const ConnectPersonaBoundary = memo<ConnectPersonaBoundaryProps>(
                     </Button>
                 )
             return null
-        }, [status, statusLoading, customHint, isFnChildren, children])
+        }, [status, statusLoading, customHint, children])
 
         const handleClick = useCallback(() => {
             beforeAction?.(status)
