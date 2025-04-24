@@ -21,14 +21,11 @@ interface GetReportsParams extends Partial<ReportParams> {
 
 export type SpamResponse<T> =
     | {
-          code: 200
+          code: 0
           data: T
-          cursor: number
-          limit: number
       }
     | {
           code: 400
-          message: string
           data: null
       }
 

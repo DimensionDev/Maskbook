@@ -3,21 +3,9 @@ import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import type { ReasonableNetwork } from '@masknet/web3-shared-base'
-import { Button, styled } from '@mui/material'
+import { Button } from '@mui/material'
 import { memo, type HTMLProps } from 'react'
 import { NetworkIcon } from '../NetworkIcon/index.js'
-
-const AllButton = styled(Button)(({ theme }) => ({
-    display: 'inline-block',
-    padding: 0,
-    borderRadius: '50%',
-    fontSize: 10,
-    backgroundColor: theme.palette.maskColor.highlight,
-    '&:hover': {
-        backgroundColor: theme.palette.maskColor.highlight,
-        boxShadow: 'none',
-    },
-}))
 
 const useStyles = makeStyles()((theme) => ({
     sidebar: {
@@ -53,7 +41,6 @@ const useStyles = makeStyles()((theme) => ({
 interface SelectNetworkSidebarProps extends HTMLProps<HTMLDivElement> {
     networks: Array<ReasonableNetwork<Web3Helper.ChainIdAll, Web3Helper.SchemaTypeAll, Web3Helper.NetworkTypeAll>>
     pluginID: NetworkPluginID
-    hideAllButton?: boolean
     chainId?: Web3Helper.ChainIdAll
     onChainChange?: (chainId: Web3Helper.ChainIdAll | undefined) => void
 }
@@ -63,23 +50,13 @@ export const SelectNetworkSidebar = memo(function SelectNetworkSidebar({
     chainId,
     pluginID,
     onChainChange,
-    hideAllButton,
     className,
     ...rest
 }: SelectNetworkSidebarProps) {
     const { classes, cx } = useStyles()
 
-    // Do not translate the "All" button
     return (
         <div className={cx(classes.sidebar, className)} {...rest}>
-            {networks.length > 1 && !hideAllButton ?
-                <AllButton className={classes.networkButton} onClick={() => onChainChange?.(undefined)}>
-                    All
-                    {!chainId ?
-                        <Icons.BorderedSuccess className={classes.indicator} size={12} />
-                    :   null}
-                </AllButton>
-            :   null}
             {networks.map((x) => (
                 <Button
                     variant="text"

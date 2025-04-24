@@ -267,7 +267,6 @@ export const SelectNonFungibleContractDialog = memo(
                     <div className={classes.columns}>
                         <SelectNetworkSidebar
                             className={classes.sidebar}
-                            hideAllButton
                             chainId={chainId}
                             onChainChange={(chainId) => setChainId(chainId ?? ChainId.Mainnet)}
                             networks={networks}

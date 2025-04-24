@@ -54,7 +54,7 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
             :   assetsNetworks
     }, [chainWhiteList, assetsNetworks])
 
-    const currentChainId = chainId ?? defaultChainId ?? (networks.length === 1 ? networks[0].chainId : chainId)
+    const currentChainId = chainId ?? defaultChainId ?? networks[0].chainId
 
     const value = useMemo(
         () => ({ pluginID, account, defaultChainId, chainId: currentChainId, setChainId, networks, chainWhiteList }),

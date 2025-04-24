@@ -170,7 +170,6 @@ export function SelectFungibleTokenDialog({
                     {!lockChainId && currentPluginID === NetworkPluginID.PLUGIN_EVM ?
                         <SelectNetworkSidebar
                             className={classes.sidebar}
-                            hideAllButton
                             chainId={chainId}
                             onChainChange={(chainId) => onChainChange?.(chainId ?? ChainId.Mainnet)}
                             networks={networks}

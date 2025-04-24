@@ -63,7 +63,6 @@ export const AddCollectiblesDialog = memo(function AddCollectiblesDialog({
                     onChainChange={setChainId}
                     pluginID={pluginID}
                     networks={networks}
-                    hideAllButton
                 />
                 <AddCollectibles
                     className={classes.form}
