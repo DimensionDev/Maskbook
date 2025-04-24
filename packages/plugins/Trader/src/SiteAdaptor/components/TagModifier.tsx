@@ -1,7 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
 import { useDirtyDetectionDependency } from '@masknet/plugin-infra/dom'
 import { PluginTraderMessages } from '@masknet/plugin-trader'
-import { Image } from '@masknet/shared'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { DSearch } from '@masknet/web3-providers'
@@ -9,7 +8,7 @@ import { TrendingAPI } from '@masknet/web3-providers/types'
 import type { FungibleTokenResult, NonFungibleCollectionResult } from '@masknet/web3-shared-base'
 import { Link } from '@mui/material'
 import { useQuery } from '@tanstack/react-query'
-import { memo, useRef } from 'react'
+import { memo, useRef, useState } from 'react'
 
 const useStyles = makeStyles()(() => ({
     tag: {
@@ -26,11 +25,6 @@ const useStyles = makeStyles()(() => ({
         borderRadius: 16,
         overflow: 'hidden',
         objectFit: 'cover',
-    },
-    imageContainer: {
-        display: 'contents',
-        borderRadius: 16,
-        overflow: 'hidden',
     },
 }))
 
@@ -49,11 +43,13 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
             return DSearch.search<TagSearchResult>(children)
         },
     })
+    const [failed, setFailed] = useState(false)
     const isDirty = !!data?.length && !isLoading
     useDirtyDetectionDependency(isDirty, isLoading, children)
 
     const timerRef = useRef<NodeJS.Timeout>(undefined)
     if (data?.length) {
+        const fallbackImage = `https://stamp.firefly.land/logo/${data[0].address}?s=50`
         return (
             <span
                 className={classes.tag}
@@ -71,19 +67,14 @@ export const TagModifier = memo<PropsOf<Plugin.SiteAdaptor.Definition['TagModifi
                 onMouseLeave={() => {
                     clearTimeout(timerRef.current)
                 }}>
-                <Image
-                    size={16}
-                    classes={{ container: classes.imageContainer, image: classes.icon }}
+                <img
+                    width={16}
+                    height={16}
                     className={classes.icon}
-                    src={data[0].logoURL}
-                    fallback={
-                        <img
-                            width={16}
-                            height={16}
-                            className={classes.icon}
-                            src={`https://stamp.firefly.land/logo/${data[0].address}?s=50`}
-                        />
-                    }
+                    src={failed ? fallbackImage : data[0].logoURL}
+                    onError={() => {
+                        setFailed(true)
+                    }}
                 />
 
                 <Link fontSize="inherit" href={href}>
