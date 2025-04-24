@@ -24,9 +24,11 @@ import {
 } from '../helpers/EVM.js'
 import type { BaseHubOptions, NonFungibleTokenAPI } from '../../entry-types.js'
 
+const ErcType = EVM.ErcType
+
 const SchemaTypeMap: Record<string, EVM.ErcType> = {
-    [SchemaType.ERC721]: EVM.ErcType.ERC721,
-    [SchemaType.ERC1155]: EVM.ErcType.ERC1155,
+    [SchemaType.ERC721]: ErcType.ERC721,
+    [SchemaType.ERC1155]: ErcType.ERC1155,
 }
 
 class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> {
@@ -85,14 +87,21 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
         { chainId = ChainId.Mainnet, indicator }: BaseHubOptions<ChainId> = {},
     ): Promise<Pageable<NonFungibleCollection<ChainId, SchemaType>, PageIndicator>> {
         if (!isValidChainId(chainId)) return createPageable(EMPTY_LIST, createIndicator(indicator))
-        const path = urlcat('/api/v2/account/own/all/:from', {
-            from: account,
-            erc_type: EVM.ErcType.ERC721,
-            show_attribute: true,
-        })
-        const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
-        const collections = response?.data.map((x) => createNonFungibleCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
-        return createPageable(collections, createIndicator(indicator))
+        const results = await Promise.allSettled(
+            [ErcType.ERC721, ErcType.ERC1155].map(async (erc_type) => {
+                const path = urlcat('/api/v2/account/own/all/:from', {
+                    from: account,
+                    erc_type,
+                    show_attribute: true,
+                })
+                const response = await fetchFromNFTScanV2<Response<EVM.AssetsGroup[]>>(chainId, path)
+                const collections =
+                    response?.data.map((x) => createNonFungibleCollectionFromGroup(chainId, x)) ?? EMPTY_LIST
+                return collections
+            }),
+        )
+        const list = results.flatMap((x) => (x.status === 'fulfilled' && x.value ? x.value : []))
+        return createPageable(list, createIndicator(indicator))
     }
 
     async getAssetsByCollectionAndOwner(
@@ -104,7 +113,7 @@ class NFTScanNonFungibleTokenAPI_EVM implements NonFungibleTokenAPI.Provider<Cha
         const path = urlcat('/api/v2/account/own/:address', {
             address: owner,
             contract_address: address,
-            erc_type: SchemaTypeMap[schemaType || SchemaType.ERC721] || EVM.ErcType.ERC721,
+            erc_type: SchemaTypeMap[schemaType || SchemaType.ERC721] || ErcType.ERC721,
             limit: size,
             cursor: indicator?.id,
         })
