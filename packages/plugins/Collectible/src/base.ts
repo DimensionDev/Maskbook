@@ -1,5 +1,6 @@
 import type { Plugin } from '@masknet/plugin-infra'
-import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite } from '@masknet/shared-base'
+import { DEFAULT_PLUGIN_PUBLISHER, EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
+import { NFTSCAN_CHAIN_IDS } from '@masknet/web3-providers'
 import { PLUGIN_DESCRIPTION, PLUGIN_ID, PLUGIN_NAME } from './constants.js'
 import { languages } from './locale/languages.js'
 
@@ -16,6 +17,11 @@ export const base: Plugin.Shared.Definition = {
             },
         },
         target: 'stable',
+        web3: {
+            [NetworkPluginID.PLUGIN_EVM]: {
+                supportedChainIds: NFTSCAN_CHAIN_IDS,
+            },
+        },
     },
     contribution: {
         postContent: new Set([
