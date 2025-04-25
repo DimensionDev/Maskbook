@@ -4,15 +4,16 @@ import { EMPTY_ENTRY, EMPTY_LIST, NetworkPluginID, Sniffings } from '@masknet/sh
 import { MaskTextField, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useAccount, useNetworks, useNonFungibleCollections, useWeb3State } from '@masknet/web3-hooks-base'
+import { NFTScanSupportedChains } from '@masknet/web3-providers'
 import { isSameAddress, type NonFungibleCollection, type ReasonableNetwork } from '@masknet/web3-shared-base'
 import {
     CHAIN_DESCRIPTORS,
     ChainId,
-    type NetworkType,
     SchemaType,
     isLensCollect,
     isLensFollower,
     isLensProfileAddress,
+    type NetworkType,
 } from '@masknet/web3-shared-evm'
 import { Button, DialogActions, DialogContent, List, Stack, Typography } from '@mui/material'
 import { Box } from '@mui/system'
@@ -25,7 +26,6 @@ import { EmptyStatus, LoadingStatus, SelectNetworkSidebar } from '../../componen
 import { InjectedDialog } from '../../contexts/components/InjectedDialog.js'
 import { AddCollectiblesModal } from '../modals.js'
 import { ContractItem } from './ContractItem.js'
-import { SimpleHashSupportedChains } from '../../../constants.js'
 
 const useStyles = makeStyles()((theme) => ({
     content: {
@@ -245,7 +245,7 @@ export const SelectNonFungibleContractDialog = memo(
         const allNetworks = useNetworks(NetworkPluginID.PLUGIN_EVM, true)
 
         const networks = useMemo(() => {
-            const supported = SimpleHashSupportedChains[pluginID]
+            const supported = NFTScanSupportedChains[pluginID]
             const networks = allNetworks.filter(
                 (x) => (x.network === 'mainnet' || x.isCustomized) && supported.includes(x.chainId),
             )

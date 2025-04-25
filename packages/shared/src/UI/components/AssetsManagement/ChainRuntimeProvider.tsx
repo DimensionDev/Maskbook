@@ -50,11 +50,14 @@ export const ChainRuntimeProvider = memo<PropsWithChildren<ChainRuntimeProviderP
     const assetsNetworks = useAssetsNetworks(pluginID)
 
     const networks = useMemo(() => {
-        const list = assetsNetworks.filter((x) => NFTSCAN_CHAIN_IDS.includes(x.chainId as ChainId))
+        const list =
+            pluginID === NetworkPluginID.PLUGIN_SOLANA ?
+                assetsNetworks
+            :   assetsNetworks.filter((x) => NFTSCAN_CHAIN_IDS.includes(x.chainId as ChainId))
         return chainWhiteList?.length ? list.filter((x) => chainWhiteList.includes(x.chainId as ChainId)) : list
     }, [chainWhiteList, assetsNetworks])
 
-    const currentChainId = chainId ?? defaultChainId ?? networks[0].chainId
+    const currentChainId = chainId ?? defaultChainId ?? networks?.[0]?.chainId
 
     const value = useMemo(
         () => ({ pluginID, account, defaultChainId, chainId: currentChainId, setChainId, networks, chainWhiteList }),
