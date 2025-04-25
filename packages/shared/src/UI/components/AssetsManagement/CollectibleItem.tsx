@@ -152,7 +152,8 @@ export const CollectibleItem = memo((props: CollectibleItemProps) => {
     const assetName = useMemo(() => {
         if (!asset.collection) return
         if (isLensCollect(asset.collection.name)) return asset.metadata?.name
-        if (isLensFollower(asset.collection.name)) return asset.collection.name
+        if (isLensFollower(asset.collection.name || asset.metadata?.name))
+            return asset.collection.name || asset.metadata?.name
         if (isLens(asset.metadata?.name)) return asset.metadata?.name
         if (isXnsContractAddress(asset.address)) return asset.metadata?.name
         if (isENSContractAddress(asset.address) || isENSNameWrapperContractAddress(asset.address))
