@@ -128,7 +128,7 @@ const RULES: Rule[] = [
 
     // magic eden
     {
-        hosts: ['magiceden.io'],
+        hosts: ['magiceden.io', 'magiceden.us'],
         pathname: /^\/item-details\/(\w+)/,
         pluginID: NetworkPluginID.PLUGIN_SOLANA,
         chainId: ChainIdSolana.Mainnet,

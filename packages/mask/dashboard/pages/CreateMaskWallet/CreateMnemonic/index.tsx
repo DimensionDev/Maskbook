@@ -348,6 +348,7 @@ const VerifyMnemonicUI = memo<VerifyMnemonicUIProps>(function VerifyMnemonicUI({
                         <Trans>Back</Trans>
                     </SecondaryButton>
                     <PrimaryButton
+                        variant="roundedContained"
                         className={classes.bold}
                         width="125px"
                         disabled={loading || Object.entries(puzzleAnswer).length !== 3}
@@ -445,6 +446,7 @@ const CreateMnemonicUI = memo<CreateMnemonicUIProps>(function CreateMnemonicUI({
             </Alert>
             <SetupFrameController>
                 <PrimaryButton
+                    variant="roundedContained"
                     className={cx(classes.bold, classes.button)}
                     width="125px"
                     size="large"

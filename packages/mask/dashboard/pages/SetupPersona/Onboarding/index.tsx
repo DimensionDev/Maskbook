@@ -167,6 +167,7 @@ export const Component = memo(function Onboarding() {
             </Box>
             <SetupFrameController>
                 <PrimaryButton
+                    variant="roundedContained"
                     onClick={onSetupTwitter}
                     size="large"
                     startIcon={
@@ -180,6 +181,7 @@ export const Component = memo(function Onboarding() {
                 </PrimaryButton>
                 {!isCreate && count && !isZero(count) ?
                     <PrimaryButton
+                        variant="roundedContained"
                         loading={loading}
                         disabled={loading}
                         onClick={onSetupPaymentPassword}

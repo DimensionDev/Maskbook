@@ -65,8 +65,8 @@ function OffersList(props: OffersListProps) {
 
     return (
         <div className={classes.wrapper} style={{ justifyContent: 'unset' }} data-hide-scrollbar>
-            {orderedOffers.map((x, idx) => (
-                <OfferCard key={idx} offer={x} className={classes.card} />
+            {orderedOffers.map((x) => (
+                <OfferCard key={x.id} offer={x} className={classes.card} />
             ))}
             <Stack pb="1px" width="100%" direction="row" justifyContent="center" data-hide-scrollbar>
                 {!finished && (
