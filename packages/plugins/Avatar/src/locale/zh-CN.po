@@ -41,6 +41,10 @@ msgid "Edit Profile"
 msgstr "编辑个人资料"
 
 #: src/Application/NFTListDialog.tsx
+msgid "EVM Chains only"
+msgstr ""
+
+#: src/Application/NFTListDialog.tsx
 msgid "Failed to download image"
 msgstr ""
 

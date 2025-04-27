@@ -506,6 +506,7 @@
         "vXygio": ["データが足りません。"],
         "cmNbUB": ["Not found your ", ["providerType"], " wallet"],
         "MTqQMG": ["未設定"],
+        "jtExaD": ["Not supported yet."],
         "1TaavV": [
             "注：前回のインポートで使用したニーモニックフレーズを使用している場合、そのニーモニックフレーズに由来するウォレットを復元することができます。"
         ],

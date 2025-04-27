@@ -506,6 +506,7 @@
         "vXygio": ["제시할 데이터가 부족합니다."],
         "cmNbUB": ["Not found your ", ["providerType"], " wallet"],
         "MTqQMG": ["설정되지 않음"],
+        "jtExaD": ["Not supported yet."],
         "1TaavV": [
             "참고: 마지막 불러오기에서 니모닉 문구를 사용하면 해당 니모닉 문구에서 파생된 월렛을 복구할 수 있습니다."
         ],

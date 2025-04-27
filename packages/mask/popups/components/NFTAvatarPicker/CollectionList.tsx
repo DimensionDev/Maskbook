@@ -6,6 +6,7 @@ import type { Web3Helper } from '@masknet/web3-helpers'
 import { Box, Skeleton, type BoxProps } from '@mui/material'
 import { makeStyles } from '@masknet/theme'
 import { Trans } from '@lingui/react/macro'
+import { NetworkPluginID } from '@masknet/shared-base'
 
 interface CollectionListProps extends BoxProps {
     loading: boolean
@@ -43,6 +44,16 @@ export const CollectionList = memo<CollectionListProps>(function CollectionList(
     const { pluginID } = useNetworkContext()
     const { classes, cx } = useStyles()
     const wallet = useWallet()
+
+    if (pluginID === NetworkPluginID.PLUGIN_EVM) {
+        return (
+            <Box style={{ height: 358 }}>
+                <EmptyStatus sx={{ height: '100%' }} flex={1}>
+                    <Trans>Not supported yet.</Trans>
+                </EmptyStatus>
+            </Box>
+        )
+    }
 
     if ((!loading && !tokens.length) || !account) {
         return (

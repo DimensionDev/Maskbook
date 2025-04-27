@@ -230,16 +230,21 @@ export function NFTListDialog() {
                         expectedPluginID={
                             !supportPluginIds.includes(selectedPluginId) ? NetworkPluginID.PLUGIN_EVM : selectedPluginId
                         }>
-                        <Button
-                            onClick={onSave}
-                            disabled={disabled || !selectedToken || !!targetWallet?.owner}
-                            fullWidth>
-                            {targetWallet?.owner ?
-                                <Trans>Coming soon</Trans>
-                            : pfpType === PFP_TYPE.PFP ?
-                                <Trans>Set NFT PFP</Trans>
-                            :   <Trans>Set NFT NFT Background</Trans>}
-                        </Button>
+                        {selectedPluginId !== NetworkPluginID.PLUGIN_EVM ?
+                            <Button disabled fullWidth>
+                                <Trans>EVM Chains only</Trans>
+                            </Button>
+                        :   <Button
+                                onClick={onSave}
+                                disabled={disabled || !selectedToken || !!targetWallet?.owner}
+                                fullWidth>
+                                {targetWallet?.owner ?
+                                    <Trans>Coming soon</Trans>
+                                : pfpType === PFP_TYPE.PFP ?
+                                    <Trans>Set NFT PFP</Trans>
+                                :   <Trans>Set NFT NFT Background</Trans>}
+                            </Button>
+                        }
                     </ChainBoundary>
                 </PluginVerifiedWalletStatusBar>
             </DialogActions>

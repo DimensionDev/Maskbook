@@ -1023,6 +1023,10 @@ msgstr "没有任何结果。"
 msgid "No wallet selected."
 msgstr ""
 
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+msgid "Not supported yet."
+msgstr ""
+
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
 msgstr "确定"

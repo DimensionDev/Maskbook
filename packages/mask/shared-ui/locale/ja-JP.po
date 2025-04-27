@@ -2031,6 +2031,10 @@ msgstr ""
 msgid "Not set"
 msgstr "未設定"
 
+#: popups/components/NFTAvatarPicker/CollectionList.tsx
+msgid "Not supported yet."
+msgstr ""
+
 #: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
 msgstr "注：前回のインポートで使用したニーモニックフレーズを使用している場合、そのニーモニックフレーズに由来するウォレットを復元することができます。"
