@@ -199,7 +199,6 @@ export const Component = memo(function RecoveryLocalBackup() {
                 <PrimaryButton
                     size="large"
                     color="primary"
-                    variant="roundedContained"
                     onClick={restoreStatus === RestoreStatus.Decrypting ? decryptBackupFile : restoreDB}
                     loading={loading}
                     disabled={disabled}>

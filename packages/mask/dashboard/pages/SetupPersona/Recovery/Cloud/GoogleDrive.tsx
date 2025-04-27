@@ -137,7 +137,6 @@ export const Component = memo(function GoogleDriveRecovery() {
             </Box>
             <OutletPortal>
                 <PrimaryButton
-                    variant="roundedContained"
                     startIcon={<Icons.Cloud size={18} />}
                     size="large"
                     color="primary"

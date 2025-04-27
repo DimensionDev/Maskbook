@@ -154,7 +154,6 @@ export const Component = memo(function GoogleDriveBackup() {
             </Box>
             <OutletPortal>
                 <PrimaryButton
-                    variant="roundedContained"
                     startIcon={<Icons.CloudBackup2 size={18} />}
                     size="large"
                     color="primary"

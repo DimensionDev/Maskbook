@@ -66,7 +66,6 @@ export function PersonaNameUI({ onNext, error, loading }: PersonaNameUIProps) {
             <SetupFrameController>
                 <div className={classes.buttonGroup}>
                     <PrimaryButton
-                        variant="roundedContained"
                         loading={loading}
                         width="125px"
                         size="large"

@@ -2026,6 +2026,10 @@ msgstr ""
 msgid "Not set"
 msgstr ""
 
+#: popups/components/NFTAvatarPicker/CollectionList.tsx
+msgid "Not supported yet."
+msgstr ""
+
 #: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
 msgstr ""

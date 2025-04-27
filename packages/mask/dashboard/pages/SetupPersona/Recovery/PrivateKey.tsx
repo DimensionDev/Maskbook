@@ -100,7 +100,6 @@ export const Component = memo(function RecoveryPrivateKey() {
                 <PrimaryButton
                     size="large"
                     color="primary"
-                    variant="roundedContained"
                     disabled={isSubmitting || !isDirty}
                     onClick={handleSubmit(onSubmit)}>
                     <Trans>Continue</Trans>

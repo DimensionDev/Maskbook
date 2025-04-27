@@ -120,7 +120,6 @@ export const Component = memo(function SignUp() {
                         <Trans>Skip</Trans>
                     </SecondaryButton>
                     <PrimaryButton
-                        variant="roundedContained"
                         width="125px"
                         size="large"
                         onClick={() => onNext()}

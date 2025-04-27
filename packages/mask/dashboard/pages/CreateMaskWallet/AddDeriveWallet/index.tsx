@@ -236,7 +236,6 @@ export const Component = memo(function AddDeriveWallet() {
 
             <SetupFrameController>
                 <PrimaryButton
-                    variant="roundedContained"
                     loading={confirmLoading}
                     disabled={disabled}
                     className={classes.bold}

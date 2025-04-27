@@ -102,12 +102,7 @@ export const Component = memo(function Welcome() {
                     <SecondaryButton variant="rounded" width="125px" size="large" onClick={() => window.close()}>
                         <Trans>Cancel</Trans>
                     </SecondaryButton>
-                    <PrimaryButton
-                        variant="roundedContained"
-                        width="125px"
-                        size="large"
-                        color="primary"
-                        onClick={handleAgree}>
+                    <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
                         <Trans>Agree</Trans>
                     </PrimaryButton>
                 </div>

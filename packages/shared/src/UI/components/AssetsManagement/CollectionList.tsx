@@ -1,6 +1,6 @@
 import { Trans } from '@lingui/react/macro'
 import { ElementAnchor, EmptyStatus, ReloadStatus, isSameNFT } from '@masknet/shared'
-import { EMPTY_LIST, EMPTY_OBJECT, Sniffings } from '@masknet/shared-base'
+import { EMPTY_LIST, EMPTY_OBJECT, NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { LoadingBase, makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { Telemetry } from '@masknet/web3-telemetry'
@@ -63,6 +63,7 @@ const useStyles = makeStyles<CollectibleGridProps>()((theme, { columns = 4, gap 
             display: 'flex',
             flexDirection: 'column',
             alignSelf: 'center',
+            minHeight: 300,
         },
         expanded: {
             flexGrow: 1,
@@ -231,6 +232,19 @@ export const CollectionList = memo(function CollectionList({
             return x.metadata?.name.includes(kw) || x.metadata?.tokenId?.includes(kw.replace(/^#/, ''))
         })
     }, [getAssets, currentCollection, searchKeyword])
+
+    if (pluginID === NetworkPluginID.PLUGIN_SOLANA) {
+        return (
+            <Box className={cx(classes.container, className)} {...rest}>
+                <div className={classes.columns}>
+                    {sidebar}
+                    <Box className={cx(classes.main, classes.emptyMain)} display="flex">
+                        <EmptyStatus flexGrow={1}>{<Trans>Not supported yet.</Trans>}</EmptyStatus>
+                    </Box>
+                </div>
+            </Box>
+        )
+    }
 
     if (!collections.length && loading && !error && account)
         return (

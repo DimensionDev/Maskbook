@@ -103,12 +103,7 @@ const MaskNetworkInner = memo(function MaskNetworkInner() {
             :   null}
             {showButton ?
                 <OutletPortal>
-                    <PrimaryButton
-                        size="large"
-                        color="primary"
-                        variant="roundedContained"
-                        onClick={handleRestore}
-                        loading={state.loading}>
+                    <PrimaryButton size="large" color="primary" onClick={handleRestore} loading={state.loading}>
                         <Trans>Restore</Trans>
                     </PrimaryButton>
                 </OutletPortal>

@@ -508,6 +508,7 @@
         "vXygio": ["Not enough data to present."],
         "cmNbUB": ["Not found your ", ["providerType"], " wallet"],
         "MTqQMG": ["Not set"],
+        "jtExaD": ["Not supported yet."],
         "1TaavV": [
             "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
         ],
