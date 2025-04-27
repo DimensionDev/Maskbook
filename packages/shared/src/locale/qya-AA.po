@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-18 08:32\n"
+"PO-Revision-Date: 2025-04-27 09:27\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1022,6 +1022,10 @@ msgstr "crwdns31034:0crwdne31034:0"
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "No wallet selected."
 msgstr "crwdns32534:0crwdne32534:0"
+
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+msgid "Not supported yet."
+msgstr "crwdns37415:0crwdne37415:0"
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
