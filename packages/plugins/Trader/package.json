@@ -16,7 +16,6 @@
     }
   },
   "dependencies": {
-    "@ethersproject/providers": "^5.7.2",
     "@hookform/resolvers": "^3.6.0",
     "@masknet/icons": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",

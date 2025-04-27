@@ -28,7 +28,7 @@ const MapIteratorPrototype: IterableIterator<any> = create(
     IteratorPrototype,
     getOwnPropertyDescriptors(getPrototypeOf(__map_iter__)),
 )
-export const ArrayIteratorPrototype: IterableIterator<any> = create(
+const ArrayIteratorPrototype: IterableIterator<any> = create(
     IteratorPrototype,
     getOwnPropertyDescriptors(getPrototypeOf(__array_iter__)),
 )

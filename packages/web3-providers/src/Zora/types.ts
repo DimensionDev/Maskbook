@@ -84,22 +84,6 @@ export interface Token<T = unknown> {
     lastRefreshTime?: string
 }
 
-export interface Collection {
-    name?: string
-    description: string
-    entityTitle: string
-    collectionAddress: string
-    entity: {
-        address: string
-        description: string
-        name: string
-        symbol: string
-        totalSupply?: number
-        networkInfo: Network
-        attributes: CollectionAttribute[]
-    }
-}
-
 export enum EventType {
     APPROVAL_EVENT = 'APPROVAL_EVENT',
     LIL_NOUNS_AUCTION_EVENT = 'LIL_NOUNS_AUCTION_EVENT',

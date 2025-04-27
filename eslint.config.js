@@ -26,7 +26,6 @@ const deferPackages = [
     'web3-utils',
     'web3-eth-abi',
     '@solana/web3.js',
-    '@project-serum/sol-wallet-adapter',
     // add package names here.
 ]
 

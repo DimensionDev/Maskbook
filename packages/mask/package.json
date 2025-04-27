@@ -35,7 +35,6 @@
   "dependencies": {
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ethereumjs/util": "^9.0.3",
-    "@ethersproject/providers": "^5.7.2",
     "@hookform/resolvers": "^3.6.0",
     "@masknet/backup-format": "workspace:^",
     "@masknet/encryption": "workspace:^",
@@ -115,7 +114,6 @@
     "eip-712": "^1.0.0",
     "elliptic": "^6.6.1",
     "event-iterator": "^2.0.0",
-    "file-loader": "^6.2.0",
     "fuse.js": "^7.0.0",
     "guess-calling-code": "^1.1.8",
     "html-to-image": "^1.11.11",

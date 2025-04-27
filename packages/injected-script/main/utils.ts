@@ -87,5 +87,5 @@ export function isTwitter() {
     )
 }
 
-export function noop() {}
+function noop() {}
 Object.freeze(noop)

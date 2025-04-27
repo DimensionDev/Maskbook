@@ -258,30 +258,3 @@ interface DappRelationship {
         id: string
     }
 }
-
-interface RequestConfig {
-    /** Address of the wallet */
-    address: string
-    /** Query parameters */
-    params?: TransactionQueryParams
-    headers?: {
-        /** Custom header that allows to get data for testnets */
-        'X-Env'?: 'testnet'
-    }
-}
-
-/**
- * Get list of wallet's transactions
- *
- * This endpoint returns a list of transactions associated with the wallet.
- * Supports testnets via X-Env header.
- *
- * NOTE2: This endpoint supports a lot of filters, sorting, and pagination parameters.
- * Make sure that your request URL length is safe for your platform.
- * Usually, 2000 characters are the safe limit in virtually any combination of client and server software.
- * NOTE2: Consider all IDs as abstract strings, without making any assumptions
- * about their format or relying on such assumptions. There is a non-zero
- * probability that IDs may change in the future, and this should not result in
- * any breaking changes.
- */
-export type GetWalletTransactions = (config: RequestConfig) => Promise<TransactionsResponse>

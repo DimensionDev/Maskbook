@@ -52,14 +52,6 @@ export interface NFT_TransferEvent {
     chain_id: ChainId
 }
 
-export interface NFT_FloorPrice {
-    floor_price: number
-    symbol: 'eth' | Omit<string, 'eth'>
-    source: 'opensea' | Omit<string, 'opensea'>
-    /** e.g., 2022-05-17T20:41:19Z */
-    updated_at: string
-}
-
 /** 0 is fail, 1 is succeed */
 export type TxStatus = 0 | 1
 export interface Tx {

@@ -1577,7 +1577,6 @@ msgstr "無効なブロックエクスプローラのURLです。"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr "メールアドレスが正しくありません。"
 
@@ -2796,8 +2795,6 @@ msgstr "chainIDは現在接続されているものと等しくありません�
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr "このコードは正しくありません"
 
@@ -2849,7 +2846,6 @@ msgid "The persona name already exists."
 msgstr "このペルソナ名は既に存在しています."
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "電話番号が間違っています。"
 
