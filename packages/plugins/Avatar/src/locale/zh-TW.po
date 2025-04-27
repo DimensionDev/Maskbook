@@ -132,4 +132,3 @@ msgstr ""
 #: src/Application/UploadAvatarDialog.tsx
 msgid "You have set NFT PFP successfully."
 msgstr ""
-
