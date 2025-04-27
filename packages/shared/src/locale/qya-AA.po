@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-27 09:27\n"
+"PO-Revision-Date: 2025-04-27 16:37\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1105,8 +1105,8 @@ msgid "Please create a persona for accessing Dapps."
 msgstr "crwdns31066:0crwdne31066:0"
 
 #: src/UI/components/AssetsManagement/SelectionSection.tsx
-msgid "Please enter token contract address."
-msgstr "crwdns36861:0crwdne36861:0"
+#~ msgid "Please enter token contract address."
+#~ msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
@@ -1223,7 +1223,6 @@ msgstr "crwdns36116:0crwdne36116:0"
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr "crwdns32550:0crwdne32550:0"
 
-#: src/UI/components/AssetsManagement/SelectionSection.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Search"
 msgstr "crwdns36863:0crwdne36863:0"
