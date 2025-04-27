@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-27 09:28\n"
+"PO-Revision-Date: 2025-04-27 16:37\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -1577,7 +1577,6 @@ msgstr "crwdns30248:0crwdne30248:0"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr "crwdns29642:0crwdne29642:0"
 
@@ -2796,8 +2795,6 @@ msgstr "crwdns30606:0crwdne30606:0"
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr "crwdns29780:0crwdne29780:0"
 
@@ -2849,7 +2846,6 @@ msgid "The persona name already exists."
 msgstr "crwdns30612:0crwdne30612:0"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "crwdns29784:0crwdne29784:0"
 
