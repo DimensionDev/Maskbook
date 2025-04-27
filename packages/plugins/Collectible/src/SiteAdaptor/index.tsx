@@ -94,7 +94,6 @@ const site: Plugin.SiteAdaptor.Definition = {
     PostInspector: function CollectiblePostInspector() {
         const links = usePostInfoDetails.mentionedLinks()
         const payload = getPayloadFromURLs(links)
-        console.log({ payload, links }, ...links)
         const isSupported =
             payload?.chainId ?
                 NFTSCAN_CHAIN_IDS.includes(payload.chainId as ChainId) ||

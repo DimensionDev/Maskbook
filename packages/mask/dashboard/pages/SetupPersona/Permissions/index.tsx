@@ -128,7 +128,12 @@ export const Component = memo(function Permission() {
                     <SecondaryButton width="125px" size="large" onClick={() => window.close()}>
                         <Trans>Cancel</Trans>
                     </SecondaryButton>
-                    <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
+                    <PrimaryButton
+                        variant="roundedContained"
+                        width="125px"
+                        size="large"
+                        color="primary"
+                        onClick={handleAgree}>
                         <Trans>Agree</Trans>
                     </PrimaryButton>
                 </div>

@@ -275,6 +275,12 @@ class MagicEdenAPI implements NonFungibleTokenAPI.Provider<ChainId, SchemaType> 
                 // TODO's
                 assetPermalink: '',
                 source: SourceType.MagicEden,
+                maker: {
+                    address: offer.buyer,
+                },
+                price: {
+                    native: offer.price.toString(),
+                },
             }
         })
         return createPageable(

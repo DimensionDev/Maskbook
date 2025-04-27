@@ -195,7 +195,7 @@ export interface ChainDescriptor<ChainId, SchemaType, NetworkType> {
     color?: string
     fullName?: string
     shortName?: string
-    /** For Solana, it's the cluster. */
+    /** For Solana, it's the cluster. The mainnet would be 'mainnet-beta' */
     network: LiteralUnion<'mainnet' | 'testnet'>
     nativeCurrency: FungibleToken<ChainId, SchemaType>
     minGasLimit?: string

@@ -12,7 +12,8 @@ export function useNetworks<T extends NetworkPluginID = NetworkPluginID>(pluginI
     const { Network } = useWeb3State(pluginID)
     const networks = useSubscription(Network?.networks ?? EMPTY_ARRAY)
     return useMemo(() => {
-        const list = networks.filter((x) => x.network === 'mainnet' || x.isCustomized)
+        // network for Solana is mainnet-beta
+        const list = networks.filter((x) => x.network.startsWith('mainnet') || x.isCustomized)
         return uniqChainId ? uniqBy(list, (x) => x.chainId) : list
-    }, [networks, uniqChainId])
+    }, [networks, uniqChainId, pluginID])
 }

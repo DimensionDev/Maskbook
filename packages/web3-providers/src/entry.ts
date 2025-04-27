@@ -83,6 +83,7 @@ export {
     NFTScanNonFungibleTokenEVM,
     NFTScanNonFungibleTokenSolana,
     NFTSCAN_CHAIN_IDS,
+    NFTScanSupportedChains,
 } from './NFTScan/index.js'
 
 // Chainbase
