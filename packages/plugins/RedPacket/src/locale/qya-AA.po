@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-03-21 03:11\n"
+"PO-Revision-Date: 2025-04-27 16:37\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -218,8 +218,8 @@ msgstr "crwdns37138:0crwdne37138:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Claim Requirements"
-msgstr "crwdns28952:0crwdne28952:0"
+#~ msgid "Claim Requirements"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Claimed"
@@ -269,8 +269,8 @@ msgid "Claiming..."
 msgstr "crwdns28962:0crwdne28962:0"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Clear all requirements"
-msgstr "crwdns28964:0crwdne28964:0"
+#~ msgid "Clear all requirements"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Collectibles"
@@ -285,8 +285,8 @@ msgstr "crwdns36851:0crwdne36851:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Comment"
-msgstr "crwdns28968:0crwdne28968:0"
+#~ msgid "Comment"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
@@ -319,8 +319,8 @@ msgid "Congratulations!"
 msgstr "crwdns36064:0crwdne36064:0"
 
 #: src/SiteAdaptor/NftRedPacket/RequestLoginFooter.tsx
-msgid "Connect to {source}"
-msgstr "crwdns36853:0{source}crwdne36853:0"
+#~ msgid "Connect to {source}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -438,8 +438,8 @@ msgstr "crwdns31730:0crwdne31730:0"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Follow me"
-msgstr "crwdns29010:0crwdne29010:0"
+#~ msgid "Follow me"
+#~ msgstr ""
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "From: @{0}"
@@ -567,12 +567,12 @@ msgid "Leave blank to allow any amount; enter a number to set a minimum holding 
 msgstr "crwdns36422:0crwdne36422:0"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Like"
-msgstr "crwdns29032:0crwdne29032:0"
+#~ msgid "Like"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Like / Repost / Comment"
-msgstr "crwdns29034:0crwdne29034:0"
+#~ msgid "Like / Repost / Comment"
+#~ msgstr ""
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 #~ msgid "Loading"
@@ -611,13 +611,13 @@ msgid "My wallet"
 msgstr "crwdns36092:0crwdne36092:0"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Next"
-msgstr "crwdns29046:0crwdne29046:0"
+#~ msgid "Next"
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "NFT holder"
-msgstr "crwdns29048:0crwdne29048:0"
+#~ msgid "NFT holder"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "NFT Holder"
@@ -725,8 +725,8 @@ msgid "Refunding"
 msgstr "crwdns29078:0crwdne29078:0"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Repost"
-msgstr "crwdns29080:0crwdne29080:0"
+#~ msgid "Repost"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Requirements/index.tsx
 #~ msgid "Requirements"
@@ -764,8 +764,8 @@ msgstr "crwdns29086:0crwdne29086:0"
 #~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Select NFT collection to gate access"
-msgstr "crwdns29090:0crwdne29090:0"
+#~ msgid "Select NFT collection to gate access"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
@@ -941,20 +941,20 @@ msgid "Transaction cost"
 msgstr "crwdns36102:0crwdne36102:0"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
-msgstr "crwdns29132:0crwdne29132:0"
+#~ msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "User must follow your account. Note: When you cross-post a Lucky Drop to multiple social networks, following you on any social allows users to claim."
-msgstr "crwdns29134:0crwdne29134:0"
+#~ msgid "User must follow your account. Note: When you cross-post a Lucky Drop to multiple social networks, following you on any social allows users to claim."
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Users must hold one NFT from the collection you select."
-msgstr "crwdns29136:0crwdne29136:0"
+#~ msgid "Users must hold one NFT from the collection you select."
+#~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
-msgstr "crwdns29138:0crwdne29138:0"
+#~ msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
@@ -993,8 +993,8 @@ msgid "You can claim the lucky drop by holding the required amount of any select
 msgstr "crwdns36436:0crwdne36436:0"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
-msgstr "crwdns29148:0crwdne29148:0"
+#~ msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
+#~ msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."
