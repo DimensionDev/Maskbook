@@ -164,7 +164,6 @@ export const Component = memo(function CreateWalletForm() {
             </form>
             <SetupFrameController>
                 <PrimaryButton
-                    variant="roundedContained"
                     width="125px"
                     size="large"
                     color="primary"

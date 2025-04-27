@@ -153,7 +153,6 @@ export const Component = memo(function CloudBackupPreview() {
                                     className={classes.button}
                                     startIcon={<Icons.Cloud size={18} />}
                                     color="primary"
-                                    variant="roundedContained"
                                     loading={mergeLoading}
                                     onClick={handleMergeClick}>
                                     <Trans>Merge data to local database</Trans>
@@ -164,8 +163,7 @@ export const Component = memo(function CloudBackupPreview() {
                                         downloadBackup(previewInfo.downloadLink!)
                                     }}
                                     startIcon={<Icons.Cloud size={18} />}
-                                    color="primary"
-                                    variant="roundedContained">
+                                    color="primary">
                                     <Trans>Download</Trans>
                                 </ActionButton>
                             </Box>

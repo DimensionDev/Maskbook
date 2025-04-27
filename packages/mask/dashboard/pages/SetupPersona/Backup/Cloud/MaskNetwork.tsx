@@ -127,7 +127,6 @@ export const Component = memo(function MaskNetworkBackup() {
             <OutletPortal>
                 <PrimaryButton
                     size="large"
-                    variant="roundedContained"
                     loading={loading}
                     disabled={!formState.isDirty || !formState.isValid}
                     onClick={form.handleSubmit(handleSubmit)}>

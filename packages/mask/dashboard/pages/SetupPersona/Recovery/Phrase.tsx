@@ -65,12 +65,7 @@ export const Component = memo(function Phrase() {
             :   null}
 
             <OutletPortal>
-                <PrimaryButton
-                    size="large"
-                    color="primary"
-                    variant="roundedContained"
-                    disabled={disabled}
-                    onClick={handleImport}>
+                <PrimaryButton size="large" color="primary" disabled={disabled} onClick={handleImport}>
                     <Trans>Continue</Trans>
                 </PrimaryButton>
             </OutletPortal>

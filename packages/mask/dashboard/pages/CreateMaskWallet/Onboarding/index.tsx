@@ -110,7 +110,7 @@ export const Component = memo(function Onboarding() {
                 <OnboardingWriter sentence={sentence} />
             </Box>
             <SetupFrameController>
-                <PrimaryButton variant="roundedContained" onClick={onOpenPopupWallet} size="large" width={'228px'}>
+                <PrimaryButton onClick={onOpenPopupWallet} size="large" width={'228px'}>
                     <Typography fontWeight={700}>
                         <Trans>Got it</Trans>
                     </Typography>

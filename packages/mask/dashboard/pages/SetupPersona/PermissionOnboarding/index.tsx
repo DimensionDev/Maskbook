@@ -137,7 +137,6 @@ export const Component = memo(function Onboarding() {
             </Box>
             <SetupFrameController>
                 <PrimaryButton
-                    variant="roundedContained"
                     onClick={onSetupTwitter}
                     size="large"
                     startIcon={

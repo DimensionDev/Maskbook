@@ -203,7 +203,6 @@ export const Component = memo(function SignUpMnemonic() {
 
             <SetupFrameController>
                 <PrimaryButton
-                    variant="roundedContained"
                     width="125px"
                     size="large"
                     color="primary"

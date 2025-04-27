@@ -98,7 +98,6 @@ export const EmailField = memo(function EmailField() {
                 <PrimaryButton
                     color="primary"
                     size="large"
-                    variant="roundedContained"
                     onClick={async () => {
                         dispatch({ type: 'SET_LOADING', loading: true })
                         try {
