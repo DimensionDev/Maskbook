@@ -67,16 +67,6 @@ interface RaydiumToken {
     symbol: string
 }
 
-export interface JupToken {
-    address: string
-    created_at: string
-    daily_volume: number
-    decimals: number
-    logoURI: string
-    name: string
-    symbol: string
-}
-
 export interface RaydiumTokenList {
     data: {
         mintList: RaydiumToken[]

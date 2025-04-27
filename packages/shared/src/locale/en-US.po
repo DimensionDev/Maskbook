@@ -1096,8 +1096,8 @@ msgid "Please create a persona for accessing Dapps."
 msgstr ""
 
 #: src/UI/components/AssetsManagement/SelectionSection.tsx
-msgid "Please enter token contract address."
-msgstr ""
+#~ msgid "Please enter token contract address."
+#~ msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
@@ -1214,7 +1214,6 @@ msgstr ""
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr ""
 
-#: src/UI/components/AssetsManagement/SelectionSection.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Search"
 msgstr ""

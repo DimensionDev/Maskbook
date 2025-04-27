@@ -1577,7 +1577,6 @@ msgstr "无效的块浏览器URL。"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr "邮箱地址不正确。"
 
@@ -2792,8 +2791,6 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr "验证码不正确"
 
@@ -2845,7 +2842,6 @@ msgid "The persona name already exists."
 msgstr "此身份名称已存在"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "此手机号码不正确。"
 

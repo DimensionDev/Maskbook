@@ -58,4 +58,4 @@ export function isWindow(item: unknown): item is Window {
         return false
     }
 }
-export const { isArray } = Array
+const { isArray } = Array

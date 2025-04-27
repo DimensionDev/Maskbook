@@ -65,20 +65,6 @@ export function sendCode({ account, type, scenario, locale }: SendCodeRequest) {
     })
 }
 
-export async function fetchUploadLink({ code, account, abstract, type }: UploadLinkRequest) {
-    const res = await fetchBackupInstance('v1/backup/upload', {
-        method: 'POST',
-        body: JSON.stringify({
-            code,
-            account_type: type,
-            account: account.replace(' ', ''),
-            abstract,
-        }),
-    })
-    const result: string = res.upload_url
-    return result
-}
-
 export async function fetchDownloadLink({ account, code, type }: VerifyCodeRequest) {
     return fetchBackupInstance('v1/backup/download', {
         method: 'POST',
@@ -99,15 +85,6 @@ export async function fetchDownloadLink({ account, code, type }: VerifyCodeReque
 
 export function fetchBackupValue(downloadLink: string) {
     return fetchBase<ArrayBuffer>(downloadLink, { method: 'GET' }, (res) => res.arrayBuffer())
-}
-
-export function uploadBackupValue(uploadLink: string, content: ArrayBuffer, signal: AbortSignal) {
-    return fetch(uploadLink, {
-        method: 'PUT',
-        // mode: 'no-cors',
-        headers: new Headers({ 'content-type': 'application/octet-stream' }),
-        body: content,
-    })
 }
 
 export function downloadBackup(url: string, name?: string) {

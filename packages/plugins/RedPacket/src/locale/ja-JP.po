@@ -218,8 +218,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Claim Requirements"
-msgstr "要件を要求する"
+#~ msgid "Claim Requirements"
+#~ msgstr "要件を要求する"
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Claimed"
@@ -269,8 +269,8 @@ msgid "Claiming..."
 msgstr "受け取り中.."
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Clear all requirements"
-msgstr "すべての要件をクリアする"
+#~ msgid "Clear all requirements"
+#~ msgstr "すべての要件をクリアする"
 
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
 msgid "Collectibles"
@@ -285,8 +285,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Comment"
-msgstr "コメント"
+#~ msgid "Comment"
+#~ msgstr "コメント"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "Completed"
@@ -319,8 +319,8 @@ msgid "Congratulations!"
 msgstr ""
 
 #: src/SiteAdaptor/NftRedPacket/RequestLoginFooter.tsx
-msgid "Connect to {source}"
-msgstr ""
+#~ msgid "Connect to {source}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/views/CreateTokenRedPacket.tsx
 #: src/SiteAdaptor/SolanaRedpacketDialog/CreateRedpacket.tsx
@@ -438,8 +438,8 @@ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Follow me"
-msgstr "今すぐフォロー"
+#~ msgid "Follow me"
+#~ msgstr "今すぐフォロー"
 
 #: src/SiteAdaptor/RedPacketNft.tsx
 #~ msgid "From: @{0}"
@@ -569,12 +569,12 @@ msgid "Leave blank to allow any amount; enter a number to set a minimum holding 
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Like"
-msgstr "いいね"
+#~ msgid "Like"
+#~ msgstr "いいね"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Like / Repost / Comment"
-msgstr "いいね/リポスト/コメント"
+#~ msgid "Like / Repost / Comment"
+#~ msgstr "いいね/リポスト/コメント"
 
 #: src/SiteAdaptor/NftRedPacketHistoryList.tsx
 #~ msgid "Loading"
@@ -613,13 +613,13 @@ msgid "My wallet"
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Next"
-msgstr "次へ"
+#~ msgid "Next"
+#~ msgstr "次へ"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "NFT holder"
-msgstr "NFT ホルダー"
+#~ msgid "NFT holder"
+#~ msgstr "NFT ホルダー"
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 msgid "NFT Holder"
@@ -727,8 +727,8 @@ msgid "Refunding"
 msgstr "返金処理中"
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Repost"
-msgstr "リポスト"
+#~ msgid "Repost"
+#~ msgstr "リポスト"
 
 #: src/SiteAdaptor/Requirements/index.tsx
 #~ msgid "Requirements"
@@ -766,8 +766,8 @@ msgstr "トークンを選択してください"
 #~ msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "Select NFT collection to gate access"
-msgstr "ゲートにアクセスするNFTコレクションを選択します"
+#~ msgid "Select NFT collection to gate access"
+#~ msgstr "ゲートにアクセスするNFTコレクションを選択します"
 
 #: src/SiteAdaptor/components/ConditionSettings.tsx
 #: src/SiteAdaptor/components/CollectionSelectPanel.tsx
@@ -943,20 +943,20 @@ msgid "Transaction cost"
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
-msgstr "ラッキードロップクエストを使用してフォロワーとエンゲージメントを成長させましょう。各要件をクリアすると、要求を受けることができます。"
+#~ msgid "Use Lucky Drop quests to grow your followers and engagement. Each requirement must be completed to be eligible to claim."
+#~ msgstr "ラッキードロップクエストを使用してフォロワーとエンゲージメントを成長させましょう。各要件をクリアすると、要求を受けることができます。"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "User must follow your account. Note: When you cross-post a Lucky Drop to multiple social networks, following you on any social allows users to claim."
-msgstr "ユーザーはアカウントをフォローする必要があります。注意: 複数のソーシャルネットワークにラッキードロップを投稿する場合、ソーシャルネットワークをフォローすると、ユーザーが請求することができます。"
+#~ msgid "User must follow your account. Note: When you cross-post a Lucky Drop to multiple social networks, following you on any social allows users to claim."
+#~ msgstr "ユーザーはアカウントをフォローする必要があります。注意: 複数のソーシャルネットワークにラッキードロップを投稿する場合、ソーシャルネットワークをフォローすると、ユーザーが請求することができます。"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Users must hold one NFT from the collection you select."
-msgstr "ユーザーは選択したコレクションから1つのNFTを保持する必要があります。"
+#~ msgid "Users must hold one NFT from the collection you select."
+#~ msgstr "ユーザーは選択したコレクションから1つのNFTを保持する必要があります。"
 
 #: src/SiteAdaptor/ClaimRequirementsRuleDialog.tsx
-msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
-msgstr "ユーザーは、あなたのラッキードロップの投稿に「いいね！」、リポスト/引用ツイート、コメントをしなければなりません。"
+#~ msgid "Users must like, repost / quote tweet, or comment on your Lucky Drop post."
+#~ msgstr "ユーザーは、あなたのラッキードロップの投稿に「いいね！」、リポスト/引用ツイート、コメントをしなければなりません。"
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketActionButton.tsx
@@ -995,8 +995,8 @@ msgid "You can claim the lucky drop by holding the required amount of any select
 msgstr ""
 
 #: src/SiteAdaptor/ClaimRequirementsDialog.tsx
-msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
-msgstr "1つまたは複数のルールを設定して、Lucky Dropを獲得することができます。"
+#~ msgid "You can set one or multiple rules to be eligible to win a Lucky Drop."
+#~ msgstr "1つまたは複数のルールを設定して、Lucky Dropを獲得することができます。"
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "You can withdraw any unclaimed amount 24 hours after sending this lucky drop."

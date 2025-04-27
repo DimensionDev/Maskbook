@@ -1577,7 +1577,6 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr ""
 
@@ -2792,8 +2791,6 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr ""
 
@@ -2845,7 +2842,6 @@ msgid "The persona name already exists."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "通訊號碼錯誤"
 

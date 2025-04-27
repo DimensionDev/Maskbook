@@ -3,7 +3,7 @@ export const takeThisF: <Args extends readonly unknown[], This, Return>(
 ) => <AssignedThis extends This>(self: AssignedThis, ...args: Args) => Return = Function.prototype.bind.bind(
     Function.prototype.call,
 )
-export const takeThis: <Args extends readonly unknown[], This, Return>(
+const takeThis: <Args extends readonly unknown[], This, Return>(
     f: (this: This, ...args: Args) => Return,
 ) => (self: This, ...args: Args) => Return = takeThisF
 export const bind: {
@@ -19,18 +19,16 @@ export const bind: {
 // #region ECMAScript intrinsic
 // ECMAScript
 export const { String, Promise, Boolean } = globalThis
-export const getOwnPropertyDescriptor: <T, K extends keyof T>(object: T, key: K) => TypedPropertyDescriptor<T, T[K]> =
+const getOwnPropertyDescriptor: <T, K extends keyof T>(object: T, key: K) => TypedPropertyDescriptor<T, T[K]> =
     Object.getOwnPropertyDescriptor as any
 export const setPrototypeOf: <const T extends object>(o: T, proto: object | null) => T = Object.setPrototypeOf
 export const { defineProperty, defineProperties, getOwnPropertyDescriptors, getPrototypeOf, create, freeze } = Object
-export const { deleteProperty } = Reflect
 export const apply: <Args extends readonly unknown[], This, Return>(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-function-type
     f: ((this: This, ...args: Args) => Return) | Function,
     thisArg: This,
     args: Readonly<Args> | IArguments,
 ) => Return = Reflect.apply as any
-export const { parse: JSON_parse, stringify: JSON_stringify } = JSON
 export let hasOwn = Object.hasOwn
 if (!hasOwn) {
     const { hasOwnProperty } = Object.prototype
@@ -40,7 +38,6 @@ export const StringSplit = takeThisF(globalThis.String.prototype.split)<string>
 export const StringToLowerCase = takeThisF(globalThis.String.prototype.toLowerCase)<string>
 export const StringStartsWith = takeThisF(globalThis.String.prototype.startsWith)<string>
 export const StringEndsWith = takeThisF(globalThis.String.prototype.endsWith)<string>
-export const StringInclude = takeThisF(globalThis.String.prototype.includes)<string>
 export const ArrayFilter = takeThisF(globalThis.Array.prototype.filter)<readonly unknown[]>
 export const ArrayIncludes = takeThisF(globalThis.Array.prototype.includes)<readonly unknown[]>
 export const ArrayUnshift: <T>(self: T[], ...args: T[]) => number = takeThisF(globalThis.Array.prototype.unshift)
@@ -51,9 +48,8 @@ export const Uint8Array_from = globalThis.Uint8Array.from.bind(globalThis.Uint8A
 // #endregion
 
 // #region  DOM<EventTarget>
-export const { URL, Blob, File, DOMException, Event, ClipboardEvent, CustomEvent, InputEvent, EventTarget } = globalThis
+export const { URL, Blob, File, DOMException, Event, CustomEvent, EventTarget } = globalThis
 export const setTimeout = globalThis.setTimeout.bind(window)
-export const clearTimeout = globalThis.clearTimeout.bind(window)
 export const addEventListener = takeThisF(EventTarget.prototype.addEventListener)<EventTarget>
 export const removeEventListener = takeThisF(EventTarget.prototype.removeEventListener)<EventTarget>
 export const dispatchEvent = takeThisF(EventTarget.prototype.dispatchEvent)
@@ -115,8 +111,6 @@ export const NodeList_forEach = takeThisF(NodeList.prototype.forEach)<NodeList>
 // #endregion
 
 // #region Firefox magic
-export const wrapXRayVision: <const T extends object>(val: T) => T =
-    typeof XPCNativeWrapper !== 'undefined' ? XPCNativeWrapper : Object
 export const isFirefox = typeof XPCNativeWrapper !== 'undefined'
 // #endregion
 interface TypedPropertyDescriptor<T, V> {
