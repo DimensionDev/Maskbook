@@ -17,12 +17,6 @@ import {
     follow as lensFollow,
     unfollow as lensUnfollow,
 } from '@lens-protocol/client/actions'
-import { gql } from 'graphql-request'
-import { sortBy, uniqBy } from 'lodash-es'
-import { fetchJSON } from '../helpers/fetchJSON.js'
-import { LENS_ROOT_API } from './constants.js'
-import { fragments } from './fragments/index.js'
-import type { FollowPair } from './types.js'
 import {
     createIndicator,
     createNextIndicator,
@@ -30,10 +24,17 @@ import {
     EMPTY_LIST,
     type PageIndicator,
 } from '@masknet/shared-base'
-import { formatLensPost, getAccountAvatar } from './helpers.js'
-import { isZero } from '@masknet/web3-shared-base'
-import type { LensV3BaseAPI } from '@masknet/web3-providers/types'
 import { EVMWeb3 } from '@masknet/web3-providers'
+import type { LensV3BaseAPI } from '@masknet/web3-providers/types'
+import { isZero } from '@masknet/web3-shared-base'
+import { isValidAddress } from '@masknet/web3-shared-evm'
+import { gql } from 'graphql-request'
+import { sortBy, uniqBy } from 'lodash-es'
+import { fetchJSON } from '../helpers/fetchJSON.js'
+import { LENS_ROOT_API } from './constants.js'
+import { fragments } from './fragments/index.js'
+import { formatLensPost, getAccountAvatar } from './helpers.js'
+import type { FollowPair } from './types.js'
 
 export class LensV3 {
     private signMessage: (message: string) => Promise<string>
@@ -46,7 +47,7 @@ export class LensV3 {
             storage: window.localStorage,
             fragments,
         })
-        if (account) this.account = evmAddress(account)
+        if (account && isValidAddress(account)) this.account = evmAddress(account)
         this.signMessage = signMessage || ((message: string) => EVMWeb3.signMessage('message', message))
     }
 
