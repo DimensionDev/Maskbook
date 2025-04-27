@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-10 05:53\n"
+"PO-Revision-Date: 2025-04-27 09:28\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -2030,6 +2030,10 @@ msgstr "crwdns32100:0{providerType}crwdne32100:0"
 #: popups/pages/Settings/index.tsx
 msgid "Not set"
 msgstr "crwdns30390:0crwdne30390:0"
+
+#: popups/components/NFTAvatarPicker/CollectionList.tsx
+msgid "Not supported yet."
+msgstr "crwdns37411:0crwdne37411:0"
 
 #: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
