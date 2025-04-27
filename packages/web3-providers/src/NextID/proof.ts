@@ -1,4 +1,3 @@
-import { env } from '@masknet/flags'
 import {
     type BindingProof,
     NextIDAction,
@@ -14,11 +13,8 @@ import { first, sortBy } from 'lodash-es'
 import urlcat from 'urlcat'
 import { Expiration, stableSquashedCached } from '../entry-helpers.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
-import { PROOF_BASE_URL_DEV, PROOF_BASE_URL_PROD } from './constants.js'
+import { PROOF_BASE_URL } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
-
-const BASE_URL =
-    env.channel === 'stable' && process.env.NODE_ENV === 'production' ? PROOF_BASE_URL_PROD : PROOF_BASE_URL_DEV
 
 interface CreatePayloadBody {
     action: string
@@ -44,14 +40,14 @@ interface RestorePubkeyResponse {
 }
 
 function getPersonaQueryURL(platform: string, identity: string) {
-    return urlcat(BASE_URL, '/v1/proof', {
+    return urlcat(PROOF_BASE_URL, '/v1/proof', {
         platform,
         identity,
     })
 }
 
 function getExistedBindingQueryURL(platform: string, identity: string, personaPublicKey: string) {
-    return urlcat(BASE_URL, '/v1/proof/exists', {
+    return urlcat(PROOF_BASE_URL, '/v1/proof/exists', {
         platform,
         identity,
         public_key: personaPublicKey,
@@ -98,7 +94,7 @@ export class NextIDProof {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<NextIDErrorBody | undefined>(urlcat(BASE_URL, '/v1/proof'), {
+        const result = await fetchJSON<NextIDErrorBody | undefined>(urlcat(PROOF_BASE_URL, '/v1/proof'), {
             body: JSON.stringify(requestBody),
             method: 'POST',
         })
@@ -131,7 +127,7 @@ export class NextIDProof {
         if (!platform && !identity) return []
 
         const bindings = await fetchFromProofService<NextIDBindings>(
-            urlcat(BASE_URL, '/v1/proof', {
+            urlcat(PROOF_BASE_URL, '/v1/proof', {
                 platform,
                 identity,
                 page,
@@ -162,7 +158,7 @@ export class NextIDProof {
         let page = 1
         do {
             const bindings = await fetchFromProofService<NextIDBindings | { message: string }>(
-                urlcat(BASE_URL, '/v1/proof', {
+                urlcat(PROOF_BASE_URL, '/v1/proof', {
                     platform,
                     identity,
                     exact,
@@ -215,7 +211,7 @@ export class NextIDProof {
 
         const nextIDLanguageFormat = language.replace('-', '_') as PostContentLanguages
 
-        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/proof/payload'), {
+        const response = await fetchJSON<CreatePayloadResponse>(urlcat(PROOF_BASE_URL, '/v1/proof/payload'), {
             body: JSON.stringify(requestBody),
             method: 'POST',
         })
@@ -231,7 +227,7 @@ export class NextIDProof {
     }
 
     static async restorePubkey(payload: string, platform: NextIDPlatform, identity: string) {
-        const url = urlcat(BASE_URL, '/v1/proof/restore_pubkey')
+        const url = urlcat(PROOF_BASE_URL, '/v1/proof/restore_pubkey')
         const response = await fetchJSON<RestorePubkeyResponse>(url, {
             method: 'POST',
             body: JSON.stringify({

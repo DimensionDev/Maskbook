@@ -5,18 +5,15 @@ import urlcat from 'urlcat'
 import { compact } from 'lodash-es'
 import { Err, Ok, type Result } from 'ts-results-es'
 import type { NextIDPlatform, NextIDStoragePayload } from '@masknet/shared-base'
-import { env } from '@masknet/flags'
-import { KV_BASE_URL_DEV, KV_BASE_URL_PROD } from './constants.js'
 import { staleNextIDCached } from './helpers.js'
 import { fetchCachedJSON, fetchJSON, fetchSquashedJSON } from '../helpers/fetchJSON.js'
+import { KV_BASE_URL } from './constants.js'
 
 interface CreatePayloadResponse {
     uuid: string
     sign_payload: string
     created_at: string
 }
-
-const BASE_URL = env.channel === 'stable' && process.env.NODE_ENV === 'production' ? KV_BASE_URL_PROD : KV_BASE_URL_DEV
 
 function formatPatchData(pluginID: string, data: unknown) {
     return {
@@ -46,7 +43,7 @@ export class NextIDStorageProvider {
             proofs: Proof[]
         }
         const response = await fetchSquashedJSON<Response | undefined>(
-            urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }),
+            urlcat(KV_BASE_URL, '/v1/kv', { persona: personaPublicKey }),
         )
         if (!response) return Err('User not found')
 
@@ -70,14 +67,16 @@ export class NextIDStorageProvider {
         interface Response {
             values: Proof[]
         }
-        const response = await fetchCachedJSON<Response>(urlcat(BASE_URL, '/v1/kv/by_identity', { platform, identity }))
+        const response = await fetchCachedJSON<Response>(
+            urlcat(KV_BASE_URL, '/v1/kv/by_identity', { platform, identity }),
+        )
         if (!response) return Err('User not found')
 
         const result = compact(response.values.map((x) => x.content[pluginID]))
         return Ok(result)
     }
     static async get<T>(personaPublicKey: string): Promise<T> {
-        return fetchCachedJSON<T>(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+        return fetchCachedJSON<T>(urlcat(KV_BASE_URL, '/v1/kv', { persona: personaPublicKey }))
     }
     /**
      * Get signature payload for updating
@@ -103,7 +102,7 @@ export class NextIDStorageProvider {
             patch: formatPatchData(pluginID, patchData),
         }
 
-        const response = await fetchJSON<CreatePayloadResponse>(urlcat(BASE_URL, '/v1/kv/payload'), {
+        const response = await fetchJSON<CreatePayloadResponse>(urlcat(KV_BASE_URL, '/v1/kv/payload'), {
             body: JSON.stringify(requestBody),
             method: 'POST',
         })
@@ -150,13 +149,13 @@ export class NextIDStorageProvider {
             created_at: createdAt,
         }
 
-        const result = await fetchJSON<T>(urlcat(BASE_URL, '/v1/kv'), {
+        const result = await fetchJSON<T>(urlcat(KV_BASE_URL, '/v1/kv'), {
             body: JSON.stringify(requestBody),
             method: 'POST',
         })
 
         if (result) {
-            await staleNextIDCached(urlcat(BASE_URL, '/v1/kv', { persona: personaPublicKey }))
+            await staleNextIDCached(urlcat(KV_BASE_URL, '/v1/kv', { persona: personaPublicKey }))
         }
 
         return result ? Ok(result) : Err(null)
