@@ -35,7 +35,7 @@
     "@react-hookz/web": "^24.0.4",
     "@types/d3": "5.16.4",
     "@types/json-stable-stringify": "^1.0.36",
-    "bignumber.js": "9.1.2",
+    "bignumber.js": "9.2.1",
     "d3": "^5.16.0",
     "date-fns": "^3.6.0",
     "fuse.js": "^7.0.0",
