@@ -120,7 +120,7 @@ export const Component = memo(function MaskNetworkBackup() {
             :   <PhoneForm />}
             <Alert severity="warning" open={showAlert} onClose={() => setShowAlert(false)}>
                 <Trans>
-                    The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative
+                    The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use alternative
                     cloud backup services or local backup solutions.
                 </Trans>
             </Alert>
