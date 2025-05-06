@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-27 09:27\n"
+"PO-Revision-Date: 2025-05-06 08:34\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -1577,7 +1577,6 @@ msgstr "無効なブロックエクスプローラのURLです。"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr "メールアドレスが正しくありません。"
 
@@ -2796,8 +2795,6 @@ msgstr "chainIDは現在接続されているものと等しくありません�
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr "このコードは正しくありません"
 
@@ -2807,7 +2804,12 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
-msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
+msgid "The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use alternative cloud backup services or local backup solutions."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
@@ -2849,7 +2851,6 @@ msgid "The persona name already exists."
 msgstr "このペルソナ名は既に存在しています."
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "電話番号が間違っています。"
 
@@ -3348,3 +3349,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
