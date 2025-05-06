@@ -84,7 +84,7 @@ const MaskNetworkInner = memo(function MaskNetworkInner() {
                     <InputForm />
                     <Alert mt={2} severity="warning" open={showAlert} onClose={() => setShowAlert(false)}>
                         <Trans>
-                            The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use
+                            The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use
                             alternative cloud backup services or local backup solutions.
                         </Trans>
                     </Alert>
