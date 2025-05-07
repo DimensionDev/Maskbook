@@ -2802,7 +2802,12 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
-msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
+msgid "The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use alternative cloud backup services or local backup solutions."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
