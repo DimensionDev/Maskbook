@@ -144,8 +144,8 @@ importers:
         specifier: 0.0.0-experimental-58af67a8f8-20240628
         version: 0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628)
       ses:
-        specifier: 1.9.0
-        version: 1.9.0
+        specifier: 1.12.0
+        version: 1.12.0
       ts-results-es:
         specifier: ^4.2.0
         version: 4.2.0
@@ -13648,8 +13648,8 @@ packages:
   ses@1.10.0:
     resolution: {integrity: sha512-HXmJbNEgY/4hsQfaz5dna39vVKNyvlElRmJYk+bjTqSXSElT0Hr6NKwWVg4j0TxP6IuHp/PNMoWJKIRXzmLbAQ==}
 
-  ses@1.9.0:
-    resolution: {integrity: sha512-ZDAkixRUIPId1oXVxDhj1sIzFUeJ3vzaJCd64Ra1owuVH6Bcd+IOGrJtiFqUTA+YC9w8jTE9XkZTwin+hkbn5Q==}
+  ses@1.12.0:
+    resolution: {integrity: sha512-jvmwXE2lFxIIY1j76hFjewIIhYMR9Slo3ynWZGtGl5M7VUCw3EA0wetS+JCIbl2UcSQjAT0yGAHkyxPJreuC9w==}
 
   set-blocking@2.0.0:
     resolution: {integrity: sha512-KiKBS8AnWGEyLzofFfmvKwpdPzqiy16LvQfK3yv/fVH7Bj13/wl3JSR1J+rfgRE9q7xUJK4qvgS8raSOeLUehw==}
@@ -29696,7 +29696,7 @@ snapshots:
     dependencies:
       '@endo/env-options': 1.1.8
 
-  ses@1.9.0:
+  ses@1.12.0:
     dependencies:
       '@endo/env-options': 1.1.8
 
