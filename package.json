@@ -1,7 +1,7 @@
 {
   "name": "mask-network",
   "type": "module",
-  "packageManager": "pnpm@9.12.1",
+  "packageManager": "pnpm@10.11.0",
   "engines": {
     "node": ">=23.6.0",
     "yarn": ">=999.0.0",
@@ -95,68 +95,5 @@
     "typescript-eslint": "^8.26.0",
     "vite": "^6.2.0",
     "vitest": "^3.0.7"
-  },
-  "pnpm": {
-    "overrides": {
-      "@emotion/styled": "$@emotion/styled",
-      "@emotion/react": "$@emotion/react",
-      "@mui/base": "$@mui/base",
-      "@mui/icons-material": "$@mui/icons-material",
-      "@mui/material": "$@mui/material",
-      "@swc/core": "$@swc/core",
-      "@protobufjs/inquire": "1.1.0",
-      "@splinetool/runtime": "0.9.342",
-      "@tanstack/react-query": "^5.49.2",
-      "@types/node": "22.13.9",
-      "@types/react": "$@types/react",
-      "@types/react-dom": "$@types/react-dom",
-      "elliptic": "6.6.1",
-      "glob-stream": "7.0.0",
-      "react": "$react",
-      "react-dom": "$react-dom",
-      "reflect-metadata": "0.1.13",
-      "webpack@5": "npm:@magic-works/webpack@5.88.2"
-    },
-    "override reason": {
-      "@protobufjs/inquire": "Patching this",
-      "@splinetool/runtime": "Patching this",
-      "@types/node": "Singleton package",
-      "@types/react": "Singleton package",
-      "@types/react-dom": "Singleton package",
-      "elliptic": "GHSA-vjh7-7g9h-fjfh",
-      "glob-stream": "https://github.com/gulpjs/gulp/issues/2795",
-      "react": "Singleton package",
-      "react-dom": "Singleton package",
-      "reflect-metadata": "Patching this",
-      "webpack@5": "PR: https://github.com/webpack/webpack/pull/18139"
-    },
-    "onlyBuiltDependencies": [],
-    "peerDependencyRules": {
-      "ignoreMissing": [],
-      "allowAny": [
-        "webpack",
-        "react",
-        "react-dom",
-        "@types/react"
-      ],
-      "allowedVersions": {}
-    },
-    "patchedDependencies": {
-      "@ceramicnetwork/rpc-transport@0.3.1": "patches/@ceramicnetwork__rpc-transport@0.3.1.patch",
-      "@types/react-avatar-editor@13.0.2": "patches/@types__react-avatar-editor@13.0.2.patch",
-      "rss3-next@0.6.17": "patches/rss3-next@0.6.17.patch",
-      "@types/react-highlight-words@0.20.0": "patches/@types__react-highlight-words@0.20.0.patch",
-      "@cyberlab/cyberconnect@4.2.2": "patches/@cyberlab__cyberconnect@4.2.2.patch",
-      "reflect-metadata@0.1.13": "patches/reflect-metadata@0.1.13.patch",
-      "bloom-filters@3.0.0": "patches/bloom-filters@3.0.0.patch",
-      "urlcat@3.1.0": "patches/urlcat@3.1.0.patch",
-      "@protobufjs/inquire@1.1.0": "patches/@protobufjs__inquire@1.1.0.patch",
-      "eslint-plugin-i@2.29.1": "patches/eslint-plugin-i@2.29.1.patch",
-      "react-use@17.5.0": "patches/react-use@17.5.0.patch",
-      "react-devtools-inline@5.3.0": "patches/react-devtools-inline@5.3.0.patch",
-      "@splinetool/runtime@0.9.342": "patches/@splinetool__runtime@0.9.342.patch",
-      "@scamsniffer/detector": "patches/@scamsniffer__detector.patch",
-      "gulp": "patches/gulp.patch"
-    }
   }
 }

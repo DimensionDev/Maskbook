@@ -22,55 +22,55 @@ overrides:
   react: 0.0.0-experimental-58af67a8f8-20240628
   react-dom: 0.0.0-experimental-58af67a8f8-20240628
   reflect-metadata: 0.1.13
-  webpack@5: npm:@magic-works/webpack@5.88.2
+  webpack: npm:@magic-works/webpack@5.88.2
 
-pnpmfileChecksum: s6bwekups2l2ek4kug4n4lxi6q
+pnpmfileChecksum: sha256-6Ev2xrqv64GryG7MkXDMYRV6GocGer0IQH/5zxhy1d8=
 
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1':
-    hash: subw5upjv36ceix3wmw66isn6u
+    hash: c84653dcea8e61f29204ef658a2a5943ad11468491b9b235c78653aaeb2330d6
     path: patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@cyberlab/cyberconnect@4.2.2':
-    hash: 7wgc4b53ygfwefhtjbh3dydjgy
+    hash: 4dbfa79010216f49a3d2b06b7d75ff505e42abec33c31f3f7fd21a86a1fe5a59
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
   '@protobufjs/inquire@1.1.0':
-    hash: cc6ztxhxwsg3dyqdzvftqua3dy
+    hash: 6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d
     path: patches/@protobufjs__inquire@1.1.0.patch
   '@scamsniffer/detector':
-    hash: visnrgq3ka5iwwicsyrypyhbiq
+    hash: 15d2dcb03f520305f2c94623328db1bd3a19322d38feeaff86833982542b5713
     path: patches/@scamsniffer__detector.patch
   '@splinetool/runtime@0.9.342':
-    hash: pai5dnfr6cjujs6g7ajnubnady
+    hash: a131e328a83b5ef1ccc97e2008268b10035de64ec76328b548b420349e28bc6c
     path: patches/@splinetool__runtime@0.9.342.patch
   '@types/react-avatar-editor@13.0.2':
-    hash: yu2mmww76lhdsakm732xadtvva
+    hash: 964633ba75b95702d6968fe8758b1f14f1e84ae66b941d42ccf852710d60d9df
     path: patches/@types__react-avatar-editor@13.0.2.patch
   '@types/react-highlight-words@0.20.0':
-    hash: vrjs5dcrnxwj656cpqcywd6gt4
+    hash: f29881aac139c1fe526819717a60157afd2b12358d3d9c87c18f464666954689
     path: patches/@types__react-highlight-words@0.20.0.patch
   bloom-filters@3.0.0:
-    hash: 2etetjrjxbcye2oktxqpij75ey
+    hash: a5e85bac08776b8696d4e85af25d3143c9b9a9895a2cc4b531d85639fe0eb30f
     path: patches/bloom-filters@3.0.0.patch
   eslint-plugin-i@2.29.1:
-    hash: zgide6rxzjqivhxxv36ouq6c4y
+    hash: b069b3420197ed9e97f27eb9369aeb901f89e426dff08f6cbb2dab8abcd1dc0c
     path: patches/eslint-plugin-i@2.29.1.patch
   gulp:
-    hash: tdwx5kqhf6grdas2dblneqarim
+    hash: f4316218fc0ee2671324cec1242936e896fb44878d3f60021eaca6bd669f43cb
     path: patches/gulp.patch
   react-devtools-inline@5.3.0:
-    hash: jy5l47kz5zhgguiggeursqr63y
+    hash: 51dda06a782a674a7cc25a64cf1787137ec9dc1079c38586eb3c017a3b961342
     path: patches/react-devtools-inline@5.3.0.patch
   react-use@17.5.0:
-    hash: tokvlmgj4xqkhjmndck4f7nw3q
+    hash: d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7
     path: patches/react-use@17.5.0.patch
   reflect-metadata@0.1.13:
-    hash: pnra5xi77mqlyipflqvcm4z6ga
+    hash: 3c19db0a577da75ff3c875a0fa4ef586a0ca002a6f7935687a9cd524fea56f79
     path: patches/reflect-metadata@0.1.13.patch
   rss3-next@0.6.17:
-    hash: db27yqpr4wdtpwfyvaxcqd4jpi
+    hash: ba708c997bf5f4873db9552566a1f534c10b15515c144c95ee348c1ee5b24a7a
     path: patches/rss3-next@0.6.17.patch
   urlcat@3.1.0:
-    hash: scyjp2cqyqu6oq4kmzjh3isyxa
+    hash: aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf
     path: patches/urlcat@3.1.0.patch
 
 importers:
@@ -212,7 +212,7 @@ importers:
         version: 3.8.3(eslint-plugin-import@2.28.1)(eslint@9.21.0(jiti@2.4.2))
       eslint-plugin-i:
         specifier: ^2.29.1
-        version: 2.29.1(patch_hash=zgide6rxzjqivhxxv36ouq6c4y)(@typescript-eslint/parser@8.26.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2))(eslint-import-resolver-typescript@3.8.3)(eslint@9.21.0(jiti@2.4.2))
+        version: 2.29.1(patch_hash=b069b3420197ed9e97f27eb9369aeb901f89e426dff08f6cbb2dab8abcd1dc0c)(@typescript-eslint/parser@8.26.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2))(eslint-import-resolver-typescript@3.8.3)(eslint@9.21.0(jiti@2.4.2))
       eslint-plugin-lingui:
         specifier: ^0.10.0
         version: 0.10.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2)
@@ -233,7 +233,7 @@ importers:
         version: 4.1.4(@typescript-eslint/eslint-plugin@8.26.0(@typescript-eslint/parser@8.26.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2))(eslint@9.21.0(jiti@2.4.2))
       gulp:
         specifier: ^5.0.0
-        version: 5.0.0(patch_hash=tdwx5kqhf6grdas2dblneqarim)
+        version: 5.0.0(patch_hash=f4316218fc0ee2671324cec1242936e896fb44878d3f60021eaca6bd669f43cb)
       husky:
         specifier: ^9.1.7
         version: 9.1.7
@@ -330,7 +330,7 @@ importers:
         version: 0.9.0-20240322092738-f9180f3(@types/webextension-polyfill@0.10.7)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -543,7 +543,7 @@ importers:
         version: 3.0.0
       '@splinetool/runtime':
         specifier: 0.9.342
-        version: 0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)
+        version: 0.9.342(patch_hash=a131e328a83b5ef1ccc97e2008268b10035de64ec76328b548b420349e28bc6c)
       '@tanstack/query-async-storage-persister':
         specifier: ^5.48.0
         version: 5.48.0
@@ -561,10 +561,10 @@ importers:
         version: 1.0.36
       '@types/react-avatar-editor':
         specifier: ^13.0.2
-        version: 13.0.2(patch_hash=yu2mmww76lhdsakm732xadtvva)
+        version: 13.0.2(patch_hash=964633ba75b95702d6968fe8758b1f14f1e84ae66b941d42ccf852710d60d9df)
       '@types/react-highlight-words':
         specifier: ^0.20.0
-        version: 0.20.0(patch_hash=vrjs5dcrnxwj656cpqcywd6gt4)
+        version: 0.20.0(patch_hash=f29881aac139c1fe526819717a60157afd2b12358d3d9c87c18f464666954689)
       '@types/use-subscription':
         specifier: ^1.0.2
         version: 1.0.2
@@ -648,7 +648,7 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-window:
         specifier: ^1.8.10
         version: 1.8.10(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -666,7 +666,7 @@ importers:
         version: 0.11.4
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -733,7 +733,7 @@ importers:
         version: 0.1.2(babel-plugin-react-compiler@19.0.0-beta-df7b47d-20241124)
       react-devtools-inline:
         specifier: 5.3.0
-        version: 5.3.0(patch_hash=jy5l47kz5zhgguiggeursqr63y)
+        version: 5.3.0(patch_hash=51dda06a782a674a7cc25a64cf1787137ec9dc1079c38586eb3c017a3b961342)
       react-refresh:
         specifier: ^0.16.0
         version: 0.16.0
@@ -823,7 +823,7 @@ importers:
         version: 6.4.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -910,10 +910,10 @@ importers:
         version: 9.1.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -961,7 +961,7 @@ importers:
         version: 3.0.0
       '@types/react-avatar-editor':
         specifier: ^13.0.2
-        version: 13.0.2(patch_hash=yu2mmww76lhdsakm732xadtvva)
+        version: 13.0.2(patch_hash=964633ba75b95702d6968fe8758b1f14f1e84ae66b941d42ccf852710d60d9df)
       '@types/use-subscription':
         specifier: ^1.0.2
         version: 1.0.2
@@ -976,7 +976,7 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -1054,7 +1054,7 @@ importers:
         version: 0.3.11
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -1144,7 +1144,7 @@ importers:
     dependencies:
       '@cyberlab/cyberconnect':
         specifier: 4.2.2
-        version: 4.2.2(patch_hash=7wgc4b53ygfwefhtjbh3dydjgy)(encoding@0.1.13)
+        version: 4.2.2(patch_hash=4dbfa79010216f49a3d2b06b7d75ff505e42abec33c31f3f7fd21a86a1fe5a59)(encoding@0.1.13)
       '@masknet/icons':
         specifier: workspace:^
         version: link:../../icons
@@ -1180,7 +1180,7 @@ importers:
         version: 1.10.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/plugins/Debugger:
     dependencies:
@@ -1276,10 +1276,10 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -1319,10 +1319,10 @@ importers:
         version: 3.6.0
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
 
   packages/plugins/GoPlusSecurity:
     dependencies:
@@ -1364,10 +1364,10 @@ importers:
         version: 2.0.10(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
 
   packages/plugins/Handle:
     dependencies:
@@ -1433,7 +1433,7 @@ importers:
         version: link:../../web3-shared/evm
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       zod:
         specifier: ^3.24.2
         version: 3.24.2
@@ -1472,7 +1472,7 @@ importers:
         version: link:../../web3-shared/evm
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/plugins/ProfileCard:
     dependencies:
@@ -1631,13 +1631,13 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       tweetnacl:
         specifier: ^1.0.3
         version: 1.0.3
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       web3-core:
         specifier: 1.10.4
         version: 1.10.4(encoding@0.1.13)
@@ -1688,7 +1688,7 @@ importers:
         version: 3.6.0
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -1718,13 +1718,13 @@ importers:
         version: link:../../web3-providers
       '@scamsniffer/detector':
         specifier: 0.0.39
-        version: 0.0.39(patch_hash=visnrgq3ka5iwwicsyrypyhbiq)(@babel/core@7.26.0)(@swc/core@1.11.7(@swc/helpers@0.5.15))(babel-jest@28.1.3(@babel/core@7.26.0))(bufferutil@4.0.8)(encoding@0.1.13)(jest@28.1.3(@types/node@22.13.9)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.11.7(@swc/helpers@0.5.15))(@types/node@22.13.9)(typescript@5.8.2)))(typescript@5.8.2)(utf-8-validate@5.0.10)
+        version: 0.0.39(patch_hash=15d2dcb03f520305f2c94623328db1bd3a19322d38feeaff86833982542b5713)(@babel/core@7.26.0)(@swc/core@1.11.7(@swc/helpers@0.5.15))(babel-jest@28.1.3(@babel/core@7.26.0))(bufferutil@4.0.8)(encoding@0.1.13)(jest@28.1.3(@types/node@22.13.9)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.11.7(@swc/helpers@0.5.15))(@types/node@22.13.9)(typescript@5.8.2)))(typescript@5.8.2)(utf-8-validate@5.0.10)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
 
   packages/plugins/ScamWarning:
     dependencies:
@@ -1754,10 +1754,10 @@ importers:
         version: link:../../web3-shared/solana
       '@scamsniffer/detector':
         specifier: 0.0.39
-        version: 0.0.39(patch_hash=visnrgq3ka5iwwicsyrypyhbiq)(@babel/core@7.26.0)(@swc/core@1.11.7(@swc/helpers@0.5.15))(babel-jest@28.1.3(@babel/core@7.26.0))(bufferutil@4.0.8)(encoding@0.1.13)(jest@28.1.3(@types/node@22.13.9)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.11.7(@swc/helpers@0.5.15))(@types/node@22.13.9)(typescript@5.8.2)))(typescript@5.8.2)(utf-8-validate@5.0.10)
+        version: 0.0.39(patch_hash=15d2dcb03f520305f2c94623328db1bd3a19322d38feeaff86833982542b5713)(@babel/core@7.26.0)(@swc/core@1.11.7(@swc/helpers@0.5.15))(babel-jest@28.1.3(@babel/core@7.26.0))(bufferutil@4.0.8)(encoding@0.1.13)(jest@28.1.3(@types/node@22.13.9)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.11.7(@swc/helpers@0.5.15))(@types/node@22.13.9)(typescript@5.8.2)))(typescript@5.8.2)(utf-8-validate@5.0.10)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/plugins/SmartPay:
     dependencies:
@@ -1802,7 +1802,7 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/plugins/Snapshot:
     dependencies:
@@ -1856,10 +1856,10 @@ importers:
         version: 3.6.0
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
 
   packages/plugins/SwitchLogo:
     dependencies:
@@ -1928,7 +1928,7 @@ importers:
         version: 1.0.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2006,10 +2006,10 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.4.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2055,7 +2055,7 @@ importers:
         version: 1.1.1
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/plugins/VCent:
     dependencies:
@@ -2085,10 +2085,10 @@ importers:
         version: link:../../web3-shared/evm
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
 
   packages/plugins/Web3Profile:
     dependencies:
@@ -2133,10 +2133,10 @@ importers:
         version: 1.0.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2406,7 +2406,7 @@ importers:
         version: 7.53.0(react@0.0.0-experimental-58af67a8f8-20240628)
       react-markdown:
         specifier: ^9.0.1
-        version: 9.0.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2)
+        version: 9.0.1(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628)
       react-qrcode-logo:
         specifier: ^3.0.0
         version: 3.0.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2415,7 +2415,7 @@ importers:
         version: 6.24.0(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       rehype-external-links:
         specifier: ^3.0.0
         version: 3.0.0
@@ -2443,7 +2443,7 @@ importers:
         version: 1.5.5
       '@types/react-avatar-editor':
         specifier: ^13.0.2
-        version: 13.0.2(patch_hash=yu2mmww76lhdsakm732xadtvva)
+        version: 13.0.2(patch_hash=964633ba75b95702d6968fe8758b1f14f1e84ae66b941d42ccf852710d60d9df)
       '@types/use-subscription':
         specifier: ^1.0.2
         version: 1.0.2
@@ -2522,10 +2522,10 @@ importers:
         version: 1.0.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2558,7 +2558,7 @@ importers:
         version: 2.0.8(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(@mui/material@5.15.20(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(@emotion/styled@11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       react-window:
         specifier: ^1.8.10
         version: 1.8.10(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2726,7 +2726,7 @@ importers:
         version: 0.1.1
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       use-subscription:
         specifier: ^1.8.0
         version: 1.8.2(react@0.0.0-experimental-58af67a8f8-20240628)
@@ -2759,7 +2759,7 @@ importers:
         version: 9.1.2
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
       web3-utils:
         specifier: 1.10.2
         version: 1.10.2
@@ -2849,7 +2849,7 @@ importers:
         version: 9.1.2
       bloom-filters:
         specifier: ^3.0.0
-        version: 3.0.0(patch_hash=2etetjrjxbcye2oktxqpij75ey)
+        version: 3.0.0(patch_hash=a5e85bac08776b8696d4e85af25d3143c9b9a9895a2cc4b531d85639fe0eb30f)
       bn.js:
         specifier: ^4.12.0
         version: 4.12.0
@@ -2879,7 +2879,7 @@ importers:
         version: 4.0.1
       rss3-next:
         specifier: ^0.6.17
-        version: 0.6.17(patch_hash=db27yqpr4wdtpwfyvaxcqd4jpi)(bufferutil@4.0.8)(typescript@5.8.2)(utf-8-validate@5.0.10)
+        version: 0.6.17(patch_hash=ba708c997bf5f4873db9552566a1f534c10b15515c144c95ee348c1ee5b24a7a)(bufferutil@4.0.8)(typescript@5.8.2)(utf-8-validate@5.0.10)
       socket.io-client:
         specifier: 2.4.0
         version: 2.4.0(bufferutil@4.0.8)(utf-8-validate@5.0.10)
@@ -2888,7 +2888,7 @@ importers:
         version: 3.1.0
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       uuid:
         specifier: ^9.0.0
         version: 9.0.0
@@ -2949,7 +2949,7 @@ importers:
         version: 6.1.0
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
       web3-core-helpers:
         specifier: 1.10.2
         version: 1.10.2
@@ -3025,7 +3025,7 @@ importers:
         version: link:../base
       react-use:
         specifier: ^17.5.0
-        version: 17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628)
 
   packages/web3-shared/solana:
     dependencies:
@@ -3064,7 +3064,7 @@ importers:
         version: 8.13.0
       urlcat:
         specifier: ^3.1.0
-        version: 3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa)
+        version: 3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf)
 
   packages/xcode: {}
 
@@ -4952,7 +4952,7 @@ packages:
     resolution: {integrity: sha512-SnYXakFnxG2n7hFYZregEbFzbOvTBRr4iCGjcamrox+WpVH2H8COr7/gELOXIsdjfvj8fi3jD+tS3gZpJZ5vmA==}
     engines: {node: ^18.0.0 || ^20.0.0 || ^22.5.1, npm: '>=7.0.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.80.2
 
   '@leichtgewicht/ip-codec@2.0.5':
     resolution: {integrity: sha512-Vo+PSpZG2/fmgmiNzYK9qWRh8h/CHrwD0mo1h1DzL4yzHNSfWYujGTYsWGreD000gcgmZ7K4Ys6Tx9TxtsKdDw==}
@@ -5245,7 +5245,7 @@ packages:
     resolution: {integrity: sha512-I/lGHztkCzvwlXpjD2+SNmvNQvB4227xBXhISPjEaJUXGImOQ9f3D2Yj/T3KasSI/h0MLWy74X0J6clhPmsRbQ==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -5260,7 +5260,7 @@ packages:
     engines: {node: '>=12.0.0'}
     peerDependencies:
       '@mui/material': 5.15.20
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
       '@types/react':
@@ -5273,7 +5273,7 @@ packages:
       '@emotion/react': 11.11.4
       '@emotion/styled': 11.11.5
       '@mui/material': 5.15.20
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -5290,7 +5290,7 @@ packages:
     peerDependencies:
       '@emotion/react': 11.11.4
       '@emotion/styled': 11.11.5
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
       react-dom: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
@@ -5305,7 +5305,7 @@ packages:
     resolution: {integrity: sha512-BK8F94AIqSrnaPYXf2KAOjGZJgWfvqAVQ2gVR3EryvQFtuBnG6RwodxrCvd3B48VuMy6Wsk897+lQMUxJyk+6g==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
       '@types/react':
@@ -5330,7 +5330,7 @@ packages:
     peerDependencies:
       '@emotion/react': 11.11.4
       '@emotion/styled': 11.11.5
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
       '@emotion/react':
@@ -5343,7 +5343,7 @@ packages:
   '@mui/types@7.2.14':
     resolution: {integrity: sha512-MZsBZ4q4HfzBsywtXgM1Ksj6HDThtiwmOKUXH1pKYISI9gAVXCNHNpo7TlGoGrBaYWZTdNoirIN7JsQcQUjmQQ==}
     peerDependencies:
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
     peerDependenciesMeta:
       '@types/react':
         optional: true
@@ -5352,7 +5352,7 @@ packages:
     resolution: {integrity: sha512-mAbYx0sovrnpAu1zHc3MDIhPqL8RPVC5W5xcO1b7PiSCJPtckIZmBkp8hefamAvUiAV8gpfMOM6Zb+eSisbI2A==}
     engines: {node: '>=12.0.0'}
     peerDependencies:
-      '@types/react': npm:types-react@beta
+      '@types/react': ^17.0.0 || ^18.0.0
       react: 0.0.0-experimental-58af67a8f8-20240628
     peerDependenciesMeta:
       '@types/react':
@@ -5460,7 +5460,7 @@ packages:
     resolution: {integrity: sha512-yNYzYN6N2wrcoOcxfNgBP7GLVoewfV7vsg4muVLAJdIBQWnXx+t7d/MEp0n3BYhcxH4MEjm6IZ6jDVzFa3zkJw==}
     engines: {node: '>= 12'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: '>= 5'
 
   '@nice-labs/git-rev@3.5.1':
     resolution: {integrity: sha512-QVbXDN0q3VGD1X73lSKwsDVRxWi1F1ZLh8SjnkirFF0ZKzCZQmNKdLEDBlQ+/Vj6FDgDGAs4s75HRLxdCItLSw==}
@@ -5675,7 +5675,7 @@ packages:
       react-refresh: '>=0.10.0 <1.0.0'
       sockjs-client: ^1.4.0
       type-fest: '>=0.17.0 <5.0.0'
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: '>=4.43.0 <6.0.0'
       webpack-dev-server: 3.x || 4.x || 5.x
       webpack-hot-middleware: 2.x
       webpack-plugin-serve: 0.x || 1.x
@@ -5868,61 +5868,51 @@ packages:
     resolution: {integrity: sha512-88I+D3TeKItrw+Y/2ud4Tw0+3CxQ2kLgu3QvrogZ0OfkmX/DEppehus7L3TS2Q4lpB+hYyxhkQiYPJ6Mf5/dPg==}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.34.9':
     resolution: {integrity: sha512-3qyfWljSFHi9zH0KgtEPG4cBXHDFhwD8kwg6xLfHQ0IWuH9crp005GfoUUh/6w9/FWGBwEHg3lxK1iHRN1MFlA==}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.34.9':
     resolution: {integrity: sha512-6TZjPHjKZUQKmVKMUowF3ewHxctrRR09eYyvT5eFv8w/fXarEra83A2mHTVJLA5xU91aCNOUnM+DWFMSbQ0Nxw==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.34.9':
     resolution: {integrity: sha512-LD2fytxZJZ6xzOKnMbIpgzFOuIKlxVOpiMAXawsAZ2mHBPEYOnLRK5TTEsID6z4eM23DuO88X0Tq1mErHMVq0A==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-loongarch64-gnu@4.34.9':
     resolution: {integrity: sha512-dRAgTfDsn0TE0HI6cmo13hemKpVHOEyeciGtvlBTkpx/F65kTvShtY/EVyZEIfxFkV5JJTuQ9tP5HGBS0hfxIg==}
     cpu: [loong64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.34.9':
     resolution: {integrity: sha512-PHcNOAEhkoMSQtMf+rJofwisZqaU8iQ8EaSps58f5HYll9EAY5BSErCZ8qBDMVbq88h4UxaNPlbrKqfWP8RfJA==}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.34.9':
     resolution: {integrity: sha512-Z2i0Uy5G96KBYKjeQFKbbsB54xFOL5/y1P5wNBsbXB8yE+At3oh0DVMjQVzCJRJSfReiB2tX8T6HUFZ2k8iaKg==}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.34.9':
     resolution: {integrity: sha512-U+5SwTMoeYXoDzJX5dhDTxRltSrIax8KWwfaaYcynuJw8mT33W7oOgz0a+AaXtGuvhzTr2tVKh5UO8GVANTxyQ==}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.34.9':
     resolution: {integrity: sha512-FwBHNSOjUTQLP4MG7y6rR6qbGw4MFeQnIBrMe161QGaQoBQLqSUEKlHIiVgF3g/mb3lxlxzJOpIBhaP+C+KP2A==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.34.9':
     resolution: {integrity: sha512-cYRpV4650z2I3/s6+5/LONkjIz8MBeqrk+vPXV10ORBnshpn8S32bPqQ2Utv39jCiDcO2eJTuSlPXpnvmaIgRA==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.34.9':
     resolution: {integrity: sha512-z4mQK9dAN6byRA/vsSgQiPeuO63wdiDxZ9yg9iyX2QTzKuQM7T4xlBoeUP/J8uiFkqxkcWndWi+W7bXdPbt27Q==}
@@ -6942,6 +6932,9 @@ packages:
   '@types/react-window@1.8.8':
     resolution: {integrity: sha512-8Ls660bHR1AUA2kuRvVG9D/4XpRC6wjAaPT9dil7Ckc76eP9TKWZwwmgfq8Q1LANX3QNDnoU4Zp48A3w+zK69Q==}
 
+  '@types/react@19.1.4':
+    resolution: {integrity: sha512-EB1yiiYdvySuIITtD5lhW4yPyJ31RkJkkDw794LaQYrxCSaQV/47y5o1FMC4zF9ZyjUjzJMZwbovEnT5yHTW6g==}
+
   '@types/resolve@1.20.2':
     resolution: {integrity: sha512-60BCwRFOZCQhDncwQdxxeOEEkbc5dIMccYLwbxsS4TUNeVECQ/pBJ0j09mrHOl/JJvpRPGwO9SvE4nR2Nb/a4Q==}
 
@@ -7380,21 +7373,21 @@ packages:
     resolution: {integrity: sha512-u8d0pJ5YFgneF/GuvEiDA61Tf1VDomHHYMjv/wc9XzYj7nopltpG96nXN5dJRstxZhcNpV1g+nT6CydO7pHbjA==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.82.0
       webpack-cli: 6.x.x
 
   '@webpack-cli/info@3.0.1':
     resolution: {integrity: sha512-coEmDzc2u/ffMvuW9aCjoRzNSPDl/XLuhPdlFRpT9tZHmJ/039az33CE7uH+8s0uL1j5ZNtfdv0HkfaKRBGJsQ==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.82.0
       webpack-cli: 6.x.x
 
   '@webpack-cli/serve@3.0.1':
     resolution: {integrity: sha512-sbgw03xQaCLiT6gcY/6u3qBDn01CWw/nbaXl3gTdTFuJJ75Gffv3E3DBpgvY2fkkrdS1fpjaXNOmJlnbtKauKg==}
     engines: {node: '>=18.12.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.82.0
       webpack-cli: 6.x.x
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -8580,7 +8573,7 @@ packages:
     resolution: {integrity: sha512-FgR/h5a6hzJqATDGd9YG41SeDViH+0bkHn6WNXCi5zKAZkeESeSxLySSsFLHqLEVCh0E+rITmCf0dusXWYukeQ==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.1.0
 
   core-js-compat@3.41.0:
     resolution: {integrity: sha512-RFsU9LySVue9RTwdDVX/T0e2Y6jRYWXERKElIjpuEOEnxaXffI0X7RUwVzfYLfzuLXSNJDYoRYUAmRUcyln20A==}
@@ -9118,7 +9111,7 @@ packages:
     resolution: {integrity: sha512-4P+1Y1VhSt1MRBRF6my8N1bs9nNMOFfIFSBHI6u18W73iCHWXNHTSWYeMoQQ72PIIHrP1q4koKpYg1Em3jb9Rw==}
     engines: {node: '>=16.14.2', npm: '>=8.5.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.20.0
 
   did-jwt@5.12.3:
     resolution: {integrity: sha512-/aENag1/Mu4eCwMD62X/ZOV63hkXqpRxyriJP1z/8qL44ZpdwBvvL00so+YtDcTk/xHm3t0OEe6ATvvjNYPMCA==}
@@ -10511,7 +10504,7 @@ packages:
     engines: {node: '>=10.13.0'}
     peerDependencies:
       '@rspack/core': 0.x || 1.x
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.20.0
     peerDependenciesMeta:
       '@rspack/core':
         optional: true
@@ -13162,7 +13155,7 @@ packages:
   react-markdown@9.0.1:
     resolution: {integrity: sha512-186Gw/vF1uRkydbsOIkcGXw7aHq0sZOCRFFjGrr7b9+nVZg4UfA4enXCaxm4fUzecU38sWfrNDitGhshuU7rdg==}
     peerDependencies:
-      '@types/react': npm:types-react@beta
+      '@types/react': '>=18'
       react: 0.0.0-experimental-58af67a8f8-20240628
 
   react-native-fetch-api@3.0.0:
@@ -13794,7 +13787,7 @@ packages:
     resolution: {integrity: sha512-k2Dur7CbSLcAH73sBcIkV5xjPV4SzqO1NJ7+XaQl8if3VODDUj3FNchNGpqgJSKbvUfJuhVdv8K2Eu8/TNl2eA==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.72.1
 
   source-map-support@0.5.13:
     resolution: {integrity: sha512-SHSKFHadjVA5oR4PPqhtAVdcBWwRYVd6g6cAXnIbRiIwc2EhPrTuKUBdSLvlEKyIP3GCf89fltvcZiP9MMFA1w==}
@@ -14131,7 +14124,7 @@ packages:
     resolution: {integrity: sha512-9Zi9UP2YmDpgmQVbyOPJClY0dwf58JDyDMQ7uRc4krmc72twNI2fvlBWHLqVekBpPc7h5NJkGVT1zNDxFrqhvg==}
     peerDependencies:
       '@swc/core': 1.11.7
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: '>=2'
 
   symbol-tree@3.2.4:
     resolution: {integrity: sha512-9QNk5KwDF+Bvz+PyObkmSYjI5ksVUYtjW7AU22r2NKcfLJcXp96hkDWU3+XndOsUb+AQ9QhfzfCT2O+CNWT5Tw==}
@@ -14169,7 +14162,7 @@ packages:
       '@swc/core': '*'
       esbuild: '*'
       uglify-js: '*'
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.1.0
     peerDependenciesMeta:
       '@swc/core':
         optional: true
@@ -15178,7 +15171,7 @@ packages:
     engines: {node: '>=18.12.0'}
     hasBin: true
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.82.0
       webpack-bundle-analyzer: '*'
       webpack-dev-server: '*'
     peerDependenciesMeta:
@@ -15191,7 +15184,7 @@ packages:
     resolution: {integrity: sha512-xOO8n6eggxnwYpy1NlzUKpvrjfJTvae5/D6WOK0S2LSo7vjmo5gCM1DbLUmFqrMTJP+W/0YZNctm7jasWvLuBA==}
     engines: {node: '>= 18.12.0'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.0.0
     peerDependenciesMeta:
       webpack:
         optional: true
@@ -15201,7 +15194,7 @@ packages:
     engines: {node: '>= 18.12.0'}
     hasBin: true
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.0.0
       webpack-cli: '*'
     peerDependenciesMeta:
       webpack:
@@ -15214,7 +15207,7 @@ packages:
     engines: {node: '>= 18.12.0'}
     hasBin: true
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.0.0
       webpack-cli: '*'
     peerDependenciesMeta:
       webpack:
@@ -15234,7 +15227,7 @@ packages:
     resolution: {integrity: sha512-rDNTgo0hdE1p6ayBy92qSRXdfivAqlaFbBOIirqfq/DSVdJvMbZ1yaDlftfzGDkkLlEeAblzl0zcQzTgp1UaKA==}
     engines: {node: '>=18.20.5'}
     peerDependencies:
-      webpack: npm:@magic-works/webpack@5.88.2
+      webpack: ^5.0.0
 
   websocket-driver@0.7.4:
     resolution: {integrity: sha512-b17KeDIQVjvb0ssuSDF2cYXSg2iztliJ4B9WdsuB6J952qCPKmnVq4DyW5motImXHDC1cBT/1UezrJVsKw5zjg==}
@@ -16587,13 +16580,13 @@ snapshots:
 
   '@ceramicnetwork/rpc-postmessage@0.4.1':
     dependencies:
-      '@ceramicnetwork/rpc-transport': 0.3.1(patch_hash=subw5upjv36ceix3wmw66isn6u)
+      '@ceramicnetwork/rpc-transport': 0.3.1(patch_hash=c84653dcea8e61f29204ef658a2a5943ad11468491b9b235c78653aaeb2330d6)
       '@ceramicnetwork/transport-postmessage': 0.3.0
       '@ceramicnetwork/transport-subject': 0.3.0
       rpc-utils: 0.4.0
       rxjs: 6.6.7
 
-  '@ceramicnetwork/rpc-transport@0.3.1(patch_hash=subw5upjv36ceix3wmw66isn6u)':
+  '@ceramicnetwork/rpc-transport@0.3.1(patch_hash=c84653dcea8e61f29204ef658a2a5943ad11468491b9b235c78653aaeb2330d6)':
     dependencies:
       '@ceramicnetwork/transport-subject': 0.3.0
       rpc-utils: 0.4.0
@@ -17157,7 +17150,7 @@ snapshots:
     dependencies:
       '@jridgewell/trace-mapping': 0.3.9
 
-  '@cyberlab/cyberconnect@4.2.2(patch_hash=7wgc4b53ygfwefhtjbh3dydjgy)(encoding@0.1.13)':
+  '@cyberlab/cyberconnect@4.2.2(patch_hash=4dbfa79010216f49a3d2b06b7d75ff505e42abec33c31f3f7fd21a86a1fe5a59)(encoding@0.1.13)':
     dependencies:
       3id-did-provider: 1.1.1(encoding@0.1.13)
       '@3id/connect': 0.2.5(encoding@0.1.13)
@@ -19402,11 +19395,11 @@ snapshots:
   '@protobufjs/fetch@1.1.0':
     dependencies:
       '@protobufjs/aspromise': 1.1.2
-      '@protobufjs/inquire': 1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy)
+      '@protobufjs/inquire': 1.1.0(patch_hash=6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d)
 
   '@protobufjs/float@1.0.2': {}
 
-  '@protobufjs/inquire@1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy)': {}
+  '@protobufjs/inquire@1.1.0(patch_hash=6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d)': {}
 
   '@protobufjs/path@1.1.2': {}
 
@@ -19649,7 +19642,7 @@ snapshots:
     optionalDependencies:
       react-refresh: 0.16.0
 
-  '@scamsniffer/detector@0.0.39(patch_hash=visnrgq3ka5iwwicsyrypyhbiq)(@babel/core@7.26.0)(@swc/core@1.11.7(@swc/helpers@0.5.15))(babel-jest@28.1.3(@babel/core@7.26.0))(bufferutil@4.0.8)(encoding@0.1.13)(jest@28.1.3(@types/node@22.13.9)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.11.7(@swc/helpers@0.5.15))(@types/node@22.13.9)(typescript@5.8.2)))(typescript@5.8.2)(utf-8-validate@5.0.10)':
+  '@scamsniffer/detector@0.0.39(patch_hash=15d2dcb03f520305f2c94623328db1bd3a19322d38feeaff86833982542b5713)(@babel/core@7.26.0)(@swc/core@1.11.7(@swc/helpers@0.5.15))(babel-jest@28.1.3(@babel/core@7.26.0))(bufferutil@4.0.8)(encoding@0.1.13)(jest@28.1.3(@types/node@22.13.9)(node-notifier@10.0.1)(ts-node@10.9.1(@swc/core@1.11.7(@swc/helpers@0.5.15))(@types/node@22.13.9)(typescript@5.8.2)))(typescript@5.8.2)(utf-8-validate@5.0.10)':
     dependencies:
       '@types/isomorphic-fetch': 0.0.36
       '@types/node': 22.13.9
@@ -20290,7 +20283,7 @@ snapshots:
       - encoding
       - utf-8-validate
 
-  '@splinetool/runtime@0.9.342(patch_hash=pai5dnfr6cjujs6g7ajnubnady)':
+  '@splinetool/runtime@0.9.342(patch_hash=a131e328a83b5ef1ccc97e2008268b10035de64ec76328b548b420349e28bc6c)':
     dependencies:
       on-change: 4.0.2
       semver-compare: 1.0.0
@@ -20915,7 +20908,7 @@ snapshots:
 
   '@types/range-parser@1.2.7': {}
 
-  '@types/react-avatar-editor@13.0.2(patch_hash=yu2mmww76lhdsakm732xadtvva)':
+  '@types/react-avatar-editor@13.0.2(patch_hash=964633ba75b95702d6968fe8758b1f14f1e84ae66b941d42ccf852710d60d9df)':
     dependencies:
       '@types/react': types-react@19.0.0-beta.2
 
@@ -20924,7 +20917,7 @@ snapshots:
       '@types/react': types-react@19.0.0-beta.2
       '@types/react-reconciler': 0.28.0
 
-  '@types/react-highlight-words@0.20.0(patch_hash=vrjs5dcrnxwj656cpqcywd6gt4)':
+  '@types/react-highlight-words@0.20.0(patch_hash=f29881aac139c1fe526819717a60157afd2b12358d3d9c87c18f464666954689)':
     dependencies:
       '@types/react': types-react@19.0.0-beta.2
 
@@ -20939,6 +20932,10 @@ snapshots:
   '@types/react-window@1.8.8':
     dependencies:
       '@types/react': types-react@19.0.0-beta.2
+
+  '@types/react@19.1.4':
+    dependencies:
+      csstype: 3.1.3
 
   '@types/resolve@1.20.2': {}
 
@@ -22489,7 +22486,7 @@ snapshots:
 
   blob@0.0.5: {}
 
-  bloom-filters@3.0.0(patch_hash=2etetjrjxbcye2oktxqpij75ey):
+  bloom-filters@3.0.0(patch_hash=a5e85bac08776b8696d4e85af25d3143c9b9a9895a2cc4b531d85639fe0eb30f):
     dependencies:
       base64-arraybuffer: 1.0.2
       is-buffer: 2.0.5
@@ -22497,7 +22494,7 @@ snapshots:
       lodash.eq: 4.0.0
       lodash.indexof: 4.0.5
       long: 5.2.1
-      reflect-metadata: 0.1.13(patch_hash=pnra5xi77mqlyipflqvcm4z6ga)
+      reflect-metadata: 0.1.13(patch_hash=3c19db0a577da75ff3c875a0fa4ef586a0ca002a6f7935687a9cd524fea56f79)
       seedrandom: 3.0.5
       xxhashjs: 0.2.2
 
@@ -24386,7 +24383,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  eslint-plugin-i@2.29.1(patch_hash=zgide6rxzjqivhxxv36ouq6c4y)(@typescript-eslint/parser@8.26.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2))(eslint-import-resolver-typescript@3.8.3)(eslint@9.21.0(jiti@2.4.2)):
+  eslint-plugin-i@2.29.1(patch_hash=b069b3420197ed9e97f27eb9369aeb901f89e426dff08f6cbb2dab8abcd1dc0c)(@typescript-eslint/parser@8.26.0(eslint@9.21.0(jiti@2.4.2))(typescript@5.8.2))(eslint-import-resolver-typescript@3.8.3)(eslint@9.21.0(jiti@2.4.2)):
     dependencies:
       debug: 4.3.7
       doctrine: 3.0.0
@@ -25605,7 +25602,7 @@ snapshots:
       v8flags: 4.0.1
       yargs: 16.2.0
 
-  gulp@5.0.0(patch_hash=tdwx5kqhf6grdas2dblneqarim):
+  gulp@5.0.0(patch_hash=f4316218fc0ee2671324cec1242936e896fb44878d3f60021eaca6bd669f43cb):
     dependencies:
       glob-watcher: 6.0.0
       gulp-cli: 3.0.0
@@ -28820,7 +28817,7 @@ snapshots:
       '@protobufjs/eventemitter': 1.1.0
       '@protobufjs/fetch': 1.1.0
       '@protobufjs/float': 1.0.2
-      '@protobufjs/inquire': 1.1.0(patch_hash=cc6ztxhxwsg3dyqdzvftqua3dy)
+      '@protobufjs/inquire': 1.1.0(patch_hash=6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d)
       '@protobufjs/path': 1.1.2
       '@protobufjs/pool': 1.1.0
       '@protobufjs/utf8': 1.1.0
@@ -29000,7 +28997,7 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  react-devtools-inline@5.3.0(patch_hash=jy5l47kz5zhgguiggeursqr63y):
+  react-devtools-inline@5.3.0(patch_hash=51dda06a782a674a7cc25a64cf1787137ec9dc1079c38586eb3c017a3b961342):
     dependencies:
       source-map-js: 0.6.2
       sourcemap-codec: 1.4.8
@@ -29046,10 +29043,10 @@ snapshots:
 
   react-is@18.3.1: {}
 
-  react-markdown@9.0.1(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2):
+  react-markdown@9.0.1(@types/react@19.1.4)(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@types/hast': 3.0.4
-      '@types/react': types-react@19.0.0-beta.2
+      '@types/react': 19.1.4
       devlop: 1.1.0
       hast-util-to-jsx-runtime: 2.3.0
       html-url-attributes: 3.0.0
@@ -29102,7 +29099,7 @@ snapshots:
       react: 0.0.0-experimental-58af67a8f8-20240628
       tslib: 2.8.1
 
-  react-use@17.5.0(patch_hash=tokvlmgj4xqkhjmndck4f7nw3q)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
+  react-use@17.5.0(patch_hash=d4ab26e7e9bf01f9c4ca5da3caefb5b44dee64b0382328e5a08df838b8d8a4f7)(react-dom@0.0.0-experimental-58af67a8f8-20240628(react@0.0.0-experimental-58af67a8f8-20240628))(react@0.0.0-experimental-58af67a8f8-20240628):
     dependencies:
       '@types/js-cookie': 2.2.7
       '@xobotyi/scrollbar-width': 1.9.5
@@ -29223,7 +29220,7 @@ snapshots:
 
   reduce-flatten@2.0.0: {}
 
-  reflect-metadata@0.1.13(patch_hash=pnra5xi77mqlyipflqvcm4z6ga): {}
+  reflect-metadata@0.1.13(patch_hash=3c19db0a577da75ff3c875a0fa4ef586a0ca002a6f7935687a9cd524fea56f79): {}
 
   reflect.getprototypeof@1.0.7:
     dependencies:
@@ -29514,7 +29511,7 @@ snapshots:
       bufferutil: 4.0.8
       utf-8-validate: 5.0.10
 
-  rss3-next@0.6.17(patch_hash=db27yqpr4wdtpwfyvaxcqd4jpi)(bufferutil@4.0.8)(typescript@5.8.2)(utf-8-validate@5.0.10):
+  rss3-next@0.6.17(patch_hash=ba708c997bf5f4873db9552566a1f534c10b15515c144c95ee348c1ee5b24a7a)(bufferutil@4.0.8)(typescript@5.8.2)(utf-8-validate@5.0.10):
     dependencies:
       axios: 0.21.1
       buffer: 6.0.3
@@ -30671,7 +30668,7 @@ snapshots:
       tsutils: 3.21.0(typescript@5.8.2)
       typescript: 5.8.2
     optionalDependencies:
-      reflect-metadata: 0.1.13(patch_hash=pnra5xi77mqlyipflqvcm4z6ga)
+      reflect-metadata: 0.1.13(patch_hash=3c19db0a577da75ff3c875a0fa4ef586a0ca002a6f7935687a9cd524fea56f79)
 
   typescript-memoize@1.1.0: {}
 
@@ -30880,7 +30877,7 @@ snapshots:
       punycode: 1.4.1
       qs: 6.13.1
 
-  urlcat@3.1.0(patch_hash=scyjp2cqyqu6oq4kmzjh3isyxa):
+  urlcat@3.1.0(patch_hash=aa686f8ceffabfc1bba820febc2d0a806654ae5b912cef3dbb7fddf1deca82cf):
     dependencies:
       qs: 6.13.1
 
