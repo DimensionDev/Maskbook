@@ -23,6 +23,7 @@
         "node_modules",
         "packages/xcode",
         "pnpm-lock.yaml",
+        "pnpm-workspace.yaml",
         "qya-aa.json"
     ],
     "TODO: fix those words": ["bridgable", "clonable", "sniffings"],
