@@ -3,7 +3,7 @@ import type { FireflyConfigAPI, NextIDBaseAPI } from '@masknet/web3-providers/ty
 import urlcat from 'urlcat'
 
 export function getFireflyLensProfileLink(handle: string) {
-    return urlcat('https://firefly.mask.social/profile/lens/:handle', { handle })
+    return urlcat('https://firefly.social/profile/lens/:handle', { handle })
 }
 
 export const NextIdLensToFireflyLens = (account: NextIDBaseAPI.LensAccount): FireflyConfigAPI.LensAccount => {
