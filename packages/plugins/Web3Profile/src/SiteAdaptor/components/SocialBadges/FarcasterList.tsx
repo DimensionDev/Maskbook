@@ -74,7 +74,7 @@ interface FarcasterListItemProps {
 
 const FarcasterListItem = memo<FarcasterListItemProps>(function FarcasterListItem({ account }) {
     const { classes } = useStyles()
-    const profileUri = `https://firefly.mask.social/profile/farcaster/${account.fid}`
+    const profileUri = `https://firefly.social/profile/farcaster/${account.fid}`
     const farcasterIcon = <Icons.Farcaster size={30} />
 
     return (

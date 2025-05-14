@@ -22,8 +22,8 @@ export const PlatformUrlMap: Record<SupportedPlatforms, string> = {
     [NextIDPlatform.Unstoppable]: 'https://ud.me/',
     [NextIDPlatform.GitHub]: 'https://github.com/',
     [NextIDPlatform.SpaceId]: 'https://bscscan.com/address/',
-    [NextIDPlatform.Farcaster]: 'https://firefly.mask.social/profile/farcaster/',
-    [NextIDPlatform.LENS]: 'https://firefly.mask.social/profile/lens/',
+    [NextIDPlatform.Farcaster]: 'https://firefly.social/profile/farcaster/',
+    [NextIDPlatform.LENS]: 'https://firefly.social/profile/lens/',
     [NextIDPlatform.Ethereum]: 'https://etherscan.io/address/',
     [NextIDPlatform.Keybase]: 'https://keybase.io/',
 }

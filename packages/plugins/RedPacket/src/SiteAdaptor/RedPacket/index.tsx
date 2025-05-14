@@ -248,7 +248,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
                 {card}
                 <Link
                     className={classes.footer}
-                    href={`https://firefly.mask.social/post/twitter/${postId}`}
+                    href={`https://firefly.social/post/twitter/${postId}`}
                     target="_blank"
                     rel="noreferrer noopener">
                     <Icons.LinkOut size={18} />

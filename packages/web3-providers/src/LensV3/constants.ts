@@ -1,3 +1,3 @@
 export const LENS_ROOT_API = 'https://api.lens.xyz/'
-export const FIREFLY_SITE_URL = 'https://firefly.mask.social'
+export const FIREFLY_SITE_URL = 'https://firefly.social'
 export const LENS_MEDIA_SNAPSHOT_URL = 'https://ik.imagekit.io/lens/media-snapshot'
