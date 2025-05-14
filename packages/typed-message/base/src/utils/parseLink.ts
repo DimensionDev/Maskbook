@@ -21,8 +21,10 @@ export function parseLink(text: string): ParseLinkResult[] {
     let start = 0
     for (const x of parsed) {
         if (x.isURL) {
-            result.push({ type: 'text', content: text.slice(start, x.start) })
-            result.push({ type: 'link', content: x.string, category: 'normal' })
+            result.push(
+                { type: 'text', content: text.slice(start, x.start) },
+                { type: 'link', content: x.string, category: 'normal' },
+            )
         } else {
             result.push({ type: 'text', content: text.slice(start, x.end) })
         }

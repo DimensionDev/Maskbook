@@ -9,9 +9,7 @@ export interface MaskThemeProvider extends React.PropsWithChildren {
 
 export function MaskThemeProvider(props: MaskThemeProvider) {
     const { children, useTheme, useMaskIconPalette } = props
-    // eslint-disable-next-line react-compiler/react-compiler
     const theme = useRef(useTheme).current()
-    // eslint-disable-next-line react-compiler/react-compiler
     const MaskIconPalette = useRef(useMaskIconPalette).current(theme)
 
     return (
