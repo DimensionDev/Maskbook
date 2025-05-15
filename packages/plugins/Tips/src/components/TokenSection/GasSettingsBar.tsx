@@ -23,9 +23,10 @@ export function GasSettingsBar() {
 
     const isNativeToken = isNativeTokenAddress(token?.address)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
-    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-        chainId,
-    })
+    const nativeTokenPrice =
+        useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+            chainId,
+        }).data || 0
     const [defaultGasPrice = '1'] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const network = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const nativeToken = network?.nativeCurrency

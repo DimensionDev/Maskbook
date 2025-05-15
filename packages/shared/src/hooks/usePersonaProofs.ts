@@ -20,7 +20,7 @@ export function usePersonaProofs(publicKey?: string): UseQueryResult<BindingProo
         queryFn: async () => {
             if (Sniffings.is_popup_page) await NextIDProof.clearPersonaQueryCache(publicKey!)
             const binding = await NextIDProof.queryExistedBindingByPersona(publicKey!)
-            return binding?.proofs
+            return binding?.proofs || null
         },
         select(data) {
             return Array.isArray(data) ? data : EMPTY_LIST

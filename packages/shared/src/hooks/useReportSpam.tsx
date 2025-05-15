@@ -21,7 +21,7 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
         queryKey: ['nftscan', 'collection', chainId, address],
         queryFn: async () => {
             if (!address || !chainId) return null
-            return NFTScanNonFungibleTokenEVM.getCollection(address, { chainId })
+            return (await NFTScanNonFungibleTokenEVM.getCollection(address, { chainId })) || null
         },
     })
     const collection = collectionByAddress
@@ -60,7 +60,6 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
     return {
         isReporting: state.loading,
         isSpam,
-        collection,
         promptReport,
     }
 }

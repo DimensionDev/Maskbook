@@ -202,8 +202,8 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         enabled: (!transaction.to || transaction.type === 'transfer' || transaction.type === 'approve') && seen,
         queryKey: ['chainbase', 'transaction', transaction.chainId, transaction.id, blockNumber],
         queryFn: async () => {
-            if (!transaction.chainId || !transaction.id) return
-            return ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)
+            if (!transaction.chainId || !transaction.id) return null
+            return (await ChainbaseHistory.getTransaction(transaction.chainId, transaction.id, blockNumber)) || null
         },
     })
     const { data: txInput, isPending: loadingTxInput } = useQuery({
@@ -211,7 +211,7 @@ export const ActivityItem = memo<ActivityItemProps>(function ActivityItem({ tran
         enabled: !!transaction && !loadingTx && !tx?.input && transaction.type === 'transfer',
         queryKey: [transaction.chainId, transaction.id],
         queryFn: async () => {
-            if (!transaction.chainId || !transaction.id) return
+            if (!transaction.chainId || !transaction.id) return null
             const tx = await EVMWeb3.getTransaction(transaction.id, { chainId: transaction.chainId })
             return tx.input
         },

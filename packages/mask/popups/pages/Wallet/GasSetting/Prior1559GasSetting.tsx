@@ -99,9 +99,10 @@ export const Prior1559GasSetting = memo(() => {
     const navigate = useNavigate()
     const [selected, setOption] = useState<number | null>(null)
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
-    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
-        chainId: nativeToken?.chainId,
-    })
+    const nativeTokenPrice =
+        useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, {
+            chainId: nativeToken?.chainId,
+        }).data || 0
 
     // #region Get gas options from debank
     const gasOptions = useMemo(() => {

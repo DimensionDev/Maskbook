@@ -11,7 +11,7 @@ export function useGasRatio(paymentToken?: string) {
     const { data: smartPayRatio } = useQuery({
         queryKey: ['smart-pay', 'gas-ratio', smartPayChainId],
         queryFn: async () => {
-            if (!smartPayChainId) return
+            if (!smartPayChainId) return null
             const depositPaymaster = new DepositPaymaster(smartPayChainId)
             const ratio = await depositPaymaster.getRatio()
             return ratio

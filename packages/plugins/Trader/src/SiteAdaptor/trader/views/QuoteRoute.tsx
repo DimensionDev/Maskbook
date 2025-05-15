@@ -4,7 +4,7 @@ import { Icons } from '@masknet/icons'
 import { EmptyStatus } from '@masknet/shared'
 import { EMPTY_LIST, NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles, ShadowRootTooltip } from '@masknet/theme'
-import { useGasPrice, useNativeToken, useNativeTokenPrice } from '@masknet/web3-hooks-base'
+import { useGasPrice, useNativeToken } from '@masknet/web3-hooks-base'
 import type { OKXSwapQuote } from '@masknet/web3-providers/types'
 import { isZero, multipliedBy, ZERO } from '@masknet/web3-shared-base'
 import { type ChainId, formatAmount } from '@masknet/web3-shared-evm'
@@ -117,7 +117,6 @@ const calcValue = (compare: OKXSwapQuote['quoteCompareList'][number], tokenPrice
  */
 function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
     const { data: dexes = EMPTY_LIST } = useLiquidityResources(chainId, quote?.quoteCompareList?.length === 0)
-    const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const [gasPrice] = useGasPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -134,7 +133,7 @@ function useCompareList(quote: OKXSwapQuote | undefined, chainId: ChainId) {
             },
         ]
         return compareList
-    }, [quote, dexes, nativeTokenPrice, gasPrice, nativeToken])
+    }, [quote, dexes, gasPrice, nativeToken])
     return compareList
 }
 

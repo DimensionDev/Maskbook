@@ -56,7 +56,6 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
             claimStrategyStatus: null,
             checkingClaimStatus: isFetching,
             recheckClaimStatus,
-            password,
             computed: {
                 canClaim: !!data?.data?.canClaim,
                 canRefund: false,
@@ -79,7 +78,6 @@ export function useAvailabilityComputed(account: string, payload: RedPacketJSONP
         claimStrategyStatus: data?.data,
         recheckClaimStatus,
         checkingClaimStatus: isFetching,
-        password,
         computed: {
             canClaim,
             canRefund: isExpired && !isEmpty && isCreator,

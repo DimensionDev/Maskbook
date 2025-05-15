@@ -53,11 +53,7 @@ export function SocialTooltip<T extends object>({ children, platform }: SocialTo
             arrow
             placement="top"
             title={title}>
-            {cloneElement(
-                children,
-                // eslint-disable-next-line react-compiler/react-compiler
-                { ...children.props, ref },
-            )}
+            {cloneElement(children, { ...children.props, ref })}
         </ShadowRootTooltip>
     )
 }

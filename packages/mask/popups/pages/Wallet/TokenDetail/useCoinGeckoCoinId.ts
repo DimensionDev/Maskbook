@@ -14,7 +14,7 @@ export function useCoinGeckoCoinId(chainId: ChainId, address?: string) {
         queryKey: ['coin-gecko', 'coin-id', 'by-address', address, chainId],
         queryFn: async () => {
             const coinInfo = await CoinGeckoTrending.getCoinInfoByAddress(address!, chainId)
-            return coinInfo?.id
+            return coinInfo?.id || null
         },
     })
 
@@ -33,7 +33,7 @@ export function useCoinGeckoCoinId(chainId: ChainId, address?: string) {
             const constantCoinId = getCoinGeckoConstant(chainId, 'COIN_ID')
             if (constantCoinId) return constantCoinId
             const results = await DSearch.search<Web3Helper.TokenResultAll>(symbol!, SearchResultType.FungibleToken)
-            return results[0]?.id
+            return results[0]?.id || null
         },
     })
     return isNativeToken ? nativeCoinId : erc20CoinId

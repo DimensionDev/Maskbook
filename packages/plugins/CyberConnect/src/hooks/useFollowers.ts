@@ -8,7 +8,7 @@ export function useFollowers(tab: ProfileTab, address?: string, size = 50) {
         queryKey: ['cyber-connect', 'followers', tab, address, size],
         initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
-            if (!address) return
+            if (!address) return null
             return PluginCyberConnectRPC.fetchFollowers(tab, address, size, pageParam)
         },
         getNextPageParam: (lastPage) => lastPage?.nextIndicator as PageIndicator | undefined,

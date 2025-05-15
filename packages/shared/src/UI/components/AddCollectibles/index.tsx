@@ -188,7 +188,7 @@ export const AddCollectibles = memo(function AddCollectibles(props: AddCollectib
             queryKey: ['nft-asset', account, pluginID, chainId, address, tokenId],
             queryFn: async () => {
                 try {
-                    return await hub.getNonFungibleAsset(address, tokenId, { chainId, account })
+                    return (await hub.getNonFungibleAsset(address, tokenId, { chainId, account })) || null
                 } catch (err) {
                     const token = await Web3.getNonFungibleToken(address, tokenId)
                     return { ...token, owner: { address: token.ownerId } }

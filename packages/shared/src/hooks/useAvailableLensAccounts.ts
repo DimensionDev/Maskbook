@@ -11,7 +11,7 @@ export function useAvailableLensAccounts(isManaged?: boolean) {
     return useQuery({
         queryKey: ['lens', 'available-accounts', !lensClient, walletAccount],
         queryFn: async () => {
-            if (!walletAccount || !lensClient) return
+            if (!walletAccount || !lensClient) return null
             const accounts = await lensClient.getAvailableAccounts(evmAddress(walletAccount))
             return accounts
         },

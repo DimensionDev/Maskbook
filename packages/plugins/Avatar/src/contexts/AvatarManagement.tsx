@@ -78,7 +78,7 @@ export const AvatarManagementProvider = memo(({ children }: Props) => {
         queryKey: ['nft-avatar-state', identity],
         enabled: !!identity,
         queryFn: async () => {
-            if (!identity?.identifier || !currentNextIDPlatform) return
+            if (!identity?.identifier || !currentNextIDPlatform) return null
             const bindings = await NextIDProof.queryAllExistedBindingsByPlatform(
                 currentNextIDPlatform,
                 identity.identifier.userId.toLowerCase(),

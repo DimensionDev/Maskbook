@@ -29,11 +29,7 @@ export const Boundary = memo(function <T>({ children }: BoundaryProps<T>) {
     const contextValue = useMemo(() => ({ boundaryRef }), [boundaryRef.current])
     return (
         <BoundaryContext value={contextValue}>
-            {cloneElement(
-                children,
-                // eslint-disable-next-line react-compiler/react-compiler
-                { ...children.props, ref: boundaryRef },
-            )}
+            {cloneElement(children, { ...children.props, ref: boundaryRef })}
         </BoundaryContext>
     )
 })

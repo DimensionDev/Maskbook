@@ -64,7 +64,7 @@ export function useCreateNftRedpacketCallback({
         ],
         refetchInterval: 10,
         queryFn: async () => {
-            if (!account) return
+            if (!account) return null
             const nftRedPacketContract = createNftRedpacketContract(chainId)
             if (!nftRedPacketContract) return null
 

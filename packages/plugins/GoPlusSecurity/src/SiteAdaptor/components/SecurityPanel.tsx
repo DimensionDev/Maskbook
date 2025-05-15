@@ -18,7 +18,7 @@ import { Trans, useLingui } from '@lingui/react/macro'
 interface TokenCardProps {
     tokenSecurity: SecurityAPI.TokenSecurityType
     tokenInfo?: FungibleToken<ChainId, SchemaType>
-    tokenPrice?: number
+    tokenPrice?: number | null
     tokenMarketCap?: number | null
 }
 

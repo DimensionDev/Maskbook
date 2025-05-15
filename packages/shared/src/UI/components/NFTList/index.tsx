@@ -203,12 +203,14 @@ export function NFTList({
         queryKey: ['non-fungible-assets', 'by-collection', collectionId, chainId],
         initialPageParam: undefined as PageIndicator | undefined,
         queryFn: async ({ pageParam }) => {
-            if (!collectionId) return
-            return Hub.getNonFungibleAssetsByCollection(collectionId, {
-                indicator: pageParam,
-                size: 50,
-                chainId,
-            })
+            if (!collectionId) return null
+            return (
+                (await Hub.getNonFungibleAssetsByCollection(collectionId, {
+                    indicator: pageParam,
+                    size: 50,
+                    chainId,
+                })) || null
+            )
         },
         getNextPageParam(lastPage) {
             return lastPage?.nextIndicator as PageIndicator

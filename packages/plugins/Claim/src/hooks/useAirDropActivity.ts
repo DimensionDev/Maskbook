@@ -16,7 +16,7 @@ export function useAirDropActivity(chainId: ChainId) {
         queryKey: ['airdrop-activity', chainId, account],
         queryFn: async () => {
             const result = await Airdrop.getActivity(chainId, account)
-            if (!result) return
+            if (!result) return null
             const { claimers, startTime, endTime, ...rest } = result
 
             const claimerList = Object.entries(claimers)

@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => ({
 
 interface HandlerDescriptionProps extends withClasses<'container'> {
     currentAccount?: Account
-    accounts?: AccountAvailable[]
+    accounts?: AccountAvailable[] | null
     onChange: (profile: Account) => void
 }
 

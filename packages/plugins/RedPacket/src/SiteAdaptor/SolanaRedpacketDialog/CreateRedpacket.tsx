@@ -201,7 +201,7 @@ export function CreateSolRedPacket() {
     // context
     const { pluginID } = useEnvironmentContext()
 
-    const { data: nativeTokenPrice } = useNativeTokenPrice(pluginID)
+    const nativeTokenPrice = useNativeTokenPrice(pluginID).data || 0
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await SelectFungibleTokenModal.openAndWaitForClose({
             disableNativeToken: false,
@@ -246,7 +246,7 @@ export function CreateSolRedPacket() {
     const cluster = SolanaChainResolver.network(chainId) as Cluster
 
     // balance
-    const { data: defaultGasFee = ZERO, isFetching: estimateGasLoading } = useEstimateGasWithCreateSolRedpacket(
+    const { data: _defaultGasFee, isFetching: estimateGasLoading } = useEstimateGasWithCreateSolRedpacket(
         shares,
         //  Avoid causing rpc rate limit due to too fast requests.
         new BigNumber('0.0001').toNumber(),
@@ -257,9 +257,10 @@ export function CreateSolRedPacket() {
         token,
         cluster,
     )
+    const defaultGasFee = _defaultGasFee || ZERO
 
     const gasFee = defaultGasFee.multipliedBy(isNativeTokenAddress(token?.address) ? 5 : 10)
-    const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)
+    const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice)
 
     const { isAvailableBalance, balance, isGasSufficient } = useAvailableBalance(
         NetworkPluginID.PLUGIN_SOLANA,

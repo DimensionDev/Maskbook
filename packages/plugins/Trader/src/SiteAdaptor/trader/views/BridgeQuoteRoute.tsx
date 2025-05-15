@@ -111,7 +111,7 @@ export const BridgeQuoteRoute = memo(function BridgeQuoteRoute() {
     const { bridgeQuote, fromToken, toToken, mode } = useTrade()
     const [bridgeId = bridgeQuote?.routerList[0].router.bridgeId, setBridgeId] = useState<number>()
     const chainId = fromToken?.chainId as ChainId
-    const { data: price = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const price = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
     const { data: nativeToken } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     if (!bridgeQuote?.routerList.length)

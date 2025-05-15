@@ -9,7 +9,7 @@ export function usePower(identifier: ProposalIdentifier) {
     return useQuery({
         enabled: !!account,
         queryKey: ['plugin', 'snapshot', 'getVp', account, identifier.id, identifier.space],
-        queryFn: () => PluginSnapshotRPC.getVp(account, identifier.space, identifier.id),
+        queryFn: async () => (await PluginSnapshotRPC.getVp(account, identifier.space, identifier.id)) || null,
         select: (data) => data?.vp,
     })
 }

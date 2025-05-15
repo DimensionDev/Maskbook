@@ -13,7 +13,6 @@ export const ElementAnchor = memo<ElementAnchorProps>(({ callback, children, ...
     })
 
     const callbackRef = useRef(callback)
-    // eslint-disable-next-line react-compiler/react-compiler
     callbackRef.current = callback
     useEffect(() => {
         if (!intersection?.isIntersecting) return

@@ -167,8 +167,11 @@ async function generateIcons() {
         if (variant.some((x) => x.args[3])) jsdoc.push('🎨 This icon supports custom color.')
         else jsdoc.push('🖼\uFE0F This icon brings its own colors.')
 
-        jsdoc.push('| Variant | Link | Preview |')
-        jsdoc.push('| ------- | ---- | ------- |')
+        jsdoc.push(
+            //
+            '| Variant | Link | Preview |',
+            '| ------- | ---- | ------- |',
+        )
         for (const { args, assetPath } of variant) {
             jsdoc.push(`| ${args[0].join(', ') || 'default'} | ${createLink(assetPath)} | !${createLink(assetPath)} |`)
         }

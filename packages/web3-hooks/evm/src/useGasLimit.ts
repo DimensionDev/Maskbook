@@ -41,18 +41,22 @@ export function useGasLimit(
                     )
                     return Number.parseInt(gas ?? '0', 16)
                 case SchemaType.ERC20:
-                    return EVMContract.getERC20Contract(contractAddress, options)
-                        ?.methods?.transfer(recipient, amount ?? 0)
-                        .estimateGas({
-                            from: account,
-                        })
+                    return (
+                        (await EVMContract.getERC20Contract(contractAddress, options)
+                            ?.methods?.transfer(recipient, amount ?? 0)
+                            .estimateGas({
+                                from: account,
+                            })) || null
+                    )
                 case SchemaType.SBT:
                 case SchemaType.ERC721:
-                    return EVMContract.getERC721Contract(contractAddress, options)
-                        ?.methods.transferFrom(account, recipient, tokenId ?? '')
-                        .estimateGas({
-                            from: account,
-                        })
+                    return (
+                        (await EVMContract.getERC721Contract(contractAddress, options)
+                            ?.methods.transferFrom(account, recipient, tokenId ?? '')
+                            .estimateGas({
+                                from: account,
+                            })) || null
+                    )
                 case SchemaType.ERC1155:
                     throw new Error('Method not implemented.')
                 default:

@@ -10,11 +10,11 @@ export function useCoinTrendingStats(chainId: number, address?: string, days?: n
     return useQuery({
         enabled: !isPending && days !== undefined,
         queryKey: ['coin-stats', chainId, address, coinId, days],
-        queryFn: async (): Promise<TrendingAPI.Stat[] | undefined> => {
-            if (!coinId || days === undefined) return
+        queryFn: async (): Promise<TrendingAPI.Stat[] | null> => {
+            if (!coinId || days === undefined) return null
 
             const currency = trending.getCurrency(chainId, SourceType.CoinGecko)
-            if (!currency) return
+            if (!currency) return null
 
             return CoinGeckoTrending.getCoinPriceStats(coinId, currency, days)
         },

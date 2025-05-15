@@ -165,7 +165,7 @@ export const Component = memo(function TransactionDetail() {
         queryKey: ['chainbase', 'transaction', transaction?.chainId, transactionId, blockNumber],
         queryFn: async () => {
             if (!chainId || !transactionId) return null
-            return ChainbaseHistory.getTransaction(chainId, transactionId, blockNumber)
+            return (await ChainbaseHistory.getTransaction(chainId, transactionId, blockNumber)) || null
         },
     })
 
@@ -174,9 +174,9 @@ export const Component = memo(function TransactionDetail() {
             !!transaction && !loadingTx && !tx?.input && transactionState?.type === 'transfer' && !candidateState?.data,
         queryKey: [transaction?.chainId, transactionId],
         queryFn: async () => {
-            if (!chainId || !transactionId) return
+            if (!chainId || !transactionId) return null
             const tx = await EVMWeb3.getTransaction(transactionId, { chainId })
-            return tx?.input
+            return tx?.input || null
         },
     })
 

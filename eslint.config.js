@@ -41,6 +41,7 @@ const avoidMistakeRules = {
     '@tanstack/query/infinite-query-property-order': 'warn', // help TypeScript to infer type correctly
     '@tanstack/query/no-rest-destructuring': 'error',
     '@tanstack/query/no-unstable-deps': 'error', // avoid unstable results from the hook being deps
+    '@tanstack/query/no-void-query-fn': 'error', // query function should always return something
     '@lingui/no-single-tag-to-translate': 'error',
     // '@lingui/no-single-variables-to-translate': 'error', // we're mixing two i18n frameworks, a lot of false positive reports
     // https://github.com/lingui/eslint-plugin/issues/46
@@ -220,7 +221,8 @@ const avoidMistakeRules = {
     'react/no-comment-textnodes': 'warn', // <div>// comment</div> will render text!
     // 'react/no-duplicate-key': 'warn', // <div key={1} /> <div key={1} /> this rule has bug?
     'react/no-leaked-conditional-rendering': 'error', // <div>{0 && <Something />}</div> will render "0"!
-    'react/no-nested-components': 'error', // rerender bugs
+    'react/no-nested-component-definitions': 'error', // rerender bugs
+    'react/no-nested-lazy-component-declarations': 'error', // rerender bugs
     'react-hooks/rules-of-hooks': 'error', // react hooks
     '@typescript-eslint/no-base-to-string': 'error', // prevent buggy .toString() call
     '@typescript-eslint/no-loop-func': 'warn', // capture a loop variable might be a bug
@@ -373,20 +375,22 @@ const codeStyleRules = {
     'prefer-regex-literals': 'warn', // RegEx
     'spaced-comment': ['warn', 'always', { line: { markers: ['/'] } }],
     // 'unicorn/no-array-reduce': 'warn',
-    // 'unicorn/no-array-push-push': 'warn',
     // 'unicorn/no-lonely-if': 'warn', // else if (a) { if (b) expr }
     // 'unicorn/no-negated-condition': 'warn', // if (!a) else
     // 'unicorn/no-nested-ternary': 'warn', // a ? b : c ? d : e
     // 'unicorn/no-typeof-undefined': 'warn', // typeof expr !== 'undefined'
     // 'unicorn/no-unreadable-array-destructuring': 'warn', // [,, foo] = parts
     'unicorn/no-unreadable-iife': 'warn', // (bar => (bar ? bar.baz : baz))(getBar())
+    'unicorn/prefer-import-meta-properties': 'warn',
     // 'unicorn/prefer-negative-index': 'warn',
+    'unicorn/prefer-single-call': 'warn',
     'unicorn/throw-new-error': 'warn',
     // 'unicorn/prefer-logical-operator-over-ternary': 'warn', // prefer ?? and ||
     // 'unicorn/prefer-optional-catch-binding': 'warn', // prefer to omit catch binding
     'react/prefer-shorthand-boolean': 'warn',
     'react/prefer-shorthand-fragment': 'warn',
     '@typescript-eslint/prefer-as-const': 'warn',
+    // '@typescript-eslint/no-unnecessary-type-conversion': 'warn', // for code like str.toString()
 
     // Consistency
     'no-irregular-whitespace': 'warn', // unusual but safe

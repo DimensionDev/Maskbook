@@ -1,5 +1,5 @@
 import type { IdentityResolved } from '@masknet/plugin-infra'
-import { MaskMessages, ValueRef, type ProfileInformation } from '@masknet/shared-base'
+import { MaskMessages, ValueRef, type NextIDPersonaBindings, type ProfileInformation } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { NextIDProof } from '@masknet/web3-providers'
 import { FontSize, ThemeColor, ThemeMode, type ThemeSettings } from '@masknet/web3-shared-base'
@@ -60,11 +60,16 @@ export function useCurrentVisitingIdentity() {
     )
 }
 
+interface SocialIdentity extends IdentityResolved {
+    publicKey?: string
+    hasBinding?: boolean
+    binding?: NextIDPersonaBindings
+}
 /**
  * Get the social identity of the given identity
  */
 export function useSocialIdentity(identity: IdentityResolved | null | undefined) {
-    const result = useQuery({
+    const result = useQuery<SocialIdentity | null>({
         enabled: !!identity,
         queryKey: ['social-identity', identity],
         queryFn: async () => {
@@ -86,7 +91,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
                     binding: first(personaBindings),
                 }
             } catch {
-                return identity
+                return identity || null
             }
         },
     })
@@ -101,7 +106,7 @@ export function useSocialIdentityByUserId(userId?: string) {
         queryKey: ['social-identity', 'by-id', userId],
         enabled: !!userId,
         queryFn: async () => {
-            return activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId!)
+            return (await activatedSiteAdaptorUI!.utils.getUserIdentity?.(userId!)) || null
         },
         networkMode: 'always',
     })

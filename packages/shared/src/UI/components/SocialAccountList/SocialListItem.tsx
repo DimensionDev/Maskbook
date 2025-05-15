@@ -163,7 +163,7 @@ export function SocialAccountListItem({
     const { data: statusData, isLoading } = useQuery({
         queryKey: ['lens', 'follow', platform, identity, account, myAccountAddress],
         queryFn: async () => {
-            if (platform !== NextIDPlatform.LENS || !identity || !account || !myAccountAddress) return
+            if (platform !== NextIDPlatform.LENS || !identity || !account || !myAccountAddress) return null
             const client = new LensV3(account, (message) => EVMWeb3.signMessage('message', message))
             const profile = await client.getAccountByHandle(identity)
             const isFollowing = await client.getFollowStatus([

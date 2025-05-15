@@ -16,11 +16,12 @@ export function useNonFungibleTokenContract<S extends 'all' | void = void, T ext
     return useQuery({
         enabled: !!address,
         queryKey: ['non-fungible-token-contract', pluginID, address, schemaType, options],
-        queryFn: async (): Promise<
-            NonFungibleTokenContract<Web3Helper.ChainIdScope<S, T>, Web3Helper.SchemaTypeScope<S, T>> | undefined
-        > => {
-            if (!address) return
-            return Web3.getNonFungibleTokenContract?.(address, schemaType)
+        queryFn: async (): Promise<NonFungibleTokenContract<
+            Web3Helper.ChainIdScope<S, T>,
+            Web3Helper.SchemaTypeScope<S, T>
+        > | null> => {
+            if (!address) return null
+            return Web3.getNonFungibleTokenContract?.(address, schemaType) || null
         },
     })
 }

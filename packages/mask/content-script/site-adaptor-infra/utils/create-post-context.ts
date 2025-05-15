@@ -124,8 +124,7 @@ export function createSiteAdaptorSpecializedPostContext(site: EnhanceableSite, a
                     hasMaskPayload.value = actions.hasPayloadLike(msg)
                 }
                 evaluate()
-                cancel.push(linksSubscribe.subscribe(evaluate))
-                cancel.push(opt.rawMessage.subscribe(evaluate))
+                cancel.push(linksSubscribe.subscribe(evaluate), opt.rawMessage.subscribe(evaluate))
                 return createSubscriptionFromValueRef(hasMaskPayload)
             })(),
             postIVIdentifier: createSubscriptionFromValueRef(postIVIdentifier),

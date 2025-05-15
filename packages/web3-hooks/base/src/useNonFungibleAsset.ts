@@ -21,7 +21,7 @@ export function useNonFungibleAsset<T extends NetworkPluginID = NetworkPluginID>
         queryKey: ['non-fungible-asset', pluginID, address, id, account, options],
         queryFn: async () => {
             if (!address || (!id && pluginID !== NetworkPluginID.PLUGIN_SOLANA)) return null
-            return Hub.getNonFungibleAsset(address, id ?? '')
+            return (await Hub.getNonFungibleAsset(address, id ?? '')) || null
         },
     })
 }

@@ -23,7 +23,7 @@ export function useRecipientValidate(recipientAddress: string): {
     const { data: security } = useQuery({
         enabled: isEvm,
         queryKey: ['go-plus', 'address-security', chainId, recipientAddress],
-        queryFn: () => GoPlusLabs.getAddressSecurity(chainId as ChainId, recipientAddress),
+        queryFn: async () => (await GoPlusLabs.getAddressSecurity(chainId as ChainId, recipientAddress)) || null,
     })
 
     const validation: ValidationTuple = useMemo(() => {

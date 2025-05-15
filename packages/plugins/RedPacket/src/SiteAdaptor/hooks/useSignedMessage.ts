@@ -33,16 +33,18 @@ export function useSignedMessage(
     return useQuery({
         queryKey: ['red-packet', 'signed-message', rpid, version, password, account, profile, isTokenRedPacket],
         queryFn: async () => {
-            if (isTokenRedPacket && version <= 3) return password
+            if (isTokenRedPacket && version <= 3) return password ?? null
             if (password) return signMessage(account, password).signature
             if (!profile) return ''
-            return FireflyRedPacket.createClaimSignature({
-                rpid,
-                profile,
-                wallet: {
-                    address: account,
-                },
-            })
+            return (
+                (await FireflyRedPacket.createClaimSignature({
+                    rpid,
+                    profile,
+                    wallet: {
+                        address: account,
+                    },
+                })) || null
+            )
         },
     })
 }

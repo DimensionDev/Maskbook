@@ -152,14 +152,14 @@ export function SavingsFormDialog({ chainId, protocol, tab, onClose }: SavingsFo
         return ''
     })()
 
-    const { data: tokenPrice = 0 } = useFungibleTokenPrice(
+    const { data: tokenPrice } = useFungibleTokenPrice(
         NetworkPluginID.PLUGIN_EVM,
         !isNativeTokenAddress(protocol.bareToken.address) ? protocol.bareToken.address : nativeToken?.address,
         { chainId },
     )
 
     const tokenValueUSD = useMemo(
-        () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice).toFixed(2) : '0'),
+        () => (inputAmount ? new BigNumber(inputAmount).times(tokenPrice ?? 0).toFixed(2) : '0'),
         [inputAmount, tokenPrice],
     )
     // #endregion
