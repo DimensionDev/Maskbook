@@ -117,7 +117,7 @@ export function NftRedPacketConfirm() {
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
     const nativeTokenDetailed = useMemo(() => EVMChainResolver.nativeCurrency(chainId), [chainId])
-    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
     const wallet = useWallet()
     const { account: redpacketPubkey, privateKey = '' } = useMemo(() => EVMWeb3.createAccount(), [])!
     const smartPayChainId = useSmartPayChainId()

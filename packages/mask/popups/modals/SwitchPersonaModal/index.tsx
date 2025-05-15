@@ -82,7 +82,7 @@ export const SwitchPersonaModal = memo<ActionModalBaseProps>(function SwitchPers
         <ActionModal header={<Trans>Switch Persona</Trans>} action={action} {...props}>
             <Box className={classes.content}>
                 <List dense className={classes.list}>
-                    {personas.map((item, index) => (
+                    {personas?.map((item, index) => (
                         <PersonaItem
                             key={index}
                             persona={item}

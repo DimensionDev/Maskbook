@@ -19,7 +19,7 @@ export function useGasOptions<T extends NetworkPluginID = NetworkPluginID>(
         queryKey: ['get-gas-options', pluginID, chainId, JSON.stringify(options)],
         queryFn: async () => {
             if (!Utils.isValidChainId(chainId)) return null
-            return Hub.getGasOptions!(chainId, options)
+            return (await Hub.getGasOptions!(chainId, options)) || null
         },
         refetchInterval: live ? (Utils.getAverageBlockDelay?.(chainId) ?? 10) : false,
     })

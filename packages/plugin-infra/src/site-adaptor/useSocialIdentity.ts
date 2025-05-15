@@ -14,7 +14,7 @@ export function useSocialIdentity(identity: IdentityResolved | null | undefined)
         enabled: Boolean(identity && currentNextIDPlatform),
         queryFn: async () => {
             if (!currentNextIDPlatform || !identity) return null
-            return querySocialIdentity(currentNextIDPlatform, identity)
+            return (await querySocialIdentity(currentNextIDPlatform, identity)) || null
         },
         refetchOnWindowFocus: false,
     })

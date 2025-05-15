@@ -21,7 +21,7 @@ export function useNFT_TrendingOverview(
         queryKey: ['nft-trending-overview', pluginID, expectedChainId, id],
         queryFn: async () => {
             if (!id || !expectedChainId || !pluginID) return null
-            return PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)
+            return (await PluginTraderRPC.getNFT_TrendingOverview(pluginID, expectedChainId, id)) || null
         },
     })
 }
@@ -83,7 +83,7 @@ export function useTrendingById(
         queryKey: ['get-coin-trending', result, currency?.id],
         queryFn: async () => {
             if (!currency || !result.source) return null
-            return PluginTraderRPC.getCoinTrending(result, currency)
+            return (await PluginTraderRPC.getCoinTrending(result, currency)) || null
         },
     })
 

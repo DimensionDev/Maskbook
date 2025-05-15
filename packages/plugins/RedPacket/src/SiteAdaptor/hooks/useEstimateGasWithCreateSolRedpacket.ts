@@ -52,7 +52,7 @@ export function useEstimateGasWithCreateSolRedpacket(
                         creator,
                         cluster,
                     )
-                :   undefined
+                :   null
             )
         },
     })

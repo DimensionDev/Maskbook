@@ -209,12 +209,9 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
     const asset = useAsset(chainId, address, account)
     const { data: balance = asset?.balance } = useFungibleTokenBalance(NetworkPluginID.PLUGIN_EVM, address, { chainId })
     const [chartRange, setChartRange] = useState(Days.ONE_DAY)
-    const {
-        data: stats = EMPTY_LIST,
-        refetch,
-        isPending: isLoadingStats,
-    } = useCoinTrendingStats(chainId, address, chartRange)
-    const { data: tokenPrice = stats.at(-1)?.[1], isPending: isLoadingPrice } = useTokenPrice(chainId, address)
+    const { data: stats, refetch, isPending: isLoadingStats } = useCoinTrendingStats(chainId, address, chartRange)
+    const { data: _tokenPrice, isPending: isLoadingPrice } = useTokenPrice(chainId, address)
+    const tokenPrice = _tokenPrice || stats?.at(-1)?.[1]
     const tokenValue = useMemo(() => {
         if (asset?.value?.usd) return asset.value.usd
         if (!asset?.decimals || !tokenPrice || !balance) return 0
@@ -244,11 +241,16 @@ export const TokenDetailUI = memo(function TokenDetailUI(props: TokenDetailUIPro
                                 height={DIMENSION.height}
                                 width={DIMENSION.width}
                             />
-                        : !isLoadingStats && !stats.length ?
+                        : !isLoadingStats && !stats?.length ?
                             <EmptyStatus className={classes.trending} height={DIMENSION.height} width={DIMENSION.width}>
                                 <Trans>Not enough data to present.</Trans>
                             </EmptyStatus>
-                        :   <TrendingChart key={`${chainId}.${address}`} className={classes.trending} stats={stats} />}
+                        :   <TrendingChart
+                                key={`${chainId}.${address}`}
+                                className={classes.trending}
+                                stats={stats || EMPTY_LIST}
+                            />
+                        }
                     </>
                 )}
 

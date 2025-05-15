@@ -38,7 +38,7 @@ export const UserAvatar = memo(function UserAvatar({ identity, size = 20, ...res
             if (!identity || isValidAddress(identity)) return null
             const profiles = await RSS3.getProfiles(identity)
             if (!profiles.length) return null
-            return profiles.find((x) => x.handle === identity)
+            return profiles.find((x) => x.handle === identity) || null
         },
     })
     const url = profile?.profile_uri?.[0]

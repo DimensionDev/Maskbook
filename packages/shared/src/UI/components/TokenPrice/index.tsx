@@ -19,11 +19,12 @@ export function TokenPrice({
     currencyType = CurrencyType.USD,
     ...rest
 }: TokenPriceProps) {
-    const { data: tokenPrice = 0 } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, contractAddress?.toLowerCase(), {
-        chainId,
-        currencyType,
-    })
-    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const tokenPrice =
+        useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, contractAddress?.toLowerCase(), {
+            chainId,
+            currencyType,
+        }).data ?? 0
+    const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data ?? 0
     const price = isZeroAddress(contractAddress) ? nativeTokenPrice : tokenPrice
     return <span {...rest}>${multipliedBy(amount, price).toFixed(2)}</span>
 }

@@ -140,6 +140,7 @@ export function createManager<
 
         verifyHostHooks()
         const abort = new AbortController()
+        // eslint-disable-next-line react/no-missing-context-display-name
         const activatedPlugin: ActivatedPluginInstance = {
             instance: definition,
             controller: abort,

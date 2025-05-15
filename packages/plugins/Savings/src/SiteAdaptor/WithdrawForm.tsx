@@ -79,7 +79,7 @@ export function WithdrawFormDialog({ onClose, chainId, protocol }: WithdrawFormD
         enabled: !isZero(amount),
         queryKey: ['savings', 'lido', 'time', amount],
         queryFn: async () => {
-            if (!amount) return
+            if (!amount) return null
             return Lido.getLidoWaitingTime(amount)
         },
     })

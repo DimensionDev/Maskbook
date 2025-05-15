@@ -179,7 +179,7 @@ export function CreateTokenRedPacket() {
     const smartPayChainId = useSmartPayChainId()
 
     // #region select token
-    const { data: nativeTokenPrice = 0 } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
+    const nativeTokenPrice = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId }).data || 0
 
     const onSelectTokenChipClick = useCallback(async () => {
         const picked = await SelectFungibleTokenModal.openAndWaitForClose({

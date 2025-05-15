@@ -11,12 +11,12 @@ export function useFungibleAsset<S extends 'all' | void = void, T extends Networ
 ) {
     const Hub = useWeb3Hub(pluginID, options)
 
-    return useQuery<Web3Helper.FungibleAssetScope<S, T> | undefined>({
+    return useQuery<Web3Helper.FungibleAssetScope<S, T> | null>({
         enabled: !!address,
         queryKey: ['fungible-asset', pluginID, address, options],
         queryFn: async () => {
-            if (!address) return
-            return Hub.getFungibleAsset(address, options)
+            if (!address) return null
+            return (await Hub.getFungibleAsset(address, options)) || null
         },
     })
 }

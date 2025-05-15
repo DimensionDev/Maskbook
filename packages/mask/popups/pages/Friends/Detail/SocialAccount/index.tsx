@@ -44,7 +44,7 @@ export const SocialAccount = memo<SocialAccountProps>(function SocialAccount({ a
         queryKey: ['social-account-avatar', site, avatar],
         queryFn: async () => {
             const userInfo = await FireflyTwitter.getUserInfo(userId)
-            return userInfo?.legacy.profile_image_url_https
+            return userInfo?.legacy.profile_image_url_https || null
         },
     })
     const userAvatar = isOnTwitter ? twitterAvatar : avatar

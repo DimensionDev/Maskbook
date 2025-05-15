@@ -125,7 +125,7 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         enabled: !!handle && !!open,
         queryKey: ['lens', 'profile-info', !lensClient, handle],
         queryFn: async () => {
-            if (!handle || !lensClient) return
+            if (!handle || !lensClient) return null
             const lensAccount = await lensClient.getAccountByHandle(handle)
             return lensAccount
         },

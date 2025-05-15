@@ -125,7 +125,7 @@ export function SolanaRedPacketConfirm() {
     }, [settings, isNativeToken])
 
     const cluster = SolanaChainResolver.network(chainId) as SolanaWeb3.Cluster
-    const { data: defaultGasFee = ZERO, isLoading: estimateLoading } = useEstimateGasWithCreateSolRedpacket(
+    const { data: _defaultGasFee, isLoading: estimateLoading } = useEstimateGasWithCreateSolRedpacket(
         settings.shares,
         new BigNumber(settings.total).toNumber(),
         isRandom,
@@ -135,6 +135,7 @@ export function SolanaRedPacketConfirm() {
         token,
         cluster,
     )
+    const defaultGasFee = _defaultGasFee || ZERO
 
     const gasFee = defaultGasFee.multipliedBy(isNativeToken ? 5 : 10)
     const gasPriceUSD = gasFee.shiftedBy(-9).multipliedBy(nativeTokenPrice ?? 0)

@@ -55,7 +55,7 @@ const useStyles = makeStyles()((theme) => {
 interface Props extends BoxProps {
     chainId: ChainId
     address?: string
-    asset?: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM>
+    asset?: Web3Helper.FungibleAssetScope<void, NetworkPluginID.PLUGIN_EVM> | null
 }
 
 export const ActionGroup = memo(function ActionGroup({ className, chainId, address, asset, ...rest }: Props) {

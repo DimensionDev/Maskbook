@@ -12,11 +12,11 @@ export function useSearchValue(value: string, type?: NextIDPlatform) {
             if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
             if (type === NextIDPlatform.Twitter) return value.replace(/^@/, '').toLowerCase()
 
-            if (value.endsWith('.eth')) return (await ENS.lookup(value))?.toLowerCase()
+            if (value.endsWith('.eth')) return (await ENS.lookup(value))?.toLowerCase() || ''
 
             if (value.endsWith('.lens') && lensClient) {
                 const account = await lensClient?.getAccountByHandle(value)
-                return (account?.username?.ownedBy as string).toLowerCase()
+                return (account?.username?.ownedBy as string).toLowerCase() || ''
             }
 
             return value.toLowerCase()

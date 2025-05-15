@@ -99,12 +99,13 @@ export function CreateNftRedPacket() {
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
     const smartPayChainId = useSmartPayChainId()
 
-    const { data: gasLimit = '0' } = useCreateNFTRedpacketGas(
-        message,
-        creator,
-        collection?.address ?? '',
-        selectedNfts.map((value) => value.tokenId),
-    )
+    const gasLimit =
+        useCreateNFTRedpacketGas(
+            message,
+            creator,
+            collection?.address ?? '',
+            selectedNfts.map((value) => value.tokenId),
+        ).data || '0'
 
     const { isGasSufficient, isGasFeeGreaterThanOneETH } = useAvailableBalance(
         NetworkPluginID.PLUGIN_EVM,

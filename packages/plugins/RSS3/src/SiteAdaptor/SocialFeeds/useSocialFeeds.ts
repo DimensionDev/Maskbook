@@ -54,7 +54,7 @@ export function useSocialFeeds({ userId, address }: Options) {
     const { data: accounts = EMPTY_LIST } = useQuery({
         queryKey: ['lens', 'popup-list', lensHandles, !lensClient],
         queryFn: async () => {
-            if (!lensClient) return
+            if (!lensClient) return EMPTY_LIST
             const profiles = await lensClient.getAccountsByHandles(lensHandles)
             return profiles?.map((x) => x.address) || EMPTY_LIST
         },

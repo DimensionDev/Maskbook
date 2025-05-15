@@ -119,7 +119,7 @@ export const UnlockERC721Token = memo<UnlockERC721TokenProps>(function UnlockERC
     const { data: contract } = useQuery({
         queryKey: ['nft-contract', chainId, transaction.computedPayload.to],
         queryFn: () => {
-            if (!transaction.computedPayload.to) return
+            if (!transaction.computedPayload.to) return null
             return connection.getNonFungibleTokenContract(transaction.computedPayload.to, undefined, { chainId })
         },
     })

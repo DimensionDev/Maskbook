@@ -11,15 +11,17 @@ export function useSocialAccountListByAddressOrDomain(
     return useQuery({
         queryKey: ['web3-bio', 'profiles', address, domain],
         placeholderData: defaultProfiles,
-        queryFn: () => {
+        queryFn: async () => {
             if (!address && !domain) return EMPTY_LIST
-            return attemptUntil(
-                [
-                    async () => (domain ? Web3Bio.getProfilesBy(domain) : EMPTY_LIST),
-                    async () => (address ? Web3Bio.getProfilesBy(address) : EMPTY_LIST),
-                ],
-                undefined,
-                (result) => !result?.length,
+            return (
+                (await attemptUntil(
+                    [
+                        async () => (domain ? Web3Bio.getProfilesBy(domain) : EMPTY_LIST),
+                        async () => (address ? Web3Bio.getProfilesBy(address) : EMPTY_LIST),
+                    ],
+                    undefined,
+                    (result) => !result?.length,
+                )) || EMPTY_LIST
             )
         },
     })

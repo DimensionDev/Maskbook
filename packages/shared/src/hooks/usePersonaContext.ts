@@ -25,7 +25,7 @@ function usePersonaInformation(
 ) {
     const { data: personas = EMPTY_LIST, refetch } = useQuery({
         queryKey: ['@@my-own-persona-info'],
-        queryFn: () => queryOwnedPersonaInformation?.(false),
+        queryFn: async () => (await queryOwnedPersonaInformation?.(false)) || null,
         refetchOnMount: true,
         networkMode: 'always',
     })
@@ -45,7 +45,7 @@ function usePersonaContext(initialState?: {
 
     const { personas } = usePersonaInformation(initialState?.queryOwnedPersonaInformation)
 
-    const currentPersona = personas.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
+    const currentPersona = personas?.find((x) => x.identifier === (currentIdentifier || personas[0]?.identifier))
 
     const { data: avatar, refetch: refetchAvatar } = useQuery({
         enabled: !!currentPersona,

@@ -38,7 +38,7 @@ export function useSetupGuideStepInfo(persona?: PersonaIdentifier) {
     useEffect(() => MaskMessages.events.ownPersonaChanged.on(() => refetch()), [])
     const { data: currentTabId } = useQuery({
         queryKey: ['current-tab-id'],
-        queryFn: async () => Services.Helper.getActiveTab().then((x) => x?.id),
+        queryFn: async () => Services.Helper.getActiveTab().then((x) => x?.id || null),
         refetchOnWindowFocus: true,
     })
     const { networkIdentifier: site, configuration } = activatedSiteAdaptorUI!
