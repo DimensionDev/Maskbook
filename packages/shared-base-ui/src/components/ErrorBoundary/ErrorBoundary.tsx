@@ -28,7 +28,7 @@ function normalizeError(error: unknown): ErrorBoundaryError {
     if (!error) return { stack, type, message }
     try {
         stack = String((error as any).stack) || '<stack not available>'
-        stack = stack.replaceAll(/webpack-internal:.+node_modules\//gu, 'npm:')
+        stack = stack.replaceAll(/^webpack-internal:.+node_modules\//gu, 'npm:')
         // remove webpack-internal:///
         stack = stack.replaceAll(/webpack-internal:\/{3}/gu, '')
         stack = stack.replaceAll('chrome-extension://jkoeaghipilijlahjplgbfiocjhldnap', '')
