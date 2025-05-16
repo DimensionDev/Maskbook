@@ -62,6 +62,7 @@ export abstract class MessageState<Request extends object, Response extends obje
             const nextMessages = produce(this.storage.value, (draft: typeof this.storage.value) => {
                 for (const key in draft) {
                     if (draft[key].state !== MessageStateType.NOT_DEPEND) {
+                        // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                         delete draft[key]
                     }
                 }

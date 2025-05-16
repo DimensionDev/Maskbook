@@ -304,6 +304,7 @@ export async function updatePersonaDB(
         const keys = Object.keys(nextRecord) as Array<keyof typeof nextRecord>
         for (const key of keys) {
             if (nextRecord[key] === undefined) {
+                // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
                 delete nextRecord[key]
             }
         }

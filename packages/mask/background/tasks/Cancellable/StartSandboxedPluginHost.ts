@@ -20,7 +20,8 @@ let hot:
     | undefined
 if (process.env.NODE_ENV === 'development') {
     const sym = Symbol.for('sandboxed plugin bridge hot map')
-    hot = (globalThis as any)[sym] ??= new Map()
+    ;(globalThis as any)[sym] ??= new Map()
+    hot = (globalThis as any)[sym]
 }
 
 if (Flags.sandboxedPluginRuntime) {

@@ -14,9 +14,10 @@ interface ContextOptions {
     defaultChainId?: ChainId
 }
 
-function useContactsContext(
-    { defaultName, defaultChainId, defaultAddress }: ContextOptions = { defaultName: '', defaultAddress: '' },
-) {
+function useContactsContext(option?: ContextOptions) {
+    const defaultName = option?.defaultName || ''
+    const defaultAddress = option?.defaultAddress || ''
+    const defaultChainId = option?.defaultChainId
     const { t } = useLingui()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
     const contacts = useContacts()

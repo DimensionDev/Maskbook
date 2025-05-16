@@ -43,9 +43,8 @@ const avoidMistakeRules = {
     '@tanstack/query/no-unstable-deps': 'error', // avoid unstable results from the hook being deps
     '@tanstack/query/no-void-query-fn': 'error', // query function should always return something
     '@lingui/no-single-tag-to-translate': 'error',
-    // '@lingui/no-single-variables-to-translate': 'error', // we're mixing two i18n frameworks, a lot of false positive reports
-    // https://github.com/lingui/eslint-plugin/issues/46
-    // '@lingui/no-unlocalized-strings': 'error',
+    // https://github.com/lingui/eslint-plugin/issues/104
+    // '@lingui/no-single-variables-to-translate': 'error',
     '@lingui/no-trans-inside-trans': 'error',
     '@lingui/t-call-in-function': 'error',
 
@@ -108,7 +107,7 @@ const avoidMistakeRules = {
     /// Unicode support
     'no-misleading-character-class': 'error', // RegEx
     'require-unicode-regexp': 'error', // RegEx modern RegEx with Unicode support
-    // 'unicorn/prefer-code-point': 'error',
+    'unicorn/prefer-code-point': 'error',
     // '@masknet/no-builtin-base64': 'warn', // Note: it fixes to Node's Buffer
     /// type safety
     // '@typescript-eslint/method-signature-style': 'warn', // method signature is bivariant
@@ -249,8 +248,7 @@ const codeStyleRules = {
     'react/no-class-component': 'error',
     'react/no-context-provider': 'error',
     'react/no-forward-ref': 'error',
-    // Let's wait for https://github.com/typescript-eslint/typescript-eslint/issues/6572
-    // '@typescript-eslint/no-namespace': 'error', // namespace T {}
+    // '@typescript-eslint/no-namespace': 'error', // namespace T {}, they won't support type only namespace
     '@typescript-eslint/prefer-namespace-keyword': 'error', // but if you really need to, don't use `module T {}`
 
     // Useless code
@@ -431,12 +429,12 @@ const codeStyleRules = {
 
     // Bad practice
     'no-ex-assign': 'warn', // reassign err in catch
-    // 'no-multi-assign': 'warn', // a = b = c
+    'no-multi-assign': 'warn', // a = b = c
     // 'no-param-reassign': 'warn',
-    // 'no-return-assign': 'warn', // return x = expr
-    // 'unicorn/no-object-as-default-parameter': 'warn',
-    // '@typescript-eslint/default-param-last': 'warn', // (a, b = 1, c)
-    // '@typescript-eslint/no-dynamic-delete': 'error', // this usually means you should use Map/Set
+    'no-return-assign': 'warn', // return x = expr
+    'unicorn/no-object-as-default-parameter': 'warn',
+    '@typescript-eslint/default-param-last': 'warn', // (a, b = 1, c)
+    '@typescript-eslint/no-dynamic-delete': 'error', // this usually means you should use Map/Set
     /// Async functions / Promise bad practice
     'no-async-promise-executor': 'error', // new Promise(async (resolve) => )
     'no-promise-executor-return': 'error', // new Promise(() => result)
@@ -577,6 +575,7 @@ const plugins = {
     'react-hooks': ReactHooksPlugin,
     'react-compiler': ReactCompilerPlugin,
     '@tanstack/query': ReactQueryPlugin,
+    // @ts-ignore
     '@lingui': fixupPluginRules(LinguiPlugin),
 }
 export default tseslint.config(

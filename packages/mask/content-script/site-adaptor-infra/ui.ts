@@ -46,7 +46,8 @@ export async function activateSiteAdaptorUIInner(ui_deferred: SiteAdaptorUI.Defe
             sampleRate: 0.01,
         })
     })
-    const ui = (activatedSiteAdaptorUI = await loadSiteAdaptorUI(ui_deferred.networkIdentifier))
+    activatedSiteAdaptorUI = await loadSiteAdaptorUI(ui_deferred.networkIdentifier)
+    const ui = activatedSiteAdaptorUI
     setupReactShadowRootEnvironment()
 
     sharedUINetworkIdentifier.value = ui_deferred.networkIdentifier

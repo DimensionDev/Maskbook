@@ -27,6 +27,7 @@ function addI18NBundleSingle(lingui: I18n, langs: LinguiI18NResource) {
     // Don't fallback to en in the translation file
     ;[zh, zh_CN, ja, ko].forEach((lang) => {
         for (const key in lang) {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
             if (typeof en[key] === 'string' && lang[key] === en[key]) delete lang[key]
         }
     })

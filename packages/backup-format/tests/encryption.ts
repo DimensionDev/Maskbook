@@ -16,13 +16,13 @@ const testData = new Uint8Array([
 ])
 
 test('Old data can be still decrypted', async () => {
-    const password = Uint8Array.from('password'.split('').map((x) => x.charCodeAt(0)))
+    const password = Uint8Array.from('password'.split('').map((x) => x.codePointAt(0)))
     const decrypted = await decryptBackup(password, testData)
     expect(new Uint8Array(decrypted)).toEqual(rawData)
 })
 
 test('decrypt(password, encrypt(password, data)) === data', async () => {
-    const password = Uint8Array.from('password'.split('').map((x) => x.charCodeAt(0)))
+    const password = Uint8Array.from('password'.split('').map((x) => x.codePointAt(0)))
     const data = new Uint8Array([4, 5, 6])
 
     const result = await encryptBackup(password, data)

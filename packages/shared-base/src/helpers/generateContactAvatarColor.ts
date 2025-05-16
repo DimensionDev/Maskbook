@@ -1,7 +1,7 @@
 export function calculateHash(input: string) {
     const hash = [...input].reduce((prev, current) => {
         // eslint-disable-next-line no-bitwise
-        const next = current.charCodeAt(0) + (prev << 5) - prev
+        const next = current.codePointAt(0)! + (prev << 5) - prev
         // eslint-disable-next-line no-bitwise
         return next & next
     }, 0)

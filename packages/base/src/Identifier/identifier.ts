@@ -169,7 +169,8 @@ export class PostIVIdentifier extends Identifier {
             console.warn('[@masknet/shared-base] For compatibility, x.com is converted to twitter.com')
         }
 
-        const networkCache = (PostIVIdentifier.#cache[network] ??= {})
+        PostIVIdentifier.#cache[network] ??= {}
+        const networkCache = PostIVIdentifier.#cache[network]
         // return the cache to keep the object identity
         // eslint-disable-next-line no-constructor-return
         if (networkCache[postIV]) return networkCache[postIV]
@@ -286,7 +287,8 @@ export class ProfileIdentifier extends Identifier {
         }
         if (!userID) throw new TypeError('[@masknet/base] userID cannot be empty.')
 
-        const networkCache = (ProfileIdentifier.#cache[network] ??= {})
+        ProfileIdentifier.#cache[network] ??= {}
+        const networkCache = ProfileIdentifier.#cache[network]
         // return the cache to keep the object identity
         // eslint-disable-next-line no-constructor-return
         if (networkCache[userID]) return networkCache[userID]

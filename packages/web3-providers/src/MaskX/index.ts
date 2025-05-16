@@ -49,13 +49,13 @@ export class MaskX {
     static async getIdentitiesExact(
         handle: string,
         platform: BaseMaskX.PlatformType,
-        initial: BaseMaskX.Options = { size: 20, page: 1 },
+        initial?: BaseMaskX.Options,
     ): Promise<BaseMaskX.Response> {
         const response = await fetchFromMaskX(
             urlcat('/prod/identity', {
                 identity: handle,
                 platform,
-                ...this.getOptions(initial),
+                ...this.getOptions(initial || { size: 20, page: 1 }),
             }),
         )
         return this.getResponse(response)
@@ -64,20 +64,22 @@ export class MaskX {
     static async getIdentitiesFuzzy(
         handle: string,
         platform: BaseMaskX.PlatformType,
-        initial: BaseMaskX.Options = { size: 20, page: 1 },
+        initial?: BaseMaskX.Options,
     ): Promise<BaseMaskX.Response> {
         const response = await fetchFromMaskX(
             urlcat('/prod/identity/search', {
                 identity: handle,
                 platform,
-                ...this.getOptions(initial),
+                ...this.getOptions(initial || { size: 20, page: 1 }),
             }),
         )
         return this.getResponse(response)
     }
 
-    static async getAllIdentities(initial: BaseMaskX.Options = { size: 20, page: 1 }): Promise<BaseMaskX.Response> {
-        const response = await fetchFromMaskX(urlcat('/prod/identity/all', this.getOptions(initial)))
+    static async getAllIdentities(initial?: BaseMaskX.Options): Promise<BaseMaskX.Response> {
+        const response = await fetchFromMaskX(
+            urlcat('/prod/identity/all', this.getOptions(initial || { size: 20, page: 1 })),
+        )
         return this.getResponse(response)
     }
 }

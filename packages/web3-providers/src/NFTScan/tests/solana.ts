@@ -4,13 +4,13 @@ import { NFTScanNonFungibleTokenSolana } from '../apis/NonFungibleTokenAPI_Solan
 describe('NFTScan Solana', () => {
     it.skipIf(!process.env.RUN_SKIP_TESTS)('should get asset correctly', { retry: 3 }, async () => {
         const asset = await NFTScanNonFungibleTokenSolana.getAsset('9quqwD7X3ywS2QbibHGj8i95UAr6ypMDhXiv5ZmwKSvY')
-        expect(asset!.traits?.sort((a, z) => a.type.charCodeAt(0) - z.type.charCodeAt(0))).toMatchSnapshot()
+        expect(asset!.traits?.sort((a, z) => a.type.codePointAt(0)! - z.type.codePointAt(0)!)).toMatchSnapshot()
     })
 
     it.skipIf(!process.env.RUN_SKIP_TESTS)('show get assets by account correctly', { retry: 3 }, async () => {
         const list = await NFTScanNonFungibleTokenSolana.getAssets('4Qzi1RHo3gnQ4oQrq3UccHehqA7nKo7DpMbnZUy1zpHG', {
             size: 1,
         })
-        expect(list.data[0]!.traits?.sort((a, z) => a.type.charCodeAt(0) - z.type.charCodeAt(0))).toMatchSnapshot()
+        expect(list.data[0]!.traits?.sort((a, z) => a.type.codePointAt(0)! - z.type.codePointAt(0)!)).toMatchSnapshot()
     })
 })

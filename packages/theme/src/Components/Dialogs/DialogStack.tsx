@@ -61,10 +61,11 @@ export function useDialogStackActor(open: boolean): useDialogStackActorReturn {
         return () => pop(selfID)
     }, [open])
 
-    const TrackDialogHierarchy = (useRef<useDialogStackActorReturn['TrackDialogHierarchy']>(null!).current ??=
-        function TrackDialogHierarchy({ children }) {
-            return <DialogHierarchyContext value={selfID}>{children}</DialogHierarchyContext>
-        })
+    const _TrackDialogHierarchy = useRef<useDialogStackActorReturn['TrackDialogHierarchy']>(null!)
+    _TrackDialogHierarchy.current ??= function TrackDialogHierarchy({ children }) {
+        return <DialogHierarchyContext value={selfID}>{children}</DialogHierarchyContext>
+    }
+    const TrackDialogHierarchy = _TrackDialogHierarchy.current
 
     const returnVal: useDialogStackActorReturn = {
         shouldReplaceExitWithBack: stack.length > 1,

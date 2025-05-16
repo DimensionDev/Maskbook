@@ -88,7 +88,8 @@ export function createDBAccessWithAsyncUpgrade<DBSchema, AsyncUpgradePreparedDat
 
         // Share a Promise to prevent async upgrade for multiple times
         if (pendingOpen) return pendingOpen
-        const promise = (pendingOpen = open())
+        pendingOpen = open()
+        const promise = pendingOpen
         promise.catch(() => (pendingOpen = undefined))
         return promise
     }
