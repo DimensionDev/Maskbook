@@ -92,11 +92,12 @@ const ArrayIteratorPrototype: IterableIterator<any> = create(
         setPrototypeOf(iter, ArrayIteratorPrototype)
         return iter
     }
-    ArrayPrototype.values = ArrayPrototype[Symbol.iterator] = function (this: T) {
+    ArrayPrototype[Symbol.iterator] = function (this: T) {
         const iter = values(this)
         setPrototypeOf(iter, ArrayIteratorPrototype)
         return iter
     }
+    ArrayPrototype.values = ArrayPrototype[Symbol.iterator]
 }
 
 export function Map<K, V>(): Map<K, V> {
