@@ -34,6 +34,6 @@ export function queryRemoteI18NBundle(
     _updater: (lang: string) => Promise<Array<[namespace: string, lang: string, json: Record<string, string>]>>,
 ) {
     const updater: typeof _updater & { [cache]?: DebouncedFunc<() => Promise<void>> } = _updater as any
-    const update = (updater[cache] ??= debounce(async () => {}, 1500))
-    update()
+    updater[cache] ??= debounce(async () => {}, 1500)
+    updater[cache]()
 }

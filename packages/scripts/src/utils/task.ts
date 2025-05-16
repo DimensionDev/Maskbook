@@ -23,8 +23,10 @@ export function watchTask(
 ) {
     dev.displayName = name + '-watch'
     build.displayName = name
-    dev.description = build.description = description
-    dev.flags = build.flags = flags
+    build.description = description
+    build.flags = flags
+    dev.description = description
+    dev.flags = flags
 }
 
 /** Generate Task and Task-Watch from npm scripts (`npm start` and `npm build`) */

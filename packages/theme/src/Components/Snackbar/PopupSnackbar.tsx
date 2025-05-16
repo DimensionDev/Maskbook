@@ -105,16 +105,13 @@ function PopupSnackbarContent({ id, title, message, variant, ref }: PopupSnackba
 export function usePopupCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
-        (
-            text: SnackbarMessage,
-            options: ShowSnackbarOptions = {
+        (text: SnackbarMessage, options?: ShowSnackbarOptions) => {
+            const { processing, message, variant, ...rest } = options || {
                 variant: 'success',
                 autoHideDuration: 2000,
-            },
-        ) => {
-            const { processing, message, variant, ...rest } = options
+            }
             return enqueueSnackbar(text, {
-                variant: options.variant,
+                variant,
                 content: (key, title) => {
                     return <PopupSnackbarContent id={key} title={title} message={message} variant={variant} />
                 },

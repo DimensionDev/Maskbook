@@ -16,8 +16,8 @@ const DEFAULT_IMAGES = [
 export const name2Image = (name?: string): string => {
     if (!name) return DEFAULT_IMAGES[0]
     let sum = 0
-    for (let i = 0; i < name.length; i += 1) {
-        sum += name.charCodeAt(i)
+    for (const char of name) {
+        sum += char.codePointAt(0)!
     }
 
     return DEFAULT_IMAGES[sum % DEFAULT_IMAGES.length]

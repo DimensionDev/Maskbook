@@ -13,17 +13,19 @@ function createGun() {
     class WebSocket extends globalThis.WebSocket {
         constructor(url: string | URL) {
             super(url)
-            const abort = (this.abort = () => {
+            this.abort = () => {
                 gun?.off()
                 gun = undefined
                 this.close()
                 for (const each of OnCloseEvent) each()
                 console.log('[Network/gun] WebSocket of the Gun instance is killed due to inactive.')
-            })
-            const keepAlive = (this.keepAlive = () => {
+            }
+            const abort = this.abort
+            this.keepAlive = () => {
                 if (this.timer) clearTimeout(this.timer)
                 this.timer = setTimeout(abort, 3 * 60 * 1000)
-            })
+            }
+            const keepAlive = this.keepAlive
             this.addEventListener(
                 'message',
                 (e) => {

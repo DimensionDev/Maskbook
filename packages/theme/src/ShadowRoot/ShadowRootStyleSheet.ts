@@ -47,7 +47,7 @@ export class StyleSheet {
     }
     insert(rule: string) {
         if (process.env.NODE_ENV !== 'production') {
-            const isImportRule = rule.charCodeAt(0) === 64 && rule.charCodeAt(1) === 105
+            const isImportRule = rule.codePointAt(0) === 64 && rule.codePointAt(1) === 105
             if (isImportRule && this._alreadyInsertedOrderInsensitiveRule) {
                 // this would only cause problem in speedy mode
                 // but we don't want enabling speedy to affect the observable behavior

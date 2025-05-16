@@ -81,7 +81,8 @@ function RawHookRender<T>({ UI, data }: { data: T; UI: Raw<T> }) {
 
     useEffect(() => {
         if (!ref) return
-        const sig = (cancel.current = new AbortController())
+        cancel.current = new AbortController()
+        const sig = cancel.current
         propsCallback.current = UI.init(sig.signal, ref)
         propsCallback.current(data)
         return () => sig.abort()

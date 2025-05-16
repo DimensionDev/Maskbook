@@ -17,7 +17,7 @@ import { getAllMaskDappContractInfo } from '../helpers/getAllMaskDappContractInf
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import type { AuthorizationAPI, PhishingSiteResponse, SecurityAPI } from '../entry-types.js'
 
-function checkInWhitelist(chainId = ChainId.Mainnet, address: string) {
+function checkInWhitelist(chainId: ChainId, address: string) {
     const { WHITE_LISTS } = getGoPlusLabsConstants(chainId)
     return WHITE_LISTS?.some((x) => isSameAddress(x, address))
 }

@@ -39,11 +39,12 @@ const ArrayIteratorPrototype: IterableIterator<any> = create(
     const entries = takeThisF(MapPrototype.entries)<T>
     const keys = takeThisF(MapPrototype.keys)<T>
     const values = takeThisF(MapPrototype.values)<T>
-    MapPrototype.entries = MapPrototype[Symbol.iterator] = function (this: T) {
+    MapPrototype[Symbol.iterator] = function (this: T) {
         const iter = entries(this)
         setPrototypeOf(iter, MapIteratorPrototype)
         return iter
     }
+    MapPrototype.entries = MapPrototype[Symbol.iterator]
     MapPrototype.keys = function (this: T) {
         const iter = keys(this)
         setPrototypeOf(iter, MapIteratorPrototype)
@@ -66,14 +67,13 @@ const ArrayIteratorPrototype: IterableIterator<any> = create(
         setPrototypeOf(iter, SetIteratorPrototype)
         return iter
     }
-    SetPrototype.values =
-        SetPrototype.keys =
-        SetPrototype[Symbol.iterator] =
-            function (this: T) {
-                const iter = values(this)
-                setPrototypeOf(iter, SetIteratorPrototype)
-                return iter
-            }
+    SetPrototype[Symbol.iterator] = function (this: T) {
+        const iter = values(this)
+        setPrototypeOf(iter, SetIteratorPrototype)
+        return iter
+    }
+    SetPrototype.keys = SetPrototype[Symbol.iterator]
+    SetPrototype.values = SetPrototype[Symbol.iterator]
 }
 
 // Array

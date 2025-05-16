@@ -205,6 +205,7 @@ async function GUN_SEA_work(data: Uint8Array | string, salt: Uint8Array | string
     const key = await crypto.subtle.importKey('raw', data, { name: 'PBKDF2' }, false, ['deriveBits'])
     const params: Pbkdf2Params = { name: 'PBKDF2', iterations: 100000, salt, hash: { name: 'SHA-256' } }
     const derived = await crypto.subtle.deriveBits(params, key, 512)
+    // eslint-disable-next-line unicorn/prefer-code-point
     return btoa(String.fromCharCode(...new Uint8Array(derived)))
 }
 

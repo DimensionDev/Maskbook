@@ -54,7 +54,7 @@ const formatCurrencySymbol = (symbol: string, isLead: boolean) => {
 const fiatCurrencyResultModifier = (
     result: string,
     currency: LiteralUnion<Keys | 'USD'> = CurrencyType.USD,
-    onlyRemainTwoOrZeroDecimal: boolean,
+    onlyRemainTwoOrZeroDecimal?: boolean,
 ) => {
     if (currency === CurrencyType.HKD) return result.replaceAll('$', 'HK$')
 

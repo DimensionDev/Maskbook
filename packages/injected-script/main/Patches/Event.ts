@@ -149,7 +149,8 @@ export class __Event extends $unsafe.NewObject implements Event {
         event.#stopPropagation = false
         event.#stopImmediatePropagation = false
         if (clearTargets) {
-            event.#target = event.#relatedTarget = null
+            event.#relatedTarget = null
+            event.#target = null
             event.#touchTargetList = $safe.Array_of()
         }
         if (activationTarget !== null) {

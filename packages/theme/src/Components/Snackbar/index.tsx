@@ -287,15 +287,12 @@ export interface ShowSnackbarOptions
 export function useCustomSnackbar() {
     const { enqueueSnackbar, closeSnackbar } = useSnackbar()
     const showSnackbar = useCallback(
-        (
-            text: SnackbarMessage,
-            options: ShowSnackbarOptions = {
+        (text: SnackbarMessage, options?: ShowSnackbarOptions) => {
+            const { processing, message, variant, ...rest } = options || {
                 variant: 'default',
-            },
-        ) => {
-            const { processing, message, variant, ...rest } = options
+            }
             return enqueueSnackbar(text, {
-                variant: options.variant,
+                variant,
                 content: (key, title) => {
                     return (
                         <CustomSnackbarContent
