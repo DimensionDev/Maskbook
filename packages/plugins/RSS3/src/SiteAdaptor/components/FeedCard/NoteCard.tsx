@@ -169,7 +169,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const firstURL = action.related_urls?.[0]
     const transformUri = useCallback(
         (uri: string) => {
-            if (action.platform === 'Planet' && firstURL && !uri.match(/^https?:\/\//))
+            if (action.platform === 'Planet' && firstURL && !uri.match(/^https?:\/\//u))
                 return `https://thumbor.rss3.dev/unsafe/${firstURL}/${uri}`
             return resolveIPFS_URL(uri)!
         },
@@ -179,7 +179,7 @@ export function NoteCard({ feed, className, ...rest }: NoteCardProps) {
     const media = metadata?.media?.[0]
 
     // Image post on Farcaster
-    const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/.test(metadata.body) : false
+    const isImagePost = metadata?.body ? /https?:\/\/.*?\.(jpg|png)$/u.test(metadata.body) : false
     const soloImage = rest.verbose && isImagePost
 
     return (

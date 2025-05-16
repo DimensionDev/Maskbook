@@ -248,7 +248,7 @@ export function RedPacketEnvelope({
                         }
                     </div>
                 </div>
-                <Typography className={classes.creator}>From: @{creator.replace(/^@/, '')}</Typography>
+                <Typography className={classes.creator}>From: @{creator.replace(/^@/u, '')}</Typography>
             </div>
             <img src={new URL('../assets/token-label.png', import.meta.url).href} className={classes.label} />
         </div>

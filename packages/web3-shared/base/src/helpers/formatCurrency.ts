@@ -59,7 +59,7 @@ const fiatCurrencyResultModifier = (
     if (currency === CurrencyType.HKD) return result.replaceAll('$', 'HK$')
 
     if (currency === CurrencyType.JPY && onlyRemainTwoOrZeroDecimal)
-        return result.startsWith('¥') ? '¥' + Number(result.replaceAll(/¥|,/g, '')).toFixed() : result
+        return result.startsWith('¥') ? '¥' + Number(result.replaceAll(/¥|,/gu, '')).toFixed() : result
 
     return result
 }
@@ -152,7 +152,7 @@ export function formatCurrency(
                             return (
                                 bn.isZero() ? zeroValue
                                 : isLessThanCustomDecimalBoundary ? customDecimalConfig.boundary.toFixed()
-                                : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/, '')
+                                : bn.toFixed(customDecimalConfig.decimalExp).replace(/0+$/u, '')
                             )
                         }
                         return (
@@ -160,8 +160,8 @@ export function formatCurrency(
                             : onlyRemainTwoOrZeroDecimal ? minimumValue
                             : isLessThanTwelveDecimalBoundary ? sixDecimalBoundary.toFixed()
                             : isGreatThanEightDecimalBoundary ?
-                                bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/, '')
-                            :   bn.toFixed(twelveDecimalExp).replace(/0+$/, '')
+                                bn.decimalPlaces(10).toFixed(twelveDecimalExp).replace(/0+$/u, '')
+                            :   bn.toFixed(twelveDecimalExp).replace(/0+$/u, '')
                         )
                     default:
                         return ''
@@ -203,8 +203,10 @@ export function formatCurrency(
                                 customDecimalConfig?.decimalExp ??
                                     (onlyRemainTwoOrZeroDecimal ? assetValueDecimalExp : sixDecimalExp),
                             )
-                            .replace(/\d\./, '')
-                        return onlyRemainTwoOrZeroDecimal ? dec.replace(/(\d\d)(0+)$/, '$1') : dec.replace(/(0+)$/, '')
+                            .replace(/\d\./u, '')
+                        return onlyRemainTwoOrZeroDecimal ?
+                                dec.replace(/(\d\d)(0+)$/u, '$1')
+                            :   dec.replace(/(0+)$/u, '')
                     case 'integer':
                         // When there is a carry
                         if (bn.gt('0.99') && onlyRemainTwoOrZeroDecimal) return '1'

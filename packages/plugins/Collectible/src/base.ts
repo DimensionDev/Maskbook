@@ -25,10 +25,10 @@ export const base: Plugin.Shared.Definition = {
     },
     contribution: {
         postContent: new Set([
-            /opensea.io\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
-            /rarible.com\/token\/(0x[\dA-Fa-f]{40}):(\d+)/,
-            /zora.co\/collections\/(0x[\dA-Fa-f]{40})\/\d+$/,
-            /opensea.io\/assets\/ethereum\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+            /opensea.io\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
+            /rarible.com\/token\/(0x[\dA-Fa-f]{40}):(\d+)/u,
+            /zora.co\/collections\/(0x[\dA-Fa-f]{40})\/\d+$/u,
+            /opensea.io\/assets\/ethereum\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         ]),
     },
     i18n: languages,

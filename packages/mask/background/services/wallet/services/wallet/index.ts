@@ -370,7 +370,7 @@ async function addWalletFromPrivateKey(
         coin: api.Coin.Ethereum,
         name,
         password: masterPassword,
-        privateKey: privateKey.replace(/^0x/, '').trim(),
+        privateKey: privateKey.replace(/^0x/u, '').trim(),
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
     const created = await Mask.createAccountOfCoinAtPath({
@@ -449,7 +449,7 @@ export async function generateAddressFromPrivateKey(privateKey: string) {
         coin: api.Coin.Ethereum,
         name: '',
         password: masterPassword,
-        privateKey: privateKey.replace(/^0x/, '').trim(),
+        privateKey: privateKey.replace(/^0x/u, '').trim(),
     })
     if (!imported?.StoredKey) throw new Error('Failed to import the wallet.')
     const created = await Mask.createAccountOfCoinAtPath({

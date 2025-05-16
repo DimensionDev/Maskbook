@@ -54,7 +54,7 @@ msgstr ""
 msgid "{0} to {1}"
 msgstr ""
 
-#. placeholder {0}: mins.replace(/\.?0+$/, '')
+#. placeholder {0}: mins.replace(/\.?0+$/u, '')
 #: src/helpers/formatTime.ts
 msgid "{0}m"
 msgstr ""

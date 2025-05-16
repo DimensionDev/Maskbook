@@ -4,6 +4,6 @@ import { multipliedBy } from './number.js'
 export function formatPercentage(value: BigNumber.Value) {
     const percentage = multipliedBy(value, 100)
         .toFixed(2)
-        .replace(/\.?0+$/, '')
+        .replace(/\.?0+$/u, '')
     return `${percentage}%`
 }

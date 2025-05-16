@@ -53,7 +53,7 @@ function TwitterDecoderText(raw: string): Option<string> {
     if (!raw) return None
     if (!raw.includes('%20') || !raw.includes('%40')) return None
     const payloadLink = parseURLs(raw)
-        .map((x) => x.replace(/\u2026$/, ''))
+        .map((x) => x.replace(/\u2026$/u, ''))
         .filter((x) => x.endsWith('%40'))[0]
     if (!URL.canParse(payloadLink)) return None
     const { search, pathname } = new URL(payloadLink)
@@ -63,10 +63,9 @@ function TwitterDecoderText(raw: string): Option<string> {
         '\u{1F3BC}' +
             payload
                 // https://github.com/sindresorhus/eslint-plugin-unicorn/issues/1476
-                // eslint-disable-next-line unicorn/better-regex
-                .replace(/^PostData_v\d=/i, '')
-                .replace(/^%20/, '')
-                .replace(/%40$/, '')
+                .replace(/^PostData_v\d=/iu, '')
+                .replace(/^%20/u, '')
+                .replace(/%40$/u, '')
                 .replace('-', '+')
                 .replace('_', '=')
                 .replaceAll('.', '|') +

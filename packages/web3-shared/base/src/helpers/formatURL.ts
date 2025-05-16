@@ -14,7 +14,7 @@ export function formatURL(url: string): string {
     }
 
     // Step 4: Remove duplicate '//' or relative path
-    const path = urlObj.pathname.replaceAll(/\/+/g, '/')
+    const path = urlObj.pathname.replaceAll(/\/+/gu, '/')
 
     // Step 5: Reconstruct the URL with the formatted parts
     const formattedURL = `${urlObj.origin}${path}${

@@ -48,7 +48,7 @@ export function getFacebookId() {
     return url.pathname.replaceAll('/', '')
 }
 
-const FACEBOOK_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/
+const FACEBOOK_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/u
 
 export function getAvatarId(avatarURL: string) {
     if (!avatarURL) return ''

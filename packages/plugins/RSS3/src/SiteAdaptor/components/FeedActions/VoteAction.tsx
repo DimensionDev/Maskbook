@@ -42,7 +42,7 @@ export function VoteAction({ feed, ...rest }: VoteActionProps) {
     const option = useMemo(() => {
         if (!metadata?.choice) return ''
         const { choice, proposal } = metadata
-        const choices: number[] = /^\[.*?]$/.test(choice) ? JSON.parse(choice) : [Number.parseInt(choice, 10)]
+        const choices: number[] = /^\[.*?\]$/u.test(choice) ? JSON.parse(choice) : [Number.parseInt(choice, 10)]
         return choices.map((no) => proposal.options[no - 1]).join(', ')
     }, [metadata?.choice, metadata?.proposal])
 

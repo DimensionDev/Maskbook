@@ -241,7 +241,7 @@ export function NftRedPacketEnvelope({
     const pluginID = asset?.runtime || NetworkPluginID.PLUGIN_EVM
     const networks = useNetworks(pluginID)
     const network = networks.find((x) => x.chainId === asset?.chainId)
-    const assetId = asset?.id ? `#${asset.id}`.replace(/^##/, '#') : ''
+    const assetId = asset?.id ? `#${asset.id}`.replace(/^##/u, '#') : ''
 
     const assetImage = metadata?.imageURL || metadata?.mediaURL || metadata?.previewImageURL
     const collectionImage = collection?.iconURL
@@ -344,7 +344,7 @@ export function NftRedPacketEnvelope({
                         }
                     </div>
                 </div>
-                <Typography className={classes.creator}>From: @{creator.replace(/^@/, '')}</Typography>
+                <Typography className={classes.creator}>From: @{creator.replace(/^@/u, '')}</Typography>
             </div>
             <img src={new URL('../assets/nft-label.png', import.meta.url).href} className={classes.label} />
         </div>

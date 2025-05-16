@@ -10,8 +10,8 @@ export function useIsImageURL(url: string | undefined): AsyncState<boolean> {
         if (resolvedURL.startsWith('data:image')) return true
 
         const { pathname } = new URL(resolvedURL)
-        if (/\.(gif|svg|png|webp|jpg|jpeg)$/.test(pathname)) return true
-        if (/\.(mp4|webm|mov|ogg|mp3|wav)$/.test(pathname)) return false
+        if (/\.(gif|svg|png|webp|jpg|jpeg)$/u.test(pathname)) return true
+        if (/\.(mp4|webm|mov|ogg|mp3|wav)$/u.test(pathname)) return false
 
         return true
     }, [url])

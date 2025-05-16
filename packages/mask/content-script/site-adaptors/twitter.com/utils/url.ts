@@ -20,7 +20,7 @@ export function normalizeImageURL(url: string) {
 }
 
 export function parseId(t: string) {
-    return regexMatch(t, /status\/(\d+)/, 1)!
+    return regexMatch(t, /status\/(\d+)/u, 1)!
 }
 
 export function removeUrlParam(url: string, param: string) {

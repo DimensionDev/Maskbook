@@ -17,6 +17,6 @@ export const base: Plugin.Shared.Definition = {
         },
         target: 'stable',
     },
-    contribution: { postContent: new Set([/^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/]) },
+    contribution: { postContent: new Set([/^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/u]) },
     i18n: languages,
 }

@@ -25,7 +25,7 @@ const useStyles = makeStyles()((theme) => {
 })
 
 const isSnapshotURL = (x: string): boolean =>
-    /^https:\/\/(?:www.)?snapshot.(org|page|box)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/.test(x)
+    /^https:\/\/(?:www.)?snapshot.(org|page|box)\/#\/(.*?)\/proposal\/[\dA-Za-z]+$/u.test(x)
 
 export function Renderer({ url }: { url: string }) {
     const { classes } = useStyles()

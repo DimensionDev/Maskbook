@@ -125,7 +125,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
         const shareTextOption = {
-            sender: payload.sender.name.replace(/^@/, ''),
+            sender: payload.sender.name.replace(/^@/u, ''),
             payload: link!,
             network: network?.name ?? 'Mainnet',
             account: isOnTwitter ? 'realMaskNetwork' : 'masknetwork',

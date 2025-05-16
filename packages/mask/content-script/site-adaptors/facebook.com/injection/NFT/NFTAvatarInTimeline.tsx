@@ -48,7 +48,7 @@ function getFacebookId(element: HTMLElement | SVGElement) {
     }
 
     if (url.pathname.includes('/groups')) {
-        const match = url.pathname.match(/\/user\/(\w+)\//)
+        const match = url.pathname.match(/\/user\/(\w+)\//u)
         if (!match) return ''
         return match[1]
     }

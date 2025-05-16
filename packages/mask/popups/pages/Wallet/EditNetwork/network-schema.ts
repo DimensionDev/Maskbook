@@ -28,7 +28,7 @@ function createBaseSchema(_: I18nContext['_'], duplicateNameValidator: NameValid
             z
                 .string()
                 .trim()
-                .regex(/^\d+|0x[\da-f]$/i, _(msg`Invalid number`))
+                .regex(/^\d+|0x[\da-f]$/iu, _(msg`Invalid number`))
                 .transform((v) => Number.parseInt(v, v.startsWith('0x') ? 16 : 10)),
             z.number(),
         ]),

@@ -12,7 +12,7 @@ async function resolver(u: string): Promise<string | null> {
         credentials: 'omit',
         referrerPolicy: 'no-referrer',
     })
-    const url = text.match(/URL=(.+).><\/noscript/)?.[1]
+    const url = text.match(/URL=(.+).><\/noscript/u)?.[1]
     if (url) cache.set(u, url)
     return url ?? null
 }

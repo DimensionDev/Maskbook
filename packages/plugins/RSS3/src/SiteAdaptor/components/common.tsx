@@ -1,5 +1,5 @@
 import { ReversedAddress, type ReverseAddressProps } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { NetworkPluginID, purify } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { RSS3BaseAPI } from '@masknet/web3-providers/types'
 import { formatBalance } from '@masknet/web3-shared-base'
@@ -94,7 +94,7 @@ export const LinkifyOptions: Opts = {
 
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
-    return htmlString.trimStart().replaceAll(/<[^>]+>/g, '')
+    return purify(htmlString).toString()
 }
 
 export function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {

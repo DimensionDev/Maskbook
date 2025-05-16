@@ -86,7 +86,7 @@ export function getUserID(x: string) {
         const search = new URLSearchParams(url.search)
         return search.get('id')
     }
-    const val = url.pathname.replace(/^\//, '').replace(/\/$/, '').split('/')[0]
+    const val = url.pathname.replace(/^\//u, '').replace(/\/$/u, '').split('/')[0]
     if (val === 'me') return null
     return val
 }

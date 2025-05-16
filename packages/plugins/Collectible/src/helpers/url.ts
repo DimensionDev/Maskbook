@@ -28,7 +28,7 @@ type Rule = {
 const openseaEVMRules: Rule[] = openseaEVMPatterns.map(({ slug, chainId }) => {
     return {
         hosts: ['opensea.io'],
-        pathname: new RegExp(`^/assets/${slug}/(0x[\\dA-Fa-f]{40})/(\\d+)`),
+        pathname: new RegExp(`^/assets/${slug}/(0x[\\dA-Fa-f]{40})/(\\d+)`, 'u'),
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId,
         provider: SourceType.OpenSea,
@@ -39,7 +39,7 @@ const RULES: Rule[] = [
     // opensea
     {
         hosts: ['opensea.io'],
-        pathname: /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/assets\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.OpenSea,
@@ -47,7 +47,7 @@ const RULES: Rule[] = [
     ...openseaEVMRules,
     {
         hosts: ['opensea.io'],
-        pathname: /^\/assets\/solana\/(\w+)/,
+        pathname: /^\/assets\/solana\/(\w+)/u,
         pluginID: NetworkPluginID.PLUGIN_SOLANA,
         chainId: ChainIdSolana.Mainnet,
         provider: SourceType.OpenSea,
@@ -56,21 +56,21 @@ const RULES: Rule[] = [
     // rarible
     {
         hosts: ['rarible.com', 'app.rarible.com'],
-        pathname: /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/,
+        pathname: /^\/token\/(0x[\dA-Fa-f]{40}):(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Rarible,
     },
     {
         hosts: ['rarible.com', 'app.rarible.com'],
-        pathname: /^\/token\/polygon\/(0x[\dA-Fa-f]{40}):(\d+)/,
+        pathname: /^\/token\/polygon\/(0x[\dA-Fa-f]{40}):(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Polygon,
         provider: SourceType.Rarible,
     },
     {
         hosts: ['rarible.com', 'app.rarible.com'],
-        pathname: /^\/token\/solana\/(\w+)/,
+        pathname: /^\/token\/solana\/(\w+)/u,
         pluginID: NetworkPluginID.PLUGIN_SOLANA,
         chainId: ChainIdSolana.Mainnet,
         provider: SourceType.Rarible,
@@ -79,15 +79,15 @@ const RULES: Rule[] = [
     // zora
     {
         hosts: ['zora.co', 'market.zora.co'],
-        pathname: /^\/collect\/(zora|eth:0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/collect\/(zora|eth:0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Zora,
-        address: (matched: string) => matched.replace('zora', ZORA_COLLECTION_ADDRESS).replace(/^eth:/, ''),
+        address: (matched: string) => matched.replace('zora', ZORA_COLLECTION_ADDRESS).replace(/^eth:/u, ''),
     },
     {
         hosts: ['zora.co', 'market.zora.co'],
-        pathname: /^\/collections\/(zora|0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/collections\/(zora|0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Zora,
@@ -97,7 +97,7 @@ const RULES: Rule[] = [
     // looksrare
     {
         hosts: ['looksrare.org'],
-        pathname: /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/collections\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.LooksRare,
@@ -106,21 +106,21 @@ const RULES: Rule[] = [
     // element
     {
         hosts: ['element.market', 'www.element.market'],
-        pathname: /^\/assets(?:\/ethereum)?\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/assets(?:\/ethereum)?\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Element,
     },
     {
         hosts: ['element.market', 'www.element.market'],
-        pathname: /^\/assets\/bsc\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/assets\/bsc\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.BSC,
         provider: SourceType.Element,
     },
     {
         hosts: ['element.market', 'www.element.market'],
-        pathname: /^\/assets\/polygon\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/assets\/polygon\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Polygon,
         provider: SourceType.Element,
@@ -129,7 +129,7 @@ const RULES: Rule[] = [
     // magic eden
     {
         hosts: ['magiceden.io', 'magiceden.us'],
-        pathname: /^\/item-details\/(\w+)/,
+        pathname: /^\/item-details\/(\w+)/u,
         pluginID: NetworkPluginID.PLUGIN_SOLANA,
         chainId: ChainIdSolana.Mainnet,
         provider: SourceType.MagicEden,
@@ -138,7 +138,7 @@ const RULES: Rule[] = [
     // solsea
     {
         hosts: ['solsea.io'],
-        pathname: /^\/n\/(\w+)/,
+        pathname: /^\/n\/(\w+)/u,
         pluginID: NetworkPluginID.PLUGIN_SOLANA,
         chainId: ChainIdSolana.Mainnet,
         provider: SourceType.Solsea,
@@ -147,7 +147,7 @@ const RULES: Rule[] = [
     // solanart
     {
         hosts: ['solanart.io'],
-        pathname: /^\/nft\/(\w+)/,
+        pathname: /^\/nft\/(\w+)/u,
         pluginID: NetworkPluginID.PLUGIN_SOLANA,
         chainId: ChainIdSolana.Mainnet,
         provider: SourceType.Solanart,
@@ -155,7 +155,7 @@ const RULES: Rule[] = [
     // Etherscan
     {
         hosts: ['etherscan.io', 'cn.etherscan.com'],
-        pathname: /^\/nft\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/nft\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.NFTScan,
@@ -163,7 +163,7 @@ const RULES: Rule[] = [
     // Punks
     {
         hosts: ['cryptopunks.app'],
-        pathname: /^\/cryptopunks\/(details)\/(\d+)/,
+        pathname: /^\/cryptopunks\/(details)\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.NFTScan,
@@ -172,7 +172,7 @@ const RULES: Rule[] = [
     // OKX
     {
         hosts: ['www.okx.com'],
-        pathname: /^\/web3\/marketplace\/nft\/asset\/eth\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/web3\/marketplace\/nft\/asset\/eth\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.OKX,
@@ -180,7 +180,7 @@ const RULES: Rule[] = [
     // OKX legacy
     {
         hosts: ['www.okx.com'],
-        pathname: /^\/web3\/nft\/markets\/eth\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/web3\/nft\/markets\/eth\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.OKX,
@@ -188,7 +188,7 @@ const RULES: Rule[] = [
     // Uniswap
     {
         hosts: ['app.uniswap.org'],
-        pathname: /^\/nfts\/asset\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/nfts\/asset\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Uniswap,
@@ -196,14 +196,14 @@ const RULES: Rule[] = [
     // Uniswap Legacy
     {
         hosts: ['app.uniswap.org'],
-        hash: /#\/nfts\/asset\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        hash: /#\/nfts\/asset\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.Uniswap,
     },
     {
         hosts: ['nftx.io'],
-        pathname: /^\/vault\/(0x[\dA-Fa-f]{40})\/(\d+)/,
+        pathname: /^\/vault\/(0x[\dA-Fa-f]{40})\/(\d+)/u,
         pluginID: NetworkPluginID.PLUGIN_EVM,
         chainId: ChainIdEVM.Mainnet,
         provider: SourceType.NFTX,

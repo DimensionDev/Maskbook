@@ -11,7 +11,7 @@ export function formatAddress(address: string, size = 0) {
         return `${partial.slice(0, Math.max(0, 2 + size))}...${partial.slice(-size)}`
     }
     if (isValidAccountAddress(address)) return format(address)
-    if (isValidContractAddress(address)) return format(`0x${address.split(/\./g)[1]}`)
+    if (isValidContractAddress(address)) return format(`0x${address.split(/\./gu)[1]}`)
     return address
 }
 
@@ -20,11 +20,11 @@ export function formatTokenId(id: string) {
 }
 
 export function isValidAccountAddress(address: string) {
-    return /0x\w{16}/.test(address)
+    return /0x\w{16}/u.test(address)
 }
 
 export function isValidContractAddress(address: string) {
-    return /A\.\w{16}\.\w+/.test(address)
+    return /A\.\w{16}\.\w+/u.test(address)
 }
 
 export function isValidAddress(address?: string): address is string {
@@ -62,7 +62,7 @@ export function getZeroAddress() {
 
 export function getContractAddress(address: string) {
     if (isValidContractAddress(address)) {
-        const [_, contractAddress, ...identifierFragments] = address.split(/\./g)
+        const [_, contractAddress, ...identifierFragments] = address.split(/\./gu)
         return {
             address: `0x${contractAddress}`,
             identifier: identifierFragments.join('.'),

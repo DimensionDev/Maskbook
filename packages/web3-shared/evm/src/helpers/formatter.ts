@@ -68,24 +68,24 @@ export function formatDomainName(domain: string, size = 18, invalidIgnore?: bool
     if (domain.length <= size) return domain
 
     if (isEnsSubdomain(domain)) {
-        return domain.replace(/^\[([^\]]+?)]\.(.*)$/, (_, hash, mainName): string => {
+        return domain.replace(/^\[([^\]]+?)\]\.(.*)$/u, (_, hash, mainName): string => {
             return `[${hash.slice(0, 4)}...${hash.slice(-4)}].${formatDomainName(mainName, size, invalidIgnore)}`
         })
     }
 
-    return domain.replace(/^(.*)\.(\w+)$/, (_, name, suffix): string => {
+    return domain.replace(/^(.*)\.(\w+)$/u, (_, name, suffix): string => {
         return `${name.slice(0, size - 6)}...${name.slice(-2)}.${suffix}`
     })
 }
 
 export function formatKeccakHash(hash: string, size = 0) {
-    if (!/0x\w{64}/.test(hash)) return hash
+    if (!/0x\w{64}/u.test(hash)) return hash
     if (size === 0) return hash
     return `${hash.slice(0, Math.max(0, 2 + size))}...${hash.slice(-size)}`
 }
 
 export function formatNumberString(input: string, size = 0) {
-    if (!/\d+/.test(input)) return input
+    if (!/\d+/u.test(input)) return input
     if (size === 0) return input
     return `${input.slice(0, Math.max(0, size))}...${input.slice(-size)}`
 }

@@ -213,7 +213,10 @@ export const FungibleTokenInputUI = memo<FungibleTokenInputUIProps>(
                 }
                 {...props}
                 onChange={(ev) => {
-                    if (ev.currentTarget.value && !new RegExp(props.inputProps?.pattern).test(ev.currentTarget.value)) {
+                    if (
+                        ev.currentTarget.value &&
+                        !new RegExp(props.inputProps?.pattern, 'u').test(ev.currentTarget.value)
+                    ) {
                         return
                     }
                     props.onChange?.(ev)

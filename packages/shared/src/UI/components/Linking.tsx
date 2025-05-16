@@ -21,7 +21,7 @@ export function Linking(props: LinkingProps) {
                 {children ?
                     children
                 :   <Typography variant="body2" component="span" {...TypographyProps}>
-                        {hostname.replace(/^www./i, '')}
+                        {hostname.replace(/^www./iu, '')}
                     </Typography>
                 }
             </Link>

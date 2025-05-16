@@ -36,7 +36,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             const result = schema.safeParse(raw)
 
             if (!result.success) return null
-            const PAYLOAD_RE = /^🎭 {2}Verify {2}@.*? {2}with {2}@NextDotID .\nSig: .*\nMisc: /
+            const PAYLOAD_RE = /^🎭 {2}Verify {2}@.*? {2}with {2}@NextDotID .\nSig: .*\nMisc: /u
             return result.data.items.find((x) => x.type === 'text' && x.content.match(PAYLOAD_RE))?.content
         }, [raw])
 

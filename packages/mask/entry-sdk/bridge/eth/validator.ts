@@ -19,14 +19,14 @@ export function fromZodError(error: ZodError) {
 
 namespace _ {
     export const httpsURL = z.string().startsWith('https://').url()
-    export const hex = z.string().regex(/0x[\da-f]*/g)
-    export const hexAllowCap = z.string().regex(/^0x[\dA-Fa-f]+$/g)
-    export const unpadded_hex = z.string().regex(/^0x([1-9a-f]+[\da-f]*|0)$/g)
+    export const hex = z.string().regex(/0x[\da-f]*/gu)
+    export const hexAllowCap = z.string().regex(/^0x[\dA-Fa-f]+$/gu)
+    export const unpadded_hex = z.string().regex(/^0x([1-9a-f]+[\da-f]*|0)$/gu)
 
-    export const address = z.string().regex(/^0x[\d,A-Fa-f]{40}$/g)
+    export const address = z.string().regex(/^0x[\d,A-Fa-f]{40}$/gu)
     export const block_hash = z
         .string()
-        .regex(/^0x[\da-f]{64}$/g)
+        .regex(/^0x[\da-f]{64}$/gu)
         .describe('block hash')
     const block_tag = z.enum(['earliest', 'finalized', 'safe', 'latest', 'pending']).describe('block_tag')
     const block_number = unpadded_hex.describe('block_number')
@@ -37,7 +37,7 @@ namespace _ {
         (x) => (typeof x === 'number' || typeof x === 'bigint' ? '0x' + x.toString(16) : x),
         z
             .string()
-            .regex(/^0x([1-9a-f]+[\da-f]*|0)$/g)
+            .regex(/^0x([1-9a-f]+[\da-f]*|0)$/gu)
             .refine((val) => Number.parseInt(val.slice(2), 16) <= Number.MAX_SAFE_INTEGER),
     )
 
@@ -60,7 +60,7 @@ namespace _ {
         .object({
             type: z
                 .string()
-                .regex(/^0x([\d,A-Fa-f]?){1,2}$/g)
+                .regex(/^0x([\d,A-Fa-f]?){1,2}$/gu)
                 .nullish(),
             nonce: unpadded_hex.nullish(),
             to: address.nullish(),
@@ -81,7 +81,7 @@ namespace _ {
         .partial()
         .strict()
         .describe('Transaction')
-    export const transaction_hash = z.string().regex(/^0x[\da-f]{64}$/g)
+    export const transaction_hash = z.string().regex(/^0x[\da-f]{64}$/gu)
     export const transaction_index = unpadded_hex.describe('TransactionIndex')
 
     // only used in return
@@ -139,7 +139,7 @@ export const methodValidate = {
             _.address,
             z
                 .string()
-                .regex(/^0x([1-9a-f]+[\da-f]{0,31})|0$/g)
+                .regex(/^0x([1-9a-f]+[\da-f]{0,31})|0$/gu)
                 .describe('StorageSlot'),
             _.block.nullish(),
         ]),

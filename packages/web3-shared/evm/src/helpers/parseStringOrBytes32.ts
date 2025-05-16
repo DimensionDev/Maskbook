@@ -1,7 +1,7 @@
 import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
 
 // parse a name or symbol from a token response
-const BYTES32_REGEX = /^0x[\dA-Fa-f]{64}$/
+const BYTES32_REGEX = /^0x[\dA-Fa-f]{64}$/u
 
 export function parseStringOrBytes32(
     str: string | undefined,

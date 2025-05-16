@@ -4,10 +4,10 @@ import { type ChainId, isValidAddress } from '@masknet/web3-shared-solana'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 import { SolanaDomain } from '../apis/DomainAPI.js'
 
-const SOL_RE = /\S{1,256}\.sol\b/i
+const SOL_RE = /\S{1,256}\.sol\b/iu
 
 function getSolanaAddress(bio: string) {
-    const addressMatched = bio.match(/\b\w{32,44}\b/)
+    const addressMatched = bio.match(/\b\w{32,44}\b/u)
     const address = addressMatched?.[0]
     if (address && !address.startsWith('0x') && isValidAddress(address)) return address
     return

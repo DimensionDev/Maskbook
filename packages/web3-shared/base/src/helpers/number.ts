@@ -109,7 +109,7 @@ export function toFixed(value: BigNumber.Value = 0, decimalPlaces?: number) {
 
 /** Trim ending zeros of decimals */
 export function trimZero(digit: string) {
-    const result = digit.replaceAll(/\.([1-9]*)?0+$/g, (_, p1) => {
+    const result = digit.replaceAll(/\.([1-9]*)?0+$/gu, (_, p1) => {
         return p1 ? `.${p1}` : ''
     })
 
@@ -121,11 +121,7 @@ export function trimZero(digit: string) {
 }
 
 export function addThousandSeparators(num: string | number) {
-    try {
-        return num.toString().replaceAll(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ',')
-    } catch (err) {
-        // Safari doesn't support regexp look behind yet
-        const value = typeof num === 'number' ? num : Number.parseFloat(num)
-        return value.toLocaleString('en-US')
-    }
+    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 99 }).format(
+        typeof num === 'string' ? Number.parseFloat(num) : num,
+    )
 }

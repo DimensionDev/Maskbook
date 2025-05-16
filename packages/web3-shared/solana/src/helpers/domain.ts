@@ -1,3 +1,3 @@
 export function isValidDomain(domain?: string) {
-    return /.+\.sol/i.test(domain ?? '')
+    return /.\.sol/iu.test(domain ?? '')
 }

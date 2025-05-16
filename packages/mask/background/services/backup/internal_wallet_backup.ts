@@ -110,7 +110,7 @@ function keyToJWK(key: string, type: 'public'): EC_Public_JsonWebKey
 function keyToJWK(key: string, type: 'private'): EC_Private_JsonWebKey
 function keyToJWK(key: string, type: 'public' | 'private'): JsonWebKey {
     const ec = new EC('secp256k1')
-    const key_ = key.replace(/^0x/, '')
+    const key_ = key.replace(/^0x/u, '')
     const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
     const pubKey = keyPair.getPublic()
     const privKey = keyPair.getPrivate()
@@ -130,7 +130,7 @@ function base64(numbers: number[]) {
 }
 function keyToAddr(key: string, type: 'public' | 'private'): string {
     const ec = new EC('secp256k1')
-    const key_ = key.replace(/^0x/, '')
+    const key_ = key.replace(/^0x/u, '')
     const keyPair = type === 'public' ? ec.keyFromPublic(key_) : ec.keyFromPrivate(key_)
     return wallet_ts.EthereumAddress.from(Buffer.from(keyPair.getPublic(false, 'array'))).address
 }

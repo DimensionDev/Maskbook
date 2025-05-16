@@ -31,7 +31,7 @@ export const RenderLinkFragment = memo(function RenderLink(
     const sharedProps = { style, children, suggestedPostImage }
 
     if (category === 'cash') {
-        if (/^\$\d+/.test(children)) return <Text {...sharedProps} />
+        if (/^\$\d+/u.test(children)) return <Text {...sharedProps} />
         return <CashLink {...sharedProps} />
     }
     if (category === 'hash') return <HashLink {...sharedProps} />
@@ -52,7 +52,8 @@ function parseText(
                 :   <Text children={text} style={style} key={`${index} of ${i}`} />,
             )
         }
-        if (frag.category === 'normal' && !frag.content.match(/^https?:\/\//gi)) frag.content = 'http://' + frag.content
+        if (frag.category === 'normal' && !frag.content.match(/^https?:\/\//giu))
+            frag.content = 'http://' + frag.content
         return (
             <RenderLinkFragment
                 key={string}

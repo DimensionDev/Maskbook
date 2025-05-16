@@ -24,10 +24,10 @@ import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
 import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 
 // cspell:disable-next-line
-const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/gi
-const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/gi
-const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/gi
-const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/gi
+const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/giu
+const SID_RE = /[^\s()[\]]{1,256}\.bnb\b/giu
+const ARBID_RE = /[^\s()[\]]{1,256}\.arb\b/giu
+const CROSSBELL_HANDLE_RE = /[\w.]+\.csb/giu
 
 function getENSNames(userId: string, nickname: string, bio: string) {
     return [userId.match(ENS_RE), nickname.match(ENS_RE), bio.match(ENS_RE)].flatMap((result) => result ?? [])

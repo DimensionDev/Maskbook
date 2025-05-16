@@ -121,7 +121,7 @@ export function postEditorInTimelineSelector() {
 }
 
 export function isReplyPageSelector() {
-    return !!location.pathname.match(/^\/\w+\/status\/\d+$/)
+    return !!location.pathname.match(/^\/\w+\/status\/\d+$/u)
 }
 export function postEditorDraftContentSelector() {
     if (location.pathname === '/compose/post') {
@@ -213,10 +213,10 @@ export function followUserAvatarSelector() {
 }
 
 const base = querySelector<HTMLScriptElement>('#react-root ~ script')
-const handle = /"screen_name":"(.*?)"/
-const name = /"name":"(.*?)"/
-const bio = /"description":"(.*?)"/
-const avatar = /"profile_image_url_https":"(.*?)"/
+const handle = /"screen_name":"(.*?)"/u
+const name = /"name":"(.*?)"/u
+const bio = /"description":"(.*?)"/u
+const avatar = /"profile_image_url_https":"(.*?)"/u
 /**
  * first matched element can be extracted by index zero, followings are all capture groups, if no 'g' specified.
  * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/match

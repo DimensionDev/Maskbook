@@ -5,5 +5,5 @@ export function formatAlchemyTokenId(tokenId: string) {
 }
 
 export function formatAlchemyTokenAddress(address: string, identifier: string) {
-    return `A.${address.replace(/^0x/, '')}.${identifier}`
+    return `A.${address.replace(/^0x/u, '')}.${identifier}`
 }

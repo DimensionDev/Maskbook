@@ -58,12 +58,12 @@ export async function getUserByScreenName(screenName: string): Promise<TwitterBa
     const patchingFeatures: string[] = []
     const failedResponse: TwitterBaseAPI.FailedResponse = await response.json()
     for (const error of failedResponse.errors) {
-        const matched = error.message.match(/The following features cannot be null: (.*)$/)
+        const matched = error.message.match(/The following features cannot be null: (.*)$/u)
         if (matched) {
             if (process.env.NODE_ENV === 'development') {
                 console.error('Error in getUserByScreenName:', error.message)
             }
-            patchingFeatures.push(...matched[1].split(/,\s+/))
+            patchingFeatures.push(...matched[1].split(/,\s+/u))
         }
     }
     if (patchingFeatures.length) {
