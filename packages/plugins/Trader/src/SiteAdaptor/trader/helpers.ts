@@ -5,7 +5,7 @@ import { SchemaType } from '@masknet/web3-shared-evm'
 import type { RouterListItem } from '@masknet/web3-providers/types'
 import { BigNumber } from 'bignumber.js'
 
-const MINIMUM_AMOUNT_RE = /((?:Minimum|Maximum) amount is\s+)(\d+)/
+const MINIMUM_AMOUNT_RE = /((?:Minimum|Maximum) amount is\s+)(\d+)/u
 export function fixBridgeMessage(message: string, token?: Web3Helper.FungibleTokenAll) {
     // "Minimum amount is  1136775000000000000"
     // "Maximum amount is  1136775000000000000"

@@ -73,7 +73,7 @@ async function recoverWalletFromMnemonicWords(
 
 async function recoverWalletFromPrivateKey(privateKey: string) {
     const ec = new EC('secp256k1')
-    const privateKey_ = privateKey.replace(/^0x/, '').trim() // strip 0x
+    const privateKey_ = privateKey.replace(/^0x/u, '').trim() // strip 0x
     const key = ec.keyFromPrivate(privateKey_)
     return {
         address: wallet_ts.EthereumAddress.from(key.getPublic(false, 'array') as any).address,
@@ -85,7 +85,7 @@ async function recoverWalletFromPrivateKey(privateKey: string) {
 }
 
 function privateKeyVerify(key: string) {
-    if (!/[\da-f]{64}/i.test(key)) return false
+    if (!/[\da-f]{64}/iu.test(key)) return false
     const k = new BigNumber(key, 16)
     const n = new BigNumber('fffffffffffffffffffffffffffffffebaaedce6af48a03bbfd25e8cd0364141', 16)
     return !k.isZero() && k.isLessThan(n)

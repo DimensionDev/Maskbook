@@ -160,8 +160,8 @@ export function collectVerificationPost(keyword: string) {
         const isVerified =
             postId &&
             content.isSome() &&
-            content.value.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '') ===
-                keyword.toLowerCase().replaceAll(/\r\n|\n|\r/gm, '')
+            content.value.toLowerCase().replaceAll(/\r\n|\n|\r/gmu, '') ===
+                keyword.toLowerCase().replaceAll(/\r\n|\n|\r/gmu, '')
 
         if (isVerified && userId) {
             return new PostIdentifier(userId, postId)

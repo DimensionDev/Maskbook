@@ -177,7 +177,7 @@ export function useLineChart(
                 .call((text) =>
                     text
                         .selectAll('tspan')
-                        .data((textContent + '').split(/\n/).map((x) => x.trim()))
+                        .data((textContent + '').split('\n').map((x) => x.trim()))
                         .join('tspan')
                         .attr('x', 0)
                         .attr('y', (d, i) => `${i * 1.2}em`)

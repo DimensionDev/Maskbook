@@ -86,7 +86,7 @@ function getCoverUriFromUrl(url: string) {
     if (!parsed) return ''
 
     if (parsed.origin === 'https://media.firefly.land' && url.endsWith('.m3u8')) {
-        return url.replace(/[^/]+\.m3u8$/, 'thumbnail.jpg')
+        return url.replace(/[^/]+\.m3u8$/u, 'thumbnail.jpg')
     }
 
     return ''
@@ -258,7 +258,7 @@ function fixUrls(urls: Array<string | undefined>) {
     return uniqBy(compact(urls), (x) => x).map(fixUrlProtocol)
 }
 
-const emailRegExp = new RegExp(EMAIL_REGEX, 'g')
+const emailRegExp = new RegExp(EMAIL_REGEX, 'gu')
 
 const BLOCKED_URLS = ['imagedelivery.net']
 
@@ -268,7 +268,7 @@ export function getEmbedUrls(content: string, embedUrls: string[]) {
     return oembedUrls.filter((x) => !BLOCKED_URLS.some((y) => x.includes(y)))
 }
 export function fixUrlProtocol(url: string) {
-    if (url.match(/^https?:\/\//)) {
+    if (url.match(/^https?:\/\//u)) {
         return url
     }
     return `https://${url}`

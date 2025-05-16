@@ -76,7 +76,7 @@ const handleRe = new RegExp(
         'zil',
         'blockchain',
     ].join('|')})$`,
-    'i',
+    'iu',
 )
 
 function isValidHandle(handle: string): boolean {
@@ -441,13 +441,10 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
     ): Promise<T[]> {
         const lowerKeyword = keyword.toLowerCase()
         // filter out 'domain/xxx' or string ends with punctuation marks like 'eth.'
-        if (
-            lowerKeyword.replace(/([#$])?([\s\w+.])+/, '').length > 0 ||
-            !new RegExp(/(\w)+/).test(lowerKeyword.at(-1)!)
-        )
+        if (lowerKeyword.replace(/([#$])?([\s\w+.])+/u, '').length > 0 || !/(\w)+/u.test(lowerKeyword.at(-1)!))
             return EMPTY_LIST
         // #MASK or $MASK or MASK
-        const [_, name = ''] = lowerKeyword.match(/(\w+)/) ?? []
+        const [_, name = ''] = lowerKeyword.match(/(\w+)/u) ?? []
 
         // BoredApeYC or CryptoPunks nft twitter project
         if (type === SearchResultType.CollectionListByTwitterHandle)

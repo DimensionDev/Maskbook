@@ -11,7 +11,7 @@ import { useMemo } from 'react'
 import { Trans } from '@lingui/react/macro'
 
 const isGitcoin = (x: string): boolean => {
-    return /^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/.test(x)
+    return /^https:\/\/explorer\.gitcoin\.co\/#\/projects\/0x[\dA-Fa-f]{64}/u.test(x)
 }
 
 function Renderer(props: { id: string; link: string }) {
@@ -32,7 +32,7 @@ const site: Plugin.SiteAdaptor.Definition = {
             if (x.isNone()) return null
             return parseURLs(x.value).find(isGitcoin)
         }, [props.message])
-        const id = link?.match(/0x[\dA-Fa-f]{64}/)?.[0]
+        const id = link?.match(/0x[\dA-Fa-f]{64}/u)?.[0]
         if (!id) return null
         return <Renderer id={id} link={link} />
     },
@@ -41,7 +41,7 @@ const site: Plugin.SiteAdaptor.Definition = {
         const links = usePostInfoDetails.mentionedLinks()
 
         const link = links.find(isGitcoin)
-        const id = link?.match(/0x[\dA-Fa-f]{64}/)?.[0]
+        const id = link?.match(/0x[\dA-Fa-f]{64}/u)?.[0]
 
         if (!id) return null
         return <Renderer id={id} link={link} />

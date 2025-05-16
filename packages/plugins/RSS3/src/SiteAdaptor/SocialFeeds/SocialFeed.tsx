@@ -196,7 +196,7 @@ export const SocialFeed = memo<SocialFeedProps>(function SocialFeed({ post, verb
     const media = post.metadata.content?.asset
     const postContent = post.metadata.content?.content
 
-    const isImagePost = postContent ? /https?:\/\/.*?\.(jpg|png)$/.test(postContent) : false
+    const isImagePost = postContent ? /https?:\/\/.*?\.(jpg|png)$/u.test(postContent) : false
     const soloImage = verbose && isImagePost
 
     const imageSize = verbose ? '100%' : 64

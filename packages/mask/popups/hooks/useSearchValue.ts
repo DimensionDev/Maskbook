@@ -10,7 +10,7 @@ export function useSearchValue(value: string, type?: NextIDPlatform) {
         queryFn: async () => {
             if (!type) return ''
             if (value.length === 44) return new ECKeyIdentifier('secp256k1', value).publicKeyAsHex ?? value
-            if (type === NextIDPlatform.Twitter) return value.replace(/^@/, '').toLowerCase()
+            if (type === NextIDPlatform.Twitter) return value.replace(/^@/u, '').toLowerCase()
 
             if (value.endsWith('.eth')) return (await ENS.lookup(value))?.toLowerCase() || ''
 

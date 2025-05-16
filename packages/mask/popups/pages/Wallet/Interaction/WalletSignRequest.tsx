@@ -97,6 +97,6 @@ export function WalletSignRequest(props: InteractionItemProps) {
 function tryParseStringMessage(message: string) {
     if (!message.startsWith('0x')) return message
     return new TextDecoder().decode(
-        new Uint8Array([...message.slice(2).matchAll(/([\da-f]{2})/gi)].map((i) => Number.parseInt(i[0], 16))),
+        new Uint8Array([...message.slice(2).matchAll(/([\da-f]{2})/giu)].map((i) => Number.parseInt(i[0], 16))),
     )
 }

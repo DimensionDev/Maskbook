@@ -29,7 +29,7 @@ export enum MirrorPageType {
     Dashboard = 'dashboard',
 }
 
-export const MIRROR_ENTRY_ID = /[\w|-]{43}/i
+export const MIRROR_ENTRY_ID = /[\w|-]{43}/iu
 
 export function getMirrorPageType(url?: string) {
     if (!url) return
@@ -48,7 +48,7 @@ export function getMirrorUserId(href?: string) {
     if (!href) return null
 
     const urlObj = new URL(href)
-    const url = urlObj.href.replace(urlObj.search, '').replace(/\/$/, '')
+    const url = urlObj.href.replace(urlObj.search, '').replace(/\/$/u, '')
 
     const pageType = getMirrorPageType(url)
 
@@ -59,15 +59,15 @@ export function getMirrorUserId(href?: string) {
 
     let tempURL = url
     if (pageType === MirrorPageType.Collection) {
-        tempURL = url.replace(/\/collection(.*)/, '')
+        tempURL = url.replace(/\/collection(.*)/u, '')
     }
     if (pageType === MirrorPageType.Post) {
-        tempURL = url.replace(/\/[\w|-]{43}/i, '')
+        tempURL = url.replace(/\/[\w|-]{43}/iu, '')
     }
 
-    const ens = last(tempURL.match(/https:\/\/mirror.xyz\/(.*)/))
+    const ens = last(tempURL.match(/https:\/\/mirror.xyz\/(.*)/u))
     if (ens) return ens
-    const match = last(tempURL.match(/https:\/\/(.*)\.mirror\.xyz/))
+    const match = last(tempURL.match(/https:\/\/(.*)\.mirror\.xyz/u))
 
     return match ? `${match}.eth` : match
 }

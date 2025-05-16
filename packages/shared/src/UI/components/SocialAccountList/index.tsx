@@ -109,7 +109,7 @@ export const SocialAccountList = memo(function SocialAccountList({
                 ...web3bioProfiles,
             ],
             (x) => {
-                const identity = x.platform === NextIDPlatform.LENS ? x.identity.replace(/\.lens$/, '') : x.identity
+                const identity = x.platform === NextIDPlatform.LENS ? x.identity.replace(/\.lens$/u, '') : x.identity
                 return `${x.platform}-${identity}`
             },
         )

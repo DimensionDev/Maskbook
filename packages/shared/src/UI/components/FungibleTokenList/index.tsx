@@ -260,7 +260,7 @@ export function FungibleTokenList<T extends NetworkPluginID>(props: FungibleToke
     const isAddressNotContract = addressType !== AddressType.Contract && Utils.isValidAddress(keyword)
 
     const searchError =
-        keyword.match(/^0x.+/i) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
+        keyword.match(/^0x.+/iu) && !Utils.isValidAddress(keyword) ? <Trans>Incorrect contract address.</Trans> : ''
     useEffect(() => {
         onSearchError?.(!!searchError)
     }, [searchError, !searchError])

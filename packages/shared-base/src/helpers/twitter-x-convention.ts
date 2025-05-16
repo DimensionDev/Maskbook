@@ -13,7 +13,7 @@ export function twitterDomainMigrate(url: string) {
         if (u.hostname === 'twitter.com') {
             u.hostname = 'x.com'
         } else if (u.hostname.endsWith('.twitter.com')) {
-            u.hostname = u.hostname.replace(/\.twitter\.com$/, '.x.com')
+            u.hostname = u.hostname.replace(/\.twitter\.com$/u, '.x.com')
         }
         return u.href
     }
@@ -21,7 +21,7 @@ export function twitterDomainMigrate(url: string) {
         if (u.hostname === 'x.com') {
             u.hostname = 'twitter.com'
         } else if (u.hostname.endsWith('.x.com')) {
-            u.hostname = u.hostname.replace(/\.x\.com$/, '.twitter.com')
+            u.hostname = u.hostname.replace(/\.x\.com$/u, '.twitter.com')
         }
     }
     return url

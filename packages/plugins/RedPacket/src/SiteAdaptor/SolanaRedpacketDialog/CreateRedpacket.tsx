@@ -220,9 +220,9 @@ export function CreateSolRedPacket() {
     // shares
     const onShareChange = useCallback(
         (ev: ChangeEvent<HTMLInputElement>) => {
-            const inputShares = ev.currentTarget.value.replaceAll(/[,.]/g, '')
+            const inputShares = ev.currentTarget.value.replaceAll(/[,.]/gu, '')
             if (inputShares === '') setShares(0)
-            else if (/^[1-9]+\d*$/.test(inputShares)) {
+            else if (/^[1-9]+\d*$/u.test(inputShares)) {
                 const parsed = Number.parseInt(inputShares, 10)
                 if (parsed >= RED_PACKET_MIN_SHARES && parsed <= SOL_REDPACKET_MAX_SHARES) {
                     setShares(Number.parseInt(inputShares, 10))

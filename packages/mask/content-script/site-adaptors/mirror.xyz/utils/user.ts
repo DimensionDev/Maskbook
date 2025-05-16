@@ -22,7 +22,7 @@ export async function getUserIdentity(userAddress: string): Promise<SocialIdenti
  */
 export function getAuthorWallet() {
     let authorWallet = location.pathname.split('/')[1].toLowerCase()
-    const matches = location.hostname.match(/(.*)\.mirror\.xyz$/)
+    const matches = location.hostname.match(/(.*)\.mirror\.xyz$/u)
     authorWallet = matches ? `${matches[1]}.eth` : authorWallet
     return authorWallet
 }

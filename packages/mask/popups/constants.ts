@@ -1,6 +1,6 @@
 import { EnhanceableSite } from '@masknet/shared-base'
 
-export const MATCH_PASSWORD_RE = /^(?=.{8,20}$)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\dA-Za-z]).*/
+export const MATCH_PASSWORD_RE = /^(?=.{8,20}$)(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^\dA-Za-z]).*/u
 export const MAX_FILE_SIZE = 10 * 1024 * 1024
 
 export const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite | string, string> = {

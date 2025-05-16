@@ -63,7 +63,8 @@ class NonceAPI implements Middleware<ConnectionContext> {
 
         try {
             const message = context.error?.message ?? ''
-            const isGeneralErrorNonce = /\bnonce|transaction\b/im.test(message) && /\b(low|high|old)\b/im.test(message)
+            const isGeneralErrorNonce =
+                /\bnonce|transaction\b/imu.test(message) && /\b(low|high|old)\b/imu.test(message)
             const isAuroraErrorNonce = message.includes('ERR_INCORRECT_NONCE')
 
             // if a nonce error was occurred then reset the nonce

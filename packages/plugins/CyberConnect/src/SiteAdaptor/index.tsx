@@ -9,7 +9,7 @@ import { extractTextFromTypedMessage } from '@masknet/typed-message'
 import Profile from './Profile.js'
 import { Trans } from '@lingui/react/macro'
 
-const isCyberConnectUrl = (x: string): boolean => !!x.match(/app\.cyberconnect\.me\/.+\/(0x[\dA-Fa-f]{40}|\w+.eth)/)
+const isCyberConnectUrl = (x: string): boolean => !!x.match(/app\.cyberconnect\.me\/.+\/(0x[\dA-Fa-f]{40}|\w+.eth)/u)
 
 function Renderer({ url }: { url: string }) {
     usePluginWrapper(true)

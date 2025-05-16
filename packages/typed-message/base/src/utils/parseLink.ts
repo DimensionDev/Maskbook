@@ -34,7 +34,7 @@ export function parseLink(text: string): ParseLinkResult[] {
     return result.filter((x) => x.content).flatMap((x) => (x.type === 'text' ? parseTag(x.content) : x))
 }
 
-const TagLike = /([#$@][\w-]+)/g
+const TagLike = /([#$@][\w-]+)/gu
 const map = {
     '@': 'user',
     '#': 'hash',

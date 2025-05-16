@@ -68,7 +68,7 @@ export const Component = memo(function EditNetwork() {
     const { classes } = useStyles()
     const navigate = useNavigate()
     const id = useParams<{ id: string }>().id
-    const chainId = id?.match(/^\d+$/) ? Number.parseInt(id, 10) : undefined
+    const chainId = id?.match(/^\d+$/u) ? Number.parseInt(id, 10) : undefined
     const isEditing = !!id && !chainId
     const { chainId: currentChainId, setChainId } = useChainContext()
 

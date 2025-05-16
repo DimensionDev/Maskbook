@@ -16,7 +16,7 @@ export async function cleanPo() {
                     file,
                     str
                         .split('\n')
-                        .map((x) => x.replace(/^#.+/, ''))
+                        .map((x) => x.replace(/^#.+/u, ''))
                         .filter(Boolean)
                         .join('\n'),
                 )

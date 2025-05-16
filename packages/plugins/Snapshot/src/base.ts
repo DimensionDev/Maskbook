@@ -20,7 +20,7 @@ export const base: Plugin.Shared.Definition = {
         target: 'stable',
     },
     contribution: {
-        postContent: new Set([/https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+/]),
+        postContent: new Set([/https:\/\/(?:www.)?snapshot.(org|page)\/#\/(.*?)\/proposal\/[\dA-Za-z]+/u]),
     },
     i18n: languages,
 }

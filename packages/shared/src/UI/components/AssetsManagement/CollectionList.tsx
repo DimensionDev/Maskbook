@@ -229,7 +229,7 @@ export const CollectionList = memo(function CollectionList({
         if (!searchKeyword) return assets
         const kw = searchKeyword.toLowerCase()
         return assets.filter((x) => {
-            return x.metadata?.name.includes(kw) || x.metadata?.tokenId?.includes(kw.replace(/^#/, ''))
+            return x.metadata?.name.includes(kw) || x.metadata?.tokenId?.includes(kw.replace(/^#/u, ''))
         })
     }, [getAssets, currentCollection, searchKeyword])
 

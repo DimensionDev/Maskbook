@@ -94,7 +94,7 @@ export const LinkifyOptions: Opts = {
 
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
-    return htmlString.trimStart().replaceAll(/<[^>]+>/g, '')
+    return htmlString.trimStart().replaceAll(/<[^>]+>/gu, '')
 }
 
 export function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {

@@ -11,7 +11,7 @@ import { formatWriter, getMirrorPageType, MirrorPageType, MIRROR_ENTRY_ID } from
 import { EnhanceableSite, PostIdentifier } from '@masknet/shared-base'
 import { getAuthorWallet } from '../utils/user.js'
 
-const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//i
+const MIRROR_LINK_PREFIX = /https(.*)mirror.xyz(.*)\//iu
 
 function queryInjectPoint(node: HTMLElement) {
     const authorWallet = getAuthorWallet()

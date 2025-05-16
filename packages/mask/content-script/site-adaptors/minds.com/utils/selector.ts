@@ -38,7 +38,7 @@ export function handleSelector() {
 
 export function selfInfoSelectors() {
     return {
-        handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1).replace(/^@/, ''), // Could include `@` by chance.
+        handle: handleSelector().evaluate()?.getAttribute('href')?.slice(1).replace(/^@/u, ''), // Could include `@` by chance.
         avatar: querySelector<HTMLImageElement>('.m-sidebarNavigation__item--user > a > div > img').evaluate()?.src,
     }
 }

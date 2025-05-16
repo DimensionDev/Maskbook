@@ -13,7 +13,7 @@ export const resolveNextIDPlatform = (value: string) => {
     if (domain.endsWith('.eth') || domain.endsWith('.lens')) return NextIDPlatform.Ethereum
 
     const userId = value
-    if (/^@?\w{1,15}$/.test(userId)) return NextIDPlatform.Twitter
+    if (/^@?\w{1,15}$/u.test(userId)) return NextIDPlatform.Twitter
 
     return
 }

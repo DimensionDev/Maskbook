@@ -123,7 +123,7 @@ export function PreviewBox(props: Props) {
     const { classes, cx } = useStyles()
 
     const renderPreview = (mediaUrl: string, imageUrl: string) => {
-        if (/\.(mp4|webm|ogg)/.test(mediaUrl ?? '')) {
+        if (/\.(mp4|webm|ogg)/u.test(mediaUrl ?? '')) {
             return (
                 <video className={classes.video} autoPlay loop muted playsInline poster={imageUrl}>
                     <source

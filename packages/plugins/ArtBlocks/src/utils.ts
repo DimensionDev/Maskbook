@@ -4,7 +4,7 @@ import { artBlocksHostnames, artBlocksPathnameRegex } from './constants.js'
 
 export function checkUrl(url: string): boolean {
     const protocol = 'https://'
-    const _url = new URL(/^https?:\/\//.test(url) ? url : protocol + url)
+    const _url = new URL(/^https?:\/\//u.test(url) ? url : protocol + url)
 
     return artBlocksHostnames.includes(_url.hostname) && artBlocksPathnameRegex.test(_url.pathname)
 }

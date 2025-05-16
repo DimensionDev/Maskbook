@@ -36,7 +36,7 @@ TypedMessageTransformers.addTransformer(ParseLinkTransformer, Order.ParseLink)
 TypedMessageTransformers.addTransformer(TypedMessagePluginTransformers.subscription, Order.Plugins)
 
 // We will use MaskPayload transformer to replace it in the future PR.
-const matcher = /^https?:\/\/mask(\.io|book\.com)/i
+const matcher = /^https?:\/\/mask(\.io|book\.com)/iu
 const textPayloadChar = /([\w+/=|:])/iu
 const emoji = '\u{1F3BC}'
 TypedMessageTransformers.addTransformer(function visitor(message, context) {

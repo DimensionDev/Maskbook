@@ -49,7 +49,7 @@ export function useModalNavigate() {
             searchParams.set('modal', urlcat(path, params || {}))
             // useLocation().pathname is pathname of modal Routes (maybe since a certain version)
             // So we use pathname in hash instead
-            const mainLocationPathname = location.hash.slice(1).replace(/\?.*$/, '')
+            const mainLocationPathname = location.hash.slice(1).replace(/\?.*$/u, '')
             navigate(`${mainLocationPathname}?${searchParams.toString()}`)
         },
         [navigate, searchParams],

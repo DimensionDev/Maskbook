@@ -7,7 +7,7 @@ export async function fetchSandboxedPluginManifest(addr: string): Promise<unknow
     return JSON.parse(
         text
             .split('\n')
-            .filter((x) => !x.match(/^ +\/\//))
+            .filter((x) => !x.match(/^ +\/\//u))
             .join('\n'),
     )
 }

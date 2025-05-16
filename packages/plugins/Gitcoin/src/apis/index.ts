@@ -149,7 +149,7 @@ export async function fetchLegacyProjectIds(id: string) {
 }
 
 export async function fetchProjectById(id: string) {
-    if (!/0x[\dA-Fa-f]{64}/.test(id)) throw new Error('Invalid project id')
+    if (!/0x[\dA-Fa-f]{64}/u.test(id)) throw new Error('Invalid project id')
     const projects = await fetchCachedJSON<{ data: { projects: GrantProject[] } }>(GITCOIN_API_GRANTS_V1, {
         method: 'POST',
         headers: {
@@ -168,7 +168,7 @@ export async function fetchProjectById(id: string) {
 }
 
 export async function fetchApplications(id: string) {
-    if (!/0x[\dA-Fa-f]{64}/.test(id)) throw new Error('Invalid project id')
+    if (!/0x[\dA-Fa-f]{64}/u.test(id)) throw new Error('Invalid project id')
 
     const legacyProjectIds = await fetchLegacyProjectIds(id)
 

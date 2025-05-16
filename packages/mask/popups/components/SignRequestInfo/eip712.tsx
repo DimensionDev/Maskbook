@@ -109,8 +109,8 @@ export function RenderEIP712({ data, messageTitle, title }: { data: Data; title:
                             </Link>
                         </Tooltip>
         }
-        if (fieldType.match(/\[(\d+)?]$/)) {
-            const type = fieldType.replace(/\[(\d+)?]$/, '')
+        if (fieldType.match(/\[(\d+)?\]$/u)) {
+            const type = fieldType.replace(/\[(\d+)?\]$/u, '')
             const data = Array.isArray(fieldData) ? fieldData : []
             return (
                 <ol className={classes.list}>

@@ -25,15 +25,15 @@ export function injectPostInspectorAtTwitter(signal: AbortSignal, current: PostI
             for (const a of content.querySelectorAll('a')) {
                 if (TwitterDecoder(a.title).isSome()) hideDOM(a)
 
-                if (/^https?:\/\/mask(\.io|book\.com)$/i.test(a.title)) hideDOM(a)
+                if (/^https?:\/\/mask(\.io|book\.com)$/iu.test(a.title)) hideDOM(a)
             }
             for (const span of content.querySelectorAll('span')) {
                 // match (.) (\n) (—§—) (any space) (/*)
                 // Note: In Chinese we can't hide dom because "解密这条推文。\n—§—" is in the same DOM
                 // hide it will break the sentence.
-                if (span.innerText.match(/^\.\n\u2014\u00A7\u2014 +\/\* $/)) hideDOM(span)
+                if (span.innerText.match(/^\.\n\u2014\u00A7\u2014 +\/\* $/u)) hideDOM(span)
                 // match (any space) (*/) (any space)
-                if (span.innerText.match(/^ +\*\/ ?$/)) hideDOM(span)
+                if (span.innerText.match(/^ +\*\/ ?$/u)) hideDOM(span)
             }
             const article = contentContainer.closest('article')
             if (article && payloadContext?.imageDecryptedResults?.length) {

@@ -135,7 +135,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
     if (node.destroyed) return null
     // In single url
     // cspell:disable-next-line
-    if (location.href.match(/plugins.+(perma.+story_fbid%3D|posts%2F)?/)) {
+    if (location.href.match(/plugins.+(perma.+story_fbid%3D|posts%2F)?/u)) {
         const url = new URL(location.href)
         return url.searchParams.get('id')
     } else {
@@ -146,7 +146,7 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
                 postTimeNode1 ?
                     (postTimeNode1
                         .getAttribute('href')
-                        ?.match(/story_fbid=(\d+)/g)?.[0]
+                        ?.match(/story_fbid=(\d+)/gu)?.[0]
                         .split('=')[1] ?? null)
                 :   null
 
@@ -157,10 +157,10 @@ function getPostID(node: DOMProxy, root: HTMLElement): null | string {
                 postTimeNode2 ?
                     (postTimeNode2
                         .getAttribute('href')
-                        ?.match(/posts\/(\w+)/g)?.[0]
+                        ?.match(/posts\/(\w+)/gu)?.[0]
                         .split('/')[1] ?? null)
                 :   null
-            if (postIdMode2 && /^-?\w+$/.test(postIdMode2)) return postIdMode2
+            if (postIdMode2 && /^-?\w+$/u.test(postIdMode2)) return postIdMode2
         } catch {
             return null
         }

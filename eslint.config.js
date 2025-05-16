@@ -107,7 +107,7 @@ const avoidMistakeRules = {
     '@typescript-eslint/no-wrapper-object-types': 'error',
     /// Unicode support
     'no-misleading-character-class': 'error', // RegEx
-    // 'require-unicode-regexp': 'error', // RegEx modern RegEx with Unicode support
+    'require-unicode-regexp': 'error', // RegEx modern RegEx with Unicode support
     // 'unicorn/prefer-code-point': 'error',
     // '@masknet/no-builtin-base64': 'warn', // Note: it fixes to Node's Buffer
     /// type safety

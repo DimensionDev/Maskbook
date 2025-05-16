@@ -18,7 +18,7 @@ export function useParseRedPacket() {
     const { account } = useChainContext()
     const me = useLastRecognizedIdentity()
     const myProfileId = me?.profileId
-    const linksWithPayload = links.filter((x) => /\bPostData_v\d=/.test(x))
+    const linksWithPayload = links.filter((x) => /\bPostData_v\d=/u.test(x))
 
     return useQuery({
         enabled: images.length > 0 || linksWithPayload.length > 0,

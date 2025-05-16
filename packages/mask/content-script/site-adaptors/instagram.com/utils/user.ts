@@ -38,7 +38,7 @@ export function getAvatar() {
     return imageURL.trim()
 }
 
-const INSTAGRAM_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/
+const INSTAGRAM_AVATAR_ID_MATCH = /(\w+).(?:png|jpg|gif|bmp)/u
 
 export function getAvatarId(avatarURL: string) {
     if (!avatarURL) return ''

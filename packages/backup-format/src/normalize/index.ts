@@ -18,7 +18,7 @@ export async function normalizeBackup(data: unknown): Promise<NormalizedBackup.D
 
     // fix invalid URL
     normalized.settings.grantedHostPermissions = normalized.settings.grantedHostPermissions.filter((url) =>
-        /^(http|<all_urls>)/.test(url),
+        /^(http|<all_urls>)/u.test(url),
     )
     return normalized
 }

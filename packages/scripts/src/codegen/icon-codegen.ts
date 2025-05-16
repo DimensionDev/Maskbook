@@ -10,7 +10,7 @@ const pattern = 'packages/icons/**/*.@(svg|jpe?g|png)'
 const iconRoot = new URL('./icons/', PKG_PATH)
 const CODE_FILE = fileURLToPath(new URL('./icon-generated-as', iconRoot))
 
-const dynamicColorRe = /\w=('|")currentColor\1|var\(--icon-color/
+const dynamicColorRe = /\w=('|")currentColor\1|var\(--icon-color/u
 
 const attr2KeyValue = (attr: string) => {
     const index = attr.indexOf(':')
@@ -19,11 +19,11 @@ const attr2KeyValue = (attr: string) => {
 function svg2jsx(code: string) {
     return code
         .trim()
-        .replaceAll(/(\w+-\w+)=('|").*?\2/g, (p: string, m1: string) => {
+        .replaceAll(/(\w+-\w+)=('|").*?\2/gu, (p: string, m1: string) => {
             return p.replace(m1, camelCase(m1))
         })
         .replaceAll('xlink:href', 'xlinkHref')
-        .replaceAll(/\bstyle=('|")(.+?)\1/g, (_p: string, _m1: string, style: string) => {
+        .replaceAll(/\bstyle=('|")(.+?)\1/gu, (_p: string, _m1: string, style: string) => {
             const attributes = style
                 .split(';')
                 .map(attr2KeyValue)
@@ -35,7 +35,7 @@ function svg2jsx(code: string) {
 function getIntrinsicSize(data: string | Buffer): [number, number] | undefined {
     if (typeof data === 'string') {
         // from `viewBox="0 0 2124 660"`, we match `2124 / 660` out.
-        const match = data.match(/viewBox="0 0 (\d+) (\d+)"/)
+        const match = data.match(/viewBox="0 0 (\d+) (\d+)"/u)
         if (match) {
             return [Number.parseFloat(match[1]), Number.parseFloat(match[2])]
         }
@@ -135,7 +135,7 @@ async function generateIcons() {
         })
 
     for (const [icon, variant] of Object.entries(variants)) {
-        const Ident = upperFirst(icon.replace(/\.(\w)/, (_, c: string) => c.toUpperCase()))
+        const Ident = upperFirst(icon.replace(/\.(\w)/u, (_, c: string) => c.toUpperCase()))
         const nameField = JSON.stringify(icon)
         const variantsField = variant
             .sort((a, b) => a.args[0].length - b.args[0].length)
@@ -223,7 +223,7 @@ function createLink(x: string) {
     // Blocked by: https://github.com/microsoft/TypeScript/issues/47718
     //             https://github.com/microsoft/vscode/issues/86564
     const absolutePath = new URL(x, iconRoot)
-    return `[${x.replace(/^\./, 'packages/icons')}](${absolutePath})`
+    return `[${x.replace(/^\./u, 'packages/icons')}](${absolutePath})`
 }
 
 export async function iconCodegen() {

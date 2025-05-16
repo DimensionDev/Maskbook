@@ -14,6 +14,6 @@ export const base: Plugin.Shared.Definition = {
         supports: { type: 'opt-in', sites: {} },
         target: 'insider',
     },
-    contribution: { postContent: new Set([/https:\/\/app.cyberconnect.me/]) },
+    contribution: { postContent: new Set([/https:\/\/app.cyberconnect.me/u]) },
     i18n: languages,
 }

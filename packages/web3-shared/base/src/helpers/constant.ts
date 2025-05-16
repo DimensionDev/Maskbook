@@ -3,7 +3,7 @@ import type { ChainIdEnum, Constants, Primitive } from './types.js'
 
 function replaceAll(input: string, values: Record<string, string>) {
     if (!input.includes('${')) return input
-    return input.replaceAll(/\${([^}]+)}/g, (match, p1) => values[p1] ?? match)
+    return input.replaceAll(/\$\{([^}]+)\}/gu, (match, p1) => values[p1] ?? match)
 }
 
 export function transformAll<ChainId extends number, T extends Constants>(

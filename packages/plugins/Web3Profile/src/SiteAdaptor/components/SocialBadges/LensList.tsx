@@ -93,7 +93,7 @@ export const LensList = memo(function LensList({ accounts }: Props) {
                 return compact(
                     nativeAccounts.map((nativeAccount) => {
                         const target = accounts.find(
-                            (x) => x.handle.replace(/\.lens$/, '') === nativeAccount.username?.localName,
+                            (x) => x.handle.replace(/\.lens$/u, '') === nativeAccount.username?.localName,
                         )
                         if (!target) return
                         return {
@@ -114,7 +114,7 @@ export const LensList = memo(function LensList({ accounts }: Props) {
             return compact(
                 nativeAccounts.map((nativeAccount) => {
                     const target = accounts.find(
-                        (x) => x.handle.replace(/\.lens$/, '') === nativeAccount.username?.localName,
+                        (x) => x.handle.replace(/\.lens$/u, '') === nativeAccount.username?.localName,
                     )
                     if (!target) return
                     const status = followStatus.find((x) =>

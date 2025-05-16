@@ -5,10 +5,10 @@ export function relativeRouteOf(parent: DashboardRoutes): (child: DashboardRoute
 export function relativeRouteOf(parent: PopupRoutes | DashboardRoutes) {
     return (child: string) => {
         if (!child.startsWith(parent)) throw new Error(`${child} is not a child of ${parent}`)
-        return child.slice(parent.length).replace(/^\//, '')
+        return child.slice(parent.length).replace(/^\//u, '')
     }
 }
 export function relativeRoute(parent: string, child: string) {
     if (!child.startsWith(parent)) throw new Error(`${child} is not a child of ${parent}`)
-    return child.slice(parent.length).replace(/^\//, '')
+    return child.slice(parent.length).replace(/^\//u, '')
 }

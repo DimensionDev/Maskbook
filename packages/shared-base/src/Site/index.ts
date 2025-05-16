@@ -3,23 +3,23 @@ import { Sniffings } from '../Sniffings/index.js'
 import { ExtensionSite, EnhanceableSite } from './types.js'
 
 const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
-    [EnhanceableSite.Localhost]: /^localhost$/i,
-    [EnhanceableSite.Facebook]: /(^|\.)facebook\.com$/i,
-    [EnhanceableSite.Twitter]: /(^|\.)(twitter|x)\.com$/i,
-    [EnhanceableSite.Minds]: /(^|\.)minds\.com$/i,
-    [EnhanceableSite.Instagram]: /(^|\.)instagram\.com$/i,
-    [EnhanceableSite.OpenSea]: /(^|\.)opensea\.io$/i,
-    [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/i,
+    [EnhanceableSite.Localhost]: /^localhost$/iu,
+    [EnhanceableSite.Facebook]: /(^|\.)facebook\.com$/iu,
+    [EnhanceableSite.Twitter]: /(^|\.)(twitter|x)\.com$/iu,
+    [EnhanceableSite.Minds]: /(^|\.)minds\.com$/iu,
+    [EnhanceableSite.Instagram]: /(^|\.)instagram\.com$/iu,
+    [EnhanceableSite.OpenSea]: /(^|\.)opensea\.io$/iu,
+    [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/iu,
     [EnhanceableSite.Firefly]:
         process.env.NODE_ENV === 'production' ?
-            /(?:^(?:firefly\.|firefly-staging\.|firefly-canary\.)?mask\.social|[\w-]+\.vercel\.app)$/i
-        :   /^localhost:\d+$/,
+            /(?:^(?:firefly\.|firefly-staging\.|firefly-canary\.)?mask\.social|[\w-]+\.vercel\.app)$/iu
+        :   /^localhost:\d+$/u,
 }
 
 const matchExtensionSitePathname: Record<ExtensionSite, RegExp> = {
-    [ExtensionSite.Dashboard]: /dashboard\.html/i,
-    [ExtensionSite.Popup]: /popups\.html/i,
-    [ExtensionSite.Swap]: /swap\.html/i,
+    [ExtensionSite.Dashboard]: /dashboard\.html/iu,
+    [ExtensionSite.Popup]: /popups\.html/iu,
+    [ExtensionSite.Swap]: /swap\.html/iu,
 }
 
 export const EnhanceableSiteList = getEnumAsArray(EnhanceableSite).map((x) => x.value)
@@ -85,7 +85,7 @@ export function getExtensionId(): string | undefined {
     try {
         if (Sniffings.is_chromium || Sniffings.is_opera || Sniffings.is_edge) {
             // @ts-expect-error this package should not access browser global. It makes this package non-portable.
-            return browser.runtime.getURL('').match(/chrome-extension:\/\/([a-z]{32})/)?.[1] ?? ''
+            return browser.runtime.getURL('').match(/chrome-extension:\/\/([a-z]{32})/u)?.[1] ?? ''
         }
     } catch {
         // in case browser does not exist

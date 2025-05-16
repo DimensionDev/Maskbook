@@ -1630,7 +1630,7 @@ export function sanitizeDStorageUrl(hash?: string, gateway?: string) {
         return `${HEY_IMAGE_KIT_URL}/fallback/tr:w-1500,h-500,q-80/${hash}`
     }
     return hash
-        .replaceAll(/^Qm[1-9A-Za-z]{44}/gm, `${gateway ?? IPFS_GATEWAY}${hash}`)
+        .replaceAll(/^Qm[1-9A-Za-z]{44}/gmu, `${gateway ?? IPFS_GATEWAY}${hash}`)
         .replace('ipfs://ipfs/', gateway ?? IPFS_GATEWAY)
         .replace('ipfs://', gateway ?? IPFS_GATEWAY)
         .replace('ar://', ARWEAVE_GATEWAY)
