@@ -121,5 +121,7 @@ export function trimZero(digit: string) {
 }
 
 export function addThousandSeparators(num: string | number) {
-    return new Intl.NumberFormat('en-US').format(typeof num === 'string' ? Number.parseFloat(num) : num)
+    return new Intl.NumberFormat('en-US', { maximumFractionDigits: 99 }).format(
+        typeof num === 'string' ? Number.parseFloat(num) : num,
+    )
 }
