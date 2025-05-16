@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 09:12\n"
+"PO-Revision-Date: 2025-05-16 11:27\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -16,39 +16,51 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Trader/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 1000\n"
 
+#. placeholder {0}: formatBalance(received, toToken.decimals)
+#. placeholder {1}: toToken.symbol
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "{0} {1} bridge completed successfully."
 msgstr "crwdns32930:0{0}crwdnd32930:0{1}crwdne32930:0"
 
+#. placeholder {0}: formatBalance(received, toToken.decimals)
+#. placeholder {1}: toToken.symbol
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 msgid "{0} {1} swap completed successfully."
 msgstr "crwdns32932:0{0}crwdnd32932:0{1}crwdne32932:0"
 
+#. placeholder {0}: bridge?.router.bridgeName
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} Bridge Network fee"
 msgstr "crwdns32934:0{0}crwdne32934:0"
 
+#. placeholder {0}: fromNetwork?.name
+#. placeholder {0}: toNetwork?.name
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} Network fee"
 msgstr "crwdns32936:0{0}crwdne32936:0"
 
+#. placeholder {0}: fromNetwork?.name
+#. placeholder {0}: toNetwork?.name
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: src/SiteAdaptor/trader/views/TradingRoute.tsx
 msgid "{0} Pool"
 msgstr "crwdns28822:0{0}crwdne28822:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#. placeholder {0}: fromNetwork?.fullName || '--'
+#. placeholder {1}: toNetwork?.fullName || '--'
 #: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{0} to {1}"
 msgstr "crwdns28824:0{0}crwdnd28824:0{1}crwdne28824:0"
 
+#. placeholder {0}: mins.replace(/\.?0+$/u, '')
 #: src/helpers/formatTime.ts
 msgid "{0}m"
 msgstr "crwdns28826:0{0}crwdne28826:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
 msgstr "crwdns28166:0gasOptionType={gasOptionType}crwdne28166:0"
 
@@ -90,8 +102,8 @@ msgstr "crwdns29466:0crwdne29466:0"
 msgid "Aggregator"
 msgstr "crwdns28172:0crwdne28172:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Approving"
 msgstr "crwdns28174:0crwdne28174:0"
 
@@ -104,15 +116,15 @@ msgid "Base fee required: {MIN_BASE_FEE} Gwei"
 msgstr "crwdns28178:0{MIN_BASE_FEE}crwdne28178:0"
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/TradingRoute.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/TradingRoute.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Bridge"
 msgstr "crwdns28830:0crwdne28830:0"
 
@@ -140,8 +152,8 @@ msgstr "crwdns29468:0crwdne29468:0"
 msgid "Check on Explorer"
 msgstr "crwdns28180:0crwdne28180:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Checking Approve"
 msgstr "crwdns28182:0crwdne28182:0"
 
@@ -149,8 +161,8 @@ msgstr "crwdns28182:0crwdne28182:0"
 msgid "Complete"
 msgstr "crwdns28184:0crwdne28184:0"
 
-#: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 #: src/SiteAdaptor/trader/views/SelectLiquidity.tsx
+#: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "Confirm"
 msgstr "crwdns28186:0crwdne28186:0"
 
@@ -168,8 +180,8 @@ msgstr "crwdns28190:0crwdne28190:0"
 msgid "Custom"
 msgstr "crwdns28192:0crwdne28192:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Data"
 msgstr "crwdns28194:0crwdne28194:0"
 
@@ -177,6 +189,7 @@ msgstr "crwdns28194:0crwdne28194:0"
 msgid "Date"
 msgstr "crwdns28196:0crwdne28196:0"
 
+#. placeholder {0}: quote?.toToken.tokenSymbol
 #: src/SiteAdaptor/trader/views/QuoteRoute.tsx
 msgid "Dex/Est received ({0})"
 msgstr "crwdns28198:0{0}crwdne28198:0"
@@ -185,8 +198,8 @@ msgstr "crwdns28198:0{0}crwdne28198:0"
 msgid "DSearch"
 msgstr "crwdns32894:0crwdne32894:0"
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Enter an Amount"
 msgstr "crwdns28200:0crwdne28200:0"
 
@@ -195,10 +208,10 @@ msgid "Enter gas limit"
 msgstr "crwdns32944:0crwdne32944:0"
 
 #: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/ExchangeDialog.tsx
 msgid "Exchange"
 msgstr "crwdns28202:0crwdne28202:0"
 
@@ -206,8 +219,8 @@ msgstr "crwdns28202:0crwdne28202:0"
 msgid "Failed"
 msgstr "crwdns28204:0crwdne28204:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Failed to bridge"
 msgstr "crwdns32946:0crwdne32946:0"
 
@@ -223,16 +236,16 @@ msgstr "crwdns28206:0crwdne28206:0"
 msgid "Fastest"
 msgstr "crwdns28840:0crwdne28840:0"
 
-#: src/SiteAdaptor/trending/TrendingView.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
+#: src/SiteAdaptor/trending/TrendingView.tsx
 msgid "Floor Price"
 msgstr "crwdns29470:0crwdne29470:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/index.tsx
 msgid "From"
 msgstr "crwdns28208:0crwdne28208:0"
 
@@ -271,8 +284,8 @@ msgid "In cross-chain transactions, this fee includes the estimated network fee 
 "than estimated, and any unused funds will remain in the original address."
 msgstr "crwdns28842:0crwdne28842:0"
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Insufficient {symbol} Balance"
 msgstr "crwdns28216:0{symbol}crwdne28216:0"
 
@@ -284,8 +297,8 @@ msgstr "crwdns29476:0crwdne29476:0"
 msgid "Load failed"
 msgstr "crwdns29478:0crwdne29478:0"
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewSkeleton.tsx
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "Loading"
 msgstr "crwdns29480:0crwdne29480:0"
 
@@ -327,22 +340,22 @@ msgstr "crwdns29484:0crwdne29484:0"
 msgid "Minimum received"
 msgstr "crwdns28846:0crwdne28846:0"
 
-#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 #: src/SiteAdaptor/trader/hooks/useSwappable.ts
+#: src/SiteAdaptor/trader/hooks/useBridgable.ts
 msgid "Missing dex contract address"
 msgstr "crwdns32962:0crwdne32962:0"
 
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Network"
 msgstr "crwdns28848:0crwdne28848:0"
 
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Network fee"
 msgstr "crwdns28220:0crwdne28220:0"
 
@@ -354,9 +367,9 @@ msgstr "crwdns29486:0crwdne29486:0"
 msgid "NFTs"
 msgstr "crwdns29488:0crwdne29488:0"
 
-#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
-#: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
+#: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
 msgid "No Data"
 msgstr "crwdns29490:0crwdne29490:0"
 
@@ -400,8 +413,8 @@ msgstr "crwdns31404:0crwdne31404:0"
 msgid "Powered by"
 msgstr "crwdns28224:0crwdne28224:0"
 
-#: src/SiteAdaptor/trending/TickersTable.tsx
 #: src/SiteAdaptor/trending/TrendingView.tsx
+#: src/SiteAdaptor/trending/TickersTable.tsx
 msgid "Price"
 msgstr "crwdns29498:0crwdne29498:0"
 
@@ -409,8 +422,8 @@ msgstr "crwdns29498:0crwdne29498:0"
 msgid "Priority fee"
 msgstr "crwdns28226:0crwdne28226:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Quote expired. Update to receive a new quote."
 msgstr "crwdns28228:0crwdne28228:0"
 
@@ -427,14 +440,15 @@ msgstr "crwdns28232:0crwdne28232:0"
 msgid "Rank"
 msgstr "crwdns35438:0crwdne35438:0"
 
+#. placeholder {0}: result.rank?.toString() ?? coin.market_cap_rank?.toString() ?? ''
 #: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Rank #{0}"
 msgstr "crwdns29500:0#{0}crwdne29500:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 #: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Trade/Quote.tsx
 msgid "Rate"
 msgstr "crwdns28234:0crwdne28234:0"
 
@@ -446,8 +460,8 @@ msgstr "crwdns28236:0crwdne28236:0"
 msgid "Select Liquidity"
 msgstr "crwdns28238:0crwdne28238:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Sending"
 msgstr "crwdns28240:0crwdne28240:0"
 
@@ -469,14 +483,14 @@ msgstr "crwdns35440:0crwdne35440:0"
 msgid "Slow"
 msgstr "crwdns28246:0crwdne28246:0"
 
+#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 #: src/SiteAdaptor/trader/ExchangeDialog.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
 #: src/SiteAdaptor/trader/views/Trade/index.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
-#: src/SiteAdaptor/trending/TrendingViewDeck.tsx
 msgid "Swap"
 msgstr "crwdns28248:0crwdne28248:0"
 
@@ -496,6 +510,7 @@ msgstr "crwdns32970:0crwdne32970:0"
 msgid "Swaps between this token pair are’t supported at the moment. You can try with third-party DApps instead."
 msgstr "crwdns28252:0crwdne28252:0"
 
+#. placeholder {0}: isSwap ? 'swap' : 'bridge'
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "The {0} is in progress. You can check its status in History after exiting this page."
 msgstr "crwdns32972:0{0}crwdne32972:0"
@@ -504,8 +519,8 @@ msgstr "crwdns32972:0{0}crwdne32972:0"
 msgid "The custom amount entered may be higher than the required network fee."
 msgstr "crwdns28254:0crwdne28254:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "This fee is used to pay miners and isn't collected by us. The actual cost may be less than estimated, and the unused fee won't be deducted from your account."
 msgstr "crwdns28258:0crwdne28258:0"
 
@@ -521,10 +536,10 @@ msgstr "crwdns28262:0crwdne28262:0"
 msgid "Time"
 msgstr "crwdns29502:0crwdne29502:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
-#: src/SiteAdaptor/trader/views/Confirm.tsx
-#: src/SiteAdaptor/trader/views/Transaction.tsx
 #: src/SiteAdaptor/trending/NonFungibleTickersTable.tsx
+#: src/SiteAdaptor/trader/views/Transaction.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "To"
 msgstr "crwdns28264:0crwdne28264:0"
 
@@ -557,8 +572,8 @@ msgstr "crwdns28852:0crwdne28852:0"
 msgid "Transaction in progress. Thank you for your patience."
 msgstr "crwdns28272:0crwdne28272:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Transaction rejected"
 msgstr "crwdns28274:0crwdne28274:0"
 
@@ -570,6 +585,8 @@ msgstr "crwdns28276:0crwdne28276:0"
 msgid "Transaction type"
 msgstr "crwdns28278:0crwdne28278:0"
 
+#. placeholder {0}: toNetwork?.fullName
+#. placeholder {1}: tx.bridgeName
 #: src/SiteAdaptor/trader/views/Transaction.tsx
 msgid "Transferring asset across to the {0} network via the {1}cross-chain bridge"
 msgstr "crwdns32976:0{0}crwdnd32976:0{1}crwdne32976:0"
@@ -582,8 +599,8 @@ msgstr "crwdns32978:0crwdne32978:0"
 msgid "Try token from different chains"
 msgstr "crwdns32980:0crwdne32980:0"
 
-#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 msgid "Update Quote"
 msgstr "crwdns28280:0crwdne28280:0"
 
