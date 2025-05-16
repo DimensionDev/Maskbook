@@ -94,7 +94,7 @@ export const LinkifyOptions: Opts = {
 
 export const htmlToPlain = (htmlString?: string) => {
     if (!htmlString) return htmlString
-    return purify(htmlString)
+    return purify(htmlString).toString()
 }
 
 export function isRegisteringENS(feed: RSS3BaseAPI.CollectibleFeed) {
