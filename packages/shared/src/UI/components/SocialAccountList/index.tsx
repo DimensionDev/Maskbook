@@ -73,7 +73,7 @@ const FireflyLensToWeb3BioProfile = (account: FireflyConfigAPI.LensAccount): Web
 const FireflyFarcasterToWeb3bioProfile = (account: FireflyConfigAPI.FarcasterProfile): Web3BioProfile => {
     return {
         platform: NextIDPlatform.Farcaster,
-        identity: account.fid.toString(),
+        identity: account.username,
         address: account.signer_address,
         displayName: account.display_name,
         avatar: account.avatar.url,

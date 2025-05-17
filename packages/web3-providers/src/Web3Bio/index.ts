@@ -12,16 +12,6 @@ type Response<T> =
           error: string
       }
 
-function patchProfile(profile: Web3BioProfile): Web3BioProfile {
-    if (profile.platform === NextIDPlatform.Farcaster && profile.social?.uid) {
-        return {
-            ...profile,
-            identity: profile.social.uid.toString(),
-        }
-    }
-    return profile
-}
-
 export class Web3Bio {
     static fetchFromWeb3Bio<T>(request: Request | RequestInfo, init?: RequestInit) {
         return fetchCachedJSON<T>(request, {
@@ -34,21 +24,21 @@ export class Web3Bio {
 
     static async getProfilesByTwitterId(handle: string) {
         const url = urlcat(WEB3_BIO_HOST, `/profile/twitter,${handle.toLowerCase()}`)
-        const res = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
-        return Array.isArray(res) ? res.map(patchProfile) : []
+        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        return Array.isArray(profiles) ? profiles : []
     }
 
     /** Get profiles by address or domain */
     static async getProfilesBy(domainOrAddress: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/:id', { id: domainOrAddress })
-        const res = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
-        return Array.isArray(res) ? res.map(patchProfile) : []
+        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        return Array.isArray(profiles) ? profiles : []
     }
 
     static async getProfilesByNextId(pubkey: string) {
         const url = urlcat(WEB3_BIO_HOST, '/profile/nextid,:pubkey', { pubkey })
-        const res = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
-        return Array.isArray(res) ? res.map(patchProfile) : []
+        const profiles = await Web3Bio.fetchFromWeb3Bio<Response<Web3BioProfile[]>>(url)
+        return Array.isArray(profiles) ? profiles : []
     }
 
     static async getAllLens(twitterId: string) {
