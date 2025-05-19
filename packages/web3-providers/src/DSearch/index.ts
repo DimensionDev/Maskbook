@@ -38,7 +38,6 @@ import { CoinGeckoSearchAPI } from '../CoinGecko/apis/DSearchAPI.js'
 import { CoinGeckoTrending } from '../CoinGecko/apis/TrendingAPI.js'
 import { ENS } from '../ENS/index.js'
 import { NFTScanCollectionSearchAPI, NFTScanSearchAPI } from '../NFTScan/apis/DSearchAPI.js'
-import { PlatformToChainIdMap } from '../RSS3/constants.js'
 import { RSS3 } from '../RSS3/index.js'
 import { SpaceID } from '../SpaceID/index.js'
 import { DSEARCH_BASE_URL } from './constants.js'
@@ -138,25 +137,6 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
                 address,
             },
         ]
-    }
-
-    private async searchRSS3Handle(handle: string): Promise<Array<DomainResult<ChainId>>> {
-        const profiles = await RSS3.getProfiles(handle)
-        return profiles
-            .filter((x) => x.handle === handle)
-            .map((profile) => {
-                const chainId = PlatformToChainIdMap[profile.network] as ChainId
-                if (!chainId) console.error(`Not chain id configured for network ${profile.network}`)
-
-                return {
-                    type: SearchResultType.Domain,
-                    pluginID: NetworkPluginID.PLUGIN_EVM,
-                    chainId,
-                    keyword: handle,
-                    domain: profile.handle,
-                    address: profile.address,
-                }
-            })
     }
 
     private async searchRSS3NameService(handle: string): Promise<Array<DomainResult<ChainId>>> {
@@ -457,14 +437,6 @@ class DSearchAPI<ChainId = Web3Helper.ChainIdAll, SchemaType = Web3Helper.Schema
         const { word, field } = this.parseKeyword(lowerKeyword)
         if (word && ['token', 'twitter'].includes(field ?? '')) return this.searchTokenByName(word) as Promise<T[]>
 
-        // vitalik.lens, vitalik.bit, etc. including ENS BNB
-        // Can't get .bit domain via RSS3 profile API.
-        if (isValidHandle(lowerKeyword) && !lowerKeyword.endsWith('.bit')) {
-            if (lowerKeyword.endsWith('.eth')) Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchEns)
-            else Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
-            const domains = (await this.searchRSS3Handle(lowerKeyword)) as T[]
-            if (domains.length) return domains
-        }
         if (lowerKeyword.endsWith('.bit')) {
             Telemetry.captureEvent(EventType.Access, EventID.EntryTimelineDsearchName)
             return this.searchRSS3NameService(lowerKeyword) as Promise<T[]>
