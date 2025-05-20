@@ -36,7 +36,7 @@ interface ConnectedAccountsProps {
     localProfile?: ProfileIdentifier
 }
 
-export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ({
+export const ConnectedAccounts = memo<ConnectedAccountsProps>(function ConnectedAccounts({
     avatar,
     nextId,
     profiles,

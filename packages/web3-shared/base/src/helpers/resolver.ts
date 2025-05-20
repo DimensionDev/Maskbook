@@ -187,7 +187,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.RSS3:
             return `https://rss3.io/result?search=${identifier}`
         case NextIDPlatform.LENS:
-            return `https://firefly.mask.social/profile/lens/${identifier}`
+            return `https://firefly.social/profile/lens/${identifier}`
         case NextIDPlatform.REDDIT:
             return `https://www.reddit.com/user/${identifier}`
         case NextIDPlatform.SYBIL:
@@ -197,7 +197,7 @@ export const resolveNextIDPlatformLink = (networkPlatform: NextIDPlatform, ident
         case NextIDPlatform.SpaceId:
             return `https://bscscan.com/address/${identifier}`
         case NextIDPlatform.Farcaster:
-            return `https://firefly.mask.social/profile/farcaster/${identifier}`
+            return `https://firefly.social/profile/farcaster/${identifier}`
         case NextIDPlatform.Bit:
             return `https://bit.cc/${name}`
         case NextIDPlatform.Unstoppable:
