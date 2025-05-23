@@ -3,7 +3,7 @@ import type { FileFrameProps } from '@masknet/shared'
 export enum Provider {
     Arweave = 'arweave',
     IPFS = 'ipfs',
-    WeaveVM = 'weavevm',
+    Load = 'load',
 }
 
 export interface LandingPageMetadata {
