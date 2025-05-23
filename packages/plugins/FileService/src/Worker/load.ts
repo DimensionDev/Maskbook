@@ -81,16 +81,16 @@ class LoadAgent implements ProviderAgent {
             const blob = new Blob([data], { type })
             const headers = {
                 'Content-Type': type,
-                'Filename': fileName,
+                Filename: fileName,
                 'App-Name': 'Maskbook',
-                'X-Load-Authorization': API_KEY
+                'X-Load-Authorization': API_KEY,
             }
 
             const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
                 method: 'POST',
                 headers,
                 body: blob,
-                signal: this.uploadController?.signal
+                signal: this.uploadController?.signal,
             })
 
             if (!response.ok) {
@@ -107,7 +107,7 @@ class LoadAgent implements ProviderAgent {
             if (error instanceof Error && error.stack) {
                 enhancedError.stack = error.stack
             }
-            
+
             throw enhancedError
         }
     }

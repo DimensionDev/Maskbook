@@ -115,6 +115,10 @@ msgid "IPFS"
 msgstr ""
 
 #: src/SiteAdaptor/components/UploadFile.tsx
+msgid "Load Network"
+msgstr ""
+
+#: src/SiteAdaptor/components/UploadFile.tsx
 msgid "Make It Encrypted"
 msgstr "암호화하기"
 
