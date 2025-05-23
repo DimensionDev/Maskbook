@@ -45,7 +45,7 @@ const resolveGatewayAPI = createLookupTableResolver<Provider, string>(
     {
         [Provider.Arweave]: 'https://arweave.net',
         [Provider.IPFS]: 'https://mask.infura-ipfs.io/ipfs',
-        [Provider.WeaveVM]: 'https://gateway.wvm.network/bundle',
+        [Provider.Load]: 'https://load0.network/resolve',
     },
     () => 'Unknown provider',
 )
@@ -63,9 +63,6 @@ export function makeFileKey(length = 16) {
 export function downloadFile(file: FileInfo) {
     const gateway = resolveGatewayAPI(file.provider)
     let link = urlcat(gateway, '/:txId', { txId: file.landingTxID })
-    if (file.provider === Provider.WeaveVM) {
-        link = `${link}/0`
-    }
     if (isAfter(new Date(2022, 8, 1), new Date(file.createdAt))) {
         link = urlcat(RECOVERY_PAGE, {
             url: encodeURIComponent(link),

@@ -121,14 +121,14 @@ enum ProviderTabs {
     All = 'All',
     IPFS = 'IPFS',
     Arweave = 'Arweave',
-    WeaveVM = 'WeaveVM',
+    Load = 'Load Network',
 }
 
 const TabToProviderMap: Record<ProviderTabs, Provider | null> = {
     [ProviderTabs.All]: null,
     [ProviderTabs.IPFS]: Provider.IPFS,
     [ProviderTabs.Arweave]: Provider.Arweave,
-    [ProviderTabs.WeaveVM]: Provider.WeaveVM,
+    [ProviderTabs.Load]: Provider.Load,
 }
 
 const providers = getEnumAsArray(ProviderTabs)
