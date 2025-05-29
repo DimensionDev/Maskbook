@@ -27,6 +27,8 @@ const site: Plugin.SiteAdaptor.Definition = {
                         digital assets.
                     </Trans>
                 ),
+                tutorialLink:
+                    'https://mask.notion.site/Security-Detection-Go-Scamsniffer-Blockaid-Cryptoscamdb-9c32befb3c0648e79997900cee232462',
             }
         })(),
     ],
