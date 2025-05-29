@@ -101,7 +101,7 @@ const definition: Plugin.SiteAdaptor.Definition = {
                 ),
                 name,
                 iconFilterColor,
-                tutorialLink: 'https://realmasknetwork.notion.site/8c8fe1efce5a48b49739a38f4ea8c60f',
+                tutorialLink: 'https://mask.notion.site/Web3-File-Service-ee60e0e79a674019a0560de16144ecb3',
             }
         })(),
     ],

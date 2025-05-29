@@ -58,6 +58,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 nextIdRequired: true,
                 category: 'dapp',
                 description: <Trans>Choose and show your Web3 footprints on X.</Trans>,
+                tutorialLink: 'https://mask.notion.site/Web3-Profile-b3215b9094f24b0fa6928d9c04fc50f2',
             }
         })(),
     ],

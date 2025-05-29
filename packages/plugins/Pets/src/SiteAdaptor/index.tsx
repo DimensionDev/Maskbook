@@ -5,7 +5,6 @@ import { Icons } from '@masknet/icons'
 import { base } from '../base.js'
 import { PluginPetMessages } from '../messages.js'
 import { PetsGlobalInjection } from './PetsGlobalInjection.js'
-import { twitterDomainMigrate } from '@masknet/shared-base'
 import { Trans } from '@lingui/react/macro'
 
 const site: Plugin.SiteAdaptor.Definition = {
@@ -41,7 +40,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 icon,
                 description: <Trans>Discover the infinite possibilities of #NFTs.</Trans>,
                 name,
-                tutorialLink: twitterDomainMigrate('https://x.com/NonFFriend'),
+                tutorialLink: 'https://mask.notion.site/Set-Up-Your-Own-NFT-Pet-PFP-8c12e0ce8b6a4fa0bde3a90fe070618b',
                 iconFilterColor,
                 category: 'dapp',
             }
