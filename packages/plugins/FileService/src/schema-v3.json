@@ -12,7 +12,7 @@
                 },
                 "provider": {
                     "type": "string",
-                    "enum": ["arweave", "ipfs"],
+                    "enum": ["arweave", "ipfs", "load"],
                     "title": "provider"
                 },
                 "id": {

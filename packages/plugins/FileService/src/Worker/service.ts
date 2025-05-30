@@ -1,10 +1,12 @@
 import { type AttachmentOptions, type LandingPageMetadata, Provider, type ProviderAgent } from '../types.js'
 import arweave from './arweave.js'
 import ipfs from './ipfs.js'
+import load from './load.js'
 
 const allProviders: Record<Provider, ProviderAgent> = {
     [Provider.Arweave]: arweave,
     [Provider.IPFS]: ipfs,
+    [Provider.Load]: load,
 }
 
 export async function makeAttachment(provider: Provider, options: AttachmentOptions) {

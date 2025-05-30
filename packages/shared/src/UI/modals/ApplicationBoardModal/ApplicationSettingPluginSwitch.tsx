@@ -207,6 +207,17 @@ function DSearchSettings({ checked, onSwitch, setRef }: DSearchSettingsProps) {
                                 <Typography className={classes.name}>
                                     <Trans>DSearch</Trans>
                                 </Typography>
+
+                                <Box className={classes.settings}>
+                                    <Icons.Tutorial
+                                        size={22}
+                                        onClick={() =>
+                                            openWindow(
+                                                'https://mask.notion.site/DSearch-73f30e9268764c10901090aaa6ed0558',
+                                            )
+                                        }
+                                    />
+                                </Box>
                             </div>
                             <Typography className={classes.desc}>
                                 <Trans>

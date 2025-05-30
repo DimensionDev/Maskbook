@@ -36,7 +36,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                 },
                 appBoardSortingDefaultPriority: 8,
                 marketListSortingPriority: 6,
-                tutorialLink: 'https://transak.com/',
+                tutorialLink: 'https://mask.notion.site/Fiat-on-ramp-77cd1c4a771a4022ab4d5a45f6691717',
                 icon,
                 description: (
                     <Trans>Fiat On-Ramp Aggregator on X. Buy crypto in 60+ countries with Transak support.</Trans>
