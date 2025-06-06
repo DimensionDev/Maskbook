@@ -78,7 +78,7 @@ export const Component = memo(function Welcome() {
             if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
             navigate(DashboardRoutes.SignUpPersona, { replace: true })
         } catch (err) {
-            snackbar.showSnackbar(t`Get permission failed`, { variant: 'error' })
+            snackbar.showSnackbar(t`Failed to get permission`, { variant: 'error' })
             throw err
         }
     }, [params, allowedToCollect])
