@@ -1195,6 +1195,10 @@ msgstr ""
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
 
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+msgid "Failed to get permission"
+msgstr ""
+
 #: dashboard/components/GoogleDriveLogin.tsx
 #~ msgid "Failed to login: {0}"
 #~ msgstr ""
@@ -1364,8 +1368,8 @@ msgid "Generating your **accounts**"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
-msgid "Get permission failed"
-msgstr ""
+#~ msgid "Get permission failed"
+#~ msgstr ""
 
 #. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
