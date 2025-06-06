@@ -1363,6 +1363,10 @@ msgstr "生成一个新的钱包地址"
 msgid "Generating your **accounts**"
 msgstr ""
 
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+msgid "Get permission failed"
+msgstr ""
+
 #. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
 #: popups/components/UnlockERC721Token/index.tsx
