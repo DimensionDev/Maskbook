@@ -1196,7 +1196,11 @@ msgstr ""
 #~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Welcome/index.tsx
-msgid "Failed to get permission"
+#~ msgid "Failed to get permission"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+msgid "Failed to get permissions"
 msgstr ""
 
 #: dashboard/components/GoogleDriveLogin.tsx
