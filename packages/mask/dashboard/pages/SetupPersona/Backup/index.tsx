@@ -49,8 +49,8 @@ const tuples: TabPathTuple[] = [
     [
         StorageType.Cloud,
         DashboardRoutes.BackupCloud,
-        DashboardRoutes.BackupCloudMaskNetwork,
         DashboardRoutes.BackupCloudGoogleDrive,
+        (pathname) => (pathname.startsWith(DashboardRoutes.BackupCloud) ? DashboardRoutes.BackupCloud : undefined),
     ],
 ]
 
