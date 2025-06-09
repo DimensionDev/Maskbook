@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-10 05:53\n"
+"PO-Revision-Date: 2025-06-09 05:27\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -752,7 +752,6 @@ msgstr "crwdns29570:0crwdne29570:0"
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
@@ -1046,7 +1045,6 @@ msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr "crwdns32040:0crwdne32040:0"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email"
 msgstr "crwdns29600:0crwdne29600:0"
@@ -1194,6 +1192,14 @@ msgstr "crwdns37234:0{0}crwdne37234:0"
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+#~ msgid "Failed to get permission"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+msgid "Failed to get permissions"
+msgstr "crwdns37745:0crwdne37745:0"
 
 #: dashboard/components/GoogleDriveLogin.tsx
 #~ msgid "Failed to login: {0}"
@@ -1362,6 +1368,10 @@ msgstr "crwdns30202:0crwdne30202:0"
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Generating your **accounts**"
 msgstr "crwdns37286:0crwdne37286:0"
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+#~ msgid "Get permission failed"
+#~ msgstr ""
 
 #. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
@@ -1577,7 +1587,6 @@ msgstr "crwdns30248:0crwdne30248:0"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "Invalid email address format."
 msgstr "crwdns29642:0crwdne29642:0"
 
@@ -1731,8 +1740,6 @@ msgstr "crwdns30300:0crwdne30300:0"
 
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
 msgid "Mask Network"
 msgstr "crwdns30302:0crwdne30302:0"
 
@@ -1843,8 +1850,8 @@ msgid "Mnemonic word"
 msgstr "crwdns29660:0crwdne29660:0"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
-msgid "Mobile"
-msgstr "crwdns29662:0crwdne29662:0"
+#~ msgid "Mobile"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Mobile number"
@@ -2030,6 +2037,10 @@ msgstr "crwdns32100:0{providerType}crwdne32100:0"
 #: popups/pages/Settings/index.tsx
 msgid "Not set"
 msgstr "crwdns30390:0crwdne30390:0"
+
+#: popups/components/NFTAvatarPicker/CollectionList.tsx
+msgid "Not supported yet."
+msgstr "crwdns37411:0crwdne37411:0"
 
 #: popups/pages/Wallet/ResetWallet/index.tsx
 msgid "Note: If you using the mnemonic phrase from your last import, you can recover the wallet derived from that mnemonic phrase."
@@ -2441,7 +2452,6 @@ msgid "Resource"
 msgstr "crwdns30494:0crwdne30494:0"
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 msgid "Restore"
 msgstr "crwdns29736:0crwdne29736:0"
@@ -2459,8 +2469,8 @@ msgid "Restore Database"
 msgstr "crwdns30496:0crwdne30496:0"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
-msgid "Restore failed"
-msgstr "crwdns29740:0crwdne29740:0"
+#~ msgid "Restore failed"
+#~ msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -2789,11 +2799,8 @@ msgstr "crwdns32146:0crwdne32146:0"
 msgid "The chainID is not equal to the currently connected one."
 msgstr "crwdns30606:0crwdne30606:0"
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The code is incorrect."
 msgstr "crwdns29780:0crwdne29780:0"
 
@@ -2803,8 +2810,13 @@ msgstr "crwdns32148:0crwdne32148:0"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
-msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
-msgstr "crwdns37252:0crwdne37252:0"
+#~ msgid "The Mask Network Cloud Backup feature will be deactivated on April 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
+#~ msgid "The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "The mnemonic word has been copied, please keep it in a safe place."
@@ -2845,7 +2857,6 @@ msgid "The persona name already exists."
 msgstr "crwdns30612:0crwdne30612:0"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-#: dashboard/contexts/CloudBackupFormContext.tsx
 msgid "The phone number is incorrect."
 msgstr "crwdns29784:0crwdne29784:0"
 
