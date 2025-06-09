@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-10 05:53\n"
+"PO-Revision-Date: 2025-06-09 05:27\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -752,7 +752,6 @@ msgstr "聯繫人"
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
@@ -1046,7 +1045,6 @@ msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email"
 msgstr ""
@@ -1194,6 +1192,14 @@ msgstr ""
 #: dashboard/modals/MergeBackupModal/MergeBackupDialog.tsx
 #~ msgid "Failed to download and merge the backup."
 #~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+#~ msgid "Failed to get permission"
+#~ msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+msgid "Failed to get permissions"
+msgstr ""
 
 #: dashboard/components/GoogleDriveLogin.tsx
 #~ msgid "Failed to login: {0}"
@@ -1362,6 +1368,10 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Generating your **accounts**"
 msgstr ""
+
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
+#~ msgid "Get permission failed"
+#~ msgstr ""
 
 #. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
@@ -1730,8 +1740,6 @@ msgstr ""
 
 #: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
 msgid "Mask Network"
 msgstr ""
 
@@ -1842,8 +1850,8 @@ msgid "Mnemonic word"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
-msgid "Mobile"
-msgstr ""
+#~ msgid "Mobile"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Mobile number"
@@ -2444,7 +2452,6 @@ msgid "Resource"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
 msgid "Restore"
 msgstr "恢復"
@@ -2462,8 +2469,8 @@ msgid "Restore Database"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
-msgid "Restore failed"
-msgstr "恢復失敗"
+#~ msgid "Restore failed"
+#~ msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -2792,7 +2799,6 @@ msgstr ""
 msgid "The chainID is not equal to the currently connected one."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 msgid "The code is incorrect."
@@ -2809,8 +2815,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
-msgid "The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use alternative cloud backup services or local backup solutions."
-msgstr ""
+#~ msgid "The Mask Network Cloud Backup feature will be deactivated on Jun 30, 2025. Please use alternative cloud backup services or local backup solutions."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "The mnemonic word has been copied, please keep it in a safe place."
@@ -3349,3 +3355,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
