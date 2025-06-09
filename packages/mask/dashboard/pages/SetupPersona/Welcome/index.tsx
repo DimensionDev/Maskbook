@@ -4,8 +4,9 @@ import { Trans } from '@lingui/react/macro'
 import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Typography } from '@mui/material'
-import { memo, useCallback, useState } from 'react'
+import { memo, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useAsyncFn } from 'react-use'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
 import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
@@ -57,7 +58,7 @@ export const Component = memo(function Welcome() {
     const navigate = useNavigate()
 
     const snackbar = useCustomSnackbar()
-    const handleAgree = useCallback(async () => {
+    const [{ loading }, handleAgree] = useAsyncFn(async () => {
         if (allowedToCollect) {
             Services.Settings.setTelemetryEnabled(true)
         }
@@ -108,7 +109,7 @@ export const Component = memo(function Welcome() {
                     <SecondaryButton variant="rounded" width="125px" size="large" onClick={() => window.close()}>
                         <Trans>Cancel</Trans>
                     </SecondaryButton>
-                    <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree}>
+                    <PrimaryButton width="125px" size="large" color="primary" onClick={handleAgree} disabled={loading}>
                         <Trans>Agree</Trans>
                     </PrimaryButton>
                 </div>
