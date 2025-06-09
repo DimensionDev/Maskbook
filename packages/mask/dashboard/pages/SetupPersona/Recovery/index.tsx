@@ -69,7 +69,11 @@ const tuples: TabPathTuple[] = [
     [RecoveryMethod.Phrase, DashboardRoutes.RecoveryPhrase],
     [RecoveryMethod.PrivateKey, DashboardRoutes.RecoveryPrivateKey],
     [RecoveryMethod.Local, DashboardRoutes.RecoveryLocal],
-    [RecoveryMethod.Cloud, DashboardRoutes.RecoveryCloudMaskNetwork, DashboardRoutes.RecoveryCloudGoogleDrive],
+    [
+        RecoveryMethod.Cloud,
+        DashboardRoutes.RecoveryCloudGoogleDrive,
+        (pathname) => (pathname.startsWith(DashboardRoutes.RecoveryCloud) ? DashboardRoutes.RecoveryCloud : undefined),
+    ],
 ]
 
 export const Component = memo(function Recovery() {

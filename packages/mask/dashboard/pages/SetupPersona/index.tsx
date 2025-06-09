@@ -29,11 +29,7 @@ export const personaRoutes: RouteObject[] = [
                 children: [
                     {
                         index: true,
-                        lazy: () => import('./Backup/Cloud/MaskNetwork.js'),
-                    },
-                    {
-                        path: rr(Routes.BackupCloud, Routes.BackupCloudMaskNetwork),
-                        lazy: () => import('./Backup/Cloud/MaskNetwork.js'),
+                        lazy: () => import('./Backup/Cloud/GoogleDrive.js'),
                     },
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupCloudGoogleDrive),
@@ -42,6 +38,10 @@ export const personaRoutes: RouteObject[] = [
                     {
                         path: rr(Routes.BackupCloud, Routes.BackupPreview),
                         lazy: () => import('./Backup/Cloud/Preview.js'),
+                    },
+                    {
+                        path: '*',
+                        lazy: () => import('./Backup/Cloud/GoogleDrive.js'),
                     },
                 ],
             },
@@ -73,14 +73,14 @@ export const personaRoutes: RouteObject[] = [
                 children: [
                     {
                         index: true,
-                        lazy: () => import('./Recovery/Cloud/MaskNetwork.js'),
-                    },
-                    {
-                        path: rr(Routes.RecoveryCloud, Routes.RecoveryCloudMaskNetwork),
-                        lazy: () => import('./Recovery/Cloud/MaskNetwork.js'),
+                        lazy: () => import('./Recovery/Cloud/GoogleDrive.js'),
                     },
                     {
                         path: rr(Routes.RecoveryCloud, Routes.RecoveryCloudGoogleDrive),
+                        lazy: () => import('./Recovery/Cloud/GoogleDrive.js'),
+                    },
+                    {
+                        path: '*',
                         lazy: () => import('./Recovery/Cloud/GoogleDrive.js'),
                     },
                 ],
