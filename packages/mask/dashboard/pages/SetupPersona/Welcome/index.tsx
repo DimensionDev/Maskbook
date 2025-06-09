@@ -1,18 +1,18 @@
+import Services from '#services'
+import { t } from '@lingui/core/macro'
+import { Trans } from '@lingui/react/macro'
 import { DashboardRoutes, EnhanceableSite, userGuideStatus } from '@masknet/shared-base'
-import { makeStyles } from '@masknet/theme'
+import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { Checkbox, FormControlLabel, Typography } from '@mui/material'
 import { memo, useCallback, useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import Services from '#services'
-import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
-import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
-import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
-
-import { SetupFrameController } from '../../../components/SetupFrame/index.js'
-import { Article } from './Article.js'
-import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
 import { requestPermissionFromExtensionPage } from '../../../../shared-ui/index.js'
-import { Trans } from '@lingui/react/macro'
+import { definedSiteAdaptors } from '../../../../shared/site-adaptors/definitions.js'
+import { PrimaryButton } from '../../../components/PrimaryButton/index.js'
+import { SecondaryButton } from '../../../components/SecondaryButton/index.js'
+import { SetupFrameController } from '../../../components/SetupFrame/index.js'
+import { TermsAgreedContext } from '../../../hooks/useTermsAgreed.js'
+import { Article } from './Article.js'
 
 const useStyles = makeStyles()((theme) => ({
     title: {
@@ -50,11 +50,13 @@ const useStyles = makeStyles()((theme) => ({
 }))
 
 export const Component = memo(function Welcome() {
+    const { classes } = useStyles()
     const [, setAgreed] = TermsAgreedContext.useContainer()
     const [allowedToCollect, setAllowedToCollect] = useState(true)
     const [params] = useSearchParams()
     const navigate = useNavigate()
 
+    const snackbar = useCustomSnackbar()
     const handleAgree = useCallback(async () => {
         if (allowedToCollect) {
             Services.Settings.setTelemetryEnabled(true)
@@ -68,14 +70,18 @@ export const Component = memo(function Welcome() {
             return
         }
 
-        const granted = await requestPermissionFromExtensionPage(
-            [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins),
-        )
-        if (!granted) return
-        if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
-        navigate(DashboardRoutes.SignUpPersona, { replace: true })
+        try {
+            const granted = await requestPermissionFromExtensionPage(
+                [...definedSiteAdaptors.values()].flatMap((x) => x.declarativePermissions.origins),
+            )
+            if (!granted) return
+            if (!userGuideStatus[EnhanceableSite.Twitter].value) userGuideStatus[EnhanceableSite.Twitter].value = '1'
+            navigate(DashboardRoutes.SignUpPersona, { replace: true })
+        } catch (err) {
+            snackbar.showSnackbar(t`Failed to get permissions`, { variant: 'error' })
+            throw err
+        }
     }, [params, allowedToCollect])
-    const { classes } = useStyles()
 
     return (
         <>
