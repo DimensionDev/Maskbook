@@ -144,7 +144,7 @@ interface Props {
     className?: string
 }
 
-export const RecipientSelect = memo(({ className }: Props) => {
+export const RecipientSelect = memo(function RecipientSelect({ className }: Props) {
     const { classes, cx } = useStyles()
     const selectRef = useRef(null)
     const { recipient, recipients, setRecipient } = useTip()
@@ -194,10 +194,9 @@ export const RecipientSelect = memo(({ className }: Props) => {
                             className={classes.text}
                         />
             }}>
-            {recipients.map((account, index) => {
+            {recipients.map((account) => {
                 const selected = isSameAddress(account.address, recipientAddress)
-                const domain = queries[index].data
-                const label = account.label || domain
+                const label = account.label || account.name
 
                 return (
                     <MenuItem className={classes.menuItem} key={account.address} value={account.address}>
