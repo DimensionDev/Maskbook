@@ -57,6 +57,7 @@ export interface SocialAddress<ChainId> {
     address: string
     /** A human readable address title */
     label: string
+    name?: string
     /** Last updated timestamp (unix timestamp) */
     updatedAt?: string
     /** Create timestamp (unix timestamp) */
