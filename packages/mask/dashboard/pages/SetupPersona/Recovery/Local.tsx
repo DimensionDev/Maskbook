@@ -187,6 +187,9 @@ export const Component = memo(function RecoveryLocalBackup() {
                         error={!!error}
                         helperText={error}
                         autoFocus
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter' && password.length) decryptBackupFile()
+                        }}
                     />
                 </Box>
             : restoreStatus === RestoreStatus.Verified && summary ?

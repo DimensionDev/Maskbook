@@ -205,7 +205,7 @@ export const RecipientSelect = memo(({ className }: Props) => {
                         <div>
                             {label ?
                                 <Typography component="span" className={classes.text}>
-                                    {account.label}
+                                    {label}
                                 </Typography>
                             :   null}
                             <Typography className={classes.address}>
