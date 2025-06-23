@@ -1671,7 +1671,6 @@ msgstr ""
 
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: popups/pages/Friends/Home/UI.tsx
-#: popups/components/WalletSettingList/index.tsx
 msgid "Loading"
 msgstr ""
 
@@ -2492,18 +2491,17 @@ msgstr "重試"
 msgid "RPC URL"
 msgstr ""
 
-#: popups/pages/Personas/AccountDetail/UI.tsx
 #: popups/components/AddContactInputPanel/index.tsx
 msgid "Save"
 msgstr "存檔"
 
 #: popups/pages/Personas/AccountDetail/index.tsx
-msgid "Save failed"
-msgstr ""
+#~ msgid "Save failed"
+#~ msgstr ""
 
 #: popups/pages/Personas/AccountDetail/index.tsx
-msgid "Saved"
-msgstr ""
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "Scam tx"
@@ -3151,7 +3149,6 @@ msgid "Verify"
 msgstr "驗證"
 
 #: content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
-#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Verify Account"
 msgstr ""
 

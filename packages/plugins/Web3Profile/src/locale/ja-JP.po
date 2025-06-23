@@ -59,8 +59,8 @@ msgid "Current wallet does not support to interact with Lens protocol."
 msgstr "現在のウォレットはレンズプロトコルとのやり取りを対応していません。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Failed to set up Web3 Profile wallets. Please try again."
-msgstr "Web3 プロファイルウォレットのセットアップに失敗しました。もう一度やり直してください。"
+#~ msgid "Failed to set up Web3 Profile wallets. Please try again."
+#~ msgstr "Web3 プロファイルウォレットのセットアップに失敗しました。もう一度やり直してください。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
@@ -128,20 +128,20 @@ msgid "Previous unfollow transaction is in processing, please wait and try again
 msgstr "以前のフォロー解除トランザクションが処理中です。しばらくしてからもう一度お試しください。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Save failed"
-msgstr "保存できませんでした"
+#~ msgid "Save failed"
+#~ msgstr "保存できませんでした"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Saved"
-msgstr ""
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "Web3フットプリントを表示し、各ソーシャルメディアアカウントにチップを受け取るためのウォレットを設定します。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Set up Web3 Profile wallets successfully."
-msgstr "Web3 プロファイルウォレットを正常にセットアップしました。"
+#~ msgid "Set up Web3 Profile wallets successfully."
+#~ msgstr "Web3 プロファイルウォレットを正常にセットアップしました。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
