@@ -3,7 +3,6 @@ import {
     EMPTY_LIST,
     NetworkPluginID,
     NextIDPlatform,
-    PluginID,
     SocialAddressType,
     createLookupTableResolver,
     type BindingProof,
@@ -21,7 +20,6 @@ import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
 import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
 import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
 import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
-import * as NextIDStorageProvider from /* webpackDefer: true */ '../../../NextID/kv.js'
 
 // cspell:disable-next-line
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/giu
@@ -126,22 +124,6 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
             }),
         )
         return compact(allSettled.map((x) => (x.status === 'fulfilled' ? x.value : undefined)))
-    }
-
-    /** Read a social address from avatar NextID storage. */
-    private async getSocialAddressFromAvatarNextID({ identifier, publicKey }: SocialIdentity) {
-        const userId = identifier?.userId
-        if (!userId || !publicKey) return
-
-        const response = await NextIDStorageProvider.NextIDStorageProvider.getByIdentity<{ ownerAddress?: string }>(
-            publicKey,
-            NextIDPlatform.Twitter,
-            userId.toLowerCase(),
-            PluginID.Avatar,
-        )
-
-        if (!response.isOk() || !response.value.ownerAddress) return
-        return this.createSocialAddress(SocialAddressType.Mask, response.value.ownerAddress)
     }
 
     /** Read a social address from NextID. */
@@ -254,20 +236,16 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
 
     override async getFromRemote(identity: SocialIdentity, includes?: SocialAddressType[]) {
         const socialAddressFromMaskX = this.getSocialAddressesFromMaskX(identity)
-        const socialAddressFromNextID = this.getSocialAddressesFromNextID(identity)
         const allSettled = await Promise.allSettled([
             this.getSocialAddressFromENS(identity),
             this.getSocialAddressFromSpaceID(identity),
             this.getSocialAddressFromARBID(identity),
-            this.getSocialAddressFromAvatarNextID(identity),
             this.getSocialAddressFromCrossbell(identity),
-            socialAddressFromNextID,
             socialAddressFromMaskX,
         ])
         const mergedIdentities = compact(allSettled.flatMap((x) => (x.status === 'fulfilled' ? x.value : [])))
 
         const identities = uniqBy(mergedIdentities, (x) => [x.type, x.label, x.address.toLowerCase()].join('_'))
-        const identitiesFromNextID = await socialAddressFromNextID
 
         const handle = identity.identifier?.userId
         if (!handle) return []
@@ -284,17 +262,15 @@ export class EVMIdentityService extends IdentityServiceState<ChainId> {
         )
         const trustedAddresses = compact(verifiedResult.map((x) => (x.status === 'fulfilled' ? x.value : null)))
 
-        const result = identities
-            .filter((x) => {
-                const address = x.address.toLowerCase()
-                if (trustedAddresses.includes(address)) return true
-                if (x.type === SocialAddressType.Address) {
-                    const handles = verifiedHandleMap.get(address) || []
-                    return handles.length ? handles.includes(handle) : true
-                }
-                return false
-            })
-            .concat(identitiesFromNextID)
+        const result = identities.filter((x) => {
+            const address = x.address.toLowerCase()
+            if (trustedAddresses.includes(address)) return true
+            if (x.type === SocialAddressType.Address) {
+                const handles = verifiedHandleMap.get(address) || []
+                return handles.length ? handles.includes(handle) : true
+            }
+            return false
+        })
         return result
     }
 }

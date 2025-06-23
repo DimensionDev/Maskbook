@@ -1671,7 +1671,6 @@ msgstr "読み込み失敗"
 
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: popups/pages/Friends/Home/UI.tsx
-#: popups/components/WalletSettingList/index.tsx
 msgid "Loading"
 msgstr "読み込み中..."
 
@@ -2492,18 +2491,17 @@ msgstr "再試行"
 msgid "RPC URL"
 msgstr ""
 
-#: popups/pages/Personas/AccountDetail/UI.tsx
 #: popups/components/AddContactInputPanel/index.tsx
 msgid "Save"
 msgstr "保存"
 
 #: popups/pages/Personas/AccountDetail/index.tsx
-msgid "Save failed"
-msgstr "保存できませんでした"
+#~ msgid "Save failed"
+#~ msgstr "保存できませんでした"
 
 #: popups/pages/Personas/AccountDetail/index.tsx
-msgid "Saved"
-msgstr ""
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 msgid "Scam tx"
@@ -3151,7 +3149,6 @@ msgid "Verify"
 msgstr "認証"
 
 #: content-script/components/InjectedComponents/SetupGuide/hooks/useNotifyConnected.ts
-#: popups/pages/Personas/AccountDetail/UI.tsx
 msgid "Verify Account"
 msgstr "接続と検証が完了しました。"
 

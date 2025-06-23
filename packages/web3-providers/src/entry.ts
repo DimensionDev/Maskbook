@@ -55,7 +55,7 @@ export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
 export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
 // NextID
-export { NextIDProof, NextIDStorageProvider } from './NextID/index.js'
+export { NextIDProof } from './NextID/index.js'
 
 // Web3Bio
 export { Web3Bio } from './Web3Bio/index.js'

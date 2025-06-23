@@ -1,5 +1,4 @@
 import { Icons } from '@masknet/icons'
-import { signWithPersona } from '@masknet/plugin-infra/dom/context'
 import { PluginTransakMessages, useTransakAllowanceCoin } from '@masknet/plugin-transak'
 import {
     EnhanceableSite_RSS3_NFT_SITE_KEY_map,
@@ -241,12 +240,7 @@ export function TrendingViewDeck(props: TrendingViewDeckProps) {
     const collectionList = useTokenMenuCollectionList(resultList, result)
 
     const rss3Key = EnhanceableSite_RSS3_NFT_SITE_KEY_map[identity?.identifier?.network as EnhanceableSite]
-    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(
-        identity,
-        undefined,
-        undefined,
-        signWithPersona,
-    )
+    const { data: socialAccounts = EMPTY_LIST } = useSocialAccountsBySettings(identity, undefined, undefined)
 
     const openRss3Profile = useCallback(
         (address: string) => {

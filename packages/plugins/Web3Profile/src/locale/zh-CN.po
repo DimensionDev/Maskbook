@@ -59,8 +59,8 @@ msgid "Current wallet does not support to interact with Lens protocol."
 msgstr "当前钱包不支持与 Lens 协议交互。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Failed to set up Web3 Profile wallets. Please try again."
-msgstr "无法设置 Web3 个人资料钱包。请重试。"
+#~ msgid "Failed to set up Web3 Profile wallets. Please try again."
+#~ msgstr "无法设置 Web3 个人资料钱包。请重试。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
@@ -128,20 +128,20 @@ msgid "Previous unfollow transaction is in processing, please wait and try again
 msgstr "先前的取消关注交易正在处理中，请稍候，然后重试。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Save failed"
-msgstr "保存失败"
+#~ msgid "Save failed"
+#~ msgstr "保存失败"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Saved"
-msgstr ""
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "设置钱包，在每个社交媒体帐户上显示 Web3 足迹和打赏地址。"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Set up Web3 Profile wallets successfully."
-msgstr "成功设置 Web3 个人资料钱包。"
+#~ msgid "Set up Web3 Profile wallets successfully."
+#~ msgstr "成功设置 Web3 个人资料钱包。"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"

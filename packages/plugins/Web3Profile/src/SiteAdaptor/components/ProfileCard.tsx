@@ -1,4 +1,4 @@
-import { memo, useState, useCallback, useMemo, useRef } from 'react'
+import { memo, useState, useRef } from 'react'
 import { useQuery } from '@tanstack/react-query'
 import { Icons } from '@masknet/icons'
 import { PlatformAvatar, WalletSettingsCard } from '@masknet/shared'
@@ -102,11 +102,8 @@ interface Props extends CardProps {
     profile: BindingProof
     avatar?: string
     walletProofs?: BindingProof[]
-    unlistedAddresses: string[]
-    pendingUnlistedAddresses: string[]
     initialExpanded?: boolean
     isCurrent?: boolean
-    onToggle?(identity: string, address: string): void
     onAddWallet?(): void
 }
 
@@ -115,11 +112,8 @@ export const ProfileCard = memo(function ProfileCard({
     avatar,
     walletProofs = EMPTY_LIST,
     className,
-    unlistedAddresses,
-    pendingUnlistedAddresses,
     initialExpanded = false,
     isCurrent,
-    onToggle,
     onAddWallet,
     ...rest
 }: Props) {
@@ -136,16 +130,7 @@ export const ProfileCard = memo(function ProfileCard({
     // Identities of Twitter proof get lowered case. Prefer handle from Twitter API.
     const handle = user?.legacy.screen_name || profile.identity
     const avatarUrl = user?.legacy.profile_image_url_https || avatar
-    const handleSwitch = useCallback(
-        (address: string) => {
-            onToggle?.(profile.identity, address)
-        },
-        [onToggle, profile.identity],
-    )
-    const listingAddresses = useMemo(() => {
-        const addresses = walletProofs.map((x) => x.identity)
-        return addresses.filter((x) => !pendingUnlistedAddresses.includes(x))
-    }, [pendingUnlistedAddresses])
+    const listingAddresses = walletProofs.map((x) => x.identity)
 
     const action =
         walletProofs.length ?
@@ -218,15 +203,12 @@ export const ProfileCard = memo(function ProfileCard({
                     <CardContent className={classes.content}>
                         <div className={classes.wallets}>
                             {walletProofs.map((proof, i) => {
-                                const checked = listingAddresses.includes(proof.identity)
                                 const fallbackName = resolveNextIDPlatformWalletName(proof.platform)
                                 return (
                                     <WalletSettingsCard
                                         key={proof.identity}
                                         wallet={proof}
                                         fallbackName={`${fallbackName} ${walletProofs.length - i}`}
-                                        checked={checked}
-                                        onSwitchChange={handleSwitch}
                                     />
                                 )
                             })}

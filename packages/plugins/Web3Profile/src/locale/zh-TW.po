@@ -59,8 +59,8 @@ msgid "Current wallet does not support to interact with Lens protocol."
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Failed to set up Web3 Profile wallets. Please try again."
-msgstr ""
+#~ msgid "Failed to set up Web3 Profile wallets. Please try again."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
@@ -128,20 +128,20 @@ msgid "Previous unfollow transaction is in processing, please wait and try again
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Save failed"
-msgstr ""
+#~ msgid "Save failed"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Saved"
-msgstr ""
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Set up Web3 Profile wallets successfully."
-msgstr ""
+#~ msgid "Set up Web3 Profile wallets successfully."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"

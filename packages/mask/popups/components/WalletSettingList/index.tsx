@@ -13,7 +13,6 @@ import {
 import { resolveNextID_NetworkPluginID, isSameAddress, formatBalance } from '@masknet/web3-shared-base'
 import {
     ListItem,
-    Switch,
     ListItemButton,
     ListItemIcon,
     ListItemText,
@@ -23,20 +22,16 @@ import {
     Box,
     List,
 } from '@mui/material'
-import { useMemo, useCallback, memo } from 'react'
-import { LoadingBase } from '@masknet/theme'
+import { useMemo, memo } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import urlcat from 'urlcat'
 import { Trans } from '@lingui/react/macro'
 
 interface WalletItemProps {
     proof: BindingProof
-    toggleUnlisted: (identity: string, address: string) => void
-    profileIdentity?: string
-    checked: boolean
 }
 
-function WalletItem({ proof, toggleUnlisted, profileIdentity, checked }: WalletItemProps) {
+function WalletItem({ proof }: WalletItemProps) {
     const theme = useTheme()
     const wallets = useWallets()
     const networkPluginId = resolveNextID_NetworkPluginID(proof.platform)
@@ -58,13 +53,8 @@ function WalletItem({ proof, toggleUnlisted, profileIdentity, checked }: WalletI
         return formattedAddress
     }, [domain, wallets, proof.identity, formattedAddress])
 
-    const handleSwitch = useCallback(() => {
-        if (!profileIdentity) return
-        toggleUnlisted(profileIdentity, proof.identity)
-    }, [toggleUnlisted, profileIdentity, proof.identity])
-
     return (
-        <ListItem sx={{ padding: 0 }} secondaryAction={<Switch checked={checked} onChange={handleSwitch} />}>
+        <ListItem sx={{ padding: 0 }}>
             <ListItemButton
                 sx={{ borderRadius: 2, '&:hover': { background: theme.palette.maskColor.bg }, padding: 1.5 }}>
                 <ListItemIcon style={{ minWidth: 30 }}>
@@ -104,32 +94,11 @@ function WalletItem({ proof, toggleUnlisted, profileIdentity, checked }: WalletI
 interface WalletListProps {
     isValid?: boolean
     walletProofs?: BindingProof[]
-    listingAddresses: string[]
-    toggleUnlisted: (identity: string, address: string) => void
-    loading: boolean
-    identity?: string
 }
 
-export const WalletList = memo<WalletListProps>(function WalletList({
-    walletProofs,
-    listingAddresses,
-    toggleUnlisted,
-    loading,
-    isValid,
-    identity,
-}) {
+export const WalletList = memo<WalletListProps>(function WalletList({ walletProofs, isValid }) {
     const theme = useTheme()
     if (!isValid) return null
-
-    if (loading)
-        return (
-            <Box flex={1} display="flex" justifyContent="center" alignItems="center" flexDirection="column">
-                <LoadingBase size={36} />
-                <Typography mt={1.5}>
-                    <Trans>Loading</Trans>
-                </Typography>
-            </Box>
-        )
 
     if (!walletProofs?.length)
         return (
@@ -151,13 +120,7 @@ export const WalletList = memo<WalletListProps>(function WalletList({
     return (
         <List>
             {walletProofs.map((proof, index) => (
-                <WalletItem
-                    checked={listingAddresses.includes(proof.identity)}
-                    proof={proof}
-                    key={index}
-                    toggleUnlisted={toggleUnlisted}
-                    profileIdentity={identity}
-                />
+                <WalletItem proof={proof} key={index} />
             ))}
         </List>
     )

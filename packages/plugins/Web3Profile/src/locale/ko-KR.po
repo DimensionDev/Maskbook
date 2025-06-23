@@ -59,8 +59,8 @@ msgid "Current wallet does not support to interact with Lens protocol."
 msgstr "현재 월렛은 Lens protocol과의 상호작용을 지원하지 않습니다."
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Failed to set up Web3 Profile wallets. Please try again."
-msgstr "Web3 Profile 월렛의 설정이 실패합니다. 다시 시도하세요."
+#~ msgid "Failed to set up Web3 Profile wallets. Please try again."
+#~ msgstr "Web3 Profile 월렛의 설정이 실패합니다. 다시 시도하세요."
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
@@ -128,20 +128,20 @@ msgid "Previous unfollow transaction is in processing, please wait and try again
 msgstr "이전의 언팔로우 트랜잭션이 진행하고 있습니다. 다시 시도 하시길 바랍니다."
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Save failed"
-msgstr "저장 실패"
+#~ msgid "Save failed"
+#~ msgstr "저장 실패"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Saved"
-msgstr ""
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "Web3 발자국을 표시하고 각 소셜 미디어 계정에 팁을 받을 수 있는 지갑을 설정합니다."
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Set up Web3 Profile wallets successfully."
-msgstr "Web3 Profile 설정 성공"
+#~ msgid "Set up Web3 Profile wallets successfully."
+#~ msgstr "Web3 Profile 설정 성공"
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"

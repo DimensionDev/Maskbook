@@ -11,7 +11,6 @@ import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { useCallback, useEffect, useMemo, type HTMLProps, type MouseEventHandler } from 'react'
-import { useProfilePublicKey } from '../../hooks/useProfilePublicKey.js'
 import { PluginTipsMessages } from '../../messages.js'
 import { useTipsAccounts } from './useTipsAccounts.js'
 
@@ -49,7 +48,6 @@ export function TipsButton(props: Props) {
     } = props
     const { classes, cx } = useStyles()
 
-    const { data: personaPubkey, isLoading: loadingPersona } = useProfilePublicKey(receiver?.userId)
     const receiverUserId = receiver?.userId
 
     const { pluginID } = useNetworkContext()
@@ -67,7 +65,7 @@ export function TipsButton(props: Props) {
         return false
     }, [pluginID, isVisitingUser])
 
-    const accountsByIdentity = useTipsAccounts(identity, personaPubkey)
+    const accountsByIdentity = useTipsAccounts(identity)
     const accounts = useMemo(() => {
         return [...receivingAccounts, ...accountsByIdentity]
             .sort((a, z) => {
@@ -86,7 +84,7 @@ export function TipsButton(props: Props) {
             })
     }, [receivingAccounts, accountsByIdentity, pluginID])
 
-    const disabled = loadingPersona || accounts.length === 0 || !isRuntimeAvailable
+    const disabled = accounts.length === 0 || !isRuntimeAvailable
 
     useEffect(() => {
         onStatusUpdate?.(disabled)

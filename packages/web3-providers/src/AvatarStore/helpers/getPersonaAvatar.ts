@@ -1,7 +1,6 @@
 import { safeUnreachable } from '@masknet/kit'
 import { ChainId } from '@masknet/web3-shared-evm'
 import { EnhanceableSite, NetworkPluginID } from '@masknet/shared-base'
-import { getAvatarFromNextID } from './getAvatarFromNextID.js'
 import { getAvatar } from './getAvatar.js'
 import type { AvatarNextID } from '../types.js'
 
@@ -13,9 +12,6 @@ export async function getPersonaAvatar<T extends NetworkPluginID>(
 ): Promise<AvatarNextID<T> | null> {
     // only twitter is supported
     if (siteType !== EnhanceableSite.Twitter) return null
-
-    const personaAvatar = await getAvatarFromNextID<T>(EnhanceableSite.Twitter, userId, avatarId, persona)
-    if (personaAvatar) return personaAvatar
 
     const avatar = await getAvatar(EnhanceableSite.Twitter, userId)
     if (!avatar) return null

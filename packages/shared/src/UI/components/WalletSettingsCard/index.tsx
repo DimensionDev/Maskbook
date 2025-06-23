@@ -13,16 +13,9 @@ import { WalletSettingsCardUI } from './WalletSettingsCardUI.js'
 interface WalletSettingsCardProps {
     wallet: BindingProof
     fallbackName?: string
-    checked: boolean
-    onSwitchChange: (address: string) => void
 }
 
-export const WalletSettingsCard = memo<WalletSettingsCardProps>(function WalletSettingsCard({
-    wallet,
-    fallbackName,
-    checked,
-    onSwitchChange,
-}) {
+export const WalletSettingsCard = memo<WalletSettingsCardProps>(function WalletSettingsCard({ wallet, fallbackName }) {
     const wallets = useWallets()
     const networkPluginId = resolveNextID_NetworkPluginID(wallet.platform)
     const chainId = useDefaultChainId(networkPluginId)
@@ -41,12 +34,10 @@ export const WalletSettingsCard = memo<WalletSettingsCardProps>(function WalletS
     const addressLink = Utils.explorerResolver.addressLink(chainId, wallet.identity)
     return (
         <WalletSettingsCardUI
-            onSwitchChange={() => onSwitchChange(wallet.identity)}
             icon={networkDescriptor?.icon}
             formattedAddress={formattedAddress}
             addressLink={addressLink}
             walletName={walletName ?? fallbackName}
-            checked={checked}
         />
     )
 })

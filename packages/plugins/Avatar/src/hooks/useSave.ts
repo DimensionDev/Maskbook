@@ -1,9 +1,8 @@
-import { type ECKeyIdentifier, NetworkPluginID, type BindingProof } from '@masknet/shared-base'
+import { NetworkPluginID } from '@masknet/shared-base'
 import type { AvatarNextID, TwitterBaseAPI } from '@masknet/web3-providers/types'
 import { ChainId, SchemaType } from '@masknet/web3-shared-evm'
 import type { AllChainsNonFungibleToken } from '../types.js'
 import { useSaveKV } from './useSaveKV.js'
-import { useSaveToNextID } from './useSaveToNextID.js'
 import { useSaveStringStorage } from './useSaveStringStorage.js'
 import { useCallback } from 'react'
 
@@ -12,19 +11,11 @@ export type AvatarInfo = TwitterBaseAPI.AvatarInfo & {
 }
 
 export function useSave(pluginID: NetworkPluginID) {
-    const saveToNextID = useSaveToNextID()
     const saveToStringStorage = useSaveStringStorage(pluginID)
     const saveToKV = useSaveKV(pluginID)
 
     return useCallback(
-        async (
-            account: string,
-            isBindAccount: boolean,
-            token: AllChainsNonFungibleToken,
-            data: AvatarInfo,
-            persona: ECKeyIdentifier,
-            proof?: BindingProof,
-        ) => {
+        async (account: string, token: AllChainsNonFungibleToken, data: AvatarInfo) => {
             if (!token.contract?.address) return
             const info: AvatarNextID<NetworkPluginID> = {
                 pluginId: pluginID,
@@ -42,7 +33,6 @@ export function useSave(pluginID: NetworkPluginID) {
             try {
                 switch (pluginID) {
                     case NetworkPluginID.PLUGIN_EVM: {
-                        if (isBindAccount) return await saveToNextID(info, account, persona, proof)
                         return await saveToStringStorage(data.userId, account, info)
                     }
                     default:
@@ -52,6 +42,6 @@ export function useSave(pluginID: NetworkPluginID) {
                 return
             }
         },
-        [pluginID, saveToNextID, saveToStringStorage, saveToKV],
+        [pluginID, saveToStringStorage, saveToKV],
     )
 }

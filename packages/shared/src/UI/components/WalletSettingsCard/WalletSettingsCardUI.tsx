@@ -1,6 +1,6 @@
 import { Icons } from '@masknet/icons'
 import { makeStyles } from '@masknet/theme'
-import { Link, Switch, Typography } from '@mui/material'
+import { Link, Typography } from '@mui/material'
 import { memo } from 'react'
 import { WalletIcon } from '../WalletIcon/index.js'
 
@@ -41,35 +41,35 @@ interface WalletSettingsCardUIProps {
     walletName?: string
     formattedAddress?: string
     addressLink?: string
-    checked: boolean
-    onSwitchChange: () => void
 }
 
-export const WalletSettingsCardUI = memo<WalletSettingsCardUIProps>(
-    ({ icon, walletName, formattedAddress, addressLink, checked, onSwitchChange }) => {
-        const { classes } = useStyles()
+export const WalletSettingsCardUI = memo<WalletSettingsCardUIProps>(function WalletSettingsCardUI({
+    icon,
+    walletName,
+    formattedAddress,
+    addressLink,
+}) {
+    const { classes } = useStyles()
 
-        return (
-            <div className={classes.root}>
-                <div className={classes.left}>
-                    <WalletIcon mainIcon={icon} size={30} />
-                    <div>
-                        <Typography className={classes.name}>{walletName}</Typography>
-                        <Typography className={classes.address}>
-                            {formattedAddress}
-                            <Link
-                                href={addressLink}
-                                target="_blank"
-                                title="View on Explorer"
-                                rel="noopener noreferrer"
-                                className={classes.link}>
-                                <Icons.LinkOut size={14} />
-                            </Link>
-                        </Typography>
-                    </div>
+    return (
+        <div className={classes.root}>
+            <div className={classes.left}>
+                <WalletIcon mainIcon={icon} size={30} />
+                <div>
+                    <Typography className={classes.name}>{walletName}</Typography>
+                    <Typography className={classes.address}>
+                        {formattedAddress}
+                        <Link
+                            href={addressLink}
+                            target="_blank"
+                            title="View on Explorer"
+                            rel="noopener noreferrer"
+                            className={classes.link}>
+                            <Icons.LinkOut size={14} />
+                        </Link>
+                    </Typography>
                 </div>
-                <Switch checked={checked} onChange={onSwitchChange} />
             </div>
-        )
-    },
-)
+        </div>
+    )
+})
