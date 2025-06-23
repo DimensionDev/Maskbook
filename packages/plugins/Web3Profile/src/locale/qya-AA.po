@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-15 08:27\n"
+"PO-Revision-Date: 2025-06-23 06:14\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -59,8 +59,8 @@ msgid "Current wallet does not support to interact with Lens protocol."
 msgstr "crwdns31416:0crwdne31416:0"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Failed to set up Web3 Profile wallets. Please try again."
-msgstr "crwdns31418:0crwdne31418:0"
+#~ msgid "Failed to set up Web3 Profile wallets. Please try again."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Firefly"
@@ -128,20 +128,20 @@ msgid "Previous unfollow transaction is in processing, please wait and try again
 msgstr "crwdns31446:0crwdne31446:0"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Save failed"
-msgstr "crwdns31448:0crwdne31448:0"
+#~ msgid "Save failed"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Saved"
-msgstr "crwdns32452:0crwdne32452:0"
+#~ msgid "Saved"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Set up wallet for displaying Web3 footprints and receiving tips on each social media account."
 msgstr "crwdns31452:0crwdne31452:0"
 
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
-msgid "Set up Web3 Profile wallets successfully."
-msgstr "crwdns31454:0crwdne31454:0"
+#~ msgid "Set up Web3 Profile wallets successfully."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Switch to Polygon and Follow"
