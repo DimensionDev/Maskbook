@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-10 05:53\n"
+"PO-Revision-Date: 2025-06-23 06:14\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -1850,7 +1850,7 @@ msgstr "助记词"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #~ msgid "Mobile"
-#~ msgstr "手机"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 msgid "Mobile number"
@@ -2469,7 +2469,7 @@ msgstr "恢复数据库"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #~ msgid "Restore failed"
-#~ msgstr "恢复失败"
+#~ msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -2497,7 +2497,7 @@ msgstr "保存"
 
 #: popups/pages/Personas/AccountDetail/index.tsx
 #~ msgid "Save failed"
-#~ msgstr "保存失败"
+#~ msgstr ""
 
 #: popups/pages/Personas/AccountDetail/index.tsx
 #~ msgid "Saved"
@@ -3352,3 +3352,4 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
