@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-15 08:27\n"
+"PO-Revision-Date: 2025-06-23 06:14\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -189,3 +189,4 @@ msgstr ""
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr ""
+
