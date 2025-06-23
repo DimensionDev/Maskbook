@@ -164,9 +164,7 @@ function Content(props: ProfileTabContentProps) {
         isPending: loadingSocialAccounts,
         error: loadSocialAccounts,
         refetch: retrySocialAccounts,
-    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter, (a, b, c, d) =>
-        Services.Identity.signWithPersona(a, b, c, location.origin, d),
-    )
+    } = useSocialAccountsBySettings(currentSocialIdentity, undefined, addressSorter)
     const [selectedAddress = first(socialAccounts)?.address, setSelectedAddress] = useState<string>()
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()

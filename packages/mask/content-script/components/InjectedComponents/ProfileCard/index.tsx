@@ -26,7 +26,6 @@ import { ChainId } from '@masknet/web3-shared-evm'
 import { EVMWeb3ContextProvider, ScopedDomainsContainer } from '@masknet/web3-hooks-base'
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventType, EventID } from '@masknet/web3-telemetry/types'
-import Services from '#services'
 import { ProfileCardTitle } from './ProfileCardTitle.js'
 import { Trans } from '@lingui/react/macro'
 
@@ -124,9 +123,7 @@ export const ProfileCard = memo(({ identity, currentAddress, ...rest }: Props) =
         data: allSocialAccounts,
         isPending,
         refetch: retrySocialAddress,
-    } = useSocialAccountsBySettings(identity, undefined, addressSorter, (a, b, c, d) =>
-        Services.Identity.signWithPersona(a, b, c, location.origin, d),
-    )
+    } = useSocialAccountsBySettings(identity, undefined, addressSorter)
     const socialAccounts = useMemo(() => {
         const accounts = isPending && !allSocialAccounts.length ? fallbackAccounts : allSocialAccounts
         return accounts.filter((x) => x.pluginID === NetworkPluginID.PLUGIN_EVM)
