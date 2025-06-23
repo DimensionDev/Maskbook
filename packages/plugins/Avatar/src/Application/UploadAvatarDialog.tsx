@@ -3,11 +3,11 @@ import { Trans } from '@lingui/react/macro'
 import { delay } from '@masknet/kit'
 import { useLastRecognizedIdentity } from '@masknet/plugin-infra/content-script'
 import { currentVisitingProfile, share } from '@masknet/plugin-infra/content-script/context'
-import { TransactionConfirmModal, usePersonaConnectStatus } from '@masknet/shared'
+import { TransactionConfirmModal } from '@masknet/shared'
 import { makeStyles, useCustomSnackbar } from '@masknet/theme'
 import { useNetworkContext } from '@masknet/web3-hooks-base'
 import { Twitter } from '@masknet/web3-providers'
-import { isSameAddress, TokenType } from '@masknet/web3-shared-base'
+import { TokenType } from '@masknet/web3-shared-base'
 import { Button, DialogActions, DialogContent, Slider } from '@mui/material'
 import { useCallback, useState } from 'react'
 import AvatarEditor from 'react-avatar-editor'
@@ -56,22 +56,20 @@ async function uploadAvatar(blob: Blob, userId: string): Promise<AvatarInfo | un
 
 export function UploadAvatarDialog() {
     const { classes } = useStyles()
-    const { proof, proofs, selectedTokenInfo } = useAvatarManagement()
+    const { selectedTokenInfo } = useAvatarManagement()
     const { image, account, token, pluginID } = selectedTokenInfo ?? {}
-    const isBindAccount = proofs.some((x) => isSameAddress(x.identity, selectedTokenInfo?.account))
     const { pluginID: currentPluginID } = useNetworkContext(pluginID)
     const identifier = useSubscription(currentVisitingProfile)
     const [editor, setEditor] = useState<AvatarEditor | null>(null)
     const [scale, setScale] = useState(1)
     const { showSnackbar } = useCustomSnackbar()
     const [disabled, setDisabled] = useState(false)
-    const { currentPersona } = usePersonaConnectStatus()
     const identity = useLastRecognizedIdentity()
     const saveAvatar = useSave(currentPluginID)
     const navigate = useNavigate()
 
     const onSave = useCallback(async () => {
-        if (!editor || !account || !token || !currentPersona?.identifier) return
+        if (!editor || !account || !token) return
         editor.getImageScaledToCanvas().toBlob(async (blob) => {
             if (!blob || !identity?.identifier?.userId) return
             setDisabled(true)
@@ -80,14 +78,7 @@ export function UploadAvatarDialog() {
                 setDisabled(false)
                 return
             }
-            const response = await saveAvatar(
-                account,
-                isBindAccount,
-                token,
-                avatarData,
-                currentPersona.identifier,
-                proof,
-            )
+            const response = await saveAvatar(account, token, avatarData)
             if (!response) {
                 showSnackbar(<Trans>Sorry, failed to save NFT Avatar. Please set again.</Trans>, { variant: 'error' })
                 setDisabled(false)
@@ -107,7 +98,7 @@ export function UploadAvatarDialog() {
                 share,
             })
         }, 'image/png')
-    }, [account, editor, identifier, navigate, currentPersona, proof, isBindAccount, saveAvatar, identity])
+    }, [account, editor, identifier, navigate, saveAvatar, identity])
 
     if (!account || !image || !token) return null
 
