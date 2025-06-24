@@ -344,7 +344,7 @@ declare module '@blocto/fcl' {
      * This is typically used with the response from `currentUser.signUserMessage`.
      * @param message A hexadecimal string
      * @param compositeSignatures An Array of CompositeSignatures
-     * @return true if verifed
+     * @return true if verified
      * @see {@link https://docs.onflow.org/fcl/reference/api/#verifyusersignatures}
      */
     export function verifyUserSignatures(message: string, compositeSignatures: CompositeSignatures[]): Promise<boolean>
@@ -594,7 +594,7 @@ declare module '@blocto/fcl' {
     // TODO: Double check with FCL dev team if Interaction needs to be added from https://github.com/onflow/fcl-js/blob/master/packages/sdk/src/interaction/interaction.js#L66
     /**
      * An interaction is an object containing the information to perform an action on chain.
-     * This object is populated through builders and converted into the approriate access node API call.
+     * This object is populated through builders and converted into the appropriate access node API call.
      * A 'partial' interaction is an interaction object that does not have sufficient
      * information to the intended on-chain action. Multiple partial interactions (through builders)
      * can be coupled to create a complete interaction.
@@ -1076,7 +1076,7 @@ declare module '@blocto/fcl' {
          */
         account: Partial<AccountObject>
         /**
-         * The block retured from a {@link getBlock} request
+         * The block returned from a {@link getBlock} request
          */
         block: BlockObject
         /**
