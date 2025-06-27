@@ -82,10 +82,13 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                 return
             }
             await RiskWarning?.approve?.(account)
-            onClose()
-        } catch {
-            // do nothing
+        } catch (err) {
+            showSnackbar((err as Error).message, {
+                variant: 'error',
+                preventDuplicate: true,
+            })
         }
+        onClose()
     }, [showSnackbar, account, onClose])
 
     return (
