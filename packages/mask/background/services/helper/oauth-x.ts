@@ -46,7 +46,6 @@ class OAuth {
                 value.sort((a, b) => (String(a) > String(b) ? 1 : -1))
 
                 let valString = ''
-                // serialize all values for this key: e.g. formkey=formvalue1&formkey=formvalue2
                 value.forEach(function (item, i) {
                     valString += key + '=' + item
                     if (i < value.length) {
