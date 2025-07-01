@@ -237,6 +237,8 @@ export async function createConfiguration(
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
                 GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
+                FIREFLY_X_CLIENT_ID: process.env.FIREFLY_X_CLIENT_ID || '',
+                FIREFLY_X_CLIENT_SECRET: process.env.FIREFLY_X_CLIENT_SECRET || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',

@@ -24,6 +24,8 @@ export function applyDotEnv(flags: BuildFlags) {
     flags.hmr ??= parseBoolean(parsed.hmr)
     flags.devtools ??= parseBoolean(parsed.devtools)
     flags.devtoolsEditorURI ??= parsed.devtoolsEditorURI
+    flags.FIREFLY_X_CLIENT_ID ??= parsed.FIREFLY_X_CLIENT_ID
+    flags.FIREFLY_X_CLIENT_SECRET ??= parsed.FIREFLY_X_CLIENT_SECRET
     const compiler = parseBooleanOrString(parsed.reactCompiler)
     if (typeof compiler === 'string') {
         if (compiler !== 'infer' && compiler !== 'annotation' && compiler !== 'all')

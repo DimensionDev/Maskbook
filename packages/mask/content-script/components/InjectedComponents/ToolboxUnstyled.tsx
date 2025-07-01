@@ -31,6 +31,7 @@ import { makeStyles } from '@masknet/theme'
 import GuideStep from '../GuideStep/index.js'
 import { useOpenApplicationBoardDialog } from '../shared/openApplicationBoardDialog.js'
 import { Trans } from '@lingui/react/macro'
+import Services from '#services'
 
 const useStyles = makeStyles()(() => ({
     title: {
@@ -99,6 +100,21 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
                         />
                     )}
                 </ListItemButton>
+                {process.env.NODE_ENV === 'development' ?
+                    <ListItemButton
+                        onClick={() =>
+                            // eslint-disable-next-line no-alert
+                            Services.Helper.requestXOAuthToken().then((result) => alert(JSON.stringify(result)))
+                        }>
+                        <ListItemText
+                            primary={
+                                <Box>
+                                    <Typography className={classes.title}>Temp: OAuth X</Typography>
+                                </Box>
+                            }
+                        />
+                    </ListItemButton>
+                :   null}
             </Container>
         </GuideStep>
     )
