@@ -1,5 +1,7 @@
 import { Icons } from '@masknet/icons'
 // import { CopyButton, Image } from '@masknet/shared'
+import { evmAddress } from '@lens-protocol/client'
+import { Trans } from '@lingui/react/macro'
 import { CrossIsolationMessages, NextIDPlatform, type BindingProof } from '@masknet/shared-base'
 import { openWindow } from '@masknet/shared-base-ui'
 import { ActionButton, MaskColors, makeStyles } from '@masknet/theme'
@@ -7,16 +9,14 @@ import { useChainContext, useWeb3Utils } from '@masknet/web3-hooks-base'
 import { ENS, EVMWeb3, LensV3 } from '@masknet/web3-providers'
 import { isSameAddress, resolveNextIDPlatformLink } from '@masknet/web3-shared-base'
 import { MenuItem, Typography } from '@mui/material'
+import { useQuery } from '@tanstack/react-query'
 import { memo } from 'react'
 import { useAsync } from 'react-use'
-import { SocialTooltip } from './SocialTooltip.js'
-import { resolveNextIDPlatformIcon } from './utils.js'
-import { Trans } from '@lingui/react/macro'
-import { useMyLensAccountAddress } from '../../../hooks/index.js'
+import { useMyLensAccount } from '../../../hooks/index.js'
 import { CopyButton } from '../CopyButton/index.js'
 import { Image } from '../Image/index.js'
-import { useQuery } from '@tanstack/react-query'
-import { evmAddress } from '@lens-protocol/client'
+import { SocialTooltip } from './SocialTooltip.js'
+import { resolveNextIDPlatformIcon } from './utils.js'
 
 const useStyles = makeStyles()((theme) => ({
     listItem: {
@@ -159,7 +159,8 @@ export function SocialAccountListItem({
     const { classes, cx } = useStyles()
     const Utils = useWeb3Utils()
 
-    const myAccountAddress = useMyLensAccountAddress()
+    const myLensAccount = useMyLensAccount()
+    const myAccountAddress = myLensAccount?.account.address
     const { data: statusData, isLoading } = useQuery({
         queryKey: ['lens', 'follow', platform, identity, account, myAccountAddress],
         queryFn: async () => {

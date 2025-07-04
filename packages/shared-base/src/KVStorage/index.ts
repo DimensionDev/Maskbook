@@ -45,13 +45,13 @@ export const PersistentStorages = {
         debugging: boolean
         /** @deprecated use lastLensAccount instead */
         latestLensProfile: string
-        /** lens account address */
-        lastLensAccount: string
+        /** lens account address, distinct by wallet address */
+        lastLensAccountMap: Record<string, string>
         backupConfig: BackupConfig
-    }>('settings', {
+    }>('settings@v1', {
         debugging: false,
         latestLensProfile: '',
-        lastLensAccount: '',
+        lastLensAccountMap: {},
         backupConfig: {
             backupPassword: '',
             email: '',

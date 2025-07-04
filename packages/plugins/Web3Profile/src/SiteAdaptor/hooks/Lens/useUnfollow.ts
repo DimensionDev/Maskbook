@@ -1,5 +1,5 @@
 import { useLingui } from '@lingui/react/macro'
-import { useLensClient, useMyLensAccountAddress } from '@masknet/shared'
+import { useLensClient, useMyLensAccount } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useCustomSnackbar, type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -31,7 +31,7 @@ export function useUnfollow({ accountAddress, onSuccess, onFailed }: UnfollowOpt
         [showSnackbar, closeSnackbar],
     )
 
-    const myLensAccount = useMyLensAccountAddress()
+    const myLensAccount = useMyLensAccount()
     const lensClient = useLensClient()
     const handleUnfollow = useCallback(async () => {
         try {

@@ -1,10 +1,13 @@
 import {
     evmAddress,
     mainnet,
+    ManagedAccountsVisibility,
+    PageSize,
     PublicClient,
     type AccountAvailable,
     type AccountStats,
     type AccountStatsRequest,
+    type ChallengeRequest,
     type EvmAddress,
     type SessionClient,
 } from '@lens-protocol/client'
@@ -51,19 +54,30 @@ export class LensV3 {
         this.signMessage = signMessage || ((message: string) => EVMWeb3.signMessage('message', message))
     }
 
-    async login(account: EvmAddress, manager?: EvmAddress) {
+    async login(account: AccountAvailable) {
         const resumed = await this.client.resumeSession()
         if (resumed.isOk()) {
             this.sessionClient = resumed.value
         }
-        if (!this.account && !manager) {
-            throw new Error('Please set account or manager')
+        if (!this.account) {
+            throw new Error('No wallet account')
         }
+        const options: ChallengeRequest =
+            account.__typename === 'AccountManaged' ?
+                {
+                    accountManager: {
+                        manager: this.account,
+                        account: account.account.address,
+                    },
+                }
+            :   {
+                    accountOwner: {
+                        owner: this.account,
+                        account: account.account.address,
+                    },
+                }
         const authenticated = await this.client.login({
-            accountManager: {
-                manager: this.account || manager,
-                account,
-            },
+            ...options,
             signMessage: this.signMessage,
         })
         if (authenticated.isErr()) {
@@ -134,9 +148,12 @@ export class LensV3 {
         })
     }
 
-    async getAvailableAccounts(address: EvmAddress) {
+    async getAvailableAccounts(address?: EvmAddress) {
         const result = await fetchAccountsAvailable(this.client, {
-            managedBy: address,
+            managedBy: address || this.account,
+            pageSize: PageSize.Fifty,
+            includeOwned: true,
+            hiddenFilter: ManagedAccountsVisibility.All,
         })
         if (result.isErr()) return []
         const list = uniqBy(
