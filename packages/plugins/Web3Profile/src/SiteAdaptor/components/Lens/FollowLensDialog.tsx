@@ -7,7 +7,7 @@ import {
     setMyLensAccountAddress,
     useAvailableLensAccounts,
     useLensClient,
-    useMyLensAccountAddress,
+    useMyLensAccount,
     WalletConnectedBoundary,
 } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
@@ -119,7 +119,8 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const { showSnackbar } = useCustomSnackbar()
     const lensClient = useLensClient()
-    const myLensAccount = useMyLensAccountAddress(true)
+    const myLensAccount = useMyLensAccount()
+    const myLensAddress = myLensAccount?.account.address
 
     const { data: lensAccount, isLoading } = useQuery({
         enabled: !!handle && !!open,
@@ -133,13 +134,15 @@ export function FollowLensDialog({ handle, onClose }: Props) {
     const { data: accounts } = useAvailableLensAccounts()
     const isSelf = isSameAddress(lensAccount?.username?.ownedBy as string, walletAccount)
 
-    const currentAccount = accounts?.find((p) => isSameAddress(p.account.address, myLensAccount)) || first(accounts)
-    const targetAccountAddress: EvmAddress | undefined = lensAccount?.address
+    const currentAccount = accounts?.find((p) => isSameAddress(p.account.address, myLensAddress)) || first(accounts)
+    const targetLensAddress: EvmAddress | undefined = lensAccount?.address
     const { isPending, data: isFollowing } = useQuery({
-        queryKey: ['lens', 'following-status', myLensAccount, targetAccountAddress, !lensClient],
+        queryKey: ['lens', 'following-status', myLensAddress, targetLensAddress, !lensClient],
         queryFn: async () => {
-            if (!targetAccountAddress || !myLensAccount || !lensClient) return false
-            const res = await lensClient.getFollowStatus([{ account: targetAccountAddress, follower: myLensAccount }])
+            if (!targetLensAddress || !myLensAddress || !lensClient) return false
+            const res = await lensClient.getFollowStatus([
+                { account: targetLensAddress, follower: myLensAddress as EvmAddress },
+            ])
             const status = res[0].isFollowing
             return status.onChain
         },
@@ -154,14 +157,14 @@ export function FollowLensDialog({ handle, onClose }: Props) {
         accountAddress: lensAccount?.address,
         onSuccess: (width: number, height: number) => {
             showConfettiExplosion(width, height)
-            updateFollowingStatus(myLensAccount, targetAccountAddress, true)
+            updateFollowingStatus(myLensAddress, targetLensAddress, true)
         },
-        onFailed: () => updateFollowingStatus(myLensAccount, targetAccountAddress, false),
+        onFailed: () => updateFollowingStatus(myLensAddress, targetLensAddress, false),
     })
     const { loading: unfollowLoading, handleUnfollow } = useUnfollow({
         accountAddress: lensAccount?.address as string,
-        onSuccess: () => updateFollowingStatus(myLensAccount, targetAccountAddress, false),
-        onFailed: () => updateFollowingStatus(myLensAccount, targetAccountAddress, true),
+        onSuccess: () => updateFollowingStatus(myLensAddress, targetLensAddress, false),
+        onFailed: () => updateFollowingStatus(myLensAddress, targetLensAddress, true),
     })
     // #endregion
 
@@ -217,9 +220,12 @@ export function FollowLensDialog({ handle, onClose }: Props) {
 
     const avatar = lensAccount?.metadata?.picture
 
-    const handleProfileChange = useCallback((profile: Account) => {
-        setMyLensAccountAddress(profile.address)
-    }, [])
+    const handleProfileChange = useCallback(
+        (profile: Account) => {
+            setMyLensAccountAddress(walletAccount, profile.address)
+        },
+        [walletAccount],
+    )
 
     const loading = followLoading || unfollowLoading || isLoading || isPending
 

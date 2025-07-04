@@ -159,15 +159,12 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                 horizontal: 'right',
             }}>
             <List disablePadding className={classes.list}>
-                {availableAccounts.map((available) => {
-                    const account = available.account
+                {availableAccounts.map(({ account, __typename: accountType }) => {
                     const avatar = LensV3.getAccountAvatar(account)
                     const name = account.metadata?.name || account.username?.localName
                     const ownerAddress: EvmAddress = account.username?.ownedBy
                     const accountId = account.username?.id
-                    const disabled =
-                        (currentAccountId && currentAccountId === accountId) ||
-                        available.__typename !== 'AccountManaged'
+                    const disabled = accountId === currentAccountId
                     return (
                         <ListItemButton
                             className={cx(classes.item, { [classes.disabled]: disabled })}
@@ -196,7 +193,7 @@ export const ProfilePopup = memo<ProfilePopupProps>(function ProfilePopup({
                                         <Typography component="div" className={classes.address}>
                                             {formatEthereumAddress(ownerAddress, 4)}
                                         </Typography>
-                                        {available.__typename === 'AccountManaged' ?
+                                        {accountType === 'AccountManaged' ?
                                             <Typography component="span" className={classes.managedTag}>
                                                 Managed
                                             </Typography>
