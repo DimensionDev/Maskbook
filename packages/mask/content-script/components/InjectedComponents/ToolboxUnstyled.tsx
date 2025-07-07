@@ -100,21 +100,19 @@ function ToolboxHintForApplication(props: ToolboxHintProps) {
                         />
                     )}
                 </ListItemButton>
-                {process.env.NODE_ENV === 'development' ?
-                    <ListItemButton
-                        onClick={() =>
-                            // eslint-disable-next-line no-alert
-                            Services.Helper.requestXOAuthToken().then((result) => alert(JSON.stringify(result)))
-                        }>
-                        <ListItemText
-                            primary={
-                                <Box>
-                                    <Typography className={classes.title}>Temp: OAuth X</Typography>
-                                </Box>
-                            }
-                        />
-                    </ListItemButton>
-                :   null}
+                <ListItemButton
+                    onClick={() =>
+                        // eslint-disable-next-line no-alert
+                        Services.Helper.requestXOAuthToken().then((result) => alert(JSON.stringify(result)))
+                    }>
+                    <ListItemText
+                        primary={
+                            <Box>
+                                <Typography className={classes.title}>Temp: OAuth X</Typography>
+                            </Box>
+                        }
+                    />
+                </ListItemButton>
             </Container>
         </GuideStep>
     )
