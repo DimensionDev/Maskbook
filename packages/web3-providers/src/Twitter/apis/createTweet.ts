@@ -82,7 +82,7 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         if (response.errors) {
             // TODO Fetch main.xxx.js and extract queryIds from Twitter's client code.
             console.error(
-                "Errors occupied, query id should be outdated. Please check twitter's client code in main.xxx.js",
+                "Errors occupied, query id could be outdated. Please check twitter's client code in main.xxx.js",
                 'Response Errors:',
                 response.errors,
             )
