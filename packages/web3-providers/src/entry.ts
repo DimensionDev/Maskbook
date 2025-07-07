@@ -92,7 +92,7 @@ export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
 export { Unstoppable } from './Unstoppable/index.js'
 
 // Zerion
-export { Zerion, ZerionGas, ZerionNonFungibleToken } from './Zerion/index.js'
+export { Zerion } from './Zerion/index.js'
 
 // Smart Pay
 export { SmartPayBundler } from './SmartPay/index.js'
