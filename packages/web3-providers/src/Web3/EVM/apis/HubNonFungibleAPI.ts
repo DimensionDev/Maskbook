@@ -7,7 +7,6 @@ import * as GoPlusAuthorization from /* webpackDefer: true */ '../../../GoPlusLa
 import * as NFTScanNonFungibleTokenEVM from /* webpackDefer: true */ '../../../NFTScan/index.js'
 import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
 import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
-import * as ZerionNonFungibleToken from /* webpackDefer: true */ '../../../Zerion/index.js'
 import * as Zora from /* webpackDefer: true */ '../../../Zora/index.js'
 import { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
 import type { EVMHubOptions } from '../types/index.js'
@@ -25,7 +24,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
         >(
             {
                 [SourceType.Chainbase]: ChainbaseNonFungibleToken.ChainbaseNonFungibleToken,
-                [SourceType.Zerion]: ZerionNonFungibleToken.ZerionNonFungibleToken,
                 [SourceType.NFTScan]: NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
                 [SourceType.Alchemy_EVM]: AlchemyEVM.AlchemyEVM,
                 [SourceType.Zora]: Zora.Zora,
@@ -36,7 +34,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
             options.chainId === ChainId.Mainnet ?
                 [
                     NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
-                    ZerionNonFungibleToken.ZerionNonFungibleToken,
                     AlchemyEVM.AlchemyEVM,
                     Zora.Zora,
                     GoPlusAuthorization.GoPlusAuthorization,
@@ -45,7 +42,6 @@ export class HubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {
                 ]
             :   [
                     NFTScanNonFungibleTokenEVM.NFTScanNonFungibleTokenEVM,
-                    ZerionNonFungibleToken.ZerionNonFungibleToken,
                     AlchemyEVM.AlchemyEVM,
                     Zora.Zora,
                     GoPlusAuthorization.GoPlusAuthorization,
