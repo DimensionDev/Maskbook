@@ -17,7 +17,6 @@ import { getAssetsList } from './base-api.js'
 import { formatAsset, formatRestTransaction, isValidAsset, zerionChainIdResolver } from './helpers.js'
 import type { TransactionsResponse } from './reset-types.js'
 
-const ZERION_NFT_DETAIL_URL = 'https://app.zerion.io/nfts/'
 const filterAssetType = ['compound', 'trash', 'uniswap', 'uniswap-v2', 'nft']
 const ZERION_REST_API = 'https://zerion-proxy.r2d2.to/'
 
