@@ -70,4 +70,3 @@ msgstr ""
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr ""
-

@@ -44,4 +44,3 @@ msgstr ""
 #: src/SiteAdaptor/components/WarningCard.tsx
 msgid "This domain or address is currently on the Mask Network warning list which may include malicious entries, phishing or scams."
 msgstr ""
-

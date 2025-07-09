@@ -189,4 +189,3 @@ msgstr ""
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
 msgid "Web3 Profile"
 msgstr ""
-

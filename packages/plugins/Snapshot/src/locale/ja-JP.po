@@ -212,4 +212,3 @@ msgstr ""
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
 msgstr "あなたの投票力"
-
