@@ -22,6 +22,8 @@ const useStyles = makeStyles<{
 }>()((theme, { openSettings }) => {
     return {
         content: {
+            display: 'flex',
+            flexDirection: 'column',
             padding: theme.spacing(1.5, openSettings ? 2 : 0, '6px'),
             height: openSettings ? 'auto' : 546,
             scrollbarWidth: 'none',

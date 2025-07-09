@@ -10,6 +10,7 @@ const useStyles = makeStyles()(() => {
             display: 'flex',
             scrollbarColor: 'transparent transparent',
             overflowX: 'scroll',
+            flexShrink: 0,
             margin: '0 2px 8px',
             padding: '8px 16px',
             scrollbarWidth: 'none',

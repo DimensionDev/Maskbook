@@ -23,10 +23,7 @@ import { useTimeout } from 'react-use'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
 
-const useStyles = makeStyles<{
-    shouldScroll: boolean
-    isCarouselReady: boolean
-}>()((theme, props) => {
+const useStyles = makeStyles()((theme) => {
     const smallQuery = `@media (max-width: ${theme.breakpoints.values.sm}px)`
     return {
         applicationWrapper: {
@@ -39,8 +36,8 @@ const useStyles = makeStyles<{
             gridTemplateRows: '100px',
             gridGap: 10,
             justifyContent: 'space-between',
-            maxHeight: 386,
-            width: props.shouldScroll && !navigator.userAgent.includes('Firefox') ? 583 : 570,
+            minHeight: 0,
+            boxSizing: 'border-box',
             scrollbarColor: `${theme.palette.maskColor.secondaryLine} ${theme.palette.maskColor.secondaryLine}`,
             scrollbarWidth: 'thin',
             '::-webkit-scrollbar': {
@@ -157,10 +154,7 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     const [isCarouselReady] = useTimeout(300)
     const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
     // #endregion
-    const { classes, cx } = useStyles({
-        shouldScroll: listedAppList.length > 12,
-        isCarouselReady: !!isCarouselReady(),
-    })
+    const { classes, cx } = useStyles()
 
     return (
         <>
