@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-07-09 03:00\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -36,14 +36,13 @@ msgstr "更改管理账户"
 msgid "Click <0>here</0> and fill the SmartPay Wallet whitelist application form."
 msgstr ""
 
-#. placeholder {0}: formatEthereumAddress(address, 4)
 #: src/SiteAdaptor/components/CreateSuccessDialog.tsx
 msgid "Congratulation! You've deployed SmartPay Wallet {0}."
 msgstr ""
 
-#: src/SiteAdaptor/components/ManagePopover.tsx
-#: src/SiteAdaptor/components/ManagePopover.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/ManagePopover.tsx
+#: src/SiteAdaptor/components/ManagePopover.tsx
 msgid "Create"
 msgstr "创建"
 
@@ -67,8 +66,8 @@ msgstr "创建新钱包"
 msgid "Create a SmartPay Wallet with your X account."
 msgstr ""
 
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
 msgid "Create persona"
 msgstr ""
 
@@ -126,8 +125,8 @@ msgstr "支持多签和社交恢复"
 msgid "Network error."
 msgstr "网络错误。"
 
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
 msgid "Persona"
 msgstr ""
 
@@ -135,8 +134,8 @@ msgstr ""
 msgid "Personas"
 msgstr "身份"
 
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/AddSmartPayPopover.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
 msgid "Please create a Persona and verify your account to use this feature."
 msgstr ""
 
@@ -168,9 +167,9 @@ msgstr "设置 MASK 代币用于支付与 Polygon Network 交互时的网络费�
 msgid "Set up the Management Account for SmartPay Wallet"
 msgstr "设置 SmartPay 钱包管理账户"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/components/SmartPayEntry.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/components/SmartPayEntry.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Smart Pay"
 msgstr "SmartPay"
 
@@ -269,3 +268,4 @@ msgstr ""
 #: src/SiteAdaptor/components/SmartPayDescriptionDialog.tsx
 msgid "You need to know before using SmartPay:"
 msgstr "在使用 Smart Pay 前需要知道的事："
+
