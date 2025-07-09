@@ -15,7 +15,6 @@ function isIgnoredRequest(request: Request) {
         // source code
         'https://maskbook.pages.dev',
         // KV
-        'https://kv.r2d2.to/api/com.maskbook.pets',
         'https://kv.r2d2.to/api/com.maskbook.user',
         // ScamDB
         'https://scam.mask.r2d2.to',

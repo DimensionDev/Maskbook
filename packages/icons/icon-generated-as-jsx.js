@@ -503,11 +503,6 @@ export const PancakeSwap = /*#__PURE__*/ __createIcon('PancakeSwap', [
         u: () => new URL('./brands/PancakeSwap.png', import.meta.url).href,
     },
 ])
-export const Pets = /*#__PURE__*/ __createIcon('Pets', [
-    {
-        u: () => new URL('./brands/Pets.svg', import.meta.url).href,
-    },
-])
 export const Planet = /*#__PURE__*/ __createIcon('Planet', [
     {
         u: () => new URL('./brands/Planet.png', import.meta.url).href,

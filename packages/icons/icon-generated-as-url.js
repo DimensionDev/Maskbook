@@ -88,7 +88,6 @@ export function open_sea_url() { return new URL("./brands/OpenSea.svg", import.m
 export function open_sea_colored_url() { return new URL("./brands/OpenSeaColored.svg", import.meta.url).href }
 export function optimism_url() { return new URL("./brands/Optimism.svg", import.meta.url).href }
 export function pancake_swap_url() { return new URL("./brands/PancakeSwap.png", import.meta.url).href }
-export function pets_url() { return new URL("./brands/Pets.svg", import.meta.url).href }
 export function planet_url() { return new URL("./brands/Planet.png", import.meta.url).href }
 export function polka_dot_url() { return new URL("./brands/PolkaDot.svg", import.meta.url).href }
 export function polygon_url() { return new URL("./brands/Polygon.svg", import.meta.url).href }

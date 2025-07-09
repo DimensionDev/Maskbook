@@ -56,7 +56,6 @@
     "@masknet/plugin-handle": "workspace:^",
     "@masknet/plugin-infra": "workspace:^",
     "@masknet/plugin-nextid": "workspace:^",
-    "@masknet/plugin-pets": "workspace:^",
     "@masknet/plugin-profilecard": "workspace:^",
     "@masknet/plugin-redpacket": "workspace:^",
     "@masknet/plugin-rss3": "workspace:^",

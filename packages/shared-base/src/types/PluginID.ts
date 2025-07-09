@@ -26,7 +26,6 @@ export enum PluginID {
     Template = 'io.mask.template',
     RSS3 = 'bio.rss3',
     RedPacket = 'com.maskbook.red_packet',
-    Pets = 'com.maskbook.pets',
     Snapshot = 'org.snapshot',
     Savings = 'com.savings',
     Wallet = 'com.maskbook.wallet',

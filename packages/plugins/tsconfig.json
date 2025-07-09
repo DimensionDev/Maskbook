@@ -15,7 +15,6 @@
     { "path": "./GoPlusSecurity/tsconfig.json" },
     { "path": "./Handle/tsconfig.json" },
     { "path": "./NextID/tsconfig.json" },
-    { "path": "./Pets/tsconfig.json" },
     { "path": "./ProfileCard/tsconfig.json" },
     { "path": "./RSS3/tsconfig.json" },
     { "path": "./RedPacket/tsconfig.json" },
