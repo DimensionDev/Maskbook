@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-07-09 03:01\n"
 "Last-Translator: \n"
 "Language: zh_TW\n"
 "Language-Team: Chinese Traditional\n"
@@ -40,8 +40,8 @@ msgstr ""
 msgid "Followings"
 msgstr ""
 
-#: src/SiteAdaptor/Profile.tsx
 #: src/SiteAdaptor/FollowersPage.tsx
+#: src/SiteAdaptor/Profile.tsx
 msgid "Load failed"
 msgstr ""
 
@@ -56,3 +56,4 @@ msgstr ""
 #: src/SiteAdaptor/ConnectButton.tsx
 msgid "Unfollow"
 msgstr ""
+
