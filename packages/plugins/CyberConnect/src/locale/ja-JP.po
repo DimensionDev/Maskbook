@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-07-09 02:59\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -40,8 +40,8 @@ msgstr "フォロワー"
 msgid "Followings"
 msgstr "フォロー"
 
-#: src/SiteAdaptor/Profile.tsx
 #: src/SiteAdaptor/FollowersPage.tsx
+#: src/SiteAdaptor/Profile.tsx
 msgid "Load failed"
 msgstr "読み込みに失敗しました"
 
@@ -56,3 +56,4 @@ msgstr "フォロー中の友達はいません。"
 #: src/SiteAdaptor/ConnectButton.tsx
 msgid "Unfollow"
 msgstr "フォロー解除"
+
