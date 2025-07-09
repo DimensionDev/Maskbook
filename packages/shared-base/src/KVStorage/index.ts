@@ -80,7 +80,6 @@ export const PersistentStorages = {
             [PluginID.Trader]: false,
             [PluginID.Tips]: false,
             [PluginID.Transak]: false,
-            [PluginID.Pets]: false,
             [PluginID.GoPlusSecurity]: false,
         },
     }),
