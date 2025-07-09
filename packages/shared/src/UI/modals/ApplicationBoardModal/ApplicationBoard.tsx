@@ -1,27 +1,27 @@
-import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
-import { useTimeout } from 'react-use'
-import { Typography } from '@mui/material'
+import { Trans } from '@lingui/react/macro'
 import { useActivatedPluginsSiteAdaptor, type IdentityResolved } from '@masknet/plugin-infra/content-script'
 import {
-    useCurrentPersonaConnectStatus,
-    SelectProviderModal,
     PersonaContext,
+    SelectProviderModal,
+    useCurrentPersonaConnectStatus,
     type PersonaPerSiteConnectStatus,
 } from '@masknet/shared'
-import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import {
     currentPersonaIdentifier,
-    EnhanceableSite,
     EMPTY_LIST,
+    EnhanceableSite,
     type DashboardRoutes,
     type NetworkPluginID,
     type PersonaInformation,
 } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
+import { Boundary, getMaskColor, makeStyles } from '@masknet/theme'
 import { useChainContext, useNetworkContext } from '@masknet/web3-hooks-base'
+import { Typography } from '@mui/material'
+import { createContext, useContext, useMemo, useState, type PropsWithChildren } from 'react'
+import { useTimeout } from 'react-use'
 import { ApplicationRecommendArea } from './ApplicationRecommendArea.js'
 import { useUnlistedEntries, type Application } from './ApplicationSettingPluginList.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles<{
     shouldScroll: boolean
@@ -31,7 +31,7 @@ const useStyles = makeStyles<{
     return {
         applicationWrapper: {
             padding: theme.spacing(0, navigator.userAgent.includes('Firefox') ? 1.5 : 0.25, 1, 3),
-            transform: props.isCarouselReady ? 'translateX(-8px)' : 'translateX(-8px)',
+            transform: 'translateX(-8px)',
             display: 'grid',
             gridTemplateColumns: 'repeat(4, 1fr)',
             overflowY: 'auto',
@@ -79,7 +79,7 @@ const useStyles = makeStyles<{
     }
 })
 
-interface ApplicationBoardContentProps extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
+interface ApplicationBoardContentProps {
     openDashboard?: (route: DashboardRoutes, search?: string) => void
     queryOwnedPersonaInformation?: (initializedOnly: boolean) => Promise<PersonaInformation[]>
     currentSite?: EnhanceableSite
@@ -97,7 +97,6 @@ export function ApplicationBoardContent({
     allPersonas,
     applicationCurrentStatus,
     personaPerSiteConnectStatusLoading,
-    classes,
 }: ApplicationBoardContentProps) {
     return (
         <PersonaContext initialState={{ queryOwnedPersonaInformation }}>
@@ -107,20 +106,13 @@ export function ApplicationBoardContent({
                 allPersonas={allPersonas}
                 applicationCurrentStatus={applicationCurrentStatus}
                 personaPerSiteConnectStatusLoading={personaPerSiteConnectStatusLoading}>
-                <ApplicationBoardPluginsList
-                    currentSite={currentSite}
-                    classes={{
-                        applicationWrapper: classes?.applicationWrapper,
-                        recommendFeatureAppListWrapper: classes?.recommendFeatureAppListWrapper,
-                    }}
-                />
+                <ApplicationBoardPluginsList currentSite={currentSite} />
             </ApplicationEntryStatusProvider>
         </PersonaContext>
     )
 }
 
-interface ApplicationBoardPluginsListProps
-    extends withClasses<'applicationWrapper' | 'recommendFeatureAppListWrapper'> {
+interface ApplicationBoardPluginsListProps {
     currentSite?: EnhanceableSite
 }
 
@@ -165,26 +157,22 @@ function ApplicationBoardPluginsList(props: ApplicationBoardPluginsListProps) {
     const [isCarouselReady] = useTimeout(300)
     const [isHoveringCarousel, setIsHoveringCarousel] = useState(false)
     // #endregion
-    const { classes, cx } = useStyles(
-        {
-            shouldScroll: listedAppList.length > 12,
-            isCarouselReady: !!isCarouselReady(),
-        },
-        { props },
-    )
+    const { classes, cx } = useStyles({
+        shouldScroll: listedAppList.length > 12,
+        isCarouselReady: !!isCarouselReady(),
+    })
 
     return (
         <>
-            <ApplicationRecommendArea
-                classes={{
-                    recommendFeatureAppListWrapper: classes.recommendFeatureAppListWrapper,
-                }}
-                recommendFeatureAppList={recommendFeatureAppList}
-                isCarouselReady={isCarouselReady}
-                RenderEntryComponent={RenderEntryComponent}
-                isHoveringCarousel={isHoveringCarousel}
-                setIsHoveringCarousel={setIsHoveringCarousel}
-            />
+            {recommendFeatureAppList.length > 0 ?
+                <ApplicationRecommendArea
+                    recommendFeatureAppList={recommendFeatureAppList}
+                    isCarouselReady={isCarouselReady}
+                    RenderEntryComponent={RenderEntryComponent}
+                    isHoveringCarousel={isHoveringCarousel}
+                    setIsHoveringCarousel={setIsHoveringCarousel}
+                />
+            :   null}
 
             {listedAppList.length > 0 ?
                 <Boundary>
