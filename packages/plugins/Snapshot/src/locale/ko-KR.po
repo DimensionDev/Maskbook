@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-07-09 02:59\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -125,7 +125,7 @@ msgstr "해당한 결과가 없습니다."
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
 #~ msgid "Option(s)"
-#~ msgstr "옵션"
+#~ msgstr ""
 
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Please try again if you failed to vote."
@@ -185,7 +185,7 @@ msgstr "투표"
 
 #: src/SiteAdaptor/VoteConfirmDialog.tsx
 #~ msgid "Vote Overview"
-#~ msgstr "투표 개요"
+#~ msgstr ""
 
 #: src/SiteAdaptor/VotingDialog.tsx
 #~ msgid "Voted."
@@ -212,3 +212,4 @@ msgstr ""
 #: src/SiteAdaptor/VotingDialog.tsx
 msgid "Your voting power"
 msgstr "투표 파워"
+
