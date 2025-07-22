@@ -84,7 +84,7 @@ export interface RedPacketProps {
 export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: RedPacketProps) {
     const { _ } = useLingui()
     const token = payload.token
-    const payloadChainId: ChainId =
+    const redpacketChainId: ChainId =
         (token?.chainId as ChainId) ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -114,11 +114,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     const isFireflyRedpacket = useIsFireflyRedpacket()
     const postId = usePostInfoDetails.postID()
 
-    // TODO payload.chainId is undefined on production mode
-    const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(
-        NetworkPluginID.PLUGIN_EVM,
-        (payload.chainId as number) || payload.token?.chainId,
-    )
+    const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(NetworkPluginID.PLUGIN_EVM, redpacketChainId)
 
     const claimedShareText = useMemo(() => {
         const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
@@ -144,10 +140,10 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         payload.contract_version,
         account,
         payload.rpid,
-        payloadChainId,
+        redpacketChainId,
     )
 
-    const redPacketContract = useRedPacketContract(payloadChainId, payload.contract_version) as HappyRedPacketV4
+    const redPacketContract = useRedPacketContract(redpacketChainId, payload.contract_version) as HappyRedPacketV4
     const checkResult = useCallback(async () => {
         const data = await redPacketContract.methods.check_availability(payload.rpid).call({
             // check availability is ok w/o account
@@ -265,7 +261,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             <NetworkContextProvider initialNetwork={currentPluginID}>
                 <OperationFooter
                     className={classes.footer}
-                    chainId={payloadChainId}
+                    chainId={redpacketChainId}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     unsatisfied={unsatisfied}
