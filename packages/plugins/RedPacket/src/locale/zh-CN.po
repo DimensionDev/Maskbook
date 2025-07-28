@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 03:00\n"
+"PO-Revision-Date: 2025-07-28 12:43\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -200,6 +200,10 @@ msgstr ""
 msgid "Claim Details"
 msgstr ""
 
+#: src/SiteAdaptor/components/ClaimOnFirefly.tsx
+msgid "Claim Lucky Drop"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "Claim on Farcaster: {link}"
 #~ msgstr ""
@@ -362,6 +366,10 @@ msgstr ""
 msgid "Details"
 msgstr ""
 
+#: src/SiteAdaptor/components/ClaimOnFirefly.tsx
+msgid "Discovered a LuckyDrop event on the FireFly website."
+msgstr ""
+
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
 #~ msgid "Drop Type"
 #~ msgstr ""
@@ -477,9 +485,7 @@ msgstr ""
 #~ msgstr ""
 
 #: src/SiteAdaptor/views/NftRedPacketConfirm.tsx
-msgid ""
-"Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n"
-"\n"
+msgid "Hi friends, I just created an NFT Lucky Drop on Twitter through Mask Network extension. Feel free to claim and share. Follow @realMaskNetwork  for Web3 updates and insights.\n\n"
 "🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io."
 msgstr ""
 
@@ -788,8 +794,8 @@ msgid "Send"
 msgstr "发送"
 
 #: src/SiteAdaptor/index.tsx
-msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
-msgstr "发送一个惊喜的加密货币红包。支持多个链上的代币和 NFT。"
+#~ msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Sent"
@@ -1075,3 +1081,4 @@ msgstr ""
 #: src/SiteAdaptor/Conditions/index.tsx
 msgid "Your wallet does not meet the eligibility criteria for claiming."
 msgstr ""
+
