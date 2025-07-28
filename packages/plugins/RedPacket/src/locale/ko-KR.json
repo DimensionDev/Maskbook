@@ -60,6 +60,7 @@
         "hom7qf": ["수령"],
         "ZDcdss": ["Claim Conditions"],
         "NdlvGd": ["Claim Details"],
+        "nqL5WA": ["Claim Lucky Drop"],
         "4iA6eo": ["Claim on Farcaster: ", ["link"]],
         "3bGj61": ["Claim on Firefly"],
         "Jc0uDj": ["Claim on Lens: ", ["link"]],
@@ -145,6 +146,7 @@
             "Customize Lucky Drop sender. Select either Lens or Forecaster usernames, or use the currently connected wallet."
         ],
         "URmyfc": ["Details"],
+        "o66hO5": ["Discovered a LuckyDrop event on the FireFly website."],
         "Zg6RWT": ["Drop Type"],
         "ePK91l": ["Edit"],
         "N2S1rs": ["비어 있음"],

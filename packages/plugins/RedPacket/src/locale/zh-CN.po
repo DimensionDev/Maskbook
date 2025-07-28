@@ -200,6 +200,10 @@ msgstr ""
 msgid "Claim Details"
 msgstr ""
 
+#: src/SiteAdaptor/components/ClaimOnFirefly.tsx
+msgid "Claim Lucky Drop"
+msgstr ""
+
 #: src/SiteAdaptor/RedPacket/index.tsx
 #~ msgid "Claim on Farcaster: {link}"
 #~ msgstr ""
@@ -360,6 +364,10 @@ msgstr ""
 
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "Details"
+msgstr ""
+
+#: src/SiteAdaptor/components/ClaimOnFirefly.tsx
+msgid "Discovered a LuckyDrop event on the FireFly website."
 msgstr ""
 
 #: src/SiteAdaptor/FireflyRedpacketConfirmDialog.tsx
