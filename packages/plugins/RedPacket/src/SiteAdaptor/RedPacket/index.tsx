@@ -13,7 +13,7 @@ import { NetworkContextProvider, useChainContext, useNetwork } from '@masknet/we
 import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useRedPacketConstant } from '@masknet/web3-shared-evm'
 import { Card, Grow, Link } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
@@ -25,6 +25,7 @@ import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { ClaimOnFirefly } from '../components/ClaimOnFirefly.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -198,6 +199,11 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         claimedAmount: availability?.claimed_amount,
         claimed: availability?.claimed,
     })
+
+    const contractAddress = useRedPacketConstant(redpacketChainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
+    if (!contractAddress) {
+        return <ClaimOnFirefly />
+    }
 
     // the red packet can fetch without account
     if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
