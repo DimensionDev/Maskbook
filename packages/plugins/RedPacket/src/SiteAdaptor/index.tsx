@@ -128,20 +128,12 @@ const site: Plugin.SiteAdaptor.Definition = {
         (() => {
             const icon = <PluginIcon size={36} />
             const name = <Trans>Lucky Drop</Trans>
-            const recommendFeature = {
-                description: (
-                    <Trans>Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported.</Trans>
-                ),
-                backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
-                isFirst: true,
-            }
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
                             title={name}
-                            recommendFeature={recommendFeature}
                             {...EntryComponentProps}
                             icon={icon}
                             onClick={() => {
@@ -160,7 +152,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 name,
                 tutorialLink: 'https://mask.notion.site/Send-a-Lucky-Drop-a4c7d33e87d54f1e9f537838308e3a6b',
                 category: 'dapp',
-                recommendFeature,
             }
         })(),
     ],

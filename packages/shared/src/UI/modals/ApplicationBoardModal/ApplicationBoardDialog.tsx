@@ -1,27 +1,29 @@
-import { useState, useCallback, useEffect } from 'react'
-import { DialogContent, IconButton, Tab } from '@mui/material'
-import { TabContext, TabPanel } from '@mui/lab'
-import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
-import { InjectedDialog, LeavePageConfirmModal, type PersonaPerSiteConnectStatus } from '@masknet/shared'
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import type { IdentityResolved } from '@masknet/plugin-infra'
+import { InjectedDialog, LeavePageConfirmModal, type PersonaPerSiteConnectStatus } from '@masknet/shared'
 import {
     CrossIsolationMessages,
-    type EnhanceableSite,
     type DashboardRoutes,
+    type EnhanceableSite,
     type PersonaInformation,
     type PluginID,
 } from '@masknet/shared-base'
+import { makeStyles, MaskTabList, useTabs } from '@masknet/theme'
+import { TabContext, TabPanel } from '@mui/lab'
+import { DialogContent, IconButton, Tab } from '@mui/material'
+import { useCallback, useEffect, useState } from 'react'
 import { ApplicationBoardContent } from './ApplicationBoard.js'
-import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 import { ApplicationSettingPluginList } from './ApplicationSettingPluginList.js'
-import { Trans } from '@lingui/react/macro'
+import { ApplicationSettingPluginSwitch } from './ApplicationSettingPluginSwitch.js'
 
 const useStyles = makeStyles<{
     openSettings: boolean
 }>()((theme, { openSettings }) => {
     return {
         content: {
+            display: 'flex',
+            flexDirection: 'column',
             padding: theme.spacing(1.5, openSettings ? 2 : 0, '6px'),
             height: openSettings ? 'auto' : 546,
             scrollbarWidth: 'none',

@@ -796,8 +796,8 @@ msgid "Send"
 msgstr "送る"
 
 #: src/SiteAdaptor/index.tsx
-msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
-msgstr "サプライズ暗号のプレゼントを送信します。複数のチェーンのトークンとNFTが対応されています。"
+#~ msgid "Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported."
+#~ msgstr "サプライズ暗号のプレゼントを送信します。複数のチェーンのトークンとNFTが対応されています。"
 
 #: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Sent"
