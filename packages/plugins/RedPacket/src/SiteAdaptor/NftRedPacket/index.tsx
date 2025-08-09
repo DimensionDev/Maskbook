@@ -119,7 +119,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
         const sender = payload.senderName
         const networkName = network?.name || ''
         const shareText = _(
-            msg`@${sender} is sending an NFT lucky drop on ${networkName} network. ${account_promote} ${promote_short} #mask_io #LuckyDrop ${postLink}`,
+            msg`@${sender} is sending an NFT lucky drop on ${networkName} network. ${account_promote} ${promote_short} #mask_io #LuckyDrop ${postLink.toString()}`,
         )
         const token = await Hub.getNonFungibleAsset(payload.contractAddress, availability.claimed_id)
 
