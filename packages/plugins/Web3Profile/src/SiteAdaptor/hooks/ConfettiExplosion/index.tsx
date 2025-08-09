@@ -96,10 +96,12 @@ export function useConfettiExplosion() {
                 // remove confetti and sequins that fall off the screen
                 // must be done in separate loops to avoid noticeable flickering
                 confetti.forEach((confetto, index) => {
-                    if (confetto.position.y >= canvasHeight) confetti.splice(index, 1)
+                    if (!(confetto.position.y >= canvasHeight)) return
+                    confetti.splice(index, 1)
                 })
                 sequins.forEach((sequin, index) => {
-                    if (sequin.position.y >= canvasHeight) sequins.splice(index, 1)
+                    if (!(sequin.position.y >= canvasHeight)) return
+                    sequins.splice(index, 1)
                 })
             }
 

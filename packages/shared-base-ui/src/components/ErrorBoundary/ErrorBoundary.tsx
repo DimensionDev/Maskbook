@@ -1,6 +1,6 @@
 import { Component } from 'react'
 import type { CrashUIProps } from './CrashUI.js'
-import * as CrashUI from /* webpackDefer: true */ './CrashUI.js'
+import * as CrashUI from './CrashUI.js'
 import type { ErrorBoundaryError } from './context.js'
 
 export class ErrorBoundary extends Component<Partial<CrashUIProps>> {

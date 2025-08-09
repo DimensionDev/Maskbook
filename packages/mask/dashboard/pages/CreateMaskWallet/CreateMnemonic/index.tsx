@@ -171,7 +171,8 @@ async function pollResult(address: string) {
     if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
     const { promise, resolve } = Promise.withResolvers()
     const unsubscribe = subscription.subscribe(() => {
-        if (subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) resolve(true)
+        if (!subscription.getCurrentValue().find((x) => isSameAddress(x.address, address))) return
+        resolve(true)
     })
     return timeout(promise, 10_000, 'It takes too long to create a wallet. You might try again.').finally(unsubscribe)
 }

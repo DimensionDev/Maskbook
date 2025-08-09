@@ -18,9 +18,8 @@ export function RouterDialog({
     const navigate = useNavigate()
 
     useLayoutEffect(() => {
-        if (pathname === RoutePaths.Exit) {
-            props.onClose?.()
-        }
+        if (!(pathname === RoutePaths.Exit)) return
+        props.onClose?.()
     }, [pathname === RoutePaths.Exit, props.onClose])
 
     const [currentTab, onChange] = usePageTab<RedPacketTabs>(pageMap)

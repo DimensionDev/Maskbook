@@ -67,7 +67,8 @@ export function clickSeeMore(node: HTMLElement | undefined | null) {
         more.parentNode!.addEventListener('click', trap)
         more.click()
         setTimeout(() => {
-            if (more.parentNode) more.parentNode.removeEventListener('click', trap)
+            if (!more.parentNode) return
+            more.parentNode.removeEventListener('click', trap)
         }, 0)
     }
 }

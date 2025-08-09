@@ -39,7 +39,8 @@ export function SendingCodeField({
     const sendButton = useRef<HTMLButtonElement>(null)
 
     useEffect(() => {
-        if (autoSend) sendButton.current?.click()
+        if (!autoSend) return
+        sendButton.current?.click()
     }, [autoSend])
 
     return (

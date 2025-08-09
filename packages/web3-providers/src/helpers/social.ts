@@ -123,7 +123,8 @@ export const composePollFrameUrl = (url: string, source: Social.SocialSource) =>
     const parsed = parseUrl(url)
     if (!parsed) return url
     Object.entries(getPollFrameSearchParams(source)).forEach(([key, value]) => {
-        if (value) parsed.searchParams.set(key, value.toString())
+        if (!value) return
+        parsed.searchParams.set(key, value.toString())
     })
     return parsed.toString()
 }

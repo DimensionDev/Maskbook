@@ -2,14 +2,18 @@ import { encodeArrayBuffer, decodeText, decodeArrayBuffer, encodeText } from '@m
 import type { AESCryptoKey } from '@masknet/shared-base'
 
 // * Payload format: 🎶2/4|encrypted_comment:||
-export async function encryptComment(postIV: Uint8Array, postContent: string, comment: string): Promise<string> {
+export async function encryptComment(
+    postIV: Uint8Array<ArrayBuffer>,
+    postContent: string,
+    comment: string,
+): Promise<string> {
     const key = await getCommentKey(postIV, postContent)
 
     const encrypted = await crypto.subtle.encrypt({ name: 'AES-GCM', iv: postIV }, key, encodeText(comment))
     return `\u{1F3B6}2/4|${encodeArrayBuffer(encrypted)}:||`
 }
 export async function decryptComment(
-    postIV: Uint8Array,
+    postIV: Uint8Array<ArrayBuffer>,
     postContent: string,
     encryptComment: string,
 ): Promise<string | null> {
@@ -21,7 +25,7 @@ export async function decryptComment(
     return decodeText(result)
 }
 
-async function getCommentKey(postIV: Uint8Array, postContent: string) {
+async function getCommentKey(postIV: Uint8Array<ArrayBuffer>, postContent: string) {
     const pbkdf = await crypto.subtle.importKey('raw', encodeText(postContent), 'PBKDF2', false, [
         'deriveBits',
         'deriveKey',

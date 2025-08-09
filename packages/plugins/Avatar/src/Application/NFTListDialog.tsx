@@ -174,11 +174,13 @@ export function NFTListDialog() {
     useRenderPhraseCallbackOnDepsChange(() => setSelectedPluginId(pluginID), [pluginID])
 
     useUpdateEffect(() => {
-        if (account) setTargetAccount(account)
+        if (!account) return
+        setTargetAccount(account)
     }, [account])
 
     useUpdateEffect(() => {
-        if (originAccount) setAccount(originAccount)
+        if (!originAccount) return
+        setAccount(originAccount)
     }, [originAccount])
 
     const targetWallet = wallets.find((x) => isSameAddress(targetAccount, x.address))

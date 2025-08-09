@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import * as Web3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as Web3 from '@solana/web3.js'
 import bs58 from 'bs58'
 import { memoize } from 'lodash-es'
 import { getTokenConstant } from '../constants/constants.js'

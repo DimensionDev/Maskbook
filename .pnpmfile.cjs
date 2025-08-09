@@ -6,8 +6,6 @@
 /** @type {Map<string, RegExp | string | (string | RegExp)[]>} */
 const approvedList = new Map()
 
-approvedList.set('webpack', ['npm:@magic-works/webpack@5.88.2'])
-
 approvedList.set('@types/react', ['npm:types-react@beta'])
 approvedList.set('@types/react-dom', ['npm:types-react-dom@beta'])
 

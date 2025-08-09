@@ -1,6 +1,6 @@
 import BN from 'bn.js'
 import { TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { AccountMeta, PublicKey, Signer } from '@solana/web3.js'
 import * as BufferLayout from '@solana/buffer-layout'
 

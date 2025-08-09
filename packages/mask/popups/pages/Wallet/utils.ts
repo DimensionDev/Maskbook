@@ -1,6 +1,6 @@
 import { mapKeys } from 'lodash-es'
 import type { BigNumber } from 'bignumber.js'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { AbiItem } from 'web3-utils'
 import { EVMWeb3 } from '@masknet/web3-providers'
 import ERC20_ABI from '@masknet/web3-contracts/abis/ERC20.json' with { type: 'json' }

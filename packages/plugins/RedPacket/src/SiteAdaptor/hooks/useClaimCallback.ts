@@ -6,7 +6,7 @@ import { EVMChainResolver, EVMWeb3 } from '@masknet/web3-providers'
 import type { RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { type ChainId, ContractTransaction } from '@masknet/web3-shared-evm'
 import { useAsyncFn } from 'react-use'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { useRedPacketContract } from './useRedPacketContract.js'
 import { useSignedMessage } from './useSignedMessage.js'
 

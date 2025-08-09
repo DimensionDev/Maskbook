@@ -57,9 +57,8 @@ export const FileFrame = memo(function FileFrame({
         const root = rootRef.current
         if (!root) return
         const check = () => {
-            if (nameRef.current) {
-                setShowTooltip(nameRef.current.offsetWidth !== nameRef.current.scrollWidth)
-            }
+            if (!nameRef.current) return
+            setShowTooltip(nameRef.current.offsetWidth !== nameRef.current.scrollWidth)
         }
         root.addEventListener('mouseenter', check)
         return () => {

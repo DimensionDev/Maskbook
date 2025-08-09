@@ -37,15 +37,15 @@ jobs:
         with:
             registry: true
       - run: pnpm install
-      - run: npx anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
-      - run: npx markdownlint-cli --fix .
-      - run: npx gulp codegen
+      - run: pnpm exec anti-trojan-source --files='packages/**/src/**/*.{ts,tsx,js}'
+      - run: pnpm exec markdownlint-cli --fix .
+      - run: pnpm exec gulp codegen
       - run: pnpm run lingui:extract
       - run: pnpm run lingui:compile
-      - run: npx gulp sync-languages
-      - run: npx gulp lint-package-json
-      - run: npx gulp fix-plugins-tsconfig
-      - run: npx prettier@3.5.3 --write .
+      - run: pnpm exec gulp sync-languages
+      - run: pnpm exec gulp lint-package-json
+      - run: pnpm exec gulp fix-plugins-tsconfig
+      - run: pnpm exec prettier@3.6.2 --write .
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: linter'
@@ -64,8 +64,8 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp codegen
-      - run: npx gulp typescript
+      - run: pnpm exec gulp codegen
+      - run: pnpm exec gulp typescript
   test:
     runs-on: ubuntu-latest
     steps:
@@ -81,8 +81,8 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp codegen
-      - run: npx gulp polyfill
+      - run: pnpm exec gulp codegen
+      - run: pnpm exec gulp polyfill
       - run: pnpm run test
   eslint:
     runs-on: ubuntu-latest
@@ -115,7 +115,7 @@ jobs:
           restore-keys: linter-v2-
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp codegen
+      - run: pnpm exec gulp codegen
       - name: Run Eslint
         run: |
           export NODE_OPTIONS="--max-old-space-size=8192"

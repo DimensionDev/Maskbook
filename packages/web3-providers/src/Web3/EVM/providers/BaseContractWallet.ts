@@ -3,7 +3,7 @@ import { isSameAddress } from '@masknet/web3-shared-base'
 import { ECKeyIdentifier, type StorageItem } from '@masknet/shared-base'
 import { type ProviderType, isValidAddress } from '@masknet/web3-shared-evm'
 import { BaseHostedProvider, type BaseHostedStorage } from './BaseHosted.js'
-import * as SmartPayBundler from /* webpackDefer: true */ '../../../SmartPay/index.js'
+import defer * as SmartPayBundler from '../../../SmartPay/index.js'
 import type { BundlerAPI } from '../../../entry-types.js'
 
 export type EIP4337ProviderStorage = StorageItem<{

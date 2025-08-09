@@ -1,5 +1,5 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
-import * as web3_eth_abi from /* webpackDefer: true */ 'web3-eth-abi'
+import defer * as web3_utils from 'web3-utils'
+import defer * as web3_eth_abi from 'web3-eth-abi'
 
 interface TypedDataField {
     name: string

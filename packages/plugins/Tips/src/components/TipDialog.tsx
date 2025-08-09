@@ -164,7 +164,8 @@ export function TipDialog({ open = false, onClose }: TipDialogProps) {
     const { setTargetChainId } = TargetRuntimeContext.useContainer()
 
     useUpdateEffect(() => {
-        if (!!wallet?.owner && smartPayChainId) setTargetChainId(smartPayChainId)
+        if (!(!!wallet?.owner && smartPayChainId)) return
+        setTargetChainId(smartPayChainId)
     }, [!!wallet?.owner, smartPayChainId])
 
     useMountReport(EventID.EntryTimelineTipsOpen)

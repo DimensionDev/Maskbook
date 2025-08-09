@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty } from 'lodash-es'
 import { z as zod } from 'zod'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { BigNumber } from 'bignumber.js'
 import { makeStyles } from '@masknet/theme'
 import { formatGweiToEther, formatGweiToWei, formatWeiToEther, formatWeiToGwei } from '@masknet/web3-shared-evm'
@@ -227,28 +227,28 @@ export const GasSetting1559 = memo(() => {
     // #region If the payload type be TRANSFER or INTERACTION and there are maxFeePerGas and maxPriorityFeePerGas parameters on tx, set them to the form data
     useUpdateEffect(() => {
         if (
-            value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
-            value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
-        ) {
-            if (value.formatterTransaction._tx.maxFeePerGas && value.formatterTransaction._tx.maxPriorityFeePerGas) {
-                setValue(
-                    'maxPriorityFeePerGas',
-                    web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
-                )
-                setValue(
-                    'maxFeePerGas',
-                    web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'),
-                )
-            } else {
-                setOption(1)
-            }
+            !(
+                value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
+            )
+        )
+            return
+        if (value.formatterTransaction._tx.maxFeePerGas && value.formatterTransaction._tx.maxPriorityFeePerGas) {
+            setValue(
+                'maxPriorityFeePerGas',
+                web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxPriorityFeePerGas), 'gwei'),
+            )
+            setValue('maxFeePerGas', web3_utils.fromWei(toFixed(value.formatterTransaction._tx.maxFeePerGas), 'gwei'))
+        } else {
+            setOption(1)
         }
     }, [value, setValue])
     // #endregion
 
     // #region Set gas on tx to form data
     useUpdateEffect(() => {
-        if (gas) setValue('gasLimit', new BigNumber(gas).toString())
+        if (!gas) return
+        setValue('gasLimit', new BigNumber(gas).toString())
     }, [gas, setValue])
     // #endregion
 
@@ -331,15 +331,15 @@ export const GasSetting1559 = memo(() => {
 
     // #region If the payload is consumed it needs to be redirected
     useUpdateEffect(() => {
-        if (!value && !getValueLoading) {
-            navigate(PopupRoutes.Wallet, { replace: true })
-        }
+        if (!(!value && !getValueLoading)) return
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, getValueLoading])
     // #endregion
 
     // #region If the estimate gas be 0, Set error
     useUpdateEffect(() => {
-        if (getGasLimitError) setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
+        if (!getGasLimitError) return
+        setError('gasLimit', { message: 'Cant not get estimate gas from contract' })
     }, [getGasLimitError])
 
     return (

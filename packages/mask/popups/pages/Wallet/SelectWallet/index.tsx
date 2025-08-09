@@ -168,7 +168,8 @@ export const Component = memo(function SelectWallet() {
                                 key={item.address}
                                 isSelected={isSameAddress(item.address, selected)}
                                 onSelect={() => {
-                                    if (!disabled) setSelected(item.address)
+                                    if (disabled) return
+                                    setSelected(item.address)
                                 }}
                             />
                         )

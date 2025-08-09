@@ -1,5 +1,5 @@
 import { identity, pickBy } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { type Unresolved, resolve } from '@masknet/shared-base'
 import type {
     BaseContract,

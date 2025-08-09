@@ -2,7 +2,7 @@ import { memo, useCallback, useEffect, useMemo, useState } from 'react'
 import { useUpdateEffect } from 'react-use'
 import { Controller, useForm } from 'react-hook-form'
 import { isEmpty, noop } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { z as zod } from 'zod'
 import { BigNumber } from 'bignumber.js'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -157,7 +157,8 @@ export const Prior1559GasSetting = memo(
         const [inputGasLimit, gasPrice] = watch(['gasLimit', 'gasPrice'])
 
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+            if (!gasLimit) return
+            setValue('gasLimit', new BigNumber(gasLimit).toString())
         }, [gasLimit, setValue])
 
         useEffect(() => {

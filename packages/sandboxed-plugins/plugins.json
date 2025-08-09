@@ -1,7 +1,7 @@
 // The list of sandboxed plugins
 
 // To locally develop a sandboxed plugin without commit it, create a "plugins-local.json" beside this file.
-// To start the sandbox compiler, run "npx gulp sbp-watch" (watch mode) or "npx gulp sbp" (build mode)
+// To start the sandbox compiler, run "pnpm exec gulp sbp-watch" (watch mode) or "pnpm exec gulp sbp" (build mode)
 
 // Supported specifiers:
 //     npm package: "npm:<package-name>"

@@ -10,12 +10,11 @@ export abstract class RiskWarningState implements Web3RiskWarningState {
         private formatAddress: (a: string) => string,
         private storage: StorageItem<Record<string, boolean>>,
     ) {
-        if (this.account) {
-            this.approved = mapSubscription(
-                mergeSubscription(this.account, this.storage.subscription),
-                ([account, storage]) => storage[this.formatAddress(account)],
-            )
-        }
+        if (!this.account) return
+        this.approved = mapSubscription(
+            mergeSubscription(this.account, this.storage.subscription),
+            ([account, storage]) => storage[this.formatAddress(account)],
+        )
     }
 
     async isApproved(address: string) {

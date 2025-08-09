@@ -3,7 +3,7 @@
 
 // All imports must be deferred. This file loads in the very early stage.
 
-import * as base /* webpackDefer: true */ from '@masknet/shared-base'
+import defer * as base from '@masknet/shared-base'
 import { TelemetryID } from '../../../../shared-base/src/Telemetry/index.js'
 
 import.meta.webpackHot?.accept()

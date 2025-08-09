@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { Emitter } from '@servie/events'
 import { delay } from '@masknet/kit'
 import {

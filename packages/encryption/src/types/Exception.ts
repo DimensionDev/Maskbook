@@ -17,7 +17,12 @@ export enum PayloadException {
 }
 
 export function assertUint8Array<T>(x: unknown, name: string, kinds: T) {
-    if (x instanceof Uint8Array) return Ok(x)
+    if (x instanceof Uint8Array) {
+        if (x.buffer.constructor.name === 'SharedArrayBuffer') {
+            return new CheckedError(kinds, `${name} is a SharedArrayBuffer, which is not allowed.`).toErr()
+        }
+        return Ok(x as Uint8Array<ArrayBuffer>)
+    }
     if (x instanceof ArrayBuffer) return Ok(new Uint8Array(x))
     return new CheckedError(kinds, `${name} is not a Binary`).toErr()
 }

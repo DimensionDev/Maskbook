@@ -183,7 +183,8 @@ const PersonaAvatarSetting = memo(function PersonaAvatar() {
     // reset loaded state after file be changed
 
     useUpdateEffect(() => {
-        if (file) setAvatarLoaded(false)
+        if (!file) return
+        setAvatarLoaded(false)
     }, [file])
 
     if (file) {

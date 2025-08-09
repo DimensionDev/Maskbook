@@ -30,6 +30,9 @@
     "resolveJsonModule": true,
     "emitDeclarationOnly": true,
     "libReplacement": true,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "paths": {
       // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.

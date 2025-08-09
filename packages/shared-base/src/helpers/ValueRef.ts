@@ -1,10 +1,7 @@
 // All imports must be deferred. This file loads in the very early stage.
-
-// false positive. we're not using lodash.get
-
-import * as lodash /* webpackDefer: true */ from 'lodash-es'
-import * as constants /* webpackDefer: true */ from '../constants.js'
-import * as stringify /* webpackDefer: true */ from 'json-stable-stringify'
+import defer * as lodash from 'lodash-es'
+import defer * as constants from '../constants.js'
+import defer * as stringify from 'json-stable-stringify'
 
 export type ValueComparer<T> = (a: T, b: T) => boolean
 const defaultComparer: ValueComparer<any> = (a, b) => a === b

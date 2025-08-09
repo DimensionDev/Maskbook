@@ -1,5 +1,5 @@
 // cspell:ignore metaplex
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { Metadata } from '@metaplex-foundation/mpl-token-metadata'
 import { EMPTY_LIST, createIndicator, createPageable, type Pageable } from '@masknet/shared-base'
 import { type NonFungibleAsset, TokenType } from '@masknet/web3-shared-base'

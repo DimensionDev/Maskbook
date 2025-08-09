@@ -1,4 +1,4 @@
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 
 import { AnchorProvider } from '@coral-xyz/anchor'
 import type { Wallet } from '@coral-xyz/anchor/dist/cjs/provider.js'

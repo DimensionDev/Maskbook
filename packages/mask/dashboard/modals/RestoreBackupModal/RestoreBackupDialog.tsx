@@ -215,9 +215,8 @@ export const RestoreBackupDialog = memo<RestoreBackupDialogProps>(function Resto
                         setBackupPasswordError('')
                     }}
                     onBlur={(e) => {
-                        if (!passwordRegexp.test(e.target.value)) {
-                            setBackupPasswordError(<Trans>Incorrect cloud backup password, please try again.</Trans>)
-                        }
+                        if (passwordRegexp.test(e.target.value)) return
+                        setBackupPasswordError(<Trans>Incorrect cloud backup password, please try again.</Trans>)
                     }}
                     error={!!backupPasswordError}
                     helperText={

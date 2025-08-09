@@ -1,6 +1,6 @@
 // ALL IMPORTS MUST BE DEFERRED
 import type { DashboardRoutes } from '@masknet/shared-base'
-import * as base from /* webpackDefer: true */ '@masknet/shared-base'
+import defer * as base from '@masknet/shared-base'
 
 type DashboardRoutes_Welcome = DashboardRoutes.Welcome extends `${infer T}` ? T : never
 function openWelcome() {

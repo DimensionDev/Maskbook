@@ -2,7 +2,7 @@ import Services from '#services'
 import { initWallet } from '@masknet/web3-providers'
 import { allPersonas } from '../initUIContext.js'
 import { CrossIsolationMessages, EMPTY_LIST, Sniffings, createSubscriptionFromAsync } from '@masknet/shared-base'
-import * as shared from /* webpackDefer: true */ '@masknet/shared'
+import defer * as shared from '@masknet/shared'
 import { delay } from '@masknet/kit'
 import { openPopupWindow } from '../utils/openPopup.js'
 

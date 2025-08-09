@@ -155,7 +155,8 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
         (): CompositionRef => ({
             setMessage: (msg) => {
                 // eslint-disable-next-line react-compiler/react-compiler
-                if (Editor) Editor.value = msg
+                if (!Editor) return
+                Editor.value = msg
             },
             setEncryptionKind,
             startPlugin: (id, props) => {

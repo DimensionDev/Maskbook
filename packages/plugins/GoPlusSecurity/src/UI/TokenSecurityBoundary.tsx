@@ -24,7 +24,8 @@ export function TokenSecurityBoundary(props: TokenSecurityBoundaryProps) {
     const { setDialog: setRiskWarningDialog } = useRemoteControlledDialog(
         PluginGoPlusSecurityMessages.tokenRiskWarningDialogEvent,
         ({ swap }) => {
-            if (swap) onSwap()
+            if (!swap) return
+            onSwap()
         },
     )
 

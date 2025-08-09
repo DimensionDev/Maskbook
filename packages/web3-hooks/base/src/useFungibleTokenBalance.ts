@@ -34,9 +34,8 @@ export function useFungibleTokenBalance<T extends NetworkPluginID = NetworkPlugi
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
-                if (isSameAddress(account, ev.account)) {
-                    result.refetch()
-                }
+                if (!isSameAddress(account, ev.account)) return
+                result.refetch()
             }) ?? noop
         )
     }, [account, result.refetch, BalanceNotifier])

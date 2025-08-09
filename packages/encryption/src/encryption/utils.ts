@@ -20,8 +20,8 @@ export function createEphemeralKeysMap(io: Pick<EncryptIO, 'getRandomECKey'>) {
 }
 
 /** @internal */
-export function fillIV(io: Pick<EncryptIO, 'getRandomValues'>): Uint8Array {
-    if (io.getRandomValues) return io.getRandomValues(new Uint8Array(16))
+export function fillIV(io: Pick<EncryptIO, 'getRandomValues'>): Uint8Array<ArrayBuffer> {
+    if (io.getRandomValues) return io.getRandomValues(new Uint8Array(16)) as Uint8Array<ArrayBuffer>
     return crypto.getRandomValues(new Uint8Array(16))
 }
 

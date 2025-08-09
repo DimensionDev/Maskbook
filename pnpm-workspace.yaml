@@ -31,7 +31,6 @@ overrides:
   react: $react
   react-dom: $react-dom
   reflect-metadata: 0.1.13
-  webpack: npm:@magic-works/webpack@5.88.2
 patchedDependencies:
   '@ceramicnetwork/rpc-transport@0.3.1': patches/@ceramicnetwork__rpc-transport@0.3.1.patch
   '@types/react-avatar-editor@13.0.2': patches/@types__react-avatar-editor@13.0.2.patch
@@ -48,6 +47,7 @@ patchedDependencies:
   '@splinetool/runtime@0.9.342': patches/@splinetool__runtime@0.9.342.patch
   '@scamsniffer/detector': patches/@scamsniffer__detector.patch
   gulp: patches/gulp.patch
+  ts-results-es: patches/ts-results-es.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:
@@ -56,5 +56,3 @@ peerDependencyRules:
     - react-dom
     - '@types/react'
   allowedVersions: {}
-# resolutionMode: time-based
-# seems not working correctly. ERR_PNPM_MISSING_TIME  The metadata of @types/react is missing the "time" field.

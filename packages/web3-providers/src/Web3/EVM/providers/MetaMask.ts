@@ -7,8 +7,7 @@ import { EVMInjectedWalletProvider } from './BaseInjected.js'
 function getInjectedProvider() {
     if (isEthereumInjected()) return Reflect.get(window, 'ethereum')
     if (isInPageEthereumInjected()) return injectedMetaMaskProvider
-    // Note: ESM & CommonJS interop
-    return (createMetaMaskProvider.default || createMetaMaskProvider)()
+    return createMetaMaskProvider()
 }
 
 export class MetaMaskProvider extends EVMInjectedWalletProvider {

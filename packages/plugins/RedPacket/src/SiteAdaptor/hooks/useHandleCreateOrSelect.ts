@@ -6,7 +6,7 @@ import type { FireflyRedPacketAPI, RedPacketJSONPayload } from '@masknet/web3-pr
 import { Telemetry } from '@masknet/web3-telemetry'
 import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { useCallback, useContext } from 'react'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { openComposition } from '../openComposition.js'
 import { reduceUselessPayloadInfo } from '../helpers/reduceUselessPayloadInfo.js'
 import { CompositionTypeContext } from '../contexts/CompositionTypeContext.js'

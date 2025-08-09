@@ -172,7 +172,8 @@ export const GasSetting1559 = memo(
 
         // #region Set gas on tx to form data
         useUpdateEffect(() => {
-            if (gasLimit) setValue('gasLimit', new BigNumber(gasLimit).toString())
+            if (!gasLimit) return
+            setValue('gasLimit', new BigNumber(gasLimit).toString())
         }, [gasLimit, setValue])
         // #endregion
 

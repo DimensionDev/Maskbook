@@ -116,9 +116,8 @@ function ProfileTabAtFacebook() {
     // handle cleared tab will be reactivated after scroll
     useEffect(() => {
         const handler = debounce(() => {
-            if (action === 'clear') {
-                clear()
-            }
+            if (!(action === 'clear')) return
+            clear()
         }, 1000)
         window.addEventListener('scroll', handler)
 

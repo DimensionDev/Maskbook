@@ -84,7 +84,8 @@ export function Terms() {
     const [confirmed, setConfirmed] = useTermsConfirmed()
 
     useLayoutEffect(() => {
-        if (confirmed) navigate(-1)
+        if (!confirmed) return
+        navigate(-1)
     }, [confirmed])
 
     return (

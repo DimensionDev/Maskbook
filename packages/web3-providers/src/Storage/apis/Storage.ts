@@ -1,6 +1,6 @@
 import { KVStorage } from '../storages/KV.js'
-import * as RSS3Storage from /* webpackDefer: true */ '../storages/RSS3.js'
-import * as FireflyStorage from /* webpackDefer: true */ '../storages/Firefly.js'
+import defer * as RSS3Storage from '../storages/RSS3.js'
+import defer * as FireflyStorage from '../storages/Firefly.js'
 
 export class Web3Storage {
     static createKVStorage(namespace: string) {

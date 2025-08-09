@@ -1,5 +1,5 @@
 import type { Eth } from 'web3-eth'
-import * as Web3Eth from /* webpackDefer: true */ 'web3-eth'
+import defer * as Web3Eth from 'web3-eth'
 import type { provider as Provider } from 'web3-core'
 
 /**

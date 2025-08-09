@@ -6,10 +6,10 @@ import { BaseHubProvider } from '../../Base/apis/HubBase.js'
 import { GasOptions } from './GasOptionAPI.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { EVMHubOptions } from '../types/index.js'
-import * as MetaSwap from /* webpackDefer: true */ '../../../MetaSwap/index.js'
-import * as AstarGas from /* webpackDefer: true */ '../../../Astar/index.js'
-import * as DeBank from /* webpackDefer: true */ '../../../DeBank/index.js'
-import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
+import defer * as MetaSwap from '../../../MetaSwap/index.js'
+import defer * as AstarGas from '../../../Astar/index.js'
+import defer * as DeBank from '../../../DeBank/index.js'
+import defer * as Zerion from '../../../Zerion/index.js'
 
 export class EVMBaseHub extends BaseHubProvider<ChainId, SchemaType, GasOption> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)

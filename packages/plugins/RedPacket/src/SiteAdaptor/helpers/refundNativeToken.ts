@@ -1,6 +1,6 @@
 import { web3 } from '@coral-xyz/anchor'
 import { getRpProgram } from './getRpProgram.js'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { Cluster } from '@solana/web3.js'
 
 export async function refundNativeToken(id: string, creator: SolanaWeb3.PublicKey, cluster?: Cluster | undefined) {

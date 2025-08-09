@@ -154,7 +154,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                 <div
                     className={classes.networkSelector}
                     onClick={(event) => {
-                        if (!disabled && !wallet.owner) onOpenNetworkSelector(event)
+                        if (!(!disabled && !wallet.owner)) return
+                        onOpenNetworkSelector(event)
                     }}>
                     {currentNetwork?.iconUrl ?
                         <ImageIcon size={30} icon={currentNetwork.iconUrl} name={currentNetwork.name || '?'} />
@@ -195,7 +196,8 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                 <div
                     className={classes.action}
                     onClick={() => {
-                        if (!disabled) onActionClick()
+                        if (disabled) return
+                        onActionClick()
                     }}>
                     {wallet.owner ?
                         <Icons.SmartPay size={30} />

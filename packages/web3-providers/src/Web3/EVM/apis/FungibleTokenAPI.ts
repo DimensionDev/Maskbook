@@ -10,7 +10,7 @@ import {
 import { createIndicator, createPageable, EMPTY_LIST } from '@masknet/shared-base'
 import { type ChainId, getEthereumConstant, type SchemaType } from '@masknet/web3-shared-evm'
 import { EVMContractReadonly } from './ContractReadonlyAPI.js'
-import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/index.js'
+import defer * as CoinGeckoPriceEVM from '../../../CoinGecko/index.js'
 import type { EVMHubOptions } from '../types/index.js'
 import type { FungibleTokenAPI as FungibleTokenBaseAPI } from '../../../entry-types.js'
 

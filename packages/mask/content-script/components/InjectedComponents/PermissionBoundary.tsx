@@ -82,7 +82,8 @@ export function MaskPostExtraPluginWrapperWithPermission({
             <MaskPostExtraPluginWrapper
                 {...props}
                 ref={(methods) => {
-                    if (methods) wrapperMethodsRef.current = methods
+                    if (!methods) return
+                    wrapperMethodsRef.current = methods
                 }}
             />
         </PermissionBoundary>

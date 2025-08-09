@@ -1,3 +1,5 @@
+// Note: this package is published as is, therefore we cannot ship the syntax nor change the module target.
+// eslint-disable-next-line @masknet/prefer-defer-import
 import * as anchorme from /* webpackDefer: true */ 'anchorme'
 import type { TypedMessageAnchor } from '../extension/index.js'
 

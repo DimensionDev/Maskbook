@@ -3,7 +3,7 @@
 ## Compile contracts typing
 
 ```console
-npm start
+pnpm start
 ```
 
 ## About CHANGELOG.md

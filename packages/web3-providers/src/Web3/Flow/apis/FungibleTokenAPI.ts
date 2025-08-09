@@ -10,7 +10,7 @@ import {
     isValidChainId,
 } from '@masknet/web3-shared-flow'
 import { type FungibleAsset, CurrencyType, rightShift } from '@masknet/web3-shared-base'
-import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/index.js'
+import defer * as CoinGeckoPriceEVM from '../../../CoinGecko/index.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
 import type { FungibleTokenAPI, TokenListAPI } from '../../../entry-types.js'
 

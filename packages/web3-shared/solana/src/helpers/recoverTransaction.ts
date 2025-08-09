@@ -1,4 +1,4 @@
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { encode } from 'bs58'
 
 export function recoverTransaction(

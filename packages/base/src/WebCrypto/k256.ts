@@ -29,17 +29,17 @@ export async function decompressK256Point(point: Uint8Array): Promise<{ x: strin
     return { x: Convert.ToBase64Url(x), y: Convert.ToBase64Url(y) }
 }
 
-export async function compressK256KeyRaw(point: Uint8Array) {
+export async function compressK256KeyRaw(point: Uint8Array<ArrayBuffer>) {
     const { isPoint, isPointCompressed, pointCompress } = await import('tiny-secp256k1')
     if (!isPoint(point)) throw new TypeError('Not a point on secp256k1.')
     if (isPointCompressed(point)) return point
-    return pointCompress(point, true)
+    return pointCompress(point, true) as Uint8Array<ArrayBuffer>
 }
-export async function decompressK256Raw(point: Uint8Array) {
+export async function decompressK256Raw(point: Uint8Array<ArrayBuffer>) {
     const { isPoint, isPointCompressed, pointCompress } = await import('tiny-secp256k1')
     if (!isPoint(point)) throw new TypeError('Not a point on secp256k1.')
     if (!isPointCompressed(point)) return point
-    return pointCompress(point, false)
+    return pointCompress(point, false) as Uint8Array<ArrayBuffer>
 }
 
 export async function compressK256Key(key: EC_JsonWebKey): Promise<string> {

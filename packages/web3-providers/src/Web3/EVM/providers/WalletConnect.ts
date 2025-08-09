@@ -1,5 +1,5 @@
 import { first } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { Emitter } from '@servie/events'
 import { getSdkError } from '@walletconnect/utils'
 import { SignClient } from '@walletconnect/sign-client'

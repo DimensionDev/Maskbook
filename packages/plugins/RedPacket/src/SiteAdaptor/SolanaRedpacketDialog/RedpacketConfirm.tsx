@@ -11,7 +11,7 @@ import { dividedBy, formatBalance, formatCurrency, ZERO } from '@masknet/web3-sh
 import { isNativeTokenAddress } from '@masknet/web3-shared-solana'
 import { Launch as LaunchIcon } from '@mui/icons-material'
 import { Box, Link, Paper, Typography } from '@mui/material'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { BigNumber } from 'bignumber.js'
 import { useCallback, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'

@@ -9,7 +9,7 @@ The script offers two functions: `compressConstants` and `completeConstants`.
 The `completeConstants` function ensures that all constant sets have the same fields, even if some fields are absent in certain sets. It fills in missing fields with default values based on their types.
 
 ```bash
-npm run complete
+pnpm run complete
 ```
 
 To specify the names of constants for which fields need to be completed, open the script file and locate the following sections:
@@ -27,7 +27,7 @@ Add the desired constant names within the array.
 The `compressConstants` function reduces the size of constants JSON files by removing blank values or values that are repeated across constant sets.
 
 ```bash
-npm run compress
+pnpm run compress
 ```
 
 To specify the names of constants to be compressed, open the script file and locate the following sections:

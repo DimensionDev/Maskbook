@@ -25,7 +25,7 @@ import {
     getTokenConstant,
 } from '@masknet/web3-shared-solana'
 import { SolanaChainResolver } from './ResolverAPI.js'
-import * as CoinGeckoPriceSolana from /* webpackDefer: true */ '../../../CoinGecko/index.js'
+import defer * as CoinGeckoPriceSolana from '../../../CoinGecko/index.js'
 import { JUP_TOKEN_LIST, RAYDIUM_TOKEN_LIST, SPL_TOKEN_PROGRAM_ID } from '../constants/index.js'
 import { createFungibleAsset, createFungibleToken, requestRPC } from '../helpers/index.js'
 import type {

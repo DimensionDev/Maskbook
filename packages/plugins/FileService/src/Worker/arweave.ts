@@ -12,13 +12,12 @@ import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../t
 import { makeFileKeySigned } from '../helpers.js'
 
 class ArweaveAgent implements ProviderAgent {
-    instance!: Arweave.default
-    static stage: Record<Transaction.default['id'], Transaction.default> = {}
+    instance!: Arweave
+    static stage: Record<Transaction['id'], Transaction> = {}
 
     init() {
         if (this.instance) return
-        // Note: ESM interop
-        this.instance = (Arweave.default || Arweave).init({
+        this.instance = Arweave.init({
             host: 'arweave.net',
             port: 443,
             protocol: 'https',
@@ -58,7 +57,7 @@ class ArweaveAgent implements ProviderAgent {
         return transaction.id
     }
 
-    async *upload(id: Transaction.default['id']) {
+    async *upload(id: Transaction['id']) {
         this.init()
         for await (const uploader of this.instance.transactions.upload(ArweaveAgent.stage[id], new Uint8Array())) {
             yield uploader.pctComplete

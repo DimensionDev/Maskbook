@@ -108,7 +108,7 @@ export interface DecryptIntermediateProgress {
 export type DecryptProgress = DecryptSuccess | DecryptError | DecryptIntermediateProgress | DecryptReportedInfo
 export interface DecryptReportedInfo {
     type: DecryptProgressKind.Info
-    iv?: Uint8Array
+    iv?: Uint8Array<ArrayBuffer>
     claimedAuthor?: ProfileIdentifier
     publicShared?: boolean
     version?: SupportedPayloadVersions

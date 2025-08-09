@@ -65,9 +65,8 @@ function ScamAlert({ result }: { result: ScamResult }) {
     const [autoReport, setAutoReport] = useState(false)
 
     useEffect(() => {
-        if (autoReport) {
-            PluginScamRPC.sendReportScam(result)
-        }
+        if (!autoReport) return
+        PluginScamRPC.sendReportScam(result)
     }, [autoReport, result])
 
     const handleClick = useCallback((event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => {

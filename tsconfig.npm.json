@@ -2,7 +2,10 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "emitDeclarationOnly": false
+    "module": "node20",
+    "moduleResolution": "node16",
+    "emitDeclarationOnly": false,
+    "rewriteRelativeImportExtensions": true
   },
   "references": [
     { "path": "./packages/base/tsconfig.json" },
