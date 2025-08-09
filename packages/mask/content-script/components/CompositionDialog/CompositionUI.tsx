@@ -154,8 +154,8 @@ export function CompositionDialogUI({ ref, ...props }: CompositionProps) {
     const refItem = useMemo(
         (): CompositionRef => ({
             setMessage: (msg) => {
-                // eslint-disable-next-line react-compiler/react-compiler
                 if (!Editor) return
+                // eslint-disable-next-line react-compiler/react-compiler
                 Editor.value = msg
             },
             setEncryptionKind,

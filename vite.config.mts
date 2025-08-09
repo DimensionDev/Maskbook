@@ -3,6 +3,20 @@ import { fileURLToPath } from 'url'
 
 const resolve = (spec: string) => fileURLToPath(new URL(spec, import.meta.url))
 export default defineConfig({
+    plugins: [
+        {
+            enforce: 'pre',
+            name: 'import defer',
+            transform(code, id, map) {
+                if (code.includes('import defer')) {
+                    return {
+                        code: code.replaceAll('import defer * as ', 'import       * as '),
+                        map: this.getCombinedSourcemap(),
+                    }
+                }
+            },
+        },
+    ],
     test: {
         include: ['./packages/**/tests/**/*.ts'],
         alias: {
