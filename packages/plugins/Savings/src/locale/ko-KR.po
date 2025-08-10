@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 02:59\n"
+"PO-Revision-Date: 2025-08-10 09:54\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -34,26 +34,25 @@ msgstr ""
 msgid "Asset"
 msgstr "자산"
 
-#: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
 msgid "Deposit"
 msgstr "입금"
 
+#. placeholder {0}: protocol.bareToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
-#~ msgid "Deposit {0}"
+msgid "Deposit {0}"
+msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#~ msgid "Deposit {8}"
 #~ msgstr ""
 
-#. placeholder {8}: protocol.bareToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
-msgid "Deposit {8}"
-msgstr ""
-
-#. placeholder {9}: protocol.bareToken.symbol
-#: src/SiteAdaptor/SavingsForm.tsx
-msgid "Deposit {9}"
-msgstr ""
+#~ msgid "Deposit {9}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
@@ -83,17 +82,14 @@ msgstr ""
 #. placeholder {1}: promote.symbol
 #. placeholder {2}: promote.chain
 #. placeholder {3}: promote.account
+#: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr ""
 
-#. placeholder {4}: promote.amount
-#. placeholder {5}: promote.symbol
-#. placeholder {6}: promote.chain
-#. placeholder {7}: promote.account
 #: src/SiteAdaptor/SavingsForm.tsx
-msgid "Hi friends, I just withdrew my deposit {4} {5} on {6}. Follow @{7} to find more staking projects."
-msgstr ""
+#~ msgid "Hi friends, I just withdrew my deposit {4} {5} on {6}. Follow @{7} to find more staking projects."
+#~ msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
@@ -157,17 +153,18 @@ msgstr ""
 msgid "Wallet"
 msgstr "월렛"
 
-#: src/SiteAdaptor/WithdrawForm.tsx
-#: src/SiteAdaptor/WithdrawForm.tsx
-#: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsDialog.tsx
+#: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsTable/SavingsRow.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw"
 msgstr "철회"
 
 #. placeholder {0}: protocol.bareToken.symbol ?? ''
 #. placeholder {0}: protocol.stakeToken.symbol
-#: src/SiteAdaptor/WithdrawForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
+#: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
 msgstr "출금 {0}"
+
