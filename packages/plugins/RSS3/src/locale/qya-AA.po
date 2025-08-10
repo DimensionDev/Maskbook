@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:55\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -16,50 +16,102 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RSS3/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 982\n"
 
+#. placeholder {0}: feed.actions.length
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "{0, plural, one {Action} other {Actions}}"
 msgstr "crwdns31680:00={0}crwdne31680:0"
 
+#. placeholder {0}: metadata?.action || ''
 #: src/SiteAdaptor/components/FeedActions/ProfileAction.tsx
-msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>}}"
-msgstr "crwdns32842:00={0}crwdnd32842:0user={user}crwdnd32842:0platform={platform}crwdnd32842:0user={user}crwdnd32842:0platform={platform}crwdne32842:0"
+msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>} other {}}"
+msgstr "crwdns38141:00={0}crwdnd38141:0user={user}crwdnd38141:0platform={platform}crwdnd38141:0user={user}crwdnd38141:0platform={platform}crwdne38141:0"
 
+#: src/SiteAdaptor/components/FeedActions/ProfileAction.tsx
+#~ msgid "{0, select, create {<0>{user}</0> created a profile on <1>{platform}</1>} update {<2>{user}</2> updated a profile on <3>{platform}</3>}}"
+#~ msgstr ""
+
+#. placeholder {0}: post.type || ''
+#. placeholder {1}: post.source
+#. placeholder {2}: post.source
+#. placeholder {3}: post.reporter?.handle
+#. placeholder {4}: post.source
+#. placeholder {5}: post.source
+#. placeholder {6}: post.source
 #: src/SiteAdaptor/SocialFeeds/FeedSummary.tsx
 msgid "{0, select, Post {<0/><1>{handle}</1> published a post on <2>{1}</2>} Comment {<3/><4>{handle}</4> made a comment on <5>{2}</5>} Mirror {<6/><7>{3}</7> mirrored a post post by<8/><9>{handle}</9> on <10>{4}</10>} Quote {<11/><12>{handle}</12> quoted a post post on <13>{5}</13>} other {<14/><15>{handle}</15> post stuff on <16>{6}</16>}}"
 msgstr "crwdns35418:00={0}crwdnd35418:0handle={handle}crwdnd35418:01={1}crwdnd35418:0handle={handle}crwdnd35418:02={2}crwdnd35418:03={3}crwdnd35418:0handle={handle}crwdnd35418:04={4}crwdnd35418:0handle={handle}crwdnd35418:05={5}crwdnd35418:0handle={handle}crwdnd35418:06={6}crwdne35418:0"
 
 #: src/SiteAdaptor/FeedFilters.tsx
-msgid "{0} Networks"
-msgstr "crwdns28894:0{0}crwdne28894:0"
+#~ msgid "{0} Networks"
+#~ msgstr ""
+
+#. placeholder {0}: metadata?.collection ?? 'Unknown'
+#. placeholder {1}: metadata?.collection ?? 'Unknown'
+#. placeholder {2}: metadata?.action || ''
+#: src/SiteAdaptor/components/FeedActions/CollectibleApprovalAction.tsx
+msgid "{2, select, approve {<0>{user}</0> approved {0} to <1>{contract}</1>} revoke {<2>{user}</2> approved {1} to <3>{contract}</3>} other {}}"
+msgstr "crwdns38143:02={2}crwdnd38143:0user={user}crwdnd38143:00={0}crwdnd38143:0contract={contract}crwdnd38143:0user={user}crwdnd38143:01={1}crwdnd38143:0contract={contract}crwdne38143:0"
 
 #: src/SiteAdaptor/components/FeedActions/CollectibleApprovalAction.tsx
-msgid "{2, select, approve {<0>{user}</0> approved {0} to <1>{contract}</1>} revoke {<2>{user}</2> approved {1} to <3>{contract}</3>}}"
-msgstr "crwdns32844:02={2}crwdnd32844:0user={user}crwdnd32844:00={0}crwdnd32844:0contract={contract}crwdnd32844:0user={user}crwdnd32844:01={1}crwdnd32844:0contract={contract}crwdne32844:0"
+#~ msgid "{2, select, approve {<0>{user}</0> approved {0} to <1>{contract}</1>} revoke {<2>{user}</2> approved {1} to <3>{contract}</3>}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/StakingAction.tsx
-msgid "{actionType, select, stake {<0>{user}</0> staked <1>{symbol}</1>} claim {<2>{user}</2> claimed <3>{symbol}</3>} unstake {<4>{user}</4> un-staked <5>{symbol}</5>}}"
-msgstr "crwdns32846:0actionType={actionType}crwdnd32846:0user={user}crwdnd32846:0symbol={symbol}crwdnd32846:0user={user}crwdnd32846:0symbol={symbol}crwdnd32846:0user={user}crwdnd32846:0symbol={symbol}crwdne32846:0"
+msgid "{actionType, select, stake {<0>{user}</0> staked <1>{symbol}</1>} claim {<2>{user}</2> claimed <3>{symbol}</3>} unstake {<4>{user}</4> un-staked <5>{symbol}</5>} other {}}"
+msgstr "crwdns38145:0actionType={actionType}crwdnd38145:0user={user}crwdnd38145:0symbol={symbol}crwdnd38145:0user={user}crwdnd38145:0symbol={symbol}crwdnd38145:0user={user}crwdnd38145:0symbol={symbol}crwdne38145:0"
+
+#: src/SiteAdaptor/components/FeedActions/StakingAction.tsx
+#~ msgid "{actionType, select, stake {<0>{user}</0> staked <1>{symbol}</1>} claim {<2>{user}</2> claimed <3>{symbol}</3>} unstake {<4>{user}</4> un-staked <5>{symbol}</5>}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/TokenApprovalAction.tsx
-msgid "{context, select, approve {<0>{user}</0> approved <1>{amount} {symbol}</1> to <2>{contract}</2>} revoke {<3>{user}</3> revoked the approval of <4>{amount} {symbol}</4> to <5>{contract}</5>}}"
-msgstr "crwdns32848:0context={context}crwdnd32848:0user={user}crwdnd32848:0amount={amount}crwdnd32848:0symbol={symbol}crwdnd32848:0contract={contract}crwdnd32848:0user={user}crwdnd32848:0amount={amount}crwdnd32848:0symbol={symbol}crwdnd32848:0contract={contract}crwdne32848:0"
+msgid "{context, select, approve {<0>{user}</0> approved <1>{amount} {symbol}</1> to <2>{contract}</2>} revoke {<3>{user}</3> revoked the approval of <4>{amount} {symbol}</4> to <5>{contract}</5>} other {}}"
+msgstr "crwdns38147:0context={context}crwdnd38147:0user={user}crwdnd38147:0amount={amount}crwdnd38147:0symbol={symbol}crwdnd38147:0contract={contract}crwdnd38147:0user={user}crwdnd38147:0amount={amount}crwdnd38147:0symbol={symbol}crwdnd38147:0contract={contract}crwdne38147:0"
+
+#: src/SiteAdaptor/components/FeedActions/TokenApprovalAction.tsx
+#~ msgid "{context, select, approve {<0>{user}</0> approved <1>{amount} {symbol}</1> to <2>{contract}</2>} revoke {<3>{user}</3> revoked the approval of <4>{amount} {symbol}</4> to <5>{contract}</5>}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx
-msgid "{context, select, mint {<0>{to}</0> minted <1>{value} {symbol}</1>} send {<2>{from}</2> sent <3>{asset}</3> to <4>{to}</4>} claim {<5>{to}</5> claimed from <6>{from}</6>} burn {<7>{from}</7> burned <8>{value} {symbol}</8>} deposit {<9>{from}</9> deposited on <10>{exchange}</10>} withdraw {<11>{from}</11> withdrew on <12>{exchange}</12>}}"
-msgstr "crwdns32850:0context={context}crwdnd32850:0to={to}crwdnd32850:0value={value}crwdnd32850:0symbol={symbol}crwdnd32850:0from={from}crwdnd32850:0asset={asset}crwdnd32850:0to={to}crwdnd32850:0to={to}crwdnd32850:0from={from}crwdnd32850:0from={from}crwdnd32850:0value={value}crwdnd32850:0symbol={symbol}crwdnd32850:0from={from}crwdnd32850:0exchange={exchange}crwdnd32850:0from={from}crwdnd32850:0exchange={exchange}crwdne32850:0"
+msgid "{context, select, mint {<0>{to}</0> minted <1>{value} {symbol}</1>} send {<2>{from}</2> sent <3>{asset}</3> to <4>{to}</4>} claim {<5>{to}</5> claimed from <6>{from}</6>} burn {<7>{from}</7> burned <8>{value} {symbol}</8>} deposit {<9>{from}</9> deposited on <10>{exchange}</10>} withdraw {<11>{from}</11> withdrew on <12>{exchange}</12>} other {}}"
+msgstr "crwdns38149:0context={context}crwdnd38149:0to={to}crwdnd38149:0value={value}crwdnd38149:0symbol={symbol}crwdnd38149:0from={from}crwdnd38149:0asset={asset}crwdnd38149:0to={to}crwdnd38149:0to={to}crwdnd38149:0from={from}crwdnd38149:0from={from}crwdnd38149:0value={value}crwdnd38149:0symbol={symbol}crwdnd38149:0from={from}crwdnd38149:0exchange={exchange}crwdnd38149:0from={from}crwdnd38149:0exchange={exchange}crwdne38149:0"
+
+#: src/SiteAdaptor/components/FeedActions/TokenOperationAction.tsx
+#~ msgid "{context, select, mint {<0>{to}</0> minted <1>{value} {symbol}</1>} send {<2>{from}</2> sent <3>{asset}</3> to <4>{to}</4>} claim {<5>{to}</5> claimed from <6>{from}</6>} burn {<7>{from}</7> burned <8>{value} {symbol}</8>} deposit {<9>{from}</9> deposited on <10>{exchange}</10>} withdraw {<11>{from}</11> withdrew on <12>{exchange}</12>}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/NoteAction.tsx
-msgid "{type, select, post {<0>{user}</0> publish a post on {platform}} mint {<1>{user}</1> minted a post on {platform}} revise {<2>{user}</2> revised a post on {platform}} share {<3>{user}</3> shared a post on {platform}}}"
-msgstr "crwdns32852:0type={type}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdnd32852:0user={user}crwdnd32852:0platform={platform}crwdne32852:0"
+msgid "{type, select, post {<0>{user}</0> publish a post on {platform}} mint {<1>{user}</1> minted a post on {platform}} revise {<2>{user}</2> revised a post on {platform}} share {<3>{user}</3> shared a post on {platform}} other {}}"
+msgstr "crwdns38151:0type={type}crwdnd38151:0user={user}crwdnd38151:0platform={platform}crwdnd38151:0user={user}crwdnd38151:0platform={platform}crwdnd38151:0user={user}crwdnd38151:0platform={platform}crwdnd38151:0user={user}crwdnd38151:0platform={platform}crwdne38151:0"
+
+#: src/SiteAdaptor/components/FeedActions/NoteAction.tsx
+#~ msgid "{type, select, post {<0>{user}</0> publish a post on {platform}} mint {<1>{user}</1> minted a post on {platform}} revise {<2>{user}</2> revised a post on {platform}} share {<3>{user}</3> shared a post on {platform}}}"
+#~ msgstr ""
+
+#. placeholder {0}: formatAmount(asset.amount)
+#. placeholder {1}: asset.symbol || asset.name
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+msgid "<0/> {txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn} other {}} <1>{0} {1}</1> "
+msgstr "crwdns38153:0txType={txType}crwdnd38153:00={0}crwdnd38153:01={1}crwdne38153:0"
 
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-msgid "<0/> {txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}} <1>{0} {1}</1>"
-msgstr "crwdns35420:0txType={txType}crwdnd35420:00={0}crwdnd35420:01={1}crwdne35420:0"
+#~ msgid "<0/> {txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}} <1>{0} {1}</1>"
+#~ msgstr ""
 
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/> {txType, select, burn {burned} deposit {deposited} mint {minted} receive {received} send {sent} withdraw {withdrawn}} <1>{0} {1}</1> "
+#~ msgstr ""
+
+#. placeholder {0}: formatAmount(inAsset.amount)
+#. placeholder {1}: inAsset.symbol || inAsset.name
+#. placeholder {2}: formatAmount(outAsset.amount)
+#. placeholder {3}: outAsset.symbol || outAsset.name
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/> {txType, select, trade {traded} mint {minted} other {traded}} <1>{0} {1}</1> for <2>{2} {3}</2>"
 msgstr "crwdns35422:0txType={txType}crwdnd35422:00={0}crwdnd35422:01={1}crwdnd35422:02={2}crwdnd35422:03={3}crwdne35422:0"
 
+#. placeholder {0}: formatAmount(asset.amount)
+#. placeholder {1}: asset.symbol || asset.name
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/> approved <1>{0} {1}</1>"
 msgstr "crwdns35424:0{0}crwdnd35424:0{1}crwdne35424:0"
@@ -72,29 +124,53 @@ msgstr "crwdns35426:0crwdne35426:0"
 msgid "<0/> interacted with <1/>"
 msgstr "crwdns35428:0crwdne35428:0"
 
+#. placeholder {0}: verbose ? 'name' : 'nft'
+#. placeholder {1}: metadata!.name
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}"
-msgstr "crwdns32262:00={0}crwdnd32262:01={1}crwdne32262:0"
+msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}}"
+msgstr "crwdns38155:00={0}crwdnd38155:01={1}crwdne38155:0"
 
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0/> minted{0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}"
+#~ msgstr ""
+
+#. placeholder {0}: action.platform
 #: src/SiteAdaptor/components/FeedCard/CommentCard.tsx
 msgid "<0/> publish a post on {0}"
 msgstr "crwdns31684:0{0}crwdne31684:0"
 
+#. placeholder {0}: asset.symbol || asset.name
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
 msgid "<0/> unapproved <1>{0}</1>"
 msgstr "crwdns35430:0{0}crwdne35430:0"
 
 #: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
-msgid "<0/>{txType, select, deploy {deployed} execute {executed}}<1/>"
-msgstr "crwdns35432:0txType={txType}crwdne35432:0"
+msgid "<0/>{txType, select, deploy {deployed} execute {executed} other {}}<1/>"
+msgstr "crwdns38157:0txType={txType}crwdne38157:0"
+
+#: src/SiteAdaptor/FinanceFeeds/FeedSummary.tsx
+#~ msgid "<0/>{txType, select, deploy {deployed} execute {executed}}<1/>"
+#~ msgstr ""
+
+#. placeholder {0}: feed.type
+#. placeholder {1}: feed.platform
+#: src/SiteAdaptor/components/FeedActions/ProfileLinkAction.tsx
+msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed} other {}} <1>{other}</1> on <2>{1}</2>"
+msgstr "crwdns38159:0formattedUser={formattedUser}crwdnd38159:00={0}crwdnd38159:0other={other}crwdnd38159:01={1}crwdne38159:0"
 
 #: src/SiteAdaptor/components/FeedActions/ProfileLinkAction.tsx
-msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed}} <1>{other}</1> on <2>{1}</2>"
-msgstr "crwdns32854:0formattedUser={formattedUser}crwdnd32854:00={0}crwdnd32854:0other={other}crwdnd32854:01={1}crwdne32854:0"
+#~ msgid "<0>{formattedUser}</0> {0, select, follow {followed} unfollow {un-followed}} <1>{other}</1> on <2>{1}</2>"
+#~ msgstr ""
+
+#. placeholder {0}: metadata?.action || ''
+#. placeholder {1}: feed.platform!
+#: src/SiteAdaptor/components/FeedActions/LiquidityAction.tsx
+msgid "<0>{user}</0> {0, select, supply {supplied} add {added} repay {repaid} withdraw {withdrew} collect {collected} remove {removed} borrow {borrowed} other {}} liquidity on <1>{1}</1>"
+msgstr "crwdns38161:0user={user}crwdnd38161:00={0}crwdnd38161:01={1}crwdne38161:0"
 
 #: src/SiteAdaptor/components/FeedActions/LiquidityAction.tsx
-msgid "<0>{user}</0> {0, select, supply {supplied} add {added} repay {repaid} withdraw {withdrew} collect {collected} remove {removed} borrow {borrowed}} liquidity on <1>{1}</1>"
-msgstr "crwdns32856:0user={user}crwdnd32856:00={0}crwdnd32856:01={1}crwdne32856:0"
+#~ msgid "<0>{user}</0> {0, select, supply {supplied} add {added} repay {repaid} withdraw {withdrew} collect {collected} remove {removed} borrow {borrowed}} liquidity on <1>{1}</1>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/ProfileProxy.tsx
 msgid "<0>{user}</0> appointed a proxy on <1>{platform}</1>"
@@ -104,17 +180,36 @@ msgstr "crwdns32858:0{user}crwdnd32858:0{platform}crwdne32858:0"
 msgid "<0>{user}</0> bridged <1>{amount} {symbol}</1> from <2>{source}</2> to <3>{target}</3>"
 msgstr "crwdns32860:0{user}crwdnd32860:0{amount}crwdnd32860:0{symbol}crwdnd32860:0{source}crwdnd32860:0{target}crwdne32860:0"
 
+#. placeholder {0}: metadata?.name
+#. placeholder {1}: verbose ? 'name' : 'nft'
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> burned <1>{1, select, nft {an NFT} name {{0}}}</1>"
-msgstr "crwdns32862:0user={user}crwdnd32862:01={1}crwdnd32862:00={0}crwdne32862:0"
+msgid "<0>{user}</0> burned <1>{1, select, nft {an NFT} name {{0}} other {}}</1>"
+msgstr "crwdns38163:0user={user}crwdnd38163:01={1}crwdnd38163:00={0}crwdne38163:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0> burned <1>{1, select, nft {an NFT} name {{0}}}</1>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/UnknownAction.tsx
 msgid "<0>{user}</0> carried out an activity to <1>{target}</1> on <2>{platform}</2>"
 msgstr "crwdns32864:0{user}crwdnd32864:0{target}crwdnd32864:0{platform}crwdne32864:0"
 
+#. placeholder {0}: verbose ? 'verbose' : 'simple'
+#. placeholder {1}: metadata!.name
+#. placeholder {2}: costMetadata ? 'cost' : 'free'
+#. placeholder {3}: formatValue(costMetadata)
+#. placeholder {4}: costMetadata?.symbol ?? 'Unknown'
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}from <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
-msgstr "crwdns32264:0user={user}crwdnd32264:00={0}crwdnd32264:01={1}crwdnd32264:0formattedAddress={formattedAddress}crwdnd32264:02={2}crwdnd32264:03={3}crwdnd32264:04={4}crwdne32264:0"
+msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>} other {}}from <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {} other {}}"
+msgstr "crwdns38165:0user={user}crwdnd38165:00={0}crwdnd38165:01={1}crwdnd38165:0formattedAddress={formattedAddress}crwdnd38165:02={2}crwdnd38165:03={3}crwdnd38165:04={4}crwdne38165:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}from <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0> claimed {0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}from <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/DonationAction.tsx
 msgid "<0>{user}</0> donated <1>{costValue} {costSymbol}</1>"
@@ -129,25 +224,52 @@ msgstr "crwdns32868:0{user}crwdnd32868:0{costValue}crwdnd32868:0{costSymbol}crwd
 msgid "<0>{user}</0> made a comment on {platform}"
 msgstr "crwdns32870:0{user}crwdnd32870:0{platform}crwdne32870:0"
 
+#. placeholder {0}: verbose ? 'name' : 'nft'
+#. placeholder {1}: metadata!.name
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}for <3>{value} {symbolName}</3>"
-msgstr "crwdns32266:0user={user}crwdnd32266:00={0}crwdnd32266:01={1}crwdnd32266:0value={value}crwdnd32266:0symbolName={symbolName}crwdne32266:0"
+msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}}for <3>{value} {symbolName}</3>"
+msgstr "crwdns38167:0user={user}crwdnd38167:00={0}crwdnd38167:01={1}crwdnd38167:0value={value}crwdnd38167:0symbolName={symbolName}crwdne38167:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0> minted {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}}for <3>{value} {symbolName}</3>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/ProposeAction.tsx
 msgid "<0>{user}</0> proposed"
 msgstr "crwdns32872:0{user}crwdne32872:0"
 
+#. placeholder {0}: verbose ? 'name' : 'nft'
+#. placeholder {1}: feed.actions[1].metadata!.name
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>}}for <3>{costValue} {costSymbol}</3>"
-msgstr "crwdns32268:0user={user}crwdnd32268:00={0}crwdnd32268:01={1}crwdnd32268:0costValue={costValue}crwdnd32268:0costSymbol={costSymbol}crwdne32268:0"
+msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>} other {}}for <3>{costValue} {costSymbol}</3>"
+msgstr "crwdns38169:0user={user}crwdnd38169:00={0}crwdnd38169:01={1}crwdnd38169:0costValue={costValue}crwdnd38169:0costSymbol={costSymbol}crwdne38169:0"
 
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
-msgstr "crwdns32270:0user={user}crwdnd32270:00={0}crwdnd32270:01={1}crwdnd32270:0recipient={recipient}crwdnd32270:02={2}crwdnd32270:0symbolName={symbolName}crwdne32270:0"
+#~ msgid "<0>{user}</0> registered {0, select, name {<1>{1} </1>} nft {<2>an ENS </2>}}for <3>{costValue} {costSymbol}</3>"
+#~ msgstr ""
+
+#. placeholder {0}: verbose ? 'name' : 'nft'
+#. placeholder {1}: metadata!.name
+#. placeholder {2}: formatValue(cost)
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
+msgstr "crwdns38171:0user={user}crwdnd38171:00={0}crwdnd38171:01={1}crwdnd38171:0recipient={recipient}crwdnd38171:02={2}crwdnd38171:0symbolName={symbolName}crwdne38171:0"
+
+#. placeholder {0}: verbose ? 'name' : 'nft'
+#. placeholder {1}: metadata!.name
+#. placeholder {2}: formatValue(cost)
+#. placeholder {3}: feed.platform
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>} other {}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
+msgstr "crwdns38173:0user={user}crwdnd38173:00={0}crwdnd38173:01={1}crwdnd38173:0recipient={recipient}crwdnd38173:02={2}crwdnd38173:0symbolName={symbolName}crwdnd38173:03={3}crwdne38173:0"
 
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
-msgstr "crwdns32272:0user={user}crwdnd32272:00={0}crwdnd32272:01={1}crwdnd32272:0recipient={recipient}crwdnd32272:02={2}crwdnd32272:0symbolName={symbolName}crwdnd32272:03={3}crwdne32272:0"
+#~ msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4>"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0> sold {0, select, name {<1>{1} </1>} nft {<2>an NFT </2>}} to <3>{recipient}</3> for <4>{2} {symbolName}</4> on <5>{3}</5>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/components/FeedActions/TokenSwapAction.tsx
 msgid "<0>{user}</0> swapped <1>{from_value} {from_symbol}</1> to <2>{to_value} {to_symbol}</2> on <3>{platform}</3>"
@@ -157,9 +279,22 @@ msgstr "crwdns32874:0{user}crwdnd32874:0{from_value}crwdnd32874:0{from_symbol}cr
 msgid "<0>{user}</0> voted for <1>{option}</1> on <2>{platform}</2>"
 msgstr "crwdns32876:0{user}crwdnd32876:0{option}crwdnd32876:0{platform}crwdne32876:0"
 
+#. placeholder {0}: verbose ? 'verbose' : 'simple'
+#. placeholder {1}: metadata!.name
+#. placeholder {2}: costMetadata ? 'cost' : 'free'
+#. placeholder {3}: formatValue(costMetadata)
+#. placeholder {4}: costMetadata?.symbol ?? 'Unknown'
 #: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
-msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
-msgstr "crwdns32274:0user={user}crwdnd32274:00={0}crwdnd32274:01={1}crwdnd32274:0formattedAddress={formattedAddress}crwdnd32274:02={2}crwdnd32274:03={3}crwdnd32274:04={4}crwdne32274:0"
+msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>} other {}}to <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {} other {}}"
+msgstr "crwdns38175:0user={user}crwdnd38175:00={0}crwdnd38175:01={1}crwdnd38175:0formattedAddress={formattedAddress}crwdnd38175:02={2}crwdnd38175:03={3}crwdnd38175:04={4}crwdne38175:0"
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost { for {3} {4}} free {}}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/components/FeedActions/CollectibleAction.tsx
+#~ msgid "<0>{user}</0>sent{0, select, verbose {<1>{1} </1>} simple {<2>an NFT </2>}}to <3>{formattedAddress}</3>{2, select, cost {for {3} {4}} free {}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 msgid "Category"
@@ -172,8 +307,8 @@ msgid "Details"
 msgstr "crwdns28898:0crwdne28898:0"
 
 #: src/SiteAdaptor/FeedFilters.tsx
-msgid "Direct"
-msgstr "crwdns28900:0crwdne28900:0"
+#~ msgid "Direct"
+#~ msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
@@ -195,7 +330,6 @@ msgstr "crwdns28906:0crwdne28906:0"
 msgid "Network"
 msgstr "crwdns28908:0crwdne28908:0"
 
-#: src/SiteAdaptor/FeedsPage.tsx
 #: src/SiteAdaptor/FinanceFeeds/index.tsx
 #: src/SiteAdaptor/SocialFeeds/index.tsx
 msgid "No more data available."
@@ -206,8 +340,8 @@ msgid "Platform"
 msgstr "crwdns28912:0crwdne28912:0"
 
 #: src/SiteAdaptor/FeedFilters.tsx
-msgid "Related"
-msgstr "crwdns28914:0crwdne28914:0"
+#~ msgid "Related"
+#~ msgstr ""
 
 #: src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
 #: src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
@@ -230,8 +364,8 @@ msgid "There's no feed associated with this address."
 msgstr "crwdns35434:0crwdne35434:0"
 
 #: src/SiteAdaptor/FeedsPage.tsx
-msgid "There's no feed associated with this address.<0>{0}</0>"
-msgstr "crwdns32926:0{0}crwdne32926:0"
+#~ msgid "There's no feed associated with this address.<0>{0}</0>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
