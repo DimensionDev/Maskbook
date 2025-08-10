@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 02:59\n"
+"PO-Revision-Date: 2025-08-10 09:54\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -16,9 +16,9 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 946\n"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/ApprovalDialog.tsx
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Approval"
 msgstr "승인"
 
@@ -39,34 +39,35 @@ msgstr "수집품"
 msgid "Collection Approval"
 msgstr "컬렉션 승인"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Contract"
 msgstr "컨트랙트"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "No approved contract records."
 msgstr "승인된 컨트렉트 기록이 없습니다."
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoke"
 msgstr "취소"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
 msgstr "취소 중"
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr "토큰"
+
