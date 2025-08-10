@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -16,18 +16,22 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/GoPlusSecurity/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 970\n"
 
+#. placeholder {0}: attentionFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factor"
 msgstr "crwdns28660:0{0}crwdne28660:0"
 
+#. placeholder {0}: attentionFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Attention factors"
 msgstr "crwdns28662:0{0}crwdne28662:0"
 
+#. placeholder {0}: riskyFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factor"
 msgstr "crwdns28664:0{0}crwdne28664:0"
 
+#. placeholder {0}: riskyFactors.toString()
 #: src/SiteAdaptor/components/SecurityPanel.tsx
 msgid "{0} Risky factors"
 msgstr "crwdns28666:0{0}crwdne28666:0"
