@@ -185,10 +185,14 @@ msgid "Approve MASK?"
 msgstr ""
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
-#. placeholder {1}: collection?.name
+#. placeholder {1}: collection?.name || ''
 #: src/hooks/useReportSpam.tsx
-msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr ""
+
+#: src/hooks/useReportSpam.tsx
+#~ msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -510,6 +514,11 @@ msgstr ""
 #~ msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
 #~ msgstr ""
 
+#. placeholder {0}: platform || ''
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, twitter {Twitter profile} facebook {Facebook profile} other {}}."
+msgstr ""
+
 #. placeholder {0}: resolveNextIDPlatformName(platform) || platform
 #. placeholder {0}: type?.replace('_', ' ') ?? ''
 #: src/UI/components/AccountIcons/index.tsx
@@ -522,8 +531,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
-msgstr ""
+#~ msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."

@@ -61,8 +61,13 @@ msgstr ""
 
 #: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
 #: src/SiteAdaptor/trader/views/Confirm.tsx
-msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
+msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom} other {}}"
 msgstr ""
+
+#: src/SiteAdaptor/trader/views/BridgeConfirm.tsx
+#: src/SiteAdaptor/trader/views/Confirm.tsx
+#~ msgid "{gasOptionType, select, slow {Slow} normal {Average} fast {Fast} custom {Custom}}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/trader/views/NetworkFee/index.tsx
 msgid "{mins}min"

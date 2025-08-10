@@ -20,6 +20,11 @@ msgstr ""
 msgid "{0, plural, one {# Hour} other {# Hours}}"
 msgstr ""
 
+#. placeholder {0}: decryptProgress || ''
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
+msgid "{0, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
+msgstr ""
+
 #. placeholder {0}: formatTokenBalance(tokenBalance, token?.decimals)
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
@@ -49,8 +54,8 @@ msgid "{count, plural, one {You have recovered **# Wallet 🚀**} other {You hav
 msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
-msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
-msgstr ""
+#~ msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
@@ -60,9 +65,14 @@ msgstr ""
 msgid "{walletLength, plural, one {# Wallet} other {# Wallets}}"
 msgstr ""
 
+#. placeholder {0}: websiteCount || 0
 #: popups/pages/Settings/index.tsx
-msgid "<0>{websiteCount}</0> {websiteCount, plural, one {Website} other {Websites}}"
+msgid "<0>{websiteCount}</0> {0, plural, one {Website} other {Websites}}"
 msgstr ""
+
+#: popups/pages/Settings/index.tsx
+#~ msgid "<0>{websiteCount}</0> {websiteCount, plural, one {Website} other {Websites}}"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "<0>@{currentUserId}</0> connected already."
@@ -1365,8 +1375,8 @@ msgstr ""
 #~ msgid "Get permission failed"
 #~ msgstr ""
 
-#. placeholder {0}: token?.symbol || ''
 #. placeholder {0}: contract?.symbol || ''
+#. placeholder {0}: token?.symbol || ''
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
