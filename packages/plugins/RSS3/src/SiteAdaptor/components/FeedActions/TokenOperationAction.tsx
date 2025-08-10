@@ -145,6 +145,7 @@ export function TokenOperationAction({ feed, action, ...rest }: TokenFeedActionP
                                 </Trans>
                             }
                             value={context}
+                            other=""
                         />
                     </Typography>
                 )

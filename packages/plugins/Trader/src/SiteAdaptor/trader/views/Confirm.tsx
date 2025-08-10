@@ -483,6 +483,7 @@ export const Confirm = memo(function Confirm() {
                                         _normal="Average"
                                         _fast="Fast"
                                         _custom="Custom"
+                                        other=""
                                     />
                                 </Typography>
                             </Box>

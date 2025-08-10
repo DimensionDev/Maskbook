@@ -521,6 +521,7 @@ than estimated, and any unused funds will remain in the original address.`
                                         _normal="Average"
                                         _fast="Fast"
                                         _custom="Custom"
+                                        other=""
                                     />
                                 </Typography>
                             </Box>

@@ -45,7 +45,7 @@ jobs:
       - run: pnpm exec gulp sync-languages
       - run: pnpm exec gulp lint-package-json
       - run: pnpm exec gulp fix-plugins-tsconfig
-      - run: pnpm exec prettier@3.6.2 --write .
+      - run: pnpx prettier@3.6.2 --write .
       - uses: EndBug/add-and-commit@v9
         with:
           message: 'fix: linter'

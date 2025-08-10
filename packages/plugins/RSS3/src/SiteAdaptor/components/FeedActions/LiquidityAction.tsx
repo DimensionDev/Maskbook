@@ -68,7 +68,8 @@ export function LiquidityAction({ feed, ...rest }: TokenFeedActionProps) {
                                 _collect="collected"
                                 _remove="removed"
                                 _borrow="borrowed"
-                                value={metadata?.action}
+                                value={metadata?.action || ''}
+                                other=""
                             />{' '}
                             liquidity on <Label>{feed.platform!}</Label>
                         </Trans>

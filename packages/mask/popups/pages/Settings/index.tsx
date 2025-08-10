@@ -216,7 +216,7 @@ export const Component = memo(function SettingsPage() {
                                 secondary={
                                     <Trans>
                                         <span style={{ color: theme.palette.maskColor.main }}>{websiteCount}</span>{' '}
-                                        <Plural value={websiteCount} one="Website" other="Websites" />
+                                        <Plural value={websiteCount || 0} one="Website" other="Websites" />
                                     </Trans>
                                 }
                             />
