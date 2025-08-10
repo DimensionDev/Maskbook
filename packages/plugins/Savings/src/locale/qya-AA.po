@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:48\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -16,6 +16,7 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Savings/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 986\n"
 
+#. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "{0} days"
 msgstr "crwdns29164:0{0}crwdne29164:0"
@@ -39,10 +40,19 @@ msgstr "crwdns29170:0crwdne29170:0"
 msgid "Deposit"
 msgstr "crwdns29172:0crwdne29172:0"
 
+#. placeholder {0}: protocol.bareToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Deposit {0}"
 msgstr "crwdns32318:0{0}crwdne32318:0"
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#~ msgid "Deposit {8}"
+#~ msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx
+#~ msgid "Deposit {9}"
+#~ msgstr ""
 
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/SavingsForm.tsx
@@ -60,19 +70,32 @@ msgstr "crwdns29176:0crwdne29176:0"
 msgid "Failed"
 msgstr "crwdns29178:0crwdne29178:0"
 
+#. placeholder {0}: promote.amount
+#. placeholder {1}: promote.symbol
+#. placeholder {2}: promote.chain
+#. placeholder {3}: promote.account
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Hi friends, I just deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr "crwdns31760:0{0}crwdnd31760:0{1}crwdnd31760:0{2}crwdnd31760:0{3}crwdne31760:0"
 
+#. placeholder {0}: promote.amount
+#. placeholder {1}: promote.symbol
+#. placeholder {2}: promote.chain
+#. placeholder {3}: promote.account
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Hi friends, I just withdrew my deposit {0} {1} on {2}. Follow @{3} to find more staking projects."
 msgstr "crwdns31762:0{0}crwdnd31762:0{1}crwdnd31762:0{2}crwdnd31762:0{3}crwdne31762:0"
 
 #: src/SiteAdaptor/SavingsForm.tsx
+#~ msgid "Hi friends, I just withdrew my deposit {4} {5} on {6}. Follow @{7} to find more staking projects."
+#~ msgstr ""
+
+#: src/SiteAdaptor/SavingsForm.tsx
 msgid "Input amount is below the minimum amount"
 msgstr "crwdns29180:0crwdne29180:0"
 
+#. placeholder {0}: isDeposit ? protocol.bareToken.symbol : protocol.stakeToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Insufficient ${0} balance"
 msgstr "crwdns29182:0${0}crwdne29182:0"
@@ -85,6 +108,7 @@ msgstr "crwdns29184:0crwdne29184:0"
 msgid "Loading"
 msgstr "crwdns29186:0crwdne29186:0"
 
+#. placeholder {0}: token.symbol
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Minimum withdraw amount is {MINIMUM_AMOUNT} {0}"
 msgstr "crwdns29190:0{MINIMUM_AMOUNT}crwdnd29190:0{0}crwdne29190:0"
@@ -111,10 +135,12 @@ msgstr "crwdns29198:0crwdne29198:0"
 msgid "Savings"
 msgstr "crwdns29202:0crwdne29202:0"
 
+#. placeholder {0}: protocol.bareToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 msgid "Swap {0}"
 msgstr "crwdns29204:0{0}crwdne29204:0"
 
+#. placeholder {0}: add(differenceInDays(new Date(time), new Date()), 1).toString()
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "To use Lido, you need to wait {0} days. Using other swap aggregators is faster, but the exchange rate is lower than 1:1."
 msgstr "crwdns29206:0{0}crwdne29206:0"
@@ -135,6 +161,8 @@ msgstr "crwdns29210:0crwdne29210:0"
 msgid "Withdraw"
 msgstr "crwdns29212:0crwdne29212:0"
 
+#. placeholder {0}: protocol.bareToken.symbol ?? ''
+#. placeholder {0}: protocol.stakeToken.symbol
 #: src/SiteAdaptor/SavingsForm.tsx
 #: src/SiteAdaptor/WithdrawForm.tsx
 msgid "Withdraw {0}"
