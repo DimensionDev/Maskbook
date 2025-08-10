@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:53\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -39,6 +39,10 @@ msgstr "crwdns28376:0crwdne28376:0"
 #: src/Application/RouterDialog.tsx
 msgid "Edit Profile"
 msgstr "crwdns28380:0crwdne28380:0"
+
+#: src/Application/NFTListDialog.tsx
+msgid "EVM Chains only"
+msgstr "crwdns37413:0crwdne37413:0"
 
 #: src/Application/NFTListDialog.tsx
 msgid "Failed to download image"
