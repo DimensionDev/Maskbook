@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-11 10:53\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -16,10 +16,12 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Collectible/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 956\n"
 
+#. placeholder {0}: sourceType ?? SourceType.NFTScan
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "{0} Platform costs"
 msgstr "crwdns28468:0{0}crwdne28468:0"
 
+#. placeholder {0}: formatDistanceToNow(Math.ceil(offer.expiredAt!), { addSuffix: true, })
 #: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "<0>Expires in </0>{0}"
 msgstr "crwdns32222:0{0}crwdne32222:0"
@@ -79,6 +81,7 @@ msgstr "crwdns28494:0crwdne28494:0"
 msgid "Mint Address"
 msgstr "crwdns28496:0crwdne28496:0"
 
+#. placeholder {0}: asset.data.source === SourceType.NFTScan ? resolveSourceTypeName(asset.data.source) : 'platform'
 #: src/SiteAdaptor/CardDialog/CardDialogContent.tsx
 msgid "More on {0}"
 msgstr "crwdns28498:0{0}crwdne28498:0"
@@ -103,6 +106,7 @@ msgstr "crwdns28506:0crwdne28506:0"
 msgid "Properties"
 msgstr "crwdns28508:0crwdne28508:0"
 
+#. placeholder {0}: formatDateTime(endDate, 'yyyy-MM-dd HH:mm:ss')
 #: src/SiteAdaptor/Card/Collectible.tsx
 msgid "Sale ends in {0}"
 msgstr "crwdns28510:0{0}crwdne28510:0"
@@ -115,6 +119,7 @@ msgstr "crwdns28512:0crwdne28512:0"
 msgid "This NFT didn't have any offers."
 msgstr "crwdns28514:0crwdne28514:0"
 
+#. placeholder {0}: type === ActivityType.Mint ? Utils.formatAddress(activity.from?.address, 4) : activity.receive.nickname || (activity.receive.address ? Utils.formatAddress(activity.receive.address, 4) : '-')
 #: src/SiteAdaptor/Shared/ActivityCard.tsx
 msgid "To <0>{0}</0>"
 msgstr "crwdns28516:0{0}crwdne28516:0"
