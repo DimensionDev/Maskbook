@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 03:00\n"
+"PO-Revision-Date: 2025-08-10 09:54\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -16,9 +16,9 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Approval/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 946\n"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/ApprovalDialog.tsx
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Approval"
 msgstr "授权"
 
@@ -39,34 +39,35 @@ msgstr "NFT"
 msgid "Collection Approval"
 msgstr "NFT 系列授权"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Contract"
 msgstr "合约"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "No approved contract records."
 msgstr "暂无授权合约记录。"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoke"
 msgstr "撤销"
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
 msgstr "撤销中"
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Tokens"
 msgstr "代币"
+
