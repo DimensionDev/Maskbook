@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:45\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -23,8 +23,13 @@ msgid "Approval"
 msgstr "crwdns28284:0crwdne28284:0"
 
 #: src/SiteAdaptor/ApprovalTokenContent.tsx
-msgid "Approved Amount"
-msgstr "crwdns28286:0crwdne28286:0"
+#~ msgid "Approved Amount"
+#~ msgstr ""
+
+#. placeholder {0}: amount ? <Typography component="span" className={classes.primaryText}> {formatSpendingCap(amount)} </Typography> : null
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+msgid "Approved Amount {0}"
+msgstr "crwdns36638:0{0}crwdne36638:0"
 
 #: src/SiteAdaptor/ApprovalDialog.tsx
 msgid "Collectibles"
