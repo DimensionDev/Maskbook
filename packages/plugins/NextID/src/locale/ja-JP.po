@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 02:59\n"
+"PO-Revision-Date: 2025-08-10 09:53\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -73,11 +73,11 @@ msgstr "表示"
 msgid "Wallet"
 msgstr "ウォレット"
 
-#: src/hooks/useWalletSign.ts
-#: src/hooks/useWalletSign.ts
+#: src/components/BindDialog.tsx
+#: src/components/BindDialog.tsx
 #: src/components/BindPanelUI.tsx
-#: src/components/BindDialog.tsx
-#: src/components/BindDialog.tsx
+#: src/hooks/useWalletSign.ts
+#: src/hooks/useWalletSign.ts
 msgid "Wallet Sign"
 msgstr "ウォレットサイン"
 
@@ -92,3 +92,4 @@ msgstr "ウォレットのサインに失敗しました。"
 #: src/components/BindDialog.tsx
 msgid "Wallet sign succeeded."
 msgstr "ウォレットのサインは成功しました。"
+
