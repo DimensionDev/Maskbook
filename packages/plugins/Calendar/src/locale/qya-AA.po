@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-11-26 10:58\n"
+"PO-Revision-Date: 2025-08-10 09:55\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -59,6 +59,7 @@ msgstr "crwdns28424:0crwdne28424:0"
 msgid "No more data available."
 msgstr "crwdns35570:0crwdne35570:0"
 
+#. placeholder {0}: providerMap[tab]
 #: src/SiteAdaptor/components/Footer.tsx
 msgid "Powered By {0}"
 msgstr "crwdns32218:0{0}crwdne32218:0"
