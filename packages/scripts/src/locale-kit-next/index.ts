@@ -5,7 +5,7 @@ import { ROOT_PATH, task, prettier } from '../utils/index.ts'
 const mainFallbackMap = new Map([['zh', 'zh-TW']])
 
 const basicHeader = `// This file is auto generated. DO NOT EDIT
-// Run \`npx gulp sync-languages\` to regenerate.`
+// Run \`pnpm exec gulp sync-languages\` to regenerate.`
 const header = `${basicHeader}
 // Default fallback language in a family of languages are chosen by the alphabet order
 // To overwrite this, please overwrite packages/scripts/src/locale-kit-next/index.ts

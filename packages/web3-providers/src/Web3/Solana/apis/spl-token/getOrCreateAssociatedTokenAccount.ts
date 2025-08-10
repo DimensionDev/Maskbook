@@ -1,7 +1,7 @@
 import type { Transaction } from '@masknet/web3-shared-solana'
 import { ASSOCIATED_TOKEN_PROGRAM_ID, TOKEN_PROGRAM_ID } from '@solana/spl-token'
 import type { Commitment, Connection, PublicKey } from '@solana/web3.js'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { createAssociatedTokenAccountInstruction } from './createAssociatedTokenAccountInstruction.js'
 import { getAccountInfo } from './getAccountInfo.js'
 import { getAssociatedTokenAddress } from './getAssociatedTokenAddress.js'

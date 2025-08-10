@@ -31,7 +31,8 @@ export const Component = memo(function InteractionPage() {
     const [paymentToken, setPaymentToken] = useState('')
 
     useEffect(() => {
-        if (!messages.length) navigate(PopupRoutes.Wallet, { replace: true })
+        if (messages.length) return
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [messages.length, navigate])
     if (!currentRequest) return null
 

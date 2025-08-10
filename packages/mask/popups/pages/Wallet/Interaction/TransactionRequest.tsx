@@ -1,6 +1,6 @@
 import { compact, mapValues, omit } from 'lodash-es'
 import { BigNumber } from 'bignumber.js'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { type TransactionDetail } from '../type.js'
 import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
 import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'

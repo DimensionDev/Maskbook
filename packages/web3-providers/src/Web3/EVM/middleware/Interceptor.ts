@@ -7,7 +7,7 @@ import { MetaMaskLike } from '../interceptors/MetaMaskLike.js'
 import { ContractWallet } from '../interceptors/ContractWallet.js'
 import { Popups } from '../interceptors/Popups.js'
 import { CustomNetwork } from '../interceptors/CustomNetwork.js'
-import * as SmartPay from /* webpackDefer: true */ '../../../SmartPay/index.js'
+import defer * as SmartPay from '../../../SmartPay/index.js'
 import type { WalletAPI } from '../../../entry-types.js'
 
 export class Interceptor implements Middleware<ConnectionContext> {

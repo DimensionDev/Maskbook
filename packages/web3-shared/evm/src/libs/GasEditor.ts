@@ -1,4 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { GasOptionType, isZero, multipliedBy, toFixed } from '@masknet/web3-shared-base'
 import { formatWeiToEther } from '../helpers/formatter.js'
 import type {

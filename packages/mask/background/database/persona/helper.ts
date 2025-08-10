@@ -47,8 +47,8 @@ export async function hasLocalKeyOf(id: ProfileIdentifier) {
  */
 export async function decryptByLocalKey(
     authorHint: ProfileIdentifier | null,
-    data: Uint8Array,
-    iv: Uint8Array,
+    data: Uint8Array<ArrayBuffer>,
+    iv: Uint8Array<ArrayBuffer>,
 ): Promise<ArrayBuffer> {
     const candidateKeys: AESJsonWebKey[] = []
 
@@ -73,7 +73,11 @@ export async function decryptByLocalKey(
     )
 }
 
-export async function encryptByLocalKey(who: ProfileIdentifier, content: Uint8Array, iv: Uint8Array) {
+export async function encryptByLocalKey(
+    who: ProfileIdentifier,
+    content: Uint8Array<ArrayBuffer>,
+    iv: Uint8Array<ArrayBuffer>,
+) {
     let key: AESCryptoKey | undefined
     await createPersonaDBReadonlyAccess(async (tx) => {
         const jwk = await getLocalKeyOf(who, tx)

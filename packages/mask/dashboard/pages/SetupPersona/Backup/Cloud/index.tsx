@@ -5,7 +5,6 @@ import { makeStyles } from '@masknet/theme'
 import { Box, Typography } from '@mui/material'
 import { memo } from 'react'
 import { Outlet, useNavigate, useOutletContext } from 'react-router-dom'
-import { CloudBackupFormContext } from './CloudBackupFormContext.js'
 import type { PortalContainerProps } from '../../../../components/OutletPortal.js'
 
 const useStyles = makeStyles()((theme) => ({
@@ -57,9 +56,7 @@ export const Component = memo(function CloudBackup() {
                     </Typography>
                 </button>
             </Box>
-            <CloudBackupFormContext.Provider>
-                <Outlet context={outletContext} />
-            </CloudBackupFormContext.Provider>
+            <Outlet context={outletContext} />
         </Box>
     )
 })

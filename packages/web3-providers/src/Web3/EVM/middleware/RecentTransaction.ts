@@ -8,7 +8,7 @@ import {
 } from '@masknet/web3-shared-evm'
 import { evm } from '../../../Manager/registry.js'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
-import * as UserTransaction from /* webpackDefer: true */ '../../../SmartPay/libs/UserTransaction.js'
+import defer * as UserTransaction from '../../../SmartPay/libs/UserTransaction.js'
 
 export class RecentTransaction implements Middleware<ConnectionContext> {
     async fn(context: ConnectionContext, next: () => Promise<void>) {

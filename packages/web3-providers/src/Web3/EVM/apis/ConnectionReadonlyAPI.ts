@@ -43,7 +43,7 @@ import {
     type Web3,
 } from '@masknet/web3-shared-evm'
 import { first, omit, toNumber } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { BaseConnectionOptions } from '../../../entry-types.js'
 import { fetchJSON } from '../../../helpers/fetchJSON.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'

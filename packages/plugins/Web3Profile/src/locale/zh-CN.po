@@ -37,8 +37,8 @@ msgstr ""
 msgid "Can not follow: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/ProfilePopup.tsx
 #: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/components/ProfilePopup.tsx
 msgid "Change"
 msgstr "切换"
 
@@ -66,9 +66,9 @@ msgstr "当前钱包不支持与 Lens 协议交互。"
 msgid "Firefly"
 msgstr ""
 
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "关注"
 
@@ -81,8 +81,8 @@ msgstr "关注"
 msgid "Follow Lens handle"
 msgstr "关注Lens handle"
 
-#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "已关注"
 
@@ -185,7 +185,7 @@ msgstr "查看"
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "Web3 名片"

@@ -1,4 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 
 export function formatAlchemyTokenId(tokenId: string) {
     return web3_utils.isHex(tokenId) && tokenId.startsWith('0x') ? web3_utils.hexToNumberString(tokenId) : tokenId

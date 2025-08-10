@@ -66,9 +66,8 @@ export function SavingsTable({ tab, protocols, loadingProtocols, onWithdraw, onD
     const theme = useTheme()
 
     const handleWithdraw = useCallback((protocol: SavingsProtocol) => {
-        if (protocol instanceof LidoProtocol) {
-            onWithdraw?.(protocol)
-        }
+        if (!(protocol instanceof LidoProtocol)) return
+        onWithdraw?.(protocol)
     }, [])
 
     const isDeposit = tab === TabType.Deposit

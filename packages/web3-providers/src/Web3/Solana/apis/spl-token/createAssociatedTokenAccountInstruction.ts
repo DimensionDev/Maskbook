@@ -1,5 +1,5 @@
 import { TOKEN_PROGRAM_ID, ASSOCIATED_TOKEN_PROGRAM_ID } from '@solana/spl-token'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { PublicKey } from '@solana/web3.js'
 
 export function createAssociatedTokenAccountInstruction(

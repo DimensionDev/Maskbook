@@ -70,10 +70,8 @@ export async function createConfiguration(
                 { futureDefaults: true }
             :   {
                     futureDefaults: true,
-                    syncImportAssertion: true,
-                    deferImport: { asyncModule: 'error' },
+                    deferImport: true,
                 },
-        // @ts-expect-error
         cache: {
             type: 'filesystem',
             buildDependencies: {

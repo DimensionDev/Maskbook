@@ -188,7 +188,8 @@ export const Component = memo(function RecoveryLocalBackup() {
                         helperText={error}
                         autoFocus
                         onKeyDown={(e) => {
-                            if (e.key === 'Enter' && password.length) decryptBackupFile()
+                            if (!(e.key === 'Enter' && password.length)) return
+                            decryptBackupFile()
                         }}
                     />
                 </Box>

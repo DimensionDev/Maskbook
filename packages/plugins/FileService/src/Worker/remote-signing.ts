@@ -2,7 +2,7 @@ import { encode } from '@msgpack/msgpack'
 import type Transaction from 'arweave/web/lib/transaction.js'
 import { ARWEAVE_SIGNING } from '../constants.js'
 
-export async function sign(transaction: Transaction.default) {
+export async function sign(transaction: Transaction) {
     const response = await fetch(ARWEAVE_SIGNING, {
         method: 'POST',
         body: Uint8Array.from(await makeRequest(transaction)),
@@ -10,7 +10,7 @@ export async function sign(transaction: Transaction.default) {
     transaction.setSignature(await response.json())
 }
 
-async function makeRequest(transaction: Transaction.default) {
+async function makeRequest(transaction: Transaction) {
     const encoder = new TextEncoder()
     await transaction.prepareChunks(transaction.data)
     const get = (base: { get: typeof transaction.get }, name: string) => base.get(name, { decode: true, string: false })

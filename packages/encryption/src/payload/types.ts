@@ -43,7 +43,7 @@ export declare namespace PayloadParseResult {
     export interface PublicEncryption {
         readonly type: 'public'
         readonly AESKey: RequiredField<AESCryptoKey, CryptoException>
-        readonly iv: RequiredField<Uint8Array>
+        readonly iv: RequiredField<Uint8Array<ArrayBuffer>>
     }
     /**
      * An E2E encrypted payload.
@@ -51,7 +51,7 @@ export declare namespace PayloadParseResult {
     export interface EndToEndEncryption {
         readonly type: 'E2E'
         readonly ownersAESKeyEncrypted: RequiredField<Uint8Array>
-        readonly iv: RequiredField<Uint8Array>
+        readonly iv: RequiredField<Uint8Array<ArrayBuffer>>
         readonly ephemeralPublicKey: Record<string, RequiredField<EC_Key, CryptoException>>
     }
 }

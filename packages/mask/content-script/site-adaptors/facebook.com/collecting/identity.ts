@@ -23,7 +23,8 @@ function resolveLastRecognizedIdentityFacebookInner(ref: ValueRef<IdentityResolv
         .addListener('onChange', (e) => assign(e.newValue))
         .startWatch({ childList: true, subtree: true, characterData: true }, signal)
     function assign(i: IdentityResolved) {
-        if (i.identifier) ref.value = i
+        if (!i.identifier) return
+        ref.value = i
     }
     fetch(new URL('/me', location.href), { method: 'HEAD', signal })
         .then((x) => x.url)

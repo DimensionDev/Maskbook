@@ -52,9 +52,8 @@ function subscribeFromZerion(
         const model = requestBody.scope[0]
         socket.emit(type, requestBody)
         socket.on(`received ${namespace} ${model}`, (data: SocketResponseBody) => {
-            if (verify(requestBody, data)) {
-                resolve(data)
-            }
+            if (!verify(requestBody, data)) return
+            resolve(data)
         })
     })
 }

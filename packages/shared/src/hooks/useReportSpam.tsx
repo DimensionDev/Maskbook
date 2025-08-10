@@ -40,8 +40,9 @@ export function useReportSpam({ pluginID, chainId, address, collectionId }: Opti
                     Are you sure to report{' '}
                     <Select
                         value={collection?.name ? 'hasName' : 'noName'}
-                        _hasName={collection?.name}
+                        _hasName={collection?.name || ''}
                         _noName="this NFT"
+                        other="this NFT"
                     />
                     ? After confirmed, this NFT will be marked as spam.
                 </Trans>

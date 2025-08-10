@@ -31,9 +31,8 @@ export function CrashUI({ onRetry, subject, ...error }: CrashUIProps) {
     // It seems like DOM mutation from out of our application might conflict with React reconciliation.
     // As a temporary fix, try to recover this React tree after 200ms.
     useTimeoutFn(() => {
-        if (error.message.includes("Failed to execute 'insertBefore' on 'Node'")) {
-            onRetry()
-        }
+        if (!error.message.includes("Failed to execute 'insertBefore' on 'Node'")) return
+        onRetry()
     }, 200)
 
     // crash report, will send to GitHub

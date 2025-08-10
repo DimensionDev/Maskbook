@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { getCreate2Address } from '../../src/helpers/getCreate2Address.js'
 
 describe('getCreate2Address', () => {

@@ -128,9 +128,8 @@ export function useFungibleAssets<S extends 'all' | void = void, T extends Netwo
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
-                if (isSameAddress(account, ev.account)) {
-                    query.refetch()
-                }
+                if (!isSameAddress(account, ev.account)) return
+                query.refetch()
             }) ?? noop
         )
     }, [account, query.refetch, BalanceNotifier])

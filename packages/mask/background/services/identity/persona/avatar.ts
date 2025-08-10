@@ -10,9 +10,9 @@ export async function getPersonaAvatar(
 ): Promise<string | undefined | Map<ProfileIdentifier | PersonaIdentifier, string>> {
     if (!identifiers) return undefined
     // Array.isArray cannot guard for readonly array.
-    // eslint-disable-next-line @masknet/type-no-instanceof-wrapper
+    // eslint-disable-next-line unicorn/no-instanceof-builtins
     const map = await queryAvatarsDataURL(identifiers instanceof Array ? identifiers : [identifiers])
-    // eslint-disable-next-line @masknet/type-no-instanceof-wrapper
+    // eslint-disable-next-line unicorn/no-instanceof-builtins
     if (identifiers instanceof Array) return map
     return map.get(identifiers)
 }

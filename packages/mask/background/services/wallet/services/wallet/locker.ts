@@ -43,7 +43,6 @@ export async function requestUnlockWallet(): Promise<void> {
 
 // This setTimeout is ok because if the background worker is killed,
 // it's the same effect as lockWallet is called.
-// eslint-disable-next-line no-restricted-globals
 let autoLockTimer: ReturnType<typeof setTimeout> | undefined
 
 export async function setAutoLockTimer(initialTimeout = 0) {

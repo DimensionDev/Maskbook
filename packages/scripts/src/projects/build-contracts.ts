@@ -41,9 +41,9 @@ export async function buildContracts() {
     ])
     replaceFileAll(join(GENERATED_PATH, 'types.ts'), [['web3-core/types', 'web3-core']])
 
-    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpx @magic-works/ts-esm-migrate .`)
+    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpm exec @magic-works/ts-esm-migrate .`)
     // format code
-    await awaitChildProcess(shell.cwd(GENERATED_PATH)`npx prettier . --write`)
+    await awaitChildProcess(shell.cwd(GENERATED_PATH)`pnpm exec prettier . --write`)
     // rename .ts to .d.ts
     for (const file of await fs.readdir(GENERATED_PATH)) {
         await fs.rename(join(GENERATED_PATH, file), join(GENERATED_PATH, file.replace('.ts', '.d.ts')))

@@ -64,7 +64,7 @@ export function ProfileLinkAction({ feed, ...rest }: ProfileLinkActionProps) {
                     <Label title={user} fontSize={14}>
                         {formattedUser}
                     </Label>{' '}
-                    <Select _follow="followed" _unfollow="un-followed" value={feed.type} />{' '}
+                    <Select _follow="followed" _unfollow="un-followed" value={feed.type} other="" />{' '}
                     <Label title={formattedOtherUser} fontSize={14}>
                         {other}
                     </Label>{' '}

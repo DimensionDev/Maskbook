@@ -157,7 +157,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             tokenType: TokenType.Fungible,
             messageTextForNFT: _(msg`1 NFT claimed.`),
             messageTextForFT: _(
-                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol || ''}.`,
             ),
             title: _(msg`Lucky Drop`),
             share: (text) => share?.(text, source ? source : undefined),

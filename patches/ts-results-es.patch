@@ -1,0 +1,280 @@
+diff --git a/.editorconfig b/.editorconfig
+deleted file mode 100644
+index 06ed3317679269267ebc440022c22b47ee6e442c..0000000000000000000000000000000000000000
+diff --git a/.github/dependabot.yml b/.github/dependabot.yml
+deleted file mode 100644
+index aff82a102da40486b8f40a652780490e192690f8..0000000000000000000000000000000000000000
+diff --git a/.github/workflows/ci.yml b/.github/workflows/ci.yml
+deleted file mode 100644
+index f755d789449f28398d31b60ee498f81ceac8ce6a..0000000000000000000000000000000000000000
+diff --git a/.prettierignore b/.prettierignore
+deleted file mode 100644
+index c575bb51d97f3a6210b8245e846fd1d707246bc1..0000000000000000000000000000000000000000
+diff --git a/.prettierrc b/.prettierrc
+deleted file mode 100644
+index cdf36540daad7fa0e43f4b26a44006ebac4b6612..0000000000000000000000000000000000000000
+diff --git a/.readthedocs.yaml b/.readthedocs.yaml
+deleted file mode 100644
+index bf9e759f491afb8f2ff0294ade1255faf70f5e7b..0000000000000000000000000000000000000000
+diff --git a/CHANGELOG.md b/CHANGELOG.md
+deleted file mode 100644
+index 044bcf63bc60d1bf1e2341f517e45cd8ff4b9d43..0000000000000000000000000000000000000000
+diff --git a/README.md b/README.md
+deleted file mode 100644
+index 6c169cb2d1397b12151d0e5364b2b64c7434110f..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncoption.d.ts b/dist/cjs/asyncoption.d.ts
+deleted file mode 100644
+index e451221b11fbc14e12012f98e2871de4996f4a1e..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncoption.d.ts.map b/dist/cjs/asyncoption.d.ts.map
+deleted file mode 100644
+index fc15b265405c8a35cb32270437f011bb04408052..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncoption.js b/dist/cjs/asyncoption.js
+deleted file mode 100644
+index 6a65217a97329ee7f9bce2896baac744f41d3e91..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncoption.js.map b/dist/cjs/asyncoption.js.map
+deleted file mode 100644
+index 28a382d19f9054d95b8cb3db64c69b0b4f5bd1ea..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncresult.d.ts b/dist/cjs/asyncresult.d.ts
+deleted file mode 100644
+index 9b594be984e7a8bf11af6f1a0e2a6aebe5b0986c..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncresult.d.ts.map b/dist/cjs/asyncresult.d.ts.map
+deleted file mode 100644
+index 15b69c01b5c01b83f63bedf3d516d019e4bc1a62..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncresult.js b/dist/cjs/asyncresult.js
+deleted file mode 100644
+index a26ebe7f18ca68bc8c8f23350b169c7d05fc19ce..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/asyncresult.js.map b/dist/cjs/asyncresult.js.map
+deleted file mode 100644
+index e8501302b0fbc363fc189db4c539e8955edd182f..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/index.d.ts b/dist/cjs/index.d.ts
+deleted file mode 100644
+index 5cffdd9f9056ddd1c43dfe37566d7a37950262dd..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/index.d.ts.map b/dist/cjs/index.d.ts.map
+deleted file mode 100644
+index b87b90d541c1ddc1ed351f681e62aca3a7aa3cc0..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/index.js b/dist/cjs/index.js
+deleted file mode 100644
+index a4c9c552dd3bdf8e7e9dc18f74917be590c6c847..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/index.js.map b/dist/cjs/index.js.map
+deleted file mode 100644
+index 5b15160c7fe805ee731a8b5792c830caa5c9985f..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/option.d.ts b/dist/cjs/option.d.ts
+deleted file mode 100644
+index da76a171635dddb06ceb64e0f2e4f591c13cac17..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/option.d.ts.map b/dist/cjs/option.d.ts.map
+deleted file mode 100644
+index eeaf559c953e96cd81078cb107a7a67442e12e49..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/option.js b/dist/cjs/option.js
+deleted file mode 100644
+index 073e75f58179d32de41624850730da306e3503d3..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/option.js.map b/dist/cjs/option.js.map
+deleted file mode 100644
+index 8285f7cf37a6b35f9c4b814faff7693dc09ebc05..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/package.json b/dist/cjs/package.json
+deleted file mode 100644
+index a3c15a7a6312b4c27cc889aafeed79bea64ecf55..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/result.d.ts b/dist/cjs/result.d.ts
+deleted file mode 100644
+index f581ea2a6c2ae99a27edd1515836425f8ce4cb61..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/result.d.ts.map b/dist/cjs/result.d.ts.map
+deleted file mode 100644
+index 22732535ef78c6a191d33faec3baa162b7234036..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/result.js b/dist/cjs/result.js
+deleted file mode 100644
+index 331f4d2d4785ff27066e471a6cd2acd6b872ec73..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/result.js.map b/dist/cjs/result.js.map
+deleted file mode 100644
+index 6270df20534abaf87c875f8f05921d656f97b2c9..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/rxjs-operators/index.d.ts b/dist/cjs/rxjs-operators/index.d.ts
+deleted file mode 100644
+index d546fea65f3d7fe7c2896e00cdd5212a74e84dea..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/rxjs-operators/index.d.ts.map b/dist/cjs/rxjs-operators/index.d.ts.map
+deleted file mode 100644
+index 601824d0fc7a534c34d82fde25c2c9b2cd70cb33..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/rxjs-operators/index.js b/dist/cjs/rxjs-operators/index.js
+deleted file mode 100644
+index 9c983a9bf499af577b6a716071c4995cbef74b6a..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/rxjs-operators/index.js.map b/dist/cjs/rxjs-operators/index.js.map
+deleted file mode 100644
+index 7a48c67893fb9140b9082434a8d3b3987010d6cc..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/utils.d.ts b/dist/cjs/utils.d.ts
+deleted file mode 100644
+index da7a8bfceed14fedd4c6a8f15fab4ee0775424fe..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/utils.d.ts.map b/dist/cjs/utils.d.ts.map
+deleted file mode 100644
+index efd703590d7d1b5ea2ab565d85406705c06afe48..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/utils.js b/dist/cjs/utils.js
+deleted file mode 100644
+index 7db7473a17bd622f99aad21d98942b01037989ec..0000000000000000000000000000000000000000
+diff --git a/dist/cjs/utils.js.map b/dist/cjs/utils.js.map
+deleted file mode 100644
+index 4ffa2688aa3789bfc320a627f133f68420cbdcba..0000000000000000000000000000000000000000
+diff --git a/dist/esm/asyncoption.d.ts.map b/dist/esm/asyncoption.d.ts.map
+deleted file mode 100644
+index fc15b265405c8a35cb32270437f011bb04408052..0000000000000000000000000000000000000000
+diff --git a/dist/esm/asyncresult.d.ts.map b/dist/esm/asyncresult.d.ts.map
+deleted file mode 100644
+index 15b69c01b5c01b83f63bedf3d516d019e4bc1a62..0000000000000000000000000000000000000000
+diff --git a/dist/esm/index.d.ts.map b/dist/esm/index.d.ts.map
+deleted file mode 100644
+index b87b90d541c1ddc1ed351f681e62aca3a7aa3cc0..0000000000000000000000000000000000000000
+diff --git a/dist/esm/option.d.ts.map b/dist/esm/option.d.ts.map
+deleted file mode 100644
+index eeaf559c953e96cd81078cb107a7a67442e12e49..0000000000000000000000000000000000000000
+diff --git a/dist/esm/package.json b/dist/esm/package.json
+deleted file mode 100644
+index 5ffd9800b97cf26f3962c0fcda77cdb56cb946a8..0000000000000000000000000000000000000000
+diff --git a/dist/esm/result.d.ts.map b/dist/esm/result.d.ts.map
+deleted file mode 100644
+index 22732535ef78c6a191d33faec3baa162b7234036..0000000000000000000000000000000000000000
+diff --git a/dist/esm/rxjs-operators/index.d.ts b/dist/esm/rxjs-operators/index.d.ts
+deleted file mode 100644
+index d546fea65f3d7fe7c2896e00cdd5212a74e84dea..0000000000000000000000000000000000000000
+diff --git a/dist/esm/rxjs-operators/index.d.ts.map b/dist/esm/rxjs-operators/index.d.ts.map
+deleted file mode 100644
+index 601824d0fc7a534c34d82fde25c2c9b2cd70cb33..0000000000000000000000000000000000000000
+diff --git a/dist/esm/rxjs-operators/index.js b/dist/esm/rxjs-operators/index.js
+deleted file mode 100644
+index 471962d9e1d448579621c666cd476d675895f63d..0000000000000000000000000000000000000000
+diff --git a/dist/esm/rxjs-operators/index.js.map b/dist/esm/rxjs-operators/index.js.map
+deleted file mode 100644
+index b95bcc512ea0f0449924d3e8a9ac475bb8a1a645..0000000000000000000000000000000000000000
+diff --git a/dist/esm/utils.d.ts.map b/dist/esm/utils.d.ts.map
+deleted file mode 100644
+index efd703590d7d1b5ea2ab565d85406705c06afe48..0000000000000000000000000000000000000000
+diff --git a/docs/Makefile b/docs/Makefile
+deleted file mode 100644
+index d4bb2cbb9eddb1bb1b4f366623044af8e4830919..0000000000000000000000000000000000000000
+diff --git a/docs/_static/keep-this-directory b/docs/_static/keep-this-directory
+deleted file mode 100644
+index 9c9324f3fdcacca2d551b31d424d2cfe4d5f5be0..0000000000000000000000000000000000000000
+diff --git a/docs/conf.py b/docs/conf.py
+deleted file mode 100644
+index d5a5404df00835bfe5bcd7f03e0c7b53fb0c3870..0000000000000000000000000000000000000000
+diff --git a/docs/index.rst b/docs/index.rst
+deleted file mode 100644
+index 0d784e1862a551c7d3567803df58f6ecec478103..0000000000000000000000000000000000000000
+diff --git a/docs/make.bat b/docs/make.bat
+deleted file mode 100644
+index 954237b9b9f2b248bb1397a15c055c0af1cad03e..0000000000000000000000000000000000000000
+diff --git a/docs/poetry.lock b/docs/poetry.lock
+deleted file mode 100644
+index a89aeb67f5c3416dcb86d2608d441005021fe2dd..0000000000000000000000000000000000000000
+diff --git a/docs/pyproject.toml b/docs/pyproject.toml
+deleted file mode 100644
+index 0c7a152296c140146754fe3649edef36a50d1e03..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/asyncoption.rst b/docs/reference/api/asyncoption.rst
+deleted file mode 100644
+index 26ba10040dc9bf0b70b3c74ec7d056a22bb1a475..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/asyncresult.rst b/docs/reference/api/asyncresult.rst
+deleted file mode 100644
+index 1327788c567a9f5152a70a0da3d72052ce09128e..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/index.rst b/docs/reference/api/index.rst
+deleted file mode 100644
+index 2400c8352089ae94f76e38675b1821ffdaf22ed1..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/option.rst b/docs/reference/api/option.rst
+deleted file mode 100644
+index a9150f20be72c0f387890943e30226cd9982e829..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/result.rst b/docs/reference/api/result.rst
+deleted file mode 100644
+index 96a7400ea72180efaacc881e5d071a80979ba2f5..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/rxjs.md b/docs/reference/api/rxjs.md
+deleted file mode 100644
+index a0ed0dbde42f4eea547afdbdb75220e1c00705e4..0000000000000000000000000000000000000000
+diff --git a/docs/reference/api/rxjs.rst b/docs/reference/api/rxjs.rst
+deleted file mode 100644
+index 010946d592bc80e42683aa7b08d2fc2f3c2ddd40..0000000000000000000000000000000000000000
+diff --git a/docs/reference/index.rst b/docs/reference/index.rst
+deleted file mode 100644
+index 96135347710df355fb465270828d5e07acacb7c5..0000000000000000000000000000000000000000
+diff --git a/jest.config.js b/jest.config.js
+deleted file mode 100644
+index ad7337cdb21b3e2b8736f395f1648f4a3f85ef04..0000000000000000000000000000000000000000
+diff --git a/package-cjs.json b/package-cjs.json
+deleted file mode 100644
+index a3c15a7a6312b4c27cc889aafeed79bea64ecf55..0000000000000000000000000000000000000000
+diff --git a/package-esm.json b/package-esm.json
+deleted file mode 100644
+index 5ffd9800b97cf26f3962c0fcda77cdb56cb946a8..0000000000000000000000000000000000000000
+diff --git a/package.json b/package.json
+index 8b7256e45366735d43955d5c709f6d0d73829961..771d41beb6df2506ebcbc960823a0a052501d476 100644
+--- a/package.json
++++ b/package.json
+@@ -11,17 +11,11 @@
+     "lint": "prettier src test tsconfig* package.json package-cjs.json package-esm.json --check",
+     "format": "prettier src test tsconfig* package.json package-cjs.json package-esm.json --write"
+   },
+-  "main": "dist/cjs/index.js",
++  "main": "dist/esm/index.js",
+   "module": "dist/esm/index.js",
++  "type": "module",
+   "exports": {
+-    ".": {
+-      "require": "./dist/cjs/index.js",
+-      "import": "./dist/esm/index.js"
+-    },
+-    "./rxjs-operators": {
+-      "require": "./dist/cjs/rxjs-operators/index.js",
+-      "import": "./dist/esm/rxjs-operators/index.js"
+-    }
++    ".": "./dist/esm/index.js"
+   },
+   "repository": {
+     "type": "git",
+diff --git a/src/asyncoption.ts b/src/asyncoption.ts
+deleted file mode 100644
+index 50565c8ab36099842dd94985886c1111f58c5a90..0000000000000000000000000000000000000000
+diff --git a/src/asyncresult.ts b/src/asyncresult.ts
+deleted file mode 100644
+index d8b00668ada617107a5c088ca5fd275df0b27635..0000000000000000000000000000000000000000
+diff --git a/src/index.ts b/src/index.ts
+deleted file mode 100644
+index 5b20d995c1982724c8b3be9fcbc617a8a3627445..0000000000000000000000000000000000000000
+diff --git a/src/option.ts b/src/option.ts
+deleted file mode 100644
+index 4a8106117785a8e1d1ca6b40867ad9710deff108..0000000000000000000000000000000000000000
+diff --git a/src/result.ts b/src/result.ts
+deleted file mode 100644
+index d5366c74cebe6fe6887408ba5890dab0bb522f73..0000000000000000000000000000000000000000
+diff --git a/src/rxjs-operators/index.ts b/src/rxjs-operators/index.ts
+deleted file mode 100644
+index 2dd60ac9f567e14fb70ff3cf676f37be1ff4a025..0000000000000000000000000000000000000000
+diff --git a/src/utils.ts b/src/utils.ts
+deleted file mode 100644
+index 39fad22f58bf8647ff5b177f0a3a2255ba2be714..0000000000000000000000000000000000000000
+diff --git a/test/asyncoption.test.ts b/test/asyncoption.test.ts
+deleted file mode 100644
+index 6a276706d66fd63dcdb361047c5a3267eccdb354..0000000000000000000000000000000000000000
+diff --git a/test/asyncresult.test.ts b/test/asyncresult.test.ts
+deleted file mode 100644
+index a8dfb1228487e28509bfabbd71c8b424da54bb41..0000000000000000000000000000000000000000
+diff --git a/test/err.test.ts b/test/err.test.ts
+deleted file mode 100644
+index 1a70551873915debd7db624277d98385c9be4605..0000000000000000000000000000000000000000
+diff --git a/test/ok.test.ts b/test/ok.test.ts
+deleted file mode 100644
+index dde53111eb221b5f5de5067a37a7e03a89b3fd00..0000000000000000000000000000000000000000
+diff --git a/test/option.test.ts b/test/option.test.ts
+deleted file mode 100644
+index fde2a914f66cb57bae3443aa72114192bde38fd5..0000000000000000000000000000000000000000
+diff --git a/test/result.test.ts b/test/result.test.ts
+deleted file mode 100644
+index 778e2beb4229c92886b400eaddd3ae4ff7a817ac..0000000000000000000000000000000000000000
+diff --git a/test/rxjs.test.ts b/test/rxjs.test.ts
+deleted file mode 100644
+index 9b76026f417755a15de0e9017853d56efb5976f4..0000000000000000000000000000000000000000
+diff --git a/test/tsconfig.json b/test/tsconfig.json
+deleted file mode 100644
+index 1db564518654673e75b947f6a32997c4b32ccc33..0000000000000000000000000000000000000000
+diff --git a/test/util.ts b/test/util.ts
+deleted file mode 100644
+index f28fdf573c9f5e3e0917efcf7dc75e390bd58799..0000000000000000000000000000000000000000
+diff --git a/tsconfig-base.json b/tsconfig-base.json
+deleted file mode 100644
+index 3c3bddc4cca550f7ecf1738888c17b8314f940a0..0000000000000000000000000000000000000000
+diff --git a/tsconfig-cjs.json b/tsconfig-cjs.json
+deleted file mode 100644
+index 651f67665c8b328fcfe86fc6a48085747b0e1031..0000000000000000000000000000000000000000
+diff --git a/tsconfig-esm.json b/tsconfig-esm.json
+deleted file mode 100644
+index 45fe156f6483995fe382fb8eecf62b52c7e00ce6..0000000000000000000000000000000000000000

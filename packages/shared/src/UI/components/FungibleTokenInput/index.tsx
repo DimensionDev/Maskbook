@@ -81,7 +81,8 @@ export const FungibleTokenInput = memo<FungibleTokenInputProps>(
                 }}
                 placeholder={placeholder}
                 onKeyDown={(ev) => {
-                    if (ev.key === 'Enter') ev.preventDefault()
+                    if (!(ev.key === 'Enter')) return
+                    ev.preventDefault()
                 }}
                 onMaxClick={() => {
                     if (!token) return

@@ -36,9 +36,8 @@ export const PersonaGuard = memo(function PersonaGuard({
 
     useEffect(() => {
         const off = PersonaSelectPanelModal.emitter.on('close', () => {
-            if (!connectedAndVerified) {
-                onDiscard?.()
-            }
+            if (connectedAndVerified) return
+            onDiscard?.()
         })
         return () => {
             off()

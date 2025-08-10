@@ -26,13 +26,13 @@ msgstr "{0} 平台成本"
 msgid "<0>Expires in </0>{0}"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "About"
 msgstr "关于"
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Activities"
 msgstr "活动"
 
@@ -64,8 +64,8 @@ msgstr "详情"
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr "直接在社交媒体上展示收藏品在 OpenSea 等平台上的具体信息，并提供报价及竞标功能。"
 
-#: src/SiteAdaptor/Shared/OfferCard.tsx
 #: src/SiteAdaptor/Shared/ActivityCard.tsx
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "From"
 msgstr "从"
 

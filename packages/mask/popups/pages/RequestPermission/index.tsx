@@ -28,7 +28,8 @@ export function RequestPermissionPage() {
     )
 
     useEffect(() => {
-        if (hasPermission) window.close()
+        if (!hasPermission) return
+        window.close()
     }, [hasPermission])
     return (
         <Box

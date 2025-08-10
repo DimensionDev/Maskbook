@@ -38,7 +38,10 @@ export interface EncryptIO {
      *
      * Throw in this case.
      */
-    encryptByLocalKey(content: Uint8Array, iv: Uint8Array): Promise<Uint8Array | ArrayBuffer>
+    encryptByLocalKey(
+        content: Uint8Array<ArrayBuffer>,
+        iv: Uint8Array<ArrayBuffer>,
+    ): Promise<Uint8Array<ArrayBuffer> | ArrayBuffer>
     /**
      * Derive a group of AES key by ECDH(selfPriv, targetPub).
      *

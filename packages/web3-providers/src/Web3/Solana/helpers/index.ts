@@ -6,7 +6,7 @@ import {
     multipliedBy,
     TokenType,
 } from '@masknet/web3-shared-base'
-import type * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import type * as SolanaWeb3 from '@solana/web3.js'
 import { type ChainId, createClientEndpoint, SchemaType } from '@masknet/web3-shared-solana'
 import type { RpcOptions } from '../types/index.js'
 

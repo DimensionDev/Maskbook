@@ -3,7 +3,7 @@ import { isNativeTokenAddress, type SchemaType, type ChainId } from '@masknet/we
 import { useQuery } from '@tanstack/react-query'
 import { getEstimatedGasByCreateWithNativeToken } from '../helpers/createWithNativeToken.js'
 
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { useAccount } from '@masknet/web3-hooks-base'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { DEFAULT_DURATION } from '../../constants.js'

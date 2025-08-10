@@ -10,7 +10,7 @@ import {
 } from '@masknet/encryption'
 import type { EC_Public_CryptoKey, EC_Public_JsonWebKey } from '@masknet/shared-base'
 import { CryptoKeyToJsonWebKey } from '../../utils-pure/index.js'
-import * as gun_utils from /* webpackDefer: true */ '@masknet/gun-utils'
+import defer * as gun_utils from '@masknet/gun-utils'
 import { EventIterator } from 'event-iterator'
 import { isObject, noop, uniq } from 'lodash-es'
 
@@ -199,7 +199,7 @@ namespace Version38Or39 {
 }
 
 // This is a self contained Gun.SEA.work implementation that only contains code path we used.
-async function GUN_SEA_work(data: Uint8Array | string, salt: Uint8Array | string) {
+async function GUN_SEA_work(data: Uint8Array<ArrayBuffer> | string, salt: Uint8Array<ArrayBuffer> | string) {
     if (typeof data === 'string') data = new TextEncoder().encode(data)
     if (typeof salt === 'string') salt = new TextEncoder().encode(salt)
     const key = await crypto.subtle.importKey('raw', data, { name: 'PBKDF2' }, false, ['deriveBits'])

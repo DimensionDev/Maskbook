@@ -1,4 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { Sniffings } from '@masknet/shared-base'
 import { injectedOperaProvider } from '@masknet/injected-script'
 import { type ChainId, EthereumMethodType, ProviderType, isValidChainId } from '@masknet/web3-shared-evm'

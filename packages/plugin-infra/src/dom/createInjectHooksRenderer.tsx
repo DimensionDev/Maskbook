@@ -26,7 +26,8 @@ export function createInjectHooksRenderer<PluginDefinition extends Plugin.Shared
                 <PluginWrapperComponent
                     definition={plugin}
                     ref={(methods) => {
-                        if (methods) setRef(methods)
+                        if (!methods) return
+                        setRef(methods)
                     }}>
                     {ref ?
                         <PluginWrapperMethodsContext value={ref}>{element}</PluginWrapperMethodsContext>

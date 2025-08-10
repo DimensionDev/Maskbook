@@ -198,12 +198,14 @@ export function Deploy({ open }: { open: boolean }) {
 
     useUpdateEffect(() => {
         if (
-            (signer?.signPersona &&
-                currentPersona?.identifier.publicKeyAsHex !== signer.signPersona.identifier.publicKeyAsHex) ||
-            (signer?.signWallet && !wallets.some((x) => isSameAddress(x.address, signer.signWallet?.address)))
-        ) {
-            closeDialog()
-        }
+            !(
+                (signer?.signPersona &&
+                    currentPersona?.identifier.publicKeyAsHex !== signer.signPersona.identifier.publicKeyAsHex) ||
+                (signer?.signWallet && !wallets.some((x) => isSameAddress(x.address, signer.signWallet?.address)))
+            )
+        )
+            return
+        closeDialog()
     }, [currentPersona, signer, wallets])
 
     return (

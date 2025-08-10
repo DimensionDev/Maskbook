@@ -1,4 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 
 export function splitSignature(signature: string) {
     if (signature.length !== 132 && !signature.startsWith('0x')) {

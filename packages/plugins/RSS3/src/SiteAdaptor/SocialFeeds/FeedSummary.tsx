@@ -54,7 +54,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ post, ...rest }) {
     return (
         <Typography component="div" {...rest} className={cx(classes.summary, rest.className)}>
             <Select
-                value={post.type}
+                value={post.type || ''}
                 _Post={
                     <Trans>
                         <Avatar url={pfp} />

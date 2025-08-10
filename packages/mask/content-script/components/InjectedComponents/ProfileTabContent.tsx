@@ -169,9 +169,8 @@ function Content(props: ProfileTabContentProps) {
     const selectedSocialAccount = socialAccounts.find((x) => isSameAddress(x.address, selectedAddress))
     const { setPair } = ScopedDomainsContainer.useContainer()
     useEffect(() => {
-        if (selectedSocialAccount?.address && selectedSocialAccount.label) {
-            setPair(selectedSocialAccount.address, selectedSocialAccount.label)
-        }
+        if (!(selectedSocialAccount?.address && selectedSocialAccount.label)) return
+        setPair(selectedSocialAccount.address, selectedSocialAccount.label)
     }, [selectedSocialAccount?.address, selectedSocialAccount?.label])
 
     useEffect(() => {
@@ -254,7 +253,8 @@ function Content(props: ProfileTabContentProps) {
 
     useEffect(() => {
         return MaskMessages.events.profileTabHidden.on((data) => {
-            if (data.hidden) setHidden(data.hidden)
+            if (!data.hidden) return
+            setHidden(data.hidden)
         })
     }, [currentVisitingUserId])
 

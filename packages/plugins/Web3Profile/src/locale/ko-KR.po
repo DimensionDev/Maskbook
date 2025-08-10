@@ -37,8 +37,8 @@ msgstr ""
 msgid "Can not follow: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/ProfilePopup.tsx
 #: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/components/ProfilePopup.tsx
 msgid "Change"
 msgstr "변경"
 
@@ -66,9 +66,9 @@ msgstr "현재 월렛은 Lens protocol과의 상호작용을 지원하지 않습
 msgid "Firefly"
 msgstr ""
 
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "팔로우"
 
@@ -81,8 +81,8 @@ msgstr "팔로우"
 msgid "Follow Lens handle"
 msgstr "Lens 핸들 팔로우"
 
-#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "팔로잉"
 
@@ -185,7 +185,7 @@ msgstr "살펴보기"
 msgid "View your profile in firefly"
 msgstr ""
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "웹3 프로필"

@@ -29,9 +29,8 @@ export const ReversedAddress = memo<ReverseAddressProps>(({ address, pluginID, s
     const popperProps = useBoundedPopperProps()
 
     useEffect(() => {
-        if (showDomain) {
-            onReverse?.(domain)
-        }
+        if (!showDomain) return
+        onReverse?.(domain)
     }, [showDomain, domain, onReverse])
 
     return hasEllipsis ?

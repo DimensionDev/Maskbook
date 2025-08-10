@@ -15,7 +15,7 @@ import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArgum
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { BaseEIP4337WalletProvider, type EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
-import * as SmartPayOwner from /* webpackDefer: true */ '../../../SmartPay/apis/OwnerAPI.js'
+import defer * as SmartPayOwner from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { evm } from '../../../Manager/registry.js'
 import type { BaseHostedStorage } from './BaseHosted.js'

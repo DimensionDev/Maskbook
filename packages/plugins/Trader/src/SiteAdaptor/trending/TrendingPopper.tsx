@@ -72,7 +72,8 @@ export const TrendingPopper = memo(function TrendingPopper({ children, locked }:
     return (
         <ClickAwayListener
             onClickAway={() => {
-                if (!locked) setActive(false)
+                if (locked) return
+                setActive(false)
             }}>
             <Fade in={active} easing="linear" timeout={250}>
                 <div

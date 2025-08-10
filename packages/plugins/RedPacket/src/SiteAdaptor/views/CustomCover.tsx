@@ -76,7 +76,8 @@ export function CustomCover() {
 
     useEffect(() => {
         return () => {
-            if (url) URL.revokeObjectURL(url)
+            if (!url) return
+            URL.revokeObjectURL(url)
         }
     }, [url])
 

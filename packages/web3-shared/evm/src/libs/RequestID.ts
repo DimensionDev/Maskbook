@@ -1,4 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { TransactionConfig } from 'web3-core'
 import type { JsonRpcPayload } from 'web3-core-helpers'
 import { EthereumMethodType, type RequestArguments } from '../types/index.js'

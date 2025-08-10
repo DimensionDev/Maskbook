@@ -9,7 +9,7 @@ import {
     type Transaction,
     type UserOperation,
 } from '@masknet/web3-shared-evm'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { AbstractAccountAPI, BundlerAPI, FunderAPI, WalletAPI } from '../../../entry-types.js'
 import { ConnectionAPI } from '../apis/ConnectionAPI.js'
 import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'

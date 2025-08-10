@@ -19,8 +19,8 @@ import {
     type TransferableMessage,
     isSameURL,
 } from '@masknet/web3-shared-base'
-import * as DepositPaymaster from /* webpackDefer: true */ '../../../SmartPay/libs/DepositPaymaster.js'
-import * as SmartPay from /* webpackDefer: true */ '../../../SmartPay/index.js'
+import defer * as DepositPaymaster from '../../../SmartPay/libs/DepositPaymaster.js'
+import defer * as SmartPay from '../../../SmartPay/index.js'
 import { EVMWeb3Readonly } from '../apis/ConnectionReadonlyAPI.js'
 import { EVMContractReadonly } from '../apis/ContractReadonlyAPI.js'
 import { evm } from '../../../Manager/registry.js'

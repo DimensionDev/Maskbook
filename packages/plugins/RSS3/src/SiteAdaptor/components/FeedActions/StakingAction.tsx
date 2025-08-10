@@ -67,6 +67,7 @@ export function StakingAction({ feed, ...rest }: StakingFeedActionProps) {
                         </Trans>
                     }
                     value={actionType}
+                    other=""
                 />
             </Typography>
         </div>

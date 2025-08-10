@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 954\n"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#: src/SiteAdaptor/components/ClaimEntry/index.tsx
-#: src/SiteAdaptor/components/ClaimDialog/index.tsx
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
+#: src/SiteAdaptor/components/ClaimDialog/index.tsx
+#: src/SiteAdaptor/components/ClaimEntry/index.tsx
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Claim"
 msgstr "수령"
 

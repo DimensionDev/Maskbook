@@ -21,13 +21,13 @@ msgstr ""
 msgid "<0>Expires in </0>{0}"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "About"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Activities"
 msgstr ""
 
@@ -59,8 +59,8 @@ msgstr ""
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr ""
 
-#: src/SiteAdaptor/Shared/OfferCard.tsx
 #: src/SiteAdaptor/Shared/ActivityCard.tsx
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "From"
 msgstr ""
 

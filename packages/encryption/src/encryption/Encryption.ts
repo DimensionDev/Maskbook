@@ -72,19 +72,22 @@ export async function encrypt(options: EncryptOptions, io: EncryptIO): Promise<E
     }
 }
 type Context = {
-    postIV: Uint8Array
-    postKeyEncoded: Promise<Uint8Array>
+    postIV: Uint8Array<ArrayBuffer>
+    postKeyEncoded: Promise<Uint8Array<ArrayBuffer>>
     authorPublic: Option<EC_Key<EC_Public_CryptoKey>>
 }
 
 /** @internal */
-export async function encodePostKey(version: EncryptOptions['version'], key: CryptoKey) {
+export async function encodePostKey(
+    version: EncryptOptions['version'],
+    key: CryptoKey,
+): Promise<Uint8Array<ArrayBuffer>> {
     if (version === -37) return crypto.subtle.exportKey('raw', key).then((x) => new Uint8Array(x))
     else if (version === -38)
         return crypto.subtle
             .exportKey('jwk', key)
             .then(JSON.stringify)
-            .then((x) => new TextEncoder().encode(x))
+            .then((x) => new TextEncoder().encode(x) as Uint8Array<ArrayBuffer>)
     unreachable(version)
 }
 async function e2e_v37(

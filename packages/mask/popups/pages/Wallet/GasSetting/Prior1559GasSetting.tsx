@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useNavigate } from 'react-router-dom'
 import { BigNumber } from 'bignumber.js'
 import { isEmpty } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { z as zod } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { NetworkPluginID, NUMERIC_INPUT_REGEXP_PATTERN, PopupRoutes } from '@masknet/shared-base'
@@ -194,20 +194,22 @@ export const Prior1559GasSetting = memo(() => {
 
     useUpdateEffect(() => {
         if (
-            value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
-            value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
-        ) {
-            // if rpc payload contain gas price, set it to default values
-            if (value.formatterTransaction._tx.gasPrice) {
-                const minGasPrice = minGasPriceOfChain[chainId]
-                // if the gas price in payload is lower than minimum value
-                if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice, minGasPrice)) {
-                    setValue('gasPrice', new BigNumber(minGasPrice).toString())
-                }
-                setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice).toString())
-            } else {
-                setOption(1)
+            !(
+                value?.formatterTransaction?.type === TransactionDescriptorType.TRANSFER ||
+                value?.formatterTransaction?.type === TransactionDescriptorType.INTERACTION
+            )
+        )
+            return
+        // if rpc payload contain gas price, set it to default values
+        if (value.formatterTransaction._tx.gasPrice) {
+            const minGasPrice = minGasPriceOfChain[chainId]
+            // if the gas price in payload is lower than minimum value
+            if (minGasPrice && isLessThan(value.formatterTransaction._tx.gasPrice, minGasPrice)) {
+                setValue('gasPrice', new BigNumber(minGasPrice).toString())
             }
+            setValue('gasPrice', formatWeiToGwei(value.formatterTransaction._tx.gasPrice).toString())
+        } else {
+            setOption(1)
         }
     }, [value, setValue, chainId])
 
@@ -217,7 +219,8 @@ export const Prior1559GasSetting = memo(() => {
     }, [minGasLimit, gas, setValue])
 
     useEffect(() => {
-        if (selected !== null && options) setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
+        if (!(selected !== null && options)) return
+        setValue('gasPrice', formatWeiToGwei(options[selected].gasPrice).toString())
     }, [selected, setValue, options])
 
     const [{ loading }, handleConfirm] = useAsyncFn(
@@ -240,9 +243,8 @@ export const Prior1559GasSetting = memo(() => {
     const onSubmit = handleSubmit((data) => handleConfirm(data))
 
     useUpdateEffect(() => {
-        if (!value && !getValueLoading) {
-            navigate(PopupRoutes.Wallet, { replace: true })
-        }
+        if (!(!value && !getValueLoading)) return
+        navigate(PopupRoutes.Wallet, { replace: true })
     }, [value, getValueLoading])
 
     return (

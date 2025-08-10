@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
+import defer * as wallet_ts from 'wallet.ts'
 import { BigNumber } from 'bignumber.js'
 import { ec as EC } from 'elliptic'
 import { fromHex, toHex, type LegacyWalletRecord } from '@masknet/shared-base'
@@ -59,7 +59,7 @@ async function recoverWalletFromMnemonicWords(
     const childKey = wallet_ts.HDKey.parseExtendedKey(extendedPrivateKey)
     const wallet = childKey.derive('')
     const walletPublicKey = wallet.publicKey
-    const walletPrivateKey = wallet.privateKey!
+    const walletPrivateKey = wallet.privateKey as Buffer<ArrayBuffer>
     return {
         address: wallet_ts.EthereumAddress.from(walletPublicKey).address,
         privateKey: walletPrivateKey,
