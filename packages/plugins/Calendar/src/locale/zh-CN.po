@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 03:00\n"
+"PO-Revision-Date: 2025-08-10 09:54\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -16,8 +16,8 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Calendar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 952\n"
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/Footer.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Calendar"
 msgstr "日历"
 
@@ -45,8 +45,8 @@ msgstr "新闻"
 #~ msgid "NFTs"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/NewsList.tsx
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
 msgstr "最近两周没有内容。"
 
@@ -54,8 +54,8 @@ msgstr "最近两周没有内容。"
 #~ msgid "No events"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/NewsList.tsx
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No more data available."
 msgstr ""
 
@@ -71,3 +71,4 @@ msgstr ""
 #: src/SiteAdaptor/components/NFTList.tsx
 #~ msgid "Total"
 #~ msgstr ""
+
