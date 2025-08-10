@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 02:59\n"
+"PO-Revision-Date: 2025-08-10 09:53\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -16,11 +16,11 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Claim/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 954\n"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-#: src/SiteAdaptor/components/ClaimEntry/index.tsx
-#: src/SiteAdaptor/components/ClaimDialog/index.tsx
 #: src/SiteAdaptor/components/AirDropActivities/AirDropActivityItem.tsx
+#: src/SiteAdaptor/components/ClaimDialog/index.tsx
+#: src/SiteAdaptor/components/ClaimEntry/index.tsx
+#: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Claim"
 msgstr "受取る"
 
@@ -66,8 +66,7 @@ msgstr "期限切れ"
 
 #. placeholder {0}: tokenDetail.symbol
 #: src/SiteAdaptor/components/ClaimSuccessDialog/index.tsx
-msgid ""
-"I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.\n"
+msgid "I just claimed airdrop with {amount} {0} on Mask Network extension. Follow @realMaskNetwork to check if you are eligible to claim.\n"
 " Install https://mask.io to explore more airdrop activities."
 msgstr ""
 
@@ -122,3 +121,4 @@ msgstr ""
 #: src/hooks/useClaimAirdrop.tsx
 msgid "Your wallet cancelled the transaction."
 msgstr "あなたのウォレットは取引をキャンセルしました。"
+
