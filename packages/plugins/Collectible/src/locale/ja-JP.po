@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-07-09 02:59\n"
+"PO-Revision-Date: 2025-08-10 09:53\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -26,13 +26,13 @@ msgstr "{0} のプラットフォームコスト"
 msgid "<0>Expires in </0>{0}"
 msgstr ""
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "About"
 msgstr "詳細"
 
-#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 #: src/SiteAdaptor/Card/Collectible.tsx
+#: src/SiteAdaptor/CardDialog/CardDialog.tsx
 msgid "Activities"
 msgstr "アクティビティ"
 
@@ -64,8 +64,8 @@ msgstr "詳細"
 msgid "Display specific information of collectibles in OpenSea and Rarible, make an offer directly on social media."
 msgstr "OpenSeaとRaribleのコレクションの具体的な情報を表示し、ソーシャルメディアで直接オファーします。"
 
-#: src/SiteAdaptor/Shared/OfferCard.tsx
 #: src/SiteAdaptor/Shared/ActivityCard.tsx
+#: src/SiteAdaptor/Shared/OfferCard.tsx
 msgid "From"
 msgstr "から"
 
@@ -131,3 +131,4 @@ msgstr "トークンID"
 #: src/SiteAdaptor/Shared/DetailsCard.tsx
 msgid "Token Standard"
 msgstr "トークン標準"
+
