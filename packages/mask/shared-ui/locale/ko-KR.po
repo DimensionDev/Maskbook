@@ -147,9 +147,9 @@ msgstr "활동"
 msgid "Activity Log"
 msgstr ""
 
-#: popups/pages/Wallet/CreateWallet/Derive.tsx
-#: popups/pages/Friends/ContactCard/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
+#: popups/pages/Friends/ContactCard/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add"
 msgstr "추가"
 
@@ -161,8 +161,8 @@ msgstr ""
 msgid "Add Assets"
 msgstr "자산 추가"
 
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Add Contact"
 msgstr "연락처 추가"
 
@@ -170,8 +170,8 @@ msgstr "연락처 추가"
 msgid "Add google Drive"
 msgstr ""
 
-#: popups/pages/Wallet/NetworkManagement/index.tsx
 #: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Add Network"
 msgstr "네트워크 추가"
 
@@ -188,14 +188,14 @@ msgid "Add the file to Chrome's database"
 msgstr ""
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-#: popups/pages/Wallet/SwitchWallet/index.tsx
-#: popups/pages/Wallet/CreateWallet/index.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Add Wallet"
 msgstr "월렛 추가"
 
-#: popups/pages/Wallet/components/AssetsList/index.tsx
 #: popups/components/TokenPicker/TokenItem.tsx
+#: popups/pages/Wallet/components/AssetsList/index.tsx
 msgid "Added by user"
 msgstr "사용자별추가"
 
@@ -223,8 +223,8 @@ msgstr "자신의 페르소나를 연결하고 확인한 후, 웹3 풋프린트�
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Agree"
 msgstr "동의"
 
@@ -245,8 +245,8 @@ msgstr ""
 msgid "Allow us to collect your usage information to help us improve Mask."
 msgstr ""
 
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Amount"
 msgstr "금액"
 
@@ -254,14 +254,14 @@ msgstr "금액"
 msgid "an NFT"
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Appearance"
 msgstr "화면"
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
-#: popups/pages/RequestPermission/RequestPermission.tsx
 #: popups/modals/UpdatePermissionModal/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Approve"
 msgstr "승인"
 
@@ -299,8 +299,8 @@ msgid "Associated Accounts"
 msgstr "관련 계정"
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "At least 6 characters"
 msgstr "최소 8 글자 이상 이용하세요"
 
@@ -321,10 +321,10 @@ msgid "Avatar set successfully"
 msgstr "아바타 설정 성공"
 
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-#: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: popups/pages/Personas/AccountDetail/UI.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Back"
 msgstr "뒤로"
 
@@ -337,10 +337,10 @@ msgstr "뒤로"
 msgid "Back Up Your Data Your Way"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: popups/pages/Personas/Logout/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Backup"
 msgstr "백업"
 
@@ -367,31 +367,31 @@ msgstr "백업 실패"
 msgid "Backup on {0}"
 msgstr "백업 시간 {0}"
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Backup password"
 msgstr "비밀번호 백업"
 
-#: dashboard/pages/SetupPersona/Backup/Local.tsx
-#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: popups/pages/Settings/index.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Backup Password"
 msgstr "비밀번호 백업"
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password must be 8-20 characters, including uppercase, lowercase, special characters and numbers."
 msgstr "백업 비밀번호는 대문자, 소문자, 특수 문자 및 숫자를 포함하여 8-20자여야 합니다."
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password set successfully"
 msgstr "백업 비밀번호가 설정되었습니다."
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Backup Persona"
 msgstr "페르소나 백업"
 
@@ -449,8 +449,8 @@ msgstr ""
 msgid "Browser File"
 msgstr "브라우저 파일"
 
-#: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>."
 msgstr ""
 
@@ -471,29 +471,29 @@ msgid "Can't find a valid user address data source."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
-#: dashboard/pages/SetupPersona/Welcome/index.tsx
-#: dashboard/pages/SetupPersona/Permissions/index.tsx
-#: dashboard/modals/ConfirmModal/index.tsx
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx
-#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
-#: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/pages/Wallet/SelectWallet/index.tsx
-#: popups/pages/Wallet/ResetWallet/index.tsx
-#: popups/pages/Wallet/Interaction/interaction.tsx
-#: popups/pages/Wallet/EditNetwork/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/RequestPermission/RequestPermission.tsx
-#: popups/pages/Personas/PersonaSignRequest/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
-#: popups/modals/DeleteContactModal/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: popups/modals/AddContactModal/index.tsx
+#: popups/modals/DeleteContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Cancel"
 msgstr "취소"
 
@@ -501,8 +501,8 @@ msgstr "취소"
 msgid "Cannot switch to a unknown network."
 msgstr ""
 
-#: popups/pages/Wallet/EditNetwork/index.tsx
 #: popups/components/SignRequestInfo/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Chain ID"
 msgstr "체인 ID"
 
@@ -513,8 +513,8 @@ msgstr "체인 ID"
 msgid "Chain ID: {0}"
 msgstr ""
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Change"
 msgstr "바꾸기"
 
@@ -522,8 +522,8 @@ msgstr "바꾸기"
 msgid "Change another account and try again."
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Change Backup Password"
 msgstr "백업 비밀번호 변경"
 
@@ -531,8 +531,8 @@ msgstr "백업 비밀번호 변경"
 msgid "Change Network"
 msgstr "네트워크 전환"
 
-#: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
 #: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
 msgid "Change Owner"
 msgstr "소유자 변경"
 
@@ -573,9 +573,9 @@ msgstr ""
 msgid "Close"
 msgstr "닫기"
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
-#: dashboard/pages/SetupPersona/Backup/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Cloud Backup"
 msgstr "클라우드 백업"
@@ -588,35 +588,35 @@ msgstr "수집품"
 msgid "Coming soon"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Completed"
 msgstr "완료됨"
 
-#: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx
-#: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
-#: popups/pages/Wallet/SelectWallet/index.tsx
-#: popups/pages/Wallet/ResetWallet/index.tsx
-#: popups/pages/Wallet/Interaction/interaction.tsx
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/pages/Wallet/EditNetwork/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: popups/modals/WalletRenameModal/index.tsx
-#: popups/modals/WalletAutoLockSettingModal/index.tsx
-#: popups/modals/ShowPrivateKeyModal/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
-#: popups/modals/PersonaRenameModal/index.tsx
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: popups/modals/EditContactModal/index.tsx
-#: popups/modals/ConfirmModal/index.tsx
-#: popups/modals/ChangePaymentPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/AddContactModal/index.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
 #: popups/components/NFTAvatarPicker/index.tsx
+#: popups/modals/AddContactModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/modals/ConfirmModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/modals/PersonaRenameModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletAutoLockSettingModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Confirm"
 msgstr "확인"
 
@@ -624,8 +624,8 @@ msgstr "확인"
 msgid "Confirm Bridge"
 msgstr ""
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
 msgstr "비밀번호 확인"
 
@@ -651,9 +651,9 @@ msgid "Congratulations"
 msgstr "축하합니다"
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: popups/modals/SelectProviderModal/index.tsx
-#: popups/components/SocialAccounts/index.tsx
 #: popups/components/ConnectedWallet/index.tsx
+#: popups/components/SocialAccounts/index.tsx
+#: popups/modals/SelectProviderModal/index.tsx
 msgid "Connect"
 msgstr "연결"
 
@@ -678,10 +678,10 @@ msgstr "소셜 계정 연결"
 msgid "Connect Wallet"
 msgstr "월렛을 연결하기"
 
-#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
-#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
-#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: popups/pages/Wallet/Interaction/AddChainRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Connect with Mask Wallet"
 msgstr ""
 
@@ -703,8 +703,8 @@ msgstr ""
 msgid "Connected {0} with {walletName}."
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 #: popups/pages/Wallet/ConnectedSites/index.tsx
+#: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 msgid "Connected sites"
 msgstr "연결된 사이트"
 
@@ -737,31 +737,30 @@ msgid "Contact edited."
 msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx
-#: popups/pages/Wallet/WalletSettings/Contacts.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/pages/Friends/Home/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
 msgstr "연락처"
 
-#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
-#: dashboard/pages/SetupPersona/SignUp/index.tsx
-#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
-#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromMnemonic.tsx
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Continue"
 msgstr "다음"
 
-#: popups/components/UnlockERC721Token/index.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Contract"
 msgstr "컨트랙트"
 
@@ -769,8 +768,8 @@ msgstr "컨트랙트"
 msgid "Contract Interaction"
 msgstr "컨트렉트 인터액션"
 
-#: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/components/PrivateKeyDisplay/index.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
 msgstr "복사됨"
 
@@ -795,8 +794,8 @@ msgid "Could not fetch chain ID. Is your RPC URL correct?"
 msgstr "체인 ID를 가져올 수 없습니다. RPC URL이 맞는지 확인하시길 바랍니다."
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
 msgstr "만들기"
 
@@ -843,8 +842,8 @@ msgstr ""
 msgid "Creation Completed"
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 #: popups/modals/ChooseCurrencyModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 msgid "Currency"
 msgstr "통화"
 
@@ -869,13 +868,13 @@ msgstr "현재 관리자 계정"
 msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
 msgstr ""
 
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "Custom"
 msgstr "커스텀"
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Dark"
 msgstr "다크"
 
@@ -917,8 +916,8 @@ msgstr "Mask로 해독되었습니다:"
 msgid "Delete"
 msgstr "삭제"
 
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/modals/DeleteContactModal/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Delete Contact"
 msgstr "연락처 삭제"
 
@@ -995,19 +994,19 @@ msgstr ""
 msgid "Don't see your NFT?"
 msgstr "NFT를 보셨나요?"
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Done"
 msgstr "완료"
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Download"
 msgstr "다운로드"
 
@@ -1039,18 +1038,16 @@ msgstr "편집"
 msgid "Edit Contact"
 msgstr "연락처 편집"
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email"
 msgstr "이메일"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email verification code"
 msgstr "메일 인증번호"
 
@@ -1084,8 +1081,8 @@ msgstr "Mask: 편집"
 #~ msgid "Encrypting your "
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Encrypting your **data**"
 msgstr ""
 
@@ -1097,8 +1094,8 @@ msgstr "암호화 방식"
 msgid "Ens or Address(0x)"
 msgstr "Ens 나 주소(0x)"
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr "기스비 한도 입력"
 
@@ -1148,8 +1145,8 @@ msgstr "예: Alice"
 msgid "Exchange"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
 msgstr "트위터에서 체험하기"
 
@@ -1157,8 +1154,8 @@ msgstr "트위터에서 체험하기"
 msgid "Explore multi-chain dApps."
 msgstr "클릭하여 메인 기능을 확인하세요."
 
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Export"
 msgstr "내보내기"
 
@@ -1255,10 +1252,10 @@ msgstr ""
 msgid "Follow @realMaskNetwork to explore Web3."
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
-#: popups/pages/Settings/index.tsx
-#: popups/modals/SelectLanguageModal/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/modals/SelectLanguageModal/index.tsx
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Follow System"
 msgstr "시스템에 따라 설정"
 
@@ -1279,12 +1276,12 @@ msgstr ""
 msgid "Function: {0}"
 msgstr ""
 
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
-#: popups/components/UnlockERC721Token/index.tsx
-#: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/TransactionPreview/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Gas Fee"
 msgstr "가스비"
 
@@ -1297,9 +1294,9 @@ msgstr "기스비 설정"
 msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr "가스 한도"
 
@@ -1308,8 +1305,8 @@ msgid "Gas Limit (Units)"
 msgstr "가스 한도(Units)"
 
 #. placeholder {0}: String(minGasLimit)
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
@@ -1321,8 +1318,8 @@ msgstr ""
 msgid "Gas limit must be smaller than {maxGas}."
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr "가스 가격"
 
@@ -1364,8 +1361,8 @@ msgstr "새로운 월렛 주소 생성"
 #~ msgid "Generating your "
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Generating your **accounts**"
 msgstr ""
 
@@ -1373,17 +1370,17 @@ msgstr ""
 #~ msgid "Get permission failed"
 #~ msgstr ""
 
-#. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
-#: popups/components/UnlockERC721Token/index.tsx
+#. placeholder {0}: contract?.symbol || ''
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
 msgid "Google Drive"
 msgstr ""
 
@@ -1436,10 +1433,10 @@ msgstr "잔액 $1 미만인 토큰 숨기기"
 msgid "Hiding Scam Transactions"
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "높음"
 
@@ -1501,8 +1498,8 @@ msgstr "월렛 불러오기"
 msgid "Incorrect Backup Password"
 msgstr ""
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Incorrect backup password."
 msgstr "잘못된 비밀번호."
 
@@ -1523,20 +1520,20 @@ msgstr "잘못된 키스토어 비밀번호."
 msgid "Incorrect Mnemonic Words."
 msgstr ""
 
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 #: popups/pages/Wallet/Unlock/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 msgid "Incorrect password"
 msgstr "잘못된 비밀번호"
 
-#: dashboard/pages/SetupPersona/Backup/Local.tsx
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Incorrect Password"
 msgstr "잘못된 비밀번호"
 
@@ -1544,13 +1541,13 @@ msgstr "잘못된 비밀번호"
 msgid "Incorrect payment password."
 msgstr "잘못된 결제 비밀번호"
 
-#: popups/modals/WalletRemoveModal/index.tsx
 #: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
 msgid "Incorrect Payment Password."
 msgstr "잘못된 결제 비밀번호"
 
-#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Incorrect Private Key"
 msgstr "잘못된 아이디 코드"
 
@@ -1558,8 +1555,8 @@ msgstr "잘못된 아이디 코드"
 msgid "Incorrect recovery phrase."
 msgstr "잘못된 복구 문구"
 
-#: popups/modals/AddContactModal/index.tsx
 #: popups/hooks/useContactsContext.ts
+#: popups/modals/AddContactModal/index.tsx
 msgid "Incorrect wallet address."
 msgstr "잘못된 월렛 주소."
 
@@ -1567,13 +1564,13 @@ msgstr "잘못된 월렛 주소."
 msgid "Incorrect words selected. Please try again!"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Input your Private Key"
 msgstr "개인 키 입력하기"
 
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "Instant"
 msgstr "즉시"
 
@@ -1587,8 +1584,8 @@ msgstr "무효한 Block Explorer URL."
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-msgid "Invalid email address format."
-msgstr "이메일 주소가 잘못되었습니다."
+#~ msgid "Invalid email address format."
+#~ msgstr "이메일 주소가 잘못되었습니다."
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid email address."
@@ -1599,14 +1596,13 @@ msgid "Invalid number"
 msgstr "잘못된 번호"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-msgid "Invalid phone number, please check and try again."
-msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
+#~ msgid "Invalid phone number, please check and try again."
+#~ msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
 msgstr "무효한 RPC URL"
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid verification code."
 msgstr "유효하지 않은 인증 코드입니다."
@@ -1641,10 +1637,10 @@ msgstr "키스토어"
 msgid "Keystore password"
 msgstr "키스토어 비밀번호"
 
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
 msgstr "숫자, 문자 또는 특수 문자가 부족합니다."
 
@@ -1652,8 +1648,8 @@ msgstr "숫자, 문자 또는 특수 문자가 부족합니다."
 msgid "Language"
 msgstr "언어"
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Light"
 msgstr "라이트"
 
@@ -1695,9 +1691,9 @@ msgstr ""
 msgid "Lock Wallet"
 msgstr "로컬 월렛"
 
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
 msgstr "로그아웃"
 
@@ -1705,9 +1701,9 @@ msgstr "로그아웃"
 #~ msgid "Login to Mask Cloud"
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Logout"
 msgstr ""
 
@@ -1719,13 +1715,13 @@ msgstr "로그아웃 실패"
 msgid "Logout successfully"
 msgstr "로그아웃 성공"
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr "낮음"
 
-#: popups/pages/Wallet/NetworkManagement/index.tsx
 #: popups/modals/ChooseNetworkModal/index.tsx
+#: popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Manage Network"
 msgstr "네트워크 관리"
 
@@ -1737,8 +1733,8 @@ msgstr ""
 msgid "Mask needs the following permissions"
 msgstr "Mask가 아래 권한을 요청합니다."
 
-#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Mask Network"
 msgstr ""
 
@@ -1754,13 +1750,13 @@ msgstr ""
 msgid "masknetwork"
 msgstr ""
 
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Max"
 msgstr "최대치"
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max Fee"
 msgstr "최대 가스비"
 
@@ -1785,8 +1781,8 @@ msgstr "현재 네트워크 컨디션에서 최대 가스비가 너무 낮습니
 msgid "Max fee should be greater than base fee of {0} Gwei."
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max Priority Fee"
 msgstr "최대 우선 가스비"
 
@@ -1810,10 +1806,10 @@ msgstr "네트워크 컨디션에 대한 최대 우선 가스비는 매우 낮�
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr "최대 우선 가스비는 0 GWEI보다 높아야 합니다"
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr "보통"
 
@@ -1821,13 +1817,13 @@ msgstr "보통"
 msgid "Merge Completed"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Merge data to local database"
 msgstr "데이터를 로컬 데이터베이스에 병합하기"
 
-#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Merge to Browser"
 msgstr ""
 
@@ -1853,12 +1849,12 @@ msgstr "니모닉 단어"
 #~ msgstr "모바일"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-msgid "Mobile number"
-msgstr "휴대폰 번호"
+#~ msgid "Mobile number"
+#~ msgstr "휴대폰 번호"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-msgid "Mobile verification code"
-msgstr "모바일 인증번호"
+#~ msgid "Mobile verification code"
+#~ msgstr "모바일 인증번호"
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
@@ -1876,9 +1872,9 @@ msgstr "나의 월렛"
 msgid "N/A"
 msgstr ""
 
-#: popups/modals/PersonaSettingModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
 #: popups/modals/AddContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Name"
 msgstr ""
 
@@ -1936,8 +1932,8 @@ msgstr "새로운 결제 비밀번호"
 
 #: content-script/components/GuideStep/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
 msgstr "다음"
 
@@ -1945,10 +1941,10 @@ msgstr "다음"
 msgid "Next.ID"
 msgstr ""
 
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Wallet/AddToken/index.tsx
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
-#: popups/pages/Wallet/AddToken/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "NFTs"
 msgstr ""
 
@@ -1969,8 +1965,8 @@ msgstr ""
 msgid "No back up"
 msgstr "백업 없음"
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "No backups found"
 msgstr "백업 없음"
 
@@ -1982,8 +1978,8 @@ msgstr ""
 msgid "No Data"
 msgstr "데이터 없음"
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "No friends are stored locally, please try search one."
 msgstr ""
 
@@ -2011,9 +2007,9 @@ msgstr "검색 결과가 없습니다."
 msgid "No websites connected to this wallet"
 msgstr ""
 
-#: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: popups/components/SignRequestInfo/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Nonce"
 msgstr ""
 
@@ -2094,9 +2090,9 @@ msgstr ""
 #~ msgid "Overwrite current backup"
 #~ msgstr ""
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Password"
 msgstr "비밀번호"
 
@@ -2104,11 +2100,11 @@ msgstr "비밀번호"
 msgid "Paste manually"
 msgstr "수동으로 붙여넣기"
 
-#: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
-#: popups/modals/WalletRemoveModal/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Payment Password"
 msgstr "결재 비밀번호"
 
@@ -2118,9 +2114,9 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Payment password must be 6 to 20 characters."
 msgstr ""
 
@@ -2160,8 +2156,8 @@ msgstr "이미 존재된 페르소나입니다."
 msgid "Persona created."
 msgstr ""
 
-#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Persona Name"
 msgstr "페르소나 이름"
 
@@ -2186,12 +2182,12 @@ msgid "Personas"
 msgstr "나의 페르소나"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-msgid "Phone verification code"
-msgstr ""
+#~ msgid "Phone verification code"
+#~ msgstr ""
 
-#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr "Mask Network를 툴바에 고정하여 보다 쉽게 액세스할 수 있습니다:"
 
@@ -2199,8 +2195,8 @@ msgstr "Mask Network를 툴바에 고정하여 보다 쉽게 액세스할 수 �
 msgid "Pinned successfully."
 msgstr "고정됩니다."
 
-#: content-script/site-adaptors/facebook.com/injection/Composition.tsx
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
+#: content-script/site-adaptors/facebook.com/injection/Composition.tsx
 msgid "Please click the \"Post\" button to open the compose dialog."
 msgstr ""
 
@@ -2314,16 +2310,16 @@ msgstr "개인정보처리방침"
 msgid "Private"
 msgstr "비공개"
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
 msgstr "개인 키"
 
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Profile Photo"
 msgstr "프로필 사진"
 
@@ -2341,8 +2337,8 @@ msgstr ""
 msgid "Quote Route"
 msgstr ""
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
 msgstr "다시 입력"
 
@@ -2360,8 +2356,8 @@ msgstr ""
 msgid "Receive"
 msgstr "받기"
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Recover"
 msgstr ""
 
@@ -2373,8 +2369,8 @@ msgstr "데어터 복구"
 msgid "Recover your wallet"
 msgstr "월렛 복구"
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Recovery"
 msgstr "복구"
@@ -2383,8 +2379,8 @@ msgstr "복구"
 msgid "Recovery Phrase"
 msgstr "복구 문구"
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Refresh"
 msgstr "새로고침"
 
@@ -2396,8 +2392,8 @@ msgstr ""
 msgid "Reload"
 msgstr "다시 로드"
 
-#: popups/pages/Wallet/WalletSettings/index.tsx
 #: popups/modals/WalletRemoveModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove"
 msgstr "삭제"
 
@@ -2409,10 +2405,10 @@ msgstr "월렛 삭제"
 msgid "Remove Wallet?"
 msgstr "월렛을 삭제하시겠습니까?"
 
-#: popups/pages/Wallet/WalletSettings/Rename.tsx
-#: popups/pages/Wallet/WalletSettings/Rename.tsx
-#: popups/pages/Wallet/CreateWallet/Derive.tsx
 #: popups/modals/PersonaRenameModal/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
 msgid "Rename"
 msgstr "이름 변경"
 
@@ -2437,8 +2433,6 @@ msgid "Reselect"
 msgstr "다시 선택"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Resend"
 msgstr "다시 보내기"
 
@@ -2450,8 +2444,8 @@ msgstr "월렛 리셋"
 msgid "Resource"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore"
 msgstr "복원하기"
 
@@ -2527,8 +2521,8 @@ msgstr ""
 msgid "Select Address"
 msgstr "주소 선택"
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Select All"
 msgstr "전체 선택"
 
@@ -2557,14 +2551,12 @@ msgid "Select Wallet"
 msgstr "월렛 선택"
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
-#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: popups/pages/Wallet/components/ActionGroup/index.tsx
-#: popups/pages/Wallet/Transfer/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
-#: popups/pages/Wallet/CollectibleDetail/index.tsx
 #: popups/components/TransactionPreview/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/Transfer/index.tsx
 msgid "Send"
 msgstr "보내기"
 
@@ -2611,9 +2603,9 @@ msgstr "최대 24자로 페로소나 이름 설정합니다"
 msgid "Settings"
 msgstr "설정"
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Share with"
 msgstr "공유 대상:"
 
@@ -2625,9 +2617,9 @@ msgstr "방법을 알려주세요."
 msgid "Show tokens with value less than $1"
 msgstr "잔액 $1 미만인 토큰 표시"
 
-#: popups/pages/Wallet/Interaction/WalletSignRequest.tsx
-#: popups/pages/Personas/PersonaSignRequest/index.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/Wallet/Interaction/WalletSignRequest.tsx
 msgid "Sign"
 msgstr "사인"
 
@@ -2676,8 +2668,8 @@ msgstr "넘어가기"
 msgid "Slippage"
 msgstr ""
 
-#: popups/pages/Personas/Home/UI.tsx
 #: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
 msgstr "소셜 계정"
 
@@ -2685,14 +2677,14 @@ msgstr "소셜 계정"
 msgid "Sorry, signature failed! Please try signing again."
 msgstr "사인 살패, 다시 시도하기"
 
+#: popups/modals/GasSettingModal/index.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
 msgid "Speed Up"
 msgstr "가속하기"
 
-#: popups/components/UnlockERC721Token/index.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Spend limit requested by"
 msgstr "지불 제한을 요청하는 이용자:"
 
@@ -2724,8 +2716,8 @@ msgstr ""
 msgid "Step 1/3"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Step 2/2"
 msgstr ""
 
@@ -2750,13 +2742,13 @@ msgstr "아이디 코드, 개인키, 로컬 백업이나 클라우드 백업으�
 msgid "Support mnemonic phrase, private key or keystore file."
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SupportedSitesModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr "지원되는 사이트"
 
-#: popups/pages/Wallet/components/ActionGroup/index.tsx
 #: popups/pages/Trader/Header.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
 msgid "Swap"
 msgstr ""
 
@@ -2799,8 +2791,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-msgid "The code is incorrect."
-msgstr "코드가 잘못되었습니다."
+#~ msgid "The code is incorrect."
+#~ msgstr "코드가 잘못되었습니다."
 
 #: dashboard/utils/api.ts
 msgid "The download link is expired"
@@ -2824,14 +2816,14 @@ msgstr ""
 msgid "The mnemonic words has been copied, please keep it in a safe place."
 msgstr ""
 
+#. placeholder {0}: match.nativeCurrency.symbol
 #: popups/pages/Wallet/EditNetwork/useWarnings.ts
-#~ msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
-#~ msgstr ""
-
-#. placeholder {1}: match.nativeCurrency.symbol
-#: popups/pages/Wallet/EditNetwork/useWarnings.ts
-msgid "The network with chain ID {formChainId} may use a different currency symbol ({1}) than the one you have entered. Please check."
+msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
 msgstr ""
+
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts
+#~ msgid "The network with chain ID {formChainId} may use a different currency symbol ({1}) than the one you have entered. Please check."
+#~ msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
@@ -2855,8 +2847,8 @@ msgid "The persona name already exists."
 msgstr "이미 존재된 페르소나입니다"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-msgid "The phone number is incorrect."
-msgstr "전화번호가 잘못되었습니다."
+#~ msgid "The phone number is incorrect."
+#~ msgstr "전화번호가 잘못되었습니다."
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
@@ -2880,9 +2872,9 @@ msgstr ""
 msgid "The wallet address already exists."
 msgstr "이 월렛 주소가 이미 존재합니다."
 
-#: popups/modals/WalletRenameModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
 #: popups/modals/AddContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
 msgid "The wallet name already exists."
 msgstr "이미 존재된 이름입니다."
 
@@ -2988,8 +2980,8 @@ msgstr "이 월렛은 현재 페르소나 {0} 에 연결됩니다."
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
 msgstr ""
 
-#: popups/pages/Wallet/TransactionDetail/index.tsx
 #: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "To"
 msgstr ""
 
@@ -3029,9 +3021,9 @@ msgstr ""
 msgid "Token Value"
 msgstr ""
 
+#: popups/pages/Wallet/AddToken/index.tsx
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
-#: popups/pages/Wallet/AddToken/index.tsx
 msgid "Tokens"
 msgstr "토큰"
 
@@ -3063,8 +3055,8 @@ msgstr ""
 msgid "Two entered passwords are different."
 msgstr ""
 
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Two entered passwords are not the same."
 msgstr ""
 
@@ -3076,8 +3068,8 @@ msgstr ""
 msgid "Unlock"
 msgstr "언락"
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Unpacking"
 msgstr ""
 
@@ -3135,13 +3127,13 @@ msgid "Verification code has been sent to your email. Please check your mailbox.
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-msgid "Verification code has been sent to your phone."
-msgstr ""
+#~ msgid "Verification code has been sent to your phone."
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
-msgid "Verification code sent"
-msgstr "인증 코드가 발송되었습니다"
+#~ msgid "Verification code sent"
+#~ msgstr "인증 코드가 발송되었습니다"
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
@@ -3152,8 +3144,8 @@ msgstr "인증"
 msgid "Verify Account"
 msgstr "인증 및 연결 성공"
 
-#: popups/pages/Settings/index.tsx
 #: popups/components/SignRequestInfo/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Version"
 msgstr ""
 
@@ -3163,10 +3155,10 @@ msgstr "거래 세부 내역 보기"
 
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
-#: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "View on Explorer"
 msgstr "Explorer에서 보기"
 
@@ -3194,8 +3186,8 @@ msgstr ""
 #~ msgid "wallet"
 #~ msgstr ""
 
-#: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Wallet Account"
 msgstr "월렛 계정"
 
@@ -3204,8 +3196,8 @@ msgid "Wallet disconnected"
 msgstr ""
 
 #. placeholder {0}: String(index + 1)
-#: popups/pages/Wallet/CreateWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Wallet Group #{0}"
 msgstr "월렛 그룹 #{0}"
 
@@ -3222,8 +3214,8 @@ msgstr "월렛 이름은 3~18자 이내로 입력해주세요."
 msgid "Wallet request timed out"
 msgstr "월렛 요청 시간 초과"
 
-#: popups/pages/Wallet/WalletSettings/index.tsx
 #: popups/pages/Wallet/SwitchWallet/index.tsx
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Wallet Settings"
 msgstr "월렛 설정"
 
@@ -3239,8 +3231,8 @@ msgstr ""
 msgid "Web3 Profile Card"
 msgstr "웹3 프로필 카드"
 
-#: popups/pages/Wallet/components/OriginCard/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Website"
 msgstr "웹사이트"
 

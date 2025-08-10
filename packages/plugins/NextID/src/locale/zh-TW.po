@@ -73,11 +73,11 @@ msgstr ""
 msgid "Wallet"
 msgstr "錢包"
 
-#: src/hooks/useWalletSign.ts
-#: src/hooks/useWalletSign.ts
+#: src/components/BindDialog.tsx
+#: src/components/BindDialog.tsx
 #: src/components/BindPanelUI.tsx
-#: src/components/BindDialog.tsx
-#: src/components/BindDialog.tsx
+#: src/hooks/useWalletSign.ts
+#: src/hooks/useWalletSign.ts
 msgid "Wallet Sign"
 msgstr ""
 

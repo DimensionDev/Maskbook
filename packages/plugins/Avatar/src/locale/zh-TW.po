@@ -60,8 +60,8 @@ msgstr ""
 msgid "NFT Avatar Setting"
 msgstr ""
 
-#: src/SiteAdaptor/NFTAvatarButton.tsx
 #: src/Application/RouterDialog.tsx
+#: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
 msgstr ""
 

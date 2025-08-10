@@ -60,8 +60,8 @@ msgstr "読み込み中..."
 msgid "NFT Avatar Setting"
 msgstr "NFT のアバター設定"
 
-#: src/SiteAdaptor/NFTAvatarButton.tsx
 #: src/Application/RouterDialog.tsx
+#: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
 msgstr ""
 

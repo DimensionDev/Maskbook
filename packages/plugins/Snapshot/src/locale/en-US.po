@@ -96,8 +96,8 @@ msgstr ""
 msgid "My vote"
 msgstr ""
 
-#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "No power"
 msgstr ""
 
@@ -148,10 +148,10 @@ msgstr ""
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/ProfileView.tsx
-#: src/SiteAdaptor/PluginDescriptor.tsx
 #: src/SiteAdaptor/InformationCard.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Snapshot"
 msgstr ""
 
@@ -171,10 +171,10 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Vote"
 msgstr ""
 

@@ -167,8 +167,8 @@ msgstr ""
 msgid "<0>{user}</0> donated <1>{costValue} {costSymbol}</1> to <2>{project}</2>"
 msgstr ""
 
-#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx
 #: src/SiteAdaptor/components/FeedActions/CommentAction.tsx
+#: src/SiteAdaptor/components/FeedCard/CommentCard.tsx
 msgid "<0>{user}</0> made a comment on {platform}"
 msgstr ""
 
@@ -228,9 +228,9 @@ msgstr ""
 msgid "Category"
 msgstr ""
 
-#: src/SiteAdaptor/modals/SocialFeedDetailsModal/DetailDialog.tsx
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/DetailDialog.tsx
 #: src/SiteAdaptor/modals/DetailsModal/DetailDialog.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/DetailDialog.tsx
+#: src/SiteAdaptor/modals/SocialFeedDetailsModal/DetailDialog.tsx
 msgid "Details"
 msgstr "디테일"
 
@@ -238,28 +238,28 @@ msgstr "디테일"
 #~ msgid "Direct"
 #~ msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Failed"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "From"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Hash"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Network"
 msgstr ""
 
-#: src/SiteAdaptor/SocialFeeds/index.tsx
 #: src/SiteAdaptor/FinanceFeeds/index.tsx
+#: src/SiteAdaptor/SocialFeeds/index.tsx
 msgid "No more data available."
 msgstr ""
 
@@ -271,23 +271,23 @@ msgstr ""
 #~ msgid "Related"
 #~ msgstr ""
 
-#: src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
 #: src/SiteAdaptor/FinanceFeeds/useFinanceFeeds.ts
+#: src/SiteAdaptor/SocialFeeds/useSocialFeeds.ts
 msgid "Request timed out"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Status"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Successful"
 msgstr ""
 
-#: src/SiteAdaptor/SocialFeeds/index.tsx
 #: src/SiteAdaptor/FinanceFeeds/index.tsx
+#: src/SiteAdaptor/SocialFeeds/index.tsx
 msgid "There's no feed associated with this address."
 msgstr ""
 
@@ -295,22 +295,22 @@ msgstr ""
 #~ msgid "There's no feed associated with this address.<0>{0}</0>"
 #~ msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Timestamp"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "To"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Transaction Details"
 msgstr ""
 
-#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 #: src/SiteAdaptor/modals/DetailsModal/TxDetails.tsx
+#: src/SiteAdaptor/modals/FinanceFeedDetailsModal/TxDetails.tsx
 msgid "Tx Fee"
 msgstr ""

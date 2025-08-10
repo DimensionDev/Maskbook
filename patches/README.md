@@ -19,6 +19,7 @@
 - @project-serum/sol-wallet-adapter: <https://github.com/project-serum/sol-wallet-adapter/issues/53>
 - @types/react-highlight-words: <https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63096>
 - urlcat: <https://github.com/balazsbotond/urlcat/issues/248>
+- ts-results-es: ts type resolution looks wrong under `moduleResolution: bundler`
 
 - rss3-next: The repo has been archived. See <https://github.com/NaturalSelectionLabs/RSS3-SDK-for-JavaScript#readme>
 - @cyberlab/cyberconnect: The repo is 404
@@ -34,6 +35,7 @@
 - react-use: <https://github.com/streamich/react-use/issues/1923>
 - typeson-registry: <https://github.com/dfahlander/typeson-registry/issues/37>
 - @scamsniffer/detector: <https://github.com/scamsniffer/scamsniffer/pull/3>
+- @lingui/cli: <https://github.com/lingui/js-lingui/issues/2308> and <https://github.com/lingui/js-lingui/pull/2309>
 
 ## CSP
 

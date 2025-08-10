@@ -33,14 +33,14 @@ msgstr ""
 msgid "By using this plugin, you agree to the <0>terms</0> and the <1>privacy policy</1>."
 msgstr ""
 
-#: src/SiteAdaptor/components/Terms.tsx
 #: src/SiteAdaptor/components/FileBrowser.tsx
+#: src/SiteAdaptor/components/Terms.tsx
 msgid "Cancel"
 msgstr "キャンセル"
 
-#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
-#: src/SiteAdaptor/components/Terms.tsx
 #: src/SiteAdaptor/components/FileBrowser.tsx
+#: src/SiteAdaptor/components/Terms.tsx
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Confirm"
 msgstr "確認"
 
@@ -92,9 +92,9 @@ msgid "File delete failed"
 msgstr ""
 
 #. placeholder {0}: file.key
-#: src/SiteAdaptor/components/Files/SelectableFile.tsx
-#: src/SiteAdaptor/components/Files/ManageableFile.tsx
 #: src/SiteAdaptor/components/Files/DisplayingFile.tsx
+#: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#: src/SiteAdaptor/components/Files/SelectableFile.tsx
 msgid "File Key: <0>{0}</0>"
 msgstr ""
 
@@ -130,8 +130,8 @@ msgstr "結果は見つかりませんでした。"
 msgid "Please click Browse Files button to select files to upload."
 msgstr "アップロードするファイルを選択するには、「ファイルを参照」ボタンをクリックしてください。"
 
-#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 #: src/SiteAdaptor/components/Files/ManageableFile.tsx
+#: src/SiteAdaptor/modals/RenameModal/RenameDialog.tsx
 msgid "Rename"
 msgstr "名前変更"
 
@@ -139,8 +139,8 @@ msgstr "名前変更"
 msgid "size"
 msgstr "サイズ"
 
-#: src/SiteAdaptor/components/RouterDialog.tsx
 #: src/SiteAdaptor/components/FileBrowser.tsx
+#: src/SiteAdaptor/components/RouterDialog.tsx
 msgid "Upload File"
 msgstr "ファイルをアップロード"
 
@@ -156,8 +156,8 @@ msgstr "アップロードされたファイル"
 msgid "Users can only delete local links of these files. Files on the decentralized storage protocols cannot be deleted."
 msgstr "ユーザーはこれらのファイルのローカルリンクのみを削除することができます。分散ストレージプロトコル上のファイルは削除できません。"
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/RouterDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 File Service"
 msgstr "プラグイン: ファイルサービス"
 
