@@ -1,5 +1,13 @@
 # @masknet/encryption
 
+## 0.5.4
+
+### Patch Changes
+
+- fee2714: Update TypeScript definition to only accept Uint8Array<ArrayBuffer>
+- Updated dependencies [fee2714]
+  - @masknet/base@0.3.2
+
 ## 0.5.3
 
 ### Patch Changes
