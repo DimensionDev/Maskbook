@@ -1329,6 +1329,7 @@ export interface Web3State<
     BlockNumberNotifier?: BlockNumberNotifierState<ChainId>
     IdentityService?: IdentityServiceState<ChainId>
     NameService?: NameServiceState
+    /** @deprecated */
     RiskWarning?: RiskWarningState
     Message?: MessageState<MessageRequest, MessageResponse>
     Settings?: SettingsState

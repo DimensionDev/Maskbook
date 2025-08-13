@@ -5,7 +5,6 @@ import { getMaskColor, makeStyles, useCustomSnackbar, ActionButton } from '@mask
 import { InjectedDialog, ActionButtonPromise, WalletStatusBox } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { useMatchXS } from '@masknet/shared-base-ui'
-import { useWeb3State } from '@masknet/web3-hooks-base'
 import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
@@ -65,12 +64,10 @@ interface WalletRiskWarningProps {
     onClose: () => void
 }
 
-export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRiskWarningProps) {
+export function WalletRiskWarning({ account, open, onClose }: WalletRiskWarningProps) {
     const { classes, cx } = useStyles()
     const { showSnackbar } = useCustomSnackbar()
     const isMobile = useMatchXS()
-
-    const { RiskWarning } = useWeb3State(pluginID)
 
     const onConfirm = useCallback(async () => {
         try {
@@ -81,7 +78,6 @@ export function WalletRiskWarning({ account, open, pluginID, onClose }: WalletRi
                 })
                 return
             }
-            await RiskWarning?.approve?.(account)
             onClose()
         } catch {
             // do nothing

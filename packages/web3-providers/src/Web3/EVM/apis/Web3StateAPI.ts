@@ -8,7 +8,6 @@ import {
     getDefaultProviderType,
 } from '@masknet/web3-shared-evm'
 import defer * as AddressBook from '../state/AddressBook.js'
-import defer * as RiskWarning from '../state/RiskWarning.js'
 import defer * as Token from '../state/Token.js'
 import defer * as Transaction from '../state/Transaction.js'
 import defer * as NameService from '../state/NameService.js'
@@ -76,7 +75,6 @@ export async function createEVMState(context: WalletAPI.IOContext): Promise<Web3
         AddressBook: () => new AddressBook.EVMAddressBook(address),
         IdentityService: () => new IdentityService.EVMIdentityService(),
         NameService: () => new NameService.EVMNameService(nameService),
-        RiskWarning: () => new RiskWarning.EVMRiskWarning(state.Provider?.account, riskWarning),
         Message: () => new Message.EVMMessage(context.MessageContext, messages),
         Token: () => new Token.EVMToken({ account: state.Provider?.account, chainId: state.Provider?.chainId }, token),
         Transaction: () =>
