@@ -48,7 +48,6 @@ patchedDependencies:
   '@scamsniffer/detector': patches/@scamsniffer__detector.patch
   gulp: patches/gulp.patch
   ts-results-es: patches/ts-results-es.patch
-  '@lingui/cli': patches/@lingui__cli.patch
 peerDependencyRules:
   ignoreMissing: []
   allowAny:
