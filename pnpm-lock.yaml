@@ -32,9 +32,6 @@ patchedDependencies:
   '@cyberlab/cyberconnect@4.2.2':
     hash: 4dbfa79010216f49a3d2b06b7d75ff505e42abec33c31f3f7fd21a86a1fe5a59
     path: patches/@cyberlab__cyberconnect@4.2.2.patch
-  '@lingui/cli':
-    hash: 0f450594799bb7255ad28e9c619f5575410bd01f806b88988ff430e406c37ce2
-    path: patches/@lingui__cli.patch
   '@protobufjs/inquire@1.1.0':
     hash: 6783a3af66b4a07f5ce06f8ecce2bc22ce61bf9637458ce1c2477c648867487d
     path: patches/@protobufjs__inquire@1.1.0.patch
@@ -99,10 +96,10 @@ importers:
         version: 11.11.5(@emotion/react@11.11.4(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2))(react@0.0.0-experimental-58af67a8f8-20240628)(types-react@19.0.0-beta.2)
       '@lingui/core':
         specifier: ^5.4.0
-        version: 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
+        version: 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
       '@lingui/react':
         specifier: ^5.4.0
-        version: 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)(react@0.0.0-experimental-58af67a8f8-20240628)
+        version: 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)(react@0.0.0-experimental-58af67a8f8-20240628)
       '@masknet/kit':
         specifier: 0.4.1
         version: 0.4.1
@@ -171,11 +168,11 @@ importers:
         specifier: ^1.3.1
         version: 1.3.1(eslint@9.32.0(jiti@2.4.2))
       '@lingui/cli':
-        specifier: ^5.4.0
-        version: 5.4.0(patch_hash=0f450594799bb7255ad28e9c619f5575410bd01f806b88988ff430e406c37ce2)(babel-plugin-macros@3.1.0)(typescript@5.9.2)
+        specifier: ^5.4.1
+        version: 5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)
       '@lingui/swc-plugin':
         specifier: ^5.6.0
-        version: 5.6.0(@lingui/core@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0))(@swc/core@1.13.3)
+        version: 5.6.0(@lingui/core@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0))(@swc/core@1.13.3)
       '@masknet/cli':
         specifier: workspace:^
         version: link:packages/scripts
@@ -4910,12 +4907,12 @@ packages:
     resolution: {integrity: sha512-eZX+5ByUAzh8DrfjCan0spZGpvF7SxEBz4tOPoBMBCuKJJLr+8EokBO/5E3ceIw04f5+lAcD3CO3bccuKomp3Q==}
     engines: {node: '>=16.0.0', npm: '>=7.0.0'}
 
-  '@lingui/babel-plugin-extract-messages@5.4.0':
-    resolution: {integrity: sha512-hcxnDgtby6rfhRvLM0Q9IsJhIjNR9dnHrKLKgSHsc5dTA/RYajSYbsdUXECvOQN+whwgBoQtZb/hvALmBpmjQA==}
+  '@lingui/babel-plugin-extract-messages@5.4.1':
+    resolution: {integrity: sha512-sjkVaLyuK3ZW62mv5gU6pOdl3ZpwDReeSaNodJuf9LssbMIQPa5WOirTnMeBaalrQ8BA2srrRzQAWgsXPQVdXA==}
     engines: {node: '>=20.0.0'}
 
-  '@lingui/babel-plugin-lingui-macro@5.4.0':
-    resolution: {integrity: sha512-VKRc/uQ4fyFJfRcBwaWDqDXNTj99IJzgAFX/P0keeTmLltW1nm/d367Ksku19JI1SDUo42p65YEuk3VxuXyQ3g==}
+  '@lingui/babel-plugin-lingui-macro@5.4.1':
+    resolution: {integrity: sha512-9IO+PDvdneY8OCI8zvI1oDXpzryTMtyRv7uq9O0U1mFCvIPVd5dWQKQDu/CpgpYAc2+JG/izn5PNl9xzPc6ckw==}
     engines: {node: '>=20.0.0'}
     peerDependencies:
       babel-plugin-macros: 2 || 3
@@ -4923,13 +4920,13 @@ packages:
       babel-plugin-macros:
         optional: true
 
-  '@lingui/cli@5.4.0':
-    resolution: {integrity: sha512-S/mWIsTc1ggx0GajoIftIVEiv5pQWuBK+ip/YMrJrvr/gVHEzja/cT4db5f8dwadWyZ/YfJuEnz22RSKqBrrKA==}
+  '@lingui/cli@5.4.1':
+    resolution: {integrity: sha512-UAKA9Iz4zMDJS7fzWMZ4hzQWontrTBnI5XCsPm7ttB0Ed0F4Pwph/Vu7pg4bJdiYr4d6nqEpRWd9aTxcC15/IA==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
-  '@lingui/conf@5.4.0':
-    resolution: {integrity: sha512-S4YIWyyPpncTfilNzmvSrPUJ8lFKvOs/2+j4Lpzwj5Ue5DIpxB+2WnpNkfw3GsQl3ilPiFbo87R21XKLNzMF+Q==}
+  '@lingui/conf@5.4.1':
+    resolution: {integrity: sha512-aDkj/bMSr/mCL8Nr1TS52v0GLCuVa4YqtRz+WvUCFZw/ovVInX0hKq1TClx/bSlhu60FzB/CbclxFMBw8aLVUg==}
     engines: {node: '>=20.0.0'}
 
   '@lingui/core@5.4.0':
@@ -4944,8 +4941,20 @@ packages:
       babel-plugin-macros:
         optional: true
 
-  '@lingui/format-po@5.4.0':
-    resolution: {integrity: sha512-zQ930if6pTXAT4fQzbVdqORNc9g4XNCB2LwQ4nhzm65acCHI/BVMnGXkeU5qWLdX5xXPRIxaJbUvhXWh3Shy3A==}
+  '@lingui/core@5.4.1':
+    resolution: {integrity: sha512-4FeIh56PH5vziPg2BYo4XYWWOHE4XaY/XR8Jakwn0/qwtLpydWMNVpZOpGWi7nfPZtcLaJLmZKup6UNxEl1Pfw==}
+    engines: {node: '>=20.0.0'}
+    peerDependencies:
+      '@lingui/babel-plugin-lingui-macro': 5.4.1
+      babel-plugin-macros: 2 || 3
+    peerDependenciesMeta:
+      '@lingui/babel-plugin-lingui-macro':
+        optional: true
+      babel-plugin-macros:
+        optional: true
+
+  '@lingui/format-po@5.4.1':
+    resolution: {integrity: sha512-IBVq3RRLNEVRzNZcdEw0qpM5NKX4e9wDmvJMorkR2OYrgTbhWx5gDYhXpEZ9yqtuEVhILMdriVNjAAUnDAJibA==}
     engines: {node: '>=20.0.0'}
 
   '@lingui/message-utils@5.4.0':
@@ -4953,6 +4962,10 @@ packages:
     engines: {node: '>=20.0.0'}
     bundledDependencies:
       - '@messageformat/date-skeleton'
+
+  '@lingui/message-utils@5.4.1':
+    resolution: {integrity: sha512-hXfL90fFBoKp5YgLaWo3HbJS/7q+WlWs7VwVbUxl4pa+YladqNZf08JoDeBUDtlEVx5a3bNUSACXHs2FZo12aw==}
+    engines: {node: '>=20.0.0'}
 
   '@lingui/react@5.4.0':
     resolution: {integrity: sha512-tDHAZDKWNA5/omua8V4++x62E5PXXymyy2WqU12A6I1sSXYmsUp3IU6mHZO1Iy4dh8ci5+UJ8DsabRAsTbLjWA==}
@@ -18667,35 +18680,35 @@ snapshots:
       multiformats: 11.0.2
       uint8arrays: 4.0.3
 
-  '@lingui/babel-plugin-extract-messages@5.4.0': {}
+  '@lingui/babel-plugin-extract-messages@5.4.1': {}
 
-  '@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2)':
+  '@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)':
     dependencies:
       '@babel/core': 7.27.1
       '@babel/runtime': 7.26.7
       '@babel/types': 7.27.1
-      '@lingui/conf': 5.4.0(typescript@5.9.2)
-      '@lingui/core': 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
-      '@lingui/message-utils': 5.4.0
+      '@lingui/conf': 5.4.1(typescript@5.9.2)
+      '@lingui/core': 5.4.1(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
+      '@lingui/message-utils': 5.4.1
     optionalDependencies:
       babel-plugin-macros: 3.1.0
     transitivePeerDependencies:
       - supports-color
       - typescript
 
-  '@lingui/cli@5.4.0(patch_hash=0f450594799bb7255ad28e9c619f5575410bd01f806b88988ff430e406c37ce2)(babel-plugin-macros@3.1.0)(typescript@5.9.2)':
+  '@lingui/cli@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)':
     dependencies:
       '@babel/core': 7.27.1
       '@babel/generator': 7.27.1
       '@babel/parser': 7.27.2
       '@babel/runtime': 7.26.7
       '@babel/types': 7.27.1
-      '@lingui/babel-plugin-extract-messages': 5.4.0
-      '@lingui/babel-plugin-lingui-macro': 5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2)
-      '@lingui/conf': 5.4.0(typescript@5.9.2)
-      '@lingui/core': 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
-      '@lingui/format-po': 5.4.0(typescript@5.9.2)
-      '@lingui/message-utils': 5.4.0
+      '@lingui/babel-plugin-extract-messages': 5.4.1
+      '@lingui/babel-plugin-lingui-macro': 5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)
+      '@lingui/conf': 5.4.1(typescript@5.9.2)
+      '@lingui/core': 5.4.1(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
+      '@lingui/format-po': 5.4.1(typescript@5.9.2)
+      '@lingui/message-utils': 5.4.1
       chokidar: 3.5.1
       cli-table: 0.3.11
       commander: 10.0.1
@@ -18715,7 +18728,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@lingui/conf@5.4.0(typescript@5.9.2)':
+  '@lingui/conf@5.4.1(typescript@5.9.2)':
     dependencies:
       '@babel/runtime': 7.26.7
       cosmiconfig: 8.3.6(typescript@5.9.2)
@@ -18725,18 +18738,26 @@ snapshots:
     transitivePeerDependencies:
       - typescript
 
-  '@lingui/core@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)':
+  '@lingui/core@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)':
     dependencies:
       '@babel/runtime': 7.26.7
       '@lingui/message-utils': 5.4.0
     optionalDependencies:
-      '@lingui/babel-plugin-lingui-macro': 5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2)
+      '@lingui/babel-plugin-lingui-macro': 5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)
       babel-plugin-macros: 3.1.0
 
-  '@lingui/format-po@5.4.0(typescript@5.9.2)':
+  '@lingui/core@5.4.1(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)':
     dependencies:
-      '@lingui/conf': 5.4.0(typescript@5.9.2)
-      '@lingui/message-utils': 5.4.0
+      '@babel/runtime': 7.26.7
+      '@lingui/message-utils': 5.4.1
+    optionalDependencies:
+      '@lingui/babel-plugin-lingui-macro': 5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)
+      babel-plugin-macros: 3.1.0
+
+  '@lingui/format-po@5.4.1(typescript@5.9.2)':
+    dependencies:
+      '@lingui/conf': 5.4.1(typescript@5.9.2)
+      '@lingui/message-utils': 5.4.1
       date-fns: 3.6.0
       pofile: 1.1.4
     transitivePeerDependencies:
@@ -18747,18 +18768,23 @@ snapshots:
       '@messageformat/parser': 5.1.0
       js-sha256: 0.10.1
 
-  '@lingui/react@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)(react@0.0.0-experimental-58af67a8f8-20240628)':
+  '@lingui/message-utils@5.4.1':
+    dependencies:
+      '@messageformat/parser': 5.1.0
+      js-sha256: 0.10.1
+
+  '@lingui/react@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)(react@0.0.0-experimental-58af67a8f8-20240628)':
     dependencies:
       '@babel/runtime': 7.26.7
-      '@lingui/core': 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
+      '@lingui/core': 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
       react: 0.0.0-experimental-58af67a8f8-20240628
     optionalDependencies:
-      '@lingui/babel-plugin-lingui-macro': 5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2)
+      '@lingui/babel-plugin-lingui-macro': 5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2)
       babel-plugin-macros: 3.1.0
 
-  '@lingui/swc-plugin@5.6.0(@lingui/core@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0))(@swc/core@1.13.3)':
+  '@lingui/swc-plugin@5.6.0(@lingui/core@5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0))(@swc/core@1.13.3)':
     dependencies:
-      '@lingui/core': 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.0(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
+      '@lingui/core': 5.4.0(@lingui/babel-plugin-lingui-macro@5.4.1(babel-plugin-macros@3.1.0)(typescript@5.9.2))(babel-plugin-macros@3.1.0)
     optionalDependencies:
       '@swc/core': 1.13.3(@swc/helpers@0.5.15)
 
@@ -25953,7 +25979,7 @@ snapshots:
   https-proxy-agent@7.0.5:
     dependencies:
       agent-base: 7.1.1
-      debug: 4.3.7
+      debug: 4.4.1
     transitivePeerDependencies:
       - supports-color
 
@@ -28189,7 +28215,7 @@ snapshots:
     dependencies:
       growly: 1.3.0
       is-wsl: 2.2.0
-      semver: 7.6.3
+      semver: 7.7.2
       shellwords: 0.1.1
       uuid: 8.3.2
       which: 2.0.2
@@ -28551,7 +28577,7 @@ snapshots:
 
   parse-json@7.1.1:
     dependencies:
-      '@babel/code-frame': 7.26.2
+      '@babel/code-frame': 7.27.1
       error-ex: 1.3.2
       json-parse-even-better-errors: 3.0.2
       lines-and-columns: 2.0.4
@@ -30922,7 +30948,7 @@ snapshots:
       is-npm: 6.0.0
       latest-version: 9.0.0
       pupa: 3.1.0
-      semver: 7.6.3
+      semver: 7.7.2
       xdg-basedir: 5.1.0
 
   uqr@0.1.2: {}
