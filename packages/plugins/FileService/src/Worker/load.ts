@@ -83,7 +83,7 @@ class LoadAgent implements ProviderAgent {
         const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${process.env.LOAD_NETWORK_KEY}`,
+                Authorization: `Bearer ${process.env.LOAD_KEY}`,
             },
             body: formData,
             signal: this.uploadController?.signal,
