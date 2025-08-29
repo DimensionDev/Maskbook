@@ -53,9 +53,7 @@ class LoadAgent implements ProviderAgent {
     async uploadLandingPage(metadata: LandingPageMetadata) {
         this.init()
         // decide which gateway URL to use based on ID
-        const linkPrefix = LEGACY_ID_REGEX.test(metadata.txId)
-            ? LOAD_LEGACY_GATEWAY_URL
-            : LOAD_GATEWAY_URL
+        const linkPrefix = LEGACY_ID_REGEX.test(metadata.txId) ? LOAD_LEGACY_GATEWAY_URL : LOAD_GATEWAY_URL
 
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
