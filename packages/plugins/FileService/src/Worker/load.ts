@@ -86,10 +86,10 @@ class LoadAgent implements ProviderAgent {
             const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${process.env.LOAD_KEY}`
+                    Authorization: `Bearer ${process.env.LOAD_KEY}`,
                 },
                 body: formData,
-                signal: this.uploadController?.signal
+                signal: this.uploadController?.signal,
             })
 
             if (!response.ok) {
@@ -102,8 +102,7 @@ class LoadAgent implements ProviderAgent {
             }
 
             return result.dataitem_id
-        }
-        catch (error) {
+        } catch (error) {
             throw error
         }
     }
