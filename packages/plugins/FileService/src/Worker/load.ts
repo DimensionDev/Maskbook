@@ -74,9 +74,7 @@ class LoadAgent implements ProviderAgent {
             .replace('__METADATA__', encodedMetadata)
 
         const data = encodeText(replaced)
-
         const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
-
         return landingPageTxId
     }
 
