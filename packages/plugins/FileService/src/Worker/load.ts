@@ -67,9 +67,7 @@ class LoadAgent implements ProviderAgent {
             .replace('__METADATA__', encodedMetadata)
 
         const data = encodeText(replaced)
-
         const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
-
         return landingPageTxId
     }
 
@@ -86,7 +84,7 @@ class LoadAgent implements ProviderAgent {
             const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
                 method: 'POST',
                 headers: {
-                    'Authorization': `Bearer ${process.env.LOAD_KEY}`
+                    'Authorization': `Bearer ${process.env.LOAD_NETWORK_KEY}`
                 },
                 body: formData,
                 signal: this.uploadController?.signal
