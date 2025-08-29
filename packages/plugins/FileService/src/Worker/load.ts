@@ -67,44 +67,38 @@ class LoadAgent implements ProviderAgent {
             .replace('__METADATA__', encodedMetadata)
 
         const data = encodeText(replaced)
-
         const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
-
         return landingPageTxId
     }
 
     async makePayload(data: Uint8Array, type: string, fileName: string = 'file.dat') {
         this.init()
 
-        try {
-            const blob = new Blob([data], { type })
-            const formData = new FormData()
-            formData.append('file', blob)
-            formData.append('content_type', type)
-            formData.append('app_name', 'Maskbook')
+        const blob = new Blob([data], { type })
+        const formData = new FormData()
+        formData.append('file', blob)
+        formData.append('content_type', type)
+        formData.append('app_name', 'Maskbook')
 
-            const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${process.env.LOAD_KEY}`,
-                },
-                body: formData,
-                signal: this.uploadController?.signal,
-            })
+        const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                Authorization: `Bearer ${process.env.LOAD_NETWORK_KEY}`,
+            },
+            body: formData,
+            signal: this.uploadController?.signal,
+        })
 
-            if (!response.ok) {
-                throw new Error(`Upload failed: ${response.statusText}`)
-            }
-
-            const result = await response.json()
-            if (!result.success || !result.dataitem_id) {
-                throw new Error('Invalid response from upload service')
-            }
-
-            return result.dataitem_id
-        } catch (error) {
-            throw error
+        if (!response.ok) {
+            throw new Error(`Upload failed: ${response.statusText}`)
         }
+
+        const result = await response.json()
+        if (!result.success || !result.dataitem_id) {
+            throw new Error('Invalid response from upload service')
+        }
+
+        return result.dataitem_id
     }
 }
 
