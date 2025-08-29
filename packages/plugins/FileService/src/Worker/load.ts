@@ -5,8 +5,10 @@ import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { LOAD_LEGACY_GATEWAY_URL, LOAD_LEGACY_ID_REGEX, makeFileKeySigned } from '../helpers.js'
 
+const LOAD_LEGACY_GATEWAY_URL = 'https://load0.network/download'
 const LOAD_GATEWAY_URL = 'https://load-s3-agent.load.network'
 const LOAD_UPLOAD_ENDPOINT = 'https://load-s3-agent.load.network/upload'
+const LEGACY_ID_REGEX = /^0x[a-f0-9]{64}$/i
 
 class LoadAgent implements ProviderAgent {
     static providerName = 'Load Network'
@@ -51,7 +53,13 @@ class LoadAgent implements ProviderAgent {
     async uploadLandingPage(metadata: LandingPageMetadata) {
         this.init()
         // decide which gateway URL to use based on ID
+<<<<<<< HEAD
         const linkPrefix = LOAD_LEGACY_ID_REGEX.test(metadata.txId) ? LOAD_LEGACY_GATEWAY_URL : LOAD_GATEWAY_URL
+=======
+        const linkPrefix = LEGACY_ID_REGEX.test(metadata.txId)
+            ? LOAD_LEGACY_GATEWAY_URL
+            : LOAD_GATEWAY_URL
+>>>>>>> 3e3f956c65 (fix: conditional legacy gateway, .env, 30MB limit)
 
         const encodedMetadata = JSON.stringify({
             name: metadata.name,

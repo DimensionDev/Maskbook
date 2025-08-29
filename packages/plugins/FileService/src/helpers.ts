@@ -14,8 +14,13 @@ import schemaV2 from './schema-v2.json' with { type: 'json' }
 import schemaV3 from './schema-v3.json' with { type: 'json' }
 
 // Load legacy detection + gateway
+<<<<<<< HEAD
 export const LOAD_LEGACY_ID_REGEX = /^0x[a-f0-9]{64}$/iu
 export const LOAD_LEGACY_GATEWAY_URL = 'https://load0.network/download'
+=======
+const LEGACY_ID_REGEX = /^0x[a-f0-9]{64}$/i
+const LOAD_LEGACY_GATEWAY_URL = 'https://load0.network/download'
+>>>>>>> 3e3f956c65 (fix: conditional legacy gateway, .env, 30MB limit)
 
 // Note: if the latest version has been changed, please update packages/mask/content-script/components/CompositionDialog/useSubmit.ts
 const reader_v1 = createTypedMessageMetadataReader<FileInfoV1>(META_KEY_1, schemaV1)
@@ -67,7 +72,11 @@ export function makeFileKey(length = 16) {
 export function downloadFile(file: FileInfo) {
     let gateway = resolveGatewayAPI(file.provider)
 
+<<<<<<< HEAD
     if (file.provider === Provider.Load && LOAD_LEGACY_ID_REGEX.test(String(file.landingTxID ?? ''))) {
+=======
+    if (file.provider === Provider.Load && LEGACY_ID_REGEX.test(String(file.landingTxID ?? ''))) {
+>>>>>>> 3e3f956c65 (fix: conditional legacy gateway, .env, 30MB limit)
         gateway = LOAD_LEGACY_GATEWAY_URL
     }
 
