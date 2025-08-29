@@ -50,7 +50,7 @@ export async function createConfiguration(
                 console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
                 WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
             }
-        } catch (err) {}
+        } catch (err) { }
     }
     const baseConfig = {
         name: 'mask',
@@ -68,7 +68,7 @@ export async function createConfiguration(
         experiments:
             rspack ?
                 { futureDefaults: true }
-            :   {
+                : {
                     futureDefaults: true,
                     deferImport: true,
                 },
@@ -98,8 +98,8 @@ export async function createConfiguration(
                     alias[require.resolve('@pmmmwh/react-refresh-webpack-plugin/client/ReactRefreshEntry.js')] =
                         //
                         alias[
-                            join(require.resolve('@rspack/plugin-react-refresh/package.json'), '../') +
-                                'client/reactRefreshEntry.js'
+                        join(require.resolve('@rspack/plugin-react-refresh/package.json'), '../') +
+                        'client/reactRefreshEntry.js'
                         ] = require.resolve('./package-overrides/null.mjs')
                 }
                 return alias
@@ -126,7 +126,7 @@ export async function createConfiguration(
                 // Source map for libraries
                 !rspack && computedFlags.sourceMapKind ?
                     { test: /\.js$/, enforce: 'pre', use: [require.resolve('source-map-loader')] }
-                :   null,
+                    : null,
                 // TypeScript
                 {
                     test: /\.[mc]?[jt]sx?$/i,
@@ -170,7 +170,7 @@ export async function createConfiguration(
                                     sources: (x) => x.endsWith('.tsx') || !!x.match(/use[A-Z]/),
                                 }),
                             }
-                        :   undefined!,
+                            : undefined!,
                     ].filter(Boolean),
                 },
                 // compress svg files
@@ -188,7 +188,7 @@ export async function createConfiguration(
                         dependency: 'url',
                         type: 'asset/resource',
                     }
-                :   null,
+                    : null,
             ],
         },
         plugins: [
@@ -202,7 +202,7 @@ export async function createConfiguration(
                     runChecks: true,
                     diagnosticsVerbosity: 1,
                 })
-            :   undefined,
+                : undefined,
             new WebExtensionPlugin({
                 background: { pageEntry: 'background', serviceWorkerEntry: 'backgroundWorker' },
                 experimental_output: {
@@ -212,13 +212,13 @@ export async function createConfiguration(
             }),
             // this slow down performance for rspack
             !rspack &&
-                flags.sourceMapHideFrameworks !== false &&
-                new DevtoolsIgnorePlugin({
-                    shouldIgnorePath: (path) => {
-                        if (path.includes('masknet') || path.includes('dimensiondev')) return false
-                        return path.includes('/node_modules/') || path.includes('/webpack/')
-                    },
-                }),
+            flags.sourceMapHideFrameworks !== false &&
+            new DevtoolsIgnorePlugin({
+                shouldIgnorePath: (path) => {
+                    if (path.includes('masknet') || path.includes('dimensiondev')) return false
+                    return path.includes('/node_modules/') || path.includes('/webpack/')
+                },
+            }),
             new (rspack?.ProvidePlugin || webpack.default.ProvidePlugin)({
                 // Widely used Node.js global variable
                 Buffer: [require.resolve('buffer'), 'Buffer'],
@@ -237,6 +237,7 @@ export async function createConfiguration(
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
                 GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
+                LOAD_KEY: process.env.LOAD_KEY || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',
@@ -247,11 +248,11 @@ export async function createConfiguration(
                 'process.stderr': '/* stdin */ null',
             }),
             flags.reactRefresh &&
-                new (
-                    await (rspack ?
-                        import('@rspack/plugin-react-refresh')
-                    :   import('@pmmmwh/react-refresh-webpack-plugin'))
-                ).default({ overlay: false, esModule: true }),
+            new (
+                await (rspack ?
+                    import('@rspack/plugin-react-refresh')
+                    : import('@pmmmwh/react-refresh-webpack-plugin'))
+            ).default({ overlay: false, esModule: true }),
             flags.profiling && new ProfilingPlugin(),
             // TODO: crashes rspack
             !rspack && new TrustedTypesPlugin(),
@@ -274,14 +275,14 @@ export async function createConfiguration(
                         from:
                             productionLike ?
                                 require.resolve('webextension-polyfill/dist/browser-polyfill.min.js')
-                            :   require.resolve('webextension-polyfill/dist/browser-polyfill.js'),
+                                : require.resolve('webextension-polyfill/dist/browser-polyfill.js'),
                         to: join(polyfillFolder, 'browser-polyfill.js'),
                     },
                     {
                         from:
                             productionLike ?
                                 require.resolve('../../../node_modules/ses/dist/lockdown.umd.min.js')
-                            :   require.resolve('../../../node_modules/ses/dist/lockdown.umd.js'),
+                                : require.resolve('../../../node_modules/ses/dist/lockdown.umd.js'),
                         to: join(polyfillFolder, 'lockdown.js'),
                     },
                     {
@@ -314,8 +315,8 @@ export async function createConfiguration(
             chunkIds:
                 productionLike ?
                     rspack ? 'deterministic'
-                    :   'total-size'
-                :   'named',
+                        : 'total-size'
+                    : 'named',
             concatenateModules: productionLike,
             flagIncludedChunks: productionLike,
             mangleExports: false,
@@ -358,8 +359,8 @@ export async function createConfiguration(
                     return (
                         entry.name === 'backgroundWorker' ?
                             rspack ? 'runtime_' + entry.name
-                            :   (false as any as string)
-                        :   'runtime'
+                                : (false as any as string)
+                            : 'runtime'
                     )
                 },
             },
@@ -396,7 +397,7 @@ export async function createConfiguration(
             devtoolModuleFilenameTemplate:
                 productionLike ?
                     'webpack://[namespace]/[resource-path]'
-                :   join(import.meta.dirname, '../../../[resource-path]'),
+                    : join(import.meta.dirname, '../../../[resource-path]'),
             globalObject: 'globalThis',
             publicPath: '/',
             clean: flags.mode === 'production',
@@ -405,7 +406,7 @@ export async function createConfiguration(
                     {
                         policyName: 'webpack',
                     }
-                :   undefined,
+                    : undefined,
         },
         ignoreWarnings: [
             /Failed to parse source map/,
