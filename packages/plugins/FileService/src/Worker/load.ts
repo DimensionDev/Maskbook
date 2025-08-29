@@ -5,9 +5,8 @@ import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
 import { makeFileKeySigned } from '../helpers.js'
 
-const LOAD_GATEWAY_URL = 'https://load0.network/resolve'
-const LOAD_UPLOAD_ENDPOINT = 'https://load0.network/upload'
-const API_KEY = 'load_acc_ep4bep0uGlmUXMu46BxM0uWXKsqL5M5w' // move to env
+const LOAD_GATEWAY_URL = 'https://load-s3-agent.load.network'
+const LOAD_UPLOAD_ENDPOINT = 'https://load-s3-agent.load.network/upload'
 
 class LoadAgent implements ProviderAgent {
     static providerName = 'Load Network'
@@ -79,36 +78,33 @@ class LoadAgent implements ProviderAgent {
 
         try {
             const blob = new Blob([data], { type })
-            const headers = {
-                'Content-Type': type,
-                Filename: fileName,
-                'App-Name': 'Maskbook',
-                'X-Load-Authorization': API_KEY,
-            }
+            const formData = new FormData()
+            formData.append('file', blob)
+            formData.append('content_type', type)
+            formData.append('app_name', 'Maskbook')
 
             const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
                 method: 'POST',
-                headers,
-                body: blob,
-                signal: this.uploadController?.signal,
+                headers: {
+                    'Authorization': `Bearer ${process.env.LOAD_KEY}`
+                },
+                body: formData,
+                signal: this.uploadController?.signal
             })
 
             if (!response.ok) {
                 throw new Error(`Upload failed: ${response.statusText}`)
             }
 
-            const { optimistic_hash } = await response.json()
-            return optimistic_hash
-        } catch (error) {
-            const errorMessage = `Load Network upload failed: ${error instanceof Error ? error.message : String(error)}`
-            console.error('Load Network detailed error:', errorMessage)
-
-            const enhancedError = new Error(errorMessage)
-            if (error instanceof Error && error.stack) {
-                enhancedError.stack = error.stack
+            const result = await response.json()
+            if (!result.success || !result.dataitem_id) {
+                throw new Error('Invalid response from upload service')
             }
 
-            throw enhancedError
+            return result.dataitem_id
+        }
+        catch (error) {
+            throw error
         }
     }
 }
