@@ -4,6 +4,7 @@ import { MindsAdaptor } from './implementations/minds.com.js'
 import { MirrorAdaptor } from './implementations/mirror.xyz.js'
 import { TwitterAdaptor } from './implementations/twitter.com.js'
 import type { SiteAdaptor } from './types.js'
+import { FarcasterAdaptor } from './implementations/farcaster.xyz.js'
 
 const defined = new Map<string, SiteAdaptor.Definition>()
 export const definedSiteAdaptors: ReadonlyMap<string, SiteAdaptor.Definition> = defined
@@ -16,6 +17,7 @@ defineSiteAdaptor(InstagramAdaptor)
 defineSiteAdaptor(MindsAdaptor)
 defineSiteAdaptor(MirrorAdaptor)
 defineSiteAdaptor(TwitterAdaptor)
+defineSiteAdaptor(FarcasterAdaptor)
 
 function matches(url: string, pattern: string) {
     const l = new URL(pattern)

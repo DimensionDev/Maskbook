@@ -75,21 +75,19 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
             <List className={classes.list}>
                 {!isPending && data ?
                     data.map((x) => {
-                        const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[x.networkIdentifier]
-
+                        const networkIdentifier = x.networkIdentifier as EnhanceableSite
+                        const Icon = SOCIAL_MEDIA_ROUND_ICON_MAPPING[networkIdentifier]
                         return (
                             <ListItemButton
                                 key={x.networkIdentifier}
                                 className={classes.item}
-                                onClick={() =>
-                                    handleSwitch({ ...x, networkIdentifier: x.networkIdentifier as EnhanceableSite })
-                                }>
+                                onClick={() => handleSwitch({ ...x, networkIdentifier })}>
                                 {Icon ?
                                     <ListItemIcon className={classes.icon}>
                                         <Icon
                                             size={24}
                                             style={{
-                                                filter: SOCIAL_MEDIA_ICON_FILTER_COLOR[x.networkIdentifier],
+                                                filter: SOCIAL_MEDIA_ICON_FILTER_COLOR[networkIdentifier],
                                                 backdropFilter: 'blur(8px)',
                                                 borderRadius: 99,
                                             }}
@@ -98,7 +96,7 @@ export const SupportedSitesModal = memo<ActionModalBaseProps>(function Supported
                                 :   null}
                                 <ListItemText
                                     classes={{ primary: classes.name }}
-                                    primary={SOCIAL_MEDIA_NAME[x.networkIdentifier]}
+                                    primary={SOCIAL_MEDIA_NAME[networkIdentifier]}
                                 />
                                 <Switch checked={!!x.hasPermission && !!x.allowInject} />
                             </ListItemButton>

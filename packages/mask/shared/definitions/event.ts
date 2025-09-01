@@ -10,6 +10,7 @@ export const EventMap: Record<EnhanceableSite, EventID> = {
     [EnhanceableSite.OpenSea]: EventID.Debug,
     [EnhanceableSite.Mirror]: EventID.Debug,
     [EnhanceableSite.Firefly]: EventID.Debug,
+    [EnhanceableSite.Farcaster]: EventID.Debug,
 }
 
 export const DisconnectEventMap: Record<string, EventID> = {

@@ -2,7 +2,7 @@ import { NextIDPlatform } from './NextID/types.js'
 import { EnhanceableSite } from './Site/types.js'
 import { PluginID } from './types/PluginID.js'
 
-export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
+export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite, string> = {
     [EnhanceableSite.Twitter]: 'X',
     [EnhanceableSite.Facebook]: 'Facebook',
     [EnhanceableSite.Minds]: 'Minds',
@@ -10,6 +10,8 @@ export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',
     [EnhanceableSite.Mirror]: 'Mirror',
+    [EnhanceableSite.Farcaster]: 'Farcaster',
+    [EnhanceableSite.Firefly]: 'Firefly',
 }
 
 export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {

@@ -1,5 +1,3 @@
-import { compact, first, sortBy } from 'lodash-es'
-import stringify from 'json-stable-stringify'
 import { delay } from '@masknet/kit'
 import {
     type PersonaIdentifier,
@@ -7,9 +5,11 @@ import {
     currentSetupGuideStatus,
     SetupGuideStep,
 } from '@masknet/shared-base'
+import stringify from 'json-stable-stringify'
+import { compact, first, sortBy } from 'lodash-es'
+import type { Tabs } from 'webextension-polyfill'
 import { definedSiteAdaptors } from '../../../shared/site-adaptors/definitions.js'
 import type { SiteAdaptor } from '../../../shared/site-adaptors/types.js'
-import type { Tabs } from 'webextension-polyfill'
 
 async function hasPermission(origin: string): Promise<boolean> {
     return browser.permissions.contains({

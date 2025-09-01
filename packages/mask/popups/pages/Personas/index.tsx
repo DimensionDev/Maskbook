@@ -17,6 +17,7 @@ export const personaRoute: RouteObject[] = [
     { path: r(PopupRoutes.WalletConnect), lazy: () => import('./WalletConnect/index.js') },
     { path: r(PopupRoutes.ExportPrivateKey), lazy: () => import('./ExportPrivateKey/index.js') },
     { path: r(PopupRoutes.PersonaAvatarSetting), lazy: () => import('./PersonaAvatarSetting/index.js') },
+    { path: r(PopupRoutes.ConnectFirefly), lazy: () => import('./ConnectFirefly/index.js') },
     { path: '*', element: <Navigate replace to={PopupRoutes.Personas} /> },
 ]
 

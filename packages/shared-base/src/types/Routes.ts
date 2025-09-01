@@ -88,6 +88,7 @@ export enum PopupRoutes {
     WalletConnect = '/personas/wallet-connect',
     ExportPrivateKey = '/personas/export-private-key',
     PersonaAvatarSetting = '/personas/avatar-setting',
+    ConnectFirefly = '/personas/connect-firefly',
     Trader = '/trader',
 }
 export interface PopupRoutesParamsMap {

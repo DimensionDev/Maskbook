@@ -12,14 +12,7 @@ export function resolveNextIDPlatformToNetwork(key: NextIDPlatform): Enhanceable
     return NextIDPlatformToNetwork[key]
 }
 
-const NetworkToNextIDPlatform = {
-    [EnhanceableSite.Facebook]: undefined,
-    [EnhanceableSite.Instagram]: undefined,
-    [EnhanceableSite.Minds]: undefined,
-    [EnhanceableSite.OpenSea]: undefined,
-    [EnhanceableSite.Localhost]: undefined,
-    [EnhanceableSite.Mirror]: undefined,
-    [EnhanceableSite.Firefly]: undefined,
+const NetworkToNextIDPlatform: Partial<Record<EnhanceableSite, NextIDPlatform>> = {
     [EnhanceableSite.Twitter]: NextIDPlatform.Twitter,
 }
 export function resolveNetworkToNextIDPlatform(key: EnhanceableSite): NextIDPlatform | undefined {
