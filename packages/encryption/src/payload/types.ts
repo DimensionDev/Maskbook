@@ -112,6 +112,9 @@ export enum EncryptPayloadNetwork {
     Twitter = 1,
     Instagram = 2,
     Minds = 3,
+    Farcaster = 4,
+    Lens = 5,
+    Bsky = 6,
 }
 /**
  * Version starts from -42 but -42 and -41 are dropped.
@@ -125,6 +128,9 @@ const map: Record<EncryptPayloadNetwork, string> = {
     [EncryptPayloadNetwork.Minds]: 'minds.com',
     [EncryptPayloadNetwork.Twitter]: 'twitter.com',
     [EncryptPayloadNetwork.Instagram]: 'instagram.com',
+    [EncryptPayloadNetwork.Farcaster]: 'farcaster.xyz',
+    [EncryptPayloadNetwork.Lens]: 'lens.xyz',
+    [EncryptPayloadNetwork.Bsky]: 'bsky.social',
 }
 export function encryptPayloadNetworkToDomain(x: EncryptPayloadNetwork) {
     return map[x]

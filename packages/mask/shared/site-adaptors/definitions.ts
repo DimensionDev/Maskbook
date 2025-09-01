@@ -1,7 +1,10 @@
 import { FacebookAdaptor } from './implementations/facebook.com.js'
+import { FarcasterAdaptor } from './implementations/farcaster.xyz.js'
 import { InstagramAdaptor } from './implementations/instagram.com.js'
+import { LensAdaptor } from './implementations/lens.xyz.js'
 import { MindsAdaptor } from './implementations/minds.com.js'
 import { MirrorAdaptor } from './implementations/mirror.xyz.js'
+import { BlueskyAdaptor } from './implementations/bsky.social.js'
 import { TwitterAdaptor } from './implementations/twitter.com.js'
 import type { SiteAdaptor } from './types.js'
 
@@ -16,6 +19,9 @@ defineSiteAdaptor(InstagramAdaptor)
 defineSiteAdaptor(MindsAdaptor)
 defineSiteAdaptor(MirrorAdaptor)
 defineSiteAdaptor(TwitterAdaptor)
+defineSiteAdaptor(FarcasterAdaptor)
+defineSiteAdaptor(LensAdaptor)
+defineSiteAdaptor(BlueskyAdaptor)
 
 function matches(url: string, pattern: string) {
     const l = new URL(pattern)

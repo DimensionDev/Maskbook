@@ -4,6 +4,7 @@ export function arbitrum_url() { return new URL("./brands/Arbitrum.svg", import.
 export function arweave_url() { return new URL("./brands/Arweave.png", import.meta.url).href }
 export function avalanche_url() { return new URL("./brands/Avalanche.svg", import.meta.url).href }
 export function base_url() { return new URL("./brands/base.png", import.meta.url).href }
+export function bluesky_url() { return new URL("./brands/Bluesky.svg", import.meta.url).href }
 export function bsc_url() { return new URL("./brands/BSC.svg", import.meta.url).href }
 export function celo_url() { return new URL("./brands/Celo.svg", import.meta.url).href }
 export function coin_carp_url() { return new URL("./brands/CoinCarp.svg", import.meta.url).href }

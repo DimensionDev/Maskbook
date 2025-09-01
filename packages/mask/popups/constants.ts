@@ -10,5 +10,8 @@ export const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite | string, st
     [EnhanceableSite.Instagram]: 'drop-shadow(0px 6px 12px rgba(246, 100, 16, 0.20))',
     [EnhanceableSite.OpenSea]: '',
     [EnhanceableSite.Mirror]: '',
+    [EnhanceableSite.Farcaster]: 'drop-shadow(0px 6px 12px rgba(137, 100, 206, 0.20))',
+    [EnhanceableSite.Lens]: 'drop-shadow(0px 6px 12px rgba(0, 0, 0, 0.20))',
+    [EnhanceableSite.Bsky]: 'drop-shadow(0px 6px 12px rgba(0, 133, 255, 0.20))',
     [EnhanceableSite.Localhost]: '',
 }

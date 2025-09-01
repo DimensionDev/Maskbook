@@ -10,6 +10,9 @@ export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite | string, string> = {
     [EnhanceableSite.OpenSea]: 'OpenSea',
     [EnhanceableSite.Localhost]: 'Localhost',
     [EnhanceableSite.Mirror]: 'Mirror',
+    [EnhanceableSite.Farcaster]: 'Farcaster',
+    [EnhanceableSite.Lens]: 'Lens',
+    [EnhanceableSite.Bsky]: 'Bluesky',
 }
 
 export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {

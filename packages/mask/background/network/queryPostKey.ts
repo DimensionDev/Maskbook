@@ -172,6 +172,9 @@ namespace Version38Or39 {
         if (x === EncryptPayloadNetwork.Twitter) return 'twitter-'
         if (x === EncryptPayloadNetwork.Minds) return 'minds-'
         if (x === EncryptPayloadNetwork.Instagram) return 'instagram-'
+        if (x === EncryptPayloadNetwork.Farcaster) return 'farcaster-'
+        if (x === EncryptPayloadNetwork.Lens) return 'lens-'
+        if (x === EncryptPayloadNetwork.Bsky) return 'bsky-'
         if (x === EncryptPayloadNetwork.Unknown)
             throw new TypeError('[@masknet/encryption] Current network is not correctly configured.')
         unreachable(x)
@@ -343,6 +346,9 @@ namespace Version37 {
         if (x === EncryptPayloadNetwork.Twitter) return '37-tw'
         if (x === EncryptPayloadNetwork.Minds) return '37-minds'
         if (x === EncryptPayloadNetwork.Instagram) return '37-ins'
+        if (x === EncryptPayloadNetwork.Farcaster) return '37-farcaster'
+        if (x === EncryptPayloadNetwork.Lens) return '37-lens'
+        if (x === EncryptPayloadNetwork.Bsky) return '37-bsky'
         if (x === EncryptPayloadNetwork.Unknown)
             throw new TypeError('[@masknet/encryption] Current network is not correctly configured.')
         unreachable(x)

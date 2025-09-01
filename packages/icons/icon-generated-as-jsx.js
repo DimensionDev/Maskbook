@@ -30,6 +30,11 @@ export const Base = /*#__PURE__*/ __createIcon('base', [
         u: () => new URL('./brands/base.png', import.meta.url).href,
     },
 ])
+export const Bluesky = /*#__PURE__*/ __createIcon('Bluesky', [
+    {
+        u: () => new URL('./brands/Bluesky.svg', import.meta.url).href,
+    },
+])
 export const BSC = /*#__PURE__*/ __createIcon('BSC', [
     {
         u: () => new URL('./brands/BSC.svg', import.meta.url).href,

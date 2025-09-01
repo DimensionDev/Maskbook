@@ -8,6 +8,10 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, G
     [EnhanceableSite.Instagram]: Icons.InstagramRoundColored,
     [EnhanceableSite.OpenSea]: Icons.OpenSeaColored,
     [EnhanceableSite.Mirror]: Icons.Mirror,
+    [EnhanceableSite.Farcaster]: Icons.Farcaster,
+    [EnhanceableSite.Lens]: Icons.Lens,
+    [EnhanceableSite.Firefly]: Icons.Mirror,
+    [EnhanceableSite.Bsky]: Icons.Bluesky,
     [EnhanceableSite.Localhost]: Icons.WebBlack,
 }
 
