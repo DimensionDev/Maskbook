@@ -50,7 +50,9 @@ export async function createConfiguration(
                 console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
                 WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
             }
-        } catch (err) { }
+        } catch (err) {
+            console.error('Environment variable WEB3_CONSTANTS_RPC is not valid JSON')
+        }
     }
     const baseConfig = {
         name: 'mask',

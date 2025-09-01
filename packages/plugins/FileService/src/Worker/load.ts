@@ -3,9 +3,8 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
-import { makeFileKeySigned } from '../helpers.js'
+import { LOAD_LEGACY_GATEWAY_URL, LOAD_LEGACY_ID_REGEX, makeFileKeySigned } from '../helpers.js'
 
-const LOAD_LEGACY_GATEWAY_URL = 'https://load0.network/download'
 const LOAD_GATEWAY_URL = 'https://load-s3-agent.load.network'
 const LOAD_UPLOAD_ENDPOINT = 'https://load-s3-agent.load.network/upload'
 const LEGACY_ID_REGEX = /^0x[a-f0-9]{64}$/i
@@ -53,9 +52,7 @@ class LoadAgent implements ProviderAgent {
     async uploadLandingPage(metadata: LandingPageMetadata) {
         this.init()
         // decide which gateway URL to use based on ID
-        const linkPrefix = LEGACY_ID_REGEX.test(metadata.txId)
-            ? LOAD_LEGACY_GATEWAY_URL
-            : LOAD_GATEWAY_URL
+        const linkPrefix = LOAD_LEGACY_ID_REGEX.test(metadata.txId) ? LOAD_LEGACY_GATEWAY_URL : LOAD_GATEWAY_URL
 
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
@@ -81,36 +78,31 @@ class LoadAgent implements ProviderAgent {
     async makePayload(data: Uint8Array, type: string, fileName: string = 'file.dat') {
         this.init()
 
-        try {
-            const blob = new Blob([data], { type })
-            const formData = new FormData()
-            formData.append('file', blob)
-            formData.append('content_type', type)
-            formData.append('app_name', 'Maskbook')
+        const blob = new Blob([data], { type })
+        const formData = new FormData()
+        formData.append('file', blob)
+        formData.append('content_type', type)
+        formData.append('app_name', 'Maskbook')
 
-            const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
-                method: 'POST',
-                headers: {
-                    'Authorization': 'Bearer maskMASKhbs3'
-                },
-                body: formData,
-                signal: this.uploadController?.signal
-            })
+        const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                'Authorization': 'maskMASKhbs3',
+            },
+            body: formData,
+            signal: this.uploadController?.signal,
+        })
 
-            if (!response.ok) {
-                throw new Error(`Upload failed: ${response.statusText}`)
-            }
-
-            const result = await response.json()
-            if (!result.success || !result.dataitem_id) {
-                throw new Error('Invalid response from upload service')
-            }
-
-            return result.dataitem_id
+        if (!response.ok) {
+            throw new Error(`Upload failed: ${response.statusText}`)
         }
-        catch (error) {
-            throw error
+
+        const result = await response.json()
+        if (!result.success || !result.dataitem_id) {
+            throw new Error('Invalid response from upload service')
         }
+
+        return result.dataitem_id
     }
 }
 
