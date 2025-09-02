@@ -6,6 +6,7 @@ type WithNumberChainId<T> = WithoutChainId<T> & { chain_id: number }
 export interface FireflyResponse<T> {
     code: number
     data: T
+    error?: string[]
 }
 
 export namespace FireflyConfigAPI {
@@ -132,6 +133,62 @@ export namespace FireflyConfigAPI {
         accessKeyId: string
         secretAccessKey: string
         sessionToken: string
+    }>
+    export type LoginResponse = FireflyResponse<{
+        accessToken: string
+        /** uuid */
+        accountId: string
+        farcaster_signer_public_key?: string
+        farcaster_signer_private_key?: string
+        isNew: boolean
+        fid?: number
+        uid?: string
+        avatar?: string
+        displayName?: string
+        telegram_username?: string
+        telegram_user_id?: string
+    }>
+    export type BindResponse = FireflyResponse<{
+        fid: number
+        farcaster_signer_public_key?: string
+        farcaster_signer_private_key?: string
+        account_id: string
+        account_raw_id: number
+        twitters: Array<{
+            id: string
+            handle: string
+        }>
+        wallets: Array<{
+            _id: number
+            id: string // the wallet address as id
+            createdAt: string
+            connectedAt: string
+            updatedAt: string
+            address: string
+            chain: string
+            ens: unknown
+        }>
+    }>
+    export interface User {
+        pfp: string
+        username: string
+        display_name: string
+        bio?: string
+        following: number
+        followers: number
+        addresses: string[]
+        solanaAddresses: string[]
+        fid: string
+        isFollowing?: boolean
+        /** if followed by the user, no relation to whether you follow the user or not */
+        isFollowedBack?: boolean
+        isPowerUser?: boolean
+        isProUser?: boolean
+    }
+    export type UserResponse = FireflyResponse<User>
+    export type FriendshipResponse = FireflyResponse<{
+        isFollowing: boolean
+        isFollowedBack: boolean
     }>
 }
 

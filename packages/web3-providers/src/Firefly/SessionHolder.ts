@@ -1,7 +1,7 @@
-import type { NextFetchersOptions } from '@/helpers/getNextFetchers.js'
 import type { FireflySession } from './Session.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { SessionHolder } from '../Session/SessionHolder.js'
+import type { NextFetchersOptions } from '../helpers/getNextFetchers.js'
 
 class FireflySessionHolder extends SessionHolder<FireflySession> {
     fetchWithSessionGiven(session: FireflySession) {

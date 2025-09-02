@@ -143,6 +143,7 @@ export function getProfileUrl(profile: Social.Profile) {
             if (!profile.handle) return ''
             return resolveProfileUrl(profile.source, profile.handle)
         case Social.Source.Farcaster:
+        case Social.Source.Firefly:
             if (!profile.profileId) return ''
             return resolveProfileUrl(profile.source, profile.profileId)
         default:
@@ -167,6 +168,7 @@ export const resolveSourceInUrl = createLookupTableResolver<Social.Source, Socia
     {
         [Social.Source.Farcaster]: Social.SourceInURL.Farcaster,
         [Social.Source.Lens]: Social.SourceInURL.Lens,
+        [Social.Source.Firefly]: Social.SourceInURL.Firefly,
     },
     (source) => {
         throw new Error(`Unreachable source = ${source}.`)
@@ -177,6 +179,7 @@ export const resolveSocialSourceInUrl = createLookupTableResolver<Social.SocialS
     {
         [Social.Source.Farcaster]: Social.SourceInURL.Farcaster,
         [Social.Source.Lens]: Social.SourceInURL.Lens,
+        [Social.Source.Firefly]: Social.SourceInURL.Firefly,
     },
     (source) => {
         throw new Error(`Unreachable source = ${source}.`)

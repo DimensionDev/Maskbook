@@ -183,6 +183,7 @@ const useStyles = makeStyles<void, 'image' | 'markdown' | 'failedImage' | 'body'
 const PlatformIconMap = {
     [Social.Source.Farcaster]: Icons.Farcaster,
     [Social.Source.Lens]: Icons.DarkLens,
+    [Social.Source.Firefly]: null,
 }
 
 export interface SocialFeedProps extends HTMLProps<HTMLDivElement> {

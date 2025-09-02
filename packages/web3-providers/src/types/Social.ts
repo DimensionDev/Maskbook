@@ -15,12 +15,14 @@ export namespace Social {
     export enum Source {
         Farcaster = 'Farcaster',
         Lens = 'Lens',
+        Firefly = 'Firefly',
     }
     export enum SourceInURL {
         Farcaster = 'farcaster',
         Lens = 'lens',
+        Firefly = '',
     }
-    export type SocialSource = Source.Farcaster | Source.Lens
+    export type SocialSource = Source.Farcaster | Source.Lens | Source.Firefly
 
     /** Normalized Channel, different from Farcaster's */
     export interface Channel {

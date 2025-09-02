@@ -1,3 +1,4 @@
+import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
 import { BindingDialog, LoadingStatus, SOCIAL_MEDIA_ROUND_ICON_MAPPING, type BindingDialogProps } from '@masknet/shared'
 import { Sniffings, SOCIAL_MEDIA_NAME } from '@masknet/shared-base'
@@ -6,7 +7,6 @@ import { Box, Button, Typography } from '@mui/material'
 import { memo } from 'react'
 import { activatedSiteAdaptorUI } from '../../../site-adaptor-infra/ui.js'
 import { SetupGuideContext } from './SetupGuideContext.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => {
     return {

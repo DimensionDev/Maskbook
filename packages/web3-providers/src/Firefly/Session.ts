@@ -1,12 +1,6 @@
-import { BaseSession } from '../Session/Session'
-import { SessionType, type Session } from '../types/Session'
-
-export const WARPCAST_ROOT_URL_V2 = 'https://api.warpcast.com/v2'
-export const FAKE_SIGNER_REQUEST_TOKEN = 'fake_signer_request_token'
-
-export enum FarcasterSponsorship {
-    Firefly = 'firefly',
-}
+import { encodeAsciiPayload, encodeNoAsciiPayload } from '../helpers/encodeSessionPayload.js'
+import { BaseSession } from '../Session/Session.js'
+import { SessionType, type Session } from '../types/Session.js'
 
 export type FireflySessionSignature = {
     address: string

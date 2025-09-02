@@ -1,14 +1,7 @@
 {
     "version": "0.2",
     "$schema": "https://raw.githubusercontent.com/streetsidesoftware/cspell/main/cspell.schema.json",
-    "dictionaries": [
-        "typescript",
-        "node",
-        "npm",
-        "html",
-        "css",
-        "fonts"
-    ],
+    "dictionaries": ["typescript", "node", "npm", "html", "css", "fonts"],
     "ignorePaths": [
         "./packages/gun-utils/gun.js",
         "./packages/icons/**",
@@ -34,11 +27,7 @@
         "pnpm-workspace.yaml",
         "qya-aa.json"
     ],
-    "TODO: fix those words": [
-        "bridgable",
-        "clonable",
-        "sniffings"
-    ],
+    "TODO: fix those words": ["bridgable", "clonable", "sniffings"],
     "ignoreWords": [
         "aeth",
         "algr",
@@ -252,15 +241,12 @@
         "zksync",
         "zora"
     ],
-    "ignoreRegExpList": [
-        "/[A-Za-z0-9]{44}/",
-        "/[A-Za-z0-9]{46}/",
-        "/[A-Za-z0-9]{59}/"
-    ],
+    "ignoreRegExpList": ["/[A-Za-z0-9]{44}/", "/[A-Za-z0-9]{46}/", "/[A-Za-z0-9]{59}/"],
     "overrides": [],
     "words": [
         "arbitrum",
         "boba",
+        "Bsky",
         "cashtags",
         "celo",
         "deeplink",
@@ -269,6 +255,7 @@
         "linkedin",
         "luma",
         "muln",
+        "pathnames",
         "reposted",
         "reposts",
         "sepolia",
@@ -278,6 +265,8 @@
         "txid",
         "waitlist",
         "WARPCAST",
+        "webm",
         "youtube"
     ]
 }
+

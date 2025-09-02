@@ -4,6 +4,7 @@ export * from './constants.js'
 export * from './types.js'
 export * from './types/index.js'
 export * from './helpers/index.js'
+export * from './errors.js'
 
 export * from './Messages/Events.js'
 export * from './Messages/CrossIsolationEvents.js'

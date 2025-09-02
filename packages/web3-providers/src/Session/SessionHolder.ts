@@ -1,3 +1,4 @@
+import type { NextFetchersOptions } from '../helpers/getNextFetchers.js'
 import type { Session } from '../types/Session.js'
 
 export class SessionHolder<T extends Session> {
@@ -43,11 +44,19 @@ export class SessionHolder<T extends Session> {
         return callback(required ? this.sessionRequired : this.session) as ReturnType<K>
     }
 
-    fetchWithSession<T>(url: string, init?: RequestInit, options?: { withSession?: boolean }): Promise<T> {
+    fetchWithSession<T>(
+        url: string,
+        init?: RequestInit,
+        options?: NextFetchersOptions & { withSession?: boolean },
+    ): Promise<T> {
         throw new Error('Not implemented')
     }
 
-    fetchWithoutSession<T>(url: string, init?: RequestInit, options?: { withSession?: boolean }): Promise<T> {
+    fetchWithoutSession<T>(
+        url: string,
+        init?: RequestInit,
+        options?: NextFetchersOptions & { withSession?: boolean },
+    ): Promise<T> {
         throw new Error('Not implemented')
     }
 
@@ -61,7 +70,7 @@ export class SessionHolder<T extends Session> {
      * @param init
      * @param withSession
      */
-    fetch<T>(url: string, init?: RequestInit, options?: { withSession?: boolean }): Promise<T> {
+    fetch<T>(url: string, init?: RequestInit, options?: NextFetchersOptions & { withSession?: boolean }): Promise<T> {
         if (options?.withSession === true) return this.fetchWithSession<T>(url, init, options)
         if (options?.withSession === false) return this.fetchWithoutSession<T>(url, init, options)
         if (this.session) return this.fetchWithSession<T>(url, init, options)

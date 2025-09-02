@@ -1,7 +1,7 @@
-import type { Account } from '@masknet/shared-base'
 import { fetchJSON } from '@masknet/web3-providers/helpers'
-import { FarcasterSession } from '@masknet/web3-providers'
+import { FarcasterSession, getFarcasterProfileById, type FireflyAccount } from '@masknet/web3-providers'
 import urlcat from 'urlcat'
+import { bindOrRestoreFireflySession } from './bindOrRestoreFireflySession'
 
 const FARCASTER_REPLY_URL = 'https://relay.farcaster.xyz'
 const NOT_DEPEND_SECRET = '[TO_BE_REPLACED_LATER]'
@@ -20,9 +20,13 @@ async function createSession(signal?: AbortSignal) {
     const url = urlcat(FARCASTER_REPLY_URL, '/v1/channel')
     const response = await fetchJSON<FarcasterReplyResponse>(url, {
         method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
         body: JSON.stringify({
-            siteUri: 'https://www.mask.io',
-            domain: 'www.mask.io',
+            // cspell: disable-next-line
+            siweUri: 'https://firefly.social',
+            domain: 'firefly.social',
         }),
         signal,
     })
@@ -51,6 +55,7 @@ export async function createAccountByRelayService(callback?: (url: string) => vo
 
     // polling for the session to be ready
     const fireflySession = await bindOrRestoreFireflySession(session, signal)
+    console.log('fireflySession', fireflySession)
 
     // profile id is available after the session is ready
     const profile = await getFarcasterProfileById(session.profileId)
@@ -60,5 +65,5 @@ export async function createAccountByRelayService(callback?: (url: string) => vo
         session,
         profile,
         fireflySession,
-    } satisfies Account
+    } satisfies FireflyAccount
 }
