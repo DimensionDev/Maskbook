@@ -180,31 +180,32 @@ export async function createPersonaByJsonWebKey(options: {
 
 export async function createProfileWithPersona(
     profileID: ProfileIdentifier,
-    data: LinkedProfileDetails,
-    keys: {
+    linkMeta: LinkedProfileDetails,
+    persona: {
         nickname?: string
         publicKey: EC_Public_JsonWebKey
         privateKey?: EC_Private_JsonWebKey
         localKey?: AESJsonWebKey
         mnemonic?: PersonaRecord['mnemonic']
     },
+    token?: string | null,
 ): Promise<void> {
-    const ec_id = (await ECKeyIdentifier.fromJsonWebKey(keys.publicKey)).unwrap()
+    const ec_id = (await ECKeyIdentifier.fromJsonWebKey(persona.publicKey)).unwrap()
     const rec: PersonaRecord = {
         createdAt: new Date(),
         updatedAt: new Date(),
         identifier: ec_id,
         linkedProfiles: new Map(),
-        nickname: keys.nickname,
-        publicKey: keys.publicKey,
-        privateKey: keys.privateKey,
-        localKey: keys.localKey,
-        mnemonic: keys.mnemonic,
+        nickname: persona.nickname,
+        publicKey: persona.publicKey,
+        privateKey: persona.privateKey,
+        localKey: persona.localKey,
+        mnemonic: persona.mnemonic,
         hasLogout: false,
     }
     await consistentPersonaDBWriteAccess(async (t) => {
         await createOrUpdatePersonaDB(rec, { explicitUndefinedField: 'ignore', linkedProfiles: 'merge' }, t)
-        await attachProfileDB(profileID, ec_id, data, t)
+        await attachProfileDB(profileID, ec_id, linkMeta, { token }, t)
     })
 }
 // #endregion

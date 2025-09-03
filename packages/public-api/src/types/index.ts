@@ -14,7 +14,6 @@ export interface JsonRpcResponse {
 
 export interface LinkedProfileDetails {
     connectionConfirmState: 'confirmed' | 'pending'
-    token?: string
 }
 
 // These type MUST be sync with packages/shared-base/src/crypto/JWKType

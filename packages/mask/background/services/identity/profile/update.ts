@@ -86,14 +86,15 @@ export async function resolveUnknownLegacyIdentity(identifier: ProfileIdentifier
 export async function attachProfile(
     source: ProfileIdentifier,
     target: ProfileIdentifier | PersonaIdentifier,
-    data: LinkedProfileDetails,
+    linkMeta: LinkedProfileDetails,
+    profileExtra?: { token?: string | null },
 ): Promise<void> {
     if (target instanceof ProfileIdentifier) {
         const profile = await queryProfileDB(target)
         if (!profile?.linkedPersona) throw new Error('target not found')
         target = profile.linkedPersona
     }
-    return attachProfileDB(source, target, data)
+    return attachProfileDB(source, target, linkMeta, profileExtra)
 }
 export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
     return detachProfileDB(identifier)
@@ -101,7 +102,7 @@ export function detachProfile(identifier: ProfileIdentifier): Promise<void> {
 
 /**
  * Set NextID profile to profileDB
- * */
+ */
 
 export async function attachNextIDPersonaToProfile(item: ProfileInformationFromNextID, whoAmI: ECKeyIdentifier) {
     if (!item.linkedPersona) throw new Error('LinkedPersona Not Found')
@@ -137,6 +138,7 @@ export async function attachNextIDPersonaToProfile(item: ProfileInformationFromN
                 profileRecord.identifier,
                 item.linkedPersona!,
                 { connectionConfirmState: 'confirmed' },
+                undefined,
                 t,
             )
             await createOrUpdateRelationDB(

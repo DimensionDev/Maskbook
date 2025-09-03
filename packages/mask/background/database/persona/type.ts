@@ -112,6 +112,7 @@ export interface ProfileRecord {
     nickname?: string
     localKey?: AESJsonWebKey
     linkedPersona?: PersonaIdentifier
+    token?: string
     createdAt: Date
     updatedAt: Date
 }

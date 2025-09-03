@@ -522,6 +522,7 @@ export async function attachProfileDB(
     identifier: ProfileIdentifier,
     attachTo: PersonaIdentifier,
     data: LinkedProfileDetails,
+    profileExtra?: { token?: string | null },
     t?: FullPersonaDBTransaction<'readwrite'>,
 ): Promise<void> {
     t = t || createTransaction(await db(), 'readwrite')('personas', 'profiles', 'relations')
@@ -534,6 +535,12 @@ export async function attachProfileDB(
 
     if (profile.linkedPersona !== undefined && profile.linkedPersona !== attachTo) {
         await detachProfileDB(identifier, t)
+    }
+
+    if (profileExtra?.token) {
+        profile.token = profileExtra.token
+    } else if (profileExtra && 'token' in profileExtra && !profileExtra.token) {
+        delete profile.token
     }
 
     profile.linkedPersona = attachTo

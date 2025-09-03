@@ -1,5 +1,4 @@
 import { Trans, useLingui } from '@lingui/react/macro'
-import { attachProfile } from '@masknet/plugin-infra/dom/context'
 import { PersonaContext, PopupHomeTabType } from '@masknet/shared'
 import {
     AbortError,
@@ -22,6 +21,7 @@ import { useMount } from 'react-use'
 import urlcat from 'urlcat'
 import { useTitle } from '../../../hooks/index.js'
 import { createAccountByRelayService } from './createAccountByRelayService.js'
+import Services from '#services'
 
 const useStyles = makeStyles()({
     container: {
@@ -98,11 +98,12 @@ export const Component = memo(function ConnectFireflyPage() {
                     setUrl(url)
                 })
                 console.log('account', account)
-                if (attachProfile && currentPersona) {
-                    await attachProfile(
+                if (currentPersona) {
+                    await Services.Identity.attachProfile(
                         ProfileIdentifier.of(EnhanceableSite.Farcaster, account.session.profileId).unwrap(),
                         currentPersona.identifier,
-                        { connectionConfirmState: 'pending', token: account.session.token },
+                        { connectionConfirmState: 'pending' },
+                        { token: account.session.token },
                     )
                 }
                 console.log('account', account)
