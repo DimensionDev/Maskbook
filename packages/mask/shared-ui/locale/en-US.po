@@ -666,6 +666,10 @@ msgstr ""
 msgid "Connect and switch between your wallets."
 msgstr ""
 
+#: popups/pages/Personas/ConnectFirefly/index.tsx
+msgid "Connect Firefly"
+msgstr ""
+
 #: popups/modals/SelectProviderModal/index.tsx
 msgid "Connect Mask Network Account using your wallet."
 msgstr ""
@@ -2786,6 +2790,10 @@ msgstr ""
 msgid "Text copied!"
 msgstr ""
 
+#: popups/pages/Personas/ConnectFirefly/index.tsx
+msgid "The account you are trying to log in with is already linked to a different Firefly account."
+msgstr ""
+
 #: popups/components/UnlockERC20Token/index.tsx
 msgid "The approval for this contract will be revoked in case of the amount is 0."
 msgstr ""
@@ -2944,6 +2952,10 @@ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "This network name already exists"
+msgstr ""
+
+#: popups/pages/Personas/ConnectFirefly/index.tsx
+msgid "This QR code is longer valid. Please scan a new one to continue."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Mnemonic/ComponentToPrint.tsx
@@ -3305,6 +3317,11 @@ msgstr ""
 #: dashboard/pages/SetupPersona/CloudBackup/index.tsx
 #~ msgid "You used <0>{0}</0> for the last cloud backup."
 #~ msgstr ""
+
+#. placeholder {0}: Social.Source.Farcaster
+#: popups/pages/Personas/ConnectFirefly/index.tsx
+msgid "Your {0} account is now connected."
+msgstr ""
 
 #: popups/components/SignRequestInfo/index.tsx
 msgid "Your connection to this site is not encrypted which can be modified by a hostile third party, we strongly suggest you reject this request."

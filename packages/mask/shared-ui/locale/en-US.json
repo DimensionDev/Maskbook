@@ -359,6 +359,7 @@
         "LWJCIn": ["Connected sites"],
         "LcET2C": ["Privacy Policy"],
         "LcZh+r": ["Unsupported data backup"],
+        "Lh3tjm": ["Connect Firefly"],
         "LkYKvc": ["Please select the correct words in the correct order."],
         "LqWHk1": ["Hide ", ["0"]],
         "Lt0Hf0": [
@@ -429,6 +430,7 @@
         "QXDgyQ": [
             "Please write down the following words in correct order. Keep it safe and do not share with anyone!"
         ],
+        "QbIq7s": ["This QR code is longer valid. Please scan a new one to continue."],
         "Qbo7Ev": ["Write down mnemonic words"],
         "QcVZFH": ["Step ", ["step"], "/", ["totalSteps"]],
         "QrHM/A": ["Backup downloaded and merged to local successfully."],
@@ -708,6 +710,7 @@
         "nUWEsV": ["Max fee is higher than necessary"],
         "nUeoRs": ["Signing Message (Text)"],
         "nVT2pJ": ["realMaskNetwork"],
+        "nWd3Q/": ["The account you are trying to log in with is already linked to a different Firefly account."],
         "ndRqFD": ["Chain ID"],
         "ngWO+e": ["No local key"],
         "npsHM5": ["Back Up to Google Drive"],
@@ -732,6 +735,7 @@
         "ou+PEI": ["Profile Photo"],
         "p2/GCq": ["Confirm Password"],
         "p2xE4C": ["Overwrite current backup"],
+        "p70+lb": ["Your ", ["0"], " account is now connected."],
         "p8Aea2": ["The persona name already exists."],
         "pGElS5": ["Mnemonic"],
         "pHqZUU": ["You used <0>", ["0"], "</0> for the last cloud backup."],
