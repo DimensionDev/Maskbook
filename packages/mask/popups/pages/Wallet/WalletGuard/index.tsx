@@ -9,9 +9,13 @@ import { WalletHeader } from '../components/WalletHeader/index.js'
 import { useWalletLockStatus } from '../hooks/index.js'
 import { useMessageGuard } from './useMessageGuard.js'
 import { usePaymentPasswordGuard } from './usePaymentPasswordGuard.js'
-import { InteractionWalletContext, useInteractionWalletContext } from '../Interaction/InteractionContext.js'
+import { useInteractionWalletContext } from '../Interaction/InteractionContext.js'
 
-export const WalletGuard = memo(function WalletGuard() {
+interface Props {
+    disableHeader?: boolean
+}
+
+export const WalletGuard = memo(function WalletGuard({ disableHeader }: Props) {
     const wallets = useWallets()
     const location = useLocation()
     const [params] = useSearchParams()
@@ -19,6 +23,7 @@ export const WalletGuard = memo(function WalletGuard() {
 
     const hitPaymentPasswordGuard = usePaymentPasswordGuard()
     const hitMessageGuard = useMessageGuard()
+    const { interactionWallet } = useInteractionWalletContext()
 
     if (!wallets.length) {
         return (
@@ -44,18 +49,11 @@ export const WalletGuard = memo(function WalletGuard() {
     if (hitMessageGuard) return <Navigate to={PopupRoutes.ContractInteraction} />
 
     return (
-        <InteractionWalletContext>
-            <WalletGuardContent />
-        </InteractionWalletContext>
-    )
-})
-
-function WalletGuardContent() {
-    const { interactionWallet } = useInteractionWalletContext()
-    return (
-        <ChainContextProvider account={interactionWallet}>
-            <WalletHeader />
+        <ChainContextProvider account={interactionWallet} isPopupWallet>
+            {!disableHeader ?
+                <WalletHeader />
+            :   null}
             <Outlet />
         </ChainContextProvider>
     )
-}
+})

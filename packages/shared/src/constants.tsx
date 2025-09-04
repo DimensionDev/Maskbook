@@ -1,7 +1,7 @@
 import { Icons, type GeneratedIcon } from '@masknet/icons'
 import { EnhanceableSite } from '@masknet/shared-base'
 
-export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, GeneratedIcon> = {
+export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<string, GeneratedIcon> = {
     [EnhanceableSite.Twitter]: Icons.TwitterXRound,
     [EnhanceableSite.Facebook]: Icons.FacebookRound,
     [EnhanceableSite.Minds]: Icons.MindsRound,
@@ -11,7 +11,8 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, G
     [EnhanceableSite.Localhost]: Icons.WebBlack,
     [EnhanceableSite.Farcaster]: Icons.Farcaster,
     [EnhanceableSite.Firefly]: Icons.Firefly,
-}
+    [EnhanceableSite.Lens]: Icons.Lens,
+} satisfies Record<EnhanceableSite, GeneratedIcon>
 
 export enum RSS3_NFT_SITE_KEY {
     TWITTER = '_nfts',

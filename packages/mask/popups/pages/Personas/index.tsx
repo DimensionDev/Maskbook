@@ -1,11 +1,12 @@
-import { memo, useEffect } from 'react'
-import { useMount, useAsync } from 'react-use'
-import { Navigate, Outlet, useNavigate, useSearchParams, type RouteObject } from 'react-router-dom'
-import { CrossIsolationMessages, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
-import { PersonaHeader } from './components/PersonaHeader/index.js'
-import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { useModalNavigate } from '../../components/index.js'
 import Services from '#services'
+import { CrossIsolationMessages, PopupModalRoutes, PopupRoutes, relativeRouteOf } from '@masknet/shared-base'
+import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { memo, useEffect } from 'react'
+import { Navigate, Outlet, useNavigate, useSearchParams, type RouteObject } from 'react-router-dom'
+import { useAsync, useMount } from 'react-use'
+import { useModalNavigate } from '../../components/index.js'
+import { WalletGuard } from '../Wallet/WalletGuard/index.js'
+import { PersonaHeader } from './components/PersonaHeader/index.js'
 
 const r = relativeRouteOf(PopupRoutes.Personas)
 export const personaRoute: RouteObject[] = [
@@ -18,6 +19,15 @@ export const personaRoute: RouteObject[] = [
     { path: r(PopupRoutes.ExportPrivateKey), lazy: () => import('./ExportPrivateKey/index.js') },
     { path: r(PopupRoutes.PersonaAvatarSetting), lazy: () => import('./PersonaAvatarSetting/index.js') },
     { path: r(PopupRoutes.ConnectFirefly), lazy: () => import('./ConnectFirefly/index.js') },
+    {
+        element: <WalletGuard />,
+        children: [
+            {
+                path: r(PopupRoutes.ConnectLens),
+                lazy: () => import('./ConnectLens/index.js'),
+            },
+        ],
+    },
     { path: '*', element: <Navigate replace to={PopupRoutes.Personas} /> },
 ]
 

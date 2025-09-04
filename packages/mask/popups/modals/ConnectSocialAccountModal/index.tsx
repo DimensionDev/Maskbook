@@ -21,8 +21,9 @@ export const ConnectSocialAccountModal = memo<ActionModalBaseProps>(function Con
     const handleConnect = useCallback(
         async (networkIdentifier: EnhanceableSite) => {
             if (networkIdentifier === EnhanceableSite.Farcaster) {
-                navigate(PopupRoutes.ConnectFirefly)
-                return
+                return navigate(PopupRoutes.ConnectFirefly)
+            } else if (networkIdentifier === EnhanceableSite.Lens) {
+                return navigate(PopupRoutes.ConnectLens)
             }
             if (!currentPersona) return
             if (!(await requestPermissionFromExtensionPage(networkIdentifier))) return

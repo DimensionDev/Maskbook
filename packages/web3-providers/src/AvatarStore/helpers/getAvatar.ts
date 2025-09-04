@@ -18,6 +18,7 @@ const resolveRSS3Key = createLookupTableResolver<EnhanceableSite, RSS3_KEY_SITE 
         [EnhanceableSite.Mirror]: undefined,
         [EnhanceableSite.Firefly]: undefined,
         [EnhanceableSite.Farcaster]: undefined,
+        [EnhanceableSite.Lens]: undefined,
     },
     undefined,
 )

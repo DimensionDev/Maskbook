@@ -91,7 +91,7 @@ export const SocialAccounts = memo<SocialAccountsProps>(function SocialAccounts(
                 <Box className={classes.accountItem} key={index} onClick={() => onAccountClick(account)}>
                     <AccountAvatar
                         avatar={account.avatar}
-                        network={account.identifier.network}
+                        network={account.identifier.network as EnhanceableSite}
                         isValid={account.is_valid}
                         classes={{ avatar: classes.avatar }}
                     />

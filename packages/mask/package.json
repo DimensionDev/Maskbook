@@ -36,6 +36,7 @@
     "@dimensiondev/mask-wallet-core": "0.1.0-20211013082857-eb62e5f",
     "@ethereumjs/util": "^9.0.3",
     "@hookform/resolvers": "^3.6.0",
+    "@lens-protocol/client": "0.0.0-canary-20250408064617",
     "@masknet/backup-format": "workspace:^",
     "@masknet/encryption": "workspace:^",
     "@masknet/flags": "workspace:^",

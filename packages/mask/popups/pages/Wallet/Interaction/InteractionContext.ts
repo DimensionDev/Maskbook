@@ -10,7 +10,7 @@ import { createContainer, useRenderPhraseCallbackOnDepsChange } from '@masknet/s
 export const { Provider: InteractionWalletContext, useContainer: useInteractionWalletContext } = createContainer(
     function () {
         const wallet = useWallet()
-        const [interactionWallet, setInteractionWallet] = useState<string | undefined>()
+        const [interactionWallet, setInteractionWallet] = useState<string>()
 
         function useInteractionWallet(currentInteractingWallet: string | undefined) {
             useRenderPhraseCallbackOnDepsChange(() => {

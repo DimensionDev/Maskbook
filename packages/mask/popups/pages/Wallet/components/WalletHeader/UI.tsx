@@ -169,11 +169,7 @@ export const WalletHeaderUI = memo<WalletHeaderUIProps>(function WalletHeaderUI(
                                 </Typography>
                             </TextOverflowTooltip>
                             {!disabled && !wallet.owner ?
-                                <Icons.ArrowDrop
-                                    size={20}
-                                    className={classes.arrow}
-                                    style={{ transform: status ? 'rotate(-180deg)' : undefined }}
-                                />
+                                <Icons.ArrowDrop size={20} className={classes.arrow} />
                             :   null}
                         </Box>
                         {isPending ? null : (

@@ -12,6 +12,7 @@ export const SOCIAL_MEDIA_NAME: Record<EnhanceableSite, string> = {
     [EnhanceableSite.Mirror]: 'Mirror',
     [EnhanceableSite.Farcaster]: 'Farcaster',
     [EnhanceableSite.Firefly]: 'Firefly',
+    [EnhanceableSite.Lens]: 'Lens',
 }
 
 export const NEXT_ID_PLATFORM_SOCIAL_MEDIA_MAP: Record<string, string> = {

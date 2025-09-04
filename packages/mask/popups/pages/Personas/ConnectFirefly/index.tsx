@@ -48,7 +48,6 @@ function useLogin() {
                 const account = await createAccount()
 
                 const done = await addAccount(account, options)
-                console.log('created account', account)
                 if (done) showSnackbar(<Trans>Your {Social.Source.Farcaster} account is now connected.</Trans>)
             } catch (error) {
                 // skip if the error is abort error
@@ -92,26 +91,19 @@ export const Component = memo(function ConnectFireflyPage() {
     const { currentPersona } = PersonaContext.useContainer()
 
     useMount(async () => {
-        login(async () => {
-            try {
-                const account = await createAccountByRelayService((url) => {
-                    setUrl(url)
-                })
-                console.log('account', account)
-                if (currentPersona) {
-                    await Services.Identity.attachProfile(
-                        ProfileIdentifier.of(EnhanceableSite.Farcaster, account.session.profileId).unwrap(),
-                        currentPersona.identifier,
-                        { connectionConfirmState: 'pending' },
-                        { token: account.session.token },
-                    )
-                }
-                console.log('account', account)
-                return account
-            } catch (err) {
-                console.log('error', err)
-                throw err
+        await login(async () => {
+            const account = await createAccountByRelayService((url) => {
+                setUrl(url)
+            })
+            if (currentPersona) {
+                await Services.Identity.attachProfile(
+                    ProfileIdentifier.of(EnhanceableSite.Farcaster, account.session.profileId).unwrap(),
+                    currentPersona.identifier,
+                    { connectionConfirmState: 'pending' },
+                    { token: account.session.token },
+                )
             }
+            return account
         })
     })
 

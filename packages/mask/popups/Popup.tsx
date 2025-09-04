@@ -1,10 +1,10 @@
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { jsxCompose, MaskMessages, PopupRoutes } from '@masknet/shared-base'
+import { MaskMessages, PopupRoutes } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
     createHashRouter,
@@ -30,6 +30,7 @@ import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
 import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
 import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
 import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
+import { InteractionWalletContext } from './pages/Wallet/Interaction/InteractionContext.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -108,23 +109,31 @@ export default function Popups() {
         throttle: 10000,
     })
 
-    return jsxCompose(
-        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
-        // eslint-disable-next-line react-compiler/react-compiler
-        <PageUIProvider useTheme={usePopupTheme} />,
-        <PopupSnackbarProvider children={null!} />,
-        <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
-        <PopupContext />,
-        <PageTitleContext value={titleContext} />,
-    )(
-        cloneElement,
-        <>
-            {/* https://github.com/TanStack/query/issues/5417 */}
-            {process.env.NODE_ENV === 'development' ?
-                <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null}
-            <RouterProvider router={router} fallbackElement={pending} future={{ v7_startTransition: true }} />
-        </>,
+    return (
+        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
+            {/* eslint-disable-next-line react-compiler/react-compiler */}
+            <PageUIProvider useTheme={usePopupTheme}>
+                <PopupSnackbarProvider>
+                    <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
+                        <InteractionWalletContext>
+                            <PopupContext>
+                                <PageTitleContext value={titleContext}>
+                                    {/* https://github.com/TanStack/query/issues/5417 */}
+                                    {process.env.NODE_ENV === 'development' ?
+                                        <ReactQueryDevtools buttonPosition="bottom-right" />
+                                    :   null}
+                                    <RouterProvider
+                                        router={router}
+                                        fallbackElement={pending}
+                                        future={{ v7_startTransition: true }}
+                                    />
+                                </PageTitleContext>
+                            </PopupContext>
+                        </InteractionWalletContext>
+                    </EVMWeb3ContextProvider>
+                </PopupSnackbarProvider>
+            </PageUIProvider>
+        </PersistQueryClientProvider>
     )
 }
 

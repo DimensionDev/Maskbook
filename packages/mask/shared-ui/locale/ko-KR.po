@@ -664,6 +664,7 @@ msgstr "축하합니다"
 #: popups/components/ConnectedWallet/index.tsx
 #: popups/components/SocialAccounts/index.tsx
 #: popups/modals/SelectProviderModal/index.tsx
+#: popups/pages/Personas/ConnectLens/index.tsx
 msgid "Connect"
 msgstr "연결"
 

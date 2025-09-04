@@ -14,7 +14,10 @@ const CUSTOM_HEADER_PATTERNS = [
     PopupRoutes.ExportWalletPrivateKey,
 ]
 
-export const WalletHeader = memo(function WalletHeader() {
+interface Props {
+    isWallet?: boolean
+}
+export const WalletHeader = memo(function WalletHeader({ isWallet }: Props) {
     const modalNavigate = useModalNavigate()
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const location = useLocation()
@@ -29,7 +32,7 @@ export const WalletHeader = memo(function WalletHeader() {
 
     const currentNetwork = useNetwork(NetworkPluginID.PLUGIN_EVM, chainId)
     const matchResetWallet = useMatch(PopupRoutes.ResetWallet)
-    const matchWallet = PopupRoutes.Wallet === location.pathname
+    const matchWallet = isWallet || PopupRoutes.Wallet === location.pathname
     const customHeader = CUSTOM_HEADER_PATTERNS.some((pattern) => matchPath(pattern, location.pathname))
     const matchContractInteraction = useMatch(PopupRoutes.ContractInteraction)
 

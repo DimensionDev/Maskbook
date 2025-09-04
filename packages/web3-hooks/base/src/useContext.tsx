@@ -22,6 +22,7 @@ interface ChainContextGetter<T extends NetworkPluginID = NetworkPluginID> {
     providerType?: Web3Helper.Definition[T]['ProviderType']
     // If it's controlled, we prefer passed value over state inside
     controlled?: boolean
+    isPopupWallet?: boolean
 }
 
 interface ChainContextSetter<T extends NetworkPluginID = NetworkPluginID> {
@@ -62,7 +63,7 @@ export function NetworkContextProvider({
  */
 export const ChainContextProvider = memo(function ChainContextProvider(props: PropsWithChildren<ChainContextGetter>) {
     const { pluginID } = useNetworkContext()
-    const { controlled } = props
+    const { controlled, isPopupWallet } = props
 
     const globalAccount = useAccount(pluginID)
     const globalChainId = useChainId(pluginID)
@@ -78,7 +79,8 @@ export const ChainContextProvider = memo(function ChainContextProvider(props: Pr
     const [_providerType, setProviderType] = useState<Web3Helper.ProviderTypeAll>()
 
     const location = useLocation()
-    const is_popup_wallet_page = Sniffings.is_popup_page && location.hash?.includes(PopupRoutes.Wallet)
+    const is_popup_wallet_page =
+        Sniffings.is_popup_page && (location.hash?.includes(PopupRoutes.Wallet) || isPopupWallet)
     const account =
         controlled ? props.account : (_account ?? props.account ?? (is_popup_wallet_page ? maskAccount : globalAccount))
     const chainId =

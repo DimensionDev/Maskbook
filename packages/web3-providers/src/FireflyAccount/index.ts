@@ -28,5 +28,6 @@ export interface AccountOptions {
 }
 
 export async function addAccount(_account: FireflyAccount, _options?: AccountOptions) {
+    console.log('TODO: addAccount')
     return true
 }

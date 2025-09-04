@@ -3,6 +3,7 @@ export enum EnhanceableSite {
     Twitter = 'twitter.com',
     Facebook = 'facebook.com',
     Farcaster = 'farcaster.xyz',
+    Lens = 'lens.xyz',
     Minds = 'minds.com',
     Instagram = 'instagram.com',
     OpenSea = 'opensea.io',

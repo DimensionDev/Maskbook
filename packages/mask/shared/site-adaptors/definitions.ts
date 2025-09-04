@@ -1,23 +1,23 @@
 import { FacebookAdaptor } from './implementations/facebook.com.js'
+import { FarcasterAdaptor } from './implementations/farcaster.xyz.js'
+import { LensAdaptor } from './implementations/hey.xyz.js'
 import { InstagramAdaptor } from './implementations/instagram.com.js'
 import { MindsAdaptor } from './implementations/minds.com.js'
 import { MirrorAdaptor } from './implementations/mirror.xyz.js'
 import { TwitterAdaptor } from './implementations/twitter.com.js'
 import type { SiteAdaptor } from './types.js'
-import { FarcasterAdaptor } from './implementations/farcaster.xyz.js'
 
-const defined = new Map<string, SiteAdaptor.Definition>()
-export const definedSiteAdaptors: ReadonlyMap<string, SiteAdaptor.Definition> = defined
-
-function defineSiteAdaptor(UI: SiteAdaptor.Definition) {
-    defined.set(UI.networkIdentifier, UI)
-}
-defineSiteAdaptor(FacebookAdaptor)
-defineSiteAdaptor(InstagramAdaptor)
-defineSiteAdaptor(MindsAdaptor)
-defineSiteAdaptor(MirrorAdaptor)
-defineSiteAdaptor(TwitterAdaptor)
-defineSiteAdaptor(FarcasterAdaptor)
+export const definedSiteAdaptors: ReadonlyMap<string, SiteAdaptor.Definition> = new Map<string, SiteAdaptor.Definition>(
+    [
+        [FacebookAdaptor.networkIdentifier, FacebookAdaptor],
+        [InstagramAdaptor.networkIdentifier, InstagramAdaptor],
+        [MindsAdaptor.networkIdentifier, MindsAdaptor],
+        [MirrorAdaptor.networkIdentifier, MirrorAdaptor],
+        [TwitterAdaptor.networkIdentifier, TwitterAdaptor],
+        [FarcasterAdaptor.networkIdentifier, FarcasterAdaptor],
+        [LensAdaptor.networkIdentifier, LensAdaptor],
+    ],
+)
 
 function matches(url: string, pattern: string) {
     const l = new URL(pattern)

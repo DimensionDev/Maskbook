@@ -13,4 +13,5 @@ export const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite, string> = {
     [EnhanceableSite.Localhost]: '',
     [EnhanceableSite.Firefly]: '',
     [EnhanceableSite.Farcaster]: '',
+    [EnhanceableSite.Lens]: '',
 }

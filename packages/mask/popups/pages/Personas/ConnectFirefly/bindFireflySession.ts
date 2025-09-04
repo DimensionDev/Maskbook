@@ -1,9 +1,11 @@
+import { FireflyAlreadyBoundError } from '@masknet/shared-base'
 import {
     FarcasterSession,
     FIREFLY_ROOT_URL,
     fireflySessionHolder,
     patchFarcasterSessionRequired,
     resolveFireflyResponseData,
+    type LensSession,
 } from '@masknet/web3-providers'
 import { SessionType, type FireflyConfigAPI, type Session } from '@masknet/web3-providers/types'
 import urlcat from 'urlcat'
@@ -39,11 +41,33 @@ async function bindFarcasterSessionToFirefly(session: FarcasterSession, signal?:
         isRelayService &&
         response.error?.some((x) => x.includes('This farcaster already bound to the other account'))
     ) {
-        throw new Error('This Farcaster account has already bound to another Firefly account.')
+        throw new FireflyAlreadyBoundError('Farcaster')
     }
 
     const data = resolveFireflyResponseData(response)
     patchFarcasterSessionRequired(session, data.fid, data.farcaster_signer_private_key)
+    return data
+}
+
+async function bindLensToFirefly(session: LensSession, signal?: AbortSignal) {
+    const response = await fireflySessionHolder.fetch<FireflyConfigAPI.BindResponse>(
+        urlcat(FIREFLY_ROOT_URL, '/v3/user/bindLens'),
+        {
+            method: 'POST',
+            body: JSON.stringify({
+                accessToken: session.token,
+                isForce: false,
+                version: 'v3',
+            }),
+            signal,
+        },
+    )
+
+    if (response.error?.some((x) => x.includes('This wallet already bound to the other account'))) {
+        throw new FireflyAlreadyBoundError('Lens')
+    }
+
+    const data = resolveFireflyResponseData(response)
     return data
 }
 
@@ -58,6 +82,8 @@ export async function bindFireflySession(session: Session, signal?: AbortSignal)
     fireflySessionHolder.assertSession()
     if (session.type === SessionType.Farcaster) {
         return bindFarcasterSessionToFirefly(session as FarcasterSession, signal)
+    } else if (session.type === SessionType.Lens) {
+        return bindLensToFirefly(session as LensSession, signal)
     } else if (session.type === SessionType.Firefly) {
         throw new Error('Not allowed')
     }

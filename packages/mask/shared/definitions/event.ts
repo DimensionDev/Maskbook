@@ -11,6 +11,7 @@ export const EventMap: Record<EnhanceableSite, EventID> = {
     [EnhanceableSite.Mirror]: EventID.Debug,
     [EnhanceableSite.Firefly]: EventID.Debug,
     [EnhanceableSite.Farcaster]: EventID.Debug,
+    [EnhanceableSite.Lens]: EventID.Debug,
 }
 
 export const DisconnectEventMap: Record<string, EventID> = {

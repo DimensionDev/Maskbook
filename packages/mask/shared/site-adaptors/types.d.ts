@@ -1,4 +1,4 @@
-import type { ProfileIdentifier } from '@masknet/shared-base'
+import type { EnhanceableSite, ProfileIdentifier } from '@masknet/shared-base'
 
 // This file should be a .ts file, not a .d.ts file (that skips type checking).
 // but this causes "because it would overwrite input file" error in incremental compiling which is annoying.
@@ -8,7 +8,7 @@ export declare namespace SiteAdaptor {
     }
     export interface Definition {
         name: string
-        networkIdentifier: string
+        networkIdentifier: EnhanceableSite
         // Note: if declarativePermissions is no longer sufficient, use "false" to indicate it need a load().
         declarativePermissions: DeclarativePermissions
         homepage: string

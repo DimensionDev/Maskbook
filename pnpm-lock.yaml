@@ -375,6 +375,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^3.6.0
         version: 3.6.0(react-hook-form@7.52.0(react@0.0.0-experimental-58af67a8f8-20240628))
+      '@lens-protocol/client':
+        specifier: 0.0.0-canary-20250408064617
+        version: 0.0.0-canary-20250408064617(typescript@5.9.2)
       '@masknet/backup-format':
         specifier: workspace:^
         version: link:../backup-format

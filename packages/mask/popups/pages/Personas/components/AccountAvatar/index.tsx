@@ -42,7 +42,7 @@ const useStyles = makeStyles()((theme) => ({
 
 export interface AccountAvatar extends withClasses<'avatar' | 'container'> {
     avatar?: string | null
-    network?: string
+    network?: EnhanceableSite
     isValid?: boolean
     size?: number
 }

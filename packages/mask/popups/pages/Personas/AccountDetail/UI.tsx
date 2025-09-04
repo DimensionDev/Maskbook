@@ -1,5 +1,5 @@
 import { Trans } from '@lingui/react/macro'
-import type { BindingProof, ProfileAccount } from '@masknet/shared-base'
+import type { BindingProof, EnhanceableSite, ProfileAccount } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import { Box, Button, Typography } from '@mui/material'
 import { memo, useCallback } from 'react'
@@ -52,7 +52,7 @@ export const AccountDetailUI = memo<AccountDetailUIProps>(function AccountDetail
                 <Box className={classes.account}>
                     <AccountAvatar
                         avatar={account.avatar}
-                        network={account.identifier.network}
+                        network={account.identifier.network as EnhanceableSite}
                         isValid={account.is_valid}
                         classes={{ avatar: classes.avatar }}
                     />

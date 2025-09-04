@@ -39,3 +39,11 @@ export class FireflyAlreadyBoundError extends Error {
         super(`This ${source} account has already bound to another Firefly account.`)
     }
 }
+
+export class NotAllowedError extends Error {
+    override name = 'NotAllowedError'
+
+    constructor(message?: string) {
+        super(message ?? 'Not allowed.')
+    }
+}
