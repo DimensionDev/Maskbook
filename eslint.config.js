@@ -421,7 +421,7 @@ const codeStyleRules = {
     // '@masknet/no-single-return': 'warn',
     // '@masknet/jsx-no-template-literal': 'warn',
 
-    // Naming convension
+    // Naming convention
     // 'func-name-matching': 'warn',
     // 'new-cap': 'warn',
     'react/naming-convention/component-name': ['warn', { rule: 'PascalCase' }],
