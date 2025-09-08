@@ -50,13 +50,9 @@ export async function createConfiguration(
                 console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
                 WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
             }
-<<<<<<< HEAD
         } catch (err) {
             console.error('Environment variable WEB3_CONSTANTS_RPC is not valid JSON')
         }
-=======
-        } catch (err) { }
->>>>>>> 3e3f956c65 (fix: conditional legacy gateway, .env, 30MB limit)
     }
     const baseConfig = {
         name: 'mask',
