@@ -16,8 +16,8 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/RedPacket/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 984\n"
 
-#. placeholder {0}: dateTimeFormat(locale, new Date(patchedHistory.creation_time))
 #. placeholder {0}: format(fromUnixTime(timestamp), 'M/d/yyyy HH:mm')
+#. placeholder {0}: dateTimeFormat(locale, new Date(patchedHistory.creation_time))
 #: src/SiteAdaptor/components/NftRedPacketRecord.tsx
 #: src/SiteAdaptor/components/RedPacketRecord.tsx
 msgid "{0} (UTC+8)"
