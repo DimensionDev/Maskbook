@@ -1,7 +1,7 @@
 import type { NormalizedBackup } from '@masknet/backup-format'
 import { concatArrayBuffer } from '@masknet/kit'
 import { fromBase64URL, isK256Point, isK256PrivateKey, type EC_JsonWebKey } from '@masknet/shared-base'
-import { ChainbaseDomain } from '@masknet/web3-providers'
+import { FireflyDomain } from '@masknet/web3-providers'
 import { HD_PATH_WITHOUT_INDEX_ETHEREUM, currySameAddress, generateNewWalletName } from '@masknet/web3-shared-base'
 import { ec as EC } from 'elliptic'
 import {
@@ -46,7 +46,7 @@ export async function internal_wallet_restore(backup: NormalizedBackup.WalletBac
             const digitIndex = matchedDefaultNameFormat?.[1]
             let name = wallet.name
             if (!name) {
-                const ens = await ChainbaseDomain.reverse(ChainId.Mainnet, wallet.address)
+                const ens = await FireflyDomain.reverse(ChainId.Mainnet, wallet.address)
                 if (ens) name = ens
             }
             if (!name) {

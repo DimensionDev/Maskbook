@@ -87,9 +87,7 @@ export {
 } from './NFTScan/index.js'
 
 // Chainbase
-export { ChainbaseHistory, ChainbaseDomain } from './Chainbase/index.js'
-
-export { Unstoppable } from './Unstoppable/index.js'
+export { ChainbaseHistory } from './Chainbase/index.js'
 
 // Zerion
 export { Zerion } from './Zerion/index.js'
@@ -108,7 +106,14 @@ export { Airdrop } from './Airdrop/index.js'
 
 // Firefly
 
-export { FireflyConfig, FireflyRedPacket, FireflyTwitter, FireflyFarcaster, FIREFLY_SITE_URL } from './Firefly/index.js'
+export {
+    FireflyConfig,
+    FireflyRedPacket,
+    FireflyTwitter,
+    FireflyFarcaster,
+    FIREFLY_SITE_URL,
+    FireflyDomain,
+} from './Firefly/index.js'
 
 // FiatCurrencyRate
 export { FiatCurrencyRate } from './FiatCurrencyRate/index.js'
