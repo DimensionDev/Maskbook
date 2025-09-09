@@ -25,7 +25,8 @@ export function useBlockNumber<T extends NetworkPluginID = NetworkPluginID>(
     useEffect(() => {
         return (
             BlockNumberNotifier?.emitter.on('update', (actualChainId) => {
-                if (actualChainId === chainId) asyncRetry.retry()
+                if (!(actualChainId === chainId)) return
+                asyncRetry.retry()
             }) ?? noop
         )
     }, [chainId, asyncRetry.retry, BlockNumberNotifier])

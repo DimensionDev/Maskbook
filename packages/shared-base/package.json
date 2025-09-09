@@ -3,7 +3,10 @@
   "description": "This package MUST be pure (have no side effects when imported).",
   "type": "module",
   "private": true,
-  "sideEffects": ["./src/i18n/instance.ts", "./dist/i18n/instance.js"],
+  "sideEffects": [
+    "./src/i18n/instance.ts",
+    "./dist/i18n/instance.js"
+  ],
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",

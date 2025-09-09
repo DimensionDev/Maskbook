@@ -137,8 +137,8 @@ msgstr ""
 msgid "Add Collectibles"
 msgstr ""
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
 msgstr ""
 
@@ -146,8 +146,8 @@ msgstr ""
 msgid "Added by user"
 msgstr ""
 
-#: src/UI/wallet/DeriveWalletTable.tsx
 #: src/UI/components/TokenWithSocialGroupMenu/index.tsx
+#: src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
 msgstr ""
 
@@ -167,8 +167,8 @@ msgstr ""
 msgid "APP list"
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "App Settings"
 msgstr ""
 
@@ -185,10 +185,14 @@ msgid "Approve MASK?"
 msgstr ""
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
-#. placeholder {1}: collection?.name
+#. placeholder {1}: collection?.name || ''
 #: src/hooks/useReportSpam.tsx
-msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr ""
+
+#: src/hooks/useReportSpam.tsx
+#~ msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -234,11 +238,11 @@ msgstr ""
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
-#: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr ""
 
@@ -246,9 +250,9 @@ msgstr ""
 msgid "Cancel Transaction"
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/index.tsx
-#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: src/UI/components/WalletStatusBar/Action.tsx
+#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
 msgstr ""
 
@@ -343,16 +347,16 @@ msgstr ""
 msgid "Community"
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr ""
 
@@ -400,12 +404,12 @@ msgstr ""
 msgid "Connect Solana Wallet"
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
-#: src/UI/components/WalletStatusBox/index.tsx
-#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
-#: src/UI/components/WalletConnectedBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx
+#: src/UI/components/WalletConnectedBoundary/index.tsx
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Connect Wallet"
 msgstr ""
 
@@ -489,11 +493,11 @@ msgstr ""
 msgid "Current base fee is {0} Gwei"
 msgstr ""
 
-#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
 msgstr ""
 
@@ -510,10 +514,15 @@ msgstr ""
 #~ msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
 #~ msgstr ""
 
+#. placeholder {0}: platform || ''
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, twitter {Twitter profile} facebook {Facebook profile} other {}}."
+msgstr ""
+
 #. placeholder {0}: resolveNextIDPlatformName(platform) || platform
 #. placeholder {0}: type?.replace('_', ' ') ?? ''
-#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 #: src/UI/components/AccountIcons/index.tsx
+#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
 msgstr ""
 
@@ -522,8 +531,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
-msgstr ""
+#~ msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."
@@ -593,8 +602,8 @@ msgstr ""
 msgid "DSearch"
 msgstr ""
 
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr ""
 
@@ -618,24 +627,24 @@ msgstr ""
 msgid "ENS or Wallet Address"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
 msgstr ""
 
@@ -755,15 +764,15 @@ msgstr ""
 msgid "Gas fee settings"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr ""
 
 #. placeholder {0}: minGasLimit.toFixed()
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
@@ -771,9 +780,9 @@ msgstr ""
 msgid "Gas limit too low will cause the transaction to fail."
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr ""
 
@@ -808,9 +817,9 @@ msgstr ""
 msgid "GWEI"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "High"
 msgstr ""
 
@@ -823,8 +832,8 @@ msgstr ""
 msgid "Import"
 msgstr ""
 
-#: src/UI/components/FungibleTokenList/index.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
 msgstr ""
 
@@ -869,8 +878,8 @@ msgstr ""
 msgid "Loading...."
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr ""
 
@@ -957,9 +966,9 @@ msgstr ""
 msgid "Max priority fee must be greater than 0 Gwei."
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr ""
 
@@ -1008,9 +1017,9 @@ msgstr ""
 msgid "No NFTs found."
 msgstr ""
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#: src/UI/components/CountryCodePicker/index.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/CountryCodePicker/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
 msgstr ""
 
@@ -1050,14 +1059,14 @@ msgstr ""
 msgid "Owner changed."
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Pending"
 msgstr ""
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts
-#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 #: src/UI/components/PersonaSelectPanel/index.tsx
+#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 msgid "Persona"
 msgstr ""
 
@@ -1120,8 +1129,8 @@ msgstr ""
 msgid "Please verify your social account"
 msgstr ""
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "Plugin switch"
 msgstr ""
 
@@ -1234,8 +1243,8 @@ msgstr ""
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
 msgstr ""
 
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 #: src/UI/components/SelectTokenChip/index.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Select"
 msgstr ""
 
@@ -1267,10 +1276,10 @@ msgstr ""
 msgid "Select Collection"
 msgstr ""
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx
-#: src/UI/components/AssetsManagement/CollectionList.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
 msgstr ""
 
@@ -1484,9 +1493,9 @@ msgstr ""
 
 #. placeholder {0}: currentVerifiedBy.join(', ')
 #. placeholder {0}: verifiedBy.join(', ')
-#: src/UI/components/AssetsManagement/CollectionHeader.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AssetsManagement/CollectibleItem.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Verified by {0}"
 msgstr ""
 

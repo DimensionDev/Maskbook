@@ -28,10 +28,10 @@ import {
     createNonFungibleToken,
 } from '@masknet/web3-shared-base'
 import { EMPTY_OBJECT, NetworkPluginID, type Account } from '@masknet/shared-base'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { BlockResponse } from '@solana/web3.js'
 import type { BaseConnection } from '../../Base/apis/Connection.js'
-import * as MagicEden from /* webpackDefer: true */ '../../../MagicEden/index.js'
+import defer * as MagicEden from '../../../MagicEden/index.js'
 import { SolanaWeb3API } from './Web3API.js'
 import { SolanaTransferAPI } from './TransferAPI.js'
 import { SolanaConnectionOptionsAPI } from './ConnectionOptionsAPI.js'

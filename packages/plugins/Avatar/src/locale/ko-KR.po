@@ -60,8 +60,8 @@ msgstr "로딩 중"
 msgid "NFT Avatar Setting"
 msgstr "NFT 아바타 설정"
 
-#: src/SiteAdaptor/NFTAvatarButton.tsx
 #: src/Application/RouterDialog.tsx
+#: src/SiteAdaptor/NFTAvatarButton.tsx
 msgid "NFT PFP"
 msgstr ""
 

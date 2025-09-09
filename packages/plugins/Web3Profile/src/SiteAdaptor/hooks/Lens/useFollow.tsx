@@ -1,6 +1,6 @@
 import { type EvmAddress } from '@lens-protocol/client'
 import { Trans, useLingui } from '@lingui/react/macro'
-import { useLensClient, useMyLensAccountAddress } from '@masknet/shared'
+import { useLensClient, useMyLensAccount } from '@masknet/shared'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import { useCustomSnackbar, type ShowSnackbarOptions, type SnackbarKey, type SnackbarMessage } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -32,7 +32,7 @@ export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions
         [showSnackbar, closeSnackbar],
     )
 
-    const myLensAccount = useMyLensAccountAddress()
+    const myLensAccount = useMyLensAccount()
     const lensClient = useLensClient()
 
     const handleFollow = useCallback(
@@ -40,7 +40,9 @@ export function useFollow({ accountAddress, onSuccess, onFailed }: FollowOptions
             try {
                 setLoading(true)
                 if (!accountAddress || chainId !== ChainId.Polygon) return
-                if (!lensClient || !myLensAccount) return
+                if (!lensClient) throw new Error('No lens client')
+                if (!myLensAccount) throw new Error('No lens account')
+
                 await lensClient.login(myLensAccount)
                 const res = await lensClient.follow(accountAddress)
                 if (res.isErr()) {

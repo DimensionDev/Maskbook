@@ -219,7 +219,7 @@ export const TradingRoute = memo(function TradingRoute() {
                         {
                             dexProtocol: [
                                 {
-                                    dexName: t`${fromNetwork?.name} Pool`,
+                                    dexName: t`${fromNetwork?.name || ''} Pool`,
                                     percent: '100',
                                 },
                             ],
@@ -229,7 +229,7 @@ export const TradingRoute = memo(function TradingRoute() {
                         {
                             dexProtocol: [
                                 {
-                                    dexName: t`${toNetwork?.name} Pool`,
+                                    dexName: t`${toNetwork?.name || ''} Pool`,
                                     percent: '100',
                                 },
                             ],

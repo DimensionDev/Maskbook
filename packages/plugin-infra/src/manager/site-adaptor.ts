@@ -46,9 +46,8 @@ export function useActivatedPluginsSiteAdaptor(minimalModeEqualsTo: 'any' | bool
 }
 
 function assertLocation() {
-    if (Sniffings.is_popup_page || Sniffings.is_dashboard_page) {
-        throw new Error('This hook should not be called in popup or dashboard.')
-    }
+    if (!(Sniffings.is_popup_page || Sniffings.is_dashboard_page)) return
+    throw new Error('This hook should not be called in popup or dashboard.')
 }
 
 export function useActivatedPluginsSiteAdaptorMinimal() {

@@ -171,7 +171,8 @@ export const Component = memo(function CollectibleDetail() {
     const { data: asset, isPending } = useNonFungibleAsset(NetworkPluginID.PLUGIN_EVM, address, id, { chainId })
 
     useEffect(() => {
-        if (!asset && !isPending) navigate(-1)
+        if (!(!asset && !isPending)) return
+        navigate(-1)
     }, [!asset && !isPending, navigate])
     useTitle(asset?.metadata?.name || t`Collectible`)
 

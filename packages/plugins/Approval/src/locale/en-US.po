@@ -11,9 +11,9 @@ msgstr ""
 "Content-Transfer-Encoding: \n"
 "Plural-Forms: \n"
 
-#: src/SiteAdaptor/index.tsx
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/ApprovalDialog.tsx
+#: src/SiteAdaptor/index.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Approval"
 msgstr ""
 
@@ -34,31 +34,31 @@ msgstr ""
 msgid "Collection Approval"
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Contract"
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "No approved contract records."
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoke"
 msgstr ""
 
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
-#: src/SiteAdaptor/ApprovalTokenContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
 #: src/SiteAdaptor/ApprovalNFTContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
+#: src/SiteAdaptor/ApprovalTokenContent.tsx
 msgid "Revoking"
 msgstr ""
 

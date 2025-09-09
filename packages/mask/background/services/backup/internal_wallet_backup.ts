@@ -1,6 +1,6 @@
 import { Some, None } from 'ts-results-es'
 import { ec as EC } from 'elliptic'
-import * as wallet_ts from /* webpackDefer: true */ 'wallet.ts'
+import defer * as wallet_ts from 'wallet.ts'
 import { isNonNull } from '@masknet/kit'
 import { isSameAddress } from '@masknet/web3-shared-base'
 import type { NormalizedBackup } from '@masknet/backup-format'

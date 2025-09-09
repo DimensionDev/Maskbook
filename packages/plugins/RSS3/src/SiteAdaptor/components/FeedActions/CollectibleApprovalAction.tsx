@@ -57,7 +57,8 @@ export function CollectibleApprovalAction({ feed, ...rest }: CollectibleApproval
                             <Label>{contract}</Label>
                         </Trans>
                     }
-                    value={metadata?.action}
+                    value={metadata?.action || ''}
+                    other=""
                 />
             </Typography>
         </div>

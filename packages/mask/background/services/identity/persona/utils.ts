@@ -1,5 +1,5 @@
 import * as bip39 from 'bip39'
-import * as wallet from /* webpackDefer: true */ 'wallet.ts'
+import defer * as wallet from 'wallet.ts'
 import { encodeArrayBuffer, encodeText } from '@masknet/kit'
 import {
     type EC_Private_JsonWebKey,
@@ -76,7 +76,7 @@ export async function validateMnemonic(mnemonic: string, wordList?: string[] | u
 
 async function HDKeyToJwk(hdk: wallet.HDKey): Promise<JsonWebKey> {
     const jwk = await decompressK256Key(encodeArrayBuffer(hdk.publicKey))
-    jwk.d = hdk.privateKey ? toBase64URL(hdk.privateKey) : undefined
+    jwk.d = hdk.privateKey ? toBase64URL(hdk.privateKey as Buffer<ArrayBuffer>) : undefined
     return jwk
 }
 

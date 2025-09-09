@@ -72,6 +72,7 @@ export function TokenApprovalAction({ feed, action: act, ...rest }: TokenApprova
                     </Trans>
                 }
                 value={context}
+                other=""
             />
         </Typography>
     )

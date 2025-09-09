@@ -62,9 +62,8 @@ export const SnapshotCard = memo(function SnapshotCard({
     const [isPending, setTransition] = useTransition()
     const ob = useIntersection(ref as any, {})
     useEffect(() => {
-        if (ob?.isIntersecting) {
-            setTransition(() => setSeen(true))
-        }
+        if (!ob?.isIntersecting) return
+        setTransition(() => setSeen(true))
     }, [ob?.isIntersecting])
 
     return (

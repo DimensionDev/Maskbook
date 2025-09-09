@@ -17,9 +17,8 @@ if (navigator.userAgent.includes('Firefox')) {
         window.addEventListener(
             'resize',
             () => {
-                if (window.innerWidth !== 400) {
-                    document.body.style.maxWidth = 'unset'
-                }
+                if (!(window.innerWidth !== 400)) return
+                document.body.style.maxWidth = 'unset'
             },
             { once: true },
         )

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useAsync, useAsyncFn } from 'react-use'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { omit } from 'lodash-es'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { useChainContext, useEnvironmentContext } from '@masknet/web3-hooks-base'

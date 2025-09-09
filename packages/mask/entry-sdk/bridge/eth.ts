@@ -3,7 +3,7 @@ import Services from '#services'
 import { MaskEthereumProviderRpcError, err } from '@masknet/sdk'
 import { Err, Ok } from 'ts-results-es'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import * as providers from /* webpackDefer: true */ '@masknet/web3-providers'
+import defer * as providers from '@masknet/web3-providers'
 import { methodValidate, fromZodError, requestSchema, type Methods } from './eth/validator.js'
 import { ZodError, ZodTuple } from 'zod'
 import { maskSDK } from '../index.js'
@@ -260,9 +260,8 @@ const methods: Methods = {
                             decimals = realDecimals
                         },
                         () => {
-                            if (!decimals) {
-                                throw err.wallet_watchAsset.decimals_are_required_but_were_not_found_in_either_the_request_or_contract()
-                            }
+                            if (decimals) return
+                            throw err.wallet_watchAsset.decimals_are_required_but_were_not_found_in_either_the_request_or_contract()
                         },
                     ),
             ])

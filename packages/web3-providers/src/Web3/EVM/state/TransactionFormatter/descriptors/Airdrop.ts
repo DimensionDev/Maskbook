@@ -3,7 +3,7 @@ import { type ChainId, type TransactionParameter } from '@masknet/web3-shared-ev
 import { BaseDescriptor } from './Base.js'
 import { getTokenAmountDescription } from '../utils.js'
 import type { TransactionDescriptorFormatResult } from '../types.js'
-import * as Airdrop from /* webpackDefer: true */ '../../../../../Airdrop/index.js'
+import defer * as Airdrop from '../../../../../Airdrop/index.js'
 
 export class AirdropDescriptor extends BaseDescriptor {
     override async compute(

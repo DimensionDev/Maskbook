@@ -55,7 +55,9 @@ export const Component = memo(function ConnectedSites() {
                 </Trans>
             </Typography>
             <Box className={classes.cardList}>
-                {origins?.map((origin) => <OriginCard key={origin} origin={origin} />)}
+                {origins?.map((origin) => (
+                    <OriginCard key={origin} origin={origin} />
+                ))}
             </Box>
         </Box>
     )

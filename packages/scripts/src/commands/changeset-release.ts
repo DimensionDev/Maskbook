@@ -13,7 +13,7 @@ const packages = [
     new URL('../../../config/', import.meta.url),
 ]
 export async function changesetRelease() {
-    const tsc = awaitChildProcess(shell.cwd(ROOT_PATH)`npx tsc -b ./tsconfig.npm.json`)
+    const tsc = awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm exec tsc -b ./tsconfig.npm.json`)
     const buildTask: Array<Promise<any>> = packages.map((path) =>
         readFile(new URL('./package.json', path), 'utf-8')
             .then(JSON.parse)
@@ -23,6 +23,6 @@ export async function changesetRelease() {
             }),
     )
     await Promise.all(buildTask.concat(tsc))
-    await awaitChildProcess(shell.cwd(ROOT_PATH)`npx changeset publish`)
+    await awaitChildProcess(shell.cwd(ROOT_PATH)`pnpm exec changeset publish`)
 }
 task(changesetRelease, 'changeset-release', 'Release script run by changeset')

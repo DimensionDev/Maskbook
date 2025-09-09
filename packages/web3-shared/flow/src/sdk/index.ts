@@ -1,4 +1,4 @@
-import * as fcl from /* webpackDefer: true */ '@blocto/fcl'
+import defer * as fcl from '@blocto/fcl'
 import type { ChainId } from '../types.js'
 import { getAuthConstants } from '../constants/constants.js'
 

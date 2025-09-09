@@ -1,4 +1,4 @@
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { ChainId } from '../types.js'
 
 const Endpoints: Record<ChainId, string> = {

@@ -30,6 +30,9 @@
     "resolveJsonModule": true,
     "emitDeclarationOnly": true,
     "libReplacement": true,
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
     "paths": {
       // # Why?
       // TypeScript project reference requires manually declaring all referenced projects.
@@ -131,7 +134,6 @@
       "@masknet/plugin-collectible": ["./packages/plugins/Collectible/src/index.ts"],
       "@masknet/plugin-claim": ["./packages/plugins/Claim/src/index.ts"],
       "@masknet/plugin-artblocks": ["./packages/plugins/ArtBlocks/src/index.ts"],
-      "@masknet/plugin-pets": ["./packages/plugins/Pets/src/index.ts"],
       "@masknet/plugin-tips": ["./packages/plugins/Tips/src/index.ts"],
       "@masknet/plugin-nextid": ["./packages/plugins/NextID/src/index.ts"],
       "@masknet/plugin-trader": ["./packages/plugins/Trader/src/index.ts"],

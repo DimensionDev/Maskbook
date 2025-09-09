@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { NetworkPluginID } from '@masknet/shared-base'
 import type { NftRedPacket } from '@masknet/web3-contracts/types/NftRedPacket.js'
 import { useChainContext } from '@masknet/web3-hooks-base'

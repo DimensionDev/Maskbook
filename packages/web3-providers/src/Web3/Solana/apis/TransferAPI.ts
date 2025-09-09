@@ -1,4 +1,4 @@
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import { getOrCreateAssociatedTokenAccount } from './spl-token/getOrCreateAssociatedTokenAccount.js'
 import { createTransferInstruction } from './spl-token/createTransferInstructions.js'
 import { SolanaWeb3API } from './Web3API.js'

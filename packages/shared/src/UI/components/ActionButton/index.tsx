@@ -72,9 +72,8 @@ export function ActionButtonPromise(props: ActionButtonPromiseProps) {
     const failClick = failedOnClick === 'use executor' ? run : failedOnClick
 
     useUpdateEffect(() => {
-        if (!noUpdateEffect) {
-            setState((prev) => (prev === 'init' ? prev : 'init'))
-        }
+        if (noUpdateEffect) return
+        setState((prev) => (prev === 'init' ? prev : 'init'))
     }, [executor, noUpdateEffect])
 
     if (state === 'wait')

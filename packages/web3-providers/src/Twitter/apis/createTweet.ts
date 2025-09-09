@@ -1,5 +1,5 @@
 /* cspell:disable */
-import * as Parser from /* webpackDefer: true */ 'twitter-text'
+import defer * as Parser from 'twitter-text'
 import { getHeaders } from './getTokens.js'
 import { fetchJSON } from '../../helpers/fetchJSON.js'
 import type { TwitterBaseAPI } from '../../entry-types.js'
@@ -52,7 +52,7 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         semantic_annotation_ids: [],
     }
     // Remove link query
-    const parsedTweet = Parser.default.parseTweet(variables.tweet_text)
+    const parsedTweet = (((Parser as any).default as typeof Parser) || Parser).parseTweet(variables.tweet_text)
     const overLength = parsedTweet.weightedLength > 280
     const scheduled = typeof variables.execute_at !== 'undefined'
     const operationName =
@@ -82,7 +82,7 @@ export async function createTweet(tweet: TwitterBaseAPI.Tweet) {
         if (response.errors) {
             // TODO Fetch main.xxx.js and extract queryIds from Twitter's client code.
             console.error(
-                "Errors occupied, query id chould be outdated. Please check twitter's client code in main.xxx.js",
+                "Errors occupied, query id could be outdated. Please check twitter's client code in main.xxx.js",
                 'Response Errors:',
                 response.errors,
             )

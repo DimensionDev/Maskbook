@@ -1,7 +1,7 @@
 import { evmAddress } from '@lens-protocol/client'
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { Image, useLensClient, useMyLensAccountAddress } from '@masknet/shared'
+import { Image, useLensClient, useMyLensAccount } from '@masknet/shared'
 import { CrossIsolationMessages, EMPTY_LIST } from '@masknet/shared-base'
 import { ActionButton, makeStyles } from '@masknet/theme'
 import { useChainContext } from '@masknet/web3-hooks-base'
@@ -80,16 +80,17 @@ interface Props {
 
 export const LensList = memo(function LensList({ accounts }: Props) {
     const lensV3 = useLensClient()
-    const myLensAccount = useMyLensAccountAddress()
+    const myLensAccount = useMyLensAccount()
+    const myLensAddress = myLensAccount?.account.address
 
     const { data = accounts, isPending } = useQuery({
-        queryKey: ['lens', 'popup-list', myLensAccount, accounts.map((x) => x.handle).join('')],
+        queryKey: ['lens', 'popup-list', myLensAddress, accounts.map((x) => x.handle).join('')],
         queryFn: async () => {
             if (!accounts.length) return EMPTY_LIST
             if (!lensV3) return accounts
 
             const nativeAccounts = await lensV3.getAccountsByHandles(accounts.map((x) => x.handle))
-            if (!myLensAccount && nativeAccounts?.length)
+            if (!myLensAddress && nativeAccounts?.length)
                 return compact(
                     nativeAccounts.map((nativeAccount) => {
                         const target = accounts.find(
@@ -106,8 +107,8 @@ export const LensList = memo(function LensList({ accounts }: Props) {
 
             if (!nativeAccounts?.length) return accounts
             const followStatus = await lensV3.getFollowStatus(
-                (myLensAccount ? nativeAccounts || [] : []).map((x) => ({
-                    follower: evmAddress(myLensAccount!),
+                (myLensAddress ? nativeAccounts || [] : []).map((x) => ({
+                    follower: evmAddress(myLensAddress!),
                     account: evmAddress(x.address),
                 })),
             )

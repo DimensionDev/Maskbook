@@ -1,5 +1,5 @@
 import { uniqWith } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { delay } from '@masknet/kit'
 import { type StorageObject, type UpdatableWallet, type Wallet, CrossIsolationMessages } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'

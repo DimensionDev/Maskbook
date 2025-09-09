@@ -1,4 +1,4 @@
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 
 export function getCreate2Address(fromAddress: string, salt: string, initCode: string): string {
     // Concatenate and hash the formula components

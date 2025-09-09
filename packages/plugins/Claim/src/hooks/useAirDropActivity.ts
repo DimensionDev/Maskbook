@@ -1,5 +1,5 @@
 import { last } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 // cspell:disable-next-line
 import { MerkleTree } from 'merkletreejs'
 import { secondsToMilliseconds } from 'date-fns'

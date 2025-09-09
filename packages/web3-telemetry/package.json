@@ -36,6 +36,5 @@
     "@sentry/browser": "^8.13.0",
     "urlcat": "^3.1.0"
   },
-  "devDependencies": {
-  }
+  "devDependencies": {}
 }

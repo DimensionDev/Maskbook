@@ -4,7 +4,7 @@ import { useChainContext } from '@masknet/web3-hooks-base'
 import { useQuery } from '@tanstack/react-query'
 import { useLensClient } from './useLensClient.js'
 
-export function useAvailableLensAccounts(isManaged?: boolean) {
+export function useAvailableLensAccounts() {
     const { account: walletAccount } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const lensClient = useLensClient()
 
@@ -14,12 +14,6 @@ export function useAvailableLensAccounts(isManaged?: boolean) {
             if (!walletAccount || !lensClient) return null
             const accounts = await lensClient.getAvailableAccounts(evmAddress(walletAccount))
             return accounts
-        },
-        select(data) {
-            if (isManaged === undefined || !data) return data
-            return data.filter((account) =>
-                isManaged ? account.__typename === 'AccountManaged' : account.__typename === 'AccountOwned',
-            )
         },
     })
 }

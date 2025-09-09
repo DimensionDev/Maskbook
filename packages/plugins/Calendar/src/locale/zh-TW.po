@@ -16,8 +16,8 @@ msgstr ""
 "X-Crowdin-File: /[DimensionDev.Maskbook] develop/packages/plugins/Calendar/src/locale/en-US.po\n"
 "X-Crowdin-File-ID: 952\n"
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/Footer.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Calendar"
 msgstr ""
 
@@ -45,8 +45,8 @@ msgstr ""
 #~ msgid "NFTs"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/NewsList.tsx
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No content for the last two weeks."
 msgstr ""
 
@@ -54,8 +54,8 @@ msgstr ""
 #~ msgid "No events"
 #~ msgstr ""
 
-#: src/SiteAdaptor/components/NewsList.tsx
 #: src/SiteAdaptor/components/EventList.tsx
+#: src/SiteAdaptor/components/NewsList.tsx
 msgid "No more data available."
 msgstr ""
 

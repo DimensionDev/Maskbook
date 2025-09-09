@@ -53,7 +53,7 @@ export function decryptWithAES(key: CryptoKey, iv: Uint8Array, message: Uint8Arr
         return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv }, key, message))
     })
 }
-export function assertIVLengthEq16(arrayBuffer: Uint8Array) {
+export function assertIVLengthEq16(arrayBuffer: Uint8Array<ArrayBuffer>) {
     if (arrayBuffer.byteLength === 16) return Ok(arrayBuffer)
     return new CheckedError(CryptoException.InvalidIVLength, null).toErr()
 }

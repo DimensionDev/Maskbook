@@ -89,6 +89,7 @@ export function NoteAction({ feed, ...rest }: NoteActionProps) {
                         </Trans>
                     }
                     value={type}
+                    other=""
                 />
             </Typography>
         </div>

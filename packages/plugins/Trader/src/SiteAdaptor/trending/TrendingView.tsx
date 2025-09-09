@@ -132,7 +132,8 @@ export function TrendingView(props: TrendingViewProps) {
     // #endregion
 
     useRenderPhraseCallbackOnDepsChange(() => {
-        if (currentResult) setResult(currentResult)
+        if (!currentResult) return
+        setResult(currentResult)
     }, [currentResult])
 
     // #region stats

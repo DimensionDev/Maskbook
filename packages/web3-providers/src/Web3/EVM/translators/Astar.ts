@@ -1,7 +1,7 @@
 import { ChainId } from '@masknet/web3-shared-evm'
 import type { ConnectionContext } from '../libs/ConnectionContext.js'
 import { BaseTranslator } from './Base.js'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 
 export class AstarTranslator extends BaseTranslator {
     override async encode(context: ConnectionContext): Promise<void> {

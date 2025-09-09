@@ -113,18 +113,16 @@ export const ApplicationSettingPluginSwitch = memo(function ApplicationSettingPl
                 checked={!pluginsInMinimalMode.map((x) => x.ID).includes(PluginID.Handle)}
                 onSwitch={(event) => onSwitch(PluginID.Handle, event.target.checked)}
                 setRef={(element: HTMLLIElement | null) => {
-                    if (DSearch_KEY === focusPluginID) {
-                        targetPluginRef.current = element
-                    }
+                    if (!(DSearch_KEY === focusPluginID)) return
+                    targetPluginRef.current = element
                 }}
             />
             {availablePlugins.map((x) => (
                 <ListItem
                     key={x.entry.ApplicationEntryID}
                     ref={(ele) => {
-                        if (x.pluginID === focusPluginID) {
-                            targetPluginRef.current = ele
-                        }
+                        if (!(x.pluginID === focusPluginID)) return
+                        targetPluginRef.current = ele
                     }}
                     className={classes.listItem}>
                     <Stack width="100%">

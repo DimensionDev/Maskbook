@@ -13,7 +13,7 @@ import { NetworkContextProvider, useChainContext, useNetwork } from '@masknet/we
 import { EVMChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type RedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, isZero, minus } from '@masknet/web3-shared-base'
-import { ChainId } from '@masknet/web3-shared-evm'
+import { ChainId, useRedPacketConstant } from '@masknet/web3-shared-evm'
 import { Card, Grow, Link } from '@mui/material'
 import { memo, useCallback, useMemo, useState } from 'react'
 import { RedPacketEnvelope } from '../components/RedPacketEnvelope.js'
@@ -25,6 +25,7 @@ import { useRedPacketContract } from '../hooks/useRedPacketContract.js'
 import { useRedPacketCover } from '../hooks/useRedPacketCover.js'
 import { useRefundCallback } from '../hooks/useRefundCallback.js'
 import { OperationFooter } from './OperationFooter.js'
+import { ClaimOnFirefly } from '../components/ClaimOnFirefly.js'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -84,7 +85,7 @@ export interface RedPacketProps {
 export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: RedPacketProps) {
     const { _ } = useLingui()
     const token = payload.token
-    const payloadChainId: ChainId =
+    const redpacketChainId: ChainId =
         (token?.chainId as ChainId) ?? EVMChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
 
@@ -105,20 +106,14 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
-    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(account, payload)
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback(account, payload)
     const source = usePostInfoDetails.source()
-    const platform = source?.toLowerCase()
     const postUrl = usePostInfoDetails.url()
-    const handle = usePostInfoDetails.handle()
     const link = postLink.toString() || postUrl?.toString()
     const isFireflyRedpacket = useIsFireflyRedpacket()
     const postId = usePostInfoDetails.postID()
 
-    // TODO payload.chainId is undefined on production mode
-    const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(
-        NetworkPluginID.PLUGIN_EVM,
-        (payload.chainId as number) || payload.token?.chainId,
-    )
+    const network = useNetwork<NetworkPluginID.PLUGIN_EVM>(NetworkPluginID.PLUGIN_EVM, redpacketChainId)
 
     const claimedShareText = useMemo(() => {
         const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
@@ -138,16 +133,16 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
                 _(msg`${claimed} Follow @${shareTextOption.account} (mask.io) to claim lucky drops.`) +
                     `\n${promote_short}\n#mask_io #LuckyDrop\n${shareTextOption.payload}`
             :   `${claimed}\n${promote_short}\n${shareTextOption.payload}`
-    }, [payload, link, claimTxHash, network?.name, platform, handle, _])
+    }, [payload, link, network?.name, _])
 
     const [{ loading: isRefunding }, _isRefunded, refundCallback] = useRefundCallback(
         payload.contract_version,
         account,
         payload.rpid,
-        payloadChainId,
+        redpacketChainId,
     )
 
-    const redPacketContract = useRedPacketContract(payloadChainId, payload.contract_version) as HappyRedPacketV4
+    const redPacketContract = useRedPacketContract(redpacketChainId, payload.contract_version) as HappyRedPacketV4
     const checkResult = useCallback(async () => {
         const data = await redPacketContract.methods.check_availability(payload.rpid).call({
             // check availability is ok w/o account
@@ -160,12 +155,12 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             tokenType: TokenType.Fungible,
             messageTextForNFT: _(msg`1 NFT claimed.`),
             messageTextForFT: _(
-                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+                msg`You claimed ${formatBalance(data.claimed_amount, token?.decimals, { significant: 2 })} $${token?.symbol || ''}.`,
             ),
             title: _(msg`Lucky Drop`),
             share: (text) => share?.(text, source ? source : undefined),
         })
-    }, [token, redPacketContract, payload.rpid, account, claimedShareText, source])
+    }, [redPacketContract.methods, payload.rpid, account, claimedShareText, token, _, source])
 
     const [showRequirements, setShowRequirements] = useState(false)
     const onClaimOrRefund = useCallback(async () => {
@@ -187,7 +182,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         if (typeof hash === 'string') {
             checkAvailability()
         }
-    }, [canClaim, canRefund, claimCallback, checkResult, recheckClaimStatus, checkAvailability])
+    }, [canClaim, canRefund, recheckClaimStatus, claimCallback, checkResult, refundCallback, checkAvailability])
 
     const outdated = isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 
@@ -202,6 +197,11 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
         claimedAmount: availability?.claimed_amount,
         claimed: availability?.claimed,
     })
+
+    const contractAddress = useRedPacketConstant(redpacketChainId, 'HAPPY_RED_PACKET_ADDRESS_V4')
+    if (!contractAddress) {
+        return <ClaimOnFirefly />
+    }
 
     // the red packet can fetch without account
     if (!availability || !token || isLoadingCover) return <LoadingStatus minHeight={148} />
@@ -265,7 +265,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             <NetworkContextProvider initialNetwork={currentPluginID}>
                 <OperationFooter
                     className={classes.footer}
-                    chainId={payloadChainId}
+                    chainId={redpacketChainId}
                     canClaim={canClaim}
                     canRefund={canRefund}
                     unsatisfied={unsatisfied}

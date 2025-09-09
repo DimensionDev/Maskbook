@@ -1,6 +1,6 @@
 import { BigNumber } from 'bignumber.js'
 import { identity, pickBy, memoize } from 'lodash-es'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import { ZERO_ADDRESS } from '../constants/index.js'
 import { isEmptyHex } from '../helpers/address.js'
 import { ChainId, type Transaction } from '../types/index.js'

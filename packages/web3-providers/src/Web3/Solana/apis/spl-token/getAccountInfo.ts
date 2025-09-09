@@ -1,5 +1,5 @@
 import { TOKEN_PROGRAM_ID, AccountLayout } from '@solana/spl-token'
-import * as SolanaWeb3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as SolanaWeb3 from '@solana/web3.js'
 import type { Connection, Commitment } from '@solana/web3.js'
 
 enum AccountState {

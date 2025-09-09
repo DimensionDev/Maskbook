@@ -20,7 +20,9 @@ export function WidgetContent(props: WidgetContentProps) {
                         <PluginTransFieldRender field={x.name} pluginID={x.ID} />
                     </Typography>
                     <Paper variant="outlined" sx={{ padding: 1 }}>
-                        {x.Widgets?.map((y) => <Widget key={y.ID} pluginID={x.ID} name={y.name} />)}
+                        {x.Widgets?.map((y) => (
+                            <Widget key={y.ID} pluginID={x.ID} name={y.name} />
+                        ))}
                     </Paper>
                 </Box>
             ))}

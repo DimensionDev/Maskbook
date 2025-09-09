@@ -6,14 +6,13 @@ import { BaseHubFungible } from '../../Base/apis/HubFungible.js'
 import { evm } from '../../../Manager/registry.js'
 import { EVMHubOptionsProvider } from './HubOptionsAPI.js'
 import type { AuthorizationAPI, FungibleTokenAPI, TokenListAPI, TokenIconAPI, PriceAPI } from '../../../entry-types.js'
-import * as ChainbaseFungibleToken from /* webpackDefer: true */ '../../../Chainbase/index.js'
-import * as Cloudflare from /* webpackDefer: true */ '../../../Cloudflare/index.js'
-import * as CoinGeckoPriceEVM from /* webpackDefer: true */ '../../../CoinGecko/index.js'
-import * as DeBankFungibleToken from /* webpackDefer: true */ '../../../DeBank/index.js'
-import * as GoPlusAuthorization from /* webpackDefer: true */ '../../../GoPlusLabs/index.js'
-import * as R2D2TokenList from /* webpackDefer: true */ '../../../R2D2/index.js'
-import * as Rabby from /* webpackDefer: true */ '../../../Rabby/index.js'
-import * as Zerion from /* webpackDefer: true */ '../../../Zerion/index.js'
+import defer * as ChainbaseFungibleToken from '../../../Chainbase/index.js'
+import defer * as Cloudflare from '../../../Cloudflare/index.js'
+import defer * as CoinGeckoPriceEVM from '../../../CoinGecko/index.js'
+import defer * as DeBankFungibleToken from '../../../DeBank/index.js'
+import defer * as GoPlusAuthorization from '../../../GoPlusLabs/index.js'
+import defer * as R2D2TokenList from '../../../R2D2/index.js'
+import defer * as Rabby from '../../../Rabby/index.js'
 
 export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
     protected override HubOptions = new EVMHubOptionsProvider(this.options)
@@ -34,7 +33,6 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
             {
                 [SourceType.Chainbase]: ChainbaseFungibleToken.ChainbaseFungibleToken,
                 [SourceType.DeBank]: DeBankFungibleToken.DeBankFungibleToken,
-                [SourceType.Zerion]: Zerion.Zerion,
                 [SourceType.GoPlus]: GoPlusAuthorization.GoPlusAuthorization,
                 [SourceType.Rabby]: Rabby.Rabby,
                 [SourceType.R2D2]: R2D2TokenList.R2D2TokenList,
@@ -43,7 +41,6 @@ export class HubFungibleAPI extends BaseHubFungible<ChainId, SchemaType> {
             },
             [
                 DeBankFungibleToken.DeBankFungibleToken,
-                Zerion.Zerion,
                 ChainbaseFungibleToken.ChainbaseFungibleToken,
                 Rabby.Rabby,
                 GoPlusAuthorization.GoPlusAuthorization,

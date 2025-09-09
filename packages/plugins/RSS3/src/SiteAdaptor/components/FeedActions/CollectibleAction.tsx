@@ -64,6 +64,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                                 value={verbose ? 'name' : 'nft'}
                                 _name={<Tag>{metadata!.name} </Tag>}
                                 _nft={<Tag>an NFT </Tag>}
+                                other=""
                             />
                             for{' '}
                             <Label>
@@ -79,6 +80,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                             value={verbose ? 'name' : 'nft'}
                             _name={<Tag>{metadata!.name} </Tag>}
                             _nft={<Tag>an NFT </Tag>}
+                            other=""
                         />
                     </Trans>
                 )
@@ -96,6 +98,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                                 value={verbose ? 'name' : 'nft'}
                                 _name={<Tag>{metadata!.name} </Tag>}
                                 _nft={<Tag>an NFT </Tag>}
+                                other=""
                             />{' '}
                             to <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
                             <Label>
@@ -112,6 +115,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                                 value={verbose ? 'name' : 'nft'}
                                 _name={<Tag>{metadata!.name} </Tag>}
                                 _nft={<Tag>an NFT </Tag>}
+                                other=""
                             />{' '}
                             to <AccountLabel address={action.to}>{recipient}</AccountLabel> for{' '}
                             <Label>
@@ -133,6 +137,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                                 value={verbose ? 'name' : 'nft'}
                                 _name={<Tag>{feed.actions[1].metadata!.name} </Tag>}
                                 _nft={<Tag>an ENS </Tag>}
+                                other=""
                             />
                             for{' '}
                             <Label>
@@ -159,12 +164,14 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                                 value={verbose ? 'verbose' : 'simple'}
                                 _verbose={<Tag>{metadata!.name} </Tag>}
                                 _simple={<Tag>an NFT </Tag>}
+                                other=""
                             />
                             to <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
                             <Select
                                 value={costMetadata ? 'cost' : 'free'}
                                 _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
                                 _free=""
+                                other=""
                             />
                         </Trans>
                     )
@@ -176,12 +183,14 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                                 value={verbose ? 'verbose' : 'simple'}
                                 _verbose={<Tag>{metadata!.name} </Tag>}
                                 _simple={<Tag>an NFT </Tag>}
+                                other=""
                             />
                             from <AccountLabel address={formattedAddress}>{formattedAddress}</AccountLabel>
                             <Select
                                 value={costMetadata ? 'cost' : 'free'}
                                 _cost={` for ${formatValue(costMetadata)} ${costMetadata?.symbol ?? 'Unknown'}`}
                                 _free=""
+                                other=""
                             />
                         </Trans>
                     )
@@ -193,7 +202,7 @@ export function CollectibleAction({ feed, ...rest }: CollectibleActionProps) {
                     <Trans>
                         <Label>{user}</Label> burned{' '}
                         <Tag>
-                            <Select _nft="an NFT" _name={metadata?.name} value={verbose ? 'name' : 'nft'} />
+                            <Select _nft="an NFT" _name={metadata?.name} value={verbose ? 'name' : 'nft'} other="" />
                         </Tag>
                     </Trans>
                 )

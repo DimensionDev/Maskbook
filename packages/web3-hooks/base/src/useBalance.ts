@@ -34,7 +34,8 @@ export function useBalance<T extends NetworkPluginID = NetworkPluginID>(
     useEffect(() => {
         return (
             BalanceNotifier?.emitter.on('update', (ev) => {
-                if (isSameAddress(account, ev.account)) result.refetch()
+                if (!isSameAddress(account, ev.account)) return
+                result.refetch()
             }) ?? noop
         )
     }, [account, result.refetch, BalanceNotifier])

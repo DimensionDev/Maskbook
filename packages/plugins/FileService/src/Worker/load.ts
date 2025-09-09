@@ -74,15 +74,12 @@ class LoadAgent implements ProviderAgent {
             .replace('__METADATA__', encodedMetadata)
 
         const data = encodeText(replaced)
-
         const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
-
         return landingPageTxId
     }
 
     async makePayload(data: Uint8Array, type: string, fileName: string = 'file.dat') {
         this.init()
-
         try {
             const blob = new Blob([data], { type })
             const formData = new FormData()
@@ -113,6 +110,8 @@ class LoadAgent implements ProviderAgent {
         catch (error) {
             throw error
         }
+
+        return result.dataitem_id
     }
 }
 

@@ -101,8 +101,8 @@ msgstr ""
 msgid "My vote"
 msgstr "나의 투표"
 
-#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "No power"
 msgstr "파워없음"
 
@@ -153,10 +153,10 @@ msgstr "결과"
 msgid "Retry"
 msgstr ""
 
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/ProfileView.tsx
-#: src/SiteAdaptor/PluginDescriptor.tsx
 #: src/SiteAdaptor/InformationCard.tsx
+#: src/SiteAdaptor/PluginDescriptor.tsx
+#: src/SiteAdaptor/ProfileView.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Snapshot"
 msgstr "스냅숏"
 
@@ -176,10 +176,10 @@ msgstr ""
 msgid "View"
 msgstr "살펴보기"
 
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
-#: src/SiteAdaptor/VotingDialog.tsx
 #: src/SiteAdaptor/Snapshot.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
+#: src/SiteAdaptor/VotingDialog.tsx
 msgid "Vote"
 msgstr "투표"
 

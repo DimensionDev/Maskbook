@@ -473,7 +473,8 @@ export class __Event extends $unsafe.NewObject implements Event {
         event.#stopImmediatePropagation = true
     }
     #SetCancelFlag() {
-        if (this.#cancelable && !this.#inPassiveListener) this.#canceled = true
+        if (!(this.#cancelable && !this.#inPassiveListener)) return
+        this.#canceled = true
     }
     get cancelable(): boolean {
         const event = $unsafe.unwrapXRayVision(this)

@@ -142,8 +142,8 @@ msgstr "24 시간 거래량"
 msgid "Add Collectibles"
 msgstr ""
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
 msgstr "NFT 추가"
 
@@ -151,8 +151,8 @@ msgstr "NFT 추가"
 msgid "Added by user"
 msgstr "사용자별 추가"
 
-#: src/UI/wallet/DeriveWalletTable.tsx
 #: src/UI/components/TokenWithSocialGroupMenu/index.tsx
+#: src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
 msgstr "주소"
 
@@ -172,8 +172,8 @@ msgstr ""
 msgid "APP list"
 msgstr "앱 리스트"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "App Settings"
 msgstr ""
 
@@ -190,10 +190,14 @@ msgid "Approve MASK?"
 msgstr "MASK 승인"
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
-#. placeholder {1}: collection?.name
+#. placeholder {1}: collection?.name || ''
 #: src/hooks/useReportSpam.tsx
-msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
 msgstr ""
+
+#: src/hooks/useReportSpam.tsx
+#~ msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -239,11 +243,11 @@ msgstr ""
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
-#: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "취소"
 
@@ -251,9 +255,9 @@ msgstr "취소"
 msgid "Cancel Transaction"
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/index.tsx
-#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: src/UI/components/WalletStatusBar/Action.tsx
+#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
 msgstr "변경"
 
@@ -348,16 +352,16 @@ msgstr "클릭하여 재시도하기"
 msgid "Community"
 msgstr "커뮤니티"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr "확인"
 
@@ -405,12 +409,12 @@ msgstr "페로소나 연결하기"
 msgid "Connect Solana Wallet"
 msgstr ""
 
-#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
-#: src/UI/components/WalletStatusBox/index.tsx
-#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
-#: src/UI/components/WalletConnectedBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx
+#: src/UI/components/WalletConnectedBoundary/index.tsx
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Connect Wallet"
 msgstr "월렛 연결"
 
@@ -494,11 +498,11 @@ msgstr ""
 msgid "Current base fee is {0} Gwei"
 msgstr "현재 기초 기스비는 {0} Gwei"
 
-#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
 msgstr "커스텀"
 
@@ -515,10 +519,15 @@ msgstr ""
 #~ msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
 #~ msgstr ""
 
+#. placeholder {0}: platform || ''
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, twitter {Twitter profile} facebook {Facebook profile} other {}}."
+msgstr ""
+
 #. placeholder {0}: resolveNextIDPlatformName(platform) || platform
 #. placeholder {0}: type?.replace('_', ' ') ?? ''
-#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 #: src/UI/components/AccountIcons/index.tsx
+#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
 msgstr "데이터 소스가 {0}에서 검색됩니다."
 
@@ -527,8 +536,8 @@ msgstr "데이터 소스가 {0}에서 검색됩니다."
 #~ msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
-msgstr ""
+#~ msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."
@@ -598,8 +607,8 @@ msgstr ""
 msgid "DSearch"
 msgstr ""
 
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr "편집"
 
@@ -623,24 +632,24 @@ msgstr "암호화"
 msgid "ENS or Wallet Address"
 msgstr "ENS나 월렛 주소"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr "기스비 한도 입력"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
 msgstr "가스비 입력"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
 msgstr "최대 가스비 입력"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
 msgstr "최대 우선 가스비 입력"
 
@@ -760,15 +769,15 @@ msgstr "가스비"
 msgid "Gas fee settings"
 msgstr "기스비 설정"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr "가스 한도"
 
 #. placeholder {0}: minGasLimit.toFixed()
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
@@ -776,9 +785,9 @@ msgstr ""
 msgid "Gas limit too low will cause the transaction to fail."
 msgstr "가스 한도가 너무 낮으면 거래가 실패할 수 있습니다."
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr "가스 가격"
 
@@ -813,9 +822,9 @@ msgstr ""
 msgid "GWEI"
 msgstr ""
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "높음"
 
@@ -828,8 +837,8 @@ msgstr ""
 msgid "Import"
 msgstr "불러오기"
 
-#: src/UI/components/FungibleTokenList/index.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
 msgstr "잘못된 컨트렉트 주소"
 
@@ -874,8 +883,8 @@ msgstr "로딩 중"
 msgid "Loading...."
 msgstr "로딩 중...."
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr "낮음"
 
@@ -962,9 +971,9 @@ msgstr "최대 우선 가스비는 0 GWEI보다 높아야 합니다"
 msgid "Max priority fee must be greater than 0 Gwei."
 msgstr "최대 우선 가스비는 0 Gwei보다 높아야 합니다."
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr "보통"
 
@@ -1013,9 +1022,9 @@ msgstr "가스비가 없습니다"
 msgid "No NFTs found."
 msgstr "NFT가 없습니다."
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#: src/UI/components/CountryCodePicker/index.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/CountryCodePicker/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
 msgstr "결과 없음"
 
@@ -1055,14 +1064,14 @@ msgstr ""
 msgid "Owner changed."
 msgstr ""
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Pending"
 msgstr "대기중"
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts
-#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 #: src/UI/components/PersonaSelectPanel/index.tsx
+#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 msgid "Persona"
 msgstr "페르소나"
 
@@ -1125,8 +1134,8 @@ msgstr ""
 msgid "Please verify your social account"
 msgstr "소셜 계정을 검증하세요."
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "Plugin switch"
 msgstr ""
 
@@ -1239,8 +1248,8 @@ msgstr "최적화된 결과를 얻으려면 ENS 도메인 또는 월렛 주소�
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
 msgstr "최적화된 결과를 얻으려면 NFT 컬렉션 이름 또는 해당 심벌을 사용하여 검색하세요."
 
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 #: src/UI/components/SelectTokenChip/index.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Select"
 msgstr "토큰 선택"
 
@@ -1272,10 +1281,10 @@ msgstr "NFT 컨트렉트 소유자를 선택하세요."
 msgid "Select Collection"
 msgstr ""
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx
-#: src/UI/components/AssetsManagement/CollectionList.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
 msgstr "발송"
 
@@ -1489,9 +1498,9 @@ msgstr ""
 
 #. placeholder {0}: currentVerifiedBy.join(', ')
 #. placeholder {0}: verifiedBy.join(', ')
-#: src/UI/components/AssetsManagement/CollectionHeader.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AssetsManagement/CollectibleItem.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Verified by {0}"
 msgstr ""
 

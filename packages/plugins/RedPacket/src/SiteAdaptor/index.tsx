@@ -9,9 +9,10 @@ import { EventID, EventType } from '@masknet/web3-telemetry/types'
 import { Typography } from '@mui/material'
 import { memo } from 'react'
 import { base } from '../base.js'
+import { NftRedPacketInPost } from './NftRedPacketInPost.js'
 import { RedPacketInPost } from './RedPacketInPost.js'
 import { RedPacketInjection } from './RedPacketInjection.js'
-import { NftRedPacketInPost } from './NftRedPacketInPost.js'
+import { SolanaRedPacketFrame } from './SolanaRedPacket/SolanaRedPacketFrame.js'
 import { openDialog } from './emitter.js'
 import {
     RedPacketMetadataReader,
@@ -21,7 +22,6 @@ import {
     renderWithSolanaRedPacketMetadata,
     SolanaRedPacketMetadataReader,
 } from './helpers.js'
-import { SolanaRedPacketFrame } from './SolanaRedPacket/SolanaRedPacketFrame.js'
 
 function Render(
     props: React.PropsWithChildren<{
@@ -42,7 +42,8 @@ const site: Plugin.SiteAdaptor.Definition = {
     ...base,
     DecryptedInspector: memo(function RedPacketInspector(props) {
         const meta = props.message.meta
-        if (RedPacketMetadataReader(meta).isOk())
+        const redpacket = RedPacketMetadataReader(meta)
+        if (redpacket.isOk()) {
             return (
                 <Render name="Lucky Drop">
                     {renderWithRedPacketMetadata(meta, (r) => (
@@ -50,6 +51,7 @@ const site: Plugin.SiteAdaptor.Definition = {
                     ))}
                 </Render>
             )
+        }
 
         if (RedPacketNftMetadataReader(meta).isOk())
             return (
@@ -126,20 +128,12 @@ const site: Plugin.SiteAdaptor.Definition = {
         (() => {
             const icon = <PluginIcon size={36} />
             const name = <Trans>Lucky Drop</Trans>
-            const recommendFeature = {
-                description: (
-                    <Trans>Send a surprise crypto giveaway. Tokens and NFTs on multiple chains are supported.</Trans>
-                ),
-                backgroundGradient: 'linear-gradient(180.54deg, #FF9A9E 0.71%, #FECFEF 98.79%, #FECFEF 99.78%)',
-                isFirst: true,
-            }
             return {
                 ApplicationEntryID: base.ID,
                 RenderEntryComponent(EntryComponentProps) {
                     return (
                         <ApplicationEntry
                             title={name}
-                            recommendFeature={recommendFeature}
                             {...EntryComponentProps}
                             icon={icon}
                             onClick={() => {
@@ -158,7 +152,6 @@ const site: Plugin.SiteAdaptor.Definition = {
                 name,
                 tutorialLink: 'https://mask.notion.site/Send-a-Lucky-Drop-a4c7d33e87d54f1e9f537838308e3a6b',
                 category: 'dapp',
-                recommendFeature,
             }
         })(),
     ],

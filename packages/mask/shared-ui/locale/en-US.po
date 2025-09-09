@@ -20,6 +20,11 @@ msgstr ""
 msgid "{0, plural, one {# Hour} other {# Hours}}"
 msgstr ""
 
+#. placeholder {0}: decryptProgress || ''
+#: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
+msgid "{0, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
+msgstr ""
+
 #. placeholder {0}: formatTokenBalance(tokenBalance, token?.decimals)
 #: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "{0} available"
@@ -49,8 +54,8 @@ msgid "{count, plural, one {You have recovered **# Wallet 🚀**} other {You hav
 msgstr ""
 
 #: content-script/components/InjectedComponents/DecryptedPost/DecryptPostAwaiting.tsx
-msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
-msgstr ""
+#~ msgid "{decryptProgress, select, finding_post_key {Mask is finding the key to decrypt this message. If this last for a long time, this post might not be shared to you.} finding_person_public_key {Mask is looking for the public key of the author...} other {Mask is decrypting...}}"
+#~ msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
 msgid "{shareWithNum, plural, one {1 friend} other {# friends}}"
@@ -60,9 +65,14 @@ msgstr ""
 msgid "{walletLength, plural, one {# Wallet} other {# Wallets}}"
 msgstr ""
 
+#. placeholder {0}: websiteCount || 0
 #: popups/pages/Settings/index.tsx
-msgid "<0>{websiteCount}</0> {websiteCount, plural, one {Website} other {Websites}}"
+msgid "<0>{websiteCount}</0> {0, plural, one {Website} other {Websites}}"
 msgstr ""
+
+#: popups/pages/Settings/index.tsx
+#~ msgid "<0>{websiteCount}</0> {websiteCount, plural, one {Website} other {Websites}}"
+#~ msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
 msgid "<0>@{currentUserId}</0> connected already."
@@ -142,9 +152,9 @@ msgstr ""
 msgid "Activity Log"
 msgstr ""
 
-#: popups/pages/Wallet/CreateWallet/Derive.tsx
-#: popups/pages/Friends/ContactCard/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
+#: popups/pages/Friends/ContactCard/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
 msgid "Add"
 msgstr ""
 
@@ -156,8 +166,8 @@ msgstr ""
 msgid "Add Assets"
 msgstr ""
 
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Add Contact"
 msgstr ""
 
@@ -165,8 +175,8 @@ msgstr ""
 msgid "Add google Drive"
 msgstr ""
 
-#: popups/pages/Wallet/NetworkManagement/index.tsx
 #: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Add Network"
 msgstr ""
 
@@ -183,14 +193,14 @@ msgid "Add the file to Chrome's database"
 msgstr ""
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-#: popups/pages/Wallet/SwitchWallet/index.tsx
-#: popups/pages/Wallet/CreateWallet/index.tsx
 #: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Add Wallet"
 msgstr ""
 
-#: popups/pages/Wallet/components/AssetsList/index.tsx
 #: popups/components/TokenPicker/TokenItem.tsx
+#: popups/pages/Wallet/components/AssetsList/index.tsx
 msgid "Added by user"
 msgstr ""
 
@@ -218,8 +228,8 @@ msgstr ""
 msgid "After logging out, your associated social accounts will no longer decrypt old encrypted messages. If you need to use your account again, you can recover your account with your identity, private key, local or cloud backup."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "Agree"
 msgstr ""
 
@@ -240,8 +250,8 @@ msgstr ""
 msgid "Allow us to collect your usage information to help us improve Mask."
 msgstr ""
 
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Amount"
 msgstr ""
 
@@ -249,14 +259,14 @@ msgstr ""
 msgid "an NFT"
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Appearance"
 msgstr ""
 
 #: content-script/components/InjectedComponents/DisabledPluginSuggestion.tsx
-#: popups/pages/RequestPermission/RequestPermission.tsx
 #: popups/modals/UpdatePermissionModal/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
 msgid "Approve"
 msgstr ""
 
@@ -294,8 +304,8 @@ msgid "Associated Accounts"
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "At least 6 characters"
 msgstr ""
 
@@ -316,10 +326,10 @@ msgid "Avatar set successfully"
 msgstr ""
 
 #: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
-#: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: popups/pages/Personas/AccountDetail/UI.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Back"
 msgstr ""
 
@@ -332,10 +342,10 @@ msgstr ""
 msgid "Back Up Your Data Your Way"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: popups/pages/Personas/Logout/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Backup"
 msgstr ""
 
@@ -362,31 +372,31 @@ msgstr ""
 msgid "Backup on {0}"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Backup password"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Local.tsx
-#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: popups/pages/Settings/index.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Backup Password"
 msgstr ""
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password must be 8-20 characters, including uppercase, lowercase, special characters and numbers."
 msgstr ""
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Backup password set successfully"
 msgstr ""
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Backup Persona"
 msgstr ""
 
@@ -444,8 +454,8 @@ msgstr ""
 msgid "Browser File"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 msgid "By continuing to the app, you agree to these <0>Service Agreement</0> and <1>Privacy Policy</1>."
 msgstr ""
 
@@ -466,29 +476,29 @@ msgid "Can't find a valid user address data source."
 msgstr ""
 
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
-#: dashboard/pages/SetupPersona/Welcome/index.tsx
-#: dashboard/pages/SetupPersona/Permissions/index.tsx
-#: dashboard/modals/ConfirmModal/index.tsx
-#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx
-#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
-#: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/pages/Wallet/SelectWallet/index.tsx
-#: popups/pages/Wallet/ResetWallet/index.tsx
-#: popups/pages/Wallet/Interaction/interaction.tsx
-#: popups/pages/Wallet/EditNetwork/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/RequestPermission/RequestPermission.tsx
-#: popups/pages/Personas/PersonaSignRequest/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/ConnectWallet/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
-#: popups/modals/DeleteContactModal/index.tsx
+#: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
+#: dashboard/pages/SetupPersona/Permissions/index.tsx
+#: dashboard/pages/SetupPersona/Welcome/index.tsx
 #: popups/modals/AddContactModal/index.tsx
+#: popups/modals/DeleteContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/RequestPermission/RequestPermission.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Cancel"
 msgstr ""
 
@@ -496,8 +506,8 @@ msgstr ""
 msgid "Cannot switch to a unknown network."
 msgstr ""
 
-#: popups/pages/Wallet/EditNetwork/index.tsx
 #: popups/components/SignRequestInfo/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
 msgid "Chain ID"
 msgstr ""
 
@@ -508,8 +518,8 @@ msgstr ""
 msgid "Chain ID: {0}"
 msgstr ""
 
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
 msgid "Change"
 msgstr ""
 
@@ -517,8 +527,8 @@ msgstr ""
 msgid "Change another account and try again."
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Change Backup Password"
 msgstr ""
 
@@ -526,8 +536,8 @@ msgstr ""
 msgid "Change Network"
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
 #: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/WalletSettings/ChangeOwner.tsx
 msgid "Change Owner"
 msgstr ""
 
@@ -568,9 +578,9 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
-#: dashboard/pages/SetupPersona/Backup/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Cloud Backup"
 msgstr ""
@@ -583,35 +593,35 @@ msgstr ""
 msgid "Coming soon"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Completed"
 msgstr ""
 
-#: dashboard/modals/ConfirmModal/index.tsx
 #: dashboard/components/Restore/ConfirmSynchronizePasswordDialog.tsx
-#: popups/pages/Wallet/components/DisconnectModal/index.tsx
-#: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
-#: popups/pages/Wallet/SelectWallet/index.tsx
-#: popups/pages/Wallet/ResetWallet/index.tsx
-#: popups/pages/Wallet/Interaction/interaction.tsx
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/pages/Wallet/EditNetwork/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
-#: popups/modals/WalletRenameModal/index.tsx
-#: popups/modals/WalletAutoLockSettingModal/index.tsx
-#: popups/modals/ShowPrivateKeyModal/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
-#: popups/modals/PersonaRenameModal/index.tsx
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
-#: popups/modals/EditContactModal/index.tsx
-#: popups/modals/ConfirmModal/index.tsx
-#: popups/modals/ChangePaymentPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/AddContactModal/index.tsx
+#: dashboard/modals/ConfirmModal/index.tsx
 #: popups/components/NFTAvatarPicker/index.tsx
+#: popups/modals/AddContactModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/modals/ConfirmModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/modals/PersonaRenameModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletAutoLockSettingModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Wallet/components/DisconnectModal/index.tsx
+#: popups/pages/Wallet/EditNetwork/index.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
+#: popups/pages/Wallet/Interaction/interaction.tsx
+#: popups/pages/Wallet/ResetWallet/index.tsx
+#: popups/pages/Wallet/SelectWallet/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
+#: popups/pages/Wallet/Transfer/NonFungibleTokenSection.tsx
 msgid "Confirm"
 msgstr ""
 
@@ -619,8 +629,8 @@ msgstr ""
 msgid "Confirm Bridge"
 msgstr ""
 
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Confirm Password"
 msgstr ""
 
@@ -646,9 +656,9 @@ msgid "Congratulations"
 msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: popups/modals/SelectProviderModal/index.tsx
-#: popups/components/SocialAccounts/index.tsx
 #: popups/components/ConnectedWallet/index.tsx
+#: popups/components/SocialAccounts/index.tsx
+#: popups/modals/SelectProviderModal/index.tsx
 msgid "Connect"
 msgstr ""
 
@@ -673,10 +683,10 @@ msgstr ""
 msgid "Connect Wallet"
 msgstr ""
 
-#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
-#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
-#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
 #: popups/pages/Wallet/Interaction/AddChainRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/PermissionRequest.tsx
+#: popups/pages/Wallet/Interaction/SwitchChainRequest.tsx
 msgid "Connect with Mask Wallet"
 msgstr ""
 
@@ -698,8 +708,8 @@ msgstr ""
 msgid "Connected {0} with {walletName}."
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 #: popups/pages/Wallet/ConnectedSites/index.tsx
+#: popups/pages/Wallet/WalletSettings/ConnectedOrigins.tsx
 msgid "Connected sites"
 msgstr ""
 
@@ -732,31 +742,30 @@ msgid "Contact edited."
 msgstr ""
 
 #: dashboard/components/BackupPreview/index.tsx
-#: popups/pages/Wallet/WalletSettings/Contacts.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/pages/Friends/Home/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/WalletSettings/Contacts.tsx
 msgid "Contacts"
 msgstr ""
 
-#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
-#: dashboard/pages/SetupPersona/SignUp/index.tsx
-#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
-#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
-#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
-#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromMnemonic.tsx
+#: dashboard/components/Restore/RestoreFromPrivateKey.tsx
+#: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
+#: dashboard/pages/SetupPersona/Recovery/Phrase.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Continue"
 msgstr ""
 
-#: popups/components/UnlockERC721Token/index.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Contract"
 msgstr ""
 
@@ -764,8 +773,8 @@ msgstr ""
 msgid "Contract Interaction"
 msgstr ""
 
-#: popups/pages/Personas/ExportPrivateKey/index.tsx
 #: popups/components/PrivateKeyDisplay/index.tsx
+#: popups/pages/Personas/ExportPrivateKey/index.tsx
 msgid "Copied"
 msgstr ""
 
@@ -790,8 +799,8 @@ msgid "Could not fetch chain ID. Is your RPC URL correct?"
 msgstr ""
 
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
-#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
 msgid "Create"
 msgstr ""
 
@@ -838,8 +847,8 @@ msgstr ""
 msgid "Creation Completed"
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 #: popups/modals/ChooseCurrencyModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/ChangeCurrency.tsx
 msgid "Currency"
 msgstr ""
 
@@ -864,13 +873,13 @@ msgstr ""
 msgid "Current wallet (<0>{currentWallet}</0>) is the management account of SmartPay wallet (<1>{other_wallets}</1>).<2/>Deleting the current wallet will result in the deletion of the SmartPay wallet simultaneously."
 msgstr ""
 
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "Custom"
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Dark"
 msgstr ""
 
@@ -912,8 +921,8 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: popups/pages/Wallet/ContactList/index.tsx
 #: popups/modals/DeleteContactModal/index.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
 msgid "Delete Contact"
 msgstr ""
 
@@ -990,19 +999,19 @@ msgstr ""
 msgid "Don't see your NFT?"
 msgstr ""
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: content-script/components/InjectedComponents/SetupGuide/AccountConnectStatus.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
 msgid "Done"
 msgstr ""
 
 #: content-script/components/InjectedComponents/AutoPasteFailedDialog.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Download"
 msgstr ""
 
@@ -1034,18 +1043,16 @@ msgstr ""
 msgid "Edit Contact"
 msgstr ""
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "eg: X accounts, persona public keys, wallet addresses or ENS"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Email verification code"
 msgstr ""
 
@@ -1079,8 +1086,8 @@ msgstr ""
 #~ msgid "Encrypting your "
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Encrypting your **data**"
 msgstr ""
 
@@ -1092,8 +1099,8 @@ msgstr ""
 msgid "Ens or Address(0x)"
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr ""
 
@@ -1143,8 +1150,8 @@ msgstr ""
 msgid "Exchange"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Experience in X"
 msgstr ""
 
@@ -1152,8 +1159,8 @@ msgstr ""
 msgid "Explore multi-chain dApps."
 msgstr ""
 
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 #: popups/modals/VerifyBackupPasswordModal/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Export"
 msgstr ""
 
@@ -1250,10 +1257,10 @@ msgstr ""
 msgid "Follow @realMaskNetwork to explore Web3."
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
-#: popups/pages/Settings/index.tsx
-#: popups/modals/SelectLanguageModal/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/modals/SelectLanguageModal/index.tsx
+#: popups/pages/Settings/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Follow System"
 msgstr ""
 
@@ -1274,12 +1281,12 @@ msgstr ""
 msgid "Function: {0}"
 msgstr ""
 
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
-#: popups/components/UnlockERC721Token/index.tsx
-#: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/TransactionPreview/index.tsx
+#: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
+#: popups/modals/GasSettingModal/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Gas Fee"
 msgstr ""
 
@@ -1292,9 +1299,9 @@ msgstr ""
 msgid "Gas fees are the fees for paying ethereum block builders. Block builders prefer to pack transactions with higher gas fees. Transactions with low gas fees might fail, and the paid gas fees won't be returned."
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr ""
 
@@ -1303,8 +1310,8 @@ msgid "Gas Limit (Units)"
 msgstr ""
 
 #. placeholder {0}: String(minGasLimit)
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr ""
 
@@ -1316,8 +1323,8 @@ msgstr ""
 msgid "Gas limit must be smaller than {maxGas}."
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr ""
 
@@ -1359,8 +1366,8 @@ msgstr ""
 #~ msgid "Generating your "
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 msgid "Generating your **accounts**"
 msgstr ""
 
@@ -1370,15 +1377,15 @@ msgstr ""
 
 #. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
-#: popups/components/UnlockERC721Token/index.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
-#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/index.tsx
 msgid "Google Drive"
 msgstr ""
 
@@ -1431,10 +1438,10 @@ msgstr ""
 msgid "Hiding Scam Transactions"
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "High"
 msgstr ""
 
@@ -1496,8 +1503,8 @@ msgstr ""
 msgid "Incorrect Backup Password"
 msgstr ""
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Incorrect backup password."
 msgstr ""
 
@@ -1518,20 +1525,20 @@ msgstr ""
 msgid "Incorrect Mnemonic Words."
 msgstr ""
 
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 #: popups/pages/Wallet/Unlock/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 msgid "Incorrect password"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Local.tsx
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/hooks/useBackupFormState.ts
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
-#: dashboard/hooks/useBackupFormState.ts
+#: dashboard/pages/SetupPersona/Backup/Local.tsx
 msgid "Incorrect Password"
 msgstr ""
 
@@ -1539,13 +1546,13 @@ msgstr ""
 msgid "Incorrect payment password."
 msgstr ""
 
-#: popups/modals/WalletRemoveModal/index.tsx
 #: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
 msgid "Incorrect Payment Password."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Incorrect Private Key"
 msgstr ""
 
@@ -1553,8 +1560,8 @@ msgstr ""
 msgid "Incorrect recovery phrase."
 msgstr ""
 
-#: popups/modals/AddContactModal/index.tsx
 #: popups/hooks/useContactsContext.ts
+#: popups/modals/AddContactModal/index.tsx
 msgid "Incorrect wallet address."
 msgstr ""
 
@@ -1562,13 +1569,13 @@ msgstr ""
 msgid "Incorrect words selected. Please try again!"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 #: dashboard/components/Restore/RestoreFromPrivateKey.tsx
+#: dashboard/pages/SetupPersona/Recovery/PrivateKey.tsx
 msgid "Input your Private Key"
 msgstr ""
 
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
 msgid "Instant"
 msgstr ""
 
@@ -1582,8 +1589,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-msgid "Invalid email address format."
-msgstr ""
+#~ msgid "Invalid email address format."
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid email address."
@@ -1594,14 +1601,13 @@ msgid "Invalid number"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-msgid "Invalid phone number, please check and try again."
-msgstr ""
+#~ msgid "Invalid phone number, please check and try again."
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid verification code."
 msgstr ""
@@ -1636,10 +1642,10 @@ msgstr ""
 msgid "Keystore password"
 msgstr ""
 
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/ChangeBackupPasswordModal/index.tsx
 #: popups/modals/SetBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
-#: popups/modals/ChangeBackupPasswordModal/index.tsx
 msgid "Lack of number, letter or special character."
 msgstr ""
 
@@ -1647,8 +1653,8 @@ msgstr ""
 msgid "Language"
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SelectAppearanceModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Light"
 msgstr ""
 
@@ -1690,9 +1696,9 @@ msgstr ""
 msgid "Lock Wallet"
 msgstr ""
 
-#: popups/pages/Personas/Logout/index.tsx
-#: popups/pages/Personas/Logout/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
+#: popups/pages/Personas/Logout/index.tsx
 msgid "Log out"
 msgstr ""
 
@@ -1700,9 +1706,9 @@ msgstr ""
 #~ msgid "Login to Mask Cloud"
 #~ msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/GoogleDrive.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Logout"
 msgstr ""
 
@@ -1714,13 +1720,13 @@ msgstr ""
 msgid "Logout successfully"
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 #: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr ""
 
-#: popups/pages/Wallet/NetworkManagement/index.tsx
 #: popups/modals/ChooseNetworkModal/index.tsx
+#: popups/pages/Wallet/NetworkManagement/index.tsx
 msgid "Manage Network"
 msgstr ""
 
@@ -1732,8 +1738,8 @@ msgstr ""
 msgid "Mask needs the following permissions"
 msgstr ""
 
-#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 #: content-script/components/InjectedComponents/PostDialogHint.tsx
+#: content-script/components/InjectedComponents/ToolboxUnstyled.tsx
 msgid "Mask Network"
 msgstr ""
 
@@ -1749,13 +1755,13 @@ msgstr ""
 msgid "masknetwork"
 msgstr ""
 
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Max"
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max Fee"
 msgstr ""
 
@@ -1780,8 +1786,8 @@ msgstr ""
 msgid "Max fee should be greater than base fee of {0} Gwei."
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 #: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
 msgid "Max Priority Fee"
 msgstr ""
 
@@ -1805,10 +1811,10 @@ msgstr ""
 msgid "Max priority fee must be greater than 0 GWEI"
 msgstr ""
 
-#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
-#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
-#: popups/hooks/useGasOptionsMenu.tsx
 #: popups/components/GasSettingMenu/index.tsx
+#: popups/hooks/useGasOptionsMenu.tsx
+#: popups/pages/Wallet/GasSetting/GasSetting1559.tsx
+#: popups/pages/Wallet/GasSetting/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr ""
 
@@ -1816,13 +1822,13 @@ msgstr ""
 msgid "Merge Completed"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "Merge data to local database"
 msgstr ""
 
-#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
+#: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Merge to Browser"
 msgstr ""
 
@@ -1848,12 +1854,12 @@ msgstr ""
 #~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-msgid "Mobile number"
-msgstr ""
+#~ msgid "Mobile number"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-msgid "Mobile verification code"
-msgstr ""
+#~ msgid "Mobile verification code"
+#~ msgstr ""
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
@@ -1871,9 +1877,9 @@ msgstr ""
 msgid "N/A"
 msgstr ""
 
-#: popups/modals/PersonaSettingModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
 #: popups/modals/AddContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/PersonaSettingModal/index.tsx
 msgid "Name"
 msgstr ""
 
@@ -1931,8 +1937,8 @@ msgstr ""
 
 #: content-script/components/GuideStep/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
-#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 #: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/Transfer/FungibleTokenSection.tsx
 msgid "Next"
 msgstr ""
 
@@ -1940,10 +1946,10 @@ msgstr ""
 msgid "Next.ID"
 msgstr ""
 
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
+#: popups/pages/Wallet/AddToken/index.tsx
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
-#: popups/pages/Wallet/AddToken/index.tsx
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "NFTs"
 msgstr ""
 
@@ -1964,8 +1970,8 @@ msgstr ""
 msgid "No back up"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 #: dashboard/components/GoogleDriveFileTable.tsx
+#: dashboard/pages/SetupPersona/Backup/Cloud/Preview.tsx
 msgid "No backups found"
 msgstr ""
 
@@ -1977,8 +1983,8 @@ msgstr ""
 msgid "No Data"
 msgstr ""
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "No friends are stored locally, please try search one."
 msgstr ""
 
@@ -2006,9 +2012,9 @@ msgstr ""
 msgid "No websites connected to this wallet"
 msgstr ""
 
-#: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/modals/GasSettingModal/GasSettingDialog.tsx
 #: popups/components/SignRequestInfo/index.tsx
+#: popups/modals/GasSettingModal/GasSettingDialog.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "Nonce"
 msgstr ""
 
@@ -2089,9 +2095,9 @@ msgstr ""
 #~ msgid "Overwrite current backup"
 #~ msgstr ""
 
-#: popups/modals/VerifyBackupPasswordModal/index.tsx
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/modals/VerifyBackupPasswordModal/index.tsx
 msgid "Password"
 msgstr ""
 
@@ -2099,11 +2105,11 @@ msgstr ""
 msgid "Paste manually"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: dashboard/modals/BackupPreviewModal/BackupPreviewDialog.tsx
-#: popups/pages/Wallet/SetPaymentPassword/index.tsx
-#: popups/modals/WalletRemoveModal/index.tsx
+#: dashboard/pages/SetupPersona/Backup/Local.tsx
 #: popups/modals/ShowPrivateKeyModal/index.tsx
+#: popups/modals/WalletRemoveModal/index.tsx
+#: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Payment Password"
 msgstr ""
 
@@ -2113,9 +2119,9 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateWalletForm/index.tsx
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Payment password must be 6 to 20 characters."
 msgstr ""
 
@@ -2155,8 +2161,8 @@ msgstr ""
 msgid "Persona created."
 msgstr ""
 
-#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
+#: dashboard/pages/SignUp/steps/PersonaNameUI.tsx
 msgid "Persona Name"
 msgstr ""
 
@@ -2181,12 +2187,12 @@ msgid "Personas"
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-msgid "Phone verification code"
-msgstr ""
+#~ msgid "Phone verification code"
+#~ msgstr ""
 
-#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
-#: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: dashboard/pages/SetupPersona/PermissionOnboarding/index.tsx
 msgid "Pin Mask Network to the toolbar for easier access:"
 msgstr ""
 
@@ -2194,8 +2200,8 @@ msgstr ""
 msgid "Pinned successfully."
 msgstr ""
 
-#: content-script/site-adaptors/facebook.com/injection/Composition.tsx
 #: content-script/components/InjectedComponents/SetupGuide/index.tsx
+#: content-script/site-adaptors/facebook.com/injection/Composition.tsx
 msgid "Please click the \"Post\" button to open the compose dialog."
 msgstr ""
 
@@ -2309,16 +2315,16 @@ msgstr ""
 msgid "Private"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: dashboard/pages/CreateMaskWallet/Recovery/index.tsx
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
-#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: dashboard/pages/SetupPersona/Recovery/index.tsx
 #: popups/pages/Personas/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
+#: popups/pages/Wallet/ExportPrivateKey/index.tsx
 msgid "Private Key"
 msgstr ""
 
-#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 #: popups/modals/PersonaSettingModal/index.tsx
+#: popups/pages/Personas/PersonaAvatarSetting/index.tsx
 msgid "Profile Photo"
 msgstr ""
 
@@ -2336,8 +2342,8 @@ msgstr ""
 msgid "Quote Route"
 msgstr ""
 
-#: popups/modals/SetBackupPasswordModal/index.tsx
 #: popups/modals/ChangeBackupPasswordModal/index.tsx
+#: popups/modals/SetBackupPasswordModal/index.tsx
 msgid "Re-enter"
 msgstr ""
 
@@ -2355,8 +2361,8 @@ msgstr ""
 msgid "Receive"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
+#: dashboard/pages/SetupPersona/Recovery/Cloud/GoogleDrive.tsx
 msgid "Recover"
 msgstr ""
 
@@ -2368,8 +2374,8 @@ msgstr ""
 msgid "Recover your wallet"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/SignUp/index.tsx
 #: dashboard/pages/SetupPersona/Mnemonic/index.tsx
+#: dashboard/pages/SetupPersona/SignUp/index.tsx
 #: popups/modals/SwitchPersonaModal/index.tsx
 msgid "Recovery"
 msgstr ""
@@ -2378,8 +2384,8 @@ msgstr ""
 msgid "Recovery Phrase"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Refresh"
 msgstr ""
 
@@ -2391,8 +2397,8 @@ msgstr ""
 msgid "Reload"
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/index.tsx
 #: popups/modals/WalletRemoveModal/index.tsx
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Remove"
 msgstr ""
 
@@ -2404,10 +2410,10 @@ msgstr ""
 msgid "Remove Wallet?"
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/Rename.tsx
-#: popups/pages/Wallet/WalletSettings/Rename.tsx
-#: popups/pages/Wallet/CreateWallet/Derive.tsx
 #: popups/modals/PersonaRenameModal/index.tsx
+#: popups/pages/Wallet/CreateWallet/Derive.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
+#: popups/pages/Wallet/WalletSettings/Rename.tsx
 msgid "Rename"
 msgstr ""
 
@@ -2432,8 +2438,6 @@ msgid "Reselect"
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 msgid "Resend"
 msgstr ""
 
@@ -2445,8 +2449,8 @@ msgstr ""
 msgid "Resource"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/pages/SetupPersona/Recovery/Cloud/ConfirmBackupInfo.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Restore"
 msgstr ""
 
@@ -2522,8 +2526,8 @@ msgstr ""
 msgid "Select Address"
 msgstr ""
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 #: content-script/components/shared/SelectProfileUI/SelectProfileUI.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Select All"
 msgstr ""
 
@@ -2552,14 +2556,12 @@ msgid "Select Wallet"
 msgstr ""
 
 #: content-script/components/InjectedComponents/SetupGuide/VerifyNextID.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
-#: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
-#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
-#: popups/pages/Wallet/components/ActionGroup/index.tsx
-#: popups/pages/Wallet/Transfer/index.tsx
-#: popups/pages/Wallet/ContactList/index.tsx
-#: popups/pages/Wallet/CollectibleDetail/index.tsx
 #: popups/components/TransactionPreview/index.tsx
+#: popups/pages/Wallet/CollectibleDetail/index.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
+#: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
+#: popups/pages/Wallet/ContactList/index.tsx
+#: popups/pages/Wallet/Transfer/index.tsx
 msgid "Send"
 msgstr ""
 
@@ -2606,9 +2608,9 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
-#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
 #: content-script/components/CompositionDialog/EncryptionTargetSelector.tsx
+#: content-script/components/InjectedComponents/SelectPeopleDialog.tsx
+#: content-script/components/shared/SelectRecipients/SelectRecipientsDialog.tsx
 msgid "Share with"
 msgstr ""
 
@@ -2620,9 +2622,9 @@ msgstr ""
 msgid "Show tokens with value less than $1"
 msgstr ""
 
-#: popups/pages/Wallet/Interaction/WalletSignRequest.tsx
-#: popups/pages/Personas/PersonaSignRequest/index.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Personas/PersonaSignRequest/index.tsx
+#: popups/pages/Wallet/Interaction/WalletSignRequest.tsx
 msgid "Sign"
 msgstr ""
 
@@ -2671,8 +2673,8 @@ msgstr ""
 msgid "Slippage"
 msgstr ""
 
-#: popups/pages/Personas/Home/UI.tsx
 #: popups/pages/Personas/AccountDetail/index.tsx
+#: popups/pages/Personas/Home/UI.tsx
 msgid "Social Account"
 msgstr ""
 
@@ -2680,14 +2682,14 @@ msgstr ""
 msgid "Sorry, signature failed! Please try signing again."
 msgstr ""
 
+#: popups/modals/GasSettingModal/index.tsx
 #: popups/pages/Wallet/components/ActivityList/ActivityItem.tsx
 #: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/modals/GasSettingModal/index.tsx
 msgid "Speed Up"
 msgstr ""
 
-#: popups/components/UnlockERC721Token/index.tsx
 #: popups/components/UnlockERC20Token/index.tsx
+#: popups/components/UnlockERC721Token/index.tsx
 msgid "Spend limit requested by"
 msgstr ""
 
@@ -2719,8 +2721,8 @@ msgstr ""
 msgid "Step 1/3"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/AddDeriveWallet/index.tsx
+#: dashboard/pages/SetupPersona/Mnemonic/index.tsx
 msgid "Step 2/2"
 msgstr ""
 
@@ -2745,13 +2747,13 @@ msgstr ""
 msgid "Support mnemonic phrase, private key or keystore file."
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/modals/SupportedSitesModal/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr ""
 
-#: popups/pages/Wallet/components/ActionGroup/index.tsx
 #: popups/pages/Trader/Header.tsx
+#: popups/pages/Wallet/components/ActionGroup/index.tsx
 msgid "Swap"
 msgstr ""
 
@@ -2794,8 +2796,8 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-msgid "The code is incorrect."
-msgstr ""
+#~ msgid "The code is incorrect."
+#~ msgstr ""
 
 #: dashboard/utils/api.ts
 msgid "The download link is expired"
@@ -2819,14 +2821,14 @@ msgstr ""
 msgid "The mnemonic words has been copied, please keep it in a safe place."
 msgstr ""
 
+#. placeholder {0}: match.nativeCurrency.symbol
 #: popups/pages/Wallet/EditNetwork/useWarnings.ts
-#~ msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
-#~ msgstr ""
-
-#. placeholder {1}: match.nativeCurrency.symbol
-#: popups/pages/Wallet/EditNetwork/useWarnings.ts
-msgid "The network with chain ID {formChainId} may use a different currency symbol ({1}) than the one you have entered. Please check."
+msgid "The network with chain ID {formChainId} may use a different currency symbol ({0}) than the one you have entered. Please check."
 msgstr ""
+
+#: popups/pages/Wallet/EditNetwork/useWarnings.ts
+#~ msgid "The network with chain ID {formChainId} may use a different currency symbol ({1}) than the one you have entered. Please check."
+#~ msgstr ""
 
 #: popups/modals/ChangePaymentPasswordModal/index.tsx
 msgid "The new passwords don't match"
@@ -2850,8 +2852,8 @@ msgid "The persona name already exists."
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
-msgid "The phone number is incorrect."
-msgstr ""
+#~ msgid "The phone number is incorrect."
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
@@ -2875,9 +2877,9 @@ msgstr ""
 msgid "The wallet address already exists."
 msgstr ""
 
-#: popups/modals/WalletRenameModal/index.tsx
-#: popups/modals/EditContactModal/index.tsx
 #: popups/modals/AddContactModal/index.tsx
+#: popups/modals/EditContactModal/index.tsx
+#: popups/modals/WalletRenameModal/index.tsx
 msgid "The wallet name already exists."
 msgstr ""
 
@@ -2983,8 +2985,8 @@ msgstr ""
 msgid "This will overwrite the existing cloud backup with the local data, this cannot be undo."
 msgstr ""
 
-#: popups/pages/Wallet/TransactionDetail/index.tsx
 #: popups/components/AddContactInputPanel/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "To"
 msgstr ""
 
@@ -3024,9 +3026,9 @@ msgstr ""
 msgid "Token Value"
 msgstr ""
 
+#: popups/pages/Wallet/AddToken/index.tsx
 #: popups/pages/Wallet/components/WalletAssets/index.tsx
 #: popups/pages/Wallet/Transfer/index.tsx
-#: popups/pages/Wallet/AddToken/index.tsx
 msgid "Tokens"
 msgstr ""
 
@@ -3058,8 +3060,8 @@ msgstr ""
 msgid "Two entered passwords are different."
 msgstr ""
 
-#: popups/pages/Wallet/hooks/usePasswordForm.ts
 #: popups/modals/SetBackupPasswordModal/index.tsx
+#: popups/pages/Wallet/hooks/usePasswordForm.ts
 msgid "Two entered passwords are not the same."
 msgstr ""
 
@@ -3071,8 +3073,8 @@ msgstr ""
 msgid "Unlock"
 msgstr ""
 
-#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 #: dashboard/components/Restore/RestoreWalletFromLocal.tsx
+#: dashboard/pages/SetupPersona/Recovery/Local.tsx
 msgid "Unpacking"
 msgstr ""
 
@@ -3130,13 +3132,13 @@ msgid "Verification code has been sent to your email. Please check your mailbox.
 msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
-msgid "Verification code has been sent to your phone."
-msgstr ""
+#~ msgid "Verification code has been sent to your phone."
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
-msgid "Verification code sent"
-msgstr ""
+#~ msgid "Verification code sent"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
@@ -3147,8 +3149,8 @@ msgstr ""
 msgid "Verify Account"
 msgstr ""
 
-#: popups/pages/Settings/index.tsx
 #: popups/components/SignRequestInfo/index.tsx
+#: popups/pages/Settings/index.tsx
 msgid "Version"
 msgstr ""
 
@@ -3158,10 +3160,10 @@ msgstr ""
 
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
 #: content-script/components/InjectedComponents/ProfileCard/ProfileBar.tsx
-#: popups/pages/Wallet/TransactionDetail/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
-#: popups/pages/Wallet/ChangeOwner/index.tsx
 #: popups/pages/Personas/ConnectWallet/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/ChangeOwner/index.tsx
+#: popups/pages/Wallet/TransactionDetail/index.tsx
 msgid "View on Explorer"
 msgstr ""
 
@@ -3189,8 +3191,8 @@ msgstr ""
 #~ msgid "wallet"
 #~ msgstr ""
 
-#: popups/pages/Wallet/SwitchWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
+#: popups/pages/Wallet/SwitchWallet/index.tsx
 msgid "Wallet Account"
 msgstr ""
 
@@ -3199,8 +3201,8 @@ msgid "Wallet disconnected"
 msgstr ""
 
 #. placeholder {0}: String(index + 1)
-#: popups/pages/Wallet/CreateWallet/index.tsx
 #: popups/modals/WalletGroupModal/index.tsx
+#: popups/pages/Wallet/CreateWallet/index.tsx
 msgid "Wallet Group #{0}"
 msgstr ""
 
@@ -3217,8 +3219,8 @@ msgstr ""
 msgid "Wallet request timed out"
 msgstr ""
 
-#: popups/pages/Wallet/WalletSettings/index.tsx
 #: popups/pages/Wallet/SwitchWallet/index.tsx
+#: popups/pages/Wallet/WalletSettings/index.tsx
 msgid "Wallet Settings"
 msgstr ""
 
@@ -3234,8 +3236,8 @@ msgstr ""
 msgid "Web3 Profile Card"
 msgstr ""
 
-#: popups/pages/Wallet/components/OriginCard/index.tsx
 #: popups/pages/Settings/index.tsx
+#: popups/pages/Wallet/components/OriginCard/index.tsx
 msgid "Website"
 msgstr ""
 

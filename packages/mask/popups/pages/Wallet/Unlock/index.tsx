@@ -92,7 +92,8 @@ const Unlock = memo(function Unlock() {
                         value={password}
                         autoFocus
                         onKeyDown={(event) => {
-                            if (event.key === 'Enter') handleUnlock()
+                            if (!(event.key === 'Enter')) return
+                            handleUnlock()
                         }}
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}

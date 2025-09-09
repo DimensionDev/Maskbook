@@ -8,7 +8,8 @@ export function createMaskSDKChannel(side: 'user' | 'content'): EventBasedChanne
     return {
         on(callback) {
             const f = (e: Event) => {
-                if (e instanceof CustomEvent) callback(e.detail)
+                if (!(e instanceof CustomEvent)) return
+                callback(e.detail)
             }
             globalThis.addEventListener(thisSide, f)
             return () => document.removeEventListener(thisSide, f)

@@ -108,12 +108,11 @@ export const CollectibleItem = memo(function CollectibleItem(props: CollectibleI
                 [classes.selectable]: selectable,
             })}
             onClick={() => {
-                if (selectable) {
-                    onChange?.({
-                        checked: !checked,
-                        value: value!,
-                    })
-                }
+                if (!selectable) return
+                onChange?.({
+                    checked: !checked,
+                    value: value!,
+                })
             }}
             {...rest}
             ref={forkedRef}>

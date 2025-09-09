@@ -79,7 +79,7 @@ export function DecryptPost({ whoAmI, onImageDecrypted }: DecryptPostProps) {
     const [progress, dispatch] = useReducer(progressReducer, [])
 
     useEffect(() => {
-        function setCommentFns(iv: Uint8Array, message: TypedMessage) {
+        function setCommentFns(iv: Uint8Array<ArrayBuffer>, message: TypedMessage) {
             const text = extractTextFromTypedMessage(message).expect('TypedMessage should have one or more text part')
             postInfo.encryptComment.value = async (comment) => Services.Crypto.encryptComment(iv, text, comment)
             postInfo.decryptComment.value = async (encryptedComment) =>
@@ -221,7 +221,7 @@ async function makeProgress(
     authorHint: ProfileIdentifier | null,
     currentProfile: ProfileIdentifier | null,
     payload: EncodedPayload,
-    done: (message: TypedMessage, iv: Uint8Array) => void,
+    done: (message: TypedMessage, iv: Uint8Array<ArrayBuffer>) => void,
     reporter: PostContext['decryptedReport'],
     reportProgress: ReportProgress,
     signal: AbortSignal,
@@ -232,7 +232,7 @@ async function makeProgress(
         currentProfile,
         encryptPayloadNetwork: activatedSiteAdaptorUI!.encryptPayloadNetwork,
     }
-    let iv: Uint8Array | undefined
+    let iv: Uint8Array<ArrayBuffer> | undefined
     for await (const progress of GeneratorServices.decrypt(payload, context)) {
         if (signal.aborted) return
         if (progress.type === DecryptProgressKind.Success) {

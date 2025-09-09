@@ -10,9 +10,10 @@ import { RedPacket, type RedPacketProps } from './RedPacket/index.js'
 
 export function RedPacketInPost({ payload }: Omit<RedPacketProps, 'currentPluginID'>) {
     const { pluginID } = useNetworkContext()
-    const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+    const { chainId: contextChianId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
     const fromUrl = usePostLink()
 
+    const chainId = payload.chainId || payload.token?.chainId || contextChianId
     useEffect(() => {
         if (!fromUrl) return
         if (!payload.txid && payload.contract_version !== 1) return

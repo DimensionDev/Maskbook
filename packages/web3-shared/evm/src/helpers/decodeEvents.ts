@@ -1,5 +1,5 @@
 import type { EventLog, Log } from 'web3-core'
-import * as web3_utils from /* webpackDefer: true */ 'web3-utils'
+import defer * as web3_utils from 'web3-utils'
 import type { AbiItem } from 'web3-utils'
 import { abiCoder } from './abiCoder.js'
 

@@ -71,7 +71,13 @@ function AccountTooltips({ platform, type, children }: AccountTooltipsProps) {
                     {SocialAddressType.Address === type ?
                         <Trans>
                             Data source is retrieved from{' '}
-                            <Select _twitter="Twitter profile" _facebook="Facebook profile" value={platform} />.
+                            <Select
+                                _twitter="Twitter profile"
+                                _facebook="Facebook profile"
+                                other=""
+                                value={platform || ''}
+                            />
+                            .
                         </Trans>
                     :   <Trans>Data source is retrieved from {type?.replace('_', ' ') ?? ''}.</Trans>}
                 </Typography>

@@ -3,7 +3,7 @@ import type { ChainId, SchemaType } from '@masknet/web3-shared-flow'
 import { FlowHubOptionsAPI } from './HubOptionsAPI.js'
 import { BaseHubNonFungible } from '../../Base/apis/HubNonFungible.js'
 import type { BaseHubOptions } from '../../Base/apis/HubOptions.js'
-import * as AlchemyFlow from /* webpackDefer: true */ '../../../Alchemy/index.js'
+import defer * as AlchemyFlow from '../../../Alchemy/index.js'
 import type { NonFungibleTokenAPI } from '../../../entry-types.js'
 
 export class FlowHubNonFungibleAPI extends BaseHubNonFungible<ChainId, SchemaType> {

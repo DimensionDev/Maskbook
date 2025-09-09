@@ -154,12 +154,12 @@ const avoidMistakeRules = {
     // Problematic language features
     /// API with trap
     radix: 'warn', // parseInt('1', _required_)
+    'unicorn/no-instanceof-builtins': 'warn', // bans `expr instanceof String` etc
     'unicorn/require-array-join-separator': 'warn', // Array.join(_required_)
     // This rule breaks BigNumber class which has different .toFixed() default value.
     // 'unicorn/require-number-to-fixed-digits-argument': 'warn', // Number#toFixed(_required_)
     'react/dom/no-missing-button-type': 'error', // default type is "submit" which refresh the page
     '@typescript-eslint/require-array-sort-compare': 'error', // Array#sort(_required_)
-    '@masknet/type-no-instanceof-wrapper': 'warn', // bans `expr instanceof String` etc
     /// Footgun language features
     'no-compare-neg-zero': 'error', // x === -0 is wrong
     'no-new-wrappers': 'error', // wrapper objects are bad
@@ -421,7 +421,7 @@ const codeStyleRules = {
     // '@masknet/no-single-return': 'warn',
     // '@masknet/jsx-no-template-literal': 'warn',
 
-    // Naming convension
+    // Naming convention
     // 'func-name-matching': 'warn',
     // 'new-cap': 'warn',
     'react/naming-convention/component-name': ['warn', { rule: 'PascalCase' }],

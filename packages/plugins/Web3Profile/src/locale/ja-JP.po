@@ -37,8 +37,8 @@ msgstr ""
 msgid "Can not follow: {0}"
 msgstr ""
 
-#: src/SiteAdaptor/components/ProfilePopup.tsx
 #: src/SiteAdaptor/components/Lens/HandlerDescription.tsx
+#: src/SiteAdaptor/components/ProfilePopup.tsx
 msgid "Change"
 msgstr "変更"
 
@@ -66,9 +66,9 @@ msgstr "現在のウォレットはレンズプロトコルとのやり取りを
 msgid "Firefly"
 msgstr ""
 
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 #: src/SiteAdaptor/components/SocialBadges/LensList.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
-#: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
 msgid "Follow"
 msgstr "フォロー"
 
@@ -81,8 +81,8 @@ msgstr "フォロー"
 msgid "Follow Lens handle"
 msgstr "レンズの指示に従ってください"
 
-#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 #: src/SiteAdaptor/components/Lens/FollowLensDialog.tsx
+#: src/SiteAdaptor/components/SocialBadges/LensList.tsx
 msgid "Following"
 msgstr "フォロー中"
 
@@ -185,7 +185,7 @@ msgstr "表示"
 msgid "View your profile in firefly"
 msgstr "あなたのプロフィールをFireflyで見る"
 
-#: src/SiteAdaptor/index.tsx
 #: src/SiteAdaptor/components/Web3ProfileDialog.tsx
+#: src/SiteAdaptor/index.tsx
 msgid "Web3 Profile"
 msgstr "Web3 プロフィール"

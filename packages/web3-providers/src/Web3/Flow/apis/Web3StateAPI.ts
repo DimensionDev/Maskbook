@@ -7,12 +7,12 @@ import {
     getDefaultChainId,
     getDefaultProviderType,
 } from '@masknet/web3-shared-flow'
-import * as AddressBook from /* webpackDefer: true */ '../state/AddressBook.js'
-import * as Provider from /* webpackDefer: true */ '../state/Provider.js'
-import * as Settings from /* webpackDefer: true */ '../state/Settings.js'
-import * as Transaction from /* webpackDefer: true */ '../state/Transaction.js'
-import * as IdentityService from /* webpackDefer: true */ '../state/IdentityService.js'
-import * as Network from /* webpackDefer: true */ '../state/Network.js'
+import defer * as AddressBook from '../state/AddressBook.js'
+import defer * as Provider from '../state/Provider.js'
+import defer * as Settings from '../state/Settings.js'
+import defer * as Transaction from '../state/Transaction.js'
+import defer * as IdentityService from '../state/IdentityService.js'
+import defer * as Network from '../state/Network.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { TransactionStorage } from '../../Base/state/Transaction.js'
 import { addressStorage, networkStorage, settingsStorage, providerStorage } from '../../Base/storage.js'

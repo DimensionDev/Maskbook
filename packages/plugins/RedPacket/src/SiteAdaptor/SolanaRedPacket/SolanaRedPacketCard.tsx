@@ -7,13 +7,7 @@ import { LoadingStatus, TransactionConfirmModal } from '@masknet/shared'
 import { type NetworkPluginID, Sniffings } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { makeStyles } from '@masknet/theme'
-import {
-    NetworkContextProvider,
-    SOLWeb3ContextProvider,
-    useChainContext,
-    useNetwork,
-    useNetworkContext,
-} from '@masknet/web3-hooks-base'
+import { NetworkContextProvider, SOLWeb3ContextProvider, useChainContext } from '@masknet/web3-hooks-base'
 import { SolanaChainResolver } from '@masknet/web3-providers'
 import { RedPacketStatus, type SolanaRedPacketJSONPayload } from '@masknet/web3-providers/types'
 import { TokenType, formatBalance, minus } from '@masknet/web3-shared-base'
@@ -71,7 +65,6 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
 }: SolanaRedPacketCardProps) {
     const { _ } = useLingui()
     const token = payload.token
-    const { pluginID } = useNetworkContext()
 
     const payloadChainId = token?.chainId ?? SolanaChainResolver.chainId(payload.network ?? '') ?? ChainId.Mainnet
     const { account } = useChainContext<NetworkPluginID.PLUGIN_SOLANA>()
@@ -90,14 +83,10 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
     // #region remote controlled transaction dialog
     const postLink = usePostLink()
 
-    const [{ loading: isClaiming, value: claimTxHash }, claimCallback] = useClaimCallback(payload)
+    const [{ loading: isClaiming }, claimCallback] = useClaimCallback(payload)
     const source = usePostInfoDetails.source()
-    const platform = source?.toLowerCase()
     const postUrl = usePostInfoDetails.url()
     const link = postLink.toString() || postUrl?.toString()
-
-    // TODO payload.chainId is undefined on production mode
-    const network = useNetwork(pluginID, payload.chainId || payload.token?.chainId)
 
     const claimedShareText = useMemo(() => {
         const promote_short = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
@@ -111,7 +100,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                 _(msg`${claimed} Follow @${account} (mask.io) to claim lucky drops.`) +
                     `\n${promote_short}\n#mask_io #LuckyDrop\n${link}`
             :   `${claimed}\n${promote_short}\n${link}`
-    }, [payload, link, claimTxHash, network?.name, platform, _])
+    }, [payload, link, _])
 
     const [{ loading: isClaimingAndChecking }, onClaimOrRefund] = useAsyncFn(async () => {
         let hash: string | undefined
@@ -136,7 +125,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
                 tokenType: TokenType.Fungible,
                 messageTextForNFT: _(msg`1 NFT claimed.`),
                 messageTextForFT: _(
-                    msg`You claimed ${formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })} $${token?.symbol}.`,
+                    msg`You claimed ${formatBalance(claimRecord.amount.toString(), token?.decimals, { significant: 2 })} $${token?.symbol || ''}.`,
                 ),
                 title: _(msg`Lucky Drop`),
                 share: (text) => share?.(text, source ? source : undefined),
@@ -148,7 +137,7 @@ export const SolanaRedPacketCard = memo(function SolanaRedPacketCard({
         if (typeof hash === 'string') {
             refreshRedPacket()
         }
-    }, [canClaim, canRefund, claimCallback, refreshRedPacket, payload.rpid, account])
+    }, [canClaim, claimCallback, payload, account, claimedShareText, token, _, source, refreshRedPacket])
 
     const outdated = availability?.isEmpty || (!canRefund && listOfStatus.includes(RedPacketStatus.expired))
 

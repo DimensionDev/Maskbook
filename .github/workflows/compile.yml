@@ -47,7 +47,7 @@ jobs:
             registry: true
       - run: git config --global url."https://github.com/".insteadOf git@github.com
       - run: pnpm install
-      - run: npx gulp build-ci
+      - run: pnpm exec gulp build-ci
       # See https://github.com/getsentry/action-release/issues/187
       - name: Change git configuration
         shell: bash

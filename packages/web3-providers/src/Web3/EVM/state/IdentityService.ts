@@ -13,13 +13,13 @@ import {
 import { ChainId, isValidAddress, isZeroAddress } from '@masknet/web3-shared-evm'
 import { IdentityServiceState } from '../../Base/state/IdentityService.js'
 import { BaseMaskX } from '../../../entry-types.js'
-import * as ARBID from /* webpackDefer: true */ '../../../ARBID/index.js'
-import * as ENS from /* webpackDefer: true */ '../../../ENS/index.js'
-import * as Firefly from /* webpackDefer: true */ '../../../Firefly/index.js'
-import * as MaskX from /* webpackDefer: true */ '../../../MaskX/index.js'
-import * as NextIDProof from /* webpackDefer: true */ '../../../NextID/proof.js'
-import * as RSS3 from /* webpackDefer: true */ '../../../RSS3/index.js'
-import * as SpaceID from /* webpackDefer: true */ '../../../SpaceID/index.js'
+import defer * as ARBID from '../../../ARBID/index.js'
+import defer * as ENS from '../../../ENS/index.js'
+import defer * as Firefly from '../../../Firefly/index.js'
+import defer * as MaskX from '../../../MaskX/index.js'
+import defer * as NextIDProof from '../../../NextID/proof.js'
+import defer * as RSS3 from '../../../RSS3/index.js'
+import defer * as SpaceID from '../../../SpaceID/index.js'
 
 // cspell:disable-next-line
 const ENS_RE = /[^\s()[\]]{1,256}\.(eth|kred|xyz|luxe)\b/giu

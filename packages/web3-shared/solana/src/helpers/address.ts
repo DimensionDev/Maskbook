@@ -1,7 +1,7 @@
 import { getEnumAsArray } from '@masknet/kit'
 import { NetworkPluginID, createLookupTableResolver } from '@masknet/shared-base'
 import { isSameAddress } from '@masknet/web3-shared-base'
-import * as Web3 from /* webpackDefer: true */ '@solana/web3.js'
+import defer * as Web3 from '@solana/web3.js'
 import bs58 from 'bs58'
 import { memoize } from 'lodash-es'
 import { getTokenConstant } from '../constants/constants.js'
@@ -12,7 +12,7 @@ export function encodePublicKey(key: Web3.PublicKey) {
     return key.toBase58()
 }
 
-export function decodeAddress(initData: string | Buffer | Uint8Array) {
+export function decodeAddress(initData: string | Uint8Array) {
     const data = typeof initData === 'string' ? bs58.decode(initData) : initData
     if (!Web3.PublicKey.isOnCurve(data)) throw new Error(`Failed to create public key from ${bs58.encode(data)}.`)
     return new Web3.PublicKey(data)

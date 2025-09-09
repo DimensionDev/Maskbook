@@ -56,7 +56,8 @@ export function useIterator<T>(
     }, [iterator])
 
     useEffect(() => {
-        if (next) next()
+        if (!next) return
+        next()
     }, [next])
 
     if (loading) {

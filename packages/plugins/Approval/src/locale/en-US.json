@@ -1,14 +1,14 @@
 {
     "messages": {
-        "yb/fjw": ["Approval"],
-        "YjX+AG": ["Approved Amount"],
-        "nFjzvC": ["Approved Amount ", ["0"]],
+        "0/eoR6": ["Revoking"],
+        "6RDwJM": ["Tokens"],
+        "GXsAby": ["Revoke"],
         "QowPFh": ["Collectibles"],
+        "W5OcTk": ["No approved contract records."],
+        "YjX+AG": ["Approved Amount"],
         "kCAzy/": ["Collection Approval"],
         "ks5OGD": ["Contract"],
-        "W5OcTk": ["No approved contract records."],
-        "GXsAby": ["Revoke"],
-        "0/eoR6": ["Revoking"],
-        "6RDwJM": ["Tokens"]
+        "nFjzvC": ["Approved Amount ", ["0"]],
+        "yb/fjw": ["Approval"]
     }
 }

@@ -110,6 +110,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
                                 _receive="received"
                                 _send="sent"
                                 _withdraw="withdrawn"
+                                other=""
                             />{' '}
                             <Label>
                                 {formatAmount(asset.amount)} {asset.symbol || asset.name}
@@ -127,7 +128,7 @@ export const FeedSummary = memo<Props>(function FeedSummary({ transaction, ...re
                 <SummaryTypography {...rest}>
                     <Trans>
                         <AccountLabel address={owner.address} />
-                        <Select value={txType} _deploy="deployed" _execute="executed" />
+                        <Select value={txType} _deploy="deployed" _execute="executed" other="" />
                         <AccountLabel address={otherAddress} />
                     </Trans>
                 </SummaryTypography>

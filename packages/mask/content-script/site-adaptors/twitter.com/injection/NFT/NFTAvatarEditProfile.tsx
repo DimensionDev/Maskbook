@@ -66,10 +66,12 @@ function OpenNFTAvatarEditProfileButtonInTwitter() {
     useEffect(() => {
         const clearTasks = [
             CrossIsolationMessages.events.personaBindFinished.on((ev) => {
-                if (ev.pluginID === PluginID.Avatar) requestSettingAvatar()
+                if (!(ev.pluginID === PluginID.Avatar)) return
+                requestSettingAvatar()
             }),
             CrossIsolationMessages.events.applicationDialogEvent.on((ev) => {
-                if (ev.pluginID === PluginID.Avatar && ev.isVerified) requestSettingAvatar()
+                if (!(ev.pluginID === PluginID.Avatar && ev.isVerified)) return
+                requestSettingAvatar()
             }),
         ]
 

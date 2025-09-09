@@ -57,7 +57,7 @@ async function processConstants(
     }
 
     // Run the prettier tool after processing
-    await awaitChildProcess(shell`npx prettier --write ${folderPath}`)
+    await awaitChildProcess(shell`pnpm exec prettier --write ${folderPath}`)
 }
 
 // Action to compress constants

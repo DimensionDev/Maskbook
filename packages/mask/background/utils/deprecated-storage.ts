@@ -15,7 +15,8 @@ class MutexStorage<T> {
         this.locked = false
     }
     private async continue() {
-        if (!this.locked) this.tasks.shift()?.()
+        if (this.locked) return
+        this.tasks.shift()?.()
     }
     public async getStorage(key: string) {
         return new Promise<T | undefined>((resolve, reject) => {

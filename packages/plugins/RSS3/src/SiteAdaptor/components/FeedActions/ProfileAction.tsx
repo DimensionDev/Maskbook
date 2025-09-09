@@ -53,7 +53,8 @@ export function ProfileAction({ feed, ...rest }: ProfileActionProps) {
                             <Label>{user}</Label> updated a profile on <Label>{platform}</Label>
                         </Trans>
                     }
-                    value={metadata?.action}
+                    value={metadata?.action || ''}
+                    other=""
                 />
             </Typography>
         </div>
