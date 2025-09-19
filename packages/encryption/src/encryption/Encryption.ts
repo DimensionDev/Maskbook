@@ -86,7 +86,22 @@ export async function encodePostKey(
     else if (version === -38)
         return crypto.subtle
             .exportKey('jwk', key)
-            .then(JSON.stringify)
+            .then((x) => {
+                // An implementation MUST NOT depend on the order of keys in a JsonWebKey.
+                // preferred order (used to snapshot our tests):
+                const ord = ['key_ops', 'ext', 'kty', 'k', 'alg']
+                const replica_object: Record<string, unknown> = {}
+                const rest: Record<string, unknown> = {}
+                ord.forEach((k) => {
+                    if (!(k in x)) return
+                    replica_object[k] = (x as Record<string, unknown>)[k]
+                })
+                Object.keys(x).forEach((k) => {
+                    if (ord.includes(k)) return
+                    rest[k] = (x as Record<string, unknown>)[k]
+                })
+                return JSON.stringify({ ...replica_object, ...rest })
+            })
             .then((x) => new TextEncoder().encode(x) as Uint8Array<ArrayBuffer>)
     unreachable(version)
 }
