@@ -17,8 +17,8 @@ const useStyles = makeStyles()((theme) => {
             alignItems: 'center',
             gap: 8,
             marginBottom: 12,
-            boxShadow: '0px 0px 20px 0px rgba(0, 0, 0, 0.05)',
             background: theme.palette.maskColor.bottom,
+            border: `1px solid ${theme.palette.maskColor.line}`,
             borderRadius: 8,
             cursor: 'pointer',
         },
@@ -76,7 +76,32 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
             <Box
                 className={classes.addWalletWrapper}
                 onClick={() => handleChoose(DashboardRoutes.CreateMaskWalletMnemonic)}>
-                <div className={cx(classes.iconWrapper, classes.walletIcon)}>
+                <div
+                    className={cx(classes.iconWrapper)}
+                    style={{
+                        boxShadow: '0 6px 12px 0 rgba(0, 0, 0, 0.20)',
+                        backdropFilter: 'blur(8px)',
+                    }}>
+                    <Icons.TwitterXRound size={30} color={theme.palette.maskColor.white} />
+                </div>
+                <div>
+                    <Typography className={classes.subTitle}>
+                        <Trans>Create a Privy Wallet</Trans>
+                    </Typography>
+                    <Typography className={classes.description}>
+                        <Trans>Create a Privy wallet using an X account</Trans>
+                    </Typography>
+                </div>
+            </Box>
+            <Box
+                className={classes.addWalletWrapper}
+                onClick={() => handleChoose(DashboardRoutes.CreateMaskWalletMnemonic)}>
+                <div
+                    className={cx(classes.iconWrapper, classes.walletIcon)}
+                    style={{
+                        boxShadow: '0 6px 12px 0 rgba(28, 104, 243, 0.20)',
+                        backdropFilter: 'blur(8px)',
+                    }}>
                     <Icons.Wallet size={20} color={theme.palette.maskColor.white} />
                 </div>
                 <div>
@@ -90,7 +115,12 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
             </Box>
 
             <Box className={classes.addWalletWrapper} onClick={() => handleChoose(DashboardRoutes.RecoveryMaskWallet)}>
-                <div className={cx(classes.iconWrapper, classes.mnemonicIcon)}>
+                <div
+                    className={cx(classes.iconWrapper, classes.mnemonicIcon)}
+                    style={{
+                        boxShadow: '0 6px 12px 0 rgba(61, 194, 51, 0.20)',
+                        backdropFilter: 'blur(8px)',
+                    }}>
                     <Icons.Mnemonic size={20} color={theme.palette.maskColor.white} />
                 </div>
                 <div>
