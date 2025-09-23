@@ -1,35 +1,38 @@
+import Services from '#services'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { jsxCompose, MaskMessages, PopupRoutes } from '@masknet/shared-base'
+import { assert, MaskMessages, PopupRoutes } from '@masknet/shared-base'
+import { queryClient } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
-    createHashRouter,
     Navigate,
     Outlet,
     RouterProvider,
+    createHashRouter,
     useNavigate,
-    useSearchParams,
     useRouteError,
+    useSearchParams,
 } from 'react-router-dom'
-import { usePopupTheme } from './hooks/usePopupTheme.js'
-import Services from '#services'
+import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
+import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
-import { PopupContext, PageTitleContext } from './hooks/index.js'
+import { PageTitleContext, PopupContext } from './hooks/index.js'
+import { usePopupTheme } from './hooks/usePopupTheme.js'
 import { Modals } from './modals/index.js'
-import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { queryClient } from '@masknet/shared-base-ui'
-import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
-import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
 import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
-import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
+import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
 import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
+import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
+import { PrivyProvider, type PrivyClientConfig } from '@privy-io/react-auth'
+import { chains } from './configs.js'
+import { PrivySetup } from './components/Privy/Setup.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -108,23 +111,38 @@ export default function Popups() {
         throttle: 10000,
     })
 
-    return jsxCompose(
-        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
-        // eslint-disable-next-line react-compiler/react-compiler
-        <PageUIProvider useTheme={usePopupTheme} />,
-        <PopupSnackbarProvider children={null!} />,
-        <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
-        <PopupContext />,
-        <PageTitleContext value={titleContext} />,
-    )(
-        cloneElement,
-        <>
-            {/* https://github.com/TanStack/query/issues/5417 */}
-            {process.env.NODE_ENV === 'development' ?
-                <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null}
-            <RouterProvider router={router} fallbackElement={pending} future={{ v7_startTransition: true }} />
-        </>,
+    assert(process.env.PRIVY_APP_ID, 'Missing PRIVY_APP_ID')
+
+    return (
+        <PrivyProvider
+            appId={process.env.PRIVY_APP_ID}
+            config={{
+                supportedChains: chains as unknown as PrivyClientConfig['supportedChains'],
+            }}>
+            <PrivySetup />
+            <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
+                {/* eslint-disable-next-line react-compiler/react-compiler */}
+                <PageUIProvider useTheme={usePopupTheme}>
+                    <PopupSnackbarProvider>
+                        <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
+                            <PopupContext>
+                                <PageTitleContext value={titleContext}>
+                                    {/* https://github.com/TanStack/query/issues/5417 */}
+                                    {process.env.NODE_ENV === 'development' ?
+                                        <ReactQueryDevtools buttonPosition="bottom-right" />
+                                    :   null}
+                                    <RouterProvider
+                                        router={router}
+                                        fallbackElement={pending}
+                                        future={{ v7_startTransition: true }}
+                                    />
+                                </PageTitleContext>
+                            </PopupContext>
+                        </EVMWeb3ContextProvider>
+                    </PopupSnackbarProvider>
+                </PageUIProvider>
+            </PersistQueryClientProvider>
+        </PrivyProvider>
     )
 }
 

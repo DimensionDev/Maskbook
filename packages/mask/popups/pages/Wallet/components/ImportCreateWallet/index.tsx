@@ -7,6 +7,7 @@ import { useAsyncFn } from 'react-use'
 import Services from '#services'
 import urlcat from 'urlcat'
 import { Trans } from '@lingui/react/macro'
+import { usePrivy, useWallets } from '@privy-io/react-auth'
 
 const useStyles = makeStyles()((theme) => {
     return {
@@ -71,11 +72,21 @@ export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onCh
         [onChoose],
     )
 
+    const { ready, authenticated } = usePrivy()
+    const wallets = useWallets()
+    console.log({ wallets, ready, authenticated })
+
     return (
         <>
             <Box
                 className={classes.addWalletWrapper}
-                onClick={() => handleChoose(DashboardRoutes.CreateMaskWalletMnemonic)}>
+                onClick={async () => {
+                    const result = await Services.Helper.requestXOAuthToken()
+                    if (result) {
+                        const account = await Services.Helper.loginFireflyViaTwitter()
+                        console.log(account)
+                    }
+                }}>
                 <div
                     className={cx(classes.iconWrapper)}
                     style={{

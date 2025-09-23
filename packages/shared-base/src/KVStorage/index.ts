@@ -33,6 +33,17 @@ export interface BackupConfig {
     googleAccount: string | null
 }
 
+interface FireflyAccount {
+    accessToken: string
+    accountId: string
+    avatar: string
+    /** @example '2023-07-30T06:57:39.418Z' */
+    createdAt: string
+    displayName: string
+    isNew: boolean
+    uid: string
+}
+
 export const PersistentStorages = {
     Plugin: createPersistentKVStorage('plugin', {}),
     Web3: createPersistentKVStorage('web3', {}),
@@ -43,6 +54,7 @@ export const PersistentStorages = {
         /** lens account address, distinct by wallet address */
         lastLensAccountMap: Record<string, string>
         backupConfig: BackupConfig
+        firefly_account: FireflyAccount
     }>('settings@v1', {
         debugging: false,
         latestLensProfile: '',
@@ -56,6 +68,15 @@ export const PersistentStorages = {
             cloudBackupMethod: null,
             googleToken: '',
             googleAccount: '',
+        },
+        firefly_account: {
+            accessToken: '',
+            accountId: '',
+            avatar: '',
+            createdAt: '',
+            displayName: '',
+            isNew: false,
+            uid: '',
         },
     }),
     ApplicationEntryUnListed: createPersistentKVStorage<{ data: string[] }>(APPLICATION_ENTRY_UNLISTED, { data: [] }),

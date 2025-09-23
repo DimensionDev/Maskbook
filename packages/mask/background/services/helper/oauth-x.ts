@@ -211,7 +211,7 @@ export async function requestXOAuthToken() {
         const user_id = step2.get('user_id')
         const screen_name = step2.get('screen_name')
 
-        browser.storage.local.set({
+        await browser.storage.local.set({
             firefly_x_oauth: {
                 oauth_token,
                 oauth_token_secret,
