@@ -186,8 +186,8 @@ msgid "Approve"
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Approve MASK?"
-msgstr ""
+#~ msgid "Approve MASK?"
+#~ msgstr ""
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
 #. placeholder {1}: collection?.name || ''
@@ -244,7 +244,6 @@ msgid "By confirming means that you agree to bear the possible risks above."
 msgstr ""
 
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
@@ -352,8 +351,6 @@ msgstr ""
 msgid "Community"
 msgstr ""
 
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
 #: src/UI/modals/ConfirmModal/Dialog.tsx
@@ -578,8 +575,8 @@ msgid "Dismiss"
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Do you want to use MASK tokens to pay gas fee?"
-msgstr ""
+#~ msgid "Do you want to use MASK tokens to pay gas fee?"
+#~ msgstr ""
 
 #: src/UI/components/CompositionDialog/PluginEntryRender.tsx
 msgid "Domain Request"
@@ -654,8 +651,8 @@ msgid "Enter a max priority fee"
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Enter an amount"
-msgstr ""
+#~ msgid "Enter an amount"
+#~ msgstr ""
 
 #: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "EVM"
@@ -705,8 +702,8 @@ msgid "Failed to load {0}. Click to retry."
 msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "Failed to load MASK. Click to retry."
-msgstr ""
+#~ msgid "Failed to load MASK. Click to retry."
+#~ msgstr ""
 
 #: src/UI/translate.ts
 msgid "Failed to refund Lucky Drop."
@@ -1365,8 +1362,8 @@ msgstr ""
 #~ msgstr ""
 
 #: src/UI/contexts/components/ApproveMaskDialog.tsx
-msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
-msgstr ""
+#~ msgid "To interact with Polygon network, MATIC tokens are required to pay as gas fees. SmartPay allow users to pay gas fee on Polygon network with MASK token."
+#~ msgstr ""
 
 #: src/UI/modals/ApplicationBoardModal/ApplicationSettingPluginSwitch.tsx
 msgid "Token"
@@ -1443,8 +1440,8 @@ msgid "Unlisted"
 msgstr ""
 
 #: src/hooks/useGasCurrencyMenu.tsx
-msgid "Unlock"
-msgstr ""
+#~ msgid "Unlock"
+#~ msgstr ""
 
 #. placeholder {0}: token.symbol
 #: src/UI/components/EthereumERC20TokenApprovedBoundary/index.tsx
