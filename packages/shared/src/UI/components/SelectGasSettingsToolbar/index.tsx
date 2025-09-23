@@ -1,26 +1,11 @@
 import { Trans } from '@lingui/react/macro'
 import { Icons } from '@masknet/icons'
-import { ApproveMaskDialog, FormattedBalance, SelectGasSettingsModal, useMenuConfig } from '@masknet/shared'
-import { NetworkPluginID } from '@masknet/shared-base'
+import { FormattedBalance, SelectGasSettingsModal, useMenuConfig } from '@masknet/shared'
+import { type NetworkPluginID } from '@masknet/shared-base'
 import { makeStyles } from '@masknet/theme'
 import type { Web3Helper } from '@masknet/web3-helpers'
-import {
-    useChainContext,
-    useFungibleToken,
-    useFungibleTokenPrice,
-    useNetworkContext,
-    useWeb3Utils,
-} from '@masknet/web3-hooks-base'
-import { DepositPaymaster, SmartPayBundler } from '@masknet/web3-providers'
-import {
-    formatBalance,
-    formatCurrency,
-    GasOptionType,
-    isSameAddress,
-    isZero,
-    toFixed,
-    ZERO,
-} from '@masknet/web3-shared-base'
+import { useChainContext, useNetworkContext, useWeb3Utils } from '@masknet/web3-hooks-base'
+import { formatBalance, formatCurrency, GasOptionType, isZero, ZERO } from '@masknet/web3-shared-base'
 import {
     type ChainId,
     formatGas,
@@ -32,9 +17,7 @@ import {
 import { Box, MenuItem, type MenuProps, Typography } from '@mui/material'
 import { BigNumber } from 'bignumber.js'
 import { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useGasCurrencyMenu } from '../../../hooks/useGasCurrencyMenu.js'
 import { SettingsContext } from '../SettingsBoard/Context.js'
-import { useQuery } from '@tanstack/react-query'
 
 export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = NetworkPluginID>
     extends withClasses<'label' | 'root'> {
@@ -44,7 +27,6 @@ export interface SelectGasSettingsToolbarProps<T extends NetworkPluginID = Netwo
     nativeTokenPrice: number
     gasLimit: number
     gasConfig?: GasConfig
-    supportMultiCurrency?: boolean
     estimateGasFee?: string
     editMode?: boolean
     /** No effects on editMode */
@@ -144,7 +126,6 @@ export function SelectGasSettingsToolbarUI({
     nativeToken,
     nativeTokenPrice,
     estimateGasFee,
-    supportMultiCurrency,
     editMode,
     className,
     classes: externalClasses,
@@ -155,14 +136,12 @@ export function SelectGasSettingsToolbarUI({
     const { classes, cx, theme } = useStyles(undefined, { props: { classes: externalClasses } })
     const { gasOptions, GAS_OPTION_NAMES } = SettingsContext.useContainer()
 
-    const [approveDialogOpen, setApproveDialogOpen] = useState(false)
     const [isCustomGas, setIsCustomGas] = useState(false)
     const [currentGasOptionType, setCurrentGasOptionType] = useState<GasOptionType>(
         gasOption?.gasOptionType && gasOption.gasOptionType !== GasOptionType.CUSTOM ?
             gasOption.gasOptionType
         :   GasOptionType.NORMAL,
     )
-    const [currentGasCurrency, setCurrentGasCurrency] = useState(gasOption?.gasCurrency)
     const { chainId } = useChainContext()
     const Utils = useWeb3Utils()
 
@@ -174,18 +153,16 @@ export function SelectGasSettingsToolbarUI({
                     {
                         maxFeePerGas,
                         maxPriorityFeePerGas,
-                        gasCurrency: currentGasCurrency,
                         gas: new BigNumber(gasLimit).toString(),
                         gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
                     }
                 :   {
                         gasPrice: new BigNumber(maxFeePerGas).gt(0) ? maxFeePerGas : gasPrice,
-                        gasCurrency: currentGasCurrency,
                         gas: new BigNumber(gasLimit).toString(),
                         gasOptionType: isCustomGas ? GasOptionType.CUSTOM : currentGasOptionType,
                     },
             ),
-        [isSupportEIP1559, chainId, onChange, currentGasCurrency, gasLimit, currentGasOptionType, isCustomGas],
+        [isSupportEIP1559, chainId, onChange, gasLimit, currentGasOptionType, isCustomGas],
     )
 
     const openCustomGasSettingsDialog = useCallback(async () => {
@@ -220,17 +197,6 @@ export function SelectGasSettingsToolbarUI({
             currentGasOption.suggestedMaxPriorityFeePerGas,
         )
     }, [currentGasOption, isCustomGas, setGasConfigCallback])
-
-    const { data: currencyRatio } = useQuery({
-        queryKey: ['currency-ratio', chainId],
-        queryFn: async () => {
-            const chainId = await SmartPayBundler.getSupportedChainId()
-            const depositPaymaster = new DepositPaymaster(chainId)
-            const ratio = await depositPaymaster.getRatio()
-
-            return ratio
-        },
-    })
 
     const [menu, openMenu] = useMenuConfig(
         Object.entries(gasOptions ?? {})
@@ -282,51 +248,18 @@ export function SelectGasSettingsToolbarUI({
         },
     )
 
-    const [currencyMenu, openCurrencyMenu] = useGasCurrencyMenu(
-        NetworkPluginID.PLUGIN_EVM,
-        (address) => setCurrentGasCurrency(address),
-        currentGasCurrency,
-        () => setApproveDialogOpen(true),
-    )
-
-    const { data: currencyToken = nativeToken } = useFungibleToken(undefined, currentGasCurrency, nativeToken, {
-        chainId,
-    })
-    const { data: currencyTokenPrice } = useFungibleTokenPrice(NetworkPluginID.PLUGIN_EVM, currentGasCurrency)
-
     const gasFee = useMemo(() => {
         if (!gasOption || !gasLimit) return ZERO
         const result = GasEditor.fromConfig(chainId as ChainId, gasOption).getGasFee(gasLimit)
-        if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
-            return result
-        }
-        if (!currencyRatio) return ZERO
-        return new BigNumber(toFixed(result.multipliedBy(currencyRatio), 0))
-    }, [gasLimit, gasOption, currencyRatio, currentGasCurrency, nativeToken])
+        return result
+    }, [gasLimit, gasOption, nativeToken])
 
     const gasFeeUSD = useMemo(() => {
         if (!gasFee || gasFee.isZero()) return '$0'
-        if (!currentGasCurrency || isSameAddress(nativeToken?.address, currentGasCurrency)) {
-            return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
-                onlyRemainTwoOrZeroDecimal: true,
-            })
-        }
-
-        if (!currencyToken || !currencyTokenPrice) return '$0'
-
-        return formatCurrency(
-            new BigNumber(formatBalance(gasFee, currencyToken.decimals)).times(currencyTokenPrice),
-            'USD',
-            { onlyRemainTwoOrZeroDecimal: true },
-        )
-    }, [
-        gasFee,
-        nativeTokenPrice,
-        currencyTokenPrice,
-        nativeToken?.address,
-        currentGasCurrency,
-        currencyToken?.decimals,
-    ])
+        return formatCurrency(formatWeiToEther(gasFee).times(nativeTokenPrice), 'USD', {
+            onlyRemainTwoOrZeroDecimal: true,
+        })
+    }, [gasFee, nativeTokenPrice, nativeToken?.address])
 
     if (!gasOptions || isZero(gasFee)) return null
 
@@ -355,9 +288,9 @@ export function SelectGasSettingsToolbarUI({
             <Typography className={classes.gasSection} component="div">
                 <FormattedBalance
                     value={gasFee}
-                    decimals={currencyToken?.decimals ?? 0}
+                    decimals={nativeToken?.decimals ?? 0}
                     significant={4}
-                    symbol={currencyToken?.symbol}
+                    symbol={nativeToken?.symbol}
                     formatter={formatBalance}
                 />
                 <Typography className={classes.gasUSDPrice}>≈ {gasFeeUSD}</Typography>
@@ -369,13 +302,8 @@ export function SelectGasSettingsToolbarUI({
                     </Typography>
                     <Icons.Candle width={12} height={12} />
                 </div>
-                {supportMultiCurrency ?
-                    <Icons.ArrowDrop onClick={openCurrencyMenu} />
-                :   null}
                 {menu}
-                {supportMultiCurrency ? currencyMenu : null}
             </Typography>
-            <ApproveMaskDialog open={approveDialogOpen} handleClose={() => setApproveDialogOpen(false)} />
         </Box>
     )
 }

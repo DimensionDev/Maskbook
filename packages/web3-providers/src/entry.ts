@@ -48,11 +48,6 @@ export { EVMUtils } from './Web3/EVM/apis/Utils.js'
 
 export { SolanaChainResolver, SolanaExplorerResolver } from './Web3/Solana/apis/ResolverAPI.js'
 export { SOLWeb3 } from './Web3/Solana/apis/ConnectionAPI.js'
-// Smart Pay
-export { DepositPaymaster } from './SmartPay/libs/DepositPaymaster.js'
-export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
-export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
-export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
 // NextID
 export { NextIDProof } from './NextID/index.js'
@@ -91,12 +86,6 @@ export { ChainbaseHistory } from './Chainbase/index.js'
 
 // Zerion
 export { Zerion } from './Zerion/index.js'
-
-// Smart Pay
-export { SmartPayBundler } from './SmartPay/index.js'
-export { SmartPayFunder } from './SmartPay/index.js'
-export { SmartPayOwner } from './SmartPay/apis/OwnerAPI.js'
-export { SmartPayAccount } from './SmartPay/apis/AbstractAccountAPI.js'
 
 // RSS3
 export { RSS3 } from './RSS3/index.js'

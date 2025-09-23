@@ -22,17 +22,15 @@ import { createEVMWalletProviders } from '../providers/index.js'
 import { ProviderState, type ProviderStorage } from '../../Base/state/Provider.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import type { BaseHostedStorage } from '../providers/BaseHosted.js'
-import type { EIP4337ProviderStorage } from '../providers/BaseContractWallet.js'
 
 export class EVMProvider extends ProviderState<ChainId, ProviderType, NetworkType> {
     constructor(
         context: WalletAPI.IOContext,
         storage: StorageObject<ProviderStorage<Account<ChainId>, ProviderType>>,
         hostedProviderStorage: BaseHostedStorage,
-        eip4337Storage: EIP4337ProviderStorage,
     ) {
         super(context.signWithPersona, storage)
-        this.providers = createEVMWalletProviders(context, hostedProviderStorage, eip4337Storage)
+        this.providers = createEVMWalletProviders(context, hostedProviderStorage)
         this.init()
     }
     protected providers

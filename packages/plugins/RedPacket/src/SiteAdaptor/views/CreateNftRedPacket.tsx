@@ -18,7 +18,6 @@ import {
     useNativeToken,
     useNativeTokenPrice,
     useNonFungibleTokenBalance,
-    useSmartPayChainId,
     useWallet,
 } from '@masknet/web3-hooks-base'
 import type { NonFungibleCollection } from '@masknet/web3-shared-base'
@@ -97,7 +96,6 @@ export function CreateNftRedPacket() {
     const wallet = useWallet()
     const { data: nativeTokenDetailed } = useNativeToken(NetworkPluginID.PLUGIN_EVM)
     const { data: nativeTokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM)
-    const smartPayChainId = useSmartPayChainId()
 
     const gasLimit =
         useCreateNFTRedpacketGas(
@@ -165,7 +163,6 @@ export function CreateNftRedPacket() {
                         className={classes.toolbar}
                         nativeToken={nativeTokenDetailed}
                         nativeTokenPrice={nativeTokenPrice}
-                        supportMultiCurrency={!!wallet?.owner && chainId === smartPayChainId}
                         gasConfig={gasOption}
                         gasLimit={Number.parseInt(gasLimit, 10)}
                         onChange={setGasOption}

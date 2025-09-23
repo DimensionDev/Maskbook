@@ -14,7 +14,6 @@ import { WalletRemoveModal } from '../../../modals/modal-controls.js'
 import { AutoLock } from './AutoLock.js'
 import { ChangeCurrency } from './ChangeCurrency.js'
 import { ChangeNetwork } from './ChangeNetwork.js'
-import { ChangeOwner } from './ChangeOwner.js'
 import { ChangePaymentPassword } from './ChangePaymentPassword.js'
 import { ConnectedOrigins } from './ConnectedOrigins.js'
 import { Contacts } from './Contacts.js'
@@ -79,9 +78,6 @@ export const Component = memo(function WalletSettings() {
                 <Icons.ArrowDownRound color={theme.palette.maskColor.white} size={24} />
             </Box>
             <List dense className={classes.list} data-hide-scrollbar>
-                {wallet.owner ?
-                    <ChangeOwner />
-                :   null}
                 <Rename />
                 <Contacts />
                 <HidingScamTx />

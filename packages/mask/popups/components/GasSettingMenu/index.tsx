@@ -4,21 +4,20 @@ import { BigNumber } from 'bignumber.js'
 import { Box } from '@mui/system'
 import { Button, Typography, useTheme } from '@mui/material'
 import { Icons } from '@masknet/icons'
-import { FormattedBalance, FormattedCurrency, useGasCurrencyMenu } from '@masknet/shared'
+import { FormattedBalance, FormattedCurrency } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import {
     useChainContext,
     useChainIdSupport,
-    useFungibleToken,
-    useFungibleTokenPrice,
     useGasLimitRange,
     useGasOptions,
+    useNativeToken,
     useNativeTokenAddress,
+    useNativeTokenPrice,
 } from '@masknet/web3-hooks-base'
 import { GasOptionType, ZERO, formatBalance, formatCurrency, scale10, toFixed } from '@masknet/web3-shared-base'
 import { type GasConfig, type ChainId, formatWeiToEther } from '@masknet/web3-shared-evm'
 import { useGasOptionsMenu } from '../../hooks/index.js'
-import { useGasRatio } from '../../hooks/useGasRatio.js'
 import { Trans } from '@lingui/react/macro'
 
 interface GasSettingMenuProps {
@@ -27,28 +26,19 @@ interface GasSettingMenuProps {
     defaultChainId?: ChainId
     disable?: boolean
     onChange?: (config: GasConfig) => void
-    onPaymentTokenChange?: (paymentToken: string) => void
-    /** Payment token address */
-    paymentToken?: string
-    owner?: string
-    allowMaskAsGas?: boolean
 }
 
 export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu({
     defaultGasLimit,
     defaultChainId,
     defaultGasConfig,
-    paymentToken,
     disable,
-    allowMaskAsGas,
-    owner,
     onChange,
-    onPaymentTokenChange,
 }) {
     const theme = useTheme()
 
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>({ chainId: defaultChainId })
-    const gasRatio = useGasRatio(paymentToken)
+
     const [gasConfig = defaultGasConfig, setGasConfig] = useState<GasConfig | undefined>()
     const [, chainDefaultGasLimit] = useGasLimitRange(NetworkPluginID.PLUGIN_EVM, { chainId })
     const gasLimit = gasConfig?.gas || defaultGasLimit || chainDefaultGasLimit
@@ -66,13 +56,7 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         [onChange],
     )
 
-    const [menu, openMenu] = useGasOptionsMenu(gasLimit, !disable ? handleChange : noop, paymentToken)
-
-    const [paymentTokenMenu, openPaymentTokenMenu] = useGasCurrencyMenu(
-        NetworkPluginID.PLUGIN_EVM,
-        onPaymentTokenChange ?? noop,
-        paymentToken,
-    )
+    const [menu, openMenu] = useGasOptionsMenu(gasLimit, !disable ? handleChange : noop)
 
     const { data: gasOptions } = useGasOptions(NetworkPluginID.PLUGIN_EVM, { chainId })
 
@@ -102,17 +86,9 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
 
     const nativeTokenAddress = useNativeTokenAddress(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { data: token } = useFungibleToken(
-        NetworkPluginID.PLUGIN_EVM,
-        paymentToken ? paymentToken : nativeTokenAddress,
-        undefined,
-        { chainId },
-    )
+    const { data: token } = useNativeToken(NetworkPluginID.PLUGIN_EVM, { chainId })
 
-    const { data: tokenPrice } = useFungibleTokenPrice(
-        NetworkPluginID.PLUGIN_EVM,
-        paymentToken ? paymentToken : nativeTokenAddress,
-    )
+    const { data: tokenPrice } = useNativeTokenPrice(NetworkPluginID.PLUGIN_EVM, { chainId })
 
     const gasOptionName = (() => {
         switch (gasOptionType) {
@@ -132,9 +108,8 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
         const maxGasPrice = 'maxFeePerGas' in gasConfig ? gasConfig.maxFeePerGas : gasConfig.gasPrice
         if (!maxGasPrice) return ZERO
         const maxPriceUsed = new BigNumber(maxGasPrice).times(gasLimit)
-        if (!gasRatio) return toFixed(maxPriceUsed, 0)
-        return toFixed(maxPriceUsed.multipliedBy(gasRatio), 0)
-    }, [gasConfig, gasLimit, gasRatio])
+        return toFixed(maxPriceUsed, 0)
+    }, [gasConfig, gasLimit])
 
     return (
         <Box display="flex" alignItems="center">
@@ -177,12 +152,6 @@ export const GasSettingMenu = memo<GasSettingMenuProps>(function GasSettingMenu(
                     </Typography>
                     <Icons.Candle size={12} />
                 </Button>
-            :   null}
-            {owner && allowMaskAsGas ?
-                <>
-                    <Icons.ArrowDrop size={20} sx={{ ml: 0.5, cursor: 'pointer' }} onClick={openPaymentTokenMenu} />
-                    {paymentTokenMenu}
-                </>
             :   null}
             {menu}
         </Box>

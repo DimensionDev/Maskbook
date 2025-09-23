@@ -29,7 +29,6 @@ export const walletRoutes: RouteObject[] = [
             { path: r(PopupRoutes.Transfer), lazy: () => import('./Transfer/index.js') },
             { path: r(PopupRoutes.ContractInteraction), lazy: () => import('./Interaction/page.js') },
             { path: r(PopupRoutes.SelectWallet), lazy: () => import('./SelectWallet/index.js') },
-            { path: r(PopupRoutes.ChangeOwner), lazy: () => import('./ChangeOwner/index.js') },
             { path: r(PopupRoutes.NetworkManagement), lazy: () => import('./NetworkManagement/index.js') },
             { path: r(PopupRoutes.AddNetwork), lazy: () => import('./EditNetwork/index.js') },
             { path: r(`${PopupRoutes.EditNetwork}/:id?` as PopupRoutes), lazy: () => import('./EditNetwork/index.js') },
