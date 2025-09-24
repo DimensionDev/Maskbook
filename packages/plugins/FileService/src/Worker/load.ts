@@ -110,8 +110,6 @@ class LoadAgent implements ProviderAgent {
         catch (error) {
             throw error
         }
-
-        return result.dataitem_id
     }
 }
 
