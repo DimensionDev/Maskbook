@@ -22,6 +22,7 @@
         "/jQctM": ["To"],
         "/nT6AE": ["새로운 비밀번호"],
         "/riTT2": ["고정됩니다."],
+        "/uEw9z": ["Your X account authorization has timed out. Please try again."],
         "/vtDGO": [["0"], " is connected to these sites, they can view your account address."],
         "/xrk7I": ["FAQ&투토리얼"],
         "00b9QG": ["결제 비밀번호 설정"],
@@ -354,6 +355,9 @@
         "LJkXYZ": ["새로운 Mask 아이디 만들기"],
         "LP+1Z7": ["네트워크 추가"],
         "LSwUJb": ["Select Liquidity"],
+        "LU3p9s": [
+            "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+        ],
         "LWJCIn": ["연결된 사이트"],
         "LcET2C": ["개인정보처리방침"],
         "LcZh+r": ["지원하지 않는 데이터 백업"],
@@ -400,6 +404,7 @@
         "OkofjH": ["Recover"],
         "On0aF2": ["웹사이트"],
         "OuUyzz": ["No contacts stored locally, you can try searching."],
+        "OzSOpz": ["Create a Privy wallet using an X account"],
         "P9wzG/": ["복구"],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "PGdbc0": [
@@ -758,6 +763,7 @@
         "rLgPvm": ["백업"],
         "rQQGN1": ["최대 우선 가스비가 필요한 것보다 높아서 필요 이상으로 지불할 수 있습니다."],
         "rWE7Lq": ["Contact deleted."],
+        "rYFSec": ["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],
         "raCUEa": ["By granting permission, you are allowing the following <0/> contract to access your funds"],
         "rkMKQ0": [
             "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -874,6 +880,7 @@
         ],
         "yz7wBu": ["닫기"],
         "yzF66j": ["링크"],
+        "z9HeHt": ["Create a Privy Wallet"],
         "zBUJYA": ["The approval for this contract will be revoked in case of the amount is 0."],
         "zPar3e": ["수집품"],
         "zga9sT": ["확인"],

@@ -90,7 +90,6 @@
     "@masknet/web3-shared-evm": "workspace:^",
     "@masknet/web3-telemetry": "workspace:^",
     "@msgpack/msgpack": "^3.0.0-beta2",
-    "@privy-io/react-auth": "^3.0.1",
     "@react-hookz/web": "^24.0.4",
     "@servie/events": "^3.0.0",
     "@splinetool/runtime": "0.9.342",

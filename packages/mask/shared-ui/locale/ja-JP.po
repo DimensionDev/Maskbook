@@ -813,6 +813,14 @@ msgstr "作成"
 msgid "Create a New Wallet"
 msgstr "新しいウォレットを作成する"
 
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy Wallet"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy wallet using an X account"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr "新規Mask IDを作成"
@@ -829,6 +837,10 @@ msgstr "ペルソナを作成"
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
 msgstr "あなたのペルソナを作成して始めましょう"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -1380,8 +1392,8 @@ msgstr ""
 #~ msgid "Get permission failed"
 #~ msgstr ""
 
-#. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
+#. placeholder {0}: contract?.symbol || ''
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
@@ -1630,8 +1642,8 @@ msgid "Just Selected Contacts"
 msgstr "選択された連絡先のみ"
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Keep your transactions and assets safe with Mask Wallet."
-msgstr "Maskウォレットで取引と資産を安全に保管してください。"
+#~ msgid "Keep your transactions and assets safe with Mask Wallet."
+#~ msgstr "Maskウォレットで取引と資産を安全に保管してください。"
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
@@ -2588,6 +2600,7 @@ msgstr "NFT 写真を設定"
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -2756,6 +2769,10 @@ msgstr ""
 #: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr "サポートされるサイト"
+
+#: popups/pages/Wallet/components/StartUp/index.tsx
+msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+msgstr ""
 
 #: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
@@ -3353,4 +3370,8 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Your X account authorization has timed out. Please try again."
 msgstr ""

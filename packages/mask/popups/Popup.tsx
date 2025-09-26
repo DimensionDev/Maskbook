@@ -1,11 +1,12 @@
 import Services from '#services'
 import { PageUIProvider, PersonaContext } from '@masknet/shared'
-import { assert, MaskMessages, PopupRoutes } from '@masknet/shared-base'
+import { MaskMessages, PopupRoutes, assert } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
+import { PrivyProvider, type PrivyClientConfig } from '@privy-io/react-auth'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
@@ -23,6 +24,8 @@ import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/Erro
 import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
+import { PrivySetup } from './components/Privy/Setup.js'
+import { chains } from './configs.js'
 import { PageTitleContext, PopupContext } from './hooks/index.js'
 import { usePopupTheme } from './hooks/usePopupTheme.js'
 import { Modals } from './modals/index.js'
@@ -30,9 +33,6 @@ import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
 import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
 import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
 import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
-import { PrivyProvider, type PrivyClientConfig } from '@privy-io/react-auth'
-import { chains } from './configs.js'
-import { PrivySetup } from './components/Privy/Setup.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -119,7 +119,6 @@ export default function Popups() {
             config={{
                 supportedChains: chains as unknown as PrivyClientConfig['supportedChains'],
             }}>
-            <PrivySetup />
             <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
                 {/* eslint-disable-next-line react-compiler/react-compiler */}
                 <PageUIProvider useTheme={usePopupTheme}>
@@ -131,6 +130,7 @@ export default function Popups() {
                                     {process.env.NODE_ENV === 'development' ?
                                         <ReactQueryDevtools buttonPosition="bottom-right" />
                                     :   null}
+                                    <PrivySetup />
                                     <RouterProvider
                                         router={router}
                                         fallbackElement={pending}

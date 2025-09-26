@@ -22,6 +22,7 @@
         "/jQctM": ["To"],
         "/nT6AE": ["New password"],
         "/riTT2": ["Pinned successfully."],
+        "/uEw9z": ["Your X account authorization has timed out. Please try again."],
         "/vtDGO": [["0"], " is connected to these sites, they can view your account address."],
         "/xrk7I": ["FAQ&Tutorial"],
         "00b9QG": ["Set Your Payment Password"],
@@ -356,6 +357,9 @@
         "LJkXYZ": ["Create New Mask Identity"],
         "LP+1Z7": ["Add Network"],
         "LSwUJb": ["Select Liquidity"],
+        "LU3p9s": [
+            "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+        ],
         "LWJCIn": ["Connected sites"],
         "LcET2C": ["Privacy Policy"],
         "LcZh+r": ["Unsupported data backup"],
@@ -402,6 +406,7 @@
         "OkofjH": ["Recover"],
         "On0aF2": ["Website"],
         "OuUyzz": ["No contacts stored locally, you can try searching."],
+        "OzSOpz": ["Create a Privy wallet using an X account"],
         "P9wzG/": ["Recovery"],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "PGdbc0": [
@@ -762,6 +767,7 @@
         "rLgPvm": ["Backup"],
         "rQQGN1": ["Max priority fee is higher than necessary. You may pay more than needed."],
         "rWE7Lq": ["Contact deleted."],
+        "rYFSec": ["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],
         "raCUEa": ["By granting permission, you are allowing the following <0/> contract to access your funds"],
         "rkMKQ0": [
             "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -878,6 +884,7 @@
         ],
         "yz7wBu": ["Close"],
         "yzF66j": ["Link"],
+        "z9HeHt": ["Create a Privy Wallet"],
         "zBUJYA": ["The approval for this contract will be revoked in case of the amount is 0."],
         "zPar3e": ["Collectible"],
         "zga9sT": ["OK"],

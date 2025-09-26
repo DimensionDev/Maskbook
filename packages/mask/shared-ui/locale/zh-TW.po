@@ -813,6 +813,14 @@ msgstr "建立"
 msgid "Create a New Wallet"
 msgstr ""
 
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy Wallet"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy wallet using an X account"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr ""
@@ -828,6 +836,10 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
 msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
@@ -1380,8 +1392,8 @@ msgstr ""
 #~ msgid "Get permission failed"
 #~ msgstr ""
 
-#. placeholder {0}: contract?.symbol || ''
 #. placeholder {0}: token?.symbol || ''
+#. placeholder {0}: contract?.symbol || ''
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
@@ -1630,8 +1642,8 @@ msgid "Just Selected Contacts"
 msgstr ""
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Keep your transactions and assets safe with Mask Wallet."
-msgstr ""
+#~ msgid "Keep your transactions and assets safe with Mask Wallet."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
@@ -2588,6 +2600,7 @@ msgstr ""
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -2755,6 +2768,10 @@ msgstr ""
 #: popups/modals/SupportedSitesModal/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
+msgstr ""
+
+#: popups/pages/Wallet/components/StartUp/index.tsx
+msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
 msgstr ""
 
 #: popups/pages/Trader/Header.tsx
@@ -3353,4 +3370,8 @@ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Your X account authorization has timed out. Please try again."
 msgstr ""

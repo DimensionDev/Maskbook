@@ -29,7 +29,8 @@
     "spellcheck": "cspell lint --no-must-find-files",
     "clean": "gulp clean",
     "lingui:compile": "gulp lingui-compile",
-    "lingui:extract": "gulp lingui-extract"
+    "lingui:extract": "gulp lingui-extract",
+    "lingui": "pnpm run lingui:extract && pnpm run lingui:compile"
   },
   "dependencies": {
     "@dimensiondev/holoflows-kit": "0.9.0-20240322092738-f9180f3",
@@ -46,6 +47,7 @@
     "@mui/material": "5.15.20",
     "@mui/system": "5.15.20",
     "@tanstack/react-query": "^5.49.2",
+    "@privy-io/react-auth": "^3.0.1",
     "@types/masknet__global-types": "workspace:^",
     "@types/react": "npm:types-react@beta",
     "@types/react-dom": "npm:types-react-dom@beta",

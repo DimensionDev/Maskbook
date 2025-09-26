@@ -39,10 +39,11 @@ const extensionOrigin = (() => {
 
 function fetchingTwitterResource(target: URL) {
     return (
-        (isDomainOrSubdomainOf(location.href, 'twitter.com') || isDomainOrSubdomainOf(location.href, 'x.com')) &&
-        (isDomainOrSubdomainOf(target.href, 'twitter.com') ||
-            isDomainOrSubdomainOf(target.href, 'x.com') ||
-            isDomainOrSubdomainOf(target.href, 'twimg.com'))
+        ((isDomainOrSubdomainOf(location.href, 'twitter.com') || isDomainOrSubdomainOf(location.href, 'x.com')) &&
+            (isDomainOrSubdomainOf(target.href, 'twitter.com') ||
+                isDomainOrSubdomainOf(target.href, 'x.com') ||
+                isDomainOrSubdomainOf(target.href, 'twimg.com'))) ||
+        isDomainOrSubdomainOf(target.href, 'privy.io')
     )
 }
 

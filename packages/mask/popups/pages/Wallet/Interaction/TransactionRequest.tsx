@@ -1,31 +1,31 @@
-import { compact, mapValues, omit } from 'lodash-es'
-import { BigNumber } from 'bignumber.js'
-import defer * as web3_utils from 'web3-utils'
-import { type TransactionDetail } from '../type.js'
-import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
-import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
-import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
-import { useCallback, useEffect, useState } from 'react'
+import { Trans } from '@lingui/react/macro'
+import { Icons } from '@masknet/icons'
+import { assert, NetworkPluginID } from '@masknet/shared-base'
+import { makeStyles } from '@masknet/theme'
+import { useChainContext, usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { GasOptionType, MessageStateType, TransactionDescriptorType } from '@masknet/web3-shared-base'
 import {
+    abiCoder,
+    ChainId,
     createJsonRpcPayload,
+    ErrorEditor,
     formatEthereumAddress,
     PayloadEditor,
-    abiCoder,
     type GasConfig,
-    ChainId,
-    ErrorEditor,
 } from '@masknet/web3-shared-evm'
-import { produce } from 'immer'
-import { GasOptionType, TransactionDescriptorType } from '@masknet/web3-shared-base'
-import { useChainContext, useWeb3State } from '@masknet/web3-hooks-base'
-import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
-import { useLatest } from 'react-use'
-import { NetworkPluginID } from '@masknet/shared-base'
 import { Box, Button, Typography } from '@mui/material'
-import { Icons } from '@masknet/icons'
-import { makeStyles } from '@masknet/theme'
+import { useQueryClient, useSuspenseQuery } from '@tanstack/react-query'
+import { BigNumber } from 'bignumber.js'
+import { produce } from 'immer'
+import { compact, mapValues, omit } from 'lodash-es'
+import { useCallback, useEffect, useState } from 'react'
+import { useLatest } from 'react-use'
+import defer * as web3_utils from 'web3-utils'
+import { TransactionPreview } from '../../../components/TransactionPreview/index.js'
+import { UnlockERC20Token } from '../../../components/UnlockERC20Token/index.js'
+import { UnlockERC721Token } from '../../../components/UnlockERC721Token/index.js'
+import { type TransactionDetail } from '../type.js'
 import type { InteractionItemProps } from './interaction.js'
-import { Trans } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     text: {
@@ -80,12 +80,16 @@ const approveParametersType = [
 ]
 
 export function TransactionRequest(props: InteractionItemProps) {
+    const wallet = useWallet()
+    const privyWallet = usePrivyWallet(wallet?.address)
     const { currentRequest: request, setConfirmAction, paymentToken, setPaymentToken } = props
     const { classes, cx } = useStyles()
     const [gasConfig, _setGasConfig] = useState<GasConfig | undefined>()
     const [approvedAmount, setApproveAmount] = useState('')
     const { Message, TransactionFormatter } = useWeb3State(NetworkPluginID.PLUGIN_EVM)
     const { chainId } = useChainContext<NetworkPluginID.PLUGIN_EVM>()
+
+    assert(Message, 'Wallet transaction request: Message not found')
 
     let transaction: TransactionDetail
     {
@@ -123,6 +127,15 @@ export function TransactionRequest(props: InteractionItemProps) {
     }
 
     setConfirmAction(async () => {
+        if (privyWallet) {
+            const provider = await privyWallet.getEthereumProvider()
+            const result = await provider.request(request.request.arguments)
+            await Message.updateMessage(request.ID, {
+                response: result,
+                state: MessageStateType.APPROVED,
+            })
+            return
+        }
         let params = structuredClone(request.request.arguments.params)
         if (approvedAmount) {
             if (!transaction.formattedTransaction?._tx.data) return
@@ -174,7 +187,7 @@ export function TransactionRequest(props: InteractionItemProps) {
             }),
         )
 
-        const response = await Message!.approveAndSendRequest(request.ID, {
+        const response = await Message.approveAndSendRequest(request.ID, {
             arguments: {
                 ...request.request.arguments,
                 params,

@@ -19,6 +19,7 @@ import defer * as SmartPayOwner from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
 import { evm } from '../../../Manager/registry.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
+import { Privy } from '@masknet/web3-providers'
 
 export let MaskWalletProviderInstance: MaskWalletProvider
 export function setMaskWalletProviderInstance(mask: MaskWalletProvider) {
@@ -79,7 +80,20 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
                 identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
             }))
 
-        const result = uniqWith([...smartPayWallets, ...super.wallets, ...wallets], (a, b) =>
+        const privyWallets = await Privy.getEvmWallets()
+        const formattedPrivyWallets: Wallet[] = privyWallets.map((wallet) => ({
+            id: wallet.address,
+            name: 'Privy Wallet',
+            source: ImportSource.Privy,
+            address: wallet.address,
+            configurable: false,
+            createdAt: new Date(wallet.first_verified_at as number),
+            updatedAt: now,
+            hasStoredKeyInfo: false,
+            hasDerivationPath: false,
+        }))
+
+        const result = uniqWith([...formattedPrivyWallets, ...super.wallets, ...wallets], (a, b) =>
             isSameAddress(a.address, b.address),
         )
 

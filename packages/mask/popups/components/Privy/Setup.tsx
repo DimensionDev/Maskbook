@@ -1,6 +1,12 @@
-import { PersistentStorages } from '@masknet/shared-base'
-import { useSyncJwtBasedAuthState } from '@privy-io/react-auth'
+import Services from '#services'
+import { CrossIsolationMessages, PersistentStorages } from '@masknet/shared-base'
+import { useAccount } from '@masknet/web3-hooks-base'
+import { EVMWeb3 } from '@masknet/web3-providers'
+import { isSameAddress } from '@masknet/web3-shared-base'
+import { ProviderType } from '@masknet/web3-shared-evm'
+import { useSyncJwtBasedAuthState, useWallets as usePrivyWallets } from '@privy-io/react-auth'
 import { memo, useCallback } from 'react'
+import { useAsync } from 'react-use'
 import { useSubscription } from 'use-subscription'
 
 export const PrivySetup = memo(function PrivySetup() {
@@ -17,13 +23,26 @@ export const PrivySetup = memo(function PrivySetup() {
         })
     }, [])
 
+    const { wallets, ready } = usePrivyWallets()
+    const account = useAccount()
+
+    useAsync(async () => {
+        const existedWallets = await Services.Wallet.getWallets()
+        const newWallets = wallets.filter((x) => !existedWallets.find((y) => isSameAddress(y.address, x.address)))
+        if (!newWallets.length) return
+        CrossIsolationMessages.events.walletsUpdated.sendToAll()
+        if (!existedWallets || !account) {
+            await EVMWeb3.connect({
+                account: newWallets[0].address,
+                providerType: ProviderType.MaskWallet,
+            })
+        }
+    }, [ready, wallets])
+
     useSyncJwtBasedAuthState({
         getExternalJwt,
         subscribe,
-        enabled: !!firefly_account,
-        onError: (error) => {
-            console.log('privy error', error)
-        },
+        enabled: !!firefly_account.accessToken,
     })
 
     return null
