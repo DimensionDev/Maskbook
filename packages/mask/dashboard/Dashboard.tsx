@@ -1,4 +1,4 @@
-import { cloneElement, useEffect } from 'react'
+import { useEffect } from 'react'
 import { CssBaseline, ThemeProvider, StyledEngineProvider, GlobalStyles } from '@mui/material'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import {
@@ -12,7 +12,7 @@ import {
 import { LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { DashboardRoutes, jsxCompose } from '@masknet/shared-base'
+import { DashboardRoutes } from '@masknet/shared-base'
 
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
@@ -37,6 +37,7 @@ const PersonaContextIO = {
     queryPersonaAvatarLastUpdateTime: Services.Identity.getPersonaAvatarLastUpdateTime,
     queryPersonaAvatar: Services.Identity.getPersonaAvatar,
 }
+const createWallet = () => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)
 export default function Dashboard() {
     // #region theme
     const appearance = useAppearance()
@@ -52,28 +53,36 @@ export default function Dashboard() {
     }, [appearance])
     // #endregion
 
-    return jsxCompose(
-        <RootWeb3ContextProvider enforceEVM />,
-        <LinguiProviderHMR i18n={i18n} />,
-        <StyledEngineProvider injectFirst />,
-        <ThemeProvider theme={theme} />,
-        <DialogStackingProvider />,
-        <UserContext.Provider />,
-        <PersonaContext.Provider initialState={PersonaContextIO} />,
-        <ErrorBoundary />,
-        <CustomSnackbarProvider children={null!} />,
-        <SharedContextProvider />,
-    )(
-        cloneElement,
-        <>
-            <CssBaseline />
-            {GlobalCss}
-            {/* https://github.com/TanStack/query/issues/5417 */}
-            {process.env.NODE_ENV === 'development' ?
-                <ReactQueryDevtools buttonPosition="bottom-right" />
-            :   null}
-            <Modals createWallet={() => Services.Helper.openDashboard(DashboardRoutes.CreateMaskWalletForm)} />
-            <Pages />
-        </>,
+    // prettier-ignore
+    return (
+        <RootWeb3ContextProvider enforceEVM>
+          <LinguiProviderHMR i18n={i18n}>
+            <StyledEngineProvider injectFirst>
+              <ThemeProvider theme={theme}>
+                <DialogStackingProvider hasGlobalBackdrop={false}>
+                  <UserContext.Provider>
+                    <PersonaContext.Provider initialState={PersonaContextIO}>
+                      <ErrorBoundary>
+                        <CustomSnackbarProvider >
+                          <SharedContextProvider>
+                            <CssBaseline />
+                            {GlobalCss}
+                            {/* https://github.com/TanStack/query/issues/5417 */}
+                            {process.env.NODE_ENV === 'development' ?
+                                <ReactQueryDevtools buttonPosition="bottom-right" />
+                            :   null}
+                            <Modals createWallet={createWallet} />
+
+                            <Pages />
+                          </SharedContextProvider>
+                        </CustomSnackbarProvider>
+                      </ErrorBoundary>
+                    </PersonaContext.Provider>
+                  </UserContext.Provider>
+                </DialogStackingProvider>
+              </ThemeProvider>
+            </StyledEngineProvider>
+          </LinguiProviderHMR>
+        </RootWeb3ContextProvider>
     )
 }
