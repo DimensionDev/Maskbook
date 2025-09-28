@@ -90,7 +90,6 @@ export default function ConnectButton({ address }: { address: string }) {
             <WalletConnectedBoundary
                 offChain
                 expectedChainId={chainId}
-                hideRiskWarningConfirmed
                 ActionButtonProps={{ variant: 'roundedDark' }}
                 classes={{ button: classes.wallet }}>
                 <ActionButton

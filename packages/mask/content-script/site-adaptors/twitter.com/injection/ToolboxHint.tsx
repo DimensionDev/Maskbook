@@ -1,5 +1,5 @@
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { PrivySetup, PrivySetupProvider } from '@masknet/shared'
+import { PrivySetup } from '@masknet/shared'
 import { ValueRef } from '@masknet/shared-base'
 import { useValueRef } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
@@ -28,12 +28,10 @@ export function injectToolboxHintAtTwitter(signal: AbortSignal, category: 'walle
         signal,
     })
     attachReactTreeWithContainer(watcher.firstDOMProxy.afterShadow, { signal }).render(
-        <PrivySetupProvider>
-            <RootWeb3ContextProvider>
-                <PrivySetup />
-                <ToolboxHintAtTwitter category={category} />
-            </RootWeb3ContextProvider>
-        </PrivySetupProvider>,
+        <RootWeb3ContextProvider>
+            <PrivySetup />
+            <ToolboxHintAtTwitter category={category} />
+        </RootWeb3ContextProvider>,
     )
     injectProfile(signal)
 }

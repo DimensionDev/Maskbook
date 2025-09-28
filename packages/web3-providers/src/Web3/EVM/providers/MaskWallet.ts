@@ -1,4 +1,4 @@
-import { compact, debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
+import { debounce, first, isEqual, sortBy, uniqWith } from 'lodash-es'
 import {
     createSubscriptionFromValueRef,
     CrossIsolationMessages,
@@ -15,9 +15,7 @@ import { ChainId, isValidAddress, PayloadEditor, ProviderType, type RequestArgum
 import { EVMChainResolver } from '../apis/ResolverAPI.js'
 import { BaseEIP4337WalletProvider, type EIP4337ProviderStorage } from './BaseContractWallet.js'
 import { EVMRequestReadonly } from '../apis/RequestReadonlyAPI.js'
-import defer * as SmartPayOwner from '../../../SmartPay/apis/OwnerAPI.js'
 import type { WalletAPI } from '../../../entry-types.js'
-import { evm } from '../../../Manager/registry.js'
 import type { BaseHostedStorage } from './BaseHosted.js'
 import { Privy } from '@masknet/web3-providers'
 
@@ -53,32 +51,9 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
         // Fetching info of SmartPay wallets is slow, update provider wallets eagerly here.
         await this.updateImmediately()
 
-        const allPersonas = this.context.allPersonas.getCurrentValue()
         const wallets = this.context.wallets.getCurrentValue()
 
-        const chainId = await this.Bundler.getSupportedChainId()
-        const accounts = await SmartPayOwner.SmartPayOwner.getAccountsByOwners(chainId, [
-            ...wallets.map((x) => x.address),
-            ...compact(allPersonas.map((x) => x.address)),
-        ])
-
         const now = new Date()
-        const smartPayWallets = accounts
-            .filter((x) => x.deployed)
-            .map((x) => ({
-                id: x.address,
-                name: super.wallets.find((item) => isSameAddress(item.address, x.address))?.name ?? 'Smart Pay',
-                source: ImportSource.WalletRPC,
-                address: x.address,
-                hasDerivationPath: false,
-                hasStoredKeyInfo: false,
-                configurable: true,
-                createdAt: now,
-                updatedAt: now,
-                owner: x.owner,
-                deployed: x.deployed,
-                identifier: allPersonas.find((persona) => isSameAddress(x.owner, persona.address))?.identifier.toText(),
-            }))
 
         const privyWallets = await Privy.getEvmWallets()
         const formattedPrivyWallets: Wallet[] = privyWallets.map((wallet) => ({
@@ -119,15 +94,9 @@ export class MaskWalletProvider extends BaseEIP4337WalletProvider {
 
         this.subscription.wallets.subscribe(async () => {
             const primaryWallet = first(this.wallets)
-            const smartPayChainId = await this.Bundler.getSupportedChainId()
             if (!this.hostedAccount && primaryWallet) {
                 await this.switchAccount(primaryWallet.address)
-                await this.switchChain(primaryWallet.owner ? smartPayChainId : ChainId.Mainnet)
-                if (primaryWallet.owner) {
-                    const networks = evm.state?.Network?.networks?.getCurrentValue()
-                    const target = networks?.find((x) => x.chainId === smartPayChainId)
-                    if (target) evm.state?.Network?.switchNetwork(target.ID)
-                }
+                await this.switchChain(ChainId.Mainnet)
             }
         })
 

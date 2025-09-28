@@ -104,7 +104,7 @@ const useStyles = makeStyles<{ account: boolean }>()((theme, { account }) => ({
 }))
 
 interface Props {
-    handle?: string
+    handle: string
     onClose(): void
 }
 
@@ -305,7 +305,6 @@ export function FollowLensDialog({ handle, onClose }: Props) {
                         <Box className={classes.profile}>
                             <WalletConnectedBoundary
                                 offChain
-                                hideRiskWarningConfirmed
                                 expectedChainId={ChainId.Polygon}
                                 ActionButtonProps={{ variant: 'roundedContained' }}>
                                 {tips ?

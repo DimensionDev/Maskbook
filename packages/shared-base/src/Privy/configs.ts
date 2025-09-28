@@ -18,12 +18,13 @@ import {
     lens as lensMainnet,
     zkSync as wagmiZkSync,
     zora as wagmiZora,
+    type Chain,
 } from 'wagmi/chains'
 
 /**
  * List of all supported chains
  */
-export const chains = [
+export const chains: Chain[] = [
     wagmiMainnet,
     wagmiBase,
     wagmiBsc,
@@ -44,16 +45,3 @@ export const chains = [
     wagmiCelo,
     lensMainnet,
 ] as const
-
-// privy wallet currently only supports these 10 chains
-export const privyVisibleChains = [
-    wagmiMainnet,
-    wagmiBase,
-    wagmiBsc,
-    wagmiOptimism,
-    wagmiPolygon,
-    wagmiLinea,
-    wagmiArbitrum,
-    wagmiZkSync,
-    wagmiCelo,
-] as const satisfies ReadonlyArray<(typeof chains)[number]>

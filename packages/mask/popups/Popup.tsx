@@ -1,6 +1,6 @@
 import Services from '#services'
-import { PageUIProvider, PersonaContext, PrivySetup, PrivySetupProvider } from '@masknet/shared'
-import { MaskMessages, PopupRoutes, assert } from '@masknet/shared-base'
+import { PageUIProvider, PersonaContext, PrivySetup } from '@masknet/shared'
+import { MaskMessages, PopupRoutes, PrivySetupProvider, assert } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
@@ -112,31 +112,31 @@ export default function Popups() {
 
     // prettier-ignore
     return (
-        <PrivySetupProvider>
-          <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
-            {/* eslint-disable-next-line react-compiler/react-compiler */}
-            <PageUIProvider useTheme={usePopupTheme}>
-              <PopupSnackbarProvider>
-                <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
-                  <PopupContext>
-                    <PageTitleContext value={titleContext}>
-                      {/* https://github.com/TanStack/query/issues/5417 */}
-                      {process.env.NODE_ENV === 'development' ?
-                        <ReactQueryDevtools buttonPosition="bottom-right" />
-                      :   null}
-                      <PrivySetup />
-                      <RouterProvider
-                        router={router}
-                        fallbackElement={pending}
-                        future={{ v7_startTransition: true }}
-                      />
-                    </PageTitleContext>
-                  </PopupContext>
-                </EVMWeb3ContextProvider>
-              </PopupSnackbarProvider>
-            </PageUIProvider>
-          </PersistQueryClientProvider>
-        </PrivySetupProvider>
+      <PrivySetupProvider>
+        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
+          {/* eslint-disable-next-line react-compiler/react-compiler */}
+          <PageUIProvider useTheme={usePopupTheme}>
+            <PopupSnackbarProvider>
+              <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
+                <PopupContext>
+                  <PageTitleContext value={titleContext}>
+                    {/* https://github.com/TanStack/query/issues/5417 */}
+                    {process.env.NODE_ENV === 'development' ?
+                      <ReactQueryDevtools buttonPosition="bottom-right" />
+                    :   null}
+                    <PrivySetup />
+                    <RouterProvider
+                      router={router}
+                      fallbackElement={pending}
+                      future={{ v7_startTransition: true }}
+                    />
+                  </PageTitleContext>
+                </PopupContext>
+              </EVMWeb3ContextProvider>
+            </PopupSnackbarProvider>
+          </PageUIProvider>
+        </PersistQueryClientProvider>
+      </PrivySetupProvider>
     )
 }
 

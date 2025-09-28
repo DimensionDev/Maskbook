@@ -1,7 +1,7 @@
-import { PrivySetup, PrivySetupProvider } from '@masknet/shared'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { memo } from 'react'
+import { PrivySetup } from '../components/Privy/Setup.js'
 import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
 import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
 import { ApplicationBoardModal, ApplicationBoardSettingsModal } from './ApplicationBoardModal/index.js'
@@ -29,34 +29,29 @@ export interface ModalProps {
 }
 export const Modals = memo(function Modals(props: ModalProps) {
     return (
-        <PrivySetupProvider>
-            <RootWeb3ContextProvider>
-                <PrivySetup />
-                <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
-                <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
-                <ConfirmDialogComponent ref={modals.ConfirmDialog.register} />
-                <SelectProviderModal createWallet={props.createWallet} ref={modals.SelectProviderModal.register} />
-                <WalletStatusModal ref={modals.WalletStatusModal.register} />
-                <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
-                <LeavePageConfirmModal ref={modals.LeavePageConfirmModal.register} />
-                <ApplicationBoardModal ref={modals.ApplicationBoardModal.register} />
-                <GasSettingModal ref={modals.GasSettingModal.register} />
-                <TransactionSnackbarModal
-                    pluginID={NetworkPluginID.PLUGIN_EVM}
-                    ref={modals.TransactionSnackbar.register}
-                />
-                <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
-                <ConfirmModal ref={modals.ConfirmModal.register} />
-                <SelectNonFungibleContractModal ref={modals.SelectNonFungibleContractModal.register} />
-                <SelectFungibleTokenModal ref={modals.SelectFungibleTokenModal.register} />
-                <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
-                <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
-                <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
-                <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
-                <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />
-                <ImageEditorModal ref={modals.ImageEditorModal.register} />
-            </RootWeb3ContextProvider>
-        </PrivySetupProvider>
+        <RootWeb3ContextProvider>
+            <PrivySetup />
+            <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
+            <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
+            <ConfirmDialogComponent ref={modals.ConfirmDialog.register} />
+            <SelectProviderModal createWallet={props.createWallet} ref={modals.SelectProviderModal.register} />
+            <WalletStatusModal ref={modals.WalletStatusModal.register} />
+            <WalletRiskWarningModal ref={modals.WalletRiskWarningModal.register} />
+            <LeavePageConfirmModal ref={modals.LeavePageConfirmModal.register} />
+            <ApplicationBoardModal ref={modals.ApplicationBoardModal.register} />
+            <GasSettingModal ref={modals.GasSettingModal.register} />
+            <TransactionSnackbarModal pluginID={NetworkPluginID.PLUGIN_EVM} ref={modals.TransactionSnackbar.register} />
+            <TransactionConfirmModal ref={modals.TransactionConfirmModal.register} />
+            <ConfirmModal ref={modals.ConfirmModal.register} />
+            <SelectNonFungibleContractModal ref={modals.SelectNonFungibleContractModal.register} />
+            <SelectFungibleTokenModal ref={modals.SelectFungibleTokenModal.register} />
+            <SelectGasSettingsModal ref={modals.SelectGasSettingsModal.register} />
+            <AddCollectiblesModal ref={modals.AddCollectiblesModal.register} />
+            <PersonaSelectPanelModal ref={modals.PersonaSelectPanelModal.register} />
+            <ApplicationBoardSettingsModal ref={modals.ApplicationBoardSettingsModal.register} />
+            <VerifyNextIDModal ref={modals.VerifyNextIDModal.register} />
+            <ImageEditorModal ref={modals.ImageEditorModal.register} />
+        </RootWeb3ContextProvider>
     )
 })
 

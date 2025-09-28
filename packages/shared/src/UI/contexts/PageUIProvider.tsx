@@ -6,7 +6,6 @@ import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { StyledEngineProvider, type Theme } from '@mui/material'
 import React, { Suspense } from 'react'
 import { PrivySetup } from '../components/Privy/Setup'
-import { PrivySetupProvider } from '../components/Privy/SetupProvider'
 
 export interface PageUIProviderProps {
     useTheme: () => Theme
@@ -25,19 +24,17 @@ export function PageUIProvider({ children, useTheme, fallback }: PageUIProviderP
                     <MaskThemeProvider
                       useMaskIconPalette={(theme) => theme.palette.mode}
                       useTheme={useTheme}>
-                      <PrivySetupProvider>
-                        <RootWeb3ContextProvider>
-                          <PrivySetup />
-                          <SharedContextProvider>
-                            <CustomSnackbarProvider
-                              disableWindowBlurListener={false}
-                              anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                              <CSSVariableInjector />
-                              {children}
-                            </CustomSnackbarProvider>
-                          </SharedContextProvider>
-                        </RootWeb3ContextProvider>
-                      </PrivySetupProvider>
+                      <RootWeb3ContextProvider>
+                        <PrivySetup />
+                        <SharedContextProvider>
+                          <CustomSnackbarProvider
+                            disableWindowBlurListener={false}
+                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                            <CSSVariableInjector />
+                            {children}
+                          </CustomSnackbarProvider>
+                        </SharedContextProvider>
+                      </RootWeb3ContextProvider>
                     </MaskThemeProvider>
                   </DialogStackingProvider>
                 </Suspense>

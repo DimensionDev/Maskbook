@@ -12,7 +12,7 @@ import {
 import { LinguiProviderHMR, PersonaContext, SharedContextProvider, Modals } from '@masknet/shared'
 import { ErrorBoundary } from '@masknet/shared-base-ui'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { DashboardRoutes } from '@masknet/shared-base'
+import { DashboardRoutes, PrivySetupProvider } from '@masknet/shared-base'
 
 import { Pages } from './pages/routes.js'
 import { UserContext, useAppearance } from '../shared-ui/index.js'
@@ -55,6 +55,7 @@ export default function Dashboard() {
 
     // prettier-ignore
     return (
+      <PrivySetupProvider>
         <RootWeb3ContextProvider enforceEVM>
           <LinguiProviderHMR i18n={i18n}>
             <StyledEngineProvider injectFirst>
@@ -84,5 +85,6 @@ export default function Dashboard() {
             </StyledEngineProvider>
           </LinguiProviderHMR>
         </RootWeb3ContextProvider>
+      </PrivySetupProvider>
     )
 }

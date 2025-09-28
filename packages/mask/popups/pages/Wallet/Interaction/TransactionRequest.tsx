@@ -8,6 +8,7 @@ import {
     abiCoder,
     ChainId,
     createJsonRpcPayload,
+    createJsonRpcResponse,
     ErrorEditor,
     formatEthereumAddress,
     PayloadEditor,
@@ -79,6 +80,7 @@ const approveParametersType = [
     },
 ]
 
+let mockingPrivyPid = Date.now() // Use unix timestamp as pid to avoid duplicate mocking
 export function TransactionRequest(props: InteractionItemProps) {
     const wallet = useWallet()
     const privyWallet = usePrivyWallet(wallet?.address)
@@ -129,9 +131,11 @@ export function TransactionRequest(props: InteractionItemProps) {
     setConfirmAction(async () => {
         if (privyWallet) {
             const provider = await privyWallet.getEthereumProvider()
-            const result = await provider.request(request.request.arguments)
+            const result: string = await provider.request(request.request.arguments)
+            mockingPrivyPid += 1
             await Message.updateMessage(request.ID, {
-                response: result,
+                request: request.request,
+                response: createJsonRpcResponse(mockingPrivyPid, result),
                 state: MessageStateType.APPROVED,
             })
             return

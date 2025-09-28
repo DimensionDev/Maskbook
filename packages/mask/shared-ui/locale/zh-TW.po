@@ -1392,8 +1392,8 @@ msgstr ""
 #~ msgid "Get permission failed"
 #~ msgstr ""
 
-#. placeholder {0}: token?.symbol || ''
 #. placeholder {0}: contract?.symbol || ''
+#. placeholder {0}: token?.symbol || ''
 #: popups/components/UnlockERC20Token/index.tsx
 #: popups/components/UnlockERC721Token/index.tsx
 msgid "Give permission to access <0/> your {0}?"
