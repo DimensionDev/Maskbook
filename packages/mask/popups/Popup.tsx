@@ -1,12 +1,11 @@
 import Services from '#services'
-import { PageUIProvider, PersonaContext } from '@masknet/shared'
+import { PageUIProvider, PersonaContext, PrivySetup, PrivySetupProvider } from '@masknet/shared'
 import { MaskMessages, PopupRoutes, assert } from '@masknet/shared-base'
 import { queryClient } from '@masknet/shared-base-ui'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { PrivyProvider, type PrivyClientConfig } from '@privy-io/react-auth'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
 import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
@@ -24,8 +23,6 @@ import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/Erro
 import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
-import { PrivySetup } from './components/Privy/Setup.js'
-import { chains } from './configs.js'
 import { PageTitleContext, PopupContext } from './hooks/index.js'
 import { usePopupTheme } from './hooks/usePopupTheme.js'
 import { Modals } from './modals/index.js'
@@ -113,36 +110,33 @@ export default function Popups() {
 
     assert(process.env.PRIVY_APP_ID, 'Missing PRIVY_APP_ID')
 
+    // prettier-ignore
     return (
-        <PrivyProvider
-            appId={process.env.PRIVY_APP_ID}
-            config={{
-                supportedChains: chains as unknown as PrivyClientConfig['supportedChains'],
-            }}>
-            <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
-                {/* eslint-disable-next-line react-compiler/react-compiler */}
-                <PageUIProvider useTheme={usePopupTheme}>
-                    <PopupSnackbarProvider>
-                        <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
-                            <PopupContext>
-                                <PageTitleContext value={titleContext}>
-                                    {/* https://github.com/TanStack/query/issues/5417 */}
-                                    {process.env.NODE_ENV === 'development' ?
-                                        <ReactQueryDevtools buttonPosition="bottom-right" />
-                                    :   null}
-                                    <PrivySetup />
-                                    <RouterProvider
-                                        router={router}
-                                        fallbackElement={pending}
-                                        future={{ v7_startTransition: true }}
-                                    />
-                                </PageTitleContext>
-                            </PopupContext>
-                        </EVMWeb3ContextProvider>
-                    </PopupSnackbarProvider>
-                </PageUIProvider>
-            </PersistQueryClientProvider>
-        </PrivyProvider>
+        <PrivySetupProvider>
+          <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
+            {/* eslint-disable-next-line react-compiler/react-compiler */}
+            <PageUIProvider useTheme={usePopupTheme}>
+              <PopupSnackbarProvider>
+                <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
+                  <PopupContext>
+                    <PageTitleContext value={titleContext}>
+                      {/* https://github.com/TanStack/query/issues/5417 */}
+                      {process.env.NODE_ENV === 'development' ?
+                        <ReactQueryDevtools buttonPosition="bottom-right" />
+                      :   null}
+                      <PrivySetup />
+                      <RouterProvider
+                        router={router}
+                        fallbackElement={pending}
+                        future={{ v7_startTransition: true }}
+                      />
+                    </PageTitleContext>
+                  </PopupContext>
+                </EVMWeb3ContextProvider>
+              </PopupSnackbarProvider>
+            </PageUIProvider>
+          </PersistQueryClientProvider>
+        </PrivySetupProvider>
     )
 }
 
