@@ -50,7 +50,9 @@ export async function createConfiguration(
                 console.error("Environment variable WEB3_CONSTANTS_RPC should be JSON.stringify'ed twice")
                 WEB3_CONSTANTS_RPC = JSON.stringify(WEB3_CONSTANTS_RPC)
             }
-        } catch (err) {}
+        } catch (err) {
+            console.error('Environment variable WEB3_CONSTANTS_RPC is not valid JSON')
+        }
     }
     const baseConfig = {
         name: 'mask',
@@ -239,6 +241,7 @@ export async function createConfiguration(
                 SOLANA_DEFAULT_RPC_URL: process.env.SOLANA_DEFAULT_RPC_URL || '',
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
                 GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
+                LOAD_KEY: process.env.LOAD_KEY || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',

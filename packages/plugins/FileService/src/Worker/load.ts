@@ -3,11 +3,10 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
-import { makeFileKeySigned } from '../helpers.js'
+import { LOAD_LEGACY_GATEWAY_URL, LOAD_LEGACY_ID_REGEX, makeFileKeySigned } from '../helpers.js'
 
-const LOAD_GATEWAY_URL = 'https://load0.network/resolve'
-const LOAD_UPLOAD_ENDPOINT = 'https://load0.network/upload'
-const API_KEY = 'load_acc_ep4bep0uGlmUXMu46BxM0uWXKsqL5M5w' // move to env
+const LOAD_GATEWAY_URL = 'https://load-s3-agent.load.network'
+const LOAD_UPLOAD_ENDPOINT = 'https://load-s3-agent.load.network/upload'
 
 class LoadAgent implements ProviderAgent {
     static providerName = 'Load Network'
@@ -51,7 +50,9 @@ class LoadAgent implements ProviderAgent {
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
         this.init()
-        const linkPrefix = LOAD_GATEWAY_URL
+        // decide which gateway URL to use based on ID
+        const linkPrefix = LOAD_LEGACY_ID_REGEX.test(metadata.txId) ? LOAD_LEGACY_GATEWAY_URL : LOAD_GATEWAY_URL
+
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
@@ -60,6 +61,7 @@ class LoadAgent implements ProviderAgent {
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
         })
+
         const response = await fetch(LANDING_PAGE)
         const text = await response.text()
         const replaced = text
@@ -68,48 +70,38 @@ class LoadAgent implements ProviderAgent {
             .replace('__METADATA__', encodedMetadata)
 
         const data = encodeText(replaced)
-
         const landingPageTxId = await this.makePayload(data, 'text/html', `${metadata.name}-landing.html`)
-
         return landingPageTxId
     }
 
     async makePayload(data: Uint8Array, type: string, fileName: string = 'file.dat') {
         this.init()
 
-        try {
-            const blob = new Blob([data], { type })
-            const headers = {
-                'Content-Type': type,
-                Filename: fileName,
-                'App-Name': 'Maskbook',
-                'X-Load-Authorization': API_KEY,
-            }
+        const blob = new Blob([data], { type })
+        const formData = new FormData()
+        formData.append('file', blob)
+        formData.append('content_type', type)
+        formData.append('app_name', 'Maskbook')
 
-            const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
-                method: 'POST',
-                headers,
-                body: blob,
-                signal: this.uploadController?.signal,
-            })
+        const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
+            method: 'POST',
+            headers: {
+                Authorization: 'Bearer maskMASKhbs3',
+            },
+            body: formData,
+            signal: this.uploadController?.signal,
+        })
 
-            if (!response.ok) {
-                throw new Error(`Upload failed: ${response.statusText}`)
-            }
-
-            const { optimistic_hash } = await response.json()
-            return optimistic_hash
-        } catch (error) {
-            const errorMessage = `Load Network upload failed: ${error instanceof Error ? error.message : String(error)}`
-            console.error('Load Network detailed error:', errorMessage)
-
-            const enhancedError = new Error(errorMessage)
-            if (error instanceof Error && error.stack) {
-                enhancedError.stack = error.stack
-            }
-
-            throw enhancedError
+        if (!response.ok) {
+            throw new Error(`Upload failed: ${response.statusText}`)
         }
+
+        const result = await response.json()
+        if (!result.success || !result.dataitem_id) {
+            throw new Error('Invalid response from upload service')
+        }
+
+        return result.dataitem_id
     }
 }
 
