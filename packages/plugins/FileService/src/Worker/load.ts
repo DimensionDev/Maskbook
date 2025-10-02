@@ -3,7 +3,7 @@ import { Attachment } from '@dimensiondev/common-protocols'
 import { encodeText } from '@masknet/kit'
 import { LANDING_PAGE, Provider } from '../constants.js'
 import type { ProviderAgent, LandingPageMetadata, AttachmentOptions } from '../types.js'
-import { makeFileKeySigned } from '../helpers.js'
+import { LOAD_LEGACY_GATEWAY_URL, LOAD_LEGACY_ID_REGEX, makeFileKeySigned } from '../helpers.js'
 
 const LOAD_GATEWAY_URL = 'https://load-s3-agent.load.network'
 const LOAD_UPLOAD_ENDPOINT = 'https://load-s3-agent.load.network/upload'
@@ -50,7 +50,9 @@ class LoadAgent implements ProviderAgent {
 
     async uploadLandingPage(metadata: LandingPageMetadata) {
         this.init()
-        const linkPrefix = LOAD_GATEWAY_URL
+        // decide which gateway URL to use based on ID
+        const linkPrefix = LOAD_LEGACY_ID_REGEX.test(metadata.txId) ? LOAD_LEGACY_GATEWAY_URL : LOAD_GATEWAY_URL
+
         const encodedMetadata = JSON.stringify({
             name: metadata.name,
             size: metadata.size,
@@ -59,6 +61,7 @@ class LoadAgent implements ProviderAgent {
             signed: await makeFileKeySigned(metadata.key),
             createdAt: new Date().toISOString(),
         })
+
         const response = await fetch(LANDING_PAGE)
         const text = await response.text()
         const replaced = text
@@ -83,7 +86,7 @@ class LoadAgent implements ProviderAgent {
         const response = await fetch(LOAD_UPLOAD_ENDPOINT, {
             method: 'POST',
             headers: {
-                Authorization: `Bearer ${process.env.LOAD_NETWORK_KEY}`,
+                Authorization: 'Bearer maskMASKhbs3',
             },
             body: formData,
             signal: this.uploadController?.signal,
