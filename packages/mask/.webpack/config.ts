@@ -124,9 +124,7 @@ export async function createConfiguration(
             },
             rules: [
                 // Source map for libraries
-                !rspack && computedFlags.sourceMapKind ?
-                    { test: /\.js$/, enforce: 'pre', extractSourceMap: true }
-                :   null,
+                !rspack && computedFlags.sourceMapKind ? { test: /\.js$/, extractSourceMap: true } : null,
                 // TypeScript
                 {
                     test: /\.[mc]?[jt]sx?$/i,
