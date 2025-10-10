@@ -43,6 +43,13 @@ function setup() {
         },
     )
 
+    registerEncodableClass(
+        'Headers',
+        (x) => x instanceof Headers,
+        (h: Headers) => [...h.entries()],
+        (e: Array<[string, string]>) => new Headers(e),
+    )
+
     typeson.register({
         Identifier: [
             (x) => x instanceof Identifier,
