@@ -238,6 +238,8 @@ export async function createConfiguration(
                 MASK_ENABLE_EXCHANGE: process.env.MASK_ENABLE_EXCHANGE || '',
                 GOOGLE_CLIENT_ID: JSON.stringify(process.env.GOOGLE_CLIENT_ID) || '',
                 LOAD_KEY: process.env.LOAD_KEY || '',
+                FIREFLY_X_CLIENT_ID: process.env.FIREFLY_X_CLIENT_ID || '',
+                FIREFLY_X_CLIENT_SECRET: process.env.FIREFLY_X_CLIENT_SECRET || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',
