@@ -66,8 +66,7 @@ interface Props extends BoxProps {
 async function loginFirefly() {
     const result = await Services.Helper.requestXOAuthToken()
     if (result) {
-        const account = await Services.Helper.loginFireflyViaTwitter()
-        console.log(account)
+        await Services.Helper.loginFireflyViaTwitter()
     }
 }
 export const ImportCreateWallet = memo<Props>(function ImportCreateWallet({ onChoose, ...props }) {

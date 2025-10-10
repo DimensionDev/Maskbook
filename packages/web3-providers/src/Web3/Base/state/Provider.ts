@@ -176,7 +176,7 @@ export abstract class ProviderState<ChainId extends number, ProviderType extends
         if (chainId !== result.chainId && providerType !== 'WalletConnect') {
             await Promise.race([
                 (async () => {
-                    await delay(30 * 1000)
+                    await delay(30 /* seconds */ * 1000 /* milliseconds */)
                     throw new Error(`Timeout of switching chain to ${chainId}.`)
                 })(),
                 provider.switchChain(chainId),

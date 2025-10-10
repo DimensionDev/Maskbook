@@ -37,8 +37,6 @@ export interface BuildFlags {
     sourceMapPreference?: boolean | string
     /** @default true */
     sourceMapHideFrameworks?: boolean | undefined
-    FIREFLY_X_CLIENT_ID?: string
-    FIREFLY_X_CLIENT_SECRET?: string
 }
 export type NormalizedFlags = Required<BuildFlags>
 export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
@@ -52,8 +50,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         reactCompiler = false,
         lavamoat = false,
         csp = false,
-        FIREFLY_X_CLIENT_ID = '',
-        FIREFLY_X_CLIENT_SECRET = '',
     } = flags
     let {
         hmr = mode === 'development',
@@ -91,9 +87,6 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         devtoolsEditorURI,
         // CI / profiling
         profiling,
-        // Secrets
-        FIREFLY_X_CLIENT_ID,
-        FIREFLY_X_CLIENT_SECRET,
     }
 }
 
