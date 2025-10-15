@@ -1,35 +1,35 @@
-import Services from '#services'
 import { PageUIProvider, PersonaContext, PrivySetup } from '@masknet/shared'
-import { MaskMessages, PopupRoutes, PrivySetupProvider, assert } from '@masknet/shared-base'
-import { queryClient } from '@masknet/shared-base-ui'
+import { assert, jsxCompose, MaskMessages, PopupRoutes, PrivySetupProvider } from '@masknet/shared-base'
 import { PopupSnackbarProvider } from '@masknet/theme'
 import { EVMWeb3ContextProvider } from '@masknet/web3-hooks-base'
 import { ProviderType } from '@masknet/web3-shared-evm'
 import { Box } from '@mui/material'
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
-import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
-import { Suspense, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
+import { Suspense, cloneElement, lazy, memo, useEffect, useMemo, useState, type ReactNode } from 'react'
 import { useIdleTimer } from 'react-idle-timer'
 import {
+    createHashRouter,
     Navigate,
     Outlet,
     RouterProvider,
-    createHashRouter,
     useNavigate,
-    useRouteError,
     useSearchParams,
+    useRouteError,
 } from 'react-router-dom'
-import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
-import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
+import { usePopupTheme } from './hooks/usePopupTheme.js'
+import Services from '#services'
 import { LoadingPlaceholder } from './components/LoadingPlaceholder/index.js'
 import { PopupLayout } from './components/PopupLayout/index.js'
-import { PageTitleContext, PopupContext } from './hooks/index.js'
-import { usePopupTheme } from './hooks/usePopupTheme.js'
+import { PopupContext, PageTitleContext } from './hooks/index.js'
 import { Modals } from './modals/index.js'
-import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
+import { UserContext, queryPersistOptions } from '../shared-ui/index.js'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { PersistQueryClientProvider } from '@tanstack/react-query-persist-client'
+import { queryClient } from '@masknet/shared-base-ui'
 import { PersonaFrame, personaRoute } from './pages/Personas/index.js'
-import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
 import { WalletFrame, walletRoutes } from './pages/Wallet/index.js'
+import { ContactsFrame, contactsRoutes } from './pages/Friends/index.js'
+import { ErrorBoundaryUIOfError } from '../../shared-base-ui/src/components/ErrorBoundary/ErrorBoundary.js'
+import { TraderFrame, traderRoutes } from './pages/Trader/index.js'
 
 const personaInitialState = {
     queryOwnedPersonaInformation: Services.Identity.queryOwnedPersonaInformation,
@@ -110,33 +110,25 @@ export default function Popups() {
 
     assert(process.env.PRIVY_APP_ID, 'Missing PRIVY_APP_ID')
 
-    // prettier-ignore
-    return (
-      <PrivySetupProvider>
-        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions}>
-          {/* eslint-disable-next-line react-compiler/react-compiler */}
-          <PageUIProvider useTheme={usePopupTheme}>
-            <PopupSnackbarProvider>
-              <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet}>
-                <PopupContext>
-                  <PageTitleContext value={titleContext}>
-                    {/* https://github.com/TanStack/query/issues/5417 */}
-                    {process.env.NODE_ENV === 'development' ?
-                      <ReactQueryDevtools buttonPosition="bottom-right" />
-                    :   null}
-                    <PrivySetup />
-                    <RouterProvider
-                      router={router}
-                      fallbackElement={pending}
-                      future={{ v7_startTransition: true }}
-                    />
-                  </PageTitleContext>
-                </PopupContext>
-              </EVMWeb3ContextProvider>
-            </PopupSnackbarProvider>
-          </PageUIProvider>
-        </PersistQueryClientProvider>
-      </PrivySetupProvider>
+    return jsxCompose(
+        <PrivySetupProvider />,
+        <PersistQueryClientProvider client={queryClient} persistOptions={queryPersistOptions} />,
+        // eslint-disable-next-line react-compiler/react-compiler
+        <PageUIProvider useTheme={usePopupTheme} />,
+        <PopupSnackbarProvider children={null!} />,
+        <EVMWeb3ContextProvider providerType={ProviderType.MaskWallet} />,
+        <PopupContext />,
+        <PageTitleContext value={titleContext} />,
+    )(
+        cloneElement,
+        <>
+            {/* https://github.com/TanStack/query/issues/5417 */}
+            {process.env.NODE_ENV === 'development' ?
+                <ReactQueryDevtools buttonPosition="bottom-right" />
+            :   null}
+            <PrivySetup />
+            <RouterProvider router={router} fallbackElement={pending} future={{ v7_startTransition: true }} />
+        </>,
     )
 }
 

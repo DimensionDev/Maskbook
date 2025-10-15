@@ -1,11 +1,11 @@
-import { i18n } from '@lingui/core'
-import { LinguiProviderHMR, SharedContextProvider } from '@masknet/shared'
-import { ErrorBoundary } from '@masknet/shared-base-ui'
-import { CSSVariableInjector, CustomSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
-import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import React, { cloneElement, Suspense } from 'react'
 import { StyledEngineProvider, type Theme } from '@mui/material'
-import React, { Suspense } from 'react'
-import { PrivySetup } from '../components/Privy/Setup'
+import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
+import { CSSVariableInjector, CustomSnackbarProvider, DialogStackingProvider, MaskThemeProvider } from '@masknet/theme'
+import { LinguiProviderHMR, PrivySetup, SharedContextProvider } from '@masknet/shared'
+import { jsxCompose } from '@masknet/shared-base'
+import { ErrorBoundary } from '@masknet/shared-base-ui'
+import { i18n } from '@lingui/core'
 
 export interface PageUIProviderProps {
     useTheme: () => Theme
@@ -13,34 +13,31 @@ export interface PageUIProviderProps {
     fallback?: React.ReactNode
 }
 export function PageUIProvider({ children, useTheme, fallback }: PageUIProviderProps) {
-    /* prettier-ignore */
-    return (
-        <Suspense>
-          <LinguiProviderHMR i18n={i18n}>
-            <StyledEngineProvider injectFirst>
-              <ErrorBoundary>
-                <Suspense fallback={fallback}>
-                  <DialogStackingProvider hasGlobalBackdrop={false}>
-                    <MaskThemeProvider
-                      useMaskIconPalette={(theme) => theme.palette.mode}
-                      useTheme={useTheme}>
-                      <RootWeb3ContextProvider>
-                        <PrivySetup />
-                        <SharedContextProvider>
-                          <CustomSnackbarProvider
-                            disableWindowBlurListener={false}
-                            anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
-                            <CSSVariableInjector />
-                            {children}
-                          </CustomSnackbarProvider>
-                        </SharedContextProvider>
-                      </RootWeb3ContextProvider>
-                    </MaskThemeProvider>
-                  </DialogStackingProvider>
-                </Suspense>
-              </ErrorBoundary>
-            </StyledEngineProvider>
-          </LinguiProviderHMR>
-        </Suspense>
+    return jsxCompose(
+        // Avoid the crash due to unhandled suspense
+        <Suspense />,
+        // Provide the minimal environment (i18n context) for CrashUI in page mode
+        <LinguiProviderHMR i18n={i18n} />,
+        <StyledEngineProvider injectFirst />,
+        <ErrorBoundary />,
+
+        <Suspense fallback={fallback} />,
+        <DialogStackingProvider hasGlobalBackdrop={false} />,
+        <MaskThemeProvider useMaskIconPalette={(theme) => theme.palette.mode} useTheme={useTheme} />,
+        <RootWeb3ContextProvider />,
+    )(
+        cloneElement,
+        <>
+            <PrivySetup />
+            <SharedContextProvider>
+                <CustomSnackbarProvider
+                    disableWindowBlurListener={false}
+                    anchorOrigin={{ vertical: 'top', horizontal: 'right' }}>
+                    <CSSVariableInjector />
+                    {children}
+                </CustomSnackbarProvider>
+            </SharedContextProvider>
+            ,
+        </>,
     )
 }
