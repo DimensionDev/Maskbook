@@ -23,10 +23,11 @@ async function getLinguiEnabledPackages() {
     )
     return folders
 }
+const parallel = process.env.CI ? '' : '--parallel'
 export async function runLinguiExtract() {
     const folders = await getLinguiEnabledPackages()
     return awaitChildProcess(
-        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only --parallel ${folders.map((x) => '--filter ' + x).join(' ')} exec lingui extract`,
+        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only ${parallel} ${folders.map((x) => '--filter ' + x).join(' ')} exec lingui extract`,
     )
 }
 task(runLinguiExtract, 'lingui-extract', 'Run lingui extract on all workspace packages')
@@ -34,10 +35,10 @@ task(runLinguiExtract, 'lingui-extract', 'Run lingui extract on all workspace pa
 export async function runLinguiCompile() {
     const folders = await getLinguiEnabledPackages()
     await awaitChildProcess(
-        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only --parallel ${folders.map((x) => '--filter ' + x).join(' ')} exec lingui compile`,
+        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only ${parallel} ${folders.map((x) => '--filter ' + x).join(' ')} exec lingui compile`,
     )
     return awaitChildProcess(
-        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only --parallel ${folders.map((x) => '--filter ' + x).join(' ')} exec prettier --write './**/*.json'`,
+        shell`pnpm -r --no-reporter-hide-prefix --aggregate-output --reporter=append-only ${parallel} ${folders.map((x) => '--filter ' + x).join(' ')} exec prettier --write './**/*.json'`,
     )
 }
 task(runLinguiCompile, 'lingui-compile', 'Run lingui compile on all workspace packages')
