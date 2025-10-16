@@ -1,13 +1,13 @@
-import { EMPTY_LIST } from '@masknet/shared-base'
-import { v4 as uuid } from 'uuid'
 import { type PutObjectCommandInput, S3 } from '@aws-sdk/client-s3'
 import { Upload } from '@aws-sdk/lib-storage'
+import { EMPTY_LIST } from '@masknet/shared-base'
 import urlcat from 'urlcat'
+import { v4 as uuid } from 'uuid'
 import type { FireflyConfigAPI } from '../entry-types.js'
 import { fetchJSON } from '../helpers/fetchJSON.js'
 import { FIREFLY_BASE_URL } from './constants.js'
 
-const BASE_URL = 'https://api.dimension.im/v1'
+const FIREFLY_API_HOST = 'https://masknetwork-dev.firefly.land'
 const TWITTER_HANDLER_VERIFY_URL = 'https://twitter-handler-proxy.r2d2.to'
 
 export class FireflyConfig {
@@ -17,7 +17,7 @@ export class FireflyConfig {
     ): Promise<FireflyConfigAPI.LensAccount[]> {
         if (!twitterHandle) return EMPTY_LIST
         const result = await fetchJSON<FireflyConfigAPI.LensResult>(
-            urlcat(BASE_URL, '/account/lens', {
+            urlcat(FIREFLY_API_HOST, '/v1/account/lens', {
                 twitterHandle,
                 isVerified,
             }),
