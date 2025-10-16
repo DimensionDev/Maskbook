@@ -370,8 +370,8 @@ msgstr "備份失敗"
 #~ msgid "Backup is saved to Mask Cloud Service."
 #~ msgstr ""
 
-#. placeholder {0}: user.localBackupAt
 #. placeholder {0}: user.cloudBackupAt
+#. placeholder {0}: user.localBackupAt
 #: popups/pages/Settings/index.tsx
 #: popups/pages/Settings/index.tsx
 msgid "Backup on {0}"
