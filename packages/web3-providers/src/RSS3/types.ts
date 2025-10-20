@@ -36,7 +36,6 @@ export enum NETWORK {
  * @deprecated
  */
 export enum PLATFORM {
-    mirror = 'mirror',
     lens = 'lens',
     gitcoin = 'gitcoin',
     snapshot = 'snapshot',

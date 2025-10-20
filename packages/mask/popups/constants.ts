@@ -9,6 +9,5 @@ export const SOCIAL_MEDIA_ICON_FILTER_COLOR: Record<EnhanceableSite | string, st
     [EnhanceableSite.Minds]: 'drop-shadow(0px 6px 12px rgba(33, 37, 42, 0.20))',
     [EnhanceableSite.Instagram]: 'drop-shadow(0px 6px 12px rgba(246, 100, 16, 0.20))',
     [EnhanceableSite.OpenSea]: '',
-    [EnhanceableSite.Mirror]: '',
     [EnhanceableSite.Localhost]: '',
 }
