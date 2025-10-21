@@ -14,6 +14,7 @@ approvedList.set('string-width-cjs', 'npm:string-width@^4.2.0')
 approvedList.set('strip-ansi-cjs', 'npm:strip-ansi@^6.0.1')
 approvedList.set('wrap-ansi-cjs', ['npm:wrap-ansi@^6.0.1', 'npm:wrap-ansi@^7.0.0'])
 
+approvedList.set('cbw-sdk', ['npm:@coinbase/wallet-sdk@3.9.3'])
 /**
  * @param {string} parentPackage The current resolving parentPackage
  * @param {string} dependedPackage The package it depends on

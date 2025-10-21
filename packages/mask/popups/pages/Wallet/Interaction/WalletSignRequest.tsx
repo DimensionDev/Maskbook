@@ -1,12 +1,12 @@
-import { parseEIP4361Message, type EIP4361Message } from '@masknet/web3-shared-base'
+import { Trans } from '@lingui/react/macro'
+import { NetworkPluginID } from '@masknet/shared-base'
+import { usePrivyWallet, useWallet, useWeb3State } from '@masknet/web3-hooks-base'
+import { MessageStateType, parseEIP4361Message, type EIP4361Message } from '@masknet/web3-shared-base'
 import { ErrorEditor, EthereumMethodType } from '@masknet/web3-shared-evm'
 import { useEffect, useMemo } from 'react'
 import { SignRequestInfo } from '../../../components/SignRequestInfo/index.js'
 import { useInteractionWalletContext } from './InteractionContext.js'
 import type { InteractionItemProps } from './interaction.js'
-import { useWeb3State } from '@masknet/web3-hooks-base'
-import { NetworkPluginID } from '@masknet/shared-base'
-import { Trans } from '@lingui/react/macro'
 
 /**
  * string: personal_sign
@@ -21,6 +21,8 @@ type ParsedSigningMessage = string | EIP4361Message | undefined
 
 export function WalletSignRequest(props: InteractionItemProps) {
     const { setConfirmAction, setConfirmVerb, setIsDanger, currentRequest } = props
+    const wallet = useWallet()
+    const privyWallet = usePrivyWallet(wallet?.address)
     const { origin, ID: id } = currentRequest
     const request = currentRequest.request.arguments
 
@@ -28,6 +30,16 @@ export function WalletSignRequest(props: InteractionItemProps) {
     useEffect(() => setConfirmVerb(<Trans>Sign</Trans>), [])
 
     setConfirmAction(async () => {
+        if (privyWallet?.isConnected) {
+            const provider = await privyWallet.getEthereumProvider()
+            const result = await provider.request(request)
+            await Message?.updateMessage(currentRequest.ID, {
+                request: currentRequest.request,
+                response: result,
+                state: MessageStateType.APPROVED,
+            })
+            return
+        }
         const params = structuredClone(request.params)
         if (request.method === EthereumMethodType.eth_signTypedData_v4) {
             if (typeof params[1] === 'object') params[1] = JSON.stringify(params[1])

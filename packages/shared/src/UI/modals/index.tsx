@@ -1,27 +1,27 @@
-import { memo } from 'react'
 import { NetworkPluginID } from '@masknet/shared-base'
 import { RootWeb3ContextProvider } from '@masknet/web3-hooks-base'
-import { WalletStatusModal } from './WalletStatusModal/index.js'
+import { memo } from 'react'
+import { PrivySetup } from '../components/Privy/Setup.js'
+import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
+import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
+import { ApplicationBoardModal, ApplicationBoardSettingsModal } from './ApplicationBoardModal/index.js'
+import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
+import { ConfirmModal } from './ConfirmModal/index.js'
+import { ConnectWalletModal } from './ConnectWalletModal/index.js'
+import { GasSettingModal } from './GasSettingModal/index.js'
+import { ImageEditorModal } from './ImageEditor/index.js'
+import { LeavePageConfirmModal } from './LeavePageConfirmModal/index.js'
+import * as modals from './modals.js'
+import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
+import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
+import { SelectFungibleTokenModal } from './SelectFungibleTokenModal/index.js'
+import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
 import { SelectProviderModal } from './SelectProviderModal/index.js'
+import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
+import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
 import { WalletConnectQRCodeModal } from './WalletConnectQRCodeModal/index.js'
 import { WalletRiskWarningModal } from './WalletRiskWarningModal/index.js'
-import { ConnectWalletModal } from './ConnectWalletModal/index.js'
-import { LeavePageConfirmModal } from './LeavePageConfirmModal/index.js'
-import { ApplicationBoardModal, ApplicationBoardSettingsModal } from './ApplicationBoardModal/index.js'
-import { GasSettingModal } from './GasSettingModal/index.js'
-import { TransactionSnackbarModal } from './TransactionSnackbar/index.js'
-import { ConfirmModal } from './ConfirmModal/index.js'
-import { TransactionConfirmModal } from './TokenTransactionConfirmModal/index.js'
-import { SelectNonFungibleContractModal } from './SelectNonFungibleContractModal/index.js'
-import { SelectFungibleTokenModal } from './SelectFungibleTokenModal/index.js'
-import { SelectGasSettingsModal } from './SelectAdvancedSettingsDialog/index.js'
-import { AddCollectiblesModal } from './AddCollectiblesModal/index.js'
-import { PersonaSelectPanelModal } from './PersonaSelectPanelModal/index.js'
-
-import * as modals from './modals.js'
-import { ConfirmDialogComponent } from './ConfirmDialog/index.js'
-import { VerifyNextIDModal } from '../components/VerifyNextIDDialog/Modal.js'
-import { ImageEditorModal } from './ImageEditor/index.js'
+import { WalletStatusModal } from './WalletStatusModal/index.js'
 export * from './modals.js'
 
 export interface ModalProps {
@@ -30,6 +30,7 @@ export interface ModalProps {
 export const Modals = memo(function Modals(props: ModalProps) {
     return (
         <RootWeb3ContextProvider>
+            <PrivySetup />
             <ConnectWalletModal ref={modals.ConnectWalletModal.register} />
             <WalletConnectQRCodeModal ref={modals.WalletConnectQRCodeModal.register} />
             <ConfirmDialogComponent ref={modals.ConfirmDialog.register} />

@@ -22,6 +22,7 @@
         "/jQctM": ["至"],
         "/nT6AE": ["新密码"],
         "/riTT2": ["固定成功。"],
+        "/uEw9z": ["Your X account authorization has timed out. Please try again."],
         "/vtDGO": [["0"], " is connected to these sites, they can view your account address."],
         "/xrk7I": ["FAQ&Tutorial"],
         "00b9QG": ["设置支付密码"],
@@ -350,6 +351,9 @@
         "LJkXYZ": ["创建新的 MASK 身份"],
         "LP+1Z7": ["添加网络"],
         "LSwUJb": ["Select Liquidity"],
+        "LU3p9s": [
+            "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+        ],
         "LWJCIn": ["已连接的网站"],
         "LcET2C": ["隐私政策"],
         "LcZh+r": ["不支持的数据备份格式"],
@@ -396,6 +400,7 @@
         "OkofjH": ["Recover"],
         "On0aF2": ["网站"],
         "OuUyzz": ["No contacts stored locally, you can try searching."],
+        "OzSOpz": ["Create a Privy wallet using an X account"],
         "P9wzG/": ["恢复"],
         "PDW/HG": ["Your Persona is on **ready 🚀**"],
         "PGdbc0": [
@@ -752,6 +757,7 @@
         "rLgPvm": ["备份"],
         "rQQGN1": ["Max priority fee过高。您或许支付了超过需要的费用。"],
         "rWE7Lq": ["Contact deleted."],
+        "rYFSec": ["Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."],
         "raCUEa": ["By granting permission, you are allowing the following <0/> contract to access your funds"],
         "rkMKQ0": [
             "The verification post sent.<0/><1/>You could check the verification result on the Mask Pop-up after few minutes. If it failed, try to send another verification post later."
@@ -868,6 +874,7 @@
         ],
         "yz7wBu": ["关闭"],
         "yzF66j": ["交易记录"],
+        "z9HeHt": ["Create a Privy Wallet"],
         "zBUJYA": ["The approval for this contract will be revoked in case of the amount is 0."],
         "zPar3e": ["收藏品"],
         "zga9sT": ["好的"],

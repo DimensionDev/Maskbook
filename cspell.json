@@ -25,7 +25,8 @@
         "packages/xcode",
         "pnpm-lock.yaml",
         "pnpm-workspace.yaml",
-        "qya-aa.json"
+        "qya-aa.json",
+        ".env/dev-preference.example"
     ],
     "TODO: fix those words": ["bridgable", "clonable", "sniffings"],
     "ignoreWords": [
@@ -246,6 +247,7 @@
     "words": [
         "arbitrum",
         "boba",
+        "caip",
         "cashtags",
         "celo",
         "endregion",
@@ -259,6 +261,7 @@
         "tiktok",
         "tweetnacl",
         "txid",
+        "wagmi",
         "waitlist",
         "youtube"
     ]

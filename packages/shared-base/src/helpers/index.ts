@@ -1,3 +1,4 @@
+export * from './assert.js'
 export * from './asyncIterator.js'
 export * from './attachRectangle.js'
 export * from './compose.js'

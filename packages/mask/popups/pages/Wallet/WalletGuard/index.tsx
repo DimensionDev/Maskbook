@@ -21,12 +21,7 @@ export const WalletGuard = memo(function WalletGuard() {
     const hitMessageGuard = useMessageGuard()
 
     if (!wallets.length) {
-        return (
-            <>
-                <WalletHeader />
-                <WalletStartUp />
-            </>
-        )
+        return <WalletStartUp />
     }
 
     if (hitPaymentPasswordGuard) {

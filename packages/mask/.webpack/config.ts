@@ -240,6 +240,7 @@ export async function createConfiguration(
                 LOAD_KEY: process.env.LOAD_KEY || '',
                 FIREFLY_X_CLIENT_ID: process.env.FIREFLY_X_CLIENT_ID || '',
                 FIREFLY_X_CLIENT_SECRET: process.env.FIREFLY_X_CLIENT_SECRET || '',
+                PRIVY_APP_ID: process.env.PRIVY_APP_ID || '',
             }),
             new (rspack?.DefinePlugin || webpack.default.DefinePlugin)({
                 'process.browser': 'true',

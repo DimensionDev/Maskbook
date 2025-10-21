@@ -1,13 +1,13 @@
-import { useCallback, useLayoutEffect, useState } from 'react'
 import { MutationObserverWatcher } from '@dimensiondev/holoflows-kit'
-import { makeStyles } from '@masknet/theme'
+import { Trans } from '@lingui/react/macro'
 import { MaskMessages } from '@masknet/shared-base'
 import { useLocationChange } from '@masknet/shared-base-ui'
+import { makeStyles } from '@masknet/theme'
+import { useCallback, useLayoutEffect, useState } from 'react'
+import { attachReactTreeWithContainer } from '../../../../utils/shadow-root.js'
 import { startWatch } from '../../../../utils/startWatch.js'
 import { searchInstagramAvatarEditPageSettingDialog, searchInstagramAvatarListSelector } from '../../utils/selector.js'
-import { attachReactTreeWithContainer } from '../../../../utils/shadow-root.js'
 import { NFTAvatarSettingDialog } from './NFTAvatarSettingDialog.js'
-import { Trans } from '@lingui/react/macro'
 
 export async function injectProfileNFTAvatarInInstagram(signal: AbortSignal) {
     const watcher = new MutationObserverWatcher(searchInstagramAvatarListSelector())

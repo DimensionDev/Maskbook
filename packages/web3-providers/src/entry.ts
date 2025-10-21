@@ -54,6 +54,9 @@ export { ContractWallet } from './SmartPay/libs/ContractWallet.js'
 export { Create2Factory } from './SmartPay/libs/Create2Factory.js'
 export { UserTransaction } from './SmartPay/libs/UserTransaction.js'
 
+// Privy
+export * from './Privy/index.js'
+
 // NextID
 export { NextIDProof } from './NextID/index.js'
 

@@ -91,7 +91,7 @@ export function normalizeBuildFlags(flags: BuildFlags): NormalizedFlags {
         devtoolsEditorURI,
         // CI / profiling
         profiling,
-        // Secrets
+        //  Secrets
         FIREFLY_X_CLIENT_ID,
         FIREFLY_X_CLIENT_SECRET,
     }
