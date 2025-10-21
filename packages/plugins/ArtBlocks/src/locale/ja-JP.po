@@ -65,8 +65,12 @@ msgstr "詳細"
 #. placeholder {1}: price.toFixed()
 #. placeholder {2}: token?.symbol || ''
 #: src/SiteAdaptor/PurchaseDialog.tsx
-msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
-msgstr "{0} {1} {2}のコレクションから美しいアート作品を購入しました。@realMaskNetworkをインストールすると、あなたも手に入ります。"
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx
+#~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
+#~ msgstr "{0} {1} {2}のコレクションから美しいアート作品を購入しました。@realMaskNetworkをインストールすると、あなたも手に入ります。"
 
 #. placeholder {0}: project.name
 #. placeholder {1}: price.toFixed()

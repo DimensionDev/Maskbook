@@ -41,6 +41,13 @@
         "qqWcBV": ["Completed"],
         "rcNnsQ": ["Price:"],
         "uqF4Nm": ["Blockchain:"],
+        "xTQLHC": [
+            "I just purchased a beautiful piece of art from {0} collection for ",
+            ["1"],
+            " ",
+            ["2"],
+            ". Install @masknetwork to get yours."
+        ],
         "xjhtsV": ["Chain"],
         "ywDBfs": ["Something went wrong!"],
         "z/3+av": ["License:"],

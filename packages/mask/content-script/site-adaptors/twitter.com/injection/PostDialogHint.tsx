@@ -1,17 +1,17 @@
-import { useCallback } from 'react'
-import { clamp } from 'lodash-es'
 import { MutationObserverWatcher, type LiveSelector } from '@dimensiondev/holoflows-kit'
+import { useLingui } from '@lingui/react/macro'
 import { CrossIsolationMessages, sayHelloShowed } from '@masknet/shared-base'
 import { makeStyles, MaskColorVar } from '@masknet/theme'
 import { makeTypedMessageText } from '@masknet/typed-message'
 import { alpha } from '@mui/material'
+import { clamp } from 'lodash-es'
+import { useCallback } from 'react'
 import { PostDialogHint } from '../../../components/InjectedComponents/PostDialogHint.js'
 import { attachReactTreeWithContainer } from '../../../utils/shadow-root/renderInShadowRoot.js'
 import { startWatch, type WatchOptions } from '../../../utils/startWatch.js'
 import { twitterBase } from '../base.js'
 import { hasEditor, isCompose } from '../utils/postBox.js'
 import { isReplyPageSelector, postEditorInPopupSelector, searchReplyToolbarSelector } from '../utils/selector.js'
-import { useLingui } from '@lingui/react/macro'
 
 const useStyles = makeStyles()((theme) => ({
     iconButton: {
@@ -88,7 +88,7 @@ function PostDialogHintAtTwitter({ reason }: { reason: 'timeline' | 'popup' }) {
             sayHelloShowed[twitterBase.networkIdentifier].value ?
                 undefined
             :   makeTypedMessageText(
-                    t`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @realMaskNetwork to explore Web3.`,
+                    t`Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3.`,
                 )
 
         CrossIsolationMessages.events.compositionDialogEvent.sendToLocal({

@@ -123,7 +123,7 @@ export const RedPacket = memo(function RedPacket({ payload, currentPluginID }: R
             sender: payload.sender.name.replace(/^@/u, ''),
             payload: link!,
             network: network?.name ?? 'Mainnet',
-            account: isOnTwitter ? 'realMaskNetwork' : 'masknetwork',
+            account: 'masknetwork',
             interpolation: { escapeValue: false },
         }
         const claimed = _(

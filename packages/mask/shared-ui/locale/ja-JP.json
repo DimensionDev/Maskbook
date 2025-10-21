@@ -209,6 +209,7 @@
         "Appw6V": ["NFTが見つかりません。"],
         "Aq+O0x": ["ステータス："],
         "AsN7HV": ["電話番号が間違っています。"],
+        "AuvDq6": ["This tweet is encrypted with #mask_io (@masknetwork). 📪🔑"],
         "AwQpq/": ["Click on the down-arrow to see the private key."],
         "AyLiVq": ["QRコードをスキャンして支払いを受け取る"],
         "B6C0XJ": ["データなし"],
@@ -439,6 +440,7 @@
         "QrHM/A": ["Backup downloaded and merged to local successfully."],
         "QypSt2": ["Update X.com Permissions"],
         "R2K7XH": ["ソーシャルメディアで Web3 dApps の機能を探索してみてください。"],
+        "RCBmDP": ["Follow @masknetwork to explore Web3."],
         "RH8jSA": ["ローカルデータベースにデータを統合"],
         "RL5m+x": ["Generating your **accounts**"],
         "ROsDRH": ["Tap to view the mnemonic words <0/> Make sure no one is looking at your screen"],
@@ -683,6 +685,7 @@
         "lWOC+h": ["Mask Network requires you to authorize the following websites before using it."],
         "llLBQ1": ["トークン"],
         "loCUuu": ["キーストア："],
+        "lvL4x0": ["Follow @masknetwork for Web3 updates and insights."],
         "m16xKo": ["追加"],
         "m2OZMI": ["最大手数料は最大優先手数料より低くすることはできません"],
         "m3XvO+": ["インポートされたウォレット"],
@@ -854,6 +857,9 @@
         "y5aRAa": ["ファイルをダウンロードするには、クラウドバックアップパスワードを入力してください。"],
         "y62Dys": ["Network fee"],
         "y6VCOb": [["0"], " 分"],
+        "yC/GKd": [
+            "Hello Mask world. This is my first encrypted message. Install https://mask.io to send me encrypted post. Follow @masknetwork to explore Web3."
+        ],
         "yD15Uj": ["このウォレットを削除してもよろしいですか？"],
         "yFpcbN": ["このリクエストはフィッシングの添付かもしれません。私はこれを理解し続けたいです。"],
         "yFrxQj": ["ニーモニック単語"],

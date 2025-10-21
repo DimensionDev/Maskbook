@@ -92,7 +92,6 @@ export function useSubmit(onClose: () => void, reason: 'timeline' | 'popup' | 'r
 function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Meta): string | null {
     if (!meta) return null
     const hasOfficialAccount = Sniffings.is_twitter_page || Sniffings.is_facebook_page
-    const officialAccount = Sniffings.is_twitter_page ? _(msg`realMaskNetwork`) : _(msg`masknetwork`)
     const token = meta.has(RedPacketMetaKey) || meta.has(SolanaRedPacketMetaKey) ? _(msg`a token`) : _(msg`an NFT`)
     const sns = SOCIAL_MEDIA_NAME[activatedSiteAdaptorUI!.networkIdentifier]
 
@@ -102,7 +101,7 @@ function decorateEncryptedText(encrypted: string, _: I18nContext['_'], meta?: Me
         const promote_red_packet2 = _(msg`🧧🧧🧧 Try sending Lucky Drop to your friends with Mask.io.`)
         return hasOfficialAccount ?
                 promote_red_packet +
-                    _(msg`Follow @${officialAccount} for Web3 updates and insights.`) +
+                    _(msg`Follow @masknetwork for Web3 updates and insights.`) +
                     ` \n\n${promote_red_packet2}\n\n${encrypted}`
             :   `${promote_red_packet}\n\n${promote_red_packet2}\n\n${encrypted}`
     } else if (meta.has(`${PluginID.FileService}:3`)) {

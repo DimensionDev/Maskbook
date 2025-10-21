@@ -22,6 +22,13 @@
         "gWcGl/": ["Your wallet cancelled the transaction."],
         "hTbvD9": ["Sorry, you are not eligible to claim $ARB in this campaign."],
         "hom7qf": ["Claim"],
+        "kHDhjV": [
+            "I just claimed airdrop with ",
+            ["amount"],
+            " ",
+            ["0"],
+            " on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n Install https://mask.io to explore more airdrop activities."
+        ],
         "neBDpj": ["Please connect wallet"],
         "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "rJZPaP": ["No activities found."],

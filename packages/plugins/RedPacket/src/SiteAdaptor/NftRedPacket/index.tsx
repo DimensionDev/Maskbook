@@ -86,11 +86,7 @@ export function NftRedPacket({ payload, currentPluginID }: NftRedPacketProps) {
     const account_promote = useMemo(() => {
         const isOnTwitter = Sniffings.is_twitter_page
         const isOnFacebook = Sniffings.is_facebook_page
-        return (
-            isOnTwitter ? _(msg`Follow @realMaskNetwork (mask.io) to claim NFT lucky drops.`)
-            : isOnFacebook ? _(msg`Follow @masknetwork (mask.io) to claim NFT lucky drops.`)
-            : ''
-        )
+        return isOnTwitter || isOnFacebook ? _(msg`Follow @masknetwork (mask.io) to claim NFT lucky drops.`) : ''
     }, [_])
     // #endregion
 

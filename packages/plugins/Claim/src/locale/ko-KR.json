@@ -22,6 +22,13 @@
         "gWcGl/": ["월렛은 이미 해당 거래를 취소했습니다."],
         "hTbvD9": ["$ARB 수령하는 자격이 없습니다."],
         "hom7qf": ["수령"],
+        "kHDhjV": [
+            "I just claimed airdrop with ",
+            ["amount"],
+            " ",
+            ["0"],
+            " on Mask Network extension. Follow @masknetwork to check if you are eligible to claim.\n Install https://mask.io to explore more airdrop activities."
+        ],
         "neBDpj": ["월렛을 연결하세요"],
         "oN9XHJ": ["Start Time: <0>", ["0"], "</0>"],
         "rJZPaP": ["사용 활동을 찾을 수 없습니다"],
