@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-10-16 09:30\n"
+"PO-Revision-Date: 2025-10-21 04:18\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -813,6 +813,14 @@ msgstr "crwdns29574:0crwdne29574:0"
 msgid "Create a New Wallet"
 msgstr "crwdns30042:0crwdne30042:0"
 
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy Wallet"
+msgstr "crwdns38909:0crwdne38909:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy wallet using an X account"
+msgstr "crwdns38911:0crwdne38911:0"
+
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr "crwdns29576:0crwdne29576:0"
@@ -829,6 +837,10 @@ msgstr "crwdns30046:0crwdne30046:0"
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
 msgstr "crwdns29578:0crwdne29578:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
+msgstr "crwdns38913:0crwdne38913:0"
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -1630,8 +1642,8 @@ msgid "Just Selected Contacts"
 msgstr "crwdns30258:0crwdne30258:0"
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Keep your transactions and assets safe with Mask Wallet."
-msgstr "crwdns30260:0crwdne30260:0"
+#~ msgid "Keep your transactions and assets safe with Mask Wallet."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
@@ -2588,6 +2600,7 @@ msgstr "crwdns30542:0crwdne30542:0"
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -2756,6 +2769,10 @@ msgstr "crwdns32140:0crwdne32140:0"
 #: popups/pages/Settings/index.tsx
 msgid "Supported Sites"
 msgstr "crwdns30596:0crwdne30596:0"
+
+#: popups/pages/Wallet/components/StartUp/index.tsx
+msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+msgstr "crwdns38915:0crwdne38915:0"
 
 #: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
@@ -3354,4 +3371,8 @@ msgstr "crwdns37288:0crwdne37288:0"
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr "crwdns37290:0crwdne37290:0"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Your X account authorization has timed out. Please try again."
+msgstr "crwdns38917:0crwdne38917:0"
 
