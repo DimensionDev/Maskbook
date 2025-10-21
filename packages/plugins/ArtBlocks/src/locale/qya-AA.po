@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2024-10-30 09:47\n"
+"PO-Revision-Date: 2025-10-21 08:48\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -48,21 +48,40 @@ msgstr "crwdns28320:0crwdne28320:0"
 msgid "Contract:"
 msgstr "crwdns28322:0crwdne28322:0"
 
+#. placeholder {0}: project.artistName
 #: src/SiteAdaptor/DetailsView.tsx
-msgid "Created by <0>{0}</0>• <1>Website</1>"
-msgstr "crwdns32208:0{0}crwdne32208:0"
+msgid "Created by <0>{0}</0> • <1>Website</1>"
+msgstr "crwdns36394:0{0}crwdne36394:0"
+
+#: src/SiteAdaptor/DetailsView.tsx
+#~ msgid "Created by <0>{0}</0>• <1>Website</1>"
+#~ msgstr ""
 
 #: src/SiteAdaptor/Collectible.tsx
 msgid "Details"
 msgstr "crwdns28326:0crwdne28326:0"
 
+#. placeholder {0}: project.name
+#. placeholder {1}: price.toFixed()
+#. placeholder {2}: token?.symbol || ''
 #: src/SiteAdaptor/PurchaseDialog.tsx
-msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
-msgstr "crwdns28328:0{0}crwdnd28328:0{1}crwdnd28328:0{2}crwdne28328:0"
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
+msgstr "crwdns38931:0{0}crwdnd38931:0{1}crwdnd38931:0{2}crwdne38931:0"
 
 #: src/SiteAdaptor/PurchaseDialog.tsx
+#~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
+#~ msgstr ""
+
+#. placeholder {0}: project.name
+#. placeholder {1}: price.toFixed()
+#. placeholder {2}: token?.symbol || ''
+#: src/SiteAdaptor/PurchaseDialog.tsx
 msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Welcome to join."
-msgstr "crwdns28330:0{0}crwdnd28330:0{1}crwdnd28330:0{2}crwdne28330:0"
+msgstr "crwdns38139:0{0}crwdnd38139:0{1}crwdnd38139:0{2}crwdne38139:0"
+
+#: src/SiteAdaptor/PurchaseDialog.tsx
+#~ msgid "I just purchased a beautiful piece of art from '{3}' collection for {4} {5}. Welcome to join."
+#~ msgstr ""
 
 #: src/SiteAdaptor/DetailsView.tsx
 msgid "Infos"
