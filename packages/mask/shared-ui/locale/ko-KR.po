@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-10 05:53\n"
+"PO-Revision-Date: 2025-10-21 04:18\n"
 "Last-Translator: \n"
 "Language: ko_KR\n"
 "Language-Team: Korean\n"
@@ -813,6 +813,14 @@ msgstr "만들기"
 msgid "Create a New Wallet"
 msgstr "새로운 월렛 만들기"
 
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy Wallet"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy wallet using an X account"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr "새로운 Mask 아이디 만들기"
@@ -829,6 +837,10 @@ msgstr "페르소나 만들기"
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
 msgstr "이용하기 전에 페르소나 한번 만들어 보세요"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -1595,7 +1607,7 @@ msgstr "무효한 Block Explorer URL."
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #~ msgid "Invalid email address format."
-#~ msgstr "이메일 주소가 잘못되었습니다."
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid email address."
@@ -1607,7 +1619,7 @@ msgstr "잘못된 번호"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #~ msgid "Invalid phone number, please check and try again."
-#~ msgstr "무효한 전화 번호입니다. 다시 시도해 보세요."
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
@@ -1630,8 +1642,8 @@ msgid "Just Selected Contacts"
 msgstr "선정된 연락처에게만 공유"
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Keep your transactions and assets safe with Mask Wallet."
-msgstr "Mask Wallet으로 거래 및 자산을 안정하게 보관합니다."
+#~ msgid "Keep your transactions and assets safe with Mask Wallet."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
@@ -1856,15 +1868,15 @@ msgstr "니모닉 단어"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #~ msgid "Mobile"
-#~ msgstr "모바일"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #~ msgid "Mobile number"
-#~ msgstr "휴대폰 번호"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #~ msgid "Mobile verification code"
-#~ msgstr "모바일 인증번호"
+#~ msgstr ""
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
@@ -2473,7 +2485,7 @@ msgstr "데이터베이스 복원"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #~ msgid "Restore failed"
-#~ msgstr "복구 실패"
+#~ msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -2501,7 +2513,7 @@ msgstr "저장"
 
 #: popups/pages/Personas/AccountDetail/index.tsx
 #~ msgid "Save failed"
-#~ msgstr "저장 실패"
+#~ msgstr ""
 
 #: popups/pages/Personas/AccountDetail/index.tsx
 #~ msgid "Saved"
@@ -2588,6 +2600,7 @@ msgstr "NFT 사진 설정"
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -2757,6 +2770,10 @@ msgstr ""
 msgid "Supported Sites"
 msgstr "지원되는 사이트"
 
+#: popups/pages/Wallet/components/StartUp/index.tsx
+msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+msgstr ""
+
 #: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 msgid "Swap"
@@ -2802,7 +2819,7 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #~ msgid "The code is incorrect."
-#~ msgstr "코드가 잘못되었습니다."
+#~ msgstr ""
 
 #: dashboard/utils/api.ts
 msgid "The download link is expired"
@@ -2858,7 +2875,7 @@ msgstr "이미 존재된 페르소나입니다"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #~ msgid "The phone number is incorrect."
-#~ msgstr "전화번호가 잘못되었습니다."
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
@@ -3143,7 +3160,7 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #~ msgid "Verification code sent"
-#~ msgstr "인증 코드가 발송되었습니다"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
@@ -3354,3 +3371,8 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Your X account authorization has timed out. Please try again."
+msgstr ""
+
