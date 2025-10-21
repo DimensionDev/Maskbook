@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-01-08 06:54\n"
+"PO-Revision-Date: 2025-10-21 08:48\n"
 "Last-Translator: \n"
 "Language: zh_CN\n"
 "Language-Team: Chinese Simplified\n"
@@ -65,8 +65,12 @@ msgstr "详情"
 #. placeholder {1}: price.toFixed()
 #. placeholder {2}: token?.symbol || ''
 #: src/SiteAdaptor/PurchaseDialog.tsx
-msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
-msgstr "我刚刚从{0} 使用{1} {2} 购买了一件美丽的艺术品。安装@realMaskNetwork来获取您的作品。"
+msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @masknetwork to get yours."
+msgstr ""
+
+#: src/SiteAdaptor/PurchaseDialog.tsx
+#~ msgid "I just purchased a beautiful piece of art from '{0}' collection for {1} {2}. Install @realMaskNetwork to get yours."
+#~ msgstr ""
 
 #. placeholder {0}: project.name
 #. placeholder {1}: price.toFixed()
@@ -132,3 +136,4 @@ msgstr "发生未知错误。"
 #: src/SiteAdaptor/ActionBar.tsx
 msgid "This project is no longer active"
 msgstr ""
+
