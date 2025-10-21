@@ -7,7 +7,6 @@ export const SOCIAL_MEDIA_ROUND_ICON_MAPPING: Record<EnhanceableSite | string, G
     [EnhanceableSite.Minds]: Icons.MindsRound,
     [EnhanceableSite.Instagram]: Icons.InstagramRoundColored,
     [EnhanceableSite.OpenSea]: Icons.OpenSeaColored,
-    [EnhanceableSite.Mirror]: Icons.Mirror,
     [EnhanceableSite.Localhost]: Icons.WebBlack,
 }
 

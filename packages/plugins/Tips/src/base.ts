@@ -15,7 +15,6 @@ export const base: Plugin.Shared.Definition = {
             type: 'opt-in',
             sites: {
                 [EnhanceableSite.Twitter]: true,
-                [EnhanceableSite.Mirror]: true,
             },
         },
         target: 'stable',

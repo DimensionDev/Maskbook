@@ -9,7 +9,6 @@ const matchEnhanceableSiteHost: Record<EnhanceableSite, RegExp> = {
     [EnhanceableSite.Minds]: /(^|\.)minds\.com$/iu,
     [EnhanceableSite.Instagram]: /(^|\.)instagram\.com$/iu,
     [EnhanceableSite.OpenSea]: /(^|\.)opensea\.io$/iu,
-    [EnhanceableSite.Mirror]: /(^|\.)mirror\.xyz$/iu,
     [EnhanceableSite.Firefly]:
         process.env.NODE_ENV === 'production' ?
             /(?:^(?:firefly\.|firefly-staging\.|firefly-canary\.)?mask\.social|[\w-]+\.vercel\.app)$/iu
