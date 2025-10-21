@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-10 05:53\n"
+"PO-Revision-Date: 2025-10-21 04:18\n"
 "Last-Translator: \n"
 "Language: ja_JP\n"
 "Language-Team: Japanese\n"
@@ -813,6 +813,14 @@ msgstr "作成"
 msgid "Create a New Wallet"
 msgstr "新しいウォレットを作成する"
 
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy Wallet"
+msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Create a Privy wallet using an X account"
+msgstr ""
+
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create New Mask Identity"
 msgstr "新規Mask IDを作成"
@@ -829,6 +837,10 @@ msgstr "ペルソナを作成"
 #: dashboard/pages/SetupPersona/SignUp/index.tsx
 msgid "Create your persona to get started"
 msgstr "あなたのペルソナを作成して始めましょう"
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Creating or retrieving your wallet with Privy. Please confirm on the X authorization page."
+msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -1595,7 +1607,7 @@ msgstr "無効なブロックエクスプローラのURLです。"
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #~ msgid "Invalid email address format."
-#~ msgstr "メールアドレスが正しくありません。"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/EmailField.tsx
 msgid "Invalid email address."
@@ -1607,7 +1619,7 @@ msgstr "無効な番号です"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #~ msgid "Invalid phone number, please check and try again."
-#~ msgstr "電話番号が無効です。確認してもう一度お試しください。"
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "Invalid RPC URL."
@@ -1630,8 +1642,8 @@ msgid "Just Selected Contacts"
 msgstr "選択された連絡先のみ"
 
 #: popups/pages/Wallet/components/StartUp/index.tsx
-msgid "Keep your transactions and assets safe with Mask Wallet."
-msgstr "Maskウォレットで取引と資産を安全に保管してください。"
+#~ msgid "Keep your transactions and assets safe with Mask Wallet."
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 msgid "Kept safely"
@@ -1856,15 +1868,15 @@ msgstr "ニーモニック単語"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/MaskNetwork.tsx
 #~ msgid "Mobile"
-#~ msgstr "モバイル"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #~ msgid "Mobile number"
-#~ msgstr "携帯番号"
+#~ msgstr ""
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/PhoneField.tsx
 #~ msgid "Mobile verification code"
-#~ msgstr "モバイル認証コード"
+#~ msgstr ""
 
 #. placeholder {0}: String(currentMessageIndex + 1)
 #. placeholder {1}: String(totalMessages)
@@ -2193,7 +2205,7 @@ msgstr "ペルソナ"
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #~ msgid "Phone verification code"
-#~ msgstr "モバイル認証コード"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
@@ -2473,7 +2485,7 @@ msgstr "データベースの復元"
 
 #: dashboard/pages/SetupPersona/Recovery/Cloud/MaskNetwork.tsx
 #~ msgid "Restore failed"
-#~ msgstr "復元に失敗しました"
+#~ msgstr ""
 
 #: dashboard/modals/RestoreBackupModal/RestoreBackupDialog.tsx
 msgid "Restore Failed"
@@ -2501,7 +2513,7 @@ msgstr "保存"
 
 #: popups/pages/Personas/AccountDetail/index.tsx
 #~ msgid "Save failed"
-#~ msgstr "保存できませんでした"
+#~ msgstr ""
 
 #: popups/pages/Personas/AccountDetail/index.tsx
 #~ msgid "Saved"
@@ -2588,6 +2600,7 @@ msgstr "NFT 写真を設定"
 
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
 #: dashboard/pages/SetupPersona/Onboarding/index.tsx
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 #: popups/pages/Wallet/SetPaymentPassword/index.tsx
 msgid "Set Payment Password"
@@ -2757,6 +2770,10 @@ msgstr ""
 msgid "Supported Sites"
 msgstr "サポートされるサイト"
 
+#: popups/pages/Wallet/components/StartUp/index.tsx
+msgid "Supports traditional wallet creation and import, creation of Firefly.social wallets via your X account."
+msgstr ""
+
 #: popups/pages/Trader/Header.tsx
 #: popups/pages/Wallet/components/ActionGroup/index.tsx
 msgid "Swap"
@@ -2802,7 +2819,7 @@ msgstr "chainIDは現在接続されているものと等しくありません�
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #~ msgid "The code is incorrect."
-#~ msgstr "このコードは正しくありません"
+#~ msgstr ""
 
 #: dashboard/utils/api.ts
 msgid "The download link is expired"
@@ -2858,7 +2875,7 @@ msgstr "このペルソナ名は既に存在しています."
 
 #: dashboard/pages/SetupPersona/Backup/Cloud/CloudBackupFormContext.ts
 #~ msgid "The phone number is incorrect."
-#~ msgstr "電話番号が間違っています。"
+#~ msgstr ""
 
 #: popups/pages/Wallet/EditNetwork/network-schema.ts
 msgid "The RPC URL you have entered returned a different chain ID ({rpcChainId}). Please update the Chain ID to match the RPC URL of the network you are trying to add."
@@ -3143,7 +3160,7 @@ msgstr ""
 #: dashboard/pages/SetupPersona/Backup/Cloud/PhoneForm.tsx
 #: dashboard/pages/SetupPersona/Backup/Cloud/EmailForm.tsx
 #~ msgid "Verification code sent"
-#~ msgstr "認証コードを送信しました"
+#~ msgstr ""
 
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
 #: dashboard/pages/CreateMaskWallet/CreateMnemonic/index.tsx
@@ -3354,3 +3371,8 @@ msgstr ""
 #: dashboard/pages/CreateMaskWallet/Onboarding/index.tsx
 msgid "Your Wallet is on **ready 🚀**"
 msgstr ""
+
+#: popups/pages/Wallet/components/ImportCreateWallet/index.tsx
+msgid "Your X account authorization has timed out. Please try again."
+msgstr ""
+
