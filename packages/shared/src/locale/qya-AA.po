@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: mask-network\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2025-04-18 08:32\n"
+"PO-Revision-Date: 2025-10-21 04:18\n"
 "Last-Translator: \n"
 "Language: qya_AA\n"
 "Language-Team: Quenya\n"
@@ -142,8 +142,8 @@ msgstr "crwdns30760:0crwdne30760:0"
 msgid "Add Collectibles"
 msgstr "crwdns36332:0crwdne36332:0"
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "Add NFTs"
 msgstr "crwdns30762:0crwdne30762:0"
 
@@ -151,8 +151,8 @@ msgstr "crwdns30762:0crwdne30762:0"
 msgid "Added by user"
 msgstr "crwdns30764:0crwdne30764:0"
 
-#: src/UI/wallet/DeriveWalletTable.tsx
 #: src/UI/components/TokenWithSocialGroupMenu/index.tsx
+#: src/UI/wallet/DeriveWalletTable.tsx
 msgid "Address"
 msgstr "crwdns30766:0crwdne30766:0"
 
@@ -172,8 +172,8 @@ msgstr "crwdns32484:0crwdne32484:0"
 msgid "APP list"
 msgstr "crwdns30772:0crwdne30772:0"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "App Settings"
 msgstr "crwdns32486:0crwdne32486:0"
 
@@ -190,10 +190,14 @@ msgid "Approve MASK?"
 msgstr "crwdns30780:0crwdne30780:0"
 
 #. placeholder {0}: collection?.name ? 'hasName' : 'noName'
-#. placeholder {1}: collection?.name
+#. placeholder {1}: collection?.name || ''
 #: src/hooks/useReportSpam.tsx
-msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
-msgstr "crwdns32488:00={0}crwdnd32488:01={1}crwdne32488:0"
+msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT} other {this NFT}}? After confirmed, this NFT will be marked as spam."
+msgstr "crwdns38919:00={0}crwdnd38919:01={1}crwdne38919:0"
+
+#: src/hooks/useReportSpam.tsx
+#~ msgid "Are you sure to report {0, select, hasName {{1}} noName {this NFT}}? After confirmed, this NFT will be marked as spam."
+#~ msgstr ""
 
 #: src/UI/components/FungibleTokenInput/UI.tsx
 msgid "Available Balance"
@@ -239,11 +243,11 @@ msgstr "crwdns36154:0crwdne36154:0"
 msgid "By confirming means that you agree to bear the possible risks above."
 msgstr "crwdns32494:0crwdne32494:0"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
-#: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmDialog/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Cancel"
 msgstr "crwdns30796:0crwdne30796:0"
 
@@ -251,9 +255,9 @@ msgstr "crwdns30796:0crwdne30796:0"
 msgid "Cancel Transaction"
 msgstr "crwdns31516:0crwdne31516:0"
 
-#: src/UI/components/WalletStatusBox/index.tsx
-#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
 #: src/UI/components/WalletStatusBar/Action.tsx
+#: src/UI/components/WalletStatusBar/WalletMenuItem.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
 msgid "Change"
 msgstr "crwdns30798:0crwdne30798:0"
 
@@ -348,22 +352,22 @@ msgstr "crwdns30820:0crwdne30820:0"
 msgid "Community"
 msgstr "crwdns30824:0crwdne30824:0"
 
-#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
-#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/contexts/components/ApproveMaskDialog.tsx
 #: src/UI/modals/ConfirmDialog/index.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
-#: src/UI/contexts/components/ApproveMaskDialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/ConfirmModal/Dialog.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
+#: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Confirm"
 msgstr "crwdns30826:0crwdne30826:0"
 
 #: src/UI/components/WalletConnectedBoundary/index.tsx
-msgid "Confirm Risk Warning"
-msgstr "crwdns30830:0crwdne30830:0"
+#~ msgid "Confirm Risk Warning"
+#~ msgstr ""
 
 #: src/UI/modals/TransactionSnackbar/TransactionSnackbar.tsx
 msgid "Confirm this transaction in your wallet"
@@ -405,12 +409,12 @@ msgstr "crwdns30842:0crwdne30842:0"
 msgid "Connect Solana Wallet"
 msgstr "crwdns36648:0crwdne36648:0"
 
-#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
-#: src/UI/components/WalletStatusBox/index.tsx
-#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
-#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
-#: src/UI/components/WalletConnectedBoundary/index.tsx
 #: src/UI/components/ChainBoundary/index.tsx
+#: src/UI/components/WalletConnectedBoundary/index.tsx
+#: src/UI/components/WalletStatusBar/PluginVerifiedWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBar/PluginWalletStatusBar.tsx
+#: src/UI/components/WalletStatusBox/index.tsx
+#: src/UI/modals/SelectProviderModal/SelectProvider.tsx
 msgid "Connect Wallet"
 msgstr "crwdns30844:0crwdne30844:0"
 
@@ -494,11 +498,11 @@ msgstr "crwdns31560:0crwdne31560:0"
 msgid "Current base fee is {0} Gwei"
 msgstr "crwdns30862:0{0}crwdne30862:0"
 
-#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SelectGasSettingsToolbar/index.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
-#: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/components/SettingsBoard/SlippageToleranceForm.tsx
 msgid "Custom"
 msgstr "crwdns30864:0crwdne30864:0"
 
@@ -515,10 +519,15 @@ msgstr "crwdns36979:00={0}crwdnd36979:0sources={sources}crwdne36979:0"
 #~ msgid "Data source is retrieved from {0, select, other {} twitter {Twitter profile and} next_id {NEXT.ID and}}{sources}."
 #~ msgstr ""
 
+#. placeholder {0}: platform || ''
+#: src/UI/components/AccountIcons/index.tsx
+msgid "Data source is retrieved from {0, select, twitter {Twitter profile} facebook {Facebook profile} other {}}."
+msgstr "crwdns38921:00={0}crwdne38921:0"
+
 #. placeholder {0}: resolveNextIDPlatformName(platform) || platform
 #. placeholder {0}: type?.replace('_', ' ') ?? ''
-#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 #: src/UI/components/AccountIcons/index.tsx
+#: src/UI/components/SocialAccountList/SocialTooltip.tsx
 msgid "Data source is retrieved from {0}."
 msgstr "crwdns30866:0{0}crwdne30866:0"
 
@@ -527,8 +536,8 @@ msgstr "crwdns30866:0{0}crwdne30866:0"
 #~ msgstr ""
 
 #: src/UI/components/AccountIcons/index.tsx
-msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
-msgstr "crwdns36981:0platform={platform}crwdne36981:0"
+#~ msgid "Data source is retrieved from {platform, select, twitter {Twitter profile} facebook {Facebook profile}}."
+#~ msgstr ""
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "Dear User,<0/><1/>When using any wallet-related plugins in Mask Network, please confirm the following usage risks:<2/><3/>Mask Network provides non-commercial free services. The plug-ins are provided by community members and other excellent third-party DApp teams. Due to the nature of the decentralized network and other uncertain risk factors, users are requested to properly protect their sensitive information such as wallet mnemonic words and private keys. Please be cautious when interact with any blockchain contract. The risks caused by any third-party DApps (plug-ins) are borne by the third-party DApps themselves."
@@ -598,8 +607,8 @@ msgstr "crwdns36110:0crwdne36110:0"
 msgid "DSearch"
 msgstr "crwdns30886:0crwdne30886:0"
 
-#: src/UI/modals/ImageEditor/ImageEditor.tsx
 #: src/UI/components/SelectGasSettingsToolbar/index.tsx
+#: src/UI/modals/ImageEditor/ImageEditor.tsx
 msgid "Edit"
 msgstr "crwdns30888:0crwdne30888:0"
 
@@ -623,24 +632,24 @@ msgstr "crwdns30896:0crwdne30896:0"
 msgid "ENS or Wallet Address"
 msgstr "crwdns30898:0crwdne30898:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas limit"
 msgstr "crwdns30900:0crwdne30900:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Enter a gas price"
 msgstr "crwdns30902:0crwdne30902:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max fee"
 msgstr "crwdns30904:0crwdne30904:0"
 
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/hooks/useGasSchema.ts
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 msgid "Enter a max priority fee"
 msgstr "crwdns30906:0crwdne30906:0"
 
@@ -760,15 +769,15 @@ msgstr "crwdns30924:0crwdne30924:0"
 msgid "Gas fee settings"
 msgstr "crwdns30926:0crwdne30926:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Limit"
 msgstr "crwdns30928:0crwdne30928:0"
 
 #. placeholder {0}: minGasLimit.toFixed()
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas limit must be at least {0}"
 msgstr "crwdns30930:0{0}crwdne30930:0"
 
@@ -776,9 +785,9 @@ msgstr "crwdns30930:0{0}crwdne30930:0"
 msgid "Gas limit too low will cause the transaction to fail."
 msgstr "crwdns30932:0crwdne30932:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/components/SettingsBoard/GasSection.tsx
 #: src/UI/components/SettingsBoard/GasForm.tsx
+#: src/UI/components/SettingsBoard/GasSection.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Gas Price"
 msgstr "crwdns30934:0crwdne30934:0"
 
@@ -813,9 +822,9 @@ msgstr "crwdns30946:0crwdne30946:0"
 msgid "GWEI"
 msgstr "crwdns30948:0crwdne30948:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "High"
 msgstr "crwdns30950:0crwdne30950:0"
 
@@ -828,8 +837,8 @@ msgstr "crwdns30952:0{0}crwdne30952:0"
 msgid "Import"
 msgstr "crwdns30954:0crwdne30954:0"
 
-#: src/UI/components/FungibleTokenList/index.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/FungibleTokenList/index.tsx
 msgid "Incorrect contract address."
 msgstr "crwdns30956:0crwdne30956:0"
 
@@ -874,8 +883,8 @@ msgstr "crwdns30972:0crwdne30972:0"
 msgid "Loading...."
 msgstr "crwdns30974:0crwdne30974:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 #: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Low"
 msgstr "crwdns30976:0crwdne30976:0"
 
@@ -962,9 +971,9 @@ msgstr "crwdns31008:0crwdne31008:0"
 msgid "Max priority fee must be greater than 0 Gwei."
 msgstr "crwdns31010:0crwdne31010:0"
 
-#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
-#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
 #: src/UI/components/SettingsBoard/Context.tsx
+#: src/UI/modals/GasSettingModal/GasSetting1559.tsx
+#: src/UI/modals/GasSettingModal/Prior1559GasSetting.tsx
 msgid "Medium"
 msgstr "crwdns31012:0crwdne31012:0"
 
@@ -1013,15 +1022,19 @@ msgstr "crwdns31030:0crwdne31030:0"
 msgid "No NFTs found."
 msgstr "crwdns31032:0crwdne31032:0"
 
-#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
-#: src/UI/components/CountryCodePicker/index.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/CountryCodePicker/index.tsx
+#: src/UI/modals/SelectNonFungibleContractModal/SelectNonFungibleContractDialog.tsx
 msgid "No results"
 msgstr "crwdns31034:0crwdne31034:0"
 
 #: src/UI/modals/WalletRiskWarningModal/WalletRiskWarning.tsx
 msgid "No wallet selected."
 msgstr "crwdns32534:0crwdne32534:0"
+
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+msgid "Not supported yet."
+msgstr "crwdns37415:0crwdne37415:0"
 
 #: src/UI/modals/TokenTransactionConfirmModal/TokenTransactionConfirm.tsx
 msgid "OK"
@@ -1051,14 +1064,14 @@ msgstr "crwdns36114:0crwdne36114:0"
 msgid "Owner changed."
 msgstr "crwdns32536:0crwdne32536:0"
 
-#: src/UI/components/WalletStatusBox/TransactionList.tsx
 #: src/UI/components/WalletStatusBar/WalletDescription.tsx
+#: src/UI/components/WalletStatusBox/TransactionList.tsx
 msgid "Pending"
 msgstr "crwdns31050:0crwdne31050:0"
 
 #: src/hooks/useCurrentPersonaConnectStatus.ts
-#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 #: src/UI/components/PersonaSelectPanel/index.tsx
+#: src/UI/modals/PersonaSelectPanelModal/PersonaSelectPanelDialog.tsx
 msgid "Persona"
 msgstr "crwdns31052:0crwdne31052:0"
 
@@ -1101,8 +1114,8 @@ msgid "Please create a persona for accessing Dapps."
 msgstr "crwdns31066:0crwdne31066:0"
 
 #: src/UI/components/AssetsManagement/SelectionSection.tsx
-msgid "Please enter token contract address."
-msgstr "crwdns36861:0crwdne36861:0"
+#~ msgid "Please enter token contract address."
+#~ msgstr ""
 
 #: src/UI/components/ProfileTabContent/WalletSettingsEntry.tsx
 msgid "Please select the wallet to activate the function after saving the settings."
@@ -1121,8 +1134,8 @@ msgstr "crwdns32546:0crwdne32546:0"
 msgid "Please verify your social account"
 msgstr "crwdns31074:0crwdne31074:0"
 
-#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 #: src/UI/modals/ApplicationBoardModal/ApplicationBoardDialog.tsx
+#: src/UI/modals/ApplicationBoardModal/ApplicationSettingsDialog.tsx
 msgid "Plugin switch"
 msgstr "crwdns32548:0crwdne32548:0"
 
@@ -1219,7 +1232,6 @@ msgstr "crwdns36116:0crwdne36116:0"
 msgid "Scan the QR code with a WalletConnect-compatible wallet"
 msgstr "crwdns32550:0crwdne32550:0"
 
-#: src/UI/components/AssetsManagement/SelectionSection.tsx
 #: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Search"
 msgstr "crwdns36863:0crwdne36863:0"
@@ -1236,8 +1248,8 @@ msgstr "crwdns31108:0crwdne31108:0"
 msgid "Search with the name of an NFT collection or its symbol to get optimized results."
 msgstr "crwdns31110:0crwdne31110:0"
 
-#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 #: src/UI/components/SelectTokenChip/index.tsx
+#: src/UI/modals/SelectFungibleTokenModal/SelectFungibleTokenDialog.tsx
 msgid "Select"
 msgstr "crwdns31112:0crwdne31112:0"
 
@@ -1269,10 +1281,10 @@ msgstr "crwdns31122:0crwdne31122:0"
 msgid "Select Collection"
 msgstr "crwdns31124:0crwdne31124:0"
 
-#: src/UI/components/VerifyNextIDDialog/index.tsx
-#: src/UI/components/AssetsManagement/CollectionList.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AddCollectibles/index.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionList.tsx
+#: src/UI/components/VerifyNextIDDialog/index.tsx
 msgid "Send"
 msgstr "crwdns31126:0crwdne31126:0"
 
@@ -1486,9 +1498,9 @@ msgstr "crwdns32570:0crwdne32570:0"
 
 #. placeholder {0}: currentVerifiedBy.join(', ')
 #. placeholder {0}: verifiedBy.join(', ')
-#: src/UI/components/AssetsManagement/CollectionHeader.tsx
-#: src/UI/components/AssetsManagement/Collection.tsx
 #: src/UI/components/AssetsManagement/CollectibleItem.tsx
+#: src/UI/components/AssetsManagement/Collection.tsx
+#: src/UI/components/AssetsManagement/CollectionHeader.tsx
 msgid "Verified by {0}"
 msgstr "crwdns31184:0{0}crwdne31184:0"
 
